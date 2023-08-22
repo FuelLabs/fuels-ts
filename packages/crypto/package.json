@@ -1,0 +1,32 @@
+{
+  "name": "@fuel-ts/crypto",
+  "version": "0.52.0",
+  "description": "Utilities for encrypting and decrypting data",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "browser": {
+    "./dist/index.mjs": "./dist/index.browser.mjs"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/pbkdf2": "^5.7.0",
+    "ethereum-cryptography": "^2.1.2"
+  }
+}

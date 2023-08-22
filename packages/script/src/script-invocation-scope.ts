@@ -6,7 +6,8 @@ import {
   FunctionInvocationScope,
   FunctionInvocationResult,
 } from '@fuel-ts/program';
-import type { CallOptions, InvocationScopeLike } from '@fuel-ts/program';
+import type { InvocationScopeLike } from '@fuel-ts/program';
+import { ByteArrayCoder } from '@fuel-ts/transactions';
 
 export class ScriptInvocationScope<
   TArgs extends Array<any> = Array<any>,
@@ -24,11 +25,14 @@ export class ScriptInvocationScope<
 
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
-
+    const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;
     this.scriptRequest = new ScriptRequest(
       programBytes,
       (args: TArgs) =>
-        this.func.encodeArguments(args, ScriptRequest.getScriptDataOffsetWithBytes(programBytes)),
+        this.func.encodeArguments(
+          args,
+          ScriptRequest.getScriptDataOffsetWithScriptBytes(byteLength)
+        ),
       () => [] as unknown as TReturn
     );
   }
@@ -36,10 +40,10 @@ export class ScriptInvocationScope<
   /**
    * Submits a script transaction to the blockchain.
    */
-  async call<T = TReturn>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
+  async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Provider is required!');
 
-    const transactionRequest = await this.getTransactionRequest(options);
+    const transactionRequest = await this.getTransactionRequest();
     const response = await this.program.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(

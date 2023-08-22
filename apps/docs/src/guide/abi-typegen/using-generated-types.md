@@ -26,6 +26,30 @@ const { transactionId, value } = await contract.functions.my_fn(1).call();
 console.log(transactionId, value);
 ```
 
+## Using the Generated Contract Factory to Deploy a Contract
+
+```ts
+import { Wallet } from "fuels";
+import { MyContract__factory } from "./types";
+import bytecode from "./types/MyContract.hex.ts";
+
+const wallet = Wallet.fromAddress("...");
+
+const contract = await MyContract__factory.deployContract(bytecode, wallet);
+
+console.log(contract.id);
+```
+
+You can also pass in [`DeployContractOptions`](https://github.com/FuelLabs/fuels-ts/blob/a64b67b9fb2d7f764ab9151a21d2266bf2df3643/packages/contract/src/contract-factory.ts#L19-L24) like storage slots and configurable constants to the `deployContract` method:
+
+```ts
+import storageSlots from "../contract/out/debug/storage-slots.json";
+
+const contract = await MyContract__factory.deployContract(bytecode, wallet, {
+  storageSlots,
+});
+```
+
 ## Using Generated Script Types
 
 After generating types via:

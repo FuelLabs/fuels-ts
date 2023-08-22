@@ -1,4 +1,5 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { sha256 } from '@ethersproject/sha2';
 import { bn } from '@fuel-ts/math';
 
 import type { Receipt } from './receipt';
@@ -239,9 +240,54 @@ describe('ReceiptCoder', () => {
     );
 
     expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
-    // TODO: this test should pass once fuel-core is fixed with the correct encoding
-    // for the message out receipt
-    // const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
-    // expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
+
+    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
+  });
+
+  it('Can encode Mint', () => {
+    const receipt: Receipt = {
+      type: ReceiptType.Mint,
+      subId: B256_ALT3,
+      contractId: B256_ALT1,
+      val: bn(4000),
+      pc: bn(30),
+      is: bn(20),
+      assetId: sha256(concat([B256_ALT1, B256_ALT3])),
+    };
+
+    const encoded = hexlify(new ReceiptCoder().encode(receipt));
+
+    expect(encoded).toEqual(
+      '0x000000000000000beb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a70590000000000000fa0000000000000001e0000000000000014'
+    );
+
+    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+
+    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
+  });
+
+  it('Can encode Burn', () => {
+    const receipt: Receipt = {
+      type: ReceiptType.Burn,
+      subId: B256_ALT1,
+      contractId: B256_ALT3,
+      val: bn(300),
+      pc: bn(90),
+      is: bn(10),
+      assetId: sha256(concat([B256_ALT3, B256_ALT1])),
+    };
+
+    const encoded = hexlify(new ReceiptCoder().encode(receipt));
+
+    expect(encoded).toEqual(
+      '0x000000000000000c750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a7059eb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd000000000000012c000000000000005a000000000000000a'
+    );
+
+    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+
+    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 });

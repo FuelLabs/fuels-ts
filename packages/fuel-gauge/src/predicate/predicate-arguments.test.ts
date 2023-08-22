@@ -1,9 +1,13 @@
-import type { WalletLocked, WalletUnlocked, JsonAbi } from 'fuels';
+import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish } from 'fuels';
 import { toHex, toNumber, Predicate } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
+import predicateBytesMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector';
+import predicateAbiMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector/out/debug/predicate-main-args-vector-abi.json';
+import predicateBytesMulti from '../../fixtures/forc-projects/predicate-multi-args';
+import predicateAbiMulti from '../../fixtures/forc-projects/predicate-multi-args/out/debug/predicate-multi-args-abi.json';
 import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
 import predicateBytesU32 from '../../fixtures/forc-projects/predicate-u32';
 import type { Validation } from '../types/predicate';
@@ -284,6 +288,8 @@ describe('Predicate', () => {
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
+      // #region predicate-struct-arg
+      // #context const predicate = new Predicate(bytecode, chainId, abi);
       const tx = await predicate
         .setData({
           has_account: true,
@@ -291,6 +297,7 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, amountToReceiver);
       await tx.waitForResult();
+      // #endregion predicate-struct-arg
 
       await assertBalances(
         predicate,
@@ -325,30 +332,22 @@ describe('Predicate', () => {
       ).rejects.toThrow('Invalid transaction');
     });
 
-    /*
-     * TODO: Implement vec test
-     */
-
-    /*
-    // eslint-disable-next-line tsdoc/syntax, tsdoc/syntax, tsdoc/syntax, tsdoc/syntax
     it.skip('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
-      const [wallet, receiver] = await setup();
       const amountToPredicate = 100;
-      const chainId = await wallet.provider.getChainId();
       const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(
-        testPredicateMainArgsVector,
+        predicateBytesMainArgsVector,
         chainId,
-        testPredicateMainArgsVectorAbi
+        predicateAbiMainArgsVector
       );
 
-      const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
+      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
       await tx.waitForResult();
 
-      await assertResults(
+      await assertBalances(
         predicate,
         receiver,
         initialPredicateBalance,
@@ -356,6 +355,45 @@ describe('Predicate', () => {
         amountToPredicate,
         amountToReceiver
       );
-    }); */
+    });
+
+    it('calls a predicate with valid multiple arguments and returns true', async () => {
+      const amountToPredicate = 100;
+      const amountToReceiver = 50;
+      const predicate = new Predicate(predicateBytesMulti, chainId, predicateAbiMulti);
+
+      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      const initialReceiverBalance = await receiver.getBalance();
+
+      // #region predicate-multi-args
+      // #context const predicate = new Predicate(bytecode, chainId, abi);
+      predicate.setData(20, 30);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver);
+      await tx.waitForResult();
+      // #endregion predicate-multi-args
+
+      await assertBalances(
+        predicate,
+        receiver,
+        initialPredicateBalance,
+        initialReceiverBalance,
+        amountToPredicate,
+        amountToReceiver
+      );
+    });
+
+    it('calls a predicate with invalid multiple arguments and returns false', async () => {
+      const amountToPredicate = 100;
+      const predicate = new Predicate(predicateBytesMulti, chainId, predicateAbiMulti);
+
+      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+
+      // Check the UTXOs locked with the predicate hash
+      expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
+
+      await expect(predicate.setData(20, 20).transfer(receiver.address, 50)).rejects.toThrow(
+        'Invalid transaction'
+      );
+    });
   });
 });

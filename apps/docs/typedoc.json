@@ -5,7 +5,16 @@
   "$schema": "https://typedoc.org/schema.json",
   "includeVersion": true,
   "entryPointStrategy": "packages",
-  "entryPoints": ["../../packages/address", "../../packages/interfaces"],
+  "entryPoints": [
+    "../../packages/address",
+    "../../packages/interfaces",
+    "../../packages/predicate",
+    "../../packages/wallet",
+    "../../packages/program",
+    "../../packages/contract",
+    "../../packages/script",
+    "../../packages/providers"
+  ],
   "out": "src/api",
   "githubPages": false,
   "readme": ".typedoc/api-readme.md",

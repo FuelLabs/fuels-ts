@@ -376,6 +376,45 @@ describe('Abi interface', () => {
           ],
         },
         {
+          fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
+          title: '[array] with generic struct',
+          value: [
+            {
+              a: [
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: U8_MAX },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: 0 },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: U8_MAX },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+              ],
+            },
+          ],
+          encodedValue: [
+            B256_ENCODED,
+            U8_MAX_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            B256_ENCODED,
+            EMPTY_U8_ARRAY,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            B256_ENCODED,
+            U8_MAX_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+          ],
+        },
+        {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: [[true, false, true, true]],
@@ -625,7 +664,7 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title: _, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);
@@ -777,8 +816,8 @@ describe('Abi interface', () => {
 
   describe('abi types', () => {
     it('should return the correct type when it exists', () => {
-      const abiType = exhaustiveExamplesInterface.getTypeById(22);
-      expect(abiType.type).toEqual('enum EnumWithStructs');
+      const abiType = exhaustiveExamplesInterface.getTypeById(0);
+      expect(abiType.type).toEqual('()');
       expect(abiType.components).toBeDefined();
       expect(abiType.typeParameters).toBeNull();
     });

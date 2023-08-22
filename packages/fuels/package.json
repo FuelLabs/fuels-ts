@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.48.0",
+  "version": "0.52.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -46,7 +46,7 @@
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",

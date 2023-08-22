@@ -10,8 +10,6 @@ apps/demo-react-vite
 apps/demo-typegen/src/generated-types
 apps/docs/.vitepress/cache/
 
-/packages/program/src/multicall/static-out
-
 __generated__
 out
 CHANGELOG.md

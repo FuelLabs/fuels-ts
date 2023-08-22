@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import { randomBytes } from '@fuel-ts/crypto';
 import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
 import type {
   Bech32Address,
@@ -10,7 +11,6 @@ import type {
   AbstractAddress,
   B256AddressEvm,
 } from '@fuel-ts/interfaces';
-import { randomBytes } from '@fuel-ts/keystore';
 import { versions } from '@fuel-ts/versions';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
