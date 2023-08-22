@@ -140,12 +140,7 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    const {
-      transaction: gqlTransaction,
-      chain: {
-        consensusParameters: { gasPerByte, gasPriceFactor },
-      },
-    } = await this.fetch();
+    const { transaction: gqlTransaction } = await this.fetch();
 
     const nullResponse = !gqlTransaction?.status?.type;
     const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
@@ -169,6 +164,10 @@ export class TransactionResponse {
     ) as Transaction<TTransactionType>;
 
     const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
+
+    const {
+      consensusParameters: { gasPerByte, gasPriceFactor },
+    } = await this.provider.getChain();
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
