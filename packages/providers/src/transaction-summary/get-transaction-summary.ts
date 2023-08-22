@@ -15,11 +15,17 @@ import { processGqlReceipt } from './receipt';
 import type { AbiMap, TransactionSummary } from './types';
 
 /** @hidden */
+export interface GetTransactionSummaryParams {
+  id: string;
+  provider: Provider;
+  abiMap?: AbiMap;
+}
+
 export async function getTransactionSummary<TTransactionType = void>(
-  id: string,
-  provider: Provider,
-  abiMap?: AbiMap
+  params: GetTransactionSummaryParams
 ): Promise<TransactionResult> {
+  const { id, provider, abiMap } = params;
+
   const {
     transaction: gqlTransaction,
     chain: {
@@ -57,12 +63,18 @@ export async function getTransactionSummary<TTransactionType = void>(
   };
 }
 
+export interface GetTransactionSummaryFromRequestParams {
+  transactionRequest: TransactionRequest;
+  provider: Provider;
+  abiMap?: AbiMap;
+}
+
 /** @hidden */
 export async function getTransactionSummaryFromRequest<TTransactionType = void>(
-  transactionRequest: TransactionRequest,
-  provider: Provider,
-  abiMap?: AbiMap
+  params: GetTransactionSummaryFromRequestParams
 ): Promise<TransactionSummary<TTransactionType>> {
+  const { provider, transactionRequest, abiMap } = params;
+
   const { receipts } = await provider.call(transactionRequest);
 
   const {
@@ -84,17 +96,23 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   return transactionSummary;
 }
 
-interface GetTransactionsSummariesReturns {
+export interface GetTransactionsSummariesParams {
+  provider: Provider;
+  filters: GqlGetTransactionsByOwnerQueryVariables;
+  abiMap?: AbiMap;
+}
+
+export interface GetTransactionsSummariesReturns {
   transactions: TransactionResult[];
   pageInfo: GqlPageInfo;
 }
 
 /** @hidden */
 export async function getTransactionsSummaries(
-  provider: Provider,
-  filters: GqlGetTransactionsByOwnerQueryVariables,
-  abiMap?: AbiMap
+  params: GetTransactionsSummariesParams
 ): Promise<GetTransactionsSummariesReturns> {
+  const { filters, provider, abiMap } = params;
+
   const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
 
   const { edges, pageInfo } = transactionsByOwner;
