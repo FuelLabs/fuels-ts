@@ -12,7 +12,7 @@ import {
   isTypeCreate,
   isTypeScript,
 } from './operations';
-import { extractAssetIdFromBurnOrMintReceipts } from './receipt';
+import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
 import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
 
@@ -44,14 +44,14 @@ export function assembleTransactionSummary<TTransactionType = void>(
     abiParam,
   } = params;
 
-  const { gasUsed, fee } = calculateTransactionFee({
-    receipts,
+  const { fee, gasUsed } = calculateTransactionFee({
     gasPrice,
+    transactionBytes,
+    transactionWitnesses: transaction?.witnesses || [],
     gasPerByte,
     gasPriceFactor,
-    transactionBytes,
     transactionType: transaction.type,
-    transactionWitnesses: transaction?.witnesses || [],
+    receipts,
   });
 
   const operations = getOperations({
@@ -68,7 +68,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);
 
-  const { mintedAssets, burnedAssets } = extractAssetIdFromBurnOrMintReceipts(receipts);
+  const mintedAssets = extractMintedAssetsFromReceipts(receipts);
+  const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
