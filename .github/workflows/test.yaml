@@ -43,18 +43,27 @@ jobs:
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v3
-        # if: ${{ !steps.findPr.outputs.number }}
-        if: ${{ steps.findPr.outputs.number }}
+        if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
           path: coverage/report
 
       - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
-        if: ${{ steps.findPr.outputs.number }}
+        # TODO: Remove PR != check once #1182 has been merged
+        if: ${{ steps.findPr.outputs.number }} && ${{ steps.findPr.outputs.number }} != 1182
         with:
           workflow: test.yaml
-          # branch: master
+          branch: master
+          name: coverage-master
+          path: coverage-master
+
+      # TODO: Delete once #1182 has been merged
+      - name: Download coverage artifact (temporary)
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.findPr.outputs.number }} && ${{ steps.findPr.outputs.number }} == 1182
+        with:
+          workflow: test.yaml
           run_id: 5940564903
           name: coverage-master
           path: coverage-master
