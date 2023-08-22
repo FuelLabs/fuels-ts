@@ -51,7 +51,7 @@ jobs:
       - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
         # TODO: Remove PR != check once #1182 has been merged
-        if: ${{ steps.findPr.outputs.number }} && ${{ steps.findPr.outputs.number }} != 1182
+        if: ${{ steps.findPr.outputs.number }} && steps.findPr.outputs.number != 1182
         with:
           workflow: test.yaml
           branch: master
@@ -61,7 +61,7 @@ jobs:
       # TODO: Delete once #1182 has been merged
       - name: Download coverage artifact (temporary)
         uses: dawidd6/action-download-artifact@v2
-        if: ${{ steps.findPr.outputs.number }} && ${{ steps.findPr.outputs.number }} == 1182
+        if: ${{ steps.findPr.outputs.number }} && steps.findPr.outputs.number == 1182
         with:
           workflow: test.yaml
           run_id: 5940564903
