@@ -103,6 +103,12 @@ export class TransactionResponse {
     this.provider = provider;
   }
 
+  static async create(id: string, provider: Provider): Promise<TransactionResponse> {
+    const response = new TransactionResponse(id, provider);
+    await response.fetch();
+    return response;
+  }
+
   /**
    * Fetch the transaction with receipts from the provider.
    *
