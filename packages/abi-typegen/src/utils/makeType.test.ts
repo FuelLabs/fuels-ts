@@ -1,5 +1,6 @@
 import { safeExec } from '@fuel-ts/utils/test-utils';
 
+import type { ArrayType } from '../abi/types/ArrayType';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { makeType } from './makeType';
@@ -27,7 +28,7 @@ describe('makeType.ts', () => {
     const expectedErrorMsg = `Type not supported: ${rawAbiType.type}`;
 
     const fn = () => makeType({ rawAbiType });
-    const { error, result } = await safeExec<Error>(fn);
+    const { error, result } = await safeExec<ArrayType, Error>(fn);
 
     expect(result).toBeFalsy();
     expect(error?.message).toEqual(expectedErrorMsg);
