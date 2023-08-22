@@ -55,7 +55,7 @@ jobs:
         with:
           workflow: test.yaml
           # branch: master
-          pr: ${{ github.event.pull_request.number }}
+          run_id: 5940564903
           name: coverage-master
           path: coverage-master
 
