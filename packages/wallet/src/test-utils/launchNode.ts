@@ -90,11 +90,15 @@ const generateWallets = async (count: number, provider: Provider) => {
 
 /**
  * Launches a fuel-core node and returns a provider, 10 wallets, and a cleanup function to stop the node.
+ * @param launchNodeOptions - options to launch the fuel-core node with.
+ * @param walletCount - the number of wallets to generate. (optional, defaults to 10)
  * */
 export const launchNodeAndGetWallets = async ({
   launchNodeOptions,
+  walletCount = 10,
 }: {
   launchNodeOptions?: LaunchNodeOptions;
+  walletCount?: number;
 } = {}) => {
   // Write a temporary chain configuration file.
   await fs.writeFile('.chainConfig.json', JSON.stringify(defaultChainConfig), 'utf8');
@@ -111,7 +115,7 @@ export const launchNodeAndGetWallets = async ({
   const closeNode = await launchNode(launchNodeOptions ?? defaultNodeOptions);
 
   const provider = new Provider('http://127.0.0.1:4000/graphql');
-  const wallets = await generateWallets(10, provider);
+  const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {
     closeNode();
