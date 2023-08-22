@@ -66,5 +66,4 @@ jobs:
           lcov-file: coverage/report/lcov.info
           lcov-base: coverage-reports/lcov.info
           delete-old-comments: true
-          filter-changed-files: true
           title: "Coverage Report"
