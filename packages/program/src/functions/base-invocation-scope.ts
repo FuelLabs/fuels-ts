@@ -23,7 +23,7 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  */
 function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
   const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
-  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer()
+  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer
     ? POINTER_DATA_OFFSET
     : 0;
   const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
@@ -32,9 +32,9 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     contractId: (program as AbstractContract).id,
     fnSelector: func.selector,
     data,
-    isInputDataPointer: func.isInputDataPointer(),
-    isOutputDataHeap: func.isOutputDataHeap(),
-    outputEncodedLength: func.getOutputEncodedLength(),
+    isInputDataPointer: func.isInputDataPointer,
+    isOutputDataHeap: func.outputMetadata.isHeapType,
+    outputEncodedLength: func.outputMetadata.encodedLength,
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,

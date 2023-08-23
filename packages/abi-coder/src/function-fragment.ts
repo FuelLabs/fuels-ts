@@ -34,6 +34,12 @@ export class FunctionFragment<
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
+  readonly isInputDataPointer: boolean;
+  readonly outputMetadata: {
+    isHeapType: boolean;
+    encodedLength: number;
+  };
+
   private readonly jsonAbi: JsonAbi;
 
   constructor(jsonAbi: JsonAbi, name: FnName) {
@@ -42,6 +48,11 @@ export class FunctionFragment<
     this.name = name;
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
+    this.isInputDataPointer = this.#isInputDataPointer();
+    this.outputMetadata = {
+      isHeapType: this.#isOutputDataHeap(),
+      encodedLength: this.#getOutputEncodedLength(),
+    };
 
     this.attributes = this.jsonFn.attributes ?? [];
   }
@@ -59,7 +70,7 @@ export class FunctionFragment<
     return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
   }
 
-  isInputDataPointer(): boolean {
+  #isInputDataPointer(): boolean {
     const inputTypes = this.jsonFn.inputs.map((i) =>
       this.jsonAbi.types.find((t) => t.typeId === i.type)
     );
@@ -67,13 +78,13 @@ export class FunctionFragment<
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
-  isOutputDataHeap(): boolean {
+  #isOutputDataHeap(): boolean {
     const outputType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === this.jsonFn.output.type);
 
     return isHeapType(outputType?.type || '');
   }
 
-  getOutputEncodedLength(): number {
+  #getOutputEncodedLength(): number {
     const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
     if (heapCoder instanceof VecCoder) {
       return heapCoder.coder.encodedLength;

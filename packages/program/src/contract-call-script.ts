@@ -200,8 +200,8 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
   functionScopes.map((funcScope) => {
     const { func } = funcScope.getCallConfig();
     return {
-      isHeap: func.isOutputDataHeap(),
-      encodedLength: func.getOutputEncodedLength(),
+      isHeap: func.outputMetadata.isHeapType,
+      encodedLength: func.outputMetadata.encodedLength,
     };
   });
 
