@@ -15,7 +15,7 @@ import type { TupleToUnion } from './type-utilities';
  * TODO:
  *
  * In the future, enums should be inferred as just as what they are: a discriminated union of all possible values, and not a struct.
- * However, that is a future endeavor as it requires changes to runtime behavior as well.
+ * However, that is a future endeavor as it requires changes to runtime logic as well.
  */
 export type MapAbiEnum<
   Types extends JsonAbi['types'],
@@ -38,7 +38,7 @@ export type MapAbiEnum<
     }>;
 
 /**
- * This is a helper that makes it mandatory to provide one, and only one property of an enum.
+ * This is a helper that makes it mandatory to provide one and only one property of an enum.
  * It's a wrapper around a library utility for naming's sake.
  */
 export type Enum<T> = RequireExactlyOne<T>;
