@@ -11,10 +11,10 @@ export type DeployContractOptions = {
 export enum Commands {
   build = 'build',
   deploy = 'deploy',
+  types = 'types',
   dev = 'dev',
   flow = 'flow',
   init = 'init',
-  types = 'types',
 }
 
 export type ActionEvent =
@@ -55,33 +55,47 @@ export type DeployOptions = {
 };
 
 export type OptionsFunction = (
-  opt: DeployOptions
+  options: DeployOptions
 ) => DeployContractOptions | Promise<DeployContractOptions>;
 
 export type FuelsConfig = {
-  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
-  onFailure?: (err: unknown, config: LoadedConfig) => void;
-  privateKey?: string;
-  providerUrl?: string;
-  deployConfig?: DeployContractOptions | OptionsFunction;
   workspace?: string;
-  scripts?: Array<string>;
   contracts?: Array<string>;
   predicates?: Array<string>;
-  output?: string;
+  scripts?: Array<string>;
+  output: string;
+
+  privateKey?: string;
+  providerUrl?: string;
+  chainConfig?: string;
+  deployConfig?: DeployContractOptions | OptionsFunction;
+
+  useSystemForc?: boolean;
+  useSystemFuelCore?: boolean;
+  spinUpFuelNode?: boolean;
+
+  onFailure?: (error: Error, config: LoadedConfig) => void;
+  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
 };
 
 export type LoadedConfig = {
   basePath: string;
-  chainConfig?: string;
-  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
-  onFailure?: (err: unknown, config: LoadedConfig) => void;
-  privateKey?: string;
-  providerUrl?: string;
-  deployConfig?: DeployContractOptions | OptionsFunction;
+
   workspace?: string;
-  scripts: Array<string>;
   contracts: Array<string>;
   predicates: Array<string>;
+  scripts: Array<string>;
   output: string;
+
+  privateKey?: string;
+  providerUrl?: string;
+  chainConfig?: string;
+  deployConfig?: DeployContractOptions | OptionsFunction;
+
+  useSystemForc?: boolean;
+  useSystemFuelCore?: boolean;
+  shouldAutoStartFuelCoreNode?: boolean;
+
+  onFailure?: (error: Error, config: LoadedConfig) => void;
+  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
 };

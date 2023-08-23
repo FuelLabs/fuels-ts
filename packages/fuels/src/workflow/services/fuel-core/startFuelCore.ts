@@ -1,23 +1,34 @@
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
+import { writeFileSync } from 'fs';
 import { join } from 'path';
 import kill from 'tree-kill';
 
 import type { LoadedConfig } from '../../types';
 import { logSection } from '../../utils';
 
+import { defaultChainConfig } from './defaultChainConfig';
+
 export async function startFuelCore(config: LoadedConfig): Promise<ChildProcessWithoutNullStreams> {
   logSection('Starting node...');
 
-  const defaultChainConfig = join(__dirname);
-  const chainConfig = config?.chainConfig ?? defaultChainConfig;
+  const coreDir = join(config.basePath, '.fuel-core');
+  const chainConfigPath = join(coreDir, 'chainConfig.json');
+  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
+
+  let chainConfig = config?.chainConfig;
+
+  if (!chainConfig) {
+    writeFileSync(chainConfigPath, chainConfigJson);
+    chainConfig = chainConfigPath;
+  }
 
   const flags = [
     'fuels-core',
     'run',
     ['--ip', '127.0.0.1'],
     ['--port', '4000'],
-    ['--db-path', join(config.basePath, '.fuel-core')],
+    ['--db-path', coreDir],
     ['--min-gas-price', '0'],
     ['--poa-instant', 'true'],
     ['--consensus-key', '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298'],
@@ -34,12 +45,12 @@ export async function startFuelCore(config: LoadedConfig): Promise<ChildProcessW
       kill(Number(subProcess.pid));
     };
 
-    process.on('unhandledRejection', killNode);
-    process.on('uncaughtExceptionMonitor', killNode);
-    process.on('rejectionHandled', killNode);
+    // process.on('unhandledRejection', killNode);
+    // process.on('uncaughtExceptionMonitor', killNode);
+    // process.on('rejectionHandled', killNode);
     process.on('beforeExit', killNode);
-    process.on('uncaughtException', killNode);
-    process.on('SIGINT', killNode);
+    // process.on('uncaughtException', killNode);
+    // process.on('SIGINT', killNode);
 
     subProcess.stderr?.pipe(process.stdout);
     subProcess.stdout?.pipe(process.stdout);

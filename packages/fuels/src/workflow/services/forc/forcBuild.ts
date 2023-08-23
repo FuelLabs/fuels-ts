@@ -2,7 +2,10 @@ import { spawn } from 'child_process';
 
 export async function forcBuild(path: string) {
   return new Promise((resolve, reject) => {
-    const subProcess = spawn('pnpm', ['fuels-forc', 'build', '-p', path], { stdio: 'pipe' });
+    const forcPath = './node_modules/.bin/fuels-forc';
+    const subProcess = spawn(forcPath, ['build', '-p', path], {
+      stdio: 'pipe',
+    });
     // Log outputs from forc build directly to current
     // process output.
     subProcess.stderr?.pipe(process.stdout);

@@ -1,7 +1,6 @@
 import * as chokidar from 'chokidar';
 import { error } from 'console';
 import { globSync } from 'glob';
-import kill from 'tree-kill';
 
 import { startFuelCore } from '../services/fuel-core/startFuelCore';
 import type { LoadedConfig } from '../types';
@@ -9,8 +8,9 @@ import type { LoadedConfig } from '../types';
 import { flow } from './flow';
 
 export async function dev(config: LoadedConfig) {
-  const fuelCoreNode = await startFuelCore(config);
-  const fuelCoreNodePID = fuelCoreNode.pid as number;
+  if (config.shouldAutoStartFuelCoreNode) {
+    await startFuelCore(config);
+  }
 
   const { contracts, scripts, predicates } = config;
   const dirs = [contracts, scripts, predicates, config.chainConfig, config.workspace].flat();
@@ -34,6 +34,5 @@ export async function dev(config: LoadedConfig) {
       .on('unlink', changeListeaner);
   } catch (err: unknown) {
     error(err);
-    kill(fuelCoreNodePID);
   }
 }
