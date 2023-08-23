@@ -15,6 +15,7 @@ type LaunchNodeOptions = {
   consensusKey: string;
   dbPath: string;
   args?: string[];
+  useSystemFuelCore?: boolean;
 };
 
 /**
@@ -23,18 +24,22 @@ type LaunchNodeOptions = {
  * @param consensusKey - the consensus key to use.
  * @param dbPath - the path to the folder to use for the fuel-core db.
  * @param args - additional arguments to pass to fuel-core
+ * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
  * */
 export const launchNode = async ({
   chainConfigPath,
   consensusKey,
   dbPath,
   args = defaultFuelCoreArgs,
+  useSystemFuelCore = true,
 }: LaunchNodeOptions): Promise<() => void> =>
   new Promise((resolve) => {
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const child = spawn('fuel-core', [
+    const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+
+    const child = spawn(command, [
       'run',
       '--db-path',
       dbPath, // hardcoded
