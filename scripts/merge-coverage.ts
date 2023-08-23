@@ -7,10 +7,10 @@ const validEnvironments = ['browser', 'node'];
 
 const main = () => {
   const environments = readdirSync(environmentsDir);
-  environments.forEach(async (environment) => {
+  environments.forEach((environment) => {
     if (validEnvironments.includes(environment)) {
       // Move environment coverage directories to a single file
-      await renameSync(
+      renameSync(
         join(environmentsDir, `${environment}/coverage-final.json`),
         join(environmentsDir, `${environment}.json`)
       );
