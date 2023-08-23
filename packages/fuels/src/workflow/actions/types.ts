@@ -17,7 +17,7 @@ async function runTypegenProgramType(
   const pluralizedFolderName = `${String(programType).toLocaleLowerCase()}s`;
 
   if (filepaths.length) {
-    await runTypegen({
+    runTypegen({
       programType,
       cwd: config.basePath,
       filepaths,
