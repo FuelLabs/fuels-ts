@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
 
 import { U64Coder } from './coders/u64';
-import { WORD_SIZE } from './constants';
+import { VEC_CODER_TYPE, WORD_SIZE } from './constants';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;
@@ -87,7 +87,7 @@ export function unpackDynamicData(
   return updatedResults;
 }
 
-/** useful for debugging
+/**
  * Turns:
   Uint8Array(24) [
     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 24
@@ -107,14 +107,14 @@ export function unpackDynamicData(
   ]
  * 
  */
-export const chunkByWord = (data: Uint8Array): Uint8Array[] => {
+export const chunkByLength = (data: Uint8Array, length = WORD_SIZE): Uint8Array[] => {
   const chunks = [];
   let offset = 0;
-  let chunk = data.slice(offset, offset + WORD_SIZE);
+  let chunk = data.slice(offset, offset + length);
   while (chunk.length) {
     chunks.push(chunk);
-    offset += WORD_SIZE;
-    chunk = data.slice(offset, offset + WORD_SIZE);
+    offset += length;
+    chunk = data.slice(offset, offset + length);
   }
 
   return chunks;
@@ -138,6 +138,8 @@ export const isPointerType = (type: string) => {
     }
   }
 };
+
+export const isHeapType = (type: string) => type === VEC_CODER_TYPE;
 
 export function findOrThrow<T>(
   arr: readonly T[],

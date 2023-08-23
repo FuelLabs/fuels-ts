@@ -110,30 +110,22 @@ export const calculateTransactionFee = ({
   transactionWitnesses,
   margin,
 }: CalculateTransactionFeeParams) => {
-  let gasUsed;
-  let fee;
-
   const isTypeCreate = transactionType === TransactionType.Create;
 
   if (isTypeCreate) {
-    ({ fee, gasUsed } = calculateTransactionFeeForContractCreated({
+    return calculateTransactionFeeForContractCreated({
       gasPerByte: gasPerByte || GAS_PER_BYTE,
       gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
       transactionBytes,
       transactionWitnesses,
       gasPrice,
-    }));
-  } else {
-    ({ fee, gasUsed } = calculateTransactionFeeForScript({
-      gasPrice,
-      receipts,
-      gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
-      margin: margin || 1,
-    }));
+    });
   }
 
-  return {
-    fee,
-    gasUsed,
-  };
+  return calculateTransactionFeeForScript({
+    gasPrice,
+    receipts,
+    gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
+    margin: margin || 1,
+  });
 };
