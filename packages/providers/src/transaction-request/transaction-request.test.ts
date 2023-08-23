@@ -13,7 +13,6 @@ describe('TransactionRequest', () => {
         type: TransactionType.Script,
         script,
         scriptData,
-        bytesOffset: 1000,
         gasPrice: 1,
         gasLimit: 10000,
         maturity: 1,
@@ -26,7 +25,6 @@ describe('TransactionRequest', () => {
       if (txRequest.type === TransactionType.Script) {
         expect(txRequest.script).toEqual(txRequestLike.script);
         expect(txRequest.scriptData).toEqual(txRequestLike.scriptData);
-        expect(txRequest.bytesOffset).toEqual(txRequestLike.bytesOffset);
       }
 
       expect(txRequest.type).toEqual(txRequestLike.type);

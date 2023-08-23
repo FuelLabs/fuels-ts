@@ -11,6 +11,7 @@ import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
 import { TupleCoder } from './coders/tuple';
 import type { U64Coder } from './coders/u64';
+import { VecCoder } from './coders/vec';
 import { OPTION_CODER_TYPE } from './constants';
 import type {
   JsonAbi,
@@ -20,7 +21,7 @@ import type {
 } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
-import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
+import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -34,6 +35,12 @@ export class FunctionFragment<
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
+  readonly isInputDataPointer: boolean;
+  readonly outputMetadata: {
+    isHeapType: boolean;
+    encodedLength: number;
+  };
+
   private readonly jsonAbi: JsonAbi;
 
   constructor(abi: JsonAbi, name: string) {
@@ -42,6 +49,11 @@ export class FunctionFragment<
     this.name = name;
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
+    this.isInputDataPointer = this.#isInputDataPointer();
+    this.outputMetadata = {
+      isHeapType: this.#isOutputDataHeap(),
+      encodedLength: this.#getOutputEncodedLength(),
+    };
 
     this.attributes = this.jsonFn.attributes ?? [];
   }
@@ -59,7 +71,7 @@ export class FunctionFragment<
     return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
   }
 
-  isInputDataPointer(): boolean {
+  #isInputDataPointer(): boolean {
     const inputTypes = this.jsonFn.inputs.map((i) =>
       this.jsonAbi.types.find((t) => t.typeId === i.type)
     );
@@ -67,9 +79,27 @@ export class FunctionFragment<
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
+  #isOutputDataHeap(): boolean {
+    const outputType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === this.jsonFn.output.type);
+
+    return isHeapType(outputType?.type || '');
+  }
+
+  #getOutputEncodedLength(): number {
+    try {
+      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+      if (heapCoder instanceof VecCoder) {
+        return heapCoder.coder.encodedLength;
+      }
+
+      return heapCoder.encodedLength;
+    } catch (e) {
+      return 0;
+    }
+  }
+
   private mapInputObjectToArray(input: Input) {
     const orderedArgNames = this.jsonFn.inputs.map((x) => x.name);
-
     return (
       Object.entries(input)
         // We sort the input object properties to match the ABI ordering, as their order can be arbitrary
@@ -149,14 +179,8 @@ export class FunctionFragment<
     }
 
     const result = nonEmptyInputs.reduce(
-      (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
+      (obj: { decoded: unknown[]; offset: number }, input) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
-        if (currentIndex === 0) {
-          const inputAbiType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === input.type);
-          if (inputAbiType.type === 'raw untyped slice') {
-            (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
-          }
-        }
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {

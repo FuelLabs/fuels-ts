@@ -22,8 +22,6 @@ export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike
   script?: BytesLike;
   /** Script input data (parameters) */
   scriptData?: BytesLike;
-  /** determined bytes offset for start of script data */
-  bytesOffset?: number | undefined;
 }
 
 /**
@@ -43,19 +41,16 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   script: Uint8Array;
   /** Script input data (parameters) */
   scriptData: Uint8Array;
-  /** determined bytes offset for start of script data */
-  bytesOffset: number | undefined;
 
   /**
    * Constructor for `ScriptTransactionRequest`.
    *
    * @param scriptTransactionRequestLike - The initial values for the instance.
    */
-  constructor({ script, scriptData, bytesOffset, ...rest }: ScriptTransactionRequestLike = {}) {
+  constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
-    this.bytesOffset = bytesOffset;
   }
 
   /**
@@ -119,10 +114,6 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   setScript<T>(script: AbstractScriptRequest<T>, data: T) {
     this.scriptData = script.encodeScriptData(data);
     this.script = script.bytes;
-
-    if (this.bytesOffset === undefined) {
-      this.bytesOffset = this.scriptData.byteLength;
-    }
   }
 
   /**
