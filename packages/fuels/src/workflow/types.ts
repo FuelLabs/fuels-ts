@@ -11,17 +11,13 @@ export type DeployContractOptions = {
 export enum Commands {
   build = 'build',
   deploy = 'deploy',
-  types = 'types',
   dev = 'dev',
   flow = 'flow',
   init = 'init',
+  types = 'types',
 }
 
 export type ActionEvent =
-  | {
-      type: Commands.types;
-      data: unknown;
-    }
   | {
       type: Commands.build;
       data: unknown;
@@ -31,15 +27,19 @@ export type ActionEvent =
       data: Array<ContractDeployed>;
     }
   | {
-      type: Commands.flow;
-      data: Array<ContractDeployed>;
-    }
-  | {
       type: Commands.dev;
       data: unknown;
     }
   | {
+      type: Commands.flow;
+      data: Array<ContractDeployed>;
+    }
+  | {
       type: Commands.init;
+      data: unknown;
+    }
+  | {
+      type: Commands.types;
       data: unknown;
     };
 
