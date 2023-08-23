@@ -40,6 +40,7 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "bech32": "^2.0.0"
   },
   "devDependencies": {
