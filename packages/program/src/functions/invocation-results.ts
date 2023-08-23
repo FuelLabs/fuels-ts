@@ -89,7 +89,7 @@ export class InvocationResult<T = any> {
     const encodedResults = decodeContractCallScriptResult(
       callResult,
       (callConfig?.program as AbstractContract).id,
-      callConfig?.func.isOutputDataHeap(),
+      callConfig?.func.outputMetadata.isHeapType,
       logs
     );
     const returnValues = encodedResults.map((encodedResult, i) => {
