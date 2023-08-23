@@ -172,13 +172,13 @@ const getCallInstructionsLength = (contractCalls: ContractCall[]): number => {
     DEFAULT_OUTPUT_INFO
   ).byteLength();
 
-  let totalHeapCalls = 0;
+  const stackCallsInstructionsLength =
+    singleStackCallLength * contractCalls.filter((call) => !call.isOutputDataHeap).length;
+
   const heapCallsInstructionsLength = contractCalls.reduce((sum, call) => {
     if (!call.isOutputDataHeap) {
       return sum;
     }
-
-    totalHeapCalls += 1;
     return (
       sum +
       getSingleCallInstructions(DEFAULT_OPCODE_PARAMS, {
@@ -187,9 +187,6 @@ const getCallInstructionsLength = (contractCalls: ContractCall[]): number => {
       }).byteLength()
     );
   }, 0);
-
-  const stackCallsInstructionsLength =
-    singleStackCallLength * (contractCalls.length - totalHeapCalls);
 
   return (
     stackCallsInstructionsLength +
