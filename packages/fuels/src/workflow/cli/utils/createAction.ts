@@ -28,7 +28,6 @@ export function createAction<CType extends Commands>(
       );
       logSection(`🎉 ${command} completed successfully!`);
     } catch (err: any) {
-      error(err?.message ? err.message : err);
       config?.onFailure?.(err, config);
       throw err;
     }

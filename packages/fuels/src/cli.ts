@@ -5,7 +5,7 @@ import { Command } from 'commander';
 
 import { configureCliOptions as configureFuelsCliOptions } from './workflow/cli';
 
-export async function run(argv: string[]) {
+export function run(argv: string[]) {
   const program = new Command();
 
   program.name('fuels');
@@ -32,5 +32,5 @@ export async function run(argv: string[]) {
   configureTypegenCliOptions(typegen);
 
   // vroom vroom
-  return program.parseAsync(argv);
+  return program.parse(argv);
 }
