@@ -87,12 +87,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = bn(gasPrice ?? 0);
-    this.gasLimit = bn(gasLimit ?? 0);
+    this.gasPrice = bn(gasPrice);
+    this.gasLimit = bn(gasLimit);
     this.maturity = maturity ?? 0;
-    this.inputs = [...(inputs ?? [])];
-    this.outputs = [...(outputs ?? [])];
-    this.witnesses = [...(witnesses ?? [])];
+    this.inputs = inputs ?? [];
+    this.outputs = outputs ?? [];
+    this.witnesses = witnesses ?? [];
   }
 
   /**
