@@ -1,7 +1,8 @@
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { writeFileSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
 import type { LoadedConfig } from '../../types';
@@ -19,6 +20,7 @@ export async function startFuelCore(config: LoadedConfig): Promise<ChildProcessW
   let chainConfig = config?.chainConfig;
 
   if (!chainConfig) {
+    mkdir('-p', dirname(chainConfigPath));
     writeFileSync(chainConfigPath, chainConfigJson);
     chainConfig = chainConfigPath;
   }

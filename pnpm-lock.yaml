@@ -728,6 +728,9 @@ importers:
       glob:
         specifier: ^10.2.6
         version: 10.2.6
+      shelljs:
+        specifier: ^0.8.5
+        version: 0.8.5
       tree-kill:
         specifier: ^1.2.2
         version: 1.2.2

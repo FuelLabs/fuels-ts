@@ -67,6 +67,7 @@
     "chokidar": "^3.5.3",
     "esbuild": "^0.16.16",
     "glob": "^10.2.6",
+    "shelljs": "^0.8.5",
     "tree-kill": "^1.2.2"
   },
   "devDependencies": {
