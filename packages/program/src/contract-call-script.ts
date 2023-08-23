@@ -161,7 +161,7 @@ const scriptResultDecoder =
 export const decodeContractCallScriptResult = (
   callResult: CallResult,
   contractId: AbstractAddress,
-  isOutputDataHeap = false,
+  isOutputDataHeap: boolean,
   logs: Array<any> = []
 ): Uint8Array[] =>
   decodeCallResult(callResult, scriptResultDecoder(contractId, isOutputDataHeap), logs);
