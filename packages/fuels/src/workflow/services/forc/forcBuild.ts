@@ -4,7 +4,7 @@ import type { LoadedConfig } from '../../types';
 
 export async function forcBuild(config: LoadedConfig, path: string) {
   return new Promise((resolve, reject) => {
-    const command = config.useSystemForc ? 'fuel-core' : './node_modules/.bin/fuels-forc';
+    const command = config.useSystemForc ? 'forc' : './node_modules/.bin/fuels-forc';
     const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
 
     forc.stderr?.pipe(process.stdout);
