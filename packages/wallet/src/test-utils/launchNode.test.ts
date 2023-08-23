@@ -4,9 +4,19 @@ import { WalletUnlocked } from '../wallets';
 
 import { launchNodeAndGetWallets } from './launchNode';
 
-test('launchNodeAndGetWallets', async () => {
+test.each([
+  {
+    useSystemFuelCore: false,
+  },
+  {
+    useSystemFuelCore: true,
+  },
+])('launchNodeAndGetWallets', async ({ useSystemFuelCore }) => {
   const { stop, provider, wallets } = await launchNodeAndGetWallets({
     walletCount: 10,
+    launchNodeOptions: {
+      useSystemFuelCore,
+    },
   });
   expect(provider).toBeInstanceOf(Provider);
   expect(wallets.length).toBe(10);

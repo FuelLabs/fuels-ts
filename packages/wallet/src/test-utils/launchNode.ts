@@ -2,6 +2,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { Provider } from '@fuel-ts/providers';
 import { spawn } from 'child_process';
 import fs from 'fs/promises';
+import kill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
@@ -52,7 +53,7 @@ export const launchNode = async ({
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      child.kill('SIGINT');
+      kill(Number(child.pid));
 
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();
