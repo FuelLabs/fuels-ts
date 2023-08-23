@@ -13,7 +13,9 @@ export type ContractCall = {
   contractId: AbstractAddress;
   data: BytesLike;
   fnSelector: string;
-  isDataPointer: boolean;
+  isInputDataPointer: boolean;
+  isOutputDataHeap: boolean;
+  outputEncodedLength: number;
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
@@ -50,7 +52,6 @@ export type CallConfig<T = unknown> = {
   txParameters?: TxParams;
   forward?: CoinQuantity;
   args: T;
-  bytesOffset: number;
 };
 
 /**
