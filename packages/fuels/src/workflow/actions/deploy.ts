@@ -42,6 +42,7 @@ export async function deploy(config: LoadedConfig) {
   }
 
   logSection('🟦 Save contract ids...');
+
   await saveContractIds(contracts, config.output);
 
   return contracts;

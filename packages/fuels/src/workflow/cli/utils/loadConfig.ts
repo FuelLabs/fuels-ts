@@ -58,11 +58,13 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
   config.useSystemFuelCore = config.useSystemFuelCore ?? false;
   config.shouldAutoStartFuelCoreNode = config.shouldAutoStartFuelCoreNode ?? true;
 
+  const { contracts, predicates, scripts } = userConfig;
+
   if (!userConfig.workspace) {
     // Resolve members individually
-    userConfig.contracts = (userConfig.contracts || []).map((c: string) => resolve(cwd, c));
-    userConfig.scripts = (userConfig.scripts || []).map((s: string) => resolve(cwd, s));
-    userConfig.predicates = (userConfig.predicates || []).map((p: string) => resolve(cwd, p));
+    config.contracts = (contracts || []).map((c: string) => resolve(cwd, c));
+    config.scripts = (scripts || []).map((s: string) => resolve(cwd, s));
+    config.predicates = (predicates || []).map((p: string) => resolve(cwd, p));
   } else {
     // Resolve members via workspace
     const workspace = resolve(cwd, userConfig.workspace);
@@ -76,17 +78,19 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
       }))
     );
 
-    userConfig.contracts = projectTypes
-      .filter((pt) => pt.type === SwayType.contract)
-      .map((pt) => pt.path);
+    config.workspace = workspace;
 
-    userConfig.predicates = projectTypes
-      .filter((pt) => pt.type === SwayType.predicate)
-      .map((pt) => pt.path);
+    config.contracts = projectTypes
+      .filter(({ type }) => type === SwayType.contract)
+      .map(({ path }) => path);
 
-    userConfig.scripts = projectTypes
-      .filter((pt) => pt.type === SwayType.script)
-      .map((pt) => pt.path);
+    config.predicates = projectTypes
+      .filter(({ type }) => type === SwayType.predicate)
+      .map(({ path }) => path);
+
+    config.scripts = projectTypes
+      .filter(({ type }) => type === SwayType.script)
+      .map(({ path }) => path);
   }
 
   return config;
