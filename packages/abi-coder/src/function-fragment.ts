@@ -85,12 +85,16 @@ export class FunctionFragment<
   }
 
   #getOutputEncodedLength(): number {
-    const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
-    if (heapCoder instanceof VecCoder) {
-      return heapCoder.coder.encodedLength;
-    }
+    try {
+      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+      if (heapCoder instanceof VecCoder) {
+        return heapCoder.coder.encodedLength;
+      }
 
-    return heapCoder.encodedLength;
+      return heapCoder.encodedLength;
+    } catch (e) {
+      return 0;
+    }
   }
 
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
