@@ -1,12 +1,12 @@
 import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../json-abi';
 
-import type { GetTypeParameters } from './get-type-parameters';
+import type { GetTypeParameters, MapTypeParametersToTypeArguments } from './get-type-parameters';
 import type { MapAbiArray } from './map-abi-array';
 import type { MapAbiEnum } from './map-abi-enum';
 import type { MapAbiStruct } from './map-abi-struct';
 import type { MapAbiTuple } from './map-abi-tuple';
 import type { AbiBuiltInType, MapAbiBuiltInType } from './map-builtin-type';
-import type { IndexOf, ReplaceValues, TupleToUnion } from './type-utilities';
+import type { ReplaceValues, TupleToUnion } from './type-utilities';
 
 /**
  * Infers the type of a specific arg
@@ -56,7 +56,7 @@ export type InferAbiType<
       | 'If you see this, please file an issue on GitHub to the fuels-ts team and attach your ABI';
 
 /**
- * Replaces generic components' generic types with specific types provided via `typeArguments` of `Arg`
+ * Replaces generic components' generic types with specific types provided via `Arg['typeArguments']`
  *
  * @param Types - ABI types
  * @param Arg - Argument who's underlying type's components are being resolved
@@ -68,22 +68,20 @@ type ResolveGenericComponents<
   T extends JsonAbiType = Types[Arg['type']],
   Components extends readonly JsonAbiArgument[] = NonNullable<T['components']>,
   TypeParameters extends readonly number[] | null = GetTypeParameters<Types, T>,
-  TypeParameterArgsMap extends Record<number, JsonAbiArgument> = {
-    [GenericId in TupleToUnion<TypeParameters>]: NonNullable<Arg['typeArguments']>[IndexOf<
-      TypeParameters,
-      GenericId
-    >];
-  }
+  TypeParameterArgsMap extends Record<number, JsonAbiArgument> = MapTypeParametersToTypeArguments<
+    TypeParameters,
+    Arg['typeArguments']
+  >
 > =
   /**
    * Does the type even have components?
-   * If not, then return null, because a type cannot possibly be generic if it doesn't even have components.
+   * If not, then return null, because a type cannot possibly be generic if it doesn't have components.
    */
   Components extends never
     ? null
     : /**
      * Okay, the type has components, but is the type actually generic?
-     * We are using TypeParameters as an indicator of genericness. For more info, check out the type GetTypeParameters.
+     * We are using TypeParameters as an indicator of genericness. For more info, check out the helper GetTypeParameters.
      *
      * If TypeParameters are null, then return the components, as there's nothing generic to resolve in them.
      */
@@ -92,7 +90,8 @@ type ResolveGenericComponents<
     : {
         /**
          * Okay, so the argument's underlying type has components and in them exists a generic (or more of them).
-         * Now we must iterate over every component of that type and check if the component is generic or if its typeArguments are generic.
+         * Now we must iterate over every component of that type and check if the component is generic or if its typeArguments are generic,
+         * so that we replace that generic with a specific values passed via Arg['typeArguments'].
          * First we are checking if the component itself is generic.
          * If it is generic, then replace that component with the corresponding specific type from the TypeParameterArgsMap.
          */

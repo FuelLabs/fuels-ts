@@ -3,7 +3,7 @@ import type { JsonAbi, JsonAbiType, JsonAbiArgument } from '../json-abi';
 import type { InferAbiType } from './abi-type-inferrer';
 
 /**
- * Tuples are collections of a fixed number of elements.
+ * Tuples are collections with a fixed number of elements.
  * We are iterating over each element of the tuple and inferring its type.
  */
 export type MapAbiTuple<

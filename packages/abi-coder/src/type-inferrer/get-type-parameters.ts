@@ -1,6 +1,6 @@
 import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../json-abi';
 
-import type { Filter, Flatten } from './type-utilities';
+import type { Filter, Flatten, IndexOf, TupleToUnion } from './type-utilities';
 
 /**
  * This helper gets all the type parameters of an abi type, be they explicit or implicit.
@@ -66,3 +66,24 @@ type MapImplicitTypeParameters<
    * All of this in the end narrows the Result's initial readonly unknown[] type to readonly number[].
    */
   Filter<Flatten<Result>, number>;
+
+/**
+ * This is a mapper between generics and their corresponding specific arguments they're being replaced with.
+ * If there aren't any TypeParameters or TypeArguments, return an empty record.
+ */
+export type MapTypeParametersToTypeArguments<
+  TypeParameters extends readonly number[] | null,
+  TypeArguments extends readonly JsonAbiArgument[] | null
+> = TypeParameters extends readonly number[]
+  ? TypeArguments extends readonly JsonAbiArgument[]
+    ? {
+        [GenericId in TupleToUnion<TypeParameters>]: TypeArguments[IndexOf<
+          TypeParameters,
+          GenericId
+        >];
+      }
+    : /**
+       * This syntax indicates an empty record.
+       */
+      Record<string, never>
+  : Record<string, never>;
