@@ -22,7 +22,6 @@ import { type Operation } from './types';
 
 describe('TransactionSummary', () => {
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
-  const gasPrice = bn(1);
   const gasPerByte = bn(2);
   const gasPriceFactor = bn(3);
   const transaction = MOCK_TRANSACTION;
@@ -38,7 +37,6 @@ describe('TransactionSummary', () => {
   const runTest = (status: GraphqlTransactionStatus, expected: Record<string, unknown>) => {
     const transactionSummary = assembleTransactionSummary({
       id,
-      gasPrice,
       gasPerByte,
       gasPriceFactor,
       transaction,
