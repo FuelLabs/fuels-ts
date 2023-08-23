@@ -7,21 +7,21 @@ import {
 
 import { getTransactionStatusName, processGraphqlStatus } from './status';
 import type { GqlTransactionStatusesNames, GraphqlTransactionStatus } from './types';
-import { SimplifiedTransactionStatusNameEnum } from './types';
+import { TransactionStatus } from './types';
 
 describe('status', () => {
   it('should ensure getTransactionStatusName return status name just fine', () => {
     let status = getTransactionStatusName('FailureStatus');
-    expect(status).toBe(SimplifiedTransactionStatusNameEnum.failure);
+    expect(status).toBe(TransactionStatus.failure);
 
     status = getTransactionStatusName('SuccessStatus');
-    expect(status).toBe(SimplifiedTransactionStatusNameEnum.success);
+    expect(status).toBe(TransactionStatus.success);
 
     status = getTransactionStatusName('SqueezedOutStatus');
-    expect(status).toBe(SimplifiedTransactionStatusNameEnum.squeezedout);
+    expect(status).toBe(TransactionStatus.squeezedout);
 
     status = getTransactionStatusName('SubmittedStatus');
-    expect(status).toBe(SimplifiedTransactionStatusNameEnum.submitted);
+    expect(status).toBe(TransactionStatus.submitted);
 
     expect(() =>
       getTransactionStatusName('UnknownStatus' as unknown as GqlTransactionStatusesNames)
@@ -41,7 +41,7 @@ describe('status', () => {
         isStatusPending: false,
         isStatusSuccess: true,
         blockIdType: 'string',
-        status: SimplifiedTransactionStatusNameEnum.success,
+        status: TransactionStatus.success,
         timeType: 'string',
       },
     },
@@ -53,7 +53,7 @@ describe('status', () => {
         isStatusPending: false,
         isStatusSuccess: false,
         blockIdType: 'string',
-        status: SimplifiedTransactionStatusNameEnum.failure,
+        status: TransactionStatus.failure,
         timeType: 'string',
       },
     },
@@ -65,7 +65,7 @@ describe('status', () => {
         isStatusPending: true,
         isStatusSuccess: false,
         blockIdType: 'undefined',
-        status: SimplifiedTransactionStatusNameEnum.submitted,
+        status: TransactionStatus.submitted,
         timeType: 'string',
       },
     },
@@ -77,7 +77,7 @@ describe('status', () => {
         isStatusPending: false,
         isStatusSuccess: false,
         blockIdType: 'undefined',
-        status: SimplifiedTransactionStatusNameEnum.squeezedout,
+        status: TransactionStatus.squeezedout,
         timeType: 'undefined',
       },
     },

@@ -1,14 +1,12 @@
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
+import type { GqlReceipt } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { assembleReceiptByType } from '../utils';
 
-import type { BurnedOrMintedAsset } from './types';
+import type { BurnedAsset, MintedAsset } from './types';
 
-export const processGqlReceipt = (
-  gqlReceipt: GqlReceiptFragmentFragment
-): TransactionResultReceipt => {
+export const processGqlReceipt = (gqlReceipt: GqlReceipt): TransactionResultReceipt => {
   const receipt = assembleReceiptByType(gqlReceipt);
 
   switch (receipt.type) {
@@ -29,14 +27,10 @@ export const processGqlReceipt = (
   }
 };
 
-export const extractAssetIdFromBurnOrMintReceipts = (
+export const extractMintedAssetsFromReceipts = (
   receipts: Array<TransactionResultReceipt>
-): {
-  mintedAssets: BurnedOrMintedAsset[];
-  burnedAssets: BurnedOrMintedAsset[];
-} => {
-  const mintedAssets: BurnedOrMintedAsset[] = [];
-  const burnedAssets: BurnedOrMintedAsset[] = [];
+): MintedAsset[] => {
+  const mintedAssets: MintedAsset[] = [];
 
   receipts.forEach((receipt) => {
     if (receipt.type === ReceiptType.Mint) {
@@ -46,7 +40,19 @@ export const extractAssetIdFromBurnOrMintReceipts = (
         assetId: receipt.assetId,
         amount: receipt.val,
       });
-    } else if (receipt.type === ReceiptType.Burn) {
+    }
+  });
+
+  return mintedAssets;
+};
+
+export const extractBurnedAssetsFromReceipts = (
+  receipts: Array<TransactionResultReceipt>
+): BurnedAsset[] => {
+  const burnedAssets: BurnedAsset[] = [];
+
+  receipts.forEach((receipt) => {
+    if (receipt.type === ReceiptType.Burn) {
       burnedAssets.push({
         subId: receipt.subId,
         contractId: receipt.contractId,
@@ -56,5 +62,5 @@ export const extractAssetIdFromBurnOrMintReceipts = (
     }
   });
 
-  return { mintedAssets, burnedAssets };
+  return burnedAssets;
 };

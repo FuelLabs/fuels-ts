@@ -17,7 +17,7 @@ export const getFunctionCall = ({ abi, receipt, rawPayload }: GetFunctionCallPro
   let encodedArgs;
 
   // if has more than 1 input or input type is bigger than 8 bytes, then it's a pointer to data
-  if (functionFragment.isInputDataPointer()) {
+  if (functionFragment.isInputDataPointer) {
     if (rawPayload) {
       // calculate offset to get function params from rawPayload. should also consider vm offset: VM_TX_MEMORY
       const argsOffset = bn(receipt.param2).sub(VM_TX_MEMORY).toNumber();
