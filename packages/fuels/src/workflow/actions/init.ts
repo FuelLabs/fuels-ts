@@ -1,9 +1,11 @@
+import { green, red } from 'chalk';
 import type { Command } from 'commander';
 import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { resolveProjectCwd } from '../cli/utils/resolveProjectCwd';
-import { logSection } from '../utils';
+import { renderFuelsConfigTemplate } from '../templates/fuels.config';
+import { log } from '../utils';
 
 export const init = (program: Command) => () => {
   const options = program.opts();
@@ -13,20 +15,13 @@ export const init = (program: Command) => () => {
   const fileExists = existsSync(fuelsConfigPath);
 
   if (fileExists) {
-    throw Error(`File exists, aborting — ${fuelsConfigPath}`);
+    log(`Config file exists, aborting\n  ${red(fuelsConfigPath)}`);
+    process.exit(1);
   }
 
-  const defaultConfig = `
-  import { createConfig, ActionEvent, LoadedConfig } from "fuels";
-
-  export default createConfig({
-    privateKey: "0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298",
-    workspace: "./sway-programs",
-    output: "./types"
-  });
-`;
+  const defaultConfig = renderFuelsConfigTemplate();
 
   writeFileSync(fuelsConfigPath, defaultConfig);
 
-  logSection(`Config file created at:\n  ${fuelsConfigPath}`);
+  log(`Config file created at:\n  ${green(fuelsConfigPath)}`);
 };

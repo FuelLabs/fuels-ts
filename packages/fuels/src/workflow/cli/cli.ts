@@ -1,8 +1,6 @@
-import { versions } from '@fuel-ts/versions';
 import type { Command } from 'commander';
 
 import * as actions from '../actions';
-import { init } from '../actions/init';
 import { Commands } from '../types';
 
 import { createAction } from './utils/createAction';
@@ -13,7 +11,7 @@ export function configureCliOptions(program: Command) {
   program
     .command('init')
     .description('Create a `fuel.config.ts` and `chainConfig.json`')
-    .action(init(program));
+    .action(actions.init(program));
 
   program
     .command('dev', { isDefault: true })
