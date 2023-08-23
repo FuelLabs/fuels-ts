@@ -114,3 +114,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git commit -m "docs: API docs"
           git push
+          git restore apps/docs/.gitignore
