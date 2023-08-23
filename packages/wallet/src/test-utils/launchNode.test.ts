@@ -7,9 +7,6 @@ import { launchNodeAndGetWallets } from './launchNode';
 test('launchNodeAndGetWallets', async () => {
   const { stop, provider, wallets } = await launchNodeAndGetWallets({
     walletCount: 10,
-    launchNodeOptions: {
-      useSystemFuelCore: false,
-    },
   });
   expect(provider).toBeInstanceOf(Provider);
   expect(wallets.length).toBe(10);
