@@ -1,5 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-import type { BN } from '@fuel-ts/math';
+import { bn, type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
@@ -14,44 +14,44 @@ import {
 } from './operations';
 import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
-import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
+import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 
-interface IAssembleTransactionSummaryParams {
+export interface AssembleTransactionSummaryParams {
   id?: string;
-  gasPrice: BN;
   gasPerByte?: BN;
   gasPriceFactor?: BN;
   transaction: Transaction;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
-  abiParam?: AbiParam;
+  abiMap?: AbiMap;
 }
 
 /** @hidden */
 export function assembleTransactionSummary<TTransactionType = void>(
-  params: IAssembleTransactionSummaryParams
+  params: AssembleTransactionSummaryParams
 ) {
   const {
     receipts,
     gasPerByte,
-    gasPrice,
     gasPriceFactor,
     transaction,
     transactionBytes,
     id,
     gqlTransactionStatus,
-    abiParam,
+    abiMap = {},
   } = params;
 
-  const { fee, gasUsed } = calculateTransactionFee({
+  const gasPrice = bn(transaction.gasPrice);
+
+  const { gasUsed, fee } = calculateTransactionFee({
+    receipts,
     gasPrice,
     transactionBytes,
     transactionWitnesses: transaction?.witnesses || [],
     gasPerByte,
     gasPriceFactor,
     transactionType: transaction.type,
-    receipts,
   });
 
   const operations = getOperations({
@@ -60,7 +60,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     outputs: transaction.outputs || [],
     receipts,
     rawPayload: hexlify(transactionBytes),
-    abiMap: abiParam?.abiMap,
+    abiMap,
   });
 
   const typeName = getTransactionTypeName(transaction.type);
