@@ -67,10 +67,10 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
     // Resolve members via workspace
     const workspace = resolve(cwd, userConfig.workspace);
     const forcToml = await readForcToml(workspace);
-    const members = forcToml.workspace.members.map((member) => resolve(workspace, member));
+    const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
     const projectTypes = await Promise.all(
-      members.map(async (m) => ({
+      swayMembers.map(async (m) => ({
         type: await readSwayType(m),
         path: m,
       }))
