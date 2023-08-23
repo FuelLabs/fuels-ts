@@ -20,7 +20,10 @@ type FullAbiInferredCorrectly = IsTrue<
             tuple: [string, number];
           };
         };
-        output: number;
+        output: {
+          arr: [string, string, string];
+          tuple: [string, number];
+        };
       };
     }
   >

@@ -50,7 +50,40 @@ type FullAbiInferredCorrectly = IsTrue<
             ];
           };
         };
-        output: void;
+        output: {
+          a: [
+            {
+              bim: string;
+              bam: {
+                propB1: number;
+              };
+              bom: {
+                propA1: number;
+                propA2: string;
+              };
+            },
+            {
+              bim: string;
+              bam: {
+                propB1: number;
+              };
+              bom: {
+                propA1: number;
+                propA2: string;
+              };
+            },
+            {
+              bim: string;
+              bam: {
+                propB1: number;
+              };
+              bom: {
+                propA1: number;
+                propA2: string;
+              };
+            }
+          ];
+        };
       };
     }
   >
