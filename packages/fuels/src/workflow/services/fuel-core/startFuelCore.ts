@@ -47,12 +47,8 @@ export async function startFuelCore(config: LoadedConfig): Promise<ChildProcessW
       kill(Number(subProcess.pid));
     };
 
-    // process.on('unhandledRejection', killNode);
-    // process.on('uncaughtExceptionMonitor', killNode);
-    // process.on('rejectionHandled', killNode);
     process.on('beforeExit', killNode);
-    // process.on('uncaughtException', killNode);
-    // process.on('SIGINT', killNode);
+    process.on('uncaughtException', killNode);
 
     subProcess.stderr?.pipe(process.stdout);
     subProcess.stdout?.pipe(process.stdout);
