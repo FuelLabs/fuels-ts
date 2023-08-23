@@ -14,15 +14,19 @@ import { returnZeroScript } from './scripts';
 import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest } from './transaction-request';
 
+/**
+ * @hidden
+ */
 export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike {
   /** Script to execute */
   script?: BytesLike;
   /** Script input data (parameters) */
   scriptData?: BytesLike;
-  /** determined bytes offset for start of script data */
-  bytesOffset?: number | undefined;
 }
 
+/**
+ * `ScriptTransactionRequest` provides functionalities for creating a transaction request that uses a script.
+ */
 export class ScriptTransactionRequest extends BaseTransactionRequest {
   static from(obj: ScriptTransactionRequestLike) {
     if (obj instanceof this) {
@@ -37,16 +41,23 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   script: Uint8Array;
   /** Script input data (parameters) */
   scriptData: Uint8Array;
-  /** determined bytes offset for start of script data */
-  bytesOffset: number | undefined;
 
-  constructor({ script, scriptData, bytesOffset, ...rest }: ScriptTransactionRequestLike = {}) {
+  /**
+   * Constructor for `ScriptTransactionRequest`.
+   *
+   * @param scriptTransactionRequestLike - The initial values for the instance.
+   */
+  constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
-    this.bytesOffset = bytesOffset;
   }
 
+  /**
+   * Converts the transaction request to a `TransactionScript`.
+   *
+   * @returns The transaction script object.
+   */
   toTransaction(): TransactionScript {
     const script = arrayify(this.script ?? '0x');
     const scriptData = arrayify(this.scriptData ?? '0x');
@@ -61,33 +72,56 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     };
   }
 
+  /**
+   * Get contract inputs for the transaction.
+   *
+   * @returns An array of contract transaction request inputs.
+   */
   getContractInputs(): ContractTransactionRequestInput[] {
     return this.inputs.filter(
       (input): input is ContractTransactionRequestInput => input.type === InputType.Contract
     );
   }
 
+  /**
+   * Get contract outputs for the transaction.
+   *
+   * @returns An array of contract transaction request outputs.
+   */
   getContractOutputs(): ContractTransactionRequestOutput[] {
     return this.outputs.filter(
       (output): output is ContractTransactionRequestOutput => output.type === OutputType.Contract
     );
   }
 
+  /**
+   * Get variable outputs for the transaction.
+   *
+   * @returns An array of variable transaction request outputs.
+   */
   getVariableOutputs(): VariableTransactionRequestOutput[] {
     return this.outputs.filter(
       (output): output is VariableTransactionRequestOutput => output.type === OutputType.Variable
     );
   }
 
+  /**
+   * Set the script and its data.
+   *
+   * @param script - The abstract script request.
+   * @param data - The script data.
+   */
   setScript<T>(script: AbstractScriptRequest<T>, data: T) {
-    this.script = script.bytes;
     this.scriptData = script.encodeScriptData(data);
-
-    if (this.bytesOffset === undefined) {
-      this.bytesOffset = this.scriptData.byteLength;
-    }
+    this.script = script.bytes;
   }
 
+  /**
+   * Adds variable outputs to the transaction request.
+   *
+   * @param numberOfVariables - The number of variables to add.
+   * @returns The new length of the outputs array.
+   */
   addVariableOutputs(numberOfVariables: number = 1) {
     let outputsNumber = numberOfVariables;
 
@@ -101,6 +135,12 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
+  /**
+   * Adds a contract input and output to the transaction request.
+   *
+   * @param contract - The contract ID.
+   * @returns The current instance of the `ScriptTransactionRequest`.
+   */
   addContractInputAndOutput(contract: ContractIdLike): ScriptTransactionRequest {
     const contractAddress = addressify(contract);
 
@@ -123,6 +163,13 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
+  /**
+   * Sets the data for the transaction request.
+   *
+   * @param abi - Script JSON ABI.
+   * @param args - The input arguments.
+   * @returns The current instance of the `ScriptTransactionRequest`.
+   */
   setData(abi: JsonAbi, args: InputValue[]): ScriptTransactionRequest {
     const abiInterface = new Interface(abi);
     this.scriptData = abiInterface.functions.main.encodeArguments(args);

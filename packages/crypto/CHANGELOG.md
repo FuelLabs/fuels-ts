@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.52.0
+
+### Minor Changes
+
+- 🐞 fix base64 decoding on helper stringFromBuffer for browser, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1196](https://github.com/FuelLabs/fuels-ts/pull/1196))
+
+## 0.51.0
+
+## 0.50.0
+
+### Minor Changes
+
+- supporting hex encoding on bufferFromString and stringFromBuffer, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1157](https://github.com/FuelLabs/fuels-ts/pull/1157))
+
 ## 0.49.1
 
 ## 0.49.0

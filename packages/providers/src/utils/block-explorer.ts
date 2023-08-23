@@ -1,5 +1,6 @@
 const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 
+/** @hidden */
 const getPathFromInput = (
   key: BuildBlockExplorerUrlHelperParam,
   value: string | number | undefined
@@ -16,6 +17,8 @@ const getPathFromInput = (
 type BuildBlockExplorerUrlHelperParam = 'address' | 'txId' | 'blockNumber';
 
 /**
+ * @hidden
+ *
  * Builds a block explorer url based on and the given path, block explorer URL and provider URL
  */
 export const buildBlockExplorerUrl = (

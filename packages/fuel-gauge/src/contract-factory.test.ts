@@ -60,12 +60,20 @@ describe('Contract Factory', () => {
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
-      status: expect.objectContaining({
-        programState: expect.any(Object),
-        type: 'success',
-      }),
+      status: expect.any(String),
+      type: expect.any(String),
+      gqlTransaction: expect.any(Object),
+      operations: expect.any(Array),
+      isStatusFailure: expect.any(Boolean),
+      isStatusPending: expect.any(Boolean),
+      isStatusSuccess: expect.any(Boolean),
+      isTypeCreate: expect.any(Boolean),
+      isTypeMint: expect.any(Boolean),
+      isTypeScript: expect.any(Boolean),
+      mintedAssets: expect.any(Array),
+      burnedAssets: expect.any(Array),
       time: expect.any(String),
-      transactionId: expect.any(String),
+      id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
       }),
@@ -90,7 +98,6 @@ describe('Contract Factory', () => {
       program: expect.objectContaining({ id: contract.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
-      bytesOffset: 760,
       callParameters: undefined,
       txParameters: undefined,
       forward: undefined,
@@ -134,7 +141,7 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: vB256 } = await contact.functions.return_b256().get();
+    const { value: vB256 } = await contact.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -169,7 +176,7 @@ describe('Contract Factory', () => {
       })
     );
 
-    const { value: vB256 } = await contract.functions.return_b256().get();
+    const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 });

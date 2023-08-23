@@ -28,8 +28,18 @@ import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
-export { TransactionType };
+export {
+  /**
+   * @hidden
+   */
+  TransactionType,
+};
 
+/**
+ * @hidden
+ *
+ * Interface defining a like structure for a base transaction request.
+ */
 export interface BaseTransactionRequestLike {
   /** Gas price for transaction */
   gasPrice?: BigNumberish;
@@ -45,6 +55,9 @@ export interface BaseTransactionRequestLike {
   witnesses?: TransactionRequestWitness[];
 }
 
+/**
+ * Abstract class to define the functionalities of a transaction request transaction request.
+ */
 export abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
   abstract type: TransactionType;
@@ -61,6 +74,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
 
+  /**
+   * Constructor for initializing a base transaction request.
+   *
+   * @param baseTransactionRequest - Optional object containing properties to initialize the transaction request.
+   */
   constructor({
     gasPrice,
     gasLimit,
@@ -77,6 +95,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.witnesses = [...(witnesses ?? [])];
   }
 
+  /**
+   * Method to obtain the base transaction details.
+   *
+   * @returns The base transaction details.
+   */
   protected getBaseTransaction(): Pick<
     TransactionScript | TransactionCreate,
     keyof BaseTransactionRequestLike | 'inputsCount' | 'outputsCount' | 'witnessesCount'
@@ -99,11 +122,18 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   abstract toTransaction(): TransactionCreate | TransactionScript;
 
+  /**
+   * Converts the transaction request to a byte array.
+   *
+   * @returns The transaction bytes.
+   */
   toTransactionBytes(): Uint8Array {
     return new TransactionCoder().encode(this.toTransaction());
   }
 
   /**
+   * @hidden
+   *
    * Pushes an input to the list without any side effects and returns the index
    */
   protected pushInput(input: TransactionRequestInput): number {
@@ -112,6 +142,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
+   * @hidden
+   *
    * Pushes an output to the list without any side effects and returns the index
    */
   protected pushOutput(output: TransactionRequestOutput): number {
@@ -120,6 +152,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
+   * @hidden
+   *
    * Creates an empty witness without any side effects and returns the index
    */
   protected createWitness() {
@@ -127,6 +161,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return this.witnesses.length - 1;
   }
 
+  /**
+   * Updates the witness for a given owner and signature.
+   *
+   * @param address - The address to get the coin input witness index for.
+   * @param signature - The signature to update the witness with.
+   */
   updateWitnessByOwner(address: AbstractAddress, signature: BytesLike) {
     const witnessIndex = this.getCoinInputWitnessIndexByOwner(address);
     if (typeof witnessIndex === 'number') {
@@ -135,7 +175,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Updates an existing witness without any side effects
+   * Updates an existing witness without any side effects.
+   *
+   * @param index - The index of the witness to update.
+   * @param witness - The new witness.
+   * @throws If the witness does not exist.
    */
   updateWitness(index: number, witness: TransactionRequestWitness) {
     if (!this.witnesses[index]) {
@@ -144,18 +188,33 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.witnesses[index] = witness;
   }
 
+  /**
+   * Gets the coin inputs for a transaction.
+   *
+   * @returns The coin inputs.
+   */
   getCoinInputs(): CoinTransactionRequestInput[] {
     return this.inputs.filter(
       (input): input is CoinTransactionRequestInput => input.type === InputType.Coin
     );
   }
 
+  /**
+   * Gets the coin outputs for a transaction.
+   *
+   * @returns The coin outputs.
+   */
   getCoinOutputs(): CoinTransactionRequestOutput[] {
     return this.outputs.filter(
       (output): output is CoinTransactionRequestOutput => output.type === OutputType.Coin
     );
   }
 
+  /**
+   * Gets the change outputs for a transaction.
+   *
+   * @returns The change outputs.
+   */
   getChangeOutputs(): ChangeTransactionRequestOutput[] {
     return this.outputs.filter(
       (output): output is ChangeTransactionRequestOutput => output.type === OutputType.Change
@@ -163,7 +222,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Returns the witnessIndex of the found CoinInput
+   * @hidden
+   *
+   * Returns the witnessIndex of the found CoinInput.
    */
   getCoinInputWitnessIndexByOwner(owner: AddressLike): number | null {
     const ownerAddress = addressify(owner);
@@ -181,7 +242,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Updates the witness for the given CoinInput owner
+   * Updates the witness for the given CoinInput owner.
+   *
+   * @param owner - The owner of the CoinInput.
+   * @param witness - The witness to update.
+   * @throws If no witness exists for the given owner.
    */
   updateWitnessByCoinInputOwner(owner: AddressLike, witness: BytesLike) {
     const witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
@@ -194,8 +259,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Converts the given Resource to a ResourceInput with the appropriate witnessIndex and pushes it along with
-   * a change output
+   * Adds a single resource to the transaction by adding inputs and outputs.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
    */
   addResourceInputAndOutput(resource: Resource) {
     const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
@@ -250,12 +317,25 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return this;
   }
 
+  /**
+   * Adds multiple resources to the transaction by adding inputs and outputs.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
+   */
   addResourceInputsAndOutputs(resources: ReadonlyArray<Resource>) {
     resources.forEach((resource) => this.addResourceInputAndOutput(resource));
 
     return this;
   }
 
+  /**
+   * Adds a coin input to the transaction.
+   *
+   * @param to - Address of the owner.
+   * @param amount - Amount of coin.
+   * @param assetId - Asset ID of coin.
+   */
   addCoinOutput(
     /** Address of the destination */
     to: AddressLike,
@@ -272,6 +352,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     });
   }
 
+  /**
+   * Adds multiple coin outputs to the transaction.
+   *
+   * @param to - Address of the destination.
+   * @param quantities - Quantities of coins.
+   */
   addCoinOutputs(
     /** Address of the destination */
     to: AddressLike,
@@ -288,10 +374,16 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     });
   }
 
+  /**
+   * @hidden
+   */
   byteSize() {
     return this.toTransactionBytes().length;
   }
 
+  /**
+   * @hidden
+   */
   chargeableByteSize() {
     const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
     return bn(this.toTransactionBytes().length - witnessSize);
@@ -299,9 +391,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   /**
    * Return the minimum amount in native coins required to create
-   * a transaction.
+   * a transaction. This is required even if the gasPrice is 0.
    *
-   * Note: this is required even gasPrice = 0
+   * @returns The minimum amount in coins required to create a transaction.
    */
   calculateFee(): CoinQuantity {
     const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
@@ -312,12 +404,22 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
+  /**
+   * Return the minimum amount in native coins required to create
+   * a transaction.
+   *
+   * @returns The transaction as a JSON object.
+   */
   toJSON() {
     return normalizeJSON(this);
   }
 
   /**
-   * Determines whether the transaction has a predicate input
+   * @hidden
+   *
+   * Determines whether the transaction has a predicate input.
+   *
+   * @returns Whether the transaction has a predicate input.
    */
   hasPredicateInput(): boolean {
     return Boolean(

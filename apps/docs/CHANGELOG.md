@@ -1,5 +1,19 @@
 # @fuel-ts/docs
 
+## 0.42.2
+
+## 0.42.1
+
+## 0.42.0
+
+### Minor Changes
+
+- use simulate instead of get on BaseInvocationScope class, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1179](https://github.com/FuelLabs/fuels-ts/pull/1179))
+
+### Patch Changes
+
+- add docs CI, match docs nav names to files, by [@sarahschwartz](https://github.com/sarahschwartz) (See [#1177](https://github.com/FuelLabs/fuels-ts/pull/1177))
+
 ## 0.41.6
 
 ## 0.41.5

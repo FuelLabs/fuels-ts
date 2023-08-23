@@ -5,7 +5,17 @@ import type { Provider } from '@fuel-ts/providers';
 import { FUEL_NETWORK_URL } from './configs';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
+/**
+ * `Wallet` provides methods to create locked and unlocked wallet instances.
+ */
 export class Wallet {
+  /**
+   * Creates a locked wallet instance from an address and a provider.
+   *
+   * @param address - The address of the wallet.
+   * @param provider - The provider URL or a Provider instance.
+   * @returns A locked wallet instance.
+   */
   static fromAddress(
     address: string | AbstractAddress,
     provider: string | Provider = FUEL_NETWORK_URL
@@ -13,12 +23,53 @@ export class Wallet {
     return new WalletLocked(address, provider);
   }
 
+  /**
+   * Creates an unlocked wallet instance from a private key and a provider.
+   *
+   * @param privateKey - The private key of the wallet.
+   * @param provider - The provider URL or a Provider instance.
+   * @returns An unlocked wallet instance.
+   */
   static fromPrivateKey(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
     return new WalletUnlocked(privateKey, provider);
   }
 
+  /**
+   * Generate a new Wallet Unlocked with a random key pair.
+   *
+   * @param generateOptions - Options to customize the generation process (optional).
+   * @returns An unlocked wallet instance.
+   */
   static generate = WalletUnlocked.generate;
+
+  /**
+   * Create a Wallet Unlocked from a seed.
+   *
+   * @param seed - The seed phrase.
+   * @param path - The derivation path (optional).
+   * @param provider - The provider URL or a Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static fromSeed = WalletUnlocked.fromSeed;
+
+  /**
+   * Create a Wallet Unlocked from a mnemonic phrase.
+   *
+   * @param mnemonic - The mnemonic phrase.
+   * @param path - The derivation path (optional).
+   * @param passphrase - The passphrase for the mnemonic (optional).
+   * @param provider - The provider URL or a Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static fromMnemonic = WalletUnlocked.fromMnemonic;
+
+  /**
+   * Create a Wallet Unlocked from an extended key.
+   *
+   * @param extendedKey - The extended key.
+   * @param provider - The provider URL or a Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static fromExtendedKey = WalletUnlocked.fromExtendedKey;
+  static fromEncryptedJson = WalletUnlocked.fromEncryptedJson;
 }

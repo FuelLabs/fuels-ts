@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.52.0
+
+### Minor Changes
+
+- add new helpers calculateTransactionFeeForScript and calculateTransactionFeeForContractCreated, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1197](https://github.com/FuelLabs/fuels-ts/pull/1197))
+
+## 0.51.0
+
+### Minor Changes
+
+- upgrade fuel-core to 0.20.3, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1112](https://github.com/FuelLabs/fuels-ts/pull/1112))
+
+## 0.50.0
+
+### Minor Changes
+
+- improve transaction response, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1108](https://github.com/FuelLabs/fuels-ts/pull/1108))
+
 ## 0.49.1
 
 ## 0.49.0

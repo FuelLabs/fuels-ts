@@ -11,6 +11,7 @@ members = [
     "coverage-contract",
     "generic-types-contract",
     "liquidity-pool",
+    "multi-token-contract",
     "payable-annotation",
     "predicate-address",
     "predicate-false",
@@ -36,5 +37,6 @@ members = [
     "token_abi",
     "token_contract",
     "vector-types-contract",
-    "vector-types-script"
+    "vector-types-script",
+    "vectors"
 ]
