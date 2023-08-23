@@ -1,5 +1,6 @@
+import type { DeployContractOptions } from '@fuel-ts/contract';
+
 import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
-import type { DeployContractOptions } from '../types';
 
 import { deploy } from './deploy';
 
