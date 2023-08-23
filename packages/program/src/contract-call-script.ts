@@ -155,8 +155,7 @@ const scriptResultDecoder =
         }
 
         return [new Uint8Array()];
-      })
-      .filter((v) => v !== undefined);
+      });
   };
 
 export const decodeContractCallScriptResult = (
