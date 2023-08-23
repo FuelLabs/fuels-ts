@@ -604,31 +604,6 @@ importers:
         specifier: workspace:*
         version: link:../versions
 
-  packages/example-contract:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@fuel-ts/abi-typegen':
-        specifier: workspace:*
-        version: link:../abi-typegen
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
-      fuels:
-        specifier: workspace:*
-        version: link:../fuels
-    devDependencies:
-      '@fuel-ts/forc':
-        specifier: workspace:*
-        version: link:../forc
-      prettier:
-        specifier: ^2.7.1
-        version: 2.8.8
-      typescript:
-        specifier: ^4.8.4
-        version: 4.9.5
-
   packages/forc:
     dependencies:
       node-fetch:
