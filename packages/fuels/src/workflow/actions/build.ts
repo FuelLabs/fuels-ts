@@ -11,8 +11,9 @@ export async function build(config: LoadedConfig) {
   // path this increases also the performance of the build
   const paths = config.workspace
     ? [config.workspace]
-    : [...config.contracts, ...config.predicates, ...config.scripts];
+    : [config.contracts, config.predicates, config.scripts].flat();
+
   for (const path of paths) {
-    await forcBuild(path);
+    await forcBuild(config, path);
   }
 }

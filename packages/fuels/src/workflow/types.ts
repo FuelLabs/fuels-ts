@@ -64,7 +64,7 @@ export type FuelsConfig = {
 
   useSystemForc?: boolean;
   useSystemFuelCore?: boolean;
-  spinUpFuelNode?: boolean;
+  shouldAutoStartFuelCoreNode?: boolean;
 
   onFailure?: (error: Error, config: LoadedConfig) => void;
   onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;

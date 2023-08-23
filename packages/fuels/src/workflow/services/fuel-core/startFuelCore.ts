@@ -41,24 +41,25 @@ export async function startFuelCore(config: LoadedConfig): Promise<ChildProcessW
   ].flat();
 
   return new Promise((resolve, reject) => {
-    const subProcess = spawn('pnpm', flags, { stdio: 'pipe' });
+    const command = config.useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+    const fuelCore = spawn(command, flags, { stdio: 'pipe' });
 
     const killNode = () => {
-      kill(Number(subProcess.pid));
+      kill(Number(fuelCore.pid));
     };
 
     process.on('beforeExit', killNode);
     process.on('uncaughtException', killNode);
 
-    subProcess.stderr?.pipe(process.stdout);
-    subProcess.stdout?.pipe(process.stdout);
+    fuelCore.stderr?.pipe(process.stdout);
+    fuelCore.stdout?.pipe(process.stdout);
 
-    subProcess.stderr?.on('data', (data) => {
+    fuelCore.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
-        resolve(subProcess);
+        resolve(fuelCore);
       }
     });
 
-    subProcess.on('error', reject);
+    fuelCore.on('error', reject);
   });
 }

@@ -1,16 +1,16 @@
 import { spawn } from 'child_process';
 
-export async function forcBuild(path: string) {
+import type { LoadedConfig } from '../../types';
+
+export async function forcBuild(config: LoadedConfig, path: string) {
   return new Promise((resolve, reject) => {
-    const forcPath = './node_modules/.bin/fuels-forc';
-    const subProcess = spawn(forcPath, ['build', '-p', path], {
-      stdio: 'pipe',
-    });
-    // Log outputs from forc build directly to current
-    // process output.
-    subProcess.stderr?.pipe(process.stdout);
-    subProcess.stdout?.pipe(process.stdout);
-    subProcess
+    const command = config.useSystemForc ? 'fuel-core' : './node_modules/.bin/fuels-forc';
+    const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
+
+    forc.stderr?.pipe(process.stdout);
+    forc.stdout?.pipe(process.stdout);
+
+    forc
       .on('exit', (code) => {
         if (!code) {
           resolve(code);
