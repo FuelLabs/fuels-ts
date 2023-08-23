@@ -27,6 +27,7 @@ import type {
   TransactionSummary,
   FailureStatus,
   GqlTransaction,
+  AbiMap,
 } from '../transaction-summary/types';
 import { sleep } from '../utils';
 
@@ -136,13 +137,10 @@ export class TransactionResponse {
    *
    * @returns The completed transaction result
    */
-  async waitForResult<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
-    const {
-      transaction: gqlTransaction,
-      chain: {
-        consensusParameters: { gasPerByte, gasPriceFactor },
-      },
-    } = await this.fetch();
+  async waitForResult<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
+    const { transaction: gqlTransaction } = await this.fetch();
 
     const nullResponse = !gqlTransaction?.status?.type;
     const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
@@ -158,7 +156,7 @@ export class TransactionResponse {
       await sleep(
         Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
       );
-      return this.waitForResult();
+      return this.waitForResult(contractsAbiMap);
     }
 
     const decodedTransaction = this.decodeTransaction<TTransactionType>(
@@ -167,15 +165,19 @@ export class TransactionResponse {
 
     const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
+    const {
+      consensusParameters: { gasPerByte, gasPriceFactor },
+    } = await this.provider.getChain();
+
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
-      gasPrice: bn(gqlTransaction.gasPrice),
       receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(gqlTransaction.rawPayload),
       gqlTransactionStatus: gqlTransaction.status,
       gasPerByte: bn(gasPerByte),
       gasPriceFactor: bn(gasPriceFactor),
+      abiMap: contractsAbiMap,
     });
 
     const transactionResult: TransactionResult<TTransactionType> = {
@@ -191,8 +193,10 @@ export class TransactionResponse {
    *
    * @returns The completed transaction.
    */
-  async wait<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
-    const result = await this.waitForResult<TTransactionType>();
+  async wait<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
+    const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
 
     if (result.isStatusFailure) {
       throw new Error(

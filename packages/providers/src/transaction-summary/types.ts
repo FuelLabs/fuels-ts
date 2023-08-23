@@ -26,7 +26,7 @@ export type BlockId = SuccessStatus['block']['id'] | FailureStatus['block']['id'
 /**
  * @hidden
  */
-export enum TransactionTypeNameEnum {
+export enum TransactionTypeName {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
@@ -35,7 +35,7 @@ export enum TransactionTypeNameEnum {
 /**
  * @hidden
  */
-export enum SimplifiedTransactionStatusNameEnum {
+export enum TransactionStatus {
   submitted = 'submitted',
   success = 'success',
   squeezedout = 'squeezedout',
@@ -50,16 +50,6 @@ export type GqlTransactionStatusesNames =
   | 'SubmittedStatus'
   | 'SuccessStatus'
   | 'SqueezedOutStatus';
-
-/**
- * @hidden
- */
-export enum TransactionInfoStatus {
-  pending = 'Pending',
-  success = 'Success',
-  failure = 'Failure',
-  squeezedOut = 'SqueezedOut',
-}
 
 /**
  * @hidden
@@ -131,11 +121,7 @@ export type ReceiptParam = {
   receipts: TransactionResultReceipt[];
 };
 
-export type AbiParam = {
-  abiMap?: {
-    [key: string]: JsonAbi;
-  };
-};
+export type AbiMap = Record<string, JsonAbi>;
 
 export type RawPayloadParam = {
   rawPayload?: string;
@@ -145,9 +131,9 @@ export type InputOutputParam = InputParam & OutputParam;
 
 export type GetOperationParams = {
   transactionType: TransactionType;
+  abiMap?: AbiMap;
 } & InputOutputParam &
   ReceiptParam &
-  AbiParam &
   RawPayloadParam;
 
 export interface MintedAsset {
@@ -165,9 +151,9 @@ export type TransactionSummary<TTransactionType = void> = {
   operations: Operation[];
   gasUsed: BN;
   fee: BN;
-  type: TransactionTypeNameEnum;
+  type: TransactionTypeName;
   blockId?: BlockId;
-  status?: SimplifiedTransactionStatusNameEnum;
+  status?: TransactionStatus;
   isTypeMint: boolean;
   isTypeCreate: boolean;
   isTypeScript: boolean;
