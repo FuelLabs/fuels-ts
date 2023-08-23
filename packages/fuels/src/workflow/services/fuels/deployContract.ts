@@ -1,8 +1,8 @@
 import { ContractFactory } from '@fuel-ts/contract';
+import type { DeployContractOptions } from '@fuel-ts/contract';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { readFile } from 'fs/promises';
 
-import type { DeployContractOptions } from '../../types';
 import { log } from '../../utils';
 
 export async function deployContract(

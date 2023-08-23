@@ -1,12 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
-import type { StorageSlot } from '@fuel-ts/transactions';
-
-export type DeployContractOptions = {
-  salt?: BytesLike;
-  storageSlots?: StorageSlot[];
-  stateRoot?: BytesLike;
-} & CreateTransactionRequestLike;
+import type { DeployContractOptions } from '@fuel-ts/contract';
 
 export enum Commands {
   build = 'build',
