@@ -35,9 +35,11 @@ export type InferAbiType<
 > = ArgType extends AbiBuiltInType
   ? MapAbiBuiltInType<ArgType>
   : ArgType extends 'struct Vec'
-  ? InferAbiType<Types, NonNullable<Components>[0]>[]
-  : ArgType extends 'struct RawVec'
-  ? InferAbiType<Types, NonNullable<Arg['typeArguments']>[0]>
+  ? /*
+    The actual type of the vector is stored in the "buf" component's first type argument.
+    That is represented with the second parameter passed to InferAbiType below.
+   */
+    InferAbiType<Types, NonNullable<NonNullable<Components>[0]['typeArguments']>[0]>[]
   : ArgType extends 'enum Option'
   ? /*
       C extends { readonly name 'Some' } ? C : never is to filter out the 'None' case of an optional type; the undefined in the union represents 'None' in this case.
