@@ -98,6 +98,8 @@ export class TransactionResponse {
   /** Number off attempts to get the committed tx */
   attempts: number = 0;
 
+  gqlTransaction?: GqlGetTransactionWithReceiptsQuery['transaction'];
+
   /**
    * Constructor for `TransactionResponse`.
    *
@@ -115,11 +117,13 @@ export class TransactionResponse {
    * @returns Transaction with receipts query result.
    */
   async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
-    const transaction = await this.provider.operations.getTransactionWithReceipts({
+    const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
 
-    return transaction;
+    this.gqlTransaction = response.transaction;
+
+    return response;
   }
 
   /**
@@ -146,6 +150,8 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     const { transaction: gqlTransaction } = await this.fetch();
+
+    await this.wait(WaitStrategy.TransactionProcessed);
 
     const nullResponse = !gqlTransaction?.status?.type;
     const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
@@ -216,23 +222,19 @@ export class TransactionResponse {
     }
   }
 
-  private async waitUntilTransactionProcessed(): Promise<void> {
-    const { transaction: gqlTransaction } = await this.fetch();
-
-    if (gqlTransaction?.status?.type === 'SubmittedStatus') {
+  async waitUntilTransactionProcessed(): Promise<void> {
+    while (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
       this.attempts += 1;
       await this.sleepBasedOnAttempts();
-      return this.waitUntilTransactionProcessed();
+      await this.fetch();
     }
   }
 
-  private async waitUntilResponseReceived(): Promise<void> {
-    const { transaction: gqlTransaction } = await this.fetch();
-
-    if (!gqlTransaction?.status?.type) {
+  async waitUntilResponseReceived(): Promise<void> {
+    while (!this.gqlTransaction?.status?.type) {
       this.attempts += 1;
       await this.sleepBasedOnAttempts();
-      return this.waitUntilResponseReceived();
+      await this.fetch();
     }
   }
 
