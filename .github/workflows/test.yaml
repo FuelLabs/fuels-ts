@@ -6,7 +6,7 @@ on:
     types: [completed]
 
 jobs:
-  test-coverage:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
