@@ -28,7 +28,7 @@ import type { ReplaceValues, TupleToUnion } from './type-utilities';
 export type InferAbiType<
   Types extends JsonAbi['types'],
   Arg extends JsonAbiArgument,
-  // @ts-expect-error this is because of some null incompatibility I couldn't get to the root of; everything works nonetheless
+  // @ts-expect-error TS isn't able to understand that ReplaceValues does its job properly. Anyways, the tests are passing, so it works.
   Components extends JsonAbiType['components'] = ResolveGenericComponents<Types, Arg>,
   ArgType extends string = Types[Arg['type']]['type'],
   C extends JsonAbiArgument = TupleToUnion<Components>
@@ -96,6 +96,7 @@ type ResolveGenericComponents<
           so that we replace that generic with a specific values passed via Arg['typeArguments'].
           First we are checking if the component itself is generic.
           If it is generic, then replace that component with the corresponding specific type from the TypeParameterArgsMap.
+          The name is not replaced because we want to keep the original component's name, as typeArguments always have an empty name.
          */
         [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap
           ? ReplaceValues<Components[K], Omit<TypeParameterArgsMap[Components[K]['type']], 'name'>>
