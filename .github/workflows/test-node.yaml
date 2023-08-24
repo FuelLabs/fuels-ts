@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test-browser:
+  test-node:
     runs-on: ubuntu-latest
     outputs:
       status: ${{ job.status }}
