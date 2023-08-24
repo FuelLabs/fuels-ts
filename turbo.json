@@ -10,7 +10,7 @@
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
-      "outputs": ["dist/**", "example-contract/src/types/**"],
+      "outputs": ["dist/**"],
       "outputMode": "new-only"
     },
     "postbuild": {

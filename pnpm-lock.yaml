@@ -1119,13 +1119,7 @@ importers:
         version: 4.3.7
 
   packages/versions:
-    devDependencies:
-      '@types/cli-table':
-        specifier: ^0.3.1
-        version: 0.3.1
-      '@types/semver':
-        specifier: ^7.3.13
-        version: 7.3.13
+    dependencies:
       chalk:
         specifier: '4'
         version: 4.0.0
@@ -1135,6 +1129,13 @@ importers:
       semver:
         specifier: ^7.3.8
         version: 7.3.8
+    devDependencies:
+      '@types/cli-table':
+        specifier: ^0.3.1
+        version: 0.3.1
+      '@types/semver':
+        specifier: ^7.3.13
+        version: 7.3.13
 
   packages/wallet:
     dependencies:
@@ -7810,6 +7811,7 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+    dev: false
 
   /chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -7953,7 +7955,7 @@ packages:
     engines: {node: '>= 0.2.0'}
     dependencies:
       colors: 1.0.3
-    dev: true
+    dev: false
 
   /cli-truncate@2.1.0:
     resolution: {integrity: sha512-n8fOixwDD6b/ObinzTrp1ZKFzbgvKZvuz/TvejnLn1aQfC6r52XEx85FmuC+3HI+JM7coBRXUvNqEU2PHVrHpg==}
@@ -8045,7 +8047,7 @@ packages:
   /colors@1.0.3:
     resolution: {integrity: sha512-pFGrxThWcWQ2MsAz6RtgeWe4NK2kUE1WfsrvvlctdII745EW9I0yflqhe7++M5LEc7bV2c/9/5zc8sFcpL0Drw==}
     engines: {node: '>=0.1.90'}
-    dev: true
+    dev: false
 
   /combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}

@@ -31,16 +31,11 @@ export const indexAndConfigs: Options = {
   },
 };
 
-export const getIndexBinAndCliConfig = (options: { watch: boolean }): Options => ({
+export const indexBinAndCliConfig: Options = {
   ...tsupDefaults,
   entry: {
     index: 'src/index.ts',
     bin: 'src/bin.ts',
     cli: 'src/cli.ts',
   },
-  format: ['cjs', 'esm'],
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  minify: !options.watch,
-});
+};

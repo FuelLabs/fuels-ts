@@ -37,10 +37,12 @@
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
-  "devDependencies": {
+  "dependencies": {
     "chalk": "4",
     "cli-table": "^0.3.11",
-    "semver": "^7.3.8",
+    "semver": "^7.3.8"
+  },
+  "devDependencies": {
     "@types/cli-table": "^0.3.1",
     "@types/semver": "^7.3.13"
   }

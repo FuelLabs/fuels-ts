@@ -1,11 +1,6 @@
 node_modules/
 coverage/
 dist/
-
-/packages/example-contract/src/example-contract-types/
-packages/providers/src/__generated__
-packages/contracts/**/generated/
-packages/program/src/multicall/static-out
 out/
 
 apps/demo-typegen/src/generated-types

@@ -13,9 +13,6 @@
     "**/.turbo": true,
     "**/dist": true
   },
-  "files.associations": {
-    "*.hbs.ts": "handlebars"
-  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

@@ -1,6 +1,7 @@
 import { tsupDefaults } from '@internal/tsup';
+import type { Options } from 'tsup';
 
-export default (options) => ({
+const configs: Options = {
   ...tsupDefaults,
   entry: {
     index: 'src/index.ts',
@@ -8,12 +9,9 @@ export default (options) => ({
     bin: 'src/bin.ts',
     runTypegen: 'src/runTypegen.ts',
   },
-  format: ['cjs', 'esm'],
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  minify: !options.watch,
   loader: {
     '.hbs': 'text',
   },
-});
+};
+
+export default configs;

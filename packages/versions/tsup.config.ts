@@ -1,3 +1,3 @@
-import { getIndexBinAndCliConfig } from '@internal/tsup';
+import { indexBinAndCliConfig } from '@internal/tsup';
 
-export default (options) => getIndexBinAndCliConfig(options);
+export default indexBinAndCliConfig;
