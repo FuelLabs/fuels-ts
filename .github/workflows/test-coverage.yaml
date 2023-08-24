@@ -1,22 +1,12 @@
 name: "Test"
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  workflow_run:
+    workflows: [Test - Validate, Test - Node, Test - Browser]
+    types: [completed]
 
 jobs:
-  docs:
-    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
-    with:
-      doc-folder-path: "apps/docs/src"
-
-  test:
+  test-coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,33 +15,41 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Forc Format Check
-        run: pnpm forc:check
-
       - name: Build
         run: pnpm build
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Validate tests
-        run: pnpm test:validate
 
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Run tests and collect coverage
-        run: pnpm ci:test-node && pnpm ci:test-browser && pnpm test:merge-coverage && pnpm test:report-coverage
+      - name: Generate Coverage Directory
+        run: mkdir -p coverage/environments
 
-      - name: Upload coverage to Github artifacts
+      - name: Download Coverage for Browser Tests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: test-browser.yaml
+          name: browswer
+          path: coverage/environments
+
+      - name: Download Coverage for Node Tests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: test-node.yaml
+          name: node
+          path: coverage/environments
+
+      - name: Merge Coverage
+        run: pnpm test:merge-coverage && pnpm test:report-coverage
+
+      - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
           path: coverage/report
 
-      - name: Download coverage artifact
+      - name: Download Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
         # TODO: Remove PR != check once #1182 has been merged
         if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1182)}}
@@ -71,7 +69,7 @@ jobs:
           name: coverage-master
           path: coverage-master
 
-      - name: Report coverage
+      - name: Report Coverage
         uses: romeovs/lcov-reporter-action@v0.3.1
         if: ${{ steps.findPr.outputs.number }}
         with:

@@ -1,0 +1,38 @@
+name: "Test - Validate"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
+    with:
+      doc-folder-path: "apps/docs/src"
+
+  test-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Forc Format Check
+        run: pnpm forc:check
+
+      - name: Build
+        run: pnpm build
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Validate tests
+        run: pnpm test:validate
