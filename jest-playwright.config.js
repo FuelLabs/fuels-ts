@@ -1,6 +1,6 @@
 module.exports = {
   browsers: ['chromium'],
-  collectCoverage: true,
+  collectCoverage: false,
   exitOnPageError: false,
   launchOptions: {
     headless: true,
