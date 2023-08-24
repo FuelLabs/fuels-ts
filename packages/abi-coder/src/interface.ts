@@ -80,6 +80,14 @@ export class Interface<
     return fragment.decodeArguments(data);
   }
 
+  /*
+    TODO: this function as a whole should be removed when full type inference is implemented,
+    as encoding/decoding should then happen on the FunctionFragment level directly (e.g. abiInterface.functions.main.encodeArguments()).
+    Currently it just serves as a wrapper around functionFragment.encodeArguments() 
+    that takes inputs in the form of an array as was previously the case with encodeArguments().
+    This is a helper to have a smoother transition until everything is type-inferred.
+    One of the last PRs would remove this function.
+  */
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
     values: Array<InputValue>,
@@ -92,8 +100,6 @@ export class Interface<
       throw new Error('Fragment not found');
     }
 
-    // TODO: this function as a whole should be removed when full type inference is implemented,
-    // as encoding/decoding should then happen on the FunctionFragment level directly (e.g. abiInterface.functions.main.encodeArguments())
     const input = values.reduce((o, currentValue, idx) => {
       try {
         const obj: Record<string, any> = o;
