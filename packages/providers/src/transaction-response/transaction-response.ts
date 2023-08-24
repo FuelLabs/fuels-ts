@@ -91,7 +91,9 @@ export class TransactionResponse {
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
   /** Number off attempts to get the committed tx */
-  attempts: number = 0;
+  fetchAttempts: number = 0;
+
+  resultAttempts: number = 0;
 
   gqlTransaction?: GqlGetTransactionWithReceiptsQuery['transaction'];
 
@@ -115,6 +117,12 @@ export class TransactionResponse {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
+
+    if (!response.transaction) {
+      this.fetchAttempts += 1;
+      await this.sleepBasedOnAttempts(this.fetchAttempts);
+      return this.fetch();
+    }
 
     this.gqlTransaction = response.transaction;
 
@@ -144,8 +152,13 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitUntilResponseReceived();
-    await this.waitUntilTransactionProcessed();
+    await this.fetch();
+
+    if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
+      this.resultAttempts += 1;
+      await this.sleepBasedOnAttempts(this.resultAttempts);
+      return this.waitForResult<TTransactionType>(contractsAbiMap);
+    }
 
     if (!this.gqlTransaction) {
       // TODO: use FuelError
@@ -201,23 +214,7 @@ export class TransactionResponse {
     return result;
   }
 
-  async waitUntilTransactionProcessed(): Promise<void> {
-    while (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
-      await this.sleepBasedOnAttempts();
-      await this.fetch();
-      this.attempts += 1;
-    }
-  }
-
-  async waitUntilResponseReceived(): Promise<void> {
-    while (!this.gqlTransaction?.status?.type) {
-      await this.sleepBasedOnAttempts();
-      await this.fetch();
-      this.attempts += 1;
-    }
-  }
-
-  private async sleepBasedOnAttempts(): Promise<void> {
+  private async sleepBasedOnAttempts(attempts: number): Promise<void> {
     // This code implements a similar approach from the fuel-core await_transaction_commit
     // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
     // double the interval duration on each attempt until max is reached
@@ -225,7 +222,7 @@ export class TransactionResponse {
     // This can wait forever, it would be great to implement a max timeout here, but it would require
     // improve request handler as response Error not mean that the tx fail.
     await sleep(
-      Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
+      Math.min(STATUS_POLLING_INTERVAL_MIN_MS * attempts, STATUS_POLLING_INTERVAL_MAX_MS)
     );
   }
 }
