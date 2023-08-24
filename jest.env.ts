@@ -1,6 +1,3 @@
-import './ts-globals/bundle-require.d';
-import './ts-globals/hbs.d';
-
 import { hexlify } from '@ethersproject/bytes';
 
 import faucets from './.fuel-core/configs/faucets.json';
