@@ -5,8 +5,6 @@ import jestBaseConfig from './jest.base.config';
 const config: Config.InitialOptions = {
   ...jestBaseConfig,
   testEnvironment: 'node',
-  // eslint-disable-next-line no-useless-escape
-  testRegex: ['\.node\..*test\.ts'],
   coverageDirectory: 'coverage/environments/node',
 };
 
