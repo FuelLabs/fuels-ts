@@ -12,6 +12,10 @@
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'turbo run build --filter=!fuel-gauge'",
     "build": "turbo run build",
+    "_test": "run-s _test:node _test:browser _merge:cov",
+    "_test:node": "jest --no-cache --runInBand --coverage --config './jest.node.config.ts' $(sh scripts/get-test-files.sh --node)",
+    "_test:browser": "jest --no-cache --runInBand --coverage --config './jest.browser.config.ts' $(sh scripts/get-test-files.sh --browser)",
+    "_merge:cov": "echo 'merge-cove goes here'",
     "ci:test": "./scripts/ci-test.sh",
     "ci:test-node": "pnpm ci:test --node",
     "ci:test-browser": "pnpm ci:test --browser",
