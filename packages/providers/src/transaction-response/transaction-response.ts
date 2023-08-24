@@ -204,6 +204,16 @@ export class TransactionResponse {
     return result;
   }
 
+  private async waitUntilTransactionProcessed(): Promise<void> {
+    const { transaction: gqlTransaction } = await this.fetch();
+
+    if (gqlTransaction?.status?.type === 'SubmittedStatus') {
+      this.attempts += 1;
+      await this.sleepBasedOnAttempts();
+      return this.waitUntilTransactionProcessed();
+    }
+  }
+
   private async waitUntilResponseReceived(): Promise<void> {
     const { transaction: gqlTransaction } = await this.fetch();
 
