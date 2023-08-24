@@ -203,17 +203,17 @@ export class TransactionResponse {
 
   async waitUntilTransactionProcessed(): Promise<void> {
     while (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
-      this.attempts += 1;
       await this.sleepBasedOnAttempts();
       await this.fetch();
+      this.attempts += 1;
     }
   }
 
   async waitUntilResponseReceived(): Promise<void> {
     while (!this.gqlTransaction?.status?.type) {
-      this.attempts += 1;
       await this.sleepBasedOnAttempts();
       await this.fetch();
+      this.attempts += 1;
     }
   }
 
