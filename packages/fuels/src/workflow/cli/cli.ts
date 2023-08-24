@@ -14,7 +14,7 @@ export function configureCliOptions(program: Command) {
     .action(actions.init(program));
 
   program
-    .command('dev', { isDefault: true })
+    .command('dev')
     .description('Start a Fuel node, watch files and run `flow` on every change')
     .action(createAction(program, Commands.dev, actions.dev));
 
