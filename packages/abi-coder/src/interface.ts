@@ -110,8 +110,7 @@ export class Interface<
       }
     }, {} as Record<string, any>);
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error This is because the input variable isn't properly type contrained (and can't be)
     return fragment.encodeArguments(input, offset);
   }
 
