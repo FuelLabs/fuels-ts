@@ -146,16 +146,8 @@ export class TransactionResponse {
     const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
 
     if (nullResponse || isStatusSubmitted) {
-      // This code implements a similar approach from the fuel-core await_transaction_commit
-      // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
-      // double the interval duration on each attempt until max is reached
-      //
-      // This can wait forever, it would be great to implement a max timeout here, but it would require
-      // improve request handler as response Error not mean that the tx fail.
       this.attempts += 1;
-      await sleep(
-        Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
-      );
+      await this.sleepBasedOnAttempts();
       return this.waitForResult(contractsAbiMap);
     }
 
@@ -205,5 +197,17 @@ export class TransactionResponse {
     }
 
     return result;
+  }
+
+  private async sleepBasedOnAttempts(): Promise<void> {
+    // This code implements a similar approach from the fuel-core await_transaction_commit
+    // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
+    // double the interval duration on each attempt until max is reached
+    //
+    // This can wait forever, it would be great to implement a max timeout here, but it would require
+    // improve request handler as response Error not mean that the tx fail.
+    await sleep(
+      Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
+    );
   }
 }
