@@ -368,50 +368,11 @@ describe('Abi interface', () => {
             EMPTY_U8_ARRAY.slice().fill(2, 7),
           ],
         },
-        // {
-        //   fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
-        //   title: '[array] with generic struct',
-        //   value: {
-        //     arg: {
-        //       a: [
-        //         {
-        //           bim: B256_DECODED,
-        //           bam: { propB1: U8_MAX },
-        //           bom: { propA1: U8_MAX, propA2: B256_DECODED },
-        //         },
-        //         {
-        //           bim: B256_DECODED,
-        //           bam: { propB1: 0 },
-        //           bom: { propA1: U8_MAX, propA2: B256_DECODED },
-        //         },
-        //         {
-        //           bim: B256_DECODED,
-        //           bam: { propB1: U8_MAX },
-        //           bom: { propA1: U8_MAX, propA2: B256_DECODED },
-        //         },
-        //       ],
-        //     },
-        //   },
-        //   encodedValue: [
-        //     B256_ENCODED,
-        //     U8_MAX_ENCODED,
-        //     U8_MAX_ENCODED,
-        //     B256_ENCODED,
-        //     B256_ENCODED,
-        //     EMPTY_U8_ARRAY,
-        //     U8_MAX_ENCODED,
-        //     B256_ENCODED,
-        //     B256_ENCODED,
-        //     U8_MAX_ENCODED,
-        //     U8_MAX_ENCODED,
-        //     B256_ENCODED,
-        //   ],
-        // },
         {
           fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
           title: '[array] with generic struct',
-          value: [
-            {
+          value: {
+            arg: {
               a: [
                 {
                   bim: B256_DECODED,
@@ -430,7 +391,7 @@ describe('Abi interface', () => {
                 },
               ],
             },
-          ],
+          },
           encodedValue: [
             B256_ENCODED,
             U8_MAX_ENCODED,
@@ -697,7 +658,8 @@ describe('Abi interface', () => {
           // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
           const encoded = fn.encodeArguments(value, offset);
 
-          const encodedVal = encodedValue instanceof Function ? encodedValue(value) : encodedValue;
+          const encodedVal =
+            encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
           const expectedEncoded =
             encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
@@ -709,7 +671,12 @@ describe('Abi interface', () => {
 
           if (decodedTransformer) decoded = decodedTransformer(decoded);
 
-          const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
+          /**
+           * If the sway function has one input parameter, then that input is also its output.
+           * If the sway function has multiple input parameters, then its output is a tuple of those input parameters.
+           */
+          const expectedDecoded =
+            Object.keys(value).length === 1 ? Object.values(value)[0] : Object.values(value);
 
           expect(decoded).toStrictEqual(expectedDecoded);
         }
