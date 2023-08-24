@@ -1,4 +1,4 @@
- // #region Predicate-main-args
+// #region Predicate-main-args
 predicate;
 
 struct Validation {
@@ -12,4 +12,4 @@ fn main(received: Validation) -> bool {
 
     received.has_account == expected_has_account && received.total_complete == expected_total_complete
 }
-  // #endregion Predicate-main-args
+// #endregion Predicate-main-args
