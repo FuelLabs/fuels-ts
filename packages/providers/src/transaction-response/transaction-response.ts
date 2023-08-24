@@ -144,22 +144,18 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    const { transaction: gqlTransaction } = await this.fetch();
+    await this.waitUntilResponseReceived();
+    await this.waitUntilTransactionProcessed();
 
-    const nullResponse = !gqlTransaction?.status?.type;
-    const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
-
-    if (nullResponse || isStatusSubmitted) {
-      this.attempts += 1;
-      await this.sleepBasedOnAttempts();
-      return this.waitForResult(contractsAbiMap);
+    if (!this.gqlTransaction) {
+      throw new Error('Transaction data is not available.');
     }
 
     const decodedTransaction = this.decodeTransaction<TTransactionType>(
-      gqlTransaction
+      this.gqlTransaction
     ) as Transaction<TTransactionType>;
 
-    const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
+    const receipts = this.gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
     const {
       consensusParameters: { gasPerByte, gasPriceFactor },
@@ -169,15 +165,15 @@ export class TransactionResponse {
       id: this.id,
       receipts,
       transaction: decodedTransaction,
-      transactionBytes: arrayify(gqlTransaction.rawPayload),
-      gqlTransactionStatus: gqlTransaction.status,
+      transactionBytes: arrayify(this.gqlTransaction.rawPayload),
+      gqlTransactionStatus: this.gqlTransaction.status,
       gasPerByte: bn(gasPerByte),
       gasPriceFactor: bn(gasPriceFactor),
       abiMap: contractsAbiMap,
     });
 
     const transactionResult: TransactionResult<TTransactionType> = {
-      gqlTransaction,
+      gqlTransaction: this.gqlTransaction,
       ...transactionSummary,
     };
 
