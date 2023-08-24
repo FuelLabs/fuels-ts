@@ -148,6 +148,7 @@ export class TransactionResponse {
     await this.waitUntilTransactionProcessed();
 
     if (!this.gqlTransaction) {
+      // TODO: use FuelError
       throw new Error('Transaction data is not available.');
     }
 
@@ -191,6 +192,7 @@ export class TransactionResponse {
     const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
 
     if (result.isStatusFailure) {
+      // TODO: use FuelError
       throw new Error(
         `Transaction failed: ${(<FailureStatus>result.gqlTransaction.status).reason}`
       );
