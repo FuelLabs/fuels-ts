@@ -2,7 +2,7 @@ name: "Test"
 
 on:
   workflow_run:
-    workflows: [Test - Validate, Test - Node, Test - Browser]
+    workflows: [test-validate, test-node, test-browser]
     types: [completed]
 
 jobs:
