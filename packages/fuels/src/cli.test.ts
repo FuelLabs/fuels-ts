@@ -20,17 +20,13 @@ describe('cli.js', () => {
     expect(name).toHaveBeenCalledWith('fuels');
     expect(version).toHaveBeenCalledWith(versions.FUELS);
 
-    expect(command).toHaveBeenNthCalledWith(1, 'build');
-    expect(command).toHaveBeenNthCalledWith(2, 'types');
-    expect(command).toHaveBeenNthCalledWith(3, 'deploy');
-    expect(command).toHaveBeenNthCalledWith(4, 'run');
-    expect(command).toHaveBeenNthCalledWith(5, 'versions');
-    expect(description).toHaveBeenNthCalledWith(6, 'check for version incompatibilities');
-    expect(command).toHaveBeenNthCalledWith(6, 'typegen');
-    expect(description).toHaveBeenNthCalledWith(
-      7,
-      'generate typescript from contract abi json files'
-    );
+    const cmds = ['init', 'dev', 'flow', 'build', 'types', 'deploy', 'versions', 'typegen'];
+    cmds.forEach((cmd, index) => {
+      expect(command).toHaveBeenNthCalledWith(index + 1, cmd);
+    });
+
+    // All commands + 1 main description of the program
+    expect(description).toHaveBeenCalledTimes(cmds.length + 1);
 
     expect(parse).toHaveBeenCalledTimes(1);
     expect(parse).toHaveBeenCalledWith([]);

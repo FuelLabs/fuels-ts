@@ -6,31 +6,32 @@ import fs, { readFile } from 'fs/promises';
 import { join } from 'path';
 import rimraf from 'rimraf';
 
+import { Commands } from '../src';
 import { run } from '../src/cli';
 
 import { createConfigFile } from './utils/createConfigFile';
 
 describe('Contracts Scripts', () => {
   let wallet: WalletUnlocked;
-  const tempPath = join(__dirname, './generated');
-  const templatePath = join(__dirname, './template');
+  const tempPath = join(__dirname, 'generated');
+  const templatePath = join(__dirname, 'template');
 
   const cleanup = () => {
     rimraf.sync(tempPath);
   };
 
   beforeEach(async () => {
-    await cleanup();
+    cleanup();
     wallet = await generateTestWallet(new Provider('http://127.0.0.1:4000/graphql'), [[1_000_000]]);
   });
 
   afterEach(() => {
-    cleanup();
+    // cleanup();
     jest.clearAllMocks();
   });
 
   async function runCommand(command: string) {
-    const argv = ['node', 'fuels-contracts', command, '-p', tempPath];
+    const argv = ['node', 'fuels', command, '-p', tempPath];
     await run(argv);
   }
 
@@ -42,7 +43,7 @@ describe('Contracts Scripts', () => {
       workspace: './project',
       output: './types',
     });
-    await runCommand('build');
+    await runCommand(Commands.build);
     expect(existsSync(join(tempPath, './project/bar/out'))).toBeTruthy();
     expect(existsSync(join(tempPath, './project/predicate/out'))).toBeTruthy();
     expect(existsSync(join(tempPath, './project/script/out'))).toBeTruthy();
@@ -56,8 +57,8 @@ describe('Contracts Scripts', () => {
       workspace: './project',
       output: './types',
     });
-    await runCommand('build');
-    await runCommand('types');
+    await runCommand(Commands.build);
+    await runCommand(Commands.types);
     expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
     expect(
       existsSync(join(tempPath, './types/contracts/factories/BarFooAbi__factory.ts'))
@@ -86,8 +87,8 @@ describe('Contracts Scripts', () => {
       output: './types',
     });
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
-    await runCommand('build');
-    await runCommand('deploy');
+    await runCommand(Commands.build);
+    await runCommand(Commands.deploy);
     const output = stdoutSpy.mock.calls.reduce((o, call) => {
       const [message] = call;
       return `${o}${message.toString()}`;
@@ -99,7 +100,7 @@ describe('Contracts Scripts', () => {
     expect(contracts.fooBar).toBeTruthy();
   });
 
-  test('should run build, deploy and types on run command', async () => {
+  test('should run build, deploy and types on flow command', async () => {
     await fs.cp(templatePath, tempPath, {
       recursive: true,
     });
@@ -112,7 +113,7 @@ describe('Contracts Scripts', () => {
       output: './types',
     });
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
-    await runCommand('run');
+    await runCommand(Commands.flow);
     const output = stdoutSpy.mock.calls.reduce((o, call) => {
       const [message] = call;
       return `${o}${message.toString()}`;

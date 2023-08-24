@@ -38,6 +38,9 @@ describe('Bin Utils loadConfig', () => {
       contracts: ['/root/foo', '/root/bar'],
       predicates: ['/root/predicate'],
       scripts: ['/root/script'],
+      shouldAutoStartFuelCoreNode: true,
+      useSystemForc: false,
+      useSystemFuelCore: false,
       output: '/root/types',
     });
   });
@@ -72,6 +75,9 @@ describe('Bin Utils loadConfig', () => {
       predicates: ['/root/project/predicate'],
       scripts: ['/root/project/script'],
       output: '/root/types',
+      shouldAutoStartFuelCoreNode: true,
+      useSystemForc: false,
+      useSystemFuelCore: false,
     });
   });
 });

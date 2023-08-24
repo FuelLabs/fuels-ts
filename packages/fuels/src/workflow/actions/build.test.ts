@@ -1,3 +1,6 @@
+import type { LoadedConfig } from '../types';
+import { FuelsConfig } from '../types';
+
 import { build } from './build';
 
 jest.mock('../services', () => {
@@ -22,32 +25,36 @@ describe('Deploy Action', () => {
   });
 
   it('build action should call forcBuild with workspace config', async () => {
-    await build({
+    const config: LoadedConfig = {
       basePath: '/root',
       workspace: '/root/project',
       contracts: [],
       predicates: [],
       scripts: [],
       output: '/types',
-    });
+    };
+
+    await build(config);
+
     const services = jest.requireMock('../services');
     const utils = jest.requireMock('../utils');
     expect(utils.logSection).toHaveBeenCalledWith('🧰 Building...');
-    expect(services.forcBuild).toHaveBeenCalledWith('/root/project');
+    expect(services.forcBuild).toHaveBeenCalledWith(config, '/root/project');
   });
 
   it('build action should call forcBuild with contracts config', async () => {
-    await build({
+    const config: LoadedConfig = {
       basePath: '/root',
       contracts: ['/root/project/foo', '/root/project/bar'],
       predicates: ['/root/project/predicate'],
       scripts: ['/root/project/script'],
       output: '/types',
-    });
+    };
+    await build(config);
     const services = jest.requireMock('../services');
     const utils = jest.requireMock('../utils');
     expect(utils.logSection).toHaveBeenCalledWith('🧰 Building...');
-    expect(services.forcBuild).toHaveBeenCalledWith('/root/project/foo');
-    expect(services.forcBuild).toHaveBeenCalledWith('/root/project/bar');
+    expect(services.forcBuild).toHaveBeenCalledWith(config, '/root/project/foo');
+    expect(services.forcBuild).toHaveBeenCalledWith(config, '/root/project/bar');
   });
 });

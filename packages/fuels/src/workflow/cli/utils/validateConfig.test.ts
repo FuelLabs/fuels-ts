@@ -8,6 +8,7 @@ describe('Bin Utils validateConfig', () => {
         output: '/otuput',
       })
     ).toBeTruthy();
+
     expect(
       await validateConfig({
         workspace: '/workspace',
@@ -15,19 +16,23 @@ describe('Bin Utils validateConfig', () => {
       })
     ).toBeTruthy();
   });
+
   it('Should fail with invalid configs', () => {
     expect(
       validateConfig({
         output: '/otuput',
       })
     ).rejects.toThrowError('config.contracts should be a valid array');
+
     expect(
       validateConfig({
         contracts: [],
         output: '/otuput',
       })
     ).rejects.toThrowError('config.contracts should have at least 1 item');
+
     expect(
+      // @ts-expect-error Output property missing
       validateConfig({
         workspace: '/workspace',
       })

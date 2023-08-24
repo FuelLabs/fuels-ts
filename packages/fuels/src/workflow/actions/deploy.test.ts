@@ -51,9 +51,11 @@ describe('Build Action', () => {
     deployOptions: DeployContractOptions
   ) {
     const services = jest.requireMock('../services');
-    const [wallet, binaryPath, deployConfig] = services.deployContract.mock.calls[callNth];
+    const [wallet, binaryPath, abiPath, deployConfig] = services.deployContract.mock.calls[callNth];
+
     expect(wallet.privateKey).toBe(config.privateKey);
     expect(binaryPath).toBe(path);
+    expect(abiPath).toBeTruthy();
     expect(deployConfig).toEqual(deployOptions);
   }
 
@@ -72,6 +74,7 @@ describe('Build Action', () => {
 
     // Expect deployContract to be called twice
     expect(services.deployContract).toHaveBeenCalledTimes(2);
+
     expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', config.deployConfig);
     expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', config.deployConfig);
 
