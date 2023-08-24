@@ -204,6 +204,18 @@ export class TransactionResponse {
     return result;
   }
 
+  private async waitUntil(strategy: WaitStrategy): Promise<void> {
+    switch (strategy) {
+      case WaitStrategy.ResponseReceived:
+        await this.waitUntilResponseReceived();
+        break;
+      case WaitStrategy.TransactionProcessed:
+      default:
+        await this.waitUntilTransactionProcessed();
+        break;
+    }
+  }
+
   private async waitUntilTransactionProcessed(): Promise<void> {
     const { transaction: gqlTransaction } = await this.fetch();
 
