@@ -80,6 +80,11 @@ export type TransactionResult<TTransactionType = void> = TransactionSummary<TTra
   gqlTransaction: GqlTransaction;
 };
 
+export enum WaitStrategy {
+  ResponseReceived, // Wait until a non-null response is received.
+  TransactionProcessed, // Wait until the transaction is processed (not submitted).
+}
+
 /**
  * Represents a response for a transaction.
  */
