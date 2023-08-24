@@ -113,7 +113,7 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
+  async fetch(): Promise<NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>> {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -126,7 +126,7 @@ export class TransactionResponse {
 
     this.gqlTransaction = response.transaction;
 
-    return response;
+    return response.transaction;
   }
 
   /**
