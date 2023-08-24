@@ -1,10 +1,8 @@
-const config = {
+module.exports = {
   browsers: ['chromium'],
-  collectCoverage: false,
+  collectCoverage: true,
   exitOnPageError: false,
   launchOptions: {
     headless: true,
   },
 };
-
-export default config;
