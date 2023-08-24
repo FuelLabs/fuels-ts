@@ -80,11 +80,6 @@ export type TransactionResult<TTransactionType = void> = TransactionSummary<TTra
   gqlTransaction: GqlTransaction;
 };
 
-export enum WaitStrategy {
-  ResponseReceived, // Wait until a non-null response is received.
-  TransactionProcessed, // Wait until the transaction is processed (not submitted).
-}
-
 /**
  * Represents a response for a transaction.
  */
@@ -151,8 +146,6 @@ export class TransactionResponse {
   ): Promise<TransactionResult<TTransactionType>> {
     const { transaction: gqlTransaction } = await this.fetch();
 
-    await this.wait(WaitStrategy.TransactionProcessed);
-
     const nullResponse = !gqlTransaction?.status?.type;
     const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
 
@@ -208,18 +201,6 @@ export class TransactionResponse {
     }
 
     return result;
-  }
-
-  private async waitUntil(strategy: WaitStrategy): Promise<void> {
-    switch (strategy) {
-      case WaitStrategy.ResponseReceived:
-        await this.waitUntilResponseReceived();
-        break;
-      case WaitStrategy.TransactionProcessed:
-      default:
-        await this.waitUntilTransactionProcessed();
-        break;
-    }
   }
 
   async waitUntilTransactionProcessed(): Promise<void> {
