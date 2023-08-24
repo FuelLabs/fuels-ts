@@ -54,7 +54,7 @@ jobs:
         # TODO: Remove PR != check once #1182 has been merged
         if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1182)}}
         with:
-          workflow: test.yaml
+          workflow: test-coverage.yaml
           branch: master
           name: coverage-master
           path: coverage-master
