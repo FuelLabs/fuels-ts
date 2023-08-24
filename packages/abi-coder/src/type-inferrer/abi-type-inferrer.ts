@@ -172,6 +172,7 @@ type MapTypeArguments<
 /**
  * This is a helper which converts the TypeParameters array into a `typeArguments` array.
  * It iterates over each element of the array and maps it to its corresponding `JsonAbiArgument` from the `TypeParametersArgsMap` that was already previously resolved.
+ * Its results are used to provide `typeArguments` to a component who's underlying type is implicitly generic.
  */
 type MapImplicitTypeArguments<
   TypeParameters extends readonly number[],
