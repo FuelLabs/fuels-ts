@@ -43,8 +43,8 @@ export class FunctionFragment<
 
   private readonly jsonAbi: JsonAbi;
 
-  constructor(abi: JsonAbi, name: string) {
-    this.jsonAbi = abi;
+  constructor(jsonAbi: JsonAbi, name: string) {
+    this.jsonAbi = jsonAbi;
     this.jsonFn = findOrThrow(this.jsonAbi.functions, (f) => f.name === name);
     this.name = name;
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
@@ -103,8 +103,7 @@ export class FunctionFragment<
     return (
       Object.entries(input)
         // We sort the input object properties to match the ABI ordering, as their order can be arbitrary
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
+        .sort((a, b) => orderedArgNames.indexOf(a[0]) - orderedArgNames.indexOf(b[0]))
         .map((x) => x[1])
     );
   }
@@ -114,20 +113,20 @@ export class FunctionFragment<
 
     FunctionFragment.verifyArgsAndInputsAlign(inputValuesArray, this.jsonFn.inputs, this.jsonAbi);
 
-    const shallowCopyValues = inputValuesArray.slice();
-
     const nonEmptyInputs = this.jsonFn.inputs.filter(
       (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
+    const coders = nonEmptyInputs.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
+
+    const coder = new TupleCoder(coders);
+
+    const shallowCopyValues = inputValuesArray.slice();
     if (Array.isArray(inputValuesArray) && nonEmptyInputs.length !== inputValuesArray.length) {
       shallowCopyValues.length = this.jsonFn.inputs.length;
       shallowCopyValues.fill(undefined as unknown as InputValue, inputValuesArray.length);
     }
 
-    const coders = nonEmptyInputs.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
-
-    const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
 
     return unpackDynamicData(results, offset, results.byteLength);
