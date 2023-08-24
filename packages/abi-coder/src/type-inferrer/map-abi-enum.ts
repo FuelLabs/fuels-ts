@@ -26,12 +26,12 @@ export type MapAbiEnum<
   : Enum<{
       [Name in Component['name']]: Component extends { readonly name: Name }
         ? Types[Component['type']]['type'] extends AbiBuiltInType
-          ? /**
-             * [] is the type fuels-abigen generates when it encounters a built-in type on an enum.
+          ? /*
+              [] is the type fuels-abigen generates when it encounters a built-in type on an enum.
              */
             []
-          : /**
-             * If it's not a built-in type, then infer it as whatever it is (array, struct, etc.)
+          : /*
+              If it's not a built-in type, then infer it as whatever it is (array, struct, etc.)
              */
             InferAbiType<Types, Component>
         : never;

@@ -11,10 +11,10 @@ export type MapAbiTuple<
   Components extends JsonAbiType['components'],
   ComponentsArr extends readonly JsonAbiArgument[] = NonNullable<Components>
 > = {
-  /**
-   * -readonly is for removing the readonly prefix that is added on TS arrays when asserting the whole abi `as const`
-   * We're iterating over the TS array loaded into the type system and replacing the element on each index with our inferred type
-   * thereby creating a new array of inferred types in place of the original array's elements
+  /*
+    -readonly is for removing the readonly prefix that is added on TS arrays when asserting the whole abi `as const`
+    We're iterating over the TS array loaded into the type system and replacing the element on each index with our inferred type
+    thereby creating a new array of inferred types in place of the original array's elements
    */
   -readonly [Idx in keyof ComponentsArr]: InferAbiType<Types, ComponentsArr[Idx]>;
 };

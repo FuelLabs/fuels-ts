@@ -39,8 +39,8 @@ export type InferAbiType<
   : ArgType extends 'struct RawVec'
   ? InferAbiType<Types, NonNullable<Arg['typeArguments']>[0]>
   : ArgType extends 'enum Option'
-  ? /**
-     * C extends \{ readonly name 'Some' \} ? C : never is to filter out the 'None' case of an optional type; the undefined in the union represents 'None' in this case.
+  ? /*
+      C extends { readonly name 'Some' } ? C : never is to filter out the 'None' case of an optional type; the undefined in the union represents 'None' in this case.
      */
     InferAbiType<Types, C extends { readonly name: 'Some' } ? C : never> | undefined
   : ArgType extends `enum ${string}` // e.g. enum MyEnum
@@ -73,34 +73,34 @@ type ResolveGenericComponents<
     Arg['typeArguments']
   >
 > =
-  /**
-   * Does the type even have components?
-   * If not, then return null, because a type cannot possibly be generic if it doesn't have components.
+  /*
+    Does the type even have components?
+    If not, then return null, because a type cannot possibly be generic if it doesn't have components.
    */
   Components extends never
     ? null
-    : /**
-     * Okay, the type has components, but is the type actually generic?
-     * We are using TypeParameters as an indicator of genericness. For more info, check out the helper GetTypeParameters.
-     *
-     * If TypeParameters are null, then return the components, as there's nothing generic to resolve in them.
+    : /*
+      Okay, the type has components, but is the type actually generic?
+      We are using TypeParameters as an indicator of genericness. For more info, check out the helper GetTypeParameters.
+     
+      If TypeParameters are null, then return the components, as there's nothing generic to resolve in them.
      */
     TypeParameters extends null
     ? Components
     : {
-        /**
-         * Okay, so the argument's underlying type has components and in them exists a generic (or more of them).
-         * Now we must iterate over every component of that type and check if the component is generic or if its typeArguments are generic,
-         * so that we replace that generic with a specific values passed via Arg['typeArguments'].
-         * First we are checking if the component itself is generic.
-         * If it is generic, then replace that component with the corresponding specific type from the TypeParameterArgsMap.
+        /*
+          Okay, so the argument's underlying type has components and in them exists a generic (or more of them).
+          Now we must iterate over every component of that type and check if the component is generic or if its typeArguments are generic,
+          so that we replace that generic with a specific values passed via Arg['typeArguments'].
+          First we are checking if the component itself is generic.
+          If it is generic, then replace that component with the corresponding specific type from the TypeParameterArgsMap.
          */
         [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap
           ? ReplaceValues<Components[K], Omit<TypeParameterArgsMap[Components[K]['type']], 'name'>>
-          : /**
-           * Okay, the component itself is not generic, but does it have typeArguments? They might be generic!
-           * if it has typeArguments, then go through each one of them and replace it with a specific type if it is a generic.
-           * This will also go through the typeArguments of those typeArguments, because it might be a deeply nested generic.
+          : /*
+            Okay, the component itself is not generic, but does it have typeArguments? They might be generic!
+            if it has typeArguments, then go through each one of them and replace it with a specific type if it is a generic.
+            This will also go through the typeArguments of those typeArguments, because it might be a deeply nested generic.
            */ Components[K]['typeArguments'] extends readonly JsonAbiArgument[]
           ? ReplaceValues<
               Components[K],
@@ -112,16 +112,16 @@ type ResolveGenericComponents<
               }
             >
           : /*
-           * Okay, so the component itself is not generic nor does it have explicitly generic typeArguments.
-           * However, there is a quirk in the abi format where a type can be implicitly generic. For more info on that, check out the helper GetTypeParameters.
-           *
-           * The TypeParameters type has accounted for implicit generics via GetTypeParameters, but it has done that on the level of the parent type of ALL components that we're iterating over (the type T).
-           * Now we need to check if the specific component we're analyzing here falls into that category of implicit generics.
-           * We're using the same GetTypeParameters helper, but on the level of the component's type.
-           * If it is indeed implicitly generic, it means that this component's `typeArguments` are null.
-           * If we let it be as it is, the underlying type's implicit generic would not be resolvable, as no type argument would be passed to it, because `typeArguments` is null.
-           * This code specifies the necessary `typeArguments` so that the generic can be resolved.
-           * These added `typeArguments` will then replace all the implicitly generic components of the underlying type in the subsequent iteration.
+            Okay, so the component itself is not generic nor does it have explicitly generic typeArguments.
+            However, there is a quirk in the abi format where a type can be implicitly generic. For more info on that, check out the helper GetTypeParameters.
+           
+            The TypeParameters type has accounted for implicit generics via GetTypeParameters, but it has done that on the level of the parent type of ALL components that we're iterating over (the type T).
+            Now we need to check if the specific component we're analyzing here falls into that category of implicit generics.
+            We're using the same GetTypeParameters helper, but on the level of the component's type.
+            If it is indeed implicitly generic, it means that this component's `typeArguments` are null.
+            If we let it be as it is, the underlying type's implicit generic would not be resolvable, as no type argument would be passed to it, because `typeArguments` is null.
+            This code specifies the necessary `typeArguments` so that the generic can be resolved.
+            These added `typeArguments` will then replace all the implicitly generic components of the underlying type in the subsequent iteration.
            */
           GetTypeParameters<Types, Types[Components[K]['type']]> extends readonly number[]
           ? ReplaceValues<
@@ -133,8 +133,8 @@ type ResolveGenericComponents<
                 >;
               }
             >
-          : /**
-             * The component is neither explicitly nor implicitly generic, so don't do anything to it and use it as it is.
+          : /*
+              The component is neither explicitly nor implicitly generic, so don't do anything to it and use it as it is.
              */
             Components[K];
       };
@@ -147,24 +147,24 @@ type MapTypeArguments<
   TypeParameterArgsMap extends Record<number, JsonAbiArgument>
 > = {
   [K in keyof Args]: Args[K]['type'] extends keyof TypeParameterArgsMap
-    ? /**
-       * Pick the original name of the typeArgument but replace everything else with the specific type that's replacing the generic.
-       * We are leaving the original name because it is always constant and known; the thing that we are replacing is its generic type.
+    ? /*
+        Pick the original name of the typeArgument but replace everything else with the specific type that's replacing the generic.
+        We are leaving the original name because it is always constant and known; the thing that we are replacing is its generic type.
        */
       Pick<Args[K], 'name'> & Omit<TypeParameterArgsMap[Args[K]['type']], 'name'>
-    : /**
-     * Okay, so the argument itself may not be generic, but maybe its typeArguments are.
-     * If the argument has `typeArguments`, recursively go through them to replace any possible nested generics.
+    : /*
+      Okay, so the argument itself may not be generic, but maybe its typeArguments are.
+      If the argument has `typeArguments`, recursively go through them to replace any possible nested generics.
      */
     Args[K]['typeArguments'] extends readonly JsonAbiArgument[]
     ? ReplaceValues<
         Args[K],
         {
-          readonly typeArguments: MapTypeArguments<Args[K]['typeArguments'], TypeParameterArgsMap>; // Recursively resolve all typeArguments that are generic.
+          readonly typeArguments: MapTypeArguments<Args[K]['typeArguments'], TypeParameterArgsMap>;
         }
       >
-    : /**
-       * The argument isn't generic and it doesn't have any `typeArguments`, so use it as it is and don't do anything to it.
+    : /*
+        The argument isn't generic and it doesn't have any `typeArguments`, so use it as it is and don't do anything to it.
        */
       Args[K];
 };

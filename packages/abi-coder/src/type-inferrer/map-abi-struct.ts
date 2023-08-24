@@ -14,11 +14,11 @@ export type MapAbiStruct<
   Components extends readonly JsonAbiArgument[],
   C extends JsonAbiArgument = TupleToUnion<Components>
 > = {
-  /**
-   * C extends \{ readonly name: Name \} is necessary to remove all types from the C union
-   * except the one that corresponds to the specific Name who's type we're inferring.
-   * If it wasn't implemented like this, every field's value would be a union of ALL the inferred component types.
-   * This way we're type constraining to ONLY the component that has the specific Name that's being iterated over in [Name in C['name']]
+  /*
+    C extends { readonly name: Name } is necessary to remove all types from the C union
+    except the one that corresponds to the specific Name who's type we're inferring.
+    If it wasn't implemented like this, every field's value would be a union of ALL the inferred component types.
+    This way we're type constraining to ONLY the component that has the specific Name that's being iterated over in [Name in C['name']]
    */
   [Name in C['name']]: C extends { readonly name: Name } ? InferAbiType<Types, C> : never;
 };
