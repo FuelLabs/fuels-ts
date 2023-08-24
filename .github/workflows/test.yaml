@@ -42,7 +42,7 @@ jobs:
         id: findPr
 
       - name: Run tests and collect coverage
-        run: pnpm ci:test && pnpm ci:test --browser && pnpm test:merge-coverage && pnpm test:report-coverage
+        run: pnpm ci:test-node && pnpm ci:test-browser && pnpm test:merge-coverage && pnpm test:report-coverage
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v3

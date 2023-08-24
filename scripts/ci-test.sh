@@ -13,8 +13,11 @@ pnpm pretest
 if [[ "$*" == *"--browser"* ]]; then
     pnpm test:browser-coverage
     TEST_RESULT=$?
-else
+elif [[ "$*" == *"--node"* ]]; then
     pnpm test:node-coverage
+    TEST_RESULT=$?
+else
+    pnpm test
     TEST_RESULT=$?
 fi
 
