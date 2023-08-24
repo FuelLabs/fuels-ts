@@ -1,5 +1,4 @@
 import type { LoadedConfig } from '../types';
-import { FuelsConfig } from '../types';
 
 import { build } from './build';
 
