@@ -20,7 +20,6 @@ import type {
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
@@ -96,7 +95,7 @@ export class TransactionResponse {
 
   resultAttempts: number = 0;
 
-  gqlTransaction?: GqlGetTransactionWithReceiptsQuery['transaction'];
+  gqlTransaction?: GqlTransaction;
 
   /**
    * Constructor for `TransactionResponse`.
@@ -114,7 +113,7 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(): Promise<NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>> {
+  async fetch(): Promise<GqlTransaction> {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -136,9 +135,7 @@ export class TransactionResponse {
    * @param transactionWithReceipts - The transaction with receipts object.
    * @returns The decoded transaction.
    */
-  decodeTransaction<TTransactionType = void>(
-    transactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>
-  ) {
+  decodeTransaction<TTransactionType = void>(transactionWithReceipts: GqlTransaction) {
     return new TransactionCoder().decode(
       arrayify(transactionWithReceipts.rawPayload),
       0
