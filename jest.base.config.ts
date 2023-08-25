@@ -11,7 +11,7 @@ const config: Config.InitialOptions = {
     '/apps/demo-react-cra',
     '/dist/demo-react-vite',
   ],
-  coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
+  coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts', 'fuel-gauge'],
   testTimeout: 15000,
   transform: {
     '\\.hbs$': 'jest-text-transformer',
