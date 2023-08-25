@@ -19,7 +19,6 @@ export enum ErrorCode {
   PARSE_FAILED = 'parse-failed',
 
   // transaction
-
   TRANSACTION_FAILED = 'transaction-failed',
 
   // coder
