@@ -4,6 +4,10 @@ import { Provider, WalletUnlocked } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   let deployedContract: Contract;
 
