@@ -119,8 +119,7 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      this.fetchAttempts += 1;
-      await this.sleepBasedOnAttempts(this.fetchAttempts);
+      await this.sleepBasedOnAttempts(++this.fetchAttempts);
       return this.fetch();
     }
 
