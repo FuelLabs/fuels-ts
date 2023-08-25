@@ -145,6 +145,39 @@ export class TransactionResponse {
     )?.[0] as Transaction<TTransactionType>;
   }
 
+  async getTransactionSummary<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionSummary<TTransactionType>> {
+    let transaction = this.gqlTransaction;
+
+    if (!transaction) {
+      transaction = await this.fetch();
+    }
+
+    const decodedTransaction = this.decodeTransaction<TTransactionType>(
+      transaction
+    ) as Transaction<TTransactionType>;
+
+    const receipts = transaction.receipts?.map(processGqlReceipt) || [];
+
+    const {
+      consensusParameters: { gasPerByte, gasPriceFactor },
+    } = await this.provider.getChain();
+
+    const transactionSummary = assembleTransactionSummary<TTransactionType>({
+      id: this.id,
+      receipts,
+      transaction: decodedTransaction,
+      transactionBytes: arrayify(transaction.rawPayload),
+      gqlTransactionStatus: transaction.status,
+      gasPerByte: bn(gasPerByte),
+      gasPriceFactor: bn(gasPriceFactor),
+      abiMap: contractsAbiMap,
+    });
+
+    return transactionSummary;
+  }
+
   /**
    * Waits for transaction to complete and returns the result.
    *
@@ -158,37 +191,14 @@ export class TransactionResponse {
     if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
       this.resultAttempts += 1;
       await this.sleepBasedOnAttempts(this.resultAttempts);
+
       return this.waitForResult<TTransactionType>(contractsAbiMap);
     }
 
-    if (!this.gqlTransaction) {
-      // TODO: use FuelError
-      throw new Error('Transaction data is not available.');
-    }
-
-    const decodedTransaction = this.decodeTransaction<TTransactionType>(
-      this.gqlTransaction
-    ) as Transaction<TTransactionType>;
-
-    const receipts = this.gqlTransaction.receipts?.map(processGqlReceipt) || [];
-
-    const {
-      consensusParameters: { gasPerByte, gasPriceFactor },
-    } = await this.provider.getChain();
-
-    const transactionSummary = assembleTransactionSummary<TTransactionType>({
-      id: this.id,
-      receipts,
-      transaction: decodedTransaction,
-      transactionBytes: arrayify(this.gqlTransaction.rawPayload),
-      gqlTransactionStatus: this.gqlTransaction.status,
-      gasPerByte: bn(gasPerByte),
-      gasPriceFactor: bn(gasPriceFactor),
-      abiMap: contractsAbiMap,
-    });
+    const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
     const transactionResult: TransactionResult<TTransactionType> = {
-      gqlTransaction: this.gqlTransaction,
+      gqlTransaction: this.gqlTransaction as GqlTransaction,
       ...transactionSummary,
     };
 
