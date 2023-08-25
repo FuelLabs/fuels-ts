@@ -32,6 +32,7 @@ export async function deploy(config: ParsedFuelsConfig) {
       contractName,
       contractPath,
     });
+
     const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
 
     log(`Contract: ${projectName} - ${contractId}`);
