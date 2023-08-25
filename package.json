@@ -12,21 +12,17 @@
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'turbo run build --filter=!fuel-gauge'",
     "build": "turbo run build",
-    "_test": "run-s _test:node _test:browser _merge:cov",
-    "_test:node": "jest --no-cache --runInBand --coverage --config './jest.node.config.ts' $(sh scripts/get-test-files.sh --node)",
-    "_test:browser": "jest --no-cache --runInBand --coverage --config './jest.browser.config.ts' $(sh scripts/get-test-files.sh --browser)",
-    "_merge:cov": "echo 'merge-cove goes here'",
-    "ci:test": "./scripts/ci-test.sh",
     "ci:test-node": "pnpm ci:test --node",
     "ci:test-browser": "pnpm ci:test --browser",
     "pretest": "turbo run pretest",
-    "test": "jest --no-cache --runInBand --config './jest.all.config.ts'",
-    "test:node": "jest --no-cache --runInBand --config './jest.node.config.ts'",
-    "test:browser": "jest --no-cache --runInBand --config './jest.browser.config.ts'",
+    "test": "run-s test:node-coverage test:browser-coverage test:coverage",
+    "test:node": "jest --no-cache --runInBand --config './jest.node.config.ts' $(sh scripts/get-test-files.sh --node)",
+    "test:browser": "jest --no-cache --runInBand --config './jest.browser.config.ts' $(sh scripts/get-test-files.sh --browser)",
     "test:node-coverage": "pnpm test:node --coverage",
     "test:browser-coverage": "pnpm test:browser --coverage",
     "test:node-watch": "pnpm test:node --watchAll",
     "test:browser-watch": "pnpm test:browser --watchAll",
+    "test:coverage": "run-s pnpm:merge-coverage pnpm:report-coverage",
     "test:merge-coverage": "tsx ./scripts/merge-coverage.ts && nyc merge coverage/environments coverage/merged/coverage.json",
     "test:report-coverage": "nyc report --temp-dir=coverage/merged --report-dir=coverage/report --reporter=lcov --exclude-after-remap=false",
     "test:validate": "tsx ./scripts/validate-tests",
@@ -111,5 +107,8 @@
     "overrides": {
       "cross-fetch": "4.0.0"
     }
+  },
+  "dependencies": {
+    "browser-or-node": "^2.1.1"
   }
 }
