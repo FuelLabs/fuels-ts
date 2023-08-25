@@ -80,7 +80,8 @@ describe('Script', () => {
     scriptRequest = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
-        const encoded = abiInterface.encodeFunctionData('main', [myStruct]);
+        // @ts-expect-error it won't be erroring when scripts become typesafe
+        const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
 
         return arrayify(encoded);
       },

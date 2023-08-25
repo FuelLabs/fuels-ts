@@ -657,11 +657,16 @@ describe('Abi interface', () => {
         ({ fn, title: _title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
           // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
           const encoded = fn.encodeArguments(value, offset);
+          // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
+          const encodedFromInputAsArray = fn.encodeArguments(Object.values(value), offset);
+          expect(encoded).toEqual(encodedFromInputAsArray);
 
           const encodedVal =
             encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
           const expectedEncoded =
             encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
+
+          expect(encoded).toEqual(expectedEncoded);
 
           expect(encoded).toEqual(expectedEncoded);
 

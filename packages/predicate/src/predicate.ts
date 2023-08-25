@@ -121,7 +121,8 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       17;
 
     this.predicateData =
-      this.interface?.encodeFunctionData('main', args, OFFSET) || new Uint8Array();
+      // @ts-expect-error it won't be erroring when predicates become typesafe
+      this.interface?.functions.main.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
   }
 

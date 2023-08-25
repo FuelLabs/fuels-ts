@@ -3,7 +3,6 @@ import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../json-abi';
 import type { GetTypeParameters, MapTypeParametersToTypeArguments } from './get-type-parameters';
 import type { MapAbiArray } from './map-abi-array';
 import type { MapAbiEnum } from './map-abi-enum';
-import type { MapAbiStruct } from './map-abi-struct';
 import type { MapAbiTuple } from './map-abi-tuple';
 import type { AbiBuiltInType, MapAbiBuiltInType } from './map-builtin-type';
 import type { ReplaceValues, TupleToUnion } from './type-utilities';
@@ -50,7 +49,19 @@ export type InferAbiType<
   : ArgType extends `(_,${string}_)` // e.g. (_, _,...elements..., _)
   ? MapAbiTuple<Types, Components>
   : ArgType extends `struct ${string}` // e.g. struct MyStruct
-  ? MapAbiStruct<Types, NonNullable<Components>>
+  ? /*
+      This maps structs by going over each component of the struct and inferring its type.
+     
+      Given that struct components have names and we're mapping a struct into an object,
+      we're mapping the whole struct into a record of type { component_name:inferred_type_of_component }.
+     
+      Mapping the struct in-place like this instead of moving it over to a MapAbiStruct type helper
+      is because when you encapsulate it behind a helper, the suggestions the IDE makes are UGLY.
+     */
+    {
+      // Explanation for this C extends {readonly name: Name} pattern can be found in the InferAbiFunctions type.
+      [Name in C['name']]: C extends { readonly name: Name } ? InferAbiType<Types, C> : never;
+    }
   : ArgType extends `[_; ${infer Length extends number}]` // e.g.[_; 3]
   ? MapAbiArray<Length, Types, NonNullable<Components>>
   :

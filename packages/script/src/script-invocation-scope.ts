@@ -29,8 +29,8 @@ export class ScriptInvocationScope<
     this.scriptRequest = new ScriptRequest(
       programBytes,
       (args: TArgs) =>
-        this.program.interface.encodeFunctionData(
-          this.func,
+        this.func.encodeArguments(
+          // @ts-expect-error it won't be erroring when scripts become typesafe
           args,
           ScriptRequest.getScriptDataOffsetWithScriptBytes(byteLength)
         ),

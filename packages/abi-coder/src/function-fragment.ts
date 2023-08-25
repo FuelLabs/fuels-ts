@@ -20,13 +20,14 @@ import type {
   JsonAbiFunctionAttribute,
 } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
+import type { ObjValuesTuple } from './type-inferrer/type-utilities';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
 export class FunctionFragment<
-  Input extends object | never = never,
+  Input extends Record<string, unknown> | never = never,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Output extends unknown | never = never
 > {
@@ -98,7 +99,8 @@ export class FunctionFragment<
     }
   }
 
-  private mapInputObjectToArray(input: Input) {
+  private mapInputObjectToArray(input: Input | ObjValuesTuple<Input>) {
+    if (Array.isArray(input)) return input;
     const orderedArgNames = this.jsonFn.inputs.map((x) => x.name);
     return (
       Object.entries(input)
@@ -108,7 +110,18 @@ export class FunctionFragment<
     );
   }
 
-  encodeArguments(value: Input, offset = 0): Uint8Array {
+  /**
+   * This method has overloads to ensure that code using the previous array-as-input approach doesn't break.
+   * It was initially accepting only arrays and `fuels typegen` was generating typesafe overloads,
+   * but after the introduction of compile-time ABI type inference, the preferred approach is to pass in an object
+   * who's keys are the parameters of the corresponding sway function.
+   *
+   * @param value Input as object (preferred), or Input as array.
+   * @param offset to add to the encoded bytes
+   */
+  encodeArguments(value: Input, offset?: number): Uint8Array;
+  encodeArguments(value: ObjValuesTuple<Input>, offset?: number): Uint8Array;
+  encodeArguments(value: Input | ObjValuesTuple<Input>, offset = 0): Uint8Array {
     const inputValuesArray = this.mapInputObjectToArray(value);
 
     FunctionFragment.verifyArgsAndInputsAlign(inputValuesArray, this.jsonFn.inputs, this.jsonAbi);
@@ -133,7 +146,7 @@ export class FunctionFragment<
   }
 
   private static verifyArgsAndInputsAlign(
-    args: InputValue[],
+    args: unknown[],
     inputs: readonly JsonAbiArgument[],
     abi: JsonAbi
   ) {

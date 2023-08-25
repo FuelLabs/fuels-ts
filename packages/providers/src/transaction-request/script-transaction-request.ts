@@ -172,7 +172,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    */
   setData(abi: JsonAbi, args: InputValue[]): ScriptTransactionRequest {
     const abiInterface = new Interface(abi);
-    this.scriptData = abiInterface.encodeFunctionData('main', args);
+    // @ts-expect-error it won't be erroring when scripts become typesafe
+    this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;
   }
 }

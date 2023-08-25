@@ -15,7 +15,10 @@ const logger = new Logger(versions.FUELS);
 
 export class Interface<
   const TAbi extends JsonAbi = JsonAbi,
-  InferredFns extends Record<string, { input: object; output: unknown }> = InferAbiFunctions<TAbi>
+  InferredFns extends Record<
+    string,
+    { input: Record<string, unknown>; output: unknown }
+  > = InferAbiFunctions<TAbi>
 > {
   readonly functions: {
     [FnName in keyof InferredFns]: FunctionFragment<

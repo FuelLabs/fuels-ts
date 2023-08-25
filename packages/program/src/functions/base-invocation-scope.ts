@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { InputValue } from '@fuel-ts/abi-coder';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
@@ -24,11 +23,8 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
 function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
   const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
   const DATA_POINTER_OFFSET = func.isInputDataPointer ? POINTER_DATA_OFFSET : 0;
-  const data = program.interface.encodeFunctionData(
-    func,
-    args as Array<InputValue>,
-    offset + DATA_POINTER_OFFSET
-  );
+  // @ts-expect-error it won't be erroring when contracts become typesafe
+  const data = func.encodeArguments(args, offset + DATA_POINTER_OFFSET);
 
   return {
     contractId: (program as AbstractContract).id,
