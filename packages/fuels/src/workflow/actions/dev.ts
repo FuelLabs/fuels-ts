@@ -8,11 +8,14 @@ import type { ParsedFuelsConfig } from '../types';
 import { flow } from './flow';
 
 export async function dev(config: ParsedFuelsConfig) {
-  if (config.autoStartFuelCore) {
-    await startFuelCore(config);
+  const configCopy = { ...config };
+
+  if (configCopy.autoStartFuelCore) {
+    const client = await startFuelCore(configCopy);
+    configCopy.providerUrl = client.providerUrl;
   }
 
-  const { contracts, scripts, predicates, chainConfig, workspace } = config;
+  const { contracts, scripts, predicates, chainConfig, workspace } = configCopy;
 
   const projectDirs = [contracts, scripts, predicates, chainConfig].flat();
 
@@ -22,17 +25,17 @@ export async function dev(config: ParsedFuelsConfig) {
 
   const pathsToWatch = projectDirs
     .flatMap((dir) => [
-      globSync(`${dir}/**/*.toml`, { cwd: config.basePath }),
-      globSync(`${dir}/**/*.sw`, { cwd: config.basePath }),
+      globSync(`${dir}/**/*.toml`, { cwd: configCopy.basePath }),
+      globSync(`${dir}/**/*.sw`, { cwd: configCopy.basePath }),
     ])
     .flat();
 
   try {
     // run once
-    await flow(config);
+    await flow(configCopy);
 
     // and then on every change
-    const changeListeaner = (_path: string) => flow(config);
+    const changeListeaner = (_path: string) => flow(configCopy);
 
     chokidar
       .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
