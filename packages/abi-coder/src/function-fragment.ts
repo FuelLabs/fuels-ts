@@ -116,8 +116,8 @@ export class FunctionFragment<
    * but after the introduction of compile-time ABI type inference, the preferred approach is to pass in an object
    * who's keys are the parameters of the corresponding sway function.
    *
-   * @param value Input as object (preferred), or Input as array.
-   * @param offset to add to the encoded bytes
+   * @param value - Input as object (preferred), or Input as array.
+   * @param offset - to add to the encoded bytes
    */
   encodeArguments(value: Input, offset?: number): Uint8Array;
   encodeArguments(value: ObjValuesTuple<Input>, offset?: number): Uint8Array;
