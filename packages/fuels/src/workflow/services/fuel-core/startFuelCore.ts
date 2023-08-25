@@ -73,6 +73,7 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
 
     childProcess.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
+        childProcess.stderr.removeAllListeners();
         resolve({ childProcess, ip, port });
       }
     });
