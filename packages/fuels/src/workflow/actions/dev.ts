@@ -12,23 +12,30 @@ export async function dev(config: ParsedFuelsConfig) {
     await startFuelCore(config);
   }
 
-  const { contracts, scripts, predicates } = config;
-  const dirs = [contracts, scripts, predicates, config.chainConfig, config.workspace].flat();
+  const { contracts, scripts, predicates, chainConfig, workspace } = config;
 
-  const filepaths = dirs
-    .flatMap((d) => [
-      globSync(`${d}/**/*.toml`, { cwd: config.basePath }),
-      globSync(`${d}/**/*.sw`, { cwd: config.basePath }),
+  const projectDirs = [contracts, scripts, predicates, chainConfig].flat();
+
+  if (workspace) {
+    projectDirs.push(workspace);
+  }
+
+  const pathsToWatch = projectDirs
+    .flatMap((dir) => [
+      globSync(`${dir}/**/*.toml`, { cwd: config.basePath }),
+      globSync(`${dir}/**/*.sw`, { cwd: config.basePath }),
     ])
     .flat();
 
   try {
+    // run once
     await flow(config);
 
+    // and then on every change
     const changeListeaner = (_path: string) => flow(config);
 
     chokidar
-      .watch(filepaths, { persistent: true, ignoreInitial: true })
+      .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
       .on('add', changeListeaner)
       .on('change', changeListeaner)
       .on('unlink', changeListeaner);
