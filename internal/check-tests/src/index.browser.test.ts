@@ -2,11 +2,13 @@
 import { testEach } from './index';
 import 'expect-playwright';
 
+import type { Browser } from 'playwright';
+
 /**
  * @group browser
  */
 describe('in:browser', () => {
-  let browser: any, page: any;
+  let browser: Browser, page: any;
 
   beforeEach(async () => {
     // @ts-expect-error
