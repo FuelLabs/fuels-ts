@@ -8,7 +8,11 @@ import type { ParsedFuelsConfig } from '../types';
 import { flow } from './flow';
 
 export async function dev(config: ParsedFuelsConfig) {
-  const configCopy = { ...config };
+  /**
+   * Create a copy of the config param, so we can safely
+   * re-assign the `providerUrl` param when auto-starting a node.
+   */
+  const configCopy = structuredClone(config);
 
   if (configCopy.autoStartFuelCore) {
     const client = await startFuelCore(configCopy);
@@ -31,10 +35,10 @@ export async function dev(config: ParsedFuelsConfig) {
     .flat();
 
   try {
-    // run once
+    // Run once
     await flow(configCopy);
 
-    // and then on every change
+    // Then on every change
     const changeListeaner = (_path: string) => flow(configCopy);
 
     chokidar
