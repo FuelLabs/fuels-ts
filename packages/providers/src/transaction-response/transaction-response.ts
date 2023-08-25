@@ -90,11 +90,11 @@ export class TransactionResponse {
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
-  /** Number off attempts to get the committed tx */
+  /** Number of attempts made to fetch the transaction */
   fetchAttempts: number = 0;
-
+  /** Number of attempts made to retrieve a processed transaction. */
   resultAttempts: number = 0;
-
+  /** The graphql Transaction with receipts object. */
   gqlTransaction?: GqlTransaction;
 
   /**
@@ -141,6 +141,13 @@ export class TransactionResponse {
     )?.[0] as Transaction<TTransactionType>;
   }
 
+  /**
+   * Retrieves the TransactionSummary. If the `gqlTransaction` is not set, it will
+   * fetch it from the provider
+   *
+   * @param contractsAbiMap - The contracts ABI map.
+   * @returns
+   */
   async getTransactionSummary<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionSummary<TTransactionType>> {
@@ -203,7 +210,7 @@ export class TransactionResponse {
   /**
    * Waits for transaction to complete and returns the result.
    *
-   * @returns The completed transaction.
+   * @param contractsAbiMap - The contracts ABI map.
    */
   async wait<TTransactionType = void>(
     contractsAbiMap?: AbiMap
@@ -220,13 +227,15 @@ export class TransactionResponse {
     return result;
   }
 
-  /*
-    TODO: Consider adding `maxTimeout` or `maxAttempts` parameter.
-
-    The aim is to avoid perpetual execution; when the limit
-    is reached, we can throw accordingly.
-  */
+  /**
+   * Introduces a delay based on the number of previous attempts made.
+   *
+   * @param attempts - The number of attempts.
+   */
   private async sleepBasedOnAttempts(attempts: number): Promise<void> {
+    // TODO: Consider adding `maxTimeout` or `maxAttempts` parameter.
+    // The aim is to avoid perpetual execution; when the limit
+    // is reached, we can throw accordingly.
     await sleep(
       Math.min(STATUS_POLLING_INTERVAL_MIN_MS * attempts, STATUS_POLLING_INTERVAL_MAX_MS)
     );
