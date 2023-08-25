@@ -7,11 +7,11 @@ export const parsedFuelsConfig: ParsedFuelsConfig = {
   predicates: ['/root/project/predicate'],
   scripts: ['/root/project/script'],
   output: '/types',
+  deployConfig: {
+    gasPrice: 5,
+  },
   useSystemForc: false,
   useSystemFuelCore: false,
   autoStartFuelCore: false,
   fuelCorePort: 4000,
-  deployConfig: {
-    gasPrice: 5,
-  },
 };
