@@ -29,6 +29,7 @@ module.exports = {
     'no-bitwise': 0,
     'no-underscore-dangle': 'off',
     'class-methods-use-this': 'off',
+    'no-plusplus': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/lines-between-class-members': [
       'error',
