@@ -50,11 +50,11 @@ export type OptionsFunction = (
   options: DeployOptions
 ) => DeployContractOptions | Promise<DeployContractOptions>;
 
-export type FuelsConfig = {
+export type UserFuelsConfig = {
   workspace?: string;
-  contracts?: Array<string>;
-  predicates?: Array<string>;
-  scripts?: Array<string>;
+  contracts?: string[];
+  predicates?: string[];
+  scripts?: string[];
   output: string;
 
   privateKey?: string;
@@ -64,30 +64,26 @@ export type FuelsConfig = {
 
   useSystemForc?: boolean;
   useSystemFuelCore?: boolean;
-  shouldAutoStartFuelCoreNode?: boolean;
+  autoStartFuelCore?: boolean;
+  fuelCorePort?: number;
 
-  onFailure?: (error: Error, config: LoadedConfig) => void;
-  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
+  onFailure?: (error: Error, config: ParsedFuelsConfig) => void;
+  onSuccess?: (event: ActionEvent, config: ParsedFuelsConfig) => void;
 };
 
-export type LoadedConfig = {
-  basePath: string;
-
-  workspace?: string;
-  contracts: Array<string>;
-  predicates: Array<string>;
-  scripts: Array<string>;
-  output: string;
-
-  privateKey?: string;
-  providerUrl?: string;
-  chainConfig?: string;
-  deployConfig?: DeployContractOptions | OptionsFunction;
-
-  useSystemForc?: boolean;
-  useSystemFuelCore?: boolean;
-  shouldAutoStartFuelCoreNode?: boolean;
-
-  onFailure?: (error: Error, config: LoadedConfig) => void;
-  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
-};
+export type ParsedFuelsConfig = UserFuelsConfig &
+  Required<
+    Pick<
+      UserFuelsConfig,
+      | 'contracts'
+      | 'predicates'
+      | 'scripts'
+      | 'deployConfig'
+      | 'useSystemForc'
+      | 'useSystemFuelCore'
+      | 'autoStartFuelCore'
+      | 'fuelCorePort'
+    >
+  > & {
+    basePath: string;
+  };

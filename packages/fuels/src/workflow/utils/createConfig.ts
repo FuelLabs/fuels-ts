@@ -1,5 +1,5 @@
-import type { FuelsConfig } from '../types';
+import type { UserFuelsConfig } from '../types';
 
-export function createConfig(config: FuelsConfig) {
+export function createConfig(config: UserFuelsConfig) {
   return config;
 }

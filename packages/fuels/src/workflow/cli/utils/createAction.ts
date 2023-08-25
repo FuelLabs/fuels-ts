@@ -2,7 +2,7 @@
 import type { Command } from 'commander';
 import { resolve } from 'path';
 
-import type { Commands, LoadedConfig, ActionEvent } from '../../types';
+import type { Commands, ParsedFuelsConfig, ActionEvent } from '../../types';
 import { logSection } from '../../utils';
 
 import { loadConfig } from './loadConfig';
@@ -10,10 +10,10 @@ import { loadConfig } from './loadConfig';
 export function createAction<CType extends Commands>(
   program: Command,
   command: CType,
-  func: (config: LoadedConfig) => Promise<Extract<ActionEvent, { type: CType }>['data']>
+  func: (config: ParsedFuelsConfig) => Promise<Extract<ActionEvent, { type: CType }>['data']>
 ) {
   return async () => {
-    let config: LoadedConfig | undefined;
+    let config: ParsedFuelsConfig | undefined;
     try {
       const options = program.opts();
       const configPath = resolve(process.cwd(), options.path || './');

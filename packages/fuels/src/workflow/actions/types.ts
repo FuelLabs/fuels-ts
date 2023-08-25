@@ -5,11 +5,11 @@ import { join } from 'path';
 
 import { getABIPaths } from '../services';
 import { renderIndexTemplate } from '../templates';
-import type { LoadedConfig } from '../types';
+import type { ParsedFuelsConfig } from '../types';
 import { logSection } from '../utils';
 
 async function runTypegenProgramType(
-  config: LoadedConfig,
+  config: ParsedFuelsConfig,
   paths: Array<string>,
   programType: ProgramTypeEnum
 ) {
@@ -29,7 +29,7 @@ async function runTypegenProgramType(
   return null;
 }
 
-export async function types(config: LoadedConfig) {
+export async function types(config: ParsedFuelsConfig) {
   logSection('🟦 Generating types...');
   const folders = (
     await Promise.all([

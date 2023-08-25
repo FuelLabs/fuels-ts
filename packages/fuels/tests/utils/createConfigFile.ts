@@ -2,9 +2,9 @@ import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { mkdir } from 'shelljs';
 
-import type { FuelsConfig } from '../../src/index';
+import type { UserFuelsConfig } from '../../src/index';
 
-export async function createConfigFile(path: string, config: FuelsConfig) {
+export async function createConfigFile(path: string, config: UserFuelsConfig) {
   mkdir('-p', path);
   await writeFile(
     join(path, './fuels.config.ts'),
@@ -16,7 +16,7 @@ export async function createConfigFile(path: string, config: FuelsConfig) {
   );
 }
 
-export async function createConfigFileWithHooks(path: string, config: FuelsConfig) {
+export async function createConfigFileWithHooks(path: string, config: UserFuelsConfig) {
   mkdir('-p', path);
   await writeFile(
     join(path, './fuels.config.ts'),

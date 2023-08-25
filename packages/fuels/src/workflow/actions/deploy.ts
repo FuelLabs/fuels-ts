@@ -7,10 +7,10 @@ import {
   getContractCamelCase,
   getContractName,
 } from '../services';
-import type { LoadedConfig, ContractDeployed } from '../types';
+import type { ParsedFuelsConfig, ContractDeployed } from '../types';
 import { getDeployConfig, log, logSection, saveContractIds } from '../utils';
 
-export async function deploy(config: LoadedConfig) {
+export async function deploy(config: ParsedFuelsConfig) {
   const contracts: Array<ContractDeployed> = [];
 
   if (config.contracts.length === 0) {

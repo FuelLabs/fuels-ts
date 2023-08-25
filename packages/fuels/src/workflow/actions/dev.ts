@@ -3,12 +3,12 @@ import { error } from 'console';
 import { globSync } from 'glob';
 
 import { startFuelCore } from '../services/fuel-core/startFuelCore';
-import type { LoadedConfig } from '../types';
+import type { ParsedFuelsConfig } from '../types';
 
 import { flow } from './flow';
 
-export async function dev(config: LoadedConfig) {
-  if (config.shouldAutoStartFuelCoreNode) {
+export async function dev(config: ParsedFuelsConfig) {
+  if (config.autoStartFuelCore) {
     await startFuelCore(config);
   }
 

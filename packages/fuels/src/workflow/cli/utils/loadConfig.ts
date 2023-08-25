@@ -3,11 +3,11 @@ import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
 import { readForcToml, readSwayType, SwayType } from '../../services';
-import type { LoadedConfig, FuelsConfig } from '../../types';
+import type { ParsedFuelsConfig, UserFuelsConfig } from '../../types';
 
 import { validateConfig } from './validateConfig';
 
-export async function loadConfig(cwd: string): Promise<LoadedConfig> {
+export async function loadConfig(cwd: string): Promise<ParsedFuelsConfig> {
   // The package `bundle-require` needs to be imported dynamically for it to work
   // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
   const { bundleRequire } = require('bundle-require');
@@ -37,15 +37,20 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
     cwd,
   });
 
-  const userConfig: FuelsConfig = result.mod.default;
+  const userConfig: UserFuelsConfig = result.mod.default;
 
   await validateConfig(userConfig);
 
   // Start clone-object while initializiung optional props
-  const config: LoadedConfig = {
+  const config: ParsedFuelsConfig = {
     contracts: [],
     scripts: [],
     predicates: [],
+    deployConfig: {},
+    useSystemForc: false,
+    useSystemFuelCore: false,
+    autoStartFuelCore: true,
+    fuelCorePort: 4000,
     ...userConfig,
     basePath: cwd,
   };
@@ -56,7 +61,7 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
   // Initialize optional variables
   config.useSystemForc = config.useSystemForc ?? false;
   config.useSystemFuelCore = config.useSystemFuelCore ?? false;
-  config.shouldAutoStartFuelCoreNode = config.shouldAutoStartFuelCoreNode ?? true;
+  config.autoStartFuelCore = config.autoStartFuelCore ?? true;
 
   const { contracts, predicates, scripts } = userConfig;
 

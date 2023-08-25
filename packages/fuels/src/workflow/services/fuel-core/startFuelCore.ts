@@ -5,12 +5,14 @@ import { dirname, join } from 'path';
 import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
-import type { LoadedConfig } from '../../types';
+import type { ParsedFuelsConfig } from '../../types';
 import { logSection } from '../../utils';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
-export async function startFuelCore(config: LoadedConfig): Promise<ChildProcessWithoutNullStreams> {
+export async function startFuelCore(
+  config: ParsedFuelsConfig
+): Promise<ChildProcessWithoutNullStreams> {
   logSection('Starting node...');
 
   const coreDir = join(config.basePath, '.fuel-core');

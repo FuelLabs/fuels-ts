@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 
 import { forcBuild } from '../services';
-import type { LoadedConfig } from '../types';
+import type { ParsedFuelsConfig } from '../types';
 import { logSection } from '../utils';
 
-export async function build(config: LoadedConfig) {
+export async function build(config: ParsedFuelsConfig) {
   logSection('🧰 Building...');
 
   // If workspace is set, build using the workspace
