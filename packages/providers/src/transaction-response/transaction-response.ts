@@ -186,8 +186,7 @@ export class TransactionResponse {
     await this.fetch();
 
     if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
-      this.resultAttempts += 1;
-      await this.sleepBasedOnAttempts(this.resultAttempts);
+      await this.sleepBasedOnAttempts(++this.resultAttempts);
 
       return this.waitForResult<TTransactionType>(contractsAbiMap);
     }
