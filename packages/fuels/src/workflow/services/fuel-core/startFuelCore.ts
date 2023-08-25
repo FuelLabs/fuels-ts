@@ -1,7 +1,6 @@
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { writeFileSync } from 'fs';
-import getPort from 'get-port';
 import { dirname, join } from 'path';
 import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
@@ -36,6 +35,11 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
 
   let port = config.fuelCorePort;
   if (!port) {
+    /**
+     * The package `get-port` in ES6-only, so we are forced
+     * to import it dynamically for it to work.
+     */
+    const { default: getPort } = await import('get-port');
     port = await getPort({ port: 4000 });
   }
 

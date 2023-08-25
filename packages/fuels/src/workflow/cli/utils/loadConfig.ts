@@ -8,9 +8,11 @@ import type { ParsedFuelsConfig, UserFuelsConfig } from '../../types';
 import { validateConfig } from './validateConfig';
 
 export async function loadConfig(cwd: string): Promise<ParsedFuelsConfig> {
-  // The package `bundle-require` needs to be imported dynamically for it to work
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
-  const { bundleRequire } = require('bundle-require');
+  /**
+   * The package `bundle-require` in ES6-only, so we are forced
+   * to import it dynamically for it to work.
+   */
+  const { bundleRequire } = await import('bundle-require');
 
   const configJoycon = new JoyCon();
 
