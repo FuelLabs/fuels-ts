@@ -110,14 +110,11 @@ export class FunctionFragment<
     );
   }
 
-  /**
-   * This method has overloads to ensure that code using the previous array-as-input approach doesn't break.
-   * It was initially accepting only arrays and `fuels typegen` was generating typesafe overloads,
-   * but after the introduction of compile-time ABI type inference, the preferred approach is to pass in an object
-   * who's keys are the parameters of the corresponding sway function.
-   *
-   * @param value - Input as object (preferred), or Input as array.
-   * @param offset - to add to the encoded bytes
+  /*
+    This method has overloads to ensure that code using the previous array-as-input approach doesn't break.
+    It was initially accepting only arrays and `fuels typegen` was generating typesafe overloads,
+    but after the introduction of compile-time ABI type inference, the preferred approach is to pass in an object
+    who's keys are the parameters of the corresponding sway function.
    */
   encodeArguments(value: Input, offset?: number): Uint8Array;
   encodeArguments(value: ObjValuesTuple<Input>, offset?: number): Uint8Array;
