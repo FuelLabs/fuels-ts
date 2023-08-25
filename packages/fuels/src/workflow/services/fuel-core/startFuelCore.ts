@@ -6,7 +6,7 @@ import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection } from '../../utils';
+import { log, logSection } from '../../utils';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
@@ -50,7 +50,6 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
   const consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298';
 
   const flags = [
-    'fuels-core',
     'run',
     ['--ip', bindIp],
     ['--port', port.toString()],
@@ -66,6 +65,7 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
 
   return new Promise((resolve, reject) => {
     const command = config.useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+
     const childProcess = spawn(command, flags, { stdio: 'pipe' });
 
     const killNode = () => {
@@ -80,8 +80,13 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
 
     childProcess.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
-        childProcess.stderr.removeAllListeners();
         resolve({ bindIp, accessIp, port, providerUrl, childProcess });
+      }
+      if (/ERROR|IO error/.test(data)) {
+        log(
+          `Some error occurred. Please, check to see if you have another instance running locally.`
+        );
+        process.exit(1);
       }
     });
 
