@@ -29,7 +29,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.3');
+    expect(version).toEqual('0.20.4');
   });
 
   it('can call()', async () => {
