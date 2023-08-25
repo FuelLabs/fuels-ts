@@ -17,6 +17,7 @@ const config: Config.InitialOptions = {
     '\\.hbs$': 'jest-text-transformer',
     ...tsjPreset.transform,
   },
+  setupFilesAfterEnv: ['expect-playwright'],
 };
 
 export default config;

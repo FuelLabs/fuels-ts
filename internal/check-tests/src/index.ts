@@ -1,7 +1,8 @@
 export const testEach = (): string => {
   let env: string;
 
-  if (globalThis.document) {
+  // @ts-expect-error
+  if (globalThis?.context?.browser()?.isConnected()) {
     env = 'browser';
   } else if (globalThis?.process?.versions?.node) {
     env = 'node';
