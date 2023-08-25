@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import JoyCon from 'joycon';
 
 import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
@@ -38,10 +39,12 @@ describe('Bin Utils loadConfig', () => {
       contracts: ['/root/foo', '/root/bar'],
       predicates: ['/root/predicate'],
       scripts: ['/root/script'],
-      shouldAutoStartFuelCoreNode: true,
+      output: '/root/types',
+      autoStartFuelCore: true,
       useSystemForc: false,
       useSystemFuelCore: false,
-      output: '/root/types',
+      deployConfig: {},
+      fuelCorePort: 4000,
     });
   });
 
@@ -75,9 +78,11 @@ describe('Bin Utils loadConfig', () => {
       predicates: ['/root/project/predicate'],
       scripts: ['/root/project/script'],
       output: '/root/types',
-      shouldAutoStartFuelCoreNode: true,
+      autoStartFuelCore: true,
       useSystemForc: false,
       useSystemFuelCore: false,
+      deployConfig: {},
+      fuelCorePort: 4000,
     });
   });
 });

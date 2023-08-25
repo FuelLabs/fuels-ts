@@ -1,4 +1,5 @@
-import type { LoadedConfig } from '../types';
+import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
+import type { ParsedFuelsConfig } from '../types';
 
 import { build } from './build';
 
@@ -24,7 +25,8 @@ describe('Deploy Action', () => {
   });
 
   it('build action should call forcBuild with workspace config', async () => {
-    const config: LoadedConfig = {
+    const config: ParsedFuelsConfig = {
+      ...parsedFuelsConfig,
       basePath: '/root',
       workspace: '/root/project',
       contracts: [],
@@ -42,7 +44,8 @@ describe('Deploy Action', () => {
   });
 
   it('build action should call forcBuild with contracts config', async () => {
-    const config: LoadedConfig = {
+    const config: ParsedFuelsConfig = {
+      ...parsedFuelsConfig,
       basePath: '/root',
       contracts: ['/root/project/foo', '/root/project/bar'],
       predicates: ['/root/project/predicate'],

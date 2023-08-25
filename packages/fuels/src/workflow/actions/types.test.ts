@@ -1,3 +1,4 @@
+import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
 import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
 
 import { types } from './types';
@@ -37,6 +38,7 @@ describe('Types Action', () => {
 
   it('should call runTypegen with all paths', async () => {
     await types({
+      ...parsedFuelsConfig,
       basePath: '/root',
       workspace: '/root/project',
       contracts: ['/root/project/foo', '/root/project/bar'],

@@ -1,3 +1,5 @@
+import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
+
 import { flow } from './flow';
 
 jest.mock('./build', () => ({
@@ -17,6 +19,7 @@ describe('Run Action', () => {
 
   it('should call build, deploy and types', async () => {
     await flow({
+      ...parsedFuelsConfig,
       basePath: '/root',
       workspace: '/root/project',
       contracts: ['/root/project/foo', '/root/project/bar'],

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DeployContractOptions } from '@fuel-ts/contract';
 
+import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
 import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
+import type { ParsedFuelsConfig, OptionsFunction } from '../types';
 
 import { deploy } from './deploy';
 
@@ -22,7 +25,8 @@ jest.mock('../utils', () => {
 });
 
 describe('Build Action', () => {
-  const config = {
+  const config: ParsedFuelsConfig = {
+    ...parsedFuelsConfig,
     privateKey: '0x0000000000000000000000000000000000000000000000000000000000000001',
     deployConfig: {
       gasPrice: 2,
@@ -48,7 +52,7 @@ describe('Build Action', () => {
   function expectDeployContractCall(
     callNth: number,
     path: string,
-    deployOptions: DeployContractOptions
+    deployOptions: DeployContractOptions | OptionsFunction
   ) {
     const services = jest.requireMock('../services');
     const [wallet, binaryPath, abiPath, deployConfig] = services.deployContract.mock.calls[callNth];
@@ -75,8 +79,8 @@ describe('Build Action', () => {
     // Expect deployContract to be called twice
     expect(services.deployContract).toHaveBeenCalledTimes(2);
 
-    expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', config.deployConfig);
-    expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', config.deployConfig);
+    expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', config.deployConfig!);
+    expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', config.deployConfig!);
 
     // Check if saveContractIds was called with correct contracts names
     expect(utils.logSection).toHaveBeenCalledWith('🟦 Save contract ids...');
