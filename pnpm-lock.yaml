@@ -10,6 +10,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      browser-or-node:
+        specifier: ^2.1.1
+        version: 2.1.1
     devDependencies:
       '@changesets/cli':
         specifier: ^2.25.0
@@ -435,11 +439,7 @@ importers:
         specifier: workspace:^
         version: link:../../packages/fuels
 
-  internal/check-tests:
-    dependencies:
-      fuels:
-        specifier: workspace:^
-        version: link:../../packages/fuels
+  internal/check-tests: {}
 
   internal/tsup: {}
 
@@ -7461,6 +7461,10 @@ packages:
 
   /brorand@1.1.0:
     resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
+    dev: false
+
+  /browser-or-node@2.1.1:
+    resolution: {integrity: sha512-8CVjaLJGuSKMVTxJ2DpBl5XnlNDiT4cQFeuCJJrvJmts9YrTZDizTX7PjC2s6W4x+MBGZeEY6dGMrF04/6Hgqg==}
     dev: false
 
   /browser-process-hrtime@1.0.0:
