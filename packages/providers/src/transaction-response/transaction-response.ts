@@ -1,4 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -205,8 +206,8 @@ export class TransactionResponse {
     const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
 
     if (result.isStatusFailure) {
-      // TODO: use FuelError
-      throw new Error(
+      throw new FuelError(
+        ErrorCode.TRANSACTION_FAILED,
         `Transaction failed: ${(<FailureStatus>result.gqlTransaction.status).reason}`
       );
     }
