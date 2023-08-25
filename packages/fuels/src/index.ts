@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference path="./hbs.d.ts" />
+/// <reference path="./bundle-require.d.ts" />
+
 export * from '@ethersproject/bytes';
 export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/address';
