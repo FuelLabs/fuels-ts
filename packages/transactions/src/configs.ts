@@ -7,7 +7,7 @@ export const CONTRACT_MAX_SIZE = 16 * 1024;
 export const MAX_WITNESSES = 16;
 
 /** Maximum gas per transaction. */
-export const MAX_GAS_PER_TX = bn(500000000);
+export const MAX_GAS_PER_TX = bn(10_000_000);
 
 /**
  * Gas Price factor this is used to calculate
