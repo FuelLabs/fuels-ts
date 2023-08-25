@@ -12,8 +12,10 @@ import { logSection } from '../../utils';
 import { defaultChainConfig } from './defaultChainConfig';
 
 export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
-  ip: string;
+  bindIp: string;
+  accessIp: string;
   port: number;
+  providerUrl: string;
   childProcess: ChildProcessWithoutNullStreams;
 }> {
   logSection('Starting node...');
@@ -22,21 +24,22 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
   const chainConfigPath = join(coreDir, 'chainConfig.json');
   const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
 
-  let chainConfig = config?.chainConfig;
+  const bindIp = '0.0.0.0';
+  const accessIp = '127.0.0.1';
 
+  let chainConfig = config?.chainConfig;
   if (!chainConfig) {
     mkdir('-p', dirname(chainConfigPath));
     writeFileSync(chainConfigPath, chainConfigJson);
     chainConfig = chainConfigPath;
   }
 
-  const ip = '0.0.0.0';
-
   let port = config.fuelCorePort;
-
   if (!port) {
     port = await getPort({ port: 4000 });
   }
+
+  const providerUrl = `http://${accessIp}:${port}/graphql`;
 
   // This is the private key of the `consensus.PoA.signing_key` in `defaultChainConfig.ts`.
   // This key is responsible for validating the transactions.
@@ -45,7 +48,7 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
   const flags = [
     'fuels-core',
     'run',
-    ['--ip', ip],
+    ['--ip', bindIp],
     ['--port', port.toString()],
     ['--db-path', coreDir],
     ['--min-gas-price', '0'],
@@ -74,7 +77,7 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
     childProcess.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
         childProcess.stderr.removeAllListeners();
-        resolve({ childProcess, ip, port });
+        resolve({ bindIp, accessIp, port, providerUrl, childProcess });
       }
     });
 
