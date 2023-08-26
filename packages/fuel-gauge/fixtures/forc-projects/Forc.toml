@@ -25,6 +25,7 @@ members = [
     "predicate-with-configurable",
     "predicate-u32",
     "predicate-vector-types",
+    "raw-slice",
     "revert-error",
     "script-main-args",
     "script-main-return-struct",

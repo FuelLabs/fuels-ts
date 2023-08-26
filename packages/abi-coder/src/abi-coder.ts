@@ -7,6 +7,7 @@ import { ArrayCoder } from './coders/array';
 import { B256Coder } from './coders/b256';
 import { B512Coder } from './coders/b512';
 import { BooleanCoder } from './coders/boolean';
+import { ByteCoder } from './coders/byte';
 import { EnumCoder } from './coders/enum';
 import { NumberCoder } from './coders/number';
 import { OptionCoder } from './coders/option';
@@ -23,6 +24,7 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
+  BYTE_CODER_TYPE,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
@@ -64,6 +66,8 @@ export abstract class AbiCoder {
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
+      case BYTE_CODER_TYPE:
+        return new ByteCoder();
       default:
         break;
     }
