@@ -31,14 +31,14 @@
     "forc:verify": "tsx ./scripts/verify-forc-version",
     "node:run": "./scripts/run-node.sh",
     "node:clean": "rimraf .fuel-core/db",
-    "aa_test": "run-s aa_test:node aa_test:browser aa_coverage:copy aa_coverage:merge aa_coverage:report aa_coverage:open",
+    "aa_test": "run-s rimraf coverage aa_test:node aa_test:browser aa_coverage:copy aa_coverage:merge aa_coverage:report aa_coverage:open",
     "aa_test:node": "vitest --run --config vite.node.config.js $(scripts/find-tests.sh --node)",
     "aa_test:browser": "vitest --run --config vite.browser.config.js $(scripts/find-tests.sh --browser)",
     "aa_coverage:copy": "run-p aa_coverage:copy:*",
     "aa_coverage:copy:node": "cp coverage/node/coverage-final.json coverage/node.json",
     "aa_coverage:copy:browser": "cp coverage/browser/coverage-final.json coverage/browser.json",
     "aa_coverage:merge": "nyc merge coverage coverage/merged/coverage.json",
-    "aa_coverage:report": "nyc report -t coverage/merged -r text -r html --exclude-after-remap=false",
+    "aa_coverage:report": "nyc report -t coverage/merged -r text -r html-spa --exclude-after-remap=false",
     "aa_coverage:open": "open coverage/index.html"
   },
   "repository": {
