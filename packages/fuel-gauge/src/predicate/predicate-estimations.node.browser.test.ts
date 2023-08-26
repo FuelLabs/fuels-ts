@@ -7,6 +7,10 @@ import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-m
 import predicateTrueBytecode from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Predicate', () => {
   describe('Estimate predicate gas', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

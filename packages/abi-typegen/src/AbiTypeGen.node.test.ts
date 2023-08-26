@@ -7,6 +7,9 @@ import * as assembleContractsMod from './utils/assembleContracts';
 import * as assemblePredicatesMod from './utils/assemblePredicates';
 import * as assembleScriptsMod from './utils/assembleScripts';
 
+/**
+ * @group node
+ */
 describe('AbiTypegen.ts', () => {
   // Use as e sample of HORRIBLE auto-code-formatting
   function mockAllDeps() {

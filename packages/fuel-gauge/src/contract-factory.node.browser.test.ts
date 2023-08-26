@@ -5,6 +5,10 @@ import { join } from 'path';
 
 import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

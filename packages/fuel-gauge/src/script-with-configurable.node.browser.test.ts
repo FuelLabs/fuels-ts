@@ -19,6 +19,10 @@ const defaultValues = {
 
 let wallet: WalletUnlocked;
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Script With Configurable', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

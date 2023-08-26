@@ -23,6 +23,10 @@ jest.mock('@fuel-ts/providers', () => ({
 
 afterEach(jest.restoreAllMocks);
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Account', () => {
   const assets = [
     '0x0101010101010101010101010101010101010101010101010101010101010101',

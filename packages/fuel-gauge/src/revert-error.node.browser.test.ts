@@ -19,6 +19,10 @@ import FactoryAbi from '../fixtures/forc-projects/revert-error/out/debug/revert-
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Revert Error Testing', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

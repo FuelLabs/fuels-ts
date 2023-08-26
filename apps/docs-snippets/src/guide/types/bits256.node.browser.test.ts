@@ -1,5 +1,9 @@
 import { Address, arrayify, getRandomB256, hexlify } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully generate and validate bit256 hexed string', () => {
     // #region bits256-1

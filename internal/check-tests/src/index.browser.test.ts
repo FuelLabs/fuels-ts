@@ -7,6 +7,9 @@ import type { Browser } from 'playwright';
 /**
  * @group browser
  */
+/**
+ * @group browser
+ */
 describe('in:browser', () => {
   let browser: Browser, page: any;
 

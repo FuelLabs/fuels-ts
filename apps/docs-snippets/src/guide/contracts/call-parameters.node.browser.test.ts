@@ -8,6 +8,10 @@ import { createAndDeployContractFromProject } from '../../utils';
  * @group browser
  * @group node
  */
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   let contract: Contract;
 

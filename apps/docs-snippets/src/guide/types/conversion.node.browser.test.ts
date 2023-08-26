@@ -13,6 +13,10 @@ import {
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
 

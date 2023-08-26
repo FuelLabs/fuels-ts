@@ -5,6 +5,10 @@ import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
 import { hashMessage, hash, hashTransaction } from './hasher';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Hasher', () => {
   it('Hash message', () => {
     expect(hashMessage(signMessageTest.message)).toEqual(signMessageTest.hashedMessage);

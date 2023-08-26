@@ -19,6 +19,10 @@ jest.mock('@fuel-ts/providers', () => ({
   ...jest.requireActual('@fuel-ts/providers'),
 }));
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', () => {
     const wallet = new WalletUnlocked(signMessageTest.privateKey);

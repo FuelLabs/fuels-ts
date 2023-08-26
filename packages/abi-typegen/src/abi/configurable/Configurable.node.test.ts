@@ -5,6 +5,9 @@ import * as findTypeMod from '../../utils/findType';
 
 import { Configurable } from './Configurable';
 
+/**
+ * @group node
+ */
 describe('Configurable.ts', () => {
   function mockAllDeps() {
     const rawAbiType: IRawAbiTypeRoot = {

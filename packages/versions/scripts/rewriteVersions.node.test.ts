@@ -13,6 +13,9 @@ jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
 }));
 
+/**
+ * @group node
+ */
 describe('rewriteVersions.js', () => {
   function modifyEnv() {
     const envBackup = { ...process.env };

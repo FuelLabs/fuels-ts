@@ -7,6 +7,9 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import { collectBinFilepaths } from './collectBinFilePaths';
 import * as validateBinFileMod from './validateBinFile';
 
+/**
+ * @group node
+ */
 describe('collectBinFilePaths.ts', () => {
   const script = getProjectResources(ForcProjectsEnum.SCRIPT);
   const predicate = getProjectResources(ForcProjectsEnum.PREDICATE);

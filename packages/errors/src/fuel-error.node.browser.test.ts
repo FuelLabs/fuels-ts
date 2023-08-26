@@ -13,6 +13,10 @@ it('has properties set as expected on creation', () => {
   expect(error.VERSIONS).toStrictEqual(versions);
 });
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Parsing', () => {
   it('parses correctly', () => {
     const message = 'my-message';

@@ -8,6 +8,10 @@ import type { VaultConfig } from './types';
 import { WalletManager } from './wallet-manager';
 import WalletManagerSpec from './wallet-manager-spec';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Wallet Manager', () => {
   const setupWallet = async (config: VaultConfig) => {
     // #region wallet-manager-mnemonic

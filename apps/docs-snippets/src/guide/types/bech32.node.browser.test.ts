@@ -1,5 +1,9 @@
 import { Address } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully generate a bech32 address', () => {
     // #region bech32-2

@@ -10,6 +10,10 @@ import {
   calculateTransactionFeeForScript,
 } from './fee';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   describe('calculatePriceWithFactor', () => {
     it('should correctly calculate the price with factor', () => {

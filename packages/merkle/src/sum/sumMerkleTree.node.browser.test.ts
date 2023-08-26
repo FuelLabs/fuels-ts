@@ -3,6 +3,10 @@ import { toHex } from '@fuel-ts/math';
 import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Sum Merkle Tree', () => {
   const size = 100;
   const sumAfterLeaves = toHex(((size - 1) * size) / 2);

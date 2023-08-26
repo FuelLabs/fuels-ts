@@ -15,6 +15,10 @@ jest.mock('@fuels/vm-asm', () => ({
   ...jest.requireActual('@fuels/vm-asm'),
 }));
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('util', () => {
   afterEach(jest.restoreAllMocks);
 

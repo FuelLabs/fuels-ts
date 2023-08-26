@@ -1,6 +1,9 @@
 import { compareUserVersions } from './compareUserVersions';
 import * as getSupportedVersionsMod from './getSupportedVersions';
 
+/**
+ * @group node
+ */
 describe('compareVersions.js', () => {
   /*
     Hooks

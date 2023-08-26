@@ -1,6 +1,9 @@
 import { B512Type } from './B512Type';
 import { BoolType } from './BoolType';
 
+/**
+ * @group node
+ */
 describe('B512Type.ts', () => {
   test('should properly parse type attributes', () => {
     const b512 = new B512Type({

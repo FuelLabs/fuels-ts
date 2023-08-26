@@ -3,6 +3,10 @@ import { WalletUnlocked, Predicate, BaseAssetId, BN, getRandomB256 } from 'fuels
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 

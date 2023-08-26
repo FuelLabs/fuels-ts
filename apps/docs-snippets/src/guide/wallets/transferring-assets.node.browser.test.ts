@@ -4,6 +4,10 @@ import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   let senderWallet: WalletUnlocked;
   let deployedContract: Contract;

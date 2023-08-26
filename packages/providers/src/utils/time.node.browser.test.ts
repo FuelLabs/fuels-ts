@@ -1,5 +1,9 @@
 import { fromTai64ToUnix, fromUnixToTai64 } from './time';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   test('fromTai64ToUnix', () => {
     expect(fromTai64ToUnix('4611686020108779312')).toEqual(1681391398);

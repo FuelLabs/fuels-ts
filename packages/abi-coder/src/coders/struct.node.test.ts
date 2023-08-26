@@ -7,6 +7,9 @@ import { BooleanCoder } from './boolean';
 import { StructCoder } from './struct';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
   const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });

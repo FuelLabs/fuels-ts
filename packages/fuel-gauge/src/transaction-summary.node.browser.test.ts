@@ -19,6 +19,10 @@ import {
   Wallet,
 } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let wallet: WalletUnlocked;

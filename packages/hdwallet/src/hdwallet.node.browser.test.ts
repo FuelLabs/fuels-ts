@@ -1,6 +1,10 @@
 import HDWallet from './hdwallet';
 import HDWalletSpec from './hdwallet-spec';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('HDWallet', () => {
   test("Should throw error on invalid extended key's", () => {
     expect(() =>

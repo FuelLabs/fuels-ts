@@ -1,5 +1,8 @@
 import { formatConfigurables } from './formatConfigurables';
 
+/**
+ * @group node
+ */
 describe('formatConfigurables.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {

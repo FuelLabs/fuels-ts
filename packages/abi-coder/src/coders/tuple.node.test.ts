@@ -7,6 +7,9 @@ import { BooleanCoder } from './boolean';
 import { TupleCoder } from './tuple';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ */
 describe('Tuple Coder', () => {
   const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
 

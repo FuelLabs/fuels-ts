@@ -4,6 +4,10 @@ import { BN, getRandomB256 } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   let contract: Contract;
 

@@ -5,6 +5,10 @@ import type { IScryptParams } from '../types';
 
 import { scrypt } from './scrypt';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('scrypt', () => {
   afterEach(jest.restoreAllMocks);
 

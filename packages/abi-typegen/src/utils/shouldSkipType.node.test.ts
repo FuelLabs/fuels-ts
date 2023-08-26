@@ -1,6 +1,9 @@
 import { shouldSkipAbiType } from './shouldSkipAbiType';
 import { supportedTypes } from './supportedTypes';
 
+/**
+ * @group node
+ */
 describe('types.ts', () => {
   test('should always skip these types', () => {
     expect(shouldSkipAbiType({ type: '()' })).toEqual(true);

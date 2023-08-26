@@ -4,6 +4,10 @@ import { bufferFromString } from '..';
 
 import { keccak256 } from './keccak256';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('keccak256', () => {
   afterEach(jest.restoreAllMocks);
 

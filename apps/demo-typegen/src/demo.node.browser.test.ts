@@ -7,6 +7,10 @@ import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json
 import { DemoContractAbi__factory } from './generated-types';
 import bytecode from './generated-types/DemoContractAbi.hex';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('ExampleContract', () => {
   it('should return the input', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

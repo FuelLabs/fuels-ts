@@ -10,6 +10,9 @@ import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-pro
 import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
+/**
+ * @group node
+ */
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {
     const project = getProjectResources(ForcProjectsEnum.FULL);

@@ -3,6 +3,10 @@ import { randomBytes } from '@fuel-ts/crypto';
 import Mnemonic from './mnemonic';
 import MnemonicSpec from './mnemonic-specs';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Mnemonic', () => {
   const mnemonic = new Mnemonic();
 

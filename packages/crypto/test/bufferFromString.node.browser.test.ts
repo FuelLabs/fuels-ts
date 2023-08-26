@@ -1,5 +1,9 @@
 import { envs } from './envs';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('bufferFromString', () => {
   const buffer = new Uint8Array([104, 101, 108, 108, 111]); // ASCII values for "hello"
 

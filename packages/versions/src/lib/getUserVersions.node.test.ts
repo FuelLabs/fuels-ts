@@ -8,6 +8,9 @@ jest.mock('child_process', () => ({
   ...jest.requireActual('child_process'),
 }));
 
+/**
+ * @group node
+ */
 describe('getUserVersions.js', () => {
   /*
     Test (mocking) utility

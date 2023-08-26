@@ -1,5 +1,8 @@
 import { safeExec } from './safeExec';
 
+/**
+ * @group node
+ */
 describe('safeExec.js', () => {
   it('should catch error', async () => {
     const ERROR_MSG = 'I am an error.';

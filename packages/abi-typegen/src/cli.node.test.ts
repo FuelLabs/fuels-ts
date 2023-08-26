@@ -6,6 +6,9 @@ import { run } from './cli';
 import * as runTypegenMod from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
+/**
+ * @group node
+ */
 describe('cli.ts', () => {
   function mockDeps() {
     const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation();

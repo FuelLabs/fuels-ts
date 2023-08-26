@@ -7,6 +7,10 @@ import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '.';
 import { seedTestWallet, generateTestWallet } from './test-utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

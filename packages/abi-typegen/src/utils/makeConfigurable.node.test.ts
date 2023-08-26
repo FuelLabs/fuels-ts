@@ -2,6 +2,9 @@ import { Configurable } from '../abi/configurable/Configurable';
 
 import { makeConfigurable } from './makeConfigurable';
 
+/**
+ * @group node
+ */
 describe('makeConfigurable.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {

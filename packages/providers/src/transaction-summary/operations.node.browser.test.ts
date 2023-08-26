@@ -48,6 +48,10 @@ import {
 import type { Operation } from './types';
 import { AddressType, OperationName, TransactionTypeName, ChainName } from './types';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('operations', () => {
   describe('getContractCallOperations', () => {
     it('should ensure getContractCallOperations return contract call operations', () => {

@@ -2,6 +2,9 @@ import { readVersionsFromFiles } from '../../scripts/rewriteVersions';
 
 import { getSupportedVersions } from './getSupportedVersions';
 
+/**
+ * @group node
+ */
 describe('getSupportedVersions.js', () => {
   test('should return received version of default', () => {
     const versions = getSupportedVersions();

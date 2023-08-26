@@ -1,5 +1,9 @@
 import { getWords } from './utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('mnemonic utils', () => {
   const words = ['a', 'b', 'c'];
 

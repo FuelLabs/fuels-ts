@@ -9,6 +9,9 @@ import { EvmAddressType } from './EvmAddressType';
 import { StructType } from './StructType';
 import { U16Type } from './U16Type';
 
+/**
+ * @group node
+ */
 describe('StructType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');

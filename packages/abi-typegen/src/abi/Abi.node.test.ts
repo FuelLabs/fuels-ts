@@ -12,6 +12,9 @@ import { EnumType } from './types/EnumType';
 import { OptionType } from './types/OptionType';
 import { VectorType } from './types/VectorType';
 
+/**
+ * @group node
+ */
 describe('Abi.ts', () => {
   /*
     Test helpers

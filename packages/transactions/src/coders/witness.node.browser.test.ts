@@ -3,6 +3,10 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('WitnessCoder', () => {
   it('Can encode empty Witness', () => {
     const witness: Witness = {

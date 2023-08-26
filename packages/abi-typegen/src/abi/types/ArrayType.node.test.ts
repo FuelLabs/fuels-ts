@@ -7,6 +7,9 @@ import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
 import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
 
+/**
+ * @group node
+ */
 describe('ArrayType.ts', () => {
   beforeEach(jest.restoreAllMocks);
 

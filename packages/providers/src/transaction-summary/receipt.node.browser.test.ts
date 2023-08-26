@@ -10,6 +10,10 @@ import type {
 import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import type { MintedAsset, BurnedAsset } from './types';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('extractMintedAssetsFromReceipts and extractBurnedAssetsFromReceipts', () => {
   it('should extracts minted and burned assets just fine', () => {
     // Sample input

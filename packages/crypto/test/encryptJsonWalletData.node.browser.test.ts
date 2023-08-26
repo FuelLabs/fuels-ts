@@ -1,5 +1,9 @@
 import { envs } from './envs';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('encryptJsonWalletData', () => {
   it.each(envs)(
     'should encrypt and decrypt json wallet data correctly in %s environment',

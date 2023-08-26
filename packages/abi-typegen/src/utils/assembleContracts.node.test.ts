@@ -7,6 +7,9 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleContracts } from './assembleContracts';
 
+/**
+ * @group node
+ */
 describe('assembleContracts.ts', () => {
   function mockAllDeps() {
     jest.resetAllMocks();

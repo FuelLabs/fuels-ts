@@ -15,36 +15,42 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
-test('allow sending coins to payable functions', async () => {
-  const contract = await setupContract();
+/**
+ * @group browser
+ * @group node
+ */
+describe(__filename, () => {
+  test('allow sending coins to payable functions', async () => {
+    const contract = await setupContract();
 
-  // This should not fail because the function is payable
-  expect(
-    contract.functions
-      .payable()
-      .callParams({
-        forward: {
-          amount: bn(100),
-          assetId: BaseAssetId,
-        },
-      })
-      .call()
-  ).resolves.toBeTruthy();
-});
+    // This should not fail because the function is payable
+    expect(
+      contract.functions
+        .payable()
+        .callParams({
+          forward: {
+            amount: bn(100),
+            assetId: BaseAssetId,
+          },
+        })
+        .call()
+    ).resolves.toBeTruthy();
+  });
 
-test("don't allow sending coins to non-payable functions", async () => {
-  const contract = await setupContract();
+  test("don't allow sending coins to non-payable functions", async () => {
+    const contract = await setupContract();
 
-  // This should fail because the function is not payable
-  await expect(async () =>
-    contract.functions
-      .non_payable()
-      .callParams({
-        forward: {
-          amount: bn(100),
-          assetId: BaseAssetId,
-        },
-      })
-      .call()
-  ).rejects.toThrowError(/Function is not payable/);
+    // This should fail because the function is not payable
+    await expect(async () =>
+      contract.functions
+        .non_payable()
+        .callParams({
+          forward: {
+            amount: bn(100),
+            assetId: BaseAssetId,
+          },
+        })
+        .call()
+    ).rejects.toThrowError(/Function is not payable/);
+  });
 });

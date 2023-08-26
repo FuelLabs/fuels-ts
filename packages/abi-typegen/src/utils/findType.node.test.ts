@@ -6,6 +6,9 @@ import type { IType } from '../types/interfaces/IType';
 import { findType } from './findType';
 import { makeType } from './makeType';
 
+/**
+ * @group node
+ */
 describe('findType.ts', () => {
   test('should find type', () => {
     const rawAbiType: IRawAbiTypeRoot = {

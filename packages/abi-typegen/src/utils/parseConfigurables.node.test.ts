@@ -1,6 +1,9 @@
 import * as makeConfigurableMod from './makeConfigurable';
 import { parseConfigurables } from './parseConfigurables';
 
+/**
+ * @group node
+ */
 describe('parseConfigurables.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {

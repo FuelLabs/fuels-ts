@@ -13,6 +13,10 @@ const contractBytecode = readFileSync(
   )
 );
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     const contract = await setup({

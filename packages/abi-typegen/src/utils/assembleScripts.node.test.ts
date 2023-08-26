@@ -6,6 +6,9 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleScripts } from './assembleScripts';
 
+/**
+ * @group node
+ */
 describe('assembleScripts.ts', () => {
   function mockAllDeps() {
     const renderCommonTemplate = jest

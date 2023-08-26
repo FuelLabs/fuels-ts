@@ -4,6 +4,9 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { formatEnums } from './formatEnums';
 
+/**
+ * @group node
+ */
 describe('formatEnums.ts', () => {
   test('should format enums just fine', () => {
     const project = getProjectResources(ForcProjectsEnum.ENUM_OF_ENUMS);

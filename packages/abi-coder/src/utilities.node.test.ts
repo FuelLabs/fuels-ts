@@ -3,6 +3,9 @@ import { concat } from '@ethersproject/bytes';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { unpackDynamicData, concatWithDynamicData } from './utilities';
 
+/**
+ * @group node
+ */
 describe('Abi Coder Utilities', () => {
   it('can concatWithVectorData [no dynamicData, should match original concat]', () => {
     const data1 = [0, 0, 0, 0, 0, 0, 0, 24];
