@@ -28,7 +28,9 @@ describe('Configurable.ts', () => {
       parseComponentsAttributes: vi.fn(),
     };
 
-    const findType = vi.spyOn(findTypeMod, 'findType').mockReturnValue(type);
+    const findType = vi
+      .spyOn(findTypeMod, 'findType')
+      .mockImplementation(vi.fn().mockReturnValue(type));
 
     return {
       type,

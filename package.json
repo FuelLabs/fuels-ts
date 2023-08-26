@@ -39,7 +39,7 @@
     "aa_coverage:copy:node": "cp coverage/node/coverage-final.json coverage/node.json",
     "aa_coverage:copy:browser": "cp coverage/browser/coverage-final.json coverage/browser.json",
     "aa_coverage:merge": "nyc merge coverage coverage/merged/coverage.json",
-    "aa_coverage:report": "nyc report -t coverage/merged -r text -r html-spa --exclude-after-remap=false",
+    "aa_coverage:report": "nyc report -t coverage/merged -r text -r html --exclude-after-remap=false",
     "aa_coverage:open": "open coverage/index.html"
   },
   "repository": {
