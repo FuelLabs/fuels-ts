@@ -2,6 +2,9 @@ import { mockVersions } from '../../test/utils/mockVersions';
 
 import { renderHbsTemplate } from './renderHbsTemplate';
 
+/**
+ * @group node
+ */
 describe('renderHbsTemplate.ts', () => {
   test('should render given template w/ data while injecting header', () => {
     // mocking

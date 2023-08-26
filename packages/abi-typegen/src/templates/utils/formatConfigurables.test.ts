@@ -1,5 +1,8 @@
 import { formatConfigurables } from './formatConfigurables';
 
+/**
+ * @group node
+ */
 describe('formatConfigurables.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {
@@ -17,7 +20,7 @@ describe('formatConfigurables.ts', () => {
       },
       rawAbiType,
       requiredFuelsMembersImports: [],
-      parseComponentsAttributes: jest.fn(),
+      parseComponentsAttributes: vi.fn(),
     };
 
     const rawAbiConfigurable = {

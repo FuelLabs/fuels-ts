@@ -4,6 +4,9 @@ import { mockVersions } from '../../../test/utils/mockVersions';
 
 import { renderBytecodeTemplate } from './bytecode';
 
+/**
+ * @group node
+ */
 describe('templates/contract/bytecode', () => {
   test('should render bytecode template', () => {
     // mocking
