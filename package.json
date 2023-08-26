@@ -30,7 +30,16 @@
     "forc:format": "./scripts/forc-format.sh",
     "forc:verify": "tsx ./scripts/verify-forc-version",
     "node:run": "./scripts/run-node.sh",
-    "node:clean": "rimraf .fuel-core/db"
+    "node:clean": "rimraf .fuel-core/db",
+    "aa_test": "run-s aa_test:node aa_test:browser aa_coverage:copy aa_coverage:merge aa_coverage:report aa_coverage:open",
+    "aa_test:node": "vitest --run --config vite.node.config.js $(scripts/find-tests.sh --node)",
+    "aa_test:browser": "vitest --run --config vite.browser.config.js $(scripts/find-tests.sh --browser)",
+    "aa_coverage:copy": "run-p aa_coverage:copy:*",
+    "aa_coverage:copy:node": "cp coverage/node/coverage-final.json coverage/node.json",
+    "aa_coverage:copy:browser": "cp coverage/browser/coverage-final.json coverage/browser.json",
+    "aa_coverage:merge": "nyc merge coverage coverage/merged/coverage.json",
+    "aa_coverage:report": "nyc report -t coverage/merged -r text -r html --exclude-after-remap=false",
+    "aa_coverage:open": "open coverage/index.html"
   },
   "repository": {
     "type": "git",
@@ -56,6 +65,9 @@
     "@types/web": "^0.0.65",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
+    "@vitest/browser": "^0.34.3",
+    "@vitest/coverage-istanbul": "^0.34.3",
+    "@vitest/ui": "^0.34.3",
     "conventional-changelog-angular": "^5.0.13",
     "dotenv": "^9.0.2",
     "eslint": "^8.26.0",
@@ -75,6 +87,7 @@
     "jest-text-transformer": "^1.0.4",
     "nodemon": "^2.0.22",
     "npm-run-all": "^4.1.5",
+    "nyc": "^15.1.0",
     "open": "^8.4.0",
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
@@ -86,7 +99,11 @@
     "tsup": "^6.7.0",
     "tsx": "^3.12.7",
     "turbo": "^1.8.8",
-    "typescript": "~5.1.6"
+    "typescript": "~5.1.6",
+    "vite": "^4.3.9",
+    "vite-plugin-plain-text": "^1.4.2",
+    "vitest": "^0.34.3",
+    "webdriverio": "^8.15.8"
   },
   "pnpm": {
     "overrides": {

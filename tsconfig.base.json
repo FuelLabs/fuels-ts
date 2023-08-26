@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["vitest/globals"]
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
 }
