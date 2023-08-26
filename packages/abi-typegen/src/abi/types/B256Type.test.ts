@@ -1,6 +1,9 @@
 import { B256Type } from './B256Type';
 import { BoolType } from './BoolType';
 
+/**
+ * @group node
+ */
 describe('B256Type.ts', () => {
   test('should properly parse type attributes', () => {
     const b256 = new B256Type({

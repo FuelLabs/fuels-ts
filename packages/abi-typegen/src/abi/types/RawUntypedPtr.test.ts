@@ -1,6 +1,9 @@
 import { RawUntypedPtr } from './RawUntypedPtr';
 import { U8Type } from './U8Type';
 
+/**
+ * @group node
+ */
 describe('RawUntypedPtrType.ts', () => {
   test('should properly parse type attributes', () => {
     const rawUntypedPtr = new RawUntypedPtr({

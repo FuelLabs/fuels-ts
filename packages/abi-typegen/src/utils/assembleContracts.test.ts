@@ -7,25 +7,28 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleContracts } from './assembleContracts';
 
+/**
+ * @group node
+ */
 describe('assembleContracts.ts', () => {
   function mockAllDeps() {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
-    const renderCommonTemplate = jest
+    const renderCommonTemplate = vi
       .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
-      .mockImplementation();
+      .mockReturnValue('');
 
-    const renderFactoryTemplate = jest
+    const renderFactoryTemplate = vi
       .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
-      .mockImplementation();
+      .mockReturnValue('');
 
-    const renderIndexTemplate = jest
+    const renderIndexTemplate = vi
       .spyOn(renderIndexTemplateMod, 'renderIndexTemplate')
-      .mockImplementation();
+      .mockReturnValue('');
 
-    const renderBytecodeTemplate = jest
+    const renderBytecodeTemplate = vi
       .spyOn(renderBytecodeTemplateMod, 'renderBytecodeTemplate')
-      .mockImplementation();
+      .mockReturnValue('');
 
     return {
       renderCommonTemplate,

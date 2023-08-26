@@ -1,6 +1,9 @@
 import * as makeConfigurableMod from './makeConfigurable';
 import { parseConfigurables } from './parseConfigurables';
 
+/**
+ * @group node
+ */
 describe('parseConfigurables.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {
@@ -18,7 +21,7 @@ describe('parseConfigurables.ts', () => {
       },
       rawAbiType,
       requiredFuelsMembersImports: [],
-      parseComponentsAttributes: jest.fn(),
+      parseComponentsAttributes: vi.fn(),
     };
 
     const rawAbiConfigurable = {
@@ -37,7 +40,7 @@ describe('parseConfigurables.ts', () => {
       rawAbiConfigurable,
     };
 
-    const makeConfigurable = jest
+    const makeConfigurable = vi
       .spyOn(makeConfigurableMod, 'makeConfigurable')
       .mockReturnValue(configurable);
 

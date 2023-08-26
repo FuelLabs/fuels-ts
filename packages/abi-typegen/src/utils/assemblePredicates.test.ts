@@ -6,19 +6,22 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assemblePredicates } from './assemblePredicates';
 
+/**
+ * @group node
+ */
 describe('assemblePredicates.ts', () => {
   function mockAllDeps() {
-    const renderCommonTemplate = jest
+    const renderCommonTemplate = vi
       .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
-      .mockImplementation();
+      .mockImplementation(vi.fn().mockResolvedValue(''));
 
-    const renderFactoryTemplate = jest
+    const renderFactoryTemplate = vi
       .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
-      .mockImplementation();
+      .mockImplementation(vi.fn().mockResolvedValue(''));
 
-    const renderIndexTemplate = jest
+    const renderIndexTemplate = vi
       .spyOn(renderIndexTemplateMod, 'renderIndexTemplate')
-      .mockImplementation();
+      .mockImplementation(vi.fn().mockResolvedValue(''));
 
     return {
       renderCommonTemplate,
@@ -27,8 +30,13 @@ describe('assemblePredicates.ts', () => {
     };
   }
 
-  beforeEach(jest.resetAllMocks);
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('should assemble all files from Predicate ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
@@ -42,7 +50,7 @@ describe('assemblePredicates.ts', () => {
       includeBinFiles: true,
     });
 
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
     const files = assemblePredicates({ abis, outputDir });
 
@@ -65,7 +73,7 @@ describe('assemblePredicates.ts', () => {
       includeBinFiles: true,
     });
 
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
     const files = assemblePredicates({ abis, outputDir });
 

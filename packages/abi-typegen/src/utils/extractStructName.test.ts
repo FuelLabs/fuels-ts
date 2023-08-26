@@ -5,6 +5,9 @@ import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { extractStructName } from './extractStructName';
 
+/**
+ * @group node
+ */
 describe('extractStructName.ts', () => {
   /*
     Test helpers

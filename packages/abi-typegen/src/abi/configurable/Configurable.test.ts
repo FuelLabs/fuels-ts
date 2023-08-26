@@ -5,6 +5,9 @@ import * as findTypeMod from '../../utils/findType';
 
 import { Configurable } from './Configurable';
 
+/**
+ * @group node
+ */
 describe('Configurable.ts', () => {
   function mockAllDeps() {
     const rawAbiType: IRawAbiTypeRoot = {
@@ -22,10 +25,10 @@ describe('Configurable.ts', () => {
       },
       rawAbiType,
       requiredFuelsMembersImports: [],
-      parseComponentsAttributes: jest.fn(),
+      parseComponentsAttributes: vi.fn(),
     };
 
-    const findType = jest.spyOn(findTypeMod, 'findType').mockReturnValue(type);
+    const findType = vi.spyOn(findTypeMod, 'findType').mockReturnValue(type);
 
     return {
       type,

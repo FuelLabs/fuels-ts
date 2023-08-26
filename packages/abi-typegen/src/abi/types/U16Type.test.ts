@@ -1,6 +1,9 @@
 import { U16Type } from './U16Type';
 import { U32Type } from './U32Type';
 
+/**
+ * @group node
+ */
 describe('U16Type.ts', () => {
   test('should properly parse type attributes', () => {
     const u16 = new U16Type({

@@ -6,6 +6,9 @@ import type { IType } from '../types/interfaces/IType';
 import { findType } from './findType';
 import { makeType } from './makeType';
 
+/**
+ * @group node
+ */
 describe('findType.ts', () => {
   test('should find type', () => {
     const rawAbiType: IRawAbiTypeRoot = {
@@ -17,7 +20,7 @@ describe('findType.ts', () => {
 
     const type: IType = makeType({ rawAbiType });
 
-    const parseComponentsAttributesSpy = jest.spyOn(type, 'parseComponentsAttributes');
+    const parseComponentsAttributesSpy = vi.spyOn(type, 'parseComponentsAttributes');
 
     const typeId = 1;
     const types: IType[] = [type]; // array with type to be found

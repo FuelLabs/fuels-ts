@@ -10,6 +10,9 @@ import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-pro
 import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
+/**
+ * @group node
+ */
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {
     const project = getProjectResources(ForcProjectsEnum.FULL);
@@ -215,5 +218,66 @@ describe('runTypegen.js', () => {
     expect(error?.message).toEqual(
       'You need to inform at least one parameter: `input` or `filepaths`'
     );
+  });
+
+  test('should write messages to stdout', async () => {
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+    const normalizedName = project.normalizedName;
+    const programType = ProgramTypeEnum.CONTRACT;
+    const silent = false;
+
+    // duplicates ABI JSON so we can validate if all inputs
+    // are being collected (and not only the first one)
+    const from = project.abiPath;
+    const to = from.replace('-abi.json', '2-abi.json');
+
+    // also duplicates BIN file
+    const fromBin = project.binPath;
+    const toBin = fromBin.replace('.bin', '2.bin');
+
+    shelljs.cp(from, to);
+    shelljs.cp(fromBin, toBin);
+
+    // mocking
+    const log = vi.spyOn(console, 'log').mockImplementation(vi.fn().mockReturnValue({}));
+
+    // executes program
+    const fn = () =>
+      runTypegen({
+        cwd,
+        inputs,
+        output,
+        programType,
+        silent,
+      });
+
+    const { error } = await safeExec(fn);
+
+    // validates execution was ok
+    expect(error).toBeFalsy();
+
+    // check if all files were created
+    const files = [
+      join(output, 'index.ts'),
+      join(output, 'common.d.ts'),
+      join(output, `${normalizedName}Abi.d.ts`),
+      join(output, `${normalizedName}2Abi.d.ts`),
+      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, `${normalizedName}Abi.hex.ts`),
+      join(output, `${normalizedName}2Abi.hex.ts`),
+    ];
+
+    expect(files.length).toEqual(7);
+
+    files.forEach((f) => {
+      expect(existsSync(f)).toEqual(true);
+    });
+
+    expect(log).toHaveBeenCalled();
   });
 });

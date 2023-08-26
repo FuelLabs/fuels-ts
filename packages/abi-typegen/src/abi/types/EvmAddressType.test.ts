@@ -8,9 +8,12 @@ import { EvmAddressType } from './EvmAddressType';
 import { StructType } from './StructType';
 import { VectorType } from './VectorType';
 
+/**
+ * @group node
+ */
 describe('EvmAddressType.ts', () => {
   test('should properly parse type attributes', () => {
-    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const project = getProjectResources(ForcProjectsEnum.EVM_ADDRESS);
 
