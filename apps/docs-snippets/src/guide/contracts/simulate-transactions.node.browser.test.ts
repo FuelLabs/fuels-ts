@@ -3,10 +3,6 @@ import { BaseAssetId, Wallet, BN } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
-/**
- * @group browser
- * @group node
- */
 describe(__filename, () => {
   it('should successfully simulate contract call with forwarded amount', async () => {
     const contract = await createAndDeployContractFromProject(

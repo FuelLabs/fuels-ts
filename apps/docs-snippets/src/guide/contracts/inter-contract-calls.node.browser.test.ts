@@ -4,10 +4,6 @@ import { BN, ContractFactory } from 'fuels';
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-/**
- * @group browser
- * @group node
- */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 

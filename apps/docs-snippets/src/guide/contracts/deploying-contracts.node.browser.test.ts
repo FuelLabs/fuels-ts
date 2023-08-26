@@ -5,10 +5,6 @@ import { join } from 'path';
 import { SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-/**
- * @group browser
- * @group node
- */
 describe(__filename, () => {
   let PRIVATE_KEY: string;
   let projectsPath: string;
