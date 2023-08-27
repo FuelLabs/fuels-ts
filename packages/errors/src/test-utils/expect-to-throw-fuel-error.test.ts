@@ -2,6 +2,10 @@ import { FuelError } from '..';
 
 import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('expect-to-throw-fuel-error', () => {
   const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
   const throwFn = () => {
