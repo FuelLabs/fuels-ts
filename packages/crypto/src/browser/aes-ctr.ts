@@ -4,6 +4,7 @@ import { pbkdf2 } from '@ethersproject/pbkdf2';
 import type { CryptoApi, Keystore } from '../types';
 
 import { bufferFromString } from './bufferFromString';
+import { crypto } from './crypto';
 import { randomBytes } from './randomBytes';
 import { stringFromBuffer } from './stringFromBuffer';
 

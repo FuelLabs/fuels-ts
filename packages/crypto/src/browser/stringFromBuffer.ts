@@ -1,7 +1,5 @@
 import type { CryptoApi, Encoding } from '../types';
 
-import { btoa } from './crypto';
-
 export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
   buffer: Uint8Array,
   encoding: Encoding = 'base64'
@@ -11,8 +9,8 @@ export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
       return new TextDecoder().decode(buffer);
     }
     case 'base64': {
-      const binary = String.fromCharCode.apply(null, new Uint8Array(buffer) as unknown as number[]);
-      return btoa(binary);
+      const str = String.fromCharCode(...new Uint8Array(buffer));
+      return btoa(str);
     }
 
     case 'hex':

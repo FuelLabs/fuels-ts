@@ -1,35 +1,42 @@
 import * as ethereumCryptography from 'ethereum-cryptography/scrypt';
 
-import { bufferFromString } from '..';
+import { resolveEnvAppropriateModules } from '../../test/utils';
 import type { IScryptParams } from '../types';
 
 import { scrypt } from './scrypt';
 
-describe('scrypt', () => {
-  afterEach(jest.restoreAllMocks);
+/**
+ * @group node
+ * @group browser
+ */
+describe('scrypt', async () => {
+  const { bufferFromString } = await resolveEnvAppropriateModules();
 
-  it('hashes using scrypt', () => {
-    const mockedHashedKey = bufferFromString('hashedKey');
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-    const mock = jest
-      .spyOn(ethereumCryptography, 'scryptSync')
-      .mockImplementationOnce(() => mockedHashedKey);
-
+  it('hashes using scrypt', async () => {
     const password = bufferFromString('password');
     const salt = bufferFromString('salt');
+    const dklen = 32;
+    const n = 2;
+    const p = 4;
+    const r = 2;
 
     const params: IScryptParams = {
-      dklen: 32,
-      n: 2,
-      p: 4,
       password,
-      r: 2,
       salt,
+      dklen,
+      n,
+      p,
+      r,
     };
 
     const hashedKey = scrypt(params);
 
-    expect(mock).toBeCalledTimes(1);
-    expect(hashedKey).toEqual(mockedHashedKey);
+    const expectedKey = await ethereumCryptography.scrypt(password, salt, n, r, p, dklen);
+
+    expect(hashedKey).toEqual(expectedKey);
   });
 });
