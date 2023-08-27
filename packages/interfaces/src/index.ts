@@ -55,7 +55,6 @@ export abstract class AbstractAccount {
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
   abstract interface: {
-    decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
     updateExternalLoggedTypes: (id: string, abiInterface: any) => any;
   };
 

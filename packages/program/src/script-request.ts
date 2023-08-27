@@ -159,11 +159,8 @@ export function callResultToInvocationResult<TReturn>(
         value = scriptResult.returnReceipt.val;
       }
       if (scriptResult.returnReceipt.type === ReceiptType.ReturnData) {
-        const decoded = call.program.interface.decodeFunctionResult(
-          call.func,
-          scriptResult.returnReceipt.data
-        );
-        value = (decoded as [TReturn])[0];
+        const decoded = call.func.decodeOutput(scriptResult.returnReceipt.data);
+        value = decoded[0];
       }
 
       return value as TReturn;
