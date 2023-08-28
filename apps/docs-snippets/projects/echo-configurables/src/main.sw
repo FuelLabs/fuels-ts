@@ -2,14 +2,14 @@
 contract;
 
 enum MyEnum {
-  Checked: (),
-  Pending: ()
+    Checked: (),
+    Pending: (),
 }
 
 struct MyStruct {
-  x: u8,
-  y: u8,
-  state: MyEnum
+    x: u8,
+    y: u8,
+    state: MyEnum,
 }
 
 configurable {
@@ -19,8 +19,8 @@ configurable {
     my_struct: MyStruct = MyStruct {
         x: 1,
         y: 2,
-        state: MyEnum::Pending
-    }
+        state: MyEnum::Pending,
+    },
 }
 
 abi EchoConfigurables {
