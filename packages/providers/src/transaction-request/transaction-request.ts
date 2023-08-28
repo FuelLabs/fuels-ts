@@ -9,6 +9,7 @@ import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
+import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Resource } from '../resource';
@@ -317,6 +318,49 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         assetId,
       });
     }
+
+    return this;
+  }
+
+  addPredicateResource(resource: Coin, predicate: BytesLike, predicateData?: BytesLike) {
+    const input: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      ...resource,
+      owner: resource.owner.toB256(),
+      witnessIndex: 0,
+      txPointer: '0x00000000000000000000000000000000',
+      predicate,
+      predicateData,
+    };
+
+    this.pushInput(input);
+
+    // Find the ChangeOutput for the AssetId of the Resource
+    const { assetId, owner } = resource;
+
+    const changeOutput = this.getChangeOutputs().find(
+      (output) => hexlify(output.assetId) === assetId
+    );
+
+    // Throw if the existing ChangeOutput is not for the same owner
+    if (changeOutput && hexlify(changeOutput.to) !== owner.toB256()) {
+      throw new ChangeOutputCollisionError();
+    }
+
+    // Insert a ChangeOutput if it does not exist
+    if (!changeOutput) {
+      this.pushOutput({
+        type: OutputType.Change,
+        to: owner.toB256(),
+        assetId,
+      });
+    }
+
+    return this;
+  }
+
+  addPredicateResources(resources: Coin[], predicate: BytesLike, predicateData: BytesLike) {
+    resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
 
     return this;
   }
