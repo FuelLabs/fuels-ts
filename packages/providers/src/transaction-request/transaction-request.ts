@@ -247,14 +247,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return (<CoinTransactionRequestInput>found)?.witnessIndex;
   }
 
-  addCoinInput(
-    /** Address of the owner */
-    coin: Coin,
-
-    predicate?: BytesLike,
-    /** Predicate data */
-    predicateData?: BytesLike
-  ) {
+  /**
+   * Adds a single coin input to the transaction and a change output for the related
+   * assetId, if one it was not added yet.
+   *
+   * @param coin - Coin resource.
+   * @param predicate - Predicate bytes.
+   * @param predicateData - Predicate data bytes.
+   */
+  addCoinInput(coin: Coin, predicate?: BytesLike, predicateData?: BytesLike) {
     const { assetId, owner, amount } = coin;
 
     let witnessIndex;
@@ -289,13 +290,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.addChangeOutput(owner, assetId);
   }
 
-  addMessageInput(
-    message: MessageCoin,
-
-    predicate?: BytesLike,
-    /** Predicate data */
-    predicateData?: BytesLike
-  ) {
+  /**
+   * Adds a single message input to the transaction and a change output for the
+   * baseAssetId, if one it was not added yet.
+   *
+   * @param message - Message resource.
+   * @param predicate - Predicate bytes.
+   * @param predicateData - Predicate data bytes.
+   */
+  addMessageInput(message: MessageCoin, predicate?: BytesLike, predicateData?: BytesLike) {
     const { recipient, sender, amount } = message;
 
     const assetId = BaseAssetId;
@@ -335,7 +338,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * Adds a single resource to the transaction by adding a coin/message input and a
    * change output for the related assetId, if one it was not added yet.
    *
-   * @param resources - The resources to add.
+   * @param resource - The resource to add.
    * @returns This transaction.
    */
   addResource(resource: Resource) {
@@ -361,6 +364,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return this;
   }
 
+  /**
+   * Adds multiple resources to the transaction by adding coin/message inputs and change
+   * outputs from the related assetIds.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
+   */
   addPredicateResource(resource: Resource, predicate: BytesLike, predicateData?: BytesLike) {
     if (isCoin(resource)) {
       this.addCoinInput(resource, predicate, predicateData);
@@ -371,6 +381,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return this;
   }
 
+  /**
+   * Adds multiple predicate coin/message inputs to the transaction and change outputs
+   * from the related assetIds.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
+   */
   addPredicateResources(resources: Coin[], predicate: BytesLike, predicateData?: BytesLike) {
     resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
 
@@ -378,7 +395,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Adds a coin input to the transaction.
+   * Adds a coin output to the transaction.
    *
    * @param to - Address of the owner.
    * @param amount - Amount of coin.
