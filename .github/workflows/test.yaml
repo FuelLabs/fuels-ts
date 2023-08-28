@@ -41,6 +41,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Build
+        run: pnpm build
+
       - name: Run Node Tests
         run: pnpm ci:test-node
 
@@ -54,6 +57,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Build
+        run: pnpm build
+
       - name: Run Browser Tests
         run: pnpm ci:test-browser
 
