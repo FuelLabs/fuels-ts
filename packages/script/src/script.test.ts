@@ -125,7 +125,7 @@ describe('Script', () => {
       arg_two: 1337,
     };
     const { response } = await callScript(wallet, scriptRequest, input);
-    const { transaction } = await response.fetch();
+    const transaction = await response.fetch();
 
     expect(transaction?.rawPayload).toBeDefined();
   });
