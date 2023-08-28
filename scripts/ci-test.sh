@@ -17,7 +17,7 @@ elif [[ "$*" == *"--node"* ]]; then
     pnpm test:node-coverage
     TEST_RESULT=$?
 else
-    pnpm test
+    pnpm test:coverage
     TEST_RESULT=$?
 fi
 

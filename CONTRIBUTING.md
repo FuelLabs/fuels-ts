@@ -107,20 +107,22 @@ And then run the tests in another terminal tab:
 # run all tests
 pnpm test
 
-# run tests while passing other flags to sub-program
-pnpm test -- --coverage --my-other-flag
+# run environment specific tests
+pnpm test:node
+pnpm test:browser
 
-# run tests for a specific package
-pnpm test packages/my-desired-package
-
-# run tests for a specific file
-pnpm test packages/my-desired-package/src/my.browser.test.ts
+# run all tests and generate merged coverage
+pnpm test:coverage
 ```
 
 Or if you want to start a local Fuel-Core node and run all tests serially you can do:
 
 ```sh
 pnpm ci:test
+
+# or environment specific
+pnpm ci:test-node
+pnpm ci:test-browser
 ```
 
 This will run `node:run`, `test` and then `node:clean`
