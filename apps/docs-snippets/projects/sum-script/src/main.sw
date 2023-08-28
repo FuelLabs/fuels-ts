@@ -2,7 +2,7 @@
 script;
 
 configurable {
-    AMOUNT: u8 = 10
+    AMOUNT: u8 = 10,
 }
 
 fn main(inpputed_amount: u8) -> u8 {

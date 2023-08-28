@@ -34,7 +34,6 @@ impl EchoEnum for Contract {
         state_error
     }
     // #endregion enum-2
-
     fn echo_user_error_enum(user_error: UserError) -> UserError {
         user_error
     }
