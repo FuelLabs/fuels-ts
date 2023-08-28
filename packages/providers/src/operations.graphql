@@ -36,19 +36,18 @@ fragment transactionFragment on Transaction {
   }
 }
 
-fragment contractFragment on Contract {
-  id
-  bytecode
-}
-
 fragment receiptFragment on Receipt {
   contract {
-    ...contractFragment
+    id
+    bytecode
+    salt
   }
   pc
   is
   to {
-    ...contractFragment
+    id
+    bytecode
+    salt
   }
   toAddress
   amount
@@ -244,12 +243,6 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
     ...transactionFragment
     receipts {
       ...receiptFragment
-    }
-  }
-  chain {
-    consensusParameters {
-      gasPerByte
-      gasPriceFactor
     }
   }
 }

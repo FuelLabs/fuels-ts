@@ -37,5 +37,6 @@ members = [
     "token_abi",
     "token_contract",
     "vector-types-contract",
-    "vector-types-script"
+    "vector-types-script",
+    "vectors"
 ]

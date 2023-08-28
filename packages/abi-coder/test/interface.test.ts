@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
+import { BN } from '@fuel-ts/math';
 
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
@@ -187,32 +187,29 @@ describe('Abi interface', () => {
           title: '[u64]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) =>
+            (decoded as BN).toNumber() as number,
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U8_MAX,
           encodedValue: U8_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U16_MAX,
           encodedValue: U16_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U32_MAX,
           encodedValue: U32_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
@@ -418,6 +415,8 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: [[true, false, true, true]],
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           encodedValue: () => {
             const vector = encodeVectorFully(
               [BOOL_TRUE_ENCODED, EMPTY_U8_ARRAY, BOOL_TRUE_ENCODED, BOOL_TRUE_ENCODED],
@@ -425,7 +424,6 @@ describe('Abi interface', () => {
             );
             return [vector.vec, vector.data] as Uint8Array[];
           },
-          skipDecoding: true,
         },
         {
           fn: exhaustiveExamplesInterface.functions.vector_u8,
@@ -436,11 +434,11 @@ describe('Abi interface', () => {
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               3 * WORD_SIZE
             );
-            return [vector.vec, vector.data];
+            return [vector.vec, vector.data] as Uint8Array[];
           },
-          skipDecoding: true,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: [{ a: true, b: U32_MAX }, [U8_MAX, 0, U8_MAX, U8_MAX]],
@@ -451,9 +449,9 @@ describe('Abi interface', () => {
             );
             return [BOOL_TRUE_ENCODED, U32_MAX_ENCODED, vector.vec, vector.data];
           },
-          skipDecoding: true,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
@@ -464,9 +462,9 @@ describe('Abi interface', () => {
             );
             return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data] as Uint8Array[];
           },
-          skipDecoding: true,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.two_u8_vectors,
           title: '[vector] two u8 vectors',
           value: [
@@ -481,9 +479,9 @@ describe('Abi interface', () => {
             );
             return [vec1.vec, vec2.vec, vec1.data, vec2.data];
           },
-          skipDecoding: true,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
@@ -513,9 +511,15 @@ describe('Abi interface', () => {
               vec3.data,
             ] as Uint8Array[];
           },
-          skipDecoding: true,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          decodedTransformer: (value: unknown | undefined) =>
+            (value as any[]).map((x) =>
+              Array.isArray(x) ? x.map((y) => (y instanceof BN ? y.toNumber() : y)) : x
+            ),
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_vector,
           title: '[vector] vector inside vector [with offset]',
           value: [
@@ -569,7 +573,6 @@ describe('Abi interface', () => {
             return expectedBytes;
           },
           offset: 100,
-          skipDecoding: true,
         },
         {
           fn: exhaustiveExamplesInterface.functions.vector_inside_array,
@@ -590,9 +593,9 @@ describe('Abi interface', () => {
             return expectedBytes;
           },
           offset: 40,
-          skipDecoding: true,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_enum,
           title: '[vector] vector inside enum',
           value: [
@@ -624,9 +627,9 @@ describe('Abi interface', () => {
             return expectedBytes;
           },
           offset: 0,
-          skipDecoding: true,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_struct,
           title: '[vector] vector inside struct [with offset]',
           value: [
@@ -660,11 +663,10 @@ describe('Abi interface', () => {
             return expectedBytes;
           },
           offset: 16,
-          skipDecoding: true,
         },
       ])(
         '$title: $value',
-        ({ fn, title: _title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);
@@ -676,15 +678,15 @@ describe('Abi interface', () => {
 
           expect(encoded).toEqual(expectedEncoded);
 
-          if (skipDecoding) return; // Vectors don't have implemented decoding
+          if (skipDecoding) return;
 
-          let decoded = fn.decodeArguments(expectedEncoded);
+          let decoded = fn.decodeOutput(expectedEncoded)[0];
 
           if (decodedTransformer) decoded = decodedTransformer(decoded);
 
-          const expectedDecoded = Array.isArray(value) ? value : [value];
+          const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
 
-          expect(decoded).toEqual(expectedDecoded);
+          expect(decoded).toStrictEqual(expectedDecoded);
         }
       );
     });
