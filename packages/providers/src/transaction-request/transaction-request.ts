@@ -12,6 +12,7 @@ import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
+import type { MessageCoin } from '../message';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
@@ -246,6 +247,90 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return (<CoinTransactionRequestInput>found)?.witnessIndex;
   }
 
+  addCoinInput(
+    /** Address of the owner */
+    coin: Coin,
+
+    predicate?: BytesLike,
+    /** Predicate data */
+    predicateData?: BytesLike
+  ) {
+    const { assetId, owner, amount } = coin;
+
+    let witnessIndex;
+
+    if (predicate) {
+      witnessIndex = 0;
+    } else {
+      witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
+
+      // Insert a dummy witness if no witness exists
+      if (typeof witnessIndex !== 'number') {
+        witnessIndex = this.createWitness();
+      }
+    }
+
+    const input: CoinTransactionRequestInput = {
+      ...coin,
+      type: InputType.Coin,
+      owner: owner.toB256(),
+      amount,
+      assetId,
+      txPointer: '0x00000000000000000000000000000000',
+      witnessIndex,
+      predicate,
+      predicateData,
+    };
+
+    // Insert the Input
+    this.pushInput(input);
+
+    // Insert a ChangeOutput if it does not exist
+    this.addChangeOutput(owner, assetId);
+  }
+
+  addMessageInput(
+    message: MessageCoin,
+
+    predicate?: BytesLike,
+    /** Predicate data */
+    predicateData?: BytesLike
+  ) {
+    const { recipient, sender, amount } = message;
+
+    const assetId = BaseAssetId;
+
+    let witnessIndex;
+
+    if (predicate) {
+      witnessIndex = 0;
+    } else {
+      witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
+
+      // Insert a dummy witness if no witness exists
+      if (typeof witnessIndex !== 'number') {
+        witnessIndex = this.createWitness();
+      }
+    }
+
+    const input: MessageTransactionRequestInput = {
+      ...message,
+      type: InputType.Message,
+      sender: sender.toB256(),
+      recipient: recipient.toB256(),
+      amount,
+      witnessIndex,
+      predicate,
+      predicateData,
+    };
+
+    // Insert the Input
+    this.pushInput(input);
+
+    // Insert a ChangeOutput if it does not exist
+    this.addChangeOutput(recipient, assetId);
+  }
+
   /**
    * Adds a single resource to the transaction by adding a coin/message input and a
    * change output for the related assetId, if one it was not added yet.
@@ -254,55 +339,24 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @returns This transaction.
    */
   addResource(resource: Resource) {
-    let ownerAddress: AbstractAddress;
-    let assetId: string;
-    let type: InputType.Coin | InputType.Message;
-
     if (isCoin(resource)) {
-      // resource is a Coin
-      ownerAddress = resource.owner;
-      assetId = resource.assetId;
-      type = InputType.Coin;
+      this.addCoinInput(resource);
     } else {
-      // resource is Message
-      ownerAddress = resource.recipient;
-      assetId = BaseAssetId;
-      type = InputType.Message;
+      this.addMessageInput(resource);
     }
 
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
+    return this;
+  }
 
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
-
-    let input: TransactionRequestInput;
-
-    if (isCoin(resource)) {
-      input = {
-        type,
-        ...resource,
-        owner: ownerAddress.toB256(),
-        witnessIndex,
-        txPointer: '0x00000000000000000000000000000000',
-      } as CoinTransactionRequestInput;
-    } else {
-      input = {
-        type,
-        ...resource,
-        sender: resource.sender.toB256(),
-        recipient: resource.recipient.toB256(),
-        witnessIndex,
-        txPointer: '0x00000000000000000000000000000000',
-      } as MessageTransactionRequestInput;
-    }
-
-    // Insert the Input
-    this.pushInput(input);
-
-    // Insert a ChangeOutput if it does not exist
-    this.addChangeOutput(ownerAddress, assetId);
+  /**
+   * Adds multiple resources to the transaction by adding coin/message inputs and change
+   * outputs from the related assetIds.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
+   */
+  addResources(resources: ReadonlyArray<Resource>) {
+    resources.forEach((resource) => this.addResource(resource));
 
     return this;
   }
@@ -329,19 +383,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   addPredicateResources(resources: Coin[], predicate: BytesLike, predicateData: BytesLike) {
     resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
-
-    return this;
-  }
-
-  /**
-   * Adds multiple resources to the transaction by adding coin/message inputs and change
-   * outputs from the related assetIds.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addResources(resources: ReadonlyArray<Resource>) {
-    resources.forEach((resource) => this.addResource(resource));
 
     return this;
   }
