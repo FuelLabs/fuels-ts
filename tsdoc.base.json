@@ -105,8 +105,5 @@
       "tagName": "@hideGroups",
       "syntaxKind": "modifier"
     }
-  ],
-  "supportForTags": {
-    "@group": true
-  }
+  ]
 }
