@@ -31,7 +31,7 @@ pub struct Game {
 abi AdvancedLogging {
     fn test_function() -> bool;
     fn test_function_with_require(a: u64, b: u64) -> bool;
-    fn test_log_from_other_contract(a:u8, contract_id: b256) -> bool;
+    fn test_log_from_other_contract(a: u8, contract_id: b256) -> bool;
 }
 
 impl AdvancedLogging for Contract {
@@ -57,7 +57,6 @@ impl AdvancedLogging for Contract {
 
         log("Game Ref");
         log(game_ref);
-        
 
         log("Game Ref Score");
         log(game_ref.score);
@@ -105,7 +104,7 @@ impl AdvancedLogging for Contract {
         true
     }
 
-    fn test_log_from_other_contract(a:u8, contract_id: b256) -> bool {
+    fn test_log_from_other_contract(a: u8, contract_id: b256) -> bool {
         let other_contract = abi(AdvancedLoggingOtherContract, contract_id);
         log("Hello from main Contract");
         other_contract.msg_from_other_contract(a);
