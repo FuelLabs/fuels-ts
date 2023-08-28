@@ -361,27 +361,17 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return this;
   }
 
-  addPredicateResource(resource: Coin, predicate: BytesLike, predicateData?: BytesLike) {
-    const input: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      ...resource,
-      owner: resource.owner.toB256(),
-      witnessIndex: 0,
-      txPointer: '0x00000000000000000000000000000000',
-      predicate,
-      predicateData,
-    };
-
-    this.pushInput(input);
-
-    const { owner, assetId } = resource;
-
-    this.addChangeOutput(owner, assetId);
+  addPredicateResource(resource: Resource, predicate: BytesLike, predicateData?: BytesLike) {
+    if (isCoin(resource)) {
+      this.addCoinInput(resource, predicate, predicateData);
+    } else {
+      this.addMessageInput(resource, predicate, predicateData);
+    }
 
     return this;
   }
 
-  addPredicateResources(resources: Coin[], predicate: BytesLike, predicateData: BytesLike) {
+  addPredicateResources(resources: Coin[], predicate: BytesLike, predicateData?: BytesLike) {
     resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
 
     return this;
