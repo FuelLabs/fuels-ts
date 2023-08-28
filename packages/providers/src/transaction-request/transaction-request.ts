@@ -300,24 +300,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     // Insert the Input
     this.pushInput(input);
 
-    // Find the ChangeOutput for the AssetId of the Resource
-    const changeOutput = this.getChangeOutputs().find(
-      (output) => hexlify(output.assetId) === assetId
-    );
-
-    // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== ownerAddress.toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
-
     // Insert a ChangeOutput if it does not exist
-    if (!changeOutput) {
-      this.pushOutput({
-        type: OutputType.Change,
-        to: ownerAddress.toB256(),
-        assetId,
-      });
-    }
+    this.addChangeOutput(ownerAddress, assetId);
 
     return this;
   }
@@ -335,26 +319,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     this.pushInput(input);
 
-    // Find the ChangeOutput for the AssetId of the Resource
-    const { assetId, owner } = resource;
+    const { owner, assetId } = resource;
 
-    const changeOutput = this.getChangeOutputs().find(
-      (output) => hexlify(output.assetId) === assetId
-    );
-
-    // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== owner.toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
-
-    // Insert a ChangeOutput if it does not exist
-    if (!changeOutput) {
-      this.pushOutput({
-        type: OutputType.Change,
-        to: owner.toB256(),
-        assetId,
-      });
-    }
+    this.addChangeOutput(owner, assetId);
 
     return this;
   }
@@ -420,6 +387,38 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         assetId: quantity.assetId,
       });
     });
+  }
+
+  /**
+   * Adds a change output to the transaction.
+   *
+   * @param to - Address of the owner.
+   * @param assetId - Asset ID of coin.
+   */
+  addChangeOutput(
+    /** Address of the destination */
+    to: AddressLike,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId
+  ) {
+    // Find the ChangeOutput for the AssetId of the Resource
+    const changeOutput = this.getChangeOutputs().find(
+      (output) => hexlify(output.assetId) === assetId
+    );
+
+    // Throw if the existing ChangeOutput is not for the same owner
+    if (changeOutput && hexlify(changeOutput.to) !== addressify(to).toB256()) {
+      throw new ChangeOutputCollisionError();
+    }
+
+    // Insert a ChangeOutput if it does not exist
+    if (!changeOutput) {
+      this.pushOutput({
+        type: OutputType.Change,
+        to: addressify(to).toB256(),
+        assetId,
+      });
+    }
   }
 
   /**
