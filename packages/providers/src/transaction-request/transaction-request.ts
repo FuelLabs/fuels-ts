@@ -247,12 +247,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Adds a single resource to the transaction by adding inputs and outputs.
+   * Adds a single resource to the transaction by adding a coin/message input and a
+   * change output for the related assetId, if one it was not added yet.
    *
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addResourceInputAndOutput(resource: Resource) {
+  addResource(resource: Resource) {
     let ownerAddress: AbstractAddress;
     let assetId: string;
     let type: InputType.Coin | InputType.Message;
@@ -333,13 +334,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Adds multiple resources to the transaction by adding inputs and outputs.
+   * Adds multiple resources to the transaction by adding coin/message inputs and change
+   * outputs from the related assetIds.
    *
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addResourceInputsAndOutputs(resources: ReadonlyArray<Resource>) {
-    resources.forEach((resource) => this.addResourceInputAndOutput(resource));
+  addResources(resources: ReadonlyArray<Resource>) {
+    resources.forEach((resource) => this.addResource(resource));
 
     return this;
   }
