@@ -439,7 +439,11 @@ importers:
         specifier: workspace:^
         version: link:../../packages/fuels
 
-  internal/check-tests: {}
+  internal/check-tests:
+    devDependencies:
+      expect-playwright:
+        specifier: ^0.8.0
+        version: 0.8.0
 
   internal/tsup: {}
 

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import type { Browser } from 'playwright';
+
 import { testEach } from './index';
 import 'expect-playwright';
-
-import type { Browser } from 'playwright';
 
 /**
  * @group browser
@@ -11,7 +12,8 @@ import type { Browser } from 'playwright';
  * @group browser
  */
 describe('in:browser', () => {
-  let browser: Browser, page: any;
+  let browser: Browser;
+  let page: any;
 
   beforeEach(async () => {
     // @ts-expect-error
