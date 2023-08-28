@@ -1,12 +1,22 @@
 name: "Test"
 
 on:
-  workflow_run:
-    workflows: [test-validate, test-node, test-browser]
-    types: [completed]
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
+  docs:
+    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
+    with:
+      doc-folder-path: "apps/docs/src"
+
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,13 +25,48 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Forc Format Check
+        run: pnpm forc:check
+
       - name: Build
         run: pnpm build
 
-      - name: Find PR Number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+      - name: Lint
+        run: pnpm lint
 
+      - name: Validate tests
+        run: pnpm test:validate
+
+  test-node:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Run Node Tests
+        run: pnpm ci:test-node
+
+      - name: Upload Node Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: node
+          path: coverage/environments/node
+
+  test-browser:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Run Browser Tests
+        run: pnpm ci:test-browser
+
+      - name: Upload Browser Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: browser
+          path: coverage/environments/browser
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [test-node, test-browser]
+    steps:
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
 
