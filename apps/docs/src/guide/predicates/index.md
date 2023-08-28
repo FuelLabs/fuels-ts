@@ -30,7 +30,7 @@ Just like contracts in Sway, once you've created a predicate, you can compile it
 
 After compiling, you will obtain the binary of the predicate and its JSON ABI (Application Binary Interface). Using these, you can instantiate a predicate in TypeScript as shown in the code snippet below:
 
-<<< @/../../docs-snippets/src/guide/predicates/index.node.browser.test.ts#predicate-index-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/predicates/index.test.ts#predicate-index-2{ts:line-numbers}
 
 The created `Predicate` instance, among other things, has three important properties: the predicate `bytes` (byte code), the `chainId`, and the predicate `address`.
 

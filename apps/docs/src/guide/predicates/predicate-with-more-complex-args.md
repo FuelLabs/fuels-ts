@@ -8,7 +8,7 @@ You can pass more than one arugment to a predicate. For example, this is a predi
 
 You can pass the two arguments to this predicate like this:
 
-<<< @/../../../packages/fuel-gauge/src/predicate/predicate-arguments.node.browser.test.ts#predicate-multi-args{ts:line-numbers}
+<<< @/../../../packages/fuel-gauge/src/predicate/predicate-arguments.test.ts#predicate-multi-args{ts:line-numbers}
 
 ## Predicate with a Struct argument
 
@@ -18,4 +18,4 @@ You can also pass a struct as an argument to a predicate. This is one such predi
 
 You can pass a struct as an argument to this predicate like this:
 
-<<< @/../../../packages/fuel-gauge/src/predicate/predicate-arguments.node.browser.test.ts#predicate-struct-arg{ts:line-numbers}
+<<< @/../../../packages/fuel-gauge/src/predicate/predicate-arguments.test.ts#predicate-struct-arg{ts:line-numbers}

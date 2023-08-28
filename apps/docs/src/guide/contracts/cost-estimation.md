@@ -8,10 +8,10 @@ The following example demonstrate how to get the estimated transaction cost for:
 
 ## 1. Single contract call transaction:
 
-<<< @/../../docs-snippets/src/guide/contracts/cost-estimation.node.browser.test.ts#cost-estimation-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/cost-estimation.test.ts#cost-estimation-1{ts:line-numbers}
 
 ## 2. Multiple contract calls transaction:
 
-<<< @/../../docs-snippets/src/guide/contracts/cost-estimation.node.browser.test.ts#cost-estimation-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/cost-estimation.test.ts#cost-estimation-2{ts:line-numbers}
 
 You can use the transaction cost estimation to set the gas limit for an actual call or display the estimated cost to the user.

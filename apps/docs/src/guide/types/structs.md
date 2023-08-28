@@ -10,7 +10,7 @@ Here is an example of a `struct` in Sway:
 
 And here is the equivalent structure represented in TypeScript:
 
-<<< @/../../docs-snippets/src/guide/types/struct.node.browser.test.ts#struct-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/struct.test.ts#struct-2{ts:line-numbers}
 
 ## Handling Different Data Types
 

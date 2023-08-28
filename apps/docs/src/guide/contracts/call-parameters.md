@@ -18,7 +18,7 @@ The `forward` parameter allows the sending of a specific amount of coins to a co
 
 <!-- forward:example:end -->
 
-<<< @/../../docs-snippets/src/guide/contracts/call-parameters.node.browser.test.ts#call-params-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/call-parameters.test.ts#call-params-1{ts:line-numbers}
 
 ## Gas Limit Parameter
 
@@ -29,7 +29,7 @@ The `gasLimit` refers to the maximum amount of gas that can be consumed specific
 
 <!-- gas_limit:example:end -->
 
-<<< @/../../docs-snippets/src/guide/contracts/call-parameters.node.browser.test.ts#call-params-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/call-parameters.test.ts#call-params-2{ts:line-numbers}
 
 ## Call Parameters `gasLimit` vs Transaction Parameters `gasLimit`
 
@@ -41,4 +41,4 @@ If you don't set the `gasLimit` for the Call, the Transaction `gasLimit` will be
 
 You can set both Call Parameters and Transaction Parameters within the same contract function call.
 
-<<< @/../../docs-snippets/src/guide/contracts/call-parameters.node.browser.test.ts#call-params-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/call-parameters.test.ts#call-params-3{ts:line-numbers}

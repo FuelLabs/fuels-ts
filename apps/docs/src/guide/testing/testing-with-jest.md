@@ -8,4 +8,4 @@ Here is a simple Sway program that takes an input and then returns it:
 
 Here is JavaScript code testing the above program using a conventional Jest setup:
 
-<<< @/../../demo-typegen/src/demo.node.browser.test.ts#Testing-with-jest-ts{ts:line-numbers}
+<<< @/../../demo-typegen/src/demo.test.ts#Testing-with-jest-ts{ts:line-numbers}

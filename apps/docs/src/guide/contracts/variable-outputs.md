@@ -18,6 +18,6 @@ Here's an example of a contract function that utilizes the `transfer_to_address`
 
 With the SDK, you can call `transfer_coins_to_output` by chaining the `txParams` and adding the property `variableOutputs: amount` to your contract call. Like this:
 
-<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.node.browser.test.ts#variable-outputs-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
 
 In the TypeScript SDK, the output variables are automatically added to the transaction's list of outputs. The output's amount and owner may vary based on the transaction execution.

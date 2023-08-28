@@ -7,7 +7,7 @@ Simulating a transaction is a powerful feature that allows you to validate wheth
 
 You can use the `simulate()` method to test your transactions:
 
-<<< @/../../docs-snippets/src/guide/contracts/simulate-transactions.node.browser.test.ts#simulate-transactions-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/simulate-transactions.test.ts#simulate-transactions-1{ts:line-numbers}
 
 Simulating a transaction allows you to catch potential errors or issues before submitting the real transaction, making it a valuable tool for development and user interaction.
 
@@ -22,7 +22,7 @@ When interacting with a contract, you might want to execute a method that does n
 
 In such cases, you can use the `simulate()` method:
 
-<<< @/../../docs-snippets/src/guide/contracts/simulate-transactions.node.browser.test.ts#simulate-transactions-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/simulate-transactions.test.ts#simulate-transactions-2{ts:line-numbers}
 
 Using `simulate()` for read-only calls or to test transactions provides a way to safely and efficiently access information from the blockchain or validate how a transaction would behave. It ensures that no changes will be made to the blockchain and no resources will be spent, making it a valuable tool for data retrieval and development.
 
