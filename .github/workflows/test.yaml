@@ -100,14 +100,14 @@ jobs:
       - name: Download Coverage for Browser Tests
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: test-browser.yaml
+          workflow: test.yaml
           name: browser
           path: coverage/environments
 
       - name: Download Coverage for Node Tests
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: test-node.yaml
+          workflow: test.yaml
           name: node
           path: coverage/environments
 
