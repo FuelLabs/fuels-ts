@@ -626,9 +626,15 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../forc
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
@@ -864,6 +870,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
