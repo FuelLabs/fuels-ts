@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.53.0
+
+### Minor Changes
+
+- improvements to transaction summary functions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1200](https://github.com/FuelLabs/fuels-ts/pull/1200))
+- upgrade fuel-core from 0.20.3 to 0.20.4, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1212](https://github.com/FuelLabs/fuels-ts/pull/1212))
+
 ## 0.52.0
 
 ### Minor Changes
