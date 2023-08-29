@@ -111,7 +111,7 @@ export class TransactionResponse {
   /**
    * Async constructor for `TransactionResponse`. This method can be used to create
    * an instance of `TransactionResponse` and wait for the transaction to be fetched
-   * from the chain
+   * from the chain, ensuring that the `gqlTransaction` property is set.
    *
    * @param id - The transaction ID.
    * @param provider - The provider.
