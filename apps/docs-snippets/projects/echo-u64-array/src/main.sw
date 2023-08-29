@@ -1,12 +1,12 @@
 contract;
 
 struct EmployeeData {
-  name: str[8],
-  age: u8,
-  salary: u64,
-  idHash: b256,
-  ratings: [u8; 3],
-  isActive: bool,
+    name: str[8],
+    age: u8,
+    salary: u64,
+    idHash: b256,
+    ratings: [u8; 3],
+    isActive: bool,
 }
 
 abi EchoU64Array {
@@ -21,7 +21,6 @@ impl EchoU64Array for Contract {
         u64_array
     }
     // #endregion arrays-2
-
     fn echo_data(data: EmployeeData) -> EmployeeData {
         data
     }
