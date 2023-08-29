@@ -388,7 +388,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addPredicateResources(resources: Coin[], predicate: BytesLike, predicateData?: BytesLike) {
+  addPredicateResources(resources: Resource[], predicate: BytesLike, predicateData?: BytesLike) {
     resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
 
     return this;
@@ -415,6 +415,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       amount,
       assetId,
     });
+
+    return this;
   }
 
   /**
@@ -437,6 +439,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         assetId: quantity.assetId,
       });
     });
+
+    return this;
   }
 
   /**
