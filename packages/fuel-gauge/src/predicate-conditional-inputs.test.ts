@@ -68,6 +68,7 @@ describe('PredicateConditionalInputs', () => {
       .addPredicateResources(predicateResoruces, predicate.bytes)
       .addCoinOutput(aliceWallet.address, amountToTransfer, assetIdA);
 
+    const aliceBaseAssetBefore = await aliceWallet.getBalance();
     const aliceAssetABefore = await aliceWallet.getBalance(assetIdA);
     const predicateAssetABefore = await predicate.getBalance(assetIdA);
 
@@ -75,6 +76,7 @@ describe('PredicateConditionalInputs', () => {
 
     await tx3.waitForResult();
 
+    const aliceBaseAssetAfter = await aliceWallet.getBalance();
     const aliceAssetAAfter = await aliceWallet.getBalance(assetIdA);
     const predicateAssetAAfter = await predicate.getBalance(assetIdA);
 
@@ -82,6 +84,9 @@ describe('PredicateConditionalInputs', () => {
     expect(bn(aliceAssetAAfter).toNumber()).toBe(
       bn(aliceAssetABefore).add(bn(amountToTransfer)).toNumber()
     );
+
+    // ensure Alice paid the fees
+    expect(bn(aliceBaseAssetBefore).toNumber()).toBeGreaterThan(bn(aliceBaseAssetAfter).toNumber());
 
     // ensure predicate balance has decreased
     expect(bn(predicateAssetAAfter).toNumber()).toBe(
@@ -135,8 +140,10 @@ describe('PredicateConditionalInputs', () => {
       [1000, BaseAssetId],
     ]);
 
-    // we need to add Alice resources in order to the predicate validate her inputs
-    // in the transaction. These resources will be returned to alice.
+    /**
+     * we need to add Alice resources in order to the predicate validates that she have inputs
+     * in the transaction and returns true. These resources will be returned to alice.
+     */
     const aliceResources = await aliceWallet.getResourcesToSpend([[1, assetIdB]]);
 
     request
