@@ -401,14 +401,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param amount - Amount of coin.
    * @param assetId - Asset ID of coin.
    */
-  addCoinOutput(
-    /** Address of the destination */
-    to: AddressLike,
-    /** Amount of coins */
-    amount: BigNumberish,
-    /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId
-  ) {
+  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike = BaseAssetId) {
     this.pushOutput({
       type: OutputType.Coin,
       to: addressify(to).toB256(),
@@ -425,12 +418,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param to - Address of the destination.
    * @param quantities - Quantities of coins.
    */
-  addCoinOutputs(
-    /** Address of the destination */
-    to: AddressLike,
-    /** Quantities of coins */
-    quantities: CoinQuantityLike[]
-  ) {
+  addCoinOutputs(to: AddressLike, quantities: CoinQuantityLike[]) {
     quantities.map(coinQuantityfy).forEach((quantity) => {
       this.pushOutput({
         type: OutputType.Coin,
@@ -449,12 +437,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param to - Address of the owner.
    * @param assetId - Asset ID of coin.
    */
-  addChangeOutput(
-    /** Address of the destination */
-    to: AddressLike,
-    /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId
-  ) {
+  addChangeOutput(to: AddressLike, assetId: BytesLike = BaseAssetId) {
     // Find the ChangeOutput for the AssetId of the Resource
     const changeOutput = this.getChangeOutputs().find(
       (output) => hexlify(output.assetId) === assetId
