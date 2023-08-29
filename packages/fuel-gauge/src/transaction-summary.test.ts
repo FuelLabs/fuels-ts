@@ -15,7 +15,7 @@ import {
   BaseAssetId,
   Provider,
   ScriptTransactionRequest,
-  TransactionTypeNameEnum,
+  TransactionTypeName,
   Wallet,
 } from 'fuels';
 
@@ -37,7 +37,7 @@ describe('TransactionSummary', () => {
     expect(transaction.fee).toStrictEqual(expect.any(BN));
     expect(transaction.gasUsed).toStrictEqual(expect.any(BN));
     expect(transaction.operations).toStrictEqual(expect.any(Array<Operation>));
-    expect(transaction.type).toEqual(TransactionTypeNameEnum.Script);
+    expect(transaction.type).toEqual(TransactionTypeName.Script);
     expect(transaction.receipts).toStrictEqual(expect.any(Array<TransactionResultReceipt>));
     expect(transaction.isTypeMint).toBe(false);
     expect(transaction.isTypeCreate).toBe(false);
@@ -76,7 +76,10 @@ describe('TransactionSummary', () => {
 
     const transactionResponse = await tx.waitForResult();
 
-    const transactionSummary = await getTransactionSummary(tx.id, provider);
+    const transactionSummary = await getTransactionSummary({
+      id: tx.id,
+      provider,
+    });
 
     verifyTransactionSummary({
       transaction: transactionSummary,
@@ -99,9 +102,12 @@ describe('TransactionSummary', () => {
     const tx2 = await sender.transfer(destination.address, amountToTransfer);
     const transactionResponse2 = await tx2.waitForResult();
 
-    const { transactions } = await getTransactionsSummaries(provider, {
-      first: 2,
-      owner: sender.address.toB256(),
+    const { transactions } = await getTransactionsSummaries({
+      provider,
+      filters: {
+        first: 2,
+        owner: sender.address.toB256(),
+      },
     });
 
     expect(transactions.length).toBe(2);
@@ -132,7 +138,10 @@ describe('TransactionSummary', () => {
 
     const transactionRequest = await wallet.populateTransactionWitnessesSignature(request);
 
-    const transactionSummary = await getTransactionSummaryFromRequest(transactionRequest, provider);
+    const transactionSummary = await getTransactionSummaryFromRequest({
+      provider,
+      transactionRequest,
+    });
     verifyTransactionSummary({
       transaction: transactionSummary,
       isRequest: true,
