@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   cross-fetch: 4.0.0
 
@@ -906,6 +910,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
@@ -17673,7 +17680,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
