@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract } from '@fuel-ts/interfaces';
 
 import { BaseInvocationScope } from './base-invocation-scope';
@@ -19,6 +20,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
   constructor(contract: AbstractContract, funcScopes: Array<FunctionInvocationScope>) {
     super(contract, true);
     this.addCalls(funcScopes);
+    this.validateHeapTypeReturnCalls();
   }
 
   /**
@@ -39,5 +41,35 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
    */
   addCalls(funcScopes: Array<FunctionInvocationScope>) {
     return super.addCalls(funcScopes);
+  }
+
+  private validateHeapTypeReturnCalls() {
+    let heapOutputIndex: number | undefined;
+    let numberOfHeaps = 0;
+
+    this.calls.forEach((call, callIndex) => {
+      const { isOutputDataHeap } = call;
+
+      if (isOutputDataHeap) {
+        heapOutputIndex = callIndex;
+
+        if (++numberOfHeaps > 1) {
+          throw new FuelError(
+            ErrorCode.ONLY_ONE_HEAP_TYPE_CALL_ALLOWED,
+            'Only one call that returns a heap type is allowed on a multicall'
+          );
+        }
+      }
+    });
+
+    const hasHeapTypeReturn = typeof heapOutputIndex === 'number';
+    const isOnLastCall = heapOutputIndex === this.calls.length - 1;
+
+    if (hasHeapTypeReturn && !isOnLastCall) {
+      throw new FuelError(
+        ErrorCode.HEAP_TYPE_RETURN_MUST_BE_LAST,
+        'The contract call with the heap type return must be at the last position on the multicall'
+      );
+    }
   }
 }
