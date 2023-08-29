@@ -104,7 +104,7 @@ jobs:
       - name: Generate and Push API Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
         run: |
-          git pull origin master
+          git pull origin master --no-edit
           pnpm install
           pnpm build
           rm -f apps/docs/.gitignore
