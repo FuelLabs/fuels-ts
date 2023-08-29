@@ -6,7 +6,6 @@ use token_abi::Token;
 use std::constants::ZERO_B256;
 
 const BASE_TOKEN: b256 = ZERO_B256
-
 impl Token for Contract {
     fn mint_coins(mint_amount: u64) {
         mint(BASE_TOKEN, mint_amount);
@@ -24,7 +23,7 @@ impl Token for Contract {
         burn(BASE_TOKEN, burn_amount);
     }
 
-    fn force_transfer_coins(target: ContractId,  asset_id: AssetId, coins: u64) {
+    fn force_transfer_coins(target: ContractId, asset_id: AssetId, coins: u64) {
         force_transfer_to_contract(target, asset_id, coins);
     }
 
