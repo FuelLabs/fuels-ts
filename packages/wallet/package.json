@@ -57,7 +57,8 @@
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.34.1",
     "tree-kill": "^1.2.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "@fuel-ts/fuel-core": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
