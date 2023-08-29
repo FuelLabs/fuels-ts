@@ -21,6 +21,10 @@ export enum ErrorCode {
   // transaction
   TRANSACTION_FAILED = 'transaction-failed',
 
+  // contract
+  ONLY_ONE_HEAP_TYPE_CALL_ALLOWED = 'only-one-heap-type-call-allowed',
+  HEAP_TYPE_RETURN_MUST_BE_LAST = 'heap-type-return-must-be-last',
+
   // coder
   // ...
 }
