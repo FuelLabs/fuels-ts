@@ -85,6 +85,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-node, test-browser]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: pnpm build
+
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
 
