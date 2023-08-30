@@ -44,7 +44,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
   }
 
   private validateHeapTypeReturnCalls() {
-    let heapOutputIndex: number | undefined;
+    let heapOutputIndex = -1;
     let numberOfHeaps = 0;
 
     this.calls.forEach((call, callIndex) => {
@@ -62,7 +62,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
       }
     });
 
-    const hasHeapTypeReturn = typeof heapOutputIndex === 'number';
+    const hasHeapTypeReturn = heapOutputIndex !== -1;
     const isOnLastCall = heapOutputIndex === this.calls.length - 1;
 
     if (hasHeapTypeReturn && !isOnLastCall) {
