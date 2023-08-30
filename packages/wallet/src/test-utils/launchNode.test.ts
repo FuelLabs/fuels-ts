@@ -12,6 +12,7 @@ test('launchNodeAndGetWallets', async () => {
     },
   });
   expect(provider).toBeInstanceOf(Provider);
+  console.log(provider.url);
   expect(wallets.length).toBe(10);
   wallets.forEach((wallet) => {
     expect(wallet).toBeInstanceOf(WalletUnlocked);

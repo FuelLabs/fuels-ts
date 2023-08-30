@@ -5,6 +5,7 @@ import fsSync from 'fs';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
+import { getPortPromise } from 'portfinder';
 import kill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
@@ -17,6 +18,8 @@ const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_bl
 type LaunchNodeOptions = {
   chainConfigPath: string;
   consensusKey: string;
+  ip?: string;
+  port?: string;
   args?: string[];
   useSystemFuelCore?: boolean;
 };
@@ -25,23 +28,46 @@ type LaunchNodeOptions = {
  * Launches a fuel-core node.
  * @param chainConfigPath - path to the chain configuration file.
  * @param consensusKey - the consensus key to use.
+ * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
+ * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
  * */
 export const launchNode = async ({
   chainConfigPath,
   consensusKey,
+  ip,
+  port,
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
-}: LaunchNodeOptions): Promise<() => void> =>
-  new Promise((resolve) => {
+}: LaunchNodeOptions): Promise<{
+  cleanup: () => void;
+  ip: string;
+  port: string;
+}> =>
+  // eslint-disable-next-line no-async-promise-executor
+  new Promise(async (resolve) => {
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
 
+    const ipToUse = ip || '0.0.0.0';
+
+    const portToUse =
+      port ||
+      (
+        await getPortPromise({
+          port: 4000, // tries 4000 first, then 4001, then 4002, etc.
+        })
+      ).toString();
+
     const child = spawn(command, [
       'run',
+      '--ip',
+      ipToUse,
+      '--port',
+      portToUse,
       '--db-type',
       'in-memory',
       '--consensus-key',
@@ -67,7 +93,11 @@ export const launchNode = async ({
       // Look for the graphql service start.
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         // Resolve with the cleanup method.
-        resolve(cleanup);
+        resolve({
+          cleanup,
+          ip: ipToUse,
+          port: portToUse,
+        });
       }
     });
 
@@ -129,9 +159,13 @@ export const launchNodeAndGetWallets = async ({
     consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   };
 
-  const closeNode = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
+  const {
+    cleanup: closeNode,
+    ip,
+    port,
+  } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
 
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = new Provider(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {

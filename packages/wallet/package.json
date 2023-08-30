@@ -46,6 +46,7 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
@@ -56,9 +57,9 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.34.1",
+    "portfinder": "^1.0.32",
     "tree-kill": "^1.2.2",
-    "uuid": "^9.0.0",
-    "@fuel-ts/fuel-core": "workspace:*"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
