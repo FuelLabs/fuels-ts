@@ -33,4 +33,15 @@ describe('Bytes Tests', () => {
     expect(true).toBeTruthy();
   });
 
+  it('should test bytes input [nested]', async () => {
+    const bytes = [40, 41, 42];
+    const INPUT = {
+      inner: [bytes, bytes],
+      inner_enum: { Second: bytes },
+    };
+
+    await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
+
+    expect(true).toBeTruthy();
+  });
 });
