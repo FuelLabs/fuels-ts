@@ -5,7 +5,6 @@ import type { Uint8ArrayWithDynamicData } from '../utilities';
 import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../utilities';
 
 import { Coder } from './abstract-coder';
-import { NumberCoder } from './number';
 import { U64Coder } from './u64';
 
 const MEMORY_SIZE_OF_U8 = 1;
@@ -24,7 +23,6 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
 
     // pointer (ptr)
     const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_VECTOR_OFFSET);
-    const u8Coder = new NumberCoder('u8');
     // pointer dynamicData, encode the vector now and attach to its pointer
     pointer.dynamicData = {
       0: concatWithDynamicData(value as unknown as BytesLike[]),
