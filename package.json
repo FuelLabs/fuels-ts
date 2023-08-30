@@ -109,8 +109,5 @@
     "overrides": {
       "cross-fetch": "4.0.0"
     }
-  },
-  "dependencies": {
-    "browser-or-node": "^2.1.1"
   }
 }
