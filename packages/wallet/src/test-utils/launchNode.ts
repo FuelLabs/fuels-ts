@@ -1,7 +1,10 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { Provider } from '@fuel-ts/providers';
 import { spawn } from 'child_process';
+import fsSync from 'fs';
 import fs from 'fs/promises';
+import os from 'os';
+import path from 'path';
 import kill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
@@ -14,7 +17,6 @@ const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_bl
 type LaunchNodeOptions = {
   chainConfigPath: string;
   consensusKey: string;
-  dbPath: string;
   args?: string[];
   useSystemFuelCore?: boolean;
 };
@@ -23,14 +25,12 @@ type LaunchNodeOptions = {
  * Launches a fuel-core node.
  * @param chainConfigPath - path to the chain configuration file.
  * @param consensusKey - the consensus key to use.
- * @param dbPath - the path to the folder to use for the fuel-core db.
  * @param args - additional arguments to pass to fuel-core
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
  * */
 export const launchNode = async ({
   chainConfigPath,
   consensusKey,
-  dbPath,
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
 }: LaunchNodeOptions): Promise<() => void> =>
@@ -42,8 +42,8 @@ export const launchNode = async ({
 
     const child = spawn(command, [
       'run',
-      '--db-path',
-      dbPath, // hardcoded
+      '--db-type',
+      'in-memory',
       '--consensus-key',
       consensusKey,
       '--chain',
@@ -106,16 +106,27 @@ export const launchNodeAndGetWallets = async ({
   launchNodeOptions?: Partial<LaunchNodeOptions>;
   walletCount?: number;
 } = {}) => {
-  // Write a temporary chain configuration file.
-  await fs.writeFile('.chainConfig.json', JSON.stringify(defaultChainConfig), 'utf8');
+  const osTempDir = os.tmpdir();
 
-  // Create a temp db directory.
-  await fs.mkdir('.fuel-core-db', { recursive: true });
+  if (!fsSync.existsSync(osTempDir)) {
+    fsSync.mkdirSync(osTempDir);
+  }
+
+  const subDirName = '.fuels-ts'; // Change to your desired subfolder name
+  const subDirPath = path.join(osTempDir, subDirName);
+
+  if (!fsSync.existsSync(subDirPath)) {
+    fsSync.mkdirSync(subDirPath);
+  }
+
+  const chainConfigFilePath = path.join(subDirPath, '.chainConfig.json');
+
+  // Write a temporary chain configuration file.
+  await fs.writeFile(chainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
 
   const defaultNodeOptions: LaunchNodeOptions = {
-    chainConfigPath: '.chainConfig.json',
+    chainConfigPath: chainConfigFilePath,
     consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
-    dbPath: '.fuel-core-db',
   };
 
   const closeNode = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
@@ -125,8 +136,7 @@ export const launchNodeAndGetWallets = async ({
 
   const cleanup = () => {
     closeNode();
-    spawn('rm', ['.chainConfig.json']);
-    spawn('rm', ['-rf', '.fuel-core-db']);
+    spawn('rm', [chainConfigFilePath]);
   };
 
   return { wallets, stop: cleanup, provider };
