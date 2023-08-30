@@ -68,6 +68,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     const baseTransaction = this.getBaseTransaction();
     const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
     const storageSlots = this.storageSlots?.map(storageSlotify) ?? [];
+    console.log(storageSlots);
     return {
       type: TransactionType.Create,
       ...baseTransaction,

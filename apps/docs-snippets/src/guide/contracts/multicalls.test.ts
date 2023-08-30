@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { BaseAssetId, BN, ContractFactory } from 'fuels';
+import { BaseAssetId, BN, ContractFactory, randomBytes } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -33,7 +33,9 @@ describe(__filename, () => {
     );
 
     echoContract = await factory1.deployContract();
-    counterContract = await factory2.deployContract();
+    counterContract = await factory2.deployContract({
+      storageSlots: counterArtifacts.storageSlots,
+    });
     contextContract = await factory3.deployContract();
   });
 
