@@ -55,7 +55,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
 
         if (++numberOfHeaps > 1) {
           throw new FuelError(
-            ErrorCode.ONLY_ONE_HEAP_TYPE_CALL_ALLOWED,
+            ErrorCode.INVALID_MULTICALL,
             'Only one call that returns a heap type is allowed on a multicall'
           );
         }
@@ -67,7 +67,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
 
     if (hasHeapTypeReturn && !isOnLastCall) {
       throw new FuelError(
-        ErrorCode.HEAP_TYPE_RETURN_MUST_BE_LAST,
+        ErrorCode.INVALID_MULTICALL,
         'The contract call with the heap type return must be at the last position on the multicall'
       );
     }
