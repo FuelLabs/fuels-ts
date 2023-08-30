@@ -1,13 +1,11 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
-import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../utilities';
+import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../utilities';
 
 import { Coder } from './abstract-coder';
 import { ArrayCoder } from './array';
-import { NumberCoder } from './number';
 import { U64Coder } from './u64';
 
 export class RawSliceCoder extends Coder<number[], BN[]> {
@@ -24,7 +22,7 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
     const coder = new U64Coder();
 
     // pointer (ptr)
-    const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_VECTOR_OFFSET);
+    const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_RAW_SLICE_OFFSET);
 
     // pointer dynamicData, encode the vector now and attach to its pointer
     pointer.dynamicData = {

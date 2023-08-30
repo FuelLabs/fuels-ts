@@ -8,7 +8,7 @@ describe('RawSliceCoder', () => {
   it('should encode a raw-slice', () => {
     const coder = new RawSliceCoder();
     const expected: Uint8ArrayWithDynamicData = new Uint8Array([
-      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 24,
+      0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 24,
     ]);
     expected.dynamicData = {
       0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3]),

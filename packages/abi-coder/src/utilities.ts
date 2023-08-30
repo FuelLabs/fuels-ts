@@ -15,6 +15,9 @@ export type Uint8ArrayWithDynamicData = Uint8Array & {
 const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 export const BASE_VECTOR_OFFSET = VEC_PROPERTY_SPACE * WORD_SIZE;
 
+const RAW_SLICE_PROPERTY_SPACE = 2; // ptr + length
+export const BASE_RAW_SLICE_OFFSET = RAW_SLICE_PROPERTY_SPACE * WORD_SIZE;
+
 // this is a fork of @ethersproject/bytes:concat
 // this collects individual dynamicData data and relocates it to top level
 export function concatWithDynamicData(items: ReadonlyArray<BytesLike>): Uint8ArrayWithDynamicData {
