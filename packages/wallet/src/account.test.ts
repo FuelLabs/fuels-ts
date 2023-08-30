@@ -14,6 +14,7 @@ import type {
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
+import type { AccountResource } from './account';
 import { Account } from './account';
 
 jest.mock('@fuel-ts/providers', () => ({
@@ -264,7 +265,7 @@ describe('Account', () => {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: Resource[] = [];
+    const resources: AccountResource<Account>[] = [];
 
     const getResourcesToSpend = jest
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -341,7 +342,7 @@ describe('Account', () => {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: Resource[] = [];
+    const resources: AccountResource<Account>[] = [];
 
     const transactionResponse = {} as unknown as TransactionResponse;
 

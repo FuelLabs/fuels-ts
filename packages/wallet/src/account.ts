@@ -33,6 +33,7 @@ import {
 } from './utils';
 
 type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
+export type AccountResource<T extends Account> = Resource & { account: ThisType<T> };
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
  */
@@ -88,22 +89,14 @@ export class Account extends AbstractAccount {
   async getResourcesToSpend<T extends this>(
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
-  ): Promise<{
-    account: T;
-    resources: Resource[];
-  }> {
+  ): Promise<AccountResource<T>[]> {
     const resources = await this.provider.getResourcesToSpend(
       this.address,
       quantities,
       excludedIds
     );
 
-    return {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      account: this,
-      resources,
-    };
+    return resources.map((x) => ({ ...x, account: this }));
   }
 
   /**
@@ -219,7 +212,7 @@ export class Account extends AbstractAccount {
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
     const fee = request.calculateFee();
-    const { resources } = await this.getResourcesToSpend([fee]);
+    const resources = await this.getResourcesToSpend([fee]);
 
     request.addResources(resources);
   }
@@ -257,7 +250,7 @@ export class Account extends AbstractAccount {
       quantities = [[amount, assetId], fee];
     }
 
-    const { resources } = await this.getResourcesToSpend(quantities);
+    const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
 
     return this.sendTransaction(request);
@@ -310,7 +303,7 @@ export class Account extends AbstractAccount {
       quantities = [[amount, assetId], fee];
     }
 
-    const { resources } = await this.getResourcesToSpend(quantities);
+    const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
 
     return this.sendTransaction(request);
@@ -352,7 +345,7 @@ export class Account extends AbstractAccount {
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
-    const { resources } = await this.getResourcesToSpend(quantities);
+    const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
 
     return this.sendTransaction(request);

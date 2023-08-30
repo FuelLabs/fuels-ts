@@ -12,7 +12,7 @@ export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLi
   );
 
   // Connect to the same Provider as wallet
-  const { resources } = await genesisWallet.getResourcesToSpend(quantities);
+  const resources = await genesisWallet.getResourcesToSpend(quantities);
 
   // Create transaction
   const request = new ScriptTransactionRequest({

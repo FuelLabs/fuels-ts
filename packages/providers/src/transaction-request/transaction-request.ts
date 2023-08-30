@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AddressLike, AbstractAddress, AbstractAccount } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
@@ -336,12 +336,24 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   /**
    * Adds a single resource to the transaction by adding a coin/message input and a
-   * change output for the related assetId, if one it was not added yet.
+   * change output for the related assetId or predicate, if one of it was not added yet.
    *
    * @param resource - The resource to add.
    * @returns This transaction.
    */
   addResource(resource: Resource) {
+    // @ts-expect-error this is due to dependency problems
+    const account: AbstractAccount | undefined = resource.account;
+
+    if (account?.constructor.name === 'Predicate') {
+      // @ts-expect-error this is due to dependency problems
+      const bytes = account.bytes as BytesLike;
+      // @ts-expect-error this is due to dependency problems
+      const predicateData = account.predicateData as BytesLike | undefined;
+      this.addPredicateResource(resource, bytes, predicateData);
+      return this;
+    }
+
     if (isCoin(resource)) {
       this.addCoinInput(resource);
     } else {
@@ -371,25 +383,16 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addPredicateResource(resource: Resource, predicate: BytesLike, predicateData?: BytesLike) {
+  private addPredicateResource(
+    resource: Resource,
+    predicate: BytesLike,
+    predicateData?: BytesLike
+  ) {
     if (isCoin(resource)) {
       this.addCoinInput(resource, predicate, predicateData);
     } else {
       this.addMessageInput(resource, predicate, predicateData);
     }
-
-    return this;
-  }
-
-  /**
-   * Adds multiple predicate coin/message inputs to the transaction and change outputs
-   * from the related assetIds.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addPredicateResources(resources: Resource[], predicate: BytesLike, predicateData?: BytesLike) {
-    resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
 
     return this;
   }
