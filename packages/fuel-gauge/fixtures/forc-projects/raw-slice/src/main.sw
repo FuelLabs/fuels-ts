@@ -1,5 +1,6 @@
 contract;
 
+#[allow(dead_code)]
 enum SomeEnum<T> {
     First: bool,
     Second: T,
