@@ -24,4 +24,13 @@ describe('Bytes Tests', () => {
 
     expect(value).toStrictEqual(new Uint8Array(Array.from({ length: 100 }, (e, i) => i)));
   });
+
+  it('should test bytes input', async () => {
+    const INPUT = [40, 41, 42];
+
+    await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
+
+    expect(true).toBeTruthy();
+  });
+
 });
