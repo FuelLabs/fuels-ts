@@ -2,6 +2,10 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { WalletUnlocked } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
