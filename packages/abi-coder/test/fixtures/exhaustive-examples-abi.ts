@@ -12,16 +12,16 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 49,
+          type: 52,
           typeArguments: null,
         },
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -35,7 +35,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 40,
+          type: 41,
           typeArguments: null,
         },
         {
@@ -74,7 +74,7 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: '__tuple_element',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
@@ -86,27 +86,27 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 59,
+          type: 62,
           typeArguments: null,
         },
         {
           name: '__tuple_element',
-          type: 50,
+          type: 53,
           typeArguments: [
             {
               name: '',
-              type: 51,
+              type: 54,
               typeArguments: [
                 {
                   name: '',
-                  type: 58,
+                  type: 61,
                   typeArguments: null,
                 },
               ],
             },
             {
               name: '',
-              type: 38,
+              type: 39,
               typeArguments: null,
             },
           ],
@@ -137,22 +137,22 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
         },
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -166,11 +166,11 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -189,38 +189,38 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 57,
+          type: 60,
           typeArguments: null,
         },
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
         },
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
         },
         {
           name: '__tuple_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
@@ -234,7 +234,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 59,
+          type: 62,
           typeArguments: null,
         },
         {
@@ -249,16 +249,16 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: '__tuple_element',
-          type: 39,
+          type: 40,
           typeArguments: null,
         },
         {
           name: '__tuple_element',
-          type: 50,
+          type: 53,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
             {
@@ -277,11 +277,11 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 57,
+              type: 60,
               typeArguments: null,
             },
           ],
@@ -307,7 +307,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 38,
+          type: 39,
           typeArguments: null,
         },
       ],
@@ -319,7 +319,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 46,
+          type: 48,
           typeArguments: null,
         },
       ],
@@ -331,7 +331,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 49,
+          type: 52,
           typeArguments: null,
         },
       ],
@@ -343,7 +343,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 47,
+          type: 49,
           typeArguments: [
             {
               name: '',
@@ -352,7 +352,7 @@ export const exhaustiveExamplesAbi = {
             },
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -378,7 +378,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 57,
+          type: 60,
           typeArguments: null,
         },
       ],
@@ -402,7 +402,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 38,
+          type: 39,
           typeArguments: null,
         },
       ],
@@ -414,7 +414,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 59,
+          type: 62,
           typeArguments: null,
         },
       ],
@@ -426,11 +426,11 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 43,
+          type: 45,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
             {
@@ -498,7 +498,7 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'b',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
@@ -515,7 +515,7 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'VariantTwo',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
@@ -532,21 +532,21 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'b',
-          type: 49,
+          type: 52,
           typeArguments: null,
         },
         {
           name: 'c',
-          type: 50,
+          type: 53,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
             {
               name: '',
-              type: 49,
+              type: 52,
               typeArguments: null,
             },
           ],
@@ -560,16 +560,16 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: 'num',
-          type: 59,
+          type: 62,
           typeArguments: null,
         },
         {
           name: 'vec',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -583,7 +583,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: 'Foo',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
         {
@@ -605,7 +605,7 @@ export const exhaustiveExamplesAbi = {
       components: [
         {
           name: 'Foo',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
         {
@@ -676,24 +676,30 @@ export const exhaustiveExamplesAbi = {
     },
     {
       typeId: 38,
-      type: 'str[3]',
+      type: 'raw untyped slice',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 39,
-      type: 'str[4]',
+      type: 'str[3]',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 40,
-      type: 'str[5]',
+      type: 'str[4]',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 41,
+      type: 'str[5]',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 42,
       type: 'struct ArrWithGenericStruct',
       components: [
         {
@@ -705,7 +711,7 @@ export const exhaustiveExamplesAbi = {
       typeParameters: [35],
     },
     {
-      typeId: 42,
+      typeId: 43,
       type: 'struct B512',
       components: [
         {
@@ -717,7 +723,24 @@ export const exhaustiveExamplesAbi = {
       typeParameters: null,
     },
     {
-      typeId: 43,
+      typeId: 44,
+      type: 'struct Bytes',
+      components: [
+        {
+          name: 'buf',
+          type: 50,
+          typeArguments: null,
+        },
+        {
+          name: 'len',
+          type: 61,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 45,
       type: 'struct MyGenericStruct',
       components: [
         {
@@ -731,7 +754,7 @@ export const exhaustiveExamplesAbi = {
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
@@ -740,19 +763,19 @@ export const exhaustiveExamplesAbi = {
       typeParameters: [34, 35],
     },
     {
-      typeId: 44,
+      typeId: 46,
       type: 'struct MyOtherStruct',
       components: [
         {
           name: 'bom',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       typeParameters: null,
     },
     {
-      typeId: 45,
+      typeId: 47,
       type: 'struct MyStruct',
       components: [
         {
@@ -762,19 +785,19 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'dummy_b',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       typeParameters: null,
     },
     {
-      typeId: 46,
+      typeId: 48,
       type: 'struct MyStructWithEnum',
       components: [
         {
           name: 'bim',
-          type: 38,
+          type: 39,
           typeArguments: null,
         },
         {
@@ -786,7 +809,7 @@ export const exhaustiveExamplesAbi = {
       typeParameters: null,
     },
     {
-      typeId: 47,
+      typeId: 49,
       type: 'struct MyStructWithGeneric',
       components: [
         {
@@ -796,7 +819,7 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'bam',
-          type: 51,
+          type: 54,
           typeArguments: [
             {
               name: '',
@@ -807,7 +830,7 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'bom',
-          type: 50,
+          type: 53,
           typeArguments: [
             {
               name: '',
@@ -825,7 +848,24 @@ export const exhaustiveExamplesAbi = {
       typeParameters: [34, 35],
     },
     {
-      typeId: 48,
+      typeId: 50,
+      type: 'struct RawBytes',
+      components: [
+        {
+          name: 'ptr',
+          type: 37,
+          typeArguments: null,
+        },
+        {
+          name: 'cap',
+          type: 61,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 51,
       type: 'struct RawVec',
       components: [
         {
@@ -835,14 +875,14 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'cap',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       typeParameters: [34],
     },
     {
-      typeId: 49,
+      typeId: 52,
       type: 'struct SimpleStruct',
       components: [
         {
@@ -852,14 +892,14 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'b',
-          type: 57,
+          type: 60,
           typeArguments: null,
         },
       ],
       typeParameters: null,
     },
     {
-      typeId: 50,
+      typeId: 53,
       type: 'struct StructA',
       components: [
         {
@@ -876,7 +916,7 @@ export const exhaustiveExamplesAbi = {
       typeParameters: [34, 35],
     },
     {
-      typeId: 51,
+      typeId: 54,
       type: 'struct StructB',
       components: [
         {
@@ -888,7 +928,7 @@ export const exhaustiveExamplesAbi = {
       typeParameters: [34],
     },
     {
-      typeId: 52,
+      typeId: 55,
       type: 'struct StructWithImplicitGenerics',
       components: [
         {
@@ -905,21 +945,21 @@ export const exhaustiveExamplesAbi = {
       typeParameters: [34, 35],
     },
     {
-      typeId: 53,
+      typeId: 56,
       type: 'struct StructWithVector',
       components: [
         {
           name: 'num',
-          type: 59,
+          type: 62,
           typeArguments: null,
         },
         {
           name: 'vec',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -928,29 +968,29 @@ export const exhaustiveExamplesAbi = {
       typeParameters: null,
     },
     {
-      typeId: 54,
+      typeId: 57,
       type: 'struct Test',
       components: [
         {
           name: 'foo',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
         {
           name: 'bar',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       typeParameters: null,
     },
     {
-      typeId: 55,
+      typeId: 58,
       type: 'struct Vec',
       components: [
         {
           name: 'buf',
-          type: 48,
+          type: 51,
           typeArguments: [
             {
               name: '',
@@ -961,32 +1001,32 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'len',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       typeParameters: [34],
     },
     {
-      typeId: 56,
+      typeId: 59,
       type: 'u16',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 57,
+      typeId: 60,
       type: 'u32',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 58,
+      typeId: 61,
       type: 'u64',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 59,
+      typeId: 62,
       type: 'u8',
       components: null,
       typeParameters: null,
@@ -997,16 +1037,16 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'a',
-          type: 49,
+          type: 52,
           typeArguments: null,
         },
         {
           name: 'x',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1031,7 +1071,7 @@ export const exhaustiveExamplesAbi = {
       name: 'array_of_structs',
       output: {
         name: '',
-        type: 38,
+        type: 39,
         typeArguments: null,
       },
       attributes: null,
@@ -1072,7 +1112,7 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 41,
+          type: 42,
           typeArguments: [
             {
               name: '',
@@ -1085,7 +1125,7 @@ export const exhaustiveExamplesAbi = {
       name: 'array_with_generic_struct',
       output: {
         name: '',
-        type: 41,
+        type: 42,
         typeArguments: [
           {
             name: '',
@@ -1116,14 +1156,14 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 42,
+          type: 43,
           typeArguments: null,
         },
       ],
       name: 'b_512',
       output: {
         name: '',
-        type: 42,
+        type: 43,
         typeArguments: null,
       },
       attributes: null,
@@ -1147,8 +1187,24 @@ export const exhaustiveExamplesAbi = {
     {
       inputs: [
         {
+          name: 'arg',
+          type: 44,
+          typeArguments: null,
+        },
+      ],
+      name: 'bytes',
+      output: {
+        name: '',
+        type: 44,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
           name: 'arg1',
-          type: 43,
+          type: 45,
           typeArguments: [
             {
               name: '',
@@ -1157,7 +1213,7 @@ export const exhaustiveExamplesAbi = {
             },
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1174,7 +1230,7 @@ export const exhaustiveExamplesAbi = {
         },
         {
           name: 'arg4',
-          type: 44,
+          type: 46,
           typeArguments: null,
         },
       ],
@@ -1190,14 +1246,14 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       name: 'entry_one',
       output: {
         name: '',
-        type: 58,
+        type: 61,
         typeArguments: null,
       },
       attributes: null,
@@ -1254,19 +1310,19 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'my_u64',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
         {
           name: 'my_struct',
-          type: 45,
+          type: 47,
           typeArguments: null,
         },
       ],
       name: 'my_struct',
       output: {
         name: '',
-        type: 58,
+        type: 61,
         typeArguments: null,
       },
       attributes: null,
@@ -1279,7 +1335,7 @@ export const exhaustiveExamplesAbi = {
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1292,10 +1348,26 @@ export const exhaustiveExamplesAbi = {
         typeArguments: [
           {
             name: '',
-            type: 59,
+            type: 62,
             typeArguments: null,
           },
         ],
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'arg',
+          type: 38,
+          typeArguments: null,
+        },
+      ],
+      name: 'raw_slice',
+      output: {
+        name: '',
+        type: 38,
+        typeArguments: null,
       },
       attributes: null,
     },
@@ -1313,11 +1385,11 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1326,11 +1398,11 @@ export const exhaustiveExamplesAbi = {
       name: 'simple_vector',
       output: {
         name: '',
-        type: 55,
+        type: 58,
         typeArguments: [
           {
             name: '',
-            type: 59,
+            type: 62,
             typeArguments: null,
           },
         ],
@@ -1341,14 +1413,14 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 40,
+          type: 41,
           typeArguments: null,
         },
       ],
       name: 'string',
       output: {
         name: '',
-        type: 40,
+        type: 41,
         typeArguments: null,
       },
       attributes: null,
@@ -1357,11 +1429,11 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 51,
+          type: 54,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1370,11 +1442,11 @@ export const exhaustiveExamplesAbi = {
       name: 'struct_generic_simple',
       output: {
         name: '',
-        type: 51,
+        type: 54,
         typeArguments: [
           {
             name: '',
-            type: 59,
+            type: 62,
             typeArguments: null,
           },
         ],
@@ -1385,14 +1457,14 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 49,
+          type: 52,
           typeArguments: null,
         },
       ],
       name: 'struct_simple',
       output: {
         name: '',
-        type: 49,
+        type: 52,
         typeArguments: null,
       },
       attributes: null,
@@ -1401,7 +1473,7 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 52,
+          type: 55,
           typeArguments: [
             {
               name: '',
@@ -1410,7 +1482,7 @@ export const exhaustiveExamplesAbi = {
             },
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1419,7 +1491,7 @@ export const exhaustiveExamplesAbi = {
       name: 'struct_with_implicitGenerics',
       output: {
         name: '',
-        type: 52,
+        type: 55,
         typeArguments: [
           {
             name: '',
@@ -1428,7 +1500,7 @@ export const exhaustiveExamplesAbi = {
           },
           {
             name: '',
-            type: 59,
+            type: 62,
             typeArguments: null,
           },
         ],
@@ -1439,7 +1511,7 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 51,
+          type: 54,
           typeArguments: [
             {
               name: '',
@@ -1452,7 +1524,7 @@ export const exhaustiveExamplesAbi = {
       name: 'struct_with_tuple',
       output: {
         name: '',
-        type: 51,
+        type: 54,
         typeArguments: [
           {
             name: '',
@@ -1467,19 +1539,19 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'a',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
         {
           name: 'b',
-          type: 58,
+          type: 61,
           typeArguments: null,
         },
       ],
       name: 'sum',
       output: {
         name: '',
-        type: 58,
+        type: 61,
         typeArguments: null,
       },
       attributes: null,
@@ -1488,14 +1560,14 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'test',
-          type: 54,
+          type: 57,
           typeArguments: null,
         },
       ],
       name: 'sum_test',
       output: {
         name: '',
-        type: 58,
+        type: 61,
         typeArguments: null,
       },
       attributes: null,
@@ -1583,22 +1655,22 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
         },
         {
           name: 'y',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1616,38 +1688,38 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 57,
+          type: 60,
           typeArguments: null,
         },
         {
           name: 'y',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
         },
         {
           name: 'z',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
         },
         {
           name: 'q',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 58,
+              type: 61,
               typeArguments: null,
             },
           ],
@@ -1665,59 +1737,11 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 56,
-          typeArguments: null,
-        },
-      ],
-      name: 'u_16',
-      output: {
-        name: '',
-        type: 56,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-    {
-      inputs: [
-        {
-          name: 'arg',
-          type: 57,
-          typeArguments: null,
-        },
-      ],
-      name: 'u_32',
-      output: {
-        name: '',
-        type: 57,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-    {
-      inputs: [
-        {
-          name: 'arg',
-          type: 58,
-          typeArguments: null,
-        },
-      ],
-      name: 'u_64',
-      output: {
-        name: '',
-        type: 58,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-    {
-      inputs: [
-        {
-          name: 'arg',
           type: 59,
           typeArguments: null,
         },
       ],
-      name: 'u_8',
+      name: 'u_16',
       output: {
         name: '',
         type: 59,
@@ -1728,8 +1752,56 @@ export const exhaustiveExamplesAbi = {
     {
       inputs: [
         {
+          name: 'arg',
+          type: 60,
+          typeArguments: null,
+        },
+      ],
+      name: 'u_32',
+      output: {
+        name: '',
+        type: 60,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'arg',
+          type: 61,
+          typeArguments: null,
+        },
+      ],
+      name: 'u_64',
+      output: {
+        name: '',
+        type: 61,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'arg',
+          type: 62,
+          typeArguments: null,
+        },
+      ],
+      name: 'u_8',
+      output: {
+        name: '',
+        type: 62,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
           name: 'x',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
@@ -1742,7 +1814,7 @@ export const exhaustiveExamplesAbi = {
       name: 'vector_boolean',
       output: {
         name: '',
-        type: 55,
+        type: 58,
         typeArguments: [
           {
             name: '',
@@ -1789,14 +1861,14 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 53,
+          type: 56,
           typeArguments: null,
         },
       ],
       name: 'vector_inside_struct',
       output: {
         name: '',
-        type: 53,
+        type: 56,
         typeArguments: null,
       },
       attributes: null,
@@ -1805,15 +1877,15 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 55,
+              type: 58,
               typeArguments: [
                 {
                   name: '',
-                  type: 57,
+                  type: 60,
                   typeArguments: null,
                 },
               ],
@@ -1824,15 +1896,15 @@ export const exhaustiveExamplesAbi = {
       name: 'vector_inside_vector',
       output: {
         name: '',
-        type: 55,
+        type: 58,
         typeArguments: [
           {
             name: '',
-            type: 55,
+            type: 58,
             typeArguments: [
               {
                 name: '',
-                type: 57,
+                type: 60,
                 typeArguments: null,
               },
             ],
@@ -1845,11 +1917,11 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1858,11 +1930,11 @@ export const exhaustiveExamplesAbi = {
       name: 'vector_u8',
       output: {
         name: '',
-        type: 55,
+        type: 58,
         typeArguments: [
           {
             name: '',
-            type: 59,
+            type: 62,
             typeArguments: null,
           },
         ],
@@ -1873,11 +1945,11 @@ export const exhaustiveExamplesAbi = {
       inputs: [
         {
           name: 'x',
-          type: 55,
+          type: 58,
           typeArguments: [
             {
               name: '',
-              type: 59,
+              type: 62,
               typeArguments: null,
             },
           ],
@@ -1904,10 +1976,10 @@ export const exhaustiveExamplesAbi = {
       name: 'U8',
       configurableType: {
         name: '',
-        type: 59,
+        type: 62,
         typeArguments: null,
       },
-      offset: 1432,
+      offset: 1488,
     },
     {
       name: 'BOOL',
@@ -1916,7 +1988,7 @@ export const exhaustiveExamplesAbi = {
         type: 24,
         typeArguments: null,
       },
-      offset: 1440,
+      offset: 1496,
     },
     {
       name: 'ARRAY',
@@ -1925,26 +1997,26 @@ export const exhaustiveExamplesAbi = {
         type: 18,
         typeArguments: null,
       },
-      offset: 1448,
+      offset: 1504,
     },
     {
       name: 'STR_4',
       configurableType: {
         name: '',
-        type: 39,
+        type: 40,
         typeArguments: null,
       },
-      offset: 1472,
+      offset: 1528,
     },
     {
       name: 'STRUCT',
       configurableType: {
         name: '',
-        type: 50,
+        type: 53,
         typeArguments: [
           {
             name: '',
-            type: 59,
+            type: 62,
             typeArguments: null,
           },
           {
@@ -1954,7 +2026,7 @@ export const exhaustiveExamplesAbi = {
           },
         ],
       },
-      offset: 1480,
+      offset: 1536,
     },
   ],
 } as const;

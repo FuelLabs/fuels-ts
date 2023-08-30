@@ -290,6 +290,28 @@ describe('Abi interface', () => {
           encodedValue: [B256_ENCODED, B256_ENCODED, B256_ENCODED, B256_ENCODED, U8_MAX_ENCODED],
         },
         {
+          fn: exhaustiveExamplesInterface.functions.bytes,
+          title: '[struct Bytes]',
+          value: [[1, 2, 3]],
+          encodedValue: new Uint8Array([
+            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3,
+          ]),
+          decodedTransformer: (decoded: unknown | undefined) => Array.from(decoded as Uint8Array),
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.raw_slice,
+          title: '[raw_slice]',
+          value: [[1, 2, 3]],
+          encodedValue: new Uint8Array([
+            0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+            0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3,
+          ]),
+          decodedTransformer: (decoded: unknown | undefined) => {
+            const data = (decoded as BN[]).slice(2);
+            return data.map((v: BN) => v.toNumber());
+          },
+        },
+        {
           fn: exhaustiveExamplesInterface.functions.tuple_as_param,
           title: '[tuple] as param',
           value: [[U8_MAX, { propA1: { propB1: U64_MAX }, propA2: 'aaa' }]],
