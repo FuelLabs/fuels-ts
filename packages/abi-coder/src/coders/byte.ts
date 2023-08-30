@@ -21,6 +21,6 @@ export class ByteCoder extends Coder<number, Uint8Array> {
     const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
     const byteData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + length * 8);
 
-    return [byteData, offset + 8];
+    return [byteData, offset + BASE_VECTOR_OFFSET];
   }
 }
