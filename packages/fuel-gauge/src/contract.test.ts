@@ -833,7 +833,7 @@ describe('Contract', () => {
     const { error } = await safeExec(() => contract.multiCall(calls).call());
 
     expect(<FuelError>error).toBeInstanceOf(FuelError);
-    expect((<FuelError>error)?.code).toBe(ErrorCode.ONLY_ONE_HEAP_TYPE_CALL_ALLOWED);
+    expect((<FuelError>error)?.code).toBe(ErrorCode.INVALID_MULTICALL);
     expect((<FuelError>error)?.message).toBe(
       'Only one call that returns a heap type is allowed on a multicall'
     );
@@ -859,7 +859,7 @@ describe('Contract', () => {
     const { error } = await safeExec(() => contract.multiCall(calls).call());
 
     expect(<FuelError>error).toBeInstanceOf(FuelError);
-    expect((<FuelError>error)?.code).toBe(ErrorCode.HEAP_TYPE_RETURN_MUST_BE_LAST);
+    expect((<FuelError>error)?.code).toBe(ErrorCode.INVALID_MULTICALL);
     expect((<FuelError>error)?.message).toBe(
       'The contract call with the heap type return must be at the last position on the multicall'
     );
