@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { BaseAssetId, BN, ContractFactory, randomBytes } from 'fuels';
+import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
