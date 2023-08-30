@@ -2,6 +2,7 @@ contract;
 
 use std::bytes::Bytes;
 
+#[allow(dead_code)]
 enum SomeEnum<T> {
     First: bool,
     Second: T,
@@ -15,9 +16,9 @@ struct Wrapper<T> {
 fn expected_bytes() -> Bytes {
     let mut bytes = Bytes::new();
 
-    bytes.push(40);
-    bytes.push(41);
-    bytes.push(42);
+    bytes.push(40u8);
+    bytes.push(41u8);
+    bytes.push(42u8);
 
     bytes
 }
@@ -35,7 +36,10 @@ impl MyContract for Contract {
 
     fn accept_nested_bytes(wrapper: Wrapper<Vec<Bytes>>) {
         if let SomeEnum::Second(enum_bytes) = wrapper.inner_enum {
-            require(enum_bytes == expected_bytes(), "wrapper.inner_enum didn't carry the expected bytes");
+            let exp = expected_bytes();
+            require(enum_bytes.get(0).unwrap() == exp.get(0).unwrap(), "wrapper.inner_enum 0 didnt match");
+            require(enum_bytes.get(1).unwrap() == exp.get(1).unwrap(), "wrapper.inner_enum 1 didnt match");
+            require(enum_bytes.get(2).unwrap() == exp.get(2).unwrap(), "wrapper.inner_enum 2 didnt match");
         } else {
             require(false, "enum was not of variant Second");
         }
