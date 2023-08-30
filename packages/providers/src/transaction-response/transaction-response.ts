@@ -1,4 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -19,7 +20,6 @@ import type {
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
@@ -90,8 +90,12 @@ export class TransactionResponse {
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
-  /** Number off attempts to get the committed tx */
-  attempts: number = 0;
+  /** Number of attempts made to fetch the transaction */
+  fetchAttempts: number = 0;
+  /** Number of attempts made to retrieve a processed transaction. */
+  resultAttempts: number = 0;
+  /** The graphql Transaction with receipts object. */
+  gqlTransaction?: GqlTransaction;
 
   /**
    * Constructor for `TransactionResponse`.
@@ -109,12 +113,19 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
-    const transaction = await this.provider.operations.getTransactionWithReceipts({
+  async fetch(): Promise<GqlTransaction> {
+    const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
 
-    return transaction;
+    if (!response.transaction) {
+      await this.sleepBasedOnAttempts(++this.fetchAttempts);
+      return this.fetch();
+    }
+
+    this.gqlTransaction = response.transaction;
+
+    return response.transaction;
   }
 
   /**
@@ -123,13 +134,51 @@ export class TransactionResponse {
    * @param transactionWithReceipts - The transaction with receipts object.
    * @returns The decoded transaction.
    */
-  decodeTransaction<TTransactionType = void>(
-    transactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>
-  ) {
+  decodeTransaction<TTransactionType = void>(transactionWithReceipts: GqlTransaction) {
     return new TransactionCoder().decode(
       arrayify(transactionWithReceipts.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
+  }
+
+  /**
+   * Retrieves the TransactionSummary. If the `gqlTransaction` is not set, it will
+   * fetch it from the provider
+   *
+   * @param contractsAbiMap - The contracts ABI map.
+   * @returns
+   */
+  async getTransactionSummary<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionSummary<TTransactionType>> {
+    let transaction = this.gqlTransaction;
+
+    if (!transaction) {
+      transaction = await this.fetch();
+    }
+
+    const decodedTransaction = this.decodeTransaction<TTransactionType>(
+      transaction
+    ) as Transaction<TTransactionType>;
+
+    const receipts = transaction.receipts?.map(processGqlReceipt) || [];
+
+    const {
+      consensusParameters: { gasPerByte, gasPriceFactor },
+    } = await this.provider.getChain();
+
+    const transactionSummary = assembleTransactionSummary<TTransactionType>({
+      id: this.id,
+      receipts,
+      transaction: decodedTransaction,
+      transactionBytes: arrayify(transaction.rawPayload),
+      gqlTransactionStatus: transaction.status,
+      gasPerByte: bn(gasPerByte),
+      gasPriceFactor: bn(gasPriceFactor),
+      abiMap: contractsAbiMap,
+    });
+
+    return transactionSummary;
   }
 
   /**
@@ -140,48 +189,18 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    const { transaction: gqlTransaction } = await this.fetch();
+    await this.fetch();
 
-    const nullResponse = !gqlTransaction?.status?.type;
-    const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
+    if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
+      await this.sleepBasedOnAttempts(++this.resultAttempts);
 
-    if (nullResponse || isStatusSubmitted) {
-      // This code implements a similar approach from the fuel-core await_transaction_commit
-      // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
-      // double the interval duration on each attempt until max is reached
-      //
-      // This can wait forever, it would be great to implement a max timeout here, but it would require
-      // improve request handler as response Error not mean that the tx fail.
-      this.attempts += 1;
-      await sleep(
-        Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
-      );
-      return this.waitForResult(contractsAbiMap);
+      return this.waitForResult<TTransactionType>(contractsAbiMap);
     }
 
-    const decodedTransaction = this.decodeTransaction<TTransactionType>(
-      gqlTransaction
-    ) as Transaction<TTransactionType>;
-
-    const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
-
-    const {
-      consensusParameters: { gasPerByte, gasPriceFactor },
-    } = await this.provider.getChain();
-
-    const transactionSummary = assembleTransactionSummary<TTransactionType>({
-      id: this.id,
-      receipts,
-      transaction: decodedTransaction,
-      transactionBytes: arrayify(gqlTransaction.rawPayload),
-      gqlTransactionStatus: gqlTransaction.status,
-      gasPerByte: bn(gasPerByte),
-      gasPriceFactor: bn(gasPriceFactor),
-      abiMap: contractsAbiMap,
-    });
+    const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
     const transactionResult: TransactionResult<TTransactionType> = {
-      gqlTransaction,
+      gqlTransaction: this.gqlTransaction as GqlTransaction,
       ...transactionSummary,
     };
 
@@ -191,7 +210,7 @@ export class TransactionResponse {
   /**
    * Waits for transaction to complete and returns the result.
    *
-   * @returns The completed transaction.
+   * @param contractsAbiMap - The contracts ABI map.
    */
   async wait<TTransactionType = void>(
     contractsAbiMap?: AbiMap
@@ -199,11 +218,26 @@ export class TransactionResponse {
     const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
 
     if (result.isStatusFailure) {
-      throw new Error(
+      throw new FuelError(
+        ErrorCode.TRANSACTION_FAILED,
         `Transaction failed: ${(<FailureStatus>result.gqlTransaction.status).reason}`
       );
     }
 
     return result;
+  }
+
+  /**
+   * Introduces a delay based on the number of previous attempts made.
+   *
+   * @param attempts - The number of attempts.
+   */
+  private async sleepBasedOnAttempts(attempts: number): Promise<void> {
+    // TODO: Consider adding `maxTimeout` or `maxAttempts` parameter.
+    // The aim is to avoid perpetual execution; when the limit
+    // is reached, we can throw accordingly.
+    await sleep(
+      Math.min(STATUS_POLLING_INTERVAL_MIN_MS * attempts, STATUS_POLLING_INTERVAL_MAX_MS)
+    );
   }
 }

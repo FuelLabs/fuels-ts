@@ -33,14 +33,13 @@ pub enum Error {
 struct Struct {
     scores: Vec<u8>,
     important_dates: Vec<ImportantDates>,
-    errors: Vec<Error>
+    errors: Vec<Error>,
 }
 
 fn main(inputs: Vec<Struct>) -> bool {
     let input_1 = inputs.get(0).unwrap();
 
     let important_dates_1 = input_1.important_dates.get(0).unwrap();
-
 
     if important_dates_1.tag != 1 {
         return false;
