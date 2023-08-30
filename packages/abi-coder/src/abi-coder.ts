@@ -11,6 +11,7 @@ import { ByteCoder } from './coders/byte';
 import { EnumCoder } from './coders/enum';
 import { NumberCoder } from './coders/number';
 import { OptionCoder } from './coders/option';
+import { RawSliceCoder } from './coders/raw-slice';
 import { StringCoder } from './coders/string';
 import { StructCoder } from './coders/struct';
 import { TupleCoder } from './coders/tuple';
@@ -60,6 +61,8 @@ export abstract class AbiCoder {
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
+      case 'raw untyped slice':
+        return new RawSliceCoder();
       case 'bool':
         return new BooleanCoder();
       case 'b256':
