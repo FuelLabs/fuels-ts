@@ -1,6 +1,7 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify, concat, type BytesLike } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
 
+import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../utilities';
 
@@ -23,20 +24,33 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
 
     // pointer (ptr)
     const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_VECTOR_OFFSET);
-    // pointer dynamicData, encode the vector now and attach to its pointer
+
+    // pointer dynamicData, encode the byte vector now and attach to its pointer
+    const data = this.#getPaddedData(value);
     pointer.dynamicData = {
-      0: concatWithDynamicData(value as unknown as BytesLike[]),
+      0: concatWithDynamicData([data]),
     };
 
     parts.push(pointer);
 
     // capacity (cap)
-    parts.push(new U64Coder().encode(value.length));
+    parts.push(new U64Coder().encode(data.byteLength));
 
     // length (len)
     parts.push(new U64Coder().encode(value.length));
 
     return concatWithDynamicData(parts);
+  }
+
+  #getPaddedData(value: number[]): Uint8Array {
+    const data: Uint8Array[] = [arrayify(value)];
+
+    const paddingLength = (WORD_SIZE - (value.length % WORD_SIZE)) % WORD_SIZE;
+    if (paddingLength) {
+      data.push(new Uint8Array(paddingLength));
+    }
+
+    return concat(data);
   }
 
   decode(data: Uint8Array, offset: number): [Uint8Array, number] {

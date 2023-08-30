@@ -6,13 +6,27 @@ describe('ByteCoder', () => {
   it('should encode a byte', () => {
     const coder = new ByteCoder();
     const expected: Uint8ArrayWithDynamicData = new Uint8Array([
-      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3,
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 3,
     ]);
     expected.dynamicData = {
-      0: new Uint8Array([1, 2, 3]),
+      0: new Uint8Array([1, 2, 3, 0, 0, 0, 0, 0]),
     };
 
     const actual = coder.encode([1, 2, 3]);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('should encode a byte [full word]', () => {
+    const coder = new ByteCoder();
+    const expected: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 8,
+    ]);
+    expected.dynamicData = {
+      0: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
+    };
+
+    const actual = coder.encode([1, 2, 3, 4, 5, 6, 7, 8]);
 
     expect(actual).toStrictEqual(expected);
   });
