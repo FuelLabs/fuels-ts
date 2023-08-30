@@ -19,6 +19,7 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
+import { stat } from 'fs';
 
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -189,12 +190,10 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.fetch();
-
-    if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
-      await this.sleepBasedOnAttempts(++this.resultAttempts);
-
-      return this.waitForResult<TTransactionType>(contractsAbiMap);
+    for await (const { statusChange } of this.provider.subscriptions.statusChange({
+      transactionId: this.id,
+    })) {
+      if (statusChange.__typename !== 'SubmittedStatus') break;
     }
 
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);

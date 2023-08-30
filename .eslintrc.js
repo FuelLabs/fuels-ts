@@ -25,6 +25,12 @@ module.exports = {
     // Disable error on devDependencies importing since this isn't a TS library
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-await-in-loop': 0,
+    'no-restricted-syntax': [
+      'off',
+      {
+        selector: 'ForOfStatement',
+      },
+    ],
     'prefer-destructuring': 0,
     'no-bitwise': 0,
     'no-underscore-dangle': 'off',
