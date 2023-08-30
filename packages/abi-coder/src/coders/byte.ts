@@ -8,11 +8,10 @@ import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../utilities';
 import { Coder } from './abstract-coder';
 import { U64Coder } from './u64';
 
-const MEMORY_SIZE_OF_U8 = 1;
-
 export class ByteCoder extends Coder<number[], Uint8Array> {
+  static memorySize = 1;
   constructor() {
-    super('struct', 'struct Bytes', MEMORY_SIZE_OF_U8);
+    super('struct', 'struct Bytes', BASE_VECTOR_OFFSET);
   }
 
   encode(value: number[]): Uint8Array {
