@@ -13,7 +13,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { GraphQLClient, gql } from 'graphql-request';
+import { GraphQLClient } from 'graphql-request';
 import { createClient } from 'graphql-sse';
 import cloneDeep from 'lodash.clonedeep';
 import fetch from 'node-fetch';
@@ -246,21 +246,17 @@ export default class Provider {
     // @ts-expect-error wot iz dis
     this.subscriptions = getSubscriptionsSdk((query, vars) => {
       const subscriptionClient = createClient({
-        url: `${url}`,
-        headers: {
-          // 'Content-Type': 'application/json',
-          // 'Accept-Encoding': 'gzip,deflate',
-        },
-        // headers: {
-        //   Connection: 'keep-alive',
-        // },
+        url: `${url}-sub`,
+        headers: {},
         // @ts-expect-error test
-        fetchFn: async (urrr, request) => {
-          // request.headers = { ...request.headers, accept: '*/*' };
-          // console.log('whatever');
-          request.headers = { ...request.headers, accept: '*/*' };
-          const response = await fetch(urrr, request);
-          console.log(JSON.stringify(response));
+        fetchFn: async (subEndpoint, request) => {
+          const originalResponse = await fetch(subEndpoint, request);
+          const originalResponseText = await originalResponse.text();
+          const text = `event: next\n${originalResponseText}`;
+
+          // @ts-expect-error Headers ain't happy but it works
+          const response = new Response(text, originalResponse);
+
           return response;
         },
       });
@@ -396,29 +392,9 @@ export default class Provider {
       );
     }
 
-    let res = '';
-
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const { submitAndAwait: result } of this.subscriptions.submitAndAwait({
-      encodedTransaction,
-    })) {
-      console.log('RESULT FROM submitAndAwait:', result);
-      res = result.__typename;
-      if (result.__typename !== 'SubmittedStatus') break;
-    }
-
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
-
-    // // eslint-disable-next-line no-restricted-syntax
-    // for await (const { statusChange: result } of this.subscriptions.statusChange({
-    //   transactionId,
-    // })) {
-    //   console.log('RESULT FROM statusChange:', result);
-    //   res = result.__typename;
-    //   if (result.__typename !== 'SubmittedStatus') break;
-    // }
 
     const response = new TransactionResponse(transactionId, this);
     return response;
