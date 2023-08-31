@@ -294,9 +294,14 @@ describe('Abi interface', () => {
           title: '[struct Bytes]',
           value: [[1, 2, 3]],
           encodedValue: new Uint8Array([
-            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3,
+            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 0, 0,
+            0, 0, 0,
           ]),
-          decodedTransformer: (decoded: unknown | undefined) => Array.from(decoded as Uint8Array),
+          decodedTransformer: (decoded: unknown | undefined) => {
+            const data = (decoded as BN[]).slice(0, 3);
+            return Array.from(data);
+          },
+          decodedTransfoarmer: (decoded: unknown | undefined) => Array.from(decoded as Uint8Array),
         },
         {
           fn: exhaustiveExamplesInterface.functions.raw_slice,
