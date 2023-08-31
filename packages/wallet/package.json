@@ -54,7 +54,7 @@
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.34.1",
+    "@fuels/vm-asm": "0.36.1",
     "@fuel-ts/crypto": "workspace:*",
     "uuid": "^9.0.0"
   },
