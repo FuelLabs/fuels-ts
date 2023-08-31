@@ -2,7 +2,7 @@ script;
 
 use std::logging::log;
 
-fn main(vector: Vec<u64> ) {
+fn main(vector: Vec<u64>) {
     log(vector.get(0).unwrap());
 
     let _is_valid = match vector.len() {
