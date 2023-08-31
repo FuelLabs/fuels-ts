@@ -38,12 +38,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: docs
+          fetch-depth: 0
 
       - name: Generate and Push API Docs
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git fetch origin master --no-tags
           git merge origin/master --no-edit
           pnpm install
           pnpm build
