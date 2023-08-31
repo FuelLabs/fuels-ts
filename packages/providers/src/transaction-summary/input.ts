@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -45,7 +46,10 @@ export function getInputContractFromIndex(
 
   if (!contractInput) return undefined;
   if (contractInput.type !== InputType.Contract) {
-    throw new Error('Contract input should be of type Contract');
+    throw new FuelError(
+      ErrorCode.INVALID_TRANSACTION_INPUT,
+      'Contract input should be of type Contract'
+    );
   }
 
   return contractInput as InputContract;

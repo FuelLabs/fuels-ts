@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+
 const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 
 /** @hidden */
@@ -60,7 +62,8 @@ export const buildBlockExplorerUrl = (
   const hasAnyDefinedValues = definedValues.length > 0;
 
   if (definedValues.length > 1) {
-    throw new Error(
+    throw new FuelError(
+      ErrorCode.ERROR_BUILDING_BLOCK_EXPLORER_URL,
       `Only one of the following can be passed in to buildBlockExplorerUrl: ${customInputParams
         .map((param) => param.key)
         .join(', ')}`
@@ -69,7 +72,8 @@ export const buildBlockExplorerUrl = (
 
   if (path && definedValues.length > 0) {
     const inputKeys = customInputParams.map(({ key }) => key).join(', ');
-    throw new Error(
+    throw new FuelError(
+      ErrorCode.ERROR_BUILDING_BLOCK_EXPLORER_URL,
       `You cannot pass in a path to buildBlockExplorerUrl along with any of the following: ${inputKeys}`
     );
   }
