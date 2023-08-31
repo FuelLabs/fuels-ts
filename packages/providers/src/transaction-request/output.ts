@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Output } from '@fuel-ts/transactions';
@@ -46,7 +47,9 @@ export type TransactionRequestOutput =
 
 /** @hidden */
 export const outputify = (value: TransactionRequestOutput): Output => {
-  switch (value.type) {
+  const { type } = value;
+
+  switch (type) {
     case OutputType.Coin: {
       return {
         type: OutputType.Coin,
@@ -87,7 +90,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       };
     }
     default: {
-      throw new Error('Invalid Output type');
+      throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, `Invalid Output type: ${type}`);
     }
   }
 };
