@@ -1,5 +1,6 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import type {
   ReceiptBurn,
@@ -66,7 +67,9 @@ export const getReceiptsWithMissingData = (receipts: Array<TransactionResultRece
 const hexOrZero = (hex?: string | null) => hex || ZeroBytes32;
 
 export function assembleReceiptByType(receipt: GqlReceipt) {
-  switch (receipt.receiptType) {
+  const { receiptType } = receipt;
+
+  switch (receiptType) {
     case GqlReceiptType.Call: {
       const callReceipt: ReceiptCall = {
         type: ReceiptType.Call,
@@ -268,6 +271,6 @@ export function assembleReceiptByType(receipt: GqlReceipt) {
     }
 
     default:
-      throw new Error('Unknown receipt type');
+      throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${receiptType}`);
   }
 }
