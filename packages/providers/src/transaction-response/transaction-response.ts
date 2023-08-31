@@ -19,7 +19,6 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
-import { stat } from 'fs';
 
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -205,7 +204,7 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     for await (const { statusChange } of this.provider.subscriptions.statusChange({
-      transactionId: this.id,
+      transactionId: '3db07b414b904228f392e4d4f28f138d6d6210361ae4fcd9231427da81f80410',
     })) {
       if (statusChange.__typename !== 'SubmittedStatus') break;
     }
