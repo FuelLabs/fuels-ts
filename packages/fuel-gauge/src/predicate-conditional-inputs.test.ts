@@ -24,7 +24,7 @@ describe('PredicateConditionalInputs', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
-  it('should execute custom transaction where predicate transfers Alice (ALICE PAYS FEES)', async () => {
+  it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
     const provider = new Provider(FUEL_NETWORK_URL);
 
     const aliceWallet = Wallet.generate();
