@@ -33,6 +33,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*"
   },
   "devDependencies": {
