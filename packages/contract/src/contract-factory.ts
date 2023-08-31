@@ -4,6 +4,7 @@ import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
@@ -183,10 +184,10 @@ export default class ContractFactory {
         this.bytecode = bytes;
       });
     } catch (err) {
-      logger.throwError('Error setting configurables', Logger.errors.INVALID_ARGUMENT, {
-        error: err,
-        configurableConstants,
-      });
+      throw new FuelError(
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants: ${err}`
+      );
     }
   }
 }
