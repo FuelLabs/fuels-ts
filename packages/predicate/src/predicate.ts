@@ -9,6 +9,7 @@ import {
 } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type {
   CallResult,
   Provider,
@@ -204,7 +205,10 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
         mutatedBytes.set(encoded, offset);
       });
     } catch (err) {
-      throw new Error(`Error setting configurable constants: ${err}`);
+      throw new FuelError(
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants: ${err}`
+      );
     }
 
     return mutatedBytes;
