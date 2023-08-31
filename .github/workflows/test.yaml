@@ -43,8 +43,8 @@ jobs:
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git pull origin docs --no-edit
-          git pull origin master --no-rebase --no-edit --allow-unrelated-histories
+          git fetch
+          git rebase master
           pnpm install
           pnpm build
           rm -f apps/docs/.gitignore
