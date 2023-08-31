@@ -61,8 +61,8 @@ impl StorageTestContract for Contract {
         let value = value.unwrap_or(0);
         value
     }
-  // Return values from storage
-  // This is used to test storage initialization, on contract deployment
+    // Return values from storage
+    // This is used to test storage initialization, on contract deployment
     #[storage(read)]
     fn return_b256() -> b256 {
         let value: Option<b256> = read::<b256>(VALUE_B256, 0);

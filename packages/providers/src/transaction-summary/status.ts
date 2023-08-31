@@ -5,19 +5,19 @@ import type {
   Time,
   TransactionSummary,
 } from './types';
-import { SimplifiedTransactionStatusNameEnum } from './types';
+import { TransactionStatus } from './types';
 
 /** @hidden */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
   switch (gqlStatus) {
     case 'FailureStatus':
-      return SimplifiedTransactionStatusNameEnum.failure;
+      return TransactionStatus.failure;
     case 'SuccessStatus':
-      return SimplifiedTransactionStatusNameEnum.success;
+      return TransactionStatus.success;
     case 'SubmittedStatus':
-      return SimplifiedTransactionStatusNameEnum.submitted;
+      return TransactionStatus.submitted;
     case 'SqueezedOutStatus':
-      return SimplifiedTransactionStatusNameEnum.squeezedout;
+      return TransactionStatus.squeezedout;
     default:
       throw new Error('Unknown transaction status');
   }
@@ -32,7 +32,7 @@ type IProcessGraphqlStatusResponse = Pick<
 export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionStatus) => {
   let time: Time;
   let blockId: BlockId | undefined;
-  let status: SimplifiedTransactionStatusNameEnum | undefined;
+  let status: TransactionStatus | undefined;
 
   let isStatusFailure = false;
   let isStatusSuccess = false;

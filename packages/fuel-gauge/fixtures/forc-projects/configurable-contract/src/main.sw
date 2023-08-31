@@ -3,12 +3,12 @@ contract;
 struct Struct1 {
     tag: str[3],
     age: u8,
-    scores: [u8; 3]
+    scores: [u8; 3],
 }
 
 enum Colors {
     red: (),
-    blue: ()
+    blue: (),
 }
 
 configurable {
@@ -25,7 +25,7 @@ configurable {
     STRUCT_1: Struct1 = Struct1 {
         tag: "000",
         age: 21,
-        scores: [1, 3, 4]
+        scores: [1, 3, 4],
     },
 }
 
@@ -90,6 +90,18 @@ impl ConfigurableContract for Contract {
     }
 
     fn echo_configurables() -> (u8, u16, u32, u64, bool, b256, Colors, [[u32; 2]; 2], str[4], (u8, bool, str[2]), Struct1) {
-        (U8, U16, U32, U64, BOOL, B256, ENUM, ARRAY, STR_4, TUPLE, STRUCT_1)
+        (
+            U8,
+            U16,
+            U32,
+            U64,
+            BOOL,
+            B256,
+            ENUM,
+            ARRAY,
+            STR_4,
+            TUPLE,
+            STRUCT_1,
+        )
     }
 }

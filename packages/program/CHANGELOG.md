@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.54.0
+
+## 0.53.0
+
+### Minor Changes
+
+- Added vector output, by [@camsjams](https://github.com/camsjams) (See [#1183](https://github.com/FuelLabs/fuels-ts/pull/1183))
+
+## 0.52.0
+
 ## 0.51.0
 
 ### Minor Changes
