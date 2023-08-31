@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import type { AbstractAccount } from '@fuel-ts/interfaces';
 
 import type { Coin } from './coin';
 import type { MessageCoin } from './message';
@@ -25,6 +26,7 @@ export type RawMessage = {
 
 export type RawResource = RawCoin | RawMessage;
 export type Resource = Coin | MessageCoin;
+export type AccountResource<T extends AbstractAccount> = Resource & { account: ThisType<T> };
 
 /** @hidden */
 export type ExcludeResourcesOption = {

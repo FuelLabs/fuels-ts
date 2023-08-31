@@ -5,8 +5,8 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import type {
   AddressLike,
   AbstractAddress,
-  AbstractPredicate,
   AbstractAccount,
+  AbstractPredicate,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -18,7 +18,7 @@ import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { MessageCoin } from '../message';
-import type { Resource } from '../resource';
+import type { AccountResource, Resource } from '../resource';
 import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
@@ -346,16 +346,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resource - The resource to add.
    * @returns This transaction.
    */
-  addResource(resource: Resource) {
-    // @ts-expect-error this is due to dependency problems
-    const account: AbstractAccount | undefined = resource.account;
+  addResource<T extends AbstractAccount>(resource: AccountResource<T>) {
+    const account = resource.account;
 
-    if (account?.constructor.name === 'Predicate') {
-      // @ts-expect-error this is due to dependency problems
-      const bytes = account.bytes as BytesLike;
-      // @ts-expect-error this is due to dependency problems
-      const predicateData = account.predicateData as BytesLike | undefined;
-      this.addPredicateResource(resource, bytes, predicateData);
+    if ((account as AbstractPredicate).bytes) {
+      this.addPredicateResource(resource, account as AbstractPredicate);
       return this;
     }
 
@@ -375,7 +370,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addResources(resources: ReadonlyArray<Resource>) {
+  addResources<T extends AbstractAccount>(resources: ReadonlyArray<AccountResource<T>>) {
     resources.forEach((resource) => this.addResource(resource));
 
     return this;

@@ -10,11 +10,11 @@ import type {
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
+  AccountResource,
 } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
-import type { AccountResource } from './account';
 import { Account } from './account';
 
 jest.mock('@fuel-ts/providers', () => ({

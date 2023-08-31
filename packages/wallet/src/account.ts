@@ -14,7 +14,7 @@ import type {
   CoinQuantityLike,
   CoinQuantity,
   Message,
-  Resource,
+  AccountResource,
   ExcludeResourcesOption,
   TransactionResponse,
 } from '@fuel-ts/providers';
@@ -33,7 +33,6 @@ import {
 } from './utils';
 
 type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
-export type AccountResource<T extends Account> = Resource & { account: ThisType<T> };
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
  */
