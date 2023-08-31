@@ -555,6 +555,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
@@ -589,6 +592,9 @@ importers:
       '@ethersproject/pbkdf2':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       ethereum-cryptography:
         specifier: ^2.1.2
         version: 2.1.2
@@ -821,6 +827,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
