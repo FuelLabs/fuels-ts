@@ -45,6 +45,32 @@ export function multipleImports() {
 }
 ```
 
+### Test Utilities
+
+You can use the `expectToThrowFuelError` test utility when asserting errors.
+
+```ts
+// can also be imported from `fuels` when using the umbrella package
+import { expectToThrowFuelError } from "@fuel-ts/errors/test-utils";
+
+import { myFn } from "...";
+
+describe('this and that'm () => {
+  const code = FuelError.CODES.INVALID_URL;
+
+  it("should throw FuelError", async () => {
+    const expected = new FuelError(code);
+    await expectToThrowFuelError(() => myFn(), expected);
+  });
+
+  it("should throw something else", async () => {
+    const expected = new FuelError(code);
+    const fn = () => expectToThrowFuelError(() => myFn(), expected)
+    await expect(fn).rejects.toThrow('Something else');
+  });
+})
+```
+
 ### External usage
 
 ```ts
@@ -70,7 +96,7 @@ function translateError(e: unknown) {
   return i18nDict[currentLocale][code];
 }
 
-(function main() {
+function main() {
   try {
     const p = new Provider("0004:tƨoʜlɒɔol//:qttʜ");
     console.log(p);
@@ -78,7 +104,7 @@ function translateError(e: unknown) {
     const prettyError = translateError(e);
     console.log({ prettyError });
   }
-})();
+);
 ```
 
 ## Contributing
