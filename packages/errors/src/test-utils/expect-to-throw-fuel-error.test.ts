@@ -29,10 +29,9 @@ describe('expect-to-throw-fuel-error', () => {
   it(`fails when passed fn doesn't throw`, async () => {
     const fn = () => expectToThrowFuelError(() => {}, fuelError);
     const fnAsync = () => expectToThrowFuelError(async () => {}, fuelError);
-
-    const msg = `Passed-in lambda didn't throw.`;
-    await expect(fn).rejects.toThrow(msg);
-    await expect(fnAsync).rejects.toThrow(msg);
+    const m = `Passed-in lambda didn't throw.`;
+    await expect(fn).rejects.toThrow(m);
+    await expect(fnAsync).rejects.toThrow(m);
   });
 
   it('compares whole or partial error objects', async () => {
