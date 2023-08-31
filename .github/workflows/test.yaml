@@ -44,7 +44,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git fetch --all
-          git rebase master
+          git rebase origin/master
           pnpm install
           pnpm build
           rm -f apps/docs/.gitignore
