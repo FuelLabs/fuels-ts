@@ -31,7 +31,7 @@ Creates a new BaseWalletUnlocked instance.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:41](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L41)
+[base-unlocked-wallet.ts:41](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L41)
 
 ## Properties
 
@@ -47,7 +47,7 @@ The address associated with the account.
 
 #### Defined in
 
-[account.ts:44](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L44)
+[account.ts:44](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L44)
 
 ___
 
@@ -63,7 +63,7 @@ The provider used to interact with the Fuel network.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:28](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L28)
+[base-unlocked-wallet.ts:28](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L28)
 
 ___
 
@@ -87,7 +87,7 @@ A function that returns the wallet's signer.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:33](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L33)
+[base-unlocked-wallet.ts:33](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L33)
 
 ___
 
@@ -103,7 +103,7 @@ Default HDWallet path.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:23](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L23)
+[base-unlocked-wallet.ts:23](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L23)
 
 ## Accessors
 
@@ -125,7 +125,7 @@ BaseWalletUnlocked.privateKey
 
 #### Defined in
 
-[base-unlocked-wallet.ts:53](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L53)
+[base-unlocked-wallet.ts:53](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L53)
 
 ___
 
@@ -145,7 +145,7 @@ BaseWalletUnlocked.publicKey
 
 #### Defined in
 
-[base-unlocked-wallet.ts:62](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L62)
+[base-unlocked-wallet.ts:62](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L62)
 
 ## Methods
 
@@ -173,7 +173,7 @@ The updated Provider instance.
 
 #### Defined in
 
-[account.ts:69](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L69)
+[account.ts:69](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L69)
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-[base-unlocked-wallet.ts:140](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L140)
+[base-unlocked-wallet.ts:140](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L140)
 
 ___
 
@@ -231,7 +231,7 @@ A promise that resolves when the resources are added to the transaction.
 
 #### Defined in
 
-[account.ts:207](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L207)
+[account.ts:207](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L207)
 
 ___
 
@@ -259,7 +259,7 @@ A promise that resolves to the balance amount.
 
 #### Defined in
 
-[account.ts:165](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L165)
+[account.ts:165](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L165)
 
 ___
 
@@ -281,7 +281,7 @@ A promise that resolves to an array of Coins and their quantities.
 
 #### Defined in
 
-[account.ts:175](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L175)
+[account.ts:175](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L175)
 
 ___
 
@@ -309,7 +309,7 @@ A promise that resolves to an array of Coins.
 
 #### Defined in
 
-[account.ts:102](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L102)
+[account.ts:102](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L102)
 
 ___
 
@@ -331,7 +331,7 @@ A promise that resolves to an array of Messages.
 
 #### Defined in
 
-[account.ts:133](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L133)
+[account.ts:133](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L133)
 
 ___
 
@@ -360,7 +360,7 @@ A promise that resolves to an array of Resources.
 
 #### Defined in
 
-[account.ts:89](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L89)
+[account.ts:89](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L89)
 
 ___
 
@@ -378,7 +378,7 @@ An instance of WalletLocked.
 
 #### Defined in
 
-[wallets.ts:42](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/wallets.ts#L42)
+[wallets.ts:42](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/wallets.ts#L42)
 
 ___
 
@@ -406,7 +406,7 @@ The populated transaction request.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:98](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L98)
+[base-unlocked-wallet.ts:98](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L98)
 
 ___
 
@@ -434,7 +434,7 @@ A promise that resolves to the TransactionResponse object.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:113](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L113)
+[base-unlocked-wallet.ts:113](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L113)
 
 ___
 
@@ -462,7 +462,7 @@ A promise that resolves to the signature as a ECDSA 64 bytes string.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L72)
+[base-unlocked-wallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L72)
 
 ___
 
@@ -490,7 +490,7 @@ A promise that resolves to the signature as a ECDSA 64 bytes string.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:83](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L83)
+[base-unlocked-wallet.ts:83](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L83)
 
 ___
 
@@ -518,7 +518,7 @@ A promise that resolves to the CallResult object.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:129](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/base-unlocked-wallet.ts#L129)
+[base-unlocked-wallet.ts:129](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/base-unlocked-wallet.ts#L129)
 
 ___
 
@@ -549,7 +549,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:223](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L223)
+[account.ts:223](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L223)
 
 ___
 
@@ -580,7 +580,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:262](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L262)
+[account.ts:262](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L262)
 
 ___
 
@@ -610,7 +610,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:314](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/account.ts#L314)
+[account.ts:314](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/account.ts#L314)
 
 ___
 
@@ -631,7 +631,7 @@ ___
 
 #### Defined in
 
-[wallets.ts:109](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/wallets.ts#L109)
+[wallets.ts:109](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/wallets.ts#L109)
 
 ___
 
@@ -656,7 +656,7 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:103](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/wallets.ts#L103)
+[wallets.ts:103](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/wallets.ts#L103)
 
 ___
 
@@ -683,7 +683,7 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:83](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/wallets.ts#L83)
+[wallets.ts:83](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/wallets.ts#L83)
 
 ___
 
@@ -709,7 +709,7 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:67](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/wallets.ts#L67)
+[wallets.ts:67](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/wallets.ts#L67)
 
 ___
 
@@ -733,4 +733,4 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:53](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/wallet/src/wallets.ts#L53)
+[wallets.ts:53](https://github.com/FuelLabs/fuels-ts/blob/2863d791/packages/wallet/src/wallets.ts#L53)
