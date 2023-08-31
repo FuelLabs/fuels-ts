@@ -1,4 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
@@ -31,7 +32,7 @@ export async function getTransactionSummary<TTransactionType = void>(
   });
 
   if (!gqlTransaction) {
-    throw new Error('transaction not found');
+    throw new FuelError(ErrorCode.TRANSACTION_NOT_FOUND, 'transaction not found');
   }
 
   const [decodedTransaction] = new TransactionCoder().decode(
