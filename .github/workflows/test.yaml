@@ -34,57 +34,37 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Checkout API Docs
-        uses: actions/checkout@v3
+      - name: Find PR Number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
+      - name: Run tests and collect coverage
+        if: ${{ !steps.findPr.outputs.number }}
+        run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
+
+      - name: Upload coverage to Github artifacts
+        uses: actions/upload-artifact@v3
+        if: ${{ !steps.findPr.outputs.number }}
         with:
-          ref: docs
-          fetch-depth: 0
+          name: coverage-reports
+          path: report.master.json
 
-      - name: Generate and Push API Docs
-        run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git merge origin/master --no-edit
-          pnpm install
-          pnpm build
-          rm -f apps/docs/.gitignore
-          git add apps/docs/src/api/
-          git add apps/docs/.typedoc/api-links.json
-          git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
-          git push
-          git restore apps/docs/.gitignore
+      - name: Download coverage artifact
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          workflow: test.yaml
+          branch: master
+          name: coverage-reports
+          path: coverage-reports
 
-      # - name: Find PR Number
-      #   uses: jwalton/gh-find-current-pr@v1
-      #   id: findPr
-
-      # - name: Run tests and collect coverage
-      #   if: ${{ !steps.findPr.outputs.number }}
-      #   run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
-
-      # - name: Upload coverage to Github artifacts
-      #   uses: actions/upload-artifact@v3
-      #   if: ${{ !steps.findPr.outputs.number }}
-      #   with:
-      #     name: coverage-reports
-      #     path: report.master.json
-
-      # - name: Download coverage artifact
-      #   uses: dawidd6/action-download-artifact@v2
-      #   if: ${{ steps.findPr.outputs.number }}
-      #   with:
-      #     workflow: test.yaml
-      #     branch: master
-      #     name: coverage-reports
-      #     path: coverage-reports
-
-      # - name: Run tests and post reports to PR
-      #   uses: ArtiomTr/jest-coverage-report-action@v2
-      #   if: ${{ steps.findPr.outputs.number }}
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-manager: pnpm
-      #     annotations: failed-tests
-      #     test-script: pnpm ci:test
-      #     prnumber: ${{ steps.findPr.outputs.number }}
-      #     base-coverage-file: coverage-reports/report.master.json
+      - name: Run tests and post reports to PR
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-manager: pnpm
+          annotations: failed-tests
+          test-script: pnpm ci:test
+          prnumber: ${{ steps.findPr.outputs.number }}
+          base-coverage-file: coverage-reports/report.master.json
