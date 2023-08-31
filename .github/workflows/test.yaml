@@ -35,13 +35,11 @@ jobs:
         run: pnpm lint
 
       - name: Checkout API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: actions/checkout@v3
         with:
           ref: docs
 
       - name: Generate and Push API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
         run: |
           git pull origin master --no-edit --no-rebase
           pnpm install
