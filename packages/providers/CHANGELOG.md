@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.54.1
+
+## 0.54.0
+
+### Minor Changes
+
+- made fetch method on TransactionResponse to wait till response is given, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1210](https://github.com/FuelLabs/fuels-ts/pull/1210))
+- add static method create to TransactionReponse class, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1206](https://github.com/FuelLabs/fuels-ts/pull/1206))
+
 ## 0.53.0
 
 ### Minor Changes
