@@ -10,7 +10,7 @@ import { U64Coder } from './u64';
 
 export class RawSliceCoder extends Coder<number[], BN[]> {
   constructor() {
-    super('struct', 'struct Bytes', BASE_RAW_SLICE_OFFSET);
+    super('raw untyped slice', 'raw untyped slice', BASE_RAW_SLICE_OFFSET);
   }
 
   encode(value: number[]): Uint8Array {
