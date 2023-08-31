@@ -27,6 +27,7 @@ describe('Predicate', () => {
       maturity: 0,
       blockCreated: bn(0),
       txCreatedIdx: bn(0),
+      account: predicate,
     });
 
     it('includes predicate as input when sending a transaction', () => {
