@@ -370,7 +370,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addResources<T extends AbstractAccount>(resources: ReadonlyArray<AccountResource<T>>) {
+  addResources<T extends AbstractAccount>(resources: readonly AccountResource<T>[]) {
     resources.forEach((resource) => this.addResource(resource));
 
     return this;
