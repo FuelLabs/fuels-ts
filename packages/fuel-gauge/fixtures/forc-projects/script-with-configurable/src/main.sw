@@ -1,7 +1,7 @@
 script;
 
 configurable {
-    FEE: u8 = 5
+    FEE: u8 = 5,
 }
 
 fn main(inputed_fee: u8) -> bool {
