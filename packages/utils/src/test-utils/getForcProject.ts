@@ -37,8 +37,12 @@ export const getProjectAbi = (params: IGetForcProjectParams) => {
 
 export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
   const projectPath = getProjectStorageSlotsPath(params);
-  const storageSlots = JSON.parse(readFileSync(projectPath, 'utf-8'));
-  return storageSlots;
+  try {
+    const storageSlots = JSON.parse(readFileSync(projectPath, 'utf-8'));
+    return storageSlots;
+  } catch (error) {
+    return [];
+  }
 };
 
 export const getForcProject = <T = unknown>(projectDir: string) => {
