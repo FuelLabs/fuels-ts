@@ -15,11 +15,14 @@ export enum ErrorCode {
   INSUFFICIENT_BALANCE = 'insufficient-balance',
 
   // errors
-
   PARSE_FAILED = 'parse-failed',
+  INVALID_CREDENTIALS = 'invalid-credentials',
+  ENV_DEPENDENCY_MISSING = 'env-dependency-missing',
 
   // transaction
   TRANSACTION_FAILED = 'transaction-failed',
+
+  INVALID_CONFIGURABLE_CONSTANTS = 'invalid-configurable-constants',
 
   // coder
   // ...
