@@ -110,8 +110,6 @@ jobs:
           rm -f apps/docs/.gitignore
           git add apps/docs/src/api/
           git add apps/docs/.typedoc/api-links.json
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git commit -m "docs: API docs"
+          git commit -m "docs: API docs -  v${{ env.BUILD_VERSION }}"
           git push
           git restore apps/docs/.gitignore
