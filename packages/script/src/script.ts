@@ -3,6 +3,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
@@ -91,12 +92,18 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   setConfigurableConstants(configurables: { [name: string]: unknown }) {
     try {
       if (!Object.keys(this.interface.configurables).length) {
-        throw new Error('Script has no configurable constants to be set');
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Script has no configurable constants to be set'
+        );
       }
 
       Object.entries(configurables).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Script has no configurable constant named: ${key}`);
+          throw new FuelError(
+            ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+            `Script has no configurable constant named: ${key}`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
@@ -106,7 +113,10 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
         this.bytes.set(encoded, offset);
       });
     } catch (err) {
-      throw new Error(`Error setting configurable: ${err}`);
+      throw new FuelError(
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable: ${err}`
+      );
     }
 
     return this;
