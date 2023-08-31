@@ -138,16 +138,10 @@ export const launchNodeAndGetWallets = async ({
 } = {}) => {
   const osTempDir = os.tmpdir();
 
-  if (!fsSync.existsSync(osTempDir)) {
-    fsSync.mkdirSync(osTempDir);
-  }
-
   const subDirName = '.fuels-ts'; // Change to your desired subfolder name
   const subDirPath = path.join(osTempDir, subDirName);
 
-  if (!fsSync.existsSync(subDirPath)) {
-    fsSync.mkdirSync(subDirPath);
-  }
+  fsSync.mkdirSync(subDirPath, { recursive: true });
 
   const chainConfigFilePath = path.join(subDirPath, '.chainConfig.json');
 
