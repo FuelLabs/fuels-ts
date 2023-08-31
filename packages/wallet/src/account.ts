@@ -17,6 +17,7 @@ import type {
   AccountResource,
   ExcludeResourcesOption,
   TransactionResponse,
+  Resource,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -88,7 +89,7 @@ export class Account extends AbstractAccount {
   async getResourcesToSpend<T extends this>(
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
-  ): Promise<AccountResource<T>[]> {
+  ): Promise<AccountResource<Resource, T>[]> {
     const resources = await this.provider.getResourcesToSpend(
       this.address,
       quantities,

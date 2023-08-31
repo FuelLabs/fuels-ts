@@ -265,7 +265,7 @@ describe('Account', () => {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: AccountResource<Account>[] = [];
+    const resources: AccountResource<Resource, Account>[] = [];
 
     const getResourcesToSpend = jest
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -342,7 +342,7 @@ describe('Account', () => {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: AccountResource<Account>[] = [];
+    const resources: AccountResource<Resource, Account>[] = [];
 
     const transactionResponse = {} as unknown as TransactionResponse;
 
