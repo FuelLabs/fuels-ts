@@ -41,7 +41,7 @@ jobs:
 
       - name: Generate and Push API Docs
         run: |
-          git pull origin master --no-edit --no-rebase
+          git pull origin master --no-edit --no-rebase --allow-unrelated-histories
           pnpm install
           pnpm build
           rm -f apps/docs/.gitignore
