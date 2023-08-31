@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
@@ -255,7 +255,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addCoinInput(coin: Coin, predicate?: BytesLike, predicateData?: BytesLike) {
+  addCoinInput(coin: Coin, predicate?: AbstractPredicate) {
     const { assetId, owner, amount } = coin;
 
     let witnessIndex;
@@ -279,8 +279,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
-      predicate,
-      predicateData,
+      predicate: predicate?.bytes,
+      predicateData: predicate?.predicateData,
     };
 
     // Insert the Input
@@ -298,7 +298,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addMessageInput(message: MessageCoin, predicate?: BytesLike, predicateData?: BytesLike) {
+  addMessageInput(message: MessageCoin, predicate?: AbstractPredicate) {
     const { recipient, sender, amount } = message;
 
     const assetId = BaseAssetId;
@@ -323,8 +323,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
-      predicate,
-      predicateData,
+      predicate: predicate?.bytes,
+      predicateData: predicate?.predicateData,
     };
 
     // Insert the Input
@@ -371,11 +371,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addPredicateResource(resource: Resource, predicate: BytesLike, predicateData?: BytesLike) {
+  addPredicateResource(resource: Resource, predicate: AbstractPredicate) {
     if (isCoin(resource)) {
-      this.addCoinInput(resource, predicate, predicateData);
+      this.addCoinInput(resource, predicate);
     } else {
-      this.addMessageInput(resource, predicate, predicateData);
+      this.addMessageInput(resource, predicate);
     }
 
     return this;
@@ -388,8 +388,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addPredicateResources(resources: Resource[], predicate: BytesLike, predicateData?: BytesLike) {
-    resources.forEach((resource) => this.addPredicateResource(resource, predicate, predicateData));
+  addPredicateResources(resources: Resource[], predicate: AbstractPredicate) {
+    resources.forEach((resource) => this.addPredicateResource(resource, predicate));
 
     return this;
   }
