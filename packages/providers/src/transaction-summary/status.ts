@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+
 import type {
   BlockId,
   GqlTransactionStatusesNames,
@@ -19,7 +21,10 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
     case 'SqueezedOutStatus':
       return TransactionStatus.squeezedout;
     default:
-      throw new Error('Unknown transaction status');
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSACTION_STATUS,
+        `Invalid transaction status: ${gqlStatus}`
+      );
   }
 };
 
