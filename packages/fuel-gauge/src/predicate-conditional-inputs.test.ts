@@ -135,7 +135,7 @@ describe('PredicateConditionalInputs', () => {
     });
 
     // predicate will pay the fee so it will need the base asset
-    const predicateResoruces = await predicate.getResourcesToSpend([
+    const predicateResources = await predicate.getResourcesToSpend([
       [amountToTransfer, assetIdA],
       [1000, BaseAssetId],
     ]);
@@ -148,7 +148,7 @@ describe('PredicateConditionalInputs', () => {
 
     request
       .addResources(aliceResources)
-      .addPredicateResources(predicateResoruces, predicate)
+      .addPredicateResources(predicateResources, predicate)
       .addCoinOutput(aliceWallet.address, amountToTransfer, assetIdA);
 
     const aliceAssetABefore = await aliceWallet.getBalance(assetIdA);
