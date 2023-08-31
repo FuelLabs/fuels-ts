@@ -1,5 +1,6 @@
 import { arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import crypto from 'crypto';
 
 import type { CryptoApi, Keystore } from '../types';
@@ -70,6 +71,6 @@ export const decrypt: CryptoApi['decrypt'] = async <T>(
   try {
     return JSON.parse(decryptedData);
   } catch {
-    throw new Error('Invalid credentials');
+    throw new FuelError(ErrorCode.INVALID_CREDENTIALS, 'Invalid credentials');
   }
 };
