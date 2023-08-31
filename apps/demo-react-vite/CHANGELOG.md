@@ -1,5 +1,11 @@
 # demo-react-vite
 
+## 0.0.13
+
+### Patch Changes
+
+- Upgrading vm/wasm libs, by [@arboleya](https://github.com/arboleya) (See [#1226](https://github.com/FuelLabs/fuels-ts/pull/1226))
+
 ## 0.0.12
 
 ## 0.0.11
