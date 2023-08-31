@@ -33,7 +33,6 @@ Represents configuration for calling a contract function.
 | Name | Type |
 | :------ | :------ |
 | `args` | `T` |
-| `bytesOffset` | `number` |
 | `callParameters?` | [`CallParams`](/api/Program/index.md#callparams) |
 | `forward?` | [`CoinQuantity`](/api/Providers/index.md#coinquantity) |
 | `func` | `FunctionFragment` |
@@ -42,7 +41,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[packages/program/src/types.ts:46](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L46)
+[packages/program/src/types.ts:48](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L48)
 
 ___
 
@@ -54,7 +53,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L25)
+[packages/program/src/types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L27)
 
 ___
 
@@ -74,11 +73,13 @@ Represents a contract call.
 | `data` | `BytesLike` |
 | `fnSelector` | `string` |
 | `gas?` | `BigNumberish` |
-| `isDataPointer` | `boolean` |
+| `isInputDataPointer` | `boolean` |
+| `isOutputDataHeap` | `boolean` |
+| `outputEncodedLength` | `number` |
 
 #### Defined in
 
-[packages/program/src/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L12)
+[packages/program/src/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L12)
 
 ___
 
@@ -102,7 +103,7 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[packages/program/src/types.ts:78](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L78)
+[packages/program/src/types.ts:79](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L79)
 
 ___
 
@@ -135,7 +136,7 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[packages/program/src/types.ts:63](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L63)
+[packages/program/src/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L64)
 
 ___
 
@@ -147,7 +148,7 @@ Represents the possible reasons for a revert.
 
 #### Defined in
 
-[packages/program/src/revert/revert-error.ts:15](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/revert/revert-error.ts#L15)
+[packages/program/src/revert/revert-error.ts:15](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/revert/revert-error.ts#L15)
 
 ___
 
@@ -159,7 +160,7 @@ Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[packages/program/src/types.ts:89](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L89)
+[packages/program/src/types.ts:90](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L90)
 
 ___
 
@@ -171,4 +172,4 @@ Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:34](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/types.ts#L34)
+[packages/program/src/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/types.ts#L36)

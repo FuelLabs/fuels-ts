@@ -36,7 +36,7 @@ Creates an instance of the ScriptRequest class.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:206](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L206)
+[packages/program/src/script-request.ts:206](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L206)
 
 ## Properties
 
@@ -48,7 +48,7 @@ The bytes of the script.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:187](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L187)
+[packages/program/src/script-request.ts:187](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L187)
 
 ___
 
@@ -74,7 +74,7 @@ A function to encode the script data.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:192](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L192)
+[packages/program/src/script-request.ts:192](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L192)
 
 ___
 
@@ -100,7 +100,7 @@ A function to decode the script result.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:197](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L197)
+[packages/program/src/script-request.ts:197](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L197)
 
 ## Methods
 
@@ -125,7 +125,7 @@ The decoded result.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:270](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L270)
+[packages/program/src/script-request.ts:260](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L260)
 
 ___
 
@@ -149,25 +149,7 @@ The encoded data.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:251](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L251)
-
-___
-
-### getArgOffset
-
-▸ **getArgOffset**(): `number`
-
-Gets the offset for the contract call argument (used for struct inputs).
-
-#### Returns
-
-`number`
-
-The memory offset.
-
-#### Defined in
-
-[packages/program/src/script-request.ts:240](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L240)
+[packages/program/src/script-request.ts:241](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L241)
 
 ___
 
@@ -185,7 +167,7 @@ The script data offset.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:231](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L231)
+[packages/program/src/script-request.ts:231](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L231)
 
 ___
 
@@ -209,4 +191,4 @@ The script data offset.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/55fe8f9/packages/program/src/script-request.ts#L222)
+[packages/program/src/script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/91b492dc/packages/program/src/script-request.ts#L222)
