@@ -23,6 +23,7 @@ export enum ErrorCode {
   TRANSACTION_FAILED = 'transaction-failed',
   INVALID_CONFIGURABLE_CONSTANTS = 'invalid-configurable-constants',
   INVALID_TRANSACTION_INPUT = 'invalid-transaction-input',
+  INVALID_TRANSACTION_OUTPUT = 'invalid-transaction-output',
   INVALID_TRANSACTION_STATUS = 'invalid-transaction-status',
   INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
 
