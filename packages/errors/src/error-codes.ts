@@ -21,8 +21,8 @@ export enum ErrorCode {
 
   // transaction
   TRANSACTION_FAILED = 'transaction-failed',
-
   INVALID_CONFIGURABLE_CONSTANTS = 'invalid-configurable-constants',
+  INVALID_TRANSACTION_INPUT = 'invalid-transaction-input',
 
   // coder
   // ...
