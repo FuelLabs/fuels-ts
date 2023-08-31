@@ -59,6 +59,7 @@ export const launchNode = async ({
       (
         await getPortPromise({
           port: 4000, // tries 4000 first, then 4001, then 4002, etc.
+          stopPort: 5000, // don't try ports above 5000
         })
       ).toString();
 
