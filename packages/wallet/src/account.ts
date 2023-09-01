@@ -96,7 +96,7 @@ export class Account extends AbstractAccount {
       excludedIds
     );
 
-    return resources.map((x) => ({ ...x, account: this }));
+    return resources.map((x) => ({ ...x, resourceAccount: this }));
   }
 
   /**

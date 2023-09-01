@@ -265,7 +265,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     let witnessIndex;
 
-    if ((coin.account as AbstractPredicate).bytes) {
+    if ((coin.resourceAccount as AbstractPredicate).bytes) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
@@ -284,8 +284,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
-      predicate: (coin.account as AbstractPredicate).bytes,
-      predicateData: (coin.account as AbstractPredicate).predicateData,
+      predicate: (coin.resourceAccount as AbstractPredicate).bytes,
+      predicateData: (coin.resourceAccount as AbstractPredicate).predicateData,
     };
 
     // Insert the Input
@@ -310,7 +310,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     let witnessIndex;
 
-    if ((message.account as AbstractPredicate).bytes) {
+    if ((message.resourceAccount as AbstractPredicate).bytes) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
@@ -328,8 +328,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
-      predicate: (message.account as AbstractPredicate).bytes,
-      predicateData: (message.account as AbstractPredicate).predicateData,
+      predicate: (message.resourceAccount as AbstractPredicate).bytes,
+      predicateData: (message.resourceAccount as AbstractPredicate).predicateData,
     };
 
     // Insert the Input
