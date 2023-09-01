@@ -8,6 +8,7 @@ import {
   decryptJsonWalletData,
   encryptJsonWalletData,
 } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -146,7 +147,7 @@ export async function decryptKeystoreWallet(jsonWallet: string, password: string
   const macHash = stringFromBuffer(macHashUint8Array, 'hex');
 
   if (mac !== macHash) {
-    throw new Error('Error decrypting wallet: invalid password');
+    throw new FuelError(ErrorCode.INVALID_PASSWORD, 'Error decrypting wallet: invalid password');
   }
 
   // Decrypt the private key.

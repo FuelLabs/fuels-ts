@@ -2,6 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -119,7 +120,10 @@ export class Account extends AbstractAccount {
       }
 
       // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} coins are not yet supported`);
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `Wallets with more than ${pageSize} coins are not yet supported`
+      );
     }
 
     return coins;
@@ -150,7 +154,10 @@ export class Account extends AbstractAccount {
       }
 
       // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} messages are not yet supported`);
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `Wallets with more than ${pageSize} messages are not yet supported`
+      );
     }
 
     return messages;
@@ -192,7 +199,10 @@ export class Account extends AbstractAccount {
       }
 
       // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} balances are not yet supported`);
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `Wallets with more than ${pageSize} balances are not yet supported`
+      );
     }
 
     return balances;
