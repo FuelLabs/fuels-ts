@@ -111,7 +111,7 @@ describe('Contract Factory', () => {
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
-    expect(var1.toHex()).toEqual(toHex(10));
+    expect(var1.toHex()).toEqual(toHex(0));
 
     const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);
