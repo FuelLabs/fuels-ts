@@ -1,5 +1,6 @@
 import type { Keystore } from '@fuel-ts/crypto';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
@@ -30,7 +31,7 @@ const ERROR_MESSAGES = {
  */
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
-    throw new Error(message);
+    throw new FuelError(ErrorCode.WALLET_MANAGER_ERROR, message);
   }
 }
 

@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
@@ -80,7 +81,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
       numberOfAccounts += 1;
     } while (numberOfAccounts < this.numberOfAccounts);
 
-    throw new Error('Account not found');
+    throw new FuelError(ErrorCode.WALLET_MANAGER_ERROR, 'Account not found');
   }
 
   getWallet(address: AbstractAddress): WalletUnlocked {
