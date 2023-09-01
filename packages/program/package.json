@@ -44,6 +44,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "@fuels/vm-asm": "0.36.0"
   },
   "devDependencies": {
