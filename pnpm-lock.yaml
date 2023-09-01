@@ -607,6 +607,9 @@ importers:
 
   packages/forc:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       node-fetch:
         specifier: ^2.6.7
         version: 2.6.7
