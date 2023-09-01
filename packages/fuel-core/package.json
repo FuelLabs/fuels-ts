@@ -17,6 +17,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@fuel-ts/errors": "workspace:*",
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
   }
