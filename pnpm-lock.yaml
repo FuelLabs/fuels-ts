@@ -150,8 +150,8 @@ importers:
   apps/demo-nextjs:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.34.1
-        version: 0.34.1
+        specifier: 0.36.1
+        version: 0.36.1
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
@@ -186,8 +186,8 @@ importers:
   apps/demo-react-cra:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.34.1
-        version: 0.34.1
+        specifier: 0.36.1
+        version: 0.36.1
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
@@ -234,8 +234,8 @@ importers:
   apps/demo-react-vite:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.34.1
-        version: 0.34.1
+        specifier: 0.36.1
+        version: 0.36.1
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -883,8 +883,8 @@ importers:
         specifier: workspace:*
         version: link:../wallet
       '@fuels/vm-asm':
-        specifier: 0.36.0
-        version: 0.36.0
+        specifier: 0.36.1
+        version: 0.36.1
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
@@ -1131,8 +1131,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@fuels/vm-asm':
-        specifier: 0.34.1
-        version: 0.34.1
+        specifier: 0.36.1
+        version: 0.36.1
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
@@ -3689,12 +3689,8 @@ packages:
       '@ethersproject/strings': 5.7.0
     dev: false
 
-  /@fuels/vm-asm@0.34.1:
-    resolution: {integrity: sha512-N6hZO/HkcSUxCm5X3cZ5UYrNZk3IZ+/dcvAGch0HSZ8+9B5p58yupMW2bEuqns8kd3hrogofqaV+1MdumnhTEA==}
-    dev: false
-
-  /@fuels/vm-asm@0.36.0:
-    resolution: {integrity: sha512-l1uI5fkx+rlB0MyxLS0TzeRKmA9h7yjBygZmOEB6XoyTqvxZDMkLQ5hn2ui4ppmBF+MHOkMvMqs8oOcUj76tDA==}
+  /@fuels/vm-asm@0.36.1:
+    resolution: {integrity: sha512-MXtNDk0WXONIrDJOlk07+X7GegpCz2hfbAgSIWycOD0th2z1GndvMqBryiw/pTVDHLnHe+5TGIODLsprI4RiEw==}
     dev: false
 
   /@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@16.18.34)(graphql@16.6.0)(ts-node@10.9.1)(typescript@4.9.5):
