@@ -39,7 +39,7 @@ describe('Predicate', () => {
           amount: bn(1000),
         },
       ]);
-      tx.addResourceInputAndOutput(ressources[0]);
+      tx.addResource(ressources[0]);
       // Add predicate bytecode to the input predicate
       (<CoinTransactionRequestInput>tx.inputs[0]).predicate = predicateStruct.bytes;
 
