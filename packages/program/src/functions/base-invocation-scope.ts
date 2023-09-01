@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
@@ -179,7 +180,8 @@ export class BaseInvocationScope<TReturn = any> {
   protected checkGasLimitTotal() {
     const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
     if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
-      throw new Error(
+      throw new FuelError(
+        ErrorCode.TRANSACTION_ERROR,
         "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
       );
     }
