@@ -69,4 +69,7 @@ export enum ErrorCode {
   // environment
   UNSUPPORTED_PLATFORM = 'unsupported-platform',
   UNSUPPORTED_ARCHITECTURE = 'unsupported-architecture',
+
+  // docs
+  VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
 }
