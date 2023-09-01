@@ -651,4 +651,41 @@ describe('Provider', () => {
     );
     expect(messageProof).toMatchSnapshot();
   });
+
+  it('has default timeout of 60s', () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    expect(provider.options.timeout).toBe(60000);
+  });
+
+  it('throws AbortError on timeout when calling an operation', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0 });
+
+    const { error } = await safeExec(() => provider.produceBlocks(10));
+
+    expect(error).toMatchObject({
+      type: 'aborted',
+      message: 'The user aborted a request.',
+    });
+  });
+
+  it('throws AbortError on timeout when calling a subscription', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0 });
+
+    const { error, result } = await safeExec(() =>
+      provider.subscriptions.statusChange({ transactionId: 'doesnt matter, will be aborted' })
+    );
+    76;
+    expect(error).toBeDefined();
+    expect(error).toMatchObject({
+      type: 'aborted',
+      message: 'the user aborted a request',
+    });
+  });
+
+  it('can accept a custom fetch function', () => {
+    const fetchFn = () => Promise.resolve(new Response());
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0, fetch: fetchFn });
+
+    expect(provider.options.fetch).toEqual(fetchFn);
+  });
 });

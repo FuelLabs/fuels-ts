@@ -133,7 +133,12 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      await this.sleepBasedOnAttempts(++this.fetchAttempts);
+      for await (const { statusChange } of this.provider.subscriptions.statusChange({
+        transactionId: '3db07b414b904228f392e4d4f28f138d6d6210361ae4fcd9231427da81f80410',
+      })) {
+        if (statusChange) break;
+      }
+
       return this.fetch();
     }
 
@@ -204,7 +209,7 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     for await (const { statusChange } of this.provider.subscriptions.statusChange({
-      transactionId: '3db07b414b904228f392e4d4f28f138d6d6210361ae4fcd9231427da81f80410',
+      transactionId: this.id,
     })) {
       if (statusChange.__typename !== 'SubmittedStatus') break;
     }

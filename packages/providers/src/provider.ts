@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
@@ -16,7 +17,7 @@ import {
 import { GraphQLClient } from 'graphql-request';
 import { createClient } from 'graphql-sse';
 import cloneDeep from 'lodash.clonedeep';
-import fetch from 'node-fetch';
+import nodeFetch from 'node-fetch';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -193,20 +194,35 @@ export type FetchRequestOptions = {
   body: string;
 };
 
+export type GetCustomFetchFn<R extends Response> = (
+  url: string,
+  options: FetchRequestOptions,
+  providerOptions?: Partial<Omit<ProviderOptions<R>, 'fetch'>>
+) => Promise<R>;
 /*
  * Provider initialization options
  */
-export type ProviderOptions = {
+export type ProviderOptions<FetchResponse extends Response = Response> = {
+  fetch: GetCustomFetchFn<FetchResponse> | undefined;
   cacheUtxo: number | undefined;
-  timeout: number | undefined;
+  timeout: number;
 };
-
 /**
  * Provider Call transaction params
  */
 export type ProviderCallParams = {
   utxoValidation?: boolean;
 };
+class CustomAbortController extends AbortController {
+  signal: AbortSignal;
+  /**
+   *
+   */
+  constructor() {
+    super();
+    this.signal = AbortSignal.abort();
+  }
+}
 
 /**
  * A provider for connecting to a node
@@ -216,16 +232,16 @@ export default class Provider {
   subscriptions!: ReturnType<typeof getSubscriptionsSdk>;
   cache?: MemoryCache;
   options: ProviderOptions = {
-    timeout: 1000,
+    timeout: 60000,
     cacheUtxo: undefined,
+    fetch: undefined,
   };
 
   private getFetchFn() {
-    return (url: string, request: FetchRequestOptions) => {
-      const controller = new AbortController();
-      setTimeout(() => controller.abort(), 1000);
-      return fetch(url, { signal: controller.signal, ...request });
-    };
+    return this.options.fetch !== undefined
+      ? this.options.fetch
+      : (url: string, request: FetchRequestOptions, options: ProviderOptions) =>
+          nodeFetch(url, { signal: AbortSignal.timeout(options.timeout), ...request });
   }
 
   /**
@@ -240,7 +256,7 @@ export default class Provider {
     options: Partial<ProviderOptions> = {}
   ) {
     this.createOperations(url, options);
-    this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
+    this.cache = this.options.cacheUtxo ? new MemoryCache(this.options.cacheUtxo) : undefined;
   }
 
   /**
@@ -263,8 +279,15 @@ export default class Provider {
     this.subscriptions = getSubscriptionsSdk((query, vars) => {
       const subscriptionClient = createClient({
         url: `${url}-sub`,
-        fetchFn: async (subscriptionUrl: string, request: FetchRequestOptions) => {
-          const originalResponse = await fetchFn(subscriptionUrl, request);
+        fetchFn: async (
+          subscriptionUrl: string,
+          request: FetchRequestOptions & { signal: AbortSignal }
+        ) => {
+          const originalResponse = (await fetchFn(
+            subscriptionUrl,
+            request,
+            this.options
+          )) as Response;
 
           /*
           The response processing below serves two purposes:
@@ -283,7 +306,6 @@ export default class Provider {
 
           const text = `event: next\ndata:${JSON.stringify(data)}\n\n`;
 
-          // @ts-expect-error Headers ain't happy but it works
           const response = new Response(text, originalResponse);
 
           return response;
@@ -409,7 +431,7 @@ export default class Provider {
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
-    // Fail transaction before submit to avoid submit failure
+    // Fail transactiqon before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
     if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
       throw new Error(
