@@ -33,7 +33,9 @@ describe(__filename, () => {
     );
 
     echoContract = await factory1.deployContract();
-    counterContract = await factory2.deployContract();
+    counterContract = await factory2.deployContract({
+      storageSlots: counterArtifacts.storageSlots,
+    });
     contextContract = await factory3.deployContract();
   });
 
