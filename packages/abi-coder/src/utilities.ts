@@ -1,5 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { U64Coder } from './coders/u64';
 import { VEC_CODER_TYPE, WORD_SIZE } from './constants';
@@ -105,7 +106,7 @@ export function unpackDynamicData(
       0, 0, 0, 0, 0, 0, 0, 24
     ]
   ]
- * 
+ *
  */
 export const chunkByLength = (data: Uint8Array, length = WORD_SIZE): Uint8Array[] => {
   const chunks = [];
@@ -145,7 +146,7 @@ export function findOrThrow<T>(
   arr: readonly T[],
   predicate: (val: T) => boolean,
   throwFn: () => never = () => {
-    throw new Error('element not found');
+    throw new FuelError(ErrorCode.ELEMENT_NOT_FOUND, 'element not found');
   }
 ): T {
   const found = arr.find(predicate);

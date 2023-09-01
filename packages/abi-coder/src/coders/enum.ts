@@ -1,4 +1,5 @@
 import { concat } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber } from '@fuel-ts/math';
 import type { RequireExactlyOne } from 'type-fest';
 
@@ -59,10 +60,10 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
 
     const [caseKey, ...empty] = Object.keys(value);
     if (!caseKey) {
-      throw new Error('A field for the case must be provided');
+      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided');
     }
     if (empty.length !== 0) {
-      throw new Error('Only one field must be provided');
+      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'Only one field must be provided');
     }
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
@@ -84,7 +85,10 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     const caseIndex = toNumber(decoded);
     const caseKey = Object.keys(this.coders)[caseIndex];
     if (!caseKey) {
-      throw new Error(`Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}`);
+      throw new FuelError(
+        ErrorCode.INVALID_DECODE_VALUE,
+        `Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}`
+      );
     }
 
     const valueCoder = this.coders[caseKey];
