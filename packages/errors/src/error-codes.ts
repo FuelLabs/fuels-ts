@@ -13,6 +13,7 @@ export enum ErrorCode {
    * The wallet doesn't have enough assets to cover the requirements of the transaction
    */
   INSUFFICIENT_BALANCE = 'insufficient-balance',
+  WALLET_MANAGER_ERROR = 'wallet-manager-error',
 
   // errors
   PARSE_FAILED = 'parse-failed',
@@ -20,6 +21,7 @@ export enum ErrorCode {
   ENV_DEPENDENCY_MISSING = 'env-dependency-missing',
   INVALID_TTL = 'invalid-ttl',
   INVALID_INPUT_PARAMETERS = 'invalid-input-parameters',
+  NOT_IMPLEMENTED = 'not-implemented',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
