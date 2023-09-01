@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import fs from 'fs/promises';
 import path, { join, dirname } from 'path';
 import sh from 'shelljs';
@@ -23,10 +24,10 @@ export default binPath;
 
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
-    throw new Error(`Unsupported platform ${process.platform}`);
+    throw new FuelError(ErrorCode.UNSUPPORTED_PLATFORM, `Unsupported platform ${process.platform}`);
   }
   if (process.arch !== 'arm64' && process.arch !== 'x64') {
-    throw new Error(`Unsupported arch ${process.arch}`);
+    throw new FuelError(ErrorCode.UNSUPPORTED_ARCHITECTURE, `Unsupported arch ${process.arch}`);
   }
   return platforms[process.platform][process.arch];
 };
