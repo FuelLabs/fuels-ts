@@ -8,7 +8,7 @@ struct StructValidation {
 }
 
 storage {
-    var1: u64 = 10,
+    var1: u64 = 0,
     var2: u32 = 20,
     var3: u16 = 30,
     var4: bool = true,
