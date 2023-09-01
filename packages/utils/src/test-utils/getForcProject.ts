@@ -1,5 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { basename, join } from 'path';
 
 import { normalizeString } from '../utils/normalizeString';
@@ -36,13 +36,12 @@ export const getProjectAbi = (params: IGetForcProjectParams) => {
 };
 
 export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
-  const projectPath = getProjectStorageSlotsPath(params);
-  try {
-    const storageSlots = JSON.parse(readFileSync(projectPath, 'utf-8'));
-    return storageSlots;
-  } catch (error) {
+  const storageSlotsFilePath = getProjectStorageSlotsPath(params);
+  if (!existsSync(storageSlotsFilePath)) {
     return [];
   }
+  const storageSlots = JSON.parse(readFileSync(storageSlotsFilePath, 'utf-8'));
+  return storageSlots;
 };
 
 export const getForcProject = <T = unknown>(projectDir: string) => {
