@@ -27,6 +27,7 @@
     "@ethersproject/pbkdf2": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*"
+    "@fuel-ts/wordlists": "workspace:*",
+    "@fuel-ts/errors": "workspace:*"
   }
 }
