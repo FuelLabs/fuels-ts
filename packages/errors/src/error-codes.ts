@@ -33,6 +33,13 @@ export enum ErrorCode {
 
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
 
+  // mnemonic
+  INVALID_WORD_LIST = 'invalid-word-list',
+  INVALID_MNEMONIC = 'invalid-mnemonic',
+  INVALID_ENTROPY = 'invalid-entropy',
+  INVALID_SEED = 'invalid-seed',
+  INVALID_CHECKSUM = 'invalid-checksum',
+
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
