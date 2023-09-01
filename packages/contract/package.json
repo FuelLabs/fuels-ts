@@ -33,8 +33,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
-    "merkletreejs": "^0.3.10"
+    "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"
