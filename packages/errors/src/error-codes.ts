@@ -3,12 +3,17 @@
  */
 export enum ErrorCode {
   // abi
+  ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
+  ABI_MAIN_METHOD_MISSING = 'abi-main-method-missing',
   INVALID_COMPONENT = 'invalid-component',
   FRAGMENT_NOT_FOUND = 'fragment-not-found',
   CONFIGURABLE_NOT_FOUND = 'configurable-not-found',
   TYPE_NOT_FOUND = 'type-not-found',
+  TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
-  ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
+  JSON_ABI_ERROR = 'abi-main-method-missing',
+  TYPE_ID_NOT_FOUND = 'type-id-not-found',
+  BIN_FILE_NOT_FOUND = 'bin-file-not-found',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -31,6 +36,7 @@ export enum ErrorCode {
   NOT_SUPPORTED = 'not-supported',
   CONVERTING_FAILED = 'converting-error',
   ELEMENT_NOT_FOUND = 'element-not-found',
+  MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
@@ -59,8 +65,6 @@ export enum ErrorCode {
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
-
-  // coder
 
   // environment
   UNSUPPORTED_PLATFORM = 'unsupported-platform',
