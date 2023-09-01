@@ -39,9 +39,15 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
+    const lastChar = wallet.address.toB256().slice(-1);
+    let nextChar = String.fromCharCode(lastChar.charCodeAt(0) + 1);
+    if (nextChar > 'f') {
+      nextChar = '0';
+    }
+
     await expect(
       contractInstance.functions
-        .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
+        .check_msg_sender({ value: wallet.address.toB256().slice(0, -1) + nextChar })
         .call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
