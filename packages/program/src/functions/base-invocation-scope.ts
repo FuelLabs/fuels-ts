@@ -216,7 +216,7 @@ export class BaseInvocationScope<TReturn = any> {
       (i) => i.type !== InputType.Coin
     );
     const resources = await this.program.account?.getResourcesToSpend(this.requiredCoins);
-    this.transactionRequest.addResourceInputsAndOutputs(resources || []);
+    this.transactionRequest.addResources(resources || []);
     return this;
   }
 

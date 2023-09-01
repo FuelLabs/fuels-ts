@@ -41,7 +41,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   });
 
   // add the UTXO inputs to the transaction request
-  request.addResourceInputsAndOutputs(resources);
+  request.addResources(resources);
 
   // add the transaction outputs (coins to be sent to the test wallet)
   quantities

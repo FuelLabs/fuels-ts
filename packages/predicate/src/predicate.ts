@@ -10,6 +10,7 @@ import {
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { AbstractPredicate } from '@fuel-ts/interfaces';
 import type {
   CallResult,
   Provider,
@@ -28,7 +29,7 @@ const logger = new Logger(versions.FUELS);
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<ARGS extends InputValue[]> extends Account {
+export class Predicate<ARGS extends InputValue[]> extends Account implements AbstractPredicate {
   bytes: Uint8Array;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
