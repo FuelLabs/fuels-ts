@@ -14,6 +14,7 @@ export enum ErrorCode {
    */
   INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
+  HD_WALLET_ERROR = 'hd-wallet-error',
 
   // errors
   PARSE_FAILED = 'parse-failed',
