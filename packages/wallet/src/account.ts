@@ -208,7 +208,7 @@ export class Account extends AbstractAccount {
     const fee = request.calculateFee();
     const resources = await this.getResourcesToSpend([fee]);
 
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
   }
 
   /**
@@ -245,7 +245,7 @@ export class Account extends AbstractAccount {
     }
 
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }
@@ -298,7 +298,7 @@ export class Account extends AbstractAccount {
     }
 
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }
@@ -340,7 +340,7 @@ export class Account extends AbstractAccount {
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }

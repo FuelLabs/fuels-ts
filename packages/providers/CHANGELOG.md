@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.55.0
+
+### Minor Changes
+
+- improve transaction api for using predicates on custom transactions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1216](https://github.com/FuelLabs/fuels-ts/pull/1216))
+
 ## 0.54.1
 
 ## 0.54.0
