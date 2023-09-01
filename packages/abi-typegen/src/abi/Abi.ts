@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { normalizeString } from '@fuel-ts/utils';
 
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
@@ -43,7 +44,10 @@ export class Abi {
     const couldNotParseName = !abiName || abiName.length === 0;
 
     if (couldNotParseName) {
-      throw new Error(`Could not parse name from abi file: ${filepath}`);
+      throw new FuelError(
+        ErrorCode.PARSE_FAILED,
+        `Could not parse name from abi file: ${filepath}`
+      );
     }
 
     const name = `${normalizeString(abiName[1])}Abi`;

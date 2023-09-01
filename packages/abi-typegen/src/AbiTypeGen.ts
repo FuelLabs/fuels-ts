@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+
 import { Abi } from './abi/Abi';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
@@ -71,7 +73,10 @@ export class AbiTypeGen {
       case ProgramTypeEnum.PREDICATE:
         return assemblePredicates({ abis, outputDir });
       default:
-        throw new Error(`Invalid Typegen programType: ${programType}`);
+        throw new FuelError(
+          ErrorCode.INVALID_INPUT_PARAMETERS,
+          `Invalid Typegen programType: ${programType}`
+        );
     }
   }
 }
