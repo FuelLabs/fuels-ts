@@ -9,9 +9,6 @@ export enum ErrorCode {
   INVALID_URL = 'invalid-url',
 
   // wallet
-  /**
-   * The wallet doesn't have enough assets to cover the requirements of the transaction
-   */
   INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
@@ -23,6 +20,7 @@ export enum ErrorCode {
   INVALID_TTL = 'invalid-ttl',
   INVALID_INPUT_PARAMETERS = 'invalid-input-parameters',
   NOT_IMPLEMENTED = 'not-implemented',
+  NOT_SUPPORTED = 'not-supported',
   CONVERTING_FAILED = 'converting-error',
 
   // transaction
@@ -35,6 +33,7 @@ export enum ErrorCode {
   INVALID_TRANSACTION_STATUS = 'invalid-transaction-status',
   INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
 
+  // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
 
   // mnemonic
@@ -43,6 +42,9 @@ export enum ErrorCode {
   INVALID_ENTROPY = 'invalid-entropy',
   INVALID_SEED = 'invalid-seed',
   INVALID_CHECKSUM = 'invalid-checksum',
+
+  // wallet
+  INVALID_PASSWORD = 'invalid-password',
 
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
