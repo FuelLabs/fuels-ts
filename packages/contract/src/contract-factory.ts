@@ -165,12 +165,18 @@ export default class ContractFactory {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
       if (!hasConfigurable) {
-        throw new Error('Contract has no configurables to be set');
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Contract has no configurables to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Contract has no configurable named: ${key}`);
+          throw new FuelError(
+            ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+            `Contract has no configurable named: ${key}`
+          );
         }
 
         const { offset } = this.interface.configurables[key];

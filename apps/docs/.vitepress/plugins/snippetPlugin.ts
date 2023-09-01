@@ -1,6 +1,7 @@
 import MarkdownIt from 'markdown-it';
 import path from 'path';
 import fs from 'fs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { RuleBlock } from 'markdown-it/lib/parser_block';
 
 function dedent(text: string): string {
@@ -100,7 +101,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       const isAFile = fs.existsSync(filepath) && fs.lstatSync(filepath).isFile();
 
       if (!isAFile) {
-        throw new Error(`File ${filepath} does not exist`);
+        throw new FuelError(ErrorCode.VITEPRESS_PLUGIN_ERROR, `File ${filepath} does not exist`);
       }
 
       let content = fs.readFileSync(filepath, 'utf8');
@@ -109,7 +110,10 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       const region = findRegion(lines, regionName);
 
       if (!region) {
-        throw new Error(`Region ${regionName} does not exist in file ${filepath}`);
+        throw new FuelError(
+          ErrorCode.VITEPRESS_PLUGIN_ERROR,
+          `Region ${regionName} does not exist in file ${filepath}`
+        );
       }
 
       content = dedent(
@@ -123,7 +127,10 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       const partialPath = match?.[0];
 
       if (!partialPath) {
-        throw new Error(`Failed to resolve the code snippet path at ${filepath}.`);
+        throw new FuelError(
+          ErrorCode.VITEPRESS_PLUGIN_ERROR,
+          `Failed to resolve the code snippet path at ${filepath}.`
+        );
       }
 
       const url = 'https://github.com/FuelLabs/fuels-ts/blob/master/'
@@ -148,7 +155,10 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         }`,
       });
     } catch (e) {
-      throw new Error(`Error while parsing snippet: ${e.message}`);
+      throw new FuelError(
+        ErrorCode.VITEPRESS_PLUGIN_ERROR,
+        `Error while parsing snippet: ${e.message}`
+      );
     }
 
     return true;

@@ -184,18 +184,25 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     try {
       if (!abiInterface) {
-        throw new Error(
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
           'Unable to validate configurable constants, Predicate instantiated without json ABI'
         );
       }
 
       if (Object.keys(abiInterface.configurables).length === 0) {
-        throw new Error('Predicate has no configurable constants to be set');
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Predicate has no configurable constants to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!abiInterface?.configurables[key]) {
-          throw new Error(`Predicate has no configurable constant named: ${key}`);
+          throw new FuelError(
+            ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+            `Predicate has no configurable constant named: ${key}`
+          );
         }
 
         const { offset } = abiInterface.configurables[key];
