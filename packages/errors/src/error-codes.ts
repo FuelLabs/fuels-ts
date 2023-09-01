@@ -2,6 +2,14 @@
  * Represents the different error codes thrown by the SDK
  */
 export enum ErrorCode {
+  // abi
+  INVALID_COMPONENT = 'invalid-component',
+  FRAGMENT_NOT_FOUND = 'fragment-not-found',
+  CONFIGURABLE_NOT_FOUND = 'configurable-not-found',
+  TYPE_NOT_FOUND = 'type-not-found',
+  INVALID_DECODE_VALUE = 'invalid-decode-value',
+  ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
+
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
 
@@ -22,6 +30,7 @@ export enum ErrorCode {
   NOT_IMPLEMENTED = 'not-implemented',
   NOT_SUPPORTED = 'not-supported',
   CONVERTING_FAILED = 'converting-error',
+  ELEMENT_NOT_FOUND = 'element-not-found',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
