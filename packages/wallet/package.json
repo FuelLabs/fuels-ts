@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.54.0",
+  "version": "0.54.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -54,7 +54,7 @@
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.34.1",
+    "@fuels/vm-asm": "0.36.1",
     "@fuel-ts/crypto": "workspace:*",
     "uuid": "^9.0.0"
   },
