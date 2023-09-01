@@ -147,7 +147,7 @@ export const launchNodeAndGetWallets = async ({
   const defaultChainConfigFilePath = path.join(subDirPath, '.chainConfig.json');
 
   // Don't create a temporary default chain configuration file if one is provided.
-  if (launchNodeOptions?.chainConfigPath) {
+  if (!launchNodeOptions?.chainConfigPath) {
     // Write a temporary chain configuration file.
     await fs.writeFile(defaultChainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
   }
