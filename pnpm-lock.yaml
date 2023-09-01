@@ -292,6 +292,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
