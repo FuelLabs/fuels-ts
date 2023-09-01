@@ -144,13 +144,16 @@ export const launchNodeAndGetWallets = async ({
 
   fsSync.mkdirSync(subDirPath, { recursive: true });
 
-  const chainConfigFilePath = path.join(subDirPath, '.chainConfig.json');
+  const defaultChainConfigFilePath = path.join(subDirPath, '.chainConfig.json');
 
-  // Write a temporary chain configuration file.
-  await fs.writeFile(chainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
+  // Don't create a temporary default chain configuration file if one is provided.
+  if (launchNodeOptions?.chainConfigPath) {
+    // Write a temporary chain configuration file.
+    await fs.writeFile(defaultChainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
+  }
 
   const defaultNodeOptions: LaunchNodeOptions = {
-    chainConfigPath: chainConfigFilePath,
+    chainConfigPath: defaultChainConfigFilePath,
     consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   };
 
@@ -165,7 +168,9 @@ export const launchNodeAndGetWallets = async ({
 
   const cleanup = () => {
     closeNode();
-    spawn('rm', [chainConfigFilePath]);
+    if (fsSync.existsSync(defaultChainConfigFilePath)) {
+      spawn('rm', [defaultChainConfigFilePath]);
+    }
   };
 
   return { wallets, stop: cleanup, provider };

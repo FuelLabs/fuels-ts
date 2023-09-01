@@ -9,6 +9,7 @@ test('launchNodeAndGetWallets', async () => {
     walletCount: 10,
     launchNodeOptions: {
       useSystemFuelCore: false,
+      chainConfigPath: './.fuel-core/configs/chainConfig.json',
     },
   });
   expect(provider).toBeInstanceOf(Provider);
