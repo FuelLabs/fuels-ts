@@ -32,6 +32,7 @@ export enum ErrorCode {
   INVALID_TRANSACTION_OUTPUT = 'invalid-transaction-output',
   INVALID_TRANSACTION_STATUS = 'invalid-transaction-status',
   INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
+  TRANSACTION_ERROR = 'transaction-error',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
