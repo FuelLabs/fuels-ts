@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import upperFirst from 'lodash.upperfirst';
 
 /**
@@ -22,7 +23,7 @@ export const normalizeString = (str: string): string => {
   const output = transformations.reduce((s, t) => t(s), str);
 
   if (output === '') {
-    throw new Error(`Can't normalize string: ${str}`);
+    throw new FuelError(ErrorCode.PARSE_FAILED, `Can't normalize string: ${str}`);
   }
 
   return output;
