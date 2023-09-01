@@ -52,5 +52,8 @@ export enum ErrorCode {
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
 
   // coder
-  // ...
+
+  // environment
+  UNSUPPORTED_PLATFORM = 'unsupported-platform',
+  UNSUPPORTED_ARCHITECTURE = 'unsupported-architecture',
 }
