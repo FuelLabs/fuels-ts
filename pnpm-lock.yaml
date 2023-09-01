@@ -776,6 +776,9 @@ importers:
 
   packages/math:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@types/bn.js':
         specifier: ^5.1.1
         version: 5.1.1
