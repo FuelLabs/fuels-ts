@@ -2,7 +2,7 @@
   import { data } from '../../versions.data'
   const { forc } = data
   const abiUrl = `
-    https://fuellabs.github.io/sway/v${forc}/book/introduction/sway_quickstart.html?highlight=abi#abi
+    https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/smart_contracts.html#the-abi-declaration
   `
   const contractsUrl = `
     https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/smart_contracts.html
