@@ -341,7 +341,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   /**
    * Adds a single resource to the transaction by adding a coin/message input and a
-   * change output for the related assetId or predicate, if one of it was not added yet.
+   * change output for the related assetId, if one it was not added yet.
    *
    * @param resource - The resource to add.
    * @returns This transaction.

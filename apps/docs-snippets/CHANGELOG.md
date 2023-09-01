@@ -1,5 +1,13 @@
 # @fuel-ts/docs-snippets
 
+## 0.55.0
+
+### Patch Changes
+
+- 🐞 Fix stateRoot calculation on sparse merkle tree, by [@luizstacio](https://github.com/luizstacio) (See [#1220](https://github.com/FuelLabs/fuels-ts/pull/1220))
+
+## 0.54.1
+
 ## 0.54.0
 
 ## 0.53.0
