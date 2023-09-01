@@ -3,6 +3,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
@@ -368,7 +369,7 @@ export class InputCoder extends Coder<Input, Input> {
         break;
       }
       default: {
-        throw new Error('Invalid Input type');
+        throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, 'Invalid Input type');
       }
     }
 
@@ -395,7 +396,7 @@ export class InputCoder extends Coder<Input, Input> {
         return [decoded, o];
       }
       default: {
-        throw new Error('Invalid Input type');
+        throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, 'Invalid Input type');
       }
     }
   }
