@@ -19,7 +19,7 @@ describe('Predicate', () => {
     predicate.setData<[string]>(b256);
 
     const request = new ScriptTransactionRequest();
-    request.addResourceInputAndOutput({
+    request.addResource({
       id: '0x01',
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
