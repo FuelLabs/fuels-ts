@@ -1,6 +1,7 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { Provider } from '@fuel-ts/providers';
 import { spawn } from 'child_process';
+import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
 import os from 'os';
@@ -16,8 +17,8 @@ import { generateTestWallet } from './generateTestWallet';
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
 type LaunchNodeOptions = {
-  chainConfigPath: string;
-  consensusKey: string;
+  chainConfigPath?: string;
+  consensusKey?: string;
   ip?: string;
   port?: string;
   args?: string[];
@@ -35,7 +36,7 @@ type LaunchNodeOptions = {
  * */
 export const launchNode = async ({
   chainConfigPath,
-  consensusKey,
+  consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   ip,
   port,
   args = defaultFuelCoreArgs,
@@ -63,6 +64,21 @@ export const launchNode = async ({
         })
       ).toString();
 
+    let chainConfigPathToUse = chainConfigPath;
+
+    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+
+    if (!chainConfigPath) {
+      if (!fsSync.existsSync(tempDirPath)) {
+        fsSync.mkdirSync(tempDirPath, { recursive: true });
+      }
+      const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
+      // Write a temporary chain configuration file.
+      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
+
+      chainConfigPathToUse = tempChainConfigFilePath;
+    }
+
     const child = spawn(command, [
       'run',
       '--ip',
@@ -74,7 +90,7 @@ export const launchNode = async ({
       '--consensus-key',
       consensusKey,
       '--chain',
-      chainConfigPath,
+      chainConfigPathToUse as string,
       ...args,
     ]);
 
@@ -85,6 +101,11 @@ export const launchNode = async ({
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();
       child.stderr.removeAllListeners();
+
+      // Remove the temporary folder and all its contents.
+      if (!chainConfigPath) {
+        spawn('rm', ['-rf', tempDirPath]);
+      }
     };
 
     child.stderr.setEncoding('utf8');
@@ -137,24 +158,9 @@ export const launchNodeAndGetWallets = async ({
   launchNodeOptions?: Partial<LaunchNodeOptions>;
   walletCount?: number;
 } = {}) => {
-  const osTempDir = os.tmpdir();
-
-  const subDirName = '.fuels-ts'; // Change to your desired subfolder name
-  const subDirPath = path.join(osTempDir, subDirName);
-
-  fsSync.mkdirSync(subDirPath, { recursive: true });
-
-  const defaultChainConfigFilePath = path.join(subDirPath, '.chainConfig.json');
-
-  // Don't create a temporary default chain configuration file if one is provided.
-  if (!launchNodeOptions?.chainConfigPath) {
-    // Write a temporary chain configuration file.
-    await fs.writeFile(defaultChainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
-  }
-
   const defaultNodeOptions: LaunchNodeOptions = {
-    chainConfigPath: defaultChainConfigFilePath,
-    consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
+    chainConfigPath: launchNodeOptions?.chainConfigPath,
+    consensusKey: launchNodeOptions?.consensusKey,
   };
 
   const {
@@ -168,9 +174,6 @@ export const launchNodeAndGetWallets = async ({
 
   const cleanup = () => {
     closeNode();
-    if (fsSync.existsSync(defaultChainConfigFilePath)) {
-      spawn('rm', [defaultChainConfigFilePath]);
-    }
   };
 
   return { wallets, stop: cleanup, provider };
