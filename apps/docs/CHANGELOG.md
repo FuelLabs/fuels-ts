@@ -1,5 +1,11 @@
 # @fuel-ts/docs
 
+## 0.42.6
+
+### Patch Changes
+
+- refactor doc links, by [@sarahschwartz](https://github.com/sarahschwartz) (See [#1231](https://github.com/FuelLabs/fuels-ts/pull/1231))
+
 ## 0.42.5
 
 ## 0.42.4
