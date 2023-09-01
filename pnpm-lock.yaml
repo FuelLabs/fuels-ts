@@ -1087,6 +1087,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@types/lodash.upperfirst':
         specifier: ^4.3.7
         version: 4.3.7

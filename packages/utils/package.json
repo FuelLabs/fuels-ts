@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@ethersproject/bytes": "^5.7.0",
+    "@fuel-ts/errors": "workspace:*",
     "@types/lodash.upperfirst": "^4.3.7"
   }
 }
