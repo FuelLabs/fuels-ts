@@ -601,9 +601,6 @@ importers:
 
   packages/errors:
     dependencies:
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
