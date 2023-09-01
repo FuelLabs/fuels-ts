@@ -23,6 +23,7 @@ export enum ErrorCode {
   INVALID_TTL = 'invalid-ttl',
   INVALID_INPUT_PARAMETERS = 'invalid-input-parameters',
   NOT_IMPLEMENTED = 'not-implemented',
+  CONVERTING_FAILED = 'converting-error',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
