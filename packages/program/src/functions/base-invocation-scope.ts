@@ -23,7 +23,7 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  */
 function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
   const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
-  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer()
+  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer
     ? POINTER_DATA_OFFSET
     : 0;
   const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
@@ -32,7 +32,9 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     contractId: (program as AbstractContract).id,
     fnSelector: func.selector,
     data,
-    isDataPointer: func.isInputDataPointer(),
+    isInputDataPointer: func.isInputDataPointer,
+    isOutputDataHeap: func.outputMetadata.isHeapType,
+    outputEncodedLength: func.outputMetadata.encodedLength,
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
@@ -49,6 +51,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
+  #scriptDataOffset: number = 0;
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -70,9 +73,8 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const script = getContractCallScript(this.functionInvocationScopes.length);
     return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, script.getScriptDataOffset())
+      createContractCall(funcScope, this.#scriptDataOffset)
     );
   }
 
@@ -80,11 +82,14 @@ export class BaseInvocationScope<TReturn = any> {
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes);
+    this.#scriptDataOffset = contractCallScript.getScriptDataOffset();
+
     const calls = this.calls;
     calls.forEach((c) => {
       this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
-    const contractCallScript = getContractCallScript(this.functionInvocationScopes.length);
+
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
@@ -209,7 +214,7 @@ export class BaseInvocationScope<TReturn = any> {
       (i) => i.type !== InputType.Coin
     );
     const resources = await this.program.account?.getResourcesToSpend(this.requiredCoins);
-    this.transactionRequest.addResourceInputsAndOutputs(resources || []);
+    this.transactionRequest.addResources(resources || []);
     return this;
   }
 

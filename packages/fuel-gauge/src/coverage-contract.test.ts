@@ -9,6 +9,8 @@ import {
   BaseAssetId,
   isMessage,
   isCoin,
+  randomBytes,
+  hexlify,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -423,7 +425,7 @@ describe('Coverage Contract', () => {
     expect(isMessage(coins[0])).toBeTruthy();
     expect(isCoin(coins[0])).toBeFalsy();
 
-    request.addResourceInputsAndOutputs(coins);
+    request.addResources(coins);
     request.addCoinOutput(recipient.address, 10, BaseAssetId);
 
     const response = await sender.sendTransaction(request);
@@ -439,24 +441,6 @@ describe('Coverage Contract', () => {
     expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
     expect(logs[2]).toEqual('Fuel');
     expect(logs[3]).toEqual([1, 2, 3]);
-  });
-
-  it('should get raw_slice output [u8]', async () => {
-    const { value } = await contractInstance.functions.echo_u8_vector([100, 2, 1, 2, 3]).call();
-
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([100, 2, 1, 2, 3]);
-  });
-
-  it('should get raw_slice output [u64]', async () => {
-    const { value } = await contractInstance.functions.echo_u64_vector([100, 2, 1, 2, 3]).call();
-
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([100, 2, 1, 2, 3]);
-  });
-
-  it('should get raw_slice output', async () => {
-    const { value } = await contractInstance.functions.get_u64_vector().call();
-
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });
 
   it('should test native enum [Red->Green]', async () => {
@@ -516,6 +500,7 @@ describe('Coverage Contract', () => {
     ];
     await contractInstance.functions.vec_in_vec(INPUT).call();
 
+    // asserted in Sway file
     expect(1).toEqual(1);
   });
 
@@ -526,6 +511,56 @@ describe('Coverage Contract', () => {
     ];
     await contractInstance.functions.vec_in_array(INPUT).call();
 
+    // asserted in Sway file
     expect(1).toEqual(1);
+  });
+
+  it('should test b256 multiple params vector input/output', async () => {
+    const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_B = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_C = hexlify(randomBytes(32));
+    const INPUT_D = hexlify(randomBytes(32));
+
+    const { value } = await contractInstance.functions
+      .echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D)
+      .call<string[]>();
+
+    expect(value).toStrictEqual(INPUT_B);
+  });
+
+  it.skip('should handle multiple calls [with vectors]', async () => {
+    const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_B = [hexlify(randomBytes(32))];
+    const INPUT_C = hexlify(randomBytes(32));
+    const INPUT_D = hexlify(randomBytes(32));
+
+    const { value: results } = await contractInstance
+      .multiCall([
+        contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
+        contractInstance.functions.echo_u8(13),
+        contractInstance.functions.echo_u8(23),
+        contractInstance.functions.echo_enum_small(SmallEnum.Empty),
+        contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
+      ])
+      .call();
+    expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
+  });
+
+  it.skip('should handle multiple calls [with vectors + stack data first]', async () => {
+    const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_B = [hexlify(randomBytes(32))];
+    const INPUT_C = hexlify(randomBytes(32));
+    const INPUT_D = hexlify(randomBytes(32));
+
+    const { value: results } = await contractInstance
+      .multiCall([
+        contractInstance.functions.echo_u8(1),
+        contractInstance.functions.echo_u8(2),
+        contractInstance.functions.echo_enum_small(SmallEnum.Empty),
+        contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
+        contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
+      ])
+      .call();
+    expect(results).toStrictEqual([1, 2, SmallEnum.Empty, INPUT_B, INPUT_A]);
   });
 });

@@ -177,6 +177,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Wallet Manager',
+            link: '/guide/wallet-manager/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Getting Started With Wallet Manager',
+                link: '/guide/wallet-manager/getting-started-with-wallet-manager',
+              },
+              {
+                text: 'Locking And Unlocking Wallet Manager',
+                link: '/guide/wallet-manager/locking-and-unlocking-wallet-manager',
+              },
+            ],
+          },
+          {
             text: 'Providers',
             link: '/guide/providers/',
             collapsed: true,

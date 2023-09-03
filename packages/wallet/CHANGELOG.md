@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.55.0
+
+### Minor Changes
+
+- improve transaction api for using predicates on custom transactions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1216](https://github.com/FuelLabs/fuels-ts/pull/1216))
+
+### Patch Changes
+
+- Add `launchNodeAndGetWallets` test utility function, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1204](https://github.com/FuelLabs/fuels-ts/pull/1204))
+
+## 0.54.1
+
+### Patch Changes
+
+- Upgrading vm/wasm libs, by [@arboleya](https://github.com/arboleya) (See [#1226](https://github.com/FuelLabs/fuels-ts/pull/1226))
+
+## 0.54.0
+
+## 0.53.0
+
+## 0.52.0
+
 ## 0.51.0
 
 ## 0.50.0

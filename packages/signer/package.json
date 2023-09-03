@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/signer",
-  "version": "0.51.0",
+  "version": "0.55.0",
   "description": "Secp256k1 signer for the Fuel Network",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",

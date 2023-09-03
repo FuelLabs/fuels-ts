@@ -98,7 +98,6 @@ describe('Contract Factory', () => {
       program: expect.objectContaining({ id: contract.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
-      bytesOffset: 0,
       callParameters: undefined,
       txParameters: undefined,
       forward: undefined,
@@ -112,7 +111,7 @@ describe('Contract Factory', () => {
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
-    expect(var1.toHex()).toEqual(toHex(10));
+    expect(var1.toHex()).toEqual(toHex(0));
 
     const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);
@@ -158,7 +157,7 @@ describe('Contract Factory', () => {
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
-    expect(var1.toHex()).toEqual(toHex(10));
+    expect(var1.toHex()).toEqual(toHex(0));
 
     const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);

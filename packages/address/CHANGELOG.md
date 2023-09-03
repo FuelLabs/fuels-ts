@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.55.0
+
+## 0.54.1
+
+## 0.54.0
+
+## 0.53.0
+
+### Patch Changes
+
+- Changed errors to FuelError, by [@nedsalk](https://github.com/nedsalk) (See [#1153](https://github.com/FuelLabs/fuels-ts/pull/1153))
+
+## 0.52.0
+
 ## 0.51.0
 
 ## 0.50.0

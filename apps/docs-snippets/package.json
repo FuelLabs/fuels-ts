@@ -1,11 +1,12 @@
 {
   "name": "@fuel-ts/docs-snippets",
-  "version": "0.51.0",
+  "version": "0.55.0",
   "description": "",
   "private": true,
   "devDependencies": {
     "fuels": "workspace:*",
-    "@fuel-ts/utils": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/wallet-manager": "workspace:*"
   },
   "keywords": [],
   "author": "",
