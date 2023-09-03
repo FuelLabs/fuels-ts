@@ -5,8 +5,8 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "run-s build:forc-projects build:process-predicates",
-    "build:forc-projects": "pnpm fuels-forc build -p fixtures/forc-projects",
+    "pretest": "run-s build:forc build:process-predicates",
+    "build:forc": "pnpm fuels-forc build -p fixtures/forc-projects",
     "build:process-predicates": "tsx ./scripts/process-predicates.ts"
   },
   "license": "Apache-2.0",

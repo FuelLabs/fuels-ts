@@ -4,7 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build": "pnpm fuels-forc build -p projects"
+    "pretest": "pnpm build:forc",
+    "build:forc": "pnpm fuels-forc build -p projects"
   },
   "devDependencies": {
     "fuels": "workspace:*",
