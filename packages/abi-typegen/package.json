@@ -40,9 +40,10 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "pnpm fuels-forc build -p test/fixtures/forc-projects",
+    "pretest": "pnpm build:forc",
     "build": "tsup",
-    "postbuild": "tsx ../../scripts/postbuild.ts"
+    "postbuild": "tsx ../../scripts/postbuild.ts",
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects"
   },
   "license": "Apache-2.0",
   "dependencies": {
