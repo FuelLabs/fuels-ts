@@ -1,5 +1,13 @@
 # demo-react-cra
 
+## 0.1.14
+
+## 0.1.13
+
+### Patch Changes
+
+- Upgrading vm/wasm libs, by [@arboleya](https://github.com/arboleya) (See [#1226](https://github.com/FuelLabs/fuels-ts/pull/1226))
+
 ## 0.1.12
 
 ## 0.1.11
