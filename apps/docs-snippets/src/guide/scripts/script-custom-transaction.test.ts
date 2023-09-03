@@ -68,7 +68,7 @@ describe(__filename, () => {
     request
       .setData(abiContents, scriptArguments)
       .addContractInputAndOutput(contract.id)
-      .addResourceInputsAndOutputs(resources);
+      .addResources(resources);
 
     // 5. Send the transaction
     const tx = await wallet.sendTransaction(request);

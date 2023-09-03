@@ -89,7 +89,7 @@ describe('Wallet', () => {
       [amount * 2, assetIdB],
     ]);
 
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
     request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
       [amount, assetIdB],
