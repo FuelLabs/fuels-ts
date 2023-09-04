@@ -21,11 +21,11 @@ describe('getUserVersions.js', () => {
 
     const error = vi.spyOn(console, 'error').mockImplementation(() => []);
 
-    const mockedExecOk = jest.fn();
+    const mockedExecOk = vi.fn();
     mockedExecOk.mockReturnValueOnce(userForcVersion); // first call (forc)
     mockedExecOk.mockReturnValueOnce(userFuelCoreVersion); // second call (fuel-core)
 
-    const execSyncThrow = jest.fn(() => {
+    const execSyncThrow = vi.fn(() => {
       throw new Error();
     });
 

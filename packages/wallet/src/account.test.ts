@@ -21,7 +21,9 @@ jest.mock('@fuel-ts/providers', () => ({
   ...jest.requireActual('@fuel-ts/providers'),
 }));
 
-afterEach(jest.restoreAllMocks);
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('Account', () => {
   const assets = [
@@ -212,8 +214,8 @@ describe('Account', () => {
 
     const resources: Resource[] = [];
 
-    const calculateFee = jest.fn(() => fee);
-    const addResourceInputsAndOutputs = jest.fn();
+    const calculateFee = vi.fn(() => fee);
+    const addResourceInputsAndOutputs = vi.fn();
 
     const request = {
       calculateFee,
@@ -254,9 +256,9 @@ describe('Account', () => {
       assetId,
     };
 
-    const calculateFee = jest.fn(() => fee);
-    const addCoinOutput = jest.fn();
-    const addResourceInputsAndOutputs = jest.fn();
+    const calculateFee = vi.fn(() => fee);
+    const addCoinOutput = vi.fn();
+    const addResourceInputsAndOutputs = vi.fn();
 
     const request = {
       calculateFee,
@@ -333,8 +335,8 @@ describe('Account', () => {
       assetId,
     };
 
-    const calculateFee = jest.fn(() => fee);
-    const addResourceInputsAndOutputs = jest.fn();
+    const calculateFee = vi.fn(() => fee);
+    const addResourceInputsAndOutputs = vi.fn();
 
     const request = {
       calculateFee,

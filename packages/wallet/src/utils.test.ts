@@ -16,13 +16,15 @@ jest.mock('@fuels/vm-asm', () => ({
 }));
 
 describe('util', () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
     const mockedOpcode = {
-      to_bytes: jest.fn().mockReturnValue(byte),
+      to_bytes: vi.fn().mockReturnValue(byte),
       free(): void {},
     };
 

@@ -20,7 +20,7 @@ import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 import { messageProofResponse } from './fixtures';
 
 afterEach(() => {
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('Provider', () => {
@@ -450,7 +450,7 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
+    const resourcesToSpendMock = vi.fn(() => Promise.resolve({ coinsToSpend: [] }));
     // @ts-expect-error mock
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
@@ -583,7 +583,7 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
+    const resourcesToSpendMock = vi.fn(() => Promise.resolve({ coinsToSpend: [] }));
     // @ts-expect-error mock
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {

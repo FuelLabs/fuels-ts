@@ -11,7 +11,10 @@ describe('compareVersions.js', () => {
     spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
   });
 
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
 
   /*
     Tests

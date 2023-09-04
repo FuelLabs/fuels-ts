@@ -6,8 +6,13 @@ import * as getUserVersionsMod from './lib/getUserVersions';
 
 describe('cli.js', () => {
   // hooks
-  beforeEach(jest.clearAllMocks);
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   /*
     Test (mocking) utility
