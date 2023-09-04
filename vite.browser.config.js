@@ -5,7 +5,7 @@ import baseConfig from './vite.base.config';
 export default mergeConfig(baseConfig, {
   test: {
     coverage: {
-      reportsDirectory: 'coverage/browser',
+      reportsDirectory: 'coverage/environments/browser',
     },
     browser: {
       enabled: true,
