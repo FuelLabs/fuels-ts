@@ -7,7 +7,7 @@ describe('compareVersions.js', () => {
   */
   beforeEach(() => {
     const v = '1.0.0';
-    const spy = jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions');
+    const spy = vi.spyOn(getSupportedVersionsMod, 'getSupportedVersions');
     spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
   });
 

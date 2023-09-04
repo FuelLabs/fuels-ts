@@ -181,7 +181,7 @@ describe('Provider', () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
     const provider = new Provider(providerUrl1);
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+    const spyGraphQLClient = vi.spyOn(GraphQL, 'GraphQLClient');
 
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);

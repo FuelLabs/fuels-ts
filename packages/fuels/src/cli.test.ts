@@ -6,12 +6,12 @@ import { run } from './cli';
 describe('cli.js', () => {
   test('should call `versions` sub-program', () => {
     // mocking
-    const name = jest.spyOn(Command.prototype, 'name');
-    const version = jest.spyOn(Command.prototype, 'version');
-    const command = jest.spyOn(Command.prototype, 'command');
-    const description = jest.spyOn(Command.prototype, 'description');
-    const action = jest.spyOn(Command.prototype, 'action');
-    const parse = jest.spyOn(Command.prototype, 'parse').mockImplementation();
+    const name = vi.spyOn(Command.prototype, 'name');
+    const version = vi.spyOn(Command.prototype, 'version');
+    const command = vi.spyOn(Command.prototype, 'command');
+    const description = vi.spyOn(Command.prototype, 'description');
+    const action = vi.spyOn(Command.prototype, 'action');
+    const parse = vi.spyOn(Command.prototype, 'parse').mockImplementation(() => []);
 
     // executing
     const argv = ['a', 'b', 'c'];

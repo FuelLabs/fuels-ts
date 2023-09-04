@@ -59,7 +59,7 @@ describe('Account', () => {
       getCoins: async () => Promise.resolve(dummyCoins),
     } as unknown as Provider;
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    vi.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
@@ -110,7 +110,7 @@ describe('Account', () => {
       getMessages: async () => Promise.resolve(dummyMessages),
     } as unknown as Provider;
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    vi.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
@@ -156,7 +156,7 @@ describe('Account', () => {
       getBalances: async () => Promise.resolve(dummyBalace),
     } as unknown as Provider;
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    vi.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
@@ -274,7 +274,7 @@ describe('Account', () => {
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
 
-    jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+    vi.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'

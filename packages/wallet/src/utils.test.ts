@@ -26,11 +26,11 @@ describe('util', () => {
       free(): void {},
     };
 
-    const gtf = jest.spyOn(fuelAsm, 'gtf').mockReturnValue(mockedOpcode);
-    const addi = jest.spyOn(fuelAsm, 'addi').mockReturnValue(mockedOpcode);
-    const lw = jest.spyOn(fuelAsm, 'lw').mockReturnValue(mockedOpcode);
-    const tr = jest.spyOn(fuelAsm, 'tr').mockReturnValue(mockedOpcode);
-    const ret = jest.spyOn(fuelAsm, 'ret').mockReturnValue(mockedOpcode);
+    const gtf = vi.spyOn(fuelAsm, 'gtf').mockReturnValue(mockedOpcode);
+    const addi = vi.spyOn(fuelAsm, 'addi').mockReturnValue(mockedOpcode);
+    const lw = vi.spyOn(fuelAsm, 'lw').mockReturnValue(mockedOpcode);
+    const tr = vi.spyOn(fuelAsm, 'tr').mockReturnValue(mockedOpcode);
+    const ret = vi.spyOn(fuelAsm, 'ret').mockReturnValue(mockedOpcode);
 
     const script = composeScriptForTransferringToContract();
 
@@ -62,7 +62,7 @@ describe('util', () => {
       .spyOn(NumberCoder.prototype, 'encode')
       .mockReturnValue(Uint8Array.from(byte));
 
-    const arrayify = jest.spyOn(arrayfyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
+    const arrayify = vi.spyOn(arrayfyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
 
     const contractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;

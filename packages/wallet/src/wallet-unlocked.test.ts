@@ -237,7 +237,7 @@ describe('WalletUnlocked', () => {
     const wallet = WalletUnlocked.generate();
     const password = 'password';
 
-    const encryptKeystoreWalletSpy = jest.spyOn(keystoreWMod, 'encryptKeystoreWallet');
+    const encryptKeystoreWalletSpy = vi.spyOn(keystoreWMod, 'encryptKeystoreWallet');
 
     const keystore = wallet.encrypt(password);
 

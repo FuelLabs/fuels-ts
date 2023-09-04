@@ -88,7 +88,7 @@ describe('rewriteVersions.js', () => {
 
   test('should rewrite files', () => {
     // mocking
-    const writeFileSync = jest.spyOn(fsMod, 'writeFileSync').mockImplementation();
+    const writeFileSync = vi.spyOn(fsMod, 'writeFileSync').mockImplementation(() => []);
 
     // executing
     rewriteVersions();

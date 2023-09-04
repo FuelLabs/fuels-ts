@@ -159,11 +159,11 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const spy = jest.spyOn(provider, 'sendTransaction');
+    const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
     const fragment = contract.interface.getFunction('entry_one');
-    const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
+    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
     try {
       await contract.functions.entry_one(42);
@@ -177,11 +177,11 @@ describe('Contract', () => {
 
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const spy = jest.spyOn(provider, 'sendTransaction');
+    const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
     const fragment = contract.interface.getFunction('tuple_function');
-    const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
+    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
     try {
       await contract.functions.tuple_function({

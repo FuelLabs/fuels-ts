@@ -29,27 +29,27 @@ describe('cli.js', () => {
       userForcIsEq,
     } = params;
 
-    const error = jest.spyOn(console, 'error').mockImplementation();
-    const info = jest.spyOn(console, 'info').mockImplementation();
-    const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const error = vi.spyOn(console, 'error').mockImplementation(() => []);
+    const info = vi.spyOn(console, 'info').mockImplementation(() => []);
+    const exit = vi.spyOn(process, 'exit').mockImplementation(() => []);
 
     jest
       .spyOn(colorizeUserVersionMod, 'colorizeUserVersion')
       .mockImplementation(({ version }) => version);
 
-    jest.spyOn(compareUserVersionsMod, 'compareUserVersions').mockImplementation(() => ({
+    vi.spyOn(compareUserVersionsMod, 'compareUserVersions').mockImplementation(() => ({
       userForcIsGt,
       userFuelCoreIsGt,
       userForcIsEq,
       userFuelCoreIsEq,
     }));
 
-    jest.spyOn(getUserVersionsMod, 'getUserVersions').mockImplementation(() => ({
+    vi.spyOn(getUserVersionsMod, 'getUserVersions').mockImplementation(() => ({
       userForcVersion,
       userFuelCoreVersion,
     }));
 
-    jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+    vi.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
       FORC: '1.0.0',
       FUEL_CORE: '1.0.0',
       FUELS: '1.0.0',

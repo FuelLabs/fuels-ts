@@ -291,16 +291,16 @@ describe('Wallet Manager', () => {
       secret: WalletManagerSpec.mnemonic,
     });
     // Create object with methods to be able to
-    // use Jest.spyOn
+    // use vi.spyOn
     const listeners = {
       onLock: () => {},
       onUnlock: () => {},
       onUpdate: () => {},
     };
 
-    const apyLock = jest.spyOn(listeners, 'onLock');
-    const spyUnlock = jest.spyOn(listeners, 'onUnlock');
-    const spyUpdate = jest.spyOn(listeners, 'onUpdate');
+    const apyLock = vi.spyOn(listeners, 'onLock');
+    const spyUnlock = vi.spyOn(listeners, 'onUnlock');
+    const spyUpdate = vi.spyOn(listeners, 'onUpdate');
 
     walletManager.on('update', listeners.onUpdate);
     walletManager.on('lock', listeners.onLock);

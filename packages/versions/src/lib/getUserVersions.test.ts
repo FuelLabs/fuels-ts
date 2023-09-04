@@ -19,7 +19,7 @@ describe('getUserVersions.js', () => {
   }) {
     const { userForcVersion, userFuelCoreVersion, shouldThrow } = params;
 
-    const error = jest.spyOn(console, 'error').mockImplementation();
+    const error = vi.spyOn(console, 'error').mockImplementation(() => []);
 
     const mockedExecOk = jest.fn();
     mockedExecOk.mockReturnValueOnce(userForcVersion); // first call (forc)

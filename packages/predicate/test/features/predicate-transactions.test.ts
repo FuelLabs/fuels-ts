@@ -32,7 +32,7 @@ describe('Predicate', () => {
     it('includes predicate as input when sending a transaction', () => {
       const sendTransactionMock = jest
         .spyOn(Account.prototype, 'sendTransaction')
-        .mockImplementation();
+        .mockImplementation(() => []);
 
       predicate.sendTransaction(request);
 
@@ -45,7 +45,7 @@ describe('Predicate', () => {
     it('includes predicate as input when simulating a transaction', () => {
       const sendTransactionMock = jest
         .spyOn(Account.prototype, 'simulateTransaction')
-        .mockImplementation();
+        .mockImplementation(() => []);
 
       predicate.simulateTransaction(request);
 
