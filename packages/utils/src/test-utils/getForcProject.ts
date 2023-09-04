@@ -1,5 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { basename, join } from 'path';
 
 import { normalizeString } from '../utils/normalizeString';
@@ -21,6 +21,9 @@ export const getProjectAbiPath = (params: IGetForcProjectParams) =>
 export const getProjectBinPath = (params: IGetForcProjectParams) =>
   join(getProjectDebugDir(params), `${params.projectName}.bin`);
 
+export const getProjectStorageSlotsPath = (params: IGetForcProjectParams) =>
+  join(getProjectDebugDir(params), `${params.projectName}-storage_slots.json`);
+
 export const getProjectAbiName = (params: IGetForcProjectParams) => `${params.projectName}-abi`;
 
 export const getProjectNormalizedName = (params: IGetForcProjectParams) =>
@@ -30,6 +33,15 @@ export const getProjectAbi = (params: IGetForcProjectParams) => {
   const projectPath = getProjectAbiPath(params);
   const abiContents = JSON.parse(readFileSync(projectPath, 'utf-8'));
   return abiContents;
+};
+
+export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
+  const storageSlotsFilePath = getProjectStorageSlotsPath(params);
+  if (!existsSync(storageSlotsFilePath)) {
+    return [];
+  }
+  const storageSlots = JSON.parse(readFileSync(storageSlotsFilePath, 'utf-8'));
+  return storageSlots;
 };
 
 export const getForcProject = <T = unknown>(projectDir: string) => {
@@ -48,11 +60,16 @@ export const getForcProject = <T = unknown>(projectDir: string) => {
   const abiName = getProjectAbiName(params);
   const abiContents: T = getProjectAbi(params);
   const normalizedName = getProjectNormalizedName(params);
+  const storageSlots: Array<{
+    key: string;
+    value: string;
+  }> = getProjectStorageSlots(params);
 
   const inputGlobal = `${debugDir}/*-abi.json`;
 
   return {
     name: projectName,
+    storageSlots,
     normalizedName,
     debugDir,
     tempDir,

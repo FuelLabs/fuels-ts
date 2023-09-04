@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.54.1",
+  "version": "0.55.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -31,10 +31,10 @@
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/utils": "workspace:*"
+    "@fuel-ts/errors": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"
