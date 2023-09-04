@@ -1,5 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
@@ -830,12 +830,12 @@ describe('Contract', () => {
       contract.functions.return_bytes(), // returns heap type Bytes
     ];
 
-    const { error } = await safeExec(() => contract.multiCall(calls).call());
-
-    expect(<FuelError>error).toBeInstanceOf(FuelError);
-    expect((<FuelError>error)?.code).toBe(ErrorCode.INVALID_MULTICALL);
-    expect((<FuelError>error)?.message).toBe(
-      'Only one call that returns a heap type is allowed on a multicall'
+    await expectToThrowFuelError(
+      () => contract.multiCall(calls).call(),
+      new FuelError(
+        ErrorCode.INVALID_MULTICALL,
+        'Only one call that returns a heap type is allowed on a multicall'
+      )
     );
   });
 
@@ -856,12 +856,12 @@ describe('Contract', () => {
       contract.functions.return_context_amount(),
     ];
 
-    const { error } = await safeExec(() => contract.multiCall(calls).call());
-
-    expect(<FuelError>error).toBeInstanceOf(FuelError);
-    expect((<FuelError>error)?.code).toBe(ErrorCode.INVALID_MULTICALL);
-    expect((<FuelError>error)?.message).toBe(
-      'The contract call with the heap type return must be at the last position on the multicall'
+    await expectToThrowFuelError(
+      () => contract.multiCall(calls).call(),
+      new FuelError(
+        ErrorCode.INVALID_MULTICALL,
+        'The contract call with the heap type return must be at the last position on the multicall'
+      )
     );
   });
 
