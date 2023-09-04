@@ -243,19 +243,14 @@ export class SparseMerkleTree {
 
   update(key: string, value: string): void {
     const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(key, this.root);
-
-    let newRoot;
-    if (value === ZERO) {
-      newRoot = this.deleteWithSideNodes(key, sideNodes, oldLeafHash, oldLeafData);
-    } else {
-      newRoot = this.updateWithSideNodes(key, value, sideNodes, oldLeafHash, oldLeafData);
-    }
-
+    const newRoot = this.updateWithSideNodes(key, value, sideNodes, oldLeafHash, oldLeafData);
     this.setRoot(newRoot);
   }
 
   delete(key: string): void {
-    this.update(key, ZERO);
+    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(key, this.root);
+    const newRoot = this.deleteWithSideNodes(key, sideNodes, oldLeafHash, oldLeafData);
+    this.setRoot(newRoot);
   }
 
   prove(key: string): SparseMerkleProof {
