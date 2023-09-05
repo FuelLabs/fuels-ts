@@ -8,10 +8,11 @@ import {
 } from './rewriteVersions';
 
 // https://stackoverflow.com/a/72885576
-jest.mock('fs', () => ({
-  __esModule: true,
-  ...jest.requireActual('fs'),
-}));
+// TODO: FIX VITETEST MOCKS
+// jest.mock('fs', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('fs'),
+// }));
 
 describe('rewriteVersions.js', () => {
   function modifyEnv() {

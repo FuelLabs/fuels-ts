@@ -3,10 +3,11 @@ import * as childProcessMod from 'child_process';
 import { getUserVersions } from './getUserVersions';
 
 // https://stackoverflow.com/a/72885576
-jest.mock('child_process', () => ({
-  __esModule: true,
-  ...jest.requireActual('child_process'),
-}));
+// TODO: FIX VITETEST MOCKS
+// jest.mock('child_process', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('child_process'),
+// }));
 
 describe('getUserVersions.js', () => {
   /*

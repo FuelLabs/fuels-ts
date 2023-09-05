@@ -1,9 +1,10 @@
 import { BooleanCoder } from './boolean';
 
-jest.mock('@fuel-ts/math', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/math'),
-}));
+// TODO: FIX VITETEST MOCKS
+// jest.mock('@fuel-ts/math', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('@fuel-ts/math'),
+// }));
 
 describe('BooleanCoder', () => {
   const TRUE_DECODED = true;

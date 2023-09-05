@@ -14,10 +14,11 @@ import * as keystoreWMod from './keystore-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-jest.mock('@fuel-ts/providers', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/providers'),
-}));
+// TODO: FIX VITETEST MOCKS
+// jest.mock('@fuel-ts/providers', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('@fuel-ts/providers'),
+// }));
 
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', () => {

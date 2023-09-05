@@ -16,10 +16,11 @@ import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
 
-jest.mock('@fuel-ts/providers', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/providers'),
-}));
+// TODO: FIX VITETEST MOCKS
+// jest.mock('@fuel-ts/providers', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('@fuel-ts/providers'),
+// }));
 
 afterEach(() => {
   vi.restoreAllMocks();

@@ -10,10 +10,11 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-jest.mock('@fuels/vm-asm', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuels/vm-asm'),
-}));
+// TODO: FIX VITETEST MOCKS
+// jest.mock('@fuels/vm-asm', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('@fuels/vm-asm'),
+// }));
 
 describe('util', () => {
   afterEach(() => {
