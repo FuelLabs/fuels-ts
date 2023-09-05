@@ -22,17 +22,16 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "lodash.clonedeep": "^4.5.0"
+    "ethers": "^6.7.1",
+    "ramda": "^0.29.0"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
-    "@types/lodash.clonedeep": "^4.5.7"
+    "@types/ramda": "^0.29.3"
   }
 }
