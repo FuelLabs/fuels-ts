@@ -222,7 +222,7 @@ describe('Account', () => {
       addResourceInputsAndOutputs,
     } as unknown as TransactionRequest;
 
-    const getResourcesToSpendSpy = jest
+    const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementationOnce(() => Promise.resolve([]));
 
@@ -268,11 +268,11 @@ describe('Account', () => {
 
     const resources: Resource[] = [];
 
-    const getResourcesToSpend = jest
+    const getResourcesToSpend = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementation(() => Promise.resolve(resources));
 
-    const sendTransaction = jest
+    const sendTransaction = vi
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
 
@@ -347,15 +347,15 @@ describe('Account', () => {
 
     const transactionResponse = {} as unknown as TransactionResponse;
 
-    const scriptTransactionRequest = jest
+    const scriptTransactionRequest = vi
       .spyOn(providersMod, 'ScriptTransactionRequest')
       .mockImplementation(() => request);
 
-    const getResourcesToSpend = jest
+    const getResourcesToSpend = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementation(() => Promise.resolve(resources));
 
-    const sendTransaction = jest
+    const sendTransaction = vi
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
@@ -404,15 +404,15 @@ describe('Account', () => {
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
 
-    const transactionRequestify = jest
+    const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const sendTransaction = jest
+    const sendTransaction = vi
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
@@ -439,15 +439,15 @@ describe('Account', () => {
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const callResult = 'callResult' as unknown as CallResult;
 
-    const transactionRequestify = jest
+    const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const simulate = jest
+    const simulate = vi
       .spyOn(providersMod.Provider.prototype, 'simulate')
       .mockImplementation(() => Promise.resolve(callResult));
 

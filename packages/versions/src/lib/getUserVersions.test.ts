@@ -29,7 +29,7 @@ describe('getUserVersions.js', () => {
       throw new Error();
     });
 
-    const execSync = jest
+    const execSync = vi
       .spyOn(childProcessMod, 'execSync')
       .mockImplementation(shouldThrow ? execSyncThrow : mockedExecOk);
 

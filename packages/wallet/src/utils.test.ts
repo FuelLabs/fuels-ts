@@ -60,9 +60,7 @@ describe('util', () => {
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
-    const encode = jest
-      .spyOn(NumberCoder.prototype, 'encode')
-      .mockReturnValue(Uint8Array.from(byte));
+    const encode = vi.spyOn(NumberCoder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
 
     const arrayify = vi.spyOn(arrayfyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
 

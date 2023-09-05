@@ -89,7 +89,7 @@ describe('WalletUnlocked', () => {
     const transactionRequest = sendTransactionTest.transaction;
     let signature: BytesLike | undefined;
     // Intercept Provider.sendTransaction to collect signature
-    const spy = jest
+    const spy = vi
       .spyOn(wallet.provider, 'sendTransaction')
       .mockImplementation(async (transaction) => {
         signature = transaction.witnesses?.[0];
@@ -193,19 +193,19 @@ describe('WalletUnlocked', () => {
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const callResult = 'callResult' as unknown as CallResult;
 
-    const transactionRequestify = jest
+    const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const call = jest
+    const call = vi
       .spyOn(providersMod.Provider.prototype, 'call')
       .mockImplementation(() => Promise.resolve(callResult));
 
-    const populateTransactionWitnessesSignatureSpy = jest
+    const populateTransactionWitnessesSignatureSpy = vi
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
       .mockImplementationOnce(() => Promise.resolve(transactionRequestLike));
 

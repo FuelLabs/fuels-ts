@@ -38,9 +38,9 @@ describe('cli.js', () => {
     const info = vi.spyOn(console, 'info').mockImplementation(() => []);
     const exit = vi.spyOn(process, 'exit').mockImplementation(() => []);
 
-    jest
-      .spyOn(colorizeUserVersionMod, 'colorizeUserVersion')
-      .mockImplementation(({ version }) => version);
+    vi.spyOn(colorizeUserVersionMod, 'colorizeUserVersion').mockImplementation(
+      ({ version }) => version
+    );
 
     vi.spyOn(compareUserVersionsMod, 'compareUserVersions').mockImplementation(() => ({
       userForcIsGt,
