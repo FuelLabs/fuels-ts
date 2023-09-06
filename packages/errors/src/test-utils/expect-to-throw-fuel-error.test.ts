@@ -3,7 +3,7 @@ import { FuelError } from '..';
 import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
 
 describe('expect-to-throw-fuel-error', () => {
-  const otherError = new Error('Error 1');
+  const otherError = new Error('Original Error');
   const fuelError = new FuelError(FuelError.CODES.PARSE_FAILED, 'FuelError 1');
   // @ts-expect-error creating invalid error with no `code`
   const fuelErrorCodeless: FuelError = { message: 'FuelError 2' };
@@ -72,5 +72,11 @@ describe('expect-to-throw-fuel-error', () => {
     const m = `Expected error code '${fuelErrorInvalid.code}' is not a valid FuelError code.`;
     await expect(fn).rejects.toThrow(m);
     await expect(fnAsync).rejects.toThrow(m);
+  });
+
+  it(`contain information about original error`, async () => {
+    const errFn = genericThrower(otherError);
+    const fn = () => expectToThrowFuelError(errFn, fuelError);
+    await expect(fn).rejects.toThrow('Thrown error >>> Error: Original Error');
   });
 });

@@ -22,15 +22,19 @@ export const expectToThrowFuelError = async (
   const { error: thrownError } = await safeExec<unknown, FuelError>(lambda);
 
   if (!thrownError) {
-    throw new Error("Passed-in lambda didn't throw.");
+    throw new Error(`Passed-in lambda didn't throw.`);
   }
 
+  const thrownErrorStr = `Thrown error >>> ${thrownError.toString()}`;
+
   if (!thrownError.code) {
-    throw new Error('Thrown error must contain a code.');
+    throw new Error(`Thrown error must contain a code. ${thrownErrorStr}`);
   }
 
   if (!codes.includes(thrownError.code)) {
-    throw new Error(`Thrown error code '${thrownError.code}' is not a valid FuelError code.`);
+    throw new Error(
+      `Thrown error code '${thrownError.code}' is not a valid FuelError code. ${thrownErrorStr}`
+    );
   }
 
   expect(thrownError.name).toEqual('FuelError');
