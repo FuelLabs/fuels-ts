@@ -1,5 +1,5 @@
 import { concat, hexlify } from '@ethersproject/bytes';
-import type * as asm from '@fuels/vm-asm';
+import * as asm from '@fuels/vm-asm';
 
 asm.initWasm().catch();
 
