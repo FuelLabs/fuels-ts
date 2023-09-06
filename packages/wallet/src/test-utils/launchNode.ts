@@ -169,7 +169,7 @@ export const launchNodeAndGetWallets = async ({
     port,
   } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
 
-  const provider = new Provider(`http://${ip}:${port}/graphql`);
+  const provider = await Provider.connect(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {
