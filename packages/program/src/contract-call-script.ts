@@ -107,7 +107,6 @@ function getInstructions(offsets: CallOpcodeParamsOffset[], outputs: CallOutputI
   }
 
   multiCallInstructions.push(asm.ret(0x01));
-
   return multiCallInstructions.toBytes();
 }
 
