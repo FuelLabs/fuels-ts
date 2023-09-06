@@ -73,7 +73,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const script = getContractCallScript(this.functionInvocationScopes.length);
+    const script = getContractCallScript(this.functionInvocationScopes);
     const provider = this.program.provider as Provider;
     const consensusParams = provider.getConsensusParams();
     if (!consensusParams) {
@@ -95,7 +95,7 @@ export class BaseInvocationScope<TReturn = any> {
     calls.forEach((c) => {
       this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
-    const contractCallScript = getContractCallScript(this.functionInvocationScopes.length);
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes);
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
