@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
@@ -806,6 +808,61 @@ describe('Contract', () => {
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  it('should ensure multicall does not allow multiple calls that return heap types', async () => {
+    const wallet = Wallet.generate();
+    await seedTestWallet(wallet, [
+      {
+        amount: bn(1_000),
+        assetId: BaseAssetId,
+      },
+    ]);
+    const factory = new ContractFactory(contractBytecode, abiJSON, wallet);
+
+    const contract = await factory.deployContract();
+
+    const vector = [5, 4, 3, 2, 1];
+
+    const calls = [
+      contract.functions.return_context_amount(),
+      contract.functions.return_vector(vector), // returns heap type Vec
+      contract.functions.return_bytes(), // returns heap type Bytes
+    ];
+
+    await expectToThrowFuelError(
+      () => contract.multiCall(calls).call(),
+      new FuelError(
+        ErrorCode.INVALID_MULTICALL,
+        'Only one call that returns a heap type is allowed on a multicall'
+      )
+    );
+  });
+
+  it('should ensure multicall only allows calls that return a heap type on last position', async () => {
+    const wallet = Wallet.generate();
+    await seedTestWallet(wallet, [
+      {
+        amount: bn(1_000),
+        assetId: BaseAssetId,
+      },
+    ]);
+    const factory = new ContractFactory(contractBytecode, abiJSON, wallet);
+
+    const contract = await factory.deployContract();
+
+    const calls = [
+      contract.functions.return_bytes(), // returns heap type Bytes
+      contract.functions.return_context_amount(),
+    ];
+
+    await expectToThrowFuelError(
+      () => contract.multiCall(calls).call(),
+      new FuelError(
+        ErrorCode.INVALID_MULTICALL,
+        'The contract call with the heap type return must be at the last position on the multicall'
+      )
+    );
   });
 
   it('Read only call', async () => {
