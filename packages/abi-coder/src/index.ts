@@ -3,7 +3,6 @@ export { ArrayCoder } from './coders/array';
 export { B256Coder } from './coders/b256';
 export { B512Coder } from './coders/b512';
 export { BooleanCoder } from './coders/boolean';
-export { ByteCoder } from './coders/byte';
 export { EnumCoder } from './coders/enum';
 export { NumberCoder } from './coders/number';
 export { StringCoder } from './coders/string';

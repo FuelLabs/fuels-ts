@@ -24,7 +24,7 @@ import {
 } from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
 
-import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
+import type { GqlReceipt } from '../__generated__/operations';
 import { GqlReceiptType } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 
@@ -65,7 +65,7 @@ export const getReceiptsWithMissingData = (receipts: Array<TransactionResultRece
 
 const hexOrZero = (hex?: string | null) => hex || ZeroBytes32;
 
-export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
+export function assembleReceiptByType(receipt: GqlReceipt) {
   switch (receipt.receiptType) {
     case GqlReceiptType.Call: {
       const callReceipt: ReceiptCall = {

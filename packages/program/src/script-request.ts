@@ -237,16 +237,6 @@ export class ScriptRequest<TData = void, TResult = void> {
   }
 
   /**
-   * Gets the offset for the contract call argument (used for struct inputs).
-   *
-   * @returns The memory offset.
-   */
-  // getArgOffset() {
-  //   const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
-  //   return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-  // }
-
-  /**
    * Encodes the data for a script call.
    *
    * @param data - The script data.

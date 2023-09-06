@@ -17,6 +17,11 @@ export function getInputsMessage(inputs: Input[]) {
 }
 
 /** @hidden */
+export function getInputsContract(inputs: Input[]) {
+  return getInputsByType<InputContract>(inputs, InputType.Contract);
+}
+
+/** @hidden */
 export function getInputFromAssetId(inputs: Input[], assetId: string) {
   const coinInputs = getInputsCoin(inputs);
   const messageInputs = getInputsMessage(inputs);

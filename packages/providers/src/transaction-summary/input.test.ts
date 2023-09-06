@@ -13,6 +13,7 @@ import {
   getInputContractFromIndex,
   getInputFromAssetId,
   getInputsCoin,
+  getInputsContract,
   getInputsMessage,
 } from './input';
 
@@ -38,6 +39,20 @@ describe('transaction-summary/input', () => {
     expect(messageInputs[0]).toStrictEqual(MOCK_INPUT_MESSAGE);
 
     const emptyInputs = getInputsMessage([MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN]);
+    expect(emptyInputs.length).toEqual(0);
+  });
+
+  it('should ensure getInputsContract return correct inputs', () => {
+    const messageInputs = getInputsContract([
+      MOCK_INPUT_COIN,
+      MOCK_INPUT_CONTRACT,
+      MOCK_INPUT_MESSAGE,
+    ]);
+
+    expect(messageInputs.length).toEqual(1);
+    expect(messageInputs[0]).toStrictEqual(MOCK_INPUT_CONTRACT);
+
+    const emptyInputs = getInputsContract([MOCK_INPUT_COIN, MOCK_INPUT_MESSAGE]);
     expect(emptyInputs.length).toEqual(0);
   });
 

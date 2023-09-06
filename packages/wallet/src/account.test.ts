@@ -222,11 +222,11 @@ describe('Account', () => {
     const resources: Resource[] = [];
 
     const calculateFee = jest.fn(() => fee);
-    const addResourceInputsAndOutputs = jest.fn();
+    const addResources = jest.fn();
 
     const request = {
       calculateFee,
-      addResourceInputsAndOutputs,
+      addResources,
     } as unknown as TransactionRequest;
 
     const getResourcesToSpendSpy = jest
@@ -245,8 +245,8 @@ describe('Account', () => {
     expect(getResourcesToSpendSpy.mock.calls.length).toBe(1);
     expect(getResourcesToSpendSpy.mock.calls[0][0]).toEqual([fee]);
 
-    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(1);
-    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
+    expect(addResources.mock.calls.length).toBe(1);
+    expect(addResources.mock.calls[0][0]).toEqual(resources);
   });
 
   it('should execute transfer just as fine', async () => {
@@ -266,12 +266,12 @@ describe('Account', () => {
 
     const calculateFee = jest.fn(() => fee);
     const addCoinOutput = jest.fn();
-    const addResourceInputsAndOutputs = jest.fn();
+    const addResources = jest.fn();
 
     const request = {
       calculateFee,
       addCoinOutput,
-      addResourceInputsAndOutputs,
+      addResources,
     } as unknown as ScriptTransactionRequest;
 
     const resources: Resource[] = [];
@@ -301,8 +301,8 @@ describe('Account', () => {
     expect(getResourcesToSpend.mock.calls.length).toBe(1);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
 
-    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(1);
-    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
+    expect(addResources.mock.calls.length).toBe(1);
+    expect(addResources.mock.calls[0][0]).toEqual(resources);
 
     expect(sendTransaction.mock.calls.length).toBe(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(request);
@@ -325,8 +325,8 @@ describe('Account', () => {
       fee,
     ]);
 
-    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(2);
-    expect(addResourceInputsAndOutputs.mock.calls[1][0]).toEqual(resources);
+    expect(addResources.mock.calls.length).toBe(2);
+    expect(addResources.mock.calls[1][0]).toEqual(resources);
 
     expect(sendTransaction.mock.calls.length).toBe(2);
     expect(sendTransaction.mock.calls[1][0]).toEqual(request);
@@ -345,11 +345,11 @@ describe('Account', () => {
     };
 
     const calculateFee = jest.fn(() => fee);
-    const addResourceInputsAndOutputs = jest.fn();
+    const addResources = jest.fn();
 
     const request = {
       calculateFee,
-      addResourceInputsAndOutputs,
+      addResources,
     } as unknown as ScriptTransactionRequest;
 
     const resources: Resource[] = [];
@@ -381,8 +381,8 @@ describe('Account', () => {
 
     expect(calculateFee.mock.calls.length).toBe(1);
 
-    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(1);
-    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
+    expect(addResources.mock.calls.length).toBe(1);
+    expect(addResources.mock.calls[0][0]).toEqual(resources);
 
     expect(getResourcesToSpend.mock.calls.length).toBe(1);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
@@ -399,8 +399,8 @@ describe('Account', () => {
 
     expect(calculateFee.mock.calls.length).toBe(2);
 
-    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(2);
-    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
+    expect(addResources.mock.calls.length).toBe(2);
+    expect(addResources.mock.calls[0][0]).toEqual(resources);
 
     expect(getResourcesToSpend.mock.calls.length).toBe(2);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);

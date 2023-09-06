@@ -2,21 +2,23 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
+import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
+import type { MessageCoin } from '../message';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
-import { NoWitnessAtIndexError, NoWitnessByOwnerError, ChangeOutputCollisionError } from './errors';
+import { NoWitnessAtIndexError, ChangeOutputCollisionError } from './errors';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -87,12 +89,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = bn(gasPrice ?? 0);
-    this.gasLimit = bn(gasLimit ?? 0);
+    this.gasPrice = bn(gasPrice);
+    this.gasLimit = bn(gasLimit);
     this.maturity = maturity ?? 0;
-    this.inputs = [...(inputs ?? [])];
-    this.outputs = [...(outputs ?? [])];
-    this.witnesses = [...(witnesses ?? [])];
+    this.inputs = inputs ?? [];
+    this.outputs = outputs ?? [];
+    this.witnesses = witnesses ?? [];
   }
 
   /**
@@ -226,130 +228,188 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * Returns the witnessIndex of the found CoinInput.
    */
-  getCoinInputWitnessIndexByOwner(owner: AddressLike): number | null {
+  getCoinInputWitnessIndexByOwner(owner: AddressLike): number | undefined {
     const ownerAddress = addressify(owner);
-    return (
-      this.inputs.find(
-        (input): input is CoinTransactionRequestInput =>
-          input.type === InputType.Coin && hexlify(input.owner) === ownerAddress.toB256()
-      )?.witnessIndex ??
-      this.inputs.find(
-        (input): input is MessageTransactionRequestInput =>
-          input.type === InputType.Message && hexlify(input.recipient) === ownerAddress.toB256()
-      )?.witnessIndex ??
-      null
-    );
+
+    const found = this.inputs.find((input) => {
+      switch (input.type) {
+        case InputType.Coin:
+          return hexlify((<CoinTransactionRequestInput>input).owner) === ownerAddress.toB256();
+        case InputType.Message:
+          return (
+            hexlify((<MessageTransactionRequestInput>input).recipient) === ownerAddress.toB256()
+          );
+        default:
+          return false;
+      }
+    });
+
+    return (<CoinTransactionRequestInput>found)?.witnessIndex;
   }
 
   /**
-   * Updates the witness for the given CoinInput owner.
+   * Adds a single coin input to the transaction and a change output for the related
+   * assetId, if one it was not added yet.
    *
-   * @param owner - The owner of the CoinInput.
-   * @param witness - The witness to update.
-   * @throws If no witness exists for the given owner.
+   * @param coin - Coin resource.
+   * @param predicate - Predicate bytes.
+   * @param predicateData - Predicate data bytes.
    */
-  updateWitnessByCoinInputOwner(owner: AddressLike, witness: BytesLike) {
-    const witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
+  addCoinInput(coin: Coin, predicate?: AbstractPredicate) {
+    const { assetId, owner, amount } = coin;
 
-    if (!witnessIndex) {
-      throw new NoWitnessByOwnerError(addressify(owner));
+    let witnessIndex;
+
+    if (predicate) {
+      witnessIndex = 0;
+    } else {
+      witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
+
+      // Insert a dummy witness if no witness exists
+      if (typeof witnessIndex !== 'number') {
+        witnessIndex = this.createWitness();
+      }
     }
 
-    this.updateWitness(witnessIndex, witness);
-  }
-
-  /**
-   * Adds a single resource to the transaction by adding inputs and outputs.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addResourceInputAndOutput(resource: Resource) {
-    const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
-    const assetId = isCoin(resource) ? resource.assetId : BaseAssetId;
-    const type = isCoin(resource) ? InputType.Coin : InputType.Message;
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
-
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
+    const input: CoinTransactionRequestInput = {
+      ...coin,
+      type: InputType.Coin,
+      owner: owner.toB256(),
+      amount,
+      assetId,
+      txPointer: '0x00000000000000000000000000000000',
+      witnessIndex,
+      predicate: predicate?.bytes,
+      predicateData: predicate?.predicateData,
+    };
 
     // Insert the Input
-    this.pushInput(
-      isCoin(resource)
-        ? ({
-            type,
-            ...resource,
-            owner: resource.owner.toB256(),
-            witnessIndex,
-            txPointer: '0x00000000000000000000000000000000',
-          } as CoinTransactionRequestInput)
-        : ({
-            type,
-            ...resource,
-            sender: resource.sender.toB256(),
-            recipient: resource.recipient.toB256(),
-            witnessIndex,
-            txPointer: '0x00000000000000000000000000000000',
-          } as MessageTransactionRequestInput)
-    );
-
-    // Find the ChangeOutput for the AssetId of the Resource
-    const changeOutput = this.getChangeOutputs().find(
-      (output) => hexlify(output.assetId) === assetId
-    );
-
-    // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== ownerAddress.toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
+    this.pushInput(input);
 
     // Insert a ChangeOutput if it does not exist
-    if (!changeOutput) {
-      this.pushOutput({
-        type: OutputType.Change,
-        to: ownerAddress.toB256(),
-        assetId,
-      });
+    this.addChangeOutput(owner, assetId);
+  }
+
+  /**
+   * Adds a single message input to the transaction and a change output for the
+   * baseAssetId, if one it was not added yet.
+   *
+   * @param message - Message resource.
+   * @param predicate - Predicate bytes.
+   * @param predicateData - Predicate data bytes.
+   */
+  addMessageInput(message: MessageCoin, predicate?: AbstractPredicate) {
+    const { recipient, sender, amount } = message;
+
+    const assetId = BaseAssetId;
+
+    let witnessIndex;
+
+    if (predicate) {
+      witnessIndex = 0;
+    } else {
+      witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
+
+      // Insert a dummy witness if no witness exists
+      if (typeof witnessIndex !== 'number') {
+        witnessIndex = this.createWitness();
+      }
+    }
+
+    const input: MessageTransactionRequestInput = {
+      ...message,
+      type: InputType.Message,
+      sender: sender.toB256(),
+      recipient: recipient.toB256(),
+      amount,
+      witnessIndex,
+      predicate: predicate?.bytes,
+      predicateData: predicate?.predicateData,
+    };
+
+    // Insert the Input
+    this.pushInput(input);
+
+    // Insert a ChangeOutput if it does not exist
+    this.addChangeOutput(recipient, assetId);
+  }
+
+  /**
+   * Adds a single resource to the transaction by adding a coin/message input and a
+   * change output for the related assetId, if one it was not added yet.
+   *
+   * @param resource - The resource to add.
+   * @returns This transaction.
+   */
+  addResource(resource: Resource) {
+    if (isCoin(resource)) {
+      this.addCoinInput(resource);
+    } else {
+      this.addMessageInput(resource);
     }
 
     return this;
   }
 
   /**
-   * Adds multiple resources to the transaction by adding inputs and outputs.
+   * Adds multiple resources to the transaction by adding coin/message inputs and change
+   * outputs from the related assetIds.
    *
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addResourceInputsAndOutputs(resources: ReadonlyArray<Resource>) {
-    resources.forEach((resource) => this.addResourceInputAndOutput(resource));
+  addResources(resources: ReadonlyArray<Resource>) {
+    resources.forEach((resource) => this.addResource(resource));
 
     return this;
   }
 
   /**
-   * Adds a coin input to the transaction.
+   * Adds multiple resources to the transaction by adding coin/message inputs and change
+   * outputs from the related assetIds.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
+   */
+  addPredicateResource(resource: Resource, predicate: AbstractPredicate) {
+    if (isCoin(resource)) {
+      this.addCoinInput(resource, predicate);
+    } else {
+      this.addMessageInput(resource, predicate);
+    }
+
+    return this;
+  }
+
+  /**
+   * Adds multiple predicate coin/message inputs to the transaction and change outputs
+   * from the related assetIds.
+   *
+   * @param resources - The resources to add.
+   * @returns This transaction.
+   */
+  addPredicateResources(resources: Resource[], predicate: AbstractPredicate) {
+    resources.forEach((resource) => this.addPredicateResource(resource, predicate));
+
+    return this;
+  }
+
+  /**
+   * Adds a coin output to the transaction.
    *
    * @param to - Address of the owner.
    * @param amount - Amount of coin.
    * @param assetId - Asset ID of coin.
    */
-  addCoinOutput(
-    /** Address of the destination */
-    to: AddressLike,
-    /** Amount of coins */
-    amount: BigNumberish,
-    /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId
-  ) {
+  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike = BaseAssetId) {
     this.pushOutput({
       type: OutputType.Coin,
       to: addressify(to).toB256(),
       amount,
       assetId,
     });
+
+    return this;
   }
 
   /**
@@ -358,12 +418,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param to - Address of the destination.
    * @param quantities - Quantities of coins.
    */
-  addCoinOutputs(
-    /** Address of the destination */
-    to: AddressLike,
-    /** Quantities of coins */
-    quantities: CoinQuantityLike[]
-  ) {
+  addCoinOutputs(to: AddressLike, quantities: CoinQuantityLike[]) {
     quantities.map(coinQuantityfy).forEach((quantity) => {
       this.pushOutput({
         type: OutputType.Coin,
@@ -372,6 +427,35 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         assetId: quantity.assetId,
       });
     });
+
+    return this;
+  }
+
+  /**
+   * Adds a change output to the transaction.
+   *
+   * @param to - Address of the owner.
+   * @param assetId - Asset ID of coin.
+   */
+  addChangeOutput(to: AddressLike, assetId: BytesLike = BaseAssetId) {
+    // Find the ChangeOutput for the AssetId of the Resource
+    const changeOutput = this.getChangeOutputs().find(
+      (output) => hexlify(output.assetId) === assetId
+    );
+
+    // Throw if the existing ChangeOutput is not for the same owner
+    if (changeOutput && hexlify(changeOutput.to) !== addressify(to).toB256()) {
+      throw new ChangeOutputCollisionError();
+    }
+
+    // Insert a ChangeOutput if it does not exist
+    if (!changeOutput) {
+      this.pushOutput({
+        type: OutputType.Change,
+        to: addressify(to).toB256(),
+        assetId,
+      });
+    }
   }
 
   /**
@@ -379,14 +463,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   byteSize() {
     return this.toTransactionBytes().length;
-  }
-
-  /**
-   * @hidden
-   */
-  chargeableByteSize() {
-    const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
-    return bn(this.toTransactionBytes().length - witnessSize);
   }
 
   /**

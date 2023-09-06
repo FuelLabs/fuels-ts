@@ -1,7 +1,7 @@
 {
   "name": "demo-react-vite",
   "private": true,
-  "version": "0.0.10",
+  "version": "0.0.14",
   "type": "module",
   "scripts": {
     "original:dev": "vite",
@@ -11,7 +11,7 @@
     "pretest": "pnpm original:build"
   },
   "dependencies": {
-    "@fuels/vm-asm": "0.34.1",
+    "@fuels/vm-asm": "0.36.1",
     "fuels": "workspace:*",
     "react-dom": "^18.2.0",
     "react": "^18.2.0"

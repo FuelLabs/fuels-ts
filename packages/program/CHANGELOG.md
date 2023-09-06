@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.55.0
+
+### Minor Changes
+
+- improve transaction api for using predicates on custom transactions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1216](https://github.com/FuelLabs/fuels-ts/pull/1216))
+
+## 0.54.1
+
+### Patch Changes
+
+- Upgrading vm/wasm libs, by [@arboleya](https://github.com/arboleya) (See [#1226](https://github.com/FuelLabs/fuels-ts/pull/1226))
+
+## 0.54.0
+
+## 0.53.0
+
+### Minor Changes
+
+- Added vector output, by [@camsjams](https://github.com/camsjams) (See [#1183](https://github.com/FuelLabs/fuels-ts/pull/1183))
+
 ## 0.52.0
 
 ## 0.51.0

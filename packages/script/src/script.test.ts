@@ -54,7 +54,7 @@ const callScript = async <TData, TResult>(
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
     const resources = await account.getResourcesToSpend(requiredCoinQuantities);
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
   }
 
   const response = await account.sendTransaction(request);
@@ -121,7 +121,7 @@ describe('Script', () => {
       arg_two: 1337,
     };
     const { response } = await callScript(wallet, scriptRequest, input);
-    const { transaction } = await response.fetch();
+    const transaction = await response.fetch();
 
     expect(transaction?.rawPayload).toBeDefined();
   });

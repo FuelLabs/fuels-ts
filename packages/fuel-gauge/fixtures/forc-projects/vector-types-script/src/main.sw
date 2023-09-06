@@ -211,7 +211,6 @@ impl Eq for Vec<SomeStruct<Vec<Vec<u32>>>> {
     }
 }
 
-
 fn main(
     u32_vec: Vec<u32>,
     vec_in_vec: Vec<Vec<u32>>,

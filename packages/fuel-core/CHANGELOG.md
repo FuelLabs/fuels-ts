@@ -1,5 +1,17 @@
 # @fuel-ts/fuel-core
 
+## 0.55.0
+
+## 0.54.1
+
+## 0.54.0
+
+## 0.53.0
+
+### Minor Changes
+
+- upgrade fuel-core from 0.20.3 to 0.20.4, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1212](https://github.com/FuelLabs/fuels-ts/pull/1212))
+
 ## 0.52.0
 
 ## 0.51.0

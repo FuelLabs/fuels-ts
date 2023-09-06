@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.55.0
+
+## 0.54.1
+
+## 0.54.0
+
+## 0.53.0
+
+### Patch Changes
+
+- 🐞 fix: MAX_GAS_PER_TX constant value to 10_000_000, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1213](https://github.com/FuelLabs/fuels-ts/pull/1213))
+
 ## 0.52.0
 
 ## 0.51.0
