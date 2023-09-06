@@ -823,7 +823,10 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall does not allow multiple calls that return heap types', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000),
@@ -852,7 +855,10 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000),
