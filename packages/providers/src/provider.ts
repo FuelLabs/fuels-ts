@@ -274,6 +274,7 @@ export default class Provider {
       this.consensusParamsCache[url] = consensusParameters;
     }
     this.operations = this.createOperations(url);
+    this.url = url;
   }
 
   /**
