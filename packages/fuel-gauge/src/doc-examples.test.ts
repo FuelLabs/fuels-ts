@@ -233,7 +233,7 @@ it('can create wallets', async () => {
 it('can connect to testnet', async () => {
   // #region provider-testnet
   // #context import { Provider, WalletUnlocked } from 'fuels';
-  const provider = await Provider.connect('https://beta-3.fuel.network/graphql');
+  const provider = await Provider.connect('https://beta-4.fuel.network/graphql');
   // Setup a private key
   const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
