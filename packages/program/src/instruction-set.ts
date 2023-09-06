@@ -1,6 +1,8 @@
 import { concat, hexlify } from '@ethersproject/bytes';
 import type * as asm from '@fuels/vm-asm';
 
+asm.initWasm().catch();
+
 /**
  * A wrapper around fuel-asm to make dynamic instructions and convert to different formats
  */
