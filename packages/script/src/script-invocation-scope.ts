@@ -26,13 +26,13 @@ export class ScriptInvocationScope<
 
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
-    const consensusParamsCache = (this.program.provider as Provider).getConsensusParams();
+    const chainInfoCache = (this.program.provider as Provider).getCachedChainInfo();
 
-    if (!consensusParamsCache) {
-      throw new Error('Provider must have consensus params cache');
+    if (!chainInfoCache) {
+      throw new Error('Provider must have chain info cache.');
     }
 
-    const maxInputs = consensusParamsCache.maxInputs.toNumber();
+    const maxInputs = chainInfoCache.consensusParameters.maxInputs.toNumber();
 
     const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;
     this.scriptRequest = new ScriptRequest(

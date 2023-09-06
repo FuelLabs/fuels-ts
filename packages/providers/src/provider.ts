@@ -210,7 +210,7 @@ export type ProviderCallParams = {
 /**
  * URL - Consensus Params mapping.
  */
-type ConsensusParamsCache = Record<string, ConsensusParameters>;
+type ChainInfoCache = Record<string, ChainInfo>;
 
 /**
  * A provider for connecting to a node
@@ -218,24 +218,24 @@ type ConsensusParamsCache = Record<string, ConsensusParameters>;
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
   cache?: MemoryCache;
-  consensusParamsCache: ConsensusParamsCache = {};
+  chainInfoCache: ChainInfoCache = {};
 
   /**
    * Constructor to initialize a Provider.
    *
    * @param url - GraphQL endpoint of the Fuel node
-   * @param consensusParams - Consensus parameters of the Fuel node
+   * @param chainInfo - Chain info of the Fuel node
    * @param options - Additional options for the provider
    * @hidden
    */
   constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    consensusParams: ConsensusParameters,
+    chainInfo: ChainInfo,
     public options: ProviderOptions = {}
   ) {
     this.operations = this.createOperations(url, options);
-    this.consensusParamsCache[url] = consensusParams;
+    this.chainInfoCache[url] = chainInfo;
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -245,33 +245,33 @@ export default class Provider {
    * @param options - Additional options for the provider
    */
   static async connect(url: string, options: ProviderOptions = {}) {
-    const consensusParameters = await this.getConsensusParamsWithoutInstance(url);
-    const provider = new Provider(url, consensusParameters, options);
+    const chainInfo = await this.getChainInfoWithoutInstance(url);
+    const provider = new Provider(url, chainInfo, options);
     return provider;
   }
 
   /**
-   * Re-fetches the consensus parameters from the chain for the current URL.
+   * Re-fetches the chain info from the chain for the current URL.
    */
-  async invalidateConsensusParamsCache() {
-    const { consensusParameters } = await this.getChain();
-    this.consensusParamsCache[this.url] = consensusParameters;
+  async invalidateChainInfoCache() {
+    const chainInfo = await this.getChain();
+    this.chainInfoCache[this.url] = chainInfo;
   }
 
   /**
-   * Returns the cached consensus parameters for the current URL.
+   * Returns the cached chainInfo for the current URL.
    */
-  getConsensusParams() {
-    return this.consensusParamsCache[this.url];
+  getCachedChainInfo() {
+    return this.chainInfoCache[this.url];
   }
 
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
   async updateUrl(url: string) {
-    if (!this.consensusParamsCache[url]) {
-      const consensusParameters = await Provider.getConsensusParamsWithoutInstance(url);
-      this.consensusParamsCache[url] = consensusParameters;
+    if (!this.chainInfoCache[url]) {
+      const chainInfo = await Provider.getChainInfoWithoutInstance(url);
+      this.chainInfoCache[url] = chainInfo;
     }
     this.operations = this.createOperations(url);
     this.url = url;
@@ -291,23 +291,13 @@ export default class Provider {
   }
 
   /**
-   * A method to get the consensus parameters for a given node URL when we don't have access to an instance of the Provider class.
+   * A method to get the chain info for a given node URL when we don't have access to an instance of the Provider class.
    */
-  static async getConsensusParamsWithoutInstance(url: string) {
+  static async getChainInfoWithoutInstance(url: string) {
     const gqlClient = new GraphQLClient(url);
     const operations = getOperationsSdk(gqlClient);
     const { chain } = await operations.getChain();
-    const { consensusParameters } = processGqlChain(chain);
-    return consensusParameters;
-  }
-
-  /**
-   * Connect provider to a different node url.
-   *
-   * @param url - The URL of the Fuel node to connect to.
-   */
-  connect(url: string) {
-    this.operations = this.createOperations(url);
+    return processGqlChain(chain);
   }
 
   /**

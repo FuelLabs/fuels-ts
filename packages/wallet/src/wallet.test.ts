@@ -86,8 +86,8 @@ describe('Wallet', () => {
     let signedTransaction;
     class ProviderCustom extends Provider {
       static async connect(url: string) {
-        const consensusParameters = await ProviderCustom.getConsensusParamsWithoutInstance(url);
-        const newProvider = new ProviderCustom(url, consensusParameters, {});
+        const chainInfo = await ProviderCustom.getChainInfoWithoutInstance(url);
+        const newProvider = new ProviderCustom(url, chainInfo, {});
         return newProvider;
       }
 

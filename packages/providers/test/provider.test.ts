@@ -674,17 +674,17 @@ describe('Provider', () => {
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual('http://127.0.0.1:4000/graphql');
-    expect(provider.consensusParamsCache['http://127.0.0.1:4000/graphql']).toBeDefined();
+    expect(provider.chainInfoCache['http://127.0.0.1:4000/graphql']).toBeDefined();
   });
 
-  it('invalidConsensusParamsCache', async () => {
+  it('invalidChainInfoCache', async () => {
     const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
 
     // spy on getChain
     const spyGetChain = jest.spyOn(provider, 'getChain');
 
     // invalidate cache
-    await provider.invalidateConsensusParamsCache();
+    await provider.invalidateChainInfoCache();
 
     // check if getChain was called
     expect(spyGetChain).toHaveBeenCalled();

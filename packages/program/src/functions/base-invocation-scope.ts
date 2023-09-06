@@ -75,10 +75,10 @@ export class BaseInvocationScope<TReturn = any> {
   protected get calls() {
     const script = getContractCallScript(this.functionInvocationScopes);
     const provider = this.program.provider as Provider;
-    const consensusParams = provider.getConsensusParams();
+    const consensusParams = provider.getCachedChainInfo().consensusParameters;
     if (!consensusParams) {
       throw new Error(
-        'Provider consensus params cache empty! Pls make sure you ran `await Provider.connect()` and not just `new Provider()`'
+        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.connect()``'
       );
     }
     const maxInputs = consensusParams.maxInputs.toNumber();
