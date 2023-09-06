@@ -766,6 +766,12 @@ describe('Contract', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
+      static async connect(url: string) {
+        const consensusParameters = await ProviderCustom.getConsensusParamsWithoutInstance(url);
+        const newProvider = new ProviderCustom(url, consensusParameters, {});
+        return newProvider;
+      }
+
       async sendTransaction(
         transactionRequestLike: TransactionRequestLike
       ): Promise<TransactionResponse> {

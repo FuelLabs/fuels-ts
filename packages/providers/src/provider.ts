@@ -292,7 +292,7 @@ export default class Provider {
   /**
    * A method to get the consensus parameters for a given node URL when we don't have access to an instance of the Provider class.
    */
-  private static async getConsensusParamsWithoutInstance(url: string) {
+  static async getConsensusParamsWithoutInstance(url: string) {
     const gqlClient = new GraphQLClient(url);
     const operations = getOperationsSdk(gqlClient);
     const { chain } = await operations.getChain();
