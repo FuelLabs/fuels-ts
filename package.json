@@ -72,6 +72,7 @@
     "@vitest/browser": "^0.34.3",
     "@vitest/coverage-istanbul": "^0.34.3",
     "@vitest/ui": "^0.34.3",
+    "buffer": "^6.0.3",
     "conventional-changelog-angular": "^5.0.13",
     "dotenv": "^9.0.2",
     "eslint": "^8.26.0",
