@@ -102,7 +102,10 @@ function getInstructions(offsets: CallOpcodeParamsOffset[], outputs: CallOutputI
     multiCallInstructions.extend(getSingleCallInstructions(offsets[i], outputs[i]).entries());
   }
 
-  multiCallInstructions.push(asm.ret(0x01));
+  if (multiCallInstructions.entries().length > 0) {
+    multiCallInstructions.push(asm.ret(0x01));
+  }
+
   return multiCallInstructions.toBytes();
 }
 
