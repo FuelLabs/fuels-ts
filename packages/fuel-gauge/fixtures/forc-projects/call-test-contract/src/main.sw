@@ -5,6 +5,7 @@ use std::context::*;
 use std::call_frames::*;
 use std::registers::context_gas;
 use std::contract_id::ContractId;
+use std::bytes::Bytes;
 
 enum TestB256Enum {
     Value: b256,
@@ -49,6 +50,8 @@ abi TestContract {
     fn echo_b256(a: b256) -> b256;
     fn add_ten(param: SingleParamStruct) -> u64;
     fn return_void();
+    fn return_vector(vector: Vec<u8>) -> Vec<u8>;
+    fn return_bytes() -> Bytes;
 
     #[payable]
     fn return_context_amount() -> u64;
@@ -166,5 +169,13 @@ impl TestContract for Contract {
             TestStringEnum::Data(val) => val,
         };
         enum_arg
+    }
+    fn return_vector(vector: Vec<u8>) -> Vec<u8> {
+        vector
+    }
+    fn return_bytes() -> Bytes {
+        let bytes = Bytes::with_capacity(8);
+
+        bytes
     }
 }

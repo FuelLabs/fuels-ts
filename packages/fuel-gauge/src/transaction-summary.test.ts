@@ -70,7 +70,7 @@ describe('TransactionSummary', () => {
       [calculatedFee.amount.add(amountToTransfer), BaseAssetId],
     ]);
 
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
 
     const tx = await wallet.sendTransaction(request);
 
@@ -134,7 +134,7 @@ describe('TransactionSummary', () => {
       [fee.amount.add(amountToTransfer), BaseAssetId],
     ]);
 
-    request.addResourceInputsAndOutputs(resources);
+    request.addResources(resources);
 
     const transactionRequest = await wallet.populateTransactionWitnessesSignature(request);
 
