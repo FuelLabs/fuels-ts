@@ -173,35 +173,21 @@ export const decodeContractCallScriptResult = (
 ): Uint8Array[] =>
   decodeCallResult(callResult, scriptResultDecoder(contractId, isOutputDataHeap), logs);
 
-const getCallInstructionsLength = (contractCalls: ContractCall[]): number => {
-  const singleStackCallLength = getSingleCallInstructions(
-    DEFAULT_OPCODE_PARAMS,
-    DEFAULT_OUTPUT_INFO
-  ).byteLength();
-
-  const stackCallsInstructionsLength =
-    singleStackCallLength * contractCalls.filter((call) => !call.isOutputDataHeap).length;
-
-  const heapCallsInstructionsLength = contractCalls.reduce((sum, call) => {
-    if (!call.isOutputDataHeap) {
-      return sum;
-    }
-    return (
-      sum +
-      getSingleCallInstructions(DEFAULT_OPCODE_PARAMS, {
-        isHeap: true,
+const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
+  contractCalls.reduce(
+    (sum, call) => {
+      const offset: CallOpcodeParamsOffset = { ...DEFAULT_OPCODE_PARAMS };
+      if (call.gas) {
+        offset.gasForwardedOffset = 1;
+      }
+      const output: CallOutputInfo = {
+        isHeap: call.isOutputDataHeap,
         encodedLength: call.outputEncodedLength,
-      }).byteLength()
-    );
-  }, 0);
-
-  return (
-    stackCallsInstructionsLength +
-    heapCallsInstructionsLength +
-    // placeholder for single RET instruction which is added later
+      };
+      return sum + getSingleCallInstructions(offset, output).byteLength();
+    }, // placeholder for single RET instruction which is added later
     asm.Instruction.size()
   );
-};
 
 const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutputInfo[] =>
   functionScopes.map((funcScope) => {
