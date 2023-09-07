@@ -6,6 +6,11 @@ import { Buffer } from 'buffer';
 
 import { hashMessage, hash, hashTransaction } from './hasher';
 
+/**
+ * @group browser
+ * 
+ * TODO: Throws value extends undefined
+ */
 describe('Hasher', () => {
   it('Hash message', () => {
     expect(hashMessage(signMessageTest.message)).toEqual(signMessageTest.hashedMessage);

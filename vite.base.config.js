@@ -10,6 +10,7 @@ export default defineConfig({
   test: {
     globals: true,
     ui: false,
+    setupFiles: ['./vite.env.ts'],
     coverage: {
       enabled: true,
       provider: 'istanbul',
