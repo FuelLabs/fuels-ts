@@ -55,9 +55,9 @@ const SCRIPT_WRAPPER_CONTRACT_ID = ZeroBytes32;
 // pointing at the following registers:
 //
 // 0x10 Script data offset
-// 0x11 Gas forwarded
-// 0x12 Coin amount
-// 0x13 Asset ID
+// 0x11 Coin amount
+// 0x12 Asset ID
+// 0x13 Gas forwarded
 //
 // These are arbitrary non-reserved registers, no special meaning
 const getSingleCallInstructions = (
