@@ -185,8 +185,8 @@ const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
         encodedLength: call.outputEncodedLength,
       };
       return sum + getSingleCallInstructions(offset, output).byteLength();
-    }, // placeholder for single RET instruction which is added later
-    asm.Instruction.size()
+    },
+    asm.Instruction.size() // placeholder for single RET instruction which is added later
   );
 
 const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutputInfo[] =>
