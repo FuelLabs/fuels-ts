@@ -66,10 +66,6 @@ export enum ErrorCode {
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
 
-  // environment
-  UNSUPPORTED_PLATFORM = 'unsupported-platform',
-  UNSUPPORTED_ARCHITECTURE = 'unsupported-architecture',
-
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
 
