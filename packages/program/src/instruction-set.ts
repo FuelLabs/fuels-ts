@@ -1,8 +1,5 @@
 import { concat, hexlify } from '@ethersproject/bytes';
-import * as asm from '@fuels/vm-asm';
-
-// @ts-expect-error Property 'initWasm' does exist on type and is defined
-asm.initWasm().catch();
+import type * as asm from '@fuels/vm-asm';
 
 /**
  * A wrapper around fuel-asm to make dynamic instructions and convert to different formats

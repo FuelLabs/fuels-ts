@@ -710,6 +710,9 @@ importers:
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
+      '@fuels/vm-asm':
+        specifier: 0.36.1
+        version: 0.36.1
       commander:
         specifier: ^9.4.1
         version: 9.4.1

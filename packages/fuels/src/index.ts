@@ -1,3 +1,8 @@
+import * as asm from '@fuels/vm-asm';
+
+// @ts-expect-error Property 'initWasm' does exist on type and is defined
+asm.initWasm().catch();
+
 export * from '@ethersproject/bytes';
 export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/address';

@@ -61,6 +61,7 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
+    "@fuels/vm-asm": "0.36.1",
     "commander": "^9.4.1"
   }
 }
