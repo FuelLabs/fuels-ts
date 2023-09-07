@@ -272,12 +272,12 @@ export const getContractCallScript = (
         /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
         /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        let gasForwardedSize = bn(0);
+        let gasForwardedSize = 0;
 
         if (call.gas) {
           scriptData.push(new U64Coder().encode(call.gas));
 
-          gasForwardedSize = bn(WORD_SIZE);
+          gasForwardedSize = WORD_SIZE;
         }
 
         /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
@@ -286,8 +286,7 @@ export const getContractCallScript = (
         // which points to where the data for the custom types start in the
         // transaction. If it doesn't take any custom inputs, this isn't necessary.
         if (call.isInputDataPointer) {
-          const pointerInputOffset =
-            segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize.toNumber();
+          const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize;
           scriptData.push(new U64Coder().encode(pointerInputOffset));
         }
 
