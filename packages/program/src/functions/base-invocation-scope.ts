@@ -86,12 +86,7 @@ export class BaseInvocationScope<TReturn = any> {
     const contractCallScript = getContractCallScript(this.functionInvocationScopes);
     this.#scriptDataOffset = contractCallScript.getScriptDataOffset();
 
-    const calls = this.calls;
-    calls.forEach((c) => {
-      this.transactionRequest.addContractInputAndOutput(c.contractId);
-    });
-
-    this.transactionRequest.setScript(contractCallScript, calls);
+    this.transactionRequest.setScript(contractCallScript, this.calls);
   }
 
   /**
@@ -150,6 +145,11 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected addCalls(funcScopes: Array<InvocationScopeLike>) {
     this.functionInvocationScopes.push(...funcScopes);
+    const calls = this.calls;
+    calls.forEach((c) => {
+      this.transactionRequest.addContractInputAndOutput(c.contractId);
+    });
+
     this.updateRequiredCoins();
     return this;
   }
