@@ -92,10 +92,12 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * Updates the transaction request with the current input/output.
    */
-  protected updateInputAndOutput() {
+  protected updateContractInputAndOutput() {
     const calls = this.calls;
     calls.forEach((c) => {
-      this.transactionRequest.addContractInputAndOutput(c.contractId);
+      if (c.contractId) {
+        this.transactionRequest.addContractInputAndOutput(c.contractId);
+      }
     });
   }
 
