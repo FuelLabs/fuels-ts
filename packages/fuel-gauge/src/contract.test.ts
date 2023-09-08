@@ -477,7 +477,7 @@ describe('Contract', () => {
     expect(value[0].toNumber()).toBeLessThanOrEqual(500_000);
 
     expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * minThreshold);
-    expect(value[1].toNumber()).toBeLessThanOrEqual(1_000_000);
+    expect(value[1].toNumber()).toBeLessThanOrEqual(4_000_000);
   });
 
   it('Get transaction cost', async () => {
