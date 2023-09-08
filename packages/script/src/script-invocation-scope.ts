@@ -23,6 +23,10 @@ export class ScriptInvocationScope<
     this.transactionRequest.setScript(this.scriptRequest, this.args);
   }
 
+  protected updateInputAndOutput() {
+    // noop
+  }
+
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
     const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;

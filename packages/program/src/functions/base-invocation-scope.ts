@@ -90,6 +90,16 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Updates the transaction request with the current input/output.
+   */
+  protected updateInputAndOutput() {
+    const calls = this.calls;
+    calls.forEach((c) => {
+      this.transactionRequest.addContractInputAndOutput(c.contractId);
+    });
+  }
+
+  /**
    * Gets the required coins for the transaction.
    *
    * @returns An array of required coin quantities.
@@ -145,11 +155,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected addCalls(funcScopes: Array<InvocationScopeLike>) {
     this.functionInvocationScopes.push(...funcScopes);
-    const calls = this.calls;
-    calls.forEach((c) => {
-      this.transactionRequest.addContractInputAndOutput(c.contractId);
-    });
-
+    this.updateContractInputAndOutput();
     this.updateRequiredCoins();
     return this;
   }
