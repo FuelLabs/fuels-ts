@@ -15,7 +15,7 @@ export class ScriptInvocationScope<
 > extends FunctionInvocationScope<TArgs, TReturn> {
   scriptRequest!: ScriptRequest<TArgs, TReturn>;
 
-  protected updateScriptRequest() {
+  protected async updateScriptRequest() {
     if (!this.scriptRequest) {
       this.buildScriptRequest();
     }
