@@ -18,7 +18,7 @@ jest.mock('@fuels/vm-asm', () => ({
 describe('util', () => {
   afterEach(jest.restoreAllMocks);
 
-  it('should ensure "composeScriptForTransferringToContract" returns script just fine', () => {
+  it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
     const mockedOpcode = {
@@ -32,7 +32,7 @@ describe('util', () => {
     const tr = jest.spyOn(fuelAsm, 'tr').mockReturnValue(mockedOpcode);
     const ret = jest.spyOn(fuelAsm, 'ret').mockReturnValue(mockedOpcode);
 
-    const script = composeScriptForTransferringToContract();
+    const script = await composeScriptForTransferringToContract();
 
     const expectedScript = Uint8Array.from([].concat(...Array(6).fill(byte)));
 
