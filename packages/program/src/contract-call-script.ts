@@ -97,6 +97,10 @@ const getSingleCallInstructions = (
 };
 // Given a list of contract calls, create the actual opcodes used to call the contract
 function getInstructions(offsets: CallOpcodeParamsOffset[], outputs: CallOutputInfo[]): Uint8Array {
+  if (!offsets.length) {
+    return new Uint8Array();
+  }
+
   const multiCallInstructions = new InstructionSet();
   for (let i = 0; i < offsets.length; i += 1) {
     multiCallInstructions.extend(getSingleCallInstructions(offsets[i], outputs[i]).entries());
