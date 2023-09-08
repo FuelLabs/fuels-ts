@@ -1,5 +1,5 @@
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish } from 'fuels';
-import { toHex, toNumber, Predicate } from 'fuels';
+import { toHex, toNumber, Predicate, toBytes } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
@@ -332,7 +332,7 @@ describe('Predicate', () => {
       ).rejects.toThrow('Invalid transaction');
     });
 
-    it.skip('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
+    it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(
