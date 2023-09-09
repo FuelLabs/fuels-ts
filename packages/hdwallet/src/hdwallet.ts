@@ -85,7 +85,10 @@ class HDWallet {
       this.privateKey = hexlify(config.privateKey);
     } else {
       if (!config.publicKey) {
-        throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Public and Private Key are missing!');
+        throw new FuelError(
+          ErrorCode.HD_WALLET_ERROR,
+          'Both public and private Key cannot be missing. At least one should be provided.'
+        );
       }
       this.publicKey = hexlify(config.publicKey);
     }
@@ -116,7 +119,10 @@ class HDWallet {
 
     if (index & HARDENED_INDEX) {
       if (!privateKey) {
-        throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Derive hardened requires privateKey');
+        throw new FuelError(
+          ErrorCode.HD_WALLET_ERROR,
+          'Cannot derive a hardened index without a private Key.'
+        );
       }
 
       // 33 bytes: 0x00 || private key
@@ -179,7 +185,10 @@ class HDWallet {
    */
   toExtendedKey(isPublic: boolean = false, testnet: boolean = false): string {
     if (this.depth >= 256) {
-      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Depth too large!');
+      throw new FuelError(
+        ErrorCode.HD_WALLET_ERROR,
+        `Exceeded max depth of 255. Current depth: ${this.depth}.`
+      );
     }
     const prefix = getExtendedKeyPrefix(this.privateKey == null || isPublic, testnet);
     const depth = hexlify(this.depth);
@@ -215,9 +224,10 @@ class HDWallet {
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {
-      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid extended key');
+      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Provided key is not a valid extended key.');
     }
-    if (!validChecksum) throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid checksum key');
+    if (!validChecksum)
+      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Provided key has an invalid checksum.');
 
     const depth = bytes[4];
     const parentFingerprint = hexlify(bytes.slice(5, 9));
@@ -226,12 +236,15 @@ class HDWallet {
     const key = bytes.slice(45, 78);
 
     if ((depth === 0 && parentFingerprint !== '0x00000000') || (depth === 0 && index !== 0)) {
-      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid depth');
+      throw new FuelError(
+        ErrorCode.HD_WALLET_ERROR,
+        'Inconsistency detected: Depth is zero but fingerprint/index is non-zero.'
+      );
     }
 
     if (isPublicExtendedKey(bytes)) {
       if (key[0] !== 3) {
-        throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid public extended key');
+        throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid public extended key.');
       }
 
       return new HDWallet({
@@ -244,7 +257,7 @@ class HDWallet {
     }
 
     if (key[0] !== 0) {
-      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid private extended key');
+      throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Invalid private extended key.');
     }
 
     return new HDWallet({
