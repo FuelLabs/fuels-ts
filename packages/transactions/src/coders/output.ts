@@ -265,7 +265,10 @@ export class OutputCoder extends Coder<Output, Output> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u8').encode(value.type));
-    switch (value.type) {
+
+    const { type } = value;
+
+    switch (type) {
       case OutputType.Coin: {
         parts.push(new OutputCoinCoder().encode(value));
         break;
@@ -287,7 +290,10 @@ export class OutputCoder extends Coder<Output, Output> {
         break;
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_TRANSACTION_OUTPUT, 'Invalid Output type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_OUTPUT,
+          `Invalid transaction output type: ${type}.`
+        );
       }
     }
 
@@ -322,7 +328,10 @@ export class OutputCoder extends Coder<Output, Output> {
         return [decoded, o];
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_TRANSACTION_OUTPUT, 'Invalid Output type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_OUTPUT,
+          `Invalid transaction output type: ${type}.`
+        );
       }
     }
   }

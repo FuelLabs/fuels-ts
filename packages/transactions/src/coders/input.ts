@@ -355,7 +355,10 @@ export class InputCoder extends Coder<Input, Input> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u8').encode(value.type));
-    switch (value.type) {
+
+    const { type } = value;
+
+    switch (type) {
       case InputType.Coin: {
         parts.push(new InputCoinCoder().encode(value));
         break;
@@ -369,7 +372,10 @@ export class InputCoder extends Coder<Input, Input> {
         break;
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, 'Invalid Input type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_INPUT,
+          `Invalid transaction input type: ${type}.`
+        );
       }
     }
 
@@ -396,7 +402,10 @@ export class InputCoder extends Coder<Input, Input> {
         return [decoded, o];
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, 'Invalid Input type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_INPUT,
+          `Invalid transaction input type: ${type}.`
+        );
       }
     }
   }

@@ -363,6 +363,9 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u8').encode(value.type));
+
+    const { type } = value;
+
     switch (value.type) {
       case TransactionType.Script: {
         parts.push(
@@ -381,7 +384,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         break;
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_TRANSACTION_TYPE, 'Invalid Transaction type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_TYPE,
+          `Invalid transaction type: ${type}`
+        );
       }
     }
 
@@ -409,7 +415,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         return [decoded, o];
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_TRANSACTION_TYPE, 'Invalid Transaction type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_TYPE,
+          `Invalid transaction type: ${type}`
+        );
       }
     }
   }
