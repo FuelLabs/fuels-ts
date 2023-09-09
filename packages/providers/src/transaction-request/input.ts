@@ -153,7 +153,10 @@ export const inputify = (value: TransactionRequestInput): Input => {
       };
     }
     default: {
-      throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, `Invalid Input type: ${type}`);
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSACTION_INPUT,
+        `Invalid transaction input type: ${type}.`
+      );
     }
   }
 };

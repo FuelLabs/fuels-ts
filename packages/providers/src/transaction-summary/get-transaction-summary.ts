@@ -32,7 +32,10 @@ export async function getTransactionSummary<TTransactionType = void>(
   });
 
   if (!gqlTransaction) {
-    throw new FuelError(ErrorCode.TRANSACTION_NOT_FOUND, 'transaction not found');
+    throw new FuelError(
+      ErrorCode.TRANSACTION_NOT_FOUND,
+      `Transaction not found for given id: ${id}.`
+    );
   }
 
   const [decodedTransaction] = new TransactionCoder().decode(

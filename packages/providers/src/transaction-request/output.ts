@@ -90,7 +90,10 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       };
     }
     default: {
-      throw new FuelError(ErrorCode.INVALID_TRANSACTION_INPUT, `Invalid Output type: ${type}`);
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSACTION_INPUT,
+        `Invalid transaction output type: ${type}.`
+      );
     }
   }
 };

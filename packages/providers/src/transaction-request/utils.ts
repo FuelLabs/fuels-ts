@@ -21,7 +21,7 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
       return CreateTransactionRequest.from(obj);
     }
     default: {
-      throw new FuelError(ErrorCode.INVALID_TRANSACTION_TYPE, `Invalid transaction type: ${type}`);
+      throw new FuelError(ErrorCode.INVALID_TRANSACTION_TYPE, `Invalid transaction type: ${type}.`);
     }
   }
 };

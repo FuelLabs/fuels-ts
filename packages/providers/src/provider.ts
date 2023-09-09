@@ -358,12 +358,12 @@ export default class Provider {
     if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
       throw new FuelError(
         ErrorCode.GAS_PRICE_TOO_LOW,
-        `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
+        `Gas limit (${transactionRequest.gasLimit}) is lower than the required: ${gasUsed}.`
       );
     } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
       throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
-        `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas price (${transactionRequest.gasPrice}) is lower than the required: ${minGasPrice}.`
       );
     }
 

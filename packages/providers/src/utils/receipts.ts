@@ -271,6 +271,6 @@ export function assembleReceiptByType(receipt: GqlReceipt) {
     }
 
     default:
-      throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${receiptType}`);
+      throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${receiptType}.`);
   }
 }
