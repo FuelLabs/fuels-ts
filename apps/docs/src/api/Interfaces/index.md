@@ -16,7 +16,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:80](https://github.com/FuelLabs/fuels-ts/blob/431c3088/packag/api/src/index.ts#L80)
+[index.ts:80](https://github.com/FuelLabs/fuels-ts/blob/a337878e/packag/api/src/index.ts#L80)
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 #### Defined in
 
-[index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/431c3088/packag/api/src/index.ts#L13)
+[index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/a337878e/packag/api/src/index.ts#L13)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/431c3088/packag/api/src/index.ts#L15)
+[index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/a337878e/packag/api/src/index.ts#L15)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/431c3088/packag/api/src/index.ts#L11)
+[index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/a337878e/packag/api/src/index.ts#L11)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[index.ts:82](https://github.com/FuelLabs/fuels-ts/blob/431c3088/packag/api/src/index.ts#L82)
+[index.ts:82](https://github.com/FuelLabs/fuels-ts/blob/a337878e/packag/api/src/index.ts#L82)
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-[index.ts:20](https://github.com/FuelLabs/fuels-ts/blob/431c3088/packag/api/src/index.ts#L20)
+[index.ts:20](https://github.com/FuelLabs/fuels-ts/blob/a337878e/packag/api/src/index.ts#L20)
