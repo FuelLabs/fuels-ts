@@ -81,7 +81,10 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
       numberOfAccounts += 1;
     } while (numberOfAccounts < this.numberOfAccounts);
 
-    throw new FuelError(ErrorCode.WALLET_MANAGER_ERROR, 'Account not found');
+    throw new FuelError(
+      ErrorCode.WALLET_MANAGER_ERROR,
+      `Account with address '${address}' not found in derived wallets.`
+    );
   }
 
   getWallet(address: AbstractAddress): WalletUnlocked {

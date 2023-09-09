@@ -19,11 +19,11 @@ import { MnemonicVault } from './vaults/mnemonic-vault';
 import { PrivateKeyVault } from './vaults/privatekey-vault';
 
 const ERROR_MESSAGES = {
-  invalid_vault_type: 'Invalid VaultType',
-  address_not_found: 'Address not found',
-  vault_not_found: 'Vault not found',
-  wallet_not_unlocked: 'Wallet is locked',
-  passphrase_not_match: "Passphrase didn't match",
+  invalid_vault_type: 'The provided Vault type is invalid.',
+  address_not_found: 'The specified wallet address was not found.',
+  vault_not_found: 'The specified vault was not found.',
+  wallet_not_unlocked: 'The wallet is currently locked.',
+  passphrase_not_match: 'The provided passphrase did not match the expected value.',
 };
 
 /**

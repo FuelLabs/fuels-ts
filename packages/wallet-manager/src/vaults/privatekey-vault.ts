@@ -59,7 +59,10 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
     );
 
     if (!privateKey) {
-      throw new FuelError(ErrorCode.WALLET_MANAGER_ERROR, 'Address not found');
+      throw new FuelError(
+        ErrorCode.WALLET_MANAGER_ERROR,
+        `No private key found for address '${address}'.`
+      );
     }
 
     return privateKey;
