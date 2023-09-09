@@ -5,7 +5,7 @@ import type { B256Address } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
 import * as asm from '@fuels/vm-asm';
 
-export const composeScriptForTransferringToContract = () => {
+export const composeScriptForTransferringToContract = async () => {
   // implementation extracted from Rust SDK at:
   // https://github.com/FuelLabs/fuels-rs/blob/master/packages/fuels-core/src/types/transaction_builders.rs#L240-L272
   // This script loads:
@@ -14,6 +14,10 @@ export const composeScriptForTransferringToContract = () => {
   //  - a pointer to the asset id
   // into the registers 0x10, 0x12, 0x13
   // and calls the TR instruction
+
+  // TODO: Remove ts-expect-error
+  // @ts-expect-error method reference missing in DTS
+  await asm.initWasm();
 
   // const gtf = fuelAsm.gtf(0x10, 0x00, 0xc);
   const gtf = asm.gtf(0x10, 0x00, asm.GTFArgs.ScriptData);
