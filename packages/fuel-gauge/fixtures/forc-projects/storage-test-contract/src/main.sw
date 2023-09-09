@@ -8,7 +8,7 @@ struct StructValidation {
 }
 
 storage {
-    var1: u64 = 10,
+    var1: u64 = 0,
     var2: u32 = 20,
     var3: u16 = 30,
     var4: bool = true,
@@ -61,8 +61,8 @@ impl StorageTestContract for Contract {
         let value = value.unwrap_or(0);
         value
     }
-  // Return values from storage
-  // This is used to test storage initialization, on contract deployment
+    // Return values from storage
+    // This is used to test storage initialization, on contract deployment
     #[storage(read)]
     fn return_b256() -> b256 {
         let value: Option<b256> = read::<b256>(VALUE_B256, 0);

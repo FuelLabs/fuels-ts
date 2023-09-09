@@ -1,15 +1,15 @@
 contract;
 
 use std::{
+    bytes::Bytes,
+    constants::BASE_ASSET_ID,
     logging::log,
-    token::{
-        transfer_to_address,
-    },
     message::{
         send_message,
     },
-    bytes::Bytes,
-    constants::BASE_ASSET_ID,
+    token::{
+        transfer_to_address,
+    },
 };
 use custom_errors::{AccessError, InputError};
 
@@ -25,7 +25,7 @@ pub struct ValidInputsEvent {
     price: u64,
 }
 
-impl RevertError for Contract{
+impl RevertError for Contract {
     fn validate_inputs(token_id: u64, price: u64) {
         require(price != 0, InputError::PriceCantBeZero);
         require(token_id != 0, AccessError::TokenIdCantBeZero);

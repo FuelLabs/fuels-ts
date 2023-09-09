@@ -94,3 +94,25 @@ jobs:
         if: env.SHOULD_DEPLOY_DOCS == 'true'
         id: deployment
         uses: actions/deploy-pages@v1
+
+      - name: Checkout API Docs
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        uses: actions/checkout@v3
+        with:
+          ref: docs
+          fetch-depth: 0
+
+      - name: Generate and Push API Docs
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git merge origin/master --no-edit
+          pnpm install
+          pnpm build
+          rm -f apps/docs/.gitignore
+          git add apps/docs/src/api/
+          git add apps/docs/.typedoc/api-links.json
+          git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
+          git push
+          git restore apps/docs/.gitignore

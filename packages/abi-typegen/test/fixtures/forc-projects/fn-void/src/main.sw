@@ -1,9 +1,9 @@
 contract;
 
 abi MyContract {
-  fn main();
+    fn main();
 }
 
 impl MyContract for Contract {
-  fn main() { }
+    fn main() {}
 }

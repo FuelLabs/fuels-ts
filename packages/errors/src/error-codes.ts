@@ -18,6 +18,12 @@ export enum ErrorCode {
 
   PARSE_FAILED = 'parse-failed',
 
+  // transaction
+  TRANSACTION_FAILED = 'transaction-failed',
+
+  // contract
+  INVALID_MULTICALL = 'invalid-multicall',
+
   // coder
   // ...
 }

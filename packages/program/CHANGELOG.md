@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.56.0
+
+### Minor Changes
+
+- forbid multicall for more than one function that returns heap types, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1217](https://github.com/FuelLabs/fuels-ts/pull/1217))
+- Ensure asm from wasm is initialzed, by [@camsjams](https://github.com/camsjams) (See [#1240](https://github.com/FuelLabs/fuels-ts/pull/1240))
+- 🐞 Fix gas call forwarding logic, by [@camsjams](https://github.com/camsjams) (See [#1241](https://github.com/FuelLabs/fuels-ts/pull/1241))
+
+## 0.55.0
+
+### Minor Changes
+
+- improve transaction api for using predicates on custom transactions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1216](https://github.com/FuelLabs/fuels-ts/pull/1216))
+
+## 0.54.1
+
+### Patch Changes
+
+- Upgrading vm/wasm libs, by [@arboleya](https://github.com/arboleya) (See [#1226](https://github.com/FuelLabs/fuels-ts/pull/1226))
+
+## 0.54.0
+
 ## 0.53.0
 
 ### Minor Changes
