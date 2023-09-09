@@ -56,7 +56,7 @@ import { expectToThrowFuelError } from "@fuel-ts/errors/test-utils";
 
 import { myFn } from "...";
 
-describe('this and that'm () => {
+describe('this and that' () => {
   const code = FuelError.CODES.INVALID_URL;
 
   it("should throw FuelError", async () => {
