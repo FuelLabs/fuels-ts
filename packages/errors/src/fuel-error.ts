@@ -10,7 +10,10 @@ export class FuelError extends Error {
     const error = e as FuelError;
 
     if (error.code === undefined) {
-      throw new FuelError(ErrorCode.PARSE_FAILED, "missing 'code' property");
+      throw new FuelError(
+        ErrorCode.PARSE_FAILED,
+        "Failed to parse the error object. The required 'code' property is missing."
+      );
     }
 
     const enumValues = Object.values(ErrorCode);
@@ -19,7 +22,7 @@ export class FuelError extends Error {
     if (!codeIsKnown) {
       throw new FuelError(
         ErrorCode.PARSE_FAILED,
-        `Unknown error code: ${error.code}. Accepted codes: ${enumValues.join(', ')}.`
+        `Received an unknown error code: ${error.code}. Accepted codes: ${enumValues.join(', ')}.`
       );
     }
 
