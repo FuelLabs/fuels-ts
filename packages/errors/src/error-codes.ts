@@ -40,6 +40,7 @@ export enum ErrorCode {
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
+  GAS_LIMIT_TOO_LOW = 'gas-limit-too-low',
   TRANSACTION_NOT_FOUND = 'transaction-not-found',
   TRANSACTION_FAILED = 'transaction-failed',
   INVALID_CONFIGURABLE_CONSTANTS = 'invalid-configurable-constants',
