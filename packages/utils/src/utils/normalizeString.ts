@@ -23,7 +23,10 @@ export const normalizeString = (str: string): string => {
   const output = transformations.reduce((s, t) => t(s), str);
 
   if (output === '') {
-    throw new FuelError(ErrorCode.PARSE_FAILED, `Can't normalize string: ${str}`);
+    const errMsg = `The provided string '${str}' results in an empty output after`.concat(
+      ` normalization, therefore, it can't normalize string.`
+    );
+    throw new FuelError(ErrorCode.PARSE_FAILED, errMsg);
   }
 
   return output;
