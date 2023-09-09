@@ -187,7 +187,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       if (!abiInterface) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Unable to validate configurable constants, Predicate instantiated without json ABI'
+          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
         );
       }
 
@@ -202,7 +202,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         if (!abiInterface?.configurables[key]) {
           throw new FuelError(
             ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-            `Predicate has no configurable constant named: ${key}`
+            `No configurable constant named "${key}" found in the Predicate`
           );
         }
 
@@ -215,7 +215,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     } catch (err) {
       throw new FuelError(
         ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-        `Error setting configurable constants: ${err}`
+        `Error setting configurable constants: ${err}.`
       );
     }
 
