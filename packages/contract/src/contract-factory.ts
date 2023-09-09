@@ -167,7 +167,7 @@ export default class ContractFactory {
       if (!hasConfigurable) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Contract has no configurables to be set'
+          'Contract does not have configurables to be set'
         );
       }
 
@@ -175,7 +175,7 @@ export default class ContractFactory {
         if (!this.interface.configurables[key]) {
           throw new FuelError(
             ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-            `Contract has no configurable named: ${key}`
+            `Contract does not have a configurable named: ${key}`
           );
         }
 
@@ -192,7 +192,7 @@ export default class ContractFactory {
     } catch (err) {
       throw new FuelError(
         ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-        `Error setting configurable constants: ${err}`
+        `Error setting configurable constants on contract: ${err}.`
       );
     }
   }
