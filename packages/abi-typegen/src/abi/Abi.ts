@@ -46,7 +46,7 @@ export class Abi {
     if (couldNotParseName) {
       throw new FuelError(
         ErrorCode.PARSE_FAILED,
-        `Could not parse name from abi file: ${filepath}`
+        `Could not parse name from ABI file: ${filepath}.`
       );
     }
 

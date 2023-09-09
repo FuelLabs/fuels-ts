@@ -75,7 +75,9 @@ export class AbiTypeGen {
       default:
         throw new FuelError(
           ErrorCode.INVALID_INPUT_PARAMETERS,
-          `Invalid Typegen programType: ${programType}`
+          `Invalid Typegen programType: ${programType}. Must be one of ${Object.values(
+            ProgramTypeEnum
+          )}`
         );
     }
   }

@@ -41,7 +41,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   } else {
     throw new FuelError(
       ErrorCode.MISSING_REQUIRED_PARAMETER,
-      'You need to inform at least one parameter: `input` or `filepaths`'
+      'At least one parameter should be informed: `input` or `filepaths`.'
     );
   }
 
