@@ -23,7 +23,10 @@ export function toUtf8Bytes(stri: string): Uint8Array {
       const c2 = str.charCodeAt(i);
 
       if (i >= str.length || (c2 & 0xfc00) !== 0xdc00) {
-        throw new FuelError(ErrorCode.INVALID_INPUT_PARAMETERS, 'invalid utf-8 string');
+        throw new FuelError(
+          ErrorCode.INVALID_INPUT_PARAMETERS,
+          'Invalid UTF-8 in the input string.'
+        );
       }
 
       // Surrogate Pair
@@ -107,7 +110,10 @@ export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<str
   for (let i = 0; i < words.length; i += 1) {
     const index = wordlist.indexOf(words[i].normalize('NFKD'));
     if (index === -1) {
-      throw new FuelError(ErrorCode.INVALID_MNEMONIC, 'invalid mnemonic');
+      throw new FuelError(
+        ErrorCode.INVALID_MNEMONIC,
+        `Invalid mnemonic: the word "${words[i]}" is not found in the provided wordlist.`
+      );
     }
 
     for (let bit = 0; bit < 11; bit += 1) {
@@ -123,7 +129,10 @@ export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<str
   const checksum = arrayify(sha256(entropy.slice(0, entropyBits / 8)))[0] & checksumMask;
 
   if (checksum !== (entropy[entropy.length - 1] & checksumMask)) {
-    throw new FuelError(ErrorCode.INVALID_CHECKSUM, 'invalid checksum');
+    throw new FuelError(
+      ErrorCode.INVALID_CHECKSUM,
+      'Checksum validation failed for the provided mnemonic.'
+    );
   }
 
   return entropy.slice(0, entropyBits / 8);

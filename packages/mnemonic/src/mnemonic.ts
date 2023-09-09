@@ -28,19 +28,29 @@ export const MNEMONIC_SIZES = [12, 15, 18, 21, 24];
 
 function assertWordList(wordlist: Array<string>) {
   if (wordlist.length !== 2048) {
-    throw new FuelError(ErrorCode.INVALID_WORD_LIST, 'Invalid word list length');
+    throw new FuelError(
+      ErrorCode.INVALID_WORD_LIST,
+      `Expected word list length of 2048, but got ${wordlist.length}.`
+    );
   }
 }
 
 function assertEntropy(entropy: BytesLike) {
   if (entropy.length % 4 !== 0 || entropy.length < 16 || entropy.length > 32) {
-    throw new FuelError(ErrorCode.INVALID_ENTROPY, 'invalid entropy');
+    throw new FuelError(
+      ErrorCode.INVALID_ENTROPY,
+      `Entropy should be between 16 and 32 bytes and a multiple of 4, but got ${entropy.length} bytes.`
+    );
   }
 }
 
 function assertMnemonic(words: Array<string>) {
   if (!MNEMONIC_SIZES.includes(words.length)) {
-    throw new FuelError(ErrorCode.INVALID_MNEMONIC, 'invalid mnemonic size');
+    const errorMsg = `Invalid mnemonic size. Expected one of [${MNEMONIC_SIZES.join(
+      ', '
+    )}] words, but got ${words.length}.`;
+
+    throw new FuelError(ErrorCode.INVALID_MNEMONIC, errorMsg);
   }
 }
 
@@ -181,7 +191,10 @@ class Mnemonic {
     const seedArray = arrayify(seed);
 
     if (seedArray.length < 16 || seedArray.length > 64) {
-      throw new FuelError(ErrorCode.INVALID_SEED, 'invalid seed');
+      throw new FuelError(
+        ErrorCode.INVALID_SEED,
+        `Seed length should be between 16 and 64 bytes, but received ${seedArray.length} bytes.`
+      );
     }
 
     return arrayify(computeHmac(SupportedAlgorithm.sha512, MasterSecret, seedArray));
