@@ -122,7 +122,7 @@ export class Account extends AbstractAccount {
       // TODO: implement pagination
       throw new FuelError(
         ErrorCode.NOT_SUPPORTED,
-        `Wallets with more than ${pageSize} coins are not yet supported`
+        `Wallets containing more than ${pageSize} coins exceed the current supported limit.`
       );
     }
 
@@ -156,7 +156,7 @@ export class Account extends AbstractAccount {
       // TODO: implement pagination
       throw new FuelError(
         ErrorCode.NOT_SUPPORTED,
-        `Wallets with more than ${pageSize} messages are not yet supported`
+        `Wallets containing more than ${pageSize} messages exceed the current supported limit.`
       );
     }
 
@@ -201,7 +201,7 @@ export class Account extends AbstractAccount {
       // TODO: implement pagination
       throw new FuelError(
         ErrorCode.NOT_SUPPORTED,
-        `Wallets with more than ${pageSize} balances are not yet supported`
+        `Wallets containing more than ${pageSize} balances exceed the current supported limit.`
       );
     }
 

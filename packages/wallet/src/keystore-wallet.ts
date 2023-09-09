@@ -147,7 +147,10 @@ export async function decryptKeystoreWallet(jsonWallet: string, password: string
   const macHash = stringFromBuffer(macHashUint8Array, 'hex');
 
   if (mac !== macHash) {
-    throw new FuelError(ErrorCode.INVALID_PASSWORD, 'Error decrypting wallet: invalid password');
+    throw new FuelError(
+      ErrorCode.INVALID_PASSWORD,
+      'Failed to decrypt the keystore wallet, the provided password is incorrect.'
+    );
   }
 
   // Decrypt the private key.
