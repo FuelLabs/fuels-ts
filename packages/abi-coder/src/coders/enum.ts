@@ -60,10 +60,10 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
 
     const [caseKey, ...empty] = Object.keys(value);
     if (!caseKey) {
-      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided');
+      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided.');
     }
     if (empty.length !== 0) {
-      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'Only one field must be provided');
+      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'Only one field must be provided.');
     }
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
@@ -87,7 +87,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     if (!caseKey) {
       throw new FuelError(
         ErrorCode.INVALID_DECODE_VALUE,
-        `Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}`
+        `Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}.`
       );
     }
 

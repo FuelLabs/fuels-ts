@@ -134,7 +134,13 @@ export class FunctionFragment<
     if (optionalInputs.length === inputTypes.length) return;
     if (inputTypes.length - optionalInputs.length === args.length) return;
 
-    throw new FuelError(ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH, 'Types/values length mismatch');
+    const errorMsg = `Mismatch between provided arguments and expected ABI inputs. Provided ${
+      args.length
+    } arguments, but expected ${inputs.length - optionalInputs.length} (excluding ${
+      optionalInputs.length
+    } optional inputs).`;
+
+    throw new FuelError(ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH, errorMsg);
   }
 
   decodeArguments(data: BytesLike) {

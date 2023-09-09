@@ -87,7 +87,7 @@ export abstract class AbiCoder {
       if (!arg) {
         throw new FuelError(
           ErrorCode.INVALID_COMPONENT,
-          'Expected array type to have an item component'
+          `The provided Array type is missing an item of 'component'.`
         );
       }
 
@@ -100,7 +100,7 @@ export abstract class AbiCoder {
       if (!arg) {
         throw new FuelError(
           ErrorCode.INVALID_COMPONENT,
-          'Expected Vec type to have a type argument'
+          `The provided Vec type is missing the 'type argument'.`
         );
       }
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);

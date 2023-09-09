@@ -65,7 +65,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     if (!fragment) {
-      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found');
+      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
     }
 
     return fragment.decodeArguments(data);
@@ -80,7 +80,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     if (!fragment) {
-      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found');
+      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
     }
 
     return fragment.encodeArguments(values, offset);
@@ -117,7 +117,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       () => {
         throw new FuelError(
           ErrorCode.CONFIGURABLE_NOT_FOUND,
-          `configurable '${name}' doesn't exist`
+          `A configurable with the '${name}' was not found in the ABI.`
         );
       }
     );
@@ -130,7 +130,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       this.jsonAbi.types,
       (t) => t.typeId === typeId,
       () => {
-        throw new FuelError(ErrorCode.TYPE_NOT_FOUND, `type with typeId '${typeId}' doesn't exist`);
+        throw new FuelError(
+          ErrorCode.TYPE_NOT_FOUND,
+          `Type with typeId '${typeId}' doesn't exist in the ABI.`
+        );
       }
     );
   }

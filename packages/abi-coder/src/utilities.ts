@@ -146,7 +146,7 @@ export function findOrThrow<T>(
   arr: readonly T[],
   predicate: (val: T) => boolean,
   throwFn: () => never = () => {
-    throw new FuelError(ErrorCode.ELEMENT_NOT_FOUND, 'element not found');
+    throw new FuelError(ErrorCode.ELEMENT_NOT_FOUND, 'Element not found in the array.');
   }
 ): T {
   const found = arr.find(predicate);
