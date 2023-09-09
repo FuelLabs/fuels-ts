@@ -78,7 +78,10 @@ export class FunctionInvocationScope<
 
     if (callParams?.forward) {
       if (!this.func.attributes.find((attr) => attr.name === 'payable')) {
-        throw new FuelError(ErrorCode.TRANSACTION_ERROR, 'Function is not payable.');
+        throw new FuelError(
+          ErrorCode.TRANSACTION_ERROR,
+          `The target function ${this.func.name} cannot accept forwarded funds as it's not marked as 'payable'.`
+        );
       }
 
       this.forward = coinQuantityfy(callParams.forward);

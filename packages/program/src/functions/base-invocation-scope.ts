@@ -193,7 +193,7 @@ export class BaseInvocationScope<TReturn = any> {
     if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
       throw new FuelError(
         ErrorCode.TRANSACTION_ERROR,
-        "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
+        "Transaction's gasLimit must be equal to or greater than the combined forwarded gas of all calls."
       );
     }
   }

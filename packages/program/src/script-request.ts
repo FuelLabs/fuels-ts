@@ -76,11 +76,17 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   });
 
   if (!scriptResultReceipt) {
-    throw new FuelError(ErrorCode.TRANSACTION_ERROR, `Expected scriptResultReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'scriptResultReceipt'.`
+    );
   }
 
   if (!returnReceipt) {
-    throw new FuelError(ErrorCode.TRANSACTION_ERROR, `Expected returnReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'returnReceipt'.`
+    );
   }
 
   const scriptResult: ScriptResult = {

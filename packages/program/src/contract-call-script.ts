@@ -137,7 +137,7 @@ const scriptResultDecoder =
     if (toNumber(result.code) !== 0) {
       throw new FuelError(
         ErrorCode.TRANSACTION_ERROR,
-        `Script returned non-zero result: ${result.code}`
+        `Execution of the script associated with contract ${contractId} resulted in a non-zero exit code: ${result.code}.`
       );
     }
 
