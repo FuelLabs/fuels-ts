@@ -12,7 +12,7 @@ export async function dev(config: ParsedFuelsConfig) {
    * Create a copy of the config param, so we can safely
    * re-assign the `providerUrl` param when auto-starting a node.
    */
-  const configCopy = structuredClone(config);
+  const configCopy = { ...config };
 
   if (configCopy.autoStartFuelCore) {
     const client = await startFuelCore(configCopy);
