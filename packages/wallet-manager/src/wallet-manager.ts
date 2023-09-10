@@ -20,7 +20,7 @@ import { PrivateKeyVault } from './vaults/privatekey-vault';
 
 const ERROR_MESSAGES = {
   invalid_vault_type: 'The provided Vault type is invalid.',
-  address_not_found: 'The specified wallet address was not found.',
+  address_not_found: 'No private key found for address the specified wallet address.',
   vault_not_found: 'The specified vault was not found.',
   wallet_not_unlocked: 'The wallet is currently locked.',
   passphrase_not_match: 'The provided passphrase did not match the expected value.',

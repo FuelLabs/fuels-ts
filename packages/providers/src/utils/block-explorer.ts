@@ -74,7 +74,7 @@ export const buildBlockExplorerUrl = (
     const inputKeys = customInputParams.map(({ key }) => key).join(', ');
     throw new FuelError(
       ErrorCode.ERROR_BUILDING_BLOCK_EXPLORER_URL,
-      `You cannot pass in a path to 'buildBlockExplorerUrl' along with any of the following: ${inputKeys}`
+      `You cannot pass in a path to 'buildBlockExplorerUrl' along with any of the following: ${inputKeys}.`
     );
   }
 

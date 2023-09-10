@@ -112,7 +112,7 @@ export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<str
     if (index === -1) {
       throw new FuelError(
         ErrorCode.INVALID_MNEMONIC,
-        `Invalid mnemonic: the word "${words[i]}" is not found in the provided wordlist.`
+        `Invalid mnemonic: the word '${words[i]}' is not found in the provided wordlist.`
       );
     }
 

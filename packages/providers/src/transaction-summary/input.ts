@@ -48,7 +48,7 @@ export function getInputContractFromIndex(
   if (contractInput.type !== InputType.Contract) {
     throw new FuelError(
       ErrorCode.INVALID_TRANSACTION_INPUT,
-      `Contract input should be of type 'contract'`
+      `Contract input should be of type 'contract'.`
     );
   }
 
