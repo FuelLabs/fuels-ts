@@ -83,7 +83,8 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
       if (/Binding GraphQL provider to/.test(data)) {
         resolve({ bindIp, accessIp, port, providerUrl, childProcess });
       }
-      if (/ERROR|IO error/.test(data)) {
+      // if (/ERROR|IO error/.test(data)) {
+      if (/IO error/.test(data)) {
         log(
           `Some error occurred. Please, check to see if you have another instance running locally.`
         );
