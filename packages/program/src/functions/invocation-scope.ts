@@ -62,7 +62,6 @@ export class FunctionInvocationScope<
    */
   setArguments(...args: TArgs) {
     this.args = args || [];
-    this.updateScriptRequest();
     return this;
   }
 
