@@ -279,7 +279,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const script = composeScriptForTransferringToContract();
+    const script = await composeScriptForTransferringToContract();
 
     const scriptData = formatScriptDataForTransferringToContract(
       contractId.toB256(),
