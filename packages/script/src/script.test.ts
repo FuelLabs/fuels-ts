@@ -133,7 +133,9 @@ describe('Script', () => {
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
-    expect((<Error>error).message).toMatch(/Script has no configurable constants to be set/);
+    const errMsg = `Error setting configurable constants: The script does not have configurable constants to be set.`;
+
+    expect((<Error>error).message).toBe(errMsg);
   });
 
   it('should throw when setting configurable with wrong name', async () => {
@@ -158,8 +160,8 @@ describe('Script', () => {
 
     const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
 
-    expect((<Error>error).message).toMatch(
-      /Script has no configurable constant named: NOT_DEFINED/
-    );
+    const errMsg = `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`;
+
+    expect((<Error>error).message).toBe(errMsg);
   });
 });

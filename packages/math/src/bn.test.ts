@@ -474,7 +474,7 @@ describe('Math - BN', () => {
 
     expect(() => {
       bn.parseUnits('100,100.000002', 5);
-    }).toThrow("Decimal can't be bigger than the units");
+    }).toThrow("Decimal can't have more than 5 digits.");
   });
 
   it('should match valueOf to toString with no base arguments', () => {

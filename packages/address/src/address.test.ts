@@ -246,7 +246,7 @@ describe('Address class', () => {
   test('create an Address class fromDynamicInput [bad input]', () => {
     const expectedError = new FuelError(
       FuelError.CODES.PARSE_FAILED,
-      `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported`
+      `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported.`
     );
     expectToThrowFuelError(() => Address.fromDynamicInput('badinput'), expectedError);
   });

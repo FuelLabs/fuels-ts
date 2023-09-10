@@ -117,7 +117,7 @@ describe('Abi.ts', () => {
 
     const { error, result } = await safeExec(fn);
 
-    const expectedErrorMsg = `Could not parse name from abi file: `;
+    const expectedErrorMsg = `Could not parse name from ABI file: .`;
     expect(result).toBeFalsy();
     expect(error).toBeTruthy();
     expect(error?.message).toEqual(expectedErrorMsg);

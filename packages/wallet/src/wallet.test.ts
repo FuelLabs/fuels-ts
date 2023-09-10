@@ -61,7 +61,9 @@ describe('Wallet', () => {
     );
 
     expect(result).toBeUndefined();
-    expect(error?.message).toBe('Error decrypting wallet: invalid password');
+    expect(error?.message).toBe(
+      'Failed to decrypt the keystore wallet, the provided password is incorrect.'
+    );
   });
 
   it('Provide a custom provider on a public wallet to the contract instance', async () => {

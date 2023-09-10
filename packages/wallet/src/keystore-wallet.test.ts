@@ -54,7 +54,9 @@ describe('Keystore Wallet', () => {
     const { error } = await safeExec(() => decryptKeystoreWallet(keystore, wrongPassword));
 
     // Assert
-    expect(error?.message).toEqual('Error decrypting wallet: invalid password');
+    expect(error?.message).toEqual(
+      'Failed to decrypt the keystore wallet, the provided password is incorrect.'
+    );
   });
 
   test('should remove the "0x" prefix from a hex string', () => {

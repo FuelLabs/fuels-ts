@@ -447,7 +447,7 @@ describe('Contract', () => {
         })
         .call<[BN, BN, BN]>()
     ).rejects.toThrowError(
-      "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
+      "Transaction's gasLimit must be equal to or greater than the combined forwarded gas of all calls."
     );
   });
 
@@ -591,7 +591,7 @@ describe('Contract', () => {
           gasLimit,
         })
         .call<BN>()
-    ).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
+    ).rejects.toThrowError(`Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`);
   });
 
   it('calls array functions', async () => {
@@ -834,7 +834,7 @@ describe('Contract', () => {
       () => contract.multiCall(calls).call(),
       new FuelError(
         ErrorCode.INVALID_MULTICALL,
-        'Only one call that returns a heap type is allowed on a multicall'
+        'A multicall can have only one call that returns a heap type.'
       )
     );
   });
@@ -860,7 +860,7 @@ describe('Contract', () => {
       () => contract.multiCall(calls).call(),
       new FuelError(
         ErrorCode.INVALID_MULTICALL,
-        'The contract call with the heap type return must be at the last position on the multicall'
+        'In a multicall, the contract call returning a heap type must be the last call.'
       )
     );
   });
