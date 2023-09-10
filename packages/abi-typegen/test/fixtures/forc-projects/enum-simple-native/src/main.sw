@@ -1,15 +1,16 @@
 contract;
 
 enum MyEnum {
-  Checked: (),
-  Pending: ()
+    Checked: (),
+    Pending: (),
 }
 
-
 abi MyContract {
-  fn main(x: MyEnum) -> MyEnum;
+    fn main(x: MyEnum) -> MyEnum;
 }
 
 impl MyContract for Contract {
-  fn main(x: MyEnum) -> MyEnum { x }
+    fn main(x: MyEnum) -> MyEnum {
+        x
+    }
 }

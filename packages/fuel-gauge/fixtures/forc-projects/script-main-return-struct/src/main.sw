@@ -5,7 +5,5 @@ struct Baz {
 }
 
 fn main(foo: u8, bar: Baz) -> Baz {
-    Baz {
-        x: bar.x + foo
-    }
+    Baz { x: bar.x + foo }
 }

@@ -41,7 +41,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   });
 
   // add the UTXO inputs to the transaction request
-  request.addResourceInputsAndOutputs(resources);
+  request.addResources(resources);
 
   // add the transaction outputs (coins to be sent to the test wallet)
   quantities
@@ -62,11 +62,13 @@ export const createAndDeployContractFromProject = async (
   project: SnippetProjectEnum
 ): Promise<Contract> => {
   const wallet = await getTestWallet();
-  const { abiContents, binHexlified } = getSnippetProjectArtifacts(project);
+  const { abiContents, binHexlified, storageSlots } = getSnippetProjectArtifacts(project);
 
   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
-  return contractFactory.deployContract();
+  return contractFactory.deployContract({
+    storageSlots,
+  });
 };
 
 export const defaultTxParams = {
