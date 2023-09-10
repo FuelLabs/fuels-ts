@@ -64,7 +64,8 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
   ].flat();
 
   return new Promise((resolve, reject) => {
-    const command = config.useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+    const fuelsCorePath = join(__dirname, '..', 'node_modules', '.bin', 'fuels-core')
+    const command = config.useSystemFuelCore ? 'fuel-core' : fuelsCorePath;
 
     const childProcess = spawn(command, flags, { stdio: 'pipe' });
 
