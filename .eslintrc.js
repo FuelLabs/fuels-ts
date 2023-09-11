@@ -51,6 +51,7 @@ module.exports = {
     'tsdoc/syntax': 'warn',
     'require-await': 'off',
     '@typescript-eslint/require-await': 'error',
+    '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {
