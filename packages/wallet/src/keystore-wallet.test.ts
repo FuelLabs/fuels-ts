@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec } from '@fuel-ts/errors';
 
 import { decryptKeystoreWallet, encryptKeystoreWallet, removeHexPrefix } from './keystore-wallet';
 

@@ -1,4 +1,4 @@
-import { safeExec } from '../test-utils/safeExec';
+import { safeExec } from '@fuel-ts/errors';
 
 import { normalizeString } from './normalizeString';
 

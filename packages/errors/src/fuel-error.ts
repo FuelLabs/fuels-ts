@@ -22,7 +22,7 @@ export class FuelError extends Error {
     if (!codeIsKnown) {
       throw new FuelError(
         ErrorCode.PARSE_FAILED,
-        `Received an unknown error code: ${error.code}. Accepted codes: ${enumValues.join(', ')}.`
+        `Unknown error code: ${error.code}. Accepted codes: ${enumValues.join(', ')}.`
       );
     }
 

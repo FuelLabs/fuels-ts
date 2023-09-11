@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec } from '@fuel-ts/errors';
 
 import type { ArrayType } from '../abi/types/ArrayType';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';

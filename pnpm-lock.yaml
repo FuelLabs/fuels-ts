@@ -341,6 +341,9 @@ importers:
 
   apps/docs-snippets:
     devDependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils

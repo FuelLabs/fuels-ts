@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec } from '@fuel-ts/errors';
 import { existsSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';

@@ -36,6 +36,7 @@ describe('Parsing', () => {
       ErrorCode.PARSE_FAILED,
       `Unknown error code: ${code}. Accepted codes: ${Object.values(ErrorCode).join(', ')}.`
     );
+
     await expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
   });
 });
