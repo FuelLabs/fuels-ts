@@ -7,6 +7,7 @@ import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/provid
 import { InputType } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
+import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
 import { POINTER_DATA_OFFSET } from '../script-request';
@@ -51,7 +52,6 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
-  #scriptDataOffset: number = 0;
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -91,12 +91,20 @@ export class BaseInvocationScope<TReturn = any> {
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes);
+    this.transactionRequest.setScript(contractCallScript, this.calls);
+  }
+
+  /**
+   * Updates the transaction request with the current input/output.
+   */
+  protected updateContractInputAndOutput() {
     const calls = this.calls;
     calls.forEach((c) => {
-      this.transactionRequest.addContractInputAndOutput(c.contractId);
+      if (c.contractId) {
+        this.transactionRequest.addContractInputAndOutput(c.contractId);
+      }
     });
-    const contractCallScript = getContractCallScript(this.functionInvocationScopes);
-    this.transactionRequest.setScript(contractCallScript, calls);
   }
 
   /**
@@ -155,7 +163,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected addCalls(funcScopes: Array<InvocationScopeLike>) {
     this.functionInvocationScopes.push(...funcScopes);
-    this.updateScriptRequest();
+    this.updateContractInputAndOutput();
     this.updateRequiredCoins();
     return this;
   }
@@ -164,6 +172,9 @@ export class BaseInvocationScope<TReturn = any> {
    * Prepares the transaction by updating the script request, required coins, and checking the gas limit.
    */
   protected async prepareTransaction() {
+    // @ts-expect-error Property 'initWasm' does exist on type and is defined
+    await asm.initWasm();
+
     // Update request scripts before call
     this.updateScriptRequest();
 
