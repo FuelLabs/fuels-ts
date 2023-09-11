@@ -983,6 +983,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces

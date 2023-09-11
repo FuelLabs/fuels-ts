@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import { FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
@@ -77,7 +78,8 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.program.provider as Provider;
     const consensusParams = provider.getCachedChainInfo().consensusParameters;
     if (!consensusParams) {
-      throw new Error(
+      throw new FuelError(
+        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.connect()``'
       );
     }

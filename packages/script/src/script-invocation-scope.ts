@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FuelError } from '@fuel-ts/errors';
 import type { AbstractScript } from '@fuel-ts/interfaces';
 import {
   ScriptRequest,
@@ -29,7 +30,10 @@ export class ScriptInvocationScope<
     const chainInfoCache = (this.program.provider as Provider).getCachedChainInfo();
 
     if (!chainInfoCache) {
-      throw new Error('Provider must have chain info cache.');
+      throw new FuelError(
+        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
+        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.connect()`'
+      );
     }
 
     const maxInputs = chainInfoCache.consensusParameters.maxInputs.toNumber();

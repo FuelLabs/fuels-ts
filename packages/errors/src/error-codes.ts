@@ -7,6 +7,7 @@ export enum ErrorCode {
 
   // provider
   INVALID_URL = 'invalid-url',
+  CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
 
   // wallet
   /**
