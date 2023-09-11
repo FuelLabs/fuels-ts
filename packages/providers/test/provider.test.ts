@@ -3,10 +3,10 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
+import { safeExec } from '@fuel-ts/errors';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { safeExec } from '@fuel-ts/errors';
 import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';
