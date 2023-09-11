@@ -19,7 +19,7 @@ export default defineConfig({
     },
   },
   head: [
-    ['link', { rel: 'icon', href: 'favicon.ico', type: 'image/png' }],
+    ['link', { rel: 'icon', href: '/fuels-ts/favicon.ico', type: 'image/png' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:url', content: 'https://fuellabs.github.io/fuels-ts/' }],
   ],

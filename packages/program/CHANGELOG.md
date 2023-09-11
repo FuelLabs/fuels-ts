@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.56.1
+
+## 0.56.0
+
+### Minor Changes
+
+- forbid multicall for more than one function that returns heap types, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1217](https://github.com/FuelLabs/fuels-ts/pull/1217))
+- Ensure asm from wasm is initialzed, by [@camsjams](https://github.com/camsjams) (See [#1240](https://github.com/FuelLabs/fuels-ts/pull/1240))
+- 🐞 Fix gas call forwarding logic, by [@camsjams](https://github.com/camsjams) (See [#1241](https://github.com/FuelLabs/fuels-ts/pull/1241))
+
 ## 0.55.0
 
 ### Minor Changes

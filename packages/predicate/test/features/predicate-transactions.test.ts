@@ -30,12 +30,12 @@ describe('Predicate', () => {
       resourceAccount: predicate,
     });
 
-    it('includes predicate as input when sending a transaction', () => {
+    it('includes predicate as input when sending a transaction', async () => {
       const sendTransactionMock = jest
         .spyOn(Account.prototype, 'sendTransaction')
         .mockImplementation();
 
-      predicate.sendTransaction(request);
+      await predicate.sendTransaction(request);
 
       const inputCoinMock = sendTransactionMock.mock.calls[0][0]
         .inputs?.[0] as unknown as InputCoin;
@@ -43,12 +43,12 @@ describe('Predicate', () => {
       expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
     });
 
-    it('includes predicate as input when simulating a transaction', () => {
+    it('includes predicate as input when simulating a transaction', async () => {
       const sendTransactionMock = jest
         .spyOn(Account.prototype, 'simulateTransaction')
         .mockImplementation();
 
-      predicate.simulateTransaction(request);
+      await predicate.simulateTransaction(request);
 
       const inputCoinMock = sendTransactionMock.mock.calls[0][0]
         .inputs?.[0] as unknown as InputCoin;
