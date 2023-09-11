@@ -14,7 +14,7 @@ describe('cli.js', () => {
 
     // executing
     jest.spyOn(process, 'exit').mockImplementation();
-    run([]);
+    await run([]);
 
     // validating
     expect(name).toHaveBeenCalledWith('fuels');

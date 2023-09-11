@@ -3,7 +3,7 @@ import { run } from './cli';
 import { error } from './workflow/utils/logger';
 
 try {
-  run(process.argv);
+  run(process.argv).catch(process.stderr.write);
 } catch (err: unknown) {
   error((err as Error)?.message || err);
   process.exit(1);
