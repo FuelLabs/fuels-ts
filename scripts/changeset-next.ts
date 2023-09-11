@@ -1,4 +1,4 @@
-import { writeFile } from 'node:fs/promises';
+import { writeFileSync } from 'node:fs';
 
 const output = `---\n"fuels": patch\n---\n\nincremental\n`;
-writeFile('.changeset/fuel-labs-ci.md', output);
+writeFileSync('.changeset/fuel-labs-ci.md', output);
