@@ -146,13 +146,13 @@ describe('Address utils', () => {
     expect(result).toEqual(ADDRESS_B256);
   });
 
-  test('toB256 (b256 to b256)', () => {
+  test('toB256 (b256 to b256)', async () => {
     const address = ADDRESS_B256 as Bech32Address;
     const expectedError = new FuelError(
       FuelError.CODES.INVALID_BECH32_ADDRESS,
       `Invalid Bech32 Address: ${address}`
     );
-    expectToThrowFuelError(() => utils.toB256(address), expectedError);
+    await expectToThrowFuelError(() => utils.toB256(address), expectedError);
   });
 
   test('toBech32=>toB256', () => {
@@ -169,13 +169,13 @@ describe('Address utils', () => {
     expect(result).toEqual(ADDRESS_B256_EVM);
   });
 
-  test('clearFirst12BytesFromB256 (invalid B256)', () => {
+  test('clearFirst12BytesFromB256 (invalid B256)', async () => {
     const invalidB256 = '0x123';
     const expectedError = new FuelError(
       FuelError.CODES.PARSE_FAILED,
       `Cannot generate EVM Address B256 from B256: ${invalidB256}`
     );
-    expectToThrowFuelError(() => utils.clearFirst12BytesFromB256(invalidB256), expectedError);
+    await expectToThrowFuelError(() => utils.clearFirst12BytesFromB256(invalidB256), expectedError);
   });
 });
 
@@ -243,12 +243,12 @@ describe('Address class', () => {
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
-  test('create an Address class fromDynamicInput [bad input]', () => {
+  test('create an Address class fromDynamicInput [bad input]', async () => {
     const expectedError = new FuelError(
       FuelError.CODES.PARSE_FAILED,
       'Unknown address format: only Bech32, B256, or Public Key (512) supported'
     );
-    expectToThrowFuelError(() => Address.fromDynamicInput('badinput'), expectedError);
+    await expectToThrowFuelError(() => Address.fromDynamicInput('badinput'), expectedError);
   });
 
   test('create an Address class fromDynamicInput [Address]', () => {
