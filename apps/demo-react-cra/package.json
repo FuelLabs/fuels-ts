@@ -1,9 +1,9 @@
 {
   "name": "demo-react-cra",
-  "version": "0.1.11",
+  "version": "0.1.14",
   "private": true,
   "dependencies": {
-    "@fuels/vm-asm": "0.34.1",
+    "@fuels/vm-asm": "0.36.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

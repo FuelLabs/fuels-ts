@@ -24,6 +24,19 @@ For this, you can find two simple utilities on the wallet package:
 
 - [`@fuel-ts/wallet`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/wallet#test-utilities)
 
+On top of these two utilities, if you want to quickly get up and running with a local node, you can use the `launchNodeAndGetWallets` from the `@fuel-ts/wallet/test-utils` package.
+
+```ts
+import { launchNodeAndGetWallets } from "@fuel-ts/wallet/test-utils";
+
+const { stop, wallets, provider } = await launchNodeAndGetWallets();
+
+// ... do your tests - deploy contracts using the wallets, fetch info from the provider, etc.
+
+// stop the node when you're done
+stop();
+```
+
 See also:
 
 1. [Setting up test wallets](../wallets/test-wallets.md)
