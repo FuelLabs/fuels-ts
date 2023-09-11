@@ -1,7 +1,7 @@
 {
   "name": "demo-react-vite",
   "private": true,
-  "version": "0.0.15",
+  "version": "0.0.16",
   "type": "module",
   "scripts": {
     "original:dev": "vite",
