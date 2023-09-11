@@ -184,14 +184,14 @@ export class WalletManager extends EventEmitter {
    * Lock wallet. It removes passphrase from class instance, encrypt and hide all address and
    * secrets.
    */
-  async lock() {
+  lock() {
     this.#isLocked = true;
     // Clean state vaults from state
     this.#vaults = [];
     // Clean password from state
     this.#passphrase = '';
     // Emit event that wallet is locked
-    await this.emit('lock');
+    this.emit('lock');
   }
 
   /**
