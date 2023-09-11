@@ -668,7 +668,7 @@ describe('Provider', () => {
     expect(messageProof).toMatchSnapshot();
   });
 
-  it('connect method', async () => {
+  it('can connect', async () => {
     const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
 
     // check if the provider was initialized properly
@@ -677,7 +677,7 @@ describe('Provider', () => {
     expect(provider.chainInfoCache['http://127.0.0.1:4000/graphql']).toBeDefined();
   });
 
-  it('invalidChainInfoCache', async () => {
+  it('can invalidate the chain info cache', async () => {
     const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
 
     // spy on getChain
