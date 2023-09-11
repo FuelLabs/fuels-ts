@@ -42,11 +42,6 @@ const DEFAULT_OPCODE_PARAMS: CallOpcodeParamsOffset = {
   callDataOffset: 0,
 };
 
-const DEFAULT_OUTPUT_INFO: CallOutputInfo = {
-  isHeap: false,
-  encodedLength: 0,
-};
-
 // During a script execution, this script's contract id is the **null** contract id
 const SCRIPT_WRAPPER_CONTRACT_ID = ZeroBytes32;
 
