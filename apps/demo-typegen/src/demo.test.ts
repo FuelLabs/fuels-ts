@@ -1,6 +1,6 @@
 // #region Testing-with-jest-ts
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { ContractFactory, Provider, toHex, BaseAssetId } from 'fuels';
+import { ContractFactory, Provider, toHex, BaseAssetId, Wallet } from 'fuels';
 
 import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
 
@@ -45,3 +45,55 @@ describe('ExampleContract', () => {
   });
 });
 // #endregion Testing-with-jest-ts
+
+type TestError = {
+  message: string;
+};
+
+it('should throw when simulating via contract factory with wallet with no resources', async () => {
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+  const unfundedWallet = Wallet.generate({ provider });
+
+  const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
+  const contract = await factory.deployContract();
+  const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
+
+  let result;
+  let error;
+
+  try {
+    const r = await contractInstance.functions.return_input(1337).simulate();
+    result = r;
+  } catch (e) {
+    error = e as TestError;
+    expect(error.message).toContain('not enough coins to fit the target');
+  }
+
+  expect(result).toBeFalsy();
+  expect(error).toBeTruthy();
+});
+
+it('should throw when dryRunning via contract factory with wallet with no resources', async () => {
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+  const unfundedWallet = Wallet.generate({ provider });
+
+  const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
+  const contract = await factory.deployContract();
+  const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
+
+  let result;
+  let error;
+
+  try {
+    const r = await contractInstance.functions.return_input(1337).dryRun();
+    result = r;
+  } catch (e) {
+    error = e as TestError;
+    expect(error.message).toContain('not enough coins to fit the target');
+  }
+
+  expect(result).toBeFalsy();
+  expect(error).toBeTruthy();
+});
