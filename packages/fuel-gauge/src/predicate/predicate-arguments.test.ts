@@ -1,5 +1,5 @@
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish } from 'fuels';
-import { toHex, toNumber, Predicate, toBytes } from 'fuels';
+import { toHex, toNumber, Predicate } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';

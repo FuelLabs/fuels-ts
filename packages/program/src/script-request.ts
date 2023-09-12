@@ -31,7 +31,6 @@ const logger = new Logger(versions.FUELS);
 export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + SCRIPT_FIXED_SIZE;
 export const POINTER_DATA_OFFSET =
   WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-
 /**
  * Represents a script result, containing information about the script execution.
  */
