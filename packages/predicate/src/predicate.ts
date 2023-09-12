@@ -117,7 +117,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
     const OFFSET =
-      VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + paddedCode.byteLength + WORD_SIZE;
+      VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
 
     this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
