@@ -26,7 +26,7 @@ export const VM_TX_MEMORY =
   // Asset ID/Balance coin input pairs
   MAX_INPUTS * (ASSET_ID_LEN + WORD_SIZE);
 
-// SCRIPT_FIXED_SIZE = 112
+// SCRIPT_FIXED_SIZE = 104
 export const SCRIPT_FIXED_SIZE =
   WORD_SIZE + // Identifier
   WORD_SIZE + // Gas price
