@@ -1,6 +1,6 @@
-import { BaseAssetId, Wallet, BN } from 'fuels';
+import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -34,5 +34,47 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_u8(15).simulate();
     // #endregion simulate-transactions-2
     expect(value).toEqual(15);
+  });
+
+  it('should throw when simulating with an unfunded wallet', async () => {
+    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+    const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
+
+    let result;
+    let error;
+
+    try {
+      const r = await deployedContract.functions.echo_u8(15).simulate();
+      result = r;
+    } catch (e) {
+      error = e as { message: string };
+      expect(error?.message).toContain('not enough coins to fit the target');
+    }
+
+    expect(result).toBeFalsy();
+    expect(error).toBeTruthy();
+  });
+
+  it('should throw when dry running with an unfunded wallet', async () => {
+    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+    const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
+
+    let result;
+    let error;
+
+    try {
+      const r = await deployedContract.functions.echo_u8(15).dryRun();
+      result = r;
+    } catch (e) {
+      error = e as { message: string };
+      expect(error?.message).toContain('not enough coins to fit the target');
+    }
+
+    expect(result).toBeFalsy();
+    expect(error).toBeTruthy();
   });
 });

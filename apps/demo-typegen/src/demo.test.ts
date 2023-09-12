@@ -46,10 +46,6 @@ describe('ExampleContract', () => {
 });
 // #endregion Testing-with-jest-ts
 
-type TestError = {
-  message: string;
-};
-
 it('should throw when simulating via contract factory with wallet with no resources', async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
@@ -66,15 +62,15 @@ it('should throw when simulating via contract factory with wallet with no resour
     const r = await contractInstance.functions.return_input(1337).simulate();
     result = r;
   } catch (e) {
-    error = e as TestError;
-    expect(error.message).toContain('not enough coins to fit the target');
+    error = e as { message: string };
+    expect(error?.message).toContain('not enough coins to fit the target');
   }
 
   expect(result).toBeFalsy();
   expect(error).toBeTruthy();
 });
 
-it('should throw when dryRunning via contract factory with wallet with no resources', async () => {
+it('should throw when dry running via contract factory with wallet with no resources', async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
   const unfundedWallet = Wallet.generate({ provider });
@@ -90,8 +86,8 @@ it('should throw when dryRunning via contract factory with wallet with no resour
     const r = await contractInstance.functions.return_input(1337).dryRun();
     result = r;
   } catch (e) {
-    error = e as TestError;
-    expect(error.message).toContain('not enough coins to fit the target');
+    error = e as { message: string };
+    expect(error?.message).toContain('not enough coins to fit the target');
   }
 
   expect(result).toBeFalsy();
