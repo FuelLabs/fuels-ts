@@ -1,4 +1,4 @@
-import uniq from 'lodash.uniq';
+import { uniq } from 'ramda';
 
 import type { IType } from '../../types/interfaces/IType';
 

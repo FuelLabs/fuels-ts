@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { hexlify } from '@ethersproject/bytes';
-import cloneDeep from 'lodash.clonedeep';
+import { clone } from 'ramda';
 
 // When parsing a Transaction to JSON we need
 // to convert special types into each respective
@@ -42,5 +42,5 @@ export function normalizeJSON(root: any) {
   // Do a single deep clone before normalizing
   // to avoid mutating the original object
   // and doing extra clones on each iteration
-  return normalize(cloneDeep(root));
+  return normalize(clone(root));
 }
