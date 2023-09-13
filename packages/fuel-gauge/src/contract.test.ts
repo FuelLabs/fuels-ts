@@ -946,4 +946,24 @@ describe('Contract', () => {
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
+
+  it('should ensure ScriptResultDecoderError works for dryRun and simulate calls', async () => {
+    const contract = await setupContract();
+
+    const invocationScope = contract.functions.return_context_amount().callParams({
+      forward: [100, BaseAssetId],
+    });
+    const { gasUsed } = await invocationScope.getTransactionCost({
+      tolerance: 0,
+    });
+
+    const gasLimit = multiply(gasUsed, 0.5);
+    await expect(
+      invocationScope
+        .txParams({
+          gasLimit,
+        })
+        .dryRun<BN>()
+    ).rejects.toThrowError('Expected returnReceipt');
+  });
 });
