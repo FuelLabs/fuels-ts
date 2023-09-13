@@ -16,8 +16,8 @@ import {
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
 import { createClient } from 'graphql-sse';
-import { clone } from 'ramda';
 import nodeFetch from 'node-fetch';
+import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -194,7 +194,7 @@ export type FetchRequestOptions = {
   body: string;
 };
 
-export type GetCustomFetchFn<R extends Response> = (
+export type CustomFetch<R extends Response> = (
   url: string,
   options: FetchRequestOptions,
   providerOptions?: Partial<Omit<ProviderOptions<R>, 'fetch'>>
@@ -203,7 +203,7 @@ export type GetCustomFetchFn<R extends Response> = (
  * Provider initialization options
  */
 export type ProviderOptions<FetchResponse extends Response = Response> = {
-  fetch: GetCustomFetchFn<FetchResponse> | undefined;
+  fetch: CustomFetch<FetchResponse> | undefined;
   cacheUtxo: number | undefined;
   timeout: number;
 };
