@@ -965,5 +965,13 @@ describe('Contract', () => {
         })
         .dryRun<BN>()
     ).rejects.toThrowError('Expected returnReceipt');
+
+    await expect(
+      invocationScope
+        .txParams({
+          gasLimit,
+        })
+        .simulate<BN>()
+    ).rejects.toThrowError('Expected returnReceipt');
   });
 });
