@@ -672,7 +672,7 @@ describe('Provider', () => {
   it.skip('throws AbortError on timeout when calling a subscription', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0 });
 
-    const { error, result } = await safeExec(() =>
+    const { error } = await safeExec(() =>
       provider.subscriptions.statusChange({ transactionId: 'doesnt matter, will be aborted' })
     );
     expect(error).toBeDefined();
@@ -682,11 +682,15 @@ describe('Provider', () => {
     });
   });
 
-  it('can accept a custom fetch function', () => {
-    const fetchFn = () => Promise.resolve(new Response());
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0, fetch: fetchFn });
-
-    expect(provider.options.fetch).toEqual(fetchFn);
+  it('can accept a custom fetch function', async () => {
+    let fetchFnUsed = false;
+    const fetchFn = () => {
+      fetchFnUsed = true;
+      return Promise.resolve(new Response());
+    };
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { fetch: fetchFn });
+    await provider.operations.getChain();
+    expect(fetchFnUsed).toEqual(true);
   });
 
   test('errors returned from node via subscriptions are thrown', async () => {
