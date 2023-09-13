@@ -5,7 +5,7 @@ import { type Transaction } from '@fuel-ts/transactions';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { calculateTransactionFee } from '../utils';
 
-import { formatDate } from './date';
+import { fromTai64ToDate } from './date';
 import {
   getOperations,
   getTransactionTypeName,
@@ -72,10 +72,10 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
-  let timeFormatted: string | undefined;
+  let date: Date | undefined;
 
   if (time) {
-    timeFormatted = formatDate(time);
+    date = fromTai64ToDate(time);
   }
 
   const transactionSummary: TransactionSummary<TTransactionType> = {
@@ -96,7 +96,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
-    timeFormatted,
+    date,
     transaction: transaction as Transaction<TTransactionType>,
   };
 

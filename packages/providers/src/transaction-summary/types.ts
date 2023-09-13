@@ -162,7 +162,7 @@ export type TransactionSummary<TTransactionType = void> = {
   isStatusFailure: boolean;
   mintedAssets: MintedAsset[];
   burnedAssets: BurnedAsset[];
-  timeFormatted?: string;
+  date?: Date;
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
 };
