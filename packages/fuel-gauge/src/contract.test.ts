@@ -879,7 +879,6 @@ describe('Contract', () => {
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     const provider = new Provider(FUEL_NETWORK_URL);
-
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
