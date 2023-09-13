@@ -280,7 +280,7 @@ export const MOCK_TRANSACTION: Transaction = {
 
 export const MOCK_SUCCESS_STATUS: SuccessStatus = {
   __typename: 'SuccessStatus',
-  time: '2021-09-09T14:00:00.000Z',
+  time: '4611686020122012518',
   type: 'SuccessStatus',
   block: {
     __typename: 'Block',
@@ -296,12 +296,12 @@ export const MOCK_FAILURE_STATUS: FailureStatus = {
     id: '0x123',
   },
   reason: 'reason',
-  time: '2021-09-09T14:00:00.000Z',
+  time: '4611686020122012535',
 };
 
 export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {
   __typename: 'SubmittedStatus',
-  time: '2021-09-09T14:00:00.000Z',
+  time: '4611686020122012562',
   type: 'SubmittedStatus',
 };
 
