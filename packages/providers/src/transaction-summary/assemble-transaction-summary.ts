@@ -5,6 +5,7 @@ import { type Transaction } from '@fuel-ts/transactions';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { calculateTransactionFee } from '../utils';
 
+import { formatDate } from './date';
 import {
   getOperations,
   getTransactionTypeName,
@@ -71,6 +72,12 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
+  let timeFormatted: string | undefined;
+
+  if (time) {
+    timeFormatted = formatDate(time);
+  }
+
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
     fee,
@@ -89,6 +96,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
+    timeFormatted,
     transaction: transaction as Transaction<TTransactionType>,
   };
 
