@@ -35,11 +35,10 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "lodash.upperfirst": "^4.3.1",
+    "ramda": "^0.29.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@types/lodash.upperfirst": "^4.3.7"
+    "@ethersproject/bytes": "^5.7.0"
   }
 }
