@@ -134,9 +134,11 @@ export class TransactionResponse {
 
     if (!response.transaction) {
       for await (const { statusChange } of this.provider.subscriptions.statusChange({
-        transactionId: '3db07b414b904228f392e4d4f28f138d6d6210361ae4fcd9231427da81f80410',
+        transactionId: this.id,
       })) {
-        if (statusChange) break;
+        if (statusChange) {
+          break;
+        }
       }
 
       return this.fetch();
@@ -242,19 +244,5 @@ export class TransactionResponse {
     }
 
     return result;
-  }
-
-  /**
-   * Introduces a delay based on the number of previous attempts made.
-   *
-   * @param attempts - The number of attempts.
-   */
-  private async sleepBasedOnAttempts(attempts: number): Promise<void> {
-    // TODO: Consider adding `maxTimeout` or `maxAttempts` parameter.
-    // The aim is to avoid perpetual execution; when the limit
-    // is reached, we can throw accordingly.
-    await sleep(
-      Math.min(STATUS_POLLING_INTERVAL_MIN_MS * attempts, STATUS_POLLING_INTERVAL_MAX_MS)
-    );
   }
 }
