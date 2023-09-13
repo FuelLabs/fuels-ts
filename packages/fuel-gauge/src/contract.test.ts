@@ -964,7 +964,7 @@ describe('Contract', () => {
           gasLimit,
         })
         .dryRun<BN>()
-    ).rejects.toThrowError('Expected returnReceipt');
+    ).rejects.toThrowError(`The script call result does not contain a 'returnReceipt'.`);
 
     await expect(
       invocationScope
@@ -972,6 +972,6 @@ describe('Contract', () => {
           gasLimit,
         })
         .simulate<BN>()
-    ).rejects.toThrowError('Expected returnReceipt');
+    ).rejects.toThrowError(`The script call result does not contain a 'returnReceipt'.`);
   });
 });
