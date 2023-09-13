@@ -2,7 +2,7 @@ import * as tai64Mod from 'tai64';
 
 import * as dateMod from './date';
 
-const { tai64toDate, formatDate, dateToTai64 } = dateMod;
+const { tai64toDate, dateToTai64 } = dateMod;
 
 describe('transaction-summary/date', () => {
   afterEach(jest.restoreAllMocks);
@@ -19,17 +19,6 @@ describe('transaction-summary/date', () => {
     expect(fromStringSpy).toHaveBeenCalledWith(tai64Timestamp, 10);
 
     expect(toUnixSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it('should format TAI64 to relative time string', () => {
-    const tai64toDateSpy = jest.spyOn(dateMod, 'tai64toDate');
-
-    const tai64Timestamp = '4611686020121838636';
-
-    formatDate(tai64Timestamp);
-
-    expect(tai64toDateSpy).toHaveBeenCalledTimes(1);
-    expect(tai64toDateSpy).toHaveBeenCalledWith(tai64Timestamp);
   });
 
   it('should convert Date to TAI64 correctly', () => {
