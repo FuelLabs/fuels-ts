@@ -21,6 +21,9 @@ export enum ErrorCode {
   // transaction
   TRANSACTION_FAILED = 'transaction-failed',
 
+  // contract
+  INVALID_MULTICALL = 'invalid-multicall',
+
   // coder
   // ...
 }
