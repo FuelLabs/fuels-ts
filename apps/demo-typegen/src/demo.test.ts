@@ -1,4 +1,5 @@
 // #region Testing-with-jest-ts
+import { safeExec } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { ContractFactory, Provider, toHex, BaseAssetId, Wallet } from 'fuels';
 
@@ -55,19 +56,9 @@ it('should throw when simulating via contract factory with wallet with no resour
   const contract = await factory.deployContract();
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  let result;
-  let error;
+  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
 
-  try {
-    const r = await contractInstance.functions.return_input(1337).simulate();
-    result = r;
-  } catch (e) {
-    error = e as { message: string };
-    expect(error?.message).toContain('not enough coins to fit the target');
-  }
-
-  expect(result).toBeFalsy();
-  expect(error).toBeTruthy();
+  expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });
 
 it('should throw when dry running via contract factory with wallet with no resources', async () => {
@@ -79,17 +70,7 @@ it('should throw when dry running via contract factory with wallet with no resou
   const contract = await factory.deployContract();
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  let result;
-  let error;
+  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).dryRun());
 
-  try {
-    const r = await contractInstance.functions.return_input(1337).dryRun();
-    result = r;
-  } catch (e) {
-    error = e as { message: string };
-    expect(error?.message).toContain('not enough coins to fit the target');
-  }
-
-  expect(result).toBeFalsy();
-  expect(error).toBeTruthy();
+  expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });

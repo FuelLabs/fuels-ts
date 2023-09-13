@@ -1,3 +1,4 @@
+import { safeExec } from '@fuel-ts/utils/test-utils';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
@@ -42,19 +43,9 @@ describe(__filename, () => {
     const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
     const deployedContract = new Contract(contract.id, abi, unfundedWallet);
 
-    let result;
-    let error;
+    const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).simulate());
 
-    try {
-      const r = await deployedContract.functions.echo_u8(15).simulate();
-      result = r;
-    } catch (e) {
-      error = e as { message: string };
-      expect(error?.message).toContain('not enough coins to fit the target');
-    }
-
-    expect(result).toBeFalsy();
-    expect(error).toBeTruthy();
+    expect((<Error>error).message).toMatch('not enough coins to fit the target');
   });
 
   it('should throw when dry running with an unfunded wallet', async () => {
@@ -63,18 +54,8 @@ describe(__filename, () => {
     const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
     const deployedContract = new Contract(contract.id, abi, unfundedWallet);
 
-    let result;
-    let error;
+    const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).dryRun());
 
-    try {
-      const r = await deployedContract.functions.echo_u8(15).dryRun();
-      result = r;
-    } catch (e) {
-      error = e as { message: string };
-      expect(error?.message).toContain('not enough coins to fit the target');
-    }
-
-    expect(result).toBeFalsy();
-    expect(error).toBeTruthy();
+    expect((<Error>error).message).toMatch('not enough coins to fit the target');
   });
 });
