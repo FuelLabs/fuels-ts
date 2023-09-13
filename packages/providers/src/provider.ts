@@ -276,7 +276,10 @@ export default class Provider {
         /*
          This is the only place where I've managed to wedge in error throwing
          without the error being converted to the library's NetworkError or being silently ignored.
-         These are errors returned from the node.
+         These are errors returned from the node as a field of the `data` property with a 200 response code,
+         so they aren't treated as errors by the library.
+         This function (onMessage) gets called after a fetch but before message processing.
+         See here: https://github.com/enisdenjo/graphql-sse/blob/370ec133f8ca9c7b763a6ca0223c756a09169c59/src/client.ts#L872
         */
         if ((msg.data as { _isError: boolean })._isError) {
           throw new Error(JSON.stringify(msg.data!.errors));
