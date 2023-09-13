@@ -29,7 +29,6 @@ import type {
   GqlTransaction,
   AbiMap,
 } from '../transaction-summary/types';
-import { sleep } from '../utils';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -72,9 +71,6 @@ export type TransactionResultReceipt =
   | TransactionResultMintReceipt
   | TransactionResultBurnReceipt;
 
-const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
-const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
-
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   gqlTransaction: GqlTransaction;
@@ -90,10 +86,6 @@ export class TransactionResponse {
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
-  /** Number of attempts made to fetch the transaction */
-  fetchAttempts: number = 0;
-  /** Number of attempts made to retrieve a processed transaction. */
-  resultAttempts: number = 0;
   /** The graphql Transaction with receipts object. */
   gqlTransaction?: GqlTransaction;
 
