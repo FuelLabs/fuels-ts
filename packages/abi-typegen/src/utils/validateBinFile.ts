@@ -1,7 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import upperFirst from 'lodash.upperfirst';
 
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
+
+const upperFirst = (s: string): string => s[0].toUpperCase() + s.slice(1);
 
 export function validateBinFile(params: {
   abiFilepath: string;

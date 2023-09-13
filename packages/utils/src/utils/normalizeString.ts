@@ -1,5 +1,4 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import upperFirst from 'lodash.upperfirst';
 
 /**
  * Converts `some.string-value` into `SomeStringValue`.
@@ -17,7 +16,7 @@ export const normalizeString = (str: string): string => {
     (s) => s.replace(/-[a-z]/g, (match) => match.slice(-1).toUpperCase()), // delete '-' and capitalize the letter after them
     (s) => s.replace(/-/g, ''), // delete any '-' left
     (s) => s.replace(/^\d+/, ''), // removes leading digits
-    (s) => upperFirst(s),
+    (s) => s[0].toUpperCase() + s.slice(1), // capitalize first letter
   ];
 
   const output = transformations.reduce((s, t) => t(s), str);

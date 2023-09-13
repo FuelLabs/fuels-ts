@@ -15,7 +15,7 @@ import {
   TransactionCoder,
 } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
-import cloneDeep from 'lodash.clonedeep';
+import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -529,7 +529,7 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike,
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
-    const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
+    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
