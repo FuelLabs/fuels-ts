@@ -50,6 +50,7 @@ describe('TransactionSummary', () => {
       expect(transaction.blockId).toEqual(expect.any(String));
       expect(transaction.time).toEqual(expect.any(String));
       expect(transaction.status).toEqual(expect.any(String));
+      expect(transaction.timeFormatted).toEqual(expect.any(String));
     }
   };
 
