@@ -2,7 +2,7 @@ import * as tai64Mod from 'tai64';
 
 import * as dateMod from './date';
 
-const { tai64toDate, dateToTai64 } = dateMod;
+const { fromTai64ToDate: tai64toDate, fromDateToTai64: dateToTai64 } = dateMod;
 
 describe('transaction-summary/date', () => {
   afterEach(jest.restoreAllMocks);
