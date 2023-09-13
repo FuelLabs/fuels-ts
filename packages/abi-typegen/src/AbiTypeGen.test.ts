@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/errors';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 

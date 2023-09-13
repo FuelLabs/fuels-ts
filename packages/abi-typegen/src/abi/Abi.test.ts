@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/errors';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';

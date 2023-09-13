@@ -1,4 +1,5 @@
-import { FuelError, expectToThrowFuelError } from '@fuel-ts/errors';
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 

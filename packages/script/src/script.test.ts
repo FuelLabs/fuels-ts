@@ -3,7 +3,7 @@ import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import { safeExec } from '@fuel-ts/errors';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
