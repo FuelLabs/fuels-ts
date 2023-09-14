@@ -1,5 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
-import { pbkdf2 } from '@ethersproject/pbkdf2';
+import { pbkdf2 } from 'ethers';
 
 import type { CryptoApi, Keystore } from '../types';
 

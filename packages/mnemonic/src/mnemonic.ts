@@ -1,10 +1,9 @@
 import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
-import { pbkdf2 } from '@ethersproject/pbkdf2';
 import { randomBytes } from '@fuel-ts/crypto';
 import { english } from '@fuel-ts/wordlists';
-import { sha256, computeHmac } from 'ethers';
+import { pbkdf2, sha256, computeHmac } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {

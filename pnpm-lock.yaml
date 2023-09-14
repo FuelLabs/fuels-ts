@@ -442,9 +442,6 @@ importers:
       '@ethersproject/properties':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@ethersproject/strings':
         specifier: ^5.7.0
         version: 5.7.0
@@ -515,9 +512,6 @@ importers:
       '@ethersproject/logger':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -547,9 +541,6 @@ importers:
         specifier: ^5.7.0
         version: 5.7.0
       '@ethersproject/logger':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
       '@fuel-ts/abi-coder':
@@ -592,12 +583,12 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
       ethereum-cryptography:
         specifier: ^2.1.2
         version: 2.1.2
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/errors:
     dependencies:
@@ -722,12 +713,6 @@ importers:
 
   packages/hasher:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -765,9 +750,6 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -794,12 +776,6 @@ importers:
 
   packages/merkle:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -813,12 +789,6 @@ importers:
         specifier: ^5.7.0
         version: 5.7.0
       '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
       '@fuel-ts/crypto':
@@ -925,9 +895,6 @@ importers:
       '@ethersproject/networks':
         specifier: ^5.7.1
         version: 5.7.1
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1038,9 +1005,6 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -1072,9 +1036,6 @@ importers:
   packages/transactions:
     dependencies:
       '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
       '@fuel-ts/abi-coder':
@@ -3658,13 +3619,6 @@ packages:
       '@ethersproject/logger': 5.7.0
     dev: false
 
-  /@ethersproject/pbkdf2@5.7.0:
-    resolution: {integrity: sha512-oR/dBRZR6GTyaofd86DehG72hY6NpAjhabkhxgr3X2FpJtJuodEl2auADWBZfhDHgVCbu3/H/Ocq2uC6dpNjjw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-    dev: false
-
   /@ethersproject/properties@5.7.0:
     resolution: {integrity: sha512-J87jy8suntrAkIZtecpxEPxY//szqr1mlBaYlQ0r4RCaiD2hjheqF9s1LVE8vVuJCXisjIP+JgtK/Do54ej4Sw==}
     dependencies:
@@ -3676,14 +3630,6 @@ packages:
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/sha2@5.7.0:
-    resolution: {integrity: sha512-gKlH42riwb3KYp0reLsFTokByAKoJdgFCwI+CCiX/k+Jm2mbNs6oOaCjYQSlI1+XBVejwH2KrmCbMAT/GnRDQw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      hash.js: 1.1.7
     dev: false
 
   /@ethersproject/signing-key@5.7.0:
