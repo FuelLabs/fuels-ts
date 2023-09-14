@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
+import type { BytesLike } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';

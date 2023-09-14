@@ -1,5 +1,5 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 
 import { U64Coder } from './coders/u64';
 import { BYTES_CODER_TYPE, VEC_CODER_TYPE, WORD_SIZE } from './constants';

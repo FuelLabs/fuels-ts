@@ -5,10 +5,10 @@ import { unpackDynamicData, concatWithDynamicData } from './utilities';
 
 describe('Abi Coder Utilities', () => {
   it('can concatWithVectorData [no dynamicData, should match original concat]', () => {
-    const data1 = [0, 0, 0, 0, 0, 0, 0, 24];
-    const data2 = [0, 0, 0, 0, 0, 0, 0, 4];
-    const data3 = [0, 0, 0, 0, 0, 0, 0, 4];
-    const data4 = [0, 0, 0, 0, 0, 0, 0, 16];
+    const data1 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    const data2 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const data3 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const data4 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
     const EXPECTED = concat([data1, data2, data3, data4]);
 
     const RESULT = concatWithDynamicData([data1, data2, data3, data4]);
@@ -18,9 +18,9 @@ describe('Abi Coder Utilities', () => {
   it('can concatWithVectorData [relocate single dynamicData]', () => {
     const pointer: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     pointer.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
-    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
-    const length = [0, 0, 0, 0, 0, 0, 0, 4];
-    const someData = [0, 0, 0, 0, 0, 0, 0, 16];
+    const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const someData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
     const EXPECTED: Uint8ArrayWithDynamicData = concat([pointer, capacity, length, someData]);
     EXPECTED.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
@@ -34,8 +34,8 @@ describe('Abi Coder Utilities', () => {
 
   it('can concatWithVectorData [two distinct dynamicData]', () => {
     const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
-    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointer,
       capacity,
@@ -63,8 +63,8 @@ describe('Abi Coder Utilities', () => {
 
   it('can concatWithVectorData [three distinct dynamicData]', () => {
     const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
-    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointer,
       capacity,
@@ -109,9 +109,9 @@ describe('Abi Coder Utilities', () => {
     pointerB.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12]) };
     const pointerC: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     pointerC.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]) };
-    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
-    const length = [0, 0, 0, 0, 0, 0, 0, 4];
-    const someData = [0, 0, 0, 0, 0, 0, 0, 16];
+    const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const someData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
     const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointerA,
       capacity,
@@ -154,9 +154,9 @@ describe('Abi Coder Utilities', () => {
     const otherData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 9]);
     const pointer: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     pointer.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
-    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
-    const length = [0, 0, 0, 0, 0, 0, 0, 4];
-    const data = [0, 0, 0, 0, 0, 0, 0, 16];
+    const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
+    const data = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
     const EXPECTED: Uint8ArrayWithDynamicData = concat([
       otherData,
       pointer,
@@ -180,11 +180,13 @@ describe('Abi Coder Utilities', () => {
       0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
       24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
     ]);
-    const DATA_1 = [
+    const DATA_1 = new Uint8Array([
       0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
       0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
-    ];
-    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    ]);
+    const DATA_2 = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188,
+    ]);
     results.dynamicData = {
       0: new Uint8Array(DATA_1),
       3: new Uint8Array(DATA_2),
@@ -214,11 +216,13 @@ describe('Abi Coder Utilities', () => {
       1, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
       0, 2,
     ]);
-    const DATA_1 = [
+    const DATA_1 = new Uint8Array([
       0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
       0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
-    ];
-    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    ]);
+    const DATA_2 = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188,
+    ]);
     results.dynamicData = {
       0: new Uint8Array(DATA_1),
       4: new Uint8Array(DATA_2),
@@ -250,11 +254,13 @@ describe('Abi Coder Utilities', () => {
       1, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
       0, 2,
     ]);
-    const DATA_1 = [
+    const DATA_1 = new Uint8Array([
       0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
       0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
-    ];
-    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    ]);
+    const DATA_2 = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188,
+    ]);
     results.dynamicData = {
       0: new Uint8Array(DATA_1),
       4: new Uint8Array(DATA_2),

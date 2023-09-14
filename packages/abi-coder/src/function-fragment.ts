@@ -1,9 +1,9 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { bufferFromString } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
+import type { BytesLike } from 'ethers';
 import { sha256 } from 'ethers';
 
 import { AbiCoder } from './abi-coder';

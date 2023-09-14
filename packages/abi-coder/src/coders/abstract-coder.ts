@@ -1,7 +1,7 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { BN } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
+import type { BytesLike } from 'ethers';
 
 import type { Option } from './option';
 
