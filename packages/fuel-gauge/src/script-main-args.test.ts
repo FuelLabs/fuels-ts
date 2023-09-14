@@ -75,6 +75,6 @@ describe('Script Coverage', () => {
 
     await expect(
       scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call()
-    ).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
+    ).rejects.toThrow(/Gas limit '10' is lower than the required/);
   });
 });

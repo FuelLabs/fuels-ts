@@ -246,27 +246,31 @@ describe('Wallet Manager', () => {
     };
 
     // Test if methods only work if wallet is unlocked
-    await expect(addMnemonic()).rejects.toThrow('Wallet is locked');
-    await expect(walletManager.loadState()).rejects.toThrow('Wallet is locked');
-    expect(() => walletManager.exportPrivateKey(Address.fromRandom())).toThrow('Wallet is locked');
+    const lockedErrMsg = 'The wallet is currently locked.';
+    await expect(addMnemonic()).rejects.toThrow(lockedErrMsg);
+    await expect(walletManager.loadState()).rejects.toThrow(lockedErrMsg);
+    expect(() => walletManager.exportPrivateKey(Address.fromRandom())).toThrow(lockedErrMsg);
     // Unlock wallet and add a vault
     await walletManager.unlock(password);
     await addMnemonic();
     // Test methods that should not find an address
-    expect(() => walletManager.getWallet(Address.fromRandom())).toThrow('Address not found');
-    expect(() => walletManager.exportPrivateKey(Address.fromRandom())).toThrow('Address not found');
+    const address = Address.fromRandom();
+    const addressErrMsg = 'No private key found for address the specified wallet address.';
+
+    expect(() => walletManager.getWallet(address)).toThrow(addressErrMsg);
+    expect(() => walletManager.exportPrivateKey(address)).toThrow(addressErrMsg);
     // Test methods that should throw id not found vault or vaultType
     await expect(
       walletManager.addVault({
         type: 'foobar',
         provider,
       })
-    ).rejects.toThrow('Invalid VaultType');
+    ).rejects.toThrow('The provided Vault type is invalid.');
     await expect(
       walletManager.addAccount({
         vaultId: 1,
       })
-    ).rejects.toThrow('Vault not found');
+    ).rejects.toThrow('The specified vault was not found.');
   });
 
   it('Test if vault secret can be leaked', async () => {

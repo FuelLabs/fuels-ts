@@ -131,7 +131,7 @@ describe('Vector Types Validation', () => {
     expect(value.toString()).toBe('1');
   });
 
-  it.skip('can use supported vector types [predicate-vector-types]', async () => {
+  it('can use supported vector types [predicate-vector-types]', async () => {
     const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const chainId = await wallet.provider.getChainId();

@@ -2,6 +2,7 @@
 
 import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
@@ -362,6 +363,9 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u8').encode(value.type));
+
+    const { type } = value;
+
     switch (value.type) {
       case TransactionType.Script: {
         parts.push(
@@ -380,7 +384,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         break;
       }
       default: {
-        throw new Error('Invalid Transaction type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_TYPE,
+          `Invalid transaction type: ${type}`
+        );
       }
     }
 
@@ -408,7 +415,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         return [decoded, o];
       }
       default: {
-        throw new Error('Invalid Transaction type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_TYPE,
+          `Invalid transaction type: ${type}`
+        );
       }
     }
   }

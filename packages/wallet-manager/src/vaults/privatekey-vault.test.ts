@@ -77,6 +77,8 @@ describe('PrivateKeyVault', () => {
     });
     const address = Address.fromRandom();
 
-    expect(() => vault.getWallet(address)).toThrow('Address not found');
+    expect(() => vault.getWallet(address)).toThrow(
+      `No private key found for address '${address.toString()}'.`
+    );
   });
 });

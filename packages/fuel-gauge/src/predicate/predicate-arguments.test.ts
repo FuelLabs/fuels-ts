@@ -356,7 +356,7 @@ describe('Predicate', () => {
       ).rejects.toThrow('Invalid transaction');
     });
 
-    it.skip('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
+    it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(

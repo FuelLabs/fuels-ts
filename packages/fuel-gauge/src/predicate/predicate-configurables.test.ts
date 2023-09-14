@@ -198,6 +198,8 @@ describe('Predicate', () => {
     });
 
     it('throws when setting invalid configurable', () => {
+      const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
+
       expect(() => {
         const predicate = new Predicate(
           predicateBytesConfigurable,
@@ -210,10 +212,12 @@ describe('Predicate', () => {
         );
 
         predicate.setData('NADA');
-      }).toThrow('Predicate has no configurable constant named:');
+      }).toThrow(errMsg);
     });
 
     it('throws when setting a configurable with no ABI', () => {
+      const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
+
       expect(() => {
         const predicate = new Predicate(
           predicateBytesConfigurable,
@@ -226,7 +230,7 @@ describe('Predicate', () => {
         );
 
         predicate.setData('NADA');
-      }).toThrow('Unable to validate configurable constants');
+      }).toThrow(errMsg);
     });
   });
 });

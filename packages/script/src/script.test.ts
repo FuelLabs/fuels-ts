@@ -3,13 +3,13 @@ import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { safeExec } from '@fuel-ts/utils/test-utils';
 import type { Account } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
@@ -133,7 +133,9 @@ describe('Script', () => {
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
-    expect((<Error>error).message).toMatch(/Script has no configurable constants to be set/);
+    const errMsg = `Error setting configurable constants: The script does not have configurable constants to be set.`;
+
+    expect((<Error>error).message).toBe(errMsg);
   });
 
   it('should throw when setting configurable with wrong name', async () => {
@@ -158,8 +160,8 @@ describe('Script', () => {
 
     const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
 
-    expect((<Error>error).message).toMatch(
-      /Script has no configurable constant named: NOT_DEFINED/
-    );
+    const errMsg = `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`;
+
+    expect((<Error>error).message).toBe(errMsg);
   });
 });

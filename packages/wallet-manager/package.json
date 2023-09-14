@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet-manager",
-  "version": "0.56.1",
+  "version": "0.57.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -28,6 +28,7 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "events": "^3.3.0"
   },
   "devDependencies": {

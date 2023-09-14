@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/utils",
-  "version": "0.56.1",
+  "version": "0.57.0",
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -39,6 +39,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@ethersproject/bytes": "^5.7.0"
+    "@ethersproject/bytes": "^5.7.0",
+    "@fuel-ts/errors": "workspace:*"
   }
 }

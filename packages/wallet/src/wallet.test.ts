@@ -1,8 +1,8 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
-import { safeExec } from '@fuel-ts/utils/test-utils';
 
 import { FUEL_NETWORK_URL } from './configs';
 import { generateTestWallet } from './test-utils/generateTestWallet';
@@ -69,7 +69,9 @@ describe('Wallet', () => {
     );
 
     expect(result).toBeUndefined();
-    expect(error?.message).toBe('Error decrypting wallet: invalid password');
+    expect(error?.message).toBe(
+      'Failed to decrypt the keystore wallet, the provided password is incorrect.'
+    );
   });
 
   it('Provide a custom provider on a public wallet to the contract instance', async () => {
