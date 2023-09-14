@@ -4,7 +4,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import {
   VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
+  SCRIPT_FIXED_SIZE,
   ASSET_ID_LEN,
   WORD_SIZE,
   CONTRACT_ID_LEN,
@@ -28,7 +28,7 @@ import type { CallConfig } from './types';
 
 const logger = new Logger(versions.FUELS);
 
-export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
+export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + SCRIPT_FIXED_SIZE;
 export const POINTER_DATA_OFFSET =
   WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
 /**
