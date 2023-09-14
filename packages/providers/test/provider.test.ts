@@ -684,7 +684,7 @@ describe('Provider', () => {
     const spyGetChain = jest.spyOn(provider, 'getChain');
 
     // invalidate cache
-    await provider.invalidateChainInfoCache();
+    await provider.refreshChainInfoCache();
 
     // check if getChain was called
     expect(spyGetChain).toHaveBeenCalled();

@@ -254,7 +254,7 @@ export default class Provider {
   /**
    * Re-fetches the chain info from the chain for the current URL.
    */
-  async invalidateChainInfoCache() {
+  async refreshChainInfoCache() {
     const chainInfo = await this.getChain();
     this.chainInfoCache[this.url] = chainInfo;
   }
