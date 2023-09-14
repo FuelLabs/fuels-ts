@@ -1,7 +1,7 @@
-import { sha256 } from '@ethersproject/sha2';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
+import { sha256 } from 'ethers';
 
 import {
   normalizeBech32,

@@ -2,9 +2,9 @@ import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
-import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { randomBytes } from '@fuel-ts/crypto';
 import { english } from '@fuel-ts/wordlists';
+import { sha256, computeHmac } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {
@@ -183,7 +183,7 @@ class Mnemonic {
       throw new Error('invalid seed');
     }
 
-    return arrayify(computeHmac(SupportedAlgorithm.sha512, MasterSecret, seedArray));
+    return arrayify(computeHmac('sha512', MasterSecret, seedArray));
   }
 
   /**

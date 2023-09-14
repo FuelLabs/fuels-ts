@@ -1,9 +1,9 @@
 import type { BytesLike, DataOptions } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 
 /**
  * @hidden

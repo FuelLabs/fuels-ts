@@ -1,10 +1,10 @@
 import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
-import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
+import { sha256, computeHmac, ripemd160 } from 'ethers';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;
@@ -127,7 +127,7 @@ class HDWallet {
     // child number: ser32(i)
     data.set(toBytes(index, 4), 33);
 
-    const bytes = arrayify(computeHmac(SupportedAlgorithm.sha512, chainCode, data));
+    const bytes = arrayify(computeHmac('sha512', chainCode, data));
     const IL = bytes.slice(0, 32);
     const IR = bytes.slice(32);
 

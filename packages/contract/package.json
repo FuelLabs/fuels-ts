@@ -24,7 +24,6 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/logger": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
@@ -33,7 +32,8 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*",
+    "ethers": "^6.7.1"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"

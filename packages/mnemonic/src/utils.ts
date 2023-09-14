@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
+import { sha256 } from 'ethers';
 
 /* Mnemonic phrase composed by words from the provided wordlist it can be a text or a array of words */
 export type MnemonicPhrase = string | Array<string>;

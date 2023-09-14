@@ -23,12 +23,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "elliptic": "^6.5.4"
+    "elliptic": "^6.5.4",
+    "ethers": "^6.7.1"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",

@@ -27,7 +27,6 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/networks": "^5.7.1",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
@@ -35,6 +34,7 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "ethers": "^6.7.1",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",

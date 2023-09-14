@@ -25,8 +25,8 @@
     "@ethersproject/basex": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/pbkdf2": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*"
+    "@fuel-ts/wordlists": "workspace:*",
+    "ethers": "^6.7.1"
   }
 }
