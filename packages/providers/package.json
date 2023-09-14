@@ -26,7 +26,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/networks": "^5.7.1",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",

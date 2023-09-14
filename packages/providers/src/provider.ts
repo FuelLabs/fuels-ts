@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { Network } from '@ethersproject/networks';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
@@ -13,6 +12,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { Network } from 'ethers';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -269,10 +269,12 @@ export default class Provider {
    * @returns A promise that resolves to the network configuration object
    */
   async getNetwork(): Promise<Network> {
-    return Promise.resolve({
-      name: 'fuelv2',
-      chainId: 0xdeadbeef,
-    });
+    const {
+      name,
+      consensusParameters: { chainId },
+    } = await this.getChain();
+    const network = new Network(name, chainId.toNumber());
+    return Promise.resolve(network);
   }
 
   /**
