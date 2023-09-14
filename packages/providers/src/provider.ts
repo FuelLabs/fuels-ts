@@ -440,7 +440,7 @@ export default class Provider {
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
-    // Fail transactiqon before submit to avoid submit failure
+    // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
     if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
       throw new Error(
