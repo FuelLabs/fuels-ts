@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.57.0
+
+### Minor Changes
+
+- made ScriptResultDecoderError works for dryRun calls, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1250](https://github.com/FuelLabs/fuels-ts/pull/1250))
+
 ## 0.56.1
 
 ## 0.56.0
