@@ -219,7 +219,7 @@ type ChainInfoCache = Record<string, ChainInfo>;
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
   cache?: MemoryCache;
-  chainInfoCache: ChainInfoCache = {};
+  static chainInfoCache: ChainInfoCache = {};
 
   /**
    * Constructor to initialize a Provider.
@@ -236,7 +236,7 @@ export default class Provider {
     public options: ProviderOptions = {}
   ) {
     this.operations = this.createOperations(url, options);
-    this.chainInfoCache[url] = chainInfo;
+    Provider.chainInfoCache[url] = chainInfo;
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -246,7 +246,13 @@ export default class Provider {
    * @param options - Additional options for the provider
    */
   static async connect(url: string, options: ProviderOptions = {}) {
-    const chainInfo = await this.getChainInfoWithoutInstance(url);
+    let chainInfo: ChainInfo;
+    // If the chain info is already cached, use it.
+    if (Provider.chainInfoCache[url]) {
+      chainInfo = Provider.chainInfoCache[url];
+    } else {
+      chainInfo = await this.getChainInfoWithoutInstance(url);
+    }
     const provider = new Provider(url, chainInfo, options);
     return provider;
   }
@@ -256,23 +262,23 @@ export default class Provider {
    */
   async refreshChainInfoCache() {
     const chainInfo = await this.getChain();
-    this.chainInfoCache[this.url] = chainInfo;
+    Provider.chainInfoCache[this.url] = chainInfo;
   }
 
   /**
    * Returns the cached chainInfo for the current URL.
    */
   getCachedChainInfo() {
-    return this.chainInfoCache[this.url];
+    return Provider.chainInfoCache[this.url];
   }
 
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
   async updateUrl(url: string) {
-    if (!this.chainInfoCache[url]) {
+    if (!Provider.chainInfoCache[url]) {
       const chainInfo = await Provider.getChainInfoWithoutInstance(url);
-      this.chainInfoCache[url] = chainInfo;
+      Provider.chainInfoCache[url] = chainInfo;
     }
     this.operations = this.createOperations(url);
     this.url = url;

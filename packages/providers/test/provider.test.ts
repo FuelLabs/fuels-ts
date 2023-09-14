@@ -674,7 +674,7 @@ describe('Provider', () => {
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual('http://127.0.0.1:4000/graphql');
-    expect(provider.chainInfoCache['http://127.0.0.1:4000/graphql']).toBeDefined();
+    expect(Provider.chainInfoCache['http://127.0.0.1:4000/graphql']).toBeDefined();
   });
 
   it('can invalidate the chain info cache', async () => {
@@ -688,5 +688,18 @@ describe('Provider', () => {
 
     // check if getChain was called
     expect(spyGetChain).toHaveBeenCalled();
+  });
+
+  it('doesnt refetch the chain info again if it is already cached', async () => {
+    const spyGetChainInfo = jest.spyOn(Provider, 'getChainInfoWithoutInstance');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const provider1 = await Provider.connect('http://127.0.0.1:4000/graphql');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const provider2 = await Provider.connect('http://127.0.0.1:4000/graphql');
+
+    // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
+    expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
   });
 });
