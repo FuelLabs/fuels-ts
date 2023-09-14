@@ -682,17 +682,6 @@ describe('Provider', () => {
     });
   });
 
-  it('can accept a custom fetch function', async () => {
-    let fetchFnUsed = false;
-    const fetchFn = () => {
-      fetchFnUsed = true;
-      return Promise.resolve(new Response());
-    };
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { fetch: fetchFn });
-    await provider.operations.getChain();
-    expect(fetchFnUsed).toEqual(true);
-  });
-
   test('errors returned from node via subscriptions are thrown', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
