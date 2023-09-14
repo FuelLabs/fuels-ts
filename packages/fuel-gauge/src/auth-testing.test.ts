@@ -1,7 +1,13 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { AssertFailedRevertError, ContractFactory, BaseAssetId, Provider } from 'fuels';
+import {
+  AssertFailedRevertError,
+  ContractFactory,
+  BaseAssetId,
+  Provider,
+  getRandomB256,
+} from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
@@ -39,16 +45,8 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    const lastChar = wallet.address.toB256().slice(-1);
-    let nextChar = String.fromCharCode(lastChar.charCodeAt(0) + 1);
-    if (nextChar > 'f') {
-      nextChar = '0';
-    }
-
     await expect(
-      contractInstance.functions
-        .check_msg_sender({ value: wallet.address.toB256().slice(0, -1) + nextChar })
-        .call()
+      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
 });

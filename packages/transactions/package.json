@@ -38,6 +38,7 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/address": "workspace:*"
   }
 }

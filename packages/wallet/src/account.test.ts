@@ -76,7 +76,7 @@ describe('Account', () => {
 
     expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
-      'Wallets with more than 9999 coins are not yet supported'
+      'Wallets containing more than 9999 coins exceed the current supported limit.'
     );
   });
 
@@ -127,7 +127,7 @@ describe('Account', () => {
 
     expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
-      'Wallets with more than 9999 messages are not yet supported'
+      'Wallets containing more than 9999 messages exceed the current supported limit.'
     );
   });
 
@@ -172,7 +172,7 @@ describe('Account', () => {
 
     expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
-      'Wallets with more than 9999 balances are not yet supported'
+      'Wallets containing more than 9999 balances exceed the current supported limit.'
     );
   });
 

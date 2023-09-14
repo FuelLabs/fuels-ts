@@ -27,6 +27,7 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
-    "@fuel-ts/signer": "workspace:*"
+    "@fuel-ts/signer": "workspace:*",
+    "@fuel-ts/errors": "workspace:*"
   }
 }
