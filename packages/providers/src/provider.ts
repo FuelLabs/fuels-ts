@@ -252,7 +252,7 @@ export default class Provider {
     public url: string,
     options: Partial<ProviderOptions> = {}
   ) {
-    this.createOperations(url, options);
+    this.connect(url, options);
     this.cache = this.options.cacheUtxo ? new MemoryCache(this.options.cacheUtxo) : undefined;
   }
 
@@ -263,11 +263,10 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(url: string, options: Partial<ProviderOptions>) {
-    this.url = url;
+  private createOperations(options: Partial<ProviderOptions>) {
     this.options = { ...this.options, ...options };
     const fetchFn = Provider.getFetchFn(this.options);
-    const gqlClient = new GraphQLClient(url, {
+    const gqlClient = new GraphQLClient(this.url, {
       fetch: (nodeUrl: string, request: FetchRequestOptions) =>
         fetchFn(nodeUrl, request, this.options),
     });
@@ -344,7 +343,8 @@ export default class Provider {
    * @param url - The URL of the Fuel node to connect to.
    */
   connect(url: string, options: Partial<ProviderOptions> = {}) {
-    this.createOperations(url, options);
+    this.url = url;
+    this.createOperations(options);
   }
 
   /**
