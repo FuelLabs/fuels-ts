@@ -150,7 +150,7 @@ describe('Address utils', () => {
     const address = ADDRESS_B256 as Bech32Address;
     const expectedError = new FuelError(
       FuelError.CODES.INVALID_BECH32_ADDRESS,
-      `Invalid Bech32 Address: ${address}`
+      `Invalid Bech32 Address: ${address}.`
     );
     await expectToThrowFuelError(() => utils.toB256(address), expectedError);
   });
@@ -173,7 +173,7 @@ describe('Address utils', () => {
     const invalidB256 = '0x123';
     const expectedError = new FuelError(
       FuelError.CODES.PARSE_FAILED,
-      `Cannot generate EVM Address B256 from B256: ${invalidB256}`
+      `Cannot generate EVM Address B256 from: ${invalidB256}.`
     );
     await expectToThrowFuelError(() => utils.clearFirst12BytesFromB256(invalidB256), expectedError);
   });
@@ -246,7 +246,7 @@ describe('Address class', () => {
   test('create an Address class fromDynamicInput [bad input]', async () => {
     const expectedError = new FuelError(
       FuelError.CODES.PARSE_FAILED,
-      'Unknown address format: only Bech32, B256, or Public Key (512) supported'
+      `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported.`
     );
     await expectToThrowFuelError(() => Address.fromDynamicInput('badinput'), expectedError);
   });

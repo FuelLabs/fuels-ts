@@ -9,6 +9,7 @@ import {
   WORD_SIZE,
   CONTRACT_ID_LEN,
 } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
@@ -75,11 +76,17 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   });
 
   if (!scriptResultReceipt) {
-    throw new Error(`Expected scriptResultReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'scriptResultReceipt'.`
+    );
   }
 
   if (!returnReceipt) {
-    throw new Error(`Expected returnReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'returnReceipt'.`
+    );
   }
 
   const scriptResult: ScriptResult = {

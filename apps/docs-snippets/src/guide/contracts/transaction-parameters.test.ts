@@ -43,7 +43,7 @@ describe(__filename, () => {
           gasLimit: 1,
         })
         .call()
-    ).rejects.toThrowError(/gasLimit[\s\S]*is lower than the required/);
+    ).rejects.toThrowError(/Gas limit [\s\S]* is lower than the required/);
     // #endregion transaction-parameters-3
   });
 });

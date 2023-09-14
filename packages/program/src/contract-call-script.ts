@@ -2,6 +2,7 @@
 import { arrayify, concat } from '@ethersproject/bytes';
 import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type {
@@ -129,7 +130,10 @@ const getMainCallReceipt = (
 const scriptResultDecoder =
   (contractId: AbstractAddress, isOutputDataHeap: boolean) => (result: ScriptResult) => {
     if (toNumber(result.code) !== 0) {
-      throw new Error(`Script returned non-zero result: ${result.code}`);
+      throw new FuelError(
+        ErrorCode.TRANSACTION_ERROR,
+        `Execution of the script associated with contract ${contractId} resulted in a non-zero exit code: ${result.code}.`
+      );
     }
 
     const mainCallResult = getMainCallReceipt(

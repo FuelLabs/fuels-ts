@@ -25,7 +25,7 @@ describe('status', () => {
 
     expect(() =>
       getTransactionStatusName('UnknownStatus' as unknown as GqlTransactionStatusesNames)
-    ).toThrowError('Unknown transaction status');
+    ).toThrowError('Invalid transaction status: UnknownStatus');
   });
 
   const statuses: Array<{

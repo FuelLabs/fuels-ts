@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { concat } from '@ethersproject/bytes';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
 export enum OutputType /* u8 */ {
@@ -264,7 +265,10 @@ export class OutputCoder extends Coder<Output, Output> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u8').encode(value.type));
-    switch (value.type) {
+
+    const { type } = value;
+
+    switch (type) {
       case OutputType.Coin: {
         parts.push(new OutputCoinCoder().encode(value));
         break;
@@ -286,7 +290,10 @@ export class OutputCoder extends Coder<Output, Output> {
         break;
       }
       default: {
-        throw new Error('Invalid Output type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_OUTPUT,
+          `Invalid transaction output type: ${type}.`
+        );
       }
     }
 
@@ -321,7 +328,10 @@ export class OutputCoder extends Coder<Output, Output> {
         return [decoded, o];
       }
       default: {
-        throw new Error('Invalid Output type');
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSACTION_OUTPUT,
+          `Invalid transaction output type: ${type}.`
+        );
       }
     }
   }

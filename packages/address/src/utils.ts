@@ -91,7 +91,7 @@ export function toB256(address: Bech32Address): B256Address {
   if (!isBech32(address)) {
     throw new FuelError(
       FuelError.CODES.INVALID_BECH32_ADDRESS,
-      `Invalid Bech32 Address: ${address}`
+      `Invalid Bech32 Address: ${address}.`
     );
   }
 
@@ -148,7 +148,7 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
     if (!isB256(b256)) {
       throw new FuelError(
         FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${b256}`
+        `Invalid Bech32 Address: ${b256}.`
       );
     }
 
@@ -157,7 +157,7 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
   } catch (error) {
     throw new FuelError(
       FuelError.CODES.PARSE_FAILED,
-      `Cannot generate EVM Address B256 from B256: ${b256}`
+      `Cannot generate EVM Address B256 from: ${b256}.`
     );
   }
 
