@@ -331,7 +331,7 @@ export default class Provider {
     const data = originalResponseData.data;
     const errors = originalResponseData.errors;
 
-    let text = `event:${errors ? 'complete' : 'next'}`;
+    let text = 'event:next';
     text += `\ndata:${JSON.stringify(data ?? { _isError: true, errors })}`;
     text += '\n\n';
     return new Response(text, originalResponse);
