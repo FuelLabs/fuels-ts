@@ -3,6 +3,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { bufferFromString } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 
@@ -133,7 +134,13 @@ export class FunctionFragment<
     if (optionalInputs.length === inputTypes.length) return;
     if (inputTypes.length - optionalInputs.length === args.length) return;
 
-    throw new Error('Types/values length mismatch');
+    const errorMsg = `Mismatch between provided arguments and expected ABI inputs. Provided ${
+      args.length
+    } arguments, but expected ${inputs.length - optionalInputs.length} (excluding ${
+      optionalInputs.length
+    } optional inputs).`;
+
+    throw new FuelError(ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH, errorMsg);
   }
 
   decodeArguments(data: BytesLike) {

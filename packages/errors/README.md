@@ -52,7 +52,7 @@ You can use the `expectToThrowFuelError` test utility when asserting errors.
 
 ```ts
 // can also be imported from `fuels` when using the umbrella package
-import { expectToThrowFuelError } from "@fuel-ts/errors/test-utils";
+import { expectToThrowFuelError } from "@fuel-ts/errors";
 
 import { myFn } from "...";
 

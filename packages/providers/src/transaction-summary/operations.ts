@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, type Output, TransactionType } from '@fuel-ts/transactions';
 
@@ -50,7 +51,10 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
     case TransactionType.Script:
       return TransactionTypeName.Script;
     default:
-      throw new Error('Unknown transaction type');
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSACTION_TYPE,
+        `Invalid transaction type: ${transactionType}.`
+      );
   }
 }
 

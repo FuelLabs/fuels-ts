@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
@@ -58,7 +59,10 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
     );
 
     if (!privateKey) {
-      throw new Error('Address not found');
+      throw new FuelError(
+        ErrorCode.WALLET_MANAGER_ERROR,
+        `No private key found for address '${address}'.`
+      );
     }
 
     return privateKey;

@@ -42,7 +42,7 @@ describe('TransactionRequest', () => {
         gasPrice: 1,
       };
 
-      expect(() => transactionRequestify(txRequestLike)).toThrow('Unknown transaction type: 5');
+      expect(() => transactionRequestify(txRequestLike)).toThrow('Invalid transaction type: 5');
     });
   });
 });
