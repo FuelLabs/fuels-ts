@@ -770,7 +770,7 @@ describe('Contract', () => {
     class ProviderCustom extends Provider {
       static async connect(url: string) {
         const chainInfo = await ProviderCustom.getChainInfoWithoutInstance(url);
-        const newProvider = new ProviderCustom(url, chainInfo, {});
+        const newProvider = new ProviderCustom(url, chainInfo);
         return newProvider;
       }
 

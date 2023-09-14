@@ -35,7 +35,7 @@ export class BaseWalletUnlocked extends Account {
    * Creates a new BaseWalletUnlocked instance.
    *
    * @param privateKey - The private key of the wallet.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    */
   constructor(privateKey: BytesLike, provider: Provider) {
     const signer = new Signer(privateKey);

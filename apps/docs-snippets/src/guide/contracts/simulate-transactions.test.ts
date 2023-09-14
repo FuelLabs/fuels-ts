@@ -13,7 +13,7 @@ describe(__filename, () => {
     const amountToForward = 40;
     const amountToTransfer = 10;
 
-    const provider = await contract.provider;
+    const provider = contract.provider;
 
     const someAddress = Wallet.generate({
       provider,

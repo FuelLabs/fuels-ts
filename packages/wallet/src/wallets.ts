@@ -60,7 +60,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a seed.
    *
    * @param seed - The seed phrase.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    * @param path - The derivation path (optional).
    * @returns An instance of WalletUnlocked.
    */
@@ -75,7 +75,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a mnemonic phrase.
    *
    * @param mnemonic - The mnemonic phrase.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
    * @returns An instance of WalletUnlocked.
@@ -97,7 +97,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from an extended key.
    *
    * @param extendedKey - The extended key.
-   * @param provider - The provider URL or a Provider instance (optional).
+   * @param provider - A Provider instance.
    * @returns An instance of WalletUnlocked.
    */
   static fromExtendedKey(extendedKey: string, provider: Provider): WalletUnlocked {

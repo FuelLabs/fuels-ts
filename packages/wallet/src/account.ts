@@ -52,7 +52,7 @@ export class Account extends AbstractAccount {
    * Creates a new Account instance.
    *
    * @param address - The address of the account.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    */
   constructor(address: string | AbstractAddress, provider: Provider) {
     super();
@@ -63,7 +63,7 @@ export class Account extends AbstractAccount {
   /**
    * Changes the provider connection for the account.
    *
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    * @returns The updated Provider instance.
    */
   connect(provider: Provider): Provider {

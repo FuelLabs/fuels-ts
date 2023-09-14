@@ -18,7 +18,7 @@ describe(__filename, () => {
     // #context }
     // #endregion bits512-1
 
-    const provider = await contract.provider;
+    const provider = contract.provider;
 
     // #region bits512-2
     // #context import {  Wallet } from 'fuels';
