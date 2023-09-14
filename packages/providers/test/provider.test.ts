@@ -8,6 +8,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
+import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -203,11 +204,15 @@ describe('Provider', () => {
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+
     const provider = new Provider(providerUrl1, {
-      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: providerUrl2 } }),
+      fetch: (url: string, options: FetchRequestOptions) =>
+        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
     });
 
     expect(provider.url).toBe(providerUrl1);
+    expect(await provider.getVersion()).toEqual(providerUrl1);
+
     provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
 
