@@ -15,9 +15,9 @@ export { Interface } from './interface';
 export { JsonAbi } from './json-abi';
 export {
   VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
+  SCRIPT_FIXED_SIZE,
+  INPUT_COIN_FIXED_SIZE,
   WORD_SIZE,
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
-  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
 } from './constants';
