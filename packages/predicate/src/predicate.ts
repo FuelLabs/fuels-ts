@@ -1,13 +1,14 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
-  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
+  INPUT_COIN_FIXED_SIZE,
+  SCRIPT_FIXED_SIZE,
   VM_TX_MEMORY,
+  WORD_SIZE,
 } from '@fuel-ts/abi-coder';
-import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractPredicate } from '@fuel-ts/interfaces';
 import type {
@@ -116,11 +117,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
     const OFFSET =
-      VM_TX_MEMORY +
-      TRANSACTION_SCRIPT_FIXED_SIZE +
-      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
-      paddedCode.byteLength -
-      17;
+      VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
 
     this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
