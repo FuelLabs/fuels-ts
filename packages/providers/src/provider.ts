@@ -206,7 +206,7 @@ export type CustomFetch<R extends Response = Response> = (
 export type ProviderOptions<FetchResponse extends Response = Response> = {
   fetch: CustomFetch<FetchResponse> | undefined;
   cacheUtxo: number | undefined;
-  timeout: number;
+  timeout: number | undefined;
 };
 /**
  * Provider Call transaction params
@@ -225,16 +225,19 @@ export default class Provider {
 
   cache?: MemoryCache;
   options: ProviderOptions = {
-    timeout: 60000,
+    timeout: undefined,
     cacheUtxo: undefined,
     fetch: undefined,
   };
 
-  private getFetchFn() {
-    return this.options.fetch !== undefined
-      ? this.options.fetch
-      : (url: string, request: FetchRequestOptions, options: ProviderOptions) =>
-          nodeFetch(url, { signal: AbortSignal.timeout(options.timeout), ...request });
+  private static getFetchFn(options: ProviderOptions) {
+    return options.fetch !== undefined
+      ? options.fetch
+      : (url: string, request: FetchRequestOptions, o: ProviderOptions) =>
+          nodeFetch(url, {
+            signal: o.timeout !== undefined ? AbortSignal.timeout(o.timeout) : undefined,
+            ...request,
+          });
   }
 
   /**
@@ -262,7 +265,7 @@ export default class Provider {
   private createOperations(url: string, options: Partial<ProviderOptions>) {
     this.url = url;
     this.options = { ...this.options, ...options };
-    const fetchFn = this.getFetchFn();
+    const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(url, {
       fetch: (nodeUrl: string, request: FetchRequestOptions) =>
         fetchFn(nodeUrl, request, this.options),
@@ -283,7 +286,7 @@ export default class Provider {
     });
   }
 
-  private createSubscriptionClient(url: string, fetchFn: ReturnType<typeof this.getFetchFn>) {
+  private createSubscriptionClient(url: string, fetchFn: ReturnType<typeof Provider.getFetchFn>) {
     return createClient({
       url: `${url}-sub`,
       onMessage: (msg) => {

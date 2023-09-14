@@ -652,9 +652,9 @@ describe('Provider', () => {
     expect(messageProof).toMatchSnapshot();
   });
 
-  it('has default timeout of 60s', () => {
+  it('default timeout is undefined', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    expect(provider.options.timeout).toBe(60000);
+    expect(provider.options.timeout).toBeUndefined();
   });
 
   it('throws AbortError on timeout when calling an operation', async () => {
