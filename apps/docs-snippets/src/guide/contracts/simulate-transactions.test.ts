@@ -1,6 +1,7 @@
-import { BaseAssetId, Wallet, BN } from 'fuels';
+import { safeExec } from '@fuel-ts/utils/test-utils';
+import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -34,5 +35,27 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_u8(15).simulate();
     // #endregion simulate-transactions-2
     expect(value).toEqual(15);
+  });
+
+  it('should throw when simulating with an unfunded wallet', async () => {
+    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+    const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
+
+    const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).simulate());
+
+    expect((<Error>error).message).toMatch('not enough coins to fit the target');
+  });
+
+  it('should throw when dry running with an unfunded wallet', async () => {
+    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+    const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
+
+    const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).dryRun());
+
+    expect((<Error>error).message).toMatch('not enough coins to fit the target');
   });
 });

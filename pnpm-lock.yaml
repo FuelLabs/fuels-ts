@@ -286,6 +286,9 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../../packages/forc
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../../packages/wallet
