@@ -1,5 +1,5 @@
 // #region Testing-with-jest-ts
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { ContractFactory, Provider, toHex, BaseAssetId, Wallet } from 'fuels';
 

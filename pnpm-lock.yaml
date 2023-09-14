@@ -283,6 +283,9 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../../packages/forc
