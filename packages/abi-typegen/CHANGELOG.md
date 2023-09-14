@@ -1,5 +1,11 @@
 # @fuel-ts/abi-typegen
 
+## 0.57.0
+
+### Patch Changes
+
+- Replace lodash with ramda for ESM support, by [@danielbate](https://github.com/danielbate) (See [#1242](https://github.com/FuelLabs/fuels-ts/pull/1242))
+
 ## 0.56.1
 
 ## 0.56.0
