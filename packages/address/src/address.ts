@@ -34,7 +34,7 @@ export default class Address extends AbstractAddress {
     if (!isBech32(this.bech32Address)) {
       throw new FuelError(
         FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${address}`
+        `Invalid Bech32 Address: ${address}.`
       );
     }
   }
@@ -202,7 +202,7 @@ export default class Address extends AbstractAddress {
 
     throw new FuelError(
       FuelError.CODES.PARSE_FAILED,
-      'Unknown address format: only Bech32, B256, or Public Key (512) supported'
+      `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported.`
     );
   }
 

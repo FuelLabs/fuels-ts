@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import BnJs from 'bn.js';
 
 import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
@@ -70,10 +71,13 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     const bytesLength = bytes * 2;
 
     if (this.isNeg()) {
-      throw new Error('cannot convert negative value to hex');
+      throw new FuelError(ErrorCode.CONVERTING_FAILED, 'Cannot convert negative value to hex.');
     }
     if (bytesPadding && this.byteLength() > bytesPadding) {
-      throw new Error(`value ${this} exceeds bytes ${bytesPadding}`);
+      throw new FuelError(
+        ErrorCode.CONVERTING_FAILED,
+        `Provided value ${this} is too large. It should fit within ${bytesPadding} bytes.`
+      );
     }
 
     return this.toString(16, bytesLength);
@@ -81,7 +85,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   toBytes(bytesPadding?: number): Uint8Array {
     if (this.isNeg()) {
-      throw new Error('cannot convert negative value to Bytes');
+      throw new FuelError(ErrorCode.CONVERTING_FAILED, 'Cannot convert negative value to bytes.');
     }
 
     return Uint8Array.from(this.toArray(undefined, bytesPadding));
@@ -264,7 +268,10 @@ bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {
   const length = valueDecimals.length;
 
   if (length > units) {
-    throw new Error("Decimal can't be bigger than the units");
+    throw new FuelError(
+      ErrorCode.CONVERTING_FAILED,
+      `Decimal can't have more than ${units} digits.`
+    );
   }
 
   const decimals = Array.from({ length: units }).fill('0');

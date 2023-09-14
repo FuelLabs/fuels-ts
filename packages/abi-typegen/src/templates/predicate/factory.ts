@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 import { formatConfigurables } from '../utils/formatConfigurables';
@@ -23,7 +25,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
   const func = abi.functions.find((f) => f.name === 'main');
 
   if (!func) {
-    throw new Error(`ABI doesn't have a 'main()' method.`);
+    throw new FuelError(ErrorCode.ABI_MAIN_METHOD_MISSING, `ABI doesn't have a 'main()' method.`);
   }
 
   const { enums } = formatEnums({ types });

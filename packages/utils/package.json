@@ -39,6 +39,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@ethersproject/bytes": "^5.7.0"
+    "@ethersproject/bytes": "^5.7.0",
+    "@fuel-ts/errors": "workspace:*"
   }
 }
