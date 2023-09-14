@@ -233,9 +233,10 @@ export default class Provider {
   private static getFetchFn(options: ProviderOptions) {
     return options.fetch !== undefined
       ? options.fetch
-      : (url: string, request: FetchRequestOptions, o: ProviderOptions) =>
+      : (url: string, request: FetchRequestOptions) =>
           nodeFetch(url, {
-            signal: o.timeout !== undefined ? AbortSignal.timeout(o.timeout) : undefined,
+            signal:
+              options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
             ...request,
           });
   }
