@@ -3,7 +3,8 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
@@ -696,14 +697,15 @@ describe('Provider', () => {
   test('errors returned from node via subscriptions are thrown', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const { error } = await safeExec(async () => {
-      for await (const iterator of provider.subscriptions.statusChange({
-        transactionId: 'Invalid ID that will cause node to return errors',
-      })) {
-        if (iterator) break;
-      }
-    });
-
-    expect(error).toBeDefined();
+    await expectToThrowFuelError(
+      async () => {
+        for await (const iterator of provider.subscriptions.statusChange({
+          transactionId: 'Invalid ID that will cause node to return errors',
+        })) {
+          if (iterator) break;
+        }
+      },
+      { code: ErrorCode.FUEL_NODE_ERROR }
+    );
   });
 });

@@ -73,6 +73,8 @@ export enum ErrorCode {
   // contract
   INVALID_MULTICALL = 'invalid-multicall',
 
+  // general
+  FUEL_NODE_ERROR = 'fuel-node-error',
   // coder
   // ...
 }
