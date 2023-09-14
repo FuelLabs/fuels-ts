@@ -274,7 +274,7 @@ export default class Provider {
 
     if (this.#subscriptionClient) this.#subscriptionClient.dispose();
 
-    this.#subscriptionClient = this.createSubscriptionClient(this.url, fetchFn);
+    this.#subscriptionClient = Provider.createSubscriptionClient(this.url, fetchFn, this.options);
     // @ts-expect-error This is due to AsyncIterable<unknown> which can't be type-specific on this level. Its type is specified when calling a specific subscription via provider.subscriptions.xyz.
     this.subscriptions = getSubscriptionsSdk((query, vars) => {
       const iterator = this.#subscriptionClient.iterate({
@@ -286,7 +286,11 @@ export default class Provider {
     });
   }
 
-  private createSubscriptionClient(url: string, fetchFn: ReturnType<typeof Provider.getFetchFn>) {
+  private static createSubscriptionClient(
+    url: string,
+    fetchFn: ReturnType<typeof Provider.getFetchFn>,
+    options: ProviderOptions
+  ) {
     return createClient({
       url: `${url}-sub`,
       onMessage: (msg) => {
@@ -308,11 +312,7 @@ export default class Provider {
         subscriptionUrl: string,
         request: FetchRequestOptions & { signal: AbortSignal }
       ) => {
-        const originalResponse = (await fetchFn(
-          subscriptionUrl,
-          request,
-          this.options
-        )) as Response;
+        const originalResponse = (await fetchFn(subscriptionUrl, request, options)) as Response;
 
         return Provider.adaptSubscriptionResponse(originalResponse);
       },
