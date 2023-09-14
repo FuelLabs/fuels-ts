@@ -14,7 +14,8 @@
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/utils": "workspace:*"
   },
   "version": null
 }

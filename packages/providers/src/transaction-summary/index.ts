@@ -6,3 +6,4 @@ export * from './operations';
 export * from './get-transaction-summary';
 export * from './assemble-transaction-summary';
 export * from './receipt';
+export * from './date';
