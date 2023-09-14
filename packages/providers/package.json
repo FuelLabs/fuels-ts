@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.56.1",
+  "version": "0.57.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -38,7 +38,8 @@
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
-    "ramda": "^0.29.0"
+    "ramda": "^0.29.0",
+    "tai64": "^1.0.0"
   },
   "devDependencies": {
     "@fuel-ts/utils": "workspace:*",
