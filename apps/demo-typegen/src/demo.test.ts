@@ -48,7 +48,7 @@ describe('ExampleContract', () => {
 // #endregion Testing-with-jest-ts
 
 it('should throw when simulating via contract factory with wallet with no resources', async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
   const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
   const unfundedWallet = Wallet.generate({ provider });
 
@@ -62,7 +62,7 @@ it('should throw when simulating via contract factory with wallet with no resour
 });
 
 it('should throw when dry running via contract factory with wallet with no resources', async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
   const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
   const unfundedWallet = Wallet.generate({ provider });
 

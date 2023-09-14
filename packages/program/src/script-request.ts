@@ -4,10 +4,9 @@ import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import {
   VM_TX_MEMORY,
-  SCRIPT_FIXED_SIZE,
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
+  SCRIPT_FIXED_SIZE,
   WORD_SIZE,
   calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
@@ -230,7 +229,7 @@ export class ScriptRequest<TData = void, TResult = void> {
    * @returns The script data offset.
    */
   static getScriptDataOffsetWithScriptBytes(byteLength: number, maxInputs: number): number {
-    const scriptDataBaseOffset = calculateVmTxMemory({ maxInputs }) + TRANSACTION_SCRIPT_FIXED_SIZE;
+    const scriptDataBaseOffset = calculateVmTxMemory({ maxInputs }) + SCRIPT_FIXED_SIZE;
     return scriptDataBaseOffset + byteLength;
   }
 
