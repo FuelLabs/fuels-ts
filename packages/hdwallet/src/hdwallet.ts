@@ -1,10 +1,9 @@
-import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
-import { sha256, computeHmac, ripemd160 } from 'ethers';
+import { encodeBase58, decodeBase58, sha256, computeHmac, ripemd160 } from 'ethers';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;
@@ -16,7 +15,7 @@ const TestnetPRV = hexlify('0x04358394');
 const TestnetPUB = hexlify('0x043587cf');
 
 function base58check(data: Uint8Array): string {
-  return Base58.encode(concat([data, hexDataSlice(sha256(sha256(data)), 0, 4)]));
+  return encodeBase58(concat([data, hexDataSlice(sha256(sha256(data)), 0, 4)]));
 }
 
 function getExtendedKeyPrefix(isPublic: boolean = false, testnet: boolean = false) {
@@ -210,7 +209,8 @@ class HDWallet {
   }
 
   static fromExtendedKey(extendedKey: string) {
-    const bytes = Base58.decode(extendedKey);
+    const decoded = hexlify(decodeBase58(extendedKey));
+    const bytes = arrayify(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {

@@ -22,11 +22,11 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/basex": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
+    "bigint-conversion": "^2.4.2",
     "ethers": "^6.7.1"
   }
 }

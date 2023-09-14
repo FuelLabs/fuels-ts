@@ -1,9 +1,8 @@
-import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { english } from '@fuel-ts/wordlists';
-import { pbkdf2, sha256, computeHmac } from 'ethers';
+import { pbkdf2, sha256, computeHmac, encodeBase58 } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {
@@ -212,7 +211,7 @@ class Mnemonic {
     ]);
     const checksum = hexDataSlice(sha256(sha256(extendedKey)), 0, 4);
 
-    return Base58.encode(concat([extendedKey, checksum]));
+    return encodeBase58(concat([extendedKey, checksum]));
   }
 
   /**

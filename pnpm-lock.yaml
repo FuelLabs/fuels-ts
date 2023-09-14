@@ -744,9 +744,6 @@ importers:
 
   packages/hdwallet:
     dependencies:
-      '@ethersproject/basex':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
@@ -759,6 +756,9 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
+      bigint-conversion:
+        specifier: ^2.4.2
+        version: 2.4.2
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -785,9 +785,6 @@ importers:
 
   packages/mnemonic:
     dependencies:
-      '@ethersproject/basex':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
@@ -3560,13 +3557,6 @@ packages:
       '@ethersproject/bytes': 5.7.0
     dev: false
 
-  /@ethersproject/basex@5.7.0:
-    resolution: {integrity: sha512-ywlh43GwZLv2Voc2gQVTKBoVQ1mti3d8HK5aMxsfu/nRDnMmNqaSJ3r3n85HBByT8OpoY96SXM1FogC533T4zw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/properties': 5.7.0
-    dev: false
-
   /@ethersproject/bignumber@5.7.0:
     resolution: {integrity: sha512-n1CAdIHRWjSucQO3MC1zPSVgV/6dy/fjL9pMrPP9peL+QxEg9wOsVqwD4+818B6LUEtaXzVHQiuivzRoxPxUGw==}
     dependencies:
@@ -4756,6 +4746,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
+
+  /@juanelas/base64@1.1.2:
+    resolution: {integrity: sha512-mr2pfRQpWap0Uq4tlrCgp3W+Yjx1/Bpq4QJsYeAQUh1mExgyQvXz7xUhmYT2HcLLspuAL5dpnos8P2QhaCSXsQ==}
+    dev: false
 
   /@leichtgewicht/ip-codec@2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
@@ -7294,6 +7288,12 @@ packages:
 
   /big.js@5.2.2:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
+    dev: false
+
+  /bigint-conversion@2.4.2:
+    resolution: {integrity: sha512-2s3aRYaQtYGqY1w6x2PQqYbHUjktOWX0S0dkv7c+FjRnkKspictZ4IaEKmGEtZJjT2ccR29ufPB7QPEDfSs4bg==}
+    dependencies:
+      '@juanelas/base64': 1.1.2
     dev: false
 
   /binary-extensions@2.2.0:

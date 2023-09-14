@@ -1,3 +1,4 @@
+import { hexlify } from '@ethersproject/bytes';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
@@ -132,7 +133,7 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromPublicKey(publicKey: string): Address {
-    const b256Address = sha256(publicKey);
+    const b256Address = sha256(hexlify(publicKey));
     return new Address(toBech32(b256Address));
   }
 
