@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.56.1",
+  "version": "0.57.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -30,15 +30,16 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
-    "lodash.clonedeep": "^4.5.0"
+    "ramda": "^0.29.0",
+    "tai64": "^1.0.0"
   },
   "devDependencies": {
     "@fuel-ts/utils": "workspace:*",
@@ -46,7 +47,7 @@
     "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
-    "@types/lodash.clonedeep": "^4.5.7",
+    "@types/ramda": "^0.29.3",
     "get-graphql-schema": "^2.1.2",
     "typescript": "^4.8.4"
   }
