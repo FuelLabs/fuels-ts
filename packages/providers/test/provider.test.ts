@@ -7,7 +7,6 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';
 import type {
@@ -22,6 +21,30 @@ import { messageProofResponse } from './fixtures';
 afterEach(() => {
   jest.restoreAllMocks();
 });
+
+const getCustomFetch =
+  (expectedOperationName: string, expectedResponse: object) =>
+  async (
+    url: string,
+    options: {
+      body: string;
+      headers: { [key: string]: string };
+      [key: string]: unknown;
+    }
+  ) => {
+    const graphqlRequest = JSON.parse(options.body);
+    const { operationName } = graphqlRequest;
+
+    if (operationName === expectedOperationName) {
+      const responseText = JSON.stringify({
+        data: expectedResponse,
+      });
+      const response = Promise.resolve(new Response(responseText, options));
+
+      return response;
+    }
+    return fetch(url, options);
+  };
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -177,43 +200,26 @@ describe('Provider', () => {
     expect(nodeVersion).toBeDefined();
   });
 
-  it('can change the provider url of the current instance', () => {
+  it('can change the provider url of the current instance', async () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
-    const provider = new Provider(providerUrl1);
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+    const provider = new Provider(providerUrl1, {
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: providerUrl2 } }),
+    });
 
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
+
+    expect(await provider.getVersion()).toEqual(providerUrl2);
   });
 
   it('can accept a custom fetch function', async () => {
     const providerUrl = 'http://127.0.0.1:4000/graphql';
 
-    const customFetch = async (
-      url: string,
-      options: {
-        body: string;
-        headers: { [key: string]: string };
-        [key: string]: unknown;
-      }
-    ) => {
-      const graphqlRequest = JSON.parse(options.body);
-      const { operationName } = graphqlRequest;
-      if (operationName === 'getVersion') {
-        const responseText = JSON.stringify({
-          data: { nodeInfo: { nodeVersion: '0.30.0' } },
-        });
-        const response = Promise.resolve(new Response(responseText, options));
-
-        return response;
-      }
-      return fetch(url, options);
-    };
-
-    const provider = new Provider(providerUrl, { fetch: customFetch });
+    const provider = new Provider(providerUrl, {
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+    });
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 
