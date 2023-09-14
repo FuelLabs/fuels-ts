@@ -691,11 +691,11 @@ describe('Provider', () => {
   });
 
   it('doesnt refetch the chain info again if it is already cached', async () => {
+    Provider.chainInfoCache = {};
     const spyGetChainInfo = jest.spyOn(Provider, 'getChainInfoWithoutInstance');
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const provider1 = await Provider.connect('http://127.0.0.1:4000/graphql');
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const provider2 = await Provider.connect('http://127.0.0.1:4000/graphql');
 
