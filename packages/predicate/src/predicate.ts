@@ -1,14 +1,16 @@
 import type { BytesLike } from 'ethers';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
-  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
+  INPUT_COIN_FIXED_SIZE,
+  SCRIPT_FIXED_SIZE,
   VM_TX_MEMORY,
+  WORD_SIZE,
 } from '@fuel-ts/abi-coder';
-import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractPredicate } from '@fuel-ts/interfaces';
 import type {
   CallResult,
@@ -116,11 +118,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
     const OFFSET =
-      VM_TX_MEMORY +
-      TRANSACTION_SCRIPT_FIXED_SIZE +
-      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
-      paddedCode.byteLength -
-      17;
+      VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
 
     this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
@@ -185,7 +183,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     try {
       if (!abiInterface) {
         throw new Error(
-          'Unable to validate configurable constants, Predicate instantiated without json ABI'
+          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
         );
       }
 
@@ -195,7 +193,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!abiInterface?.configurables[key]) {
-          throw new Error(`Predicate has no configurable constant named: ${key}`);
+          throw new Error(`No configurable constant named '${key}' found in the Predicate`);
         }
 
         const { offset } = abiInterface.configurables[key];
@@ -205,7 +203,10 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         mutatedBytes.set(encoded, offset);
       });
     } catch (err) {
-      throw new Error(`Error setting configurable constants: ${err}`);
+      throw new FuelError(
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants: ${(<Error>err).message}.`
+      );
     }
 
     return mutatedBytes;

@@ -1,7 +1,7 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { ErrorCode } from '../error-codes';
+import type { FuelError } from '../fuel-error';
 
-import type { FuelError } from '../index';
-import { ErrorCode } from '../index';
+import { safeExec } from './safeExec';
 
 type ExpectedFuelError = Partial<FuelError> & Required<Pick<FuelError, 'code'>>;
 

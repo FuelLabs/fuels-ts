@@ -2,6 +2,7 @@
 
 import { arrayify, concat } from '@ethersproject/bytes';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { sha256 } from 'ethers';
 
@@ -918,6 +919,9 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u8').encode(value.type));
+
+    const { type } = value;
+
     switch (value.type) {
       case ReceiptType.Call: {
         parts.push(new ReceiptCallCoder().encode(value));
@@ -972,7 +976,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
         break;
       }
       default: {
-        throw new Error('Invalid Receipt type');
+        throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${type}`);
       }
     }
 
@@ -1039,7 +1043,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
         return [decoded, o];
       }
       default: {
-        throw new Error('Invalid Receipt type');
+        throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${type}`);
       }
     }
   }

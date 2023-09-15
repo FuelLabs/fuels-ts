@@ -1,5 +1,6 @@
 import type { BytesLike } from 'ethers';
 import { hexlify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 type Cache = {
   [key: string]: {
@@ -17,7 +18,10 @@ export class MemoryCache {
     this.ttl = ttlInMs;
 
     if (typeof ttlInMs !== 'number' || this.ttl <= 0) {
-      throw new Error(`Invalid TTL: ${this.ttl}. Use a value greater than zero.`);
+      throw new FuelError(
+        ErrorCode.INVALID_TTL,
+        `Invalid TTL: ${this.ttl}. Use a value greater than zero.`
+      );
     }
   }
 

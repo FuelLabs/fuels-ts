@@ -283,6 +283,9 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../../packages/forc
@@ -295,6 +298,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
@@ -341,6 +347,9 @@ importers:
 
   apps/docs-snippets:
     devDependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -436,6 +445,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -454,6 +466,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
@@ -537,6 +552,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
@@ -571,6 +589,15 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+<<<<<<< HEAD
+=======
+      '@ethersproject/pbkdf2':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
+>>>>>>> 5310e8b5226a74058b85a6f1ca3671b6b5b5c5b7
       ethereum-cryptography:
         specifier: ^2.1.2
         version: 2.1.2
@@ -580,9 +607,6 @@ importers:
 
   packages/errors:
     dependencies:
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -735,6 +759,15 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+<<<<<<< HEAD
+=======
+      '@ethersproject/sha2':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
+>>>>>>> 5310e8b5226a74058b85a6f1ca3671b6b5b5c5b7
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -755,6 +788,9 @@ importers:
 
   packages/math:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@types/bn.js':
         specifier: ^5.1.1
         version: 5.1.1
@@ -779,6 +815,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
@@ -800,6 +839,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -956,6 +998,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
@@ -1026,6 +1071,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1045,6 +1093,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
 
   packages/versions:
     dependencies:
@@ -1079,6 +1130,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/fuel-core':
         specifier: workspace:*
         version: link:../fuel-core
@@ -1140,6 +1194,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces

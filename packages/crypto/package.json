@@ -27,6 +27,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "ethereum-cryptography": "^2.1.2",
-    "ethers": "^6.7.1"
+    "ethers": "^6.7.1",
+    "@fuel-ts/errors": "workspace:*"
   }
 }

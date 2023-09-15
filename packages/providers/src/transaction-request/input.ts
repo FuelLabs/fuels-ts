@@ -1,6 +1,7 @@
 import type { BytesLike } from 'ethers';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
@@ -87,6 +88,8 @@ export type TransactionRequestInput =
 
 /** @hidden */
 export const inputify = (value: TransactionRequestInput): Input => {
+  const { type } = value;
+
   switch (value.type) {
     case InputType.Coin: {
       const predicate = arrayify(value.predicate ?? '0x');
@@ -150,7 +153,10 @@ export const inputify = (value: TransactionRequestInput): Input => {
       };
     }
     default: {
-      throw new Error('Invalid Input type');
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSACTION_INPUT,
+        `Invalid transaction input type: ${type}.`
+      );
     }
   }
 };

@@ -4,6 +4,7 @@ import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
@@ -164,12 +165,12 @@ export default class ContractFactory {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
       if (!hasConfigurable) {
-        throw new Error('Contract has no configurables to be set');
+        throw new Error('Contract does not have configurables to be set');
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Contract has no configurable named: ${key}`);
+          throw new Error(`Contract does not have a configurable named: '${key}'`);
         }
 
         const { offset } = this.interface.configurables[key];
@@ -183,10 +184,10 @@ export default class ContractFactory {
         this.bytecode = bytes;
       });
     } catch (err) {
-      logger.throwError('Error setting configurables', Logger.errors.INVALID_ARGUMENT, {
-        error: err,
-        configurableConstants,
-      });
+      throw new FuelError(
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants on contract: ${(<Error>err).message}.`
+      );
     }
   }
 }

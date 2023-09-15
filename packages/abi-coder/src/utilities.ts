@@ -1,4 +1,5 @@
 import { concat, arrayify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from 'ethers';
 
 import { U64Coder } from './coders/u64';
@@ -145,7 +146,7 @@ export function findOrThrow<T>(
   arr: readonly T[],
   predicate: (val: T) => boolean,
   throwFn: () => never = () => {
-    throw new Error('element not found');
+    throw new FuelError(ErrorCode.ELEMENT_NOT_FOUND, 'Element not found in the array.');
   }
 ): T {
   const found = arr.find(predicate);

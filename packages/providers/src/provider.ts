@@ -2,6 +2,7 @@
 import type { BytesLike } from 'ethers';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';
@@ -357,12 +358,14 @@ export default class Provider {
     // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
     if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
-      throw new Error(
-        `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
       );
     } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
-      throw new Error(
-        `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas price '${transactionRequest.gasPrice}' is lower than the required: '${minGasPrice}'.`
       );
     }
 
@@ -923,7 +926,10 @@ export default class Provider {
     };
 
     if (commitBlockId && commitBlockHeight) {
-      throw new Error('commitBlockId and commitBlockHeight cannot be used together');
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'commitBlockId and commitBlockHeight cannot be used together'
+      );
     }
 
     if (commitBlockId) {
