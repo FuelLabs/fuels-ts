@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -14,10 +14,10 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import crossFetch from 'cross-fetch';
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
 import { createClient } from 'graphql-sse';
-import nodeFetch from 'node-fetch';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -234,7 +234,7 @@ export default class Provider {
     return options.fetch !== undefined
       ? options.fetch
       : (url: string, request: FetchRequestOptions) =>
-          nodeFetch(url, {
+          crossFetch(url, {
             signal:
               options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
             ...request,

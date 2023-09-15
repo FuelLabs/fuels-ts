@@ -6,7 +6,6 @@ settings:
 
 overrides:
   cross-fetch: 4.0.0
-  node-fetch: ^2.6.13
 
 importers:
 
@@ -621,8 +620,8 @@ importers:
   packages/forc:
     dependencies:
       node-fetch:
-        specifier: ^2.6.13
-        version: 2.6.13
+        specifier: ^2.6.7
+        version: 2.7.0
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
@@ -630,8 +629,8 @@ importers:
   packages/fuel-core:
     dependencies:
       node-fetch:
-        specifier: ^2.6.13
-        version: 2.6.13
+        specifier: ^2.6.7
+        version: 2.7.0
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
@@ -959,6 +958,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      cross-fetch:
+        specifier: 4.0.0
+        version: 4.0.0
       graphql:
         specifier: ^16.6.0
         version: 16.6.0
@@ -971,9 +973,6 @@ importers:
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.6.0)
-      node-fetch:
-        specifier: ^2.6.13
-        version: 2.6.13
       ramda:
         specifier: ^0.29.0
         version: 0.29.0
@@ -1439,7 +1438,7 @@ packages:
     resolution: {integrity: sha512-xhlTqH0m31mnsG0tIP4ETgfSB6gXDaYYsUWTrlUV93fFQPI9dd8hE0Ot6MHLCtqgB32hwJAC3YZMWlXZw7AleA==}
     engines: {node: '>=14'}
     dependencies:
-      node-fetch: 2.6.13
+      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -3193,7 +3192,7 @@ packages:
     resolution: {integrity: sha512-JppheLu7S114aEs157fOZDjFqUDpm7eHdq5E8SSR0gUBTEK0cNSHsrSR5a66xs0z3RWuo46QvA3vawp8BxDHvg==}
     dependencies:
       dataloader: 1.4.0
-      node-fetch: 2.6.13
+      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -6835,7 +6834,7 @@ packages:
       event-target-polyfill: 0.0.3
       form-data-encoder: 1.9.0
       formdata-node: 4.4.1
-      node-fetch: 2.6.13
+      node-fetch: 2.7.0
       undici: 5.23.0
       web-streams-polyfill: 3.2.1
     transitivePeerDependencies:
@@ -8268,7 +8267,7 @@ packages:
   /cross-fetch@4.0.0:
     resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
     dependencies:
-      node-fetch: 2.6.13
+      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
 
@@ -10107,7 +10106,7 @@ packages:
       chalk: 2.4.2
       graphql: 14.7.0
       minimist: 1.2.8
-      node-fetch: 2.6.13
+      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -13133,8 +13132,8 @@ packages:
     engines: {node: '>=10.5.0'}
     dev: true
 
-  /node-fetch@2.6.13:
-    resolution: {integrity: sha512-StxNAxh15zr77QvvkmveSQ8uCQ4+v5FkvNTj0OESmiHu+VRi/gXArXtkWMElOsOUNLtUEvI4yS+rdtOHZTwlQA==}
+  /node-fetch@2.7.0:
+    resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
       encoding: ^0.1.0
@@ -16342,7 +16341,7 @@ packages:
       fs-extra: 8.1.0
       get-url-origin: 1.0.1
       minimatch: 3.1.2
-      node-fetch: 2.6.13
+      node-fetch: 2.7.0
       p-memoize: 3.1.0
       p-queue: 6.6.2
       textlint: 13.3.2
