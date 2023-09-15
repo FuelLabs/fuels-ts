@@ -1,6 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { concat } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bufferFromString } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
@@ -8,7 +5,9 @@ import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { transactionRequestify, TransactionType } from '@fuel-ts/providers';
 import type { UtxoId } from '@fuel-ts/transactions';
 import { OutputType, InputType, TransactionCoder } from '@fuel-ts/transactions';
-import cloneDeep from 'lodash.clonedeep';
+import type { BytesLike } from 'ethers';
+import { concat, sha256 } from 'ethers';
+import { clone } from 'ramda';
 
 /**
  * hash string messages with sha256
@@ -48,7 +47,7 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike, 
 
   // Zero out input fields
   transaction.inputs = transaction.inputs.map((input) => {
-    const inputClone = cloneDeep(input);
+    const inputClone = clone(input);
 
     switch (inputClone.type) {
       // Zero out on signing: txPointer, predicateGasUsed
@@ -85,7 +84,7 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike, 
   });
   // Zero out output fields
   transaction.outputs = transaction.outputs.map((output) => {
-    const outputClone = cloneDeep(output);
+    const outputClone = clone(output);
 
     switch (outputClone.type) {
       // Zero out on signing: balanceRoot, stateRoot
