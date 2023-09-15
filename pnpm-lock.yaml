@@ -589,15 +589,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-<<<<<<< HEAD
-=======
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
->>>>>>> 5310e8b5226a74058b85a6f1ca3671b6b5b5c5b7
       ethereum-cryptography:
         specifier: ^2.1.2
         version: 2.1.2
@@ -759,15 +753,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-<<<<<<< HEAD
-=======
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
->>>>>>> 5310e8b5226a74058b85a6f1ca3671b6b5b5c5b7
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -777,9 +765,6 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
-      bigint-conversion:
-        specifier: ^2.4.2
-        version: 2.4.2
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -4645,10 +4630,6 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@juanelas/base64@1.1.2:
-    resolution: {integrity: sha512-mr2pfRQpWap0Uq4tlrCgp3W+Yjx1/Bpq4QJsYeAQUh1mExgyQvXz7xUhmYT2HcLLspuAL5dpnos8P2QhaCSXsQ==}
-    dev: false
-
   /@leichtgewicht/ip-codec@2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
     dev: false
@@ -7182,12 +7163,6 @@ packages:
 
   /big.js@5.2.2:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
-    dev: false
-
-  /bigint-conversion@2.4.2:
-    resolution: {integrity: sha512-2s3aRYaQtYGqY1w6x2PQqYbHUjktOWX0S0dkv7c+FjRnkKspictZ4IaEKmGEtZJjT2ccR29ufPB7QPEDfSs4bg==}
-    dependencies:
-      '@juanelas/base64': 1.1.2
     dev: false
 
   /binary-extensions@2.2.0:

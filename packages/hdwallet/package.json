@@ -26,7 +26,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "ethers": "^6.7.1"
-    "@fuel-ts/errors": "workspace:*"
   }
 }
