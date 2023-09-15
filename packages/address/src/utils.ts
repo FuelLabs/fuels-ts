@@ -1,4 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
@@ -13,6 +12,7 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
+import type { BytesLike } from 'ethers';
 
 /**
  * Fuel Network HRP (human-readable part) for bech32 encoding

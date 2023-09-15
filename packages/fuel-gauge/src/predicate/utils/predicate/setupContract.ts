@@ -1,5 +1,5 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { BytesLike } from 'ethers';
 import { BaseAssetId, ContractFactory, Provider } from 'fuels';
 import type { Interface, JsonAbi, Contract, WalletUnlocked } from 'fuels';
 

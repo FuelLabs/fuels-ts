@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { hexlify } from '@ethersproject/bytes';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish, BN } from '@fuel-ts/math';

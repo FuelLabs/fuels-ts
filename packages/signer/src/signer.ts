@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';

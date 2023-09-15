@@ -1,8 +1,8 @@
-import { type BytesLike } from '@ethersproject/bytes';
 import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
+import type { BytesLike } from 'ethers';
 
 import {
   composeScriptForTransferringToContract,

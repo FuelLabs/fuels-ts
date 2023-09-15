@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';

@@ -1,5 +1,5 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import type { Provider } from '@fuel-ts/providers';
+import type { BytesLike } from 'ethers';
 
 export interface GenerateOptions {
   /** Additional entropy for the random bytes */

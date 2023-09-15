@@ -17,9 +17,6 @@ importers:
       '@changesets/get-github-info':
         specifier: ^0.5.2
         version: 0.5.2
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:packages/forc
@@ -1115,6 +1112,9 @@ importers:
       '@fuels/vm-asm':
         specifier: 0.36.1
         version: 0.36.1
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32

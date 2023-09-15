@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { english } from '@fuel-ts/wordlists';

@@ -1,4 +1,3 @@
-import { hexlify } from '@ethersproject/bytes';
 import {
   bufferFromString,
   keccak256,
@@ -9,6 +8,7 @@ import {
   encryptJsonWalletData,
 } from '@fuel-ts/crypto';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
+import { hexlify } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 
 export type KeystoreWallet = {

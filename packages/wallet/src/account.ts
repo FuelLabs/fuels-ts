@@ -1,5 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { AbstractAccount } from '@fuel-ts/interfaces';
@@ -25,6 +24,8 @@ import {
   transactionRequestify,
 } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
+import type { BytesLike } from 'ethers';
+import { hexlify } from 'ethers';
 
 import { FUEL_NETWORK_URL } from './configs';
 import {

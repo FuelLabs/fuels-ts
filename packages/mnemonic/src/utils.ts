@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { arrayify } from '@ethersproject/bytes';
 import { sha256 } from 'ethers';
 

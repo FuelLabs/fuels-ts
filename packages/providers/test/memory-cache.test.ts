@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 

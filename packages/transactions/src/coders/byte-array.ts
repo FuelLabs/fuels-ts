@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from 'ethers';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
 
