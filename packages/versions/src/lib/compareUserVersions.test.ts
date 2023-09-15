@@ -15,7 +15,6 @@ describe('compareVersions.js', () => {
     vi.restoreAllMocks();
   });
 
-
   /*
     Tests
   */

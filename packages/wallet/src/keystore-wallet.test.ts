@@ -8,7 +8,6 @@ describe('Keystore Wallet', () => {
     vi.restoreAllMocks();
   });
 
-
   const privateKey = '0xeac85e732b683119e62fb52ce3b04c0d2f60539cd55af34c731fcdcf802e5ef4';
 
   const address = Address.fromAddressOrString(
