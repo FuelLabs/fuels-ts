@@ -33,7 +33,7 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/math": "workspace:*",                                                             
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",

@@ -1,4 +1,3 @@
- 
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -305,7 +304,7 @@ export default class Provider {
           See here: https://github.com/enisdenjo/graphql-sse/blob/370ec133f8ca9c7b763a6ca0223c756a09169c59/src/client.ts#L872
         */
         if ((msg.data as { _isError: boolean })._isError) {
-          throw new FuelError(ErrorCode.FUEL_NODE_ERROR, JSON.stringify(msg.data!.errors));
+          throw new FuelError(ErrorCode.FUEL_NODE_ERROR, JSON.stringify(msg.data?.errors));
         }
       },
       fetchFn: async (
@@ -677,7 +676,7 @@ export default class Provider {
       filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges!.map((edge) => edge!.node!);
+    const coins = result.coins.edges.map((edge) => edge.node);
 
     return coins.map((coin) => ({
       id: coin.utxoId,
@@ -945,7 +944,7 @@ export default class Provider {
       filter: { owner: owner.toB256() },
     });
 
-    const balances = result.balances.edges!.map((edge) => edge!.node!);
+    const balances = result.balances.edges.map((edge) => edge.node);
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
@@ -972,7 +971,7 @@ export default class Provider {
       owner: address.toB256(),
     });
 
-    const messages = result.messages.edges!.map((edge) => edge!.node!);
+    const messages = result.messages.edges.map((edge) => edge.node);
 
     return messages.map((message) => ({
       messageId: InputMessageCoder.getMessageId({
