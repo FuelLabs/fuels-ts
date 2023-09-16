@@ -30,6 +30,10 @@ const setup = async () => {
   return contract;
 };
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('StorageTestContract', () => {
   it('can increment counter', async () => {
     const contract = await setup();

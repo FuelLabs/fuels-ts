@@ -25,6 +25,10 @@ type Baz = {
   x: number;
 };
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
     const wallet = await setup();

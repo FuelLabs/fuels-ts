@@ -4,6 +4,10 @@ import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB25
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
 

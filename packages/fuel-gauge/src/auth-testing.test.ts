@@ -9,6 +9,10 @@ import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debu
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

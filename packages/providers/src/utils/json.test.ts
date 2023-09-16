@@ -3,6 +3,10 @@ import { BN, bn } from '@fuel-ts/math';
 
 import { normalizeJSON } from './json';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('JSON parser', () => {
   test('normalizeJSON object', () => {
     const bytesValue = Uint8Array.from([1, 2, 3, 4]);

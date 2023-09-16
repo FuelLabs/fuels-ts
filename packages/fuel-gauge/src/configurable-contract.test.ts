@@ -34,6 +34,10 @@ const defaultValues = {
   },
 };
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Configurable Contract', () => {
   let wallet: WalletUnlocked;
   let factory: ContractFactory;

@@ -13,6 +13,10 @@ const setup = async (balance = 5_000) => {
   return wallet;
 };
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Script With Vectors', () => {
   it('can call script and use main argument [array]', async () => {
     const wallet = await setup();

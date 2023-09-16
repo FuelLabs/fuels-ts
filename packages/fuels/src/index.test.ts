@@ -1,5 +1,9 @@
 import * as fuels from './index';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('index.js', () => {
   test('should export everything', () => {
     expect(fuels.Interface).toBeTruthy();

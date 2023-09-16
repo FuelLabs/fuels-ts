@@ -9,6 +9,10 @@ import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Predicate', () => {
   describe('Transactions', () => {
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';

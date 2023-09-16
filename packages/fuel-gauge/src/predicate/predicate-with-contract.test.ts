@@ -21,6 +21,10 @@ const liquidityPoolBytes = readFileSync(
   join(__dirname, '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
 );
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Predicate', () => {
   describe('With Contract', () => {
     let wallet: WalletUnlocked;

@@ -85,6 +85,10 @@ const setup = async (balance = 5_000) => {
   return wallet;
 };
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Vector Types Validation', () => {
   it('can use supported vector types [vector-types-contract]', async () => {
     const setupContract = getSetupContract('vector-types-contract');

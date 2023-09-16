@@ -14,6 +14,10 @@ import type { Validation } from '../types/predicate';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Predicate', () => {
   describe('Arguments', () => {
     let wallet: WalletUnlocked;

@@ -45,6 +45,10 @@ const ADDRESS_BYTES = new Uint8Array([
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,
 ]);
 
+/**
+ * @group browser
+ * @group node
+ */
 test('it has an Address class using bech32Address', () => {
   const address = new Address(ADDRESS_BECH32);
 

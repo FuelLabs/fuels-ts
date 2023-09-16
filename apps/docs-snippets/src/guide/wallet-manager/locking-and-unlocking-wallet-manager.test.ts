@@ -1,5 +1,9 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   it('should', async () => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';

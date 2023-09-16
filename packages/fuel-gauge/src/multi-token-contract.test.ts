@@ -32,6 +32,10 @@ const subIds = [
   '0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5',
 ];
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance

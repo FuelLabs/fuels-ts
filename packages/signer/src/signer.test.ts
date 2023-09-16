@@ -5,6 +5,10 @@ import { Buffer } from 'buffer';
 
 import Signer from './signer';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Signer', () => {
   it('Initialize publicKey and address for new signer instance', () => {
     const signer = new Signer(signMessageTest.privateKey);

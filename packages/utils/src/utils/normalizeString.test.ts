@@ -2,6 +2,9 @@ import { safeExec } from '../test-utils/safeExec';
 
 import { normalizeString } from './normalizeString';
 
+/**
+ * @group node
+ */
 describe('normalize.ts', () => {
   test('should normalize strings', () => {
     expect(normalizeString('DsToken')).toEqual('DsToken');

@@ -5,6 +5,10 @@ import { hash } from '../common';
 import { DeepSparseMerkleSubTree } from './deepSparseMerkleSubTree';
 import { SparseMerkleTree } from './sparseMerkleTree';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Sparse Merkle Tree', () => {
   it('Update and delete', () => {
     const smt = new SparseMerkleTree();

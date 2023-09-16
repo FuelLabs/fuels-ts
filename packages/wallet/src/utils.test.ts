@@ -16,6 +16,10 @@ import {
 //   ...jest.requireActual('@fuels/vm-asm'),
 // }));
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('util', () => {
   afterEach(() => {
     vi.restoreAllMocks();

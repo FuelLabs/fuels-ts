@@ -1,5 +1,9 @@
 import { Wallet } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully encrypt wallet', async () => {
     // #region encrypting-and-decrypting-json-wallets-1

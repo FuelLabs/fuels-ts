@@ -1,5 +1,9 @@
 import { Provider, fromTai64ToUnix } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 test('produceBlocks with custom timestamp docs snippet', async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const latestBlock = await provider.getBlock('latest');

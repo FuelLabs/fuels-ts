@@ -15,6 +15,10 @@ const scriptBytes = readFileSync(
   join(__dirname, '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
 );
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Predicate', () => {
   describe('With script', () => {
     let wallet: WalletUnlocked;

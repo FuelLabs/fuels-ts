@@ -1,5 +1,8 @@
 import { B512Coder } from './b512';
 
+/**
+ * @group node
+ */
 describe('B512Coder', () => {
   const B512_DECODED =
     '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';

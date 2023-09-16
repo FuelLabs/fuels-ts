@@ -4,6 +4,9 @@ import { BooleanCoder } from './boolean';
 import { NumberCoder } from './number';
 import { VecCoder } from './vec';
 
+/**
+ * @group node
+ */
 describe('VecCoder', () => {
   it('should encode a Vec of Booleans', () => {
     const coder = new VecCoder(new BooleanCoder());

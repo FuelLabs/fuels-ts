@@ -3,6 +3,10 @@ import { Command } from 'commander';
 
 import { run } from './cli';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('cli.js', () => {
   test('should call `versions` sub-program', () => {
     // mocking

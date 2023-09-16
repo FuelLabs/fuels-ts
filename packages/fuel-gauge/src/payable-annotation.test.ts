@@ -15,6 +15,10 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
+/**
+ * @group browser
+ * @group node
+ */
 test('allow sending coins to payable functions', async () => {
   const contract = await setupContract();
 

@@ -4,6 +4,10 @@ import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Predicate', () => {
   describe('Functions', () => {
     const chainId = 0;

@@ -4,6 +4,9 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { StorageSlot } from './storage-slot';
 import { StorageSlotCoder } from './storage-slot';
 
+/**
+ * @group node
+ */
 describe('StorageSlotCoder', () => {
   it('Can encode and decode', () => {
     const storageSlot: StorageSlot = {

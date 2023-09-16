@@ -4,6 +4,10 @@ import { Address } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('EvMAddress', () => {
   let contract: Contract;
   const Bits256: B256AddressEvm =

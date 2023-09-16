@@ -1,5 +1,9 @@
 import { Address, Wallet } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
     // #region address-2

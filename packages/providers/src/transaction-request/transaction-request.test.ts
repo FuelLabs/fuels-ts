@@ -4,6 +4,10 @@ import { TransactionType } from '@fuel-ts/transactions';
 import type { TransactionRequestLike } from './types';
 import { transactionRequestify } from './utils';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('TransactionRequest', () => {
   describe('transactionRequestify', () => {
     it('should keep data from input in transaction request created', () => {

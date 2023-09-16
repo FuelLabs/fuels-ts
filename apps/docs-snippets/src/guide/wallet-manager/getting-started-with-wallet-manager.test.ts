@@ -1,6 +1,10 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
 import { Wallet } from 'fuels';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe(__filename, () => {
   it('instantiates the WalletManager', async () => {
     // #region getting-started-with-wallet-manager-1

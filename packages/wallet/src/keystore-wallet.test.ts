@@ -3,6 +3,10 @@ import { safeExec } from '@fuel-ts/utils/test-utils';
 
 import { decryptKeystoreWallet, encryptKeystoreWallet, removeHexPrefix } from './keystore-wallet';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Keystore Wallet', () => {
   afterEach(() => {
     vi.restoreAllMocks();

@@ -8,6 +8,10 @@ const checksum = (wordlists: string[]) =>
     .update(Buffer.from(`${wordlists.join('\n')}\n`))
     .digest('hex');
 
+  /**
+ * @group browser
+ * @group node
+ */
 describe('Checksum word lists', () => {
   test('Checksum english list', () => {
     expect(checksum(english)).toBe(

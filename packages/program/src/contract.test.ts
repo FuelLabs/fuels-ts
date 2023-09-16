@@ -36,6 +36,10 @@ const ABI: JsonAbi = {
   configurables: [],
 };
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Contract', () => {
   test('Create contract instance with provider', () => {
     const provider = new Provider('http://localhost:4000/graphql');

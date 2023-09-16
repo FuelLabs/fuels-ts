@@ -20,6 +20,10 @@ const predicateBytecode = readFileSync(
   )
 );
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('PredicateConditionalInputs', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';

@@ -14,6 +14,10 @@ beforeAll(async () => {
   otherContractInstance = await setupOtherContract({ cache: false });
 });
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     const { value, logs } = await contractInstance.functions.test_function().call();

@@ -5,6 +5,9 @@ import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';
 import { NumberCoder } from './number';
 
+/**
+ * @group node
+ */
 describe('ArrayCoder', () => {
   it('should encode a number array with zero inputs', () => {
     const coder = new ArrayCoder(new NumberCoder('u8'), 0);
