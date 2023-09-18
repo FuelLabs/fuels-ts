@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 const upperFirst = (s: string): string => s[0].toUpperCase() + s.slice(1);
@@ -13,7 +15,8 @@ export function validateBinFile(params: {
   const isScript = programType === ProgramTypeEnum.SCRIPT;
 
   if (!binExists && isScript) {
-    throw new Error(
+    throw new FuelError(
+      ErrorCode.BIN_FILE_NOT_FOUND,
       [
         `Could not find BIN file for counterpart ${upperFirst(programType)} ABI.`,
         `  - ABI: ${abiFilepath}`,

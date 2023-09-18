@@ -101,14 +101,16 @@ describe('BlockExplorer Utils', () => {
     );
 
     // passing in path AND a helper param should throw
+    const errMsg = `You cannot pass in a path to 'buildBlockExplorerUrl' along `.concat(
+      'with any of the following: address, txId, blockNumber.'
+    );
+
     expect(() =>
       buildBlockExplorerUrl({
         path: '/transaction/0x123',
         address: '0x123',
       })
-    ).toThrow(
-      'You cannot pass in a path to buildBlockExplorerUrl along with any of the following: address, txId, blockNumber'
-    );
+    ).toThrow(errMsg);
 
     expect(
       buildBlockExplorerUrl({

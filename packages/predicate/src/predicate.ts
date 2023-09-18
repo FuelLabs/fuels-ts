@@ -10,6 +10,7 @@ import {
   WORD_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractPredicate } from '@fuel-ts/interfaces';
 import type {
   CallResult,
@@ -182,7 +183,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     try {
       if (!abiInterface) {
         throw new Error(
-          'Unable to validate configurable constants, Predicate instantiated without json ABI'
+          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
         );
       }
 
@@ -192,7 +193,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!abiInterface?.configurables[key]) {
-          throw new Error(`Predicate has no configurable constant named: ${key}`);
+          throw new Error(`No configurable constant named '${key}' found in the Predicate`);
         }
 
         const { offset } = abiInterface.configurables[key];
@@ -202,7 +203,10 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         mutatedBytes.set(encoded, offset);
       });
     } catch (err) {
-      throw new Error(`Error setting configurable constants: ${err}`);
+      throw new FuelError(
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants: ${(<Error>err).message}.`
+      );
     }
 
     return mutatedBytes;

@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { TransactionType } from '@fuel-ts/transactions';
 
 import { CreateTransactionRequest } from './create-transaction-request';
@@ -9,6 +10,9 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
   if (obj instanceof ScriptTransactionRequest || obj instanceof CreateTransactionRequest) {
     return obj;
   }
+
+  const { type } = obj;
+
   switch (obj.type) {
     case TransactionType.Script: {
       return ScriptTransactionRequest.from(obj);
@@ -17,12 +21,7 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
       return CreateTransactionRequest.from(obj);
     }
     default: {
-      throw new Error(
-        `Unknown transaction type: ${
-          // @ts-expect-error Unreachable code
-          obj.type
-        }`
-      );
+      throw new FuelError(ErrorCode.INVALID_TRANSACTION_TYPE, `Invalid transaction type: ${type}.`);
     }
   }
 };
