@@ -270,7 +270,7 @@ export default class Provider {
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
-  async updateUrl(url: string) {
+  async switchUrl(url: string) {
     if (!Provider.chainInfoCache[url]) {
       const chainInfo = await Provider.getChainInfoWithoutInstance(url);
       Provider.chainInfoCache[url] = chainInfo;

@@ -188,7 +188,7 @@ describe('Provider', () => {
     const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
 
     expect(provider.url).toBe(providerUrl1);
-    await provider.updateUrl(providerUrl2);
+    await provider.switchUrl(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
     expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
   });
