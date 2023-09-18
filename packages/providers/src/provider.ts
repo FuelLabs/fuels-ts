@@ -232,11 +232,9 @@ export default class Provider {
   constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    chainInfo: ChainInfo,
     public options: ProviderOptions = {}
   ) {
     this.operations = this.createOperations(url, options);
-    Provider.chainInfoCache[url] = chainInfo;
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -246,14 +244,11 @@ export default class Provider {
    * @param options - Additional options for the provider
    */
   static async connect(url: string, options: ProviderOptions = {}) {
-    let chainInfo: ChainInfo;
-    // If the chain info is already cached, use it.
-    if (Provider.chainInfoCache[url]) {
-      chainInfo = Provider.chainInfoCache[url];
-    } else {
-      chainInfo = await this.getChainInfoWithoutInstance(url);
+    if (!Provider.chainInfoCache[url]) {
+      const chainInfo = await this.getChainInfoWithoutInstance(url);
+      Provider.chainInfoCache[url] = chainInfo;
     }
-    const provider = new Provider(url, chainInfo, options);
+    const provider = new Provider(url, options);
     return provider;
   }
 

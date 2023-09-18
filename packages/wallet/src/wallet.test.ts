@@ -87,9 +87,9 @@ describe('Wallet', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
+      // eslint-disable-next-line @typescript-eslint/require-await
       static async connect(url: string) {
-        const chainInfo = await ProviderCustom.getChainInfoWithoutInstance(url);
-        const newProvider = new ProviderCustom(url, chainInfo, {});
+        const newProvider = new ProviderCustom(url, {});
         return newProvider;
       }
 

@@ -27,10 +27,8 @@ describe(__filename, () => {
   });
 
   it('should successfully update contract instance provider', () => {
-    const chainInfo = deployedContract.provider.getCachedChainInfo();
-
     // use the `chainInfo` from the deployed contract's provider to create a new dummy provider
-    const newProvider = new Provider('http://provider:9999', chainInfo);
+    const newProvider = new Provider('http://provider:9999');
 
     expect(deployedContract.provider?.url).not.toBe(newProvider.url);
 
