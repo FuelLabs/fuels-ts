@@ -1,7 +1,15 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { WalletUnlocked } from 'fuels';
-import { BaseAssetId, ContractFactory, toNumber, Contract, Provider, Predicate } from 'fuels';
+import {
+  BaseAssetId,
+  ContractFactory,
+  toNumber,
+  Contract,
+  Provider,
+  Predicate,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 import { join } from 'path';
 
 import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -27,7 +35,7 @@ describe('Predicate', () => {
     let receiver: WalletUnlocked;
 
     beforeEach(async () => {
-      const provider = new Provider('http://127.0.0.1:4000/graphql');
+      const provider = new Provider(FUEL_NETWORK_URL);
       wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });

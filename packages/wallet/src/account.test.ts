@@ -15,6 +15,7 @@ import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
+import { FUEL_NETWORK_URL } from './configs';
 
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
@@ -181,7 +182,7 @@ describe('Account', () => {
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
-    expect(account.provider.url).toEqual('http://127.0.0.1:4000/graphql');
+    expect(account.provider.url).toEqual(FUEL_NETWORK_URL);
 
     const newProviderUrl = 'https://rpc.fuel.sh';
     account.connect(newProviderUrl);

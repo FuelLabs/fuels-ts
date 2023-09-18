@@ -1,12 +1,12 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
-import { Provider, Wallet, ContractFactory, bn, BaseAssetId } from 'fuels';
+import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract-abi.json';
 
-const provider = new Provider('http://127.0.0.1:4000/graphql');
+const provider = new Provider(FUEL_NETWORK_URL);
 
 const setup = async () => {
   // Create wallet

@@ -1,6 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Provider } from '@fuel-ts/providers';
 import { Account, Wallet } from '@fuel-ts/wallet';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import Contract from './contract';
 
@@ -38,7 +39,7 @@ const ABI: JsonAbi = {
 
 describe('Contract', () => {
   test('Create contract instance with provider', () => {
-    const provider = new Provider('http://localhost:4000/graphql');
+    const provider = new Provider(FUEL_NETWORK_URL);
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
