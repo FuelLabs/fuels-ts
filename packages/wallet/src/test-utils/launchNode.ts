@@ -96,7 +96,9 @@ export const launchNode = async ({
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      kill(Number(child.pid));
+      if (child.pid) {
+        kill(Number(child.pid));
+      }
 
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();
