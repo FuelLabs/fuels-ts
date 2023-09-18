@@ -1,13 +1,21 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, Provider, ContractFactory, BaseAssetId } from 'fuels';
+import {
+  bn,
+  toHex,
+  Interface,
+  Provider,
+  ContractFactory,
+  BaseAssetId,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 import { join } from 'path';
 
 import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = new Provider(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source

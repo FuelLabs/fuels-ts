@@ -1,6 +1,14 @@
 import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
-import { BaseAssetId, Provider, Predicate, bn, ScriptTransactionRequest, InputType } from 'fuels';
+import {
+  BaseAssetId,
+  Provider,
+  Predicate,
+  bn,
+  ScriptTransactionRequest,
+  InputType,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -9,7 +17,7 @@ import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
   describe('Estimate predicate gas', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = new Provider(FUEL_NETWORK_URL);
     let predicateTrue: Predicate<[]>;
     let predicateStruct: Predicate<[Validation]>;
 

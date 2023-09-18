@@ -26,6 +26,7 @@ import {
   ContractFactory,
   ZeroBytes32,
   BaseAssetId,
+  FUEL_NETWORK_URL,
 } from 'fuels';
 import { join } from 'path';
 
@@ -115,7 +116,7 @@ test('it has conversion tools', () => {
   const address = Address.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);
   const walletLike: WalletLocked = Wallet.fromAddress(address);
-  const provider = new Provider('http://localhost:4000/graphql');
+  const provider = new Provider(FUEL_NETWORK_URL);
   const contractLike: Contract = new Contract(address, abiJSON, provider);
 
   expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
@@ -188,7 +189,7 @@ it('can create wallets', async () => {
   // #region wallet-setup
   // #context import { Provider, bn } from 'fuels';
   // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = new Provider(FUEL_NETWORK_URL);
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
@@ -243,7 +244,7 @@ it('can connect to testnet', () => {
 it('can connect to a local provider', () => {
   // #region provider-local
   // #context import { Provider, WalletUnlocked } from 'fuels';
-  const localProvider = new Provider('http://127.0.0.1:4000/graphql');
+  const localProvider = new Provider(FUEL_NETWORK_URL);
   // Setup a private key
   const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
@@ -260,7 +261,7 @@ it('can query address with wallets', async () => {
   // #region wallet-query
   // #context import { Provider } from 'fuels';
   // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = new Provider(FUEL_NETWORK_URL);
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
   const wallet = await generateTestWallet(provider, [
@@ -314,7 +315,7 @@ it('can query address with wallets', async () => {
 it('can create a predicate', async () => {
   // #region predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = new Provider(FUEL_NETWORK_URL);
   const chainId = await provider.getChainId();
   const predicate = new Predicate(testPredicateTrue, chainId);
 
@@ -324,7 +325,7 @@ it('can create a predicate', async () => {
 });
 
 it('can create a predicate and use', async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = new Provider(FUEL_NETWORK_URL);
   // Setup a private key
   const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
   const PRIVATE_KEY_2 = '0x37fa81c84ccd547c30c176b118d5cb892bdb113e8e80141f266519422ef9eefd';
@@ -434,7 +435,7 @@ it('can create a predicate and use', async () => {
 
 test.skip('deposit and withdraw cookbook guide', async () => {
   // #region deposit-and-withdraw-cookbook-wallet-setup
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = new Provider(FUEL_NETWORK_URL);
   const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
   const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
   await seedTestWallet(wallet, [{ assetId: BaseAssetId, amount: bn(100_000) }]);

@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, Script, BaseAssetId, Provider } from 'fuels';
+import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-abi.json';
@@ -21,7 +21,7 @@ let wallet: WalletUnlocked;
 
 describe('Script With Configurable', () => {
   beforeAll(async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = new Provider(FUEL_NETWORK_URL);
 
     const quantities: CoinQuantityLike[] = [
       {
