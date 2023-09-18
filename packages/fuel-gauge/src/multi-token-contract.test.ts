@@ -7,7 +7,7 @@ import { join } from 'path';
 import abi from '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract-abi.json';
 
 const setup = async () => {
-  const provider = await Provider.connect(FUEL_NETWORK_URL);
+  const provider = await Provider.create(FUEL_NETWORK_URL);
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
@@ -33,7 +33,7 @@ const subIds = [
 
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const multiTokenContract = await setup();

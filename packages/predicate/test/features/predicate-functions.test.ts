@@ -13,7 +13,7 @@ describe('Predicate', () => {
     let provider: Provider;
 
     beforeAll(async () => {
-      provider = await Provider.connect(FUEL_NETWORK_URL);
+      provider = await Provider.create(FUEL_NETWORK_URL);
     });
 
     it('sets predicate address for given byte code', () => {

@@ -14,7 +14,7 @@ describe('Wallet Manager', () => {
   let provider: Provider;
 
   beforeEach(async () => {
-    provider = await Provider.connect(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
   });
 
   const setupWallet = async (config: VaultConfig) => {

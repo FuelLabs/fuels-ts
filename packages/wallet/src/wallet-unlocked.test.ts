@@ -22,7 +22,7 @@ jest.mock('@fuel-ts/providers', () => ({
 
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(signMessageTest.privateKey, provider);
 
     expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
@@ -30,7 +30,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Sign a message using wallet instance', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(signMessageTest.privateKey, provider);
     const signedMessage = await wallet.signMessage(signMessageTest.message);
     const verifiedAddress = Signer.recoverAddress(
@@ -45,7 +45,7 @@ describe('WalletUnlocked', () => {
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
     // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = await wallet.signTransaction(transactionRequest);
@@ -61,7 +61,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Populate transaction witnesses signature using wallet instance', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = await wallet.signTransaction(transactionRequest);
@@ -73,7 +73,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Populate transaction multi-witnesses signature using wallet instance', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
     const privateKey = randomBytes(32);
     const otherWallet = new WalletUnlocked(privateKey, provider);
@@ -91,7 +91,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Check if send transaction adds signature using wallet instance', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
     const transactionRequest = sendTransactionTest.transaction;
     let signature: BytesLike | undefined;
@@ -113,7 +113,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Generate a new random wallet', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.generate({
       provider,
     });
@@ -128,7 +128,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Generate a new random wallet with entropy', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.generate({
       entropy: randomBytes(32),
       provider,
@@ -144,7 +144,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Create wallet from seed', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
 
     expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
@@ -152,7 +152,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Create wallet from mnemonic', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.fromMnemonic(
       walletSpec.mnemonic,
       provider,
@@ -165,14 +165,14 @@ describe('WalletUnlocked', () => {
   });
 
   it('Create wallet from mnemonic with default path', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, provider);
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
   });
 
   it('Create wallet from extendedKey', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
@@ -180,7 +180,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Create wallet from seed with default path', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
@@ -188,7 +188,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('Create wallet and lock it', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.generate({
       provider,
     });
@@ -218,7 +218,7 @@ describe('WalletUnlocked', () => {
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
       .mockImplementationOnce(() => Promise.resolve(transactionRequestLike));
 
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const wallet = WalletUnlocked.generate({
       provider,
@@ -247,7 +247,7 @@ describe('WalletUnlocked', () => {
   });
 
   it('encrypts wallet to keystore', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = WalletUnlocked.generate({
       provider,
     });

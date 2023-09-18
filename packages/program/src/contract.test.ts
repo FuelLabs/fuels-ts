@@ -39,14 +39,14 @@ const ABI: JsonAbi = {
 
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
   });
 
   test('Create contract instance with wallet', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.generate({
       provider,
     });
@@ -56,7 +56,7 @@ describe('Contract', () => {
   });
 
   test('Create contract instance with custom wallet', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const generatedWallet = Wallet.generate({
       provider,
     });

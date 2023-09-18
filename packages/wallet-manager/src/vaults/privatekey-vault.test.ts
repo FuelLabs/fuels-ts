@@ -11,7 +11,7 @@ describe('PrivateKeyVault', () => {
   let walletSpec: WalletUnlocked;
 
   beforeAll(async () => {
-    provider = await Provider.connect(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
     walletSpec = Wallet.generate({
       provider,
     });

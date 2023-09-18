@@ -17,7 +17,7 @@ describe(__filename, () => {
 
   it('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const chainId = await provider.getChainId();
     const predicate = new Predicate(bin, chainId, provider, abi);
     // #endregion send-and-spend-funds-from-predicates-2
@@ -52,7 +52,7 @@ describe(__filename, () => {
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicateOwner = WalletUnlocked.generate({
       provider,
     });
@@ -85,7 +85,7 @@ describe(__filename, () => {
   });
 
   it('should fail when set wrong input data for predicate', async () => {
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicateOwner = WalletUnlocked.generate({
       provider,
     });

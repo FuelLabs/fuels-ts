@@ -15,7 +15,7 @@ import { getSnippetProjectArtifacts } from '../projects';
 
 export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // create a provider using the Fuel network URL
-  const provider = await Provider.connect(FUEL_NETWORK_URL);
+  const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // instantiate the genesis wallet with its secret key
   const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || '0x01', provider);

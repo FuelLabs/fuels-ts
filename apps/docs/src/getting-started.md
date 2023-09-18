@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     async () => {
-      const provider = await Provider.connect("https://beta-4.fuel.network/graphql");
+      const provider = await Provider.create("https://beta-4.fuel.network/graphql");
       const myWallet = Wallet.fromAddress("0x...", provider);
       myWallet.getBalances().then((data) => {
         setBalance(new BN(data[0].amount).toNumber());

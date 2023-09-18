@@ -7,7 +7,7 @@ describe('TransactionSummary', () => {
   let adminWallet: WalletUnlocked;
 
   beforeAll(async () => {
-    provider = await Provider.connect(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
     adminWallet = await generateTestWallet(provider, [[1_000]]);
   });
 

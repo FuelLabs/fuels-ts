@@ -28,7 +28,7 @@ describe('Predicate', () => {
     let provider: Provider;
 
     beforeEach(async () => {
-      provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+      provider = await Provider.create('http://127.0.0.1:4000/graphql');
       wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });

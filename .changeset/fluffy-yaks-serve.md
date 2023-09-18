@@ -13,7 +13,7 @@
 `chainInfo` is now fetched and cached on all `Provider`s when they are initialized. With this release, you now need to initialize a `Provider` like so:
 
 ```ts
-const provider = await Provider.connect(url);
+const provider = await Provider.create(url);
 ```
 
 For the full list of breaking-changes, please see [this PR](https://github.com/FuelLabs/fuels-ts/pull/1181).

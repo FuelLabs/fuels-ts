@@ -22,7 +22,7 @@ describe('Predicate', () => {
     let predicateStruct: Predicate<[Validation]>;
 
     beforeEach(async () => {
-      provider = await Provider.connect(FUEL_NETWORK_URL);
+      provider = await Provider.create(FUEL_NETWORK_URL);
       const chainId = await provider.getChainId();
       predicateTrue = new Predicate(predicateTrueBytecode, chainId, provider);
       predicateStruct = new Predicate<[Validation]>(

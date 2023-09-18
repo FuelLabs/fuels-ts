@@ -243,7 +243,7 @@ export default class Provider {
    * @param url - GraphQL endpoint of the Fuel node
    * @param options - Additional options for the provider
    */
-  static async connect(url: string, options: ProviderOptions = {}) {
+  static async create(url: string, options: ProviderOptions = {}) {
     if (!Provider.chainInfoCache[url]) {
       const chainInfo = await this.getChainInfoWithoutInstance(url);
       Provider.chainInfoCache[url] = chainInfo;

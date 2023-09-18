@@ -27,7 +27,7 @@ let provider: Provider;
 afterEach(jest.restoreAllMocks);
 
 beforeAll(async () => {
-  provider = await Provider.connect(FUEL_NETWORK_URL);
+  provider = await Provider.create(FUEL_NETWORK_URL);
 });
 
 describe('Account', () => {
@@ -207,7 +207,7 @@ describe('Account', () => {
 
     expect(account.provider.url).not.toEqual(newProviderUrl);
 
-    const newProvider = await Provider.connect(newProviderUrl);
+    const newProvider = await Provider.create(newProviderUrl);
     account.connect(newProvider);
 
     expect(account.provider.url).toEqual(newProviderUrl);

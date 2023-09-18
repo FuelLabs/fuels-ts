@@ -18,7 +18,7 @@ describe(__filename, () => {
   let provider: Provider;
 
   beforeAll(async () => {
-    provider = await Provider.connect(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
   });
 
   it('should successfully convert between b256 and bytes32', () => {

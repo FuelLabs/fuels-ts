@@ -80,7 +80,7 @@ export class BaseInvocationScope<TReturn = any> {
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
-        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.connect()``'
+        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
     const maxInputs = consensusParams.maxInputs.toNumber();

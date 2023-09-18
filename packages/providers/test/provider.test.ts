@@ -25,7 +25,7 @@ afterEach(() => {
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     const version = await provider.getVersion();
 
@@ -33,7 +33,7 @@ describe('Provider', () => {
   });
 
   it('can call()', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -98,7 +98,7 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -144,7 +144,7 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
@@ -165,7 +165,7 @@ describe('Provider', () => {
 
   it('can get node info including some consensus parameters properties', async () => {
     // #region provider-definition
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
       await provider.getNodeInfo();
     // #endregion provider-definition
@@ -184,7 +184,7 @@ describe('Provider', () => {
   it.skip('can change the provider url of the current instance', async () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
-    const provider = await Provider.connect(providerUrl1);
+    const provider = await Provider.create(providerUrl1);
     const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
 
     expect(provider.url).toBe(providerUrl1);
@@ -228,13 +228,13 @@ describe('Provider', () => {
       return fetch(url, options);
     };
 
-    const provider = await Provider.connect(providerUrl, { fetch: customFetch });
+    const provider = await Provider.create(providerUrl, { fetch: customFetch });
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 
   it('can force-produce blocks', async () => {
     // #region Provider-produce-blocks
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -255,7 +255,7 @@ describe('Provider', () => {
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -297,13 +297,13 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [undefined]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     expect(provider.cache).toEqual(undefined);
   });
 
   it('can cacheUtxo [numerical]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       cacheUtxo: 2500,
     });
 
@@ -313,13 +313,13 @@ describe('Provider', () => {
 
   it('can cacheUtxo [invalid numerical]', async () => {
     const { error } = await safeExec(() =>
-      Provider.connect('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })
+      Provider.create('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })
     );
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
     const transactionRequest = new ScriptTransactionRequest({});
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -329,7 +329,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       cacheUtxo: 1,
     });
     const MessageInput: MessageTransactionRequestInput = {
@@ -352,7 +352,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -411,7 +411,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -485,7 +485,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -544,7 +544,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -630,7 +630,7 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
@@ -654,7 +654,7 @@ describe('Provider', () => {
   it('can getMessageProof with all data', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql', {
       fetch: async (url, options) => {
         const messageProof = JSON.stringify(messageProofResponse);
         return Promise.resolve(new Response(messageProof, options));
@@ -669,7 +669,7 @@ describe('Provider', () => {
   });
 
   it('can connect', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
@@ -678,7 +678,7 @@ describe('Provider', () => {
   });
 
   it('can invalidate the chain info cache', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     // spy on getChain
     const spyGetChain = jest.spyOn(provider, 'getChain');
@@ -695,9 +695,9 @@ describe('Provider', () => {
     const spyGetChainInfo = jest.spyOn(Provider, 'getChainInfoWithoutInstance');
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const provider1 = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider1 = await Provider.create('http://127.0.0.1:4000/graphql');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const provider2 = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider2 = await Provider.create('http://127.0.0.1:4000/graphql');
 
     // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
     expect(spyGetChainInfo).toHaveBeenCalledTimes(1);

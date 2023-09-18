@@ -366,7 +366,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should get initial state messages from node', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
 
     // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
@@ -410,7 +410,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should test spending input messages', async () => {
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
     const recipient = Wallet.generate({

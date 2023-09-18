@@ -22,7 +22,7 @@ describe('Predicate', () => {
     let provider: Provider;
 
     beforeEach(async () => {
-      provider = await Provider.connect(FUEL_NETWORK_URL);
+      provider = await Provider.create(FUEL_NETWORK_URL);
       wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });

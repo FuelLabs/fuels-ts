@@ -14,7 +14,7 @@ describe('Wallet', () => {
   let provider: Provider;
 
   beforeAll(async () => {
-    provider = await Provider.connect(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = Wallet.generate({
       provider,
     });
@@ -131,7 +131,7 @@ describe('Wallet', () => {
     let walletProvider: Provider;
 
     beforeAll(async () => {
-      const newProvider = await Provider.connect(providerUrl1);
+      const newProvider = await Provider.create(providerUrl1);
       walletUnlocked = WalletUnlocked.generate({
         provider: newProvider,
       });
@@ -142,13 +142,13 @@ describe('Wallet', () => {
       expect(walletUnlocked.provider.url).toBe(providerUrl1);
     });
     it('connect to providerUrl should assign url without change instance of the provider', async () => {
-      const newProvider = await Provider.connect(providerUrl2);
+      const newProvider = await Provider.create(providerUrl2);
       walletUnlocked.connect(newProvider);
       expect(walletUnlocked.provider).toBe(walletProvider);
       expect(walletUnlocked.provider.url).toBe(providerUrl2);
     });
     it('connect to provider instance should replace the current provider istance', async () => {
-      const newProvider = await Provider.connect(providerUrl1);
+      const newProvider = await Provider.create(providerUrl1);
       walletUnlocked.connect(newProvider);
       expect(walletUnlocked.provider).not.toBe(walletProvider);
     });
