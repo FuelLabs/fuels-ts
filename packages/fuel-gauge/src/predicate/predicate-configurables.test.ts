@@ -1,6 +1,13 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinQuantityLike } from 'fuels';
-import { getRandomB256, BaseAssetId, Provider, WalletUnlocked, Predicate } from 'fuels';
+import {
+  getRandomB256,
+  BaseAssetId,
+  Provider,
+  WalletUnlocked,
+  Predicate,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import predicateAbiTrue from '../../fixtures/forc-projects/predicate-true/out/debug/predicate-true-abi.json';
@@ -20,7 +27,7 @@ describe('Predicate', () => {
     };
 
     beforeEach(async () => {
-      const provider = await Provider.create('http://127.0.0.1:4000/graphql');
+      const provider = await Provider.create(FUEL_NETWORK_URL);
 
       const quantities: CoinQuantityLike[] = [
         {

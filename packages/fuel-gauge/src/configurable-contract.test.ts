@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256 } from 'fuels';
+import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import contractAbi from '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract-abi.json';
@@ -39,7 +39,7 @@ describe('Configurable Contract', () => {
   let factory: ContractFactory;
 
   beforeAll(async () => {
-    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const quantities: CoinQuantityLike[] = [
       {

@@ -160,7 +160,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
-    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
@@ -178,7 +178,7 @@ describe('Contract', () => {
   });
 
   it('generates function methods on a complex contract', async () => {
-    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
@@ -199,7 +199,7 @@ describe('Contract', () => {
   });
 
   it('assigns a provider if passed', async () => {
-    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
