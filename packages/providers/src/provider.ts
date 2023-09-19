@@ -403,10 +403,10 @@ export default class Provider {
    * Returns the chain ID
    * @returns A promise that resolves to the chain ID number
    */
-  async getChainId(): Promise<number> {
+  getChainId() {
     const {
       consensusParameters: { chainId },
-    } = await this.getChain();
+    } = this.getChain();
     return chainId.toNumber();
   }
 

@@ -23,11 +23,9 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      const chainId = await provider.getChainId();
-      predicateTrue = new Predicate(predicateTrueBytecode, chainId, provider);
+      predicateTrue = new Predicate(predicateTrueBytecode, provider);
       predicateStruct = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
-        chainId,
         provider,
         predicateAbiMainArgsStruct
       );

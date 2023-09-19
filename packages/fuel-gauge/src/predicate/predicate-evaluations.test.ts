@@ -11,12 +11,10 @@ describe('Predicate', () => {
     let predicate: Predicate<InputValue[]>;
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
-    let chainId: number;
     let provider: Provider;
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
-      chainId = await wallet.provider.getChainId();
       provider = wallet.provider;
     });
 
@@ -25,7 +23,7 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
-      predicate = new Predicate(predicateBytesTrue, chainId, provider);
+      predicate = new Predicate(predicateBytesTrue, provider);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
@@ -46,7 +44,7 @@ describe('Predicate', () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
 
-      predicate = new Predicate(predicateBytesFalse, chainId, provider);
+      predicate = new Predicate(predicateBytesFalse, provider);
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

@@ -951,9 +951,7 @@ describe('Contract', () => {
     const amountToContract = 200;
     const amountToPredicate = 300;
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId, provider);
+    const predicate = new Predicate(predicateBytecode, provider);
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
 
