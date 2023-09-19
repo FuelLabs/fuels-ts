@@ -18,7 +18,6 @@ describe('Predicate', () => {
   describe('Arguments', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
-    let chainId: number;
     let provider: Provider;
 
     const AddressAbiInputs: JsonAbi = {
@@ -179,12 +178,7 @@ describe('Predicate', () => {
 
     it('calls a predicate with invalid address data and returns false', async () => {
       const amountToPredicate = 10;
-      const predicate = new Predicate<[string]>(
-        predicateBytesAddress,
-        chainId,
-        provider,
-        AddressAbiInputs
-      );
+      const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -201,7 +195,7 @@ describe('Predicate', () => {
     it('calls a predicate with valid u32 data and returns true', async () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
-      const predicate = new Predicate<[number]>(predicateBytesU32, chainId, provider, U32AbiInputs);
+      const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -221,7 +215,7 @@ describe('Predicate', () => {
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
       const amountToPredicate = 10;
-      const predicate = new Predicate<[number]>(predicateBytesU32, chainId, provider, U32AbiInputs);
+      const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -240,7 +234,6 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
-        chainId,
         provider,
         StructAbiInputs
       );
@@ -270,7 +263,6 @@ describe('Predicate', () => {
       const amountToPredicate = 10;
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
-        chainId,
         provider,
         StructAbiInputs
       );
@@ -297,7 +289,6 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
-        chainId,
         provider,
         predicateAbiMainArgsStruct
       );
@@ -330,7 +321,6 @@ describe('Predicate', () => {
       const amountToPredicate = 100;
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
-        chainId,
         provider,
         predicateAbiMainArgsStruct
       );
@@ -355,7 +345,6 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(
         predicateBytesMainArgsVector,
-        chainId,
         provider,
         predicateAbiMainArgsVector
       );
@@ -379,7 +368,7 @@ describe('Predicate', () => {
     it('calls a predicate with valid multiple arguments and returns true', async () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
-      const predicate = new Predicate(predicateBytesMulti, chainId, provider, predicateAbiMulti);
+      const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -403,7 +392,7 @@ describe('Predicate', () => {
 
     it('calls a predicate with invalid multiple arguments and returns false', async () => {
       const amountToPredicate = 100;
-      const predicate = new Predicate(predicateBytesMulti, chainId, provider, predicateAbiMulti);
+      const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 

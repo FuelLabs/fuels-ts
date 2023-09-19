@@ -19,8 +19,7 @@ describe('Predicate', () => {
 
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      const chainId = 0;
-      predicate = new Predicate(defaultPredicateBytecode, chainId, provider, defaultPredicateAbi);
+      predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
       const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
       predicate.setData<[string]>(b256);
