@@ -323,8 +323,7 @@ it('can create a predicate', async () => {
   // #region predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const chainId = await provider.getChainId();
-  const predicate = new Predicate(testPredicateTrue, chainId, provider);
+  const predicate = new Predicate(testPredicateTrue, provider);
 
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
@@ -397,8 +396,7 @@ it('can create a predicate and use', async () => {
     loggedTypes: [],
     configurables: [],
   };
-  const chainId = await provider.getChainId();
-  const predicate = new Predicate(predicateTriple, chainId, provider, AbiInputs);
+  const predicate = new Predicate(predicateTriple, provider, AbiInputs);
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();

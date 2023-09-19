@@ -151,19 +151,13 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
-      chainId = await wallet.provider.getChainId();
       provider = wallet.provider;
     });
 
     it('calls a predicate with valid address data and returns true', async () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
-      const predicate = new Predicate<[string]>(
-        predicateBytesAddress,
-        chainId,
-        provider,
-        AddressAbiInputs
-      );
+      const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();

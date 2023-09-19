@@ -45,10 +45,8 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 100;
       const amountToReceiver = 50;
-      const chainId = await wallet.provider.getChainId();
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
-        chainId,
         provider,
         predicateAbiMainArgsStruct
       );

@@ -38,9 +38,7 @@ describe('PredicateConditionalInputs', () => {
       [5_000, assetIdA],
     ]);
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId, provider, abiJSON, {
+    const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
       MAKER: aliceWallet.address.toB256(),
     });
 
@@ -111,9 +109,7 @@ describe('PredicateConditionalInputs', () => {
       [5_000, assetIdB],
     ]);
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId, provider, abiJSON, {
+    const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
       MAKER: aliceWallet.address.toB256(),
     });
 

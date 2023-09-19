@@ -49,10 +49,8 @@ describe('Predicate', () => {
       });
       const contract = await setupContract();
       const amountToPredicate = 100_000;
-      const chainId = await wallet.provider.getChainId();
       const predicate = new Predicate<[Validation]>(
         predicateBytesTrue,
-        chainId,
         provider,
         predicateAbiMainArgsStruct
       );
@@ -101,10 +99,8 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 100;
       const amountToReceiver = 50;
-      const chainId = await wallet.provider.getChainId();
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
-        chainId,
         provider,
         predicateAbiMainArgsStruct
       );
