@@ -6,7 +6,7 @@ import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
 
-const provider = new Provider(FUEL_NETWORK_URL);
+let provider: Provider;
 
 const setup = async () => {
   // Create wallet
@@ -21,6 +21,10 @@ const setup = async () => {
 
   return contract;
 };
+
+beforeAll(async () => {
+  provider = await Provider.create(FUEL_NETWORK_URL);
+});
 
 describe('TokenTestContract', () => {
   it('Can mint and transfer coins', async () => {

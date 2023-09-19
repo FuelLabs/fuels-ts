@@ -53,7 +53,6 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
-  #scriptDataOffset: number = 0;
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -75,8 +74,18 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
+    const script = getContractCallScript(this.functionInvocationScopes);
+    const provider = this.program.provider as Provider;
+    const consensusParams = provider.getChain().consensusParameters;
+    if (!consensusParams) {
+      throw new FuelError(
+        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
+        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
+      );
+    }
+    const maxInputs = consensusParams.maxInputs.toNumber();
     return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, this.#scriptDataOffset)
+      createContractCall(funcScope, script.getScriptDataOffset(maxInputs))
     );
   }
 
@@ -85,8 +94,6 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected updateScriptRequest() {
     const contractCallScript = getContractCallScript(this.functionInvocationScopes);
-    this.#scriptDataOffset = contractCallScript.getScriptDataOffset();
-
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
 

@@ -19,6 +19,12 @@ export const NONCE_LEN = BYTES_32;
 export const UTXO_LEN = WORD_SIZE * 5;
 export const TX_POINTER_LEN = WORD_SIZE * 2;
 
+export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
+  BYTES_32 + // Tx ID
+  WORD_SIZE + // Tx size
+  // Asset ID/Balance coin input pairs
+  maxInputs * (ASSET_ID_LEN + WORD_SIZE);
+
 // VM_TX_MEMORY = 10240
 export const VM_TX_MEMORY =
   BYTES_32 + // Tx ID

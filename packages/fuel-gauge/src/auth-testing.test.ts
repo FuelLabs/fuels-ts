@@ -18,7 +18,7 @@ let wallet: WalletUnlocked;
 
 describe('Auth Testing', () => {
   beforeAll(async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(

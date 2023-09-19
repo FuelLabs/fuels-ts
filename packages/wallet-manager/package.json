@@ -27,6 +27,7 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "events": "^3.3.0"
   },

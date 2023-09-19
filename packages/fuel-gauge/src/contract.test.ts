@@ -160,7 +160,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
@@ -178,7 +178,7 @@ describe('Contract', () => {
   });
 
   it('generates function methods on a complex contract', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
@@ -198,8 +198,8 @@ describe('Contract', () => {
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
-  it('assigns a provider if passed', () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+  it('assigns a provider if passed', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
@@ -725,7 +725,10 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000_000),
@@ -750,7 +753,10 @@ describe('Contract', () => {
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
-    const externalWallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const externalWallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),
@@ -762,6 +768,12 @@ describe('Contract', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
+      // eslint-disable-next-line @typescript-eslint/require-await
+      static async connect(url: string) {
+        const newProvider = new ProviderCustom(url);
+        return newProvider;
+      }
+
       async sendTransaction(
         transactionRequestLike: TransactionRequestLike
       ): Promise<TransactionResponse> {
@@ -774,7 +786,7 @@ describe('Contract', () => {
     }
 
     // Set custom provider to contract instance
-    const customProvider = new ProviderCustom(FUEL_NETWORK_URL);
+    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
     contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
@@ -811,7 +823,10 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall does not allow multiple calls that return heap types', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000),
@@ -840,7 +855,10 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000),
@@ -878,7 +896,7 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -898,7 +916,7 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [
       [500, BaseAssetId],
       [200, asset],
@@ -920,7 +938,7 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -930,9 +948,7 @@ describe('Contract', () => {
     const amountToContract = 200;
     const amountToPredicate = 300;
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId);
+    const predicate = new Predicate(predicateBytecode, provider);
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
 

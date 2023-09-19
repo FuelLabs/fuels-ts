@@ -10,7 +10,7 @@ import { seedTestWallet, generateTestWallet } from './test-utils';
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
@@ -25,7 +25,7 @@ describe('Wallet', () => {
   });
 
   it('can transfer with custom TX Params', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
@@ -50,7 +50,7 @@ describe('Wallet', () => {
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -70,7 +70,7 @@ describe('Wallet', () => {
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -122,7 +122,7 @@ describe('Wallet', () => {
   });
 
   it('can withdraw an amount of base asset', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const recipient = Address.fromB256(
@@ -146,7 +146,7 @@ describe('Wallet', () => {
   });
 
   it('can retrieve a valid MessageProof', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
     const AMOUNT = 10;
@@ -174,8 +174,13 @@ describe('Wallet', () => {
   });
 
   it('can transfer amount using mutiple utxos', async () => {
-    const sender = Wallet.generate();
-    const receiver = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const sender = Wallet.generate({
+      provider,
+    });
+    const receiver = Wallet.generate({
+      provider,
+    });
 
     // seed wallet with 3 distinct utxos
     await seedTestWallet(sender, [[100, BaseAssetId]]);
@@ -190,7 +195,10 @@ describe('Wallet', () => {
   });
 
   it('can withdraw an amount of base asset using mutiple uxtos', async () => {
-    const sender = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const sender = Wallet.generate({
+      provider,
+    });
     // seed wallet with 3 distinct utxos
     await seedTestWallet(sender, [[100, BaseAssetId]]);
     await seedTestWallet(sender, [[100, BaseAssetId]]);

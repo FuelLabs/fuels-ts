@@ -17,16 +17,16 @@ import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
   describe('Estimate predicate gas', () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    let provider: Provider;
     let predicateTrue: Predicate<[]>;
     let predicateStruct: Predicate<[Validation]>;
 
     beforeEach(async () => {
-      const chainId = await provider.getChainId();
-      predicateTrue = new Predicate(predicateTrueBytecode, chainId);
+      provider = await Provider.create(FUEL_NETWORK_URL);
+      predicateTrue = new Predicate(predicateTrueBytecode, provider);
       predicateStruct = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
-        chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
       await seedTestWallet(predicateStruct, [

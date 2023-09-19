@@ -20,7 +20,7 @@ const deployContract = async (factory: ContractFactory, useCache: boolean = true
 
 const createWallet = async () => {
   if (walletInstance) return walletInstance;
-  const provider = new Provider(FUEL_NETWORK_URL, { cacheUtxo: 10 });
+  const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
   walletInstance = await generateTestWallet(provider, [
     [5_000_000, BaseAssetId],
     [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],

@@ -1,14 +1,26 @@
 import { Address } from '@fuel-ts/address';
+import { Provider } from '@fuel-ts/providers';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { PrivateKeyVault } from './privatekey-vault';
 
 describe('PrivateKeyVault', () => {
-  const walletSpec = Wallet.generate();
+  let provider: Provider;
+  let walletSpec: WalletUnlocked;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    walletSpec = Wallet.generate({
+      provider,
+    });
+  });
 
   it('should get wallet instance', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
+      provider,
     });
 
     vault.addAccount();
@@ -20,6 +32,7 @@ describe('PrivateKeyVault', () => {
   it('should check if accounts have been added correctly', async () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
+      provider,
     });
 
     await vault.addAccount();
@@ -29,10 +42,13 @@ describe('PrivateKeyVault', () => {
   });
 
   it('should serialize and recreate vault state', () => {
-    const walletSpec2 = Wallet.generate();
+    const walletSpec2 = Wallet.generate({
+      provider,
+    });
     // Initialize with privateKeys to check if it will create correctly
     const vault = new PrivateKeyVault({
       accounts: [walletSpec.privateKey, walletSpec2.privateKey],
+      provider,
     });
 
     const state = vault.serialize();
@@ -46,6 +62,7 @@ describe('PrivateKeyVault', () => {
   it('should return new account on add account', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
+      provider,
     });
 
     const account = vault.addAccount();
@@ -55,7 +72,9 @@ describe('PrivateKeyVault', () => {
   });
 
   it('should throw an error when trying to add an account with an invalid private key', () => {
-    const vault = new PrivateKeyVault({});
+    const vault = new PrivateKeyVault({
+      provider,
+    });
     const address = Address.fromRandom();
 
     expect(() => vault.getWallet(address)).toThrow(

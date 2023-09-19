@@ -5,7 +5,7 @@ import { BaseAssetId, FUEL_NETWORK_URL, Provider } from 'fuels';
 import { getScript } from './utils';
 
 const setup = async (balance = 5_000) => {
-  const provider = new Provider(FUEL_NETWORK_URL);
+  const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);

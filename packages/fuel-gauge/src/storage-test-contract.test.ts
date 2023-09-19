@@ -12,7 +12,7 @@ const binPath = join(
 );
 
 const setup = async () => {
-  const provider = new Provider(FUEL_NETWORK_URL);
+  const provider = await Provider.create(FUEL_NETWORK_URL);
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
@@ -45,7 +45,7 @@ describe('StorageTestContract', () => {
   });
 
   it('can increment counter - using custom inline storage slots', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const bytecode = readFileSync(binPath);
     const factory = new ContractFactory(bytecode, abi, wallet);
