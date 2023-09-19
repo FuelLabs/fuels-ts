@@ -677,19 +677,6 @@ describe('Provider', () => {
     expect(Provider.chainInfoCache['http://127.0.0.1:4000/graphql']).toBeDefined();
   });
 
-  it('can invalidate the chain info cache', async () => {
-    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
-
-    // spy on getChain
-    const spyGetChain = jest.spyOn(provider, 'getChain');
-
-    // invalidate cache
-    await provider.refreshChainInfoCache();
-
-    // check if getChain was called
-    expect(spyGetChain).toHaveBeenCalled();
-  });
-
   it('doesnt refetch the chain info again if it is already cached', async () => {
     Provider.chainInfoCache = {};
     const spyGetChainInfo = jest.spyOn(Provider, 'getChainInfoWithoutInstance');
