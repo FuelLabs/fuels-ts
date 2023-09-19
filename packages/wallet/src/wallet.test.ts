@@ -74,9 +74,7 @@ describe('Wallet', () => {
     );
   });
 
-  // TODO: This test is being skipped right now because we are not being able to extend the `Provider` class after making its constructor private.
-  /*
-  it.skip('Provide a custom provider on a public wallet to the contract instance', async () => {
+  it('Provide a custom provider on a public wallet to the contract instance', async () => {
     const externalWallet = await generateTestWallet(provider, [
       {
         amount: bn(1_000_000_000),
@@ -87,7 +85,8 @@ describe('Wallet', () => {
 
     // Create a custom provider to emulate a external signer
     // like Wallet Extension or a Hardware wallet
-    let signedTransaction;
+
+    // Set custom provider to contract instance
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
       static async connect(url: string) {
@@ -100,13 +99,12 @@ describe('Wallet', () => {
       ): Promise<TransactionResponse> {
         const transactionRequest = transactionRequestify(transactionRequestLike);
         // Simulate a external request of signature
-        signedTransaction = await externalWallet.signTransaction(transactionRequest);
+        const signedTransaction = await externalWallet.signTransaction(transactionRequest);
         transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
         return super.sendTransaction(transactionRequestLike);
       }
     }
 
-    // Set custom provider to contract instance
     const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
     const lockedWallet = Wallet.fromAddress(externalWallet.address, customProvider);
 
@@ -120,40 +118,46 @@ describe('Wallet', () => {
     const balance = await externalWalletReceiver.getBalance(BaseAssetId);
     expect(balance.eq(1_000_000)).toBeTruthy();
   });
-  */
 
-  /*
-   * We are skipping these tests because we only have one valid provider URL to work with.
-   * The testnet URLs won't work because they run a different client version.
-   * TODO: figure out a way to still test Wallet.connect and other methods that cover provider URL switching
-   */
-  describe.skip('Wallet.connect', () => {
-    const providerUrl1 = 'http://localhost:4001/graphql';
-    const providerUrl2 = 'http://localhost:4002/graphql';
+  describe('Wallet.connect', () => {
     let walletUnlocked: WalletUnlocked;
-    let walletProvider: Provider;
+    let providerInstance: Provider;
+
+    Provider.prototype.getContractBalance;
 
     beforeAll(async () => {
-      const newProvider = await Provider.create(providerUrl1);
+      providerInstance = await Provider.create(FUEL_NETWORK_URL);
+
       walletUnlocked = WalletUnlocked.generate({
-        provider: newProvider,
+        provider: providerInstance,
       });
-      walletProvider = walletUnlocked.provider;
     });
 
-    it('Wallet provider should be assigned on creation', () => {
-      expect(walletUnlocked.provider.url).toBe(providerUrl1);
+    it('Wallet provider should be assigned on creation', async () => {
+      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+      const myWallet = Wallet.generate({ provider: newProviderInstance });
+
+      expect(myWallet.provider).toBe(newProviderInstance);
     });
-    it('connect to providerUrl should assign url without change instance of the provider', async () => {
-      const newProvider = await Provider.create(providerUrl2);
-      walletUnlocked.connect(newProvider);
-      expect(walletUnlocked.provider).toBe(walletProvider);
-      expect(walletUnlocked.provider.url).toBe(providerUrl2);
+
+    it('connect should assign a new instance of the provider', async () => {
+      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+      walletUnlocked.connect(newProviderInstance);
+
+      expect(walletUnlocked.provider).toBe(newProviderInstance);
     });
-    it('connect to provider instance should replace the current provider istance', async () => {
-      const newProvider = await Provider.create(providerUrl1);
-      walletUnlocked.connect(newProvider);
-      expect(walletUnlocked.provider).not.toBe(walletProvider);
+
+    it('connect should replace the current provider instance', async () => {
+      const currentInstance = walletUnlocked.provider;
+
+      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+      walletUnlocked.connect(newProviderInstance);
+
+      expect(walletUnlocked.provider).toBe(newProviderInstance);
+      expect(walletUnlocked.provider).not.toBe(currentInstance);
     });
   });
 });
