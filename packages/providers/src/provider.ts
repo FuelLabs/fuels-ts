@@ -232,7 +232,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @hidden
    */
-  constructor(
+  private constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
     public options: ProviderOptions = {}
