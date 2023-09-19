@@ -248,15 +248,7 @@ export default class Provider {
    */
   static async create(url: string, options: ProviderOptions = {}) {
     const provider = new Provider(url, options);
-
-    if (!Provider.chainInfoCache[url]) {
-      const chainInfo = await provider.fetchChain();
-      Provider.chainInfoCache[url] = chainInfo;
-    }
-    if (!Provider.nodeInfoCache[url]) {
-      const nodeInfo = await provider.fetchNode();
-      Provider.nodeInfoCache[url] = nodeInfo;
-    }
+    await provider.fetchChainAndNodeInfo();
     return provider;
   }
 
@@ -310,15 +302,35 @@ export default class Provider {
   async switchUrl(url: string) {
     this.url = url;
     this.operations = this.createOperations(url);
+    await this.fetchChainAndNodeInfo();
+  }
 
-    if (!Provider.chainInfoCache[url]) {
-      const chainInfo = await this.fetchChain();
-      Provider.chainInfoCache[url] = chainInfo;
+  /**
+   * Retrieves and caches chain and node information if not already cached.
+   *
+   * - Checks the cache for existing chain and node information based on the current URL.
+   * - If not found in cache, fetches the information, caches it, and then returns the data.
+   *
+   * @returns NodeInfo and Chain
+   */
+  async fetchChainAndNodeInfo() {
+    let nodeInfo = Provider.nodeInfoCache[this.url];
+    let chain = Provider.chainInfoCache[this.url];
+
+    if (!nodeInfo) {
+      nodeInfo = await this.fetchNode();
+      Provider.nodeInfoCache[this.url] = nodeInfo;
     }
-    if (!Provider.nodeInfoCache[url]) {
-      const nodeInfo = await this.fetchNode();
-      Provider.nodeInfoCache[url] = nodeInfo;
+
+    if (!chain) {
+      chain = await this.fetchChain();
+      Provider.chainInfoCache[this.url] = chain;
     }
+
+    return {
+      chain,
+      nodeInfo,
+    };
   }
 
   /**
