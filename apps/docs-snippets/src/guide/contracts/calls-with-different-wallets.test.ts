@@ -25,4 +25,20 @@ describe(__filename, () => {
 
     expect(deployedContract.account.address).toBe(newWallet.address);
   });
+
+  // TODO: We are skipping and commenting out this test because the constructor for `Provider` is private now.
+  /*
+  it('should successfully update contract instance provider', () => {
+    // use the `chainInfo` from the deployed contract's provider to create a new dummy provider
+    const newProvider = new Provider('http://provider:9999');
+
+    expect(deployedContract.provider?.url).not.toBe(newProvider.url);
+
+    // #region calls-with-different-wallets-2
+    deployedContract.provider = newProvider;
+    // #endregion calls-with-different-wallets-2
+
+    expect(deployedContract.provider.url).toBe(newProvider.url);
+  });
+  */
 });
