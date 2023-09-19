@@ -18,6 +18,8 @@ import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse } from './fixtures';
+import { MOCK_CHAIN } from './fixtures/chain';
+import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -168,15 +170,22 @@ describe('Provider', () => {
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  /*
-   * TODO: We are skipping this test for now because we cannot initialize a provider with an invalid URL.
-   * This should be possible with the use of the `launchNode` testing utlity.
-   */
-  it.skip('can change the provider url of the current instance', async () => {
+  it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+
     const provider = await Provider.create(providerUrl1);
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient').mockImplementationOnce(
+      () =>
+        ({
+          request: async () =>
+            Promise.resolve({
+              chain: MOCK_CHAIN,
+              nodeInfo: MOCK_NODE_INFO,
+            }),
+        } as unknown as GraphQL.GraphQLClient)
+    );
 
     expect(provider.url).toBe(providerUrl1);
     await provider.switchUrl(providerUrl2);
@@ -668,14 +677,15 @@ describe('Provider', () => {
 
   it('doesnt refetch the chain info again if it is already cached', async () => {
     Provider.chainInfoCache = {};
-    const spyGetChainInfo = jest.spyOn(Provider, 'fetchChain');
+    const spyGetChainInfo = jest.spyOn(Provider.prototype, 'fetchChain');
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const provider1 = await Provider.create(FUEL_NETWORK_URL);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const provider2 = await Provider.create(FUEL_NETWORK_URL);
 
     // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
     expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
+
+    expect(provider1.url).toEqual(FUEL_NETWORK_URL);
+    expect(provider2.url).toEqual(FUEL_NETWORK_URL);
   });
 });
