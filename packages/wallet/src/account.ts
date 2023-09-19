@@ -56,7 +56,7 @@ export class Account extends AbstractAccount {
    */
   constructor(address: string | AbstractAddress, provider: Provider) {
     super();
-    this.provider = this.connect(provider);
+    this.provider = provider;
     this.address = Address.fromDynamicInput(address);
   }
 

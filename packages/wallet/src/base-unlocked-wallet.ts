@@ -41,7 +41,7 @@ export class BaseWalletUnlocked extends Account {
     const signer = new Signer(privateKey);
     super(signer.address, provider);
     this.signer = () => signer;
-    this.provider = this.connect(provider);
+    this.provider = provider;
   }
 
   /**
