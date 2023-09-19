@@ -277,7 +277,7 @@ export default class Provider {
         'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
       );
     }
-    return Provider.nodeInfoCache[this.url];
+    return node;
   }
 
   /**
