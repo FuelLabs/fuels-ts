@@ -61,20 +61,16 @@ describe('Account', () => {
     expect(assetC?.amount.gt(1)).toBeTruthy();
   });
 
-  // TODO: This test is being skipped right now because we are facing problems mocking the `Provider` class after making its constructor private.
-  /*
-  it.skip('should throw if coins length is higher than 9999', async () => {
+  it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    const dummyProvider = {
-      getCoins: async () => Promise.resolve(dummyCoins),
-    } as unknown as Provider;
+    const getCoins = async () => Promise.resolve(dummyCoins);
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    jest.spyOn(providersMod.Provider.prototype, 'getCoins').mockImplementation(getCoins);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      dummyProvider
+      provider
     );
 
     let result;
@@ -91,7 +87,6 @@ describe('Account', () => {
       'Wallets containing more than 9999 coins exceed the current supported limit.'
     );
   });
-  */
 
   it('should execute getResourcesToSpend just fine', async () => {
     // #region Message-getResourcesToSpend
@@ -118,20 +113,17 @@ describe('Account', () => {
     expect(messages.length).toEqual(1);
   });
 
-  // TODO: This test is being skipped right now because we are facing problems mocking the `Provider` class after making its constructor private.
-  /*
-  it.skip('should throw if messages length is higher than 9999', async () => {
-    const dummyMessages: Message[] = new Array(10000);
-
-    const dummyProvider = {
-      getMessages: async () => Promise.resolve(dummyMessages),
-    } as unknown as Provider;
-
-    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+  it('should throw if messages length is higher than 9999', async () => {
+    // mocking
+    const messages: Message[] = new Array(10000);
+    const mockedGetMessages = async () => Promise.resolve(messages);
+    jest
+      .spyOn(providersMod.Provider.prototype, 'getMessages')
+      .mockImplementationOnce(mockedGetMessages);
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-      dummyProvider
+      provider
     );
 
     let result;
@@ -148,7 +140,6 @@ describe('Account', () => {
       'Wallets containing more than 9999 messages exceed the current supported limit.'
     );
   });
-  */
 
   it('should get single asset balance just fine', async () => {
     const account = new Account(
@@ -170,20 +161,18 @@ describe('Account', () => {
     expect(balances.length).toBeGreaterThanOrEqual(1);
   });
 
-  // TODO: This test is being skipped right now because we are facing problems mocking the `Provider` class after making its constructor private.
-  /*
   it('should throw if balances length is higher than 9999', async () => {
     const dummyBalace: CoinQuantity[] = new Array(10000);
 
-    const dummyProvider = {
-      getBalances: async () => Promise.resolve(dummyBalace),
-    } as unknown as Provider;
+    const mockedGetBalances = async () => Promise.resolve(dummyBalace);
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    jest
+      .spyOn(providersMod.Provider.prototype, 'getBalances')
+      .mockImplementation(mockedGetBalances);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      dummyProvider
+      provider
     );
 
     let result;
@@ -199,27 +188,21 @@ describe('Account', () => {
       'Wallets containing more than 9999 balances exceed the current supported limit.'
     );
   });
-  */
 
-  /*
-   * We are skipping these tests because we only have one valid provider URL to work with.
-   * The testnet URLs won't work because they run a different client version.
-   * TODO: figure out a way to still test these methods that cover provider URL switching
-   */
-  it.skip('should connect with provider just fine [INSTANCE]', async () => {
+  it('should connect with provider just fine [INSTANCE]', async () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    const newProviderUrl = 'https://rpc.fuel.sh';
+    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
 
-    expect(account.provider.url).not.toEqual(newProviderUrl);
+    expect(account.provider).not.toBe(newProviderInstance);
 
-    const newProvider = await Provider.create(newProviderUrl);
-    account.connect(newProvider);
+    account.connect(newProviderInstance);
 
-    expect(account.provider.url).toEqual(newProviderUrl);
+    expect(account.provider).toBe(newProviderInstance);
+    expect(account.provider).not.toBe(provider);
   });
 
   it('should execute fund just as fine', async () => {
