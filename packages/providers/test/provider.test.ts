@@ -144,8 +144,10 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
+    // #region provider-definition
     const provider = await Provider.create('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
+    // #endregion provider-definition
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
     expect(consensusParameters.maxInputs).toBeDefined();
@@ -161,20 +163,6 @@ describe('Provider', () => {
     expect(consensusParameters.gasPriceFactor).toBeDefined();
     expect(consensusParameters.gasPerByte).toBeDefined();
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
-  });
-
-  it('can get node info including some consensus parameters properties', async () => {
-    // #region provider-definition
-    const provider = await Provider.create('http://127.0.0.1:4000/graphql');
-    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
-      await provider.getNodeInfo();
-    // #endregion provider-definition
-
-    expect(minGasPrice).toBeDefined();
-    expect(gasPerByte).toBeDefined();
-    expect(gasPriceFactor).toBeDefined();
-    expect(maxGasPerTx).toBeDefined();
-    expect(nodeVersion).toBeDefined();
   });
 
   /*

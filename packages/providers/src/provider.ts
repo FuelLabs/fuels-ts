@@ -21,7 +21,6 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
-  GqlGetInfoQuery,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -102,6 +101,15 @@ export type ChainInfo = {
 /**
  * Node information
  */
+export type NodeInfo = {
+  utxoValidation: boolean;
+  vmBacktrace: boolean;
+  minGasPrice: BN;
+  maxTx: BN;
+  maxDepth: BN;
+  nodeVersion: string;
+};
+
 export type NodeInfoAndConsensusParameters = {
   minGasPrice: BN;
   nodeVersion: string;
@@ -154,17 +162,6 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   };
 };
 
-const processNodeInfoAndConsensusParameters = (
-  nodeInfo: GqlGetInfoQuery['nodeInfo'],
-  consensusParameters: GqlGetInfoQuery['chain']['consensusParameters']
-) => ({
-  minGasPrice: bn(nodeInfo.minGasPrice),
-  nodeVersion: nodeInfo.nodeVersion,
-  gasPerByte: bn(consensusParameters.gasPerByte),
-  gasPriceFactor: bn(consensusParameters.gasPriceFactor),
-  maxGasPerTx: bn(consensusParameters.maxGasPerTx),
-});
-
 /**
  * @hidden
  *
@@ -214,12 +211,18 @@ export type ProviderCallParams = {
 type ChainInfoCache = Record<string, ChainInfo>;
 
 /**
+ * URL - Node Info mapping.
+ */
+type NodeInfoCache = Record<string, NodeInfo>;
+
+/**
  * A provider for connecting to a node
  */
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
   cache?: MemoryCache;
   static chainInfoCache: ChainInfoCache = {};
+  static nodeInfoCache: NodeInfoCache = {};
 
   /**
    * Constructor to initialize a Provider.
@@ -248,6 +251,10 @@ export default class Provider {
       const chainInfo = await this.fetchChain(url);
       Provider.chainInfoCache[url] = chainInfo;
     }
+    if (!Provider.nodeInfoCache[url]) {
+      const nodeInfo = await this.fetchNode(url);
+      Provider.nodeInfoCache[url] = nodeInfo;
+    }
     const provider = new Provider(url, options);
     return provider;
   }
@@ -256,7 +263,44 @@ export default class Provider {
    * Returns the cached chainInfo for the current URL.
    */
   getChain() {
-    return Provider.chainInfoCache[this.url];
+    const chain = Provider.chainInfoCache[this.url];
+    if (!chain) {
+      throw new FuelError(
+        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
+        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      );
+    }
+    return chain;
+  }
+
+  /**
+   * Returns the cached nodeInfo for the current URL.
+   */
+  getNode() {
+    const node = Provider.nodeInfoCache[this.url];
+    if (!node) {
+      throw new FuelError(
+        ErrorCode.NODE_INFO_CACHE_EMPTY,
+        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      );
+    }
+    return Provider.nodeInfoCache[this.url];
+  }
+
+  /**
+   * Returns some helpful parameters related to gas fees.
+   */
+  getGasConfig() {
+    const { minGasPrice } = this.getNode();
+    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte } =
+      this.getChain().consensusParameters;
+    return {
+      minGasPrice,
+      maxGasPerTx,
+      maxGasPerPredicate,
+      gasPriceFactor,
+      gasPerByte,
+    };
   }
 
   /**
@@ -266,6 +310,10 @@ export default class Provider {
     if (!Provider.chainInfoCache[url]) {
       const chainInfo = await Provider.fetchChain(url);
       Provider.chainInfoCache[url] = chainInfo;
+    }
+    if (!Provider.nodeInfoCache[url]) {
+      const nodeInfo = await Provider.fetchNode(url);
+      Provider.nodeInfoCache[url] = nodeInfo;
     }
     this.operations = this.createOperations(url);
     this.url = url;
@@ -321,13 +369,22 @@ export default class Provider {
   }
 
   /**
-   * Returns node information.
-   *
-   * @returns A promise that resolves to the node information object.
+   * Returns the chain information.
+   * @param url - The URL of the Fuel node
+   * @returns NodeInfo object
    */
-  async getNodeInfo(): Promise<NodeInfoAndConsensusParameters> {
-    const { nodeInfo, chain } = await this.operations.getInfo();
-    return processNodeInfoAndConsensusParameters(nodeInfo, chain.consensusParameters);
+  static async fetchNode(url: string): Promise<NodeInfo> {
+    const gqlClient = new GraphQLClient(url);
+    const operations = getOperationsSdk(gqlClient);
+    const { nodeInfo } = await operations.getNodeInfo();
+    return {
+      maxDepth: bn(nodeInfo.maxDepth),
+      maxTx: bn(nodeInfo.maxTx),
+      minGasPrice: bn(nodeInfo.minGasPrice),
+      nodeVersion: nodeInfo.nodeVersion,
+      utxoValidation: nodeInfo.utxoValidation,
+      vmBacktrace: nodeInfo.vmBacktrace,
+    };
   }
 
   /**
@@ -566,7 +623,7 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
-    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = await this.getNodeInfo();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
 
