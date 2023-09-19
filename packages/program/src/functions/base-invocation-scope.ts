@@ -76,7 +76,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected get calls() {
     const script = getContractCallScript(this.functionInvocationScopes);
     const provider = this.program.provider as Provider;
-    const consensusParams = provider.getCachedChainInfo().consensusParameters;
+    const consensusParams = provider.getChain().consensusParameters;
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,

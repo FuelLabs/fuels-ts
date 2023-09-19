@@ -245,7 +245,7 @@ export default class Provider {
    */
   static async create(url: string, options: ProviderOptions = {}) {
     if (!Provider.chainInfoCache[url]) {
-      const chainInfo = await this.getChainInfoWithoutInstance(url);
+      const chainInfo = await this.fetchChain(url);
       Provider.chainInfoCache[url] = chainInfo;
     }
     const provider = new Provider(url, options);
@@ -255,7 +255,7 @@ export default class Provider {
   /**
    * Returns the cached chainInfo for the current URL.
    */
-  getCachedChainInfo() {
+  getChain() {
     return Provider.chainInfoCache[this.url];
   }
 
@@ -264,7 +264,7 @@ export default class Provider {
    */
   async switchUrl(url: string) {
     if (!Provider.chainInfoCache[url]) {
-      const chainInfo = await Provider.getChainInfoWithoutInstance(url);
+      const chainInfo = await Provider.fetchChain(url);
       Provider.chainInfoCache[url] = chainInfo;
     }
     this.operations = this.createOperations(url);
@@ -282,16 +282,6 @@ export default class Provider {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
-  }
-
-  /**
-   * A method to get the chain info for a given node URL when we don't have access to an instance of the Provider class.
-   */
-  static async getChainInfoWithoutInstance(url: string) {
-    const gqlClient = new GraphQLClient(url);
-    const operations = getOperationsSdk(gqlClient);
-    const { chain } = await operations.getChain();
-    return processGqlChain(chain);
   }
 
   /**
@@ -341,12 +331,14 @@ export default class Provider {
   }
 
   /**
-   * Returns chain information.
-   *
-   * @returns A promise that resolves to the chain information object
+   * Fetches the `chainInfo` for the given node URL.
+   * @param url - The URL of the Fuel node
+   * @returns ChainInfo object
    */
-  async getChain(): Promise<ChainInfo> {
-    const { chain } = await this.operations.getChain();
+  static async fetchChain(url: string): Promise<ChainInfo> {
+    const gqlClient = new GraphQLClient(url);
+    const operations = getOperationsSdk(gqlClient);
+    const { chain } = await operations.getChain();
     return processGqlChain(chain);
   }
 

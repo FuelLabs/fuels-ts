@@ -27,7 +27,7 @@ export class ScriptInvocationScope<
 
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
-    const chainInfoCache = (this.program.provider as Provider).getCachedChainInfo();
+    const chainInfoCache = (this.program.provider as Provider).getChain();
 
     if (!chainInfoCache) {
       throw new FuelError(
