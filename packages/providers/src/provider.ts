@@ -250,11 +250,11 @@ export default class Provider {
     const provider = new Provider(url, options);
 
     if (!Provider.chainInfoCache[url]) {
-      const chainInfo = await provider.fetchChain(url);
+      const chainInfo = await provider.fetchChain();
       Provider.chainInfoCache[url] = chainInfo;
     }
     if (!Provider.nodeInfoCache[url]) {
-      const nodeInfo = await provider.fetchNode(url);
+      const nodeInfo = await provider.fetchNode();
       Provider.nodeInfoCache[url] = nodeInfo;
     }
     return provider;
@@ -312,11 +312,11 @@ export default class Provider {
     this.operations = this.createOperations(url);
 
     if (!Provider.chainInfoCache[url]) {
-      const chainInfo = await this.fetchChain(url);
+      const chainInfo = await this.fetchChain();
       Provider.chainInfoCache[url] = chainInfo;
     }
     if (!Provider.nodeInfoCache[url]) {
-      const nodeInfo = await this.fetchNode(url);
+      const nodeInfo = await this.fetchNode();
       Provider.nodeInfoCache[url] = nodeInfo;
     }
   }
@@ -375,10 +375,8 @@ export default class Provider {
    * @param url - The URL of the Fuel node
    * @returns NodeInfo object
    */
-  async fetchNode(url: string): Promise<NodeInfo> {
-    const gqlClient = new GraphQLClient(url);
-    const operations = getOperationsSdk(gqlClient);
-    const { nodeInfo } = await operations.getNodeInfo();
+  async fetchNode(): Promise<NodeInfo> {
+    const { nodeInfo } = await this.operations.getNodeInfo();
     return {
       maxDepth: bn(nodeInfo.maxDepth),
       maxTx: bn(nodeInfo.maxTx),
@@ -394,10 +392,8 @@ export default class Provider {
    * @param url - The URL of the Fuel node
    * @returns ChainInfo object
    */
-  async fetchChain(url: string): Promise<ChainInfo> {
-    const gqlClient = new GraphQLClient(url);
-    const operations = getOperationsSdk(gqlClient);
-    const { chain } = await operations.getChain();
+  async fetchChain(): Promise<ChainInfo> {
+    const { chain } = await this.operations.getChain();
     return processGqlChain(chain);
   }
 
