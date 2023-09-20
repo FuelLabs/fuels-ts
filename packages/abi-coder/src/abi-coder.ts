@@ -26,7 +26,7 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
-  BYTE_CODER_TYPE,
+  BYTES_CODER_TYPE,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
@@ -70,7 +70,7 @@ export abstract class AbiCoder {
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
-      case BYTE_CODER_TYPE:
+      case BYTES_CODER_TYPE:
         return new ByteCoder();
       default:
         break;
