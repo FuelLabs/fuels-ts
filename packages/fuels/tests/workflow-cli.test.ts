@@ -6,7 +6,7 @@ import fs, { readFile } from 'fs/promises';
 import { join } from 'path';
 import rimraf from 'rimraf';
 
-import { Commands } from '../src';
+import { Commands, FUEL_NETWORK_URL } from '../src';
 import { run } from '../src/cli';
 
 import { createConfigFile } from './utils/createConfigFile';
@@ -22,7 +22,8 @@ describe('Contracts Scripts', () => {
 
   beforeEach(async () => {
     cleanup();
-    wallet = await generateTestWallet(new Provider('http://127.0.0.1:4000/graphql'), [[1_000_000]]);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    wallet = await generateTestWallet(provider, [[1_000_000]]);
   });
 
   afterEach(() => {

@@ -1,4 +1,4 @@
-import type { ParsedFuelsConfig } from '../../src';
+import { FUEL_NETWORK_URL, type ParsedFuelsConfig } from '../../src';
 
 export const parsedFuelsConfig: ParsedFuelsConfig = {
   basePath: '/root',
@@ -14,4 +14,5 @@ export const parsedFuelsConfig: ParsedFuelsConfig = {
   useSystemFuelCore: false,
   autoStartFuelCore: false,
   fuelCorePort: 4000,
+  providerUrl: FUEL_NETWORK_URL,
 };
