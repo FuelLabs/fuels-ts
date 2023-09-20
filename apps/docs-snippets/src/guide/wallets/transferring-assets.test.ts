@@ -23,7 +23,9 @@ describe(__filename, () => {
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
-    const destinationWallet = Wallet.generate();
+    const destinationWallet = Wallet.generate({
+      provider: senderWallet.provider,
+    });
     const amountToTransfer = 500;
     const assetId = BaseAssetId;
 

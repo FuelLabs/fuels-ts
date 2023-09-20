@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { BaseAssetId, ContractFactory, Provider } from 'fuels';
+import { BaseAssetId, ContractFactory, FUEL_NETWORK_URL, Provider } from 'fuels';
 import type { Interface, JsonAbi, Contract, WalletUnlocked } from 'fuels';
 
 let walletInstance: WalletUnlocked;
@@ -20,7 +20,7 @@ const deployContract = async (factory: ContractFactory, useCache: boolean = true
 
 const createWallet = async () => {
   if (walletInstance) return walletInstance;
-  const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10 });
+  const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
   walletInstance = await generateTestWallet(provider, [
     [5_000_000, BaseAssetId],
     [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],

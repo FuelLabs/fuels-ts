@@ -11,9 +11,8 @@ describe(__filename, () => {
     // #region predicate-index-2
     // #context import { Predicate, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-    const provider = new Provider(FUEL_NETWORK_URL);
-    const chainId = await provider.getChainId();
-    const predicate = new Predicate(binary, chainId, jsonAbi, provider);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const predicate = new Predicate(binary, provider, jsonAbi);
     // #endregion predicate-index-2
 
     expect(predicate).toBeTruthy();

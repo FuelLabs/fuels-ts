@@ -23,7 +23,10 @@ describe('Parsing', () => {
   });
 
   it('fails when parsing an object without a code property', async () => {
-    const expectedError = new FuelError(FuelError.CODES.PARSE_FAILED, "missing 'code' property");
+    const expectedError = new FuelError(
+      FuelError.CODES.PARSE_FAILED,
+      `Failed to parse the error object. The required 'code' property is missing.`
+    );
     await expectToThrowFuelError(() => FuelError.parse({}), expectedError);
   });
 
@@ -33,6 +36,7 @@ describe('Parsing', () => {
       ErrorCode.PARSE_FAILED,
       `Unknown error code: ${code}. Accepted codes: ${Object.values(ErrorCode).join(', ')}.`
     );
+
     await expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
   });
 });

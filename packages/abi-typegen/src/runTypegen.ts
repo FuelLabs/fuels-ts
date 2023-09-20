@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import mkdirp from 'mkdirp';
@@ -38,7 +39,10 @@ export function runTypegen(params: IGenerateFilesParams) {
   } else if (originalFilepaths?.length) {
     filepaths = originalFilepaths;
   } else {
-    throw new Error('You need to inform at least one parameter: `input` or `filepaths`');
+    throw new FuelError(
+      ErrorCode.MISSING_REQUIRED_PARAMETER,
+      `At least one parameter should be informed: 'input' or 'filepaths'.`
+    );
   }
 
   /*

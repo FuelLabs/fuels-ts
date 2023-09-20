@@ -1,4 +1,4 @@
-import type { BN, WalletLocked, WalletUnlocked } from 'fuels';
+import type { BN, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
@@ -13,6 +13,7 @@ describe('Predicate', () => {
     let predicateBalance: BN;
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
+    let provider: Provider;
 
     const validation: Validation = {
       has_account: true,
@@ -22,10 +23,10 @@ describe('Predicate', () => {
     beforeAll(async () => {
       [wallet, receiver] = await setupWallets();
       const amountToPredicate = 100;
-      const chainId = await wallet.provider.getChainId();
+      provider = wallet.provider;
       predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
-        chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
 

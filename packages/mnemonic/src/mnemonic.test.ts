@@ -7,12 +7,18 @@ describe('Mnemonic', () => {
   const mnemonic = new Mnemonic();
 
   test('Word list invalid should throw', () => {
-    expect(() => new Mnemonic([])).toThrowError('Invalid word list length');
+    expect(() => new Mnemonic([])).toThrowError('Expected word list length of 2048, but got 0.');
   });
 
   test('Entropy invalid should throw', () => {
-    expect(() => mnemonic.entropyToMnemonic(randomBytes(5))).toThrowError('invalid entropy');
-    expect(() => mnemonic.entropyToMnemonic(randomBytes(34))).toThrowError('invalid entropy');
+    const bytes5 = randomBytes(5);
+    const bytes34 = randomBytes(34);
+    expect(() => mnemonic.entropyToMnemonic(randomBytes(5))).toThrowError(
+      `Entropy should be between 16 and 32 bytes and a multiple of 4, but got ${bytes5.length} bytes.`
+    );
+    expect(() => mnemonic.entropyToMnemonic(randomBytes(34))).toThrowError(
+      `Entropy should be between 16 and 32 bytes and a multiple of 4, but got ${bytes34.length} bytes.`
+    );
   });
 
   test('The same sentence in various UTF-8 forms', () => {
@@ -44,16 +50,20 @@ describe('Mnemonic', () => {
   });
 
   test('Mnemonic invalid should throw', () => {
+    const phrase = 'aaaaa bbbbb ccccc ddddd eeeee fffff ggggg hhhhh jjjjj kkkkk ooooo nnnnn';
+    const [firstWord] = phrase.split(/\s/);
     expect(() =>
       mnemonic.mnemonicToEntropy(
         'aaaaa bbbbb ccccc ddddd eeeee fffff ggggg hhhhh jjjjj kkkkk ooooo nnnnn'
       )
-    ).toThrowError('invalid mnemonic');
+    ).toThrowError(
+      `Invalid mnemonic: the word '${firstWord}' is not found in the provided wordlist.`
+    );
     expect(() =>
       mnemonic.mnemonicToEntropy(
         'letter advice cage absurd amount doctor acoustic avoid letter advice cage cage'
       )
-    ).toThrowError('invalid checksum');
+    ).toThrowError('Checksum validation failed for the provided mnemonic.');
   });
 
   MnemonicSpec.forEach((spec) => {

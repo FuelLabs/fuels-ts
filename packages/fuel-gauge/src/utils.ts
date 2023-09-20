@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, Contract, BytesLike, WalletUnlocked, JsonAbi } from 'fuels';
-import { Script, Provider, ContractFactory, BaseAssetId } from 'fuels';
+import { Script, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
@@ -14,7 +14,7 @@ const deployContract = async (factory: ContractFactory, useCache: boolean = true
 let walletInstance: WalletUnlocked;
 const createWallet = async () => {
   if (walletInstance) return walletInstance;
-  const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10 });
+  const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
   walletInstance = await generateTestWallet(provider, [
     [5_000_000, BaseAssetId],
     [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
