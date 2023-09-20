@@ -19,8 +19,6 @@ import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse } from './fixtures';
-import { MOCK_CHAIN } from './fixtures/chain';
-import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -51,30 +49,6 @@ const getCustomFetch =
   };
 // TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
-
-const getCustomFetch =
-  (expectedOperationName: string, expectedResponse: object) =>
-  async (
-    url: string,
-    options: {
-      body: string;
-      headers: { [key: string]: string };
-      [key: string]: unknown;
-    }
-  ) => {
-    const graphqlRequest = JSON.parse(options.body);
-    const { operationName } = graphqlRequest;
-
-    if (operationName === expectedOperationName) {
-      const responseText = JSON.stringify({
-        data: expectedResponse,
-      });
-      const response = Promise.resolve(new Response(responseText, options));
-
-      return response;
-    }
-    return fetch(url, options);
-  };
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -218,25 +192,11 @@ describe('Provider', () => {
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  it('can get node info including some consensus parameters properties', async () => {
-    // #region provider-definition
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
-      await provider.getNodeInfo();
-    // #endregion provider-definition
-
-    expect(minGasPrice).toBeDefined();
-    expect(gasPerByte).toBeDefined();
-    expect(gasPriceFactor).toBeDefined();
-    expect(maxGasPerTx).toBeDefined();
-    expect(nodeVersion).toBeDefined();
-  });
-
   it('can change the provider url of the current instance', async () => {
-    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
+    const providerUrl1 = FUEL_NETWORK_URL;
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
-    const provider = new Provider(providerUrl1, {
+    const provider = await Provider.create(providerUrl1, {
       fetch: (url: string, options: FetchRequestOptions) =>
         getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
     });
@@ -244,7 +204,7 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
-    provider.connect(providerUrl2);
+    provider.switchUrl(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
 
     expect(await provider.getVersion()).toEqual(providerUrl2);
@@ -253,7 +213,7 @@ describe('Provider', () => {
   it('can accept a custom fetch function', async () => {
     const providerUrl = FUEL_NETWORK_URL;
 
-    const provider = new Provider(providerUrl, {
+    const provider = await Provider.create(providerUrl, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
     });
     expect(await provider.getVersion()).toEqual('0.30.0');
@@ -693,15 +653,13 @@ describe('Provider', () => {
     expect(messageProof).toMatchSnapshot();
   });
 
-  it('default timeout is undefined', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it('default timeout is undefined', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     expect(provider.options.timeout).toBeUndefined();
   });
 
   it('throws AbortError on timeout when calling an operation', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0 });
-
-    const { error } = await safeExec(() => provider.produceBlocks(10));
+    const { error } = await safeExec(() => Provider.create(FUEL_NETWORK_URL, { timeout: 0 }));
 
     expect(error).toMatchObject({
       type: 'aborted',
@@ -711,7 +669,7 @@ describe('Provider', () => {
 
   // Fails because the library creates its own AbortController
   it.skip('throws AbortError on timeout when calling a subscription', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { timeout: 0 });
+    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
 
     const { error } = await safeExec(() =>
       provider.subscriptions.statusChange({ transactionId: 'doesnt matter, will be aborted' })
@@ -723,8 +681,8 @@ describe('Provider', () => {
     });
   });
 
-  test('errors returned from node via subscriptions are thrown', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it('errors returned from node via subscriptions are thrown', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     await expectToThrowFuelError(
       async () => {
@@ -736,6 +694,8 @@ describe('Provider', () => {
       },
       { code: ErrorCode.FUEL_NODE_ERROR }
     );
+  });
+
   it('can connect', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 

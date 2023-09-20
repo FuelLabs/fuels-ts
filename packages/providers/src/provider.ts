@@ -265,7 +265,8 @@ export default class Provider {
     public url: string,
     options: Partial<ProviderOptions> = {}
   ) {
-    this.connect(url, options);
+    this.options = { ...this.options, ...options };
+    this.createOperations();
     this.cache = this.options.cacheUtxo ? new MemoryCache(this.options.cacheUtxo) : undefined;
   }
 
@@ -274,7 +275,7 @@ export default class Provider {
    * @param url - GraphQL endpoint of the Fuel node
    * @param options - Additional options for the provider
    */
-  static async create(url: string, options: ProviderOptions = {}) {
+  static async create(url: string, options: Partial<ProviderOptions> = {}) {
     const provider = new Provider(url, options);
     await provider.fetchChainAndNodeInfo();
     return provider;
@@ -329,99 +330,7 @@ export default class Provider {
    */
   async switchUrl(url: string) {
     this.url = url;
-    this.operations = this.createOperations(url);
-    await this.fetchChainAndNodeInfo();
-  }
-
-  /**
-   * Retrieves and caches chain and node information if not already cached.
-   *
-   * - Checks the cache for existing chain and node information based on the current URL.
-   * - If not found in cache, fetches the information, caches it, and then returns the data.
-   *
-   * @returns NodeInfo and Chain
-   */
-  async fetchChainAndNodeInfo() {
-    let nodeInfo = Provider.nodeInfoCache[this.url];
-    let chain = Provider.chainInfoCache[this.url];
-
-    if (!nodeInfo) {
-      nodeInfo = await this.fetchNode();
-      Provider.nodeInfoCache[this.url] = nodeInfo;
-    }
-
-    if (!chain) {
-      chain = await this.fetchChain();
-      Provider.chainInfoCache[this.url] = chain;
-    }
-
-    return {
-      chain,
-      nodeInfo,
-    };
-  }
-
-  /**
-   * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
-   * @param url - GraphQL endpoint of the Fuel node
-   * @param options - Additional options for the provider
-   */
-  static async create(url: string, options: ProviderOptions = {}) {
-    const provider = new Provider(url, options);
-    await provider.fetchChainAndNodeInfo();
-    return provider;
-  }
-
-  /**
-   * Returns the cached chainInfo for the current URL.
-   */
-  getChain() {
-    const chain = Provider.chainInfoCache[this.url];
-    if (!chain) {
-      throw new FuelError(
-        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
-        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      );
-    }
-    return chain;
-  }
-
-  /**
-   * Returns the cached nodeInfo for the current URL.
-   */
-  getNode() {
-    const node = Provider.nodeInfoCache[this.url];
-    if (!node) {
-      throw new FuelError(
-        ErrorCode.NODE_INFO_CACHE_EMPTY,
-        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      );
-    }
-    return node;
-  }
-
-  /**
-   * Returns some helpful parameters related to gas fees.
-   */
-  getGasConfig() {
-    const { minGasPrice } = this.getNode();
-    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte } =
-      this.getChain().consensusParameters;
-    return {
-      minGasPrice,
-      maxGasPerTx,
-      maxGasPerPredicate,
-      gasPriceFactor,
-      gasPerByte,
-    };
-  }
-
-  /**
-   * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
-   */
-  async switchUrl(url: string) {
-    this.url = url;
-    this.operations = this.createOperations(url);
+    this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
 
@@ -460,8 +369,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(options: Partial<ProviderOptions>) {
-    this.options = { ...this.options, ...options };
+  private createOperations() {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (nodeUrl: string, request: FetchRequestOptions) =>
@@ -532,15 +440,6 @@ export default class Provider {
     text += `\ndata:${JSON.stringify(data ?? { _isError: true, errors })}`;
     text += '\n\n';
     return new Response(text, originalResponse);
-  }
-
-  /**
-   * Connect provider to a different node url.
-   *
-   * @param url - The URL of the Fuel node to connect to.
-   */
-  connect(url: string) {
-    this.operations = this.createOperations(url);
   }
 
   /**
