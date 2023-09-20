@@ -18,7 +18,7 @@ export async function deploy(config: ParsedFuelsConfig) {
     return [];
   }
 
-  const wallet = createWallet(config.privateKey, config.providerUrl);
+  const wallet = await createWallet(config.providerUrl, config.privateKey);
 
   logSection(`🔗 Deploying contracts to ${wallet.provider.url}...`);
 
