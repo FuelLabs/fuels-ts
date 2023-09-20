@@ -9,7 +9,6 @@ import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import type { Account } from '@fuel-ts/wallet';
 
@@ -109,11 +108,19 @@ export default class ContractFactory {
       storageSlots: storageSlots || [],
     };
 
+    if (!this.provider) {
+      throw new FuelError(
+        ErrorCode.MISSING_PROVIDER,
+        'Cannot create transaction request without provider'
+      );
+    }
+
+    const { maxGasPerTx } = this.provider.getGasConfig();
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
