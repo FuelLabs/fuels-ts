@@ -215,7 +215,6 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async getTransactionCost(options?: TransactionCostOptions) {
     const provider = this.getProvider();
-    assert(provider, 'Wallet or Provider is required!');
 
     await this.prepareTransaction();
     const request = transactionRequestify(this.transactionRequest);
@@ -334,7 +333,6 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
     const provider = this.getProvider();
-    assert(provider, 'Wallet or Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest();
     const request = transactionRequestify(transactionRequest);
@@ -352,6 +350,9 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   getProvider(): Provider {
-    return <Provider>(this.program.account?.provider || this.program.provider);
+    const provider = <Provider>this.program.provider;
+    assert(provider, 'Provider is required!');
+
+    return provider;
   }
 }
