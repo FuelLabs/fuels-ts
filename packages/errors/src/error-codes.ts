@@ -22,6 +22,7 @@ export enum ErrorCode {
   INVALID_URL = 'invalid-url',
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
+  MISSING_PROVIDER = 'missing-provider',
 
   // wallet
   INSUFFICIENT_BALANCE = 'insufficient-balance',
