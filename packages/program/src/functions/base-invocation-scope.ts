@@ -6,7 +6,6 @@ import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
 
@@ -63,8 +62,11 @@ export class BaseInvocationScope<TReturn = any> {
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
     this.isMultiCall = isMultiCall;
+
+    const provider = program.provider as Provider;
+    const { maxGasPerTx } = provider.getGasConfig();
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
     });
   }
 
