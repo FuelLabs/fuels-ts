@@ -4,5 +4,5 @@ import type { Provider } from '@fuel-ts/providers';
 export interface GenerateOptions {
   /** Additional entropy for the random bytes */
   entropy?: BytesLike;
-  provider?: string | Provider;
+  provider: Provider;
 }

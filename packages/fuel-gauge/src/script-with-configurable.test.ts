@@ -21,7 +21,7 @@ let wallet: WalletUnlocked;
 
 describe('Script With Configurable', () => {
   beforeAll(async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const quantities: CoinQuantityLike[] = [
       {

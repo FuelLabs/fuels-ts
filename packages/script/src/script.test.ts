@@ -25,7 +25,7 @@ const scriptBin = readFileSync(
 );
 
 const setup = async () => {
-  const provider = new Provider(FUEL_NETWORK_URL);
+  const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);

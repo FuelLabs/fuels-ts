@@ -50,7 +50,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * @param generateOptions - Options to customize the generation process (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static generate(generateOptions?: GenerateOptions): WalletUnlocked {
+  static generate(generateOptions: GenerateOptions): WalletUnlocked {
     const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
 
     return new WalletUnlocked(privateKey, generateOptions?.provider);
@@ -60,11 +60,11 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a seed.
    *
    * @param seed - The seed phrase.
+   * @param provider - A Provider instance.
    * @param path - The derivation path (optional).
-   * @param provider - The provider URL or a Provider instance (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static fromSeed(seed: string, path?: string, provider?: Provider): WalletUnlocked {
+  static fromSeed(seed: string, provider: Provider, path?: string): WalletUnlocked {
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
 
@@ -75,16 +75,16 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a mnemonic phrase.
    *
    * @param mnemonic - The mnemonic phrase.
+   * @param provider - A Provider instance.
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
-   * @param provider - The provider URL or a Provider instance (optional).
    * @returns An instance of WalletUnlocked.
    */
   static fromMnemonic(
     mnemonic: string,
+    provider: Provider,
     path?: string,
-    passphrase?: BytesLike,
-    provider?: Provider
+    passphrase?: BytesLike
   ): WalletUnlocked {
     const seed = Mnemonic.mnemonicToSeed(mnemonic, passphrase);
     const hdWallet = HDWallet.fromSeed(seed);
@@ -97,18 +97,22 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from an extended key.
    *
    * @param extendedKey - The extended key.
-   * @param provider - The provider URL or a Provider instance (optional).
+   * @param provider - A Provider instance.
    * @returns An instance of WalletUnlocked.
    */
-  static fromExtendedKey(extendedKey: string, provider?: Provider): WalletUnlocked {
+  static fromExtendedKey(extendedKey: string, provider: Provider): WalletUnlocked {
     const hdWallet = HDWallet.fromExtendedKey(extendedKey);
 
     return new WalletUnlocked(<string>hdWallet.privateKey, provider);
   }
 
-  static async fromEncryptedJson(jsonWallet: string, password: string): Promise<WalletUnlocked> {
+  static async fromEncryptedJson(
+    jsonWallet: string,
+    password: string,
+    provider: Provider
+  ): Promise<WalletUnlocked> {
     const privateKey = await decryptKeystoreWallet(jsonWallet, password);
 
-    return new WalletUnlocked(privateKey);
+    return new WalletUnlocked(privateKey, provider);
   }
 }

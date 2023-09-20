@@ -19,16 +19,15 @@ import type {
   ExcludeResourcesOption,
   TransactionResponse,
   Resource,
+  Provider,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
-  Provider,
   transactionRequestify,
 } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
-import { FUEL_NETWORK_URL } from './configs';
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
@@ -53,30 +52,22 @@ export class Account extends AbstractAccount {
    * Creates a new Account instance.
    *
    * @param address - The address of the account.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    */
-  constructor(address: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
+  constructor(address: string | AbstractAddress, provider: Provider) {
     super();
-    this.provider = this.connect(provider);
+    this.provider = provider;
     this.address = Address.fromDynamicInput(address);
   }
 
   /**
    * Changes the provider connection for the account.
    *
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    * @returns The updated Provider instance.
    */
-  connect(provider: string | Provider): Provider {
-    if (typeof provider === 'string') {
-      if (this.provider) {
-        this.provider.connect(provider);
-      } else {
-        this.provider = new Provider(provider);
-      }
-    } else {
-      this.provider = provider;
-    }
+  connect(provider: Provider): Provider {
+    this.provider = provider;
     return this.provider;
   }
 
