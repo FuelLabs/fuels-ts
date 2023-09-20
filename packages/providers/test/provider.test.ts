@@ -204,7 +204,7 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
-    provider.switchUrl(providerUrl2);
+    await provider.switchUrl(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
 
     expect(await provider.getVersion()).toEqual(providerUrl2);
@@ -672,7 +672,7 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
 
     const { error } = await safeExec(() =>
-      provider.subscriptions.statusChange({ transactionId: 'doesnt matter, will be aborted' })
+      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' })
     );
     expect(error).toBeDefined();
     expect(error).toMatchObject({
@@ -686,7 +686,7 @@ describe('Provider', () => {
 
     await expectToThrowFuelError(
       async () => {
-        for await (const iterator of provider.subscriptions.statusChange({
+        for await (const iterator of provider.operations.statusChange({
           transactionId: 'Invalid ID that will cause node to return errors',
         })) {
           if (iterator) break;
