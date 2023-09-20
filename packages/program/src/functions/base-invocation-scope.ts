@@ -75,7 +75,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const script = getContractCallScript(this.functionInvocationScopes);
-    const provider = this.program.provider as Provider;
+    const provider = this.getProvider();
     const consensusParams = provider.getChain().consensusParameters;
     if (!consensusParams) {
       throw new FuelError(
@@ -115,12 +115,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
+    const { gasPriceFactor } = this.getProvider().getGasConfig();
+
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee())
+      .concat(this.transactionRequest.calculateFee(gasPriceFactor))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
@@ -212,8 +214,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
-    assert(provider, 'Wallet or Provider is required!');
+    const provider = this.getProvider();
 
     await this.prepareTransaction();
     const request = transactionRequestify(this.transactionRequest);
@@ -331,8 +332,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
-    assert(provider, 'Wallet or Provider is required!');
+    const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
     const request = transactionRequestify(transactionRequest);
@@ -347,5 +347,11 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     return result;
+  }
+
+  getProvider(): Provider {
+    const provider = <Provider>this.program.provider;
+
+    return provider;
   }
 }

@@ -67,7 +67,9 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
-    const calculatedFee = request.calculateFee();
+    const { gasPriceFactor } = wallet.provider.getGasConfig();
+
+    const calculatedFee = request.calculateFee(gasPriceFactor);
 
     const resources = await wallet.getResourcesToSpend([
       [calculatedFee.amount.add(amountToTransfer), BaseAssetId],
@@ -134,7 +136,10 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
       gasPrice: 1,
     });
-    const fee = request.calculateFee();
+
+    const { gasPriceFactor } = wallet.provider.getGasConfig();
+
+    const fee = request.calculateFee(gasPriceFactor);
 
     const amountToTransfer = 100;
     const resources = await wallet.getResourcesToSpend([
