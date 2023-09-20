@@ -2,7 +2,7 @@ import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
 import type { Witness } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { GAS_PER_BYTE, GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
+import { GAS_PER_BYTE } from '@fuel-ts/transactions/configs';
 
 import type {
   TransactionResultReceipt,
@@ -30,7 +30,7 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 export interface CalculateTransactionFeeForScriptParams {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
-  gasPriceFactor?: BN;
+  gasPriceFactor: BN;
   margin?: number;
 }
 
@@ -38,10 +38,10 @@ export interface CalculateTransactionFeeForScriptParams {
 export const calculateTransactionFeeForScript = (
   params: CalculateTransactionFeeForScriptParams
 ) => {
-  const { gasPrice, receipts, gasPriceFactor = GAS_PRICE_FACTOR, margin = 1 } = params;
+  const { gasPrice, receipts, gasPriceFactor, margin = 1 } = params;
 
   const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
-  const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
 
   return {
     fee,
@@ -54,7 +54,7 @@ export interface CalculateTransactionFeeForContractCreatedParams {
   gasPrice: BN;
   transactionBytes: Uint8Array;
   transactionWitnesses: Witness[];
-  gasPriceFactor?: BN;
+  gasPriceFactor: BN;
   gasPerByte?: BN;
 }
 
@@ -67,7 +67,7 @@ export const calculateTransactionFeeForContractCreated = (
     transactionBytes,
     transactionWitnesses,
     gasPerByte = GAS_PER_BYTE,
-    gasPriceFactor = GAS_PRICE_FACTOR,
+    gasPriceFactor,
   } = params;
 
   const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
@@ -95,7 +95,7 @@ export interface CalculateTransactionFeeParams {
   transactionBytes: Uint8Array;
   transactionWitnesses: Witness[];
   transactionType: TransactionType;
-  gasPriceFactor?: BN;
+  gasPriceFactor: BN;
   gasPerByte?: BN;
 }
 
@@ -115,7 +115,7 @@ export const calculateTransactionFee = ({
   if (isTypeCreate) {
     return calculateTransactionFeeForContractCreated({
       gasPerByte: gasPerByte || GAS_PER_BYTE,
-      gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
+      gasPriceFactor,
       transactionBytes,
       transactionWitnesses,
       gasPrice,
@@ -125,7 +125,7 @@ export const calculateTransactionFee = ({
   return calculateTransactionFeeForScript({
     gasPrice,
     receipts,
-    gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
+    gasPriceFactor,
     margin: margin || 1,
   });
 };
