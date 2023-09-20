@@ -351,7 +351,6 @@ export class BaseInvocationScope<TReturn = any> {
 
   getProvider(): Provider {
     const provider = <Provider>this.program.provider;
-    assert(provider, 'Provider is required!');
 
     return provider;
   }
