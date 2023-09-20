@@ -83,6 +83,7 @@ export type ParsedFuelsConfig = UserFuelsConfig &
       | 'useSystemFuelCore'
       | 'autoStartFuelCore'
       | 'fuelCorePort'
+      | 'providerUrl'
     >
   > & {
     basePath: string;

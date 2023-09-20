@@ -1,3 +1,4 @@
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
@@ -53,6 +54,7 @@ export async function loadConfig(cwd: string): Promise<ParsedFuelsConfig> {
     useSystemFuelCore: false,
     autoStartFuelCore: true,
     fuelCorePort: 4000,
+    providerUrl: FUEL_NETWORK_URL,
     ...userConfig,
     basePath: cwd,
   };
