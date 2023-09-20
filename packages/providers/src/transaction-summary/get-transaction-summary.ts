@@ -80,9 +80,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 
   const { receipts } = await provider.call(transactionRequest);
 
-  const {
-    consensusParameters: { gasPerByte, gasPriceFactor },
-  } = await provider.getChain();
+  const { gasPerByte, gasPriceFactor } = provider.getGasConfig();
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
