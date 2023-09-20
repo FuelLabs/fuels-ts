@@ -115,12 +115,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
+    const { gasPriceFactor } = (<Provider>this.program.provider).getGasConfig();
+
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee())
+      .concat(this.transactionRequest.calculateFee(gasPriceFactor))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
