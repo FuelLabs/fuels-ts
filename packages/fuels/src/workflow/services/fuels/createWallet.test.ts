@@ -27,7 +27,7 @@ describe('Services Fuels', () => {
   });
 
   it('Should fail if not privateKey is found', async () => {
-    process.env.PRIVATE_KEY = undefined;
+    delete process.env.PRIVATE_KEY;
     await expect(async () => createWallet(provider.url)).rejects.toThrowError(
       /You must provide a privateKey/
     );
