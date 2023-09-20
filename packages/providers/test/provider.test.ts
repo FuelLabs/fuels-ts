@@ -19,6 +19,8 @@ import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse } from './fixtures';
+import { MOCK_CHAIN } from './fixtures/chain';
+import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -47,10 +49,36 @@ const getCustomFetch =
     }
     return fetch(url, options);
   };
+// TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
+const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
+
+const getCustomFetch =
+  (expectedOperationName: string, expectedResponse: object) =>
+  async (
+    url: string,
+    options: {
+      body: string;
+      headers: { [key: string]: string };
+      [key: string]: unknown;
+    }
+  ) => {
+    const graphqlRequest = JSON.parse(options.body);
+    const { operationName } = graphqlRequest;
+
+    if (operationName === expectedOperationName) {
+      const responseText = JSON.stringify({
+        data: expectedResponse,
+      });
+      const response = Promise.resolve(new Response(responseText, options));
+
+      return response;
+    }
+    return fetch(url, options);
+  };
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const version = await provider.getVersion();
 
@@ -58,7 +86,7 @@ describe('Provider', () => {
   });
 
   it('can call()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -123,7 +151,7 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -169,8 +197,10 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    // #region provider-definition
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const { consensusParameters } = await provider.getChain();
+    // #endregion provider-definition
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
     expect(consensusParameters.maxInputs).toBeDefined();
@@ -221,7 +251,7 @@ describe('Provider', () => {
   });
 
   it('can accept a custom fetch function', async () => {
-    const providerUrl = 'http://127.0.0.1:4000/graphql';
+    const providerUrl = FUEL_NETWORK_URL;
 
     const provider = new Provider(providerUrl, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
@@ -231,7 +261,7 @@ describe('Provider', () => {
 
   it('can force-produce blocks', async () => {
     // #region Provider-produce-blocks
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -252,7 +282,7 @@ describe('Provider', () => {
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -293,14 +323,14 @@ describe('Provider', () => {
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it('can cacheUtxo [undefined]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it('can cacheUtxo [undefined]', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     expect(provider.cache).toEqual(undefined);
   });
 
-  it('can cacheUtxo [numerical]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+  it('can cacheUtxo [numerical]', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 2500,
     });
 
@@ -308,14 +338,13 @@ describe('Provider', () => {
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
-  it('can cacheUtxo [invalid numerical]', () => {
-    expect(() => new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })).toThrow(
-      'Invalid TTL: -500. Use a value greater than zero.'
-    );
+  it('can cacheUtxo [invalid numerical]', async () => {
+    const { error } = await safeExec(() => Provider.create(FUEL_NETWORK_URL, { cacheUtxo: -500 }));
+    expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const transactionRequest = new ScriptTransactionRequest({});
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -325,7 +354,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 1,
     });
     const MessageInput: MessageTransactionRequestInput = {
@@ -348,7 +377,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -407,7 +436,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -481,7 +510,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -540,7 +569,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -626,7 +655,7 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
@@ -650,7 +679,7 @@ describe('Provider', () => {
   it('can getMessageProof with all data', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       fetch: async (url, options) => {
         const messageProof = JSON.stringify(messageProofResponse);
         return Promise.resolve(new Response(messageProof, options));
@@ -707,5 +736,26 @@ describe('Provider', () => {
       },
       { code: ErrorCode.FUEL_NODE_ERROR }
     );
+  it('can connect', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    // check if the provider was initialized properly
+    expect(provider).toBeInstanceOf(Provider);
+    expect(provider.url).toEqual(FUEL_NETWORK_URL);
+    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+  });
+
+  it('doesnt refetch the chain info again if it is already cached', async () => {
+    Provider.chainInfoCache = {};
+    const spyGetChainInfo = jest.spyOn(Provider.prototype, 'fetchChain');
+
+    const provider1 = await Provider.create(FUEL_NETWORK_URL);
+    const provider2 = await Provider.create(FUEL_NETWORK_URL);
+
+    // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
+    expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
+
+    expect(provider1.url).toEqual(FUEL_NETWORK_URL);
+    expect(provider2.url).toEqual(FUEL_NETWORK_URL);
   });
 });

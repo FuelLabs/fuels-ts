@@ -20,4 +20,5 @@ export {
   WORD_SIZE,
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
+  calculateVmTxMemory,
 } from './constants';
