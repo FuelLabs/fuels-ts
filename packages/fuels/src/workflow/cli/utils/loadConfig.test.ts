@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import JoyCon from 'joycon';
 
 import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
@@ -45,6 +46,7 @@ describe('Bin Utils loadConfig', () => {
       useSystemFuelCore: false,
       deployConfig: {},
       fuelCorePort: 4000,
+      providerUrl: FUEL_NETWORK_URL,
     });
   });
 
@@ -83,6 +85,7 @@ describe('Bin Utils loadConfig', () => {
       useSystemFuelCore: false,
       deployConfig: {},
       fuelCorePort: 4000,
+      providerUrl: FUEL_NETWORK_URL,
     });
   });
 });

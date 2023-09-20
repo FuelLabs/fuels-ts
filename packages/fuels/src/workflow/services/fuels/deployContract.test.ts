@@ -1,6 +1,8 @@
 import { Address } from '@fuel-ts/address';
 import { ContractFactory } from '@fuel-ts/contract';
+import { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { deployContract } from './deployContract';
 
@@ -54,7 +56,8 @@ jest.mock('fs/promises', () => {
 
 describe('Services Fuels', () => {
   it('deployContract should load binary and call deploy with config', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({ provider });
     const contractId = '0x0000000000000000000000000000000000000000000000000000000000000001';
     const deployContractMock = jest
       .spyOn(ContractFactory.prototype, 'deployContract')

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DeployContractOptions } from '@fuel-ts/contract';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
 import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
@@ -31,7 +31,7 @@ describe('Build Action', () => {
     deployConfig: {
       gasPrice: 2,
     },
-    providerUrl: 'http://localhost:9999/graphql',
+    providerUrl: FUEL_NETWORK_URL,
     basePath: '/root',
     workspace: '/root/project',
     contracts: ['/root/project/foo', '/root/project/bar'],
@@ -79,7 +79,9 @@ describe('Build Action', () => {
     // Expect deployContract to be called twice
     expect(services.deployContract).toHaveBeenCalledTimes(2);
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', config.deployConfig!);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', config.deployConfig!);
 
     // Check if saveContractIds was called with correct contracts names

@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
+import { findPackageRoot } from '../../cli/utils/findPackageRoot';
 import type { ParsedFuelsConfig } from '../../types';
 import { log, logSection } from '../../utils';
 
@@ -63,8 +64,10 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
     '--manual_blocks_enabled',
   ].flat();
 
+  const pkgRootDir = findPackageRoot();
+
   return new Promise((resolve, reject) => {
-    const fuelsCorePath = join(__dirname, '..', 'node_modules', '.bin', 'fuels-core');
+    const fuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
     const command = config.useSystemFuelCore ? 'fuel-core' : fuelsCorePath;
 
     const childProcess = spawn(command, flags, { stdio: 'pipe' });

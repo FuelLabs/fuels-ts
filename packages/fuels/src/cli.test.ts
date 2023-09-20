@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { run } from './cli';
 
 describe('cli.js', () => {
-  test('should call `versions` sub-program', () => {
+  test('should call `versions` sub-program', async () => {
     // mocking
     const name = jest.spyOn(Command.prototype, 'name');
     const version = jest.spyOn(Command.prototype, 'version');
