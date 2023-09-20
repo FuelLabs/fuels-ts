@@ -25,7 +25,6 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
 } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import {
   composeScriptForTransferringToContract,
@@ -231,8 +230,8 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const params: TxParamsType = { gasLimit: MAX_GAS_PER_TX, ...txParams };
-
+    const { maxGasPerTx } = this.provider.getGasConfig();
+    const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
     const fee = request.calculateFee();
@@ -278,8 +277,9 @@ export class Account extends AbstractAccount {
       assetId
     );
 
+    const { maxGasPerTx } = this.provider.getGasConfig();
     const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
       ...txParams,
       script,
       scriptData,
@@ -334,7 +334,8 @@ export class Account extends AbstractAccount {
     ]);
 
     // build the transaction
-    const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const { maxGasPerTx } = this.provider.getGasConfig();
+    const params = { script, gasLimit: maxGasPerTx, ...txParams };
     const request = new ScriptTransactionRequest(params);
     const fee = request.calculateFee();
     let quantities: CoinQuantityLike[] = [];
