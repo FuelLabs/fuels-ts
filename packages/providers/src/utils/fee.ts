@@ -2,7 +2,6 @@ import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
 import type { Witness } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { GAS_PER_BYTE } from '@fuel-ts/transactions/configs';
 
 import type {
   TransactionResultReceipt,
@@ -62,13 +61,7 @@ export interface CalculateTransactionFeeForContractCreatedParams {
 export const calculateTransactionFeeForContractCreated = (
   params: CalculateTransactionFeeForContractCreatedParams
 ) => {
-  const {
-    gasPrice,
-    transactionBytes,
-    transactionWitnesses,
-    gasPerByte = GAS_PER_BYTE,
-    gasPriceFactor,
-  } = params;
+  const { gasPrice, transactionBytes, transactionWitnesses, gasPerByte, gasPriceFactor } = params;
 
   const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
 
@@ -114,7 +107,7 @@ export const calculateTransactionFee = ({
 
   if (isTypeCreate) {
     return calculateTransactionFeeForContractCreated({
-      gasPerByte: gasPerByte || GAS_PER_BYTE,
+      gasPerByte,
       gasPriceFactor,
       transactionBytes,
       transactionWitnesses,

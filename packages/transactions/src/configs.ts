@@ -15,9 +15,6 @@ export const MAX_GAS_PER_TX = bn(10_000_000);
  * Ex.: transactionFee = Math.ceil(<gasUsed> / MAX_GAS_PER_TX);
  */
 
-/** Gas charged per byte of the transaction. */
-export const GAS_PER_BYTE = bn(4);
-
 // TODO: set max script length const
 /** Maximum length of script, in instructions. */
 export const MAX_SCRIPT_LENGTH = 1024 * 1024 * 1024;
