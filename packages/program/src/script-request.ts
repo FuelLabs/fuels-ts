@@ -4,11 +4,13 @@ import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import {
   VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
   ASSET_ID_LEN,
-  WORD_SIZE,
   CONTRACT_ID_LEN,
+  SCRIPT_FIXED_SIZE,
+  WORD_SIZE,
+  calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
@@ -28,9 +30,9 @@ import type { CallConfig } from './types';
 
 const logger = new Logger(versions.FUELS);
 
-export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
-export const POINTER_DATA_OFFSET = ASSET_ID_LEN + 2 * WORD_SIZE + CONTRACT_ID_LEN + 2 * WORD_SIZE;
-
+export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + SCRIPT_FIXED_SIZE;
+export const POINTER_DATA_OFFSET =
+  WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
 /**
  * Represents a script result, containing information about the script execution.
  */
@@ -75,11 +77,17 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   });
 
   if (!scriptResultReceipt) {
-    throw new Error(`Expected scriptResultReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'scriptResultReceipt'.`
+    );
   }
 
   if (!returnReceipt) {
-    throw new Error(`Expected returnReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'returnReceipt'.`
+    );
   }
 
   const scriptResult: ScriptResult = {
@@ -216,20 +224,23 @@ export class ScriptRequest<TData = void, TResult = void> {
   /**
    * Gets the script data offset for the given bytes.
    *
-   * @param bytes - The bytes of the script.
+   * @param byteLength - The byte length of the script.
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
    * @returns The script data offset.
    */
-  static getScriptDataOffsetWithScriptBytes(byteLength: number): number {
-    return SCRIPT_DATA_BASE_OFFSET + byteLength;
+  static getScriptDataOffsetWithScriptBytes(byteLength: number, maxInputs: number): number {
+    const scriptDataBaseOffset = calculateVmTxMemory({ maxInputs }) + SCRIPT_FIXED_SIZE;
+    return scriptDataBaseOffset + byteLength;
   }
 
   /**
    * Gets the script data offset.
    *
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
    * @returns The script data offset.
    */
-  getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes.length);
+  getScriptDataOffset(maxInputs: number) {
+    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes.length, maxInputs);
   }
 
   /**

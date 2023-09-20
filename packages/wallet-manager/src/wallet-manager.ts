@@ -1,5 +1,6 @@
 import type { Keystore } from '@fuel-ts/crypto';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
@@ -18,11 +19,11 @@ import { MnemonicVault } from './vaults/mnemonic-vault';
 import { PrivateKeyVault } from './vaults/privatekey-vault';
 
 const ERROR_MESSAGES = {
-  invalid_vault_type: 'Invalid VaultType',
-  address_not_found: 'Address not found',
-  vault_not_found: 'Vault not found',
-  wallet_not_unlocked: 'Wallet is locked',
-  passphrase_not_match: "Passphrase didn't match",
+  invalid_vault_type: 'The provided Vault type is invalid.',
+  address_not_found: 'No private key found for address the specified wallet address.',
+  vault_not_found: 'The specified vault was not found.',
+  wallet_not_unlocked: 'The wallet is currently locked.',
+  passphrase_not_match: 'The provided passphrase did not match the expected value.',
 };
 
 /**
@@ -30,7 +31,7 @@ const ERROR_MESSAGES = {
  */
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
-    throw new Error(message);
+    throw new FuelError(ErrorCode.WALLET_MANAGER_ERROR, message);
   }
 }
 
@@ -183,14 +184,14 @@ export class WalletManager extends EventEmitter {
    * Lock wallet. It removes passphrase from class instance, encrypt and hide all address and
    * secrets.
    */
-  async lock() {
+  lock() {
     this.#isLocked = true;
     // Clean state vaults from state
     this.#vaults = [];
     // Clean password from state
     this.#passphrase = '';
     // Emit event that wallet is locked
-    await this.emit('lock');
+    this.emit('lock');
   }
 
   /**

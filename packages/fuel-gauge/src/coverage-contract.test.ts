@@ -11,6 +11,7 @@ import {
   isCoin,
   randomBytes,
   hexlify,
+  FUEL_NETWORK_URL,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -366,7 +367,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should get initial state messages from node', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
@@ -410,10 +411,12 @@ describe('Coverage Contract', () => {
   });
 
   it('should test spending input messages', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    const recipient = Wallet.generate();
+    const recipient = Wallet.generate({
+      provider,
+    });
     const sender = Wallet.fromPrivateKey(
       '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
       provider

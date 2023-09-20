@@ -174,4 +174,4 @@ const main = async () => {
   recreateInternalLinks();
 };
 
-main();
+main().catch(process.stderr.write);

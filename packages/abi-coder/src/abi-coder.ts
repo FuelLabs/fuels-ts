@@ -1,5 +1,6 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import { Logger } from '@ethersproject/logger';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { versions } from '@fuel-ts/versions';
 
 import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
@@ -91,7 +92,10 @@ export abstract class AbiCoder {
       const length = parseInt(arrayMatch.length, 10);
       const arg = components[0];
       if (!arg) {
-        throw new Error('Expected array type to have an item component');
+        throw new FuelError(
+          ErrorCode.INVALID_COMPONENT,
+          `The provided Array type is missing an item of 'component'.`
+        );
       }
 
       const arrayElementCoder = AbiCoder.getCoderImpl(arg);
@@ -101,7 +105,10 @@ export abstract class AbiCoder {
     if (resolvedAbiType.type === VEC_CODER_TYPE) {
       const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments?.[0];
       if (!arg) {
-        throw new Error('Expected Vec type to have a type argument');
+        throw new FuelError(
+          ErrorCode.INVALID_COMPONENT,
+          `The provided Vec type is missing the 'type argument'.`
+        );
       }
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 

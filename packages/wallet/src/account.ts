@@ -2,6 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -17,16 +18,15 @@ import type {
   Resource,
   ExcludeResourcesOption,
   TransactionResponse,
+  Provider,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
-  Provider,
   transactionRequestify,
 } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
-import { FUEL_NETWORK_URL } from './configs';
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
@@ -52,30 +52,22 @@ export class Account extends AbstractAccount {
    * Creates a new Account instance.
    *
    * @param address - The address of the account.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    */
-  constructor(address: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
+  constructor(address: string | AbstractAddress, provider: Provider) {
     super();
-    this.provider = this.connect(provider);
+    this.provider = provider;
     this.address = Address.fromDynamicInput(address);
   }
 
   /**
    * Changes the provider connection for the account.
    *
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    * @returns The updated Provider instance.
    */
-  connect(provider: string | Provider): Provider {
-    if (typeof provider === 'string') {
-      if (this.provider) {
-        this.provider.connect(provider);
-      } else {
-        this.provider = new Provider(provider);
-      }
-    } else {
-      this.provider = provider;
-    }
+  connect(provider: Provider): Provider {
+    this.provider = provider;
     return this.provider;
   }
 
@@ -119,7 +111,10 @@ export class Account extends AbstractAccount {
       }
 
       // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} coins are not yet supported`);
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `Wallets containing more than ${pageSize} coins exceed the current supported limit.`
+      );
     }
 
     return coins;
@@ -150,7 +145,10 @@ export class Account extends AbstractAccount {
       }
 
       // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} messages are not yet supported`);
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `Wallets containing more than ${pageSize} messages exceed the current supported limit.`
+      );
     }
 
     return messages;
@@ -192,7 +190,10 @@ export class Account extends AbstractAccount {
       }
 
       // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} balances are not yet supported`);
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `Wallets containing more than ${pageSize} balances exceed the current supported limit.`
+      );
     }
 
     return balances;
@@ -269,7 +270,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const script = composeScriptForTransferringToContract();
+    const script = await composeScriptForTransferringToContract();
 
     const scriptData = formatScriptDataForTransferringToContract(
       contractId.toB256(),

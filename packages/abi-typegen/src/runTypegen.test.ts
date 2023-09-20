@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { existsSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
@@ -213,7 +213,7 @@ describe('runTypegen.js', () => {
 
     // validates execution was ok
     expect(error?.message).toEqual(
-      'You need to inform at least one parameter: `input` or `filepaths`'
+      `At least one parameter should be informed: 'input' or 'filepaths'.`
     );
   });
 });

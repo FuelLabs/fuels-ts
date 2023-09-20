@@ -37,32 +37,32 @@ describe('HDWallet', () => {
       HDWallet.fromExtendedKey(
         'xprv9s2SPatNQ9Vc6GTbVMFPFo7jsaZySyzk7L8n2uqKXJen3KUmvQNTuLh3fhZMBoG3G4ZW1N2kZuHEPY53qmbZzCHshoQnNf4GvELZfqTUrcv'
       )
-    ).toThrow('Invalid depth');
+    ).toThrow('Inconsistency detected: Depth is zero but fingerprint/index is non-zero.');
     expect(() =>
       HDWallet.fromExtendedKey(
         'xpub661no6RGEX3uJkY4bNnPcw4URcQTrSibUZ4NqJEw5eBkv7ovTwgiT91XX27VbEXGENhYRCf7hyEbWrR3FewATdCEebj6znwMfQkhRYHRLpJ'
       )
-    ).toThrow('Invalid depth');
+    ).toThrow('Inconsistency detected: Depth is zero but fingerprint/index is non-zero.');
     expect(() =>
       HDWallet.fromExtendedKey(
         'xprv9s21ZrQH4r4TsiLvyLXqM9P7k1K3EYhA1kkD6xuquB5i39AU8KF42acDyL3qsDbU9NmZn6MsGSUYZEsuoePmjzsB3eFKSUEh3Gu1N3cqVUN'
       )
-    ).toThrow('Invalid depth');
+    ).toThrow('Inconsistency detected: Depth is zero but fingerprint/index is non-zero.');
     expect(() =>
       HDWallet.fromExtendedKey(
         'xpub661MyMwAuDcm6CRQ5N4qiHKrJ39Xe1R1NyfouMKTTWcguwVcfrZJaNvhpebzGerh7gucBvzEQWRugZDuDXjNDRmXzSZe4c7mnTK97pTvGS8'
       )
-    ).toThrow('Invalid depth');
+    ).toThrow('Inconsistency detected: Depth is zero but fingerprint/index is non-zero.');
     expect(() =>
       HDWallet.fromExtendedKey(
         'DMwo58pR1QLEFihHiXPVykYB6fJmsTeHvyTp7hRThAtCX8CvYzgPcn8XnmdfHGMQzT7ayAmfo4z3gY5KfbrZWZ6St24UVf2Qgo6oujFktLHdHY4'
       )
-    ).toThrow('Invalid extended key');
+    ).toThrow('Provided key is not a valid extended key.');
     expect(() =>
       HDWallet.fromExtendedKey(
         'DMwo58pR1QLEFihHiXPVykYB6fJmsTeHvyTp7hRThAtCX8CvYzgPcn8XnmdfHPmHJiEDXkTiJTVV9rHEBUem2mwVbbNfvT2MTcAqj3nesx8uBf9'
       )
-    ).toThrow('Invalid extended key');
+    ).toThrow('Provided key is not a valid extended key.');
     expect(() =>
       HDWallet.fromExtendedKey(
         'xprv9s21ZrQH143K24Mfq5zL5MhWK9hUhhGbd45hLXo2Pq2oqzMMo63oStZzF93Y5wvzdUayhgkkFoicQZcP3y52uPPxFnfoLZB21Teqt1VvEHx'

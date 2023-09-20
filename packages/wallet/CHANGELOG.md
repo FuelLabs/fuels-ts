@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.57.0
+
+## 0.56.1
+
+### Patch Changes
+
+- Awaiting for WASM initialization inside wallet utility, by [@arboleya](https://github.com/arboleya) (See [#1243](https://github.com/FuelLabs/fuels-ts/pull/1243))
+
+## 0.56.0
+
 ## 0.55.0
 
 ### Minor Changes

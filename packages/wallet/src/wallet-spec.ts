@@ -1,3 +1,5 @@
+import { FUEL_NETWORK_URL } from './configs';
+
 export default {
   mnemonic:
     'fragile silver alley worth float lizard memory amazing fee race escape rotate evil mystery coyote',
@@ -16,5 +18,5 @@ export default {
     privateKey: '0x679e1dd21644ec892d1db655ff857ac0af179f077c4682636fea03ac7a46d94a',
     xprv: 'xprvA2avFD3xMpA5MLaGYTp5eS4yAp39e5Tu6jcjxPN2vh9xhq6rM9i6LPa6q6AU6MBoS7m1Y1fNLbXHg5P8GpVNPkjcJN9bkSBweYuxBpwZgxL',
   },
-  providerUrl: 'http://localhost:8545',
+  providerUrl: FUEL_NETWORK_URL,
 };

@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.57.0
+
+### Minor Changes
+
+- add timeFormatted to TransactionSummary, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1252](https://github.com/FuelLabs/fuels-ts/pull/1252))
+
+### Patch Changes
+
+- Replace lodash with ramda for ESM support, by [@danielbate](https://github.com/danielbate) (See [#1242](https://github.com/FuelLabs/fuels-ts/pull/1242))
+
+## 0.56.1
+
+## 0.56.0
+
 ## 0.55.0
 
 ### Minor Changes

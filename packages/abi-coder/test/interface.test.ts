@@ -115,8 +115,14 @@ describe('Abi interface', () => {
     });
 
     it('raises an error if the arguments do not match the function input types', () => {
-      expect(() => exhaustiveExamplesInterface.encodeFunctionData('entry_one', [11, 11])).toThrow(
-        'Types/values length mismatch'
+      const values = [11, 11];
+
+      const errMsg = `Mismatch between provided arguments and expected ABI inputs.`
+        .concat(` Provided ${values.length} arguments,`)
+        .concat(` but expected 1 (excluding 0 optional inputs).`);
+
+      expect(() => exhaustiveExamplesInterface.encodeFunctionData('entry_one', values)).toThrow(
+        errMsg
       );
     });
   });
@@ -138,7 +144,7 @@ describe('Abi interface', () => {
 
     it('throws when encoding non-existent configurable', () => {
       expect(() => exhaustiveExamplesInterface.encodeConfigurable('futile_effort', 3)).toThrow(
-        "configurable 'futile_effort' doesn't exist"
+        "A configurable with the 'futile_effort' was not found in the ABI."
       );
     });
   });
@@ -852,8 +858,9 @@ describe('Abi interface', () => {
     });
 
     it('should throw an error when type does not exist', () => {
-      expect(() => exhaustiveExamplesInterface.getTypeById(999)).toThrowError(
-        "type with typeId '999' doesn't exist"
+      const id = 999;
+      expect(() => exhaustiveExamplesInterface.getTypeById(id)).toThrowError(
+        `Type with typeId '${id}' doesn't exist in the ABI.`
       );
     });
   });

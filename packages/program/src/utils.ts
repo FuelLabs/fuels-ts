@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { TransactionResult } from '@fuel-ts/providers';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
@@ -31,6 +32,6 @@ export const getDocs = (
  */
 export function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
-    throw new Error(message);
+    throw new FuelError(ErrorCode.TRANSACTION_ERROR, message);
   }
 }
