@@ -1,12 +1,18 @@
-import type { WalletUnlocked } from '@fuel-ts/wallet';
+import { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
-export function createWallet(privateKey?: string, providerUrl?: string): WalletUnlocked {
+export async function createWallet(providerUrl: string, privateKey?: string) {
+  let pvtKey: string;
+
   if (privateKey) {
-    return Wallet.fromPrivateKey(privateKey, providerUrl);
+    pvtKey = privateKey;
+  } else if (process.env.PRIVATE_KEY) {
+    pvtKey = process.env.PRIVATE_KEY;
+  } else {
+    throw new Error('You must provide a privateKey via config.privateKey or env PRIVATE_KEY');
   }
-  if (process.env.PRIVATE_KEY) {
-    return Wallet.fromPrivateKey(process.env.PRIVATE_KEY, providerUrl);
-  }
-  throw new Error('You must provide a privateKey via config.privateKey or env PRIVATE_KEY');
+
+  const provider = await Provider.create(providerUrl);
+
+  return Wallet.fromPrivateKey(pvtKey, provider);
 }
