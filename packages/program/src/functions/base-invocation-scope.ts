@@ -75,7 +75,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const script = getContractCallScript(this.functionInvocationScopes);
-    const provider = this.program.provider as Provider;
+    const provider = this.getProvider();
     const consensusParams = provider.getChain().consensusParameters;
     if (!consensusParams) {
       throw new FuelError(
@@ -115,7 +115,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
-    const { gasPriceFactor } = (<Provider>this.program.provider).getGasConfig();
+    const { gasPriceFactor } = this.getProvider().getGasConfig();
 
     const assets = this.calls
       .map((call) => ({
@@ -214,7 +214,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
+    const provider = this.getProvider();
     assert(provider, 'Wallet or Provider is required!');
 
     await this.prepareTransaction();
@@ -333,7 +333,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
+    const provider = this.getProvider();
     assert(provider, 'Wallet or Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest();
@@ -349,5 +349,9 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     return result;
+  }
+
+  getProvider(): Provider {
+    return <Provider>(this.program.account?.provider || this.program.provider);
   }
 }
