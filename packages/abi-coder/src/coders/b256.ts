@@ -1,4 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
+import { ErrorCode } from '@fuel-ts/errors';
 import { bn, toHex } from '@fuel-ts/math';
 
 import { Coder } from './abstract-coder';
@@ -13,10 +14,10 @@ export class B256Coder extends Coder<string, string> {
     try {
       encodedValue = arrayify(value);
     } catch (error) {
-      this.throwError(`Invalid ${this.type}`, value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     if (encodedValue.length !== 32) {
-      this.throwError(`Invalid ${this.type}`, value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     return encodedValue;
   }
@@ -28,7 +29,7 @@ export class B256Coder extends Coder<string, string> {
       bytes = new Uint8Array(32);
     }
     if (bytes.length !== 32) {
-      this.throwError('Invalid size for b256', bytes);
+      this.throwError(ErrorCode.DECODE_ERROR, `'Invalid size for b256'.`);
     }
     return [toHex(bytes, 32), offset + 32];
   }

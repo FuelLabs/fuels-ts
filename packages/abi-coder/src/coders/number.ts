@@ -1,3 +1,4 @@
+import { ErrorCode } from '@fuel-ts/errors';
 import { toNumber, toBytes } from '@fuel-ts/math';
 
 import { Coder } from './abstract-coder';
@@ -33,11 +34,11 @@ export class NumberCoder extends Coder<number, number> {
     try {
       bytes = toBytes(value);
     } catch (error) {
-      this.throwError(`Invalid ${this.baseType}`, value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
     }
 
     if (bytes.length > this.length) {
-      this.throwError(`Invalid ${this.baseType}. Too many bytes.`, value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
     return toBytes(bytes, 8);
