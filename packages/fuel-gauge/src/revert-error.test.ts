@@ -1,3 +1,4 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
@@ -9,9 +10,7 @@ import {
   TransferToAddressRevertError,
   bn,
   ContractFactory,
-  Provider,
   BaseAssetId,
-  FUEL_NETWORK_URL,
 } from 'fuels';
 import path from 'path';
 

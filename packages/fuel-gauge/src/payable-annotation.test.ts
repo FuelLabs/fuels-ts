@@ -1,3 +1,4 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { readFileSync } from 'fs';
 import { bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
@@ -16,7 +17,8 @@ const setupContract = createSetupConfig({
 });
 
 test('allow sending coins to payable functions', async () => {
-  const contract = await setupContract();
+  using provider = await setupTestProvider();
+  const contract = await setupContract(provider);
 
   // This should not fail because the function is payable
   expect(
@@ -33,7 +35,8 @@ test('allow sending coins to payable functions', async () => {
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
-  const contract = await setupContract();
+  using provider = await setupTestProvider();
+  const contract = await setupContract(provider);
 
   // This should fail because the function is not payable
   await expect(async () =>

@@ -1,4 +1,4 @@
-import type { InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Predicate } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
@@ -8,22 +8,15 @@ import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
   describe('Evaluations', () => {
-    let predicate: Predicate<InputValue[]>;
-    let wallet: WalletUnlocked;
-    let receiver: WalletLocked;
-    let provider: Provider;
-
-    beforeEach(async () => {
-      [wallet, receiver] = await setupWallets();
-      provider = wallet.provider;
-    });
-
     it('calls a no argument predicate and returns true', async () => {
+      const provider = await setupTestProvider();
+      const [wallet, receiver] = await setupWallets(provider);
+
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
-      predicate = new Predicate(predicateBytesTrue, provider);
+      const predicate = new Predicate(predicateBytesTrue, provider);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
@@ -41,10 +34,12 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns false', async () => {
+      const provider = await setupTestProvider();
+      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const amountToReceiver = 50;
 
-      predicate = new Predicate(predicateBytesFalse, provider);
+      const predicate = new Predicate(predicateBytesFalse, provider);
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

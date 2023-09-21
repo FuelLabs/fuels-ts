@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -6,16 +6,11 @@ import { getSetupContract } from './utils';
 const setupContract = getSetupContract('advanced-logging');
 const setupOtherContract = getSetupContract('advanced-logging-other-contract');
 
-let contractInstance: Contract;
-let otherContractInstance: Contract;
-
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  otherContractInstance = await setupOtherContract({ cache: false });
-});
-
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
+
     const { value, logs } = await contractInstance.functions.test_function().call();
 
     expect(value).toBeTruthy();
@@ -60,6 +55,9 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
+
     const { value, logs } = await contractInstance.functions
       .test_function_with_require(1, 1)
       .call();
@@ -69,6 +67,9 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
+
     const invocation = contractInstance.functions.test_function_with_require(1, 3);
     try {
       await invocation.call();
@@ -98,6 +99,10 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from a downstream Contract', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
+    const otherContractInstance = await setupOtherContract(provider);
+
     const INPUT = 3;
     const { value, logs } = await contractInstance.functions
       .test_log_from_other_contract(INPUT, otherContractInstance.id)

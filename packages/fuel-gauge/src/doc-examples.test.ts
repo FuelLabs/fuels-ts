@@ -1,3 +1,4 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type {
@@ -249,9 +250,11 @@ it('can connect to testnet', async () => {
 });
 
 it('can connect to a local provider', async () => {
+  using provider = await setupTestProvider();
+  const providerUrl = provider.url;
   // #region provider-local
   // #context import { Provider, WalletUnlocked } from 'fuels';
-  const localProvider = await Provider.create(FUEL_NETWORK_URL);
+  const localProvider = await Provider.create(providerUrl);
   // Setup a private key
   const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
@@ -265,10 +268,10 @@ it('can connect to a local provider', async () => {
 });
 
 it('can query address with wallets', async () => {
-  // #region wallet-query
-  // #context import { Provider } from 'fuels';
-  // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   using provider = await setupTestProvider();
+  // #region wallet-query
+  // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
   const wallet = await generateTestWallet(provider, [
@@ -320,9 +323,9 @@ it('can query address with wallets', async () => {
 });
 
 it('can create a predicate', async () => {
+  using provider = await setupTestProvider();
   // #region predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
-  using provider = await setupTestProvider();
   const predicate = new Predicate(testPredicateTrue, provider);
 
   expect(predicate.address).toBeTruthy();
@@ -439,8 +442,8 @@ it('can create a predicate and use', async () => {
 });
 
 test.skip('deposit and withdraw cookbook guide', async () => {
-  // #region deposit-and-withdraw-cookbook-wallet-setup
   using provider = await setupTestProvider();
+  // #region deposit-and-withdraw-cookbook-wallet-setup
   const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
   const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
   await seedTestWallet(wallet, [{ assetId: BaseAssetId, amount: bn(100_000) }]);

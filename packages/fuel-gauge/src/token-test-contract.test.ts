@@ -1,14 +1,13 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BN } from 'fuels';
-import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import type { BN, Provider } from 'fuels';
+import { toHex, Wallet, ContractFactory, bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
 
-let provider: Provider;
-
-const setup = async () => {
+const setup = async (provider: Provider) => {
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
@@ -22,15 +21,13 @@ const setup = async () => {
   return contract;
 };
 
-beforeAll(async () => {
-  provider = await Provider.create(FUEL_NETWORK_URL);
-});
-
 describe('TokenTestContract', () => {
   it('Can mint and transfer coins', async () => {
+    const provider = await setupTestProvider();
+
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
-    const token = await setup();
+    const token = await setup(provider);
     const tokenContractId = { value: token.id.toB256() };
     const addressId = { value: userWallet.address };
 
@@ -61,13 +58,14 @@ describe('TokenTestContract', () => {
   });
 
   it('Automatically add variableOuputs', async () => {
+    using provider = await setupTestProvider();
     const [wallet1, wallet2, wallet3] = Array.from({ length: 3 }, () =>
       Wallet.generate({ provider })
     );
 
     const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({ value: wallet.address }));
 
-    const token = await setup();
+    const token = await setup(provider);
 
     const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
     await functionCallOne.dryRun();
@@ -119,8 +117,9 @@ describe('TokenTestContract', () => {
   });
 
   it('Contract getBalance', async () => {
+    using provider = await setupTestProvider();
     const userWallet = Wallet.generate({ provider });
-    const token = await setup();
+    const token = await setup(provider);
     const addressId = {
       value: userWallet.address,
     };

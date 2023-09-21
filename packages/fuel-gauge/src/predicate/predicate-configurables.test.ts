@@ -1,13 +1,7 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinQuantityLike } from 'fuels';
-import {
-  getRandomB256,
-  BaseAssetId,
-  Provider,
-  WalletUnlocked,
-  Predicate,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { getRandomB256, BaseAssetId, WalletUnlocked, Predicate } from 'fuels';
 
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import predicateAbiTrue from '../../fixtures/forc-projects/predicate-true/out/debug/predicate-true-abi.json';
@@ -18,27 +12,22 @@ import { fundPredicate, assertBalance } from './utils/predicate';
 
 describe('Predicate', () => {
   describe('Configurables', () => {
-    let wallet: WalletUnlocked;
-
     const defaultValues = {
       FEE: 10,
       ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
     };
 
-    beforeEach(async () => {
-      using provider = await setupTestProvider();
-
-      const quantities: CoinQuantityLike[] = [
-        {
-          amount: 1_000_000,
-          assetId: BaseAssetId,
-        },
-      ];
-
-      wallet = await generateTestWallet(provider, quantities);
-    });
+    const quantities: CoinQuantityLike[] = [
+      {
+        amount: 1_000_000,
+        assetId: BaseAssetId,
+      },
+    ];
 
     it('calls a predicate with configurables using default values', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
+
       const predicate = new Predicate(
         predicateBytesConfigurable,
         wallet.provider,
@@ -67,6 +56,8 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where first param is equal', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       const configurableConstants = { FEE: 35 };
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
@@ -99,6 +90,8 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where second param is equal', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       const configurableConstants = { ADDRESS: getRandomB256() };
 
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
@@ -131,6 +124,8 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where both params are equal', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       const configurableConstants = {
         FEE: 90,
         ADDRESS: getRandomB256(),
@@ -165,6 +160,8 @@ describe('Predicate', () => {
     });
 
     it('throws when configurable data is not set', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       const predicate = new Predicate(
         predicateBytesConfigurable,
         wallet.provider,
@@ -180,7 +177,9 @@ describe('Predicate', () => {
       );
     });
 
-    it('throws when setting configurable but predicate has none', () => {
+    it('throws when setting configurable but predicate has none', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       expect(() => {
         const predicate = new Predicate(predicateBytesTrue, wallet.provider, predicateAbiTrue, {
           constant: 'NADA',
@@ -190,7 +189,9 @@ describe('Predicate', () => {
       }).toThrow('Predicate has no configurable constants to be set');
     });
 
-    it('throws when setting invalid configurable', () => {
+    it('throws when setting invalid configurable', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
 
       expect(() => {
@@ -207,7 +208,9 @@ describe('Predicate', () => {
       }).toThrow(errMsg);
     });
 
-    it('throws when setting a configurable with no ABI', () => {
+    it('throws when setting a configurable with no ABI', async () => {
+      using provider = await setupTestProvider();
+      const wallet = await generateTestWallet(provider, quantities);
       const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
 
       expect(() => {

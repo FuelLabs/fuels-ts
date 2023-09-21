@@ -1,15 +1,8 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { WalletUnlocked } from 'fuels';
-import {
-  BaseAssetId,
-  ContractFactory,
-  toNumber,
-  Contract,
-  Provider,
-  Predicate,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import type { Provider } from 'fuels';
+import { BaseAssetId, ContractFactory, toNumber, Contract, Predicate } from 'fuels';
 import { join } from 'path';
 
 import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -31,29 +24,27 @@ const liquidityPoolBytes = readFileSync(
 
 describe('Predicate', () => {
   describe('With Contract', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
-    let provider: Provider;
+    const getWallets = async (provider: Provider) => {
+      const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+      const receiver = await generateTestWallet(provider);
 
-    beforeEach(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
-      receiver = await generateTestWallet(provider);
-    });
+      return { wallet, receiver };
+    };
 
     it('calls a predicate from a contract function', async () => {
+      using provider = await setupTestProvider();
       const setupContract = setupContractWithConfig({
         contractBytecode: contractBytes,
         abi: contractAbi,
-        cache: true,
       });
-      const contract = await setupContract();
+      const contract = await setupContract(provider);
       const amountToPredicate = 100_000;
       const predicate = new Predicate<[Validation]>(
         predicateBytesTrue,
         provider,
         predicateAbiMainArgsStruct
       );
+      const { wallet } = await getWallets(provider);
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
       const predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -72,6 +63,9 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
+      using provider = await setupTestProvider();
+      const { wallet, receiver } = await getWallets(provider);
+
       const initialReceiverBalance = toNumber(await receiver.getBalance());
 
       const contract = await new ContractFactory(

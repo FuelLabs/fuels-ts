@@ -1,14 +1,7 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import {
-  Provider,
-  FUEL_NETWORK_URL,
-  BaseAssetId,
-  Predicate,
-  Wallet,
-  ScriptTransactionRequest,
-  bn,
-} from 'fuels';
+import { BaseAssetId, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../fixtures/forc-projects/predicate-conditional-inputs/out/debug/predicate-conditional-inputs-abi.json';

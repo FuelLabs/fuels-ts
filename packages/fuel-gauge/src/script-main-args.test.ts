@@ -1,7 +1,8 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import type { BigNumberish, Provider } from 'fuels';
+import { bn, Script, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
@@ -12,9 +13,7 @@ const scriptBin = readFileSync(
   join(__dirname, '../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
 );
 
-const setup = async (balance = 5_000) => {
-  using provider = await setupTestProvider();
-
+const setup = async (provider: Provider, balance = 5_000) => {
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
@@ -27,7 +26,9 @@ type Baz = {
 
 describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
-    const wallet = await setup();
+    using provider = await setupTestProvider();
+    const wallet = await setup(provider);
+
     // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
@@ -40,7 +41,9 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [two args, read logs]', async () => {
-    const wallet = await setup();
+    using provider = await setupTestProvider();
+    const wallet = await setup(provider);
+
     const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
     const foo = 33;
     const bar: Baz = {
@@ -54,7 +57,9 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [two args, struct return]', async () => {
-    const wallet = await setup();
+    using provider = await setupTestProvider();
+    const wallet = await setup(provider);
+
     const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
     const foo = 1;
     const bar: Baz = {
@@ -69,7 +74,9 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [tx params]', async () => {
-    const wallet = await setup();
+    using provider = await setupTestProvider();
+    const wallet = await setup(provider);
+
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 

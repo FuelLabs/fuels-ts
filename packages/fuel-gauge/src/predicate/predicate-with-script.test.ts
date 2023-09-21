@@ -1,7 +1,8 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import type { BigNumberish, Provider } from 'fuels';
+import { toNumber, BaseAssetId, Script, Predicate } from 'fuels';
 import { join } from 'path';
 
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -17,17 +18,16 @@ const scriptBytes = readFileSync(
 
 describe('Predicate', () => {
   describe('With script', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
-    let provider: Provider;
+    const getWallets = async (provider: Provider) => {
+      const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+      const receiver = await generateTestWallet(provider);
 
-    beforeEach(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-      receiver = await generateTestWallet(provider);
-    });
+      return { wallet, receiver };
+    };
 
     it('calls a predicate and uses proceeds for a script call', async () => {
+      using provider = await setupTestProvider();
+      const { wallet, receiver } = await getWallets(provider);
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
         scriptBytes,
