@@ -1,4 +1,5 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
@@ -9,12 +10,6 @@ import type { ParsedFuelsConfig, UserFuelsConfig } from '../../types';
 import { validateConfig } from './validateConfig';
 
 export async function loadConfig(cwd: string): Promise<ParsedFuelsConfig> {
-  /**
-   * The package `bundle-require` in ES6-only, so we are forced
-   * to import it dynamically for it to work.
-   */
-  const { bundleRequire } = await import('bundle-require');
-
   const configJoycon = new JoyCon();
 
   const configPath = await configJoycon.resolve({
