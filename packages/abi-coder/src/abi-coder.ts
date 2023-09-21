@@ -13,6 +13,7 @@ import { EnumCoder } from './coders/enum';
 import { NumberCoder } from './coders/number';
 import { OptionCoder } from './coders/option';
 import { RawSliceCoder } from './coders/raw-slice';
+import { StdStringCoder } from './coders/stdString';
 import { StringCoder } from './coders/string';
 import { StructCoder } from './coders/struct';
 import { TupleCoder } from './coders/tuple';
@@ -27,6 +28,7 @@ import {
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
   BYTES_CODER_TYPE,
+  STRING_CODER_TYPE,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
@@ -72,6 +74,8 @@ export abstract class AbiCoder {
         return new B512Coder();
       case BYTES_CODER_TYPE:
         return new ByteCoder();
+      case STRING_CODER_TYPE:
+        return new StdStringCoder();
       default:
         break;
     }
