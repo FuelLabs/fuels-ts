@@ -25,7 +25,6 @@
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/logger": "^5.7.0",
     "@ethersproject/properties": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@ethersproject/strings": "^5.7.0",
