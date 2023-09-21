@@ -7,7 +7,8 @@ describe(__filename, () => {
   it('should successfully execute and validate contract call', async () => {
     using contract = await createAndDeployContractFromProject(
       SnippetProjectEnum.ECHO_EMPLOYEE_DATA_VECTOR
-    ); // #region vector-1
+    );
+    // #region vector-1
     // Sway Vec<u8>
     // #context const basicU8Vector = [1, 2, 3];
     // #endregion vector-1

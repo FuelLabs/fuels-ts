@@ -9,7 +9,9 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
+import type { GqlGetCoinsToSpendQuery } from '../src/__generated__/operations';
 import Provider from '../src/provider';
+import { setupTestProvider } from '../src/test-utils';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -24,9 +26,6 @@ import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 afterEach(() => {
   jest.restoreAllMocks();
 });
-
-// TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
-const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -171,8 +170,11 @@ describe('Provider', () => {
   });
 
   it('can change the provider url of the current instance', async () => {
-    const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    using provider1 = await setupTestProvider();
+    using provider2 = await setupTestProvider();
+
+    const providerUrl1 = provider1.url;
+    const providerUrl2 = provider2.url;
 
     const provider = await Provider.create(providerUrl1);
 
@@ -194,7 +196,8 @@ describe('Provider', () => {
   });
 
   it('can accept a custom fetch function', async () => {
-    const providerUrl = FUEL_NETWORK_URL;
+    using provider1 = await setupTestProvider();
+    const providerUrl = provider1.url;
 
     const customFetch = async (
       url: string,
@@ -303,16 +306,16 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [numerical]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 2500,
-    });
+    using provider = await setupTestProvider({ cacheUtxo: 2500 });
 
     expect(provider.cache).toBeTruthy();
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
   it('can cacheUtxo [invalid numerical]', async () => {
-    const { error } = await safeExec(() => Provider.create(FUEL_NETWORK_URL, { cacheUtxo: -500 }));
+    const { error } = await safeExec(async () => {
+      using provider = await setupTestProvider({ cacheUtxo: -500 });
+    });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
@@ -327,9 +330,8 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 1,
-    });
+    using provider = await setupTestProvider({ cacheUtxo: 1 });
+
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
@@ -350,9 +352,8 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using provider = await setupTestProvider({ cacheUtxo: 10000 });
+
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -409,9 +410,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using provider = await setupTestProvider({ cacheUtxo: 10000 });
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -464,8 +463,11 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
-    // @ts-expect-error mock
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve<GqlGetCoinsToSpendQuery>({
+        coinsToSpend: [],
+      } as unknown as GqlGetCoinsToSpendQuery)
+    );
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
 
@@ -483,9 +485,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using provider = await setupTestProvider({ cacheUtxo: 10000 });
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -542,9 +542,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using provider = await setupTestProvider({ cacheUtxo: 10000 });
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -598,7 +596,6 @@ describe('Provider', () => {
 
     const owner = Address.fromRandom();
     const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
-    // @ts-expect-error mock
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [
@@ -652,7 +649,7 @@ describe('Provider', () => {
   it('can getMessageProof with all data', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    using provider = await setupTestProvider({
       fetch: async (url, options) => {
         const messageProof = JSON.stringify(messageProofResponse);
         return Promise.resolve(new Response(messageProof, options));
@@ -671,21 +668,19 @@ describe('Provider', () => {
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
-    expect(provider.url).toEqual(FUEL_NETWORK_URL);
-    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(Provider.chainInfoCache[provider.url]).toBeDefined();
   });
 
   it('doesnt refetch the chain info again if it is already cached', async () => {
     Provider.chainInfoCache = {};
     const spyGetChainInfo = jest.spyOn(Provider.prototype, 'fetchChain');
+    using provider1 = await setupTestProvider();
 
-    const provider1 = await Provider.create(FUEL_NETWORK_URL);
-    const provider2 = await Provider.create(FUEL_NETWORK_URL);
+    const provider2 = await Provider.create(provider1.url);
 
     // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
     expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
 
-    expect(provider1.url).toEqual(FUEL_NETWORK_URL);
-    expect(provider2.url).toEqual(FUEL_NETWORK_URL);
+    expect(provider1.url).toEqual(provider2.url);
   });
 });

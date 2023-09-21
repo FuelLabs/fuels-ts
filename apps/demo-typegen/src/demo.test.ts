@@ -1,7 +1,8 @@
 // #region Testing-with-jest-ts
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { ContractFactory, toHex, BaseAssetId, Wallet } from 'fuels';
 
 import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
 

@@ -31,7 +31,7 @@ describe('Predicate', () => {
     };
 
     it('throws if sender does not have enough resources for tx and gas', async () => {
-      const provider = await setupTestProvider();
+      using provider = await setupTestProvider();
       const [wallet, receiver] = await setupWallets(provider);
 
       const { predicate, predicateBalance } = await setup(wallet);
@@ -41,7 +41,7 @@ describe('Predicate', () => {
     });
 
     it('throws if the passed gas limit is too low', async () => {
-      const provider = await setupTestProvider();
+      using provider = await setupTestProvider();
       const [wallet, receiver] = await setupWallets(provider);
 
       const { predicate } = await setup(wallet);
