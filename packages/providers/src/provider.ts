@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { BytesLike } from 'ethers';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -13,6 +12,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import type { BytesLike } from 'ethers';
 import { Network } from 'ethers';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';

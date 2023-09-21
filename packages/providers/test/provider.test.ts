@@ -1,4 +1,3 @@
-import type { BytesLike } from 'ethers';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
@@ -7,6 +6,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BytesLike } from 'ethers';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import {
@@ -24,6 +23,7 @@ import type {
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
+import type { BytesLike } from 'ethers';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';

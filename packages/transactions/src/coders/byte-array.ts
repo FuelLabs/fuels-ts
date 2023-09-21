@@ -1,6 +1,6 @@
-import type { BytesLike } from 'ethers';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
+import type { BytesLike } from 'ethers';
 
 export class ByteArrayCoder extends Coder<BytesLike, string> {
   length: number;

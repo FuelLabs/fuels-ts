@@ -1,4 +1,3 @@
-import type { BytesLike } from 'ethers';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
@@ -22,6 +21,7 @@ import { transactionRequestify } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
+import type { BytesLike } from 'ethers';
 
 import { getPredicateRoot } from './utils';
 

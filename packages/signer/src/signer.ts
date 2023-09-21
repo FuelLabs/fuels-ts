@@ -1,10 +1,10 @@
-import type { BytesLike } from 'ethers';
 import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
 import * as elliptic from 'elliptic';
+import type { BytesLike } from 'ethers';
 
 /* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
  * which may not support all module.exports as named exports' error

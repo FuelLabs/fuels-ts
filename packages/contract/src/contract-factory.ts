@@ -1,4 +1,3 @@
-import type { BytesLike } from 'ethers';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
@@ -12,6 +11,7 @@ import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import type { Account } from '@fuel-ts/wallet';
+import type { BytesLike } from 'ethers';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
 

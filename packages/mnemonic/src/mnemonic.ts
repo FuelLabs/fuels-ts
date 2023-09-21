@@ -1,8 +1,8 @@
-import type { BytesLike } from 'ethers';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { english } from '@fuel-ts/wordlists';
+import type { BytesLike } from 'ethers';
 import { pbkdf2, sha256, computeHmac, encodeBase58 } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';

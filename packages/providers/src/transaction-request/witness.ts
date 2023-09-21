@@ -1,6 +1,6 @@
-import type { BytesLike } from 'ethers';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Witness } from '@fuel-ts/transactions';
+import type { BytesLike } from 'ethers';
 
 export type TransactionRequestWitness = BytesLike;
 

@@ -1,4 +1,3 @@
-import type { BytesLike } from 'ethers';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
@@ -7,6 +6,7 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
+import type { BytesLike } from 'ethers';
 
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';

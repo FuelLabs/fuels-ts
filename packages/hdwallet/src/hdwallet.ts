@@ -1,9 +1,9 @@
-import type { BytesLike } from 'ethers';
 import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
+import type { BytesLike } from 'ethers';
 import { encodeBase58, decodeBase58, sha256, computeHmac, ripemd160 } from 'ethers';
 
 // "Bitcoin seed"
