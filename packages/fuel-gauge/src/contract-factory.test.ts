@@ -1,5 +1,3 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
@@ -189,17 +187,5 @@ describe('Contract Factory', () => {
 
     const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
-  });
-
-  it('should throws an error if calls createTransactionRequest', async () => {
-    const factory = new ContractFactory(byteCode, abi);
-
-    await expectToThrowFuelError(
-      () => factory.createTransactionRequest(),
-      new FuelError(
-        ErrorCode.MISSING_PROVIDER,
-        'Cannot create transaction request without provider'
-      )
-    );
   });
 });
