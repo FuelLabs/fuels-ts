@@ -241,9 +241,9 @@ export default class Provider {
       ? options.fetch
       : (url: string, request: FetchRequestOptions) =>
           fetch(url, {
+            ...request,
             signal:
               options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
-            ...request,
           });
   }
 

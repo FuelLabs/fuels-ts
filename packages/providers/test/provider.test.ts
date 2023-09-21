@@ -658,7 +658,7 @@ describe('Provider', () => {
     expect(provider.options.timeout).toBeUndefined();
   });
 
-  it('throws AbortError on timeout when calling an operation', async () => {
+  it('throws TimeoutError on timeout when calling an operation', async () => {
     const { error } = await safeExec(async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
       await provider.getTransaction('will fail due to timeout');
@@ -672,7 +672,7 @@ describe('Provider', () => {
   });
 
   // Fails because the library creates its own AbortController
-  it.skip('throws AbortError on timeout when calling a subscription', async () => {
+  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
     const { error } = await safeExec(async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
       provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
