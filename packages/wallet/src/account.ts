@@ -206,7 +206,8 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const fee = request.calculateFee();
+    const { gasPriceFactor } = this.provider.getGasConfig();
+    const fee = request.calculateFee(gasPriceFactor);
     const resources = await this.getResourcesToSpend([fee]);
 
     request.addResources(resources);
@@ -235,7 +236,10 @@ export class Account extends AbstractAccount {
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    const fee = request.calculateFee();
+
+    const { gasPriceFactor } = this.provider.getGasConfig();
+
+    const fee = request.calculateFee(gasPriceFactor);
     let quantities: CoinQuantityLike[] = [];
 
     if (fee.assetId === hexlify(assetId)) {
@@ -287,7 +291,9 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractId);
 
-    const fee = request.calculateFee();
+    const { gasPriceFactor } = this.provider.getGasConfig();
+
+    const fee = request.calculateFee(gasPriceFactor);
 
     let quantities: CoinQuantityLike[] = [];
 
@@ -336,7 +342,10 @@ export class Account extends AbstractAccount {
     // build the transaction
     const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    const fee = request.calculateFee();
+
+    const { gasPriceFactor } = this.provider.getGasConfig();
+
+    const fee = request.calculateFee(gasPriceFactor);
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);
     quantities = [fee];

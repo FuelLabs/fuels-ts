@@ -176,9 +176,7 @@ export class TransactionResponse {
 
     const receipts = transaction.receipts?.map(processGqlReceipt) || [];
 
-    const {
-      consensusParameters: { gasPerByte, gasPriceFactor },
-    } = await this.provider.getChain();
+    const { gasPerByte, gasPriceFactor } = this.provider.getGasConfig();
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
