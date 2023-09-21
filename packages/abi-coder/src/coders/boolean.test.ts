@@ -1,3 +1,6 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import { BooleanCoder } from './boolean';
 
 jest.mock('@fuel-ts/math', () => ({
@@ -54,11 +57,11 @@ describe('BooleanCoder', () => {
       }).toThrow('Invalid bool');
     }
   );
-  it('should throw an error when decoding an invalid boolean value', () => {
+  it('should throw an error when decoding an invalid boolean value', async () => {
     const invalidInput = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
-
-    expect(() => {
-      coder.decode(invalidInput, 0);
-    }).toThrow('Invalid boolean value');
+    await expectToThrowFuelError(
+      () => coder.decode(invalidInput, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid boolean value.')
+    );
   });
 });

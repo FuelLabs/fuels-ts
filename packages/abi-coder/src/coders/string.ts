@@ -1,5 +1,6 @@
 import { concat } from '@ethersproject/bytes';
 import { toUtf8Bytes, toUtf8String } from '@ethersproject/strings';
+import { ErrorCode } from '@fuel-ts/errors';
 
 import { Coder } from './abstract-coder';
 
@@ -17,7 +18,7 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
 
   encode(value: string): Uint8Array {
     if (this.length !== value.length) {
-      this.throwError('Value length mismatch during encode', value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Value length mismatch during encode.`);
     }
 
     const encoded = toUtf8Bytes(value);
