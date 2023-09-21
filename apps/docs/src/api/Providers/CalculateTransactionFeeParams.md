@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:99](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L99)
+[packages/providers/src/utils/fee.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L92)
 
 ___
 
@@ -20,17 +20,17 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:93](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L93)
+[packages/providers/src/utils/fee.ts:86](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L86)
 
 ___
 
 ### gasPriceFactor
 
-• `Optional` **gasPriceFactor**: `BN`
+• **gasPriceFactor**: `BN`
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:98](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L98)
+[packages/providers/src/utils/fee.ts:91](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L91)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:94](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L94)
+[packages/providers/src/utils/fee.ts:87](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L87)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:92](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L92)
+[packages/providers/src/utils/fee.ts:85](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L85)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:95](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L95)
+[packages/providers/src/utils/fee.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L88)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:97](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L97)
+[packages/providers/src/utils/fee.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L90)
 
 ___
 
@@ -80,4 +80,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:96](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/providers/src/utils/fee.ts#L96)
+[packages/providers/src/utils/fee.ts:89](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/providers/src/utils/fee.ts#L89)

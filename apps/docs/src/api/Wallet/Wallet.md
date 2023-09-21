@@ -14,11 +14,11 @@
 
 ### fromEncryptedJson
 
-▪ `Static` **fromEncryptedJson**: (`jsonWallet`: `string`, `password`: `string`) => `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\> = `WalletUnlocked.fromEncryptedJson`
+▪ `Static` **fromEncryptedJson**: (`jsonWallet`: `string`, `password`: `string`, `provider`: [`Provider`](/api/Providers/Provider.md)) => `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\> = `WalletUnlocked.fromEncryptedJson`
 
 #### Type declaration
 
-▸ (`jsonWallet`, `password`): `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\>
+▸ (`jsonWallet`, `password`, `provider`): `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\>
 
 ##### Parameters
 
@@ -26,6 +26,7 @@
 | :------ | :------ |
 | `jsonWallet` | `string` |
 | `password` | `string` |
+| `provider` | [`Provider`](/api/Providers/Provider.md) |
 
 ##### Returns
 
@@ -33,17 +34,17 @@
 
 #### Defined in
 
-[wallet.ts:74](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L74)
+[wallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L70)
 
 ___
 
 ### fromExtendedKey
 
-▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`, `provider?`: [`Provider`](/api/Providers/Provider.md)) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
+▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`, `provider`: [`Provider`](/api/Providers/Provider.md)) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
 
 #### Type declaration
 
-▸ (`extendedKey`, `provider?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ (`extendedKey`, `provider`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Create a Wallet Unlocked from an extended key.
 
@@ -52,7 +53,7 @@ Create a Wallet Unlocked from an extended key.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `extendedKey` | `string` | The extended key. |
-| `provider?` | [`Provider`](/api/Providers/Provider.md) | The provider URL or a Provider instance (optional). |
+| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 
 ##### Returns
 
@@ -62,17 +63,17 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L73)
+[wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L69)
 
 ___
 
 ### fromMnemonic
 
-▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: `BytesLike`, `provider?`: [`Provider`](/api/Providers/Provider.md)) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
+▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `provider`: [`Provider`](/api/Providers/Provider.md), `path?`: `string`, `passphrase?`: `BytesLike`) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
 
 #### Type declaration
 
-▸ (`mnemonic`, `path?`, `passphrase?`, `provider?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ (`mnemonic`, `provider`, `path?`, `passphrase?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Create a Wallet Unlocked from a mnemonic phrase.
 
@@ -81,9 +82,9 @@ Create a Wallet Unlocked from a mnemonic phrase.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `mnemonic` | `string` | The mnemonic phrase. |
+| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 | `path?` | `string` | The derivation path (optional). |
 | `passphrase?` | `BytesLike` | The passphrase for the mnemonic (optional). |
-| `provider?` | [`Provider`](/api/Providers/Provider.md) | The provider URL or a Provider instance (optional). |
 
 ##### Returns
 
@@ -93,17 +94,17 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:64](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L64)
+[wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L60)
 
 ___
 
 ### fromSeed
 
-▪ `Static` **fromSeed**: (`seed`: `string`, `path?`: `string`, `provider?`: [`Provider`](/api/Providers/Provider.md)) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.fromSeed`
+▪ `Static` **fromSeed**: (`seed`: `string`, `provider`: [`Provider`](/api/Providers/Provider.md), `path?`: `string`) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.fromSeed`
 
 #### Type declaration
 
-▸ (`seed`, `path?`, `provider?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ (`seed`, `provider`, `path?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Create a Wallet Unlocked from a seed.
 
@@ -112,8 +113,8 @@ Create a Wallet Unlocked from a seed.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `seed` | `string` | The seed phrase. |
+| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 | `path?` | `string` | The derivation path (optional). |
-| `provider?` | [`Provider`](/api/Providers/Provider.md) | The provider URL or a Provider instance (optional). |
 
 ##### Returns
 
@@ -123,17 +124,17 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:53](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L53)
+[wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L49)
 
 ___
 
 ### generate
 
-▪ `Static` **generate**: (`generateOptions?`: `GenerateOptions`) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.generate`
+▪ `Static` **generate**: (`generateOptions`: `GenerateOptions`) => [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md) = `WalletUnlocked.generate`
 
 #### Type declaration
 
-▸ (`generateOptions?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ (`generateOptions`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Generate a new Wallet Unlocked with a random key pair.
 
@@ -141,7 +142,7 @@ Generate a new Wallet Unlocked with a random key pair.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `generateOptions?` | `GenerateOptions` | Options to customize the generation process (optional). |
+| `generateOptions` | `GenerateOptions` | Options to customize the generation process (optional). |
 
 ##### Returns
 
@@ -151,22 +152,22 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:43](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L43)
+[wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L39)
 
 ## Methods
 
 ### fromAddress
 
-▸ `Static` **fromAddress**(`address`, `provider?`): [`WalletLocked`](/api/Wallet/WalletLocked.md)
+▸ `Static` **fromAddress**(`address`, `provider`): [`WalletLocked`](/api/Wallet/WalletLocked.md)
 
 Creates a locked wallet instance from an address and a provider.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the wallet. |
-| `provider` | `string` \| [`Provider`](/api/Providers/Provider.md) | `FUEL_NETWORK_URL` | The provider URL or a Provider instance. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the wallet. |
+| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
 
 #### Returns
 
@@ -176,22 +177,22 @@ A locked wallet instance.
 
 #### Defined in
 
-[wallet.ts:19](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L19)
+[wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L18)
 
 ___
 
 ### fromPrivateKey
 
-▸ `Static` **fromPrivateKey**(`privateKey`, `provider?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ `Static` **fromPrivateKey**(`privateKey`, `provider`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Creates an unlocked wallet instance from a private key and a provider.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `privateKey` | `BytesLike` | `undefined` | The private key of the wallet. |
-| `provider` | `string` \| [`Provider`](/api/Providers/Provider.md) | `FUEL_NETWORK_URL` | The provider URL or a Provider instance. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `privateKey` | `BytesLike` | The private key of the wallet. |
+| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
 
 #### Returns
 
@@ -201,4 +202,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:33](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/wallet/src/wallet.ts#L33)
+[wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/wallet/src/wallet.ts#L29)

@@ -36,7 +36,7 @@ Creates an instance of the ScriptRequest class.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:206](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L206)
+[packages/program/src/script-request.ts:214](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L214)
 
 ## Properties
 
@@ -48,7 +48,7 @@ The bytes of the script.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:187](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L187)
+[packages/program/src/script-request.ts:195](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L195)
 
 ___
 
@@ -74,7 +74,7 @@ A function to encode the script data.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:192](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L192)
+[packages/program/src/script-request.ts:200](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L200)
 
 ___
 
@@ -100,7 +100,7 @@ A function to decode the script result.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:197](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L197)
+[packages/program/src/script-request.ts:205](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L205)
 
 ## Methods
 
@@ -125,7 +125,7 @@ The decoded result.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:260](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L260)
+[packages/program/src/script-request.ts:271](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L271)
 
 ___
 
@@ -149,15 +149,21 @@ The encoded data.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:241](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L241)
+[packages/program/src/script-request.ts:252](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L252)
 
 ___
 
 ### getScriptDataOffset
 
-▸ **getScriptDataOffset**(): `number`
+▸ **getScriptDataOffset**(`maxInputs`): `number`
 
 Gets the script data offset.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `maxInputs` | `number` | The maxInputs value from the chain's consensus params. |
 
 #### Returns
 
@@ -167,21 +173,22 @@ The script data offset.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:231](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L231)
+[packages/program/src/script-request.ts:242](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L242)
 
 ___
 
 ### getScriptDataOffsetWithScriptBytes
 
-▸ `Static` **getScriptDataOffsetWithScriptBytes**(`byteLength`): `number`
+▸ `Static` **getScriptDataOffsetWithScriptBytes**(`byteLength`, `maxInputs`): `number`
 
 Gets the script data offset for the given bytes.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `byteLength` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `byteLength` | `number` | The byte length of the script. |
+| `maxInputs` | `number` | The maxInputs value from the chain's consensus params. |
 
 #### Returns
 
@@ -191,4 +198,4 @@ The script data offset.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/c43bc9c5/packages/program/src/script-request.ts#L222)
+[packages/program/src/script-request.ts:231](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packages/program/src/script-request.ts#L231)
