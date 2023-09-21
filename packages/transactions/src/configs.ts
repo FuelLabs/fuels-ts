@@ -1,5 +1,3 @@
-import { bn } from '@fuel-ts/math';
-
 /** Maximum contract size, in bytes. */
 export const CONTRACT_MAX_SIZE = 16 * 1024;
 
