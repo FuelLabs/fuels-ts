@@ -194,7 +194,7 @@ describe('Provider', () => {
 
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
 
     const provider = await Provider.create(providerUrl1, {
       fetch: (url: string, options: FetchRequestOptions) =>
@@ -659,25 +659,28 @@ describe('Provider', () => {
   });
 
   it('throws AbortError on timeout when calling an operation', async () => {
-    const { error } = await safeExec(() => Provider.create(FUEL_NETWORK_URL, { timeout: 0 }));
+    const { error } = await safeExec(async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      await provider.getTransaction('will fail due to timeout');
+    });
 
     expect(error).toMatchObject({
-      type: 'aborted',
-      message: 'The user aborted a request.',
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
     });
   });
 
   // Fails because the library creates its own AbortController
   it.skip('throws AbortError on timeout when calling a subscription', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-
-    const { error } = await safeExec(() =>
-      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' })
-    );
-    expect(error).toBeDefined();
+    const { error } = await safeExec(async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
+    });
     expect(error).toMatchObject({
-      type: 'aborted',
-      message: 'The user aborted a request.',
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
     });
   });
 
