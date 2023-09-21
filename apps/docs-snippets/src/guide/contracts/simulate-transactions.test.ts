@@ -13,7 +13,11 @@ describe(__filename, () => {
     const amountToForward = 40;
     const amountToTransfer = 10;
 
-    const someAddress = Wallet.generate().address.toB256();
+    const provider = contract.provider;
+
+    const someAddress = Wallet.generate({
+      provider,
+    }).address.toB256();
 
     // #region simulate-transactions-1
     const { gasUsed } = await contract.functions

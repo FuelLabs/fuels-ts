@@ -19,10 +19,10 @@ describe('Predicate', () => {
   describe('With script', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
-
-    const provider = new Provider(FUEL_NETWORK_URL);
+    let provider: Provider;
 
     beforeEach(async () => {
+      provider = await Provider.create(FUEL_NETWORK_URL);
       wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
@@ -45,10 +45,9 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 100;
       const amountToReceiver = 50;
-      const chainId = await wallet.provider.getChainId();
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
-        chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
       const initialPredicateBalance = toNumber(await predicate.getBalance());

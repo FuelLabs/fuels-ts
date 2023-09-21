@@ -17,9 +17,8 @@ describe(__filename, () => {
 
   it('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
-    const provider = new Provider(FUEL_NETWORK_URL);
-    const chainId = await provider.getChainId();
-    const predicate = new Predicate(bin, chainId, abi, provider);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const predicate = new Predicate(bin, provider, abi);
     // #endregion send-and-spend-funds-from-predicates-2
 
     // #region send-and-spend-funds-from-predicates-3
@@ -41,7 +40,9 @@ describe(__filename, () => {
     // #endregion send-and-spend-funds-from-predicates-4
 
     // #region send-and-spend-funds-from-predicates-5
-    const receiverWallet = WalletUnlocked.generate();
+    const receiverWallet = WalletUnlocked.generate({
+      provider,
+    });
 
     const tx2 = await predicate.transfer(receiverWallet.address, amountToPredicate - 100);
 
@@ -50,9 +51,8 @@ describe(__filename, () => {
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {
-    const predicateOwner = WalletUnlocked.generate();
-    const chainId = await predicateOwner.provider.getChainId();
-    const predicate = new Predicate(bin, chainId, abi, predicateOwner.provider);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const predicate = new Predicate(bin, provider, abi);
 
     const amountToPredicate = 100;
 
@@ -62,7 +62,9 @@ describe(__filename, () => {
 
     const predicateBalance = new BN(await predicate.getBalance()).toNumber();
 
-    const receiverWallet = WalletUnlocked.generate();
+    const receiverWallet = WalletUnlocked.generate({
+      provider,
+    });
 
     predicate.setData('0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4');
 
@@ -78,9 +80,11 @@ describe(__filename, () => {
   });
 
   it('should fail when set wrong input data for predicate', async () => {
-    const predicateOwner = WalletUnlocked.generate();
-    const chainId = await predicateOwner.provider.getChainId();
-    const predicate = new Predicate(bin, chainId, abi, predicateOwner.provider);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const predicateOwner = WalletUnlocked.generate({
+      provider,
+    });
+    const predicate = new Predicate(bin, predicateOwner.provider, abi);
 
     const amountToPredicate = 1_000;
 
@@ -88,7 +92,9 @@ describe(__filename, () => {
 
     await tx.waitForResult();
 
-    const receiverWallet = WalletUnlocked.generate();
+    const receiverWallet = WalletUnlocked.generate({
+      provider,
+    });
 
     predicate.setData(getRandomB256());
 

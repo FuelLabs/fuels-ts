@@ -1,4 +1,4 @@
-import type { InputValue, WalletLocked, WalletUnlocked } from 'fuels';
+import type { InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { Predicate } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
@@ -11,11 +11,11 @@ describe('Predicate', () => {
     let predicate: Predicate<InputValue[]>;
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
-    let chainId: number;
+    let provider: Provider;
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
-      chainId = await wallet.provider.getChainId();
+      provider = wallet.provider;
     });
 
     it('calls a no argument predicate and returns true', async () => {
@@ -23,7 +23,7 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
-      predicate = new Predicate(predicateBytesTrue, chainId);
+      predicate = new Predicate(predicateBytesTrue, provider);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
@@ -44,7 +44,7 @@ describe('Predicate', () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
 
-      predicate = new Predicate(predicateBytesFalse, chainId);
+      predicate = new Predicate(predicateBytesFalse, provider);
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 
