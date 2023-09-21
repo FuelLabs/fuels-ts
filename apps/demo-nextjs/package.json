@@ -18,6 +18,6 @@
     "next": "13.4.4",
     "react-dom": "18.2.0",
     "react": "18.2.0",
-    "typescript": "^4.8.4"
+    "typescript": "~5.2.0"
   }
 }

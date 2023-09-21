@@ -11,6 +11,18 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
+    },
+    "./test-utils": {
+      "require": "./dist/test-utils.js",
+      "import": "./dist/test-utils.mjs",
+      "types": "./dist/test-utils.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "test-utils": [
+        "./dist/test-utils.d.ts"
+      ]
     }
   },
   "files": [
@@ -48,7 +60,6 @@
     "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
     "@types/ramda": "^0.29.3",
-    "get-graphql-schema": "^2.1.2",
-    "typescript": "^4.8.4"
+    "get-graphql-schema": "^2.1.2"
   }
 }

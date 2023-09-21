@@ -25,7 +25,7 @@
     "markdown-it": "^13.0.1",
     "nodemon": "^2.0.22",
     "replace": "^1.2.2",
-    "typedoc": "^0.24.8",
+    "typedoc": "^0.25.1",
     "typedoc-plugin-merge-modules": "^5.0.1",
     "vitepress": "1.0.0-alpha.51",
     "vitepress-plugin-search": "1.0.4-alpha.19",
