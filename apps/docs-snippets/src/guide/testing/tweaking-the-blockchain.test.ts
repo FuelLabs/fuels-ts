@@ -1,4 +1,5 @@
-import { FUEL_NETWORK_URL, Provider, fromTai64ToUnix } from 'fuels';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { fromTai64ToUnix } from 'fuels';
 
 test('produceBlocks with custom timestamp docs snippet', async () => {
   using provider = await setupTestProvider();

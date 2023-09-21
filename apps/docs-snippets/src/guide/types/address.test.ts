@@ -1,4 +1,5 @@
-import { Address, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { Address, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {

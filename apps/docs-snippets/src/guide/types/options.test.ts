@@ -1,16 +1,9 @@
-import type { Contract } from 'fuels';
-
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
-  });
-
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
+    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
     // #region options-1
     // Sway Option<u8>
     // #region options-3
@@ -26,6 +19,7 @@ describe(__filename, () => {
   });
 
   it('should successfully execute contract call to sum 2 option inputs (1 INPUT)', async () => {
+    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
     // #region options-4
     const input: number | undefined = 5;
 

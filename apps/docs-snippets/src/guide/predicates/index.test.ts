@@ -1,4 +1,5 @@
-import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { Predicate } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 

@@ -1,16 +1,9 @@
-import type { Contract } from 'fuels';
-
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
-  });
-
   it('should successfully echo a simple enum in a contract call', async () => {
+    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
     // #region enum-3
     const enumVariant = 'Completed';
 
@@ -21,6 +14,7 @@ describe(__filename, () => {
   });
 
   it('should successfully echo a enum in a contract call (UserError Enum)', async () => {
+    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
     // #region enum-6
     const userErroVar = 'InsufficientPermissions';
 
@@ -33,6 +27,7 @@ describe(__filename, () => {
   });
 
   it('should successfully echo a enum in a contract call (StateError Enum)', async () => {
+    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
     // #region enum-7
     const stateErrorVar = 'Completed';
 

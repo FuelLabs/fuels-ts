@@ -1,16 +1,10 @@
-import type { Contract } from 'fuels';
-
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-  });
-
   it('should successfully call contract and echo values', async () => {
+    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+
     // #region echo-values
     const u8Value = 10;
     const str8Value = 'fuel-sdk';

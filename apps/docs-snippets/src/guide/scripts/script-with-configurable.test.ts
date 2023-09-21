@@ -1,19 +1,14 @@
-import type { WalletUnlocked } from 'fuels';
 import { Script, BN } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-
   const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.SUM_SCRIPT);
 
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-  });
-
   it('should successfully sum setted configurable constant with inpputed value', async () => {
+    using wallet = await getTestWallet();
+
     // #region script-with-configurable-contants-2
     const script = new Script(binHexlified, abiContents, wallet);
 

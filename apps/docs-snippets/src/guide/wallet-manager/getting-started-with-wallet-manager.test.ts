@@ -1,5 +1,6 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('instantiates the WalletManager', async () => {

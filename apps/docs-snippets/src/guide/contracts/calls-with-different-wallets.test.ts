@@ -1,18 +1,16 @@
-import type { Contract } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, WalletUnlocked } from 'fuels';
+import { WalletUnlocked } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
-  let deployedContract: Contract;
-
-  beforeAll(async () => {
-    deployedContract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
-  });
-
   it('should successfully update contract instance wallet', async () => {
-    using provider = await setupTestProvider();
+    using deployedContract = await createAndDeployContractFromProject(
+      SnippetProjectEnum.RETURN_CONTEXT
+    );
+
+    const provider = deployedContract.provider;
+
     const newWallet = WalletUnlocked.generate({
       provider,
     });

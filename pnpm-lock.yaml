@@ -353,6 +353,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
+      '@fuel-ts/providers':
+        specifier: workspace:*
+        version: link:../../packages/providers
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
