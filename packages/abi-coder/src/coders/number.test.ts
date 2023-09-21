@@ -1,3 +1,6 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import { U8_MAX, U16_MAX, U32_MAX } from '../../test/utils/constants';
 
 import { NumberCoder } from './number';
@@ -126,12 +129,13 @@ describe('NumberCoder', () => {
     }).toThrow('Invalid u8');
   });
 
-  it('should throw if coder is too small for number size', () => {
+  it('should throw if coder is too small for number size', async () => {
     const coder = new NumberCoder('u8');
     const invalidInput = U32_MAX;
 
-    expect(() => {
-      coder.encode(invalidInput);
-    }).toThrow('Invalid u8. Too many bytes.');
+    await expectToThrowFuelError(
+      () => coder.encode(invalidInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, `Invalid u8, too many bytes.`)
+    );
   });
 });
