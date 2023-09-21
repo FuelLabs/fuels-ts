@@ -1,26 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Interface, Contract, BytesLike, WalletUnlocked, JsonAbi } from 'fuels';
-import { Script, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import type { Interface, BytesLike, WalletUnlocked, JsonAbi, Provider } from 'fuels';
+import { Script, ContractFactory, BaseAssetId } from 'fuels';
 import { join } from 'path';
-
-let contractInstance: Contract;
-const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
-  if (contractInstance && useCache) return contractInstance;
-  contractInstance = await factory.deployContract();
-  return contractInstance;
-};
-
-let walletInstance: WalletUnlocked;
-const createWallet = async () => {
-  if (walletInstance) return walletInstance;
-  const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
-  walletInstance = await generateTestWallet(provider, [
-    [5_000_000, BaseAssetId],
-    [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
-  ]);
-  return walletInstance;
-};
 
 export type SetupConfig = {
   contractBytecode: BytesLike;
@@ -28,17 +10,21 @@ export type SetupConfig = {
   cache?: boolean;
 };
 
-export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
+export const setup = async (provider: Provider, { contractBytecode, abi }: SetupConfig) => {
   // Create wallet
-  const wallet = await createWallet();
+  const wallet = await generateTestWallet(provider, [
+    [5_000_000, BaseAssetId],
+    [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+  ]);
+
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, cache);
+  const contract = await factory.deployContract();
   return contract;
 };
 
 export const createSetupConfig =
-  (defaultConfig: SetupConfig) => async (config?: Partial<SetupConfig>) =>
-    setup({
+  (defaultConfig: SetupConfig) => async (provider: Provider, config?: Partial<SetupConfig>) =>
+    setup(provider, {
       contractBytecode: defaultConfig.contractBytecode,
       abi: defaultConfig.abi,
       ...config,
@@ -47,9 +33,7 @@ export const createSetupConfig =
 const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
   next(join(__dirname, `../fixtures/forc-projects/${contractName}/out/debug/${contractName}`));
 
-export const getSetupContract = (
-  contractName: string
-): ((config?: Partial<SetupConfig>) => Promise<Contract>) =>
+export const getSetupContract = (contractName: string) =>
   getFullPath(contractName, (fullPath: string) =>
     createSetupConfig({
       contractBytecode: readFileSync(`${fullPath}.bin`),
