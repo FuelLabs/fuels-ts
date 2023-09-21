@@ -152,6 +152,10 @@ export class ResolvedAbiType {
       return 'rawptr';
     }
 
+    if (this.type === 'raw untyped slice') {
+      return 'rawslice';
+    }
+
     const strMatch = stringRegEx.exec(this.type)?.groups;
     if (strMatch) {
       return `str[${strMatch.length}]`;
