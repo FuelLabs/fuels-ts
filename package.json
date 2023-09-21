@@ -8,7 +8,7 @@
     "node": ">= 18.18.0",
     "pnpm": ">= 8.6.1"
   },
-  "packageManager": "pnpm@8.1.1",
+  "packageManager": "pnpm@8.6.1",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'turbo run build --filter=!fuel-gauge'",
     "build": "turbo run build",
