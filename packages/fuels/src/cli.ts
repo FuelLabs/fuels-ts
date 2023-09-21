@@ -3,7 +3,7 @@ import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command } from 'commander';
 
-import { configureCliOptions as configureFuelsCliOptions } from './workflow/cli';
+import { configureCliOptions as configureFuelsCliOptions } from './cli/cli';
 
 export async function run(argv: string[]) {
   const program = new Command();

@@ -1,4 +1,4 @@
-import { forcFiles } from '../../src/workflow/services';
+import { forcFiles } from '../../src/cli/services';
 
 export function mockForcFiles() {
   forcFiles.set('/root/project/Forc.toml', {
