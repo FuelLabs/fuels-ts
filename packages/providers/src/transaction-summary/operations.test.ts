@@ -874,7 +874,7 @@ describe('operations', () => {
     expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);
 
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
-      'Unknown transaction type'
+      'Invalid transaction type: '
     );
   });
 });

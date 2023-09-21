@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/math",
-  "version": "0.57.0",
+  "version": "0.58.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -35,6 +35,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@types/bn.js": "^5.1.1",
+    "@fuel-ts/errors": "workspace:*",
     "bn.js": "^5.2.1"
   }
 }

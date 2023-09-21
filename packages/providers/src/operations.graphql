@@ -212,17 +212,18 @@ query getVersion {
   }
 }
 
-query getInfo {
+fragment nodeInfoFragment on NodeInfo {
+  utxoValidation
+  vmBacktrace
+  minGasPrice
+  maxTx
+  maxDepth
+  nodeVersion
+}
+
+query getNodeInfo {
   nodeInfo {
-    nodeVersion
-    minGasPrice
-  }
-  chain {
-    consensusParameters {
-      gasPerByte
-      maxGasPerTx
-      gasPriceFactor
-    }
+    ...nodeInfoFragment
   }
 }
 

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
@@ -52,7 +53,6 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
-  #scriptDataOffset: number = 0;
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -74,8 +74,18 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
+    const script = getContractCallScript(this.functionInvocationScopes);
+    const provider = this.getProvider();
+    const consensusParams = provider.getChain().consensusParameters;
+    if (!consensusParams) {
+      throw new FuelError(
+        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
+        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
+      );
+    }
+    const maxInputs = consensusParams.maxInputs.toNumber();
     return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, this.#scriptDataOffset)
+      createContractCall(funcScope, script.getScriptDataOffset(maxInputs))
     );
   }
 
@@ -84,8 +94,6 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected updateScriptRequest() {
     const contractCallScript = getContractCallScript(this.functionInvocationScopes);
-    this.#scriptDataOffset = contractCallScript.getScriptDataOffset();
-
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
 
@@ -107,12 +115,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
+    const { gasPriceFactor } = this.getProvider().getGasConfig();
+
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee())
+      .concat(this.transactionRequest.calculateFee(gasPriceFactor))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
@@ -190,8 +200,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected checkGasLimitTotal() {
     const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
     if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
-      throw new Error(
-        "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
+      throw new FuelError(
+        ErrorCode.TRANSACTION_ERROR,
+        "Transaction's gasLimit must be equal to or greater than the combined forwarded gas of all calls."
       );
     }
   }
@@ -203,8 +214,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
-    assert(provider, 'Wallet or Provider is required!');
+    const provider = this.getProvider();
 
     await this.prepareTransaction();
     const request = transactionRequestify(this.transactionRequest);
@@ -322,8 +332,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
-    assert(provider, 'Wallet or Provider is required!');
+    const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
     const request = transactionRequestify(transactionRequest);
@@ -338,5 +347,11 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     return result;
+  }
+
+  getProvider(): Provider {
+    const provider = <Provider>this.program.provider;
+
+    return provider;
   }
 }

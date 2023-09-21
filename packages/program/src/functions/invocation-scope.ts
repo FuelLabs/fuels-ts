@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractProgram } from '@fuel-ts/interfaces';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { coinQuantityfy } from '@fuel-ts/providers';
@@ -77,7 +78,10 @@ export class FunctionInvocationScope<
 
     if (callParams?.forward) {
       if (!this.func.attributes.find((attr) => attr.name === 'payable')) {
-        throw new Error('Function is not payable.');
+        throw new FuelError(
+          ErrorCode.TRANSACTION_ERROR,
+          `The target function ${this.func.name} cannot accept forwarded funds as it's not marked as 'payable'.`
+        );
       }
 
       this.forward = coinQuantityfy(callParams.forward);
