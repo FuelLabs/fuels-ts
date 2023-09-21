@@ -14,6 +14,8 @@ export enum ErrorCode {
   JSON_ABI_ERROR = 'abi-main-method-missing',
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
+  CODER_NOT_FOUND = 'coder-not-found',
+  FUNCTION_NOT_FOUND = 'function-not-found',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -30,6 +32,8 @@ export enum ErrorCode {
 
   // errors
   PARSE_FAILED = 'parse-failed',
+  ENCODE_ERROR = 'encode-error',
+  DECODE_ERROR = 'decode-error',
   INVALID_CREDENTIALS = 'invalid-credentials',
   ENV_DEPENDENCY_MISSING = 'env-dependency-missing',
   INVALID_TTL = 'invalid-ttl',
@@ -62,8 +66,9 @@ export enum ErrorCode {
   INVALID_SEED = 'invalid-seed',
   INVALID_CHECKSUM = 'invalid-checksum',
 
-  // wallet
+  // wallet / account
   INVALID_PASSWORD = 'invalid-password',
+  ACCOUNT_REQUIRED = 'account-required',
 
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
@@ -75,8 +80,13 @@ export enum ErrorCode {
   // contract
   INVALID_MULTICALL = 'invalid-multicall',
 
+  // script
+  SCRIPT_REVERTED = 'script-reverted',
+  SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
+
   // general
   FUEL_NODE_ERROR = 'fuel-node-error',
+ 
   // coder
   // ...
 }

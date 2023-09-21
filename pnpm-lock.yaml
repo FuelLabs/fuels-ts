@@ -442,9 +442,6 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/logger':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@ethersproject/properties':
         specifier: ^5.7.0
         version: 5.7.0
@@ -521,9 +518,6 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/logger':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
@@ -550,9 +544,6 @@ importers:
   packages/contract:
     dependencies:
       '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/logger':
         specifier: ^5.7.0
         version: 5.7.0
       '@ethersproject/sha2':
@@ -839,9 +830,6 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
-      '@ethersproject/logger':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -883,9 +871,6 @@ importers:
   packages/program:
     dependencies:
       '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/logger':
         specifier: ^5.7.0
         version: 5.7.0
       '@fuel-ts/abi-coder':
