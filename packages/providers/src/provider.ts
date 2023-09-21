@@ -379,10 +379,12 @@ export default class Provider {
 
     // @ts-expect-error This is due to this function being generic and us using multiple libraries. Its type is specified when calling a specific operation via provider.operations.xyz.
     this.operations = getOperationsSdk((query, vars) => {
-      const queryAsString = print(query);
-      if (queryAsString.startsWith('subscription')) {
+      const isSubscription =
+        (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
+          ?.operation === 'subscription';
+      if (isSubscription) {
         return this.#subscriptionClient.iterate({
-          query: queryAsString,
+          query: print(query),
           variables: vars as Record<string, unknown>,
         });
       }
