@@ -2,10 +2,10 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { Wallet } from '.';
-import { FUEL_NETWORK_URL } from './configs';
 import { seedTestWallet, generateTestWallet } from './test-utils';
 
 describe('Wallet', () => {
