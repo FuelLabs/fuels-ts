@@ -11,6 +11,7 @@ import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -24,7 +25,7 @@ const scriptBin = readFileSync(
 );
 
 const setup = async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
@@ -49,7 +50,9 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.calculateFee());
+  const { gasPriceFactor } = account.provider.getGasConfig();
+
+  requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {

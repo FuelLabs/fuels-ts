@@ -35,20 +35,20 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
+  // TODO: Since provider is no longer optional, we can maybe remove `chainId` from the constructor.
   /**
    * Creates an instance of the Predicate class.
    *
    * @param bytes - The bytes of the predicate.
    * @param chainId - The chain ID for which the predicate is used.
-   * @param jsonAbi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
+   * @param jsonAbi - The JSON ABI of the predicate.
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
   constructor(
     bytes: BytesLike,
-    chainId: number,
+    provider: Provider,
     jsonAbi?: JsonAbi,
-    provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
@@ -56,7 +56,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       jsonAbi,
       configurableConstants
     );
-
+    const chainId = provider.getChainId();
     const address = Address.fromB256(getPredicateRoot(predicateBytes, chainId));
     super(address, provider);
 

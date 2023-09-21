@@ -20,12 +20,12 @@ import { Provider } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
 import { Signer } from '@fuel-ts/signer';
 import { InputCoinCoder } from '@fuel-ts/transactions';
-import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Wallet } from '@fuel-ts/wallet';
 import { WalletManager } from '@fuel-ts/wallet-manager';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+// TODO: Add `launchNode` and `launchNodeAndGetWallets` here
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { english, Language } from '@fuel-ts/wordlists';
 import { ScriptRequest } from 'fuels';
@@ -69,7 +69,6 @@ log(ScriptRequest);
  */
 log(hashTransaction);
 log(hashMessage);
-log(GAS_PRICE_FACTOR);
 
 /**
  * hdwallet
