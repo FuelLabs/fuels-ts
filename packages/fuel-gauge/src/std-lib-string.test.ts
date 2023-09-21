@@ -11,8 +11,7 @@ beforeAll(async () => {
 describe('std-lib-string Tests', () => {
   it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions.return_dynamic_string().call<string>();
-
-    expect(value).toStrictEqual('Hello World');
+    expect(value).toBe('Hello World');
   });
 
   it('should test std-lib-string input', async () => {
@@ -20,6 +19,6 @@ describe('std-lib-string Tests', () => {
 
     await contractInstance.functions.accepts_dynamic_string(INPUT).call<number[]>();
 
-    expect(true).toStrictEqual(true);
+    expect(true).toBe(true);
   });
 });
