@@ -16,12 +16,12 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
+import { Script } from '../src/script';
 
-import { Script } from './script';
+import { jsonAbiMock, jsonAbiFragmentMock } from './fixtures/mocks';
 
 const scriptBin = readFileSync(
-  join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
+  join(__dirname, './call-test-script/out/debug/call-test-script.bin')
 );
 
 const setup = async () => {
