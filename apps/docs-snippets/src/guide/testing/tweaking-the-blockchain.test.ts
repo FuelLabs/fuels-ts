@@ -1,7 +1,7 @@
 import { FUEL_NETWORK_URL, Provider, fromTai64ToUnix } from 'fuels';
 
 test('produceBlocks with custom timestamp docs snippet', async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
+  using provider = await setupTestProvider();
   const latestBlock = await provider.getBlock('latest');
   if (!latestBlock) {
     throw new Error('No latest block');

@@ -11,7 +11,7 @@ describe(__filename, () => {
     // #region predicate-index-2
     // #context import { Predicate, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     const predicate = new Predicate(binary, provider, jsonAbi);
     // #endregion predicate-index-2
 

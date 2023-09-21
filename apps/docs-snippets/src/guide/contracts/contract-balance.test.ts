@@ -18,7 +18,7 @@ describe(__filename, () => {
     const amountToForward = 40;
     const amountToTransfer = 10;
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const recipient = Wallet.generate({
       provider,

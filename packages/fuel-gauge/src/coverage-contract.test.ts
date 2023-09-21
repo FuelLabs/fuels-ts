@@ -367,7 +367,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should get initial state messages from node', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
@@ -411,7 +411,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should test spending input messages', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
     const recipient = Wallet.generate({

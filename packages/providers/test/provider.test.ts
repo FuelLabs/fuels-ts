@@ -30,7 +30,7 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const version = await provider.getVersion();
 
@@ -38,7 +38,7 @@ describe('Provider', () => {
   });
 
   it('can call()', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -103,7 +103,7 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -150,7 +150,7 @@ describe('Provider', () => {
 
   it('can get all chain info', async () => {
     // #region provider-definition
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     const { consensusParameters } = await provider.getChain();
     // #endregion provider-definition
 
@@ -184,7 +184,7 @@ describe('Provider', () => {
               chain: MOCK_CHAIN,
               nodeInfo: MOCK_NODE_INFO,
             }),
-        } as unknown as GraphQL.GraphQLClient)
+        }) as unknown as GraphQL.GraphQLClient
     );
 
     expect(provider.url).toBe(providerUrl1);
@@ -234,7 +234,7 @@ describe('Provider', () => {
 
   it('can force-produce blocks', async () => {
     // #region Provider-produce-blocks
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -255,7 +255,7 @@ describe('Provider', () => {
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -297,7 +297,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [undefined]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     expect(provider.cache).toEqual(undefined);
   });
@@ -317,7 +317,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     const transactionRequest = new ScriptTransactionRequest({});
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -628,7 +628,7 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
@@ -667,7 +667,7 @@ describe('Provider', () => {
   });
 
   it('can connect', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);

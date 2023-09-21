@@ -26,7 +26,7 @@ describe('Predicate', () => {
     };
 
     beforeEach(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL);
+      using provider = await setupTestProvider();
 
       const quantities: CoinQuantityLike[] = [
         {

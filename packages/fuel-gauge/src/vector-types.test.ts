@@ -73,11 +73,11 @@ type MainArgs = [
   SomeStruct[], // ENUM_IN_VEC
   TwoDimensionArray, // TUPLE_IN_VEC
   TwoDimensionArray, // VEC_IN_TUPLE
-  VecInAStructInAVec // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
+  VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
 const setup = async (balance = 5_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
+  using provider = await setupTestProvider();
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);

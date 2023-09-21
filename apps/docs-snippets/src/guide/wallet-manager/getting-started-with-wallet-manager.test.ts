@@ -3,7 +3,7 @@ import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('instantiates the WalletManager', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     // #region getting-started-with-wallet-manager-1
     const walletManager = new WalletManager();
     // #endregion getting-started-with-wallet-manager-1

@@ -22,7 +22,7 @@ let wallet: WalletUnlocked;
 
 describe('Revert Error Testing', () => {
   beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(

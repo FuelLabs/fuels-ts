@@ -2,7 +2,7 @@ import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('should successfully encrypt wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     // #region encrypting-and-decrypting-json-wallets-1
     // #context import fs from 'fs';
     // #context import { Wallet } from 'fuels';
@@ -22,7 +22,7 @@ describe(__filename, () => {
   });
 
   it('should successfully decrypt a wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     const jsonWallet = await Wallet.generate({
       provider,
     }).encrypt('my-password');

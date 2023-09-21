@@ -12,7 +12,7 @@ describe(__filename, () => {
   });
 
   it('should successfully update contract instance wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     const newWallet = WalletUnlocked.generate({
       provider,
     });

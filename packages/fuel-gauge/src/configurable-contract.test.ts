@@ -39,7 +39,7 @@ describe('Configurable Contract', () => {
   let factory: ContractFactory;
 
   beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     const quantities: CoinQuantityLike[] = [
       {

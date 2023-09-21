@@ -13,7 +13,7 @@ describe(__filename, () => {
   });
 
   it('should successfully generate new address instance from public key', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     // #region address-3
     const wallet = Wallet.generate({
       provider,
