@@ -35,10 +35,10 @@ describe('StdStringCoder', () => {
       0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 11,
     ]);
     expected.dynamicData = {
-      0: new Uint8Array([104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 0, 0, 0, 0, 0]),
+      0: new Uint8Array([72, 51, 108, 108, 111, 32, 87, 48, 114, 108, 100, 0, 0, 0, 0, 0]),
     };
 
-    const actual = coder.encode('hello world');
+    const actual = coder.encode('H3llo W0rld');
     expect(actual).toStrictEqual(expected);
   });
 
