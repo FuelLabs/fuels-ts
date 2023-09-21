@@ -6,8 +6,13 @@ import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
 /**
  * @hidden
  */
-const getFailureReason = (reason: string): string =>
-  PANIC_REASONS.includes(reason) ? reason : 'unknown';
+const getFailureReason = (reason: string): string => {
+  if (PANIC_REASONS.includes(reason)) {
+    return reason;
+  }
+
+  return reason === 'Revert(123)' ? 'MismatchedSelector' : 'unknown';
+};
 
 /**
  * @hidden

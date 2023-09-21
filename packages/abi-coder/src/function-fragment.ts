@@ -10,6 +10,7 @@ import { versions } from '@fuel-ts/versions';
 import { AbiCoder } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
+import { ByteCoder } from './coders/byte';
 import { TupleCoder } from './coders/tuple';
 import type { U64Coder } from './coders/u64';
 import { VecCoder } from './coders/vec';
@@ -90,6 +91,9 @@ export class FunctionFragment<
       const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
       if (heapCoder instanceof VecCoder) {
         return heapCoder.coder.encodedLength;
+      }
+      if (heapCoder instanceof ByteCoder) {
+        return ByteCoder.memorySize;
       }
 
       return heapCoder.encodedLength;

@@ -8,9 +8,11 @@ import { ArrayCoder } from './coders/array';
 import { B256Coder } from './coders/b256';
 import { B512Coder } from './coders/b512';
 import { BooleanCoder } from './coders/boolean';
+import { ByteCoder } from './coders/byte';
 import { EnumCoder } from './coders/enum';
 import { NumberCoder } from './coders/number';
 import { OptionCoder } from './coders/option';
+import { RawSliceCoder } from './coders/raw-slice';
 import { StringCoder } from './coders/string';
 import { StructCoder } from './coders/struct';
 import { TupleCoder } from './coders/tuple';
@@ -24,6 +26,7 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
+  BYTES_CODER_TYPE,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
@@ -59,12 +62,16 @@ export abstract class AbiCoder {
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
+      case 'raw untyped slice':
+        return new RawSliceCoder();
       case 'bool':
         return new BooleanCoder();
       case 'b256':
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
+      case BYTES_CODER_TYPE:
+        return new ByteCoder();
       default:
         break;
     }
