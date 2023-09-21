@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import {
   VM_TX_MEMORY,
   ASSET_ID_LEN,
@@ -23,12 +22,9 @@ import type {
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { versions } from '@fuel-ts/versions';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
-
-const logger = new Logger(versions.FUELS);
 
 export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + SCRIPT_FIXED_SIZE;
 export const POINTER_DATA_OFFSET =
@@ -145,20 +141,23 @@ export function callResultToInvocationResult<TReturn>(
     callResult,
     (scriptResult: ScriptResult) => {
       if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
-        logger.throwError('Script Reverted', Logger.errors.CALL_EXCEPTION, logs);
+        throw new FuelError(
+          ErrorCode.SCRIPT_REVERTED,
+          `Script Reverted. Logs: ${JSON.stringify(logs)}`
+        );
       }
 
       if (
         scriptResult.returnReceipt.type !== ReceiptType.Return &&
         scriptResult.returnReceipt.type !== ReceiptType.ReturnData
       ) {
-        logger.throwError(
-          `Script Return Type [${scriptResult.returnReceipt.type}] Invalid`,
-          Logger.errors.CALL_EXCEPTION,
-          {
+        const { type } = scriptResult.returnReceipt;
+        throw new FuelError(
+          ErrorCode.SCRIPT_REVERTED,
+          `Script Return Type [${type}] Invalid. Logs: ${JSON.stringify({
             logs,
             receipt: scriptResult.returnReceipt,
-          }
+          })}`
         );
       }
 
@@ -167,11 +166,8 @@ export function callResultToInvocationResult<TReturn>(
         value = scriptResult.returnReceipt.val;
       }
       if (scriptResult.returnReceipt.type === ReceiptType.ReturnData) {
-        const decoded = call.program.interface.decodeFunctionResult(
-          call.func,
-          scriptResult.returnReceipt.data
-        );
-        value = (decoded as [TReturn])[0];
+        const decoded = call.func.decodeOutput(scriptResult.returnReceipt.data);
+        value = decoded[0];
       }
 
       return value as TReturn;

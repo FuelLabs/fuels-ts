@@ -1,12 +1,10 @@
-import { Logger } from '@ethersproject/logger';
 import type { TransactionResultReceipt, TransactionResultRevertReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { versions } from '@fuel-ts/versions';
 
 import type { RevertError } from './revert-error';
 import { revertErrorFactory } from './revert-error';
 
-const logger = new Logger(versions.FUELS);
+const { warn } = console;
 
 const getRevertReceipts = (
   receipts: TransactionResultReceipt[]
@@ -34,7 +32,7 @@ export class RevertErrorCodes {
     }
 
     if (this.revertReceipts.length !== 1) {
-      logger.warn(
+      warn(
         'Multiple revert receipts found, expected one. Receipts:',
         JSON.stringify(this.revertReceipts)
       );

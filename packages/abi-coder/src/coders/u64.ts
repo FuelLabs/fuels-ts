@@ -1,3 +1,4 @@
+import { ErrorCode } from '@fuel-ts/errors';
 import type { BN, BNInput } from '@fuel-ts/math';
 import { bn, toBytes } from '@fuel-ts/math';
 
@@ -14,7 +15,7 @@ export class U64Coder extends Coder<BNInput, BN> {
     try {
       bytes = toBytes(value, 8);
     } catch (error) {
-      this.throwError(`Invalid ${this.type}`, value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
 
     return bytes;
