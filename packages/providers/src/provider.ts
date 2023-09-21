@@ -13,8 +13,8 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { GraphQLClient, gql } from 'graphql-request';
-import type { GraphQLResponse } from 'graphql-request/dist/types';
+import { print } from 'graphql';
+import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
 import { createClient } from 'graphql-sse';
 import { clone } from 'ramda';
@@ -377,19 +377,17 @@ export default class Provider {
     if (this.#subscriptionClient) this.#subscriptionClient.dispose();
     this.#subscriptionClient = Provider.createSubscriptionClient(this.url, fetchFn, this.options);
 
-    // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
+    // @ts-expect-error This is due to this function being generic and us using multiple libraries. Its type is specified when calling a specific operation via provider.operations.xyz.
     this.operations = getOperationsSdk((query, vars) => {
-      if (query.trim().startsWith('subscription')) {
+      const queryAsString = print(query);
+      if (queryAsString.startsWith('subscription')) {
         return this.#subscriptionClient.iterate({
-          query,
+          query: queryAsString,
           variables: vars as Record<string, unknown>,
         });
       }
 
-      return Provider.adaptResponse(
-        gqlClient.rawRequest(query, vars) as unknown as Promise<Response>,
-        false
-      );
+      return gqlClient.request(query, vars);
     });
   }
 
@@ -418,7 +416,7 @@ export default class Provider {
       fetchFn: async (
         subscriptionUrl: string,
         request: FetchRequestOptions & { signal: AbortSignal }
-      ) => Provider.adaptResponse(fetchFn(subscriptionUrl, request, options), true),
+      ) => Provider.adaptSubscriptionResponse(await fetchFn(subscriptionUrl, request, options)),
     });
   }
 
@@ -438,28 +436,6 @@ export default class Provider {
     text += `\ndata:${JSON.stringify(data ?? { _isError: true, errors })}`;
     text += '\n\n';
     return new Response(text, originalResponse);
-  }
-
-  private static async adaptResponse(
-    request: Promise<GraphQLResponse>,
-    isSubscription: boolean
-  ): Promise<Response> {
-    const originalResponse = await request;
-    if (isSubscription) {
-      const originalResponseData = JSON.parse(originalResponse.split('data:')[1]);
-      const data = originalResponseData.data;
-      const errors = originalResponseData.errors;
-
-      let text = 'event:next';
-      text += `\ndata:${JSON.stringify(data ?? { _isError: true, errors })}`;
-      text += '\n\n';
-      return new Response(text, originalResponse);
-    }
-
-    if ((originalResponse as GraphQLResponse).data.errors) {
-      throw new FuelError(ErrorCode.FUEL_NODE_ERROR, JSON.stringify(originalResponse));
-    }
-    return originalResponse.data;
   }
 
   /**

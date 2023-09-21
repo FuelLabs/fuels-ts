@@ -6,10 +6,12 @@
       "documents": "./src/operations.graphql",
       "plugins": [
         { "typescript": {} },
-        { "typescript-operations": {} },
+        {
+          "typescript-operations": {}
+        },
         {
           "typescript-generic-sdk": {
-            "documentMode": "string"
+            "dedupeFragments": true
           }
         }
       ],
