@@ -93,8 +93,8 @@ export class InvocationResult<T = any> {
       logs
     );
     const returnValues = encodedResults.map((encodedResult, i) => {
-      const { program, func } = this.functionScopes[i].getCallConfig();
-      return program.interface.decodeFunctionResult(func, encodedResult)?.[0];
+      const { func } = this.functionScopes[i].getCallConfig();
+      return func.decodeOutput(encodedResult)?.[0];
     });
     return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
   }
