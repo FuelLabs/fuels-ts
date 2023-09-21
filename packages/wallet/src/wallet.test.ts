@@ -130,18 +130,7 @@ describe('Wallet', () => {
   });
 
   describe('Wallet.connect', () => {
-    let walletUnlocked: WalletUnlocked;
-    let providerInstance: Provider;
-
     Provider.prototype.getContractBalance;
-
-    beforeAll(async () => {
-      providerInstance = await Provider.create(FUEL_NETWORK_URL);
-
-      walletUnlocked = WalletUnlocked.generate({
-        provider: providerInstance,
-      });
-    });
 
     it('Wallet provider should be assigned on creation', async () => {
       const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
@@ -152,6 +141,10 @@ describe('Wallet', () => {
     });
 
     it('connect should assign a new instance of the provider', async () => {
+      using providerInstance = await setupTestProvider();
+      const walletUnlocked = WalletUnlocked.generate({
+        provider: providerInstance,
+      });
       const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
 
       walletUnlocked.connect(newProviderInstance);
@@ -160,6 +153,10 @@ describe('Wallet', () => {
     });
 
     it('connect should replace the current provider instance', async () => {
+      using providerInstance = await setupTestProvider();
+      const walletUnlocked = WalletUnlocked.generate({
+        provider: providerInstance,
+      });
       const currentInstance = walletUnlocked.provider;
 
       const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
