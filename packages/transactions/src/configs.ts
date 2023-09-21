@@ -14,10 +14,6 @@ export const MAX_GAS_PER_TX = bn(10_000_000);
  * This is used to calculate the gas fee in Native Coins.
  * Ex.: transactionFee = Math.ceil(<gasUsed> / MAX_GAS_PER_TX);
  */
-export const GAS_PRICE_FACTOR = bn(1000000000);
-
-/** Gas charged per byte of the transaction. */
-export const GAS_PER_BYTE = bn(4);
 
 // TODO: set max script length const
 /** Maximum length of script, in instructions. */

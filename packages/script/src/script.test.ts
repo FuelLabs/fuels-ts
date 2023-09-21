@@ -50,7 +50,9 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.calculateFee());
+  const { gasPriceFactor } = account.provider.getGasConfig();
+
+  requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {

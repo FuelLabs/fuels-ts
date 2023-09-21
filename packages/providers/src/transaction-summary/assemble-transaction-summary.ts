@@ -20,7 +20,7 @@ import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './typ
 export interface AssembleTransactionSummaryParams {
   id?: string;
   gasPerByte?: BN;
-  gasPriceFactor?: BN;
+  gasPriceFactor: BN;
   transaction: Transaction;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;

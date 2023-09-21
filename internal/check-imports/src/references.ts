@@ -20,7 +20,6 @@ import { Provider } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
 import { Signer } from '@fuel-ts/signer';
 import { InputCoinCoder } from '@fuel-ts/transactions';
-import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Wallet } from '@fuel-ts/wallet';
@@ -70,7 +69,6 @@ log(ScriptRequest);
  */
 log(hashTransaction);
 log(hashMessage);
-log(GAS_PRICE_FACTOR);
 
 /**
  * hdwallet
