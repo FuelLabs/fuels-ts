@@ -6,4 +6,4 @@
 "@fuel-ts/wallet": minor
 ---
 
-purging constant MAX_GAS_PER_PREDICATE
+purging constant MAX_GAS_PER_TX
