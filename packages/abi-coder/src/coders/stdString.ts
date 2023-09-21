@@ -1,5 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, hexlify, stripZeros } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { toUtf8Bytes, toUtf8String } from '@ethersproject/strings';
 import { bn } from '@fuel-ts/math';
 
