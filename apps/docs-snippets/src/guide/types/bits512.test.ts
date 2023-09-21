@@ -18,10 +18,14 @@ describe(__filename, () => {
     // #context }
     // #endregion bits512-1
 
+    const provider = contract.provider;
+
     // #region bits512-2
     // #context import {  Wallet } from 'fuels';
 
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({
+      provider,
+    });
 
     // #context console.log(walllet.publicKey);
 

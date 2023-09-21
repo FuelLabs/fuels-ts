@@ -10,7 +10,6 @@ import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
 import { Account } from './account';
-import { FUEL_NETWORK_URL } from './configs';
 import { encryptKeystoreWallet } from './keystore-wallet';
 
 /**
@@ -36,13 +35,13 @@ export class BaseWalletUnlocked extends Account {
    * Creates a new BaseWalletUnlocked instance.
    *
    * @param privateKey - The private key of the wallet.
-   * @param provider - The provider URL or a Provider instance.
+   * @param provider - A Provider instance.
    */
-  constructor(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
+  constructor(privateKey: BytesLike, provider: Provider) {
     const signer = new Signer(privateKey);
     super(signer.address, provider);
     this.signer = () => signer;
-    this.provider = this.connect(provider);
+    this.provider = provider;
   }
 
   /**
