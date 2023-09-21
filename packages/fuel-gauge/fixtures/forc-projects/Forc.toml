@@ -40,6 +40,7 @@ members = [
   "script-with-vector",
   "script-with-vector-advanced",
   "script-with-vector-mixed",
+  "std-lib-string",
   "storage-test-contract",
   "token_abi",
   "token_contract",
