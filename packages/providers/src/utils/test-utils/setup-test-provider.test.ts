@@ -12,7 +12,7 @@ describe('launchTestProvider', () => {
     {
       using p = await setupTestProvider();
       url = p.url;
-      await p.getChain();
+      await p.getBlockNumber();
     }
 
     // wait for OS to kill node
@@ -20,7 +20,7 @@ describe('launchTestProvider', () => {
 
     const { error } = await safeExec(async () => {
       const p = await Provider.create(url);
-      await p.getChain();
+      await p.getBlockNumber();
     });
 
     const ipAndPort = url.replace('http://', '').replace('/graphql', '');
