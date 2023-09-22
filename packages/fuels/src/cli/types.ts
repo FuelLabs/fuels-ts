@@ -4,9 +4,7 @@ export enum Commands {
   build = 'build',
   deploy = 'deploy',
   dev = 'dev',
-  flow = 'flow',
   init = 'init',
-  types = 'types',
 }
 
 export type ActionEvent =
@@ -23,15 +21,7 @@ export type ActionEvent =
       data: unknown;
     }
   | {
-      type: Commands.flow;
-      data: ContractDeployed[];
-    }
-  | {
       type: Commands.init;
-      data: unknown;
-    }
-  | {
-      type: Commands.types;
       data: unknown;
     };
 
