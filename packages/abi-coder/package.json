@@ -17,6 +17,8 @@
     "dist"
   ],
   "scripts": {
+    "pretest": "pnpm build:forc",
+    "build:forc": "pnpm fuels-forc build -p ./test/sway-projects/exhaustive-examples",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
