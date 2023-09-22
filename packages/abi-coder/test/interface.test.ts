@@ -5,7 +5,7 @@ import { BN } from '@fuel-ts/math';
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
-import  exhaustiveExamplesAbi  from './sway-projects/exhaustive-examples/out/debug/exhaustive-examples-abi.json';
+import exhaustiveExamplesAbi from './sway-projects/exhaustive-examples/out/debug/exhaustive-examples-abi.json';
 import {
   B256_DECODED,
   B256_ENCODED,
