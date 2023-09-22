@@ -5,6 +5,7 @@ import { Command, Option } from 'commander';
 
 import { build } from './cli/commands/build';
 import { deploy } from './cli/commands/deploy';
+import { dev } from './cli/commands/dev';
 import { init } from './cli/commands/init';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
@@ -46,7 +47,7 @@ export async function run(argv: string[]) {
     .description('Start a Fuel node and run build + deploy on every file change')
     .addOption(pathOption)
     .addOption(silentOption)
-    .action(withConfig(command, Commands.dev, build));
+    .action(withConfig(command, Commands.dev, dev));
 
   (command = program.command(Commands.build))
     .description('Build Sway programs and generate Typescript for them')
