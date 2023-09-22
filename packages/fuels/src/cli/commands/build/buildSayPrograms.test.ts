@@ -1,5 +1,5 @@
-import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
-import type { ParsedFuelsConfig } from '../types';
+import { parsedFuelsConfig } from '../../../../tests/fixtures/parsed-fuels-config';
+import type { ParsedFuelsConfig } from '../../types';
 
 import { build } from './build';
 

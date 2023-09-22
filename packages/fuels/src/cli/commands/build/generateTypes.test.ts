@@ -1,5 +1,5 @@
-import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
-import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
+import { parsedFuelsConfig } from '../../../../tests/fixtures/parsed-fuels-config';
+import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
 
 import { types } from './types';
 
