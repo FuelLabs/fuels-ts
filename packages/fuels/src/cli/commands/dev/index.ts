@@ -1,9 +1,9 @@
 import * as chokidar from 'chokidar';
-import { error } from 'console';
-import { build } from 'esbuild';
 import { globSync } from 'glob';
 
 import type { ParsedFuelsConfig } from '../../types';
+import { error } from '../../utils/logger';
+import { build } from '../build';
 import { deploy } from '../deploy';
 
 import { startFuelCore } from './startFuelCore';
