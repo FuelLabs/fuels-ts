@@ -327,6 +327,15 @@ export default class Provider {
       Provider.chainInfoCache[this.url] = chain;
     }
 
+    Provider.verifyNodeVersionSupport(nodeInfo);
+
+    return {
+      chain,
+      nodeInfo,
+    };
+  }
+
+  private static verifyNodeVersionSupport(nodeInfo: NodeInfo) {
     const [nodeVersionMajor, nodeVersionMinor, nodeVersionPatch] = nodeInfo.nodeVersion.split('.');
     const [supportedNodeVersionMajor, supportedNodeVersionMinor, supportedNodeVersionPatch] =
       versions.FUEL_CORE.split('.');
@@ -348,11 +357,6 @@ export default class Provider {
         `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${versions.FUEL_CORE}`
       );
     }
-
-    return {
-      chain,
-      nodeInfo,
-    };
   }
 
   /**
