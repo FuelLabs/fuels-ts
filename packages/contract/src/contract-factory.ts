@@ -28,7 +28,7 @@ export type DeployContractOptions = {
 export default class ContractFactory {
   bytecode: BytesLike;
   interface: Interface;
-  provider: Provider;
+  provider!: Provider | null;
   account!: Account | null;
 
   /**
@@ -41,7 +41,7 @@ export default class ContractFactory {
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
-    accountOrProvider: Account | Provider
+    accountOrProvider: Account | Provider | null = null
   ) {
     // Force the bytecode to be a byte array
     this.bytecode = arrayify(bytecode);
@@ -103,6 +103,13 @@ export default class ContractFactory {
       ...deployContractOptions,
       storageSlots: storageSlots || [],
     };
+
+    if (!this.provider) {
+      throw new FuelError(
+        ErrorCode.MISSING_PROVIDER,
+        'Cannot create transaction request without provider'
+      );
+    }
 
     const { maxGasPerTx } = this.provider.getGasConfig();
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
