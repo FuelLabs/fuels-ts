@@ -1,3 +1,5 @@
+import { ErrorCode } from '@fuel-ts/errors';
+
 import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -33,7 +35,10 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       const fieldCoder = this.coders[fieldName];
       const fieldValue = value[fieldName];
       if (!(fieldCoder instanceof OptionCoder) && fieldValue == null) {
-        this.throwError(`Invalid ${this.type}. Field "${fieldName}" not present.`, value);
+        this.throwError(
+          ErrorCode.ENCODE_ERROR,
+          `Invalid ${this.type}. Field "${fieldName}" not present.`
+        );
       }
       const encoded = fieldCoder.encode(fieldValue);
       return encoded;
