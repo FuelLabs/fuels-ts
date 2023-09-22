@@ -5,7 +5,7 @@ import { dirname, join } from 'path';
 import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
-import { findPackageRoot } from '../../cli/utils/findPackageRoot';
+import { findPackageRoot } from '../../config/findPackageRoot';
 import type { ParsedFuelsConfig } from '../../types';
 import { log, logSection } from '../../utils';
 

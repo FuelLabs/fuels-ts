@@ -1,6 +1,6 @@
 import type { Command } from 'commander';
 
-import { loadConfig } from '../cli/utils/loadConfig';
+import { loadConfig } from '../config/loadConfig';
 import type { Commands, ParsedFuelsConfig, ActionEvent } from '../types';
 import { logSection } from '../utils';
 
