@@ -6,7 +6,7 @@ import { join } from 'path';
 import { getABIPaths } from '../../config/forcUtils';
 import { renderIndexTemplate } from '../../templates';
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection } from '../../utils';
+import { logSection } from '../../utils/logger';
 
 async function generateTypesForProgramType(
   config: ParsedFuelsConfig,

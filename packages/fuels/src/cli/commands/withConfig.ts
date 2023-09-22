@@ -2,7 +2,7 @@ import type { Command } from 'commander';
 
 import { loadConfig } from '../config/loadConfig';
 import type { Commands, ParsedFuelsConfig, ActionEvent } from '../types';
-import { logSection } from '../utils';
+import { logSection } from '../utils/logger';
 
 export function withConfig<CType extends Commands>(
   program: Command,

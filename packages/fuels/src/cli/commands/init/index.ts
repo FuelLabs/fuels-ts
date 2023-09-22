@@ -4,7 +4,7 @@ import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
-import { logSection } from '../../utils';
+import { logSection } from '../../utils/logger';
 
 export function init(program: Command) {
   const options = program.opts();

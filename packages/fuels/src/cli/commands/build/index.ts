@@ -1,5 +1,5 @@
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection } from '../../utils';
+import { logSection } from '../../utils/logger';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
 import { generateTypes } from './generateTypes';

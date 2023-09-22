@@ -1,9 +1,9 @@
 import { spawn } from 'child_process';
 import { join } from 'path';
 
-import { findPackageRoot } from '../../utils/findPackageRoot';
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection } from '../../utils';
+import { findPackageRoot } from '../../utils/findPackageRoot';
+import { logSection } from '../../utils/logger';
 
 export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) {
   logSection('Building Sway program', path);
