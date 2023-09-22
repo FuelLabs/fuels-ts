@@ -1,13 +1,13 @@
-import { SwayType } from './types';
 import {
   readForcToml,
+  readSwayType,
+  SwayType,
   getContractName,
   getContractCamelCase,
   getBinaryPath,
-  getABIPaths,
   getABIPath,
-  readSwayType,
-} from '../../config/forcUtils';
+  getABIPaths,
+} from './forcUtils';
 
 jest.mock('fs/promises', () => ({
   readFile: jest.fn((filepath: string) => {
@@ -17,7 +17,7 @@ jest.mock('fs/promises', () => ({
       entry = "main.sw"
       license = "Apache-2.0"
       name = "bar_foo"
-      
+
       [dependencies]`;
     }
     if (filepath.endsWith('.sw')) {

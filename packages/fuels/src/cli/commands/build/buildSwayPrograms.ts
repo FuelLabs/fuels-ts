@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import { join } from 'path';
 
-import { findPackageRoot } from '../../config/findPackageRoot';
+import { findPackageRoot } from '../../utils/findPackageRoot';
 import type { ParsedFuelsConfig } from '../../types';
 import { logSection } from '../../utils';
 

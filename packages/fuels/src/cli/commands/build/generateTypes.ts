@@ -3,7 +3,7 @@ import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
-import { getABIPaths } from '../../services';
+import { getABIPaths } from '../../config/forcUtils';
 import { renderIndexTemplate } from '../../templates';
 import type { ParsedFuelsConfig } from '../../types';
 import { logSection } from '../../utils';
