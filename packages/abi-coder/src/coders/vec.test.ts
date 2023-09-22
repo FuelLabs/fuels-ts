@@ -1,3 +1,6 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { BooleanCoder } from './boolean';
@@ -19,12 +22,12 @@ describe('VecCoder', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('should throw when encoding non array input', () => {
+  it('should throw when encoding non array input', async () => {
     const coder = new VecCoder(new BooleanCoder());
-
-    expect(() => {
-      coder.encode('Nope' as never);
-    }).toThrow('expected array value');
+    await expectToThrowFuelError(
+      () => coder.encode('Nope' as never),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
+    );
   });
 
   it('should decode a u8 Vec', () => {
