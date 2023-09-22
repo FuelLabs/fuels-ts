@@ -24,27 +24,31 @@ export async function deploy(config: ParsedFuelsConfig) {
 
   logSection(`Deploying contracts to ${wallet.provider.url}..`);
 
-  await Promise.all(
-    config.contracts.map(async (contractPath) => {
-      const binaryPath = getBinaryPath(contractPath);
-      const abiPath = getABIPath(contractPath);
-      const projectName = getContractName(contractPath);
-      const contractName = getContractCamelCase(contractPath);
-      const deployConfig = await getDeployConfig(config.deployConfig, {
-        contracts: Array.from(contracts),
-        contractName,
-        contractPath,
-      });
+  /**
+   * Ideally, this would have been done with Promise.all(...), but
+   * deploying contracts in parallel could cause UTXO conflicts,
+   * so we resort back to the [restrict] async for/each usage
+   */
+  // eslint-disable-next-line no-restricted-syntax
+  for (const contractPath of config.contracts) {
+    const binaryPath = getBinaryPath(contractPath);
+    const abiPath = getABIPath(contractPath);
+    const projectName = getContractName(contractPath);
+    const contractName = getContractCamelCase(contractPath);
+    const deployConfig = await getDeployConfig(config.deployConfig, {
+      contracts: Array.from(contracts),
+      contractName,
+      contractPath,
+    });
 
-      const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
+    const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
 
-      log(`Contract: ${projectName} - ${contractId}`);
-      contracts.push({
-        name: contractName,
-        contractId,
-      });
-    })
-  );
+    log(`Contract: ${projectName} - ${contractId}`);
+    contracts.push({
+      name: contractName,
+      contractId,
+    });
+  }
 
   logSection('Save contract ids..');
 
