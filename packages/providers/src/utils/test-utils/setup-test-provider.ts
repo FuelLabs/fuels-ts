@@ -5,7 +5,7 @@ import Provider from '../../provider';
 
 export async function setupTestProvider<Dispose extends boolean = true>(
   providerOptions?: ProviderOptions,
-  runCleanup?: Dispose,
+  runCleanup?: Dispose
 ): Promise<
   Dispose extends true ? Provider & Disposable : { provider: Provider; cleanup: () => void }
 > {

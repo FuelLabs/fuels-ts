@@ -1,4 +1,4 @@
-import { execSync, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
@@ -25,16 +25,6 @@ export type LaunchNodeResult = Promise<{
   port: string;
 }>;
 
-// async function getFuelCorePid(parentPid: string, wait: boolean = false): Promise<string> {
-//   if (wait) {
-//     await sleep(250);
-//   }
-//   const fuelCorePid = execSync(`ps --ppid ${parentPid} | grep fuel-core | xargs | awk '{print $1}'`)
-//     .toString()
-//     .replace('\n', '');
-
-//   return fuelCorePid === '' ? getFuelCorePid(parentPid, true) : fuelCorePid;
-// }
 /**
  * Launches a fuel-core node.
  * @param chainConfigPath - path to the chain configuration file.
@@ -62,7 +52,6 @@ export const launchNode = async ({
     const ipToUse = ip || '127.0.0.1';
 
     let chainConfigPathToUse = chainConfigPath;
-
     const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
 
     if (!chainConfigPath) {
@@ -99,10 +88,6 @@ export const launchNode = async ({
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      // execSync(
-      //   `kill -9 $(ps -A | grep -E $(lsof -i :${result.port} -t| tr '\n' '|' | sed '$s/|$//') | grep fuel-core | awk '{print $1;}')`
-      // );
-      // execSync(`kill -9 ${fuelCorePid}`);
       kill(Number(child.pid));
 
       // Remove all the listeners we've added.
