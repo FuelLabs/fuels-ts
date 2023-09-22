@@ -1,3 +1,5 @@
+import { ErrorCode } from '@fuel-ts/errors';
+
 import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -24,7 +26,7 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
     if (this.coders.length !== value.length) {
-      this.throwError('Types/values length mismatch', { value });
+      this.throwError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
     return concatWithDynamicData(this.coders.map((coder, i) => coder.encode(value[i])));

@@ -1,4 +1,4 @@
-import { arrayify, concat, type BytesLike } from '@ethersproject/bytes';
+import { arrayify, concat } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../constants';

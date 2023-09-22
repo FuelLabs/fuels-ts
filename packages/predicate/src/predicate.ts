@@ -1,6 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
@@ -20,12 +19,9 @@ import type {
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
-import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
 import { getPredicateRoot } from './utils';
-
-const logger = new Logger(versions.FUELS);
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
@@ -143,10 +139,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     if (jsonAbi) {
       abiInterface = new Interface(jsonAbi);
       if (abiInterface.functions.main === undefined) {
-        logger.throwArgumentError(
-          'Cannot use ABI without "main" function',
-          'Abi functions',
-          abiInterface.functions
+        throw new FuelError(
+          ErrorCode.ABI_MAIN_METHOD_MISSING,
+          'Cannot use ABI without "main" function.'
         );
       }
     }
