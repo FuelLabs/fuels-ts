@@ -1,3 +1,5 @@
+import { ErrorCode } from '@fuel-ts/errors';
+
 import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -21,11 +23,11 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError('expected array value', value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     if (this.length !== value.length) {
-      this.throwError('Types/values length mismatch', value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
     return concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v)));

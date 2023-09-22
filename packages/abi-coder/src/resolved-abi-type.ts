@@ -1,11 +1,8 @@
-import { Logger } from '@ethersproject/logger';
-import { versions } from '@fuel-ts/versions';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { arrayRegEx, enumRegEx, genericRegEx, stringRegEx, structRegEx } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { findOrThrow } from './utilities';
-
-const logger = new Logger(versions.FUELS);
 
 export class ResolvedAbiType {
   readonly abi: JsonAbi;
@@ -19,12 +16,17 @@ export class ResolvedAbiType {
     const type = findOrThrow(
       abi.types,
       (t) => t.typeId === argument.type,
-      () =>
-        logger.throwArgumentError('Type does not exist in the provided abi', 'type', {
-          argument,
-          abi: this.abi,
-        })
+      () => {
+        throw new FuelError(
+          ErrorCode.TYPE_NOT_FOUND,
+          `Type does not exist in the provided abi: ${JSON.stringify({
+            argument,
+            abi: this.abi,
+          })}`
+        );
+      }
     );
+
     this.name = argument.name;
 
     this.type = type.type;
