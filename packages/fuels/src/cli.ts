@@ -18,6 +18,10 @@ export async function run(argv: string[]) {
   program.helpOption('-h, --help', 'Display help');
   program.addHelpCommand('help [command]', 'Display help for command');
 
+  /**
+   * Defining local commands
+   */
+
   const pathOption = new Option(
     '-p, --path <path>',
     'Path to the directory where `fuel.config.ts` file is located'
@@ -26,7 +30,7 @@ export async function run(argv: string[]) {
   const silentOption = new Option(
     '-V, --verbose [boolean]',
     'Omit output and status messages'
-  ).default(true);
+  ).default(true); // TODO: change to false before release
 
   let command: Command;
 
@@ -57,7 +61,7 @@ export async function run(argv: string[]) {
     .action(withConfig(command, Commands.deploy, deploy));
 
   /**
-   * Routing external CLI from sub-packages
+   * Routing external commands from sub-packages' CLIs
    */
 
   // Typegen
@@ -73,6 +77,8 @@ export async function run(argv: string[]) {
     .description('Check for version incompatibilities')
     .action(runVersions);
 
-  // Lets go
+  /**
+   * Let's go
+   */
   return program.parseAsync(argv);
 }
