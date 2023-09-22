@@ -3,9 +3,10 @@ import { error } from 'console';
 import { build } from 'esbuild';
 import { globSync } from 'glob';
 
-import { startFuelCore } from '../../services/fuel-core/startFuelCore';
 import type { ParsedFuelsConfig } from '../../types';
 import { deploy } from '../deploy';
+
+import { startFuelCore } from './startFuelCore';
 
 export async function buildAndDeploy(config: ParsedFuelsConfig) {
   await build(config);
