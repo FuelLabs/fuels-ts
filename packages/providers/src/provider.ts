@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -14,6 +13,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { versions } from '@fuel-ts/versions';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -325,6 +325,28 @@ export default class Provider {
     if (!chain) {
       chain = await this.fetchChain();
       Provider.chainInfoCache[this.url] = chain;
+    }
+
+    const [nodeVersionMajor, nodeVersionMinor, nodeVersionPatch] = nodeInfo.nodeVersion.split('.');
+    const [supportedNodeVersionMajor, supportedNodeVersionMinor, supportedNodeVersionPatch] =
+      versions.FUEL_CORE.split('.');
+
+    if (
+      nodeVersionMajor !== supportedNodeVersionMajor ||
+      nodeVersionMinor !== supportedNodeVersionMinor
+    ) {
+      throw new FuelError(
+        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${versions.FUEL_CORE}`
+      );
+    }
+
+    if (nodeVersionPatch !== supportedNodeVersionPatch) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${versions.FUEL_CORE}`
+      );
     }
 
     return {

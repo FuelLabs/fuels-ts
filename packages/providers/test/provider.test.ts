@@ -3,10 +3,12 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import * as fuelTsVersions from '@fuel-ts/versions';
 import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';
@@ -687,5 +689,35 @@ describe('Provider', () => {
 
     expect(provider1.url).toEqual(FUEL_NETWORK_URL);
     expect(provider2.url).toEqual(FUEL_NETWORK_URL);
+  });
+
+  it('throws on difference between major client version and supported major version', async () => {
+    jest.replaceProperty(fuelTsVersions.versions, 'FUEL_CORE', '1.0.0');
+    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '2.0.0');
+    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
+      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      message: 'Fuel client version: 2.0.0, Supported version: 1.0.0',
+    });
+  });
+
+  it('throws on difference between minor client version and supported minor version', async () => {
+    jest.replaceProperty(fuelTsVersions.versions, 'FUEL_CORE', '0.19.0');
+    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '0.20.0');
+    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
+      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      message: 'Fuel client version: 0.20.0, Supported version: 0.19.0',
+    });
+  });
+
+  it('warns on difference between patch client version and supported patch version', async () => {
+    jest.replaceProperty(fuelTsVersions.versions, 'FUEL_CORE', '0.0.1');
+    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '0.0.2');
+    const warnSpy = jest.spyOn(global.console, 'warn');
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      'The patch versions of the client and sdk differ. Fuel client version: 0.0.2, Supported version: 0.0.1'
+    );
   });
 });

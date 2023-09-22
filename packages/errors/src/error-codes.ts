@@ -11,7 +11,7 @@ export enum ErrorCode {
   TYPE_NOT_FOUND = 'type-not-found',
   TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
-  JSON_ABI_ERROR = 'abi-main-method-missing',
+  JSON_ABI_ERROR = 'json-abi-error',
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
   CODER_NOT_FOUND = 'coder-not-found',
@@ -73,6 +73,7 @@ export enum ErrorCode {
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
+  UNSUPPORTED_FUEL_CLIENT_VERSION = 'unsupported-fuel-client-version',
 
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
