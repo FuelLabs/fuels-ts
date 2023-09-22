@@ -1,11 +1,16 @@
 import * as chokidar from 'chokidar';
 import { error } from 'console';
+import { build } from 'esbuild';
 import { globSync } from 'glob';
 
-import { startFuelCore } from '../services/fuel-core/startFuelCore';
-import type { ParsedFuelsConfig } from '../types';
+import { startFuelCore } from '../../services/fuel-core/startFuelCore';
+import type { ParsedFuelsConfig } from '../../types';
+import { deploy } from '../deploy';
 
-import { flow } from './flow';
+export async function buildAndDeploy(config: ParsedFuelsConfig) {
+  await build(config);
+  return deploy(config);
+}
 
 export async function dev(config: ParsedFuelsConfig) {
   /**
@@ -36,10 +41,10 @@ export async function dev(config: ParsedFuelsConfig) {
 
   try {
     // Run once
-    await flow(configCopy);
+    await buildAndDeploy(configCopy);
 
     // Then on every change
-    const changeListeaner = (_path: string) => flow(configCopy);
+    const changeListeaner = (_path: string) => buildAndDeploy(configCopy);
 
     chokidar
       .watch(pathsToWatch, { persistent: true, ignoreInitial: true })

@@ -38,11 +38,11 @@ export async function run(argv: string[]) {
     .option('-o, --output <path>', 'Relative dir path to generating Typescript', './types')
     .action(withProgram(command, Commands.init, init));
 
-  // (command = program.command('dev'))
-  //   .description('Start a Fuel node and run build + deploy on every file change')
-  //   .addOption(pathOption)
-  //   .addOption(silentOption)
-  //   .action(withConfig(command, Commands.dev, build));
+  (command = program.command('dev'))
+    .description('Start a Fuel node and run build + deploy on every file change')
+    .addOption(pathOption)
+    .addOption(silentOption)
+    .action(withConfig(command, Commands.dev, build));
 
   (command = program.command('build'))
     .description('Build Sway programs and generate Typescript for them')
