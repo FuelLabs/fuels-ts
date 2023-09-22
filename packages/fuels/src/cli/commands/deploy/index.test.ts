@@ -1,11 +1,11 @@
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
-import { parsedFuelsConfig } from '../../../tests/fixtures/parsed-fuels-config';
-import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
-import type { ParsedFuelsConfig, OptionsFunction } from '../types';
+import { parsedFuelsConfig } from '../../../../tests/fixtures/parsed-fuels-config';
+import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
+import type { ParsedFuelsConfig, OptionsFunction } from '../../types';
 
-import { deploy } from './deploy';
+import { deploy } from '.';
 
 jest.mock('../services', () => {
   const original = jest.requireActual('../services');

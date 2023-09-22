@@ -1,14 +1,12 @@
-/* eslint-disable no-restricted-syntax */
 import {
-  createWallet,
-  deployContract,
-  getABIPath,
   getBinaryPath,
-  getContractCamelCase,
+  getABIPath,
   getContractName,
-} from '../services';
-import type { ParsedFuelsConfig, ContractDeployed } from '../types';
-import { getDeployConfig, log, logSection, saveContractIds } from '../utils';
+  getContractCamelCase,
+} from '../../config/forcUtils';
+import { createWallet, deployContract } from '../../services';
+import { ParsedFuelsConfig, ContractDeployed } from '../../types';
+import { logSection, getDeployConfig, saveContractIds, log } from '../../utils';
 
 export async function deploy(config: ParsedFuelsConfig) {
   const contracts: Array<ContractDeployed> = [];
@@ -23,10 +21,10 @@ export async function deploy(config: ParsedFuelsConfig) {
   logSection(`🔗 Deploying contracts to ${wallet.provider.url}...`);
 
   for (const contractPath of config.contracts) {
-    const binaryPath = await getBinaryPath(contractPath);
-    const abiPath = await getABIPath(contractPath);
-    const projectName = await getContractName(contractPath);
-    const contractName = await getContractCamelCase(contractPath);
+    const binaryPath = getBinaryPath(contractPath);
+    const abiPath = getABIPath(contractPath);
+    const projectName = getContractName(contractPath);
+    const contractName = getContractCamelCase(contractPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {
       contracts: Array.from(contracts),
       contractName,
