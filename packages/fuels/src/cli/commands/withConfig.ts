@@ -7,14 +7,13 @@ import { logSection } from '../utils';
 export function withConfig<CType extends Commands>(
   program: Command,
   command: CType,
-  func: (config: ParsedFuelsConfig) => Promise<Extract<ActionEvent, { type: CType }>['data']>
+  fn: (config: ParsedFuelsConfig) => Promise<Extract<ActionEvent, { type: CType }>['data']>
 ) {
   return async () => {
-    let config: ParsedFuelsConfig | undefined;
+    const options = program.opts();
+    const config = await loadConfig(options.path);
     try {
-      const options = program.opts();
-      config = await loadConfig(options.path);
-      const eventData = await func(config);
+      const eventData = await fn(config);
       config.onSuccess?.(
         {
           type: command,
@@ -25,7 +24,7 @@ export function withConfig<CType extends Commands>(
       );
       logSection(`🎉 ${command} completed successfully!`);
     } catch (err: unknown) {
-      config?.onFailure?.(<Error>err, config);
+      config.onFailure?.(<Error>err, config);
       throw err;
     }
   };
