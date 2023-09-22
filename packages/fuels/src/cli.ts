@@ -2,6 +2,7 @@ import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
+import { join } from 'path';
 
 import { build } from './cli/commands/build';
 import { deploy } from './cli/commands/deploy';
@@ -10,6 +11,7 @@ import { init } from './cli/commands/init';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
 import { Commands } from './cli/types';
+import { findPackageRoot } from './cli/utils/findPackageRoot';
 
 export async function run(argv: string[]) {
   const program = new Command();
@@ -18,6 +20,7 @@ export async function run(argv: string[]) {
   program.version(versions.FUELS, '-v, --version', 'Output the version number');
   program.helpOption('-h, --help', 'Display help');
   program.addHelpCommand('help [command]', 'Display help for command');
+  program.enablePositionalOptions(true);
 
   /**
    * Defining local commands
@@ -77,6 +80,21 @@ export async function run(argv: string[]) {
     .command('versions')
     .description('Check for version incompatibilities')
     .action(runVersions);
+
+  /**
+   * Binary wrappers
+   */
+
+  const pkgRootDir = findPackageRoot();
+  const binPath = join(pkgRootDir, 'node_modules', '.bin', `fuels`);
+
+  program.command('core', 'Wrapper around Fuel Core binary', {
+    executableFile: `${binPath}-core`,
+  });
+
+  program.command('forc', 'Wrapper around Sway / Forc binary', {
+    executableFile: `${binPath}-forc`,
+  });
 
   /**
    * Let's go
