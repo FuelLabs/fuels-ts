@@ -1,5 +1,7 @@
 # @fuel-ts/abi-typegen
 
+## 0.59.0
+
 ## 0.58.0
 
 ### Minor Changes
