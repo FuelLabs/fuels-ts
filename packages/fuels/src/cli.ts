@@ -4,6 +4,7 @@ import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
 
 import { build } from './cli/commands/build';
+import { deploy } from './cli/commands/deploy';
 import { init } from './cli/commands/init';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
@@ -49,11 +50,11 @@ export async function run(argv: string[]) {
     .addOption(silentOption)
     .action(withConfig(command, Commands.build, build));
 
-  // (command = program.command('deploy'))
-  //   .description('Deploy contracts to Fuel network')
-  //   .addOption(pathOption)
-  //   .addOption(silentOption)
-  //   .action(withConfig(command, Commands.deploy, deploy));
+  (command = program.command('deploy'))
+    .description('Deploy contracts to Fuel network')
+    .addOption(pathOption)
+    .addOption(silentOption)
+    .action(withConfig(command, Commands.deploy, deploy));
 
   /**
    * Routing external CLI from sub-packages

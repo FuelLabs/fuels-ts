@@ -13,16 +13,16 @@ import { getDeployConfig } from './getDeployConfig';
 import { saveContractIds } from './saveContractIds';
 
 export async function deploy(config: ParsedFuelsConfig) {
-  const contracts: Array<ContractDeployed> = [];
+  const contracts: ContractDeployed[] = [];
 
   if (config.contracts.length === 0) {
-    logSection('🔗 No contracts to deploy');
+    logSection('No contracts to deploy');
     return [];
   }
 
   const wallet = await createWallet(config.providerUrl, config.privateKey);
 
-  logSection(`🔗 Deploying contracts to ${wallet.provider.url}...`);
+  logSection(`Deploying contracts to ${wallet.provider.url}..`);
 
   await Promise.all(
     config.contracts.map(async (contractPath) => {
@@ -46,7 +46,7 @@ export async function deploy(config: ParsedFuelsConfig) {
     })
   );
 
-  logSection('🟦 Save contract ids...');
+  logSection('Save contract ids..');
 
   await saveContractIds(contracts, config.output);
 

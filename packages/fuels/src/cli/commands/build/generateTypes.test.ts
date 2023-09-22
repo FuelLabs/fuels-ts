@@ -50,7 +50,7 @@ describe('Types Action', () => {
     const { writeFile } = jest.requireMock('fs/promises');
     const { logSection } = jest.requireMock('../utils');
 
-    expect(logSection).toHaveBeenCalledWith('🟦 Generating types...');
+    expect(logSection).toHaveBeenCalledWith('Generating types..');
     expect(runTypegen).toHaveBeenCalledTimes(3);
     expect(runTypegen).toHaveBeenNthCalledWith(1, {
       programType: 'contract',

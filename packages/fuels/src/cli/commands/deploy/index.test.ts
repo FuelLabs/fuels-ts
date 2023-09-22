@@ -85,7 +85,7 @@ describe('Build Action', () => {
     expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', config.deployConfig!);
 
     // Check if saveContractIds was called with correct contracts names
-    expect(utils.logSection).toHaveBeenCalledWith('🟦 Save contract ids...');
+    expect(utils.logSection).toHaveBeenCalledWith('Save contract ids...');
     expect(utils.saveContractIds).toHaveBeenCalledWith(
       [
         { name: 'fooBar', contractId: '0x01' },

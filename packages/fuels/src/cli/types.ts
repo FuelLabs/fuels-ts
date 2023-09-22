@@ -16,7 +16,7 @@ export type ActionEvent =
     }
   | {
       type: Commands.deploy;
-      data: Array<ContractDeployed>;
+      data: ContractDeployed[];
     }
   | {
       type: Commands.dev;
@@ -24,7 +24,7 @@ export type ActionEvent =
     }
   | {
       type: Commands.flow;
-      data: Array<ContractDeployed>;
+      data: ContractDeployed[];
     }
   | {
       type: Commands.init;
@@ -41,7 +41,7 @@ export type ContractDeployed = {
 };
 
 export type DeployOptions = {
-  contracts: Array<ContractDeployed>;
+  contracts: ContractDeployed[];
   contractName: string;
   contractPath: string;
 };

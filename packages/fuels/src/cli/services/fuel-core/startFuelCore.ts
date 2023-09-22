@@ -18,7 +18,7 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
   providerUrl: string;
   childProcess: ChildProcessWithoutNullStreams;
 }> {
-  logSection('Starting node...');
+  logSection('Starting node..');
 
   const coreDir = join(config.basePath, '.fuels');
   const chainConfigPath = join(coreDir, 'chainConfig.json');

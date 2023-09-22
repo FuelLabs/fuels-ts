@@ -76,6 +76,6 @@ export function getABIPath(contractPath: string) {
   return join(contractPath, `/out/debug/${projectName}-abi.json`);
 }
 
-export function getABIPaths(paths: Array<string>) {
+export function getABIPaths(paths: string[]) {
   return Promise.all(paths.map((path) => getABIPath(path)));
 }
