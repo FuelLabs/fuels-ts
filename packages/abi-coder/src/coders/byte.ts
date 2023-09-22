@@ -1,4 +1,5 @@
 import { arrayify, concat } from '@ethersproject/bytes';
+import { ErrorCode } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../constants';
@@ -16,7 +17,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
 
   encode(value: number[]): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError('expected array value', value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     const parts: Uint8Array[] = [];
