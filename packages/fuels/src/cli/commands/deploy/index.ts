@@ -4,9 +4,11 @@ import {
   getContractName,
   getContractCamelCase,
 } from '../../config/forcUtils';
-import { createWallet, deployContract } from '../../services';
-import { ParsedFuelsConfig, ContractDeployed } from '../../types';
+import type { ParsedFuelsConfig, ContractDeployed } from '../../types';
 import { logSection, getDeployConfig, saveContractIds, log } from '../../utils';
+
+import { createWallet } from './createWallet';
+import { deployContract } from './deployContract';
 
 export async function deploy(config: ParsedFuelsConfig) {
   const contracts: Array<ContractDeployed> = [];
@@ -20,25 +22,27 @@ export async function deploy(config: ParsedFuelsConfig) {
 
   logSection(`🔗 Deploying contracts to ${wallet.provider.url}...`);
 
-  for (const contractPath of config.contracts) {
-    const binaryPath = getBinaryPath(contractPath);
-    const abiPath = getABIPath(contractPath);
-    const projectName = getContractName(contractPath);
-    const contractName = getContractCamelCase(contractPath);
-    const deployConfig = await getDeployConfig(config.deployConfig, {
-      contracts: Array.from(contracts),
-      contractName,
-      contractPath,
-    });
+  await Promise.all(
+    config.contracts.map(async (contractPath) => {
+      const binaryPath = getBinaryPath(contractPath);
+      const abiPath = getABIPath(contractPath);
+      const projectName = getContractName(contractPath);
+      const contractName = getContractCamelCase(contractPath);
+      const deployConfig = await getDeployConfig(config.deployConfig, {
+        contracts: Array.from(contracts),
+        contractName,
+        contractPath,
+      });
 
-    const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
+      const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
 
-    log(`Contract: ${projectName} - ${contractId}`);
-    contracts.push({
-      name: contractName,
-      contractId,
-    });
-  }
+      log(`Contract: ${projectName} - ${contractId}`);
+      contracts.push({
+        name: contractName,
+        contractId,
+      });
+    })
+  );
 
   logSection('🟦 Save contract ids...');
 
