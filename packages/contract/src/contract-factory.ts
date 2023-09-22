@@ -1,6 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -10,12 +9,9 @@ import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers'
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
-import { versions } from '@fuel-ts/versions';
 import type { Account } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
-
-const logger = new Logger(versions.FUELS);
 
 /**
  * Options for deploying a contract.
@@ -134,11 +130,7 @@ export default class ContractFactory {
    */
   async deployContract(deployContractOptions: DeployContractOptions = {}) {
     if (!this.account) {
-      return logger.throwArgumentError(
-        'Cannot deploy Contract without account',
-        'account',
-        this.account
-      );
+      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
     }
 
     const { configurableConstants } = deployContractOptions;

@@ -1,7 +1,5 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
-import { Logger } from '@ethersproject/logger';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { versions } from '@fuel-ts/versions';
 
 import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
 import { ArrayCoder } from './coders/array';
@@ -34,7 +32,6 @@ import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 import { findOrThrow } from './utilities';
 
-const logger = new Logger(versions.FUELS);
 export abstract class AbiCoder {
   static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
     const resolvedAbiType = new ResolvedAbiType(abi, argument);
@@ -143,7 +140,10 @@ export abstract class AbiCoder {
       return new TupleCoder(coders);
     }
 
-    return logger.throwArgumentError('Coder not found', 'abiType', { abiType: resolvedAbiType });
+    throw new FuelError(
+      ErrorCode.CODER_NOT_FOUND,
+      `Coder not found: ${JSON.stringify(resolvedAbiType)}.`
+    );
   }
 
   private static getCoders(components: readonly ResolvedAbiType[]) {
