@@ -34,7 +34,7 @@ AbstractProgram.account
 
 #### Defined in
 
-[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packag/api/src/index.ts#L56)
+[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packag/api/src/index.ts#L56)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[index.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packag/api/src/index.ts#L69)
+[index.ts:67](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packag/api/src/index.ts#L67)
 
 ___
 
@@ -56,8 +56,6 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `decodeFunctionResult` | (`func`: `any`, `result`: `string` \| `Uint8Array`) => `any` |
-| `encodeFunctionData` | (`func`: `any`, `args`: `any`[], `offset`: `number`) => `any` |
 | `updateExternalLoggedTypes` | (`id`: `string`, `abiInterface`: `any`) => `any` |
 
 #### Inherited from
@@ -66,7 +64,7 @@ AbstractProgram.interface
 
 #### Defined in
 
-[index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packag/api/src/index.ts#L57)
+[index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packag/api/src/index.ts#L57)
 
 ___
 
@@ -80,4 +78,4 @@ AbstractProgram.provider
 
 #### Defined in
 
-[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/8928ad39/packag/api/src/index.ts#L63)
+[index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packag/api/src/index.ts#L61)
