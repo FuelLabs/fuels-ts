@@ -336,21 +336,17 @@ export default class Provider {
   }
 
   private static verifyClientVersionSupport(nodeInfo: NodeInfo) {
-    const [nodeVersionMajor, nodeVersionMinor, nodeVersionPatch] = nodeInfo.nodeVersion.split('.');
-    const [supportedNodeVersionMajor, supportedNodeVersionMinor, supportedNodeVersionPatch] =
-      versions.FUEL_CORE.split('.');
+    const [major, minor, patch] = nodeInfo.nodeVersion.split('.');
+    const [supportedMajor, supportedMinor, supportedPatch] = versions.FUEL_CORE.split('.');
 
-    if (
-      nodeVersionMajor !== supportedNodeVersionMajor ||
-      nodeVersionMinor !== supportedNodeVersionMinor
-    ) {
+    if (major !== supportedMajor || minor !== supportedMinor) {
       throw new FuelError(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
         `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${versions.FUEL_CORE}`
       );
     }
 
-    if (nodeVersionPatch !== supportedNodeVersionPatch) {
+    if (patch !== supportedPatch) {
       // eslint-disable-next-line no-console
       console.warn(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
