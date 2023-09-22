@@ -86,7 +86,7 @@ export enum ErrorCode {
 
   // general
   FUEL_NODE_ERROR = 'fuel-node-error',
- 
+
   // coder
   // ...
 }
