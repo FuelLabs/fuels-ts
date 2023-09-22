@@ -1,6 +1,6 @@
 import type { DeployContractOptions } from '@fuel-ts/contract';
 
-import type { DeployOptions, OptionsFunction } from '../types';
+import type { DeployOptions, OptionsFunction } from '../../types';
 
 export async function getDeployConfig(
   deployConfig: DeployContractOptions | OptionsFunction | undefined,
