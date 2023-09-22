@@ -7,7 +7,7 @@ import {
   getABIPaths,
   getABIPath,
   readSwayType,
-} from './utils';
+} from '../../config/forcUtils';
 
 jest.mock('fs/promises', () => ({
   readFile: jest.fn((filepath: string) => {

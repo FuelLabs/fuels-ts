@@ -3,7 +3,26 @@ import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
 
-import type { ForcToml, SwayType } from './types';
+export type ForcToml = {
+  project: {
+    authors?: string[];
+    entry: string;
+    license: string;
+    name: string;
+  };
+  workspace: {
+    members: string[];
+  };
+  dependencies: {
+    [key: string]: string;
+  };
+};
+
+export enum SwayType {
+  contract = 'contract',
+  script = 'script',
+  predicate = 'predicate',
+}
 
 export const forcFiles = new Map<string, ForcToml>();
 
