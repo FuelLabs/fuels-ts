@@ -1,5 +1,11 @@
 # @fuel-ts/errors
 
+## 0.59.0
+
+### Minor Changes
+
+- using `FuelError` instead of `@ethersproject/logger`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1278](https://github.com/FuelLabs/fuels-ts/pull/1278))
+
 ## 0.58.0
 
 ### Minor Changes
