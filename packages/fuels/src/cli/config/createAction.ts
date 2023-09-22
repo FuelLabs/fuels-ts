@@ -3,7 +3,7 @@ import type { Command } from 'commander';
 import { resolve } from 'path';
 
 import type { Commands, ParsedFuelsConfig, ActionEvent } from '../../types';
-import { logSection } from '../../utils';
+import { logSection } from '../utils';
 
 import { loadConfig } from './loadConfig';
 

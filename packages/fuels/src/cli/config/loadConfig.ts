@@ -4,8 +4,8 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
-import { readForcToml, readSwayType, SwayType } from '../../services';
-import type { ParsedFuelsConfig, UserFuelsConfig } from '../../types';
+import { readForcToml, readSwayType, SwayType } from '../services';
+import type { ParsedFuelsConfig, UserFuelsConfig } from '../types';
 
 import { validateConfig } from './validateConfig';
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Commands } from '../../types';
+import { Commands } from '../types';
 
 import { createAction } from './createAction';
 
