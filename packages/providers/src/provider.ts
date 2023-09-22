@@ -327,7 +327,7 @@ export default class Provider {
       Provider.chainInfoCache[this.url] = chain;
     }
 
-    Provider.verifyNodeVersionSupport(nodeInfo);
+    Provider.verifyClientVersionSupport(nodeInfo);
 
     return {
       chain,
@@ -335,7 +335,7 @@ export default class Provider {
     };
   }
 
-  private static verifyNodeVersionSupport(nodeInfo: NodeInfo) {
+  private static verifyClientVersionSupport(nodeInfo: NodeInfo) {
     const [nodeVersionMajor, nodeVersionMinor, nodeVersionPatch] = nodeInfo.nodeVersion.split('.');
     const [supportedNodeVersionMajor, supportedNodeVersionMinor, supportedNodeVersionPatch] =
       versions.FUEL_CORE.split('.');
