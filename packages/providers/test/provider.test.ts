@@ -595,7 +595,11 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve<GqlGetCoinsToSpendQuery>({
+        coinsToSpend: [],
+      } as unknown as GqlGetCoinsToSpendQuery)
+    );
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [

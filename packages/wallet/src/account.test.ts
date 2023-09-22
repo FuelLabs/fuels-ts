@@ -16,7 +16,6 @@ import * as providersMod from '@fuel-ts/providers';
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { Account } from './account';
-import { FUEL_NETWORK_URL } from './configs';
 
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
@@ -200,7 +199,7 @@ describe('Account', () => {
       provider
     );
 
-    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+    const newProviderInstance = await Provider.create(provider.url);
 
     expect(account.provider).not.toBe(newProviderInstance);
 

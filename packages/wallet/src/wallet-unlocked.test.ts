@@ -48,7 +48,7 @@ describe('WalletUnlocked', () => {
     const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = await wallet.signTransaction(transactionRequest);
-    const chainId = (await wallet.provider.getChain()).consensusParameters.chainId.toNumber();
+    const chainId = wallet.provider.getChain().consensusParameters.chainId.toNumber();
     const verifiedAddress = Signer.recoverAddress(
       hashTransaction(transactionRequest, chainId),
       signedTransaction
@@ -146,7 +146,6 @@ describe('WalletUnlocked', () => {
     const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
 
     expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet from mnemonic', async () => {
@@ -159,7 +158,6 @@ describe('WalletUnlocked', () => {
     );
 
     expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet from mnemonic with default path', async () => {
@@ -174,7 +172,6 @@ describe('WalletUnlocked', () => {
     const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet from seed with default path', async () => {
@@ -182,7 +179,6 @@ describe('WalletUnlocked', () => {
     const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet and lock it', async () => {

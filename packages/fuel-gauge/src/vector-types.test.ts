@@ -1,6 +1,6 @@
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BigNumberish, Provider } from 'fuels';
+import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
 
 import predicateVectorTypes from '../fixtures/forc-projects/predicate-vector-types';
@@ -77,14 +77,9 @@ type MainArgs = [
   VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
-const setup = async (provider: Provider, balance = 5_000) => {
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
-
 describe('Vector Types Validation', () => {
+  const balance = 5_000;
+
   it('can use supported vector types [vector-types-contract]', async () => {
     const setupContract = getSetupContract('vector-types-contract');
     using provider = await setupTestProvider();
@@ -110,7 +105,7 @@ describe('Vector Types Validation', () => {
 
   it('can use supported vector types [vector-types-script]', async () => {
     using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
     const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
 
     const { value } = await scriptInstance.functions
@@ -134,7 +129,7 @@ describe('Vector Types Validation', () => {
 
   it('can use supported vector types [predicate-vector-types]', async () => {
     using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
     const amountToReceiver = 50;

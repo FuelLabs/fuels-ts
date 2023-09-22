@@ -99,7 +99,7 @@ describe('Wallet', () => {
     // Set custom provider to contract instance
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
-      static async connect(url: string) {
+      static async create(url: string) {
         const newProvider = new ProviderCustom(url, {});
         return newProvider;
       }
@@ -115,7 +115,7 @@ describe('Wallet', () => {
       }
     }
 
-    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
+    const customProvider = await ProviderCustom.create(provider.url);
     const lockedWallet = Wallet.fromAddress(externalWallet.address, customProvider);
 
     const response = await lockedWallet.transfer(
@@ -145,7 +145,7 @@ describe('Wallet', () => {
       const walletUnlocked = WalletUnlocked.generate({
         provider: providerInstance,
       });
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      const newProviderInstance = await Provider.create(providerInstance.url);
 
       walletUnlocked.connect(newProviderInstance);
 
@@ -159,7 +159,7 @@ describe('Wallet', () => {
       });
       const currentInstance = walletUnlocked.provider;
 
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      const newProviderInstance = await Provider.create(providerInstance.url);
 
       walletUnlocked.connect(newProviderInstance);
 
