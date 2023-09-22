@@ -171,39 +171,6 @@ abi MyContract {
 }
 
 impl MyContract for Contract {
-    fn test_function() -> bool {true}
-    fn u_8(arg: u8) -> u8 {arg}
-    fn u_16(arg: u16) -> u16 {arg}
-    fn u_32(arg: u32) -> u32 {arg}
-    fn u_64(arg: u64) -> u64 {arg}
-    fn string(arg: str[5]) -> str[5] {arg}
-    fn boolean(arg: bool) -> bool {arg}
-    fn b_256(arg: b256) -> b256 {arg}
-    fn b_512(arg: B512) -> B512 {arg}
-    fn two_args(arg1: b256, arg2: bool) -> (b256, bool) {(arg1, arg2)}
-    fn struct_simple(x: SimpleStruct) -> SimpleStruct { x }
-    fn struct_generic_simple(x: StructB<u8>) -> StructB<u8> {x}
-    fn struct_with_tuple(x: StructB<(bool, u64)>) -> StructB<(bool, u64)> {x}
-    fn tuple_as_param(x: (u8, StructA<StructB<u64>, str[3]>)) -> (u8, StructA<StructB<u64>, str[3]>) {x}
-    fn vector_boolean(x: Vec<bool>) -> Vec<bool> {x}
-    fn vector_u8(x: Vec<u8>) -> Vec<u8> {x}
-    fn enum_simple(x: Color) -> Color {x}
-    fn enum_with_builtin_type(x: EnumWithBuiltinType) -> EnumWithBuiltinType { x }    
-    fn enum_with_structs(x: EnumWithStructs) -> EnumWithStructs {x}
-    fn array_simple(x: [u8; 4]) -> [u8; 4] { x }
-    fn array_struct(x: [SimpleStruct; 3]) -> [SimpleStruct; 3] {x}
-    fn option_u8(x: Option<u8>) -> Option<u8> {x}
-    fn arg_then_vector_u8(a: SimpleStruct, x: Vec<u8>) -> (SimpleStruct, Vec<u8>) {(a, x)}
-    fn vector_u8_then_arg(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {(x, y)}
-    fn struct_with_implicitGenerics(arg: StructWithImplicitGenerics<b256, u8>) -> StructWithImplicitGenerics<b256, u8> {arg}
-    fn bytes(arg: Bytes) -> Bytes { arg }
-    fn raw_slice(arg: raw_slice) -> raw_slice { arg }
-    fn dynamic_string(arg: String) -> String { arg }
-    
-    fn two_u8_vectors(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {(x, y)}
-    fn u32_then_three_vectors_u64(x: u32, y: Vec<u64>, z: Vec<u64>, q: Vec<u64>) -> (u32, Vec<u64>, Vec<u64>, Vec<u64>) {(x, y, z, q)}
-    
-    
     fn test_function() -> bool {
         true
     }
@@ -280,6 +247,17 @@ impl MyContract for Contract {
         arg: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8> {
         arg
+    }
+
+    fn bytes(arg: Bytes) -> Bytes { 
+        arg
+    }
+    fn raw_slice(arg: raw_slice) -> raw_slice {
+        arg 
+    }
+    
+    fn dynamic_string(arg: String) -> String { 
+        arg 
     }
 
     fn two_u8_vectors(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {

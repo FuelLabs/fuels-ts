@@ -1,3 +1,4 @@
+import { ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../constants';
@@ -15,7 +16,7 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
 
   encode(value: number[]): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError('expected array value', value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     const parts: Uint8Array[] = [];
