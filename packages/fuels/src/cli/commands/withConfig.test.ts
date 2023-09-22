@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Commands } from '../types';
 
-import { createAction } from './createAction';
+import { withConfig } from './withConfig';
 
-jest.mock('./loadConfig', () => {
+jest.mock('../config/loadConfig', () => {
   const config = {
     basePath: '/root',
     contracts: ['/root/foo', '/root/bar'],
@@ -16,7 +16,7 @@ jest.mock('./loadConfig', () => {
   };
 });
 
-describe('Bin Utils createAction', () => {
+describe('Bin Utils withConfig', () => {
   it('Action should be created and should call onSuccess after execute', async () => {
     const commander = {
       opts: () => ({
@@ -28,9 +28,9 @@ describe('Bin Utils createAction', () => {
       foo: 'bar',
     };
     // eslint-disable-next-line @typescript-eslint/require-await
-    const buildAction = createAction(commander, Commands.build, async () => actionData);
+    const buildAction = withConfig(commander, Commands.build, async () => actionData);
 
-    const loadConfigMock = jest.requireMock('./loadConfig');
+    const loadConfigMock = jest.requireMock('../config/loadConfig');
     const configMock = await loadConfigMock.loadConfig();
     await buildAction();
     expect(configMock.onSuccess).toHaveBeenCalledWith(
@@ -50,7 +50,7 @@ describe('Bin Utils createAction', () => {
     } as any;
 
     const error = new Error('Failure test');
-    const buildAction = await createAction(commander, Commands.build, () => {
+    const buildAction = await withConfig(commander, Commands.build, () => {
       throw error;
     });
 
