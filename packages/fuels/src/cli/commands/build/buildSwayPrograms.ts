@@ -3,8 +3,11 @@ import { join } from 'path';
 
 import { findPackageRoot } from '../../cli/utils/findPackageRoot';
 import type { ParsedFuelsConfig } from '../../types';
+import { logSection } from '../../utils';
 
-export async function forcBuild(config: ParsedFuelsConfig, path: string) {
+export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) {
+  logSection('Building Sway program', path);
+
   const pkgRootDir = findPackageRoot();
 
   return new Promise((resolve, reject) => {
@@ -28,4 +31,14 @@ export async function forcBuild(config: ParsedFuelsConfig, path: string) {
         reject();
       });
   });
+}
+
+export async function buildSwayPrograms(config: ParsedFuelsConfig) {
+  logSection('Building Sway programs..');
+
+  const paths = config.workspace
+    ? [config.workspace]
+    : [config.contracts, config.predicates, config.scripts].flat();
+
+  await Promise.all(paths.map((path) => buildSwayProgram(config, path)));
 }

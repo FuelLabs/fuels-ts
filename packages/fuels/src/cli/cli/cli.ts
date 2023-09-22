@@ -1,6 +1,10 @@
 import type { Command } from 'commander';
 
 import * as actions from '../actions';
+import { build } from '../commands/build';
+import { init } from '../commands/init';
+import { withConfig } from '../commands/withConfig';
+import { withProgram } from '../commands/withProgram';
 import { Commands } from '../types';
 
 import { createAction } from './utils/createAction';
@@ -11,7 +15,7 @@ export function configureCliOptions(program: Command) {
   program
     .command('init')
     .description('Create a `fuel.config.ts` and `chainConfig.json`')
-    .action(actions.init(program));
+    .action(withProgram(program, init));
 
   program
     .command('dev')
@@ -26,7 +30,7 @@ export function configureCliOptions(program: Command) {
   program
     .command(Commands.build)
     .description('Build Sway programs using Forc')
-    .action(createAction(program, Commands.build, actions.build));
+    .action(withConfig(program, Commands.build, build));
 
   program
     .command(Commands.types)

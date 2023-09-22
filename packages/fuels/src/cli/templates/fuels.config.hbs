@@ -1,10 +1,10 @@
 import type {
   ActionEvent,
   // DeployOptions,
-  LoadedConfig,
-} from '../types';
-import { createConfig } from '../utils';
+  ParsedFuelsConfig,
+} from 'fuels';
 
+import { createConfig } from 'fuels';
 
 export default createConfig({
 
@@ -15,7 +15,7 @@ export default createConfig({
    * individually, you can also use workspaces (recommended)
    * @param workspace - Path to Sway/Forc Workspace
    */
-  workspace: './sway-workspace',
+  workspace: '{{workspace}}',
 
   /**
    * This property should not be used alongside `workspace`
@@ -38,7 +38,7 @@ export default createConfig({
   /**
    * @param output - Where to generate Typescript definitions
    */
-  output: './types',
+  output: '{{output}}',
 
 
   // ----------------------------------- Node & Deployment settings
@@ -130,7 +130,7 @@ export default createConfig({
    * This function is called in case of errors
    * @param error - The error that interrupted the execution
    */
-  onFailure: (error: Error, config: LoadedConfig) => {
-    console.log('fuels:onFailure', { error, config });
+  onFailure: (error: Error) => {
+    console.log('fuels:onFailure', { error });
   },
 });
