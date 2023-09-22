@@ -30,7 +30,7 @@ export async function run(argv: string[]) {
 
   let command: Command;
 
-  (command = program.command('init'))
+  (command = program.command(Commands.init))
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
     .addOption(silentOption)
@@ -38,19 +38,19 @@ export async function run(argv: string[]) {
     .option('-o, --output <path>', 'Relative dir path to generating Typescript', './types')
     .action(withProgram(command, Commands.init, init));
 
-  (command = program.command('dev'))
+  (command = program.command(Commands.dev))
     .description('Start a Fuel node and run build + deploy on every file change')
     .addOption(pathOption)
     .addOption(silentOption)
     .action(withConfig(command, Commands.dev, build));
 
-  (command = program.command('build'))
+  (command = program.command(Commands.build))
     .description('Build Sway programs and generate Typescript for them')
     .addOption(pathOption)
     .addOption(silentOption)
     .action(withConfig(command, Commands.build, build));
 
-  (command = program.command('deploy'))
+  (command = program.command(Commands.deploy))
     .description('Deploy contracts to Fuel network')
     .addOption(pathOption)
     .addOption(silentOption)
