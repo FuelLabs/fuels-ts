@@ -22,6 +22,7 @@ export async function run(argv: string[]) {
   program.addHelpCommand('help [command]', 'Display help for command');
   program.enablePositionalOptions(true);
 
+  program.option('-D, --debug [boolean]', 'Enables verbose logging', false);
   program.option('-S, --silent [boolean]', 'Omit output messages', false);
 
   /**
