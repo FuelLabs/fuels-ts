@@ -28,10 +28,7 @@ export async function run(argv: string[]) {
    * Defining local commands
    */
 
-  const pathOption = new Option(
-    '-p, --path <path>',
-    'Path to the directory where `fuel.config.ts` file is located'
-  ).default(process.cwd());
+  const pathOption = new Option('-p, --path <path>', 'Path to project root').default(process.cwd());
 
   let command: Command;
 
