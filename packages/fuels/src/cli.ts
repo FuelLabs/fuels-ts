@@ -12,18 +12,27 @@ import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
 import { Commands } from './cli/types';
 import { findPackageRoot } from './cli/utils/findPackageRoot';
+import { configureLogging } from './cli/utils/logger';
 
 export async function run(argv: string[]) {
   const program = new Command();
 
   program.name('fuels');
   program.version(versions.FUELS, '-v, --version', 'Output the version number');
+
   program.helpOption('-h, --help', 'Display help');
   program.addHelpCommand('help [command]', 'Display help for command');
-  program.enablePositionalOptions(true);
 
-  program.option('-D, --debug [boolean]', 'Enables verbose logging', false);
-  program.option('-S, --silent [boolean]', 'Omit output messages', false);
+  program.option('-D, --debug', 'Enables verbose logging', false);
+  program.option('-S, --silent', 'Omit output messages', false);
+
+  program.hook('preAction', (command: Command) => {
+    const opts = command.opts();
+    configureLogging({
+      isDebugEnabled: opts.debug,
+      isLoggingEnabled: !opts.silent,
+    });
+  });
 
   /**
    * Defining local commands

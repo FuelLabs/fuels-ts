@@ -4,7 +4,7 @@ import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
-import { logSection } from '../../utils/logger';
+import { log, logSection } from '../../utils/logger';
 
 export function init(program: Command) {
   const options = program.opts();
@@ -21,5 +21,5 @@ export function init(program: Command) {
 
   writeFileSync(fuelsConfigPath, defaultConfig);
 
-  logSection(`Config file created at:\n  ${green(fuelsConfigPath)}`);
+  log(`Config file created at:\n  ${green(fuelsConfigPath)}`);
 }
