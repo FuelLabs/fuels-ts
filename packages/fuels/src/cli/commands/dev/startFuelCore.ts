@@ -78,7 +78,9 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
     }
 
     const killNode = () => {
-      kill(Number(childProcess.pid));
+      if (core.pid) {
+        kill(Number(core.pid));
+      }
     };
 
     process.on('beforeExit', killNode);
