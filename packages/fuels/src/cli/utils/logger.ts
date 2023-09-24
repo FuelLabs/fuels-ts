@@ -24,11 +24,11 @@ export function debug(...data: unknown[]) {
 
 export function logSection(...data: unknown[]) {
   if (loggingConfig.isLoggingEnabled) {
-    log('\n', chalk.green.bold(data.join(' ')), '\n');
+    log(chalk.green.bold(data.join(' ')));
   }
 }
 
 export function error(...data: unknown[]) {
   // TODO: consider throwing and exiting process
-  log('\n', chalk.red(data.join(' ')));
+  log(chalk.red(data.join(' ')));
 }
