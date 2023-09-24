@@ -25,7 +25,7 @@ async function generateTypesForProgramType(
     cwd: config.basePath,
     filepaths,
     output: join(config.output, pluralizedFolderName),
-    silent: !loggingConfig.isLoggingEnabled,
+    silent: !loggingConfig.isDebugEnabled,
   });
 
   return pluralizedFolderName;
