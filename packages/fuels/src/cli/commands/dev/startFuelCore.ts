@@ -5,9 +5,9 @@ import { dirname, join } from 'path';
 import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
-import { findPackageRoot } from '../../utils/findPackageRoot';
-import { log, logSection } from '../../utils/logger';
 import type { ParsedFuelsConfig } from '../../types';
+import { findPackageRoot } from '../../utils/findPackageRoot';
+import { log, logSection, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
@@ -70,7 +70,12 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
     const fuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
     const command = config.useSystemFuelCore ? 'fuel-core' : fuelsCorePath;
 
-    const childProcess = spawn(command, flags, { stdio: 'pipe' });
+    const core = spawn(command, flags, { stdio: 'pipe' });
+
+    core.stderr?.pipe(process.stderr);
+    if (loggingConfig.isDebugEnabled) {
+      core.stdout?.pipe(process.stdout);
+    }
 
     const killNode = () => {
       kill(Number(childProcess.pid));
@@ -79,12 +84,9 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
     process.on('beforeExit', killNode);
     process.on('uncaughtException', killNode);
 
-    childProcess.stderr?.pipe(process.stdout);
-    childProcess.stdout?.pipe(process.stdout);
-
-    childProcess.stderr?.on('data', (data) => {
+    core.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
-        resolve({ bindIp, accessIp, port, providerUrl, childProcess });
+        resolve({ bindIp, accessIp, port, providerUrl, childProcess: core });
       }
       // if (/ERROR|IO error/.test(data)) {
       if (/IO error/.test(data)) {
@@ -95,6 +97,6 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
       }
     });
 
-    childProcess.on('error', reject);
+    core.on('error', reject);
   });
 }

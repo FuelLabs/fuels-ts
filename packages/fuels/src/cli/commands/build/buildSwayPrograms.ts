@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import type { ParsedFuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
-import { logSection } from '../../utils/logger';
+import { logSection, loggingConfig } from '../../utils/logger';
 
 export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) {
   logSection('Building Sway program', path);
@@ -16,8 +16,10 @@ export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) 
     const command = config.useSystemForc ? 'forc' : forcPath;
     const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
 
-    forc.stderr?.pipe(process.stdout);
-    forc.stdout?.pipe(process.stdout);
+    forc.stderr?.pipe(process.stderr);
+    if (loggingConfig.isDebugEnabled) {
+      forc.stdout?.pipe(process.stdout);
+    }
 
     forc
       .on('exit', (code) => {
