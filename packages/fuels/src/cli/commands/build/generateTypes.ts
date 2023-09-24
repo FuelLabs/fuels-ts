@@ -6,7 +6,7 @@ import { join } from 'path';
 import { getABIPaths } from '../../config/forcUtils';
 import { renderIndexTemplate } from '../../templates';
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection } from '../../utils/logger';
+import { logSection, loggingConfig } from '../../utils/logger';
 
 async function generateTypesForProgramType(
   config: ParsedFuelsConfig,
@@ -25,6 +25,7 @@ async function generateTypesForProgramType(
     cwd: config.basePath,
     filepaths,
     output: join(config.output, pluralizedFolderName),
+    silent: !loggingConfig.isLoggingEnabled,
   });
 
   return pluralizedFolderName;
