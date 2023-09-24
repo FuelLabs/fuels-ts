@@ -76,15 +76,14 @@ export async function run(argv: string[]) {
    * Binary wrappers
    */
 
-  const pkgRootDir = findPackageRoot();
-  const binPath = join(pkgRootDir, 'node_modules', '.bin', `fuels`);
+  const binDir = join(findPackageRoot(), 'node_modules', '.bin');
 
   program.command('core', 'Wrapper around Fuel Core binary', {
-    executableFile: `${binPath}-core`,
+    executableFile: join(binDir, 'fuels-core'),
   });
 
   program.command('forc', 'Wrapper around Sway / Forc binary', {
-    executableFile: `${binPath}-forc`,
+    executableFile: join(binDir, 'fuels-forc'),
   });
 
   /**
