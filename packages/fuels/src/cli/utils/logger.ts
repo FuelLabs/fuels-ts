@@ -6,22 +6,26 @@ export const loggingConfig = {
 };
 
 export function configureLogging(params: { isDebugEnabled: boolean; isLoggingEnabled: boolean }) {
-  loggingConfig.isDebugEnabled = params.isDebugEnabled;
   loggingConfig.isLoggingEnabled = params.isLoggingEnabled;
+  loggingConfig.isDebugEnabled = params.isDebugEnabled && loggingConfig.isLoggingEnabled;
 }
 
 export function log(...data: unknown[]) {
-  if (!loggingConfig.isLoggingEnabled || !loggingConfig.isDebugEnabled) {
-    return;
+  if (loggingConfig.isLoggingEnabled) {
+    process.stdout.write(`${data.join(' ')}\n`);
   }
-  process.stdout.write(`${data.join(' ')}\n`);
+}
+
+export function debug(...data: unknown[]) {
+  if (loggingConfig.isDebugEnabled) {
+    log(...data);
+  }
 }
 
 export function logSection(...data: unknown[]) {
-  if (!loggingConfig.isLoggingEnabled) {
-    return;
+  if (loggingConfig.isLoggingEnabled) {
+    log('\n', chalk.green.bold(data.join(' ')), '\n');
   }
-  log('\n', chalk.green.bold(data.join(' ')), '\n');
 }
 
 export function error(...data: unknown[]) {
