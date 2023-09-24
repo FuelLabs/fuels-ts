@@ -22,13 +22,13 @@ export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) 
     forc
       .on('exit', (code) => {
         if (!code) {
-          resolve(code);
+          resolve(0);
           return;
         }
-        reject();
+        reject(code);
       })
-      .on('error', () => {
-        reject();
+      .on('error', (err) => {
+        reject(err);
       });
   });
 }
