@@ -86,10 +86,9 @@ describe(__filename, () => {
     });
     const predicate = new Predicate(bin, predicateOwner.provider, abi);
 
-    const amountToPredicate = 1_000;
+    const amountToPredicate = 1_000_0;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
-
     await tx.waitForResult();
 
     const receiverWallet = WalletUnlocked.generate({
@@ -98,9 +97,7 @@ describe(__filename, () => {
 
     predicate.setData(getRandomB256());
 
-    const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, amountToPredicate)
-    );
+    const { error } = await safeExec(() => predicate.transfer(receiverWallet.address, 1_000));
 
     // #region send-and-spend-funds-from-predicates-7
     const errorMsg =
