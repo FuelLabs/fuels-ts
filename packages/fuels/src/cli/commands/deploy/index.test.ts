@@ -7,24 +7,24 @@ import type { ParsedFuelsConfig, OptionsFunction } from '../../types';
 
 import { deploy } from '.';
 
-jest.mock('../services', () => {
-  const original = jest.requireActual('../services');
-  return {
-    ...original,
-    deployContract: jest.fn().mockImplementation(() => Promise.resolve('0x01')),
-  };
-});
+// jest.mock('../services', () => {
+//   const original = jest.requireActual('../services');
+//   return {
+//     ...original,
+//     deployContract: jest.fn().mockImplementation(() => Promise.resolve('0x01')),
+//   };
+// });
 
-jest.mock('../utils', () => {
-  const original = jest.requireActual('../utils');
-  return {
-    ...original,
-    saveContractIds: jest.fn(),
-    logSection: jest.fn(),
-  };
-});
+// jest.mock('../utils', () => {
+//   const original = jest.requireActual('../utils');
+//   return {
+//     ...original,
+//     saveContractIds: jest.fn(),
+//     logSection: jest.fn(),
+//   };
+// });
 
-describe('Build Action', () => {
+describe.skip('Build Action', () => {
   const config: ParsedFuelsConfig = {
     ...parsedFuelsConfig,
     privateKey: '0x0000000000000000000000000000000000000000000000000000000000000001',

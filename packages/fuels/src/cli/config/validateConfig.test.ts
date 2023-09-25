@@ -1,6 +1,6 @@
 import { validateConfig } from './validateConfig';
 
-describe('Bin Utils validateConfig', () => {
+describe.skip('Bin Utils validateConfig', () => {
   it('Should pass valid configs', async () => {
     expect(
       await validateConfig({

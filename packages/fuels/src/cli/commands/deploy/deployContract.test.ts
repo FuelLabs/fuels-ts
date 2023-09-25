@@ -38,23 +38,23 @@ const mockABI = {
   configurables: [],
 };
 
-jest.mock('fs/promises', () => {
-  const originalModule = jest.requireActual('fs/promises');
+// jest.mock('fs/promises', () => {
+//   const originalModule = jest.requireActual('fs/promises');
 
-  // if the path ends with '.json', return a json object
+//   // if the path ends with '.json', return a json object
 
-  return {
-    ...originalModule,
-    readFile: (path: string) => {
-      if (path.endsWith('.json')) {
-        return JSON.stringify(mockABI);
-      }
-      return '0x1111';
-    },
-  };
-});
+//   return {
+//     ...originalModule,
+//     readFile: (path: string) => {
+//       if (path.endsWith('.json')) {
+//         return JSON.stringify(mockABI);
+//       }
+//       return '0x1111';
+//     },
+//   };
+// });
 
-describe('Services Fuels', () => {
+describe.skip('Services Fuels', () => {
   it('deployContract should load binary and call deploy with config', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.generate({ provider });

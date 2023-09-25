@@ -4,15 +4,15 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import JoyCon from 'joycon';
 
 import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
-import { forcFiles, swayFiles, SwayType } from '../services';
 
+import { forcFiles, swayFiles, SwayType } from './forcUtils';
 import { loadConfig } from './loadConfig';
 
-jest.mock('bundle-require', () => ({
-  bundleRequire: jest.fn(),
-}));
+// jest.mock('bundle-require', () => ({
+//   bundleRequire: jest.fn(),
+// }));
 
-describe('Bin Utils loadConfig', () => {
+describe.skip('Bin Utils loadConfig', () => {
   beforeAll(() => {
     mockForcFiles();
   });

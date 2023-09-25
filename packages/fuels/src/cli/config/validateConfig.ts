@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as yup from 'yup';
 
-import type { UserFuelsConfig } from '../../types';
+import type { UserFuelsConfig } from '../types';
 
 const schema = yup
   .object({

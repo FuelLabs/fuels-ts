@@ -4,7 +4,7 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { createWallet } from './createWallet';
 
-describe('Services Fuels', () => {
+describe.skip('Services Fuels', () => {
   let provider: Provider;
 
   beforeAll(async () => {

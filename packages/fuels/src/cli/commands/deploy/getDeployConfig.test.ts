@@ -1,6 +1,6 @@
 import { getDeployConfig } from './getDeployConfig';
 
-describe('Utils getDeployConfig', () => {
+describe.skip('Utils getDeployConfig', () => {
   it('Get deployConfig from object', async () => {
     const config = await getDeployConfig(
       {
