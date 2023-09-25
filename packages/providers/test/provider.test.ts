@@ -209,10 +209,18 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
     await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
 
     expect(await provider.getVersion()).toEqual(providerUrl2);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
   });
 
   it('can accept a custom fetch function', async () => {
