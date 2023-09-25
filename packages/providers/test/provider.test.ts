@@ -640,16 +640,16 @@ describe('Provider', () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, options) => {
-        const messageProof = JSON.stringify(messageProofResponse);
-        return Promise.resolve(new Response(messageProof, options));
-      },
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageProof', { messageProof: messageProofResponse })(url, options),
     });
+
     const messageProof = await provider.getMessageProof(
       '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
       '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
+
     expect(messageProof).toMatchSnapshot();
   });
 
