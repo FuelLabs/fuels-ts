@@ -676,8 +676,7 @@ describe('Provider', () => {
     });
   });
 
-  // Fails because the library creates its own AbortController
-  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
+  it('throws TimeoutError on timeout when calling a subscription', async () => {
     const { error } = await safeExec(async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
       provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
