@@ -1,10 +1,9 @@
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import type { BN, Message, Contract } from 'fuels';
+import type { BN, Message } from 'fuels';
 import {
   arrayify,
   bn,
   toHex,
-  Provider,
   Wallet,
   ScriptTransactionRequest,
   BaseAssetId,
@@ -12,7 +11,6 @@ import {
   isCoin,
   randomBytes,
   hexlify,
-  FUEL_NETWORK_URL,
 } from 'fuels';
 
 import { getSetupContract } from './utils';

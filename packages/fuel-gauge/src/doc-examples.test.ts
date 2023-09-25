@@ -27,7 +27,6 @@ import {
   ContractFactory,
   ZeroBytes32,
   BaseAssetId,
-  FUEL_NETWORK_URL,
 } from 'fuels';
 import { join } from 'path';
 

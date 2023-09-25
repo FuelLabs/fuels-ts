@@ -1,7 +1,6 @@
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { TransactionResponse, Wallet } from 'fuels';
 
 describe('TransactionSummary', () => {
   it('should ensure create method waits till a transaction response is given', async () => {

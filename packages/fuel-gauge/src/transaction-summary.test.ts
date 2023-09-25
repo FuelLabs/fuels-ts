@@ -1,7 +1,6 @@
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type {
-  WalletUnlocked,
   TransactionResultReceipt,
   Operation,
   TransactionSummary,
@@ -9,12 +8,10 @@ import type {
 } from 'fuels';
 import {
   BN,
-  FUEL_NETWORK_URL,
   getTransactionsSummaries,
   getTransactionSummary,
   getTransactionSummaryFromRequest,
   BaseAssetId,
-  Provider,
   ScriptTransactionRequest,
   TransactionTypeName,
   Wallet,

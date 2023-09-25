@@ -1,5 +1,4 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';

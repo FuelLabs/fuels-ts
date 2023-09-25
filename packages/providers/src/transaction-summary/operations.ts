@@ -17,20 +17,15 @@ import {
   getInputsCoin,
 } from './input';
 import { getOutputsCoin, getOutputsContract, getOutputsContractCreated } from './output';
+import { AddressType, ChainName, OperationName, TransactionTypeName } from './types';
 import type {
   InputOutputParam,
   InputParam,
   OperationCoin,
   RawPayloadParam,
   ReceiptParam,
-} from './types';
-import {
-  type Operation,
-  type GetOperationParams,
-  AddressType,
-  ChainName,
-  OperationName,
-  TransactionTypeName,
+  Operation,
+  GetOperationParams,
 } from './types';
 
 /** @hidden */
