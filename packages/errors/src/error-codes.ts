@@ -11,7 +11,7 @@ export enum ErrorCode {
   TYPE_NOT_FOUND = 'type-not-found',
   TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
-  JSON_ABI_ERROR = 'abi-main-method-missing',
+  JSON_ABI_ERROR = 'json-abi-error',
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
   CODER_NOT_FOUND = 'coder-not-found',
@@ -84,6 +84,9 @@ export enum ErrorCode {
   // script
   SCRIPT_REVERTED = 'script-reverted',
   SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
+
+  // general
+  FUEL_NODE_ERROR = 'fuel-node-error',
 
   // coder
   // ...
