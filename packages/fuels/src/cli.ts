@@ -91,7 +91,7 @@ export async function run(argv: string[]) {
     executableFile: join(binDir, 'fuels-core'),
   });
 
-  program.command('forc', 'Wrapper around Sway / Forc binary', {
+  program.command('forc', 'Wrapper around Forc binary', {
     executableFile: join(binDir, 'fuels-forc'),
   });
 
