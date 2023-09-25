@@ -1,6 +1,6 @@
-import { FUEL_NETWORK_URL, type ParsedFuelsConfig } from '../../src';
+import { FUEL_NETWORK_URL, type FuelsConfig } from '../../src';
 
-export const parsedFuelsConfig: ParsedFuelsConfig = {
+export const parsedFuelsConfig: FuelsConfig = {
   basePath: '/root',
   // workspace: '/root/project',
   contracts: ['/root/project/foo', '/root/project/bar'],

@@ -4,12 +4,12 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
-import type { ParsedFuelsConfig, UserFuelsConfig } from '../types';
+import type { FuelsConfig, UserFuelsConfig } from '../types';
 
 import { readForcToml, readSwayType, SwayType } from './forcUtils';
 import { validateConfig } from './validateConfig';
 
-export async function loadConfig(cwd: string): Promise<ParsedFuelsConfig> {
+export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const configJoycon = new JoyCon();
 
   const configPath = await configJoycon.resolve({
@@ -40,7 +40,7 @@ export async function loadConfig(cwd: string): Promise<ParsedFuelsConfig> {
   await validateConfig(userConfig);
 
   // Start clone-object while initializiung optional props
-  const config: ParsedFuelsConfig = {
+  const config: FuelsConfig = {
     contracts: [],
     scripts: [],
     predicates: [],

@@ -3,7 +3,7 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { parsedFuelsConfig } from '../../../../tests/fixtures/parsed-fuels-config';
 import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
-import type { ParsedFuelsConfig, OptionsFunction } from '../../types';
+import type { FuelsConfig, OptionsFunction } from '../../types';
 
 import { deploy } from '.';
 
@@ -25,7 +25,7 @@ import { deploy } from '.';
 // });
 
 describe.skip('Build Action', () => {
-  const config: ParsedFuelsConfig = {
+  const config: FuelsConfig = {
     ...parsedFuelsConfig,
     privateKey: '0x0000000000000000000000000000000000000000000000000000000000000001',
     deployConfig: {

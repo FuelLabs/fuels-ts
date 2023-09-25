@@ -2,13 +2,13 @@ import { capitalizeString } from '@fuel-ts/utils';
 import type { Command } from 'commander';
 
 import { loadConfig } from '../config/loadConfig';
-import type { Commands, ParsedFuelsConfig, ActionEvent } from '../types';
+import type { Commands, FuelsConfig, CommandEvent } from '../types';
 import { log } from '../utils/logger';
 
 export function withConfig<CType extends Commands>(
   program: Command,
   command: CType,
-  fn: (config: ParsedFuelsConfig) => Promise<Extract<ActionEvent, { type: CType }>['data']>
+  fn: (config: FuelsConfig) => Promise<Extract<CommandEvent, { type: CType }>['data']>
 ) {
   return async () => {
     const options = program.opts();

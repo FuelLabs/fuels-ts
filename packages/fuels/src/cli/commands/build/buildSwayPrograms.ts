@@ -1,11 +1,11 @@
 import { spawn } from 'child_process';
 import { join } from 'path';
 
-import type { ParsedFuelsConfig } from '../../types';
+import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
 import { debug, log, loggingConfig } from '../../utils/logger';
 
-export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) {
+export async function buildSwayProgram(config: FuelsConfig, path: string) {
   debug('Building Sway program', path);
 
   return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) 
   });
 }
 
-export async function buildSwayPrograms(config: ParsedFuelsConfig) {
+export async function buildSwayPrograms(config: FuelsConfig) {
   log('Building Sway programs..');
 
   const paths = config.workspace

@@ -1,19 +1,19 @@
 import * as chokidar from 'chokidar';
 import { globSync } from 'glob';
 
-import type { ParsedFuelsConfig } from '../../types';
+import type { FuelsConfig } from '../../types';
 import { error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';
 
 import { startFuelCore } from './startFuelCore';
 
-export async function buildAndDeploy(config: ParsedFuelsConfig) {
+export async function buildAndDeploy(config: FuelsConfig) {
   await build(config);
   return deploy(config);
 }
 
-export async function dev(config: ParsedFuelsConfig) {
+export async function dev(config: FuelsConfig) {
   /**
    * Create a copy of the config param, so we can safely
    * re-assign the `providerUrl` param when auto-starting a node.

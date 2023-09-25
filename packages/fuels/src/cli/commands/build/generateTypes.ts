@@ -5,11 +5,11 @@ import { join } from 'path';
 
 import { getABIPaths } from '../../config/forcUtils';
 import { renderIndexTemplate } from '../../templates';
-import type { ParsedFuelsConfig } from '../../types';
+import type { FuelsConfig } from '../../types';
 import { log, loggingConfig } from '../../utils/logger';
 
 async function generateTypesForProgramType(
-  config: ParsedFuelsConfig,
+  config: FuelsConfig,
   paths: string[],
   programType: ProgramTypeEnum
 ) {
@@ -31,7 +31,7 @@ async function generateTypesForProgramType(
   return pluralizedFolderName;
 }
 
-export async function generateTypes(config: ParsedFuelsConfig) {
+export async function generateTypes(config: FuelsConfig) {
   log('Generating types..');
 
   const folders = (

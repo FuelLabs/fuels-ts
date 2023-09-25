@@ -1,7 +1,7 @@
 import type {
-  ActionEvent,
+  CommandEvent,
   // DeployOptions,
-  ParsedFuelsConfig,
+  FuelsConfig,
 } from 'fuels';
 
 import { createConfig } from 'fuels';
@@ -109,10 +109,10 @@ export default createConfig({
 
   /**
    * Optional property, defaults to true
-   * @param spinUpFuelNode - When set to false, it will skip spinning up
-   a FuelCore node. In this case, you'll need to start the node yourself.
+   * @param autoStartFuelCore - When set to false, it will skip spinning up
+   * a FuelCore node. In this case, you'll need to start the node yourself.
    */
-  // spinUpFuelNode: true,
+  // autoStartFuelCore: true,
 
 
   // ----------------------------------- Callbacks
@@ -122,7 +122,7 @@ export default createConfig({
    * @param event - The event that triggered this execution
    * @param config - The loaded `fuels.config`
    */
-  onSuccess: (event: ActionEvent, config: LoadedConfig) => {
+  onSuccess: (event: CommandEvent, config: FuelsConfig) => {
     console.log('fuels:onSuccess', { event, config });
   },
 

@@ -5,13 +5,13 @@ import { dirname, join } from 'path';
 import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
-import type { ParsedFuelsConfig } from '../../types';
+import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
 import { log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
-export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
+export async function startFuelCore(config: FuelsConfig): Promise<{
   bindIp: string;
   accessIp: string;
   port: number;

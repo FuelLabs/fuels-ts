@@ -7,7 +7,7 @@ export enum Commands {
   init = 'init',
 }
 
-export type ActionEvent =
+export type CommandEvent =
   | {
       type: Commands.build;
       data: unknown;
@@ -57,11 +57,11 @@ export type UserFuelsConfig = {
   autoStartFuelCore?: boolean;
   fuelCorePort?: number;
 
-  onFailure?: (error: Error, config: ParsedFuelsConfig) => void;
-  onSuccess?: (event: ActionEvent, config: ParsedFuelsConfig) => void;
+  onFailure?: (error: Error, config: FuelsConfig) => void;
+  onSuccess?: (event: CommandEvent, config: FuelsConfig) => void;
 };
 
-export type ParsedFuelsConfig = UserFuelsConfig &
+export type FuelsConfig = UserFuelsConfig &
   Required<
     Pick<
       UserFuelsConfig,
