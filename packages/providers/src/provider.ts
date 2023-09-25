@@ -13,7 +13,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { versions } from '@fuel-ts/versions';
+import { getDifferenceToUserFuelCoreVersion } from '@fuel-ts/versions';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -327,7 +327,7 @@ export default class Provider {
       Provider.chainInfoCache[this.url] = chain;
     }
 
-    Provider.verifyClientIsSupported(nodeInfo);
+    Provider.ensureClientVersionIsSupported(nodeInfo);
 
     return {
       chain,
@@ -335,22 +335,21 @@ export default class Provider {
     };
   }
 
-  private static verifyClientIsSupported(nodeInfo: NodeInfo) {
-    const [major, minor, patch] = nodeInfo.nodeVersion.split('.');
-    const [supportedMajor, supportedMinor, supportedPatch] = versions.FUEL_CORE.split('.');
+  private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
+    const { difference, userVersion } = getDifferenceToUserFuelCoreVersion(nodeInfo.nodeVersion);
 
-    if (major !== supportedMajor || minor !== supportedMinor) {
+    if (difference === 'major' || difference === 'minor') {
       throw new FuelError(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${versions.FUEL_CORE}`
+        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${userVersion}`
       );
     }
 
-    if (patch !== supportedPatch) {
+    if (difference === 'patch') {
       // eslint-disable-next-line no-console
       console.warn(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${versions.FUEL_CORE}`
+        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${userVersion}`
       );
     }
   }
