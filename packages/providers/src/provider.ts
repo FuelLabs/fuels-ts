@@ -333,26 +333,16 @@ export default class Provider {
   }
 
   /**
-   * Retrieves and caches chain and node information if not already cached.
-   *
-   * - Checks the cache for existing chain and node information based on the current URL.
-   * - If not found in cache, fetches the information, caches it, and then returns the data.
+   * Fetches both the chain and node information, saves it to the cache, and return it.
    *
    * @returns NodeInfo and Chain
    */
   async fetchChainAndNodeInfo() {
-    let nodeInfo = Provider.nodeInfoCache[this.url];
-    let chain = Provider.chainInfoCache[this.url];
+    const chain = await this.fetchChain();
+    const nodeInfo = await this.fetchNode();
 
-    if (!nodeInfo) {
-      nodeInfo = await this.fetchNode();
-      Provider.nodeInfoCache[this.url] = nodeInfo;
-    }
-
-    if (!chain) {
-      chain = await this.fetchChain();
-      Provider.chainInfoCache[this.url] = chain;
-    }
+    Provider.chainInfoCache[this.url] = chain;
+    Provider.nodeInfoCache[this.url] = nodeInfo;
 
     return {
       chain,
