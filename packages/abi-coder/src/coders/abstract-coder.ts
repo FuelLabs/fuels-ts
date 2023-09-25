@@ -1,11 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
+import { FuelError, type ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
-import { versions } from '@fuel-ts/versions';
 
 import type { Option } from './option';
-
-const logger = new Logger(versions.FUELS);
 
 type Primitive = string | number | boolean;
 
@@ -45,8 +42,8 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
     this.encodedLength = encodedLength;
   }
 
-  throwError(message: string, value: unknown): never {
-    return logger.throwArgumentError(message, this.name, value);
+  throwError(errorCode: ErrorCode, message: string): never {
+    throw new FuelError(errorCode, message);
   }
 
   abstract encode(value: TInput, length?: number): Uint8Array;

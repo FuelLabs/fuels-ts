@@ -1,3 +1,4 @@
+import { ErrorCode } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
 import type { Uint8ArrayWithDynamicData } from '../utilities';
@@ -23,7 +24,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError('expected array value', value);
+      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     const parts: Uint8Array[] = [];

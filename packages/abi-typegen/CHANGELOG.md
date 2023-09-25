@@ -1,5 +1,13 @@
 # @fuel-ts/abi-typegen
 
+## 0.59.0
+
+## 0.58.0
+
+### Minor Changes
+
+- using FuelError across all packages, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1230](https://github.com/FuelLabs/fuels-ts/pull/1230))
+
 ## 0.57.0
 
 ### Patch Changes
