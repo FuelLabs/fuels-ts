@@ -5,10 +5,10 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "private": true,
   "engines": {
-    "node": ">= 18.14.1",
-    "pnpm": ">= 8.1.1"
+    "node": ">= 18.18.0",
+    "pnpm": ">= 8.6.1"
   },
-  "packageManager": "pnpm@8.1.1",
+  "packageManager": "pnpm@8.6.1",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'turbo run build --filter=!fuel-gauge'",
     "build": "turbo run build",
@@ -87,10 +87,5 @@
     "tsx": "^3.12.7",
     "turbo": "^1.8.8",
     "typescript": "~5.1.6"
-  },
-  "pnpm": {
-    "overrides": {
-      "cross-fetch": "4.0.0"
-    }
   }
 }
