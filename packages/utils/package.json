@@ -31,8 +31,8 @@
   "scripts": {
     "pretest": "pnpm build:forc",
     "build": "tsup",
-    "postbuild": "tsx ../../scripts/postbuild.ts",
-    "build:forc": "pnpm fuels-forc build -p test/forc-projects/simple"
+    "build:forc": "pnpm fuels-forc build -p test/forc-projects/simple",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
