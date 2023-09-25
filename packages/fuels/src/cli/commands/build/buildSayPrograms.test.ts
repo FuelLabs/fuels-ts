@@ -1,4 +1,4 @@
-import { parsedFuelsConfig } from '../../../../tests/fixtures/parsed-fuels-config';
+import { fuelsConfig } from '../../../../tests/fixtures/fuels-config';
 import type { FuelsConfig } from '../../types';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
@@ -26,7 +26,7 @@ describe.skip('Deploy Action', () => {
 
   it('build action should call forcBuild with workspace config', async () => {
     const config: FuelsConfig = {
-      ...parsedFuelsConfig,
+      ...fuelsConfig,
       basePath: '/root',
       workspace: '/root/project',
       contracts: [],
@@ -45,7 +45,7 @@ describe.skip('Deploy Action', () => {
 
   it('build action should call forcBuild with contracts config', async () => {
     const config: FuelsConfig = {
-      ...parsedFuelsConfig,
+      ...fuelsConfig,
       basePath: '/root',
       contracts: ['/root/project/foo', '/root/project/bar'],
       predicates: ['/root/project/predicate'],

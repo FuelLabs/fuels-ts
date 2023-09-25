@@ -1,7 +1,7 @@
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
-import { parsedFuelsConfig } from '../../../../tests/fixtures/parsed-fuels-config';
+import { fuelsConfig } from '../../../../tests/fixtures/fuels-config';
 import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
 import type { FuelsConfig, OptionsFunction } from '../../types';
 
@@ -26,7 +26,7 @@ import { deploy } from '.';
 
 describe.skip('Build Action', () => {
   const config: FuelsConfig = {
-    ...parsedFuelsConfig,
+    ...fuelsConfig,
     privateKey: '0x0000000000000000000000000000000000000000000000000000000000000001',
     deployConfig: {
       gasPrice: 2,
