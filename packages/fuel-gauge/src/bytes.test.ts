@@ -67,6 +67,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     const bytes = [40, 41, 42];
+
     const INPUT: Wrapper = {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },

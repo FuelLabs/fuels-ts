@@ -1,3 +1,4 @@
+
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
