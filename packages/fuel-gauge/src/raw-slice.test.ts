@@ -14,6 +14,9 @@ import {
 import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
 import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
 
+import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
+import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
+
 import { getScript, getSetupContract } from './utils';
 
 type SomeEnum = {
@@ -33,6 +36,16 @@ const setup = async (balance = 5_000) => {
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
   return wallet;
+};
+
+type SomeEnum = {
+  First?: boolean;
+  Second?: number[];
+};
+
+type Wrapper = {
+  inner: number[][];
+  inner_enum: SomeEnum;
 };
 
 const setupContract = getSetupContract('raw-slice');
