@@ -3,14 +3,13 @@ import { join } from 'path';
 
 import type { ParsedFuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
-import { logSection, loggingConfig } from '../../utils/logger';
+import { debug, log, loggingConfig } from '../../utils/logger';
 
 export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) {
-  logSection('Building Sway program', path);
-
-  const pkgRootDir = findPackageRoot();
+  debug('Building Sway program', path);
 
   return new Promise((resolve, reject) => {
+    const pkgRootDir = findPackageRoot();
     const forcPath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-forc');
 
     const command = config.useSystemForc ? 'forc' : forcPath;
@@ -36,7 +35,7 @@ export async function buildSwayProgram(config: ParsedFuelsConfig, path: string) 
 }
 
 export async function buildSwayPrograms(config: ParsedFuelsConfig) {
-  logSection('Building Sway programs..');
+  log('Building Sway programs..');
 
   const paths = config.workspace
     ? [config.workspace]

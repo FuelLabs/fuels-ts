@@ -7,7 +7,7 @@ import kill from 'tree-kill';
 
 import type { ParsedFuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
-import { log, logSection, loggingConfig } from '../../utils/logger';
+import { log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
@@ -18,7 +18,7 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
   providerUrl: string;
   childProcess: ChildProcessWithoutNullStreams;
 }> {
-  logSection('Starting node..');
+  log('Starting node..');
 
   const coreDir = join(config.basePath, '.fuels');
   const chainConfigPath = join(coreDir, 'chainConfig.json');
@@ -64,12 +64,11 @@ export async function startFuelCore(config: ParsedFuelsConfig): Promise<{
     '--manual_blocks_enabled',
   ].flat();
 
-  const pkgRootDir = findPackageRoot();
-
   return new Promise((resolve, reject) => {
+    const pkgRootDir = findPackageRoot();
     const fuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
-    const command = config.useSystemFuelCore ? 'fuel-core' : fuelsCorePath;
 
+    const command = config.useSystemFuelCore ? 'fuel-core' : fuelsCorePath;
     const core = spawn(command, flags, { stdio: 'pipe' });
 
     core.stderr?.pipe(process.stderr);

@@ -12,9 +12,11 @@ export async function saveContractIds(contracts: ContractDeployed[], output: str
     }),
     {}
   );
+
   const filePath = resolve(output, 'contracts.json');
-  log('save contract ids at:');
-  log(filePath);
+
   await mkdir(output, { recursive: true });
   await writeFile(filePath, JSON.stringify(contractsMap, null, 2));
+
+  log(`Contract IDs saved at: ${filePath}`);
 }

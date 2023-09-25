@@ -18,17 +18,14 @@ export function log(...data: unknown[]) {
 
 export function debug(...data: unknown[]) {
   if (loggingConfig.isDebugEnabled) {
-    log(...data);
-  }
-}
-
-export function logSection(...data: unknown[]) {
-  if (loggingConfig.isLoggingEnabled) {
-    log(chalk.green.bold(data.join(' ')));
+    log(data);
   }
 }
 
 export function error(...data: unknown[]) {
-  // TODO: consider throwing and exiting process
-  log(chalk.red(data.join(' ')));
+  process.stderr.write(`${chalk.red(data.join(' '))}\n`);
+}
+
+export function warn(...data: unknown[]) {
+  log(`${chalk.yellow(data.join(' '))}\n`);
 }

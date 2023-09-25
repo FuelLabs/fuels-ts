@@ -1,11 +1,11 @@
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection } from '../../utils/logger';
+import { log } from '../../utils/logger';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
 import { generateTypes } from './generateTypes';
 
 export async function build(config: ParsedFuelsConfig) {
-  logSection('Building..');
+  log('Building..');
   await buildSwayPrograms(config);
   await generateTypes(config);
 }

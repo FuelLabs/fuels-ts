@@ -1,8 +1,9 @@
+import { capitalizeString } from '@fuel-ts/utils';
 import type { Command } from 'commander';
 
 import { loadConfig } from '../config/loadConfig';
 import type { Commands, ParsedFuelsConfig, ActionEvent } from '../types';
-import { logSection } from '../utils/logger';
+import { log } from '../utils/logger';
 
 export function withConfig<CType extends Commands>(
   program: Command,
@@ -22,7 +23,7 @@ export function withConfig<CType extends Commands>(
         },
         config
       );
-      logSection(`🎉 ${command} completed successfully!`);
+      log(`🎉  ${capitalizeString(command)} completed successfully!`);
     } catch (err: unknown) {
       config.onFailure?.(<Error>err, config);
       throw err;

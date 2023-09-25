@@ -2,7 +2,7 @@ import * as chokidar from 'chokidar';
 import { globSync } from 'glob';
 
 import type { ParsedFuelsConfig } from '../../types';
-import { error, logSection } from '../../utils/logger';
+import { error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';
 
@@ -45,16 +45,16 @@ export async function dev(config: ParsedFuelsConfig) {
     await buildAndDeploy(configCopy);
 
     // Then on every change
-    const changeListeaner = async (_path: string) => {
+    const changeListener = async (path: string) => {
+      log(`\nFile changed: ${path}`);
       await buildAndDeploy(configCopy);
-      logSection(`🎉 dev completed successfully!`);
     };
 
     chokidar
       .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
-      .on('add', changeListeaner)
-      .on('change', changeListeaner)
-      .on('unlink', changeListeaner);
+      .on('add', changeListener)
+      .on('change', changeListener)
+      .on('unlink', changeListener);
   } catch (err: unknown) {
     error(err);
   }

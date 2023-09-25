@@ -1,10 +1,9 @@
-import { green, red } from 'chalk';
 import { type Command } from 'commander';
 import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
-import { log, logSection } from '../../utils/logger';
+import { error, log } from '../../utils/logger';
 
 export function init(program: Command) {
   const options = program.opts();
@@ -12,7 +11,7 @@ export function init(program: Command) {
   const fileExists = existsSync(fuelsConfigPath);
 
   if (fileExists) {
-    logSection(`Config file exists, aborting\n  ${red(fuelsConfigPath)}`);
+    error(`Config file exists, aborting.\n\n  ${fuelsConfigPath}\n`);
     process.exit(1);
   }
 
@@ -21,5 +20,5 @@ export function init(program: Command) {
 
   writeFileSync(fuelsConfigPath, defaultConfig);
 
-  log(`Config file created at:\n  ${green(fuelsConfigPath)}`);
+  log(`Config file created at:\n\n ${fuelsConfigPath}\n`);
 }

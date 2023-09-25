@@ -6,7 +6,7 @@ import { join } from 'path';
 import { getABIPaths } from '../../config/forcUtils';
 import { renderIndexTemplate } from '../../templates';
 import type { ParsedFuelsConfig } from '../../types';
-import { logSection, loggingConfig } from '../../utils/logger';
+import { log, loggingConfig } from '../../utils/logger';
 
 async function generateTypesForProgramType(
   config: ParsedFuelsConfig,
@@ -32,7 +32,7 @@ async function generateTypesForProgramType(
 }
 
 export async function generateTypes(config: ParsedFuelsConfig) {
-  logSection('Generating types..');
+  log('Generating types..');
 
   const folders = (
     await Promise.all([

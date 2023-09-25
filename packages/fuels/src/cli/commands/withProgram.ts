@@ -1,7 +1,6 @@
 import type { Command } from 'commander';
 
 import type { Commands } from '../types';
-import { logSection } from '../utils/logger';
 
 export function withProgram<CType extends Commands>(
   program: Command,
@@ -10,6 +9,5 @@ export function withProgram<CType extends Commands>(
 ) {
   return async () => {
     await fn(program);
-    logSection(`🎉 ${command} completed successfully!`);
   };
 }

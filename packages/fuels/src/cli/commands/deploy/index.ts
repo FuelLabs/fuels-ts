@@ -5,7 +5,7 @@ import {
   getContractCamelCase,
 } from '../../config/forcUtils';
 import type { ParsedFuelsConfig, ContractDeployed } from '../../types';
-import { log, logSection } from '../../utils/logger';
+import { debug, log, warn } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
 import { deployContract } from './deployContract';
@@ -16,13 +16,13 @@ export async function deploy(config: ParsedFuelsConfig) {
   const contracts: ContractDeployed[] = [];
 
   if (config.contracts.length === 0) {
-    logSection('No contracts to deploy');
+    warn('No contracts to deploy');
     return [];
   }
 
   const wallet = await createWallet(config.providerUrl, config.privateKey);
 
-  logSection(`Deploying contracts to ${wallet.provider.url}..`);
+  log(`Deploying contracts to: ${wallet.provider.url}`);
 
   /**
    * Ideally, this would have been done with Promise.all(...), but
@@ -43,14 +43,13 @@ export async function deploy(config: ParsedFuelsConfig) {
 
     const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
 
-    log(`Contract: ${projectName} - ${contractId}`);
+    debug(`Contract deployed: ${projectName} - ${contractId}`);
+
     contracts.push({
       name: contractName,
       contractId,
     });
   }
-
-  logSection('Save contract ids..');
 
   await saveContractIds(contracts, config.output);
 
