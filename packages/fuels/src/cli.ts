@@ -18,13 +18,13 @@ export async function run(argv: string[]) {
   const program = new Command();
 
   program.name('fuels');
-  program.version(versions.FUELS, '-v, --version', 'Output the version number');
-
-  program.helpOption('-h, --help', 'Display help');
-  program.addHelpCommand('help [command]', 'Display help for command');
 
   program.option('-D, --debug', 'Enables verbose logging', false);
   program.option('-S, --silent', 'Omit output messages', false);
+
+  program.version(versions.FUELS, '-v, --version', 'Output the version number');
+  program.helpOption('-h, --help', 'Display help');
+  program.addHelpCommand('help [command]', 'Display help for command');
 
   program.hook('preAction', (command: Command) => {
     const opts = command.opts();
