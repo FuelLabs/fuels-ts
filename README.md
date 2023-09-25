@@ -54,21 +54,22 @@ $ npm add fuels
 $ npx fuels --help
 Usage: fuels [options] [command]
 
-Automate Fuel projects workflows, check environment compatibility, and generate types.
-
 Options:
-  -V, --version      output the version number
-  -p, --path <path>  Root folder where the config file is located (default: "./")
-  -h, --help         display help for command
+  -D, --debug        Enables verbose logging (default: false)
+  -S, --silent       Omit output messages (default: false)
+  -v, --version      Output the version number
+  -h, --help         Display help
 
 Commands:
-  build              Build Sway contracts using forc tool
-  types              Generate TypeScript definitions for the project
-  deploy             Deploy contracts to fuel network
-  run                Build Sway contracts, generate types and deploy contracts to fuel network
-  versions           check for version incompatibilities
-  typegen [options]  generate typescript from contract abi json files
-  help [command]     display help for command
+  init [options]     Create a sample `fuel.config.ts` file
+  dev [options]      Start a Fuel node and run build + deploy on every file change
+  build [options]    Build Sway programs and generate Typescript for them
+  deploy [options]   Deploy contracts to Fuel network
+  typegen [options]  Generate Typescript from Sway ABI JSON files
+  versions           Check for version incompatibilities
+  core               Wrapper around Fuel Core binary
+  forc               Wrapper around Forc binary
+  help [command]     Display help for command
 ```
 
 # The Fuel Ecosystem
