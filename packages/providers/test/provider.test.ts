@@ -204,7 +204,7 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
-    await provider.switchUrl(providerUrl2);
+    await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
 
     expect(await provider.getVersion()).toEqual(providerUrl2);

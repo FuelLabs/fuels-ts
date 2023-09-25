@@ -326,7 +326,7 @@ export default class Provider {
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
-  async switchUrl(url: string) {
+  async connect(url: string) {
     this.url = url;
     this.createOperations();
     await this.fetchChainAndNodeInfo();
