@@ -3,7 +3,7 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
@@ -23,6 +23,11 @@ import { messageProofResponse } from './fixtures';
 afterEach(() => {
   jest.restoreAllMocks();
 });
+
+const resetCache = () => {
+  Provider.chainInfoCache = {};
+  Provider.nodeInfoCache = {};
+};
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -708,17 +713,90 @@ describe('Provider', () => {
     expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
   });
 
-  it('doesnt refetch the chain info again if it is already cached', async () => {
-    Provider.chainInfoCache = {};
-    const spyGetChainInfo = jest.spyOn(Provider.prototype, 'fetchChain');
+  it('should cache chain and node info', async () => {
+    resetCache();
 
-    const provider1 = await Provider.create(FUEL_NETWORK_URL);
-    const provider2 = await Provider.create(FUEL_NETWORK_URL);
+    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeUndefined();
+    expect(Provider.nodeInfoCache[FUEL_NETWORK_URL]).toBeUndefined();
 
-    // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
-    expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
+    await Provider.create(FUEL_NETWORK_URL);
 
-    expect(provider1.url).toEqual(FUEL_NETWORK_URL);
-    expect(provider2.url).toEqual(FUEL_NETWORK_URL);
+    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(Provider.nodeInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+  });
+
+  it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
+    resetCache();
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    provider.getChain();
+    provider.getNode();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+  });
+
+  it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
+    resetCache();
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    await provider.fetchChainAndNodeInfo();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
+    expect(spyFetchChain).toHaveBeenCalledTimes(2);
+    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure getGasConfig return essential gas related data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const gasConfig = provider.getGasConfig();
+
+    expect(gasConfig.gasPerByte).toBeDefined();
+    expect(gasConfig.gasPriceFactor).toBeDefined();
+    expect(gasConfig.maxGasPerPredicate).toBeDefined();
+    expect(gasConfig.maxGasPerTx).toBeDefined();
+    expect(gasConfig.minGasPrice).toBeDefined();
+  });
+
+  it('should throws when using getChain or getNode and without cached data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    resetCache();
+
+    await expectToThrowFuelError(
+      () => provider.getChain(),
+      new FuelError(
+        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
+        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
+
+    await expectToThrowFuelError(
+      () => provider.getNode(),
+      new FuelError(
+        ErrorCode.NODE_INFO_CACHE_EMPTY,
+        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
   });
 });
