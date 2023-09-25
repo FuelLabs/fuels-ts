@@ -13,6 +13,7 @@ import {
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
 
+
 import { getSetupContract } from './utils';
 
 const setupContract = getSetupContract('bytes');
@@ -58,6 +59,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     const bytes = [40, 41, 42];
+
     const INPUT: Wrapper = {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
