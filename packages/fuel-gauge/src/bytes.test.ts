@@ -1,4 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { BN } from 'fuels';
 import {
   type Contract,
   bn,
@@ -60,21 +61,20 @@ describe('Bytes Tests', () => {
   it('should test bytes input', async () => {
     const INPUT = [40, 41, 42];
 
-    await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    const { value } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
+    expect(value).toBeUndefined();
   });
 
   it('should test bytes input [nested]', async () => {
     const bytes = [40, 41, 42];
+
     const INPUT: Wrapper = {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };
 
-    await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    const { value } = await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
+    expect(value).toBeUndefined();
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
@@ -120,8 +120,8 @@ describe('Bytes Tests', () => {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };
-    await scriptInstance.functions.main(1, INPUT).call();
 
-    expect(true).toBe(true);
+    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN>();
+    expect(value.toNumber()).toStrictEqual(0);
   });
 });

@@ -53,9 +53,9 @@ describe('Raw Slice Tests', () => {
   it('should test raw slice input', async () => {
     const INPUT = [40, 41, 42];
 
-    await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
 
-    expect(true).toBeTruthy();
+    expect(value).toBeUndefined();
   });
 
   it('should test raw slice input [nested]', async () => {
@@ -65,9 +65,11 @@ describe('Raw Slice Tests', () => {
       inner_enum: { Second: slice },
     };
 
-    await contractInstance.functions.accept_nested_raw_slice(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions
+      .accept_nested_raw_slice(INPUT)
+      .call<number[]>();
 
-    expect(true).toBeTruthy();
+    expect(value).toBeUndefined();
   });
 
   it('should test raw slice input [predicate-raw-slice]', async () => {
@@ -117,8 +119,8 @@ describe('Raw Slice Tests', () => {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };
-    await scriptInstance.functions.main(1, INPUT).call();
 
-    expect(true).toBe(true);
+    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN[]>();
+    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });
 });
