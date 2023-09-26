@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -14,7 +13,10 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
+import type { Client } from 'graphql-sse';
+import { createClient } from 'graphql-sse';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -26,7 +28,7 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
-import type { Message, MessageCoin, MessageProof } from './message';
+import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import type {
   TransactionRequestLike,
@@ -190,14 +192,19 @@ export type FetchRequestOptions = {
   body: string;
 };
 
+export type CustomFetch<R extends Response = Response> = (
+  url: string,
+  options: FetchRequestOptions,
+  providerOptions?: Partial<Omit<ProviderOptions<R>, 'fetch'>>
+) => Promise<R>;
 /*
  * Provider initialization options
  */
-export type ProviderOptions = {
-  fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
-  cacheUtxo?: number;
+export type ProviderOptions<FetchResponse extends Response = Response> = {
+  fetch: CustomFetch<FetchResponse> | undefined;
+  cacheUtxo: number | undefined;
+  timeout: number | undefined;
 };
-
 /**
  * Provider Call transaction params
  */
@@ -219,8 +226,27 @@ type NodeInfoCache = Record<string, NodeInfo>;
  * A provider for connecting to a node
  */
 export default class Provider {
-  operations: ReturnType<typeof getOperationsSdk>;
+  operations!: ReturnType<typeof getOperationsSdk>;
+  #subscriptionClient!: Client;
+
   cache?: MemoryCache;
+  options: ProviderOptions = {
+    timeout: undefined,
+    cacheUtxo: undefined,
+    fetch: undefined,
+  };
+
+  private static getFetchFn(options: ProviderOptions) {
+    return options.fetch !== undefined
+      ? options.fetch
+      : (url: string, request: FetchRequestOptions) =>
+          fetch(url, {
+            ...request,
+            signal:
+              options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
+          });
+  }
+
   static chainInfoCache: ChainInfoCache = {};
   static nodeInfoCache: NodeInfoCache = {};
 
@@ -235,10 +261,11 @@ export default class Provider {
   protected constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    public options: ProviderOptions = {}
+    options: Partial<ProviderOptions> = {}
   ) {
-    this.operations = this.createOperations(url, options);
-    this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
+    this.options = { ...this.options, ...options };
+    this.createOperations();
+    this.cache = this.options.cacheUtxo ? new MemoryCache(this.options.cacheUtxo) : undefined;
   }
 
   /**
@@ -246,7 +273,7 @@ export default class Provider {
    * @param url - GraphQL endpoint of the Fuel node
    * @param options - Additional options for the provider
    */
-  static async create(url: string, options: ProviderOptions = {}) {
+  static async create(url: string, options: Partial<ProviderOptions> = {}) {
     const provider = new Provider(url, options);
     await provider.fetchChainAndNodeInfo();
     return provider;
@@ -301,7 +328,7 @@ export default class Provider {
    */
   async switchUrl(url: string) {
     this.url = url;
-    this.operations = this.createOperations(url);
+    this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
 
@@ -340,10 +367,77 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(url: string, options: ProviderOptions = {}) {
-    this.url = url;
-    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
-    return getOperationsSdk(gqlClient);
+  private createOperations() {
+    const fetchFn = Provider.getFetchFn(this.options);
+    const gqlClient = new GraphQLClient(this.url, {
+      fetch: (nodeUrl: string, request: FetchRequestOptions) =>
+        fetchFn(nodeUrl, request, this.options),
+    });
+
+    if (this.#subscriptionClient) this.#subscriptionClient.dispose();
+    this.#subscriptionClient = Provider.createSubscriptionClient(this.url, fetchFn, this.options);
+
+    // @ts-expect-error This is due to this function being generic and us using multiple libraries. Its type is specified when calling a specific operation via provider.operations.xyz.
+    this.operations = getOperationsSdk((query, vars) => {
+      const isSubscription =
+        (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
+          ?.operation === 'subscription';
+      if (isSubscription) {
+        return this.#subscriptionClient.iterate({
+          query: print(query),
+          variables: vars as Record<string, unknown>,
+        });
+      }
+
+      return gqlClient.request(query, vars);
+    });
+  }
+
+  private static createSubscriptionClient(
+    url: string,
+    fetchFn: ReturnType<typeof Provider.getFetchFn>,
+    options: ProviderOptions
+  ) {
+    return createClient({
+      url: `${url}-sub`,
+      onMessage: (msg) => {
+        /*
+          This is the only place where I've managed to wedge in error throwing
+          without the error being converted to the graphql-sse library's NetworkError or being silently ignored.
+          These are errors returned from the node as a field of the `data` property with a 200 response code,
+          so they aren't treated as errors by the graphql-sse library.
+          This function (onMessage) gets called after a fetch but before message processing.
+          So the fetchFn below gets called first, the node returns errors, then this function is called.
+          The _isError property is added in the response processing in the fetchFn as a way to differentiate between errors and successful responses.
+          See here: https://github.com/enisdenjo/graphql-sse/blob/370ec133f8ca9c7b763a6ca0223c756a09169c59/src/client.ts#L872
+        */
+        if ((msg.data as { _isError: boolean })._isError) {
+          throw new FuelError(ErrorCode.FUEL_NODE_ERROR, JSON.stringify(msg.data?.errors));
+        }
+      },
+      fetchFn: async (
+        subscriptionUrl: string,
+        request: FetchRequestOptions & { signal: AbortSignal }
+      ) => Provider.adaptSubscriptionResponse(await fetchFn(subscriptionUrl, request, options)),
+    });
+  }
+
+  /**
+    The subscription response processing serves two purposes:
+    1. To add an `event` field which is mandated by the graphql-sse library (not by the SSE protocol)
+    (see [the library's protocol](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md))
+    2. To process the node's response because it's a different format to the types generated by graphql-codegen.
+  */
+  private static async adaptSubscriptionResponse(originalResponse: Response): Promise<Response> {
+    const originalResponseText = await originalResponse.text();
+    const originalResponseData = JSON.parse(originalResponseText.split('data:')[1]);
+    const data = originalResponseData.data;
+    const errors = originalResponseData.errors;
+
+    let text = 'event:next';
+    text += `\ndata:${JSON.stringify(data ?? { _isError: true, errors })}`;
+    text += '\n\n';
+    return new Response(text, originalResponse);
   }
 
   /**
@@ -683,7 +777,7 @@ export default class Provider {
       filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges!.map((edge) => edge!.node!);
+    const coins = result.coins.edges.map((edge) => edge.node);
 
     return coins.map((coin) => ({
       id: coin.utxoId,
@@ -951,7 +1045,7 @@ export default class Provider {
       filter: { owner: owner.toB256() },
     });
 
-    const balances = result.balances.edges!.map((edge) => edge!.node!);
+    const balances = result.balances.edges.map((edge) => edge.node);
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
@@ -978,7 +1072,7 @@ export default class Provider {
       owner: address.toB256(),
     });
 
-    const messages = result.messages.edges!.map((edge) => edge!.node!);
+    const messages = result.messages.edges.map((edge) => edge.node);
 
     return messages.map((message) => ({
       messageId: InputMessageCoder.getMessageId({
@@ -1106,6 +1200,20 @@ export default class Provider {
       amount: bn(amount),
       data,
     };
+  }
+
+  /**
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt.
+   *
+   * @param nonce - The nonce of the message to get status from.
+   * @returns A promise that resolves to the message status
+   */
+  async getMessageStatus(
+    /** The nonce of the message to get status from */
+    nonce: string
+  ): Promise<MessageStatus> {
+    const result = await this.operations.getMessageStatus({ nonce });
+    return result.messageStatus;
   }
 
   /**
