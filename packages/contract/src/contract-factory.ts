@@ -8,7 +8,6 @@ import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import type { Account } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
@@ -81,7 +80,7 @@ export default class ContractFactory {
    * @param provider - The provider to be associated with the factory.
    * @returns A new ContractFactory instance.
    */
-  connect(provider: Provider | null) {
+  connect(provider: Provider) {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
@@ -105,11 +104,19 @@ export default class ContractFactory {
       storageSlots: storageSlots || [],
     };
 
+    if (!this.provider) {
+      throw new FuelError(
+        ErrorCode.MISSING_PROVIDER,
+        'Cannot create transaction request without provider'
+      );
+    }
+
+    const { maxGasPerTx } = this.provider.getGasConfig();
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
