@@ -1,3 +1,4 @@
+import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
 import { run } from '../../src/cli';
@@ -20,4 +21,13 @@ export async function runInit() {
   await run(argv);
 
   return { argv };
+}
+
+export function clean() {
+  if (existsSync(fuelsConfig)) {
+    rmSync(fuelsConfig);
+  }
+  if (existsSync(output)) {
+    rmSync(output, { recursive: true });
+  }
 }

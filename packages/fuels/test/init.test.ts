@@ -1,12 +1,10 @@
 import chalk from 'chalk';
-import { existsSync, readFileSync, rmSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
-import { fuelsConfig, runInit } from './utils/runCommands';
+import { clean, fuelsConfig, runInit } from './utils/runCommands';
 
 describe('init', () => {
-  afterEach(() => {
-    rmSync(fuelsConfig);
-  });
+  afterEach(clean);
 
   it('should run `init` command', async () => {
     await runInit();
