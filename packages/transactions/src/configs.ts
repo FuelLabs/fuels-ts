@@ -1,13 +1,8 @@
-import { bn } from '@fuel-ts/math';
-
 /** Maximum contract size, in bytes. */
 export const CONTRACT_MAX_SIZE = 16 * 1024;
 
 /** Maximum number of witnesses. */
 export const MAX_WITNESSES = 16;
-
-/** Maximum gas per transaction. */
-export const MAX_GAS_PER_TX = bn(10_000_000);
 
 /**
  * Gas Price factor this is used to calculate
