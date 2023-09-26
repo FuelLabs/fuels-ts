@@ -13,9 +13,6 @@ import {
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
 
-import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
-import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
-
 import { getScript, getSetupContract } from './utils';
 
 const setupContract = getSetupContract('bytes');
