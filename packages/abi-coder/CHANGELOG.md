@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.60.0
+
+### Minor Changes
+
+- Add support for Bytes and RawSlice, by [@camsjams](https://github.com/camsjams) (See [#1221](https://github.com/FuelLabs/fuels-ts/pull/1221))
+
 ## 0.59.0
 
 ### Minor Changes
