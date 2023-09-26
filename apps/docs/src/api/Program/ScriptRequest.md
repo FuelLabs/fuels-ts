@@ -36,7 +36,7 @@ Creates an instance of the ScriptRequest class.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:210](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L210)
+[packages/program/src/script-request.ts:210](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L210)
 
 ## Properties
 
@@ -48,7 +48,7 @@ The bytes of the script.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:191](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L191)
+[packages/program/src/script-request.ts:191](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L191)
 
 ___
 
@@ -74,7 +74,7 @@ A function to encode the script data.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:196](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L196)
+[packages/program/src/script-request.ts:196](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L196)
 
 ___
 
@@ -100,7 +100,7 @@ A function to decode the script result.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:201](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L201)
+[packages/program/src/script-request.ts:201](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L201)
 
 ## Methods
 
@@ -125,7 +125,7 @@ The decoded result.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:267](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L267)
+[packages/program/src/script-request.ts:267](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L267)
 
 ___
 
@@ -149,7 +149,7 @@ The encoded data.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:248](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L248)
+[packages/program/src/script-request.ts:248](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L248)
 
 ___
 
@@ -173,7 +173,7 @@ The script data offset.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:238](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L238)
+[packages/program/src/script-request.ts:238](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L238)
 
 ___
 
@@ -198,4 +198,4 @@ The script data offset.
 
 #### Defined in
 
-[packages/program/src/script-request.ts:227](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/program/src/script-request.ts#L227)
+[packages/program/src/script-request.ts:227](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/program/src/script-request.ts#L227)

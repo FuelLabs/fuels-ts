@@ -6,13 +6,23 @@ A provider for connecting to a node
 
 ## Properties
 
+### #subscriptionClient
+
+• `Private` **#subscriptionClient**: `Client`
+
+#### Defined in
+
+[packages/providers/src/provider.ts:230](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L230)
+
+___
+
 ### cache
 
 • `Optional` **cache**: `MemoryCache`
 
 #### Defined in
 
-[packages/providers/src/provider.ts:223](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L223)
+[packages/providers/src/provider.ts:232](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L232)
 
 ___
 
@@ -24,45 +34,46 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `dryRun` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string` ; `utxoValidation?`: `InputMaybe`&lt;`boolean`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlDryRunMutation`\> |
-| `estimatePredicates` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlEstimatePredicatesQuery`\> |
-| `getBalance` | (`variables`: `Exact`&lt;{ `assetId`: `string` ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBalanceQuery`\> |
-| `getBalances` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `filter`: `GqlBalanceFilterInput` ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBalancesQuery`\> |
-| `getBlock` | (`variables?`: `Exact`&lt;{ `blockHeight?`: `InputMaybe`&lt;`string`\> ; `blockId?`: `InputMaybe`&lt;`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBlockQuery`\> |
-| `getBlockWithTransactions` | (`variables?`: `Exact`&lt;{ `blockHeight?`: `InputMaybe`&lt;`string`\> ; `blockId?`: `InputMaybe`&lt;`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBlockWithTransactionsQuery`\> |
-| `getBlocks` | (`variables?`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBlocksQuery`\> |
-| `getChain` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetChainQuery`\> |
-| `getCoin` | (`variables`: `Exact`&lt;{ `coinId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetCoinQuery`\> |
-| `getCoins` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `filter`: `GqlCoinFilterInput` ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetCoinsQuery`\> |
-| `getCoinsToSpend` | (`variables`: `Exact`&lt;{ `excludedIds?`: `InputMaybe`&lt;`GqlExcludeInput`\> ; `owner`: `string` ; `queryPerAsset`: `GqlSpendQueryElementInput` \| `GqlSpendQueryElementInput`[]  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetCoinsToSpendQuery`\> |
-| `getContract` | (`variables`: `Exact`&lt;{ `contractId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetContractQuery`\> |
-| `getContractBalance` | (`variables`: `Exact`&lt;{ `asset`: `string` ; `contract`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetContractBalanceQuery`\> |
-| `getMessageProof` | (`variables`: `Exact`&lt;{ `commitBlockHeight?`: `any` ; `commitBlockId?`: `InputMaybe`&lt;`string`\> ; `messageId`: `any` ; `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetMessageProofQuery`\> |
-| `getMessages` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\> ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetMessagesQuery`\> |
-| `getNodeInfo` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetNodeInfoQuery`\> |
-| `getTransaction` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionQuery`\> |
-| `getTransactionWithReceipts` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionWithReceiptsQuery`\> |
-| `getTransactions` | (`variables?`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionsQuery`\> |
-| `getTransactionsByOwner` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\> ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionsByOwnerQuery`\> |
-| `getVersion` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetVersionQuery`\> |
-| `produceBlocks` | (`variables`: `Exact`&lt;{ `blocksToProduce`: `string` ; `startTimestamp?`: `any`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlProduceBlocksMutation`\> |
-| `submit` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlSubmitMutation`\> |
+| `dryRun` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string` ; `utxoValidation?`: `InputMaybe`&lt;`boolean`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlDryRunMutation`\> |
+| `estimatePredicates` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlEstimatePredicatesQuery`\> |
+| `getBalance` | (`variables`: `Exact`&lt;{ `assetId`: `string` ; `owner`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetBalanceQuery`\> |
+| `getBalances` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `filter`: `GqlBalanceFilterInput` ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetBalancesQuery`\> |
+| `getBlock` | (`variables?`: `Exact`&lt;{ `blockHeight?`: `InputMaybe`&lt;`string`\> ; `blockId?`: `InputMaybe`&lt;`string`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetBlockQuery`\> |
+| `getBlockWithTransactions` | (`variables?`: `Exact`&lt;{ `blockHeight?`: `InputMaybe`&lt;`string`\> ; `blockId?`: `InputMaybe`&lt;`string`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetBlockWithTransactionsQuery`\> |
+| `getBlocks` | (`variables?`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetBlocksQuery`\> |
+| `getChain` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetChainQuery`\> |
+| `getCoin` | (`variables`: `Exact`&lt;{ `coinId`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetCoinQuery`\> |
+| `getCoins` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `filter`: `GqlCoinFilterInput` ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetCoinsQuery`\> |
+| `getCoinsToSpend` | (`variables`: `Exact`&lt;{ `excludedIds?`: `InputMaybe`&lt;`GqlExcludeInput`\> ; `owner`: `string` ; `queryPerAsset`: `GqlSpendQueryElementInput` \| `GqlSpendQueryElementInput`[]  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetCoinsToSpendQuery`\> |
+| `getContract` | (`variables`: `Exact`&lt;{ `contractId`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetContractQuery`\> |
+| `getContractBalance` | (`variables`: `Exact`&lt;{ `asset`: `string` ; `contract`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetContractBalanceQuery`\> |
+| `getMessageProof` | (`variables`: `Exact`&lt;{ `commitBlockHeight?`: `any` ; `commitBlockId?`: `InputMaybe`&lt;`string`\> ; `messageId`: `any` ; `transactionId`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetMessageProofQuery`\> |
+| `getMessageStatus` | (`variables`: `Exact`&lt;{ `nonce`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetMessageStatusQuery`\> |
+| `getMessages` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\> ; `owner`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetMessagesQuery`\> |
+| `getNodeInfo` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetNodeInfoQuery`\> |
+| `getTransaction` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetTransactionQuery`\> |
+| `getTransactionWithReceipts` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetTransactionWithReceiptsQuery`\> |
+| `getTransactions` | (`variables?`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetTransactionsQuery`\> |
+| `getTransactionsByOwner` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\> ; `owner`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetTransactionsByOwnerQuery`\> |
+| `getVersion` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlGetVersionQuery`\> |
+| `produceBlocks` | (`variables`: `Exact`&lt;{ `blocksToProduce`: `string` ; `startTimestamp?`: `any`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlProduceBlocksMutation`\> |
+| `statusChange` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `options?`: `unknown`) => `AsyncIterable`&lt;`GqlStatusChangeSubscription`\> |
+| `submit` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `options?`: `unknown`) => `Promise`&lt;`GqlSubmitMutation`\> |
+| `submitAndAwait` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `options?`: `unknown`) => `AsyncIterable`&lt;`GqlSubmitAndAwaitSubscription`\> |
 
 #### Defined in
 
-[packages/providers/src/provider.ts:222](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L222)
+[packages/providers/src/provider.ts:229](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L229)
 
 ___
 
 ### options
 
-• **options**: [`ProviderOptions`](/api/Providers/index.md#provideroptions) = `{}`
-
-Additional options for the provider
+• **options**: [`ProviderOptions`](/api/Providers/index.md#provideroptions)&lt;`Response`\>
 
 #### Defined in
 
-[packages/providers/src/provider.ts:238](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L238)
+[packages/providers/src/provider.ts:233](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L233)
 
 ___
 
@@ -74,7 +85,7 @@ GraphQL endpoint of the Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:237](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L237)
+[packages/providers/src/provider.ts:263](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L263)
 
 ___
 
@@ -84,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:224](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L224)
+[packages/providers/src/provider.ts:250](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L250)
 
 ___
 
@@ -94,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:225](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L225)
+[packages/providers/src/provider.ts:251](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L251)
 
 ## Methods
 
@@ -122,58 +133,25 @@ A promise that resolves to the call result object.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:491](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L491)
+[packages/providers/src/provider.ts:585](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L585)
 
 ___
 
 ### createOperations
 
-▸ `Private` **createOperations**(`url`, `options?`): `Object`
+▸ `Private` **createOperations**(): `void`
 
 Create GraphQL client and set operations.
 
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `url` | `string` | The URL of the Fuel node |
-| `options` | [`ProviderOptions`](/api/Providers/index.md#provideroptions) | Additional options for the provider |
-
 #### Returns
 
-`Object`
+`void`
 
 The operation SDK object
 
-| Name | Type |
-| :------ | :------ |
-| `dryRun` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string` ; `utxoValidation?`: `InputMaybe`&lt;`boolean`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlDryRunMutation`\> |
-| `estimatePredicates` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlEstimatePredicatesQuery`\> |
-| `getBalance` | (`variables`: `Exact`&lt;{ `assetId`: `string` ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBalanceQuery`\> |
-| `getBalances` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `filter`: `GqlBalanceFilterInput` ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBalancesQuery`\> |
-| `getBlock` | (`variables?`: `Exact`&lt;{ `blockHeight?`: `InputMaybe`&lt;`string`\> ; `blockId?`: `InputMaybe`&lt;`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBlockQuery`\> |
-| `getBlockWithTransactions` | (`variables?`: `Exact`&lt;{ `blockHeight?`: `InputMaybe`&lt;`string`\> ; `blockId?`: `InputMaybe`&lt;`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBlockWithTransactionsQuery`\> |
-| `getBlocks` | (`variables?`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetBlocksQuery`\> |
-| `getChain` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetChainQuery`\> |
-| `getCoin` | (`variables`: `Exact`&lt;{ `coinId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetCoinQuery`\> |
-| `getCoins` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `filter`: `GqlCoinFilterInput` ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetCoinsQuery`\> |
-| `getCoinsToSpend` | (`variables`: `Exact`&lt;{ `excludedIds?`: `InputMaybe`&lt;`GqlExcludeInput`\> ; `owner`: `string` ; `queryPerAsset`: `GqlSpendQueryElementInput` \| `GqlSpendQueryElementInput`[]  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetCoinsToSpendQuery`\> |
-| `getContract` | (`variables`: `Exact`&lt;{ `contractId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetContractQuery`\> |
-| `getContractBalance` | (`variables`: `Exact`&lt;{ `asset`: `string` ; `contract`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetContractBalanceQuery`\> |
-| `getMessageProof` | (`variables`: `Exact`&lt;{ `commitBlockHeight?`: `any` ; `commitBlockId?`: `InputMaybe`&lt;`string`\> ; `messageId`: `any` ; `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetMessageProofQuery`\> |
-| `getMessages` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\> ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetMessagesQuery`\> |
-| `getNodeInfo` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetNodeInfoQuery`\> |
-| `getTransaction` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionQuery`\> |
-| `getTransactionWithReceipts` | (`variables`: `Exact`&lt;{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionWithReceiptsQuery`\> |
-| `getTransactions` | (`variables?`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionsQuery`\> |
-| `getTransactionsByOwner` | (`variables`: `Exact`&lt;{ `after?`: `InputMaybe`&lt;`string`\> ; `before?`: `InputMaybe`&lt;`string`\> ; `first?`: `InputMaybe`&lt;`number`\> ; `last?`: `InputMaybe`&lt;`number`\> ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetTransactionsByOwnerQuery`\> |
-| `getVersion` | (`variables?`: `Exact`&lt;{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlGetVersionQuery`\> |
-| `produceBlocks` | (`variables`: `Exact`&lt;{ `blocksToProduce`: `string` ; `startTimestamp?`: `any`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlProduceBlocksMutation`\> |
-| `submit` | (`variables`: `Exact`&lt;{ `encodedTransaction`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`&lt;`GqlSubmitMutation`\> |
-
 #### Defined in
 
-[packages/providers/src/provider.ts:343](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L343)
+[packages/providers/src/provider.ts:370](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L370)
 
 ___
 
@@ -197,7 +175,7 @@ A promise that resolves to the estimated transaction request object.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:514](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L514)
+[packages/providers/src/provider.ts:608](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L608)
 
 ___
 
@@ -224,7 +202,7 @@ A promise.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:551](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L551)
+[packages/providers/src/provider.ts:645](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L645)
 
 ___
 
@@ -242,7 +220,7 @@ ChainInfo object
 
 #### Defined in
 
-[packages/providers/src/provider.ts:407](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L407)
+[packages/providers/src/provider.ts:501](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L501)
 
 ___
 
@@ -263,7 +241,7 @@ NodeInfo and Chain
 
 #### Defined in
 
-[packages/providers/src/provider.ts:316](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L316)
+[packages/providers/src/provider.ts:343](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L343)
 
 ___
 
@@ -281,7 +259,7 @@ NodeInfo object
 
 #### Defined in
 
-[packages/providers/src/provider.ts:390](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L390)
+[packages/providers/src/provider.ts:484](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L484)
 
 ___
 
@@ -306,7 +284,7 @@ A promise that resolves to the balance.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:922](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L922)
+[packages/providers/src/provider.ts:1016](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L1016)
 
 ___
 
@@ -331,7 +309,7 @@ A promise that resolves to the balances.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:942](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L942)
+[packages/providers/src/provider.ts:1036](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L1036)
 
 ___
 
@@ -355,7 +333,7 @@ A promise that resolves to the block.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:778](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L778)
+[packages/providers/src/provider.ts:872](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L872)
 
 ___
 
@@ -373,7 +351,7 @@ A promise that resolves to the block number
 
 #### Defined in
 
-[packages/providers/src/provider.ts:380](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L380)
+[packages/providers/src/provider.ts:474](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L474)
 
 ___
 
@@ -397,7 +375,7 @@ A promise that resolves to the block.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:832](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L832)
+[packages/providers/src/provider.ts:926](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L926)
 
 ___
 
@@ -421,7 +399,7 @@ A promise that resolves to the blocks.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:813](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L813)
+[packages/providers/src/provider.ts:907](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L907)
 
 ___
 
@@ -437,7 +415,7 @@ Returns the cached chainInfo for the current URL.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:258](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L258)
+[packages/providers/src/provider.ts:285](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L285)
 
 ___
 
@@ -455,7 +433,7 @@ A promise that resolves to the chain ID number
 
 #### Defined in
 
-[packages/providers/src/provider.ts:416](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L416)
+[packages/providers/src/provider.ts:510](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L510)
 
 ___
 
@@ -479,7 +457,7 @@ Returns coins for the given owner.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:672](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L672)
+[packages/providers/src/provider.ts:766](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L766)
 
 ___
 
@@ -503,7 +481,7 @@ A promise that resolves to the contract.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:887](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L887)
+[packages/providers/src/provider.ts:981](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L981)
 
 ___
 
@@ -528,7 +506,7 @@ A promise that resolves to the balance.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:902](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L902)
+[packages/providers/src/provider.ts:996](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L996)
 
 ___
 
@@ -552,7 +530,7 @@ Returns some helpful parameters related to gas fees.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:286](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L286)
+[packages/providers/src/provider.ts:313](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L313)
 
 ___
 
@@ -579,7 +557,31 @@ A promise that resolves to the message proof.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:1009](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L1009)
+[packages/providers/src/provider.ts:1103](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L1103)
+
+___
+
+### getMessageStatus
+
+▸ **getMessageStatus**(`nonce`): `Promise`&lt;[`MessageStatus`](/api/Providers/index.md#messagestatus)\>
+
+Returns Message Proof for given transaction id and the message id from MessageOut receipt.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nonce` | `string` | The nonce of the message to get status from. |
+
+#### Returns
+
+`Promise`&lt;[`MessageStatus`](/api/Providers/index.md#messagestatus)\>
+
+A promise that resolves to the message status
+
+#### Defined in
+
+[packages/providers/src/provider.ts:1211](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L1211)
 
 ___
 
@@ -604,7 +606,7 @@ A promise that resolves to the messages.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:969](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L969)
+[packages/providers/src/provider.ts:1063](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L1063)
 
 ___
 
@@ -620,7 +622,7 @@ Returns the cached nodeInfo for the current URL.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:272](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L272)
+[packages/providers/src/provider.ts:299](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L299)
 
 ___
 
@@ -646,7 +648,7 @@ A promise that resolves to the resources.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:707](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L707)
+[packages/providers/src/provider.ts:801](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L801)
 
 ___
 
@@ -676,7 +678,7 @@ A promise that resolves to the transaction.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:868](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L868)
+[packages/providers/src/provider.ts:962](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L962)
 
 ___
 
@@ -703,7 +705,7 @@ A promise that resolves to the transaction cost object.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:631](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L631)
+[packages/providers/src/provider.ts:725](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L725)
 
 ___
 
@@ -721,7 +723,7 @@ A promise that resolves to the version string.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:354](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L354)
+[packages/providers/src/provider.ts:448](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L448)
 
 ___
 
@@ -746,7 +748,7 @@ A promise that resolves to the block number of the last produced block.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:1118](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L1118)
+[packages/providers/src/provider.ts:1226](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L1226)
 
 ___
 
@@ -773,7 +775,7 @@ A promise that resolves to the transaction response object.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:448](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L448)
+[packages/providers/src/provider.ts:542](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L542)
 
 ___
 
@@ -801,7 +803,7 @@ A promise that resolves to the call result object.
 
 #### Defined in
 
-[packages/providers/src/provider.ts:602](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L602)
+[packages/providers/src/provider.ts:696](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L696)
 
 ___
 
@@ -823,7 +825,32 @@ Updates the URL for the provider and fetches the consensus parameters for the ne
 
 #### Defined in
 
-[packages/providers/src/provider.ts:302](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L302)
+[packages/providers/src/provider.ts:329](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L329)
+
+___
+
+### adaptSubscriptionResponse
+
+▸ `Private` `Static` **adaptSubscriptionResponse**(`originalResponse`): `Promise`&lt;`Response`\>
+
+The subscription response processing serves two purposes:
+1. To add an `event` field which is mandated by the graphql-sse library (not by the SSE protocol)
+(see [the library's protocol](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md))
+2. To process the node's response because it's a different format to the types generated by graphql-codegen.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `originalResponse` | `Response` |
+
+#### Returns
+
+`Promise`&lt;`Response`\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:431](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L431)
 
 ___
 
@@ -838,7 +865,7 @@ Creates a new instance of the Provider class. This is the recommended way to ini
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `url` | `string` | GraphQL endpoint of the Fuel node |
-| `options` | [`ProviderOptions`](/api/Providers/index.md#provideroptions) | Additional options for the provider |
+| `options` | `Partial`&lt;[`ProviderOptions`](/api/Providers/index.md#provideroptions)&lt;`Response`\>\> | Additional options for the provider |
 
 #### Returns
 
@@ -846,4 +873,46 @@ Creates a new instance of the Provider class. This is the recommended way to ini
 
 #### Defined in
 
-[packages/providers/src/provider.ts:249](https://github.com/FuelLabs/fuels-ts/blob/4803e6df/packages/providers/src/provider.ts#L249)
+[packages/providers/src/provider.ts:276](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L276)
+
+___
+
+### createSubscriptionClient
+
+▸ `Private` `Static` **createSubscriptionClient**(`url`, `fetchFn`, `options`): `Client`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `url` | `string` |
+| `fetchFn` | [`CustomFetch`](/api/Providers/index.md#customfetch)&lt;`Response`\> |
+| `options` | [`ProviderOptions`](/api/Providers/index.md#provideroptions)&lt;`Response`\> |
+
+#### Returns
+
+`Client`
+
+#### Defined in
+
+[packages/providers/src/provider.ts:396](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L396)
+
+___
+
+### getFetchFn
+
+▸ `Private` `Static` **getFetchFn**(`options`): [`CustomFetch`](/api/Providers/index.md#customfetch)&lt;`Response`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options` | [`ProviderOptions`](/api/Providers/index.md#provideroptions)&lt;`Response`\> |
+
+#### Returns
+
+[`CustomFetch`](/api/Providers/index.md#customfetch)&lt;`Response`\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:239](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/providers/src/provider.ts#L239)
