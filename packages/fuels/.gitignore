@@ -1,3 +1,3 @@
 README.md
-tests/fixtures/types
-tests/fixtures/fuels.config.ts
+test/fixtures/types
+test/fixtures/fuels.config.ts
