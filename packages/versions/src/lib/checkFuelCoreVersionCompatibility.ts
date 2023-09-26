@@ -2,12 +2,12 @@ import semver from 'semver';
 
 import { getSupportedVersions } from './getSupportedVersions';
 
-type VersionDifference = {
-  difference: 'major' | 'minor' | 'patch' | 'equal';
+export function checkFuelCoreVersionCompatibility(version: string): {
+  isPatchSupported: boolean;
+  isMinorSupported: boolean;
+  isMajorSupported: boolean;
   userVersion: string;
-};
-
-export function getDifferenceToUserFuelCoreVersion(version: string): VersionDifference {
+} {
   const major = semver.major(version);
   const minor = semver.minor(version);
   const patch = semver.patch(version);
@@ -18,14 +18,10 @@ export function getDifferenceToUserFuelCoreVersion(version: string): VersionDiff
   const supportedMinor = semver.minor(FUEL_CORE);
   const supportedPatch = semver.patch(FUEL_CORE);
 
-  const result: VersionDifference = {
+  return {
     userVersion: FUEL_CORE,
-    difference: 'equal',
+    isMajorSupported: major === supportedMajor,
+    isMinorSupported: minor === supportedMinor,
+    isPatchSupported: patch === supportedPatch,
   };
-
-  if (major !== supportedMajor) result.difference = 'major';
-  else if (minor !== supportedMinor) result.difference = 'minor';
-  else if (patch !== supportedPatch) result.difference = 'patch';
-
-  return result;
 }

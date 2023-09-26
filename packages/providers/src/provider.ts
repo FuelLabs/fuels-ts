@@ -13,7 +13,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { getDifferenceToUserFuelCoreVersion } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
@@ -364,16 +364,17 @@ export default class Provider {
   }
 
   private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
-    const { difference, userVersion } = getDifferenceToUserFuelCoreVersion(nodeInfo.nodeVersion);
+    const { isMajorSupported, isMinorSupported, isPatchSupported, userVersion } =
+      checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
-    if (difference === 'major' || difference === 'minor') {
+    if (!isMajorSupported || !isMinorSupported) {
       throw new FuelError(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
         `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${userVersion}`
       );
     }
 
-    if (difference === 'patch') {
+    if (!isPatchSupported) {
       // eslint-disable-next-line no-console
       console.warn(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,

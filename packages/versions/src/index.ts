@@ -38,4 +38,4 @@
 import { getSupportedVersions } from './lib/getSupportedVersions';
 
 export const versions = getSupportedVersions();
-export * from './lib/getDifferenceToUserFuelCoreVersion';
+export * from './lib/checkFuelCoreVersionCompatibility';
