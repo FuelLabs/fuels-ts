@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference path="../../src/hbs.d.ts" />
+
 import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
@@ -18,6 +21,14 @@ export async function runInit() {
     ['-p', fixtures],
     '--silent',
   ].flat();
+  await run(argv);
+
+  return { argv };
+}
+
+export async function runBuild() {
+  const argv = ['node', 'fuels', 'build', ['-p', fixtures], '--silent'].flat();
+
   await run(argv);
 
   return { argv };
