@@ -64,7 +64,7 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
       },
     },
   ])(
-    `returns $expectedResult when checking $version and ${v} equality`,
+    `Succeeds when checking $version and ${v} equality`,
     ({ version, isSupportedResult: { major, minor, patch } }) => {
       const { isMajorSupported, isMinorSupported, isPatchSupported, userVersion } =
         checkFuelCoreVersionCompatibility(version);
