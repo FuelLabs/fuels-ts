@@ -277,7 +277,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The prepared transaction request.
    */
-  async getTransactionRequest(): Promise<TransactionRequest> {
+  async getTransactionRequest(): Promise<ScriptTransactionRequest> {
     await this.prepareTransaction();
     return this.transactionRequest;
   }
