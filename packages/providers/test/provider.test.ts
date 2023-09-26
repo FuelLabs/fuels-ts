@@ -18,7 +18,7 @@ import type {
 import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
-import { messageProofResponse } from './fixtures';
+import { messageProofResponse, messageStatusResponse } from './fixtures';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -651,6 +651,21 @@ describe('Provider', () => {
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
     expect(messageProof).toMatchSnapshot();
+  });
+
+  it('can getMessageStatus', async () => {
+    // Create a mock provider to return the message proof
+    // It test mainly types and converstions
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, options) => {
+        const messageStatus = JSON.stringify(messageStatusResponse);
+        return Promise.resolve(new Response(messageStatus, options));
+      },
+    });
+    const messageStatus = await provider.getMessageStatus(
+      '0x0000000000000000000000000000000000000000000000000000000000000008'
+    );
+    expect(messageStatus).toMatchSnapshot();
   });
 
   it('default timeout is undefined', async () => {
