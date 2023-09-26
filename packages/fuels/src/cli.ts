@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+/// <reference path="./hbs.d.ts" />
+
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';

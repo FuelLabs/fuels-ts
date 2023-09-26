@@ -1,7 +1,3 @@
-// TODO: Remove reference after all tests are finished
-/* eslint-disable @typescript-eslint/triple-slash-reference */
-/// <reference path="../../src/hbs.d.ts" />
-
 import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
