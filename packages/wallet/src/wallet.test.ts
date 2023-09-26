@@ -133,7 +133,7 @@ describe('Wallet', () => {
     Provider.prototype.getContractBalance;
 
     it('Wallet provider should be assigned on creation', async () => {
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      using newProviderInstance = await setupTestProvider();
 
       const myWallet = Wallet.generate({ provider: newProviderInstance });
 
