@@ -46,7 +46,7 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
  * Base class for managing invocation scopes and preparing transactions.
  */
 export class BaseInvocationScope<TReturn = any> {
-  transactionRequest: ScriptTransactionRequest;
+  protected transactionRequest: ScriptTransactionRequest;
   protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
