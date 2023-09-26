@@ -1,4 +1,4 @@
-import { fuelsConfig } from '../../../../tests/fixtures/fuels-config';
+import { fuelsConfig } from '../../../../test/fixtures/fuels-config';
 import type { FuelsConfig } from '../../types';
 
 import { buildSwayPrograms } from './buildSwayPrograms';

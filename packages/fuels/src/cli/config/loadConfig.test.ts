@@ -3,7 +3,7 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import JoyCon from 'joycon';
 
-import { mockForcFiles } from '../../../tests/mocks/mockForcFiles';
+import { mockForcFiles } from '../../../test/mocks/mockForcFiles';
 
 import { forcFiles, swayFiles, SwayType } from './forcUtils';
 import { loadConfig } from './loadConfig';

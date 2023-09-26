@@ -1,8 +1,8 @@
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
-import { fuelsConfig } from '../../../../tests/fixtures/fuels-config';
-import { mockForcFiles } from '../../../../tests/mocks/mockForcFiles';
+import { fuelsConfig } from '../../../../test/fixtures/fuels-config';
+import { mockForcFiles } from '../../../../test/mocks/mockForcFiles';
 import type { FuelsConfig, OptionsFunction } from '../../types';
 
 import { deploy } from '.';
