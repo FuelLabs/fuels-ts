@@ -172,6 +172,9 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
+      const tx = await wallet.transfer(predicate.address, 400);
+      await tx.waitForResult();
+
       await expect(predicate.transfer(destination.address, 300)).rejects.toThrow(
         'Invalid transaction'
       );

@@ -285,7 +285,7 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, amountToPredicate)
+          .transfer(receiver.address, amountToPredicate - 5)
       ).rejects.toThrow('Invalid transaction');
     });
 
