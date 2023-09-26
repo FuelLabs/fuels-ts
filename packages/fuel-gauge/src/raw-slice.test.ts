@@ -53,9 +53,9 @@ describe('Raw Slice Tests', () => {
   it('should test raw slice input', async () => {
     const INPUT = [40, 41, 42];
 
-    await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    await expect(() =>
+      contractInstance.functions.accept_raw_slice(INPUT).call<number[]>()
+    ).not.toThrow();
   });
 
   it('should test raw slice input [nested]', async () => {
@@ -65,9 +65,9 @@ describe('Raw Slice Tests', () => {
       inner_enum: { Second: slice },
     };
 
-    await contractInstance.functions.accept_nested_raw_slice(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    await expect(() =>
+      contractInstance.functions.accept_nested_raw_slice(INPUT).call<number[]>()
+    ).not.toThrow();
   });
 
   it('should test raw slice input [predicate-raw-slice]', async () => {
@@ -117,8 +117,7 @@ describe('Raw Slice Tests', () => {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };
-    await scriptInstance.functions.main(1, INPUT).call();
 
-    expect(true).toBe(true);
+    await expect(() => scriptInstance.functions.main(1, INPUT).call()).not.toThrow();
   });
 });

@@ -60,9 +60,9 @@ describe('Bytes Tests', () => {
   it('should test bytes input', async () => {
     const INPUT = [40, 41, 42];
 
-    await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    await expect(() =>
+      contractInstance.functions.accept_bytes(INPUT).call<number[]>()
+    ).not.toThrow();
   });
 
   it('should test bytes input [nested]', async () => {
@@ -73,9 +73,9 @@ describe('Bytes Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    await expect(
+      () => contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>
+    ).not.toThrow();
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
@@ -121,8 +121,7 @@ describe('Bytes Tests', () => {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };
-    await scriptInstance.functions.main(1, INPUT).call();
 
-    expect(true).toBe(true);
+    await expect(() => scriptInstance.functions.main(1, INPUT).call).not.toThrow();
   });
 });
