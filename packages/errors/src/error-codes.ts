@@ -24,6 +24,7 @@ export enum ErrorCode {
   INVALID_URL = 'invalid-url',
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
+  MISSING_PROVIDER = 'missing-provider',
 
   // wallet
   INSUFFICIENT_BALANCE = 'insufficient-balance',
@@ -84,6 +85,9 @@ export enum ErrorCode {
   // script
   SCRIPT_REVERTED = 'script-reverted',
   SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
+
+  // general
+  FUEL_NODE_ERROR = 'fuel-node-error',
 
   // coder
   // ...
