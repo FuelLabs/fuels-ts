@@ -14,7 +14,15 @@ import { Commands } from './cli/types';
 import { findPackageRoot } from './cli/utils/findPackageRoot';
 import { configureLogging } from './cli/utils/logger';
 
-export async function run(argv: string[]) {
+export const onPreAction = (command: Command) => {
+  const opts = command.opts();
+  configureLogging({
+    isDebugEnabled: opts.debug,
+    isLoggingEnabled: !opts.silent,
+  });
+};
+
+export const configureCli = () => {
   const program = new Command();
 
   program.name('fuels');
@@ -26,13 +34,7 @@ export async function run(argv: string[]) {
   program.helpOption('-h, --help', 'Display help');
   program.addHelpCommand('help [command]', 'Display help for command');
 
-  program.hook('preAction', (command: Command) => {
-    const opts = command.opts();
-    configureLogging({
-      isDebugEnabled: opts.debug,
-      isLoggingEnabled: !opts.silent,
-    });
-  });
+  program.hook('preAction', onPreAction);
 
   /**
    * Defining local commands
@@ -95,8 +97,10 @@ export async function run(argv: string[]) {
     executableFile: join(binDir, 'fuels-forc'),
   });
 
-  /**
-   * Let's go
-   */
+  return program;
+};
+
+export const run = async (argv: string[]) => {
+  const program = configureCli();
   return program.parseAsync(argv);
-}
+};
