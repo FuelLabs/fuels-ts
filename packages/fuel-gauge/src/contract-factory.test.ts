@@ -1,6 +1,6 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Provider } from 'fuels';
@@ -8,10 +8,6 @@ import { bn, toHex, Interface, ContractFactory, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
 import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
-
-describe('Contract Factory', () => {
-  const createContractFactory = async (provider: Provider) => {
-    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
 // load the byteCode of the contract, generated from Sway source
 const byteCode = readFileSync(
@@ -28,16 +24,14 @@ const abi = JSON.parse(
   ).toString()
 );
 
+const createContractFactory = async (provider: Provider) => {
+  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+
+  // send byteCode and ABI to ContractFactory to load
+  const factory = new ContractFactory(byteCode, abi, wallet);
+  return factory;
+};
 describe('Contract Factory', () => {
-  const createContractFactory = async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-
-    // send byteCode and ABI to ContractFactory to load
-    const factory = new ContractFactory(byteCode, abi, wallet);
-    return factory;
-  };
-
   it('Creates a factory from inputs that can return call results', async () => {
     using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
@@ -196,7 +190,8 @@ describe('Contract Factory', () => {
   });
 
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
-    const factory = new ContractFactory(byteCode, abi);
+    using provider = await setupTestProvider();
+    const factory = new ContractFactory(byteCode, abi, provider);
 
     await expectToThrowFuelError(
       () => factory.createTransactionRequest(),

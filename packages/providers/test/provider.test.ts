@@ -216,7 +216,8 @@ describe('Provider', () => {
   });
 
   it('can accept a custom fetch function', async () => {
-    const providerUrl = FUEL_NETWORK_URL;
+    using providerForUrl = await setupTestProvider();
+    const providerUrl = providerForUrl.url;
 
     const provider = await Provider.create(providerUrl, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
@@ -657,13 +658,13 @@ describe('Provider', () => {
   });
 
   it('default timeout is undefined', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
     expect(provider.options.timeout).toBeUndefined();
   });
 
   it('throws TimeoutError on timeout when calling an operation', async () => {
     const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      using provider = await setupTestProvider({ timeout: 0 });
       await provider.getTransaction('will fail due to timeout');
     });
 
@@ -677,7 +678,7 @@ describe('Provider', () => {
   // Fails because the library creates its own AbortController
   it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
     const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      using provider = await setupTestProvider({ timeout: 0 });
       provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
     });
     expect(error).toMatchObject({
@@ -688,53 +689,7 @@ describe('Provider', () => {
   });
 
   it('errors returned from node via subscriptions are thrown', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    await expectToThrowFuelError(
-      async () => {
-        for await (const iterator of provider.operations.statusChange({
-          transactionId: 'Invalid ID that will cause node to return errors',
-        })) {
-          if (iterator) break;
-        }
-      },
-      { code: ErrorCode.FUEL_NODE_ERROR }
-    );
-  });
-
-  it('default timeout is undefined', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    expect(provider.options.timeout).toBeUndefined();
-  });
-
-  it('throws TimeoutError on timeout when calling an operation', async () => {
-    const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-      await provider.getTransaction('will fail due to timeout');
-    });
-
-    expect(error).toMatchObject({
-      code: 23,
-      name: 'TimeoutError',
-      message: 'The operation was aborted due to timeout',
-    });
-  });
-
-  // Fails because the library creates its own AbortController
-  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
-    const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
-    });
-    expect(error).toMatchObject({
-      code: 23,
-      name: 'TimeoutError',
-      message: 'The operation was aborted due to timeout',
-    });
-  });
-
-  it('errors returned from node via subscriptions are thrown', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     await expectToThrowFuelError(
       async () => {

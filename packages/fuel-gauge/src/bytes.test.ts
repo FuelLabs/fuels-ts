@@ -1,3 +1,4 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import {
   type Contract,
@@ -16,10 +17,6 @@ import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/deb
 import { getSetupContract } from './utils';
 
 const setupContract = getSetupContract('bytes');
-let contractInstance: Contract;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-});
 
 type SomeEnum = {
   First?: boolean;
@@ -33,6 +30,8 @@ type Wrapper = {
 
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -41,6 +40,8 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output [100 items]', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
     const INPUT = 100;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -49,6 +50,8 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
     const INPUT = [40, 41, 42];
 
     await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
@@ -57,6 +60,8 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [nested]', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
     const bytes = [40, 41, 42];
 
     const INPUT: Wrapper = {
@@ -70,7 +75,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     // Create wallet
     const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);

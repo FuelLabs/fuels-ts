@@ -1,15 +1,7 @@
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN } from 'fuels';
-import {
-  type Contract,
-  bn,
-  Predicate,
-  Wallet,
-  Address,
-  BaseAssetId,
-  Provider,
-  FUEL_NETWORK_URL,
-} from 'fuels';
 
 import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
 import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
@@ -27,13 +19,12 @@ type Wrapper = {
 };
 
 const setupContract = getSetupContract('raw-slice');
-let contractInstance: Contract;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-});
 
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
+
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_raw_slice(INPUT).call<BN[]>();
@@ -42,6 +33,8 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
     const INPUT = [40, 41, 42];
 
     await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
@@ -50,6 +43,8 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [nested]', async () => {
+    using provider = await setupTestProvider();
+    const contractInstance = await setupContract(provider);
     const slice = [40, 41, 42];
     const INPUT = {
       inner: [slice, slice],
@@ -62,7 +57,7 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [predicate-raw slice]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using provider = await setupTestProvider();
 
     // Create wallet
     const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
