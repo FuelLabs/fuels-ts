@@ -46,7 +46,7 @@ export async function run(argv: string[]) {
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
     .option('-w, --workspace <path>', 'Relative dir path to Sway workspace', './sway-workspace')
-    .option('-o, --output <path>', 'Relative dir path to generating Typescript', './types')
+    .option('-o, --output <path>', 'Relative dir path for Typescript generation output', './types')
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
