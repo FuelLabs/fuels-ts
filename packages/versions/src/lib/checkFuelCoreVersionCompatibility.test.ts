@@ -2,7 +2,7 @@ import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompati
 import * as getSupportedVersionsMod from './getSupportedVersions';
 
 describe('getDifferenceToUserFuelCoreVersion', () => {
-  afterAll(() => jest.resetAllMocks());
+  afterAll(() => jest.restoreAllMocks());
 
   it('should validate all possible version mismatches', () => {
     const supportedVersion = '0.1.2';
