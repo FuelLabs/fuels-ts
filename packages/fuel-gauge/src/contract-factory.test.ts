@@ -190,8 +190,7 @@ describe('Contract Factory', () => {
   });
 
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
-    using provider = await setupTestProvider();
-    const factory = new ContractFactory(byteCode, abi, provider);
+    const factory = new ContractFactory(byteCode, abi);
 
     await expectToThrowFuelError(
       () => factory.createTransactionRequest(),
