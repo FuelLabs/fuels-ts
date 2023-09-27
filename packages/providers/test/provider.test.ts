@@ -670,10 +670,8 @@ describe('Provider', () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, options) => {
-        const messageStatus = JSON.stringify(messageStatusResponse);
-        return Promise.resolve(new Response(messageStatus, options));
-      },
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
     });
     const messageStatus = await provider.getMessageStatus(
       '0x0000000000000000000000000000000000000000000000000000000000000008'
