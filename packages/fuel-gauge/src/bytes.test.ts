@@ -1,4 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { BN } from 'fuels';
 import {
   type Contract,
   bn,
@@ -13,7 +14,7 @@ import {
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
 
-import { getSetupContract } from './utils';
+import { getScript, getSetupContract } from './utils';
 
 const setupContract = getSetupContract('bytes');
 let contractInstance: Contract;
@@ -29,6 +30,15 @@ type SomeEnum = {
 type Wrapper = {
   inner: number[][];
   inner_enum: SomeEnum;
+};
+
+const setup = async (balance = 5_000) => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+
+  // Create wallet
+  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+
+  return wallet;
 };
 
 describe('Bytes Tests', () => {
@@ -51,9 +61,8 @@ describe('Bytes Tests', () => {
   it('should test bytes input', async () => {
     const INPUT = [40, 41, 42];
 
-    await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    const { value } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
+    expect(value).toBeUndefined();
   });
 
   it('should test bytes input [nested]', async () => {
@@ -64,16 +73,12 @@ describe('Bytes Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
-
-    expect(true).toBeTruthy();
+    const { value } = await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
+    expect(value).toBeUndefined();
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    // Create wallet
-    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+    const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
     const amountToReceiver = 50;
@@ -103,5 +108,20 @@ describe('Bytes Tests', () => {
     // Check we spent the entire predicate hash input
     const finalPredicateBalance = await predicate.getBalance();
     expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
+  });
+
+  it('should test bytes input [script-bytes]', async () => {
+    const wallet = await setup();
+    type MainArgs = [number, Wrapper];
+    const scriptInstance = getScript<MainArgs, void>('script-bytes', wallet);
+
+    const bytes = [40, 41, 42];
+    const INPUT: Wrapper = {
+      inner: [bytes, bytes],
+      inner_enum: { Second: bytes },
+    };
+
+    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN>();
+    expect(value.toNumber()).toStrictEqual(0);
   });
 });

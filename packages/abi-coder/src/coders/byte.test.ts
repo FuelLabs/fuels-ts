@@ -1,3 +1,6 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { ByteCoder } from './byte';
@@ -29,6 +32,15 @@ describe('ByteCoder', () => {
     const actual = coder.encode([1, 2, 3, 4, 5, 6, 7, 8]);
 
     expect(actual).toStrictEqual(expected);
+  });
+
+  it('should throw when value to encode is not array', async () => {
+    const coder = new ByteCoder();
+    const nonArrayInput = { ...[1] };
+    await expectToThrowFuelError(
+      () => coder.encode(nonArrayInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
+    );
   });
 
   it('should decode a byte', () => {

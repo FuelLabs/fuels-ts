@@ -1,3 +1,5 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 
 import type { Uint8ArrayWithDynamicData } from '../utilities';
@@ -17,6 +19,15 @@ describe('RawSliceCoder', () => {
     const actual = coder.encode([1, 2, 3]);
 
     expect(actual).toStrictEqual(expected);
+  });
+
+  it('should throw when value to encode is not array', async () => {
+    const coder = new RawSliceCoder();
+    const nonArrayInput = { ...[1] };
+    await expectToThrowFuelError(
+      () => coder.encode(nonArrayInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
+    );
   });
 
   it('should decode a raw-slice', () => {
