@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.60.0
+
+### Minor Changes
+
+- add method "getMessageStatus" to provider, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1297](https://github.com/FuelLabs/fuels-ts/pull/1297))
+- Added subscriptions to graphql node, by [@nedsalk](https://github.com/nedsalk) (See [#1256](https://github.com/FuelLabs/fuels-ts/pull/1256))
+
 ## 0.59.0
 
 ### Minor Changes
