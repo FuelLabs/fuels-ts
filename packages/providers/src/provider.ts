@@ -364,13 +364,13 @@ export default class Provider {
   }
 
   private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
-    const { isMajorSupported, isMinorSupported, isPatchSupported, userVersion } =
+    const { isMajorSupported, isMinorSupported, isPatchSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
       throw new FuelError(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${userVersion}`
+        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
       );
     }
 
@@ -378,7 +378,7 @@ export default class Provider {
       // eslint-disable-next-line no-console
       console.warn(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${userVersion}`
+        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
       );
     }
   }

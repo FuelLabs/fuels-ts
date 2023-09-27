@@ -737,7 +737,7 @@ describe('Provider', () => {
       isMajorSupported: false,
       isMinorSupported: true,
       isPatchSupported: true,
-      userVersion: '1.0.0',
+      supportedVersion: '1.0.0',
     }));
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
@@ -754,7 +754,7 @@ describe('Provider', () => {
       isMajorSupported: true,
       isMinorSupported: false,
       isPatchSupported: true,
-      userVersion: '0.19.0',
+      supportedVersion: '0.19.0',
     }));
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
@@ -773,7 +773,7 @@ describe('Provider', () => {
       isMajorSupported: true,
       isMinorSupported: true,
       isPatchSupported: false,
-      userVersion: '0.0.1',
+      supportedVersion: '0.0.1',
     }));
 
     const warnSpy = jest.spyOn(global.console, 'warn');
