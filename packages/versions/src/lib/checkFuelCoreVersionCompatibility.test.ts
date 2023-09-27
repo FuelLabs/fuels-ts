@@ -2,10 +2,6 @@ import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompati
 import * as getSupportedVersionsMod from './getSupportedVersions';
 
 describe('getDifferenceToUserFuelCoreVersion', () => {
-import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompatibility';
-import * as getSupportedVersionsMod from './getSupportedVersions';
-
-describe('getDifferenceToUserFuelCoreVersion', () => {
   afterAll(() => jest.resetAllMocks());
 
   it('should validate all possible version mismatches', () => {
@@ -66,5 +62,4 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
       supportedVersion,
     });
   });
-});
 });
