@@ -1,5 +1,11 @@
 # @fuel-ts/errors
 
+## 0.60.0
+
+### Minor Changes
+
+- purging constant MAX_GAS_PER_TX, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1272](https://github.com/FuelLabs/fuels-ts/pull/1272))
+
 ## 0.59.0
 
 ### Minor Changes
