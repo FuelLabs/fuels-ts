@@ -28,7 +28,7 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
-import type { Message, MessageCoin, MessageProof } from './message';
+import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import type {
   TransactionRequestLike,
@@ -1200,6 +1200,20 @@ export default class Provider {
       amount: bn(amount),
       data,
     };
+  }
+
+  /**
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt.
+   *
+   * @param nonce - The nonce of the message to get status from.
+   * @returns A promise that resolves to the message status
+   */
+  async getMessageStatus(
+    /** The nonce of the message to get status from */
+    nonce: string
+  ): Promise<MessageStatus> {
+    const result = await this.operations.getMessageStatus({ nonce });
+    return result.messageStatus;
   }
 
   /**
