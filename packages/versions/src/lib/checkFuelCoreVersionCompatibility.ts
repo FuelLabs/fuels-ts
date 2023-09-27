@@ -2,26 +2,21 @@ import semver from 'semver';
 
 import { getSupportedVersions } from './getSupportedVersions';
 
-export function checkFuelCoreVersionCompatibility(version: string): {
-  isPatchSupported: boolean;
-  isMinorSupported: boolean;
-  isMajorSupported: boolean;
-  userVersion: string;
-} {
-  const major = semver.major(version);
-  const minor = semver.minor(version);
-  const patch = semver.patch(version);
+export function checkFuelCoreVersionCompatibility(networkVersion: string) {
+  const { FUEL_CORE: supportedVersion } = getSupportedVersions();
 
-  const { FUEL_CORE } = getSupportedVersions();
+  const networkMajor = semver.major(networkVersion);
+  const networkMinor = semver.minor(networkVersion);
+  const networkPatch = semver.patch(networkVersion);
 
-  const supportedMajor = semver.major(FUEL_CORE);
-  const supportedMinor = semver.minor(FUEL_CORE);
-  const supportedPatch = semver.patch(FUEL_CORE);
+  const supportedMajor = semver.major(supportedVersion);
+  const supportedMinor = semver.minor(supportedVersion);
+  const supportedPatch = semver.patch(supportedVersion);
 
   return {
-    userVersion: FUEL_CORE,
-    isMajorSupported: major === supportedMajor,
-    isMinorSupported: minor === supportedMinor,
-    isPatchSupported: patch === supportedPatch,
+    supportedVersion,
+    isMajorSupported: networkMajor === supportedMajor,
+    isMinorSupported: networkMinor === supportedMinor,
+    isPatchSupported: networkPatch === supportedPatch,
   };
 }
