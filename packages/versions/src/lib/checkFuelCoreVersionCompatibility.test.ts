@@ -2,78 +2,69 @@ import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompati
 import * as getSupportedVersionsMod from './getSupportedVersions';
 
 describe('getDifferenceToUserFuelCoreVersion', () => {
-  const v = '0.1.2';
-  const spy = jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions');
-  spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
+import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompatibility';
+import * as getSupportedVersionsMod from './getSupportedVersions';
 
-  it.each([
-    {
-      version: '1.1.2',
-      isSupportedResult: {
-        major: false,
-        minor: true,
-        patch: true,
-      },
-    },
-    {
-      version: '1.2.2',
-      isSupportedResult: {
-        major: false,
-        minor: false,
-        patch: true,
-      },
-    },
-    {
-      version: '1.1.3',
-      isSupportedResult: {
-        major: false,
-        minor: true,
-        patch: false,
-      },
-    },
-    {
-      version: '0.2.2',
-      isSupportedResult: {
-        major: true,
-        minor: false,
-        patch: true,
-      },
-    },
-    {
-      version: '0.2.3',
-      isSupportedResult: {
-        major: true,
-        minor: false,
-        patch: false,
-      },
-    },
-    {
-      version: '0.1.3',
-      isSupportedResult: {
-        major: true,
-        minor: true,
-        patch: false,
-      },
-    },
-    {
-      version: '0.1.2',
-      isSupportedResult: {
-        major: true,
-        minor: true,
-        patch: true,
-      },
-    },
-  ])(
-    `Succeeds when checking $version and ${v} equality`,
-    ({ version, isSupportedResult: { major, minor, patch } }) => {
-      const { isMajorSupported, isMinorSupported, isPatchSupported, userVersion } =
-        checkFuelCoreVersionCompatibility(version);
+describe('getDifferenceToUserFuelCoreVersion', () => {
+  afterAll(() => jest.resetAllMocks());
 
-      expect(isMajorSupported).toEqual(major);
-      expect(isMinorSupported).toEqual(minor);
-      expect(isPatchSupported).toEqual(patch);
+  it('should validate all possible version mismatches', () => {
+    const supportedVersion = '0.1.2';
 
-      expect(userVersion).toEqual(v);
-    }
-  );
+    jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+      FUELS: '1', // not under test
+      FORC: '1', // not under test
+      FUEL_CORE: supportedVersion,
+    }));
+
+    expect(checkFuelCoreVersionCompatibility('1.1.2')).toEqual({
+      isMajorSupported: false,
+      isMinorSupported: true,
+      isPatchSupported: true,
+      supportedVersion,
+    });
+
+    expect(checkFuelCoreVersionCompatibility('1.2.2')).toEqual({
+      isMajorSupported: false,
+      isMinorSupported: false,
+      isPatchSupported: true,
+      supportedVersion,
+    });
+
+    expect(checkFuelCoreVersionCompatibility('1.1.3')).toEqual({
+      isMajorSupported: false,
+      isMinorSupported: true,
+      isPatchSupported: false,
+      supportedVersion,
+    });
+
+    expect(checkFuelCoreVersionCompatibility('0.2.2')).toEqual({
+      isMajorSupported: true,
+      isMinorSupported: false,
+      isPatchSupported: true,
+      supportedVersion,
+    });
+
+    expect(checkFuelCoreVersionCompatibility('0.2.3')).toEqual({
+      isMajorSupported: true,
+      isMinorSupported: false,
+      isPatchSupported: false,
+      supportedVersion,
+    });
+
+    expect(checkFuelCoreVersionCompatibility('0.1.3')).toEqual({
+      isMajorSupported: true,
+      isMinorSupported: true,
+      isPatchSupported: false,
+      supportedVersion,
+    });
+
+    expect(checkFuelCoreVersionCompatibility('0.1.2')).toEqual({
+      isMajorSupported: true,
+      isMinorSupported: true,
+      isPatchSupported: true,
+      supportedVersion,
+    });
+  });
+});
 });
