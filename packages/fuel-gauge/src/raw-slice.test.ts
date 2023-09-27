@@ -14,7 +14,7 @@ import {
 import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
 import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
 
-import { getSetupContract } from './utils';
+import { getScript, getSetupContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -24,6 +24,15 @@ type SomeEnum = {
 type Wrapper = {
   inner: number[][];
   inner_enum: SomeEnum;
+};
+
+const setup = async (balance = 5_000) => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+
+  // Create wallet
+  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+
+  return wallet;
 };
 
 const setupContract = getSetupContract('raw-slice');
@@ -44,9 +53,9 @@ describe('Raw Slice Tests', () => {
   it('should test raw slice input', async () => {
     const INPUT = [40, 41, 42];
 
-    await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
 
-    expect(true).toBeTruthy();
+    expect(value).toBeUndefined();
   });
 
   it('should test raw slice input [nested]', async () => {
@@ -56,16 +65,15 @@ describe('Raw Slice Tests', () => {
       inner_enum: { Second: slice },
     };
 
-    await contractInstance.functions.accept_nested_raw_slice(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions
+      .accept_nested_raw_slice(INPUT)
+      .call<number[]>();
 
-    expect(true).toBeTruthy();
+    expect(value).toBeUndefined();
   });
 
-  it('should test raw slice input [predicate-raw slice]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    // Create wallet
-    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+  it('should test raw slice input [predicate-raw-slice]', async () => {
+    const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
     const amountToReceiver = 50;
@@ -99,5 +107,20 @@ describe('Raw Slice Tests', () => {
     // Check we spent the entire predicate hash input
     const finalPredicateBalance = await predicate.getBalance();
     expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
+  });
+
+  it('should test bytes input [script-raw-slice]', async () => {
+    const wallet = await setup();
+    type MainArgs = [number, Wrapper];
+    const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
+
+    const bytes = [40, 41, 42];
+    const INPUT: Wrapper = {
+      inner: [bytes, bytes],
+      inner_enum: { Second: bytes },
+    };
+
+    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN[]>();
+    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });
 });
