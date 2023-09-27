@@ -5,9 +5,9 @@ import { run } from '../../src/cli';
 
 export const fixtures = join(__dirname, '..', 'fixtures');
 export const workspace = join(fixtures, 'project');
-export const output = join(fixtures, 'types');
+export const types = join(fixtures, 'types');
 export const fuelsConfig = join(fixtures, 'fuels.config.ts');
-export const contractsJson = join(output, 'contracts.json');
+export const contractsJson = join(types, 'contracts.json');
 
 export async function runInit() {
   const argv = [
@@ -15,7 +15,7 @@ export async function runInit() {
     'fuels',
     'init',
     ['-w', workspace],
-    ['-o', output],
+    ['-o', types],
     ['-p', fixtures],
     '--silent',
   ].flat();
@@ -40,7 +40,7 @@ export function clean() {
   if (existsSync(fuelsConfig)) {
     rmSync(fuelsConfig);
   }
-  if (existsSync(output)) {
-    rmSync(output, { recursive: true });
+  if (existsSync(types)) {
+    rmSync(types, { recursive: true });
   }
 }
