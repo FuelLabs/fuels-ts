@@ -446,6 +446,12 @@ query getMessageProof(
   }
 }
 
+query getMessageStatus($nonce: Nonce!) {
+  messageStatus(nonce: $nonce) {
+    state
+  }
+}
+
 mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
   dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
     ...receiptFragment
