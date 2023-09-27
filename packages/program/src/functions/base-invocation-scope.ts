@@ -3,7 +3,7 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
+import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
