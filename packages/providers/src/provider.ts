@@ -341,9 +341,6 @@ export default class Provider {
     const chain = await this.fetchChain();
     const nodeInfo = await this.fetchNode();
 
-    Provider.chainInfoCache[this.url] = chain;
-    Provider.nodeInfoCache[this.url] = nodeInfo;
-
     return {
       chain,
       nodeInfo,
@@ -473,7 +470,8 @@ export default class Provider {
    */
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
-    return {
+
+    const processedNodeInfo: NodeInfo = {
       maxDepth: bn(nodeInfo.maxDepth),
       maxTx: bn(nodeInfo.maxTx),
       minGasPrice: bn(nodeInfo.minGasPrice),
@@ -481,6 +479,10 @@ export default class Provider {
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
     };
+
+    Provider.nodeInfoCache[this.url] = processedNodeInfo;
+
+    return processedNodeInfo;
   }
 
   /**
@@ -490,7 +492,12 @@ export default class Provider {
    */
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
-    return processGqlChain(chain);
+
+    const processedChain = processGqlChain(chain);
+
+    Provider.chainInfoCache[this.url] = processedChain;
+
+    return processedChain;
   }
 
   /**
