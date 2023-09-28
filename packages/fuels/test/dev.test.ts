@@ -17,21 +17,15 @@ describe('dev', () => {
   let fooContractSwayContentsBefore: string;
 
   async function ensureFileChanged(path: string, mtime: Date) {
-    let output: boolean;
-
     const stat = statSync(path);
-
     if (stat.mtime.getTime() > mtime.getTime()) {
-      output = true;
-    } else {
-      output = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(ensureFileChanged(path, mtime));
-        }, 100);
-      });
+      return true;
     }
-
-    return output;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(ensureFileChanged(path, mtime));
+      }, 1000);
+    });
   }
 
   beforeEach(clean);
