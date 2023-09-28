@@ -11,13 +11,16 @@ import { log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
-export async function startFuelCore(config: FuelsConfig): Promise<{
+export const startFuelCore = async (
+  config: FuelsConfig
+): Promise<{
   bindIp: string;
   accessIp: string;
   port: number;
   providerUrl: string;
   childProcess: ChildProcessWithoutNullStreams;
-}> {
+}> => {
+  console.log('FUCK!');
   log('Starting node..');
 
   const coreDir = join(config.basePath, '.fuels');
@@ -100,4 +103,4 @@ export async function startFuelCore(config: FuelsConfig): Promise<{
 
     core.on('error', reject);
   });
-}
+};

@@ -13,6 +13,10 @@ export async function buildAndDeploy(config: FuelsConfig) {
   return deploy(config);
 }
 
+export const fileHandlers: {
+  watcher?: chokidar.FSWatcher;
+} = {};
+
 export async function dev(config: FuelsConfig) {
   /**
    * Create a copy of the config param, so we can safely
@@ -50,7 +54,7 @@ export async function dev(config: FuelsConfig) {
       await buildAndDeploy(configCopy);
     };
 
-    chokidar
+    fileHandlers.watcher = chokidar
       .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
       .on('add', changeListener)
       .on('change', changeListener)

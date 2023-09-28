@@ -1,39 +1,38 @@
 import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
+import { Commands } from '../../src';
 import { run } from '../../src/cli';
 
 export const fixtures = join(__dirname, '..', 'fixtures');
+
 export const workspace = join(fixtures, 'project');
-export const types = join(fixtures, 'types');
+export const fooContractSway = join(workspace, 'foo', 'src', 'main.sw');
+
 export const fuelsConfig = join(fixtures, 'fuels.config.ts');
+export const types = join(fixtures, 'types');
 export const contractsJson = join(types, 'contracts.json');
+export const fooContractTs = join(types, 'contracts', 'factories', 'FooBarAbi__factory.ts');
+
+export async function runCommand(commandName: string, params: string[] = []) {
+  const argv = ['node', 'fuels', commandName, '-p', fixtures, '--silent'].concat(params);
+  return { argv, command: await run(argv) };
+}
 
 export async function runInit() {
-  const argv = [
-    'node',
-    'fuels',
-    'init',
-    ['-w', workspace],
-    ['-o', types],
-    ['-p', fixtures],
-    '--silent',
-  ].flat();
-  await run(argv);
-
-  return { argv };
+  return runCommand(Commands.init, ['-w', workspace, '-o', types]);
 }
 
 export async function runBuild() {
-  const argv = ['node', 'fuels', 'build', ['-p', fixtures], '--silent'].flat();
-  await run(argv);
-  return { argv };
+  return runCommand(Commands.build);
 }
 
 export async function runDeploy() {
-  const argv = ['node', 'fuels', 'deploy', ['-p', fixtures], '--silent'].flat();
-  await run(argv);
-  return { argv };
+  return runCommand(Commands.deploy);
+}
+
+export async function runDev() {
+  return runCommand(Commands.dev);
 }
 
 export function clean() {
