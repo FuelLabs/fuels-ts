@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync, statfsSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, statSync, writeFileSync } from 'fs';
 
 import type { FuelsConfig } from '../src';
 import { fileHandlers } from '../src/cli/commands/dev';
@@ -44,7 +44,7 @@ describe('dev', () => {
     writeFileSync(fooContractSway, fooContractSwayContentsBefore);
 
     // Clean generated files
-    // clean();
+    clean();
   });
 
   it('should run `dev` command', async () => {
