@@ -20,7 +20,6 @@ export const startFuelCore = async (
   providerUrl: string;
   childProcess: ChildProcessWithoutNullStreams;
 }> => {
-  console.log('FUCK!');
   log('Starting node..');
 
   const coreDir = join(config.basePath, '.fuels');
