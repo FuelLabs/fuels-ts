@@ -123,7 +123,7 @@ export default createConfig({
    * @param config - The loaded `fuels.config`
    */
   onSuccess: (event: CommandEvent, config: FuelsConfig) => {
-    console.log('fuels:onSuccess', { event, config });
+    // console.log('fuels:onSuccess', { event, config });
   },
 
   /**
@@ -131,6 +131,6 @@ export default createConfig({
    * @param error - The error that interrupted the execution
    */
   onFailure: (error: Error) => {
-    console.log('fuels:onFailure', { error });
+    // console.log('fuels:onFailure', { error });
   },
 });
