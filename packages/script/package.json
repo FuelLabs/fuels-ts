@@ -17,9 +17,9 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "pnpm build-forc-projects",
+    "pretest": "pnpm build:forc",
     "build": "tsup",
-    "build-forc-projects": "./scripts/build-forc-projects.sh",
+    "build:forc": "pnpm fuels-forc build -p ./test/call-test-script",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
