@@ -9,6 +9,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import { versions } from '@fuel-ts/versions';
 
 import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
@@ -828,58 +829,66 @@ describe('Provider', () => {
   });
 
   it('throws on difference between major client version and supported major version', async () => {
-    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '2.0.0');
-
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => ({
+    const { FUEL_CORE } = versions;
+    const mock = {
       isMajorSupported: false,
       isMinorSupported: true,
       isPatchSupported: true,
       supportedVersion: '1.0.0',
-    }));
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
       code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: 'Fuel client version: 2.0.0, Supported version: 1.0.0',
+      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
     });
   });
 
   it('throws on difference between minor client version and supported minor version', async () => {
-    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '0.20.0');
-
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => ({
-      isMajorSupported: true,
+    const { FUEL_CORE } = versions;
+    const mock = {
+      isMajorSupported: false,
       isMinorSupported: false,
       isPatchSupported: true,
       supportedVersion: '0.19.0',
-    }));
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
       code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: 'Fuel client version: 0.20.0, Supported version: 0.19.0',
+      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
     });
   });
 
   it('warns on difference between patch client version and supported patch version', async () => {
-    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '0.0.2');
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
 
-    jest.replaceProperty(Provider.nodeInfoCache[FUEL_NETWORK_URL], 'nodeVersion', '0.0.2');
-
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementation(() => ({
+    const mock = {
       isMajorSupported: true,
       isMinorSupported: true,
       isPatchSupported: false,
-      supportedVersion: '0.0.1',
-    }));
+      supportedVersion: `${major}.${minor}.${parseInt(patch, 10) - 1}`,
+    };
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementation(() => mock);
 
     const warnSpy = jest.spyOn(global.console, 'warn');
     await Provider.create(FUEL_NETWORK_URL);
 
     expect(warnSpy).toHaveBeenCalledWith(
       ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      'The patch versions of the client and sdk differ. Fuel client version: 0.0.2, Supported version: 0.0.1'
+      'The patch versions of the client and sdk differ. Fuel client version: ${}, Supported version: 0.0.1'
     );
   });
 });
