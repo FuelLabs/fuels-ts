@@ -200,10 +200,22 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    for await (const { statusChange } of this.provider.operations.statusChange({
+    let transactionCompleted = false;
+
+    // Check if the transaction is already completed
+    const { transaction } = await this.provider.operations.getTransaction({
       transactionId: this.id,
-    })) {
-      if (statusChange.__typename !== 'SubmittedStatus') break;
+    });
+    if (transaction?.status?.type !== 'SubmittedStatus') {
+      transactionCompleted = true;
+    }
+
+    if (!transactionCompleted) {
+      for await (const { statusChange } of this.provider.operations.statusChange({
+        transactionId: this.id,
+      })) {
+        if (statusChange.__typename !== 'SubmittedStatus') break;
+      }
     }
 
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
