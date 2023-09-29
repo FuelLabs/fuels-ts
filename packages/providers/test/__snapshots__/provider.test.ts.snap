@@ -49,3 +49,9 @@ exports[`Provider can getMessageProof with all data 1`] = `
   "sender": "fuel108z5yxd9eygf08j7fsnj3hck87n9fg07qwzru6h4nk4zc07dgt4q5t8nka",
 }
 `;
+
+exports[`Provider can getMessageStatus 1`] = `
+{
+  "state": "SPENT",
+}
+`;
