@@ -78,7 +78,7 @@ describe('std-lib-string Tests', () => {
     expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
   });
 
-  it('should test bytes input [script-std-lib-string]', async () => {
+  it('should test String input [script-std-lib-string]', async () => {
     const wallet = await setup();
     type MainArgs = [string];
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
