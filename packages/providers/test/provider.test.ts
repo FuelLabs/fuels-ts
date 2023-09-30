@@ -726,6 +726,7 @@ describe('Provider', () => {
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual(FUEL_NETWORK_URL);
     expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
   });
 
   it('should cache chain and node info', async () => {
