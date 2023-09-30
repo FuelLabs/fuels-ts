@@ -128,11 +128,8 @@ export class TransactionResponse {
       for await (const { statusChange } of this.provider.operations.statusChange({
         transactionId: this.id,
       })) {
-        if (statusChange) {
-          break;
-        }
+        if (statusChange) break;
       }
-
       return this.fetch();
     }
 
@@ -203,7 +200,9 @@ export class TransactionResponse {
     for await (const { statusChange } of this.provider.operations.statusChange({
       transactionId: this.id,
     })) {
-      if (statusChange.__typename !== 'SubmittedStatus') break;
+      if (statusChange.type !== 'SubmittedStatus') {
+        break;
+      }
     }
 
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
