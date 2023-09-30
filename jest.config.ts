@@ -16,7 +16,7 @@ const config: Config.InitialOptions = {
   transform: {
     '\\.hbs$': 'jest-text-transformer',
   },
-  openHandlesTimeout: 4000,
+  openHandlesTimeout: 5000,
 };
 
 export default config;
