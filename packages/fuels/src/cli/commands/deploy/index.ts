@@ -29,7 +29,6 @@ export async function deploy(config: FuelsConfig) {
    * deploying contracts in parallel could cause UTXO conflicts,
    * so we resort back to the [restrict] async for/each usage
    */
-  // eslint-disable-next-line no-restricted-syntax
   for (const contractPath of config.contracts) {
     const binaryPath = getBinaryPath(contractPath);
     const abiPath = getABIPath(contractPath);
