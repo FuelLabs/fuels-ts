@@ -947,8 +947,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0(graphql@16.6.0)
       graphql-sse:
-        specifier: ^2.2.1
-        version: 2.2.1(graphql@16.6.0)
+        specifier: ^2.3.0
+        version: 2.3.0(graphql@16.6.0)
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.6.0)
@@ -10291,8 +10291,8 @@ packages:
       - encoding
     dev: true
 
-  /graphql-sse@2.2.1(graphql@16.6.0):
-    resolution: {integrity: sha512-lLpddzD+DqI6zJaaNo04T7uFtHgQtf45vjMxllKZb2Z/4ddX0KED0Ckf3Yeq0FN6+nTzu3vjXcDTOd+Y3dU4BA==}
+  /graphql-sse@2.3.0(graphql@16.6.0):
+    resolution: {integrity: sha512-D+NL4X3q4XCkp+QL3y+BGmQcFoq87ONhrAvADMoivt/Z5NpxH/8PUzE1+4pYMtJXPhPSQQTXxvIMcjWfqdatjA==}
     engines: {node: '>=12'}
     peerDependencies:
       graphql: '>=0.11 <=16'
