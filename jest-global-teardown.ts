@@ -7,6 +7,6 @@ function sleep(time: number) {
 }
 
 module.exports = async function globalTeardown() {
-  console.log('running global teardown');
+  // Wait a bit before killing jest because the gql subscriptions library doesn't immediately close connections
   await sleep(3000);
 };
