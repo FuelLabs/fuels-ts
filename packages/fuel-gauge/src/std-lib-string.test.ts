@@ -44,7 +44,7 @@ describe('std-lib-string Tests', () => {
     expect(true).toBe(true);
   });
 
-  it('should test bytes input [predicate-std-lib-string]', async () => {
+  it('should test String input [predicate-std-lib-string]', async () => {
     const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
