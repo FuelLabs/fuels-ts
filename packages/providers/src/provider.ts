@@ -247,7 +247,7 @@ export default class Provider {
           });
   }
 
-  static resetChainAndNodeCaches() {
+  static clearChainAndNodeCaches() {
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
   }

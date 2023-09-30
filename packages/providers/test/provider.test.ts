@@ -729,7 +729,7 @@ describe('Provider', () => {
   });
 
   it('should cache chain and node info', async () => {
-    Provider.resetChainAndNodeCaches();
+    Provider.clearChainAndNodeCaches();
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -738,7 +738,7 @@ describe('Provider', () => {
   });
 
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
-    Provider.resetChainAndNodeCaches();
+    Provider.clearChainAndNodeCaches();
 
     const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
@@ -759,7 +759,7 @@ describe('Provider', () => {
   });
 
   it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
-    Provider.resetChainAndNodeCaches();
+    Provider.clearChainAndNodeCaches();
 
     const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
@@ -793,7 +793,7 @@ describe('Provider', () => {
   it('should throws when using getChain or getNode and without cached data', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    Provider.resetChainAndNodeCaches();
+    Provider.clearChainAndNodeCaches();
 
     await expectToThrowFuelError(
       () => provider.getChain(),
