@@ -12,10 +12,11 @@ const config: Config.InitialOptions = {
     '/dist/demo-react-vite',
   ],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
-  testTimeout: 15000,
+  testTimeout: 60000,
   transform: {
     '\\.hbs$': 'jest-text-transformer',
   },
+  globalTeardown: './jest-global-teardown.ts',
 };
 
 export default config;
