@@ -15,7 +15,7 @@ export const contractsJson = join(types, 'contracts.json');
 export const fooContractTs = join(types, 'contracts', 'factories', 'FooBarAbi__factory.ts');
 
 export async function runCommand(commandName: string, params: string[] = []) {
-  const argv = ['node', 'fuels', commandName, '-p', fixtures, '--silent'].concat(params);
+  const argv = ['node', 'fuels', '--silent', commandName, '-p', fixtures].concat(params);
   return { argv, command: await run(argv) };
 }
 

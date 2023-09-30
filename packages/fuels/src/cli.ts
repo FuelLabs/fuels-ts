@@ -37,6 +37,8 @@ export const configureCli = () => {
   program.helpOption('-h, --help', 'Display help');
   program.addHelpCommand('help [command]', 'Display help for command');
 
+  program.enablePositionalOptions(true);
+
   program.hook('preAction', onPreAction);
 
   /**
