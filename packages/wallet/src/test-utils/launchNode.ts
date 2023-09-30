@@ -1,5 +1,8 @@
+import { hexlify } from '@ethersproject/bytes';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
+import { Signer } from '@fuel-ts/signer';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
@@ -75,8 +78,33 @@ export const launchNode = async ({
         fsSync.mkdirSync(tempDirPath, { recursive: true });
       }
       const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
+
+      let chainConfig = defaultChainConfig;
+
+      // If there's no genesis key, generate one and some coins to the genesis block.
+      if (!process.env.GENESIS_SECRET) {
+        const pk = Signer.generatePrivateKey();
+        const signer = new Signer(pk);
+        process.env.GENESIS_SECRET = hexlify(pk);
+
+        chainConfig = {
+          ...defaultChainConfig,
+          initial_state: {
+            ...defaultChainConfig.initial_state,
+            coins: [
+              ...defaultChainConfig.initial_state.coins,
+              {
+                owner: signer.address.toHexString(),
+                amount: toHex(1_000_000_000),
+                asset_id: BaseAssetId,
+              },
+            ],
+          },
+        };
+      }
+
       // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(defaultChainConfig), 'utf8');
+      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }
