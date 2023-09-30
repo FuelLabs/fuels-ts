@@ -16,7 +16,7 @@ const config: Config.InitialOptions = {
   transform: {
     '\\.hbs$': 'jest-text-transformer',
   },
-  globalTeardown: './jest-global-teardown.ts',
+  openHandlesTimeout: 4000,
 };
 
 export default config;
