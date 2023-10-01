@@ -10,9 +10,9 @@ export const workspace = join(fixtures, 'project');
 export const fooContractSway = join(workspace, 'foo', 'src', 'main.sw');
 
 export const fuelsConfig = join(fixtures, 'fuels.config.ts');
-export const types = join(fixtures, 'types');
-export const contractsJson = join(types, 'contracts.json');
-export const fooContractTs = join(types, 'contracts', 'factories', 'FooBarAbi__factory.ts');
+export const generated = join(fixtures, 'generated');
+export const contractsJson = join(generated, 'contracts.json');
+export const fooContractTs = join(generated, 'contracts', 'factories', 'FooBarAbi__factory.ts');
 
 export async function runCommand(commandName: string, params: string[] = []) {
   const argv = ['node', 'fuels', '--silent', commandName, '-p', fixtures].concat(params);
@@ -20,7 +20,7 @@ export async function runCommand(commandName: string, params: string[] = []) {
 }
 
 export async function runInit() {
-  return runCommand(Commands.init, ['-w', workspace, '-o', types]);
+  return runCommand(Commands.init, ['-w', workspace, '-o', generated]);
 }
 
 export async function runBuild() {
@@ -39,7 +39,7 @@ export function clean() {
   if (existsSync(fuelsConfig)) {
     rmSync(fuelsConfig);
   }
-  if (existsSync(types)) {
-    rmSync(types, { recursive: true });
+  if (existsSync(generated)) {
+    rmSync(generated, { recursive: true });
   }
 }
