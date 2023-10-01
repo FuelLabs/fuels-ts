@@ -144,6 +144,12 @@ importers:
         specifier: ~5.1.6
         version: 5.1.6
 
+  apps/demo-fuels:
+    dependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+
   apps/demo-nextjs:
     dependencies:
       '@fuels/vm-asm':
