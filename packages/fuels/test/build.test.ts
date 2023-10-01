@@ -24,7 +24,7 @@ describe('build', () => {
       'scripts/factories/ScriptTrueAbi__factory.ts',
       'scripts/index.ts',
       'index.ts',
-    ].map((f) => join(__dirname, 'fixtures', 'types', f));
+    ].map((f) => join(__dirname, 'fixtures', 'generated', f));
 
     for (const file of files) {
       expect(existsSync(file)).toBeTruthy();

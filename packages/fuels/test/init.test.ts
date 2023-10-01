@@ -12,7 +12,7 @@ describe('init', () => {
     expect(existsSync(fuelsConfig)).toBeTruthy();
     const fuelsContents = readFileSync(fuelsConfig, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: 'project',`);
-    expect(fuelsContents).toMatch(`output: 'types',`);
+    expect(fuelsContents).toMatch(`output: 'generated',`);
   });
 
   it('should run `init` command and throw for existent config file', async () => {
