@@ -52,7 +52,7 @@ Run your first command:
 pnpm fuels help
 ```
 
-```yaml
+```
 Usage: fuels [options] [command]
 
 Options:
@@ -215,7 +215,8 @@ Options:
 - [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
 
 > [!WARNING]
-> The internally shipped Forc and FuelCore binaries are used by default.
+> The internally shipped Forc and FuelCore binaries are used by default.<br/>
+> Want to use your system's `forc` and `fuel-core` instead? See [Customizing](#customizing).
 
 Both come pinned to their latest versions supported by the Typescript SDK.
 
