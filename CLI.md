@@ -155,7 +155,7 @@ pnpm fuels dev
 1. Runs `build` and `deploy` once at the start
 2. Watches your Sway programs for changes, and do it again
 
-# Sub-packages' commands
+# Utility Commands
 
 These are our other individual CLIs, all shipped together for convenience.
 
@@ -214,6 +214,9 @@ Options:
 - [`forc`](https://docs.fuel.network/docs/forc/commands/)
 - [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
 
+> [!WARNING]
+> The internally shipped Forc and FuelCore binaries are used by default.
+
 Both come pinned to their latest versions supported by the Typescript SDK.
 
 ```console
@@ -232,9 +235,6 @@ pnpm fuels forc --version
 pnpm fuels core --version
 fuel-core 0.20.4
 ```
-
-> [!WARNING]
-> The internally shipped Forc and FuelCore binaries are used by default.
 
 ## Customizing
 
