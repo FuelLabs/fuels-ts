@@ -60,6 +60,21 @@ export default defineConfig({
         link: '/guide/',
         items: [
           {
+            text: 'CLI',
+            link: '/guide/cli/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Commands',
+                link: '/guide/cli/commands',
+              },
+              {
+                text: 'Config file',
+                link: '/guide/cli/config-file',
+              },
+            ],
+          },
+          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,
