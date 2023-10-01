@@ -2,4 +2,11 @@
 "fuels": minor
 ---
 
-Add workflow tooling to help developers on the task of automating build, deploy, type generation and contract ids integration.
+Total revamp of Fuels CLI, providing a frictionless onboarding experience and blazingly fast development cycle.
+
+New essential commands includes:
+
+- init
+- build
+- deploy
+- dev
