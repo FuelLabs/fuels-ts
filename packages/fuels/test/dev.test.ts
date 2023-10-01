@@ -41,7 +41,6 @@ describe('dev', () => {
     await runInit();
     await runDev();
 
-    // Validates if fuel-core has been started
     expect(startFuelCore).toHaveBeenCalledTimes(1);
     expect(build).toHaveBeenCalledTimes(1);
     expect(deploy).toHaveBeenCalledTimes(1);
