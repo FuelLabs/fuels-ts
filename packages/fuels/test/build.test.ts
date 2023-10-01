@@ -4,7 +4,8 @@ import { join } from 'path';
 import { clean, runBuild, runInit } from './utils/runCommands';
 
 describe('build', () => {
-  afterEach(clean);
+  beforeEach(clean);
+  afterAll(clean);
 
   it('should run `build` command', async () => {
     await runInit();

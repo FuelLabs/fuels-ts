@@ -4,7 +4,8 @@ import { existsSync, readFileSync } from 'fs';
 import { clean, fuelsConfig, runInit } from './utils/runCommands';
 
 describe('init', () => {
-  afterEach(clean);
+  beforeEach(clean);
+  afterAll(clean);
 
   it('should run `init` command', async () => {
     await runInit();

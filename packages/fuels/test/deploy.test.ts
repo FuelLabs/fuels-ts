@@ -3,7 +3,8 @@ import { existsSync, readFileSync } from 'fs';
 import { clean, contractsJson, runBuild, runDeploy, runInit } from './utils/runCommands';
 
 describe('deploy', () => {
-  afterEach(clean);
+  beforeEach(clean);
+  afterAll(clean);
 
   it('should run `deploy` command', async () => {
     await runInit();
