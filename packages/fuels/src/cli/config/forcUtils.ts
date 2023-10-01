@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
@@ -31,14 +31,19 @@ export const swayFiles = new Map<string, SwayType>();
 export function readForcToml(path: string) {
   const forcPath = join(path, './Forc.toml');
 
-  // Read Forc file and store in cache
+  if (!existsSync(forcPath)) {
+    throw new Error(`Workspace not configured, toml file not found: \n - ${forcPath}`);
+  }
+
   if (!forcFiles.has(forcPath)) {
     const forcFile = readFileSync(forcPath, 'utf8');
     const tomlParsed = toml.parse(forcFile);
     forcFiles.set(forcPath, tomlParsed);
   }
 
-  return forcFiles.get(forcPath) as ForcToml;
+  const tomlContents = forcFiles.get(forcPath) as ForcToml;
+
+  return tomlContents;
 }
 
 export function readSwayType(path: string) {
@@ -46,7 +51,6 @@ export function readSwayType(path: string) {
   const entryFile = forcToml.project.entry || 'main.sw';
   const swayEntryPath = join(path, 'src', entryFile);
 
-  // Read Forc file and store in cache
   if (!swayFiles.has(swayEntryPath)) {
     const swayFile = readFileSync(swayEntryPath, 'utf8');
     const [swayType] = swayFile.split(';\n');

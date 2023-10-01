@@ -12,7 +12,9 @@ export function withConfig<CType extends Commands>(
 ) {
   return async () => {
     const options = program.opts();
+
     const config = await loadConfig(options.path);
+
     try {
       const eventData = await fn(config);
       config.onSuccess?.(
