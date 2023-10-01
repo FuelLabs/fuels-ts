@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "demo-fuels",
+  "description": "Simple demo using Fuel CLI",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "scripts": {
+    "build": "pnpm fuels build"
+  },
+  "dependencies": {
+    "fuels": "workspace:*"
+  }
+}
