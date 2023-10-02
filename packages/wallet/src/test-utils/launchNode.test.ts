@@ -46,4 +46,4 @@ describe('without a GENESIS_SECRET', () => {
     });
     stop();
   });
-})
+});
