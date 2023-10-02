@@ -1,28 +1,36 @@
 # Fuels CLI
 
-Run your first command:
+## Getting started
+
+Imagine you have this file structure:
+
+```sh
+my-fuel-dapp
+├── backend # <—— your sway programs' workspace
+│   ├── ...
+│   └── Forc.toml
+└── frontend # <—— typically your nextjs app or similar
+    ├── src
+    └── package.json
+```
+
+## Installation
+
+Add it to your Frontend project:
 
 ```console
-pnpm fuels help
+cd my-fuel-dapp/frontend
+pnpm add fuels
 ```
 
-```
-Usage: fuels [options] [command]
+## Double-checking
 
-Options:
-  -D, --debug        Enables verbose logging (default: false)
-  -S, --silent       Omit output messages (default: false)
-  -v, --version      Output the version number
-  -h, --help         Display help
-
-Commands:
-  init [options]     Create a sample `fuel.config.ts` file
-  dev [options]      Start a Fuel node and run build + deploy on every file change
-  build [options]    Build Sway programs and generate Typescript for them
-  deploy [options]   Deploy contracts to Fuel network
-  typegen [options]  Generate Typescript from Sway ABI JSON files
-  versions           Check for version incompatibilities
-  core               Wrapper around Fuel Core binary
-  forc               Wrapper a und Forc binary
-  help [command]     Display help for command
+```console
+pnpm fuels -v
 ```
+
+## Next Steps
+
+Now you need a [`fuel.config.ts`](./config-file) file.
+
+You can create one with [pnpm fuels init](./commands#init).

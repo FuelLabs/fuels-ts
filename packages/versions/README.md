@@ -51,7 +51,7 @@ console.log(versions);
 $ npx fuels-versions
 You have all the right versions! ⚡
 ┌───────────┬───────────┬─────────────────┐
-│           │ Supported │ Yours / Symstem │
+│           │ Supported │ Yours / System │
 ├───────────┼───────────┼─────────────────┤
 │ Forc      │ 0.30.0    │ 0.30.0          │
 ├───────────┼───────────┼─────────────────┤

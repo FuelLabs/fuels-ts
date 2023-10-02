@@ -1,6 +1,4 @@
-# Config Specs
-
-You can configure using a workspace:
+# Config File
 
 ## workspace
 
@@ -12,8 +10,6 @@ You can configure using a workspace:
   */
 workspace: '../backend',
 ```
-
-Or individual settings for Contracts, Predicates and Scripts:
 
 ## contracts
 
@@ -46,8 +42,6 @@ scripts: ['../backend/scripts'],
 ```
 
 ## output
-
-Here's where your Typescript definitions and factory classes will be created:
 
 ```ts
 /**

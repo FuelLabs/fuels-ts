@@ -1,14 +1,14 @@
 # Commands
 
-## Init
+## `fuels init`
 
-Use it to create new `fuels.config.ts` file:
+Use it to create a new `fuels.config.ts` file:
 
 ```console
 pnpm fuels init -w ../backend -o ./src/backend-api
 ```
 
-This will give you a minimal configuration
+This will give you a minimal configuration:
 
 ```ts
 // fuels.config.ts
@@ -31,23 +31,27 @@ In a nutshell:
 └── backend
 ```
 
-# Build
+### See more
+
+- [Forc workspaces](https://docs.fuel.network/docs/forc/workspaces/)
+
+## `fuels build`
 
 ```console
 pnpm fuels build
 ```
 
-1.  Build all Sway programs under your `workspace` using `fuels-forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
-1.  Generate types for them using `fuels-typegen` <sup>[2](#1-typegen)</sup>
+1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
+1.  Generate types for them using `fuels-typegen` <sup>[2](#typegen)</sup>
 
-## Deploy
+## `fuels deploy`
 
 ```console
 pnpm fuels deploy
 ```
 
-1. Deploy all Sway con racts under `workspace`
-1. Saves their deploye IDs to:
+1. Deploy all Sway contracts under `workspace`
+1. Saves their deployed IDs to:
    - _`./src/backend-api/contracts.json`_
 
 ```json
@@ -57,7 +61,7 @@ pnpm fuels deploy
 }
 ```
 
-You can use them when instantiating your programs:
+Use it when instantiating your contracts:
 
 ```ts
 import { MyContract__factory } from "./backend-api";
@@ -71,7 +75,7 @@ For a complete example, see:
 
 - [Using Generated Types](https://docs.fuel.network/docs/fuels-ts/abi-typegen/using-generated-types/)
 
-## Dev
+## `fuels dev`
 
 ```console
 pnpm fuels dev
@@ -80,11 +84,11 @@ pnpm fuels dev
 1. Runs `build` and `deploy` once at the start
 2. Watches your Sway programs for changes, and do it again
 
-## Typegen
+> _In `dev` mode, everytime you update a contract on your Forc `workspace`, we re-generate type definitions and factory classs for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
-Sub-command inherited from:
+## `fuels typegen`
 
-- [packages/abi-typegen](https://github.com/FuelLabs/fuels-ts/tree/master/packages/abi-typegen)
+Manually generates type definitions and factory classes from ABI JSON files.
 
 ```console
 pnpm fuels help typegen
@@ -109,58 +113,42 @@ For more info, check:
 
 - [Generating Types from ABI](https://docs.fuel.network/docs/fuels-ts/abi-typegen/generating-types-from-abi/)
 
-## Versions
+## `fuels versions`
 
-Sub-command inherited from:
-
-- [packages/versions](https://github.com/FuelLabs/fuels-ts/tree/master/packages/versions)
+Check for version incompatibilities between your [Fuel Toolchain](#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
 ```console
-pnpm fuels help versions
+pnpm fuels versions
 ```
 
 ```
-Usage: fuels versions [options]
-
-Check for version incompatibilities
-
-Options:
-  -h, --help  Display help
+You have all the right versions! ⚡
+┌───────────┬───────────┬─────────────────┐
+│           │ Supported │ Yours / System  │
+├───────────┼───────────┼─────────────────┤
+│ Forc      │ 0.30.0    │ 0.30.0          │
+├───────────┼───────────┼─────────────────┤
+│ Fuel-Core │ 0.14.0    │ 0.14.0          │
+└───────────┴───────────┴─────────────────┘
 ```
 
-## Forc & Fuel Core
+## The Fuel Toolchain
 
-`fuels` conveniently ships with the last compatible binaries for:
+This guide assumes you have [The Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/) installed already.
 
-- [`forc`](https://docs.fuel.network/docs/forc/commands/)
-- [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
+Otherwise, you can use [`fuel-up`](https://docs.fuel.network/docs/fuelup/installation/) to get it up and running.
 
-> [!WARNING]
-> The internally shipped Forc and FuelCore binaries are used by default.<br/>
-> Want to use your system's `forc` and `fuel-core` instead? See [Customizing](#customizing).
-
-Both come pinned to their latest versions supported by the Typescript SDK.
+Check if it's ok with:
 
 ```console
-pnpm fuels forc <command> [options]
-pnpm fuels core <command> [options]
-```
-
-For example:
-
-```console
-pnpm fuels forc --version
-0.46.0
+forc --version
 ```
 
 ```console
-pnpm fuels core --version
-fuel-core 0.20.4
+fuel-core --version
 ```
 
-> [!INFO]
-> Do you have your Rust toolchain setup using [`fuel-up`](https://docs.fuel.network/docs/fuelup/)? No problem. <br/>
-> You can tell `fuels` to use them instead.
+Then, tell `fuels` to use it via the system binaries:
 
 ```ts
 // fuels.config.ts
@@ -173,14 +161,26 @@ export createConfig({
 })
 ```
 
-You can check which versions you have with:
-
-```console
-forc --version
-fuel-core --version
-```
-
 Check the docs about `forc` and `fuel-core`:
 
 - [Forc Commands](https://docs.fuel.network/docs/forc/commands/)
 - [Running a local Node using `fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
+
+## Batteries Included
+
+In case you haven't configured [The Fuel Toolchain](#the-fuel-toolchain) _yet_, `fuels` conveniently ships with the last compatible binaries for:
+
+- [`forc`](https://docs.fuel.network/docs/forc/commands/)
+- [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
+
+```console
+pnpm fuels help forc
+pnpm fuels forc --version
+pnpm fuels forc test -h
+```
+
+```console
+pnpm fuels help core
+pnpm fuels core --version
+pnpm fuels core run -h
+```
