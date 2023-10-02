@@ -49,7 +49,7 @@ export const calculateTransactionFeeForScript = (
 };
 
 /** @hidden */
-export interface CalculateTransactionFeeForContractCreatedParams {
+export interface CalculateTxChargeableBytesFeeParams {
   gasPrice: BN;
   transactionBytes: Uint8Array;
   transactionWitnesses: Witness[];
@@ -58,27 +58,22 @@ export interface CalculateTransactionFeeForContractCreatedParams {
 }
 
 /** @hidden */
-export const calculateTransactionFeeForContractCreated = (
-  params: CalculateTransactionFeeForContractCreatedParams
-) => {
+export const calculateTxChargeableBytesFee = (params: CalculateTxChargeableBytesFeeParams): BN => {
   const { gasPrice, transactionBytes, transactionWitnesses, gasPerByte, gasPriceFactor } = params;
 
   const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
 
   const txChargeableBytes = bn(transactionBytes.length - witnessSize);
 
-  const gasUsed = bn(
+  const txChargeableBytesGasUsed = bn(
     Math.ceil(
       (txChargeableBytes.toNumber() * bn(gasPerByte).toNumber()) / bn(gasPriceFactor).toNumber()
     )
   );
 
-  const fee = gasUsed.mul(gasPrice);
+  const chargeableBytesFee = txChargeableBytesGasUsed.mul(gasPrice);
 
-  return {
-    fee,
-    gasUsed,
-  };
+  return chargeableBytesFee;
 };
 
 export interface CalculateTransactionFeeParams {
@@ -106,7 +101,7 @@ export const calculateTransactionFee = ({
   const isTypeCreate = transactionType === TransactionType.Create;
 
   if (isTypeCreate) {
-    return calculateTransactionFeeForContractCreated({
+    return calculateTxChargeableBytesFee({
       gasPerByte,
       gasPriceFactor,
       transactionBytes,
