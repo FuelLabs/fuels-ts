@@ -1,7 +1,7 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import type { Witness } from '@fuel-ts/transactions';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import type { Witness, TransactionType } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import type {
   TransactionResultReceipt,
@@ -21,31 +21,6 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   const gasUsed = scriptResult.reduce((prev, receipt) => prev.add(receipt.gasUsed), bn(0));
 
   return gasUsed;
-};
-
-/**
- * @hidden
- */
-export interface CalculateTransactionFeeForScriptParams {
-  receipts: TransactionResultReceipt[];
-  gasPrice: BN;
-  gasPriceFactor: BN;
-  margin?: number;
-}
-
-/** @hidden */
-export const calculateTransactionFeeForScript = (
-  params: CalculateTransactionFeeForScriptParams
-) => {
-  const { gasPrice, receipts, gasPriceFactor, margin = 1 } = params;
-
-  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
-  const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
-
-  return {
-    fee,
-    gasUsed,
-  };
 };
 
 /** @hidden */
@@ -98,22 +73,19 @@ export const calculateTransactionFee = ({
   transactionWitnesses,
   margin,
 }: CalculateTransactionFeeParams) => {
-  const isTypeCreate = transactionType === TransactionType.Create;
-
-  if (isTypeCreate) {
-    return calculateTxChargeableBytesFee({
-      gasPerByte,
-      gasPriceFactor,
-      transactionBytes,
-      transactionWitnesses,
-      gasPrice,
-    });
-  }
-
-  return calculateTransactionFeeForScript({
-    gasPrice,
-    receipts,
+  const chargeableBytesFee = calculateTxChargeableBytesFee({
+    gasPerByte,
     gasPriceFactor,
-    margin: margin || 1,
+    transactionBytes,
+    transactionWitnesses,
+    gasPrice,
   });
+
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
+  const partialFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
+
+  return {
+    fee: partialFee.add(chargeableBytesFee),
+    gasUsed,
+  };
 };
