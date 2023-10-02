@@ -438,6 +438,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/fuels
 
+  internal/check-tests: {}
+
   internal/tsup: {}
 
   packages/abi-coder:
@@ -734,12 +736,6 @@ importers:
 
   packages/hasher:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -755,16 +751,19 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
-      lodash.clonedeep:
-        specifier: ^4.5.0
-        version: 4.5.0
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
     devDependencies:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-      '@types/lodash.clonedeep':
-        specifier: ^4.5.7
-        version: 4.5.7
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
 
   packages/hdwallet:
     dependencies:
@@ -1215,6 +1214,10 @@ packages:
 
   /@adobe/css-tools@4.2.0:
     resolution: {integrity: sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==}
+    dev: false
+
+  /@adraffy/ens-normalize@1.9.2:
+    resolution: {integrity: sha512-0h+FrQDqe2Wn+IIGFkTCd4aAwTJ+7834Ek1COohCyV26AXhwQ7WQaz+4F/nLOeVl/3BtWHOHLPsq46V8YB46Eg==}
     dev: false
 
   /@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.18.0)(algoliasearch@4.18.0)(search-insights@2.6.0):
@@ -4161,7 +4164,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: true
 
   /@graphql-tools/prisma-loader@7.2.72(@types/node@16.18.34)(graphql@16.6.0):
@@ -4204,7 +4207,7 @@ packages:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4921,9 +4924,17 @@ packages:
       '@noble/hashes': 1.3.1
     dev: false
 
+  /@noble/hashes@1.1.2:
+    resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
+    dev: false
+
   /@noble/hashes@1.3.1:
     resolution: {integrity: sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==}
     engines: {node: '>= 16'}
+    dev: false
+
+  /@noble/secp256k1@1.7.1:
+    resolution: {integrity: sha512-hOUk6AyBFmqVrv7k5WAw/LpszxVbj9gGN4JRkIX52fdFAj1UA61KXmZDvqVEm+pOyec3+fIeZB02LYa/pWOArw==}
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:
@@ -5835,6 +5846,10 @@ packages:
   /@types/node@16.18.34:
     resolution: {integrity: sha512-VmVm7gXwhkUimRfBwVI1CHhwp86jDWR04B5FGebMMyxV90SlCmFujwUHrxTD4oO+SOYU86SoxvhgeRQJY7iXFg==}
 
+  /@types/node@18.15.13:
+    resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
+    dev: false
+
   /@types/node@18.15.3:
     resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
 
@@ -5862,6 +5877,12 @@ packages:
   /@types/qs@6.9.7:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
     dev: false
+
+  /@types/ramda@0.29.3:
+    resolution: {integrity: sha512-Yh/RHkjN0ru6LVhSQtTkCRo6HXkfL9trot/2elzM/yXLJmbLm2v6kJc8yftTnwv1zvUob6TEtqI2cYjdqG3U0Q==}
+    dependencies:
+      types-ramda: 0.29.4
+    dev: true
 
   /@types/range-parser@1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
@@ -6949,6 +6970,10 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       regex-parser: 2.2.11
+    dev: false
+
+  /aes-js@4.0.0-beta.5:
+    resolution: {integrity: sha512-G965FqalsNyrPqgEGON7nIx1e/OVENSgiEIzyC63haUMuvNnwIgIjMs52hlTCKhkBny7A2ORNlfY9Zu+jmGk1Q==}
     dev: false
 
   /agent-base@6.0.2:
@@ -10078,6 +10103,22 @@ packages:
       '@noble/hashes': 1.3.1
       '@scure/bip32': 1.3.1
       '@scure/bip39': 1.2.1
+    dev: false
+
+  /ethers@6.7.1:
+    resolution: {integrity: sha512-qX5kxIFMfg1i+epfgb0xF4WM7IqapIIu50pOJ17aebkxxa4BacW5jFrQRmCJpDEg2ZK2oNtR5QjrQ1WDBF29dA==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@adraffy/ens-normalize': 1.9.2
+      '@noble/hashes': 1.1.2
+      '@noble/secp256k1': 1.7.1
+      '@types/node': 18.15.13
+      aes-js: 4.0.0-beta.5
+      tslib: 2.4.0
+      ws: 8.5.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /event-target-polyfill@0.0.3:
@@ -15543,6 +15584,10 @@ packages:
       performance-now: 2.1.0
     dev: false
 
+  /ramda@0.29.0:
+    resolution: {integrity: sha512-BBea6L67bYLtdbOqfp8f58fPMqEwx0doL+pAi8TZyp2YWz8R9G8z9x75CZI8W+ftqhFHCpEX2cRnUUXK130iKA==}
+    dev: false
+
   /randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
@@ -17530,6 +17575,10 @@ packages:
       yn: 3.1.1
     dev: true
 
+  /ts-toolbelt@9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
+    dev: true
+
   /tsconfig-paths@3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
     dependencies:
@@ -17540,6 +17589,10 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+
+  /tslib@2.4.0:
+    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+    dev: false
 
   /tslib@2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
@@ -17813,6 +17866,12 @@ packages:
       minimatch: 9.0.2
       shiki: 0.14.3
       typescript: 5.1.6
+
+  /types-ramda@0.29.4:
+    resolution: {integrity: sha512-XO/820iRsCDwqLjE8XE+b57cVGPyk1h+U9lBGpDWvbEky+NQChvHVwaKM05WnW1c5z3EVQh8NhXFmh2E/1YazQ==}
+    dependencies:
+      ts-toolbelt: 9.6.0
+    dev: true
 
   /typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
@@ -19005,6 +19064,19 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+
+  /ws@8.5.0:
+    resolution: {integrity: sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
 
   /xml-name-validator@3.0.0:
     resolution: {integrity: sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==}
