@@ -1,3 +1,4 @@
+// @ts-expect-error val should be undefined in a node environment
 const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 const isNode =
