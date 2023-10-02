@@ -4,6 +4,10 @@ import { WalletUnlocked } from '../wallets';
 
 import { launchNodeAndGetWallets } from './launchNode';
 
+/**
+ * @group browser
+ * @group node
+ */
 test('launchNodeAndGetWallets - empty config', async () => {
   const { stop, provider, wallets } = await launchNodeAndGetWallets();
   expect(provider).toBeInstanceOf(Provider);

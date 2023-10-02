@@ -14,6 +14,9 @@ import {
 //   ...jest.requireActual('fs'),
 // }));
 
+/**
+ * @group node
+ */
 describe('rewriteVersions.js', () => {
   function modifyEnv() {
     const envBackup = { ...process.env };

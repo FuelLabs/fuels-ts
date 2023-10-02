@@ -4,6 +4,9 @@ import { normalizeString } from '../utils/normalizeString';
 
 import { getForcProject } from './getForcProject';
 
+/**
+ * @group node
+ */
 describe('getForcProject.js', () => {
   const PROJECT_DIR = join(__dirname, '..', '..', 'test', 'forc-projects', 'simple');
 

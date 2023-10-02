@@ -1,5 +1,9 @@
 import { safeExec } from './safeExec';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('safeExec.js', () => {
   it('should catch error', async () => {
     const ERROR_MSG = 'I am an error.';
