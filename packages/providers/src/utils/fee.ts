@@ -1,6 +1,6 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import type { Witness, TransactionType } from '@fuel-ts/transactions';
+import type { Witness } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type {
@@ -57,7 +57,6 @@ export interface CalculateTransactionFeeParams {
   margin?: number;
   transactionBytes: Uint8Array;
   transactionWitnesses: Witness[];
-  transactionType: TransactionType;
   gasPriceFactor: BN;
   gasPerByte?: BN;
 }
@@ -69,16 +68,15 @@ export const calculateTransactionFee = ({
   gasPriceFactor,
   gasPerByte,
   transactionBytes,
-  transactionType,
   transactionWitnesses,
   margin,
 }: CalculateTransactionFeeParams) => {
   const chargeableBytesFee = calculateTxChargeableBytesFee({
-    gasPerByte,
-    gasPriceFactor,
+    gasPrice,
     transactionBytes,
     transactionWitnesses,
-    gasPrice,
+    gasPriceFactor,
+    gasPerByte,
   });
 
   const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
