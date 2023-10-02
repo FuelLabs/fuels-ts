@@ -1,6 +1,12 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { generateTestWallet, launchNode } from '@fuel-ts/wallet/test-utils';
+import {
+  Provider,
+  WalletUnlocked,
+  FUEL_NETWORK_URL,
+  TransactionResponse,
+  Wallet,
+  randomBytes,
+} from 'fuels';
 
 describe('TransactionSummary', () => {
   let provider: Provider;
@@ -63,20 +69,29 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    const destination = Wallet.generate({
-      provider,
+    const { cleanup, ip, port } = await launchNode({
+      args: ['--poa-interval-period', '10s'],
     });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
-    const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
 
-    const response = new TransactionResponse(transactionId, provider);
+    const destinationWallet = Wallet.generate({ provider: nodeProvider });
 
-    expect(response.gqlTransaction).toBeUndefined();
+    const { id: transactionId } = await genesisWallet.transfer(destinationWallet.address, 100);
+
+    const response = await TransactionResponse.create(transactionId, provider);
+
+    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
     await response.waitForResult();
 
-    expect(response.gqlTransaction?.status?.type).toBeDefined();
-    expect(response.gqlTransaction?.status?.type).not.toEqual('SubmittedStatus');
+    expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
     expect(response.gqlTransaction?.id).toBe(transactionId);
+
+    cleanup();
   });
 });

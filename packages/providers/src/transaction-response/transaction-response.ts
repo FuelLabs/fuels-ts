@@ -205,6 +205,8 @@ export class TransactionResponse {
       }
     }
 
+    await this.fetch();
+
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
     const transactionResult: TransactionResult<TTransactionType> = {
