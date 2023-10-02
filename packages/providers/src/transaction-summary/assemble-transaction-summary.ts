@@ -52,7 +52,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
     transactionWitnesses: transaction?.witnesses || [],
     gasPerByte,
     gasPriceFactor,
-    transactionType: transaction.type,
   });
 
   const operations = getOperations({

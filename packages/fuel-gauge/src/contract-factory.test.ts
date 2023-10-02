@@ -10,6 +10,7 @@ import {
   ContractFactory,
   BaseAssetId,
   FUEL_NETWORK_URL,
+  BN,
 } from 'fuels';
 import { join } from 'path';
 
@@ -67,7 +68,7 @@ describe('Contract Factory', () => {
     await contact.functions.initialize_counter(100).call();
 
     const { transactionResult } = await contact.functions.increment_counter(1).call();
-    expect(transactionResult).toEqual({
+    expect(transactionResult).toMatchObject({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.any(String),
@@ -85,10 +86,8 @@ describe('Contract Factory', () => {
       burnedAssets: expect.any(Array),
       time: expect.any(String),
       id: expect.any(String),
-      gasUsed: expect.objectContaining({
-        words: expect.arrayContaining([expect.any(Number)]),
-      }),
-      fee: bn(0),
+      gasUsed: expect.any(BN),
+      fee: expect.any(BN),
       transaction: expect.any(Object),
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);

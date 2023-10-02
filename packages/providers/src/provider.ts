@@ -744,7 +744,6 @@ export default class Provider {
       transactionWitnesses: transaction?.witnesses || [],
       gasPerByte,
       gasPriceFactor,
-      transactionType: transaction.type,
       receipts,
       margin,
     });
