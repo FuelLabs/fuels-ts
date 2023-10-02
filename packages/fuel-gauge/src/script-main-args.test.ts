@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script, BaseAssetId } from 'fuels';
+import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
@@ -13,7 +13,7 @@ const scriptBin = readFileSync(
 );
 
 const setup = async (balance = 5_000) => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
@@ -79,6 +79,6 @@ describe('Script Coverage', () => {
 
     await expect(
       scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call()
-    ).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
+    ).rejects.toThrow(/Gas limit '10' is lower than the required/);
   });
 });

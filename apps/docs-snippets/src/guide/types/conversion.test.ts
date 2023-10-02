@@ -19,6 +19,11 @@ import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../project
  */
 describe(__filename, () => {
   const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+  let provider: Provider;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+  });
 
   it('should successfully convert between b256 and bytes32', () => {
     // #region conversion-1
@@ -42,8 +47,6 @@ describe(__filename, () => {
 
     const address = Address.fromRandom();
 
-    const provider = new Provider(FUEL_NETWORK_URL);
-
     const contractLike = new Contract(address, abi, provider);
 
     expect(address.equals(<Address>contractLike.id)).toBeTruthy();
@@ -54,7 +57,7 @@ describe(__filename, () => {
     // #region conversion-3
     const address = Address.fromRandom();
 
-    const wallet: WalletLocked = Wallet.fromAddress(address);
+    const wallet: WalletLocked = Wallet.fromAddress(address, provider);
 
     // we use the cast here to cast from `AbstractAddress` to `Address`
     expect(address.equals(<Address>wallet.address)).toBeTruthy();

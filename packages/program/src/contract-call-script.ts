@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
+import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type {
@@ -42,11 +43,6 @@ const DEFAULT_OPCODE_PARAMS: CallOpcodeParamsOffset = {
   callDataOffset: 0,
 };
 
-const DEFAULT_OUTPUT_INFO: CallOutputInfo = {
-  isHeap: false,
-  encodedLength: 0,
-};
-
 // During a script execution, this script's contract id is the **null** contract id
 const SCRIPT_WRAPPER_CONTRACT_ID = ZeroBytes32;
 
@@ -55,9 +51,9 @@ const SCRIPT_WRAPPER_CONTRACT_ID = ZeroBytes32;
 // pointing at the following registers:
 //
 // 0x10 Script data offset
-// 0x11 Gas forwarded
-// 0x12 Coin amount
-// 0x13 Asset ID
+// 0x11 Coin amount
+// 0x12 Asset ID
+// 0x13 Gas forwarded
 //
 // These are arbitrary non-reserved registers, no special meaning
 const getSingleCallInstructions = (
@@ -66,13 +62,20 @@ const getSingleCallInstructions = (
 ): InstructionSet => {
   const inst = new InstructionSet(
     asm.movi(0x10, callDataOffset),
-    asm.movi(0x11, gasForwardedOffset),
+    asm.movi(0x11, amountOffset),
     asm.lw(0x11, 0x11, 0),
-    asm.movi(0x12, amountOffset),
-    asm.lw(0x12, 0x12, 0),
-    asm.movi(0x13, assetIdOffset),
-    asm.call(0x10, 0x12, 0x13, 0x11)
+    asm.movi(0x12, assetIdOffset)
   );
+
+  if (gasForwardedOffset) {
+    inst.push(
+      asm.movi(0x13, gasForwardedOffset),
+      asm.lw(0x13, 0x13, 0),
+      asm.call(0x10, 0x11, 0x12, 0x13)
+    );
+  } else {
+    inst.push(asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8()));
+  }
 
   if (outputInfo.isHeap) {
     inst.extend([
@@ -83,10 +86,10 @@ const getSingleCallInstructions = (
       // changes in the compiler.
       // Load the word located at the address contained in RET, it's a word that
       // translates to a heap address. 0x15 is a free register.
-      asm.lw(0x15, 0x0d, 0),
+      asm.lw(0x15, asm.RegId.ret().to_u8(), 0),
       // We know a Vec/Bytes struct has its third WORD contain the length of the underlying
       // vector, so use a 2 offset to store the length in 0x16, which is a free register.
-      asm.lw(0x16, 0x0d, 2),
+      asm.lw(0x16, asm.RegId.ret().to_u8(), 2),
       // The in-memory size of the type is (in-memory size of the inner type) * length
       asm.muli(0x16, 0x16, outputInfo.encodedLength),
       asm.retd(0x15, 0x16),
@@ -97,6 +100,10 @@ const getSingleCallInstructions = (
 };
 // Given a list of contract calls, create the actual opcodes used to call the contract
 function getInstructions(offsets: CallOpcodeParamsOffset[], outputs: CallOutputInfo[]): Uint8Array {
+  if (!offsets.length) {
+    return new Uint8Array();
+  }
+
   const multiCallInstructions = new InstructionSet();
   for (let i = 0; i < offsets.length; i += 1) {
     multiCallInstructions.extend(getSingleCallInstructions(offsets[i], outputs[i]).entries());
@@ -123,7 +130,10 @@ const getMainCallReceipt = (
 const scriptResultDecoder =
   (contractId: AbstractAddress, isOutputDataHeap: boolean) => (result: ScriptResult) => {
     if (toNumber(result.code) !== 0) {
-      throw new Error(`Script returned non-zero result: ${result.code}`);
+      throw new FuelError(
+        ErrorCode.TRANSACTION_ERROR,
+        `Execution of the script associated with contract ${contractId} resulted in a non-zero exit code: ${result.code}.`
+      );
     }
 
     const mainCallResult = getMainCallReceipt(
@@ -166,35 +176,21 @@ export const decodeContractCallScriptResult = (
 ): Uint8Array[] =>
   decodeCallResult(callResult, scriptResultDecoder(contractId, isOutputDataHeap), logs);
 
-const getCallInstructionsLength = (contractCalls: ContractCall[]): number => {
-  const singleStackCallLength = getSingleCallInstructions(
-    DEFAULT_OPCODE_PARAMS,
-    DEFAULT_OUTPUT_INFO
-  ).byteLength();
-
-  const stackCallsInstructionsLength =
-    singleStackCallLength * contractCalls.filter((call) => !call.isOutputDataHeap).length;
-
-  const heapCallsInstructionsLength = contractCalls.reduce((sum, call) => {
-    if (!call.isOutputDataHeap) {
-      return sum;
-    }
-    return (
-      sum +
-      getSingleCallInstructions(DEFAULT_OPCODE_PARAMS, {
-        isHeap: true,
+const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
+  contractCalls.reduce(
+    (sum, call) => {
+      const offset: CallOpcodeParamsOffset = { ...DEFAULT_OPCODE_PARAMS };
+      if (call.gas) {
+        offset.gasForwardedOffset = 1;
+      }
+      const output: CallOutputInfo = {
+        isHeap: call.isOutputDataHeap,
         encodedLength: call.outputEncodedLength,
-      }).byteLength()
-    );
-  }, 0);
-
-  return (
-    stackCallsInstructionsLength +
-    heapCallsInstructionsLength +
-    // placeholder for single RET instruction which is added later
-    asm.Instruction.size()
+      };
+      return sum + getSingleCallInstructions(offset, output).byteLength();
+    },
+    asm.Instruction.size() // placeholder for single RET instruction which is added later
   );
-};
 
 const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutputInfo[] =>
   functionScopes.map((funcScope) => {
@@ -247,23 +243,31 @@ export const getContractCallScript = (
           encodedLength: call.outputEncodedLength,
         });
         paramOffsets.push({
-          assetIdOffset: segmentOffset,
-          amountOffset: segmentOffset + ASSET_ID_LEN,
-          gasForwardedOffset: segmentOffset + ASSET_ID_LEN + WORD_SIZE,
-          callDataOffset: segmentOffset + ASSET_ID_LEN + 2 * WORD_SIZE,
+          gasForwardedOffset: call.gas
+            ? segmentOffset + WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE
+            : 0,
+          amountOffset: segmentOffset,
+          assetIdOffset: segmentOffset + WORD_SIZE,
+          callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN,
         });
 
         /// script data, consisting of the following items in the given order:
-        /// 1. Asset ID to be forwarded ([`AssetId::LEN`])
-        scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
-        /// 2. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
+        /// 1. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.amount || 0));
-        /// 3. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new U64Coder().encode(call.gas || 20000));
-        /// 4. Contract ID ([`ContractId::LEN`]);
+        /// 2. Asset ID to be forwarded ([`AssetId::LEN`])
+        scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
+        /// 3. Contract ID ([`ContractId::LEN`]);
         scriptData.push(call.contractId.toBytes());
-        /// 5. Function selector `(1 * `[`WORD_SIZE`]`)`
+        /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
+        /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
+        let gasForwardedSize = 0;
+
+        if (call.gas) {
+          scriptData.push(new U64Coder().encode(call.gas));
+
+          gasForwardedSize = WORD_SIZE;
+        }
 
         /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
         // If the method call takes custom inputs or has more than
@@ -271,7 +275,7 @@ export const getContractCallScript = (
         // which points to where the data for the custom types start in the
         // transaction. If it doesn't take any custom inputs, this isn't necessary.
         if (call.isInputDataPointer) {
-          const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET;
+          const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize;
           scriptData.push(new U64Coder().encode(pointerInputOffset));
         }
 

@@ -1,4 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
@@ -31,7 +32,10 @@ export async function getTransactionSummary<TTransactionType = void>(
   });
 
   if (!gqlTransaction) {
-    throw new Error('transaction not found');
+    throw new FuelError(
+      ErrorCode.TRANSACTION_NOT_FOUND,
+      `Transaction not found for given id: ${id}.`
+    );
   }
 
   const [decodedTransaction] = new TransactionCoder().decode(
@@ -76,9 +80,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 
   const { receipts } = await provider.call(transactionRequest);
 
-  const {
-    consensusParameters: { gasPerByte, gasPriceFactor },
-  } = await provider.getChain();
+  const { gasPerByte, gasPriceFactor } = provider.getGasConfig();
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();

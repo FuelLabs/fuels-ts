@@ -29,9 +29,11 @@ describe('PredicateConditionalInputs', () => {
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const aliceWallet = Wallet.generate();
+    const aliceWallet = Wallet.generate({
+      provider,
+    });
 
     const amountToTransfer = 1000;
 
@@ -40,9 +42,7 @@ describe('PredicateConditionalInputs', () => {
       [5_000, assetIdA],
     ]);
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId, abiJSON, provider, {
+    const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
       MAKER: aliceWallet.address.toB256(),
     });
 
@@ -99,9 +99,11 @@ describe('PredicateConditionalInputs', () => {
   });
 
   it('should execute custom transaction where predicate transfer to Alice (PREDICATE PAYS FEES)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const aliceWallet = Wallet.generate();
+    const aliceWallet = Wallet.generate({
+      provider,
+    });
 
     const amountToTransfer = 1000;
 
@@ -111,9 +113,7 @@ describe('PredicateConditionalInputs', () => {
       [5_000, assetIdB],
     ]);
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId, abiJSON, provider, {
+    const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
       MAKER: aliceWallet.address.toB256(),
     });
 

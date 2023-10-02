@@ -26,18 +26,22 @@ describe('Parsing', () => {
     expect(error.code).toBe(ErrorCode.INVALID_URL);
   });
 
-  it('fails when parsing an object without a code property', () => {
-    const expectedError = new FuelError(FuelError.CODES.PARSE_FAILED, "missing 'code' property");
-    expectToThrowFuelError(() => FuelError.parse({}), expectedError);
+  it('fails when parsing an object without a code property', async () => {
+    const expectedError = new FuelError(
+      FuelError.CODES.PARSE_FAILED,
+      `Failed to parse the error object. The required 'code' property is missing.`
+    );
+    await expectToThrowFuelError(() => FuelError.parse({}), expectedError);
   });
 
-  it('fails when parsing an object with an unknown error code', () => {
+  it('fails when parsing an object with an unknown error code', async () => {
     const code = 'qweqwe';
     const expectedError = new FuelError(
       ErrorCode.PARSE_FAILED,
       `Unknown error code: ${code}. Accepted codes: ${Object.values(ErrorCode).join(', ')}.`
     );
-    expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
+
+    await expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
   });
 });
 

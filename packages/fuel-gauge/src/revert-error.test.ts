@@ -11,6 +11,7 @@ import {
   ContractFactory,
   Provider,
   BaseAssetId,
+  FUEL_NETWORK_URL,
 } from 'fuels';
 import path from 'path';
 
@@ -25,7 +26,7 @@ let wallet: WalletUnlocked;
  */
 describe('Revert Error Testing', () => {
   beforeAll(async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(

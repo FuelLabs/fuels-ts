@@ -79,7 +79,7 @@ describe('transaction-summary/input', () => {
 
   it('should ensure getInputContractFromIndex throws if input type is not Contract', () => {
     expect(() => getInputContractFromIndex([MOCK_INPUT_COIN], 0)).toThrowError(
-      'Contract input should be of type Contract'
+      `Contract input should be of type 'contract'.`
     );
   });
 

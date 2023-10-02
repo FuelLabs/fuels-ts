@@ -25,6 +25,12 @@ type LaunchNodeOptions = {
   useSystemFuelCore?: boolean;
 };
 
+export type LaunchNodeResult = Promise<{
+  cleanup: () => void;
+  ip: string;
+  port: string;
+}>;
+
 /**
  * Launches a fuel-core node.
  * @param chainConfigPath - path to the chain configuration file.
@@ -41,11 +47,7 @@ export const launchNode = async ({
   port,
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
-}: LaunchNodeOptions): Promise<{
-  cleanup: () => void;
-  ip: string;
-  port: string;
-}> =>
+}: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
@@ -96,7 +98,9 @@ export const launchNode = async ({
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      kill(Number(child.pid));
+      if (child.pid) {
+        kill(Number(child.pid));
+      }
 
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();
@@ -146,6 +150,12 @@ const generateWallets = async (count: number, provider: Provider) => {
   return wallets;
 };
 
+export type LaunchNodeAndGetWalletsResult = Promise<{
+  wallets: WalletUnlocked[];
+  stop: () => void;
+  provider: Provider;
+}>;
+
 /**
  * Launches a fuel-core node and returns a provider, 10 wallets, and a cleanup function to stop the node.
  * @param launchNodeOptions - options to launch the fuel-core node with.
@@ -157,7 +167,7 @@ export const launchNodeAndGetWallets = async ({
 }: {
   launchNodeOptions?: Partial<LaunchNodeOptions>;
   walletCount?: number;
-} = {}) => {
+} = {}): LaunchNodeAndGetWalletsResult => {
   const defaultNodeOptions: LaunchNodeOptions = {
     chainConfigPath: launchNodeOptions?.chainConfigPath,
     consensusKey: launchNodeOptions?.consensusKey,
@@ -169,7 +179,7 @@ export const launchNodeAndGetWallets = async ({
     port,
   } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
 
-  const provider = new Provider(`http://${ip}:${port}/graphql`);
+  const provider = await Provider.create(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.55.0",
+  "version": "0.60.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -17,10 +17,10 @@
     "dist"
   ],
   "scripts": {
-    "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
-    "build-operations": "pnpm graphql-codegen",
-    "prebuild": "pnpm build-operations",
+    "prebuild": "pnpm build:operations",
     "build": "tsup",
+    "build:schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
+    "build:operations": "pnpm graphql-codegen",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
@@ -30,15 +30,17 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
-    "lodash.clonedeep": "^4.5.0"
+    "graphql-sse": "^2.2.1",
+    "ramda": "^0.29.0",
+    "tai64": "^1.0.0"
   },
   "devDependencies": {
     "@fuel-ts/utils": "workspace:*",
@@ -46,8 +48,8 @@
     "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
-    "@types/lodash.clonedeep": "^4.5.7",
-    "get-graphql-schema": "^2.1.2",
-    "typescript": "^4.8.4"
+    "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
+    "@types/ramda": "^0.29.3",
+    "get-graphql-schema": "^2.1.2"
   }
 }

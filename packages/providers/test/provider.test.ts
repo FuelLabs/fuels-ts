@@ -3,12 +3,13 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { safeExec } from '@fuel-ts/utils/test-utils';
-import * as GraphQL from 'graphql-request';
 
+import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -17,11 +18,42 @@ import type {
 import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
-import { messageProofResponse } from './fixtures';
+import { messageProofResponse, messageStatusResponse } from './fixtures';
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
+
+const resetCache = () => {
+  Provider.chainInfoCache = {};
+  Provider.nodeInfoCache = {};
+};
+
+const getCustomFetch =
+  (expectedOperationName: string, expectedResponse: object) =>
+  async (
+    url: string,
+    options: {
+      body: string;
+      headers: { [key: string]: string };
+      [key: string]: unknown;
+    }
+  ) => {
+    const graphqlRequest = JSON.parse(options.body);
+    const { operationName } = graphqlRequest;
+
+    if (operationName === expectedOperationName) {
+      const responseText = JSON.stringify({
+        data: expectedResponse,
+      });
+      const response = Promise.resolve(new Response(responseText, options));
+
+      return response;
+    }
+    return fetch(url, options);
+  };
+// TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
+const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 /**
  * @group browser
@@ -29,15 +61,15 @@ afterEach(() => {
  */
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.4');
+    expect(version).toEqual('0.20.5');
   });
 
   it('can call()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -102,7 +134,7 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -148,8 +180,10 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    // #region provider-definition
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const { consensusParameters } = await provider.getChain();
+    // #endregion provider-definition
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
     expect(consensusParameters.maxInputs).toBeDefined();
@@ -167,63 +201,44 @@ describe('Provider', () => {
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  it('can get node info including some consensus parameters properties', async () => {
-    // #region provider-definition
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
-      await provider.getNodeInfo();
-    // #endregion provider-definition
+  it('can change the provider url of the current instance', async () => {
+    const providerUrl1 = FUEL_NETWORK_URL;
+    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
 
-    expect(minGasPrice).toBeDefined();
-    expect(gasPerByte).toBeDefined();
-    expect(gasPriceFactor).toBeDefined();
-    expect(maxGasPerTx).toBeDefined();
-    expect(nodeVersion).toBeDefined();
-  });
-
-  it('can change the provider url of the current instance', () => {
-    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
-    const provider = new Provider(providerUrl1);
-    const spyGraphQLClient = vi.spyOn(GraphQL, 'GraphQLClient');
+    const provider = await Provider.create(providerUrl1, {
+      fetch: (url: string, options: FetchRequestOptions) =>
+        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
+    });
 
     expect(provider.url).toBe(providerUrl1);
-    provider.connect(providerUrl2);
+    expect(await provider.getVersion()).toEqual(providerUrl1);
+
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
+
+    await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
+
+    expect(await provider.getVersion()).toEqual(providerUrl2);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
   });
 
   it('can accept a custom fetch function', async () => {
-    const providerUrl = 'http://127.0.0.1:4000/graphql';
+    const providerUrl = FUEL_NETWORK_URL;
 
-    const customFetch = async (
-      url: string,
-      options: {
-        body: string;
-        headers: { [key: string]: string };
-        [key: string]: unknown;
-      }
-    ) => {
-      const graphqlRequest = JSON.parse(options.body);
-      const { operationName } = graphqlRequest;
-      if (operationName === 'getVersion') {
-        const responseText = JSON.stringify({
-          data: { nodeInfo: { nodeVersion: '0.30.0' } },
-        });
-        const response = Promise.resolve(new Response(responseText, options));
-
-        return response;
-      }
-      return fetch(url, options);
-    };
-
-    const provider = new Provider(providerUrl, { fetch: customFetch });
+    const provider = await Provider.create(providerUrl, {
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+    });
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 
   it('can force-produce blocks', async () => {
     // #region Provider-produce-blocks
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -244,7 +259,7 @@ describe('Provider', () => {
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -285,14 +300,14 @@ describe('Provider', () => {
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it('can cacheUtxo [undefined]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it('can cacheUtxo [undefined]', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     expect(provider.cache).toEqual(undefined);
   });
 
-  it('can cacheUtxo [numerical]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+  it('can cacheUtxo [numerical]', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 2500,
     });
 
@@ -300,14 +315,13 @@ describe('Provider', () => {
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
-  it('can cacheUtxo [invalid numerical]', () => {
-    expect(() => new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })).toThrow(
-      'Invalid TTL: -500. Use a value greater than zero.'
-    );
+  it('can cacheUtxo [invalid numerical]', async () => {
+    const { error } = await safeExec(() => Provider.create(FUEL_NETWORK_URL, { cacheUtxo: -500 }));
+    expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const transactionRequest = new ScriptTransactionRequest({});
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -317,7 +331,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 1,
     });
     const MessageInput: MessageTransactionRequestInput = {
@@ -340,7 +354,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -399,7 +413,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -473,7 +487,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -532,7 +546,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
     const EXPECTED: BytesLike[] = [
@@ -618,7 +632,7 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
@@ -642,17 +656,171 @@ describe('Provider', () => {
   it('can getMessageProof with all data', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = new Provider('http://127.0.0.1:4000/graphql', {
-      fetch: async (url, options) => {
-        const messageProof = JSON.stringify(messageProofResponse);
-        return Promise.resolve(new Response(messageProof, options));
-      },
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageProof', { messageProof: messageProofResponse })(url, options),
     });
+
     const messageProof = await provider.getMessageProof(
       '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
       '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
+
     expect(messageProof).toMatchSnapshot();
+  });
+
+  it('can getMessageStatus', async () => {
+    // Create a mock provider to return the message proof
+    // It test mainly types and converstions
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
+    });
+    const messageStatus = await provider.getMessageStatus(
+      '0x0000000000000000000000000000000000000000000000000000000000000008'
+    );
+    expect(messageStatus).toMatchSnapshot();
+  });
+
+  it('default timeout is undefined', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    expect(provider.options.timeout).toBeUndefined();
+  });
+
+  it('throws TimeoutError on timeout when calling an operation', async () => {
+    const { error } = await safeExec(async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      await provider.getTransaction('will fail due to timeout');
+    });
+
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
+  });
+
+  it('throws TimeoutError on timeout when calling a subscription', async () => {
+    const { error } = await safeExec(async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
+    });
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
+  });
+
+  it('errors returned from node via subscriptions are thrown', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    await expectToThrowFuelError(
+      async () => {
+        for await (const iterator of provider.operations.statusChange({
+          transactionId: 'Invalid ID that will cause node to return errors',
+        })) {
+          if (iterator) break;
+        }
+      },
+      { code: ErrorCode.FUEL_NODE_ERROR }
+    );
+  });
+
+  it('can connect', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    // check if the provider was initialized properly
+    expect(provider).toBeInstanceOf(Provider);
+    expect(provider.url).toEqual(FUEL_NETWORK_URL);
+    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+  });
+
+  it('should cache chain and node info', async () => {
+    resetCache();
+
+    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeUndefined();
+    expect(Provider.nodeInfoCache[FUEL_NETWORK_URL]).toBeUndefined();
+
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(Provider.nodeInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+  });
+
+  it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
+    resetCache();
+
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    provider.getChain();
+    provider.getNode();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+  });
+
+  it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
+    resetCache();
+
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    await provider.fetchChainAndNodeInfo();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
+    expect(spyFetchChain).toHaveBeenCalledTimes(2);
+    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure getGasConfig return essential gas related data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const gasConfig = provider.getGasConfig();
+
+    expect(gasConfig.gasPerByte).toBeDefined();
+    expect(gasConfig.gasPriceFactor).toBeDefined();
+    expect(gasConfig.maxGasPerPredicate).toBeDefined();
+    expect(gasConfig.maxGasPerTx).toBeDefined();
+    expect(gasConfig.minGasPrice).toBeDefined();
+  });
+
+  it('should throws when using getChain or getNode and without cached data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    resetCache();
+
+    await expectToThrowFuelError(
+      () => provider.getChain(),
+      new FuelError(
+        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
+        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
+
+    await expectToThrowFuelError(
+      () => provider.getNode(),
+      new FuelError(
+        ErrorCode.NODE_INFO_CACHE_EMPTY,
+        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
   });
 });

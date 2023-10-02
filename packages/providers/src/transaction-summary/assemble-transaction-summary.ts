@@ -5,6 +5,7 @@ import { type Transaction } from '@fuel-ts/transactions';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { calculateTransactionFee } from '../utils';
 
+import { fromTai64ToDate } from './date';
 import {
   getOperations,
   getTransactionTypeName,
@@ -19,7 +20,7 @@ import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './typ
 export interface AssembleTransactionSummaryParams {
   id?: string;
   gasPerByte?: BN;
-  gasPriceFactor?: BN;
+  gasPriceFactor: BN;
   transaction: Transaction;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
@@ -71,6 +72,12 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
+  let date: Date | undefined;
+
+  if (time) {
+    date = fromTai64ToDate(time);
+  }
+
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
     fee,
@@ -89,6 +96,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
+    date,
     transaction: transaction as Transaction<TTransactionType>,
   };
 

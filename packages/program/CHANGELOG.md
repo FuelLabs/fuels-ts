@@ -1,5 +1,50 @@
 # Change Log
 
+## 0.60.0
+
+### Minor Changes
+
+- purging constant MAX_GAS_PER_TX, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1272](https://github.com/FuelLabs/fuels-ts/pull/1272))
+
+## 0.59.0
+
+### Minor Changes
+
+- using `FuelError` instead of `@ethersproject/logger`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1278](https://github.com/FuelLabs/fuels-ts/pull/1278))
+
+## 0.58.0
+
+### Minor Changes
+
+- `chainInfo` is now fetched and cached on all `Provider`s when they are initialized. With this release, you now need to initialize a `Provider` like so:
+  ```ts
+  const provider = await Provider.create(url);
+  ```
+  For the full list of breaking-changes, please see [this PR](https://github.com/FuelLabs/fuels-ts/pull/1181), by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1181](https://github.com/FuelLabs/fuels-ts/pull/1181))
+- Remove `chainId` from the `Predicate` constructor. You don't need to pass in `chainId` anymore since you are passing in a `provider` already, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1181](https://github.com/FuelLabs/fuels-ts/pull/1181))
+- using FuelError across all packages, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1230](https://github.com/FuelLabs/fuels-ts/pull/1230))
+- purging GAS_PRICE_FACTOR and GAS_PER_BYTE constants, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1271](https://github.com/FuelLabs/fuels-ts/pull/1271))
+
+### Patch Changes
+
+- Increase support for vectors in predicates, by [@danielbate](https://github.com/danielbate) (See [#1247](https://github.com/FuelLabs/fuels-ts/pull/1247))
+
+## 0.57.0
+
+### Minor Changes
+
+- made ScriptResultDecoderError works for dryRun calls, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1250](https://github.com/FuelLabs/fuels-ts/pull/1250))
+
+## 0.56.1
+
+## 0.56.0
+
+### Minor Changes
+
+- forbid multicall for more than one function that returns heap types, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1217](https://github.com/FuelLabs/fuels-ts/pull/1217))
+- Ensure asm from wasm is initialzed, by [@camsjams](https://github.com/camsjams) (See [#1240](https://github.com/FuelLabs/fuels-ts/pull/1240))
+- 🐞 Fix gas call forwarding logic, by [@camsjams](https://github.com/camsjams) (See [#1241](https://github.com/FuelLabs/fuels-ts/pull/1241))
+
 ## 0.55.0
 
 ### Minor Changes

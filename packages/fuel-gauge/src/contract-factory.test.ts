@@ -1,9 +1,34 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, Provider, ContractFactory, BaseAssetId } from 'fuels';
+import {
+  bn,
+  toHex,
+  Interface,
+  Provider,
+  ContractFactory,
+  BaseAssetId,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 import { join } from 'path';
 
 import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+
+// load the byteCode of the contract, generated from Sway source
+const byteCode = readFileSync(
+  join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
+);
+
+// load the JSON abi of the contract, generated from Sway source
+const abi = JSON.parse(
+  readFileSync(
+    join(
+      __dirname,
+      '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
+    )
+  ).toString()
+);
 
 /**
  * @group browser
@@ -11,23 +36,8 @@ import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/de
  */
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-
-    // load the byteCode of the contract, generated from Sway source
-    const byteCode = readFileSync(
-      join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
-    );
-
-    // load the JSON abi of the contract, generated from Sway source
-    const abi = JSON.parse(
-      readFileSync(
-        join(
-          __dirname,
-          '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
-        )
-      ).toString()
-    );
 
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);
@@ -74,6 +84,7 @@ describe('Contract Factory', () => {
       isTypeCreate: expect.any(Boolean),
       isTypeMint: expect.any(Boolean),
       isTypeScript: expect.any(Boolean),
+      date: expect.any(Date),
       mintedAssets: expect.any(Array),
       burnedAssets: expect.any(Array),
       time: expect.any(String),
@@ -182,5 +193,17 @@ describe('Contract Factory', () => {
 
     const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
+  });
+
+  it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
+    const factory = new ContractFactory(byteCode, abi);
+
+    await expectToThrowFuelError(
+      () => factory.createTransactionRequest(),
+      new FuelError(
+        ErrorCode.MISSING_PROVIDER,
+        'Cannot create transaction request without provider'
+      )
+    );
   });
 });

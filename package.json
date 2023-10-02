@@ -5,13 +5,14 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "private": true,
   "engines": {
-    "node": ">= 18.14.1",
-    "pnpm": ">= 8.1.1"
+    "node": ">= 18.18.0",
+    "pnpm": ">= 8.6.1"
   },
-  "packageManager": "pnpm@8.1.1",
+  "packageManager": "pnpm@8.6.1",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'turbo run build --filter=!fuel-gauge'",
+    "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build",
+    "build:packages": "turbo run build --filter=!docs",
     "ci:test": "./scripts/ci-test.sh",
     "ci:test-node": "pnpm ci:test --node",
     "ci:test-browser": "pnpm ci:test --browser",
@@ -107,10 +108,5 @@
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^0.34.3",
     "webdriverio": "^8.15.8"
-  },
-  "pnpm": {
-    "overrides": {
-      "cross-fetch": "4.0.0"
-    }
   }
 }

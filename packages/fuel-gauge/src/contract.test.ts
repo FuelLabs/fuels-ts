@@ -164,7 +164,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
  */
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
@@ -182,7 +182,7 @@ describe('Contract', () => {
   });
 
   it('generates function methods on a complex contract', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
@@ -202,8 +202,8 @@ describe('Contract', () => {
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
-  it('assigns a provider if passed', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it('assigns a provider if passed', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
@@ -252,12 +252,14 @@ describe('Contract', () => {
 
     const scope = contract.multiCall(calls).addContracts([otherContract]);
 
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
+    const transactionRequest = await scope.getTransactionRequest();
+
+    expect(transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
       { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+    expect(transactionRequest.getContractOutputs()).toEqual([
       { type: 1, inputIndex: 0 },
       { type: 1, inputIndex: 1 },
     ]);
@@ -347,12 +349,14 @@ describe('Contract', () => {
 
     const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
+    const transactionRequest = await scope.getTransactionRequest();
+
+    expect(transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
       { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+    expect(transactionRequest.getContractOutputs()).toEqual([
       { type: 1, inputIndex: 0 },
       { type: 1, inputIndex: 1 },
     ]);
@@ -451,7 +455,7 @@ describe('Contract', () => {
         })
         .call<[BN, BN, BN]>()
     ).rejects.toThrowError(
-      "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
+      "Transaction's gasLimit must be equal to or greater than the combined forwarded gas of all calls."
     );
   });
 
@@ -481,7 +485,7 @@ describe('Contract', () => {
     expect(value[0].toNumber()).toBeLessThanOrEqual(500_000);
 
     expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * minThreshold);
-    expect(value[1].toNumber()).toBeLessThanOrEqual(1_000_000);
+    expect(value[1].toNumber()).toBeLessThanOrEqual(4_000_000);
   });
 
   it('Get transaction cost', async () => {
@@ -595,7 +599,7 @@ describe('Contract', () => {
           gasLimit,
         })
         .call<BN>()
-    ).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
+    ).rejects.toThrowError(`Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`);
   });
 
   it('calls array functions', async () => {
@@ -729,7 +733,10 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000_000),
@@ -754,7 +761,10 @@ describe('Contract', () => {
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
-    const externalWallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const externalWallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),
@@ -766,6 +776,12 @@ describe('Contract', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
+      // eslint-disable-next-line @typescript-eslint/require-await
+      static async connect(url: string) {
+        const newProvider = new ProviderCustom(url);
+        return newProvider;
+      }
+
       async sendTransaction(
         transactionRequestLike: TransactionRequestLike
       ): Promise<TransactionResponse> {
@@ -778,7 +794,7 @@ describe('Contract', () => {
     }
 
     // Set custom provider to contract instance
-    const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
+    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
     contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
@@ -815,7 +831,10 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall does not allow multiple calls that return heap types', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000),
@@ -838,13 +857,16 @@ describe('Contract', () => {
       () => contract.multiCall(calls).call(),
       new FuelError(
         ErrorCode.INVALID_MULTICALL,
-        'Only one call that returns a heap type is allowed on a multicall'
+        'A multicall can have only one call that returns a heap type.'
       )
     );
   });
 
   it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000),
@@ -864,7 +886,7 @@ describe('Contract', () => {
       () => contract.multiCall(calls).call(),
       new FuelError(
         ErrorCode.INVALID_MULTICALL,
-        'The contract call with the heap type return must be at the last position on the multicall'
+        'In a multicall, the contract call returning a heap type must be the last call.'
       )
     );
   });
@@ -882,7 +904,7 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -902,7 +924,7 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [
       [500, BaseAssetId],
       [200, asset],
@@ -924,7 +946,7 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -934,9 +956,7 @@ describe('Contract', () => {
     const amountToContract = 200;
     const amountToPredicate = 300;
 
-    const chainId = await provider.getChainId();
-
-    const predicate = new Predicate(predicateBytecode, chainId);
+    const predicate = new Predicate(predicateBytecode, provider);
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
 
@@ -949,5 +969,33 @@ describe('Contract', () => {
     const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
+  });
+
+  it('should ensure ScriptResultDecoderError works for dryRun and simulate calls', async () => {
+    const contract = await setupContract();
+
+    const invocationScope = contract.functions.return_context_amount().callParams({
+      forward: [100, BaseAssetId],
+    });
+    const { gasUsed } = await invocationScope.getTransactionCost({
+      tolerance: 0,
+    });
+
+    const gasLimit = multiply(gasUsed, 0.5);
+    await expect(
+      invocationScope
+        .txParams({
+          gasLimit,
+        })
+        .dryRun<BN>()
+    ).rejects.toThrowError(`The script call result does not contain a 'returnReceipt'.`);
+
+    await expect(
+      invocationScope
+        .txParams({
+          gasLimit,
+        })
+        .simulate<BN>()
+    ).rejects.toThrowError(`The script call result does not contain a 'returnReceipt'.`);
   });
 });

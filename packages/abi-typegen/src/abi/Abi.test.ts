@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
@@ -120,7 +120,7 @@ describe('Abi.ts', () => {
 
     const { error, result } = await safeExec(fn);
 
-    const expectedErrorMsg = `Could not parse name from abi file: `;
+    const expectedErrorMsg = `Could not parse name from ABI file: .`;
     expect(result).toBeFalsy();
     expect(error).toBeTruthy();
     expect(error?.message).toEqual(expectedErrorMsg);

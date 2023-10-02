@@ -3,28 +3,29 @@ import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { safeExec } from '@fuel-ts/utils/test-utils';
 import type { Account } from '@fuel-ts/wallet';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
 
-import { Script } from './script';
+import { Script } from './index';
 
 const scriptBin = readFileSync(
-  join(__dirname, './call-test-script/out/debug/call-test-script.bin')
+  join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
 );
 
 const setup = async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
@@ -49,7 +50,9 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.calculateFee());
+  const { gasPriceFactor } = account.provider.getGasConfig();
+
+  requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
@@ -137,7 +140,9 @@ describe('Script', () => {
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
-    expect((<Error>error).message).toMatch(/Script has no configurable constants to be set/);
+    const errMsg = `Error setting configurable constants: The script does not have configurable constants to be set.`;
+
+    expect((<Error>error).message).toBe(errMsg);
   });
 
   it('should throw when setting configurable with wrong name', async () => {
@@ -162,8 +167,8 @@ describe('Script', () => {
 
     const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
 
-    expect((<Error>error).message).toMatch(
-      /Script has no configurable constant named: NOT_DEFINED/
-    );
+    const errMsg = `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`;
+
+    expect((<Error>error).message).toBe(errMsg);
   });
 });

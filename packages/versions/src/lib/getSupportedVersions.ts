@@ -1,7 +1,7 @@
 export function getSupportedVersions() {
   return {
     FORC: '0.44.0',
-    FUEL_CORE: '0.20.4',
-    FUELS: '0.55.0',
+    FUEL_CORE: '0.20.5',
+    FUELS: '0.60.0',
   };
 }

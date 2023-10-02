@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { TransactionResult } from '@fuel-ts/providers';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
@@ -5,8 +6,13 @@ import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
 /**
  * @hidden
  */
-const getFailureReason = (reason: string): string =>
-  PANIC_REASONS.includes(reason) ? reason : 'unknown';
+const getFailureReason = (reason: string): string => {
+  if (PANIC_REASONS.includes(reason)) {
+    return reason;
+  }
+
+  return reason === 'Revert(123)' ? 'MismatchedSelector' : 'unknown';
+};
 
 /**
  * @hidden
@@ -31,6 +37,6 @@ export const getDocs = (
  */
 export function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
-    throw new Error(message);
+    throw new FuelError(ErrorCode.TRANSACTION_ERROR, message);
   }
 }

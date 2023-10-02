@@ -1,4 +1,6 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import type { Input, InputMessage } from './input';
@@ -70,29 +72,30 @@ describe('InputCoder', () => {
     );
   });
 
-  it('will throw encoding a coin with larger than max predicate length', () => {
-    expect(() => {
-      const input: Input = {
-        type: InputType.Coin,
-        utxoID: { transactionId: B256, outputIndex: 0 },
-        owner: B256,
-        amount: bn(0),
-        assetId: B256,
-        txPointer: {
-          blockHeight: 0,
-          txIndex: 0,
-        },
-        witnessIndex: 0,
-        maturity: 0,
-        predicateGasUsed: bn(0),
-        predicateLength: MAX_U32 + 1,
-        predicateDataLength: MAX_U32 + 1,
-        predicate: '0x',
-        predicateData: '0x',
-      };
+  it('will throw encoding a coin with larger than max predicate length', async () => {
+    const input: Input = {
+      type: InputType.Coin,
+      utxoID: { transactionId: B256, outputIndex: 0 },
+      owner: B256,
+      amount: bn(0),
+      assetId: B256,
+      txPointer: {
+        blockHeight: 0,
+        txIndex: 0,
+      },
+      witnessIndex: 0,
+      maturity: 0,
+      predicateGasUsed: bn(0),
+      predicateLength: MAX_U32 + 1,
+      predicateDataLength: MAX_U32 + 1,
+      predicate: '0x',
+      predicateData: '0x',
+    };
 
-      new InputCoder().encode(input);
-    }).toThrow('Invalid u32. Too many bytes.');
+    await expectToThrowFuelError(
+      () => new InputCoder().encode(input),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u32, too many bytes.')
+    );
   });
 
   it('Can encode Contract', () => {

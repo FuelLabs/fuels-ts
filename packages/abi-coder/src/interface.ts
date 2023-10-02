@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
-import { versions } from '@fuel-ts/versions';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
@@ -10,16 +9,14 @@ import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
 import { findOrThrow } from './utilities';
 
-const logger = new Logger(versions.FUELS);
-
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
 
   readonly configurables: Record<string, JsonAbiConfigurable>;
   /*
   TODO: Refactor so that there's no need for externalLoggedTypes
-   
-  This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
+
+  This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method.
   This is used to decode logs from contracts other than the main contract
   we're interacting with.
   */
@@ -52,10 +49,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     if (fn !== undefined) return fn;
 
-    return logger.throwArgumentError(
-      `function ${nameOrSignatureOrSelector} not found.`,
-      'data',
-      fn
+    throw new FuelError(
+      ErrorCode.FUNCTION_NOT_FOUND,
+      `function ${nameOrSignatureOrSelector} not found: ${JSON.stringify(fn)}.`
     );
   }
 
@@ -64,7 +60,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     if (!fragment) {
-      throw new Error('Fragment not found');
+      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
     }
 
     return fragment.decodeArguments(data);
@@ -79,7 +75,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     if (!fragment) {
-      throw new Error('Fragment not found');
+      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
     }
 
     return fragment.encodeArguments(values, offset);
@@ -114,7 +110,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       this.jsonAbi.configurables,
       (c) => c.name === name,
       () => {
-        throw new Error(`configurable '${name}' doesn't exist`);
+        throw new FuelError(
+          ErrorCode.CONFIGURABLE_NOT_FOUND,
+          `A configurable with the '${name}' was not found in the ABI.`
+        );
       }
     );
 
@@ -126,7 +125,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       this.jsonAbi.types,
       (t) => t.typeId === typeId,
       () => {
-        throw new Error(`type with typeId '${typeId}' doesn't exist`);
+        throw new FuelError(
+          ErrorCode.TYPE_NOT_FOUND,
+          `Type with typeId '${typeId}' doesn't exist in the ABI.`
+        );
       }
     );
   }

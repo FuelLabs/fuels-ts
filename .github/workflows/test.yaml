@@ -31,6 +31,10 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # linting of some tests depends on pretest being run so that it generates the necessary files
+      - name: Pretest
+        run: pnpm pretest
+
       - name: Lint
         run: pnpm lint
 

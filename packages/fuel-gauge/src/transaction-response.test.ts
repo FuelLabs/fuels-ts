@@ -11,12 +11,14 @@ describe('TransactionSummary', () => {
   let adminWallet: WalletUnlocked;
 
   beforeAll(async () => {
-    provider = new Provider(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
     adminWallet = await generateTestWallet(provider, [[1_000]]);
   });
 
   it('should ensure create method waits till a transaction response is given', async () => {
-    const destination = Wallet.generate();
+    const destination = Wallet.generate({
+      provider,
+    });
 
     const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
 
@@ -28,7 +30,9 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
-    const destination = Wallet.generate();
+    const destination = Wallet.generate({
+      provider,
+    });
 
     const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
 
@@ -63,7 +67,9 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    const destination = Wallet.generate();
+    const destination = Wallet.generate({
+      provider,
+    });
 
     const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
 

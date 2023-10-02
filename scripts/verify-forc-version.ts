@@ -7,4 +7,4 @@ import path from 'path';
   if (forcVersion.indexOf('git:') !== -1) {
     throw new Error('Cannot publish from a git branch. Please use a release directly.');
   }
-})();
+})().catch(process.stderr.write);

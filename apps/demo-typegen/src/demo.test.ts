@@ -1,6 +1,7 @@
 // #region Testing-with-jest-ts
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { ContractFactory, Provider, toHex, BaseAssetId } from 'fuels';
+import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
 
@@ -13,7 +14,7 @@ import bytecode from './generated-types/DemoContractAbi.hex';
  */
 describe('ExampleContract', () => {
   it('should return the input', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     // Deploy
@@ -33,7 +34,7 @@ describe('ExampleContract', () => {
   });
 
   it('deployContract method', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     // Deploy
@@ -49,3 +50,31 @@ describe('ExampleContract', () => {
   });
 });
 // #endregion Testing-with-jest-ts
+
+it('should throw when simulating via contract factory with wallet with no resources', async () => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+  const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+  const unfundedWallet = Wallet.generate({ provider });
+
+  const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
+  const contract = await factory.deployContract();
+  const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
+
+  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
+
+  expect((<Error>error).message).toMatch('not enough coins to fit the target');
+});
+
+it('should throw when dry running via contract factory with wallet with no resources', async () => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+  const fundedWallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+  const unfundedWallet = Wallet.generate({ provider });
+
+  const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
+  const contract = await factory.deployContract();
+  const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
+
+  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).dryRun());
+
+  expect((<Error>error).message).toMatch('not enough coins to fit the target');
+});

@@ -1,3 +1,6 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import { U8_MAX } from '../../test/utils/constants';
 
 import { ArrayCoder } from './array';
@@ -89,18 +92,20 @@ describe('ArrayCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw when value to encode is not array', () => {
+  it('should throw when value to encode is not array', async () => {
     const coder = new ArrayCoder(new NumberCoder('u8'), 1);
     const nonArrayInput = { ...[1] };
-    expect(() => {
-      coder.encode(nonArrayInput);
-    }).toThrow('expected array value');
+    await expectToThrowFuelError(
+      () => coder.encode(nonArrayInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
+    );
   });
 
-  it('should throw when coder length is not match inputted array length', () => {
+  it('should throw when coder length is not match inputted array length', async () => {
     const coder = new ArrayCoder(new NumberCoder('u8'), 1);
-    expect(() => {
-      coder.encode([1, 2]);
-    }).toThrow('Types/values length mismatch');
+    await expectToThrowFuelError(
+      () => coder.encode([1, 2]),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Types/values length mismatch.')
+    );
   });
 });

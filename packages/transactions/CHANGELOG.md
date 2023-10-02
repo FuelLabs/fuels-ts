@@ -1,5 +1,30 @@
 # Change Log
 
+## 0.60.0
+
+### Minor Changes
+
+- purging constant MAX_GAS_PER_TX, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1272](https://github.com/FuelLabs/fuels-ts/pull/1272))
+
+## 0.59.0
+
+### Minor Changes
+
+- using `FuelError` instead of `@ethersproject/logger`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1278](https://github.com/FuelLabs/fuels-ts/pull/1278))
+
+## 0.58.0
+
+### Minor Changes
+
+- using FuelError across all packages, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1230](https://github.com/FuelLabs/fuels-ts/pull/1230))
+- purging GAS_PRICE_FACTOR and GAS_PER_BYTE constants, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1271](https://github.com/FuelLabs/fuels-ts/pull/1271))
+
+## 0.57.0
+
+## 0.56.1
+
+## 0.56.0
+
 ## 0.55.0
 
 ## 0.54.1

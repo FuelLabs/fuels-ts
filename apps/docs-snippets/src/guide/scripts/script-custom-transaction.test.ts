@@ -64,7 +64,8 @@ describe(__filename, () => {
     const scriptArguments = [contract.id.toB256(), assetIdA, new BN(1000), assetIdB, new BN(500)];
 
     // 3. Get the resources for inputs and outpoints
-    const fee = request.calculateFee();
+    const { gasPriceFactor } = contract.provider.getGasConfig();
+    const fee = request.calculateFee(gasPriceFactor);
     const quantities: CoinQuantityLike[] = [[1000, assetIdA], [500, assetIdB], fee];
     const resources = await wallet.getResourcesToSpend(quantities);
 

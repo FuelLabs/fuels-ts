@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import {
   VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
   ASSET_ID_LEN,
-  WORD_SIZE,
   CONTRACT_ID_LEN,
+  SCRIPT_FIXED_SIZE,
+  WORD_SIZE,
+  calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
@@ -21,16 +22,13 @@ import type {
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { versions } from '@fuel-ts/versions';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
 
-const logger = new Logger(versions.FUELS);
-
-export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
-export const POINTER_DATA_OFFSET = ASSET_ID_LEN + 2 * WORD_SIZE + CONTRACT_ID_LEN + 2 * WORD_SIZE;
-
+export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + SCRIPT_FIXED_SIZE;
+export const POINTER_DATA_OFFSET =
+  WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
 /**
  * Represents a script result, containing information about the script execution.
  */
@@ -75,11 +73,17 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   });
 
   if (!scriptResultReceipt) {
-    throw new Error(`Expected scriptResultReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'scriptResultReceipt'.`
+    );
   }
 
   if (!returnReceipt) {
-    throw new Error(`Expected returnReceipt`);
+    throw new FuelError(
+      ErrorCode.TRANSACTION_ERROR,
+      `The script call result does not contain a 'returnReceipt'.`
+    );
   }
 
   const scriptResult: ScriptResult = {
@@ -137,20 +141,23 @@ export function callResultToInvocationResult<TReturn>(
     callResult,
     (scriptResult: ScriptResult) => {
       if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
-        logger.throwError('Script Reverted', Logger.errors.CALL_EXCEPTION, logs);
+        throw new FuelError(
+          ErrorCode.SCRIPT_REVERTED,
+          `Script Reverted. Logs: ${JSON.stringify(logs)}`
+        );
       }
 
       if (
         scriptResult.returnReceipt.type !== ReceiptType.Return &&
         scriptResult.returnReceipt.type !== ReceiptType.ReturnData
       ) {
-        logger.throwError(
-          `Script Return Type [${scriptResult.returnReceipt.type}] Invalid`,
-          Logger.errors.CALL_EXCEPTION,
-          {
+        const { type } = scriptResult.returnReceipt;
+        throw new FuelError(
+          ErrorCode.SCRIPT_REVERTED,
+          `Script Return Type [${type}] Invalid. Logs: ${JSON.stringify({
             logs,
             receipt: scriptResult.returnReceipt,
-          }
+          })}`
         );
       }
 
@@ -159,11 +166,8 @@ export function callResultToInvocationResult<TReturn>(
         value = scriptResult.returnReceipt.val;
       }
       if (scriptResult.returnReceipt.type === ReceiptType.ReturnData) {
-        const decoded = call.program.interface.decodeFunctionResult(
-          call.func,
-          scriptResult.returnReceipt.data
-        );
-        value = (decoded as [TReturn])[0];
+        const decoded = call.func.decodeOutput(scriptResult.returnReceipt.data);
+        value = decoded[0];
       }
 
       return value as TReturn;
@@ -216,20 +220,23 @@ export class ScriptRequest<TData = void, TResult = void> {
   /**
    * Gets the script data offset for the given bytes.
    *
-   * @param bytes - The bytes of the script.
+   * @param byteLength - The byte length of the script.
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
    * @returns The script data offset.
    */
-  static getScriptDataOffsetWithScriptBytes(byteLength: number): number {
-    return SCRIPT_DATA_BASE_OFFSET + byteLength;
+  static getScriptDataOffsetWithScriptBytes(byteLength: number, maxInputs: number): number {
+    const scriptDataBaseOffset = calculateVmTxMemory({ maxInputs }) + SCRIPT_FIXED_SIZE;
+    return scriptDataBaseOffset + byteLength;
   }
 
   /**
    * Gets the script data offset.
    *
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
    * @returns The script data offset.
    */
-  getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes.length);
+  getScriptDataOffset(maxInputs: number) {
+    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes.length, maxInputs);
   }
 
   /**

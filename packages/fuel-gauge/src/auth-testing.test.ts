@@ -1,7 +1,14 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { AssertFailedRevertError, ContractFactory, BaseAssetId, Provider } from 'fuels';
+import {
+  AssertFailedRevertError,
+  ContractFactory,
+  BaseAssetId,
+  Provider,
+  getRandomB256,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
@@ -15,7 +22,7 @@ let wallet: WalletUnlocked;
  */
 describe('Auth Testing', () => {
   beforeAll(async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
@@ -43,16 +50,8 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    const lastChar = wallet.address.toB256().slice(-1);
-    let nextChar = String.fromCharCode(lastChar.charCodeAt(0) + 1);
-    if (nextChar > 'f') {
-      nextChar = '0';
-    }
-
     await expect(
-      contractInstance.functions
-        .check_msg_sender({ value: wallet.address.toB256().slice(0, -1) + nextChar })
-        .call()
+      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
 });
