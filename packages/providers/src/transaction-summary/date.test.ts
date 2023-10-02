@@ -5,7 +5,9 @@ import * as dateMod from './date';
 const { fromTai64ToDate: tai64toDate, fromDateToTai64: dateToTai64 } = dateMod;
 
 describe('transaction-summary/date', () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should convert TAI64 to Date correctly', () => {
     const fromStringSpy = vi.spyOn(tai64Mod.TAI64, 'fromString');
