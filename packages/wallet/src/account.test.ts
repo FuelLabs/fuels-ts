@@ -71,11 +71,9 @@ describe('Account', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    const dummyProvider = {
-      getCoins: async () => Promise.resolve(dummyCoins),
-    } as unknown as Provider;
-
-    vi.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
+      Promise.resolve(dummyCoins)
+    );
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -125,11 +123,9 @@ describe('Account', () => {
   it('should throw if messages length is higher than 9999', async () => {
     const dummyMessages: Message[] = new Array(10000);
 
-    const dummyProvider = {
-      getMessages: async () => Promise.resolve(dummyMessages),
-    } as unknown as Provider;
-
-    vi.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
+      Promise.resolve(dummyMessages)
+    );
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
@@ -174,11 +170,9 @@ describe('Account', () => {
   it('should throw if balances length is higher than 9999', async () => {
     const dummyBalances: CoinQuantity[] = new Array(10000);
 
-    const dummyProvider = {
-      getBalances: async () => Promise.resolve(dummyBalances),
-    } as unknown as Provider;
-
-    vi.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
+    vi.spyOn(Provider.prototype, 'getBalances').mockImplementation(async () =>
+      Promise.resolve(dummyBalances)
+    );
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
