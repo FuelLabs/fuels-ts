@@ -1,5 +1,5 @@
 import { compareUserVersions } from './compareUserVersions';
-import * as getSupportedVersionsMod from './getSupportedVersions';
+import * as getBuiltinVersionsMod from './getBuiltinVersions';
 
 describe('compareVersions.js', () => {
   /*
@@ -7,7 +7,7 @@ describe('compareVersions.js', () => {
   */
   beforeEach(() => {
     const v = '1.0.0';
-    const spy = jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions');
+    const spy = jest.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions');
     spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
   });
 
@@ -18,8 +18,8 @@ describe('compareVersions.js', () => {
   */
   test('should compare against: newer versions', () => {
     const comparisons = compareUserVersions({
-      userForcVersion: '1.0.1',
-      userFuelCoreVersion: '1.0.1',
+      systemForcVersion: '1.0.1',
+      systemFuelCoreVersion: '1.0.1',
     });
 
     expect(comparisons.userForcIsGt).toEqual(true);
@@ -31,8 +31,8 @@ describe('compareVersions.js', () => {
 
   test('should compare against: exact versions', () => {
     const comparisons = compareUserVersions({
-      userForcVersion: '1.0.0',
-      userFuelCoreVersion: '1.0.0',
+      systemForcVersion: '1.0.0',
+      systemFuelCoreVersion: '1.0.0',
     });
 
     expect(comparisons.userForcIsGt).toEqual(false);
@@ -44,8 +44,8 @@ describe('compareVersions.js', () => {
 
   test('should compare against: older versions', () => {
     const comparisons = compareUserVersions({
-      userForcVersion: '0.0.1',
-      userFuelCoreVersion: '0.0.1',
+      systemForcVersion: '0.0.1',
+      systemFuelCoreVersion: '0.0.1',
     });
 
     expect(comparisons.userForcIsGt).toEqual(false);

@@ -1,8 +1,8 @@
 import { runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareUserVersionsMod from './lib/compareUserVersions';
-import * as getSupportedVersionsMod from './lib/getSupportedVersions';
-import * as getUserVersionsMod from './lib/getUserVersions';
+import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
+import * as getSystemVersionsMod from './lib/getSystemVersions';
 
 describe('cli.js', () => {
   // hooks
@@ -17,12 +17,12 @@ describe('cli.js', () => {
     userForcIsEq: boolean;
     userFuelCoreIsGt: boolean;
     userFuelCoreIsEq: boolean;
-    userForcVersion: string;
-    userFuelCoreVersion: string;
+    systemForcVersion: string;
+    systemFuelCoreVersion: string;
   }) {
     const {
-      userForcVersion,
-      userFuelCoreVersion,
+      systemForcVersion,
+      systemFuelCoreVersion,
       userFuelCoreIsGt,
       userFuelCoreIsEq,
       userForcIsGt,
@@ -44,12 +44,12 @@ describe('cli.js', () => {
       userFuelCoreIsEq,
     }));
 
-    jest.spyOn(getUserVersionsMod, 'getUserVersions').mockImplementation(() => ({
-      userForcVersion,
-      userFuelCoreVersion,
+    jest.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
+      systemForcVersion,
+      systemFuelCoreVersion,
     }));
 
-    jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+    jest.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
       FORC: '1.0.0',
       FUEL_CORE: '1.0.0',
       FUELS: '1.0.0',
@@ -68,8 +68,8 @@ describe('cli.js', () => {
   test('should inform about newer versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
-      userForcVersion: '1.1.1',
-      userFuelCoreVersion: '1.1.1',
+      systemForcVersion: '1.1.1',
+      systemFuelCoreVersion: '1.1.1',
       userFuelCoreIsGt: true,
       userFuelCoreIsEq: false,
       userForcIsGt: true,
@@ -88,8 +88,8 @@ describe('cli.js', () => {
   test('should inform about exact versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
-      userForcVersion: '1.0.0',
-      userFuelCoreVersion: '1.0.0',
+      systemForcVersion: '1.0.0',
+      systemFuelCoreVersion: '1.0.0',
       userFuelCoreIsGt: false,
       userFuelCoreIsEq: true,
       userForcIsGt: false,
@@ -108,8 +108,8 @@ describe('cli.js', () => {
   test('should warn about older versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
-      userForcVersion: '0.0.1',
-      userFuelCoreVersion: '0.0.1',
+      systemForcVersion: '0.0.1',
+      systemFuelCoreVersion: '0.0.1',
       userFuelCoreIsGt: false,
       userFuelCoreIsEq: false,
       userForcIsGt: false,

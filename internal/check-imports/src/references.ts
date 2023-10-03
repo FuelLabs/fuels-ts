@@ -141,8 +141,8 @@ log(InputCoinCoder);
  */
 log(runVersions);
 log(versions);
-// log(getSupportedVersions); // nop
-// log(getUserVersions); // nop
+// log(getBuiltinVersions); // nop
+// log(getSystemVersions); // nop
 // log(compareUserVersions); // nop
 // log(colorizeUserVersion); // nop
 
