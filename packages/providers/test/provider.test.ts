@@ -823,11 +823,14 @@ describe('Provider', () => {
 
   it('throws on difference between major client version and supported major version', async () => {
     const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
+
     const mock = {
       isMajorSupported: false,
       isMinorSupported: true,
       isPatchSupported: true,
-      supportedVersion: '1.0.0',
+      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
     };
 
     if (mock.supportedVersion === FUEL_CORE) throw new Error();
@@ -843,11 +846,14 @@ describe('Provider', () => {
 
   it('throws on difference between minor client version and supported minor version', async () => {
     const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const minorMismatch = minor === '0' ? 1 : parseInt(patch, 10) - 1;
+
     const mock = {
-      isMajorSupported: false,
+      isMajorSupported: true,
       isMinorSupported: false,
       isPatchSupported: true,
-      supportedVersion: '0.19.0',
+      supportedVersion: `${major}.${minorMismatch}.${patch}`,
     };
 
     if (mock.supportedVersion === FUEL_CORE) throw new Error();
@@ -865,11 +871,12 @@ describe('Provider', () => {
     const { FUEL_CORE } = versions;
     const [major, minor, patch] = FUEL_CORE.split('.');
 
+    const patchMismatch = patch === '0' ? 1 : parseInt(patch, 10) - 1;
     const mock = {
       isMajorSupported: true,
       isMinorSupported: true,
       isPatchSupported: false,
-      supportedVersion: `${major}.${minor}.${parseInt(patch, 10) - 1}`,
+      supportedVersion: `${major}.${minor}.${patchMismatch}`,
     };
     if (mock.supportedVersion === FUEL_CORE) throw new Error();
 
@@ -881,7 +888,7 @@ describe('Provider', () => {
 
     expect(warnSpy).toHaveBeenCalledWith(
       ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      'The patch versions of the client and sdk differ. Fuel client version: ${}, Supported version: 0.0.1'
+      `The patch versions of the client and sdk differ. Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
     );
   });
 });
