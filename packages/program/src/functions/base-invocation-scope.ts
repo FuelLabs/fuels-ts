@@ -3,10 +3,9 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
+import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
 
@@ -47,7 +46,7 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
  * Base class for managing invocation scopes and preparing transactions.
  */
 export class BaseInvocationScope<TReturn = any> {
-  transactionRequest: ScriptTransactionRequest;
+  protected transactionRequest: ScriptTransactionRequest;
   protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
@@ -63,8 +62,11 @@ export class BaseInvocationScope<TReturn = any> {
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
     this.isMultiCall = isMultiCall;
+
+    const provider = program.provider as Provider;
+    const { maxGasPerTx } = provider.getGasConfig();
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
     });
   }
 
@@ -75,7 +77,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const script = getContractCallScript(this.functionInvocationScopes);
-    const provider = this.program.provider as Provider;
+    const provider = this.getProvider();
     const consensusParams = provider.getChain().consensusParameters;
     if (!consensusParams) {
       throw new FuelError(
@@ -115,12 +117,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
+    const { gasPriceFactor } = this.getProvider().getGasConfig();
+
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee())
+      .concat(this.transactionRequest.calculateFee(gasPriceFactor))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
@@ -212,8 +216,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
-    assert(provider, 'Wallet or Provider is required!');
+    const provider = this.getProvider();
 
     await this.prepareTransaction();
     const request = transactionRequestify(this.transactionRequest);
@@ -274,7 +277,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The prepared transaction request.
    */
-  async getTransactionRequest(): Promise<TransactionRequest> {
+  async getTransactionRequest(): Promise<ScriptTransactionRequest> {
     await this.prepareTransaction();
     return this.transactionRequest;
   }
@@ -331,8 +334,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    const provider = (this.program.account?.provider || this.program.provider) as Provider;
-    assert(provider, 'Wallet or Provider is required!');
+    const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
     const request = transactionRequestify(transactionRequest);
@@ -347,5 +349,11 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     return result;
+  }
+
+  getProvider(): Provider {
+    const provider = <Provider>this.program.provider;
+
+    return provider;
   }
 }

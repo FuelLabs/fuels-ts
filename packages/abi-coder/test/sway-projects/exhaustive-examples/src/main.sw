@@ -1,5 +1,7 @@
 contract;
 use std::b512::B512;
+use std::bytes::Bytes;
+use std::string::String;
 
 enum EnumWithGeneric<T> {
     VariantOne: T,
@@ -132,7 +134,10 @@ abi MyContract {
     fn struct_generic_simple(x: StructB<u8>) -> StructB<u8>;
     fn struct_with_tuple(x: StructB<(bool, u64)>) -> StructB<(bool, u64)>;
     fn struct_with_implicitGenerics(arg: StructWithImplicitGenerics<b256, u8>) -> StructWithImplicitGenerics<b256, u8>;
-
+    fn bytes(arg: Bytes) -> Bytes;
+    fn raw_slice(arg: raw_slice) -> raw_slice;
+    fn dynamic_string(arg: String) -> String;
+    
     fn tuple_as_param(x: (u8, StructA<StructB<u64>, str[3]>)) -> (u8, StructA<StructB<u64>, str[3]>);
     fn array_simple(x: [u8; 4]) -> [u8; 4];
     fn array_struct(x: [SimpleStruct; 3]) -> [SimpleStruct; 3];
@@ -242,6 +247,17 @@ impl MyContract for Contract {
         arg: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8> {
         arg
+    }
+
+    fn bytes(arg: Bytes) -> Bytes { 
+        arg
+    }
+    fn raw_slice(arg: raw_slice) -> raw_slice {
+        arg 
+    }
+    
+    fn dynamic_string(arg: String) -> String { 
+        arg 
     }
 
     fn two_u8_vectors(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {

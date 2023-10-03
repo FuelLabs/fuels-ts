@@ -1,6 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -9,13 +8,9 @@ import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
-import { versions } from '@fuel-ts/versions';
 import type { Account } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
-
-const logger = new Logger(versions.FUELS);
 
 /**
  * Options for deploying a contract.
@@ -85,7 +80,7 @@ export default class ContractFactory {
    * @param provider - The provider to be associated with the factory.
    * @returns A new ContractFactory instance.
    */
-  connect(provider: Provider | null) {
+  connect(provider: Provider) {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
@@ -109,11 +104,19 @@ export default class ContractFactory {
       storageSlots: storageSlots || [],
     };
 
+    if (!this.provider) {
+      throw new FuelError(
+        ErrorCode.MISSING_PROVIDER,
+        'Cannot create transaction request without provider'
+      );
+    }
+
+    const { maxGasPerTx } = this.provider.getGasConfig();
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
@@ -134,11 +137,7 @@ export default class ContractFactory {
    */
   async deployContract(deployContractOptions: DeployContractOptions = {}) {
     if (!this.account) {
-      return logger.throwArgumentError(
-        'Cannot deploy Contract without account',
-        'account',
-        this.account
-      );
+      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
     }
 
     const { configurableConstants } = deployContractOptions;

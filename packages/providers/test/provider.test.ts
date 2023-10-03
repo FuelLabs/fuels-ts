@@ -3,12 +3,13 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import * as GraphQL from 'graphql-request';
 
+import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -17,14 +18,35 @@ import type {
 import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
-import { messageProofResponse } from './fixtures';
-import { MOCK_CHAIN } from './fixtures/chain';
-import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
+import { messageProofResponse, messageStatusResponse } from './fixtures';
 
 afterEach(() => {
   jest.restoreAllMocks();
 });
 
+const getCustomFetch =
+  (expectedOperationName: string, expectedResponse: object) =>
+  async (
+    url: string,
+    options: {
+      body: string;
+      headers: { [key: string]: string };
+      [key: string]: unknown;
+    }
+  ) => {
+    const graphqlRequest = JSON.parse(options.body);
+    const { operationName } = graphqlRequest;
+
+    if (operationName === expectedOperationName) {
+      const responseText = JSON.stringify({
+        data: expectedResponse,
+      });
+      const response = Promise.resolve(new Response(responseText, options));
+
+      return response;
+    }
+    return fetch(url, options);
+  };
 // TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
@@ -34,7 +56,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.4');
+    expect(version).toEqual('0.20.5');
   });
 
   it('can call()', async () => {
@@ -172,63 +194,36 @@ describe('Provider', () => {
 
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
 
-    const provider = await Provider.create(providerUrl1);
-
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient').mockImplementationOnce(
-      () =>
-        ({
-          request: async () =>
-            Promise.resolve({
-              chain: MOCK_CHAIN,
-              nodeInfo: MOCK_NODE_INFO,
-            }),
-        } as unknown as GraphQL.GraphQLClient)
-    );
+    const provider = await Provider.create(providerUrl1, {
+      fetch: (url: string, options: FetchRequestOptions) =>
+        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
+    });
 
     expect(provider.url).toBe(providerUrl1);
-    await provider.switchUrl(providerUrl2);
+    expect(await provider.getVersion()).toEqual(providerUrl1);
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
+
+    expect(await provider.getVersion()).toEqual(providerUrl2);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
   });
 
   it('can accept a custom fetch function', async () => {
     const providerUrl = FUEL_NETWORK_URL;
 
-    const customFetch = async (
-      url: string,
-      options: {
-        body: string;
-        headers: { [key: string]: string };
-        [key: string]: unknown;
-      }
-    ) => {
-      const graphqlRequest = JSON.parse(options.body);
-      const { operationName } = graphqlRequest;
-      if (operationName === 'getVersion') {
-        const responseText = JSON.stringify({
-          data: { nodeInfo: { nodeVersion: '0.30.0' } },
-        });
-        const response = Promise.resolve(new Response(responseText, options));
-
-        return response;
-      }
-
-      // Mocking `getChain` because it is called by `connect`. If we don't mock it, `connect` will throw
-      if (operationName === 'getChain') {
-        const responseText = JSON.stringify({
-          data: {
-            chain: {},
-          },
-        });
-        const response = Promise.resolve(new Response(responseText, options));
-        return response;
-      }
-      return fetch(url, options);
-    };
-
-    const provider = await Provider.create(providerUrl, { fetch: customFetch });
+    const provider = await Provider.create(providerUrl, {
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+    });
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 
@@ -653,17 +648,75 @@ describe('Provider', () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, options) => {
-        const messageProof = JSON.stringify(messageProofResponse);
-        return Promise.resolve(new Response(messageProof, options));
-      },
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageProof', { messageProof: messageProofResponse })(url, options),
     });
+
     const messageProof = await provider.getMessageProof(
       '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
       '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
+
     expect(messageProof).toMatchSnapshot();
+  });
+
+  it('can getMessageStatus', async () => {
+    // Create a mock provider to return the message proof
+    // It test mainly types and converstions
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
+    });
+    const messageStatus = await provider.getMessageStatus(
+      '0x0000000000000000000000000000000000000000000000000000000000000008'
+    );
+    expect(messageStatus).toMatchSnapshot();
+  });
+
+  it('default timeout is undefined', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    expect(provider.options.timeout).toBeUndefined();
+  });
+
+  it('throws TimeoutError on timeout when calling an operation', async () => {
+    const { error } = await safeExec(async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      await provider.getTransaction('will fail due to timeout');
+    });
+
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
+  });
+
+  it('throws TimeoutError on timeout when calling a subscription', async () => {
+    const { error } = await safeExec(async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
+      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
+    });
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
+  });
+
+  it('errors returned from node via subscriptions are thrown', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    await expectToThrowFuelError(
+      async () => {
+        for await (const iterator of provider.operations.statusChange({
+          transactionId: 'Invalid ID that will cause node to return errors',
+        })) {
+          if (iterator) break;
+        }
+      },
+      { code: ErrorCode.FUEL_NODE_ERROR }
+    );
   });
 
   it('can connect', async () => {
@@ -672,20 +725,91 @@ describe('Provider', () => {
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual(FUEL_NETWORK_URL);
-    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
   });
 
-  it('doesnt refetch the chain info again if it is already cached', async () => {
-    Provider.chainInfoCache = {};
-    const spyGetChainInfo = jest.spyOn(Provider.prototype, 'fetchChain');
+  it('should cache chain and node info', async () => {
+    Provider.clearChainAndNodeCaches();
 
-    const provider1 = await Provider.create(FUEL_NETWORK_URL);
-    const provider2 = await Provider.create(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
-    expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
+    expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
+  });
 
-    expect(provider1.url).toEqual(FUEL_NETWORK_URL);
-    expect(provider2.url).toEqual(FUEL_NETWORK_URL);
+  it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
+    Provider.clearChainAndNodeCaches();
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    provider.getChain();
+    provider.getNode();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+  });
+
+  it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
+    Provider.clearChainAndNodeCaches();
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    await provider.fetchChainAndNodeInfo();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
+    expect(spyFetchChain).toHaveBeenCalledTimes(2);
+    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure getGasConfig return essential gas related data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const gasConfig = provider.getGasConfig();
+
+    expect(gasConfig.gasPerByte).toBeDefined();
+    expect(gasConfig.gasPriceFactor).toBeDefined();
+    expect(gasConfig.maxGasPerPredicate).toBeDefined();
+    expect(gasConfig.maxGasPerTx).toBeDefined();
+    expect(gasConfig.minGasPrice).toBeDefined();
+  });
+
+  it('should throws when using getChain or getNode and without cached data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    Provider.clearChainAndNodeCaches();
+
+    await expectToThrowFuelError(
+      () => provider.getChain(),
+      new FuelError(
+        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
+        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
+
+    await expectToThrowFuelError(
+      () => provider.getNode(),
+      new FuelError(
+        ErrorCode.NODE_INFO_CACHE_EMPTY,
+        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
   });
 });

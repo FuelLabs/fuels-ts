@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.57.0",
+  "version": "0.60.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -23,7 +23,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/logger": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",

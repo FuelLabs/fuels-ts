@@ -3,7 +3,7 @@ import { concat, arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { U64Coder } from './coders/u64';
-import { BYTES_CODER_TYPE, VEC_CODER_TYPE, WORD_SIZE } from './constants';
+import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STD_STRING_CODER_TYPE, WORD_SIZE } from './constants';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;
@@ -15,6 +15,9 @@ export type Uint8ArrayWithDynamicData = Uint8Array & {
 
 const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 export const BASE_VECTOR_OFFSET = VEC_PROPERTY_SPACE * WORD_SIZE;
+
+const RAW_SLICE_PROPERTY_SPACE = 2; // ptr + length
+export const BASE_RAW_SLICE_OFFSET = RAW_SLICE_PROPERTY_SPACE * WORD_SIZE;
 
 // this is a fork of @ethersproject/bytes:concat
 // this collects individual dynamicData data and relocates it to top level
@@ -140,7 +143,8 @@ export const isPointerType = (type: string) => {
   }
 };
 
-export const isHeapType = (type: string) => type === VEC_CODER_TYPE || type === BYTES_CODER_TYPE;
+export const isHeapType = (type: string) =>
+  type === VEC_CODER_TYPE || type === BYTES_CODER_TYPE || type === STD_STRING_CODER_TYPE;
 
 export function findOrThrow<T>(
   arr: readonly T[],

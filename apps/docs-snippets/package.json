@@ -1,10 +1,11 @@
 {
   "name": "@fuel-ts/docs-snippets",
-  "version": "0.57.0",
+  "version": "0.60.0",
   "description": "",
   "private": true,
   "scripts": {
-    "build": "pnpm fuels-forc build -p projects"
+    "pretest": "pnpm build:forc",
+    "build:forc": "pnpm fuels-forc build -p projects"
   },
   "devDependencies": {
     "fuels": "workspace:*",

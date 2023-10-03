@@ -12,7 +12,6 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
-import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
@@ -448,8 +447,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @returns The minimum amount in coins required to create a transaction.
    */
-  calculateFee(): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+  calculateFee(gasPriceFactor: BN): CoinQuantity {
+    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, gasPriceFactor);
 
     return {
       assetId: BaseAssetId,

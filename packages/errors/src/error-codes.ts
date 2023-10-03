@@ -11,9 +11,11 @@ export enum ErrorCode {
   TYPE_NOT_FOUND = 'type-not-found',
   TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
-  JSON_ABI_ERROR = 'abi-main-method-missing',
+  JSON_ABI_ERROR = 'json-abi-error',
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
+  CODER_NOT_FOUND = 'coder-not-found',
+  FUNCTION_NOT_FOUND = 'function-not-found',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -22,6 +24,7 @@ export enum ErrorCode {
   INVALID_URL = 'invalid-url',
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
+  MISSING_PROVIDER = 'missing-provider',
 
   // wallet
   INSUFFICIENT_BALANCE = 'insufficient-balance',
@@ -30,6 +33,8 @@ export enum ErrorCode {
 
   // errors
   PARSE_FAILED = 'parse-failed',
+  ENCODE_ERROR = 'encode-error',
+  DECODE_ERROR = 'decode-error',
   INVALID_CREDENTIALS = 'invalid-credentials',
   ENV_DEPENDENCY_MISSING = 'env-dependency-missing',
   INVALID_TTL = 'invalid-ttl',
@@ -62,8 +67,9 @@ export enum ErrorCode {
   INVALID_SEED = 'invalid-seed',
   INVALID_CHECKSUM = 'invalid-checksum',
 
-  // wallet
+  // wallet / account
   INVALID_PASSWORD = 'invalid-password',
+  ACCOUNT_REQUIRED = 'account-required',
 
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
@@ -74,6 +80,13 @@ export enum ErrorCode {
 
   // contract
   INVALID_MULTICALL = 'invalid-multicall',
+
+  // script
+  SCRIPT_REVERTED = 'script-reverted',
+  SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
+
+  // general
+  FUEL_NODE_ERROR = 'fuel-node-error',
 
   // coder
   // ...

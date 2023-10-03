@@ -18,10 +18,10 @@ import { join } from 'path';
 
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
 
-import { Script } from './script';
+import { Script } from './index';
 
 const scriptBin = readFileSync(
-  join(__dirname, './call-test-script/out/debug/call-test-script.bin')
+  join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
 );
 
 const setup = async () => {
@@ -50,7 +50,9 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.calculateFee());
+  const { gasPriceFactor } = account.provider.getGasConfig();
+
+  requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
