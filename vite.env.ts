@@ -1,4 +1,6 @@
 import { hexlify } from '@ethersproject/bytes';
+import process from 'node:process';
+import { vi } from 'vitest';
 
 import faucets from './.fuel-core/configs/faucets.json';
 
@@ -22,13 +24,12 @@ import faucets from './.fuel-core/configs/faucets.json';
  */
 const getPrivateKeyForCurrentWorker = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const workerId = Number.parseInt(process.env.VITEST_POOL_ID!, 10);
+  const workerId = Number.parseInt(process.env.VITEST_POOL_ID!, 10) || 1;
 
   if (workerId > faucets.length) {
     throw new Error(`At most ${faucets.length} workers are supported.`);
   }
 
-  console.log(process.env.VITEST_POOL_ID, workerId, process);
   const privateKey = hexlify([workerId]);
 
   return privateKey;
