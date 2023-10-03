@@ -38,12 +38,10 @@ describe('cli.js', () => {
     expect(forc).toBeTruthy();
     expect(core).toBeTruthy();
 
-    // checks commands options
+    // checking default options
     const path = process.cwd();
-    const output = './backend-api';
-    const workspace = './backend';
 
-    expect(init?.opts()).toEqual({ path, output, workspace });
+    expect(init?.opts()).toEqual({ path });
     expect(dev?.opts()).toEqual({ path });
     expect(build?.opts()).toEqual({ path });
     expect(deploy?.opts()).toEqual({ path });
