@@ -940,6 +940,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
       graphql:
         specifier: ^16.6.0
         version: 16.6.0
