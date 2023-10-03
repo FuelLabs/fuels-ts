@@ -1,6 +1,6 @@
 import { runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
-import * as compareUserVersionsMod from './lib/compareUserVersions';
+import * as compareSystemVersionsMod from './lib/compareSystemVersions';
 import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
 import * as getSystemVersionsMod from './lib/getSystemVersions';
 
@@ -13,20 +13,20 @@ describe('cli.js', () => {
     Test (mocking) utility
   */
   function mockAllDeps(params: {
-    userForcIsGt: boolean;
-    userForcIsEq: boolean;
-    userFuelCoreIsGt: boolean;
-    userFuelCoreIsEq: boolean;
+    systemForcIsGt: boolean;
+    systemForcIsEq: boolean;
+    systemFuelCoreIsGt: boolean;
+    systemFuelCoreIsEq: boolean;
     systemForcVersion: string;
     systemFuelCoreVersion: string;
   }) {
     const {
       systemForcVersion,
       systemFuelCoreVersion,
-      userFuelCoreIsGt,
-      userFuelCoreIsEq,
-      userForcIsGt,
-      userForcIsEq,
+      systemFuelCoreIsGt,
+      systemFuelCoreIsEq,
+      systemForcIsGt,
+      systemForcIsEq,
     } = params;
 
     const error = jest.spyOn(console, 'error').mockImplementation();
@@ -37,11 +37,11 @@ describe('cli.js', () => {
       .spyOn(colorizeUserVersionMod, 'colorizeUserVersion')
       .mockImplementation(({ version }) => version);
 
-    jest.spyOn(compareUserVersionsMod, 'compareUserVersions').mockImplementation(() => ({
-      userForcIsGt,
-      userFuelCoreIsGt,
-      userForcIsEq,
-      userFuelCoreIsEq,
+    jest.spyOn(compareSystemVersionsMod, 'compareSystemVersions').mockImplementation(() => ({
+      systemForcIsGt,
+      systemFuelCoreIsGt,
+      systemForcIsEq,
+      systemFuelCoreIsEq,
     }));
 
     jest.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
@@ -70,10 +70,10 @@ describe('cli.js', () => {
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '1.1.1',
       systemFuelCoreVersion: '1.1.1',
-      userFuelCoreIsGt: true,
-      userFuelCoreIsEq: false,
-      userForcIsGt: true,
-      userForcIsEq: false,
+      systemFuelCoreIsGt: true,
+      systemFuelCoreIsEq: false,
+      systemForcIsGt: true,
+      systemForcIsEq: false,
     });
 
     // executing
@@ -90,10 +90,10 @@ describe('cli.js', () => {
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '1.0.0',
       systemFuelCoreVersion: '1.0.0',
-      userFuelCoreIsGt: false,
-      userFuelCoreIsEq: true,
-      userForcIsGt: false,
-      userForcIsEq: true,
+      systemFuelCoreIsGt: false,
+      systemFuelCoreIsEq: true,
+      systemForcIsGt: false,
+      systemForcIsEq: true,
     });
 
     // executing
@@ -110,10 +110,10 @@ describe('cli.js', () => {
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '0.0.1',
       systemFuelCoreVersion: '0.0.1',
-      userFuelCoreIsGt: false,
-      userFuelCoreIsEq: false,
-      userForcIsGt: false,
-      userForcIsEq: false,
+      systemFuelCoreIsGt: false,
+      systemFuelCoreIsEq: false,
+      systemForcIsGt: false,
+      systemForcIsEq: false,
     });
 
     // executing
