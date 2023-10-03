@@ -3,7 +3,7 @@ import { concat, arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { U64Coder } from './coders/u64';
-import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STRING_CODER_TYPE, WORD_SIZE } from './constants';
+import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STD_STRING_CODER_TYPE, WORD_SIZE } from './constants';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;
@@ -144,7 +144,7 @@ export const isPointerType = (type: string) => {
 };
 
 export const isHeapType = (type: string) =>
-  type === VEC_CODER_TYPE || type === BYTES_CODER_TYPE || type === STRING_CODER_TYPE;
+  type === VEC_CODER_TYPE || type === BYTES_CODER_TYPE || type === STD_STRING_CODER_TYPE;
 
 export function findOrThrow<T>(
   arr: readonly T[],
