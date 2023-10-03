@@ -44,7 +44,7 @@ describe('std-lib-string Tests', () => {
     expect(true).toBe(true);
   });
 
-  it('should test bytes input [predicate-std-lib-string]', async () => {
+  it('should test String input [predicate-std-lib-string]', async () => {
     const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
@@ -78,7 +78,7 @@ describe('std-lib-string Tests', () => {
     expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
   });
 
-  it('should test bytes input [script-std-lib-string]', async () => {
+  it('should test String input [script-std-lib-string]', async () => {
     const wallet = await setup();
     type MainArgs = [string];
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);

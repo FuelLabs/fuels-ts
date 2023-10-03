@@ -18,10 +18,10 @@ import { join } from 'path';
 
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
 
-import { Script } from './script';
+import { Script } from './index';
 
 const scriptBin = readFileSync(
-  join(__dirname, './call-test-script/out/debug/call-test-script.bin')
+  join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
 );
 
 const setup = async () => {
