@@ -247,8 +247,13 @@ export default class Provider {
           });
   }
 
-  static chainInfoCache: ChainInfoCache = {};
-  static nodeInfoCache: NodeInfoCache = {};
+  static clearChainAndNodeCaches() {
+    Provider.nodeInfoCache = {};
+    Provider.chainInfoCache = {};
+  }
+
+  private static chainInfoCache: ChainInfoCache = {};
+  private static nodeInfoCache: NodeInfoCache = {};
 
   /**
    * Constructor to initialize a Provider.
