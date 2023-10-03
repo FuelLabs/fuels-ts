@@ -83,7 +83,7 @@ describe('TransactionSummary', () => {
 
     const { id: transactionId } = await genesisWallet.transfer(destinationWallet.address, 100);
 
-    const response = await TransactionResponse.create(transactionId, provider);
+    const response = await TransactionResponse.create(transactionId, nodeProvider);
 
     expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
