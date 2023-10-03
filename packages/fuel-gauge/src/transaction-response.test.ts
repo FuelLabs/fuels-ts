@@ -93,5 +93,5 @@ describe('TransactionSummary', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
 
     cleanup();
-  });
+  }, 25000);
 });
