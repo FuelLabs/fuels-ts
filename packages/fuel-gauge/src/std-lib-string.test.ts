@@ -1,4 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { BN } from 'fuels';
 import {
   type Contract,
   bn,
@@ -39,9 +40,9 @@ describe('std-lib-string Tests', () => {
   it('should test std-lib-string input', async () => {
     const INPUT = 'Hello World';
 
-    await contractInstance.functions.accepts_dynamic_string(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions.accepts_dynamic_string(INPUT).call();
 
-    expect(true).toBe(true);
+    expect(value).toBeUndefined();
   });
 
   it('should test String input [predicate-std-lib-string]', async () => {
@@ -82,10 +83,10 @@ describe('std-lib-string Tests', () => {
     const wallet = await setup();
     type MainArgs = [string];
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
-
     const INPUT = 'Hello World';
-    await scriptInstance.functions.main(INPUT).call();
 
-    expect(true).toBe(true);
+    const { value } = await scriptInstance.functions.main(INPUT).call<BN>();
+
+    expect(value.toNumber()).toStrictEqual(0);
   });
 });
