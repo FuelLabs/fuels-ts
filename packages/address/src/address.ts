@@ -100,7 +100,7 @@ export default class Address extends AbstractAddress {
    *
    * @returns The `bech32Address` property as an {@link EvmAddress | `EvmAddress`}
    */
-  toEvmAddress(): EvmAddress {
+  toWrappedEvmAddress(): EvmAddress {
     const b256Address = toB256(this.bech32Address);
 
     return {
