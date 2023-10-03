@@ -52,8 +52,8 @@ export type UserFuelsConfig = {
   chainConfig?: string;
   deployConfig?: DeployContractOptions | OptionsFunction;
 
-  useSystemForc?: boolean;
-  useSystemFuelCore?: boolean;
+  useBuiltinForc?: boolean;
+  useBuiltinFuelCore?: boolean;
   autoStartFuelCore?: boolean;
   fuelCorePort?: number;
 
@@ -69,8 +69,8 @@ export type FuelsConfig = UserFuelsConfig &
       | 'predicates'
       | 'scripts'
       | 'deployConfig'
-      | 'useSystemForc'
-      | 'useSystemFuelCore'
+      | 'useBuiltinForc'
+      | 'useBuiltinFuelCore'
       | 'autoStartFuelCore'
       | 'fuelCorePort'
       | 'providerUrl'

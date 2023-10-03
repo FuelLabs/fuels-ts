@@ -20,7 +20,14 @@ export async function runCommand(commandName: string, params: string[] = []) {
 }
 
 export async function runInit() {
-  return runCommand(Commands.init, ['-w', workspace, '-o', generated]);
+  return runCommand(Commands.init, [
+    '-w',
+    workspace,
+    '-o',
+    generated,
+    '--use-builtin-forc',
+    '--use-builtin-fuel-core',
+  ]);
 }
 
 export async function runBuild() {

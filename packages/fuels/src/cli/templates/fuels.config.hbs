@@ -21,19 +21,19 @@ export default createConfig({
    * This property should not be used alongside `workspace`
    * @param contracts - Paths to Sway Contracts
    */
-  // contracts: ['./sway/contracts'],
+  // contracts: ['./backend/contracts'],
 
   /**
    * This property should not be used alongside `workspace`
    * @param predicates - Paths to Sway Predicates
    */
-  // predicates: ['./sway/predicates'],
+  // predicates: ['./backend/predicates'],
 
   /**
    * This property should not be used alongside `workspace`
    * @param scripts - Path to Sway scripts
    */
-  // scripts: ['./sway/scripts'],
+  // scripts: ['./backend/scripts'],
 
   /**
    * @param output - Where to generate Typescript definitions
@@ -96,19 +96,17 @@ export default createConfig({
 
   // ----------------------------------- Forc/FuelCore settings
   /**
-   * Optional property, defaults to false
-   * @param useSystemForc - Skip using internal wrapped Forc binaries
+   * @param useBuiltinForc - Skip using internal wrapped Forc binaries
    */
-  // useSystemForc: false,
+  useBuiltinForc: {{useBuiltinForc}},
 
   /**
-   * Optional property, defaults to false
-   * @param useSystemFuelCore - Skip using internal wrapped FuelCore binaries
+   * @param useBuiltinFuelCore - Skip using internal wrapped FuelCore binaries
    */
-  // useSystemFuelCore: false,
+  useBuiltinFuelCore: {{useBuiltinFuelCore}},
 
   /**
-   * Optional property, defaults to true
+   * Optional, defaults to true
    * @param autoStartFuelCore - When set to false, it will skip spinning up
    * a FuelCore node. In this case, you'll need to start the node yourself.
    */
@@ -122,15 +120,15 @@ export default createConfig({
    * @param event - The event that triggered this execution
    * @param config - The loaded `fuels.config`
    */
-  onSuccess: (event: CommandEvent, config: FuelsConfig) => {
-    // console.log('fuels:onSuccess', { event, config });
+  onSuccess: (_event: CommandEvent, _config: FuelsConfig) => {
+    // console.log('fuels:onSuccess', { event: _event, config: _config });
   },
 
   /**
    * This function is called in case of errors
    * @param error - The error that interrupted the execution
    */
-  onFailure: (error: Error) => {
-    // console.log('fuels:onFailure', { error });
+  onFailure: (_error: Error) => {
+    // console.log('fuels:onFailure', { error: _error });
   },
 });

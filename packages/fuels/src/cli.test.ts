@@ -40,8 +40,8 @@ describe('cli.js', () => {
 
     // checks commands options
     const path = process.cwd();
-    const output = './types';
-    const workspace = './sway-workspace';
+    const output = './backend-api';
+    const workspace = './backend';
 
     expect(init?.opts()).toEqual({ path, output, workspace });
     expect(dev?.opts()).toEqual({ path });

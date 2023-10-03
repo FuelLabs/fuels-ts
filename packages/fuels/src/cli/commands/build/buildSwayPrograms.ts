@@ -12,7 +12,7 @@ export async function buildSwayProgram(config: FuelsConfig, path: string) {
     const pkgRootDir = findPackageRoot();
     const forcPath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-forc');
 
-    const command = config.useSystemForc ? 'forc' : forcPath;
+    const command = config.useBuiltinForc ? forcPath : 'forc';
     const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
 
     forc.stderr?.pipe(process.stderr);

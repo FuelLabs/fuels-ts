@@ -70,7 +70,7 @@ export const startFuelCore = async (
     const pkgRootDir = findPackageRoot();
     const fuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
 
-    const command = config.useSystemFuelCore ? 'fuel-core' : fuelsCorePath;
+    const command = config.useBuiltinFuelCore ? fuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });
 
     core.stderr?.pipe(process.stderr);

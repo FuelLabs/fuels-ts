@@ -52,8 +52,14 @@ export const configureCli = () => {
   (command = program.command(Commands.init))
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
-    .option('-w, --workspace <path>', 'Relative dir path to Sway workspace', './sway-workspace')
-    .option('-o, --output <path>', 'Relative dir path for Typescript generation output', './types')
+    .option('-w, --workspace <path>', 'Relative dir path to Sway workspace', './backend')
+    .option(
+      '-o, --output <path>',
+      'Relative dir path for Typescript generation output',
+      './backend-api'
+    )
+    .option('--use-builtin-forc', 'Should buit-in `forc` be used?')
+    .option('--use-builtin-fuel-core', 'Should buit-in `fuel-core` be used?')
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))

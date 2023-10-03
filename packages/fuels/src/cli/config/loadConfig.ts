@@ -45,8 +45,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     scripts: [],
     predicates: [],
     deployConfig: {},
-    useSystemForc: false,
-    useSystemFuelCore: false,
+    useBuiltinForc: true,
+    useBuiltinFuelCore: true,
     autoStartFuelCore: true,
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,
@@ -58,8 +58,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   config.output = resolve(cwd, config.output);
 
   // Initialize optional variables
-  config.useSystemForc = config.useSystemForc ?? false;
-  config.useSystemFuelCore = config.useSystemFuelCore ?? false;
+  config.useBuiltinForc = config.useBuiltinForc ?? false;
+  config.useBuiltinFuelCore = config.useBuiltinFuelCore ?? false;
   config.autoStartFuelCore = config.autoStartFuelCore ?? true;
 
   const { contracts, predicates, scripts } = userConfig;

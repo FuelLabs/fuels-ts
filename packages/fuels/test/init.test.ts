@@ -1,3 +1,4 @@
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
@@ -13,19 +14,17 @@ describe('init', () => {
     const fuelsContents = readFileSync(fuelsConfig, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: 'project',`);
     expect(fuelsContents).toMatch(`output: 'generated',`);
+    expect(fuelsContents).toMatch(`useBuiltinForc: true,`);
+    expect(fuelsContents).toMatch(`useBuiltinFuelCore: true,`);
   });
 
   it('should run `init` command and throw for existent config file', async () => {
-    const write = jest.spyOn(process.stderr, 'write').mockImplementation();
-    const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const firstRun = await safeExec(() => runInit());
+    expect(firstRun.error).not.toBeTruthy();
 
-    await runInit();
-    await runInit(); // second time will trigger error
-
-    const writeArgs = chalk.reset(write.mock.calls[0][0]);
-
-    expect(write).toHaveBeenCalledTimes(1);
-    expect(writeArgs).toMatch(/Config file exists, aborting./);
-    expect(exit).toHaveBeenNthCalledWith(1, 1);
+    // second time will trigger error
+    const secondRun = await safeExec(() => runInit());
+    expect(secondRun.result).not.toBeTruthy();
+    expect(chalk.reset(secondRun.error)).toMatch(/Config file exists, aborting./);
   });
 });

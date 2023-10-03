@@ -114,24 +114,24 @@ deployConfig: async (options: DeployOptions) => {
 };
 ```
 
-## useSystemForc
+## useBuiltinForc
 
 ```ts
 /**
  * Optional property, defaults to false
- * @param useSystemForc - Skip using internal wrapped Forc binaries
+ * @param useBuiltinForc - Skip using internal wrapped Forc binaries
  */
-useSystemForc: false,
+useBuiltinForc: false,
 ```
 
-## useSystemFuelCore
+## useBuiltinFuelCore
 
 ```ts
 /**
  * Optional property, defaults to false
- * @param useSystemFuelCore - Skip using internal wrapped FuelCore binaries
+ * @param useBuiltinFuelCore - Skip using internal wrapped FuelCore binaries
  */
-useSystemFuelCore: false,
+useBuiltinFuelCore: false,
 ```
 
 Use this to enable the auto-start of a Fuel node when you run `pnpm fuels dev`:

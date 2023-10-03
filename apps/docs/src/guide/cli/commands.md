@@ -156,8 +156,8 @@ import { createConfig } from 'fuels'
 
 export createConfig({
   // ...
-  useSystemForc: true,
-  useSystemFuelCore: true,
+  useBuiltinForc: true,
+  useBuiltinFuelCore: true,
 })
 ```
 
