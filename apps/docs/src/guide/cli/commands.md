@@ -148,7 +148,7 @@ forc --version
 fuel-core --version
 ```
 
-Then, tell `fuels` to use it via the system binaries:
+Make sure your config is _**not**_ set to use the SDK built-in versions:
 
 ```ts
 // fuels.config.ts
@@ -156,8 +156,8 @@ import { createConfig } from 'fuels'
 
 export createConfig({
   // ...
-  useBuiltinForc: true,
-  useBuiltinFuelCore: true,
+  useBuiltinForc: false,
+  useBuiltinFuelCore: false,
 })
 ```
 
@@ -172,6 +172,21 @@ In case you haven't configured [The Fuel Toolchain](#the-fuel-toolchain) _yet_, 
 
 - [`forc`](https://docs.fuel.network/docs/forc/commands/)
 - [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
+
+To use them, make sure your config _**is**_ set to use the SDK built-in versions:
+
+```ts
+// fuels.config.ts
+import { createConfig } from 'fuels'
+
+export createConfig({
+  // ...
+  useBuiltinForc: true,
+  useBuiltinFuelCore: true,
+})
+```
+
+You can also call them directly:
 
 ```console
 pnpm fuels help forc
