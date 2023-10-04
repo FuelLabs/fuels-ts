@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
 
-import { arrayify, concat } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
-import { sha256 } from 'ethers';
+import { getBytes, sha256 } from 'ethers';
 
 import { ByteArrayCoder } from './byte-array';
 
@@ -698,7 +698,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(arrayify(value.data || '0x'));
+    parts.push(getBytes(value.data || '0x'));
 
     return sha256(concat(parts));
   }
@@ -734,7 +734,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
     [decoded, o] = new ByteArrayCoder(len).decode(data, o);
-    const messageData = arrayify(decoded);
+    const messageData = getBytes(decoded);
 
     const receiptMessageOut: ReceiptMessageOut = {
       type: ReceiptType.MessageOut,
@@ -769,8 +769,8 @@ export type ReceiptMint = {
 };
 
 const getAssetIdForMintAndBurnReceipts = (contractId: string, subId: string): string => {
-  const contractIdBytes = arrayify(contractId);
-  const subIdBytes = arrayify(subId);
+  const contractIdBytes = getBytes(contractId);
+  const subIdBytes = getBytes(subId);
 
   return sha256(concat([contractIdBytes, subIdBytes]));
 };

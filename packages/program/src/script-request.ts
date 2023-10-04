@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { arrayify } from '@ethersproject/bytes';
 import {
   VM_TX_MEMORY,
   ASSET_ID_LEN,
@@ -21,7 +20,7 @@ import type {
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
-import type { BytesLike } from 'ethers';
+import { getBytes, type BytesLike } from 'ethers';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
@@ -212,7 +211,7 @@ export class ScriptRequest<TData = void, TResult = void> {
     scriptDataEncoder: (data: TData) => EncodedScriptCall,
     scriptResultDecoder: (scriptResult: ScriptResult) => TResult
   ) {
-    this.bytes = arrayify(bytes);
+    this.bytes = getBytes(bytes);
     this.scriptDataEncoder = scriptDataEncoder;
     this.scriptResultDecoder = scriptResultDecoder;
   }
@@ -253,7 +252,7 @@ export class ScriptRequest<TData = void, TResult = void> {
     }
 
     // object
-    this.bytes = arrayify(callScript.script);
+    this.bytes = getBytes(callScript.script);
     return callScript.data;
   }
 

@@ -1,8 +1,8 @@
-import { concat, arrayify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { hash, uint64ToBytesBE } from '@fuel-ts/hasher';
 import { calcRoot } from '@fuel-ts/merkle';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
-import { hexlify } from 'ethers';
+import { getBytes, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /**
@@ -16,7 +16,7 @@ import type { BytesLike } from 'ethers';
  */
 export const getPredicateRoot = (bytecode: BytesLike, chainId: number): string => {
   const chunkSize = 16 * 1024;
-  const bytes = arrayify(bytecode);
+  const bytes = getBytes(bytecode);
   const chunks = chunkAndPadBytes(bytes, chunkSize);
   const chainIdBytes = uint64ToBytesBE(chainId);
   const codeRoot = calcRoot(chunks.map((c) => hexlify(c)));

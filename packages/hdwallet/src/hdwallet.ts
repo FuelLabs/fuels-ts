@@ -1,4 +1,4 @@
-import { concat, arrayify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
@@ -13,6 +13,7 @@ import {
   sha256,
   computeHmac,
   ripemd160,
+  getBytes,
 } from 'ethers';
 
 // "Bitcoin seed"
@@ -120,9 +121,9 @@ class HDWallet {
    * @returns A new instance of HDWallet on the derived index
    */
   deriveIndex(index: number) {
-    const privateKey = this.privateKey && arrayify(this.privateKey);
-    const publicKey = arrayify(this.publicKey);
-    const chainCode = arrayify(this.chainCode);
+    const privateKey = this.privateKey && getBytes(this.privateKey);
+    const publicKey = getBytes(this.publicKey);
+    const chainCode = getBytes(this.chainCode);
     const data = new Uint8Array(37);
 
     if (index & HARDENED_INDEX) {
@@ -136,13 +137,13 @@ class HDWallet {
       // 33 bytes: 0x00 || private key
       data.set(privateKey, 1);
     } else {
-      data.set(arrayify(this.publicKey));
+      data.set(getBytes(this.publicKey));
     }
 
     // child number: ser32(i)
     data.set(toBytes(index, 4), 33);
 
-    const bytes = arrayify(computeHmac('sha512', chainCode, data));
+    const bytes = getBytes(computeHmac('sha512', chainCode, data));
     const IL = bytes.slice(0, 32);
     const IR = bytes.slice(32);
 
@@ -222,14 +223,14 @@ class HDWallet {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
 
     return new HDWallet({
-      chainCode: arrayify(masterKey.slice(32)),
-      privateKey: arrayify(masterKey.slice(0, 32)),
+      chainCode: getBytes(masterKey.slice(32)),
+      privateKey: getBytes(masterKey.slice(0, 32)),
     });
   }
 
   static fromExtendedKey(extendedKey: string) {
     const decoded = toBeHex(decodeBase58(extendedKey));
-    const bytes = arrayify(decoded);
+    const bytes = getBytes(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {

@@ -1,6 +1,5 @@
-import { arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { pbkdf2 } from 'ethers';
+import { getBytes, pbkdf2 } from 'ethers';
 
 import type { CryptoApi, Keystore } from '../types';
 
@@ -20,7 +19,7 @@ export const keyFromPassword: CryptoApi['keyFromPassword'] = (
   const passBuffer = bufferFromString(String(password).normalize('NFKC'), 'utf-8');
   const key = pbkdf2(passBuffer, saltBuffer, 100000, 32, 'sha256');
 
-  return arrayify(key);
+  return getBytes(key);
 };
 
 /**
