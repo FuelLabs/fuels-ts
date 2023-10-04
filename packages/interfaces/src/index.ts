@@ -82,7 +82,7 @@ export type ContractIdLike = AbstractAddress | AbstractContract;
 /**
  * @hidden
  */
-export abstract class AbstractPredicate extends AbstractAccount {
+export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;
   abstract predicateData: Uint8Array;
