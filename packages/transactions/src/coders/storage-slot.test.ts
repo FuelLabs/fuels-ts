@@ -1,5 +1,6 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { hexlify } from 'ethers';
 
 import type { StorageSlot } from './storage-slot';
 import { StorageSlotCoder } from './storage-slot';

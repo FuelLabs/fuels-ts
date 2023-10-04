@@ -1,9 +1,10 @@
-import { concat, hexlify, arrayify } from '@ethersproject/bytes';
+import { concat, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
 import * as elliptic from 'elliptic';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
@@ -49,8 +50,8 @@ class Signer {
     const keyPair = getCurve().keyFromPrivate(privateKeyBytes, 'hex');
 
     // Slice(1) removes the encoding scheme from the public key
-    this.compressedPublicKey = hexlify(keyPair.getPublic(true, 'array'));
-    this.publicKey = hexlify(keyPair.getPublic(false, 'array').slice(1));
+    this.compressedPublicKey = hexlify(Uint8Array.from(keyPair.getPublic(true, 'array')));
+    this.publicKey = hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
     this.privateKey = hexlify(privateKeyBytes);
     this.address = Address.fromPublicKey(this.publicKey);
   }
@@ -88,7 +89,7 @@ class Signer {
     const p1 = getCurve().keyFromPublic(arrayify(point));
     const result = p0.getPublic().add(p1.getPublic());
 
-    return hexlify(result.encode('array', true));
+    return hexlify(Uint8Array.from(result.encode('array', true)));
   }
 
   /**
@@ -144,7 +145,7 @@ class Signer {
    */
   static extendPublicKey(publicKey: BytesLike) {
     const keyPair = getCurve().keyFromPublic(arrayify(publicKey));
-    return hexlify(keyPair.getPublic(false, 'array').slice(1));
+    return hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
   }
 }
 

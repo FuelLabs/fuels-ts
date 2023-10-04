@@ -1,6 +1,6 @@
-import { hexlify } from '@ethersproject/bytes';
 import { bn, type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
+import { hexlify } from 'ethers';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 import { calculateTransactionFee } from '../utils';

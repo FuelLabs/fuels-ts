@@ -1,4 +1,4 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
@@ -6,6 +6,7 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { ContractTransactionRequestInput } from './input';

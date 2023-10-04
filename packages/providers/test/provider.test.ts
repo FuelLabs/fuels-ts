@@ -1,4 +1,4 @@
-import { hexlify, arrayify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -9,6 +9,7 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { versions } from '@fuel-ts/versions';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { FetchRequestOptions } from '../src/provider';

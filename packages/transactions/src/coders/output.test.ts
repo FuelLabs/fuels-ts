@@ -1,5 +1,6 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
+import { hexlify } from 'ethers';
 
 import type { Output } from './output';
 import { OutputCoder, OutputType } from './output';

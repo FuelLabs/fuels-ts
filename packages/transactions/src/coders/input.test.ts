@@ -1,7 +1,8 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
+import { hexlify } from 'ethers';
 
 import type { Input, InputMessage } from './input';
 import { InputMessageCoder, InputCoder, InputType } from './input';

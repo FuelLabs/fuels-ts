@@ -1,7 +1,7 @@
-import { hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { TransactionCreate } from '@fuel-ts/transactions';
 import { TransactionType, OutputType } from '@fuel-ts/transactions';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { ContractCreatedTransactionRequestOutput } from './output';

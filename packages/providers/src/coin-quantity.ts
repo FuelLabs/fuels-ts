@@ -1,7 +1,7 @@
-import { hexlify } from '@ethersproject/bytes';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 export type CoinQuantityLike =

@@ -1,10 +1,19 @@
-import { hexlify, concat, arrayify } from '@ethersproject/bytes';
+import { concat, arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
 import type { BytesLike } from 'ethers';
-import { encodeBase58, decodeBase58, sha256, computeHmac, ripemd160, dataSlice } from 'ethers';
+import {
+  toBeHex,
+  dataSlice,
+  hexlify,
+  encodeBase58,
+  decodeBase58,
+  sha256,
+  computeHmac,
+  ripemd160,
+} from 'ethers';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;
@@ -190,7 +199,7 @@ class HDWallet {
       );
     }
     const prefix = getExtendedKeyPrefix(this.privateKey == null || isPublic, testnet);
-    const depth = hexlify(this.depth);
+    const depth = hexlify(Uint8Array.from([this.depth]));
     const parentFingerprint = this.parentFingerprint;
     const index = toHex(this.index, 4);
     // last 32 bites from the key
@@ -219,7 +228,7 @@ class HDWallet {
   }
 
   static fromExtendedKey(extendedKey: string) {
-    const decoded = hexlify(decodeBase58(extendedKey));
+    const decoded = toBeHex(decodeBase58(extendedKey));
     const bytes = arrayify(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 

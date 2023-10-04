@@ -1,4 +1,5 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
+import { hexlify } from 'ethers';
 
 import type { UtxoId } from './utxo-id';
 import { UtxoIdCoder } from './utxo-id';

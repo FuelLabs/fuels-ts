@@ -1,5 +1,6 @@
-import { hexlify, arrayify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import type { StorageSlot } from '@fuel-ts/transactions';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 export type TransactionRequestStorageSlot =

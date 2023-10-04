@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify } from 'ethers';
 
 import faucets from './.fuel-core/configs/faucets.json';
 

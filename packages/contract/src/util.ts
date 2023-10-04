@@ -1,5 +1,5 @@
 import type { DataOptions } from '@ethersproject/bytes';
-import { hexlify, arrayify, concat } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';

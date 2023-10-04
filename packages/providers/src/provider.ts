@@ -1,4 +1,4 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
@@ -13,7 +13,7 @@ import {
 } from '@fuel-ts/transactions';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
-import { Network } from 'ethers';
+import { hexlify, Network } from 'ethers';
 import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';

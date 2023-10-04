@@ -1,5 +1,5 @@
-import { hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import { MemoryCache } from '../src/memory-cache';

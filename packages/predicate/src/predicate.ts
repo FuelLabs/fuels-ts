@@ -1,4 +1,4 @@
-import { hexlify, arrayify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
@@ -20,6 +20,7 @@ import { transactionRequestify } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
 import type { BytesLike } from 'ethers';
+import { hexlify } from 'ethers';
 
 import { getPredicateRoot } from './utils';
 

@@ -1,4 +1,4 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
@@ -12,6 +12,7 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /**

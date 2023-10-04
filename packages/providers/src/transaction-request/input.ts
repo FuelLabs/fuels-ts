@@ -1,10 +1,11 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
+import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 export type CoinTransactionRequestInput = {
