@@ -13,9 +13,12 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractPredicate } from '@fuel-ts/interfaces';
 import type {
   CallResult,
+  CoinQuantityLike,
+  ExcludeResourcesOption,
   Provider,
   TransactionRequestLike,
   TransactionResponse,
+  PredicateResource,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
@@ -58,6 +61,29 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
+  }
+
+  /**
+   * Retrieves resources satisfying the spend query for the account.
+   *
+   * @param quantities - IDs of coins to exclude.
+   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @returns A promise that resolves to an array of Resources.
+   */
+  async getResourcesToSpend(
+    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<PredicateResource[]> {
+    const resources = await this.provider.getResourcesToSpend(
+      this.address,
+      quantities,
+      excludedIds
+    );
+
+    return resources.map((r) => ({
+      ...r,
+      getPredicateContent: () => ({ predicate: this.bytes, predicateData: this.predicateData }),
+    }));
   }
 
   /**
