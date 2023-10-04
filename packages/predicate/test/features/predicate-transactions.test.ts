@@ -34,32 +34,32 @@ describe('Predicate', () => {
           txCreatedIdx: bn(0),
         },
       ]);
+    });
 
-      it('includes predicate as input when sending a transaction', async () => {
-        const sendTransactionMock = jest
-          .spyOn(Account.prototype, 'sendTransaction')
-          .mockImplementation();
+    it('includes predicate as input when sending a transaction', async () => {
+      const sendTransactionMock = jest
+        .spyOn(Account.prototype, 'sendTransaction')
+        .mockImplementation();
 
-        await predicate.sendTransaction(request);
+      await predicate.sendTransaction(request);
 
-        const inputCoinMock = sendTransactionMock.mock.calls[0][0]
-          .inputs?.[0] as unknown as InputCoin;
-        expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
-        expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
-      });
+      const inputCoinMock = sendTransactionMock.mock.calls[0][0]
+        .inputs?.[0] as unknown as InputCoin;
+      expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
+      expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
+    });
 
-      it('includes predicate as input when simulating a transaction', async () => {
-        const sendTransactionMock = jest
-          .spyOn(Account.prototype, 'simulateTransaction')
-          .mockImplementation();
+    it('includes predicate as input when simulating a transaction', async () => {
+      const sendTransactionMock = jest
+        .spyOn(Account.prototype, 'simulateTransaction')
+        .mockImplementation();
 
-        await predicate.simulateTransaction(request);
+      await predicate.simulateTransaction(request);
 
-        const inputCoinMock = sendTransactionMock.mock.calls[0][0]
-          .inputs?.[0] as unknown as InputCoin;
-        expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
-        expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
-      });
+      const inputCoinMock = sendTransactionMock.mock.calls[0][0]
+        .inputs?.[0] as unknown as InputCoin;
+      expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
+      expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
     });
   });
 });
