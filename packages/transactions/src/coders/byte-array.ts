@@ -1,5 +1,6 @@
-import { arrayify, concat } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
+import { concatBytes } from '@fuel-ts/utils';
 import { hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
@@ -33,7 +34,7 @@ export class ByteArrayCoder extends Coder<BytesLike, string> {
       parts.push(new Uint8Array(this.#paddingLength));
     }
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {

@@ -1,8 +1,8 @@
-import { concat, arrayify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { hash, uint64ToBytesBE } from '@fuel-ts/hasher';
 import { calcRoot } from '@fuel-ts/merkle';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
-import { hexlify } from 'ethers';
+import { hexlify, concat } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /**

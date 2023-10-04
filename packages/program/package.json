@@ -44,6 +44,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.36.1",
     "ethers": "^6.7.1"
   },

@@ -1,4 +1,4 @@
-import { concat } from '@ethersproject/bytes';
+import { concatBytes } from '@fuel-ts/utils';
 import type * as asm from '@fuels/vm-asm';
 import { hexlify } from 'ethers';
 
@@ -29,7 +29,7 @@ export class InstructionSet {
   }
 
   toBytes(): Uint8Array {
-    return concat(
+    return concatBytes(
       this.#operations.reduce((instructions, line) => {
         instructions.push(line.to_bytes());
         return instructions;
