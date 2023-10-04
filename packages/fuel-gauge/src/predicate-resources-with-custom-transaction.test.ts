@@ -41,6 +41,7 @@ describe('predicate resources with custom transaction', () => {
 
     predicate.setData(bn(1), bn(1));
 
+    const predicateDataBeforeGettingResoures = predicate.predicateData;
     // fetch predicate resources to spend
     const predicateResources = await predicate.getResourcesToSpend([
       [amountToTransfer, BaseAssetId],
@@ -48,13 +49,12 @@ describe('predicate resources with custom transaction', () => {
 
     predicate.setData(bn(2), bn(2));
 
-    const postResourceFetchPredicateData = new Uint8Array(predicate.predicateData);
+    expect(predicateDataBeforeGettingResoures).not.toEqual(predicate.predicateData);
+
     request.addResources(predicateResources);
 
     request.inputs.forEach((input) => {
-      expect((input as CoinTransactionRequestInput).predicateData).toEqual(
-        postResourceFetchPredicateData
-      );
+      expect((input as CoinTransactionRequestInput).predicateData).toEqual(predicate.predicateData);
     });
   });
 
@@ -83,14 +83,18 @@ describe('predicate resources with custom transaction', () => {
 
     predicate.setData(bn(1), bn(1));
 
-    const initialPredicateData = new Uint8Array(predicate.predicateData);
+    const predicateDataBeforeAddingResources = predicate.predicateData;
 
     request.addResources(predicateResources);
 
     predicate.setData(bn(1), bn(2));
 
+    expect(predicateDataBeforeAddingResources).not.toEqual(predicate.predicateData);
+
     request.inputs.forEach((input) => {
-      expect((input as CoinTransactionRequestInput).predicateData).toEqual(initialPredicateData);
+      expect((input as CoinTransactionRequestInput).predicateData).toEqual(
+        predicateDataBeforeAddingResources
+      );
     });
   });
 });
