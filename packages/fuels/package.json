@@ -43,10 +43,10 @@
     "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
@@ -61,6 +61,7 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
-    "commander": "^9.4.1"
+    "commander": "^9.4.1",
+    "ethers": "^6.7.1"
   }
 }

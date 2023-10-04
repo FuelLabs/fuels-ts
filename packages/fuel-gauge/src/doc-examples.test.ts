@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import type {
   Bech32Address,
   BigNumberish,
-  Bytes,
+  BytesLike,
   CoinQuantity,
   JsonAbi,
   WalletLocked,
@@ -89,7 +89,7 @@ test('it has Address tools', () => {
 });
 
 test('it has Bytes tools', () => {
-  const random32Bytes: Bytes = randomBytes(32);
+  const random32Bytes: BytesLike = randomBytes(32);
   const random32BytesString: string = hexlify(random32Bytes);
   const zeroed32Bytes: string = ZeroBytes32;
 
@@ -99,7 +99,7 @@ test('it has Bytes tools', () => {
 });
 
 test('it has b256 tools', () => {
-  const randomB256Bytes: Bytes = randomBytes(32);
+  const randomB256Bytes: BytesLike = randomBytes(32);
   const randomB256: string = getRandomB256();
 
   const hexedB256: string = hexlify(randomB256Bytes);
@@ -113,7 +113,7 @@ test('it has conversion tools', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
 
   const assetId: string = ZeroBytes32;
-  const randomB256Bytes: Bytes = randomBytes(32);
+  const randomB256Bytes: BytesLike = randomBytes(32);
   const hexedB256: string = hexlify(randomB256Bytes);
   const address = Address.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);

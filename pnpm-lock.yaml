@@ -704,6 +704,9 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/hasher:
     dependencies:

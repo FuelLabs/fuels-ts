@@ -1,4 +1,4 @@
-import type { Bytes, WalletLocked } from 'fuels';
+import type { BytesLike, WalletLocked } from 'fuels';
 import {
   Wallet,
   FUEL_NETWORK_URL,
@@ -23,7 +23,7 @@ describe(__filename, () => {
 
   it('should successfully convert between b256 and bytes32', () => {
     // #region conversion-1
-    const random256BitsArr: Bytes = randomBytes(32);
+    const random256BitsArr: BytesLike = randomBytes(32);
 
     const hexed256BitsStr: string = hexlify(random256BitsArr);
 

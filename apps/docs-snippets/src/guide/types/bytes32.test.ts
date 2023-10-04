@@ -1,4 +1,4 @@
-import type { Bytes } from 'fuels';
+import type { BytesLike } from 'fuels';
 import { arrayify, hexlify, randomBytes } from 'fuels';
 
 describe(__filename, () => {
@@ -7,7 +7,7 @@ describe(__filename, () => {
     // #region bytes32-2
     // #context import { randomBytes } from 'fuels';
 
-    const bytes32: Bytes = randomBytes(32);
+    const bytes32: BytesLike = randomBytes(32);
     // #endregion bytes32-1
 
     const bytes32String: string = hexlify(bytes32);
