@@ -1,6 +1,6 @@
 import { concat } from '@ethersproject/bytes';
-import { toUtf8Bytes, toUtf8String } from 'ethers';
 import { ErrorCode } from '@fuel-ts/errors';
+import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { Coder } from './abstract-coder';
 

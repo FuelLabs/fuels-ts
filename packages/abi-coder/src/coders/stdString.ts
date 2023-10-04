@@ -1,6 +1,6 @@
 import { concat } from '@ethersproject/bytes';
-import { toUtf8Bytes, toUtf8String } from 'ethers';
 import { bn } from '@fuel-ts/math';
+import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';

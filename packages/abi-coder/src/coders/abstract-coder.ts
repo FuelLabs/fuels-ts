@@ -1,6 +1,7 @@
+import { FuelError, type ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { BytesLike } from 'ethers';
-import { FuelError, type ErrorCode } from '@fuel-ts/errors';
+
 import type { Option } from './option';
 
 type Primitive = string | number | boolean;
