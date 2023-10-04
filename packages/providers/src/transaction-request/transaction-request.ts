@@ -357,7 +357,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * outputs from the related assetIds.
    *
    * If the added resources are from a predicate, the predicate's bytecode and data is also added.
-   * Changing the predicate's data will NOT change the `predicateData`of the resource after the resource has been added.
+   * Changing the predicate's data _after_ adding the resource will **not** change the `predicateData` of the added resource.
    *
    * @param resources - The resources to add.
    * @returns This transaction.
