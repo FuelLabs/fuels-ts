@@ -356,10 +356,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * Adds multiple resources to the transaction by adding coin/message inputs and change
    * outputs from the related assetIds.
    *
+   * If the added resources are from a predicate, the predicate's bytecode and data is also added.
+   * Changing the predicate's data will NOT change the `predicateData`of the resource after the resource has been added.
+   *
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addResources(resources: ReadonlyArray<Resource>) {
+  addResources(...resources: readonly Resource[]) {
     resources.forEach((resource) => this.addResource(resource));
 
     return this;
