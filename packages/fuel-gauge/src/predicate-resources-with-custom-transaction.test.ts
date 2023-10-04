@@ -58,7 +58,7 @@ describe('predicate resources with custom transaction', () => {
     });
   });
 
-  it(`Settting a predicate's data after adding its resource to a custom transaction does not affect that resource's predicateData,
+  it(`Settting a predicate's data after adding its resource to a custom transaction does not affect the input's predicateData,
     because a transaction's input shouldn't be mutated after it's added
 `, async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
