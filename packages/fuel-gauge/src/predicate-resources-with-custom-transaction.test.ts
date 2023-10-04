@@ -21,9 +21,7 @@ const predicateBytecode = readFileSync(
 );
 
 describe('predicate resources with custom transaction', () => {
-  it(`predicate data can be set before adding its resources to custom transaction,
-    and that data will be set in the resources after they're added to the transaction
-`, async () => {
+  it(`A transaction resource's predicateData is always the last one set on the predicate before the resource was added to the custom transaction`, async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
@@ -58,8 +56,8 @@ describe('predicate resources with custom transaction', () => {
     });
   });
 
-  it(`setting predicate data after adding its resources to custom transaction does not affect those resources' predicate and predicateData,
-    because inputs shouldn't be mutated after being added
+  it(`Settting a predicate's data after adding its resource to a custom transaction does not affect that resource's predicateData,
+    because the resource shouldn't be mutated after it's added to a transaction
 `, async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
