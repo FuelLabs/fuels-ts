@@ -342,7 +342,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resource - The resource to add.
    * @returns This transaction.
    */
-  addResource(resource: Resource) {
+  private addResource(resource: Resource) {
     if (isCoin(resource)) {
       this.addCoinInput(resource);
     } else {
