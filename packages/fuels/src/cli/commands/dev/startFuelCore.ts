@@ -1,8 +1,7 @@
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
-import { writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
-import { mkdir } from 'shelljs';
 import kill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
@@ -11,6 +10,13 @@ import { log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
+export const killNode =
+  (core: ChildProcessWithoutNullStreams, killFn: (pid: number) => void) => () => {
+    if (core.pid) {
+      killFn(Number(core.pid));
+    }
+  };
+
 export const startFuelCore = async (
   config: FuelsConfig
 ): Promise<{
@@ -18,6 +24,7 @@ export const startFuelCore = async (
   accessIp: string;
   port: number;
   providerUrl: string;
+  chainConfig: string;
   childProcess: ChildProcessWithoutNullStreams;
 }> => {
   log('Starting node..');
@@ -31,7 +38,7 @@ export const startFuelCore = async (
 
   let chainConfig = config?.chainConfig;
   if (!chainConfig) {
-    mkdir('-p', dirname(chainConfigPath));
+    mkdirSync(dirname(chainConfigPath), { recursive: true });
     writeFileSync(chainConfigPath, chainConfigJson);
     chainConfig = chainConfigPath;
   }
@@ -73,23 +80,25 @@ export const startFuelCore = async (
     const command = config.useBuiltinFuelCore ? fuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });
 
-    core.stderr?.pipe(process.stderr);
+    core.stderr.pipe(process.stderr);
     if (loggingConfig.isDebugEnabled) {
-      core.stdout?.pipe(process.stdout);
+      core.stdout.pipe(process.stdout);
     }
 
-    const killNode = () => {
-      if (core.pid) {
-        kill(Number(core.pid));
-      }
-    };
-
-    process.on('beforeExit', killNode);
-    process.on('uncaughtException', killNode);
+    process.on('beforeExit', killNode(core, kill));
+    process.on('uncaughtException', killNode(core, kill));
 
     core.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
-        resolve({ bindIp, accessIp, port, providerUrl, childProcess: core });
+        resolve({
+          bindIp,
+          accessIp,
+          port,
+          providerUrl,
+          childProcess: core,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          chainConfig: chainConfig!,
+        });
       }
       // if (/ERROR|IO error/.test(data)) {
       if (/IO error/.test(data)) {
