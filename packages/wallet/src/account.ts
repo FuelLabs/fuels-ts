@@ -77,17 +77,11 @@ export class Account extends AbstractAccount {
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
-  async getResourcesToSpend<T extends this>(
+  async getResourcesToSpend(
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
-  ): Promise<AccountResource<Resource, T>[]> {
-    const resources = await this.provider.getResourcesToSpend(
-      this.address,
-      quantities,
-      excludedIds
-    );
-
-    return resources.map((x) => ({ ...x, resourceAccount: this }));
+  ): Promise<Resource[]> {
+    return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
   }
 
   /**
