@@ -40,6 +40,7 @@ describe('predicate resources with custom transaction', () => {
     predicate.setData(bn(1), bn(1));
 
     const predicateDataBeforeGettingResoures = predicate.predicateData;
+
     // fetch predicate resources to spend
     const predicateResources = await predicate.getResourcesToSpend([
       [amountToTransfer, BaseAssetId],
@@ -47,6 +48,7 @@ describe('predicate resources with custom transaction', () => {
 
     predicate.setData(bn(2), bn(2));
 
+    // ensure that predicate data changed
     expect(predicateDataBeforeGettingResoures).not.toEqual(predicate.predicateData);
 
     request.addResources(predicateResources);
