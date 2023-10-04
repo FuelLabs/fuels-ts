@@ -6,7 +6,7 @@ An Ethereum Virtual Machine (EVM) Address can be represented using the `EvmAddre
 
 ## Creating an EVM Address
 
-An EVM Address only has 20 bytes therefore the first 12 bytes of the `Bits256` value are set to 0. Within the SDK, an `Address` can be instantiated and converted to a wrapped and Sway compatible EVM Address using the `toWrappedEvmAddress()` function:
+An EVM Address only has 20 bytes therefore the first 12 bytes of the `Bits256` value are set to 0. Within the SDK, an `Address` can be instantiated and converted to a wrapped and Sway compatible EVM Address using the `toEvmAddress()` function:
 
 <<< @/../../docs-snippets/src/guide/types/evm-address.test.ts#evm-address-2{ts:line-numbers}
 

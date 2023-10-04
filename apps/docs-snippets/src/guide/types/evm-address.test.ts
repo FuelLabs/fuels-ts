@@ -34,7 +34,7 @@ describe('EvMAddress', () => {
 
     const address = Address.fromB256(b256Address);
 
-    const evmAddress: EvmAddress = address.toWrappedEvmAddress();
+    const evmAddress: EvmAddress = address.toEvmAddress();
     // #endregion evm-address-2
 
     const { value } = await contract.functions.echo_address_comparison(evmAddress).simulate();
