@@ -1,10 +1,10 @@
-import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
+import { hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
 import type { BytesLike } from 'ethers';
-import { encodeBase58, decodeBase58, sha256, computeHmac, ripemd160 } from 'ethers';
+import { encodeBase58, decodeBase58, sha256, computeHmac, ripemd160, dataSlice } from 'ethers';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;
@@ -16,7 +16,7 @@ const TestnetPRV = hexlify('0x04358394');
 const TestnetPUB = hexlify('0x043587cf');
 
 function base58check(data: Uint8Array): string {
-  return encodeBase58(concat([data, hexDataSlice(sha256(sha256(data)), 0, 4)]));
+  return encodeBase58(concat([data, dataSlice(sha256(sha256(data)), 0, 4)]));
 }
 
 function getExtendedKeyPrefix(isPublic: boolean = false, testnet: boolean = false) {
@@ -93,7 +93,7 @@ class HDWallet {
     }
 
     this.parentFingerprint = config.parentFingerprint || this.parentFingerprint;
-    this.fingerprint = hexDataSlice(ripemd160(sha256(this.publicKey)), 0, 4);
+    this.fingerprint = dataSlice(ripemd160(sha256(this.publicKey)), 0, 4);
     this.depth = config.depth || this.depth;
     this.index = config.index || this.index;
     this.chainCode = config.chainCode;

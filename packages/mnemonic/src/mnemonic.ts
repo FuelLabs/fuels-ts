@@ -1,9 +1,9 @@
-import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
+import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { english } from '@fuel-ts/wordlists';
 import type { BytesLike } from 'ethers';
-import { pbkdf2, sha256, computeHmac, encodeBase58 } from 'ethers';
+import { dataSlice, pbkdf2, sha256, computeHmac, encodeBase58 } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {
@@ -223,7 +223,7 @@ class Mnemonic {
       chainCode,
       concat(['0x00', privateKey]),
     ]);
-    const checksum = hexDataSlice(sha256(sha256(extendedKey)), 0, 4);
+    const checksum = dataSlice(sha256(sha256(extendedKey)), 0, 4);
 
     return encodeBase58(concat([extendedKey, checksum]));
   }
