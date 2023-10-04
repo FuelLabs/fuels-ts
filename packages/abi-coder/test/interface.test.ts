@@ -5,7 +5,7 @@ import { BN } from '@fuel-ts/math';
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
-import { exhaustiveExamplesAbi } from './fixtures/exhaustive-examples-abi';
+import exhaustiveExamplesAbi from './sway-projects/exhaustive-examples/out/debug/exhaustive-examples-abi.json';
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -294,6 +294,41 @@ describe('Abi interface', () => {
           title: '[struct] with implicit generics',
           value: { arr: [B256_DECODED, B256_DECODED, B256_DECODED], tuple: [B256_DECODED, U8_MAX] },
           encodedValue: [B256_ENCODED, B256_ENCODED, B256_ENCODED, B256_ENCODED, U8_MAX_ENCODED],
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.bytes,
+          title: '[struct Bytes]',
+          value: [[1, 2, 3]],
+          encodedValue: new Uint8Array([
+            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 0, 0,
+            0, 0, 0,
+          ]),
+          decodedTransformer: (decoded: unknown | undefined) => {
+            const data = (decoded as BN[]).slice(0, 3);
+            return Array.from(data);
+          },
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.raw_slice,
+          title: '[raw_slice]',
+          value: [[1, 2, 3]],
+          encodedValue: new Uint8Array([
+            0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+            0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3,
+          ]),
+          decodedTransformer: (decoded: unknown | undefined) => {
+            const data = (decoded as BN[]).slice(2);
+            return data.map((v: BN) => v.toNumber());
+          },
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.dynamic_string,
+          title: '[struct String]',
+          value: 'H3llo W0rld',
+          encodedValue: new Uint8Array([
+            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 11, 72, 51, 108,
+            108, 111, 32, 87, 48, 114, 108, 100, 0, 0, 0, 0, 0,
+          ]),
         },
         {
           fn: exhaustiveExamplesInterface.functions.tuple_as_param,

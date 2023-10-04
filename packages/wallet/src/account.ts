@@ -1,4 +1,4 @@
-import { arrayify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -24,9 +24,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
 } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import type { BytesLike } from 'ethers';
-import { hexlify } from 'ethers';
 
 import {
   composeScriptForTransferringToContract,
@@ -233,8 +231,8 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const params: TxParamsType = { gasLimit: MAX_GAS_PER_TX, ...txParams };
-
+    const { maxGasPerTx } = this.provider.getGasConfig();
+    const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 
@@ -283,8 +281,9 @@ export class Account extends AbstractAccount {
       assetId
     );
 
+    const { maxGasPerTx } = this.provider.getGasConfig();
     const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
       ...txParams,
       script,
       scriptData,
@@ -341,7 +340,8 @@ export class Account extends AbstractAccount {
     ]);
 
     // build the transaction
-    const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const { maxGasPerTx } = this.provider.getGasConfig();
+    const params = { script, gasLimit: maxGasPerTx, ...txParams };
     const request = new ScriptTransactionRequest(params);
 
     const { gasPriceFactor } = this.provider.getGasConfig();

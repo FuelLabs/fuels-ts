@@ -2,6 +2,8 @@ import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { BytesLike } from 'ethers';
 
+import type { GqlMessageState } from './__generated__/operations';
+
 // #region Message-shape
 /**
  * A Fuel message
@@ -57,4 +59,11 @@ export type MessageProof = {
   nonce: string;
   amount: BN;
   data: string;
+};
+
+/**
+ * Message Status
+ */
+export type MessageStatus = {
+  state: GqlMessageState;
 };

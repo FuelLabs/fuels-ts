@@ -248,12 +248,14 @@ describe('Contract', () => {
 
     const scope = contract.multiCall(calls).addContracts([otherContract]);
 
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
+    const transactionRequest = await scope.getTransactionRequest();
+
+    expect(transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
       { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+    expect(transactionRequest.getContractOutputs()).toEqual([
       { type: 1, inputIndex: 0 },
       { type: 1, inputIndex: 1 },
     ]);
@@ -343,12 +345,14 @@ describe('Contract', () => {
 
     const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
+    const transactionRequest = await scope.getTransactionRequest();
+
+    expect(transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
       { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+    expect(transactionRequest.getContractOutputs()).toEqual([
       { type: 1, inputIndex: 0 },
       { type: 1, inputIndex: 1 },
     ]);

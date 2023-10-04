@@ -1,15 +1,14 @@
 import { arrayify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import { bufferFromString } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { versions } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { sha256 } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
+import { ByteCoder } from './coders/byte';
 import { TupleCoder } from './coders/tuple';
 import type { U64Coder } from './coders/u64';
 import { VecCoder } from './coders/vec';
@@ -23,8 +22,6 @@ import type {
 import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utilities';
-
-const logger = new Logger(versions.FUELS);
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
@@ -91,6 +88,9 @@ export class FunctionFragment<
       if (heapCoder instanceof VecCoder) {
         return heapCoder.coder.encodedLength;
       }
+      if (heapCoder instanceof ByteCoder) {
+        return ByteCoder.memorySize;
+      }
 
       return heapCoder.encodedLength;
     } catch (e) {
@@ -153,10 +153,9 @@ export class FunctionFragment<
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
       if (bytes.length === 0) return undefined;
 
-      logger.throwError(
-        'Types/values length mismatch during decode',
-        Logger.errors.INVALID_ARGUMENT,
-        {
+      throw new FuelError(
+        ErrorCode.DECODE_ERROR,
+        `Types/values length mismatch during decode. ${JSON.stringify({
           count: {
             types: this.jsonFn.inputs.length,
             nonEmptyInputs: nonEmptyInputs.length,
@@ -167,7 +166,7 @@ export class FunctionFragment<
             nonEmptyInputs,
             values: bytes,
           },
-        }
+        })}`
       );
     }
 

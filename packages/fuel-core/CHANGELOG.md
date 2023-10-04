@@ -1,5 +1,15 @@
 # @fuel-ts/fuel-core
 
+## 0.60.0
+
+## 0.59.0
+
+### Minor Changes
+
+- Updated fuel-core to 0.20.5, by [@camsjams](https://github.com/camsjams) (See [#1284](https://github.com/FuelLabs/fuels-ts/pull/1284))
+
+## 0.58.0
+
 ## 0.57.0
 
 ## 0.56.1

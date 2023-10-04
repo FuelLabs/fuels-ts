@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-coder",
-  "version": "0.57.0",
+  "version": "0.60.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -17,13 +17,13 @@
     "dist"
   ],
   "scripts": {
+    "pretest": "pnpm build:forc",
+    "build:forc": "pnpm fuels-forc build -p ./test/sway-projects/exhaustive-examples",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/logger": "^5.7.0",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

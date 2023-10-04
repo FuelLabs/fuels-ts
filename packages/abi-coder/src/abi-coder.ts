@@ -1,16 +1,17 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
-import { Logger } from '@ethersproject/logger';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { versions } from '@fuel-ts/versions';
 
 import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
 import { ArrayCoder } from './coders/array';
 import { B256Coder } from './coders/b256';
 import { B512Coder } from './coders/b512';
 import { BooleanCoder } from './coders/boolean';
+import { ByteCoder } from './coders/byte';
 import { EnumCoder } from './coders/enum';
 import { NumberCoder } from './coders/number';
 import { OptionCoder } from './coders/option';
+import { RawSliceCoder } from './coders/raw-slice';
+import { StdStringCoder } from './coders/stdString';
 import { StringCoder } from './coders/string';
 import { StructCoder } from './coders/struct';
 import { TupleCoder } from './coders/tuple';
@@ -24,12 +25,13 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
+  BYTES_CODER_TYPE,
+  STD_STRING_CODER_TYPE,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 import { findOrThrow } from './utilities';
 
-const logger = new Logger(versions.FUELS);
 export abstract class AbiCoder {
   static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
     const resolvedAbiType = new ResolvedAbiType(abi, argument);
@@ -59,12 +61,18 @@ export abstract class AbiCoder {
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
+      case 'raw untyped slice':
+        return new RawSliceCoder();
       case 'bool':
         return new BooleanCoder();
       case 'b256':
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
+      case BYTES_CODER_TYPE:
+        return new ByteCoder();
+      case STD_STRING_CODER_TYPE:
+        return new StdStringCoder();
       default:
         break;
     }
@@ -132,7 +140,10 @@ export abstract class AbiCoder {
       return new TupleCoder(coders);
     }
 
-    return logger.throwArgumentError('Coder not found', 'abiType', { abiType: resolvedAbiType });
+    throw new FuelError(
+      ErrorCode.CODER_NOT_FOUND,
+      `Coder not found: ${JSON.stringify(resolvedAbiType)}.`
+    );
   }
 
   private static getCoders(components: readonly ResolvedAbiType[]) {
