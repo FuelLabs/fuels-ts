@@ -10,7 +10,6 @@ import type {
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
-  AccountResource,
 } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
@@ -267,7 +266,7 @@ describe('Account', () => {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: AccountResource<Resource, Account>[] = [];
+    const resources: Resource[] = [];
 
     const getResourcesToSpend = jest
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -345,7 +344,7 @@ describe('Account', () => {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: AccountResource<Resource, Account>[] = [];
+    const resources: Resource[] = [];
 
     const transactionResponse = {} as unknown as TransactionResponse;
 

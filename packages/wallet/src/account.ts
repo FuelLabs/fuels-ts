@@ -15,7 +15,6 @@ import type {
   CoinQuantityLike,
   CoinQuantity,
   Message,
-  AccountResource,
   ExcludeResourcesOption,
   TransactionResponse,
   Resource,
