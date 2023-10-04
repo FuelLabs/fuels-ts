@@ -23,7 +23,7 @@ describe('Predicate', () => {
       const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
     const request = new ScriptTransactionRequest();
-    request.addResource({
+    request.addResources([{
       id: '0x01',
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
@@ -31,8 +31,7 @@ describe('Predicate', () => {
       maturity: 0,
       blockCreated: bn(0),
       txCreatedIdx: bn(0),
-      resourceAccount: predicate,
-    });
+    }]);
 
     it('includes predicate as input when sending a transaction', async () => {
       const sendTransactionMock = jest

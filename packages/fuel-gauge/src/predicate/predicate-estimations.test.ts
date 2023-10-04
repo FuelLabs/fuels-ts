@@ -41,13 +41,13 @@ describe('Predicate', () => {
       const tx = new ScriptTransactionRequest();
 
       // Get resources from the predicate struct
-      const ressources = await predicateStruct.getResourcesToSpend([
+      const resources = await predicateStruct.getResourcesToSpend([
         {
           assetId: BaseAssetId,
           amount: bn(1000),
         },
       ]);
-      tx.addResource(ressources[0]);
+      tx.addResources([resources[0]]);
       // Add predicate bytecode to the input predicate
       (<CoinTransactionRequestInput>tx.inputs[0]).predicate = predicateStruct.bytes;
 
