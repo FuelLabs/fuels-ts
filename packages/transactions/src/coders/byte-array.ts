@@ -1,7 +1,6 @@
-import { arrayify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
 import { concatBytes } from '@fuel-ts/utils';
-import { hexlify } from 'ethers';
+import { hexlify, getBytes } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 export class ByteArrayCoder extends Coder<BytesLike, string> {
@@ -27,7 +26,7 @@ export class ByteArrayCoder extends Coder<BytesLike, string> {
   encode(value: BytesLike): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    const data = arrayify(value);
+    const data = getBytes(value);
     parts.push(data);
     // Write padding
     if (this.#paddingLength) {

@@ -1,6 +1,6 @@
-import { arrayify } from '@ethersproject/bytes';
 import { ErrorCode } from '@fuel-ts/errors';
 import { bn, toHex } from '@fuel-ts/math';
+import { getBytes } from 'ethers';
 
 import { Coder } from './abstract-coder';
 
@@ -12,7 +12,7 @@ export class B512Coder extends Coder<string, string> {
   encode(value: string): Uint8Array {
     let encodedValue;
     try {
-      encodedValue = arrayify(value);
+      encodedValue = getBytes(value);
     } catch (error) {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }

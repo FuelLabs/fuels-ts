@@ -1,4 +1,3 @@
-import { arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -24,7 +23,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
 } from '@fuel-ts/providers';
-import { hexlify } from 'ethers';
+import { getBytes, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import {
@@ -328,14 +327,14 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     // add recipient and amount to the transaction script code
-    const recipientDataArray = arrayify(
+    const recipientDataArray = getBytes(
       '0x'.concat(recipient.toHexString().substring(2).padStart(64, '0'))
     );
-    const amountDataArray = arrayify(
+    const amountDataArray = getBytes(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
     );
     const script = new Uint8Array([
-      ...arrayify(withdrawScript.bytes),
+      ...getBytes(withdrawScript.bytes),
       ...recipientDataArray,
       ...amountDataArray,
     ]);

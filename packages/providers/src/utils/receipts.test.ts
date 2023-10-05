@@ -1,4 +1,3 @@
-import { arrayify } from '@ethersproject/bytes';
 import { BN, bn } from '@fuel-ts/math';
 import type {
   ReceiptBurn,
@@ -16,6 +15,7 @@ import type {
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
 import { ReceiptBurnCoder, ReceiptMessageOutCoder, ReceiptType } from '@fuel-ts/transactions';
+import { getBytes } from 'ethers';
 
 import { MOCK_GQL_RECEIPT_FRAGMENT } from '../../test/fixtures/receipts';
 import { GqlReceiptType } from '../__generated__/operations';
@@ -180,7 +180,7 @@ describe('assembleReceiptByType', () => {
     const recipient = MOCK_GQL_RECEIPT_FRAGMENT.recipient || '';
     const nonce = MOCK_GQL_RECEIPT_FRAGMENT.nonce || '';
     const amount = bn(MOCK_GQL_RECEIPT_FRAGMENT.amount);
-    const data = arrayify(MOCK_GQL_RECEIPT_FRAGMENT.data || '');
+    const data = getBytes(MOCK_GQL_RECEIPT_FRAGMENT.data || '');
     const digest = MOCK_GQL_RECEIPT_FRAGMENT.digest;
 
     const messageId = ReceiptMessageOutCoder.getMessageId({

@@ -1,4 +1,3 @@
-import { arrayify } from '@ethersproject/bytes';
 import { ErrorCode } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { concatBytes } from '@fuel-ts/utils';
@@ -44,7 +43,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
   }
 
   #getPaddedData(value: number[]): Uint8Array {
-    const data: Uint8Array[] = [arrayify(value)];
+    const data: Uint8Array[] = [Uint8Array.from(value)];
 
     const paddingLength = (WORD_SIZE - (value.length % WORD_SIZE)) % WORD_SIZE;
     if (paddingLength) {

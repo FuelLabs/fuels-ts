@@ -1,5 +1,4 @@
-export { arrayify } from '@ethersproject/bytes';
-export { hexlify, type BytesLike } from 'ethers';
+export { hexlify, type BytesLike, getBytes as arrayify } from 'ethers';
 export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/address';
 export * from '@fuel-ts/contract';
