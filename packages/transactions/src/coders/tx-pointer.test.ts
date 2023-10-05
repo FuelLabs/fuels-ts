@@ -1,5 +1,4 @@
-import { arrayify } from '@ethersproject/bytes';
-import { hexlify } from 'ethers';
+import { getBytes, hexlify } from 'ethers';
 
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
@@ -17,7 +16,7 @@ describe('TxPointerCoder', () => {
 
     expect(encoded).toEqual('0x000000000000000a0000000000000001');
 
-    const [decoded, offset] = new TxPointerCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new TxPointerCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual(16);
     expect(decoded).toEqual(txPointer);

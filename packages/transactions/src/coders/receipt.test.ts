@@ -1,6 +1,6 @@
-import { arrayify, concat } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
-import { hexlify, sha256 } from 'ethers';
+import { getBytes, hexlify, sha256 } from 'ethers';
 
 import type { Receipt } from './receipt';
 import { ReceiptCoder, ReceiptMessageOutCoder, ReceiptType } from './receipt';
@@ -32,7 +32,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -53,7 +53,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -76,7 +76,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -98,7 +98,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -119,7 +119,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000004d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -143,7 +143,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000005d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -168,7 +168,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000006d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -191,7 +191,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000007d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -214,7 +214,7 @@ describe('ReceiptCoder', () => {
       '0x0000000000000008d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new ReceiptCoder().decode(getBytes(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
@@ -239,9 +239,9 @@ describe('ReceiptCoder', () => {
       '0x000000000000000a750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a705968b401b682ba0c9018150cca596358a6b98576337ea10b9cfb0d02441b3bc61a0000000000000fa0eb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd000000000000000c2f6d40e3ac1a172fb9445f9843440a0fc383bea238a7a35a77a3c73d369029920102030405060708090a0b0c00000000'
     );
 
-    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+    expect(getBytes(encoded).length).toEqual((encoded.length - 2) / 2);
 
-    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded] = new ReceiptCoder().decode(getBytes(encoded), 0);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
@@ -262,9 +262,9 @@ describe('ReceiptCoder', () => {
       '0x000000000000000beb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a70590000000000000fa0000000000000001e0000000000000014'
     );
 
-    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+    expect(getBytes(encoded).length).toEqual((encoded.length - 2) / 2);
 
-    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded] = new ReceiptCoder().decode(getBytes(encoded), 0);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
@@ -285,9 +285,9 @@ describe('ReceiptCoder', () => {
       '0x000000000000000c750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a7059eb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd000000000000012c000000000000005a000000000000000a'
     );
 
-    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+    expect(getBytes(encoded).length).toEqual((encoded.length - 2) / 2);
 
-    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    const [decoded] = new ReceiptCoder().decode(getBytes(encoded), 0);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 });
