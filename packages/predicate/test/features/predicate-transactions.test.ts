@@ -22,6 +22,8 @@ describe('Predicate', () => {
       predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
       const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
+      predicate.setData<[string]>(b256);
+
       request = new ScriptTransactionRequest();
       request.addResources([
         {
