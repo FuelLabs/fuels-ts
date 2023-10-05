@@ -11,4 +11,15 @@ describe('concatBytes', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  it('can concatenate multiple num arrays', () => {
+    const actual = concatBytes([
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+    ]);
+    const expected = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    expect(actual).toEqual(expected);
+  });
 });
