@@ -77,7 +77,7 @@ describe(__filename, () => {
     expect(address3.toB256()).toEqual(assetId);
 
     // consistent bytes conversion
-    expect(arrayify(assetId)).toEqual(arrayify(address1));
+    expect(arrayify(assetId)).toEqual(arrayify(address1.toB256()));
     // #endregion conversion-4
   });
 });
