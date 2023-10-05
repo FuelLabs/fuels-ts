@@ -7,9 +7,9 @@ import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers'
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
-import { getBytes, hexlify, type BytesLike } from 'ethers';
+import { getBytes, type BytesLike } from 'ethers';
 
-import { getContractId, getContractStorageRoot } from './util';
+import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /**
  * Options for deploying a contract.
@@ -92,8 +92,8 @@ export default class ContractFactory {
   createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
-        key: hexlify(key),
-        value: hexlify(value),
+        key: hexlifyWithPrefix(key),
+        value: hexlifyWithPrefix(value),
       }))
       .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
