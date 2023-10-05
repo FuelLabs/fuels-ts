@@ -13,6 +13,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
@@ -28,7 +29,7 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
-import type { Message, MessageCoin, MessageProof } from './message';
+import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import type {
   TransactionRequestLike,
@@ -247,8 +248,13 @@ export default class Provider {
           });
   }
 
-  static chainInfoCache: ChainInfoCache = {};
-  static nodeInfoCache: NodeInfoCache = {};
+  static clearChainAndNodeCaches() {
+    Provider.nodeInfoCache = {};
+    Provider.chainInfoCache = {};
+  }
+
+  private static chainInfoCache: ChainInfoCache = {};
+  private static nodeInfoCache: NodeInfoCache = {};
 
   /**
    * Constructor to initialize a Provider.
@@ -326,38 +332,47 @@ export default class Provider {
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
-  async switchUrl(url: string) {
+  async connect(url: string) {
     this.url = url;
     this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
 
   /**
-   * Retrieves and caches chain and node information if not already cached.
-   *
-   * - Checks the cache for existing chain and node information based on the current URL.
-   * - If not found in cache, fetches the information, caches it, and then returns the data.
+   * Fetches both the chain and node information, saves it to the cache, and return it.
    *
    * @returns NodeInfo and Chain
    */
   async fetchChainAndNodeInfo() {
-    let nodeInfo = Provider.nodeInfoCache[this.url];
-    let chain = Provider.chainInfoCache[this.url];
+    const chain = await this.fetchChain();
+    const nodeInfo = await this.fetchNode();
 
-    if (!nodeInfo) {
-      nodeInfo = await this.fetchNode();
-      Provider.nodeInfoCache[this.url] = nodeInfo;
-    }
-
-    if (!chain) {
-      chain = await this.fetchChain();
-      Provider.chainInfoCache[this.url] = chain;
-    }
+    Provider.ensureClientVersionIsSupported(nodeInfo);
 
     return {
       chain,
       nodeInfo,
     };
+  }
+
+  private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
+    const { isMajorSupported, isMinorSupported, isPatchSupported, supportedVersion } =
+      checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
+
+    if (!isMajorSupported || !isMinorSupported) {
+      throw new FuelError(
+        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+      );
+    }
+
+    if (!isPatchSupported) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+      );
+    }
   }
 
   /**
@@ -483,7 +498,8 @@ export default class Provider {
    */
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
-    return {
+
+    const processedNodeInfo: NodeInfo = {
       maxDepth: bn(nodeInfo.maxDepth),
       maxTx: bn(nodeInfo.maxTx),
       minGasPrice: bn(nodeInfo.minGasPrice),
@@ -491,6 +507,10 @@ export default class Provider {
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
     };
+
+    Provider.nodeInfoCache[this.url] = processedNodeInfo;
+
+    return processedNodeInfo;
   }
 
   /**
@@ -500,7 +520,12 @@ export default class Provider {
    */
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
-    return processGqlChain(chain);
+
+    const processedChain = processGqlChain(chain);
+
+    Provider.chainInfoCache[this.url] = processedChain;
+
+    return processedChain;
   }
 
   /**
@@ -1200,6 +1225,20 @@ export default class Provider {
       amount: bn(amount),
       data,
     };
+  }
+
+  /**
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt.
+   *
+   * @param nonce - The nonce of the message to get status from.
+   * @returns A promise that resolves to the message status
+   */
+  async getMessageStatus(
+    /** The nonce of the message to get status from */
+    nonce: string
+  ): Promise<MessageStatus> {
+    const result = await this.operations.getMessageStatus({ nonce });
+    return result.messageStatus;
   }
 
   /**
