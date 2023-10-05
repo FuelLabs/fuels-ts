@@ -24,6 +24,7 @@ describe('TransactionSummary', () => {
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
   const gasPerByte = bn(2);
   const gasPriceFactor = bn(3);
+  const maxInputs = bn(255);
   const transaction = MOCK_TRANSACTION;
   const transactionBytes = arrayify(MOCK_TRANSACTION_RAWPAYLOAD);
   const receipts: TransactionResultReceipt[] = [
@@ -43,6 +44,7 @@ describe('TransactionSummary', () => {
       transactionBytes,
       receipts,
       gqlTransactionStatus: status,
+      maxInputs,
     });
 
     expect(transactionSummary).toMatchObject(expected);
