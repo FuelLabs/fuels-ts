@@ -208,7 +208,7 @@ class HDWallet {
     // first 32 bites from the key
     const key =
       this.privateKey != null && !isPublic ? concat(['0x00', this.privateKey]) : this.publicKey;
-    const extendedKey = arrayify(concat([prefix, depth, parentFingerprint, index, chainCode, key]));
+    const extendedKey = getBytes(concat([prefix, depth, parentFingerprint, index, chainCode, key]));
 
     return base58check(extendedKey);
   }
