@@ -41,7 +41,7 @@ export function toUtf8Bytes(stri: string): Uint8Array {
     }
   }
 
-  return getBytes(result);
+  return Uint8Array.from(result);
 }
 
 // Returns a byte with the LSB bits set

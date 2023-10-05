@@ -28,8 +28,8 @@ import {
 // "Bitcoin seed"
 const MasterSecret = toUtf8Bytes('Bitcoin seed');
 // 4 byte: version bytes (mainnet: 0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private)
-const MainnetPRV = 0x0488ade4;
-const TestnetPRV = 0x04358394;
+const MainnetPRV = '0x0488ade4';
+const TestnetPRV = '0x04358394';
 export const MNEMONIC_SIZES = [12, 15, 18, 21, 24];
 
 function assertWordList(wordlist: Array<string>) {
@@ -112,9 +112,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static entropyToMnemonic(entropy: BytesLike, wordlist: Array<string> = english): string {
-    const entropyBytes = getBytes(entropy, {
-      allowMissingPrefix: true,
-    });
+    const entropyBytes = getBytes(entropy);
 
     assertWordList(wordlist);
     assertEntropy(entropyBytes);
