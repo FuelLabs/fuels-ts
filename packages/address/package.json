@@ -34,7 +34,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
