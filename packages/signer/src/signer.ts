@@ -1,10 +1,9 @@
-import { concat } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
 import * as elliptic from 'elliptic';
-import { getBytes, hexlify } from 'ethers';
+import { hexlify, concat, getBytes } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
@@ -75,7 +74,7 @@ class Signer {
     // add recoveryParam to first s byte
     s[0] |= (signature.recoveryParam || 0) << 7;
 
-    return hexlify(concat([r, s]));
+    return concat([r, s]);
   }
 
   /**

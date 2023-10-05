@@ -1,10 +1,8 @@
-import type { DataOptions } from '@ethersproject/bytes';
-import { concat, hexlify } from '@ethersproject/bytes';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
 import type { BytesLike } from 'ethers';
-import { getBytes, sha256 } from 'ethers';
+import { sha256, hexlify, concat, getBytes } from 'ethers';
 
 /**
  * @hidden
@@ -58,18 +56,3 @@ export const getContractId = (
   const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
   return contractId;
 };
-
-/**
- * @hidden
- *
- * Ensures that a string is hexlified.
- *
- * @param value - The value to be hexlified.
- * @param options - Options for hexlify.
- * @returns The input value hexlified.
- */
-export const includeHexPrefix = (value: string, options?: DataOptions) =>
-  hexlify(value, {
-    ...options,
-    allowMissingPrefix: true,
-  });

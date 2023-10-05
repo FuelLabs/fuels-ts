@@ -1,5 +1,5 @@
-import { concat } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
+import { concatBytes } from '@fuel-ts/utils';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { WORD_SIZE } from '../constants';
@@ -46,7 +46,7 @@ export class StdStringCoder extends Coder<string, string> {
       data.push(new Uint8Array(paddingLength));
     }
 
-    return concat(data);
+    return concatBytes(data);
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {

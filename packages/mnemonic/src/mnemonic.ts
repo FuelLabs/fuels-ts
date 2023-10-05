@@ -1,9 +1,17 @@
-import { concat } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { english } from '@fuel-ts/wordlists';
 import type { BytesLike } from 'ethers';
-import { hexlify, dataSlice, pbkdf2, sha256, computeHmac, encodeBase58, getBytes } from 'ethers';
+import {
+  concat,
+  hexlify,
+  dataSlice,
+  pbkdf2,
+  sha256,
+  computeHmac,
+  encodeBase58,
+  getBytes,
+} from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {

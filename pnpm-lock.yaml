@@ -445,6 +445,9 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -873,6 +876,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -1062,6 +1068,9 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       ethers:
         specifier: ^6.7.1
         version: 6.7.1

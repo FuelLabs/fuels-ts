@@ -1,6 +1,5 @@
-import { concat } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
-import { getBytes, hexlify, sha256 } from 'ethers';
+import { getBytes, hexlify, sha256, concat } from 'ethers';
 
 import type { Receipt } from './receipt';
 import { ReceiptCoder, ReceiptMessageOutCoder, ReceiptType } from './receipt';

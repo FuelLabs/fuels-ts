@@ -39,6 +39,7 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.7.1"
   }
 }

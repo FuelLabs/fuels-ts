@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { concat } from '@ethersproject/bytes';
 import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -12,6 +11,7 @@ import type {
   TransactionResultReturnReceipt,
 } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import { concatBytes } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { getBytes } from 'ethers';
 
@@ -159,7 +159,7 @@ const scriptResultDecoder =
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
-            return concat([encodedScriptReturn, getBytes(nextReturnData.data)]);
+            return concatBytes([encodedScriptReturn, getBytes(nextReturnData.data)]);
           }
 
           return [encodedScriptReturn];
@@ -285,12 +285,12 @@ export const getContractCallScript = (
         scriptData.push(args);
 
         // move offset for next call
-        segmentOffset = dataOffset + concat(scriptData).byteLength;
+        segmentOffset = dataOffset + concatBytes(scriptData).byteLength;
       }
 
       // get asm instructions
       const script = getInstructions(paramOffsets, outputInfos);
-      const finalScriptData = concat(scriptData);
+      const finalScriptData = concatBytes(scriptData);
       return { data: finalScriptData, script };
     },
     () => [new Uint8Array()]

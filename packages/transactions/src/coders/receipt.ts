@@ -1,9 +1,8 @@
 /* eslint-disable max-classes-per-file */
-
-import { concat } from '@ethersproject/bytes';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
+import { concatBytes } from '@fuel-ts/utils';
 import { getBytes, sha256 } from 'ethers';
 
 import { ByteArrayCoder } from './byte-array';
@@ -64,7 +63,7 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptCall, number] {
@@ -133,7 +132,7 @@ export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptReturn, number] {
@@ -193,7 +192,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptReturnData, number] {
@@ -256,7 +255,7 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
     parts.push(new U64Coder().encode(value.is));
     parts.push(new B256Coder().encode(value.contractId));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptPanic, number] {
@@ -313,7 +312,7 @@ export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptRevert, number] {
@@ -376,7 +375,7 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptLog, number] {
@@ -451,7 +450,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptLogData, number] {
@@ -523,7 +522,7 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptTransfer, number] {
@@ -589,7 +588,7 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptTransferOut, number] {
@@ -643,7 +642,7 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
     parts.push(new U64Coder().encode(value.result));
     parts.push(new U64Coder().encode(value.gasUsed));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptScriptResult, number] {
@@ -700,7 +699,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new U64Coder().encode(value.amount));
     parts.push(getBytes(value.data || '0x'));
 
-    return sha256(concat(parts));
+    return sha256(concatBytes(parts));
   }
 
   encode(value: Omit<ReceiptMessageOut, 'messageId'>): Uint8Array {
@@ -714,7 +713,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new ByteArrayCoder(value.data.length).encode(value.data));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptMessageOut, number] {
@@ -772,7 +771,7 @@ const getAssetIdForMintAndBurnReceipts = (contractId: string, subId: string): st
   const contractIdBytes = getBytes(contractId);
   const subIdBytes = getBytes(subId);
 
-  return sha256(concat([contractIdBytes, subIdBytes]));
+  return sha256(concatBytes([contractIdBytes, subIdBytes]));
 };
 
 export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
@@ -793,7 +792,7 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptMint, number] {
@@ -861,7 +860,7 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [ReceiptBurn, number] {
@@ -980,7 +979,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       }
     }
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [Receipt, number] {
