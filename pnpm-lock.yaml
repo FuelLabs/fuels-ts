@@ -433,9 +433,6 @@ importers:
 
   packages/abi-coder:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -506,9 +503,6 @@ importers:
 
   packages/address:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -534,9 +528,6 @@ importers:
 
   packages/contract:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -577,9 +568,6 @@ importers:
 
   packages/crypto:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -635,9 +623,6 @@ importers:
 
   packages/fuels:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -728,6 +713,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -744,9 +732,6 @@ importers:
 
   packages/hdwallet:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -788,9 +773,6 @@ importers:
 
   packages/mnemonic:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -806,9 +788,6 @@ importers:
 
   packages/predicate:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -852,9 +831,6 @@ importers:
 
   packages/program:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -898,9 +874,6 @@ importers:
 
   packages/providers:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -974,9 +947,6 @@ importers:
 
   packages/script:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1020,9 +990,6 @@ importers:
 
   packages/signer:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -1053,9 +1020,6 @@ importers:
 
   packages/transactions:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1087,9 +1051,6 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -1115,9 +1076,6 @@ importers:
 
   packages/wallet:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -3717,14 +3675,6 @@ packages:
   /@eslint/js@8.38.0:
     resolution: {integrity: sha512-IoD2MfUnOV58ghIHCiil01PcohxjbYR/qCxsoC+xNgUwh1EY8jOOrYmu3d3a71+tJJ23uscEV4X2HJWMsPJu4g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  /@ethersproject/bytes@5.7.0:
-    resolution: {integrity: sha512-nsbxwgFXWh9NyYWo+U8atvmMsSdKJprTcICAkvbBffT75qDocbuggBU0SJiVK2MuTrp0q+xvLkTnGMPK1+uA9A==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-
-  /@ethersproject/logger@5.7.0:
-    resolution: {integrity: sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==}
 
   /@fuels/vm-asm@0.36.1:
     resolution: {integrity: sha512-MXtNDk0WXONIrDJOlk07+X7GegpCz2hfbAgSIWycOD0th2z1GndvMqBryiw/pTVDHLnHe+5TGIODLsprI4RiEw==}
