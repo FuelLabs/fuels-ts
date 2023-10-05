@@ -98,7 +98,7 @@ class Signer {
    * @param signature - hashed signature
    * @returns public key from signature from the
    */
-  static recoverPublicKey(data: BytesLike, signature: BytesLike) {
+  static recoverPublicKey(data: BytesLike, signature: BytesLike): string {
     const signedMessageBytes = getBytes(signature);
     const r = signedMessageBytes.slice(0, 32);
     const s = signedMessageBytes.slice(32, 64);
@@ -112,7 +112,7 @@ class Signer {
       .encode('array', false)
       .slice(1);
 
-    return publicKey;
+    return hexlify(Uint8Array.from(publicKey));
   }
 
   /**
