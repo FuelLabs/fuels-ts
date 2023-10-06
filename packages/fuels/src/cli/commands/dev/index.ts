@@ -8,14 +8,14 @@ import { deploy } from '../deploy';
 
 import { startFuelCore } from './startFuelCore';
 
-export async function buildAndDeploy(config: FuelsConfig) {
-  await build(config);
-  return deploy(config);
-}
-
 export const fileHandlers: {
   watcher?: chokidar.FSWatcher;
 } = {};
+
+export const buildAndDeploy = async (config: FuelsConfig) => {
+  await build(config);
+  return deploy(config);
+};
 
 export const changeListener = (config: FuelsConfig) => async (path: string) => {
   log(`\nFile changed: ${path}`);
