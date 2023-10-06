@@ -236,7 +236,7 @@ describe('Contract', () => {
     expect(results.toHex()).toEqual(toHex(1338));
   });
 
-  it('adds multiple contracts on multicalls', async () => {
+  it('adds multiple contracts on multicalls (2 CALLS)', async () => {
     const contract = await setupContract();
     const otherContract = await setupContract({
       cache: false,
