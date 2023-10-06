@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as yup from 'yup';
 
 import type { UserFuelsConfig } from '../types';
@@ -22,10 +21,5 @@ const schema = yup
   .required();
 
 export async function validateConfig(config: UserFuelsConfig) {
-  try {
-    const isValid = await schema.validate(config);
-    return isValid;
-  } catch (err: any) {
-    throw new Error(err.message);
-  }
+  return schema.validate(config);
 }
