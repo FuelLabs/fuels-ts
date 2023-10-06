@@ -46,20 +46,20 @@ const doesReceiptHaveMissingContractId = (
 /** @hidden */
 export const getReceiptsWithMissingData = (receipts: Array<TransactionResultReceipt>) =>
   receipts.reduce<{
-    missingOutputVariables: Array<ReceiptRevert>;
-    missingOutputContractIds: Array<ReceiptPanic>;
+    missingOutputVariables: number;
+    missingOutputContractIds: Array<string>;
   }>(
-    (memo, receipt) => {
+    (accumulator, receipt) => {
       if (doesReceiptHaveMissingOutputVariables(receipt)) {
-        memo.missingOutputVariables.push(receipt);
+        accumulator.missingOutputVariables += 1;
       }
       if (doesReceiptHaveMissingContractId(receipt)) {
-        memo.missingOutputContractIds.push(receipt);
+        accumulator.missingOutputContractIds.push(receipt.contractId);
       }
-      return memo;
+      return accumulator;
     },
     {
-      missingOutputVariables: [],
+      missingOutputVariables: 0,
       missingOutputContractIds: [],
     }
   );

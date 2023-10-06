@@ -421,7 +421,7 @@ export class Account extends AbstractAccount {
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
 
-      missingOutputVariableCount = missingOutputVariables.length;
+      missingOutputVariableCount = missingOutputVariables;
       missingOutputContractIdsCount = missingOutputContractIds.length;
 
       if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
@@ -431,7 +431,7 @@ export class Account extends AbstractAccount {
       if (transactionRequest instanceof ScriptTransactionRequest) {
         transactionRequest.addVariableOutputs(missingOutputVariableCount);
 
-        missingOutputContractIds.forEach(({ contractId }) =>
+        missingOutputContractIds.forEach((contractId: string) =>
           transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
         );
       }
