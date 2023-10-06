@@ -5,7 +5,7 @@ import {
   getContractCamelCase,
 } from '../../config/forcUtils';
 import type { FuelsConfig, ContractDeployed } from '../../types';
-import { debug, log, warn } from '../../utils/logger';
+import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
 import { deployContract } from './deployContract';
@@ -14,11 +14,6 @@ import { saveContractIds } from './saveContractIds';
 
 export async function deploy(config: FuelsConfig) {
   const contracts: ContractDeployed[] = [];
-
-  if (config.contracts.length === 0) {
-    warn('No contracts to deploy');
-    return [];
-  }
 
   const wallet = await createWallet(config.providerUrl, config.privateKey);
 
