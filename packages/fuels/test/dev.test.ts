@@ -27,6 +27,7 @@ describe('dev', () => {
           providerUrl: `http://127.0.0.1:4000/graphql`,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           childProcess: {} as any,
+          chainConfig: '/some/path/chainConfig.json',
         })
       );
 
