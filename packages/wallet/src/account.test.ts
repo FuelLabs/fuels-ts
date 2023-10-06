@@ -6,12 +6,11 @@ import type {
   CoinQuantity,
   Message,
   Resource,
-  ScriptTransactionRequest,
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
 } from '@fuel-ts/providers';
-import { Provider } from '@fuel-ts/providers';
+import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
@@ -410,13 +409,13 @@ describe('Account', () => {
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
-      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
-
     const sendTransaction = jest
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
+
+    const estimateTxDependencies = jest
+      .spyOn(Account.prototype, 'estimateTxDependencies')
+      .mockImplementation(() => Promise.resolve());
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -427,28 +426,29 @@ describe('Account', () => {
 
     expect(result).toEqual(transactionResponse);
 
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+
     expect(transactionRequestify.mock.calls.length).toEqual(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
-
-    expect(estimateTxDependencies.mock.calls.length).toEqual(1);
-    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
-    const callResult = 'callResult' as unknown as CallResult;
+    const transactionRequest = new ScriptTransactionRequest();
+    const callResult: CallResult = {
+      receipts: [],
+    };
 
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
     const estimateTxDependencies = jest
-      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
+      .spyOn(Account.prototype, 'estimateTxDependencies')
+      .mockImplementation(async () => Promise.resolve());
 
     const simulate = jest
       .spyOn(providersMod.Provider.prototype, 'simulate')
@@ -459,12 +459,12 @@ describe('Account', () => {
       provider
     );
 
-    const result = await account.simulateTransaction(transactionRequestLike);
+    const result = await account.simulateTransaction(transactionRequest);
 
     expect(result).toEqual(callResult);
 
     expect(transactionRequestify.mock.calls.length).toBe(1);
-    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(estimateTxDependencies.mock.calls.length).toBe(1);
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);

@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import type { CallResult, TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
+import type { CallResult, TransactionResponse } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
@@ -9,6 +9,7 @@ import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
+import { Account } from './account';
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import { FUEL_NETWORK_URL } from './configs';
 import * as keystoreWMod from './keystore-wallet';
@@ -19,6 +20,8 @@ jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
   ...jest.requireActual('@fuel-ts/providers'),
 }));
+
+const { ScriptTransactionRequest } = providersMod;
 
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
@@ -198,25 +201,26 @@ describe('WalletUnlocked', () => {
   });
 
   it('simulates a transaction', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
-    const callResult = 'callResult' as unknown as CallResult;
+    const transactionRequest = new ScriptTransactionRequest();
+    const callResult: CallResult = {
+      receipts: [],
+    };
 
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
-      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
-
     const call = jest
       .spyOn(providersMod.Provider.prototype, 'call')
       .mockImplementation(() => Promise.resolve(callResult));
 
+    const estimateTxDependencies = jest
+      .spyOn(Account.prototype, 'estimateTxDependencies')
+      .mockImplementation(() => Promise.resolve());
+
     const populateTransactionWitnessesSignatureSpy = jest
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
-      .mockImplementationOnce(() => Promise.resolve(transactionRequestLike));
+      .mockImplementationOnce(() => Promise.resolve(transactionRequest));
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -224,12 +228,12 @@ describe('WalletUnlocked', () => {
       provider,
     });
 
-    const result = await wallet.simulateTransaction(transactionRequestLike);
+    const result = await wallet.simulateTransaction(transactionRequest);
 
     expect(result).toEqual(callResult);
 
     expect(transactionRequestify.mock.calls.length).toBe(1);
-    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(estimateTxDependencies.mock.calls.length).toBe(1);
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
@@ -239,7 +243,7 @@ describe('WalletUnlocked', () => {
 
     expect(call.mock.calls.length).toBe(1);
     expect(call.mock.calls[0]).toEqual([
-      transactionRequestLike,
+      transactionRequest,
       {
         utxoValidation: true,
       },
