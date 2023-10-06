@@ -119,21 +119,6 @@ export const launchNode = async ({
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      // let initialOpenSocketsResult = '';
-      // for (;;) {
-      //   if (initialOpenSocketsResult === '') {
-      //     initialOpenSocketsResult = execSync(`lsof -i :${result.port} -n -P -F cpnT`).toString();
-      //     // eslint-disable-next-line no-continue
-      //     continue;
-      //   }
-      //   const openSocketsResult = execSync(`lsof -i :${result.port} -n -P -F cpnT`).toString();
-      //   if (initialOpenSocketsResult !== openSocketsResult) break;
-      // }
-
-      // execSync(
-      //   `kill -9 $(ps -A | grep -E $(lsof -i :${result.port} -t| tr '\n' '|' | sed '$s/|$//') | grep fuel-core | awk '{print $1;}')`
-      // );
-
       if (child.pid) {
         kill(Number(child.pid));
       }
@@ -163,7 +148,6 @@ export const launchNode = async ({
         result.ip = nodeIp;
         result.port = nodePort;
 
-        console.log(`${nodeIp}:${nodePort}`);
         resolve(result);
       }
     });
