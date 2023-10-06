@@ -6,11 +6,9 @@ import type {
   CoinQuantity,
   Message,
   Resource,
-  TransactionRequest,
   TransactionRequestLike,
-  TransactionResponse,
 } from '@fuel-ts/providers';
-import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
+import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
@@ -215,10 +213,9 @@ describe('Account', () => {
     const calculateFee = jest.fn(() => fee);
     const addResources = jest.fn();
 
-    const request = {
-      calculateFee,
-      addResources,
-    } as unknown as TransactionRequest;
+    const transactionRequest = new ScriptTransactionRequest();
+    transactionRequest.calculateFee = calculateFee;
+    transactionRequest.addResources = addResources;
 
     const getResourcesToSpendSpy = jest
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -229,7 +226,7 @@ describe('Account', () => {
       provider
     );
 
-    await account.fund(request);
+    await account.fund(transactionRequest);
 
     expect(calculateFee.mock.calls.length).toBe(1);
 
@@ -258,12 +255,10 @@ describe('Account', () => {
     const calculateFee = jest.fn(() => fee);
     const addCoinOutput = jest.fn();
     const addResources = jest.fn();
-
-    const request = {
-      calculateFee,
-      addCoinOutput,
-      addResources,
-    } as unknown as ScriptTransactionRequest;
+    const transactionRequest = new ScriptTransactionRequest();
+    transactionRequest.calculateFee = calculateFee;
+    transactionRequest.addCoinOutput = addCoinOutput;
+    transactionRequest.addResources = addResources;
 
     const resources: Resource[] = [];
 
@@ -273,9 +268,11 @@ describe('Account', () => {
 
     const sendTransaction = jest
       .spyOn(Account.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
+      .mockImplementation(async () => Promise.resolve({} as unknown as TransactionResponse));
 
-    jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+    jest
+      .spyOn(providersMod, 'ScriptTransactionRequest')
+      .mockImplementation(() => transactionRequest);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -296,7 +293,7 @@ describe('Account', () => {
     expect(addResources.mock.calls[0][0]).toEqual(resources);
 
     expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
 
     // asset id not hexlified
     await account.transfer(destination, amount);
@@ -320,7 +317,7 @@ describe('Account', () => {
     expect(addResources.mock.calls[1][0]).toEqual(resources);
 
     expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[1][0]).toEqual(request);
+    expect(sendTransaction.mock.calls[1][0]).toEqual(transactionRequest);
   });
 
   it('should execute withdrawToBaseLayer just fine', async () => {
@@ -338,26 +335,25 @@ describe('Account', () => {
     const calculateFee = jest.fn(() => fee);
     const addResources = jest.fn();
 
-    const request = {
-      calculateFee,
-      addResources,
-    } as unknown as ScriptTransactionRequest;
+    const transactionRequest = new ScriptTransactionRequest();
+    transactionRequest.calculateFee = calculateFee;
+    transactionRequest.addResources = addResources;
 
     const resources: Resource[] = [];
 
-    const transactionResponse = {} as unknown as TransactionResponse;
+    const transactionResponse = new TransactionResponse('', provider);
 
     const scriptTransactionRequest = jest
       .spyOn(providersMod, 'ScriptTransactionRequest')
-      .mockImplementation(() => request);
+      .mockImplementation(() => transactionRequest);
 
     const getResourcesToSpend = jest
       .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementation(() => Promise.resolve(resources));
+      .mockImplementation(async () => Promise.resolve(resources));
 
     const sendTransaction = jest
       .spyOn(Account.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve(transactionResponse));
+      .mockImplementation(async () => Promise.resolve(transactionResponse));
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -379,7 +375,7 @@ describe('Account', () => {
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
 
     expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
 
     // without txParams
     result = await account.withdrawToBaseLayer(recipient, amount);
@@ -397,13 +393,12 @@ describe('Account', () => {
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
 
     expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
   });
 
   it('should execute sendTransaction just fine', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
-    const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
+    const transactionRequest = new ScriptTransactionRequest();
+    const transactionResponse = new TransactionResponse('', provider);
 
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
@@ -411,18 +406,18 @@ describe('Account', () => {
 
     const sendTransaction = jest
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve(transactionResponse));
+      .mockImplementation(async () => Promise.resolve(transactionResponse));
 
     const estimateTxDependencies = jest
       .spyOn(Account.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(async () => Promise.resolve());
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    const result = await account.sendTransaction(transactionRequestLike);
+    const result = await account.sendTransaction(transactionRequest);
 
     expect(result).toEqual(transactionResponse);
 
@@ -430,7 +425,7 @@ describe('Account', () => {
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(transactionRequestify.mock.calls.length).toEqual(1);
-    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
