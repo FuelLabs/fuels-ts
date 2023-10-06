@@ -5,7 +5,7 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
-import { getBytes, hexlify } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { Coin } from '../coin';
@@ -499,7 +499,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   hasPredicateInput(): boolean {
     return Boolean(
       this.inputs.find(
-        (input) => 'predicate' in input && input.predicate && input.predicate !== getBytes('0x')
+        (input) => 'predicate' in input && input.predicate && input.predicate !== getBytesCopy('0x')
       )
     );
   }

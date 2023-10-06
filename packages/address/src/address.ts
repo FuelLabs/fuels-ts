@@ -1,13 +1,13 @@
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
-import { getBytes, hexlify, sha256 } from 'ethers';
+import { getBytesCopy, hexlify, sha256 } from 'ethers';
 
 import {
   normalizeBech32,
   isBech32,
   toB256,
-  getBytesFromBech32,
+  getBytesCopyFromBech32,
   toBech32,
   getRandomB256,
   isPublicKey,
@@ -63,7 +63,7 @@ export default class Address extends AbstractAddress {
    * @returns The `bech32Address` property as a byte array
    */
   toBytes(): Uint8Array {
-    return getBytesFromBech32(this.bech32Address);
+    return getBytesCopyFromBech32(this.bech32Address);
   }
 
   /**
@@ -132,7 +132,7 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromPublicKey(publicKey: string): Address {
-    const b256Address = sha256(hexlify(getBytes(publicKey)));
+    const b256Address = sha256(hexlify(getBytesCopy(publicKey)));
     return new Address(toBech32(b256Address));
   }
 

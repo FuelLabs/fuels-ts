@@ -3,7 +3,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
 import * as elliptic from 'elliptic';
-import { hexlify, concat, getBytes } from 'ethers';
+import { hexlify, concat, getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
@@ -45,7 +45,7 @@ class Signer {
 
     // Convert to byte array, normalize private key input allowing it to be BytesLike
     // like remove 0x prefix and accept array of bytes
-    const privateKeyBytes = getBytes(privateKey);
+    const privateKeyBytes = getBytesCopy(privateKey);
     const keyPair = getCurve().keyFromPrivate(privateKeyBytes, 'hex');
 
     // Slice(1) removes the encoding scheme from the public key
@@ -64,8 +64,8 @@ class Signer {
    * @returns hashed signature
    */
   sign(data: BytesLike) {
-    const keyPair = getCurve().keyFromPrivate(getBytes(this.privateKey), 'hex');
-    const signature = keyPair.sign(getBytes(data), {
+    const keyPair = getCurve().keyFromPrivate(getBytesCopy(this.privateKey), 'hex');
+    const signature = keyPair.sign(getBytesCopy(data), {
       canonical: true,
     });
     const r = toBytes(signature.r, 32);
@@ -84,8 +84,8 @@ class Signer {
    * @returns compressed point on the curve
    */
   addPoint(point: BytesLike) {
-    const p0 = getCurve().keyFromPublic(getBytes(this.compressedPublicKey));
-    const p1 = getCurve().keyFromPublic(getBytes(point));
+    const p0 = getCurve().keyFromPublic(getBytesCopy(this.compressedPublicKey));
+    const p1 = getCurve().keyFromPublic(getBytesCopy(point));
     const result = p0.getPublic().add(p1.getPublic());
 
     return hexlify(Uint8Array.from(result.encode('array', true)));
@@ -99,7 +99,7 @@ class Signer {
    * @returns public key from signature from the
    */
   static recoverPublicKey(data: BytesLike, signature: BytesLike): string {
-    const signedMessageBytes = getBytes(signature);
+    const signedMessageBytes = getBytesCopy(signature);
     const r = signedMessageBytes.slice(0, 32);
     const s = signedMessageBytes.slice(32, 64);
     const recoveryParam = (s[0] & 0x80) >> 7;
@@ -108,7 +108,7 @@ class Signer {
     s[0] &= 0x7f;
 
     const publicKey = getCurve()
-      .recoverPubKey(getBytes(data), { r, s }, recoveryParam)
+      .recoverPubKey(getBytesCopy(data), { r, s }, recoveryParam)
       .encode('array', false)
       .slice(1);
 
@@ -133,7 +133,7 @@ class Signer {
    * @returns random 32-byte hashed
    */
   static generatePrivateKey(entropy?: BytesLike) {
-    return entropy ? hash(concat([randomBytes(32), getBytes(entropy)])) : randomBytes(32);
+    return entropy ? hash(concat([randomBytes(32), getBytesCopy(entropy)])) : randomBytes(32);
   }
 
   /**
@@ -143,7 +143,7 @@ class Signer {
    * @returns extended publicKey
    */
   static extendPublicKey(publicKey: BytesLike) {
-    const keyPair = getCurve().keyFromPublic(getBytes(publicKey));
+    const keyPair = getCurve().keyFromPublic(getBytesCopy(publicKey));
     return hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
   }
 }

@@ -13,7 +13,7 @@ import type {
 import { ReceiptType } from '@fuel-ts/transactions';
 import { concatBytes } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
-import { getBytes } from 'ethers';
+import { getBytesCopy } from 'ethers';
 
 import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
@@ -154,12 +154,12 @@ const scriptResultDecoder =
           return [new U64Coder().encode((receipt as TransactionResultReturnReceipt).val)];
         }
         if (receipt.type === ReceiptType.ReturnData) {
-          const encodedScriptReturn = getBytes(receipt.data);
+          const encodedScriptReturn = getBytesCopy(receipt.data);
           if (isOutputDataHeap && isReturnType(filtered[index + 1]?.type)) {
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
-            return concatBytes([encodedScriptReturn, getBytes(nextReturnData.data)]);
+            return concatBytes([encodedScriptReturn, getBytesCopy(nextReturnData.data)]);
           }
 
           return [encodedScriptReturn];
@@ -281,7 +281,7 @@ export const getContractCallScript = (
         }
 
         /// 7. Encoded arguments (optional) (variable length)
-        const args = getBytes(call.data);
+        const args = getBytesCopy(call.data);
         scriptData.push(args);
 
         // move offset for next call

@@ -11,7 +11,7 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
-import { getBytes, hexlify } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 /**
@@ -38,7 +38,7 @@ export function fromBech32(address: Bech32Address): Decoded {
 export function toBech32(address: B256Address): Bech32Address {
   return bech32m.encode(
     FUEL_BECH32_HRP_PREFIX,
-    bech32m.toWords(getBytes(hexlify(address)))
+    bech32m.toWords(getBytesCopy(hexlify(address)))
   ) as Bech32Address;
 }
 
@@ -78,7 +78,7 @@ export function isPublicKey(address: string): boolean {
  *
  * @hidden
  */
-export function getBytesFromBech32(address: Bech32Address): Uint8Array {
+export function getBytesCopyFromBech32(address: Bech32Address): Uint8Array {
   return new Uint8Array(bech32m.fromWords(fromBech32(address).words));
 }
 
@@ -95,7 +95,7 @@ export function toB256(address: Bech32Address): B256Address {
     );
   }
 
-  return hexlify(getBytesFromBech32(address));
+  return hexlify(getBytesCopyFromBech32(address));
 }
 
 /**
@@ -152,7 +152,7 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
       );
     }
 
-    bytes = getBytesFromBech32(toBech32(b256));
+    bytes = getBytesCopyFromBech32(toBech32(b256));
     bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
   } catch (error) {
     throw new FuelError(

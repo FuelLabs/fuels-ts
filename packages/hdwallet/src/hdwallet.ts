@@ -12,7 +12,7 @@ import {
   sha256,
   computeHmac,
   ripemd160,
-  getBytes,
+  getBytesCopy,
   concat,
 } from 'ethers';
 
@@ -121,9 +121,9 @@ class HDWallet {
    * @returns A new instance of HDWallet on the derived index
    */
   deriveIndex(index: number) {
-    const privateKey = this.privateKey && getBytes(this.privateKey);
-    const publicKey = getBytes(this.publicKey);
-    const chainCode = getBytes(this.chainCode);
+    const privateKey = this.privateKey && getBytesCopy(this.privateKey);
+    const publicKey = getBytesCopy(this.publicKey);
+    const chainCode = getBytesCopy(this.chainCode);
     const data = new Uint8Array(37);
 
     if (index & HARDENED_INDEX) {
@@ -137,13 +137,13 @@ class HDWallet {
       // 33 bytes: 0x00 || private key
       data.set(privateKey, 1);
     } else {
-      data.set(getBytes(this.publicKey));
+      data.set(getBytesCopy(this.publicKey));
     }
 
     // child number: ser32(i)
     data.set(toBytes(index, 4), 33);
 
-    const bytes = getBytes(computeHmac('sha512', chainCode, data));
+    const bytes = getBytesCopy(computeHmac('sha512', chainCode, data));
     const IL = bytes.slice(0, 32);
     const IR = bytes.slice(32);
 
@@ -208,7 +208,9 @@ class HDWallet {
     // first 32 bites from the key
     const key =
       this.privateKey != null && !isPublic ? concat(['0x00', this.privateKey]) : this.publicKey;
-    const extendedKey = getBytes(concat([prefix, depth, parentFingerprint, index, chainCode, key]));
+    const extendedKey = getBytesCopy(
+      concat([prefix, depth, parentFingerprint, index, chainCode, key])
+    );
 
     return base58check(extendedKey);
   }
@@ -223,14 +225,14 @@ class HDWallet {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
 
     return new HDWallet({
-      chainCode: getBytes(masterKey.slice(32)),
-      privateKey: getBytes(masterKey.slice(0, 32)),
+      chainCode: getBytesCopy(masterKey.slice(32)),
+      privateKey: getBytesCopy(masterKey.slice(0, 32)),
     });
   }
 
   static fromExtendedKey(extendedKey: string) {
     const decoded = toBeHex(decodeBase58(extendedKey));
-    const bytes = getBytes(decoded);
+    const bytes = getBytesCopy(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {

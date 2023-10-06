@@ -1,7 +1,7 @@
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
-import * as getBytesMod from 'ethers';
+import * as getBytesCopyMod from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import {
@@ -28,7 +28,9 @@ describe('util', () => {
       .spyOn(NumberCoder.prototype, 'encode')
       .mockReturnValue(Uint8Array.from(byte));
 
-    const arrayify = jest.spyOn(getBytesMod, 'getBytes').mockReturnValue(Uint8Array.from(byte));
+    const arrayify = jest
+      .spyOn(getBytesCopyMod, 'getBytesCopy')
+      .mockReturnValue(Uint8Array.from(byte));
 
     const contractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;

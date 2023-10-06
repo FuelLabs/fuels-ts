@@ -12,7 +12,7 @@ import {
 } from '@fuel-ts/transactions';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
-import { getBytes, hexlify, Network } from 'ethers';
+import { getBytesCopy, hexlify, Network } from 'ethers';
 import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
@@ -639,7 +639,7 @@ export default class Provider {
 
     const estimatedTransaction = transactionRequest;
     const [decodedTransaction] = new TransactionCoder().decode(
-      getBytes(response.estimatePredicates.rawPayload),
+      getBytesCopy(response.estimatePredicates.rawPayload),
       0
     );
 
@@ -974,7 +974,7 @@ export default class Provider {
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder().decode(getBytes(tx.rawPayload), 0)?.[0]
+        (tx) => new TransactionCoder().decode(getBytesCopy(tx.rawPayload), 0)?.[0]
       ),
     };
   }
@@ -993,7 +993,7 @@ export default class Provider {
       return null;
     }
     return new TransactionCoder().decode(
-      getBytes(transaction.rawPayload),
+      getBytesCopy(transaction.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
   }

@@ -2,7 +2,7 @@ import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
 import type { BytesLike } from 'ethers';
-import { sha256, hexlify, concat, getBytes } from 'ethers';
+import { sha256, hexlify, concat, getBytesCopy } from 'ethers';
 
 /**
  * @hidden
@@ -14,7 +14,7 @@ import { sha256, hexlify, concat, getBytes } from 'ethers';
  */
 export const getContractRoot = (bytecode: BytesLike): string => {
   const chunkSize = 16 * 1024;
-  const bytes = getBytes(bytecode);
+  const bytes = getBytesCopy(bytecode);
   const chunks = chunkAndPadBytes(bytes, chunkSize);
 
   return calcRoot(chunks.map((c) => hexlify(c)));
@@ -52,7 +52,7 @@ export const getContractId = (
   salt: BytesLike,
   stateRoot: BytesLike
 ): string => {
-  const root = getContractRoot(getBytes(bytecode));
+  const root = getContractRoot(getBytesCopy(bytecode));
   const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
   return contractId;
 };

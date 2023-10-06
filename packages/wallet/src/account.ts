@@ -23,7 +23,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
 } from '@fuel-ts/providers';
-import { getBytes, hexlify } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import {
@@ -327,14 +327,14 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     // add recipient and amount to the transaction script code
-    const recipientDataArray = getBytes(
+    const recipientDataArray = getBytesCopy(
       '0x'.concat(recipient.toHexString().substring(2).padStart(64, '0'))
     );
-    const amountDataArray = getBytes(
+    const amountDataArray = getBytesCopy(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
     );
     const script = new Uint8Array([
-      ...getBytes(withdrawScript.bytes),
+      ...getBytesCopy(withdrawScript.bytes),
       ...recipientDataArray,
       ...amountDataArray,
     ]);

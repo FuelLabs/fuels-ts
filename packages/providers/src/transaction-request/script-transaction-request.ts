@@ -5,7 +5,7 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
-import { getBytes, hexlify } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { ContractTransactionRequestInput } from './input';
@@ -49,8 +49,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    */
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = getBytes(script ?? returnZeroScript.bytes);
-    this.scriptData = getBytes(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = getBytesCopy(script ?? returnZeroScript.bytes);
+    this.scriptData = getBytesCopy(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   /**
@@ -59,8 +59,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @returns The transaction script object.
    */
   toTransaction(): TransactionScript {
-    const script = getBytes(this.script ?? '0x');
-    const scriptData = getBytes(this.scriptData ?? '0x');
+    const script = getBytesCopy(this.script ?? '0x');
+    const scriptData = getBytesCopy(this.scriptData ?? '0x');
     return {
       type: TransactionType.Script,
       ...super.getBaseTransaction(),

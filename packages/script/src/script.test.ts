@@ -12,7 +12,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { getBytes } from 'ethers';
+import { getBytesCopy } from 'ethers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -68,7 +68,7 @@ const callScript = async <TData, TResult>(
 };
 
 // #region script-init
-// #context import { Script, AbiCoder, getBytes } from 'fuels';
+// #context import { Script, AbiCoder, getBytesCopy } from 'fuels';
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {
@@ -85,7 +85,7 @@ describe('Script', () => {
       (myStruct: MyStruct) => {
         const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
 
-        return getBytes(encoded);
+        return getBytesCopy(encoded);
       },
       (scriptResult) => {
         if (scriptResult.returnReceipt.type === ReceiptType.Revert) {

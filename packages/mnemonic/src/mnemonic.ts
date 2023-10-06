@@ -10,7 +10,7 @@ import {
   sha256,
   computeHmac,
   encodeBase58,
-  getBytes,
+  getBytesCopy,
 } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
@@ -112,7 +112,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static entropyToMnemonic(entropy: BytesLike, wordlist: Array<string> = english): string {
-    const entropyBytes = getBytes(entropy);
+    const entropyBytes = getBytesCopy(entropy);
 
     assertWordList(wordlist);
     assertEntropy(entropyBytes);
@@ -192,7 +192,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static masterKeysFromSeed(seed: string): Uint8Array {
-    const seedArray = getBytes(seed);
+    const seedArray = getBytesCopy(seed);
 
     if (seedArray.length < 16 || seedArray.length > 64) {
       throw new FuelError(
@@ -201,7 +201,7 @@ class Mnemonic {
       );
     }
 
-    return getBytes(computeHmac('sha512', MasterSecret, seedArray));
+    return getBytesCopy(computeHmac('sha512', MasterSecret, seedArray));
   }
 
   /**
@@ -213,7 +213,7 @@ class Mnemonic {
    */
   static seedToExtendedKey(seed: string, testnet: boolean = false): string {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
-    const prefix = getBytes(testnet ? TestnetPRV : MainnetPRV);
+    const prefix = getBytesCopy(testnet ? TestnetPRV : MainnetPRV);
     const depth = '0x00';
     const fingerprint = '0x00000000';
     const index = '0x00000000';
@@ -248,7 +248,7 @@ class Mnemonic {
    */
   static generate(size: number = 32, extraEntropy: BytesLike = '') {
     const entropy = extraEntropy
-      ? sha256(concat([randomBytes(size), getBytes(extraEntropy)]))
+      ? sha256(concat([randomBytes(size), getBytesCopy(extraEntropy)]))
       : randomBytes(size);
     return Mnemonic.entropyToMnemonic(entropy);
   }
