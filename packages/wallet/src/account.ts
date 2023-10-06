@@ -24,12 +24,16 @@ import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
+  TransactionType,
+  getReceiptsWithMissingData,
 } from '@fuel-ts/providers';
 
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
 } from './utils';
+
+const MAX_RETRIES = 10;
 
 type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
@@ -366,7 +370,7 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(transactionRequest);
   }
 
@@ -378,7 +382,61 @@ export class Account extends AbstractAccount {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
     return this.provider.simulate(transactionRequest);
+  }
+
+  /**
+   * Will dryRun a transaction and check for missing dependencies.
+   *
+   * If there are missing variable outputs,
+   * `addVariableOutputs` is called on the transaction.
+   *
+   * @privateRemarks
+   * TODO: Add support for missing output messages
+   *
+   * @param transactionRequest - The transaction request object.
+   * @returns A promise.
+   */
+  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
+    let missingOutputVariableCount = 0;
+    let missingOutputContractIdsCount = 0;
+    let tries = 0;
+
+    if (transactionRequest.type === TransactionType.Create) {
+      return;
+    }
+
+    let callRequest: TransactionRequest = transactionRequest;
+
+    if (transactionRequest.hasPredicateInput()) {
+      callRequest = await this.provider.estimatePredicates(transactionRequest);
+    }
+
+    do {
+      const { receipts } = await this.provider.call(callRequest, {
+        utxoValidation: false,
+      });
+
+      const { missingOutputVariables, missingOutputContractIds } =
+        getReceiptsWithMissingData(receipts);
+
+      missingOutputVariableCount = missingOutputVariables.length;
+      missingOutputContractIdsCount = missingOutputContractIds.length;
+
+      if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
+        return;
+      }
+
+      if (transactionRequest instanceof ScriptTransactionRequest) {
+        transactionRequest.addVariableOutputs(missingOutputVariableCount);
+
+        missingOutputContractIds.forEach(({ contractId }) =>
+          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
+        );
+      }
+
+      tries += 1;
+    } while (tries < MAX_RETRIES);
   }
 }
