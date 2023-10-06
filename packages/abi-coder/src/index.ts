@@ -14,7 +14,6 @@ export type { FunctionFragment } from './function-fragment';
 export { Interface } from './interface';
 export { JsonAbi } from './json-abi';
 export {
-  VM_TX_MEMORY,
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
   WORD_SIZE,

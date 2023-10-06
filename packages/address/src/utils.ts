@@ -74,6 +74,15 @@ export function isPublicKey(address: string): boolean {
 }
 
 /**
+ * Determines if a given string is in EVM Address format
+ *
+ * @hidden
+ */
+export function isEvmAddress(address: string): boolean {
+  return (address.length === 42 || address.length === 40) && /(0x)?[0-9a-f]{40}$/i.test(address);
+}
+
+/**
  * Takes a Bech32 address and returns the byte data
  *
  * @hidden
@@ -162,4 +171,22 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
   }
 
   return bytes;
+};
+
+/**
+ * Pads the first 12 bytes of an Evm address. This is useful for padding addresses returned from
+ * the EVM to interact with the Sway EVM Address Type.
+ *
+ * @param address - Evm address to be padded
+ * @returns Evm address padded to a b256 address
+ *
+ * @hidden
+ */
+export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => {
+  if (!isEvmAddress(address)) {
+    throw new FuelError(FuelError.CODES.INVALID_EVM_ADDRESS, 'Invalid EVM address format.');
+  }
+
+  const prefixedAddress = address.startsWith('0x') ? address : `0x${address}`;
+  return prefixedAddress.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
 };

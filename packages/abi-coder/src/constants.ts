@@ -26,13 +26,6 @@ export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
   // Asset ID/Balance coin input pairs
   maxInputs * (ASSET_ID_LEN + WORD_SIZE);
 
-// VM_TX_MEMORY = 10240
-export const VM_TX_MEMORY =
-  BYTES_32 + // Tx ID
-  WORD_SIZE + // Tx size
-  // Asset ID/Balance coin input pairs
-  MAX_INPUTS * (ASSET_ID_LEN + WORD_SIZE);
-
 // SCRIPT_FIXED_SIZE = 104
 export const SCRIPT_FIXED_SIZE =
   WORD_SIZE + // Identifier
