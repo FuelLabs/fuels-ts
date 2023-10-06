@@ -13,9 +13,9 @@ import type {
 } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { Account } from './account';
+import { setupTestProvider } from './test-utils';
 
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,

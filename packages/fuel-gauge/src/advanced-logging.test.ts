@@ -1,4 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
 import { getSetupContract } from './utils';

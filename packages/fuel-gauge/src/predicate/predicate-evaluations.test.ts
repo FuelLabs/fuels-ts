@@ -1,4 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { Predicate } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';

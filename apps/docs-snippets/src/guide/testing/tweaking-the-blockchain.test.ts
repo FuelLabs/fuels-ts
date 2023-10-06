@@ -1,4 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { fromTai64ToUnix } from 'fuels';
 
 test('produceBlocks with custom timestamp docs snippet', async () => {

@@ -1,4 +1,4 @@
-import { execSync, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
@@ -44,9 +44,6 @@ export const launchNode = async ({
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
-    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
-    const graphQLStartSubstring = 'Binding GraphQL provider to';
-
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
 
     const ipToUse = ip || '127.0.0.1';
@@ -88,10 +85,7 @@ export const launchNode = async ({
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      execSync(
-        `kill -9 $(ps -A | grep -E $(lsof -i :${result.port} -t| tr '\n' '|' | sed '$s/|$//') | grep fuel-core | awk '{print $1;}')`
-      );
-      // kill(Number(child.pid));
+      kill(Number(child.pid));
 
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();
@@ -104,6 +98,9 @@ export const launchNode = async ({
     };
 
     child!.stderr.setEncoding('utf8');
+
+    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
+    const graphQLStartSubstring = 'Binding GraphQL provider to';
 
     // Look for a specific graphql start point in the output.
     child!.stderr.on('data', (chunk: string) => {

@@ -14,10 +14,9 @@ import type {
   Provider,
 } from '@fuel-ts/providers';
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

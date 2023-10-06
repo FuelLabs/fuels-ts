@@ -1,4 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { bn, BaseAssetId } from 'fuels';
 import { join } from 'path';

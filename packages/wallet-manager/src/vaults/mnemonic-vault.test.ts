@@ -1,5 +1,5 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Wallet } from '@fuel-ts/wallet';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 
 import walletManagerSpec from '../wallet-manager-spec';
 

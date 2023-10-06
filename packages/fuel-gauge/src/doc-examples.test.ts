@@ -1,5 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider , generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type {
   Bech32Address,

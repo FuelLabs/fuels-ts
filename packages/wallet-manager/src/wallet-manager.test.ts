@@ -1,8 +1,8 @@
 import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 
 import MemoryStorage from './storages/memory-storage';
 import type { VaultConfig } from './types';

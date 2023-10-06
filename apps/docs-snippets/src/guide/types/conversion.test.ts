@@ -1,4 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import type { Bytes, WalletLocked } from 'fuels';
 import { Wallet, Contract, Address, ZeroBytes32, arrayify, hexlify, randomBytes } from 'fuels';
 

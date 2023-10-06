@@ -1,5 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
 

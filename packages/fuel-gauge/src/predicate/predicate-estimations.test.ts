@@ -1,5 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider , seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinTransactionRequestInput, MessageTransactionRequestInput, Provider } from 'fuels';
 import { BaseAssetId, Predicate, bn, ScriptTransactionRequest, InputType } from 'fuels';
 

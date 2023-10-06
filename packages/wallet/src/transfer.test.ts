@@ -3,10 +3,9 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { Wallet } from '.';
-import { seedTestWallet, generateTestWallet } from './test-utils';
+import { seedTestWallet, generateTestWallet, setupTestProvider } from './test-utils';
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {

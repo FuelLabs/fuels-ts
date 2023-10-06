@@ -191,6 +191,7 @@ export type FetchRequestOptions = {
   method: 'POST';
   headers: { [key: string]: string };
   body: string;
+  signal?: AbortSignal;
 };
 
 export type CustomFetch<R extends Response = Response> = (
@@ -242,9 +243,9 @@ export default class Provider {
       ? options.fetch
       : (url: string, request: FetchRequestOptions) =>
           fetch(url, {
-            ...request,
             signal:
               options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
+            ...request,
           });
   }
 
@@ -433,7 +434,11 @@ export default class Provider {
       fetchFn: async (
         subscriptionUrl: string,
         request: FetchRequestOptions & { signal: AbortSignal }
-      ) => Provider.adaptSubscriptionResponse(await fetchFn(subscriptionUrl, request, options)),
+      ) => {
+        console.log('AbortSignal', request.signal);
+        if (request.signal.aborted) return new Response();
+        return Provider.adaptSubscriptionResponse(await fetchFn(subscriptionUrl, request, options));
+      },
     });
   }
 

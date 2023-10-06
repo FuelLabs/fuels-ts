@@ -3,9 +3,9 @@ import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import type { Provider } from '@fuel-ts/providers';
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import type { InputCoin } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 
 import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';

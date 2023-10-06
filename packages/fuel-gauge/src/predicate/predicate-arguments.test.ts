@@ -1,4 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import type { JsonAbi, BigNumberish } from 'fuels';
 import { toHex, toNumber, Predicate } from 'fuels';
 
@@ -186,7 +186,9 @@ describe('Predicate', () => {
 
       predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
-      await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
+      await expect(predicate.transfer(receiver.address, amountToPredicate / 2)).rejects.toThrow(
+        'Invalid transaction'
+      );
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
@@ -226,7 +228,7 @@ describe('Predicate', () => {
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate.setData(100).transfer(receiver.address, amountToPredicate)
+        predicate.setData(100).transfer(receiver.address, amountToPredicate / 2)
       ).rejects.toThrow('Invalid transaction');
     });
 

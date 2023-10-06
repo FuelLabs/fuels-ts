@@ -3,14 +3,13 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import { spawn } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
+import { Socket } from 'net';
 import os from 'os';
 import path from 'path';
-import { getPortPromise } from 'portfinder';
-import kill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
@@ -53,21 +52,9 @@ export const launchNode = async ({
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
-    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
-    const graphQLStartSubstring = 'Binding GraphQL provider to';
-
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
 
-    const ipToUse = ip || '0.0.0.0';
-
-    const portToUse =
-      port ||
-      (
-        await getPortPromise({
-          port: 4000, // tries 4000 first, then 4001, then 4002, etc.
-          stopPort: 5000, // don't try ports above 5000
-        })
-      ).toString();
+    const ipToUse = ip || '127.0.0.1';
 
     let chainConfigPathToUse = chainConfigPath;
 
@@ -111,24 +98,45 @@ export const launchNode = async ({
 
     const child = spawn(command, [
       'run',
-      '--ip',
-      ipToUse,
-      '--port',
-      portToUse,
       '--db-type',
       'in-memory',
       '--consensus-key',
       consensusKey,
       '--chain',
       chainConfigPathToUse as string,
+      '--ip',
+      ipToUse,
+      '--port',
+      `${port ?? 0}`,
       ...args,
     ]);
 
+    const result = {
+      cleanup: () => {},
+      port: '',
+      ip: '',
+    };
+
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
-      if (child.pid) {
-        kill(Number(child.pid));
-      }
+      // let initialOpenSocketsResult = '';
+      // for (;;) {
+      //   if (initialOpenSocketsResult === '') {
+      //     initialOpenSocketsResult = execSync(`lsof -i :${result.port} -n -P -F cpnT`).toString();
+      //     // eslint-disable-next-line no-continue
+      //     continue;
+      //   }
+      //   const openSocketsResult = execSync(`lsof -i :${result.port} -n -P -F cpnT`).toString();
+      //   if (initialOpenSocketsResult !== openSocketsResult) break;
+      // }
+
+      execSync(
+        `kill -9 $(ps -A | grep -E $(lsof -i :${result.port} -t| tr '\n' '|' | sed '$s/|$//') | grep fuel-core | awk '{print $1;}')`
+      );
+
+      // if (child.pid) {
+      //   kill(Number(child.pid));
+      // }
 
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();
@@ -142,16 +150,21 @@ export const launchNode = async ({
 
     child.stderr.setEncoding('utf8');
 
+    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
+    const graphQLStartSubstring = 'Binding GraphQL provider to';
+
     // Look for a specific graphql start point in the output.
-    child.stderr.on('data', (chunk: string) => {
+    child!.stderr.on('data', (chunk: string) => {
       // Look for the graphql service start.
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         // Resolve with the cleanup method.
-        resolve({
-          cleanup,
-          ip: ipToUse,
-          port: portToUse,
-        });
+        const [nodeIp, nodePort] = chunk.split(' ').at(-1)!.trim().split(':');
+        result.cleanup = cleanup;
+        result.ip = nodeIp;
+        result.port = nodePort;
+
+        console.log(`${nodeIp}:${nodePort}`);
+        resolve(result);
       }
     });
 

@@ -1,7 +1,7 @@
-import { launchNode } from '@fuel-ts/utils/test-utils';
+import type { ProviderOptions } from '@fuel-ts/providers';
+import { Provider } from '@fuel-ts/providers';
 
-import type { ProviderOptions } from '../../provider';
-import Provider from '../../provider';
+import { launchNode } from './launchNode';
 
 export async function setupTestProvider<Dispose extends boolean = true>(
   providerOptions?: Partial<ProviderOptions>,

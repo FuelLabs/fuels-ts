@@ -1,7 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-
-import Provider from '../../provider';
-import { sleep } from '../sleep';
+import { Provider, sleep } from '@fuel-ts/providers';
 
 import { setupTestProvider } from './setup-test-provider';
 
@@ -24,12 +22,18 @@ describe('launchTestProvider', () => {
     });
 
     const ipAndPort = url.replace('http://', '').replace('/graphql', '');
+    const [ip, port] = ipAndPort.split(':');
 
-    expect(error).toEqual({
-      message: `request to ${url} failed, reason: connect ECONNREFUSED ${ipAndPort}`,
-      type: 'system',
-      errno: 'ECONNREFUSED',
-      code: 'ECONNREFUSED',
-    });
+    const expectedError = {
+      message: 'fetch failed',
+      cause: {
+        syscall: 'system',
+        errno: -111,
+        code: 'ECONNREFUSED',
+        address: ip,
+        port,
+      },
+    };
+    expect(error).toEqual(expectedError);
   });
 });

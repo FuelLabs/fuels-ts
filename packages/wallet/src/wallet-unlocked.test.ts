@@ -3,7 +3,6 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import type { CallResult, TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
@@ -11,6 +10,7 @@ import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import * as keystoreWMod from './keystore-wallet';
+import { setupTestProvider } from './test-utils';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 

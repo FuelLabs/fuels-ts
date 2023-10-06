@@ -1,16 +1,6 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
-import {
-  type Contract,
-  bn,
-  Predicate,
-  Wallet,
-  Address,
-  BaseAssetId,
-  Provider,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { bn, Predicate, Wallet, Address, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import type { BN, Provider } from 'fuels';
 
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
@@ -29,9 +19,7 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-const setup = async (balance = 5_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-
+const setup = async (provider: Provider, balance = 5_000) => {
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
@@ -119,7 +107,9 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [script-bytes]', async () => {
-    const wallet = await setup();
+    using provider = await setupTestProvider();
+
+    const wallet = await setup(provider);
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-bytes', wallet);
 

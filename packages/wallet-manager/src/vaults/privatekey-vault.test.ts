@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Wallet } from '@fuel-ts/wallet';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 
 import { PrivateKeyVault } from './privatekey-vault';
 

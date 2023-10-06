@@ -1,6 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Account, Wallet } from '@fuel-ts/wallet';
+import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 
 import Contract from './contract';
 

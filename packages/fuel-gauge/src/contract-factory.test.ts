@@ -1,7 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Provider } from 'fuels';
 import { bn, toHex, Interface, ContractFactory, BaseAssetId } from 'fuels';

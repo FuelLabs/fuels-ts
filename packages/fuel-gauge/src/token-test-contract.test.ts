@@ -1,5 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN, Provider } from 'fuels';
 import { toHex, Wallet, ContractFactory, bn, BaseAssetId } from 'fuels';

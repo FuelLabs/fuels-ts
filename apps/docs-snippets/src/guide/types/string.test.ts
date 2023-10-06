@@ -1,3 +1,6 @@
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
@@ -29,14 +32,16 @@ describe(__filename, () => {
     // #region string-3
     const longString = 'fuel-sdk-WILL-THROW-ERROR';
 
-    await expect(() => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
-      'Value length mismatch during encode'
+    await expectToThrowFuelError(
+      () => contract.functions.echo_str_8(longString).call(),
+      new FuelError(FuelError.CODES.DECODE_ERROR, 'Value length mismatch during encode')
     );
 
     const shortString = 'THROWS';
 
-    await expect(() => contract.functions.echo_str_8(shortString).call()).rejects.toThrowError(
-      'Value length mismatch during encode'
+    await expectToThrowFuelError(
+      () => contract.functions.echo_str_8(shortString).call(),
+      new FuelError(FuelError.CODES.DECODE_ERROR, 'Value length mismatch during encode')
     );
     // #endregion string-3
   });
