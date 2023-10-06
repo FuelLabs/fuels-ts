@@ -310,7 +310,6 @@ describe('Abi interface', () => {
             const data = (decoded as BN[]).slice(0, 3);
             return Array.from(data);
           },
-          decodedTransfoarmer: (decoded: unknown | undefined) => Array.from(decoded as Uint8Array),
         },
         {
           fn: exhaustiveExamplesInterface.functions.raw_slice,
@@ -324,6 +323,15 @@ describe('Abi interface', () => {
             const data = (decoded as BN[]).slice(2);
             return data.map((v: BN) => v.toNumber());
           },
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.dynamic_string,
+          title: '[struct String]',
+          value: 'H3llo W0rld',
+          encodedValue: new Uint8Array([
+            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 11, 72, 51, 108,
+            108, 111, 32, 87, 48, 114, 108, 100, 0, 0, 0, 0, 0,
+          ]),
         },
         {
           fn: exhaustiveExamplesInterface.functions.tuple_as_param,

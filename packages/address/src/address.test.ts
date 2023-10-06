@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
+import type { B256AddressEvm, Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
@@ -8,7 +8,9 @@ import * as utils from './utils';
 
 const PUBLIC_KEY = signMessageTest.publicKey;
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
-const ADDRESS_B256_EVM = '0x00000000000000000000000007a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
+const ADDRESS_B256_EVM_PADDED: B256AddressEvm =
+  '0x00000000000000000000000007a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
+const ADDRESS_EVM = '0x07a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
 const ADDRESS_BECH32: Bech32Address =
   'fuel1a7r2l2tfdncdccu9utzq0fhptxs3q080kl32up3klvea8je2ne9qrqnt6n';
 const ADDRESS_WORDS = [
@@ -132,6 +134,36 @@ describe('Address utils', () => {
     expect(result).toBeTruthy();
   });
 
+  test('isEvmAddress (EvmAddress)', () => {
+    const result = utils.isEvmAddress(ADDRESS_EVM);
+
+    expect(result).toBeTruthy();
+  });
+
+  test('isEvmAddress (invalid chars)', () => {
+    const result = utils.isEvmAddress(`${ADDRESS_EVM}/?`);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isEvmAddress (too long)', () => {
+    const result = utils.isEvmAddress(`${ADDRESS_EVM}abc12345`);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isEvmAddress (too short)', () => {
+    const result = utils.isEvmAddress('0x123');
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isEvmAddress (no hex prefix)', () => {
+    const result = utils.isEvmAddress('07a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
+
+    expect(result).toBeTruthy();
+  });
+
   test('getBytesFromBech32 (bech32 to Uint8Array)', () => {
     const result = utils.getBytesFromBech32(ADDRESS_BECH32);
 
@@ -170,7 +202,7 @@ describe('Address utils', () => {
   test('clearFirst12BytesFromB256 (b256 to evm b256)', () => {
     const result = utils.clearFirst12BytesFromB256(ADDRESS_B256);
 
-    expect(result).toEqual(ADDRESS_B256_EVM);
+    expect(result).toEqual(ADDRESS_B256_EVM_PADDED);
   });
 
   test('clearFirst12BytesFromB256 (invalid B256)', async () => {
@@ -180,6 +212,24 @@ describe('Address utils', () => {
       `Cannot generate EVM Address B256 from: ${invalidB256}.`
     );
     await expectToThrowFuelError(() => utils.clearFirst12BytesFromB256(invalidB256), expectedError);
+  });
+
+  test('padFirst12BytesOfEvmAddress (evm Address to b256)', () => {
+    const result = utils.padFirst12BytesOfEvmAddress(ADDRESS_EVM);
+
+    expect(result).toEqual(ADDRESS_B256_EVM_PADDED);
+  });
+
+  test('padFirst12BytesOfEvmAddress (invalid EVM Address)', async () => {
+    const invalidEvmAddress = '0x123';
+    const expectedError = new FuelError(
+      FuelError.CODES.INVALID_EVM_ADDRESS,
+      'Invalid EVM address format.'
+    );
+    await expectToThrowFuelError(
+      () => utils.padFirst12BytesOfEvmAddress(invalidEvmAddress),
+      expectedError
+    );
   });
 });
 
@@ -247,6 +297,12 @@ describe('Address class', () => {
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
+  test('create an Address class fromDynamicInput [evmAddress]', () => {
+    const address = Address.fromDynamicInput(ADDRESS_EVM);
+
+    expect(address.toB256()).toEqual(ADDRESS_B256_EVM_PADDED);
+  });
+
   test('create an Address class fromDynamicInput [bad input]', async () => {
     const expectedError = new FuelError(
       FuelError.CODES.PARSE_FAILED,
@@ -269,16 +325,17 @@ describe('Address class', () => {
     const evmAddress: EvmAddress = address.toEvmAddress();
 
     expect(evmAddress).toBeDefined();
-    expect(evmAddress.value).toBe(ADDRESS_B256_EVM);
+    expect(evmAddress.value).toBe(ADDRESS_B256_EVM_PADDED);
   });
 
-  test('create an Address class fromEvmAddress', () => {
-    const evmAddress: EvmAddress = {
-      value: ADDRESS_B256_EVM,
+  test('create an Address from an Evm Address', () => {
+    const address = Address.fromEvmAddress(ADDRESS_EVM);
+
+    const evmAddressWrapped: EvmAddress = {
+      value: ADDRESS_B256_EVM_PADDED,
     };
 
-    const address = Address.fromEvmAddress(evmAddress);
-
-    expect(address.toB256()).toEqual(ADDRESS_B256_EVM);
+    expect(address.toEvmAddress()).toMatchObject(evmAddressWrapped);
+    expect(address.toB256()).toEqual(ADDRESS_B256_EVM_PADDED);
   });
 });

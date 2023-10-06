@@ -132,6 +132,7 @@ export type InputOutputParam = InputParam & OutputParam;
 export type GetOperationParams = {
   transactionType: TransactionType;
   abiMap?: AbiMap;
+  maxInputs: BN;
 } & InputOutputParam &
   ReceiptParam &
   RawPayloadParam;

@@ -8,6 +8,8 @@ import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import { versions } from '@fuel-ts/versions';
 
 import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
@@ -20,14 +22,15 @@ import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 
+// https://stackoverflow.com/a/72885576
+jest.mock('@fuel-ts/versions', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/versions'),
+}));
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
-
-const resetCache = () => {
-  Provider.chainInfoCache = {};
-  Provider.nodeInfoCache = {};
-};
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -182,7 +185,7 @@ describe('Provider', () => {
   it('can get all chain info', async () => {
     // #region provider-definition
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { consensusParameters } = await provider.getChain();
+    const { consensusParameters } = provider.getChain();
     // #endregion provider-definition
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
@@ -734,23 +737,21 @@ describe('Provider', () => {
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual(FUEL_NETWORK_URL);
-    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
   });
 
   it('should cache chain and node info', async () => {
-    resetCache();
+    Provider.clearChainAndNodeCaches();
 
-    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeUndefined();
-    expect(Provider.nodeInfoCache[FUEL_NETWORK_URL]).toBeUndefined();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    await Provider.create(FUEL_NETWORK_URL);
-
-    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
-    expect(Provider.nodeInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
   });
 
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
-    resetCache();
+    Provider.clearChainAndNodeCaches();
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
@@ -771,7 +772,7 @@ describe('Provider', () => {
   });
 
   it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
-    resetCache();
+    Provider.clearChainAndNodeCaches();
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
@@ -805,7 +806,7 @@ describe('Provider', () => {
   it('should throws when using getChain or getNode and without cached data', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    resetCache();
+    Provider.clearChainAndNodeCaches();
 
     await expectToThrowFuelError(
       () => provider.getChain(),
@@ -821,6 +822,77 @@ describe('Provider', () => {
         ErrorCode.NODE_INFO_CACHE_EMPTY,
         'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
       )
+    );
+  });
+
+  it('throws on difference between major client version and supported major version', async () => {
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
+
+    const mock = {
+      isMajorSupported: false,
+      isMinorSupported: true,
+      isPatchSupported: true,
+      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
+
+    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
+      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
+    });
+  });
+
+  it('throws on difference between minor client version and supported minor version', async () => {
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const minorMismatch = minor === '0' ? 1 : parseInt(patch, 10) - 1;
+
+    const mock = {
+      isMajorSupported: true,
+      isMinorSupported: false,
+      isPatchSupported: true,
+      supportedVersion: `${major}.${minorMismatch}.${patch}`,
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
+
+    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
+      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
+    });
+  });
+
+  it('warns on difference between patch client version and supported patch version', async () => {
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+
+    const patchMismatch = patch === '0' ? 1 : parseInt(patch, 10) - 1;
+    const mock = {
+      isMajorSupported: true,
+      isMinorSupported: true,
+      isPatchSupported: false,
+      supportedVersion: `${major}.${minor}.${patchMismatch}`,
+    };
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementation(() => mock);
+
+    const warnSpy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      `The patch versions of the client and sdk differ. Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
     );
   });
 });

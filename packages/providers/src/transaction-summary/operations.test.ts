@@ -86,6 +86,7 @@ describe('operations', () => {
         inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
         outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
         receipts,
+        maxInputs: bn(255),
       });
 
       expect(operations.length).toEqual(1);
@@ -147,6 +148,7 @@ describe('operations', () => {
           '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1': CONTRACT_CALL_ABI,
         },
         rawPayload: MOCK_TRANSACTION_RAWPAYLOAD,
+        maxInputs: bn(255),
       });
 
       expect(operations.length).toEqual(1);
@@ -158,6 +160,7 @@ describe('operations', () => {
         inputs: [],
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+        maxInputs: bn(255),
       });
 
       expect(operations.length).toEqual(0);
@@ -456,6 +459,7 @@ describe('operations', () => {
           MOCK_RECEIPT_RETURN_DATA_2,
           MOCK_RECEIPT_SCRIPT_RESULT,
         ],
+        maxInputs: bn(255),
       });
       expect(operations.length).toEqual(2);
       expect(operations).toStrictEqual(expected);
@@ -505,6 +509,7 @@ describe('operations', () => {
         inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
         outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
         receipts: receiptsCallNoAmount,
+        maxInputs: bn(255),
       });
       expect(operations.length).toEqual(2);
       expect(operations[0]).toStrictEqual(operationsCallNoAmount); // contract call
@@ -534,6 +539,7 @@ describe('operations', () => {
         inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+        maxInputs: bn(255),
       });
       expect(operations.length).toEqual(1);
 
@@ -564,6 +570,7 @@ describe('operations', () => {
         inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+        maxInputs: bn(255),
       });
 
       expect(operations.length).toEqual(1);
@@ -593,6 +600,7 @@ describe('operations', () => {
         inputs: [],
         outputs: [MOCK_OUTPUT_COIN],
         receipts: [],
+        maxInputs: bn(255),
       });
 
       expect(operations.length).toEqual(1);
@@ -616,6 +624,7 @@ describe('operations', () => {
         inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
         outputs: [MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE],
         receipts: [],
+        maxInputs: bn(255),
       });
 
       expect(operations.length).toEqual(1);
