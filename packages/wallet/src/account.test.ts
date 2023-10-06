@@ -1,4 +1,5 @@
 import { Address } from '@fuel-ts/address';
+import type { ContractIdLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import type {
   CallResult,
@@ -7,12 +8,19 @@ import type {
   Message,
   Resource,
   TransactionRequestLike,
+  TransactionResultReceipt,
 } from '@fuel-ts/providers';
-import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
+import {
+  TransactionResponse,
+  ScriptTransactionRequest,
+  Provider,
+  CreateTransactionRequest,
+} from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
+import { Wallet } from './wallet';
 
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
@@ -466,5 +474,212 @@ describe('Account', () => {
 
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);
+  });
+
+  describe('estimateTxDependencies', () => {
+    const mockDeps = (params: {
+      hasPredicateInputReturns: boolean;
+      receipts?: TransactionResultReceipt[];
+      getReceiptsWithMissingDataReturns?: {
+        missingOutputContractIds: string[];
+        missingOutputVariables: number;
+      };
+    }) => {
+      const {
+        hasPredicateInputReturns,
+        receipts = [],
+        getReceiptsWithMissingDataReturns: { missingOutputContractIds, missingOutputVariables } = {
+          missingOutputContractIds: [],
+          missingOutputVariables: 0,
+        },
+      } = params;
+      const transactionRequest = new ScriptTransactionRequest();
+
+      const hasPredicateInput = jest.fn(() => hasPredicateInputReturns);
+      const addVariableOutputs = jest.fn((number: number) => number);
+      const addContractInputAndOutput = jest.fn((_: ContractIdLike) => transactionRequest);
+
+      transactionRequest.hasPredicateInput = hasPredicateInput;
+      transactionRequest.addVariableOutputs = addVariableOutputs;
+      transactionRequest.addContractInputAndOutput = addContractInputAndOutput;
+
+      const callResult: CallResult = {
+        receipts,
+      };
+
+      const call = jest
+        .spyOn(Provider.prototype, 'call')
+        .mockImplementation(async () => Promise.resolve(callResult));
+
+      const getReceiptsWithMissingData = jest
+        .spyOn(providersMod, 'getReceiptsWithMissingData')
+        .mockImplementationOnce(() => ({
+          missingOutputContractIds,
+          missingOutputVariables,
+        }))
+        .mockImplementation(() => ({
+          missingOutputContractIds: [],
+          missingOutputVariables: 0,
+        }));
+
+      const estimatePredicates = jest
+        .spyOn(Provider.prototype, 'estimatePredicates')
+        .mockImplementation(async () => Promise.resolve(transactionRequest));
+
+      return {
+        call,
+        hasPredicateInput,
+        addVariableOutputs,
+        estimatePredicates,
+        transactionRequest,
+        addContractInputAndOutput,
+        getReceiptsWithMissingData,
+      };
+    };
+
+    it('should ensure estimateTxDependencies will estimate predicate gas used', async () => {
+      const {
+        call,
+        estimatePredicates,
+        transactionRequest,
+        addVariableOutputs,
+        hasPredicateInput,
+        addContractInputAndOutput,
+        getReceiptsWithMissingData,
+      } = mockDeps({
+        hasPredicateInputReturns: true,
+      });
+
+      const account = Wallet.generate({ provider });
+
+      await account.estimateTxDependencies(transactionRequest);
+
+      expect(hasPredicateInput).toBeCalledTimes(1);
+
+      expect(estimatePredicates).toBeCalledTimes(1);
+      expect(estimatePredicates).toBeCalledWith(transactionRequest);
+
+      expect(call).toBeCalledTimes(1);
+      expect(call).toBeCalledWith(transactionRequest, {
+        utxoValidation: false,
+      });
+
+      expect(getReceiptsWithMissingData).toBeCalledTimes(1);
+      expect(getReceiptsWithMissingData).toBeCalledWith([]);
+
+      expect(addVariableOutputs).not.toBeCalled();
+      expect(addContractInputAndOutput).not.toBeCalled();
+    });
+
+    it('should ensure estimateTxDependencies will add missing variable outputs', async () => {
+      const missingOutputVariables = 2;
+      const {
+        call,
+        estimatePredicates,
+        transactionRequest,
+        addVariableOutputs,
+        hasPredicateInput,
+        addContractInputAndOutput,
+        getReceiptsWithMissingData,
+      } = mockDeps({
+        hasPredicateInputReturns: true,
+        getReceiptsWithMissingDataReturns: {
+          missingOutputContractIds: [],
+          missingOutputVariables,
+        },
+      });
+
+      const account = Wallet.generate({ provider });
+
+      await account.estimateTxDependencies(transactionRequest);
+
+      expect(hasPredicateInput).toBeCalledTimes(1);
+
+      expect(estimatePredicates).toBeCalledTimes(1);
+      expect(estimatePredicates).toBeCalledWith(transactionRequest);
+
+      expect(call).toBeCalledTimes(2);
+      expect(call).toBeCalledWith(transactionRequest, {
+        utxoValidation: false,
+      });
+
+      expect(getReceiptsWithMissingData).toBeCalledTimes(2);
+      expect(getReceiptsWithMissingData).toBeCalledWith([]);
+
+      expect(addVariableOutputs).toBeCalledTimes(1);
+      expect(addVariableOutputs).toBeCalledWith(missingOutputVariables);
+
+      expect(addContractInputAndOutput).not.toBeCalled();
+    });
+
+    it('should ensure estimateTxDependencies will add missing contracts', async () => {
+      const missingOutputContractIds: string[] = [
+        Address.fromRandom().toString(),
+        Address.fromRandom().toString(),
+      ];
+      const {
+        call,
+        estimatePredicates,
+        transactionRequest,
+        addVariableOutputs,
+        hasPredicateInput,
+        addContractInputAndOutput,
+        getReceiptsWithMissingData,
+      } = mockDeps({
+        hasPredicateInputReturns: true,
+        receipts: [],
+        getReceiptsWithMissingDataReturns: {
+          missingOutputContractIds,
+          missingOutputVariables: 0,
+        },
+      });
+
+      const account = Wallet.generate({ provider });
+
+      await account.estimateTxDependencies(transactionRequest);
+
+      expect(hasPredicateInput).toBeCalledTimes(1);
+
+      expect(estimatePredicates).toBeCalledTimes(1);
+      expect(estimatePredicates).toBeCalledWith(transactionRequest);
+
+      expect(call).toBeCalledTimes(2);
+      expect(call).toBeCalledWith(transactionRequest, {
+        utxoValidation: false,
+      });
+
+      expect(getReceiptsWithMissingData).toBeCalledTimes(2);
+      expect(getReceiptsWithMissingData).toBeCalledWith([]);
+
+      expect(addVariableOutputs).toBeCalledTimes(1);
+      expect(addVariableOutputs).toBeCalledWith(0);
+
+      expect(addContractInputAndOutput).toBeCalledTimes(missingOutputContractIds.length);
+      expect(addContractInputAndOutput).toHaveBeenCalledWith(
+        Address.fromString(missingOutputContractIds[0])
+      );
+      expect(addContractInputAndOutput).toHaveBeenCalledWith(
+        Address.fromString(missingOutputContractIds[1])
+      );
+    });
+
+    it('should ensure estimateTxDependencies will return for CreateTransactionRequest', async () => {
+      const transactionRequest = new CreateTransactionRequest();
+      const callResult: CallResult = {
+        receipts: [],
+      };
+
+      const hasPredicateInput = jest.spyOn(transactionRequest, 'hasPredicateInput');
+      const call = jest
+        .spyOn(Provider.prototype, 'call')
+        .mockImplementation(async () => Promise.resolve(callResult));
+
+      const account = Wallet.generate({ provider });
+
+      await account.estimateTxDependencies(transactionRequest);
+
+      expect(call).not.toBeCalled();
+      expect(hasPredicateInput).not.toBeCalled();
+    });
   });
 });
