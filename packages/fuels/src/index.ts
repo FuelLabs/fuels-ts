@@ -1,4 +1,5 @@
-export { hexlify, type BytesLike, getBytesCopy as arrayify } from 'ethers';
+export type { BytesLike } from 'ethers';
+export { hexlify, getBytesCopy as arrayify } from 'ethers';
 export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/address';
 export * from '@fuel-ts/contract';
