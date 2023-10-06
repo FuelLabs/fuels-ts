@@ -73,7 +73,10 @@ export const startFuelCore = async (
     const command = config.useBuiltinFuelCore ? fuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });
 
-    core.stderr.pipe(process.stderr);
+    if (loggingConfig.isLoggingEnabled) {
+      core.stderr.pipe(process.stderr);
+    }
+
     if (loggingConfig.isDebugEnabled) {
       core.stdout.pipe(process.stdout);
     }
