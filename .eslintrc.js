@@ -36,6 +36,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'class-methods-use-this': 'off',
     'no-plusplus': 'off',
+    'no-param-reassign': ['error', { props: false }],
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/lines-between-class-members': [
       'error',
