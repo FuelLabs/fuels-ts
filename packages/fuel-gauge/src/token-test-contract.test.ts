@@ -70,7 +70,6 @@ describe('TokenTestContract', () => {
     const token = await setup();
 
     const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
-    await functionCallOne.dryRun();
     const { transactionResult } = await functionCallOne.call();
 
     const { mintedAssets } = transactionResult;
