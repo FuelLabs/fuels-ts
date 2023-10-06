@@ -101,7 +101,8 @@ export const startFuelCore = async (
         log(
           `Some error occurred. Please, check to see if you have another instance running locally.`
         );
-        process.exit(1);
+        reject(data);
+        // process.exit(1);
       }
     });
 
