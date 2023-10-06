@@ -34,15 +34,15 @@ describe(__filename, () => {
 
     await expectToThrowFuelError(
       () => contract.functions.echo_str_8(longString).call(),
-      new FuelError(FuelError.CODES.DECODE_ERROR, 'Value length mismatch during encode')
+      new FuelError(FuelError.CODES.DECODE_ERROR, 'Value length mismatch during encode.')
     );
 
     const shortString = 'THROWS';
 
-    await expectToThrowFuelError(
-      () => contract.functions.echo_str_8(shortString).call(),
-      new FuelError(FuelError.CODES.DECODE_ERROR, 'Value length mismatch during encode')
-    );
+    await expectToThrowFuelError(() => contract.functions.echo_str_8(shortString).call(), {
+      code: FuelError.CODES.ENCODE_ERROR,
+      message: 'Value length mismatch during encode.',
+    });
     // #endregion string-3
   });
 });

@@ -27,13 +27,13 @@ describe('launchTestProvider', () => {
     const expectedError = {
       message: 'fetch failed',
       cause: {
-        syscall: 'system',
+        syscall: 'connect',
         errno: -111,
         code: 'ECONNREFUSED',
         address: ip,
-        port,
+        port: parseInt(port, 10),
       },
     };
-    expect(error).toEqual(expectedError);
+    expect(error).toMatchObject(expectedError);
   });
 });

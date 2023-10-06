@@ -3,13 +3,13 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import { execSync, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
-import { Socket } from 'net';
 import os from 'os';
 import path from 'path';
+import kill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
@@ -130,13 +130,13 @@ export const launchNode = async ({
       //   if (initialOpenSocketsResult !== openSocketsResult) break;
       // }
 
-      execSync(
-        `kill -9 $(ps -A | grep -E $(lsof -i :${result.port} -t| tr '\n' '|' | sed '$s/|$//') | grep fuel-core | awk '{print $1;}')`
-      );
+      // execSync(
+      //   `kill -9 $(ps -A | grep -E $(lsof -i :${result.port} -t| tr '\n' '|' | sed '$s/|$//') | grep fuel-core | awk '{print $1;}')`
+      // );
 
-      // if (child.pid) {
-      //   kill(Number(child.pid));
-      // }
+      if (child.pid) {
+        kill(Number(child.pid));
+      }
 
       // Remove all the listeners we've added.
       child.stdout.removeAllListeners();

@@ -791,12 +791,6 @@ describe('Contract', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      static async connect(url: string) {
-        const newProvider = new ProviderCustom(url);
-        return newProvider;
-      }
-
       async sendTransaction(
         transactionRequestLike: TransactionRequestLike
       ): Promise<TransactionResponse> {
@@ -809,7 +803,7 @@ describe('Contract', () => {
     }
 
     // Set custom provider to contract instance
-    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
+    const customProvider = await ProviderCustom.create(provider.url);
     contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
