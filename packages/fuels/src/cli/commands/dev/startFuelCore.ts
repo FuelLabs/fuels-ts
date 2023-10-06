@@ -18,6 +18,14 @@ export const killNode =
     }
   };
 
+export const createTempChainConfig = (coreDir: string) => {
+  const chainConfigPath = join(coreDir, 'chainConfig.json');
+  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
+  mkdirSync(dirname(chainConfigPath), { recursive: true });
+  writeFileSync(chainConfigPath, chainConfigJson);
+  return chainConfigPath;
+};
+
 export const startFuelCore = async (
   config: FuelsConfig
 ): Promise<{
@@ -31,19 +39,11 @@ export const startFuelCore = async (
   log('Starting node..');
 
   const coreDir = join(config.basePath, '.fuels');
-  const chainConfigPath = join(coreDir, 'chainConfig.json');
-  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
 
   const bindIp = '0.0.0.0';
   const accessIp = '127.0.0.1';
 
-  let chainConfig = config?.chainConfig;
-  if (!chainConfig) {
-    mkdirSync(dirname(chainConfigPath), { recursive: true });
-    writeFileSync(chainConfigPath, chainConfigJson);
-    chainConfig = chainConfigPath;
-  }
-
+  const chainConfig = config.chainConfig ?? createTempChainConfig(coreDir);
   const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
   const providerUrl = `http://${accessIp}:${port}/graphql`;
