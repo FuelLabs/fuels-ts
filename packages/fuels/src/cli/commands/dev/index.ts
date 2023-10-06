@@ -17,6 +17,11 @@ export const fileHandlers: {
   watcher?: chokidar.FSWatcher;
 } = {};
 
+export const changeListener = (config: FuelsConfig) => async (path: string) => {
+  log(`\nFile changed: ${path}`);
+  await buildAndDeploy(config);
+};
+
 export async function dev(config: FuelsConfig) {
   /**
    * Create a copy of the config param, so we can safely
@@ -49,16 +54,13 @@ export async function dev(config: FuelsConfig) {
     await buildAndDeploy(configCopy);
 
     // Then on every change
-    const changeListener = async (path: string) => {
-      log(`\nFile changed: ${path}`);
-      await buildAndDeploy(configCopy);
-    };
+    const onChange = changeListener(configCopy);
 
     fileHandlers.watcher = chokidar
       .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
-      .on('add', changeListener)
-      .on('change', changeListener)
-      .on('unlink', changeListener);
+      .on('add', onChange)
+      .on('change', onChange)
+      .on('unlink', onChange);
   } catch (err: unknown) {
     error(err);
   }
