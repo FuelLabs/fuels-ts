@@ -1,4 +1,4 @@
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN, Provider } from 'fuels';
 import { Wallet, ContractFactory, bn, BaseAssetId } from 'fuels';
@@ -76,11 +76,11 @@ describe('MultiTokenContract', () => {
     };
 
     // validates contract has expected balance after mint
-    subIds.forEach(async (subId) => {
+    for (const subId of subIds) {
       expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
         helperDict[subId].amount
       );
-    });
+    }
 
     // transfer coins to user wallet
     await multiTokenContract
@@ -95,7 +95,7 @@ describe('MultiTokenContract', () => {
       )
       .call();
 
-    subIds.forEach(async (subId) => {
+    for (const subId of subIds) {
       // validates that user wallet has expected balance after transfer
       expect(bn(await userWallet.getBalance(helperDict[subId].assetId)).toNumber()).toBe(
         helperDict[subId].amount
@@ -103,7 +103,7 @@ describe('MultiTokenContract', () => {
 
       // validates contract has not balance after transfer
       expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(0);
-    });
+    }
   });
 
   it('can burn coins', async () => {
@@ -158,11 +158,10 @@ describe('MultiTokenContract', () => {
     };
 
     // validates contract has expected balance after mint
-    subIds.forEach(async (subId) => {
-      expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
-        helperDict[subId].amount
-      );
-    });
+    for (const subId of subIds) {
+      const balance = bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber();
+      expect(balance).toBe(helperDict[subId].amount);
+    }
 
     // burning coins
     await multiTokenContract
@@ -173,11 +172,10 @@ describe('MultiTokenContract', () => {
       )
       .call();
 
-    subIds.forEach(async (subId) => {
-      // validates contract has expected balance for each coin after burn
-      expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
-        helperDict[subId].amount - helperDict[subId].amountToBurn
-      );
-    });
+    // validates contract has expected balance for each coin after burn
+    for (const subId of subIds) {
+      const balance = bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber();
+      expect(balance).toBe(helperDict[subId].amount - helperDict[subId].amountToBurn);
+    }
   });
 });

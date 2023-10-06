@@ -22,18 +22,17 @@ test('allow sending coins to payable functions', async () => {
   using provider = await setupTestProvider();
   const contract = await setupContract(provider);
 
+  const result = await contract.functions
+    .payable()
+    .callParams({
+      forward: {
+        amount: bn(100),
+        assetId: BaseAssetId,
+      },
+    })
+    .call();
   // This should not fail because the function is payable
-  expect(
-    contract.functions
-      .payable()
-      .callParams({
-        forward: {
-          amount: bn(100),
-          assetId: BaseAssetId,
-        },
-      })
-      .call()
-  ).resolves.toBeTruthy();
+  expect(result).toBeTruthy();
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
