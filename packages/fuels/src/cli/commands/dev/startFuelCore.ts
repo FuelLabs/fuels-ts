@@ -2,6 +2,7 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
+import { getPortPromise } from 'portfinder';
 import kill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
@@ -43,15 +44,7 @@ export const startFuelCore = async (
     chainConfig = chainConfigPath;
   }
 
-  let port = config.fuelCorePort;
-  if (!port) {
-    /**
-     * The package `get-port` in ES6-only, so we are forced
-     * to import it dynamically for it to work.
-     */
-    const { default: getPort } = await import('get-port');
-    port = await getPort({ port: 4000 });
-  }
+  const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
   const providerUrl = `http://${accessIp}:${port}/graphql`;
 

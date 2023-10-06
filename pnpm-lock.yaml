@@ -746,9 +746,6 @@ importers:
       esbuild:
         specifier: ^0.19.3
         version: 0.19.3
-      get-port:
-        specifier: ^7.0.0
-        version: 7.0.0
       glob:
         specifier: ^10.2.6
         version: 10.2.6
@@ -761,6 +758,9 @@ importers:
       lodash.camelcase:
         specifier: ^4.3.0
         version: 4.3.0
+      portfinder:
+        specifier: ^1.0.32
+        version: 1.0.32
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -10423,11 +10423,6 @@ packages:
   /get-package-type@0.1.0:
     resolution: {integrity: sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==}
     engines: {node: '>=8.0.0'}
-
-  /get-port@7.0.0:
-    resolution: {integrity: sha512-mDHFgApoQd+azgMdwylJrv2DX47ywGq1i5VFJE7fZ0dttNq3iQMfsU4IvEgBHojA3KqEudyu7Vq+oN8kNaNkWw==}
-    engines: {node: '>=16'}
-    dev: false
 
   /get-stdin@5.0.1:
     resolution: {integrity: sha512-jZV7n6jGE3Gt7fgSTJoz91Ak5MuTLwMwkoYdjxuJ/AmjIsE1UC03y/IWkZCQGEvVNS9qoRNwy5BCqxImv0FVeA==}
