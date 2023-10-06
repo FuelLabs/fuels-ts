@@ -9,6 +9,10 @@
 
 This doc was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
 
+## Installation Guide
+
+Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/installation) to install The Fuel toolchain binaries and pre requisites.
+
 ## Developer Quickstart Guide
 
 We recommend starting with the [Developer Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) for a walk through on building your first DApp on Fuel.

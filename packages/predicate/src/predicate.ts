@@ -3,8 +3,8 @@ import {
   Interface,
   INPUT_COIN_FIXED_SIZE,
   SCRIPT_FIXED_SIZE,
-  VM_TX_MEMORY,
   WORD_SIZE,
+  calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -113,6 +113,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     const mainFn = this.interface?.functions.main;
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
+    const VM_TX_MEMORY = calculateVmTxMemory({
+      maxInputs: this.provider.getChain().consensusParameters.maxInputs.toNumber(),
+    });
     const OFFSET =
       VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
 

@@ -3,6 +3,7 @@ import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type {
   CallResult,
@@ -20,8 +21,8 @@ import type { EncodedScriptCall, ScriptResult } from './script-request';
 import {
   decodeCallResult,
   ScriptRequest,
-  SCRIPT_DATA_BASE_OFFSET,
   POINTER_DATA_OFFSET,
+  calculateScriptDataBaseOffset,
 } from './script-request';
 import type { ContractCall, InvocationScopeLike } from './types';
 
@@ -203,7 +204,8 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
   });
 
 export const getContractCallScript = (
-  functionScopes: InvocationScopeLike[]
+  functionScopes: InvocationScopeLike[],
+  maxInputs: BN
 ): ScriptRequest<ContractCall[], Uint8Array[]> =>
   new ScriptRequest<ContractCall[], Uint8Array[]>(
     // Script to call the contract, start with stub size matching length of calls
@@ -225,7 +227,8 @@ export const getContractCallScript = (
       const paddedInstructionsLength = callInstructionsLength + paddingLength;
 
       // get total data offset AFTER all scripts
-      const dataOffset = SCRIPT_DATA_BASE_OFFSET + paddedInstructionsLength;
+      const dataOffset =
+        calculateScriptDataBaseOffset(maxInputs.toNumber()) + paddedInstructionsLength;
 
       // The data for each call is ordered into segments
       const paramOffsets: CallOpcodeParamsOffset[] = [];
