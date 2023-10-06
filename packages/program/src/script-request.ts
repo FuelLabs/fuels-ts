@@ -2,7 +2,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import {
-  VM_TX_MEMORY,
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   SCRIPT_FIXED_SIZE,
@@ -26,7 +25,8 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
 
-export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + SCRIPT_FIXED_SIZE;
+export const calculateScriptDataBaseOffset = (maxInputs: number) =>
+  SCRIPT_FIXED_SIZE + calculateVmTxMemory({ maxInputs });
 export const POINTER_DATA_OFFSET =
   WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
 /**

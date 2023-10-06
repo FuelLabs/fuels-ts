@@ -1,4 +1,5 @@
-import { Interface, VM_TX_MEMORY, type JsonAbi } from '@fuel-ts/abi-coder';
+import { Interface, type JsonAbi, calculateVmTxMemory } from '@fuel-ts/abi-coder';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { ReceiptCall } from '@fuel-ts/transactions';
 
@@ -6,9 +7,10 @@ type GetFunctionCallProps = {
   abi: JsonAbi;
   receipt: ReceiptCall;
   rawPayload?: string;
+  maxInputs: BN;
 };
 
-export const getFunctionCall = ({ abi, receipt, rawPayload }: GetFunctionCallProps) => {
+export const getFunctionCall = ({ abi, receipt, rawPayload, maxInputs }: GetFunctionCallProps) => {
   const abiInterface = new Interface(abi);
   const callFunctionSelector = receipt.param1.toHex(8);
   const functionFragment = abiInterface.getFunction(callFunctionSelector);
@@ -19,8 +21,10 @@ export const getFunctionCall = ({ abi, receipt, rawPayload }: GetFunctionCallPro
   // if has more than 1 input or input type is bigger than 8 bytes, then it's a pointer to data
   if (functionFragment.isInputDataPointer) {
     if (rawPayload) {
-      // calculate offset to get function params from rawPayload. should also consider vm offset: VM_TX_MEMORY
-      const argsOffset = bn(receipt.param2).sub(VM_TX_MEMORY).toNumber();
+      // calculate offset to get function params from rawPayload. should also consider vm offset
+      const argsOffset = bn(receipt.param2)
+        .sub(calculateVmTxMemory({ maxInputs: maxInputs.toNumber() }))
+        .toNumber();
 
       // slice(2) to remove first 0x, then slice again to remove offset and get only args
       encodedArgs = `0x${rawPayload.slice(2).slice(argsOffset * 2)}`;
