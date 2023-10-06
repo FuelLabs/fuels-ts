@@ -883,7 +883,7 @@ describe('Provider', () => {
     const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementation(() => mock);
 
-    const warnSpy = jest.spyOn(global.console, 'warn');
+    const warnSpy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
     await Provider.create(FUEL_NETWORK_URL);
 
     expect(warnSpy).toHaveBeenCalledWith(

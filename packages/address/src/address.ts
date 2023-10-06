@@ -13,6 +13,8 @@ import {
   isPublicKey,
   isB256,
   clearFirst12BytesFromB256,
+  isEvmAddress,
+  padFirst12BytesOfEvmAddress,
 } from './utils';
 
 /**
@@ -200,6 +202,10 @@ export default class Address extends AbstractAddress {
       return Address.fromB256(address);
     }
 
+    if (isEvmAddress(address)) {
+      return Address.fromEvmAddress(address);
+    }
+
     throw new FuelError(
       FuelError.CODES.PARSE_FAILED,
       `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported.`
@@ -207,11 +213,13 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Takes an `EvmAddress` and returns back an `Address`
+   * Takes an Evm Address and returns back an `Address`
    *
    * @returns A new `Address` instance
    */
-  static fromEvmAddress(evmAddress: EvmAddress): Address {
-    return new Address(toBech32(evmAddress.value));
+  static fromEvmAddress(evmAddress: string): Address {
+    const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
+
+    return new Address(toBech32(paddedAddress));
   }
 }
