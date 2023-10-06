@@ -72,7 +72,6 @@ export type FuelsConfig = UserFuelsConfig &
       | 'useBuiltinForc'
       | 'useBuiltinFuelCore'
       | 'autoStartFuelCore'
-      | 'fuelCorePort'
       | 'providerUrl'
     >
   > & {
