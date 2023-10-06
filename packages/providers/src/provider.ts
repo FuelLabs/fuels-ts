@@ -7,12 +7,7 @@ import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import {
-  InputType,
-  TransactionType,
-  InputMessageCoder,
-  TransactionCoder,
-} from '@fuel-ts/transactions';
+import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -37,13 +32,11 @@ import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
 } from './transaction-request';
-import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
+import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
-import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
-
-const MAX_RETRIES = 10;
+import { calculateTransactionFee, fromUnixToTai64 } from './utils';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -569,7 +562,6 @@ export default class Provider {
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     this.#cacheInputs(transactionRequest.inputs);
-    await this.estimateTxDependencies(transactionRequest);
     // #endregion Provider-sendTransaction
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
@@ -612,7 +604,6 @@ export default class Provider {
     { utxoValidation }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.estimateTxDependencies(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -655,60 +646,6 @@ export default class Provider {
   }
 
   /**
-   * Will dryRun a transaction and check for missing dependencies.
-   *
-   * If there are missing variable outputs,
-   * `addVariableOutputs` is called on the transaction.
-   *
-   * @privateRemarks
-   * TODO: Investigate support for missing contract IDs
-   * TODO: Add support for missing output messages
-   *
-   * @param transactionRequest - The transaction request object.
-   * @returns A promise.
-   */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
-    let missingOutputVariableCount = 0;
-    let missingOutputContractIdsCount = 0;
-    let tries = 0;
-
-    if (transactionRequest.type === TransactionType.Create) {
-      return;
-    }
-
-    const encodedTransaction = transactionRequest.hasPredicateInput()
-      ? hexlify((await this.estimatePredicates(transactionRequest)).toTransactionBytes())
-      : hexlify(transactionRequest.toTransactionBytes());
-
-    do {
-      const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction,
-        utxoValidation: false,
-      });
-      const receipts = gqlReceipts.map(processGqlReceipt);
-      const { missingOutputVariables, missingOutputContractIds } =
-        getReceiptsWithMissingData(receipts);
-
-      missingOutputVariableCount = missingOutputVariables.length;
-      missingOutputContractIdsCount = missingOutputContractIds.length;
-
-      if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
-        return;
-      }
-
-      if (transactionRequest instanceof ScriptTransactionRequest) {
-        transactionRequest.addVariableOutputs(missingOutputVariableCount);
-
-        missingOutputContractIds.forEach(({ contractId }) =>
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
-        );
-      }
-
-      tries += 1;
-    } while (tries < MAX_RETRIES);
-  }
-
-  /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
    *
@@ -720,7 +657,6 @@ export default class Provider {
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.estimateTxDependencies(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
