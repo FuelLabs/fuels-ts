@@ -16,10 +16,6 @@ async function generateTypesForProgramType(
   const filepaths = await getABIPaths(paths);
   const pluralizedFolderName = `${String(programType).toLocaleLowerCase()}s`;
 
-  if (!filepaths.length) {
-    return null;
-  }
-
   runTypegen({
     programType,
     cwd: config.basePath,
