@@ -87,7 +87,7 @@ export function isEvmAddress(address: string): boolean {
  *
  * @hidden
  */
-export function getBytesCopyFromBech32(address: Bech32Address): Uint8Array {
+export function getBytesFromBech32(address: Bech32Address): Uint8Array {
   return new Uint8Array(bech32m.fromWords(fromBech32(address).words));
 }
 
@@ -104,7 +104,7 @@ export function toB256(address: Bech32Address): B256Address {
     );
   }
 
-  return hexlify(getBytesCopyFromBech32(address));
+  return hexlify(getBytesFromBech32(address));
 }
 
 /**
@@ -161,7 +161,7 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
       );
     }
 
-    bytes = getBytesCopyFromBech32(toBech32(b256));
+    bytes = getBytesFromBech32(toBech32(b256));
     bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
   } catch (error) {
     throw new FuelError(

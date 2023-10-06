@@ -7,7 +7,7 @@ import {
   normalizeBech32,
   isBech32,
   toB256,
-  getBytesCopyFromBech32,
+  getBytesFromBech32,
   toBech32,
   getRandomB256,
   isPublicKey,
@@ -65,7 +65,7 @@ export default class Address extends AbstractAddress {
    * @returns The `bech32Address` property as a byte array
    */
   toBytes(): Uint8Array {
-    return getBytesCopyFromBech32(this.bech32Address);
+    return getBytesFromBech32(this.bech32Address);
   }
 
   /**

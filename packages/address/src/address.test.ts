@@ -160,8 +160,8 @@ describe('Address utils', () => {
     expect(result).toBeTruthy();
   });
 
-  test('getBytesCopyFromBech32 (bech32 to Uint8Array)', () => {
-    const result = utils.getBytesCopyFromBech32(ADDRESS_BECH32);
+  test('getBytesFromBech32 (bech32 to Uint8Array)', () => {
+    const result = utils.getBytesFromBech32(ADDRESS_BECH32);
 
     expect(result).toEqual(new Uint8Array(ADDRESS_BYTES));
   });
