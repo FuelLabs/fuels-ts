@@ -10,6 +10,7 @@ import { shouldUseBuiltinForc } from './shouldUserBuiltinForc';
 
 export async function init(program: Command) {
   const options = program.opts();
+
   const fuelsConfigPath = join(options.path, 'fuels.config.ts');
   const fileExists = existsSync(fuelsConfigPath);
 
@@ -17,10 +18,8 @@ export async function init(program: Command) {
     throw new Error(`Config file exists, aborting.\n\n  ${fuelsConfigPath}\n`);
   }
 
-  const { path } = options;
-
-  const workspace = relative(path, options.workspace);
-  const output = relative(path, options.output);
+  const workspace = relative(options.path, options.workspace);
+  const output = relative(options.path, options.output);
 
   const useBuiltinForc = await shouldUseBuiltinForc(options.useBuiltinForc);
   const useBuiltinFuelCore = await shouldUseBuiltinFuelCore(options.useBuiltinFuelCore);
@@ -30,6 +29,7 @@ export async function init(program: Command) {
     output,
     useBuiltinForc,
     useBuiltinFuelCore,
+    autoStartFuelCore: options.autoStartFuelCore,
   });
 
   writeFileSync(fuelsConfigPath, defaultConfig);

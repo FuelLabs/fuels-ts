@@ -56,6 +56,7 @@ export const configureCli = () => {
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
     .option('--use-builtin-forc', 'Should buit-in `forc` be used?')
     .option('--use-builtin-fuel-core', 'Should buit-in `fuel-core` be used?')
+    .option('--auto-start-fuel-core', 'Should a fuel node be started automatically?')
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))

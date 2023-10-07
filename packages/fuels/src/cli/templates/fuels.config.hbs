@@ -110,7 +110,11 @@ export default createConfig({
    * @param autoStartFuelCore - When set to false, it will skip spinning up
    * a FuelCore node. In this case, you'll need to start the node yourself.
    */
+  {{#if (isDefined autoStartFuelCore)}}
+  autoStartFuelCore: {{autoStartFuelCore}},
+  {{else}}
   // autoStartFuelCore: true,
+  {{/if}}
 
 
   // ----------------------------------- Callbacks

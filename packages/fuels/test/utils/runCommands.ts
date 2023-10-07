@@ -19,15 +19,12 @@ export async function runCommand(commandName: string, params: string[] = []) {
   return { argv, command: await run(argv) };
 }
 
-export async function runInit() {
-  return runCommand(Commands.init, [
-    '-w',
-    workspace,
-    '-o',
-    generated,
-    '--use-builtin-forc',
-    '--use-builtin-fuel-core',
-  ]);
+export const flagsUseBuiltinBinaries = ['--use-builtin-forc', '--use-builtin-fuel-core'];
+export const flagsAutoStartFuelCore = '--auto-start-fuel-core';
+export const flagsDefault = [flagsUseBuiltinBinaries, flagsAutoStartFuelCore].flat();
+
+export async function runInit(extraFlags: string[] = flagsDefault) {
+  return runCommand(Commands.init, ['-w', workspace, '-o', generated, extraFlags].flat());
 }
 
 export async function runBuild() {
