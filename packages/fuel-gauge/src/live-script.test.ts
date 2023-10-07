@@ -74,13 +74,14 @@ type MainArgs = [
 
 describe('Live Script Test', () => {
   it('can use script against live Fuel Node', async () => {
-    if (!process.env.FUEL_NETWORK_GENESIS_KEY && !process.env.FUEL_NETWORK_FORCE_CHECK) {
+    if (!process.env.FUEL_NETWORK_GENESIS_KEY) {
+      // eslint-disable-next-line no-console
+      console.log('Skipping live Fuel Node test');
       return;
     }
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const wallet = new WalletUnlocked(process.env.FUEL_NETWORK_GENESIS_KEY!, provider);
+    const wallet = new WalletUnlocked(process.env.FUEL_NETWORK_GENESIS_KEY, provider);
     const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
 
     const { value } = await scriptInstance.functions
