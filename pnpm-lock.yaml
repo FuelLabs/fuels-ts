@@ -761,6 +761,9 @@ importers:
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
+      prompts:
+        specifier: ^2.4.2
+        version: 2.4.2
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -780,6 +783,9 @@ importers:
       '@types/lodash.camelcase':
         specifier: ^4.3.7
         version: 4.3.7
+      '@types/prompts':
+        specifier: ^2.4.5
+        version: 2.4.5
       '@types/rimraf':
         specifier: ^3.0.2
         version: 3.0.2
@@ -6266,6 +6272,13 @@ packages:
 
   /@types/prettier@2.7.3:
     resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
+
+  /@types/prompts@2.4.5:
+    resolution: {integrity: sha512-TvrzGMCwARi2qqXcD7VmvMvfMP3F7JRQpeEHECK0oufRNZInoBqzd8v/1zksKFE5XW8OOGto/5FsDT8lnpvGRA==}
+    dependencies:
+      '@types/node': 16.18.34
+      kleur: 3.0.3
+    dev: true
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}

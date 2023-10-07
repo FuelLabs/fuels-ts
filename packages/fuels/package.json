@@ -75,6 +75,7 @@
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
+    "prompts": "^2.4.2",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",
     "toml": "^3.0.0",
@@ -83,6 +84,7 @@
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
+    "@types/prompts": "^2.4.5",
     "@types/rimraf": "^3.0.2"
   }
 }
