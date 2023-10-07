@@ -89,7 +89,7 @@ jobs:
         run: pnpm build
 
       - name: Run Isolated Tests
-        run: pnpm build
+        run: pnpm test:e2e
         env:
           FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
           # not enough coins to fit the target?
