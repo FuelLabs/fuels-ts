@@ -74,7 +74,9 @@ jobs:
           base-coverage-file: coverage-reports/report.master.json
   live-tests:
     name: Run Live Tests
-    if: github.head_ref = 'changeset-release/master'
+    # if: github.head_ref = 'changeset-release/master'
+    # temp for proof of concept on GH PR
+    if: github.head_ref = 'refs/pull/1324/merge'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
