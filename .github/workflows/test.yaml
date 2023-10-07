@@ -72,3 +72,27 @@ jobs:
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
           base-coverage-file: coverage-reports/report.master.json
+  live-tests:
+    name: Run Live Tests
+    if: github.head_ref = 'changeset-release/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run Isolated Tests
+        run: pnpm build
+        env:
+          FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
+          # not enough coins to fit the target?
+          # add assets via https://faucet-beta-4.fuel.network/
+          # bech32 address = fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg
+          FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
