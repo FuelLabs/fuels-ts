@@ -1,6 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { readFileSync } from 'fs';
-import { join, relative } from 'path';
 
 import {
   clean,
@@ -9,7 +8,7 @@ import {
   fuelsConfigPath,
   initFlagsUseBuiltinBinaries,
   generatedDir,
-  workspaceDir,
+  initFlagsWorkspace,
 } from '../../../test/utils/runCommands';
 
 import { loadConfig } from './loadConfig';
@@ -26,7 +25,7 @@ describe('loadConfig', () => {
   });
 
   test(`should auto start fuel core by default`, async () => {
-    await runInit(initFlagsUseBuiltinBinaries);
+    await runInit([initFlagsWorkspace, initFlagsUseBuiltinBinaries].flat());
 
     const config = await loadConfig(fixturesDir);
     const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
@@ -36,7 +35,9 @@ describe('loadConfig', () => {
   });
 
   test(`should auto start fuel core explicitly`, async () => {
-    await runInit([initFlagsUseBuiltinBinaries, '--auto-start-fuel-core'].flat());
+    await runInit(
+      [initFlagsWorkspace, initFlagsUseBuiltinBinaries, '--auto-start-fuel-core'].flat()
+    );
 
     const config = await loadConfig(fixturesDir);
     const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
