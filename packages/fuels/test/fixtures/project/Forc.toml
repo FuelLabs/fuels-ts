@@ -1,7 +1,7 @@
 [workspace]
 members = [
-  "./bar",
-  "./foo",
-  "./script",
-  "./predicate"
+  "./contracts/bar",
+  "./contracts/foo",
+  "./scripts/script",
+  "./predicates/predicate"
 ]
