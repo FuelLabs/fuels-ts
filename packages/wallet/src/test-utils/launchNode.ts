@@ -13,7 +13,7 @@ import kill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
-import { defaultChainConfig } from './defaultChainConfig';
+import { defaultChainConfig, genesisWalletConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
@@ -70,10 +70,7 @@ export const launchNode = async ({
 
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
-        const pk = Signer.generatePrivateKey();
-        const signer = new Signer(pk);
-        process.env.GENESIS_SECRET = hexlify(pk);
-
+        process.env.GENESIS_SECRET = genesisWalletConfig.privateKey;
         chainConfig = {
           ...defaultChainConfig,
           initial_state: {
@@ -81,7 +78,7 @@ export const launchNode = async ({
             coins: [
               ...defaultChainConfig.initial_state.coins,
               {
-                owner: signer.address.toHexString(),
+                owner: genesisWalletConfig.address,
                 amount: toHex(1_000_000_000),
                 asset_id: BaseAssetId,
               },
@@ -111,12 +108,6 @@ export const launchNode = async ({
       ...args,
     ]);
 
-    const result = {
-      cleanup: () => {},
-      port: '',
-      ip: '',
-    };
-
     // Cleanup function where fuel-core is stopped.
     const cleanup = () => {
       if (child.pid) {
@@ -144,11 +135,8 @@ export const launchNode = async ({
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         // Resolve with the cleanup method.
         const [nodeIp, nodePort] = chunk.split(' ').at(-1)!.trim().split(':');
-        result.cleanup = cleanup;
-        result.ip = nodeIp;
-        result.port = nodePort;
 
-        resolve(result);
+        resolve({ cleanup, ip: nodeIp, port: nodePort });
       }
     });
 
