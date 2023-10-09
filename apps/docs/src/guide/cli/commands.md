@@ -5,7 +5,7 @@
 Use it to create a new `fuels.config.ts` file:
 
 ```console
-pnpm fuels init -w ../backend -o ./src/backend-api
+npm fuels init -w ../backend -o ./src/backend-api
 ```
 
 This will give you a minimal configuration:
@@ -38,7 +38,7 @@ In a nutshell:
 ## `fuels build`
 
 ```console
-pnpm fuels build
+npx fuels build
 ```
 
 1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
@@ -47,7 +47,7 @@ pnpm fuels build
 ## `fuels deploy`
 
 ```console
-pnpm fuels deploy
+npx fuels deploy
 ```
 
 1. Deploy all Sway contracts under `workspace`
@@ -78,11 +78,11 @@ For a complete example, see:
 ## `fuels dev`
 
 ```console
-pnpm fuels dev
+npx fuels dev
 ```
 
 1. Runs `build` and `deploy` once at the start
-2. Watches your Sway programs for changes, and do it again
+2. Watches your Sway workspace and repeats previous step on every change
 
 > _In `dev` mode, everytime you update a contract on your Forc `workspace`, we re-generate type definitions and factory classs for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
@@ -91,7 +91,7 @@ pnpm fuels dev
 Manually generates type definitions and factory classes from ABI JSON files.
 
 ```console
-pnpm fuels help typegen
+npx fuels help typegen
 ```
 
 ```
@@ -118,7 +118,7 @@ For more info, check:
 Check for version incompatibilities between your [Fuel Toolchain](#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
 ```console
-pnpm fuels versions
+npx fuels versions
 ```
 
 ```
@@ -191,13 +191,13 @@ export createConfig({
 You can also call them directly:
 
 ```console
-pnpm fuels help forc
-pnpm fuels forc --version
-pnpm fuels forc test -h
+npx fuels help forc
+npx fuels forc --version
+npx fuels forc test -h
 ```
 
 ```console
-pnpm fuels help core
-pnpm fuels core --version
-pnpm fuels core run -h
+npx fuels help core
+npx fuels core --version
+npx fuels core run -h
 ```

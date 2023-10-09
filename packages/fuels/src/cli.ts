@@ -76,7 +76,7 @@ export const configureCli = () => {
     .action(withConfig(command, Commands.build, build));
 
   (command = program.command(Commands.deploy))
-    .description('Deploy contracts to Fuel network')
+    .description('Deploy contracts to the Fuel network')
     .addOption(pathOption)
     .action(withConfig(command, Commands.deploy, deploy));
 

@@ -20,13 +20,13 @@ Add it to your Frontend project:
 
 ```console
 cd my-fuel-dapp/frontend
-pnpm add fuels
+npm install fuels --save
 ```
 
 ## Double-checking
 
 ```console
-pnpm fuels -v
+npx fuels -v
 ```
 
 ## Next Steps
