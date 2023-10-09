@@ -168,12 +168,14 @@ Check the docs about `forc` and `fuel-core`:
 
 ## Batteries Included
 
-In case you haven't configured [The Fuel Toolchain](#the-fuel-toolchain) _yet_, `fuels` conveniently ships with the last compatible binaries for:
+`fuels` conveniently ships with the last compatible binaries for:
 
 - [`forc`](https://docs.fuel.network/docs/forc/commands/)
 - [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
 
-To use them, make sure your config _**is**_ set to use the SDK built-in versions:
+In case you haven't configured [The Fuel Toolchain](#the-fuel-toolchain) _yet_, it will ask you if you'd like to use the buit-in versions.
+
+You can auto-accept the built-in versions by explicitly configuring it:
 
 ```ts
 // fuels.config.ts
