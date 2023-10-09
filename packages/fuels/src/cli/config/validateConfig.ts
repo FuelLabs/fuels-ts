@@ -5,15 +5,7 @@ import type { UserFuelsConfig } from '../types';
 const schema = yup
   .object({
     workspace: yup.string(),
-    contracts: yup
-      .array(yup.string().required('config.contracts should be a valid string'))
-      .when('workspace', {
-        is: (w?: string) => !w,
-        then: yup
-          .array()
-          .required('config.contracts should be a valid array')
-          .min(1, 'config.contracts should have at least 1 item'),
-      }),
+    contracts: yup.array(yup.string()),
     scripts: yup.array(yup.string()),
     predicates: yup.array(yup.string()),
     output: yup.string().required('config.output should be a valid string'),
