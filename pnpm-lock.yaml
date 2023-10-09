@@ -1098,6 +1098,12 @@ importers:
 
   packages/utils:
     dependencies:
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
