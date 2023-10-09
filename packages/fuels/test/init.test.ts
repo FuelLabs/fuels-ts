@@ -2,7 +2,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
-import { clean, fuelsConfigPath, runInit } from './utils/runCommands';
+import { clean, fuelsConfigPath, generatedDir, runInit } from './utils/runCommands';
 
 describe('init', () => {
   beforeEach(clean);
@@ -26,5 +26,12 @@ describe('init', () => {
     const secondRun = await safeExec(() => runInit());
     expect(secondRun.result).not.toBeTruthy();
     expect(chalk.reset(secondRun.error)).toMatch(/Config file exists, aborting./);
+  });
+
+  it('should error if not inputs are informed', async () => {
+    const { error } = await safeExec(() => runInit(['-o', generatedDir].flat()));
+
+    expect(error).toBeTruthy();
+    expect(error?.toString()).toMatch(/Workspace not informed./i);
   });
 });
