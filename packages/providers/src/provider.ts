@@ -435,7 +435,6 @@ export default class Provider {
         subscriptionUrl: string,
         request: FetchRequestOptions & { signal: AbortSignal }
       ) => {
-        console.log('AbortSignal', request.signal);
         if (request.signal.aborted) return new Response();
         return Provider.adaptSubscriptionResponse(await fetchFn(subscriptionUrl, request, options));
       },
