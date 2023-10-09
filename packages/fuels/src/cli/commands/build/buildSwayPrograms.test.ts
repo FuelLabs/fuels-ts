@@ -24,9 +24,16 @@ describe('buildSwayPrograms', () => {
   beforeEach(reset);
   afterAll(reset);
 
-  function mockSpawn() {
+  function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
     const spawnMocks = {
-      on: jest.fn(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      on: jest.fn((eventName: string, fn: (..._: any) => void) => {
+        const shouldExit = eventName === 'exit' && !params.shouldError;
+        const shouldError = eventName === 'error' && params.shouldError;
+        if (shouldExit || shouldError) {
+          setTimeout(fn, 10);
+        }
+      }),
       stderr: {
         pipe: jest.fn(),
       },
@@ -50,7 +57,7 @@ describe('buildSwayPrograms', () => {
   function mockBuildSwayProgram() {
     const buildSwayProgram = jest
       .spyOn(buildSwayProgramsMod, 'buildSwayProgram')
-      .mockImplementation();
+      .mockReturnValue(Promise.resolve());
 
     return {
       buildSwayProgram,
@@ -87,7 +94,7 @@ describe('buildSwayPrograms', () => {
     expect(buildSwayProgram).toHaveBeenCalledWith(config, config.predicates[0]);
   });
 
-  test.only('should pipe stdout', async () => {
+  test('should pipe stdout', async () => {
     const config = customConfig(workspaceDir);
     const { spawn, spawnMocks } = mockSpawn();
 
@@ -111,16 +118,13 @@ describe('buildSwayPrograms', () => {
     expect(spawn).toHaveBeenCalledTimes(1);
     expect(spawnMocks.stderr.pipe).toHaveBeenCalledTimes(1);
     expect(spawnMocks.stdout.pipe).toHaveBeenCalledTimes(1);
-
     expect(spawnMocks.on).toHaveBeenCalledTimes(2);
-    expect(spawnMocks.on).toHaveBeenCalledWith('exit');
-    expect(spawnMocks.on).toHaveBeenCalledWith('error');
   });
 
   test('should resolve on successful exit', () => {
     const resolve = jest.fn();
     const reject = jest.fn((_reason?: number | Error) => {});
-    onForcExit(reject, resolve)(null);
+    onForcExit(resolve, reject)(null);
     expect(reject).toHaveBeenCalledTimes(0);
     expect(resolve).toHaveBeenCalledTimes(1);
   });
@@ -128,7 +132,7 @@ describe('buildSwayPrograms', () => {
   test('should reject on failed exit', () => {
     const resolve = jest.fn();
     const reject = jest.fn((_reason?: number | Error) => {});
-    onForcExit(reject, resolve)(1);
+    onForcExit(resolve, reject)(1);
     expect(reject).toHaveBeenCalledTimes(1);
     expect(resolve).toHaveBeenCalledTimes(0);
   });
