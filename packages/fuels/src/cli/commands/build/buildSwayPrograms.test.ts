@@ -24,7 +24,7 @@ describe('buildSwayPrograms', () => {
   beforeEach(reset);
   afterAll(reset);
 
-  function mockAll(workspace: undefined | string) {
+  function mockSpawn() {
     const spawnMocks = {
       on: jest.fn(),
       stderr: {
@@ -41,25 +41,32 @@ describe('buildSwayPrograms', () => {
         (..._) => spawnMocks as unknown as childProcessMod.ChildProcessWithoutNullStreams
       );
 
+    return {
+      spawn,
+      spawnMocks,
+    };
+  }
+
+  function mockBuildSwayProgram() {
     const buildSwayProgram = jest
       .spyOn(buildSwayProgramsMod, 'buildSwayProgram')
       .mockImplementation();
 
-    const config = {
-      ...structuredClone(fuelsConfig),
-      workspace,
-    };
-
     return {
-      config,
-      spawn,
-      spawnMocks,
       buildSwayProgram,
     };
   }
 
+  function customConfig(workspace: undefined | string) {
+    return {
+      ...structuredClone(fuelsConfig),
+      workspace,
+    };
+  }
+
   test('building Sway programs using workspace', async () => {
-    const { config, buildSwayProgram } = mockAll(workspaceDir);
+    const config = customConfig(workspaceDir);
+    const { buildSwayProgram } = mockBuildSwayProgram();
 
     await buildSwayProgramsMod.buildSwayPrograms(config);
 
@@ -68,7 +75,8 @@ describe('buildSwayPrograms', () => {
   });
 
   test('building Sway programs using individual configs', async () => {
-    const { config, buildSwayProgram } = mockAll(undefined);
+    const { buildSwayProgram } = mockBuildSwayProgram();
+    const config = customConfig(undefined);
 
     await buildSwayProgramsMod.buildSwayPrograms(config);
 
@@ -79,8 +87,9 @@ describe('buildSwayPrograms', () => {
     expect(buildSwayProgram).toHaveBeenCalledWith(config, config.predicates[0]);
   });
 
-  test('should pipe stdout', async () => {
-    const { config, spawn, spawnMocks } = mockAll(workspaceDir);
+  test.only('should pipe stdout', async () => {
+    const config = customConfig(workspaceDir);
+    const { spawn, spawnMocks } = mockSpawn();
 
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
 
@@ -92,7 +101,8 @@ describe('buildSwayPrograms', () => {
   });
 
   test('should pipe stdout and stderr', async () => {
-    const { config, spawn, spawnMocks } = mockAll(workspaceDir);
+    const config = customConfig(workspaceDir);
+    const { spawn, spawnMocks } = mockSpawn();
 
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
 
@@ -101,6 +111,10 @@ describe('buildSwayPrograms', () => {
     expect(spawn).toHaveBeenCalledTimes(1);
     expect(spawnMocks.stderr.pipe).toHaveBeenCalledTimes(1);
     expect(spawnMocks.stdout.pipe).toHaveBeenCalledTimes(1);
+
+    expect(spawnMocks.on).toHaveBeenCalledTimes(2);
+    expect(spawnMocks.on).toHaveBeenCalledWith('exit');
+    expect(spawnMocks.on).toHaveBeenCalledWith('error');
   });
 
   test('should resolve on successful exit', () => {
