@@ -15,25 +15,54 @@ export default createConfig({
    * individually, you can also use workspaces (recommended)
    * @param workspace - Path to Sway/Forc Workspace
    */
+  {{#if (isDefined workspace)}}
   workspace: '{{workspace}}',
+  {{else}}
+  // workspace: './backend',
+  {{/if}}
+
 
   /**
    * This property should not be used alongside `workspace`
    * @param contracts - Paths to Sway Contracts
    */
-  // contracts: ['./backend/contracts'],
+  {{#if (isDefined contracts)}}
+  contracts: [
+    {{#each contracts}}
+      '{{this}}',
+    {{/each}}
+  ],
+  {{else}}
+  // contracts: [],
+  {{/if}}
 
   /**
    * This property should not be used alongside `workspace`
    * @param predicates - Paths to Sway Predicates
    */
-  // predicates: ['./backend/predicates'],
+  {{#if (isDefined predicates)}}
+  predicates: [
+    {{#each predicates}}
+      '{{this}}',
+    {{/each}}
+  ],
+  {{else}}
+  // predicates: [],
+  {{/if}}
 
   /**
    * This property should not be used alongside `workspace`
    * @param scripts - Path to Sway scripts
    */
-  // scripts: ['./backend/scripts'],
+  {{#if (isDefined scripts)}}
+  scripts: [
+    {{#each scripts}}
+      '{{this}}',
+    {{/each}}
+  ],
+  {{else}}
+  // scripts: [],
+  {{/if}}
 
   /**
    * @param output - Where to generate Typescript definitions

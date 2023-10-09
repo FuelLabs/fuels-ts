@@ -49,14 +49,20 @@ export const configureCli = () => {
 
   let command: Command;
 
+  const desc = `Relative path/globals to `;
+  const arg = `<path|global>`;
+
   (command = program.command(Commands.init))
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
-    .requiredOption('-w, --workspace <path>', 'Relative dir path to Sway workspace')
+    .option('-w, --workspace <path>', 'Relative dir path to Sway workspace')
+    .addOption(new Option(`-c, --contracts ${arg}`, `${desc} Contracts`).conflicts('workspace'))
+    .addOption(new Option(`-s, --scripts ${arg}`, `${desc} Scripts`).conflicts('workspace'))
+    .addOption(new Option(`-p, --predicates ${arg}`, `${desc} Predicates`).conflicts('workspace'))
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
-    .option('--use-builtin-forc', 'Should buit-in `forc` be used?')
-    .option('--use-builtin-fuel-core', 'Should buit-in `fuel-core` be used?')
-    .option('--auto-start-fuel-core', 'Should a fuel node be started automatically?')
+    .option('--use-builtin-forc', 'Use buit-in `forc` to build Sway programs')
+    .option('--use-builtin-fuel-core', 'Use buit-in `fuel-core` when starting a Fuel node')
+    .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
