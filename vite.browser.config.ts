@@ -1,11 +1,12 @@
 import { mergeConfig } from 'vitest/config';
+import type { UserConfig } from 'vitest/config';
 
 import baseConfig from './vite.base.config';
 
-/**
- * TODO: Resolve polyfill
- */
-export default mergeConfig(baseConfig, {
+const config: UserConfig = {
+  define: {
+    'process.env': process.env ?? {},
+  },
   test: {
     coverage: {
       reportsDirectory: 'coverage/environments/browser',
@@ -16,4 +17,6 @@ export default mergeConfig(baseConfig, {
       name: 'chrome',
     },
   },
-});
+};
+
+export default mergeConfig(baseConfig, config);
