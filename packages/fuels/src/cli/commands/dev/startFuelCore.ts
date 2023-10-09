@@ -94,8 +94,7 @@ export const startFuelCore = async (
           port,
           providerUrl,
           killChildProcess,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          chainConfig: chainConfig!,
+          chainConfig,
         });
       }
       if (/error/i.test(data)) {
