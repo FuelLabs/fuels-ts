@@ -1,6 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as childProcessMod from 'child_process';
-// import * as porfinderMod from 'portfinder';
 
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
 import type { FuelsConfig } from '../../types';
@@ -16,21 +15,17 @@ jest.mock('child_process', () => ({
 }));
 
 describe('startFuelCore', () => {
-  let loggingBkp = { ...loggingConfig };
+  const loggingBackup = structuredClone(loggingConfig);
 
-  function backupAndDisableLogging() {
-    loggingBkp = { ...loggingConfig };
+  beforeEach(() => {
+    jest.restoreAllMocks();
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: false });
-  }
+  });
 
-  function restoreLogging() {
-    configureLogging(loggingBkp);
-  }
-
-  beforeEach(jest.restoreAllMocks);
-  beforeEach(backupAndDisableLogging);
-  afterEach(restoreLogging);
-  afterAll(jest.restoreAllMocks);
+  afterEach(() => {
+    jest.restoreAllMocks();
+    configureLogging(loggingBackup);
+  });
 
   /**
    * This should mimick the stderr.on('data') event, returning both
@@ -122,6 +117,7 @@ describe('startFuelCore', () => {
   });
 
   test('should pipe stdout', async () => {
+    jest.spyOn(process.stdout, 'write').mockImplementation();
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: true });
 
     const { innerMocks } = mockSpawn();
@@ -133,6 +129,8 @@ describe('startFuelCore', () => {
   });
 
   test('should pipe stdout and stderr', async () => {
+    jest.spyOn(process.stderr, 'write').mockImplementation();
+    jest.spyOn(process.stdout, 'write').mockImplementation();
     configureLogging({ isDebugEnabled: true, isLoggingEnabled: true });
 
     const { innerMocks } = mockSpawn();

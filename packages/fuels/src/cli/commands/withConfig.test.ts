@@ -2,14 +2,28 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { program } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/config/fuels.config';
+import { clean } from '../../../test/utils/runCommands';
 import * as loadConfigMod from '../config/loadConfig';
 import type { FuelsConfig } from '../types';
 import { Commands } from '../types';
+import { loggingConfig, configureLogging } from '../utils/logger';
 
 import { withConfig } from './withConfig';
 
 describe('withConfig', () => {
-  beforeEach(jest.restoreAllMocks);
+  const loggingBackup = structuredClone(loggingConfig);
+
+  beforeEach(() => {
+    jest.restoreAllMocks();
+    configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
+    clean();
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+    configureLogging(loggingBackup);
+    clean();
+  });
 
   function mockAll(params: { shouldError: boolean }) {
     const onSuccess = jest.fn();

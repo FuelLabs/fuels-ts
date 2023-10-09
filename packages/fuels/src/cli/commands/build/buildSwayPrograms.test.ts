@@ -16,13 +16,15 @@ describe('buildSwayPrograms', () => {
 
   const loggingBackup = structuredClone(loggingConfig);
 
-  const reset = () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+    configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
+  });
+
+  afterAll(() => {
     jest.restoreAllMocks();
     configureLogging(loggingBackup);
-  };
-
-  beforeEach(reset);
-  afterAll(reset);
+  });
 
   function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
     const spawnMocks = {
@@ -98,6 +100,7 @@ describe('buildSwayPrograms', () => {
     const config = customConfig(workspaceDir);
     const { spawn, spawnMocks } = mockSpawn();
 
+    jest.spyOn(process.stdout, 'write').mockImplementation();
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
 
     await buildSwayProgramsMod.buildSwayProgram(config, config.workspace);
@@ -111,6 +114,8 @@ describe('buildSwayPrograms', () => {
     const config = customConfig(workspaceDir);
     const { spawn, spawnMocks } = mockSpawn();
 
+    jest.spyOn(process.stderr, 'write').mockImplementation();
+    jest.spyOn(process.stdout, 'write').mockImplementation();
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
 
     await buildSwayProgramsMod.buildSwayProgram(config, config.workspace);
