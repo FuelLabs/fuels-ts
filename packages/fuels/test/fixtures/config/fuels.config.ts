@@ -5,12 +5,16 @@ import type { FuelsConfig } from '../../../src';
 
 const projectPath = join(__dirname, '..', 'project');
 
+const contractsDir = join(projectPath, 'contracts');
+const scriptsDir = join(projectPath, 'scripts');
+const predicatesDir = join(projectPath, 'predicates');
+
 export const fuelsConfig: FuelsConfig = {
   basePath: projectPath,
   // workspace: '/root/project',
-  contracts: [join(projectPath, 'foo'), join(projectPath, 'bar')],
-  predicates: [join(projectPath, 'predicate')],
-  scripts: [join(projectPath, 'script')],
+  contracts: [join(contractsDir, 'foo'), join(contractsDir, 'bar')],
+  scripts: [join(scriptsDir, 'script')],
+  predicates: [join(predicatesDir, 'predicate')],
   output: '/generated-types',
   deployConfig: {
     gasPrice: 5,
