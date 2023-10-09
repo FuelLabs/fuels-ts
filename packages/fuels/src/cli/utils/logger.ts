@@ -24,7 +24,6 @@ export function debug(...data: unknown[]) {
 
 export function error(...data: unknown[]) {
   process.stderr.write(`${chalk.red(data.join(' '))}\n`);
-  process.exit(1);
 }
 
 export function warn(...data: unknown[]) {

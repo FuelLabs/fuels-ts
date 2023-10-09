@@ -1,3 +1,5 @@
+import { safeExec } from '@fuel-ts/errors/test-utils';
+
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
 import type { FuelsConfig } from '../../types';
 import * as logger from '../../utils/logger';
@@ -28,7 +30,10 @@ describe('dev', () => {
 
     const configCopy: FuelsConfig = { ...fuelsConfig, autoStartFuelCore: false };
 
-    await dev(configCopy);
+    const { result, error: safeError } = await safeExec(() => dev(configCopy));
+
+    expect(result).not.toBeTruthy();
+    expect(safeError).toEqual(err);
 
     expect(error).toHaveBeenCalledTimes(1);
     expect(error.mock.calls[0][0]).toEqual(err);

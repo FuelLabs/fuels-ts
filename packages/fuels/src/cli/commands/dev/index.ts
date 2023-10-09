@@ -63,5 +63,6 @@ export async function dev(config: FuelsConfig) {
       .on('unlink', onChange);
   } catch (err: unknown) {
     error(err);
+    throw err;
   }
 }
