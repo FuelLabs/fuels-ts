@@ -2,7 +2,6 @@ import { type Command } from 'commander';
 import { existsSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import { join, relative } from 'path';
-import { cwd } from 'process';
 
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
 import { log } from '../../utils/logger';
