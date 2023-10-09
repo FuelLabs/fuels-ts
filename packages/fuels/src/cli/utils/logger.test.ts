@@ -15,7 +15,7 @@ describe('logger', () => {
 
   function mockStdIO() {
     const err = jest.spyOn(process.stderr, 'write').mockImplementation();
-    const out = jest.spyOn(process.stderr, 'write').mockImplementation();
+    const out = jest.spyOn(process.stdout, 'write').mockImplementation();
     return { err, out };
   }
 
