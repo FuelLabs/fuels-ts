@@ -42,7 +42,8 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
     const onExit = onForcExit(resolve, reject);
     const onError = onForcError(reject);
 
-    forc.on('exit', onExit).on('error', onError);
+    forc.on('exit', onExit);
+    forc.on('error', onError);
   });
 };
 
