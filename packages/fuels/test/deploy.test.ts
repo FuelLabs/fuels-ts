@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 
-import { clean, contractsJson, runBuild, runDeploy, runInit } from './utils/runCommands';
+import { clean, contractsJsonPath, runBuild, runDeploy, runInit } from './utils/runCommands';
 
 describe('deploy', () => {
   beforeEach(clean);
@@ -11,9 +11,9 @@ describe('deploy', () => {
     await runBuild();
     await runDeploy();
 
-    expect(existsSync(contractsJson)).toBeTruthy();
+    expect(existsSync(contractsJsonPath)).toBeTruthy();
 
-    const fuelsContents = JSON.parse(readFileSync(contractsJson, 'utf-8'));
+    const fuelsContents = JSON.parse(readFileSync(contractsJsonPath, 'utf-8'));
     expect(fuelsContents.barFoo).toMatch(/0x/);
     expect(fuelsContents.fooBar).toMatch(/0x/);
   });

@@ -2,7 +2,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
-import { clean, fuelsConfig, runInit } from './utils/runCommands';
+import { clean, fuelsConfigPath, runInit } from './utils/runCommands';
 
 describe('init', () => {
   beforeEach(clean);
@@ -10,8 +10,8 @@ describe('init', () => {
 
   it('should run `init` command', async () => {
     await runInit();
-    expect(existsSync(fuelsConfig)).toBeTruthy();
-    const fuelsContents = readFileSync(fuelsConfig, 'utf-8');
+    expect(existsSync(fuelsConfigPath)).toBeTruthy();
+    const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: 'project',`);
     expect(fuelsContents).toMatch(`output: 'generated',`);
     expect(fuelsContents).toMatch(`useBuiltinForc: true,`);

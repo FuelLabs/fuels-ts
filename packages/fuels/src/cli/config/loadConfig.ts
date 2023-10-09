@@ -60,10 +60,9 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   // Initialize optional variables
   config.autoStartFuelCore = userConfig.autoStartFuelCore ?? true;
 
-  const { contracts, predicates, scripts } = userConfig;
-
   if (!userConfig.workspace) {
     // Resolve members individually
+    const { contracts, predicates, scripts } = userConfig;
     config.contracts = (contracts || []).map((c: string) => resolve(cwd, c));
     config.scripts = (scripts || []).map((s: string) => resolve(cwd, s));
     config.predicates = (predicates || []).map((p: string) => resolve(cwd, p));
