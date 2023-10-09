@@ -34,7 +34,7 @@ export const startFuelCore = async (
   port: number;
   providerUrl: string;
   chainConfig: string;
-  childProcess: ChildProcessWithoutNullStreams;
+  killChildProcess: () => void;
 }> => {
   log('Starting node..');
 
@@ -81,8 +81,10 @@ export const startFuelCore = async (
       core.stdout.pipe(process.stdout);
     }
 
-    process.on('beforeExit', killNode(core, kill));
-    process.on('uncaughtException', killNode(core, kill));
+    const killChildProcess = killNode(core, kill);
+
+    process.on('beforeExit', killChildProcess);
+    process.on('uncaughtException', killChildProcess);
 
     core.stderr?.on('data', (data) => {
       if (/Binding GraphQL provider to/.test(data)) {
@@ -91,18 +93,16 @@ export const startFuelCore = async (
           accessIp,
           port,
           providerUrl,
-          childProcess: core,
+          killChildProcess,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           chainConfig: chainConfig!,
         });
       }
-      // if (/ERROR|IO error/.test(data)) {
-      if (/IO error/.test(data)) {
+      if (/error/i.test(data)) {
         log(
           `Some error occurred. Please, check to see if you have another instance running locally.`
         );
-        reject(data);
-        // process.exit(1);
+        reject(data.toString());
       }
     });
 

@@ -86,9 +86,9 @@ describe('startFuelCore', () => {
     expect(core.accessIp).toEqual('127.0.0.1');
     expect(core.port).toBeGreaterThanOrEqual(4000);
     expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/graphql/);
-    expect(core.childProcess).toBeTruthy();
+    expect(core.killChildProcess).toBeTruthy();
 
-    core.childProcess.kill();
+    core.killChildProcess();
   });
 
   test('should start `fuel-core` node using system binary', async () => {
