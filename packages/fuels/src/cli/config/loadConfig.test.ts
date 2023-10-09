@@ -62,4 +62,49 @@ describe('loadConfig', () => {
     expect(config.scripts.length).toEqual(1);
     expect(config.predicates.length).toEqual(1);
   });
+
+  test(`should resolve only contracts`, async () => {
+    await runInit(
+      [
+        ['--contracts', 'project/contracts/*'],
+        ['-o', generatedDir],
+      ].flat()
+    );
+
+    const config = await loadConfig(fixturesDir);
+
+    expect(config.contracts.length).toEqual(2);
+    expect(config.scripts.length).toEqual(0);
+    expect(config.predicates.length).toEqual(0);
+  });
+
+  test(`should resolve only scripts`, async () => {
+    await runInit(
+      [
+        ['--scripts', 'project/scripts/*'],
+        ['-o', generatedDir],
+      ].flat()
+    );
+
+    const config = await loadConfig(fixturesDir);
+
+    expect(config.contracts.length).toEqual(0);
+    expect(config.scripts.length).toEqual(1);
+    expect(config.predicates.length).toEqual(0);
+  });
+
+  test(`should resolve only predicates`, async () => {
+    await runInit(
+      [
+        ['--predicates', 'project/predicates/*'],
+        ['-o', generatedDir],
+      ].flat()
+    );
+
+    const config = await loadConfig(fixturesDir);
+
+    expect(config.contracts.length).toEqual(0);
+    expect(config.scripts.length).toEqual(0);
+    expect(config.predicates.length).toEqual(1);
+  });
 });
