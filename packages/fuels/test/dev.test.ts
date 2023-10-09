@@ -25,8 +25,7 @@ describe('dev', () => {
           accessIp: '127.0.0.1',
           port: 4000,
           providerUrl: `http://127.0.0.1:4000/graphql`,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          childProcess: {} as any,
+          killChildProcess: jest.fn(),
           chainConfig: '/some/path/chainConfig.json',
         })
       );
