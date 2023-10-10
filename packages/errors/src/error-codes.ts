@@ -19,6 +19,7 @@ export enum ErrorCode {
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
+  INVALID_EVM_ADDRESS = 'invalid-evm-address',
 
   // provider
   INVALID_URL = 'invalid-url',
@@ -74,6 +75,7 @@ export enum ErrorCode {
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
+  UNSUPPORTED_FUEL_CLIENT_VERSION = 'unsupported-fuel-client-version',
 
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',

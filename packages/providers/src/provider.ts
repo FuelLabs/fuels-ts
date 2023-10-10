@@ -13,6 +13,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { Client } from 'graphql-sse';
@@ -247,8 +248,13 @@ export default class Provider {
           });
   }
 
-  static chainInfoCache: ChainInfoCache = {};
-  static nodeInfoCache: NodeInfoCache = {};
+  static clearChainAndNodeCaches() {
+    Provider.nodeInfoCache = {};
+    Provider.chainInfoCache = {};
+  }
+
+  private static chainInfoCache: ChainInfoCache = {};
+  private static nodeInfoCache: NodeInfoCache = {};
 
   /**
    * Constructor to initialize a Provider.
@@ -341,10 +347,24 @@ export default class Provider {
     const chain = await this.fetchChain();
     const nodeInfo = await this.fetchNode();
 
+    Provider.ensureClientVersionIsSupported(nodeInfo);
+
     return {
       chain,
       nodeInfo,
     };
+  }
+
+  private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
+    const { isMajorSupported, isMinorSupported, supportedVersion } =
+      checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
+
+    if (!isMajorSupported || !isMinorSupported) {
+      throw new FuelError(
+        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+      );
+    }
   }
 
   /**
