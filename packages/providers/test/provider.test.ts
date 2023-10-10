@@ -10,8 +10,8 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import * as GraphQL from 'graphql-request';
 
-import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -21,6 +21,8 @@ import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
+import { MOCK_CHAIN } from './fixtures/chain';
+import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 // https://stackoverflow.com/a/72885576
 jest.mock('@fuel-ts/versions', () => ({
@@ -203,15 +205,22 @@ describe('Provider', () => {
 
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
-    const provider = await Provider.create(providerUrl1, {
-      fetch: (url: string, options: FetchRequestOptions) =>
-        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
-    });
+    const provider = await Provider.create(providerUrl1);
 
     expect(provider.url).toBe(providerUrl1);
-    expect(await provider.getVersion()).toEqual(providerUrl1);
+
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient').mockImplementation(
+      () =>
+        ({
+          request: () =>
+            Promise.resolve({
+              chain: MOCK_CHAIN,
+              nodeInfo: MOCK_NODE_INFO,
+            }),
+        } as unknown as GraphQL.GraphQLClient)
+    );
 
     const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
@@ -219,8 +228,7 @@ describe('Provider', () => {
 
     await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-
-    expect(await provider.getVersion()).toEqual(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
