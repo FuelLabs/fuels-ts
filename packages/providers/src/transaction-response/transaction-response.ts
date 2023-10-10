@@ -199,7 +199,7 @@ export class TransactionResponse {
    *
    * @returns The completed transaction result
    */
-  async waitForResult<TTransactionType = void>(
+  async #waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     for await (const { statusChange } of this.provider.operations.statusChange({
@@ -226,7 +226,7 @@ export class TransactionResponse {
   async wait<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
+    const result = await this.#waitForResult<TTransactionType>(contractsAbiMap);
 
     if (result.isStatusFailure) {
       throw new FuelError(
