@@ -6,13 +6,15 @@ import { join } from 'path';
 import { getABIPaths } from '../../config/forcUtils';
 import { renderIndexTemplate } from '../../templates';
 import type { FuelsConfig } from '../../types';
-import { log, loggingConfig } from '../../utils/logger';
+import { debug, log, loggingConfig } from '../../utils/logger';
 
 async function generateTypesForProgramType(
   config: FuelsConfig,
   paths: string[],
   programType: ProgramTypeEnum
 ) {
+  debug('Generating types..');
+
   const filepaths = await getABIPaths(paths);
   const pluralizedFolderName = `${String(programType).toLocaleLowerCase()}s`;
 
@@ -28,15 +30,25 @@ async function generateTypesForProgramType(
 }
 
 export async function generateTypes(config: FuelsConfig) {
-  log('Generating types..');
+  log('Generating types..', JSON.stringify(config, null, 2));
 
-  const folders = (
-    await Promise.all([
-      generateTypesForProgramType(config, config.contracts, ProgramTypeEnum.CONTRACT),
-      generateTypesForProgramType(config, config.predicates, ProgramTypeEnum.PREDICATE),
-      generateTypesForProgramType(config, config.scripts, ProgramTypeEnum.SCRIPT),
-    ])
-  ).filter((f) => !!f) as string[];
+  const generateTypesForNonEmptyProgramType = (
+    artifacts: string[],
+    programType: ProgramTypeEnum
+  ) => {
+    if (artifacts.length) {
+      return generateTypesForProgramType(config, artifacts, programType);
+    }
+    return [];
+  };
+
+  const promises = [
+    generateTypesForNonEmptyProgramType(config.contracts, ProgramTypeEnum.CONTRACT),
+    generateTypesForNonEmptyProgramType(config.predicates, ProgramTypeEnum.PREDICATE),
+    generateTypesForNonEmptyProgramType(config.scripts, ProgramTypeEnum.SCRIPT),
+  ].flat();
+
+  const folders = await Promise.all(promises);
 
   const indexFile = await renderIndexTemplate(folders);
 
