@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify, arrayify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
@@ -12,16 +12,12 @@ import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractPredicate } from '@fuel-ts/interfaces';
 import type {
-  CallResult,
   CoinQuantityLike,
   ExcludeResourcesOption,
   Provider,
-  TransactionRequestLike,
-  TransactionResponse,
   PredicateResource,
 } from '@fuel-ts/providers';
-import { transactionRequestify } from '@fuel-ts/providers';
-import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import { ByteArrayCoder } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
 
 import { getPredicateRoot } from './utils';
@@ -84,49 +80,6 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       ...r,
       getPredicateContent: () => ({ predicate: this.bytes, predicateData: this.predicateData }),
     }));
-  }
-
-  /**
-   * Populates the transaction data with predicate data.
-   *
-   * @param transactionRequestLike - The transaction request-like object.
-   * @returns The transaction request with predicate data.
-   */
-  populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
-    const request = transactionRequestify(transactionRequestLike);
-
-    request.inputs?.forEach((input) => {
-      if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
-        // eslint-disable-next-line no-param-reassign
-        input.predicate = this.bytes;
-        // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.predicateData;
-      }
-    });
-
-    return request;
-  }
-
-  /**
-   * Sends a transaction with the populated predicate data.
-   *
-   * @param transactionRequestLike - The transaction request-like object.
-   * @returns A promise that resolves to the transaction response.
-   */
-  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
-    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.sendTransaction(transactionRequest);
-  }
-
-  /**
-   * Simulates a transaction with the populated predicate data.
-   *
-   * @param transactionRequestLike - The transaction request-like object.
-   * @returns A promise that resolves to the call result.
-   */
-  simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
-    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.simulateTransaction(transactionRequest);
   }
 
   /**
