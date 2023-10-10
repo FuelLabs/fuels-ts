@@ -4,7 +4,7 @@
   "description": "Simple demo using Fuel CLI",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "buildx": "pnpm fuels build"
+    "build": "pnpm fuels build"
   },
   "dependencies": {
     "fuels": "workspace:*"
