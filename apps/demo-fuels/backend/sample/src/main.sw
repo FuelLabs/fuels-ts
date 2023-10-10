@@ -1,11 +1,11 @@
 contract;
 
-abi MyContract {
-    fn test_function() -> bool;
+abi Sample {
+    fn return_input(input: u64) -> u64;
 }
 
-impl MyContract for Contract {
-    fn test_function() -> bool {
-        true
+impl Sample for Contract {
+    fn return_input(input: u64) -> u64 {
+        input
     }
 }
