@@ -8,7 +8,7 @@ import type { TransactionResultReceipt } from '../transaction-response';
 import {
   calculatePriceWithFactor,
   calculateTransactionFee,
-  calculateTxChargeableBytesFee,
+  calculateTxChargeableBytes,
   getGasUsedFromReceipts,
 } from './fee';
 
@@ -37,125 +37,97 @@ describe(__filename, () => {
 
   describe('calculateTransactionFee', () => {
     it('should calculate transaction fee for script correctly', () => {
-      const margin = 1;
-      const gasUsed = new BN(1700);
-      const gasPrice = new BN(50);
-      const gasPriceFactor = new BN(92);
-      const gasPerByte = new BN(1);
-      const transactionWitnesses: Witness[] = [
-        {
-          dataLength: 64,
-          data: '0x3d8943b87436d54d7f1282ed9b01d38633f8003a37676276bbaf0560390d21f826b5f6e9ea85b1bca435af2bec4982436c20c1294876025f78aaa0143867eb7f',
-        },
-      ];
+      const gasUsed = bn(1700);
+      const gasLimit = bn(10);
+      const gasPrice = bn(50);
+      const gasPriceFactor = bn(92);
+      const gasPerByte = bn(4);
+      const chargeableBytes = bn(440);
 
-      const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
-
-      const receipts: TransactionResultReceipt[] = [
-        {
-          type: ReceiptType.ScriptResult,
-          result: bn(50),
-          gasUsed,
-        },
-      ];
+      const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
+      const minGas = bytesGas.add(0);
+      const maxGas = bytesGas.add(gasLimit);
+      const expectedMinGasToPay = bn(
+        Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
+      );
+      const expectedMaxGasToPay = bn(
+        Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
+      );
 
       const result = calculateTransactionFee({
-        receipts,
         gasPrice,
-        gasPriceFactor,
-        margin,
-        transactionBytes,
-        transactionWitnesses,
+        gasUsed,
+        gasLimit,
         gasPerByte,
+        gasPriceFactor,
+        chargeableBytes,
       });
 
-      const expectedFee = 1200;
-      const expectedGasUsed = gasUsed;
-
-      expect(result.fee.toNumber()).toStrictEqual(expectedFee);
-      expect(result.gasUsed.toNumber()).toStrictEqual(expectedGasUsed.toNumber());
+      expect(result.fee.toNumber()).toEqual(expectedMinGasToPay.toNumber());
+      expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
+      expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
     });
 
     it('should calculate transaction fee for multiple receipts', () => {
-      const gasUsed1 = new BN(900);
-      const gasUsed2 = new BN(800);
+      const gasUsed = new BN(900);
+      const gasLimit = bn(10);
       const gasPrice = new BN(50);
       const gasPriceFactor = new BN(1000000);
-      const margin = 1;
       const gasPerByte = new BN(1);
-      const transactionWitnesses: Witness[] = [
-        {
-          dataLength: 64,
-          data: '0x741af9e1379d78d1882d6058888cb704f3ba5b4854ca919e6a26b759dbd6931877323cfbf6ced0ba63b18fbb15926fadd877218c93b8d9972564168b6198208d',
-        },
-      ];
+      const chargeableBytes = bn(1120);
 
-      const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
-
-      const receipts: TransactionResultReceipt[] = [
-        {
-          type: ReceiptType.ScriptResult,
-          result: bn(50),
-          gasUsed: gasUsed1,
-        },
-        {
-          type: ReceiptType.ScriptResult,
-          result: bn(90),
-          gasUsed: gasUsed2,
-        },
-      ];
+      const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
+      const minGas = bytesGas.add(0);
+      const maxGas = bytesGas.add(gasLimit);
+      const expectedMinGasToPay = bn(
+        Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
+      );
+      const expectedMaxGasToPay = bn(
+        Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
+      );
 
       const result = calculateTransactionFee({
-        receipts,
         gasPrice,
-        gasPriceFactor,
-        margin,
-        transactionBytes,
-        transactionWitnesses,
+        gasUsed,
+        gasLimit,
         gasPerByte,
+        gasPriceFactor,
+        chargeableBytes,
       });
 
-      const expectedGasUsed = bn(gasUsed1.toNumber() + gasUsed2.toNumber());
-      const expectedFee = 100;
-
-      expect(result.fee.toNumber()).toStrictEqual(expectedFee);
-      expect(result.gasUsed.toNumber()).toStrictEqual(expectedGasUsed.toNumber());
+      expect(result.fee.toNumber()).toEqual(expectedMinGasToPay.toNumber());
+      expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
+      expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
     });
   });
 
-  describe('calculateTxChargeableBytesFee', () => {
-    it('should calculate gas used for contract created correctly', () => {
+  describe('calculateTxChargeableBytes', () => {
+    it('should calculate properly transaction chargeable bytes just fine', () => {
       const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
-      const gasPerByte = new BN(1);
-      const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [{ dataLength: 0, data: '0x' }];
-      const gasPrice = new BN(4);
 
-      const chargeableBytesFee = calculateTxChargeableBytesFee({
+      const chargeableBytesFee = calculateTxChargeableBytes({
         transactionBytes,
-        gasPerByte,
-        gasPriceFactor,
         transactionWitnesses,
-        gasPrice,
       });
 
-      expect(chargeableBytesFee.toNumber()).toEqual(1040);
+      expect(chargeableBytesFee.toNumber()).toEqual(0);
     });
 
     it('should handle an empty witnesses array', () => {
       const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
-      const gasPerByte = new BN(1);
-      const gasPriceFactor = new BN(2);
-      const transactionWitnesses: Witness[] = [];
+      const offset = 520;
+      const transactionWitnesses: Witness[] = [
+        {
+          dataLength: 64,
+          data: '0x3d8943b87436d54d7f1282ed9b01d38633f8003a37676276bbaf0560390d21f826b5f6e9ea85b1bca435af2bec4982436c20c1294876025f78aaa0143867eb7f',
+          offset,
+        },
+      ];
 
-      const gasPrice = new BN(2);
-
-      const chargeableBytesFee = calculateTxChargeableBytesFee({
+      const chargeableBytesFee = calculateTxChargeableBytes({
         transactionBytes,
-        gasPerByte,
-        gasPriceFactor,
         transactionWitnesses,
-        gasPrice,
       });
 
       expect(chargeableBytesFee.toNumber()).toEqual(520);
@@ -163,22 +135,21 @@ describe(__filename, () => {
 
     it('should round up the result', () => {
       const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
+      const offset = 760;
+      const transactionWitnesses: Witness[] = [
+        {
+          dataLength: 64,
+          data: '0x741af9e1379d78d1882d6058888cb704f3ba5b4854ca919e6a26b759dbd6931877323cfbf6ced0ba63b18fbb15926fadd877218c93b8d9972564168b6198208d',
+          offset,
+        },
+      ];
 
-      const gasPerByte = new BN(1);
-      const gasPriceFactor = new BN(2);
-      const transactionWitnesses: Witness[] = [];
-
-      const gasPrice = new BN(1);
-
-      const chargeableBytesFee = calculateTxChargeableBytesFee({
+      const chargeableBytesFee = calculateTxChargeableBytes({
         transactionBytes,
-        gasPerByte,
-        gasPriceFactor,
         transactionWitnesses,
-        gasPrice,
       });
 
-      expect(chargeableBytesFee.toNumber()).toEqual(260);
+      expect(chargeableBytesFee.toNumber()).toEqual(760);
     });
   });
 

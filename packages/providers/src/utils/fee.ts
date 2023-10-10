@@ -1,5 +1,5 @@
 import type { BN } from '@fuel-ts/math';
-import { bn, multiply } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Witness } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -24,66 +24,49 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 };
 
 /** @hidden */
-export interface CalculateTxChargeableBytesFeeParams {
-  gasPrice: BN;
+export interface CalculateTxChargeableBytesParams {
   transactionBytes: Uint8Array;
-  transactionWitnesses: Witness[];
-  gasPriceFactor: BN;
-  gasPerByte?: BN;
+  transactionWitnesses?: Witness[];
 }
 
 /** @hidden */
-export const calculateTxChargeableBytesFee = (params: CalculateTxChargeableBytesFeeParams): BN => {
-  const { gasPrice, transactionBytes, transactionWitnesses, gasPerByte, gasPriceFactor } = params;
+export const calculateTxChargeableBytes = (params: CalculateTxChargeableBytesParams): BN => {
+  const { transactionWitnesses } = params;
 
-  const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
+  const txChargeableBytes = bn(transactionWitnesses?.[0]?.offset || 0);
 
-  const txChargeableBytes = bn(transactionBytes.length - witnessSize);
-
-  const txChargeableBytesGasUsed = bn(
-    Math.ceil(
-      (txChargeableBytes.toNumber() * bn(gasPerByte).toNumber()) / bn(gasPriceFactor).toNumber()
-    )
-  );
-
-  const chargeableBytesFee = txChargeableBytesGasUsed.mul(gasPrice);
-
-  return chargeableBytesFee;
+  return txChargeableBytes;
 };
 
 export interface CalculateTransactionFeeParams {
-  receipts: TransactionResultReceipt[];
+  gasUsed: BN;
   gasPrice: BN;
-  margin?: number;
-  transactionBytes: Uint8Array;
-  transactionWitnesses: Witness[];
+  gasLimit: BN;
+  gasPerByte: BN;
   gasPriceFactor: BN;
-  gasPerByte?: BN;
+  chargeableBytes: BN;
 }
 
 /** @hidden */
 export const calculateTransactionFee = ({
-  receipts,
   gasPrice,
-  gasPriceFactor,
+  gasLimit,
   gasPerByte,
-  transactionBytes,
-  transactionWitnesses,
-  margin,
+  gasPriceFactor,
+  chargeableBytes,
 }: CalculateTransactionFeeParams) => {
-  const chargeableBytesFee = calculateTxChargeableBytesFee({
-    gasPrice,
-    transactionBytes,
-    transactionWitnesses,
-    gasPriceFactor,
-    gasPerByte,
-  });
+  const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
 
-  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
-  const partialFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
+  // TODO: Consider gas used by predicated
+  const minGas = bytesGas.add(0); // add gas used per predicates
+  const maxGas = bytesGas.add(gasLimit);
+
+  const minGasToPay = bn(Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber()));
+  const maxGasToPay = bn(Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber()));
 
   return {
-    fee: partialFee.add(chargeableBytesFee),
-    gasUsed,
+    fee: minGasToPay,
+    minGasToPay,
+    maxGasToPay,
   };
 };
