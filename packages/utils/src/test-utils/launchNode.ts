@@ -12,7 +12,7 @@ import { defaultChainConfig, genesisWalletConfig } from './defaultChainConfig';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
-type LaunchNodeOptions = {
+export type LaunchNodeOptions = {
   chainConfigPath?: string;
   consensusKey?: string;
   ip?: string;
@@ -75,6 +75,16 @@ export const launchNode = async ({
                 owner: genesisWalletConfig.address,
                 amount: toHex(1_000_000_000),
                 asset_id: BaseAssetId,
+              },
+              {
+                owner: genesisWalletConfig.address,
+                amount: '0xFFFFFFFFFFFFFFFF',
+                asset_id: '0x0101010101010101010101010101010101010101010101010101010101010101',
+              },
+              {
+                owner: genesisWalletConfig.address,
+                amount: '0xFFFFFFFFFFFFFFFF',
+                asset_id: '0x0202020202020202020202020202020202020202020202020202020202020202',
               },
             ],
           },
