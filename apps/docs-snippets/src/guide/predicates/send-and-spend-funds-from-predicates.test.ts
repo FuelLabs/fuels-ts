@@ -26,7 +26,7 @@ describe(__filename, () => {
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
 
-    await tx.waitForResult();
+    await tx.wait();
     // #endregion send-and-spend-funds-from-predicates-3
 
     const initialPredicateBalance = new BN(await predicate.getBalance()).toNumber();
@@ -46,7 +46,7 @@ describe(__filename, () => {
 
     const tx2 = await predicate.transfer(receiverWallet.address, amountToPredicate - 100);
 
-    await tx2.waitForResult();
+    await tx2.wait();
     // #endregion send-and-spend-funds-from-predicates-5
   });
 
@@ -58,7 +58,7 @@ describe(__filename, () => {
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
 
-    await tx.waitForResult();
+    await tx.wait();
 
     const predicateBalance = new BN(await predicate.getBalance()).toNumber();
 
@@ -90,7 +90,7 @@ describe(__filename, () => {
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
 
-    await tx.waitForResult();
+    await tx.wait();
 
     const receiverWallet = WalletUnlocked.generate({
       provider,

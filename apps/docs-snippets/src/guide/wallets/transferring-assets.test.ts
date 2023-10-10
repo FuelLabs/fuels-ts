@@ -61,7 +61,7 @@ describe(__filename, () => {
     const tx = await senderWallet.transferToContract(contractId, amountToTransfer, assetId);
     expect(new BN(contractBalance).toNumber()).toBe(0);
 
-    await tx.waitForResult();
+    await tx.wait();
 
     expect(new BN(await deployedContract.getBalance(assetId)).toNumber()).toBe(amountToTransfer);
     // #endregion transferring-assets-2

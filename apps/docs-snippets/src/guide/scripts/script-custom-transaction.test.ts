@@ -73,7 +73,7 @@ describe(__filename, () => {
 
     // 5. Send the transaction
     const tx = await wallet.sendTransaction(request);
-    await tx.waitForResult();
+    await tx.wait();
 
     // #endregion custom-transactions-2
     const contractFinalBalanceAssetA = await contract.getBalance(assetIdA);

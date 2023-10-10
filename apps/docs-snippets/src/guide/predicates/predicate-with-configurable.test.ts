@@ -28,7 +28,7 @@ describe(__filename, () => {
     // transfering funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 500);
 
-    await tx1.waitForResult();
+    await tx1.wait();
 
     const destinationWallet = WalletUnlocked.generate({
       provider: wallet.provider,
@@ -39,7 +39,7 @@ describe(__filename, () => {
     // transfering funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
 
-    await tx2.waitForResult();
+    await tx2.wait();
     // #endregion predicate-with-configurable-constants-2
 
     const destinationBalance = await destinationWallet.getBalance(BaseAssetId);
@@ -57,7 +57,7 @@ describe(__filename, () => {
     // transfering funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 500);
 
-    await tx1.waitForResult();
+    await tx1.wait();
 
     const destinationWallet = WalletUnlocked.generate({
       provider: wallet.provider,
@@ -68,7 +68,7 @@ describe(__filename, () => {
     // transfering funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
 
-    await tx2.waitForResult();
+    await tx2.wait();
     // #endregion predicate-with-configurable-constants-3
 
     const destinationBalance = await destinationWallet.getBalance(BaseAssetId);
