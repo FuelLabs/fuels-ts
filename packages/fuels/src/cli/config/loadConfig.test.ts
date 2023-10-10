@@ -49,6 +49,7 @@ describe('loadConfig', () => {
   test(`should resolve individually paths when not using workspaces`, async () => {
     await runInit(
       [
+        initFlagsUseBuiltinBinaries,
         ['--contracts', 'project/contracts/*'],
         ['--scripts', 'project/scripts/*'],
         ['--predicates', 'project/predicates/*'],
@@ -66,6 +67,7 @@ describe('loadConfig', () => {
   test(`should resolve only contracts`, async () => {
     await runInit(
       [
+        initFlagsUseBuiltinBinaries,
         ['--contracts', 'project/contracts/*'],
         ['-o', generatedDir],
       ].flat()
@@ -80,10 +82,7 @@ describe('loadConfig', () => {
 
   test(`should resolve only scripts`, async () => {
     await runInit(
-      [
-        ['--scripts', 'project/scripts/*'],
-        ['-o', generatedDir],
-      ].flat()
+      [initFlagsUseBuiltinBinaries, ['--scripts', 'project/scripts/*'], ['-o', generatedDir]].flat()
     );
 
     const config = await loadConfig(fixturesDir);
@@ -96,6 +95,7 @@ describe('loadConfig', () => {
   test(`should resolve only predicates`, async () => {
     await runInit(
       [
+        initFlagsUseBuiltinBinaries,
         ['--predicates', 'project/predicates/*'],
         ['-o', generatedDir],
       ].flat()
