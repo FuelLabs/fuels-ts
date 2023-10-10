@@ -1,5 +1,6 @@
-import type { BigNumberish } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, WalletUnlocked } from 'fuels';
+/* eslint-disable no-console */
+import type { BN } from 'fuels';
+import { Provider, FUEL_NETWORK_URL, WalletUnlocked, bn } from 'fuels';
 
 import { getScript } from './utils';
 
@@ -75,34 +76,47 @@ type MainArgs = [
 describe('Live Script Test', () => {
   it('can use script against live Fuel Node', async () => {
     if (!process.env.FUEL_NETWORK_GENESIS_KEY) {
-      // eslint-disable-next-line no-console
       console.log('Skipping live Fuel Node test');
       return;
     }
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(process.env.FUEL_NETWORK_GENESIS_KEY, provider);
-    const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
+    const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
 
-    const { value } = await scriptInstance.functions
-      .main(
-        U32_VEC,
-        VEC_IN_VEC,
-        STRUCT_IN_VEC,
-        VEC_IN_STRUCT,
-        ARRAY_IN_VEC,
-        VEC_IN_ARRAY,
-        VEC_IN_ENUM,
-        ENUM_IN_VEC,
-        TUPLE_IN_VEC,
-        VEC_IN_TUPLE,
-        VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-      )
-      .txParams({
-        gasPrice: 1,
-      })
-      .call();
+    let output: BN = bn(0);
+    try {
+      const { value } = await scriptInstance.functions
+        .main(
+          U32_VEC,
+          VEC_IN_VEC,
+          STRUCT_IN_VEC,
+          VEC_IN_STRUCT,
+          ARRAY_IN_VEC,
+          VEC_IN_ARRAY,
+          VEC_IN_ENUM,
+          ENUM_IN_VEC,
+          TUPLE_IN_VEC,
+          VEC_IN_TUPLE,
+          VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
+        )
+        .txParams({
+          gasPrice: 1,
+        })
+        .call();
 
-    expect(value.toString()).toBe('1');
+      output = value;
+    } catch (e) {
+      console.error((e as Error).message);
+      console.warn(`
+        not enough coins to fit the target?
+        
+        - add assets: https://faucet-beta-4.fuel.network/
+        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-4/#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg
+        - bech32 address: fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg
+        `);
+    }
+
+    expect(output.toString()).toBe('1');
   });
 });
