@@ -171,7 +171,7 @@ export function assembleReceiptByType(receipt: GqlReceipt) {
       const transferReceipt: ReceiptTransfer = {
         type: ReceiptType.Transfer,
         from: hexOrZero(receipt.contract?.id),
-        to: hexOrZero(receipt?.to?.id),
+        to: hexOrZero(receipt.toAddress || receipt?.to?.id),
         amount: bn(receipt.amount),
         assetId: hexOrZero(receipt.assetId),
         pc: bn(receipt.pc),
@@ -185,7 +185,7 @@ export function assembleReceiptByType(receipt: GqlReceipt) {
       const transferOutReceipt: ReceiptTransferOut = {
         type: ReceiptType.TransferOut,
         from: hexOrZero(receipt.contract?.id),
-        to: hexOrZero(receipt?.to?.id),
+        to: hexOrZero(receipt.toAddress || receipt.to?.id),
         amount: bn(receipt.amount),
         assetId: hexOrZero(receipt.assetId),
         pc: bn(receipt.pc),
