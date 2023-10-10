@@ -41,7 +41,13 @@ import { transactionRequestify, ScriptTransactionRequest } from './transaction-r
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
-import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
+import {
+  calculateTransactionFee,
+  calculateTxChargeableBytes,
+  fromUnixToTai64,
+  getGasUsedFromReceipts,
+  getReceiptsWithMissingData,
+} from './utils';
 
 const MAX_RETRIES = 10;
 
@@ -741,12 +747,13 @@ export default class Provider {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    tolerance: number = 0.2
+    _tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const margin = 1 + tolerance;
+    const gasLimit = maxGasPerTx;
+    // const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
@@ -758,14 +765,20 @@ export default class Provider {
     const { receipts } = await this.call(transactionRequest);
     const transaction = transactionRequest.toTransaction();
 
-    const { fee, gasUsed } = calculateTransactionFee({
-      gasPrice,
+    const chargeableBytes = calculateTxChargeableBytes({
       transactionBytes: transactionRequest.toTransactionBytes(),
-      transactionWitnesses: transaction?.witnesses || [],
+      transactionWitnesses: transaction.witnesses,
+    });
+
+    const gasUsed = getGasUsedFromReceipts(receipts);
+
+    const { fee } = calculateTransactionFee({
+      gasPrice,
       gasPerByte,
       gasPriceFactor,
-      receipts,
-      margin,
+      chargeableBytes,
+      gasLimit,
+      gasUsed,
     });
 
     return {
