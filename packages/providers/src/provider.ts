@@ -356,21 +356,13 @@ export default class Provider {
   }
 
   private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
-    const { isMajorSupported, isMinorSupported, isPatchSupported, supportedVersion } =
+    const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
       throw new FuelError(
         FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
         `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
-      );
-    }
-
-    if (!isPatchSupported) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `The patch versions of the client and sdk differ. Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
       );
     }
   }
