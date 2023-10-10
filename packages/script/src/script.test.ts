@@ -61,7 +61,7 @@ const callScript = async <TData, TResult>(
   }
 
   const response = await account.sendTransaction(request);
-  const transactionResult = await response.waitForResult();
+  const transactionResult = await response.wait();
   const result = script.decodeCallResult(transactionResult);
 
   return { transactionResult, result, response };

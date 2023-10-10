@@ -120,7 +120,7 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, amountToReceiver);
 
-      await tx.waitForResult();
+      await tx.wait();
 
       // calling the contract with the receiver account (with resources)
       const gasPrice = 1;

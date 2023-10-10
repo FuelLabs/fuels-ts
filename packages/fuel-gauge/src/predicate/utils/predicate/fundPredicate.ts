@@ -7,7 +7,7 @@ export const fundPredicate = async <T extends InputValue[]>(
   amountToPredicate: BigNumberish
 ): Promise<BN> => {
   const tx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
-  await tx.waitForResult();
+  await tx.wait();
 
   return predicate.getBalance();
 };

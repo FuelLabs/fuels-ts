@@ -73,7 +73,7 @@ describe('TransactionSummary', () => {
 
     expect(response.gqlTransaction).toBeUndefined();
 
-    await response.waitForResult();
+    await response.wait();
 
     expect(response.gqlTransaction?.status?.type).toBeDefined();
     expect(response.gqlTransaction?.status?.type).not.toEqual('SubmittedStatus');

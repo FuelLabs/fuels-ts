@@ -45,12 +45,12 @@ describe('PredicateConditionalInputs', () => {
     // transfer asset A to predicate so it can transfer to alice
     const tx1 = await adminWallet.transfer(predicate.address, 2_000, assetIdA);
 
-    await tx1.waitForResult();
+    await tx1.wait();
 
     // transfer base asset to Alice so she can pay the fees
     const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000);
 
-    await tx2.waitForResult();
+    await tx2.wait();
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1000,
@@ -74,7 +74,7 @@ describe('PredicateConditionalInputs', () => {
 
     const tx3 = await aliceWallet.sendTransaction(request);
 
-    await tx3.waitForResult();
+    await tx3.wait();
 
     const aliceBaseAssetAfter = await aliceWallet.getBalance();
     const aliceAssetAAfter = await aliceWallet.getBalance(assetIdA);
@@ -116,18 +116,18 @@ describe('PredicateConditionalInputs', () => {
     // transfer asset A to predicate so it can transfer to alice
     const tx1 = await adminWallet.transfer(predicate.address, 2_000, assetIdA);
 
-    await tx1.waitForResult();
+    await tx1.wait();
 
     // transfer base asset to predicate so it can pay the fees
     const tx2 = await adminWallet.transfer(predicate.address, 2_000, BaseAssetId);
 
-    await tx2.waitForResult();
+    await tx2.wait();
 
     // transfer asset B to Alice so it can add symbolic UTXOs to the transaction
     // inputs in order to the predicate validate her inputs in the transaction.
     const tx3 = await adminWallet.transfer(aliceWallet.address, 2_000, assetIdB);
 
-    await tx3.waitForResult();
+    await tx3.wait();
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1000,
@@ -159,7 +159,7 @@ describe('PredicateConditionalInputs', () => {
 
     const tx4 = await aliceWallet.sendTransaction(request);
 
-    await tx4.waitForResult();
+    await tx4.wait();
 
     const aliceAssetAAfter = await aliceWallet.getBalance(assetIdA);
     const predicateAssetAAfter = await predicate.getBalance(assetIdA);

@@ -751,7 +751,7 @@ describe('Contract', () => {
     await wallet.fund(transactionRequestParsed);
     // Send tx
     const response = await wallet.sendTransaction(transactionRequestParsed);
-    const result = await response.waitForResult();
+    const result = await response.wait();
     expect(result.status).toBe('success');
   });
 
@@ -911,7 +911,7 @@ describe('Contract', () => {
 
     const tx = await wallet.transferToContract(contract.id, amountToContract);
 
-    await tx.waitForResult();
+    await tx.wait();
 
     const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
@@ -934,7 +934,7 @@ describe('Contract', () => {
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, asset);
 
-    await tx.waitForResult();
+    await tx.wait();
 
     const finalBalance = new BN(await contract.getBalance(asset)).toNumber();
 
@@ -956,11 +956,11 @@ describe('Contract', () => {
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
 
-    await tx1.waitForResult();
+    await tx1.wait();
 
     const tx2 = await predicate.transferToContract(contract.id, amountToContract);
 
-    await tx2.waitForResult();
+    await tx2.wait();
 
     const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 

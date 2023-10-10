@@ -28,7 +28,7 @@ describe('Predicate', () => {
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalances(
         predicate,

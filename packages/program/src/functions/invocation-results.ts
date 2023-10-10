@@ -171,7 +171,7 @@ export class FunctionInvocationResult<
     isMultiCall: boolean,
     program: AbstractProgram
   ) {
-    const txResult = await transactionResponse.waitForResult<TTransactionType>();
+    const txResult = await transactionResponse.wait<TTransactionType>();
     const fnResult = new FunctionInvocationResult<T, TTransactionType>(
       funcScope,
       transactionResponse,

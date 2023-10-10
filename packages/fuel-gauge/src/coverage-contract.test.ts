@@ -432,7 +432,7 @@ describe('Coverage Contract', () => {
     request.addCoinOutput(recipient.address, 10, BaseAssetId);
 
     const response = await sender.sendTransaction(request);
-    const result = await response.waitForResult();
+    const result = await response.wait();
 
     expect(result.status).toEqual('success');
   });

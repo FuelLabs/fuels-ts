@@ -164,7 +164,7 @@ describe('Predicate', () => {
       const tx = await predicate
         .setData('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a')
         .transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalances(
         predicate,
@@ -201,7 +201,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.setData(1078).transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalances(
         predicate,
@@ -247,7 +247,7 @@ describe('Predicate', () => {
           total_complete: 100,
         })
         .transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalances(
         predicate,
@@ -304,7 +304,7 @@ describe('Predicate', () => {
           total_complete: 100,
         })
         .transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
       // #endregion predicate-struct-arg
 
       await assertBalances(
@@ -353,7 +353,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalances(
         predicate,
@@ -377,7 +377,7 @@ describe('Predicate', () => {
       // #context const predicate = new Predicate(bytecode, chainId, abi);
       predicate.setData(20, 30);
       const tx = await predicate.transfer(receiver.address, amountToReceiver);
-      await tx.waitForResult();
+      await tx.wait();
       // #endregion predicate-multi-args
 
       await assertBalances(

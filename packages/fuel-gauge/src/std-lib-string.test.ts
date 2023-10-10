@@ -59,14 +59,14 @@ describe('std-lib-string Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
-    await setupTx.waitForResult();
+    await setupTx.wait();
 
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
     const tx = await predicate
       .setData(1, 2, 'Hello World')
       .transfer(receiver.address, amountToReceiver);
-    await tx.waitForResult();
+    await tx.wait();
 
     // Check the balance of the receiver
     const finalReceiverBalance = await receiver.getBalance();

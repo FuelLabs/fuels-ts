@@ -87,7 +87,7 @@ describe('Bytes Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
-    await setupTx.waitForResult();
+    await setupTx.wait();
 
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
@@ -97,7 +97,7 @@ describe('Bytes Tests', () => {
       inner_enum: { Second: bytes },
     };
     const tx = await predicate.setData(INPUT).transfer(receiver.address, amountToReceiver);
-    await tx.waitForResult();
+    await tx.wait();
 
     // Check the balance of the receiver
     const finalReceiverBalance = await receiver.getBalance();

@@ -61,7 +61,7 @@ describe('Predicate', () => {
 
       const tx = await predicate.transfer(destination.address, amountToTransfer);
 
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
@@ -93,7 +93,7 @@ describe('Predicate', () => {
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer);
 
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
@@ -125,7 +125,7 @@ describe('Predicate', () => {
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer);
 
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
@@ -159,7 +159,7 @@ describe('Predicate', () => {
 
       const tx = await predicate.transfer(destination.address, amountToTransfer);
 
-      await tx.waitForResult();
+      await tx.wait();
 
       await assertBalance(destination, amountToTransfer, BaseAssetId);
     });

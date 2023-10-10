@@ -79,7 +79,7 @@ describe('TransactionSummary', () => {
 
     const tx = await wallet.sendTransaction(request);
 
-    const transactionResponse = await tx.waitForResult();
+    const transactionResponse = await tx.wait();
 
     const transactionSummary = await getTransactionSummary({
       id: tx.id,
@@ -100,7 +100,7 @@ describe('TransactionSummary', () => {
     });
 
     const tx1 = await wallet.transfer(sender.address, 200);
-    const transactionResponse1 = await tx1.waitForResult();
+    const transactionResponse1 = await tx1.wait();
 
     const amountToTransfer = 100;
 
@@ -109,7 +109,7 @@ describe('TransactionSummary', () => {
     });
 
     const tx2 = await sender.transfer(destination.address, amountToTransfer);
-    const transactionResponse2 = await tx2.waitForResult();
+    const transactionResponse2 = await tx2.wait();
 
     const { transactions } = await getTransactionsSummaries({
       provider,

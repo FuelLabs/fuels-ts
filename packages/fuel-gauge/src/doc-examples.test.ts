@@ -402,7 +402,7 @@ it('can create a predicate and use', async () => {
   const initialPredicateBalance = await predicate.getBalance();
 
   const response = await wallet1.transfer(predicate.address, amountToPredicate);
-  await response.waitForResult();
+  await response.wait();
   const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate
@@ -410,7 +410,7 @@ it('can create a predicate and use', async () => {
 
   const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
   // Wait for Transaction to succeed
-  await depositOnPredicate.waitForResult();
+  await depositOnPredicate.wait();
   const updatedPredicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the updated expected amount to predicate
@@ -426,7 +426,7 @@ it('can create a predicate and use', async () => {
   const signatures = [signature1, signature2, signature3];
 
   const tx = await predicate.setData(signatures).transfer(receiver.address, amountToReceiver);
-  await tx.waitForResult();
+  await tx.wait();
 
   // check balances
   const finalPredicateBalance = await predicate.getBalance();

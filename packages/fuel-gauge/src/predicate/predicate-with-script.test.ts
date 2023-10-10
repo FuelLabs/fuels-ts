@@ -66,7 +66,7 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, amountToReceiver);
 
-      await tx.waitForResult();
+      await tx.wait();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
 
