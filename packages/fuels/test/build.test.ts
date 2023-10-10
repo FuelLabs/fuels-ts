@@ -1,7 +1,14 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
 
-import { clean, runBuild, runInit } from './utils/runCommands';
+import {
+  clean,
+  contractsFooDir,
+  generatedDir,
+  initFlagsUseBuiltinBinaries,
+  runBuild,
+  runInit,
+} from './utils/runCommands';
 
 describe('build', () => {
   beforeEach(clean);
@@ -23,6 +30,23 @@ describe('build', () => {
       'contracts/index.ts',
       'scripts/factories/ScriptTrueAbi__factory.ts',
       'scripts/index.ts',
+      'index.ts',
+    ].map((f) => join(__dirname, 'fixtures', 'generated', f));
+
+    for (const file of files) {
+      expect(existsSync(file)).toBeTruthy();
+    }
+  });
+
+  it('should run `build` command with contracts-only', async () => {
+    await runInit([initFlagsUseBuiltinBinaries, '-c', contractsFooDir, '-o', generatedDir].flat());
+    await runBuild();
+
+    const files = [
+      'contracts/FooBarAbi.hex.ts',
+      'contracts/FooBarAbi.d.ts',
+      'contracts/factories/FooBarAbi__factory.ts',
+      'contracts/index.ts',
       'index.ts',
     ].map((f) => join(__dirname, 'fixtures', 'generated', f));
 
