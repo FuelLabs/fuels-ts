@@ -1,4 +1,4 @@
-export const theFuelToolchainLink = 'http://';
+export const theFuelToolchainLink = 'https://docs.fuel.network/guides/installation/';
 
 type BinaryName = 'forc' | 'fuel-core';
 
