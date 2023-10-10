@@ -240,17 +240,14 @@ export default class Provider {
   private static getFetchFn(options: ProviderOptions) {
     return options.fetch !== undefined
       ? options.fetch
-      : (url: string, request: FetchRequestOptions) => {
-          let abortSignal: AbortSignal | undefined;
-          if (options.timeout !== undefined) {
-            abortSignal =
-              options.timeout === 0 ? AbortSignal.abort() : AbortSignal.timeout(options.timeout);
-          }
-          return fetch(url, {
+      : (url: string, request: FetchRequestOptions, providerOptions: ProviderOptions) =>
+          fetch(url, {
             ...request,
-            signal: abortSignal,
+            signal:
+              providerOptions.timeout !== undefined
+                ? AbortSignal.timeout(providerOptions.timeout)
+                : undefined,
           });
-        };
   }
 
   static clearChainAndNodeCaches() {

@@ -10,6 +10,8 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { versions } from '@fuel-ts/versions';
+import { time } from 'console';
+import type { Url } from 'url';
 
 import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
@@ -18,7 +20,7 @@ import type {
   MessageTransactionRequestInput,
 } from '../src/transaction-request';
 import { ScriptTransactionRequest } from '../src/transaction-request';
-import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
+import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 
@@ -688,9 +690,18 @@ describe('Provider', () => {
   });
 
   it('throws TimeoutError on timeout when calling an operation', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
+    jest
+      .spyOn(global, 'fetch')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TS is throwing error in test, but not in IDE
+      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
+        sleep(timeout).then(() => fetch(input, init))
+      );
+
     const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-      await provider.getTransaction('will fail due to timeout');
+      await provider.getBlocks({});
     });
 
     expect(error).toMatchObject({
@@ -700,10 +711,25 @@ describe('Provider', () => {
     });
   });
 
-  it('throws TimeoutError on timeout when calling a subscription', async () => {
+  // skipped because graphql-sse creates their own AbortController which controls timeouts. https://github.com/FuelLabs/fuels-ts/issues/1293
+  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
+
+    jest
+      .spyOn(global, 'fetch')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TS is throwing error in test, but not in IDE
+      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
+        sleep(timeout).then(() => fetch(input, init))
+      );
+
     const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
+      for await (const iterator of provider.operations.statusChange({
+        transactionId: 'doesnt matter, will be aborted',
+      })) {
+        // shouldn't be reached
+      }
     });
     expect(error).toMatchObject({
       code: 23,
