@@ -94,7 +94,6 @@ describe('startFuelCore', () => {
       useBuiltinFuelCore: false,
     });
 
-    // bang
     expect(spawn).toHaveBeenCalledTimes(1);
     expect(spawn.mock.calls[0][0]).toMatch(/^fuel-core$/m);
 

@@ -4,6 +4,9 @@ import { join } from 'path';
 import { Commands } from '../../src';
 import { run } from '../../src/cli';
 
+/**
+ * Paths
+ */
 export const fixturesDir = join(__dirname, '..', 'fixtures');
 
 export const workspaceDir = join(fixturesDir, 'project');
@@ -25,11 +28,18 @@ export const fooContractFactoryPath = join(
   'FooBarAbi__factory.ts'
 );
 
+/**
+ * Helper
+ */
 export async function runCommand(commandName: string, params: string[] = []) {
+  // always `--silent` to avoid polluting tests output
   const argv = ['node', 'fuels', '--silent', commandName, '-p', fixturesDir].concat(params);
   return { argv, command: await run(argv) };
 }
 
+/**
+ * Bundled flag combos
+ */
 export const initFlagsWorkspace = ['-w', workspaceDir, '-o', generatedDir];
 export const initFlagsUseBuiltinBinaries = ['--use-builtin-forc', '--use-builtin-fuel-core'];
 export const initFlagsAutoStartFuelCore = '--auto-start-fuel-core';
@@ -39,6 +49,9 @@ export const initFlagsDefault = [
   initFlagsAutoStartFuelCore,
 ];
 
+/**
+ * Command callers
+ */
 export async function runInit(flags: string[] = initFlagsDefault.flat()) {
   return runCommand(Commands.init, flags.flat());
 }
@@ -55,6 +68,9 @@ export async function runDev() {
   return runCommand(Commands.dev);
 }
 
+/**
+ * Cleanup routine
+ */
 export function clean() {
   if (existsSync(fuelsConfigPath)) {
     rmSync(fuelsConfigPath);
