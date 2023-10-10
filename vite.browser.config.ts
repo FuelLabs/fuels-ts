@@ -1,9 +1,21 @@
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { mergeConfig } from 'vitest/config';
 import type { UserConfig } from 'vitest/config';
 
 import baseConfig from './vite.base.config';
 
 const config: UserConfig = {
+  plugins: [
+    nodePolyfills({
+      include: ['buffer', 'process', 'crypto', 'stream'],
+      globals: {
+        Buffer: false,
+        global: true,
+        process: true,
+      },
+      protocolImports: false,
+    }),
+  ],
   define: {
     'process.env': process.env ?? {},
   },

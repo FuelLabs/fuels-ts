@@ -105,6 +105,7 @@
     "turbo": "^1.8.8",
     "typescript": "~5.1.6",
     "vite": "^4.3.9",
+    "vite-plugin-node-polyfills": "^0.15.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^0.34.3",
     "webdriverio": "^8.15.8"
