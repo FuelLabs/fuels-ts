@@ -19,11 +19,6 @@ export async function deploy(config: FuelsConfig) {
 
   log(`Deploying contracts to: ${wallet.provider.url}`);
 
-  /**
-   * Ideally, this would have been done with Promise.all(...), but
-   * deploying contracts in parallel could cause UTXO conflicts,
-   * so we resort back to the [restrict] async for/each usage
-   */
   for (const contractPath of config.contracts) {
     const binaryPath = getBinaryPath(contractPath);
     const abiPath = getABIPath(contractPath);
