@@ -57,7 +57,7 @@ export const calculateTransactionFee = ({
 }: CalculateTransactionFeeParams) => {
   const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
 
-  // TODO: Consider gas used by predicated
+  // TODO: Consider gas used by predicates
   const minGas = bytesGas.add(0); // add gas used per predicates
   const maxGas = bytesGas.add(gasLimit);
 
