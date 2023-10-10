@@ -185,8 +185,8 @@ export class TransactionResponse {
       transaction: decodedTransaction,
       transactionBytes: arrayify(transaction.rawPayload),
       gqlTransactionStatus: transaction.status,
-      gasPerByte: bn(gasPerByte),
-      gasPriceFactor: bn(gasPriceFactor),
+      gasPerByte,
+      gasPriceFactor,
       abiMap: contractsAbiMap,
       maxInputs,
     });
