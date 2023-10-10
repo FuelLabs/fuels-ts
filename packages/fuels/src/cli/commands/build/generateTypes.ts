@@ -30,7 +30,7 @@ async function generateTypesForProgramType(
 }
 
 export async function generateTypes(config: FuelsConfig) {
-  log('Generating types..', JSON.stringify(config, null, 2));
+  log('Generating types..');
 
   const generateTypesForNonEmptyProgramType = (
     artifacts: string[],
