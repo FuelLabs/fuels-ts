@@ -9,6 +9,7 @@ export const fixturesDir = join(__dirname, '..', 'fixtures');
 export const workspaceDir = join(fixturesDir, 'project');
 
 export const contractsDir = join(workspaceDir, 'contracts');
+export const contractsFooDir = join(contractsDir, 'foo');
 export const scriptsDir = join(workspaceDir, 'scripts');
 export const predicateDir = join(workspaceDir, 'predicate');
 
