@@ -3,11 +3,13 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import { versions } from '@fuel-ts/versions';
 
 import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
@@ -19,6 +21,12 @@ import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
+
+// https://stackoverflow.com/a/72885576
+jest.mock('@fuel-ts/versions', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/versions'),
+}));
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -56,7 +64,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.5');
+    expect(version).toEqual('0.20.6');
   });
 
   it('can call()', async () => {
@@ -173,7 +181,7 @@ describe('Provider', () => {
   it('can get all chain info', async () => {
     // #region provider-definition
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { consensusParameters } = await provider.getChain();
+    const { consensusParameters } = provider.getChain();
     // #endregion provider-definition
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
@@ -204,10 +212,18 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
-    await provider.switchUrl(providerUrl2);
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
 
     expect(await provider.getVersion()).toEqual(providerUrl2);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
   });
 
   it('can accept a custom fetch function', async () => {
@@ -640,16 +656,16 @@ describe('Provider', () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, options) => {
-        const messageProof = JSON.stringify(messageProofResponse);
-        return Promise.resolve(new Response(messageProof, options));
-      },
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageProof', { messageProof: messageProofResponse })(url, options),
     });
+
     const messageProof = await provider.getMessageProof(
       '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
       '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
+
     expect(messageProof).toMatchSnapshot();
   });
 
@@ -657,10 +673,8 @@ describe('Provider', () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, options) => {
-        const messageStatus = JSON.stringify(messageStatusResponse);
-        return Promise.resolve(new Response(messageStatus, options));
-      },
+      fetch: async (url, options) =>
+        getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
     });
     const messageStatus = await provider.getMessageStatus(
       '0x0000000000000000000000000000000000000000000000000000000000000008'
@@ -686,8 +700,7 @@ describe('Provider', () => {
     });
   });
 
-  // Fails because the library creates its own AbortController
-  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
+  it('throws TimeoutError on timeout when calling a subscription', async () => {
     const { error } = await safeExec(async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
       provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
@@ -720,20 +733,137 @@ describe('Provider', () => {
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual(FUEL_NETWORK_URL);
-    expect(Provider.chainInfoCache[FUEL_NETWORK_URL]).toBeDefined();
+    expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
   });
 
-  it('doesnt refetch the chain info again if it is already cached', async () => {
-    Provider.chainInfoCache = {};
-    const spyGetChainInfo = jest.spyOn(Provider.prototype, 'fetchChain');
+  it('should cache chain and node info', async () => {
+    Provider.clearChainAndNodeCaches();
 
-    const provider1 = await Provider.create(FUEL_NETWORK_URL);
-    const provider2 = await Provider.create(FUEL_NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    // `getChainInfoWithoutInstance` should only be called once, we reuse the cached value for the second provider
-    expect(spyGetChainInfo).toHaveBeenCalledTimes(1);
+    expect(provider.getChain()).toBeDefined();
+    expect(provider.getNode()).toBeDefined();
+  });
 
-    expect(provider1.url).toEqual(FUEL_NETWORK_URL);
-    expect(provider2.url).toEqual(FUEL_NETWORK_URL);
+  it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
+    Provider.clearChainAndNodeCaches();
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    provider.getChain();
+    provider.getNode();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+  });
+
+  it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
+    Provider.clearChainAndNodeCaches();
+
+    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    await provider.fetchChainAndNodeInfo();
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
+    expect(spyFetchChain).toHaveBeenCalledTimes(2);
+    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure getGasConfig return essential gas related data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const gasConfig = provider.getGasConfig();
+
+    expect(gasConfig.gasPerByte).toBeDefined();
+    expect(gasConfig.gasPriceFactor).toBeDefined();
+    expect(gasConfig.maxGasPerPredicate).toBeDefined();
+    expect(gasConfig.maxGasPerTx).toBeDefined();
+    expect(gasConfig.minGasPrice).toBeDefined();
+  });
+
+  it('should throws when using getChain or getNode and without cached data', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    Provider.clearChainAndNodeCaches();
+
+    await expectToThrowFuelError(
+      () => provider.getChain(),
+      new FuelError(
+        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
+        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
+
+    await expectToThrowFuelError(
+      () => provider.getNode(),
+      new FuelError(
+        ErrorCode.NODE_INFO_CACHE_EMPTY,
+        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
+      )
+    );
+  });
+
+  it('throws on difference between major client version and supported major version', async () => {
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
+
+    const mock = {
+      isMajorSupported: false,
+      isMinorSupported: true,
+      isPatchSupported: true,
+      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
+
+    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
+      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
+    });
+  });
+
+  it('throws on difference between minor client version and supported minor version', async () => {
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const minorMismatch = minor === '0' ? 1 : parseInt(patch, 10) - 1;
+
+    const mock = {
+      isMajorSupported: true,
+      isMinorSupported: false,
+      isPatchSupported: true,
+      supportedVersion: `${major}.${minorMismatch}.${patch}`,
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+
+    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
+
+    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
+      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
+    });
   });
 });
