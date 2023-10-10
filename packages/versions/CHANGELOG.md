@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.61.0
+
+### Patch Changes
+
+- Upgrading `fuel-core` to `0.20.6`, by [@arboleya](https://github.com/arboleya) (See [#1327](https://github.com/FuelLabs/fuels-ts/pull/1327))
+
 ## 0.60.0
 
 ## 0.59.0

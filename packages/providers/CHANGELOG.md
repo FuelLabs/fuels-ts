@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.61.0
+
+### Minor Changes
+
+- rename Provider switchUrl to connect, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1294](https://github.com/FuelLabs/fuels-ts/pull/1294))
+- Check mismatch of fuel client version and supported version: throw on major/minor mismatch, warn on patch mismatch, by [@nedsalk](https://github.com/nedsalk) (See [#1287](https://github.com/FuelLabs/fuels-ts/pull/1287))
+
+### Patch Changes
+
+- 🐞 Fixed the TransferOut and Transfer receipts, by [@matt-user](https://github.com/matt-user) (See [#1328](https://github.com/FuelLabs/fuels-ts/pull/1328))
+- remove console warn, by [@camsjams](https://github.com/camsjams) (See [#1323](https://github.com/FuelLabs/fuels-ts/pull/1323))
+- refactor: purge the usage of the hardcoded constant `VM_TX_MEMORY`, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1318](https://github.com/FuelLabs/fuels-ts/pull/1318))
+- On the `Provider` class, make `nodeInfoCache` and `chainInfoCache` private fields, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1303](https://github.com/FuelLabs/fuels-ts/pull/1303))
+
 ## 0.60.0
 
 ### Minor Changes

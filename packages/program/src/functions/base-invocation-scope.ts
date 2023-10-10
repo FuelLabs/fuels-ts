@@ -3,7 +3,7 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
+import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
@@ -46,7 +46,7 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
  * Base class for managing invocation scopes and preparing transactions.
  */
 export class BaseInvocationScope<TReturn = any> {
-  transactionRequest: ScriptTransactionRequest;
+  protected transactionRequest: ScriptTransactionRequest;
   protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
@@ -76,7 +76,6 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const script = getContractCallScript(this.functionInvocationScopes);
     const provider = this.getProvider();
     const consensusParams = provider.getChain().consensusParameters;
     if (!consensusParams) {
@@ -85,9 +84,10 @@ export class BaseInvocationScope<TReturn = any> {
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
-    const maxInputs = consensusParams.maxInputs.toNumber();
+    const maxInputs = consensusParams.maxInputs;
+    const script = getContractCallScript(this.functionInvocationScopes, maxInputs);
     return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, script.getScriptDataOffset(maxInputs))
+      createContractCall(funcScope, script.getScriptDataOffset(maxInputs.toNumber()))
     );
   }
 
@@ -95,7 +95,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
-    const contractCallScript = getContractCallScript(this.functionInvocationScopes);
+    const maxInputs = (this.program.provider as Provider).getChain().consensusParameters.maxInputs;
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
 
@@ -277,7 +278,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The prepared transaction request.
    */
-  async getTransactionRequest(): Promise<TransactionRequest> {
+  async getTransactionRequest(): Promise<ScriptTransactionRequest> {
     await this.prepareTransaction();
     return this.transactionRequest;
   }
