@@ -8,6 +8,8 @@ export type Witness = {
   dataLength: number;
   /** Witness data (byte[]) */
   data: string;
+
+  offset?: number;
 };
 
 export class WitnessCoder extends Coder<Witness, Witness> {
@@ -42,6 +44,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
       {
         dataLength,
         data: witnessData,
+        offset,
       },
       o,
     ];
