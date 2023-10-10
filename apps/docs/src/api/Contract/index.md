@@ -14,4 +14,4 @@ Options for deploying a contract.
 
 #### Defined in
 
-[contract-factory.ts:18](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/contract/src/contract-factory.ts#L18)
+[contract-factory.ts:18](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/contract/src/contract-factory.ts#L18)

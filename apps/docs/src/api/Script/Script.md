@@ -46,7 +46,7 @@ AbstractScript.constructor
 
 #### Defined in
 
-[script.ts:71](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L71)
+[script.ts:71](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L71)
 
 ## Properties
 
@@ -62,7 +62,7 @@ AbstractScript.account
 
 #### Defined in
 
-[script.ts:47](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L47)
+[script.ts:47](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L47)
 
 ___
 
@@ -78,7 +78,7 @@ AbstractScript.bytes
 
 #### Defined in
 
-[script.ts:37](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L37)
+[script.ts:37](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L37)
 
 ___
 
@@ -96,7 +96,7 @@ Functions that can be invoked within the script.
 
 #### Defined in
 
-[script.ts:62](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L62)
+[script.ts:62](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L62)
 
 ___
 
@@ -112,7 +112,7 @@ AbstractScript.interface
 
 #### Defined in
 
-[script.ts:42](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L42)
+[script.ts:42](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L42)
 
 ___
 
@@ -128,7 +128,7 @@ AbstractScript.provider
 
 #### Defined in
 
-[script.ts:57](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L57)
+[script.ts:57](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L57)
 
 ___
 
@@ -140,7 +140,7 @@ The script request object.
 
 #### Defined in
 
-[script.ts:52](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L52)
+[script.ts:52](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L52)
 
 ## Methods
 
@@ -168,4 +168,4 @@ This instance of the `Script`.
 
 #### Defined in
 
-[script.ts:92](https://github.com/FuelLabs/fuels-ts/blob/5bf70bb2/packages/script/src/script.ts#L92)
+[script.ts:92](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/script/src/script.ts#L92)
