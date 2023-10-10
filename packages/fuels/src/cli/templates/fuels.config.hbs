@@ -52,7 +52,7 @@ export default createConfig({
 
   /**
    * This property should not be used alongside `workspace`
-   * @param scripts - Path to Sway scripts
+   * @param scripts - Path to Sway Scripts
    */
   {{#if (isDefined scripts)}}
   scripts: [
@@ -75,7 +75,7 @@ export default createConfig({
   /**
    * @param privateKey - Your wallet private key
    */
-  // Should ideally como from env — `process.env.MY_PRIVATE_KEY`
+  // Should ideally come from env — `process.env.MY_PRIVATE_KEY`
   privateKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
 
   /**
@@ -94,7 +94,7 @@ export default createConfig({
    *
    * Sometimes we need to deploy two contracts, and the second
    * depends on the first—in such cses, you can use the contracts
-   * object to get the necessary contract id's. Amother option is,
+   * object to get the necessary contract id's. Another option is,
    * you could also fetch remote data for some reason.
    */
   /*
@@ -125,19 +125,19 @@ export default createConfig({
 
   // ----------------------------------- Forc/FuelCore settings
   /**
-   * @param useBuiltinForc - Skip using internal wrapped Forc binaries
+   * @param useBuiltinForc - Opt-in or out from using builtin Forc binaries
    */
   useBuiltinForc: {{useBuiltinForc}},
 
   /**
-   * @param useBuiltinFuelCore - Skip using internal wrapped FuelCore binaries
+   * @param useBuiltinFuelCore - Opt-in or out from using builtin Fuel Core binaries
    */
   useBuiltinFuelCore: {{useBuiltinFuelCore}},
 
   /**
    * Optional, defaults to true
    * @param autoStartFuelCore - When set to false, it will skip spinning up
-   * a FuelCore node. In this case, you'll need to start the node yourself.
+   * a Fuel Core node. In this case, you'll need to start the node yourself.
    */
   {{#if (isDefined autoStartFuelCore)}}
   autoStartFuelCore: {{autoStartFuelCore}},
@@ -158,7 +158,7 @@ export default createConfig({
   },
 
   /**
-   * This function is called in case of errors
+   * This function is called after an unsuccessful run
    * @param error - The error that interrupted the execution
    */
   onFailure: (_error: Error) => {

@@ -36,7 +36,7 @@ predicates: ['../backend/predicates'],
 ```ts
 /**
  * This property should not be used alongside `workspace`
- * @param scripts - Path to Sway scripts
+ * @param scripts - Path to Sway Scripts
  */
 scripts: ['../backend/scripts'],
 ```
@@ -85,9 +85,9 @@ chainConfig: '...',
 /**
  * This method can be used for crafting custom deployment flows.
  *
- * Sometimes, we need to deploy two contracts, and the second
- * depends on the first—in such cases, you can use the contracts
- * object to get the necessary contract IDs. Another option is,
+ * Sometimes we need to deploy two contracts, and the second
+ * depends on the first—in such cses, you can use the contracts
+ * object to get the necessary contract id's. Another option is,
  * you could also fetch remote data for some reason.
  */
 deployConfig: async (options: DeployOptions) => {
@@ -119,7 +119,7 @@ deployConfig: async (options: DeployOptions) => {
 ```ts
 /**
  * Optional property, defaults to false
- * @param useBuiltinForc - Skip using internal wrapped Forc binaries
+ * @param useBuiltinForc - Opt-in or out from using builtin Forc binaries
  */
 useBuiltinForc: false,
 ```
@@ -133,8 +133,6 @@ useBuiltinForc: false,
  */
 useBuiltinFuelCore: false,
 ```
-
-Use this to enable the auto-start of a Fuel node when you run `pnpm fuels dev`:
 
 ## autoStartFuelCore
 
@@ -156,7 +154,7 @@ autoStartFuelCore: true,
   * @param config - The loaded `fuels.config`
   */
 onSuccess: (event: CommandEvent, config: FuelsConfig) => {
-  // console.log('fuels:onSuccess', { event, config });
+  console.log('fuels:onSuccess', { event, config });
 },
 ```
 
@@ -168,6 +166,6 @@ onSuccess: (event: CommandEvent, config: FuelsConfig) => {
   * @param error - The error that interrupted the execution
   */
 onFailure: (error: Error) => {
-  // console.log('fuels:onFailure', { error });
+  console.log('fuels:onFailure', { error });
 },
 ```
