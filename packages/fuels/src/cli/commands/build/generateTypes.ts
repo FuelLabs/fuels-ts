@@ -32,23 +32,19 @@ async function generateTypesForProgramType(
 export async function generateTypes(config: FuelsConfig) {
   log('Generating types..');
 
-  const generateTypesForNonEmptyProgramType = (
-    artifacts: string[],
-    programType: ProgramTypeEnum
-  ) => {
-    if (artifacts.length) {
-      return generateTypesForProgramType(config, artifacts, programType);
-    }
-    return [];
-  };
+  const { contracts, scripts, predicates } = config;
 
-  const promises = [
-    generateTypesForNonEmptyProgramType(config.contracts, ProgramTypeEnum.CONTRACT),
-    generateTypesForNonEmptyProgramType(config.predicates, ProgramTypeEnum.PREDICATE),
-    generateTypesForNonEmptyProgramType(config.scripts, ProgramTypeEnum.SCRIPT),
-  ].flat();
+  const members = [
+    { type: ProgramTypeEnum.CONTRACT, artifacts: contracts },
+    { type: ProgramTypeEnum.SCRIPT, artifacts: scripts },
+    { type: ProgramTypeEnum.PREDICATE, artifacts: predicates },
+  ];
 
-  const folders = await Promise.all(promises);
+  const folders = await Promise.all(
+    members
+      .filter(({ artifacts }) => !!artifacts.length)
+      .map(({ artifacts, type }) => generateTypesForProgramType(config, artifacts, type))
+  );
 
   const indexFile = await renderIndexTemplate(folders);
 
