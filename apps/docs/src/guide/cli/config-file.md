@@ -86,7 +86,7 @@ chainConfig: '...',
  * This method can be used for crafting custom deployment flows.
  *
  * Sometimes we need to deploy two contracts, and the second
- * depends on the first—in such cses, you can use the contracts
+ * depends on the first—in such cases, you can use the contracts
  * object to get the necessary contract ids. Another option is,
  * you could also fetch remote data for some reason.
  */
@@ -129,7 +129,7 @@ useBuiltinForc: false,
 ```ts
 /**
  * Optional property, defaults to false
- * @param useBuiltinFuelCore - Skip using internal wrapped FuelCore binaries
+ * @param useBuiltinFuelCore -  Opt-in or out from using builtin Fuel Core binaries
  */
 useBuiltinFuelCore: false,
 ```
@@ -140,7 +140,7 @@ useBuiltinFuelCore: false,
 /**
  * Optional property, defaults to true
  * @param autoStartFuelCore - When set to false, it will skip spinning up
- * a FuelCore node. In this case, you'll need to start the node yourself
+ * a FuelCore node and you'll need to start the node yourself
  */
 autoStartFuelCore: true,
 ```
