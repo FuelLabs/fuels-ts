@@ -1,7 +1,7 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
-import { spawn } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
@@ -27,7 +27,7 @@ export type LaunchNodeOptions = {
 };
 
 export type LaunchNodeResult = Promise<{
-  cleanup: () => void;
+  cleanup: () => Promise<void>;
   ip: string;
   port: string;
 }>;
@@ -72,11 +72,11 @@ export const launchNode = async ({
       if (!process.env.GENESIS_SECRET) {
         process.env.GENESIS_SECRET = genesisWalletConfig.privateKey;
         chainConfigToUse = {
-          ...defaultChainConfig,
+          ...chainConfigToUse,
           initial_state: {
-            ...defaultChainConfig.initial_state,
+            ...chainConfigToUse.initial_state,
             coins: [
-              ...defaultChainConfig.initial_state.coins,
+              ...chainConfigToUse.initial_state.coins,
               {
                 owner: genesisWalletConfig.address,
                 amount: toHex(1_000_000_000),
@@ -109,20 +109,22 @@ export const launchNode = async ({
     ]);
 
     // Cleanup function where fuel-core is stopped.
-    const cleanup = () => {
-      if (child.pid) {
-        kill(Number(child.pid));
-      }
+    const cleanup = () =>
+      new Promise<void>((resolveFn, rejectFn) => {
+        kill(Number(child.pid), (err) => {
+          if (err) rejectFn(err);
+          // Remove all the listeners we've added.
+          child.stdout.removeAllListeners();
+          child.stderr.removeAllListeners();
 
-      // Remove all the listeners we've added.
-      child.stdout.removeAllListeners();
-      child.stderr.removeAllListeners();
+          // Remove the temporary folder and all its contents.
+          if (!chainConfigPath) {
+            spawnSync('rm', ['-rf', tempDirPath]);
+          }
 
-      // Remove the temporary folder and all its contents.
-      if (!chainConfigPath) {
-        spawn('rm', ['-rf', tempDirPath]);
-      }
-    };
+          resolveFn();
+        });
+      });
 
     child.stderr.setEncoding('utf8');
 
@@ -165,7 +167,7 @@ const generateWallets = async (count: number, provider: Provider) => {
 
 export type LaunchNodeAndGetWalletsResult = Promise<{
   wallets: WalletUnlocked[];
-  stop: () => void;
+  stop: () => Promise<void>;
   provider: Provider;
 }>;
 
@@ -186,18 +188,10 @@ export const launchNodeAndGetWallets = async ({
     consensusKey: launchNodeOptions?.consensusKey,
   };
 
-  const {
-    cleanup: closeNode,
-    ip,
-    port,
-  } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
+  const { cleanup, ip, port } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
 
   const provider = await Provider.create(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);
-
-  const cleanup = () => {
-    closeNode();
-  };
 
   return { wallets, stop: cleanup, provider };
 };

@@ -10,10 +10,10 @@ export async function setupTestProvider<Dispose extends boolean = true>(
   },
   runCleanup?: Dispose
 ): Promise<
-  Dispose extends true ? Provider & Disposable : { provider: Provider; cleanup: () => void }
+  Dispose extends true
+    ? Provider & AsyncDisposable
+    : { provider: Provider; cleanup: () => Promise<void> }
 > {
-  // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
-  Symbol.dispose ??= Symbol('Symbol.dispose');
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.asyncDispose ??= Symbol('Symbol.asyncDispose');
 
@@ -24,9 +24,7 @@ export async function setupTestProvider<Dispose extends boolean = true>(
   // @ts-expect-error TODO: fix later
   return dispose
     ? Object.assign(provider, {
-        [Symbol.dispose]: () => {
-          cleanup();
-        },
+        [Symbol.asyncDispose]: cleanup,
       })
     : {
         provider,

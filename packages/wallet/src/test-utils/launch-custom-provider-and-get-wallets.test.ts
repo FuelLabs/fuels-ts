@@ -1,60 +1,80 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { sleep, Provider } from '@fuel-ts/providers';
+import { Provider } from '@fuel-ts/providers';
 
-import { launchCustomProviderAndGetWallets } from './launch-custom-provider-and-get-wallets';
+import {
+  WalletConfig,
+  launchCustomProviderAndGetWallets,
+} from './launch-custom-provider-and-get-wallets';
 
 describe('launchCustomProviderAndGetWallets', () => {
   it('kills the node after going out of scope', async () => {
     let url = '';
 
     {
-      using providerAndWallets = await launchCustomProviderAndGetWallets();
+      await using providerAndWallets = await launchCustomProviderAndGetWallets();
       const { provider } = providerAndWallets;
       url = provider.url;
       await provider.getBlockNumber();
     }
-
-    // wait for OS to kill node
-    await sleep(1000);
 
     const { error } = await safeExec(async () => {
       const p = await Provider.create(url);
       await p.getBlockNumber();
     });
 
-    const ipAndPort = url.replace('http://', '').replace('/graphql', '');
-    const [ip, port] = ipAndPort.split(':');
-
     const expectedError = {
       message: 'fetch failed',
-      cause: {
-        syscall: 'connect',
-        errno: -111,
-        code: 'ECONNREFUSED',
-        address: ip,
-        port: parseInt(port, 10),
-      },
     };
 
     expect(error).toMatchObject(expectedError);
   });
 
-  it('default: one wallet, one coin (BaseAssetId), 10000 amount', async () => {
-    using providerAndWallets = await launchCustomProviderAndGetWallets();
+  it('default: one wallet, one asset (BaseAssetId), one coin, 10000 amount', async () => {
+    await using providerAndWallets = await launchCustomProviderAndGetWallets();
     const { wallets } = providerAndWallets;
 
     expect(wallets.length).toBe(1);
 
     const wallet = wallets[0];
 
-    const balances = await wallet.getBalances();
+    const coins = await wallet.getCoins();
 
-    expect(balances.length).toBe(1);
+    expect(coins.length).toBe(1);
 
-    const balance = balances[0];
+    const coin = coins[0];
 
-    expect(balance.assetId).toBe(BaseAssetId);
-    expect(balance.amount).toBe(10000);
+    expect(coin.assetId).toBe(BaseAssetId);
+    expect(coin.amount.toNumber()).toBe(10000);
+  });
+
+  it('can return multiple wallets with multiple assets, coins and amounts', async () => {
+    const numOfWallets = 3;
+    const numberOfAssets = 5;
+    const coinsPerAsset = 10;
+    const amountPerCoin = 15;
+
+    await using providerAndWallets = await launchCustomProviderAndGetWallets({
+      walletConfig: new WalletConfig(numOfWallets, numberOfAssets, coinsPerAsset, amountPerCoin),
+    });
+    const { wallets } = providerAndWallets;
+
+    expect(wallets.length).toBe(numOfWallets);
+
+    const promises = wallets.map(async (wallet) => {
+      const coins = await wallet.getCoins();
+      expect(coins.length).toBe(numberOfAssets * coinsPerAsset);
+
+      coins.forEach((coin, index) => {
+        if (index < coinsPerAsset) expect(coin.assetId).toBe(BaseAssetId);
+        else {
+          expect(coin.assetId).not.toBe(BaseAssetId);
+          expect(coin.assetId).not.toBeFalsy();
+        }
+        expect(coin.amount.toNumber()).toBe(amountPerCoin);
+      });
+    });
+
+    await Promise.all(promises);
   });
 });

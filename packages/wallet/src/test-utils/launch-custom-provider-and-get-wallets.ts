@@ -1,4 +1,6 @@
+import { hexlify } from '@ethersproject/bytes';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import { toHex } from '@fuel-ts/math';
 import type { Provider, ProviderOptions } from '@fuel-ts/providers';
 
@@ -21,10 +23,19 @@ export class WalletConfig {
   public coins: ChainConfig['coins'];
   public wallets: WalletUnlocked[];
 
+  public static default() {
+    return new WalletConfig(1, 1, 1, 10000);
+  }
+
   /**
    *
    */
-  constructor(numWallets: number, coinsPerAsset: number, amountPerCoin: number) {
+  constructor(
+    numWallets: number,
+    numberOfAssets: number,
+    coinsPerAsset: number,
+    amountPerCoin: number
+  ) {
     const wallets: WalletUnlocked[] = [];
     for (let index = 0; index < numWallets; index++) {
       // @ts-expect-error will be updated later
@@ -33,26 +44,34 @@ export class WalletConfig {
 
     this.wallets = wallets;
 
-    this.coins = WalletConfig.createAssets(wallets, coinsPerAsset, amountPerCoin);
+    this.coins = WalletConfig.createAssets(wallets, numberOfAssets, coinsPerAsset, amountPerCoin);
   }
 
-  public static default() {
-    return new WalletConfig(1, 1, 10000);
-  }
-
-  static createAssets(wallets: WalletUnlocked[], coinsPerAsset: number, amountPerCoin: number) {
+  static createAssets(
+    wallets: WalletUnlocked[],
+    numberOfAssets: number,
+    coinsPerAsset: number,
+    amountPerCoin: number
+  ) {
     const coins: ChainConfig['coins'] = [];
+
+    const assetIds: string[] = [];
+    for (let index = 0; index < numberOfAssets; index++) {
+      assetIds.push(index === 0 ? BaseAssetId : hexlify(randomBytes(32)));
+    }
 
     wallets
       .map((wallet) => wallet.address.toHexString())
       .forEach((walletAddress) => {
-        for (let index = 0; index < coinsPerAsset; index++) {
-          coins.push({
-            amount: toHex(amountPerCoin),
-            asset_id: index === 0 ? BaseAssetId : '',
-            owner: walletAddress,
-          });
-        }
+        assetIds.forEach((assetId) => {
+          for (let index = 0; index < coinsPerAsset; index++) {
+            coins.push({
+              amount: toHex(amountPerCoin, 8),
+              asset_id: assetId,
+              owner: walletAddress,
+            });
+          }
+        });
       });
 
     return coins;
@@ -69,7 +88,9 @@ export async function launchCustomProviderAndGetWallets({
   walletConfig = WalletConfig.default(),
   providerOptions,
   nodeOptions,
-}: Partial<Options> = {}): Promise<{ wallets: WalletUnlocked[]; provider: Provider } & Disposable> {
+}: Partial<Options> = {}): Promise<
+  { wallets: WalletUnlocked[]; provider: Provider } & AsyncDisposable
+> {
   const { wallets, coins } = walletConfig;
 
   const chainConfig = structuredClone(defaultChainConfig);
@@ -77,6 +98,7 @@ export async function launchCustomProviderAndGetWallets({
   chainConfig.initial_state = {
     ...chainConfig.initial_state,
     coins,
+    messages: [],
   };
 
   const { provider, cleanup } = await setupTestProvider(
@@ -97,6 +119,6 @@ export async function launchCustomProviderAndGetWallets({
   return {
     wallets,
     provider,
-    [Symbol.dispose]: () => cleanup(),
+    [Symbol.asyncDispose]: cleanup,
   };
 }
