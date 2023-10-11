@@ -7,7 +7,7 @@ import baseConfig from './vite.base.config';
 const config: UserConfig = {
   plugins: [
     nodePolyfills({
-      include: ['buffer', 'process', 'crypto', 'stream'],
+      include: ['process', 'buffer'],
       globals: {
         Buffer: false,
         global: true,

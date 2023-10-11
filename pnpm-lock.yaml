@@ -56,9 +56,6 @@ importers:
       '@vitest/ui':
         specifier: ^0.34.3
         version: 0.34.3(vitest@0.34.3)
-      buffer:
-        specifier: ^6.0.3
-        version: 6.0.3
       conventional-changelog-angular:
         specifier: ^5.0.13
         version: 5.0.13

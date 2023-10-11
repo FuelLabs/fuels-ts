@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import { createHash } from 'crypto';
 
 import { english } from './words/english';
