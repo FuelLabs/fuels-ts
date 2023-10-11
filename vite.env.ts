@@ -1,5 +1,4 @@
 import { hexlify } from '@ethersproject/bytes';
-import process from 'node:process';
 import { vi } from 'vitest';
 
 import faucets from './.fuel-core/configs/faucets.json';
