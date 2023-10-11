@@ -90,6 +90,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Pretest
+        run: pnpm pretest
+
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
