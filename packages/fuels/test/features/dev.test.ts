@@ -1,12 +1,11 @@
 import * as chokidar from 'chokidar';
 
-import type { FuelsConfig } from '../src';
-import * as buildMod from '../src/cli/commands/build/index';
-import * as deployMod from '../src/cli/commands/deploy/index';
-import * as startCoreMod from '../src/cli/commands/dev/startFuelCore';
-import { loggingConfig, configureLogging } from '../src/cli/utils/logger';
-
-import { clean, runInit, runDev } from './utils/runCommands';
+import type { FuelsConfig } from '../../src';
+import * as buildMod from '../../src/cli/commands/build/index';
+import * as deployMod from '../../src/cli/commands/deploy/index';
+import * as startCoreMod from '../../src/cli/commands/dev/startFuelCore';
+import { loggingConfig, configureLogging } from '../../src/cli/utils/logger';
+import { clean, runInit, runDev } from '../utils/runCommands';
 
 jest.mock('chokidar', () => ({
   __esModule: true,

@@ -8,7 +8,7 @@ import {
   initFlagsUseBuiltinBinaries,
   runBuild,
   runInit,
-} from './utils/runCommands';
+} from '../utils/runCommands';
 
 describe('build', () => {
   beforeEach(clean);
@@ -31,7 +31,7 @@ describe('build', () => {
       'scripts/factories/ScriptTrueAbi__factory.ts',
       'scripts/index.ts',
       'index.ts',
-    ].map((f) => join(__dirname, 'fixtures', 'generated', f));
+    ].map((f) => join(__dirname, '..', 'fixtures', 'generated', f));
 
     files.forEach((file) => expect(existsSync(file)).toBeTruthy());
   });
@@ -46,7 +46,7 @@ describe('build', () => {
       'contracts/factories/FooBarAbi__factory.ts',
       'contracts/index.ts',
       'index.ts',
-    ].map((f) => join(__dirname, 'fixtures', 'generated', f));
+    ].map((f) => join(__dirname, '..', 'fixtures', 'generated', f));
 
     files.forEach((file) => expect(existsSync(file)).toBeTruthy());
   });

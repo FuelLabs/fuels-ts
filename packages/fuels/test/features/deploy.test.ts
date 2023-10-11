@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 
-import { clean, contractsJsonPath, runBuild, runDeploy, runInit } from './utils/runCommands';
+import { clean, contractsJsonPath, runBuild, runDeploy, runInit } from '../utils/runCommands';
 
 describe('deploy', () => {
   beforeEach(clean);
