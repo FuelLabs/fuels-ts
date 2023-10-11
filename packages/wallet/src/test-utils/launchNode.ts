@@ -1,8 +1,6 @@
-import { hexlify } from '@ethersproject/bytes';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
-import { Signer } from '@fuel-ts/signer';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
@@ -18,13 +16,14 @@ import { generateTestWallet } from './generateTestWallet';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
-type LaunchNodeOptions = {
+export type LaunchNodeOptions = {
   chainConfigPath?: string;
   consensusKey?: string;
   ip?: string;
   port?: string;
   args?: string[];
   useSystemFuelCore?: boolean;
+  chainConfig?: typeof defaultChainConfig;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -49,6 +48,7 @@ export const launchNode = async ({
   port,
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
+  chainConfig = defaultChainConfig,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
@@ -66,12 +66,12 @@ export const launchNode = async ({
       }
       const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
 
-      let chainConfig = defaultChainConfig;
+      let chainConfigToUse = chainConfig;
 
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
         process.env.GENESIS_SECRET = genesisWalletConfig.privateKey;
-        chainConfig = {
+        chainConfigToUse = {
           ...defaultChainConfig,
           initial_state: {
             ...defaultChainConfig.initial_state,
@@ -88,7 +88,7 @@ export const launchNode = async ({
       }
 
       // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfigToUse), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }
