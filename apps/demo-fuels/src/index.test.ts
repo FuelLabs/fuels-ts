@@ -1,5 +1,5 @@
 /**
- * NOTE: These testes are a copy of the ones at:
+ * NOTE: These tests are a copy of the ones at:
  *  - /apps/demo-typegen/src/index.test.ts
  *
  * It ensures that built code is fully working.
