@@ -4,7 +4,8 @@ use std::inputs::{input_owner};
 use std::constants::{ZERO_B256};
 
 configurable {
-    MAKER: b256 = ZERO_B256, /// Order owner
+    /// Order owner
+    MAKER: b256 = ZERO_B256,
 }
 
 fn main() -> bool {
