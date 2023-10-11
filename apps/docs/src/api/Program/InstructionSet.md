@@ -18,7 +18,7 @@ A wrapper around fuel-asm to make dynamic instructions and convert to different 
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:10](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L10)
+[packages/program/src/instruction-set.ts:10](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L10)
 
 ## Properties
 
@@ -28,7 +28,7 @@ A wrapper around fuel-asm to make dynamic instructions and convert to different 
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:8](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L8)
+[packages/program/src/instruction-set.ts:8](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L8)
 
 ## Methods
 
@@ -42,7 +42,7 @@ A wrapper around fuel-asm to make dynamic instructions and convert to different 
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:47](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L47)
+[packages/program/src/instruction-set.ts:47](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L47)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:22](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L22)
+[packages/program/src/instruction-set.ts:22](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L22)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:14](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L14)
+[packages/program/src/instruction-set.ts:14](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L14)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:26](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L26)
+[packages/program/src/instruction-set.ts:26](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L26)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:18](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L18)
+[packages/program/src/instruction-set.ts:18](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L18)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:30](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L30)
+[packages/program/src/instruction-set.ts:30](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L30)
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:39](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L39)
+[packages/program/src/instruction-set.ts:39](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L39)
 
 ___
 
@@ -158,4 +158,4 @@ ___
 
 #### Defined in
 
-[packages/program/src/instruction-set.ts:43](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/program/src/instruction-set.ts#L43)
+[packages/program/src/instruction-set.ts:43](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/program/src/instruction-set.ts#L43)

@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[wallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L70)
+[wallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L70)
 
 ___
 
@@ -63,7 +63,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L69)
+[wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L69)
 
 ___
 
@@ -94,7 +94,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L60)
+[wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L60)
 
 ___
 
@@ -124,7 +124,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L49)
+[wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L49)
 
 ___
 
@@ -152,7 +152,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L39)
+[wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L39)
 
 ## Methods
 
@@ -177,7 +177,7 @@ A locked wallet instance.
 
 #### Defined in
 
-[wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L18)
+[wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L18)
 
 ___
 
@@ -202,4 +202,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/f9c50fca/packages/wallet/src/wallet.ts#L29)
+[wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/72af9ecc/packages/wallet/src/wallet.ts#L29)
