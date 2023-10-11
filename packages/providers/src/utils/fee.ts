@@ -50,6 +50,7 @@ export interface CalculateTransactionFeeParams {
 /** @hidden */
 export const calculateTransactionFee = ({
   gasPrice,
+  gasUsed,
   gasLimit,
   gasPerByte,
   gasPriceFactor,
@@ -64,8 +65,10 @@ export const calculateTransactionFee = ({
   const minGasToPay = bn(Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber()));
   const maxGasToPay = bn(Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber()));
 
+  const fee = bn(Math.ceil((gasUsed.toNumber() * gasPrice.toNumber()) / gasPriceFactor.toNumber()));
+
   return {
-    fee: minGasToPay,
+    fee,
     minGasToPay,
     maxGasToPay,
   };

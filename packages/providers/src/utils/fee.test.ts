@@ -54,6 +54,10 @@ describe(__filename, () => {
         Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
       );
 
+      const expectedFee = bn(
+        Math.ceil((gasUsed.toNumber() * gasPrice.toNumber()) / gasPriceFactor.toNumber())
+      );
+
       const result = calculateTransactionFee({
         gasPrice,
         gasUsed,
@@ -63,7 +67,7 @@ describe(__filename, () => {
         chargeableBytes,
       });
 
-      expect(result.fee.toNumber()).toEqual(expectedMinGasToPay.toNumber());
+      expect(result.fee.toNumber()).toEqual(expectedFee.toNumber());
       expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
       expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
     });
