@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.62.0
+
+### Minor Changes
+
+- Reverted GraphQL subscriptions, thus removing `Provider.operations.statusChange`, by [@nedsalk](https://github.com/nedsalk) (See [#1333](https://github.com/FuelLabs/fuels-ts/pull/1333))
+
 ## 0.61.0
 
 ### Minor Changes
