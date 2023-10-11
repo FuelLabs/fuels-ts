@@ -4,31 +4,6 @@
 # generate `operations.ts` from this file.
 
 # Fragments
-
-fragment transactionStatusFragment on TransactionStatus {
-  type: __typename
-  ... on SubmittedStatus {
-    time
-  }
-  ... on SuccessStatus {
-    block {
-      id
-    }
-    time
-    programState {
-      returnType
-      data
-    }
-  }
-  ... on FailureStatus {
-    block {
-      id
-    }
-    time
-    reason
-  }
-}
-
 fragment transactionFragment on Transaction {
   id
   rawPayload
@@ -37,7 +12,27 @@ fragment transactionFragment on Transaction {
     ...receiptFragment
   }
   status {
-    ...transactionStatusFragment
+    type: __typename
+    ... on SubmittedStatus {
+      time
+    }
+    ... on SuccessStatus {
+      block {
+        id
+      }
+      time
+      programState {
+        returnType
+        data
+      }
+    }
+    ... on FailureStatus {
+      block {
+        id
+      }
+      time
+      reason
+    }
   }
 }
 
@@ -472,16 +467,4 @@ mutation produceBlocks(
     blocksToProduce: $blocksToProduce
     startTimestamp: $startTimestamp
   )
-}
-
-subscription submitAndAwait($encodedTransaction: HexString!) {
-  submitAndAwait(tx: $encodedTransaction) {
-    ...transactionStatusFragment
-  }
-}
-
-subscription statusChange($transactionId: TransactionId!) {
-  statusChange(id: $transactionId) {
-    ...transactionStatusFragment
-  }
 }
