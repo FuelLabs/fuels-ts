@@ -389,6 +389,9 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../../packages/crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../../packages/hasher
