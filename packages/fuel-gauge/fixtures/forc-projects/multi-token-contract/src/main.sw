@@ -19,9 +19,9 @@ abi MultiToken {
     fn get_balance(target: ContractId, asset_id: AssetId) -> u64;
 }
 
-const TOKEN_1: b256 = 0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00
-const TOKEN_2: b256 = 0x0d000e76a67758bbc6861d48ca571876cd480d9df8cf4dfa635c168e1e97f324
-const TOKEN_3: b256 = 0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5
+const TOKEN_1: b256 = 0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00;
+const TOKEN_2: b256 = 0x0d000e76a67758bbc6861d48ca571876cd480d9df8cf4dfa635c168e1e97f324;
+const TOKEN_3: b256 = 0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5;
 
 impl MultiToken for Contract {
     fn mint_coins(sub_id: b256, mint_amount: u64) {
