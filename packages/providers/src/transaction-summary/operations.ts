@@ -242,9 +242,10 @@ export function getContractCallOperations({
   receipts,
   abiMap,
   rawPayload,
+  maxInputs,
 }: InputOutputParam &
   ReceiptParam &
-  Pick<GetOperationParams, 'abiMap'> &
+  Pick<GetOperationParams, 'abiMap' | 'maxInputs'> &
   RawPayloadParam): Operation[] {
   const contractCallReceipts = getReceiptsCall(receipts);
   const contractOutputs = getOutputsContract(outputs);
@@ -267,6 +268,7 @@ export function getContractCallOperations({
                   abi,
                   receipt,
                   rawPayload,
+                  maxInputs,
                 })
               );
             }
@@ -401,6 +403,7 @@ export function getOperations({
   receipts,
   abiMap,
   rawPayload,
+  maxInputs,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
     return [
@@ -418,6 +421,7 @@ export function getOperations({
         receipts,
         abiMap,
         rawPayload,
+        maxInputs,
       }),
       ...getContractTransferOperations({ receipts }),
       ...getWithdrawFromFuelOperations({ inputs, receipts }),

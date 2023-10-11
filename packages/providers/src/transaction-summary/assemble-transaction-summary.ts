@@ -26,6 +26,7 @@ export interface AssembleTransactionSummaryParams {
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
   abiMap?: AbiMap;
+  maxInputs: BN;
 }
 
 /** @hidden */
@@ -41,6 +42,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     id,
     gqlTransactionStatus,
     abiMap = {},
+    maxInputs,
   } = params;
 
   const gasPrice = bn(transaction.gasPrice);
@@ -62,6 +64,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     receipts,
     rawPayload: hexlify(transactionBytes),
     abiMap,
+    maxInputs,
   });
 
   const typeName = getTransactionTypeName(transaction.type);

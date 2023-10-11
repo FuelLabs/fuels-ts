@@ -76,11 +76,13 @@ describe('MultiTokenContract', () => {
     };
 
     // validates contract has expected balance after mint
-    for (const subId of subIds) {
+    const validateMintPromises = subIds.map(async (subId) => {
       expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
         helperDict[subId].amount
       );
     }
+
+    await Promise.all(validateMintPromises);
 
     // transfer coins to user wallet
     await multiTokenContract
@@ -95,15 +97,16 @@ describe('MultiTokenContract', () => {
       )
       .call();
 
-    for (const subId of subIds) {
+    const validateTransferPromises = subIds.map(async (subId) => {
       // validates that user wallet has expected balance after transfer
       expect(bn(await userWallet.getBalance(helperDict[subId].assetId)).toNumber()).toBe(
         helperDict[subId].amount
       );
-
       // validates contract has not balance after transfer
       expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(0);
     }
+
+    await Promise.all(validateTransferPromises);
   });
 
   it('can burn coins', async () => {
@@ -158,10 +161,13 @@ describe('MultiTokenContract', () => {
     };
 
     // validates contract has expected balance after mint
-    for (const subId of subIds) {
-      const balance = bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber();
-      expect(balance).toBe(helperDict[subId].amount);
-    }
+    const validateMintPromises = subIds.map(async (subId) => {
+      expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
+        helperDict[subId].amount
+      );
+    });
+
+    await Promise.all(validateMintPromises);
 
     // burning coins
     await multiTokenContract
@@ -172,10 +178,13 @@ describe('MultiTokenContract', () => {
       )
       .call();
 
-    // validates contract has expected balance for each coin after burn
-    for (const subId of subIds) {
-      const balance = bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber();
-      expect(balance).toBe(helperDict[subId].amount - helperDict[subId].amountToBurn);
-    }
+    const validateBurnPromises = subIds.map(async (subId) => {
+      // validates contract has expected balance for each coin after burn
+      expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
+        helperDict[subId].amount - helperDict[subId].amountToBurn
+      );
+    });
+
+    await Promise.all(validateBurnPromises);
   });
 });

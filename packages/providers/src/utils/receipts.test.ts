@@ -17,7 +17,10 @@ import type {
 } from '@fuel-ts/transactions';
 import { ReceiptBurnCoder, ReceiptMessageOutCoder, ReceiptType } from '@fuel-ts/transactions';
 
-import { MOCK_GQL_RECEIPT_FRAGMENT } from '../../test/fixtures/receipts';
+import {
+  MOCK_GQL_RECEIPT_FRAGMENT,
+  MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS,
+} from '../../test/fixtures/receipts';
 import { GqlReceiptType } from '../__generated__/operations';
 
 import { assembleReceiptByType } from './receipts';
@@ -144,6 +147,21 @@ describe('assembleReceiptByType', () => {
     expect(receipt.amount).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.amount));
   });
 
+  it('should return a ReceiptTransfer receipt when GqlReceiptType.Transfer to address is provided', () => {
+    const receipt = assembleReceiptByType({
+      ...MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS,
+      receiptType: GqlReceiptType.TransferOut,
+    }) as ReceiptTransferOut;
+
+    expect(receipt.type).toBe(ReceiptType.TransferOut);
+    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.contract?.id);
+    expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.toAddress);
+    expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.assetId);
+    expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.is));
+    expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.pc));
+    expect(receipt.amount).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.amount));
+  });
+
   it('should return a ReceiptTransferOut receipt when GqlReceiptType.TransferOut is provided', () => {
     const receipt = assembleReceiptByType({
       ...MOCK_GQL_RECEIPT_FRAGMENT,
@@ -157,6 +175,21 @@ describe('assembleReceiptByType', () => {
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
     expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.pc));
     expect(receipt.amount).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.amount));
+  });
+
+  it('should return a ReceiptTransferOut receipt when GqlReceiptType.TransferOut to an address is provided', () => {
+    const receipt = assembleReceiptByType({
+      ...MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS,
+      receiptType: GqlReceiptType.TransferOut,
+    }) as ReceiptTransferOut;
+
+    expect(receipt.type).toBe(ReceiptType.TransferOut);
+    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.contract?.id);
+    expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.toAddress);
+    expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.assetId);
+    expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.is));
+    expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.pc));
+    expect(receipt.amount).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.amount));
   });
 
   it('should return a ReceiptScriptResult when GqlReceiptType.ScriptResult is provided', () => {
