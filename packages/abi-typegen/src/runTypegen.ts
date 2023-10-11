@@ -25,8 +25,9 @@ export function runTypegen(params: IGenerateFilesParams) {
   const cwdBasename = basename(cwd);
 
   function log(...args: unknown[]) {
-    if (silent) return;
-    process.stdout.write(`${args.join(' ')}\n`);
+    if (!silent) {
+      process.stdout.write(`${args.join(' ')}\n`);
+    }
   }
 
   /*
