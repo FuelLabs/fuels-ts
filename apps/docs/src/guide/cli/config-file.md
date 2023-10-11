@@ -54,7 +54,7 @@ output: './src/backend-api',
 
 ```ts
 /**
- * @param privat Key - Your wallet private key
+ * @param private Key - Your wallet private key
   */
  // Should ideally come from env — `process.env.MY_PRIVATE_KEY`
 privateKey: '0x..',
