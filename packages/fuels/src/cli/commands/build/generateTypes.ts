@@ -16,17 +16,17 @@ async function generateTypesForProgramType(
   debug('Generating types..');
 
   const filepaths = await getABIPaths(paths);
-  const pluralizedFolderName = `${String(programType).toLocaleLowerCase()}s`;
+  const pluralizedDirName = `${String(programType).toLocaleLowerCase()}s`;
 
   runTypegen({
     programType,
     cwd: config.basePath,
     filepaths,
-    output: join(config.output, pluralizedFolderName),
+    output: join(config.output, pluralizedDirName),
     silent: !loggingConfig.isDebugEnabled,
   });
 
-  return pluralizedFolderName;
+  return pluralizedDirName;
 }
 
 export async function generateTypes(config: FuelsConfig) {
@@ -35,18 +35,18 @@ export async function generateTypes(config: FuelsConfig) {
   const { contracts, scripts, predicates } = config;
 
   const members = [
-    { type: ProgramTypeEnum.CONTRACT, artifacts: contracts },
-    { type: ProgramTypeEnum.SCRIPT, artifacts: scripts },
-    { type: ProgramTypeEnum.PREDICATE, artifacts: predicates },
+    { type: ProgramTypeEnum.CONTRACT, programs: contracts },
+    { type: ProgramTypeEnum.SCRIPT, programs: scripts },
+    { type: ProgramTypeEnum.PREDICATE, programs: predicates },
   ];
 
-  const folders = await Promise.all(
+  const pluralizedDirNames = await Promise.all(
     members
-      .filter(({ artifacts }) => !!artifacts.length)
-      .map(({ artifacts, type }) => generateTypesForProgramType(config, artifacts, type))
+      .filter(({ programs }) => !!programs.length)
+      .map(({ programs, type }) => generateTypesForProgramType(config, programs, type))
   );
 
-  const indexFile = await renderIndexTemplate(folders);
+  const indexFile = await renderIndexTemplate(pluralizedDirNames);
 
   writeFileSync(join(config.output, 'index.ts'), indexFile);
 }
