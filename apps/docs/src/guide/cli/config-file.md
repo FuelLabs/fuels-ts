@@ -94,7 +94,7 @@ deployConfig: async (options: DeployOptions) => {
   await Promise.resolve(`simulating remote data fetch`);
 
   const contract = options.contracts.find(
-    (c) => c.name === "<my contract deployed name>"
+    (c) => c.name === MY_CONTRACT_DEPLOYED_NAME
   );
 
   if (!contract) {
