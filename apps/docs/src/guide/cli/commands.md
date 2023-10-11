@@ -168,7 +168,7 @@ Check the docs about `forc` and `fuel-core`:
 
 ## Batteries Included
 
-`fuels` conveniently ships with the last compatible binaries for:
+`fuels` conveniently ships with the latest compatible binaries for:
 
 - [`forc`](https://docs.fuel.network/docs/forc/commands/)
 - [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
