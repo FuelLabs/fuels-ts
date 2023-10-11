@@ -53,7 +53,7 @@ export const initFlagsDefault = [
  * Command callers
  */
 export async function runInit(flags: string[] = initFlagsDefault.flat()) {
-  return runCommand(Commands.init, flags.flat());
+  return runCommand(Commands.init, flags);
 }
 
 export async function runBuild() {
