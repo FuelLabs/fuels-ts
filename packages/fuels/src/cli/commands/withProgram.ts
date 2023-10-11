@@ -4,7 +4,7 @@ import type { Commands } from '../types';
 
 export function withProgram<CType extends Commands>(
   program: Command,
-  command: CType,
+  _command: CType,
   fn: (program: Command) => void
 ) {
   return async () => {
