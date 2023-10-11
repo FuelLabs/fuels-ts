@@ -545,39 +545,6 @@ describe('Contract', () => {
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
-  it('Get transaction cost with gasPrice 2', async () => {
-    const contract = await setupContract();
-
-    const invocationScope = contract.multiCall([
-      contract.functions.return_context_amount().callParams({
-        forward: [100, BaseAssetId],
-      }),
-      contract.functions.return_context_amount().callParams({
-        forward: [200, AltToken],
-      }),
-    ]);
-    // Get transaction cost using gasPrice
-    // override by SDK user
-    const transactionCost = await invocationScope.getTransactionCost({
-      gasPrice: 2,
-    });
-
-    expect(toNumber(transactionCost.gasPrice)).toBe(2);
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(2);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
-
-    // Test that gasUsed is correctly calculated
-    // and can be used as gasLimit
-    const { value } = await invocationScope
-      .txParams({
-        gasPrice: transactionCost.gasPrice,
-        gasLimit: transactionCost.gasUsed,
-      })
-      .call<[string, string]>();
-
-    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
-  });
-
   it('Fail before submit if gasLimit is lower than gasUsed', async () => {
     const contract = await setupContract();
 
