@@ -80,7 +80,7 @@ describe('MultiTokenContract', () => {
       expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
         helperDict[subId].amount
       );
-    }
+    });
 
     await Promise.all(validateMintPromises);
 
@@ -104,7 +104,7 @@ describe('MultiTokenContract', () => {
       );
       // validates contract has not balance after transfer
       expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(0);
-    }
+    })
 
     await Promise.all(validateTransferPromises);
   });
