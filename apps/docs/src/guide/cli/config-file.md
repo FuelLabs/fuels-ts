@@ -56,7 +56,7 @@ output: './src/backend-api',
 /**
  * @param privat Key - Your wallet private key
   */
- // Should ideally como from env — `process.env.MY_PRIVATE_KEY`
+ // Should ideally come from env — `process.env.MY_PRIVATE_KEY`
 privateKey: '0x..',
 ```
 
