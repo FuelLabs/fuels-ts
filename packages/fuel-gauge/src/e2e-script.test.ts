@@ -112,8 +112,8 @@ describe('Live Script Test', () => {
         not enough coins to fit the target?
         
         - add assets: https://faucet-beta-4.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-4/#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg
-        - bech32 address: fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg
+        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-4/#/address/fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
+        - bech32 address: fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
         `);
     }
 
