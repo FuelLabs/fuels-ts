@@ -87,7 +87,7 @@ chainConfig: '...',
  *
  * Sometimes we need to deploy two contracts, and the second
  * depends on the first—in such cses, you can use the contracts
- * object to get the necessary contract id's. Another option is,
+ * object to get the necessary contract ids. Another option is,
  * you could also fetch remote data for some reason.
  */
 deployConfig: async (options: DeployOptions) => {
