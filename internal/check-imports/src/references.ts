@@ -28,7 +28,9 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { english, Language } from '@fuel-ts/wordlists';
-import { ScriptRequest } from 'fuels';
+import type { DeployOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
+import { ScriptRequest, createConfig } from 'fuels';
+import { fuelsConfig } from 'fuels/test/fixtures/config/fuels.config';
 
 const { log } = console;
 
@@ -60,9 +62,16 @@ log(Address.fromPublicKey('asdfasdf'));
 log(ContractFactory);
 
 /**
- * fuels (reading class re-exported by umbrella)
+ * fuels
  */
+// class re-exported by umbrella
 log(ScriptRequest);
+
+// CLI stuff
+export const x: UserFuelsConfig | undefined = undefined;
+export const y: FuelsConfig | undefined = undefined;
+export const z: DeployOptions | undefined = undefined;
+log(createConfig);
 
 /**
  * hasher
