@@ -19,7 +19,10 @@ export async function deploy(config: FuelsConfig) {
 
   log(`Deploying contracts to: ${wallet.provider.url}`);
 
-  for (const contractPath of config.contracts) {
+  const contractsLen = config.contracts.length;
+
+  for (let i = 0; i < contractsLen; i++) {
+    const contractPath = config.contracts[i];
     const binaryPath = getBinaryPath(contractPath);
     const abiPath = getABIPath(contractPath);
     const projectName = getContractName(contractPath);

@@ -33,9 +33,7 @@ describe('build', () => {
       'index.ts',
     ].map((f) => join(__dirname, 'fixtures', 'generated', f));
 
-    for (const file of files) {
-      expect(existsSync(file)).toBeTruthy();
-    }
+    files.forEach((file) => expect(existsSync(file)).toBeTruthy());
   });
 
   it('should run `build` command with contracts-only', async () => {
@@ -50,8 +48,6 @@ describe('build', () => {
       'index.ts',
     ].map((f) => join(__dirname, 'fixtures', 'generated', f));
 
-    for (const file of files) {
-      expect(existsSync(file)).toBeTruthy();
-    }
+    files.forEach((file) => expect(existsSync(file)).toBeTruthy());
   });
 });
