@@ -1,19 +1,13 @@
 {
   "$schema": "https://www.graphql-code-generator.com/config.schema.json",
   "schema": "./fuel-core-schema.graphql",
+  "documents": "./src/operations.graphql",
   "generates": {
     "./src/__generated__/operations.ts": {
-      "documents": "./src/operations.graphql",
       "plugins": [
         { "typescript": {} },
-        {
-          "typescript-operations": {}
-        },
-        {
-          "typescript-generic-sdk": {
-            "dedupeFragments": true
-          }
-        }
+        { "typescript-operations": {} },
+        { "typescript-graphql-request": {} }
       ],
       "config": {
         "scalars": {
