@@ -152,6 +152,39 @@ describe('runTypegen.js', () => {
     });
   });
 
+  test('should log messages to stdout', async () => {
+    const stdoutWrite = jest.spyOn(process.stdout, 'write').mockImplementation();
+
+    // setup temp sway project
+    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const input = project.inputGlobal;
+    const output = project.tempDir;
+    const programType = ProgramTypeEnum.SCRIPT;
+    const silent = false; // turning flag off
+
+    const filepaths = globSync(input, { cwd });
+
+    // executes program
+    const fn = () =>
+      runTypegen({
+        cwd,
+        filepaths,
+        output,
+        programType,
+        silent,
+      });
+
+    const { error } = await safeExec(fn);
+
+    // validates execution was ok
+    expect(error).toBeFalsy();
+
+    expect(stdoutWrite).toHaveBeenCalledTimes(4);
+  });
+
   test('should raise error for non-existent Script BIN file', async () => {
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);
     const tempBinPath = `${project.binPath}--BKP`;
