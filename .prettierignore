@@ -4,11 +4,14 @@ coverage
 node_modules
 docs/examples/
 
+apps/demo-fuels/src/backend-api
 apps/demo-nextjs
 apps/demo-react-cra
 apps/demo-react-vite
 apps/demo-typegen/src/generated-types
 apps/docs/.vitepress/cache/
+
+packages/fuels/test/fixtures/project
 
 __generated__
 out
