@@ -638,6 +638,9 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/contract':
+        specifier: workspace:*
+        version: link:../contract
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors

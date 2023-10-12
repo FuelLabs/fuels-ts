@@ -48,7 +48,9 @@ export class TestNodeLauncher {
     const contracts = [];
 
     if (deployContracts.length > 0) {
-      const factories = deployContracts.map(TestNodeLauncher.prepareContractFactory);
+      const factories = deployContracts.map((config) =>
+        TestNodeLauncher.prepareContractFactory(config, wallets[0])
+      );
 
       for (const f of factories) {
         const contract = await f.factory.deployContract(f.deployConfig);
@@ -59,12 +61,15 @@ export class TestNodeLauncher {
     return { provider, wallets, contracts, [Symbol.asyncDispose]: cleanup };
   }
 
-  private static prepareContractFactory(contractConfig: DeployContractConfig) {
+  private static prepareContractFactory(
+    contractConfig: DeployContractConfig,
+    wallet: WalletUnlocked
+  ) {
     const { abiContents, binHexlified, storageSlots } = getForcProject<JsonAbi>(
       contractConfig.projectDir
     );
 
-    const factory = new ContractFactory(binHexlified, abiContents);
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
     return {
       factory,
       deployConfig: {

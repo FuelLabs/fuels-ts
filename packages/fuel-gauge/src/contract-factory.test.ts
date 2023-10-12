@@ -1,6 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Provider } from 'fuels';
 import { bn, toHex, Interface, ContractFactory, BaseAssetId } from 'fuels';
@@ -32,7 +32,7 @@ const createContractFactory = async (provider: Provider) => {
 };
 describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
 
     const contact = await factory.deployContract();
@@ -50,7 +50,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
 
     const contact = await factory.deployContract();
@@ -93,7 +93,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can prepare call data', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
 
     const contract = await factory.deployContract();
@@ -110,7 +110,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage fixed var names', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
     const contract = await factory.deployContract({
       storageSlots,
@@ -138,7 +138,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
@@ -153,7 +153,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const factory = await createContractFactory(provider);
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 

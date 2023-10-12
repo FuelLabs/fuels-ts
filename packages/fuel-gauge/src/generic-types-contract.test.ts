@@ -1,26 +1,17 @@
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
+import { TestNodeLauncher } from '@fuel-ts/contract/test-utils';
 import { toHex } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
-
-import { setup } from './utils';
-
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
-  )
-);
+const projectDir = join(__dirname, '../fixtures/forc-projects/generic-types-contract');
 
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
-    using provider = await setupTestProvider();
-    const contract = await setup(provider, {
-      abi: abiJSON,
-      contractBytecode,
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ projectDir }],
     });
+
+    const { contracts } = nodeLauncherResult;
+    const contract = contracts[0];
 
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
     const bimArg1 = 'Yes';
