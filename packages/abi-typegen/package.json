@@ -10,8 +10,8 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">= 18.14.1",
-    "pnpm": ">= 8.1.1"
+    "node": "^18.14.1",
+    "pnpm": "^8.1.1"
   },
   "packageManager": "pnpm@8.1.1",
   "exports": {

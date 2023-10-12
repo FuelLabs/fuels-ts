@@ -5,8 +5,8 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "private": true,
   "engines": {
-    "node": ">= 18.14.1",
-    "pnpm": ">= 8.1.1"
+    "node": "^18.14.1",
+    "pnpm": "^8.1.1"
   },
   "packageManager": "pnpm@8.1.1",
   "scripts": {
