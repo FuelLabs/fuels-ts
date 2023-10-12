@@ -1,96 +1,36 @@
-import { hexlify } from '@ethersproject/bytes';
-import { BaseAssetId } from '@fuel-ts/address/configs';
-import { randomBytes } from '@fuel-ts/crypto';
-import { toHex } from '@fuel-ts/math';
-import type { Provider, ProviderOptions } from '@fuel-ts/providers';
+import type { Provider } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import type { SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
 
-import type { LaunchNodeOptions } from '../test-utils';
-import { WalletUnlocked } from '../wallets';
+import type { WalletUnlocked } from '../wallets';
 
 import { defaultChainConfig } from './defaultChainConfig';
-import { setupTestProvider } from './setup-test-provider';
+import { WalletConfig } from './wallet-config';
 
 interface ChainConfigCoin {
   owner: string;
   asset_id: string;
   amount: string;
 }
-interface ChainConfig {
+export interface ChainConfig {
   coins: ChainConfigCoin[];
 }
 
-export class WalletConfig {
-  public coins: ChainConfig['coins'];
-  public wallets: WalletUnlocked[];
-
-  public static default() {
-    return new WalletConfig(1, 1, 1, 10000);
-  }
-
-  /**
-   *
-   */
-  constructor(
-    numWallets: number,
-    numberOfAssets: number,
-    coinsPerAsset: number,
-    amountPerCoin: number
-  ) {
-    const wallets: WalletUnlocked[] = [];
-    for (let index = 0; index < numWallets; index++) {
-      // @ts-expect-error will be updated later
-      wallets.push(WalletUnlocked.generate({ provider: null }));
-    }
-
-    this.wallets = wallets;
-
-    this.coins = WalletConfig.createAssets(wallets, numberOfAssets, coinsPerAsset, amountPerCoin);
-  }
-
-  static createAssets(
-    wallets: WalletUnlocked[],
-    numberOfAssets: number,
-    coinsPerAsset: number,
-    amountPerCoin: number
-  ) {
-    const coins: ChainConfig['coins'] = [];
-
-    const assetIds: string[] = [];
-    for (let index = 0; index < numberOfAssets; index++) {
-      assetIds.push(index === 0 ? BaseAssetId : hexlify(randomBytes(32)));
-    }
-
-    wallets
-      .map((wallet) => wallet.address.toHexString())
-      .forEach((walletAddress) => {
-        assetIds.forEach((assetId) => {
-          for (let index = 0; index < coinsPerAsset; index++) {
-            coins.push({
-              amount: toHex(amountPerCoin, 8),
-              asset_id: assetId,
-              owner: walletAddress,
-            });
-          }
-        });
-      });
-
-    return coins;
-  }
-}
-
-interface Options {
+interface Options extends SetupTestProviderOptions {
   walletConfig: WalletConfig;
-  providerOptions: ProviderOptions;
-  nodeOptions: Omit<LaunchNodeOptions, 'chainConfigPath' | 'chainConfig'>;
 }
 
-export async function launchCustomProviderAndGetWallets({
-  walletConfig = WalletConfig.default(),
-  providerOptions,
-  nodeOptions,
-}: Partial<Options> = {}): Promise<
-  { wallets: WalletUnlocked[]; provider: Provider } & AsyncDisposable
-> {
+export async function launchCustomProviderAndGetWallets<
+  Dispose extends boolean = true,
+  R = {
+    wallets: WalletUnlocked[];
+    provider: Provider;
+  },
+  ReturnType = Dispose extends true ? R & AsyncDisposable : R & { cleanup: () => Promise<void> },
+>(
+  { walletConfig = WalletConfig.default(), providerOptions, nodeOptions }: Partial<Options> = {},
+  runCleanup?: Dispose
+): Promise<ReturnType> {
   const { wallets, coins } = walletConfig;
 
   const chainConfig = structuredClone(defaultChainConfig);
@@ -116,9 +56,18 @@ export async function launchCustomProviderAndGetWallets({
     wallet.provider = provider;
   }
 
-  return {
-    wallets,
-    provider,
-    [Symbol.asyncDispose]: cleanup,
-  };
+  const dispose = runCleanup ?? true;
+
+  // @ts-expect-error whaa
+  return dispose
+    ? {
+        wallets,
+        provider,
+        [Symbol.asyncDispose]: cleanup,
+      }
+    : {
+        wallets,
+        provider,
+        cleanup,
+      };
 }

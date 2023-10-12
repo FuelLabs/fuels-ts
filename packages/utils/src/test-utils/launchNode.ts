@@ -1,6 +1,4 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
-import { toHex } from '@fuel-ts/math';
-import { spawn } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
@@ -8,7 +6,7 @@ import os from 'os';
 import path from 'path';
 import kill from 'tree-kill';
 
-import { defaultChainConfig, genesisWalletConfig } from './defaultChainConfig';
+import { defaultChainConfig } from './defaultChainConfig';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
@@ -19,10 +17,11 @@ export type LaunchNodeOptions = {
   port?: string;
   args?: string[];
   useSystemFuelCore?: boolean;
+  chainConfig?: typeof defaultChainConfig;
 };
 
 export type LaunchNodeResult = Promise<{
-  cleanup: () => void;
+  cleanup: () => Promise<void>;
   ip: string;
   port: string;
 }>;
@@ -43,7 +42,8 @@ export const launchNode = async ({
   port,
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
-}: LaunchNodeOptions): LaunchNodeResult =>
+  chainConfig = defaultChainConfig,
+}: LaunchNodeOptions = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
@@ -54,47 +54,14 @@ export const launchNode = async ({
 
     const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
 
-    if (!chainConfigPath) {
+    if (!chainConfigPathToUse) {
       if (!fsSync.existsSync(tempDirPath)) {
         fsSync.mkdirSync(tempDirPath, { recursive: true });
       }
-      const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
-
-      let chainConfig = defaultChainConfig;
-
-      // If there's no genesis key, generate one and some coins to the genesis block.
-      if (!process.env.GENESIS_SECRET) {
-        process.env.GENESIS_SECRET = genesisWalletConfig.privateKey;
-        chainConfig = {
-          ...defaultChainConfig,
-          initial_state: {
-            ...defaultChainConfig.initial_state,
-            coins: [
-              ...defaultChainConfig.initial_state.coins,
-              {
-                owner: genesisWalletConfig.address,
-                amount: toHex(1_000_000_000),
-                asset_id: BaseAssetId,
-              },
-              {
-                owner: genesisWalletConfig.address,
-                amount: '0xFFFFFFFFFFFFFFFF',
-                asset_id: '0x0101010101010101010101010101010101010101010101010101010101010101',
-              },
-              {
-                owner: genesisWalletConfig.address,
-                amount: '0xFFFFFFFFFFFFFFFF',
-                asset_id: '0x0202020202020202020202020202020202020202020202020202020202020202',
-              },
-            ],
-          },
-        };
-      }
+      chainConfigPathToUse = path.join(tempDirPath, '.chainConfig.json');
 
       // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
-
-      chainConfigPathToUse = tempChainConfigFilePath;
+      await fs.writeFile(chainConfigPathToUse, JSON.stringify(chainConfig), 'utf8');
     }
 
     const child = spawn(command, [
@@ -113,20 +80,22 @@ export const launchNode = async ({
     ]);
 
     // Cleanup function where fuel-core is stopped.
-    const cleanup = () => {
-      if (child.pid) {
-        kill(Number(child.pid));
-      }
+    const cleanup = () =>
+      new Promise<void>((resolveFn, rejectFn) => {
+        kill(Number(child.pid), (err) => {
+          // Remove all the listeners we've added.
+          child.stdout.removeAllListeners();
+          child.stderr.removeAllListeners();
 
-      // Remove all the listeners we've added.
-      child.stdout.removeAllListeners();
-      child.stderr.removeAllListeners();
+          // Remove the temporary folder and all its contents.
+          if (!chainConfigPath) {
+            spawnSync('rm', ['-rf', tempDirPath]);
+          }
 
-      // Remove the temporary folder and all its contents.
-      if (!chainConfigPath) {
-        spawn('rm', ['-rf', tempDirPath]);
-      }
-    };
+          if (err) rejectFn(err);
+          resolveFn();
+        });
+      });
 
     child.stderr.setEncoding('utf8');
 

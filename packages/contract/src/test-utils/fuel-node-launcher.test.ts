@@ -1,16 +1,19 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { Provider } from '@fuel-ts/providers';
 
-import { setupTestProvider } from './setup-test-provider';
+import { TestNodeLauncher } from './fuel-node-launcher';
 
-describe('launchTestProvider', () => {
+describe('TestNodeLauncher', () => {
   it('kills the node after going out of scope', async () => {
     let url = '';
-    // eslint-disable-next-line no-lone-blocks
+
     {
-      await using p = await setupTestProvider();
-      url = p.url;
-      await p.getBlockNumber();
+      await using launched = await TestNodeLauncher.launch();
+
+      const { provider } = launched;
+
+      url = provider.url;
+      await provider.getBlockNumber();
     }
 
     const { error } = await safeExec(async () => {

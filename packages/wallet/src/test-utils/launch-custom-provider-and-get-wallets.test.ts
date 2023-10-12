@@ -2,10 +2,8 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { Provider } from '@fuel-ts/providers';
 
-import {
-  WalletConfig,
-  launchCustomProviderAndGetWallets,
-} from './launch-custom-provider-and-get-wallets';
+import { launchCustomProviderAndGetWallets } from './launch-custom-provider-and-get-wallets';
+import { WalletConfig } from './wallet-config';
 
 describe('launchCustomProviderAndGetWallets', () => {
   it('kills the node after going out of scope', async () => {
@@ -30,22 +28,23 @@ describe('launchCustomProviderAndGetWallets', () => {
     expect(error).toMatchObject(expectedError);
   });
 
-  it('default: one wallet, one asset (BaseAssetId), one coin, 10000 amount', async () => {
+  it('default: two wallets, one asset (BaseAssetId), one coin, 1_000_000_000 amount', async () => {
     await using providerAndWallets = await launchCustomProviderAndGetWallets();
     const { wallets } = providerAndWallets;
 
-    expect(wallets.length).toBe(1);
+    expect(wallets.length).toBe(2);
 
-    const wallet = wallets[0];
+    const promises = wallets.map(async (wallet) => {
+      const coins = await wallet.getCoins();
+      expect(coins.length).toBe(1);
 
-    const coins = await wallet.getCoins();
+      const coin = coins[0];
 
-    expect(coins.length).toBe(1);
+      expect(coin.assetId).toBe(BaseAssetId);
+      expect(coin.amount.toNumber()).toBe(1_000_000_000);
+    });
 
-    const coin = coins[0];
-
-    expect(coin.assetId).toBe(BaseAssetId);
-    expect(coin.amount.toNumber()).toBe(10000);
+    await Promise.all(promises);
   });
 
   it('can return multiple wallets with multiple assets, coins and amounts', async () => {
