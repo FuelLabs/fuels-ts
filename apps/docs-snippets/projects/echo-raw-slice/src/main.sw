@@ -14,7 +14,7 @@ impl RawSliceTest for Contract {
     fn raw_slice_comparison(value: raw_slice) -> bool {
         let vec: Vec<u64> = Vec::from(value);
 
-        vec.len() == 3 && vec.get(0).unwrap() == 40 && vec.get(1).unwrap() == 41 && vec.get(1).unwrap() == 42
+        vec.len() == 3 && vec.get(0).unwrap() == 40 && vec.get(1).unwrap() == 41 && vec.get(2).unwrap() == 42
     }
 }
 // #endregion raw-slice-1

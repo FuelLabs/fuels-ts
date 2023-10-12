@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { Contract, BN } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -28,7 +28,7 @@ describe('RawSlice', () => {
 
     const { value } = await contract.functions.echo_raw_slice(rawSlice).simulate();
 
-    expect(value).toEqual(rawSlice);
+    expect(value.map((v: BN) => v.toNumber())).toStrictEqual(rawSlice);
     // #endregion raw-slice-2
   });
 });

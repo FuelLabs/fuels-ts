@@ -26,9 +26,9 @@ describe('Bytes', () => {
 
     const bytes = [8, 42, 77];
 
-    const { value } = await contract.functions.echo_raw_slice(bytes).simulate();
+    const { value } = await contract.functions.echo_bytes(bytes).simulate();
 
-    expect(value).toEqual(bytes);
+    expect(value).toStrictEqual(new Uint8Array(bytes));
     // #endregion bytes-2
   });
 });
