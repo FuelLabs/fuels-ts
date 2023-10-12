@@ -1,17 +1,8 @@
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { CoinQuantityLike, Provider } from 'fuels';
-import { BN, ContractFactory, BaseAssetId, getRandomB256 } from 'fuels';
-import { join } from 'path';
+import { BN, getRandomB256, TestNodeLauncher } from 'fuels';
 
-import contractAbi from '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract-abi.json';
+import { getContractPath } from './utils';
 
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract.bin'
-  )
-);
+const configurableContractPath = getContractPath('configurable-contract');
 
 const defaultValues = {
   U8: 10,
@@ -35,26 +26,14 @@ const defaultValues = {
 };
 
 describe('Configurable Contract', () => {
-  const setupFactory = async (provider: Provider) => {
-    const quantities: CoinQuantityLike[] = [
-      {
-        amount: 1_000_000,
-        assetId: BaseAssetId,
-      },
-    ];
-
-    const wallet = await generateTestWallet(provider, quantities);
-
-    const factory = new ContractFactory(contractBytecode, contractAbi, wallet);
-
-    return { factory };
-  };
-
   it('should assert default values', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ projectDir: configurableContractPath }],
+    });
 
-    const contract = await factory.deployContract();
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     const { value } = await contract.functions.echo_configurables().simulate();
 
@@ -72,16 +51,21 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (U8)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       U8: 99,
     };
 
-    expect(defaultValues.U8).not.toBe(configurableConstants.U8);
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
 
-    const contract = await factory.deployContract({ configurableConstants });
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
+
+    expect(defaultValues.U8).not.toBe(configurableConstants.U8);
 
     const { value } = await contract.functions.echo_u8().simulate();
 
@@ -89,16 +73,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (U16)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       U16: 499,
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.U16).not.toBe(configurableConstants.U16);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u16().simulate();
 
@@ -106,16 +94,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (U32)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       U32: 854,
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.U32).not.toBe(configurableConstants.U32);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u32().simulate();
 
@@ -123,16 +115,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (U64)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       U64: 999999,
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.U64).not.toBe(configurableConstants.U64);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u64().simulate();
 
@@ -140,16 +136,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (BOOL)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       BOOL: false,
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.BOOL).not.toBe(configurableConstants.BOOL);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_bool().simulate();
 
@@ -157,16 +157,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (B256)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       B256: getRandomB256(),
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.B256).not.toBe(configurableConstants.B256);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_b256().simulate();
 
@@ -174,16 +178,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (ENUM)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       ENUM: 'blue',
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.ENUM).not.toBe(configurableConstants.ENUM);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_enum().simulate();
 
@@ -191,19 +199,23 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (ARRAY)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       ARRAY: [
         [666, 667],
         [656, 657],
       ],
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.ARRAY).not.toStrictEqual(configurableConstants.ARRAY);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_array().simulate();
 
@@ -211,16 +223,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (STR_4)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       STR_4: 'leuf',
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.STR_4).not.toBe(configurableConstants.STR_4);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_str4().simulate();
 
@@ -228,16 +244,20 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (TUPLE)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       TUPLE: [99, true, 'by'],
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.TUPLE).not.toStrictEqual(configurableConstants.TUPLE);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_tuple().simulate();
 
@@ -245,9 +265,6 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (STRUCT)', async () => {
-    using provider = await setupTestProvider();
-    const { factory } = await setupFactory(provider);
-
     const configurableConstants = {
       STRUCT_1: {
         tag: '007',
@@ -255,10 +272,17 @@ describe('Configurable Contract', () => {
         scores: [10, 10, 10],
       },
     };
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [
+        { projectDir: configurableContractPath, options: { configurableConstants } },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = nodeLauncherResult;
 
     expect(defaultValues.STRUCT_1).not.toStrictEqual(configurableConstants.STRUCT_1);
-
-    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_struct().simulate();
 
