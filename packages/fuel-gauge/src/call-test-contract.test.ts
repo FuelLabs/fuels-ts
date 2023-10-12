@@ -2,13 +2,13 @@ import { BN, bn, toHex, BaseAssetId, TestNodeLauncher } from 'fuels';
 
 import { getContractPath } from './utils';
 
-const callTestDir = getContractPath('call-test');
+const callTestPath = getContractPath('call-test');
 
 const U64_MAX = bn(2).pow(64).sub(1);
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -28,7 +28,7 @@ describe('CallTestContract', () => {
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -42,7 +42,7 @@ describe('CallTestContract', () => {
 
   it('can call a function with empty arguments', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -58,7 +58,7 @@ describe('CallTestContract', () => {
 
   it('function with empty return should resolve undefined', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -139,7 +139,7 @@ describe('CallTestContract', () => {
     `Test call with multiple arguments and different types -> %s`,
     async (method, { values, expected }) => {
       await using nodeLauncherResult = await TestNodeLauncher.launch({
-        deployContracts: [{ projectDir: callTestDir }],
+        deployContracts: [{ projectDir: callTestPath }],
       });
 
       const {
@@ -158,7 +158,7 @@ describe('CallTestContract', () => {
 
   it('Forward amount value on contract call', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -176,7 +176,7 @@ describe('CallTestContract', () => {
 
   it('Forward asset_id on contract call', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -195,7 +195,7 @@ describe('CallTestContract', () => {
 
   it('Forward asset_id on contract simulate call', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {
@@ -214,7 +214,7 @@ describe('CallTestContract', () => {
 
   it('can make multiple calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: callTestDir }],
+      deployContracts: [{ projectDir: callTestPath }],
     });
 
     const {

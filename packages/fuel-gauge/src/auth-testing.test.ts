@@ -2,12 +2,12 @@ import { AssertFailedRevertError, getRandomB256, TestNodeLauncher } from 'fuels'
 
 import { getContractPath } from './utils';
 
-const authTestingContract = getContractPath('auth_testing_contract');
+const authTestingPath = getContractPath('auth_testing_contract');
 
 describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: authTestingContract }],
+      deployContracts: [{ projectDir: authTestingPath }],
     });
 
     const {
@@ -21,7 +21,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: authTestingContract }],
+      deployContracts: [{ projectDir: authTestingPath }],
     });
 
     const {
@@ -38,7 +38,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: authTestingContract }],
+      deployContracts: [{ projectDir: authTestingPath }],
     });
 
     const {

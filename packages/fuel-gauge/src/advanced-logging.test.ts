@@ -2,13 +2,13 @@ import { RequireRevertError, ScriptResultDecoderError, TestNodeLauncher } from '
 
 import { getContractPath } from './utils';
 
-const advancedLogging = getContractPath('advanced-logging');
-const advancedLoggingOtherContract = getContractPath('advanced-logging-other-contract');
+const advancedLoggingPath = getContractPath('advanced-logging');
+const advancedLoggingOtherPath = getContractPath('advanced-logging-other-contract');
 
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: advancedLogging }],
+      deployContracts: [{ projectDir: advancedLoggingPath }],
     });
 
     const {
@@ -60,7 +60,7 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=true]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: advancedLogging }],
+      deployContracts: [{ projectDir: advancedLoggingPath }],
     });
 
     const {
@@ -77,7 +77,7 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=false]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: advancedLogging }],
+      deployContracts: [{ projectDir: advancedLoggingPath }],
     });
 
     const {
@@ -115,8 +115,8 @@ describe('Advanced Logging', () => {
   it('can get log data from a downstream Contract', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: advancedLogging },
-        { projectDir: advancedLoggingOtherContract },
+        { projectDir: advancedLoggingPath },
+        { projectDir: advancedLoggingOtherPath },
       ],
     });
 

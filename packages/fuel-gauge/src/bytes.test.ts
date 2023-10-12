@@ -6,7 +6,7 @@ import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/deb
 
 import { getContractPath, getScript } from './utils';
 
-const bytesContract = getContractPath('bytes');
+const bytesPath = getContractPath('bytes');
 
 type SomeEnum = {
   First?: boolean;
@@ -21,7 +21,7 @@ type Wrapper = {
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesContract }],
+      deployContracts: [{ projectDir: bytesPath }],
     });
 
     const {
@@ -37,7 +37,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes output [100 items]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesContract }],
+      deployContracts: [{ projectDir: bytesPath }],
     });
 
     const {
@@ -52,7 +52,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesContract }],
+      deployContracts: [{ projectDir: bytesPath }],
     });
 
     const {
@@ -66,7 +66,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesContract }],
+      deployContracts: [{ projectDir: bytesPath }],
     });
 
     const {
