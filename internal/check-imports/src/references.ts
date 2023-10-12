@@ -30,7 +30,6 @@ import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { english, Language } from '@fuel-ts/wordlists';
 import type { DeployOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
 import { ScriptRequest, createConfig } from 'fuels';
-import { fuelsConfig } from 'fuels/test/fixtures/config/fuels.config';
 
 const { log } = console;
 
