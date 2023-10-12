@@ -12,9 +12,14 @@ export type SetupConfig = {
   cache?: boolean;
 };
 
-const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
+const deployContract = async (
+  factory: ContractFactory,
+  provider: Provider,
+  useCache: boolean = true
+) => {
   if (contractInstance && useCache) return contractInstance;
-  contractInstance = await factory.deployContract();
+  const { minGasPrice } = provider.getGasConfig();
+  contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
   return contractInstance;
 };
 
@@ -32,7 +37,7 @@ export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, cache);
+  const contract = await deployContract(factory, wallet.provider, cache);
   return contract;
 };
 
