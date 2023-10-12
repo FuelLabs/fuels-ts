@@ -3,12 +3,12 @@ contract;
 
 use std::string::String;
 
-abi RawSliceTest {
+abi StdStringTest {
     fn echo_string(value: String) -> String;
     fn string_comparison(value: String) -> bool;
 }
 
-impl RawSliceTest for Contract {
+impl StdStringTest for Contract {
     fn echo_string(value: String) -> String {
         value
     }
