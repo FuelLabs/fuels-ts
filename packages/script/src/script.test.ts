@@ -2,21 +2,15 @@
 import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
-import type {
-  CoinQuantityLike,
-  TransactionResponse,
-  TransactionResult,
-  Provider,
-} from '@fuel-ts/providers';
+import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -27,10 +21,6 @@ import { Script } from './index';
 const scriptBin = readFileSync(
   join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
 );
-
-const setup = async (provider: Provider) =>
-  // Create wallet
-  generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
 const callScript = async <TData, TResult>(
   account: Account,
@@ -102,8 +92,10 @@ describe('Script', () => {
   // #endregion script-init
 
   it('can call a script', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
 
     const input = {
       arg_one: true,
@@ -119,8 +111,11 @@ describe('Script', () => {
   });
 
   it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -132,8 +127,11 @@ describe('Script', () => {
   });
 
   it('should throw if script has no configurable to be set', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
@@ -144,8 +142,11 @@ describe('Script', () => {
   });
 
   it('should throw when setting configurable with wrong name', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+
     const jsonAbiWithConfigurablesMock: JsonAbi = {
       ...jsonAbiMock,
       configurables: [
