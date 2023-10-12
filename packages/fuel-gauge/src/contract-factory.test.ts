@@ -1,39 +1,23 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { Provider } from 'fuels';
-import { bn, toHex, Interface, ContractFactory, BaseAssetId } from 'fuels';
-import { join } from 'path';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
+import type { JsonAbi } from 'fuels';
+import { bn, toHex, Interface, ContractFactory } from 'fuels';
 
-import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+import { getContractPath } from './utils';
 
-// load the byteCode of the contract, generated from Sway source
-const byteCode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
+const { binHexlified, abiContents, storageSlots } = getForcProject<JsonAbi>(
+  getContractPath('storage-test')
 );
 
-// load the JSON abi of the contract, generated from Sway source
-const abi = JSON.parse(
-  readFileSync(
-    join(
-      __dirname,
-      '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
-    )
-  ).toString()
-);
-
-const createContractFactory = async (provider: Provider) => {
-  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-
-  // send byteCode and ABI to ContractFactory to load
-  const factory = new ContractFactory(byteCode, abi, wallet);
-  return factory;
-};
 describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
-    await using provider = await setupTestProvider();
-    const factory = await createContractFactory(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
     const contact = await factory.deployContract();
 
@@ -50,8 +34,11 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
-    await using provider = await setupTestProvider();
-    const factory = await createContractFactory(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
     const contact = await factory.deployContract();
 
@@ -93,8 +80,11 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can prepare call data', async () => {
-    await using provider = await setupTestProvider();
-    const factory = await createContractFactory(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
     const contract = await factory.deployContract();
 
@@ -110,8 +100,12 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage fixed var names', async () => {
-    await using provider = await setupTestProvider();
-    const factory = await createContractFactory(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
     const contract = await factory.deployContract({
       storageSlots,
     });
@@ -138,8 +132,12 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
-    await using provider = await setupTestProvider();
-    const factory = await createContractFactory(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contact = await factory.deployContract({
@@ -153,8 +151,12 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
-    await using provider = await setupTestProvider();
-    const factory = await createContractFactory(provider);
+    await using launchResult = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launchResult;
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contract = await factory.deployContract({
@@ -189,7 +191,7 @@ describe('Contract Factory', () => {
   });
 
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
-    const factory = new ContractFactory(byteCode, abi);
+    const factory = new ContractFactory(binHexlified, abiContents);
 
     await expectToThrowFuelError(
       () => factory.createTransactionRequest(),
