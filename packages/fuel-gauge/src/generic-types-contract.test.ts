@@ -1,5 +1,4 @@
-import { TestNodeLauncher } from '@fuel-ts/contract/test-utils';
-import { toHex } from 'fuels';
+import { TestNodeLauncher, toHex } from 'fuels';
 import { join } from 'path';
 
 const projectDir = join(__dirname, '../fixtures/forc-projects/generic-types-contract');

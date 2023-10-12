@@ -52,9 +52,10 @@ export async function launchCustomProviderAndGetWallets<
     false
   );
 
-  for (const wallet of wallets) {
+  wallets.forEach((wallet) => {
+    // eslint-disable-next-line no-param-reassign
     wallet.provider = provider;
-  }
+  });
 
   const dispose = runCleanup ?? true;
 

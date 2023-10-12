@@ -54,3 +54,6 @@ export const getScript = <TInput extends unknown[], TOutput>(
         wallet
       )
   );
+
+export const getContractPath = (name: string) =>
+  join(__dirname, `../fixtures/forc-projects/${name}`);

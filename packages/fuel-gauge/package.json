@@ -18,7 +18,6 @@
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/contract": "workspace:*"
+    "@fuel-ts/providers": "workspace:*"
   }
 }

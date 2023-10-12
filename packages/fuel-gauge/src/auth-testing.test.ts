@@ -1,31 +1,18 @@
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
-import type { Provider } from 'fuels';
-import { AssertFailedRevertError, ContractFactory, BaseAssetId, getRandomB256 } from 'fuels';
-import path from 'path';
+import { AssertFailedRevertError, getRandomB256, TestNodeLauncher } from 'fuels';
 
-import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
+import { getContractPath } from './utils';
+
+const authTestingContract = getContractPath('auth_testing_contract');
 
 describe('Auth Testing', () => {
-  const setup = async (provider: Provider) => {
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
-
-    const bytecode = fs.readFileSync(
-      path.join(
-        __dirname,
-        '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract.bin'
-      )
-    );
-    const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    const contractInstance = await factory.deployContract();
-
-    return { wallet, contractInstance };
-  };
-  beforeAll(async () => {});
-
   it('can get is_caller_external', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ projectDir: authTestingContract }],
+    });
+
+    const {
+      contracts: [contractInstance],
+    } = nodeLauncherResult;
 
     const { value } = await contractInstance.functions.is_caller_external().call();
 
@@ -33,8 +20,14 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id]', async () => {
-    using provider = await setupTestProvider();
-    const { wallet, contractInstance } = await setup(provider);
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ projectDir: authTestingContract }],
+    });
+
+    const {
+      contracts: [contractInstance],
+      wallets: [wallet],
+    } = nodeLauncherResult;
 
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
@@ -44,8 +37,13 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ projectDir: authTestingContract }],
+    });
+
+    const {
+      contracts: [contractInstance],
+    } = nodeLauncherResult;
 
     await expect(
       contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
