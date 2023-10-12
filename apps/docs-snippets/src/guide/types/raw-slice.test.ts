@@ -15,7 +15,7 @@ describe('RawSlice', () => {
 
     const rawSlice = [40, 41, 42];
 
-    const { value } = await contract.functions.bytes_comparison(rawSlice).simulate();
+    const { value } = await contract.functions.raw_slice_comparison(rawSlice).simulate();
 
     expect(value).toBeTruthy();
     // #endregion raw-slice-1
@@ -26,7 +26,7 @@ describe('RawSlice', () => {
 
     const rawSlice = [8, 42, 77];
 
-    const { value } = await contract.functions.echo_bytes(rawSlice).simulate();
+    const { value } = await contract.functions.echo_raw_slice(rawSlice).simulate();
 
     expect(value).toEqual(rawSlice);
     // #endregion raw-slice-2

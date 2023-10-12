@@ -15,7 +15,7 @@ describe('Bytes', () => {
 
     const bytes = [40, 41, 42];
 
-    const { value } = await contract.functions.raw_slice_comparison(bytes).simulate();
+    const { value } = await contract.functions.bytes_comparison(bytes).simulate();
 
     expect(value).toBeTruthy();
     // #endregion bytes-1
