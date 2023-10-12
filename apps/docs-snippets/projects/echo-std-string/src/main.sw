@@ -16,7 +16,7 @@ impl RawSliceTest for Contract {
     fn string_comparison(value: String) -> bool {
         let expected = String::from_ascii_str("Hello World");
 
-        value == expected
+        value.as_bytes() == expected.as_bytes()
     }
 }
 // #endregion std-string-1
