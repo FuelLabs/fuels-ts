@@ -1,4 +1,2 @@
 [workspace]
-members = [
-  "./sample"
-]
+members = ["./sample"]
