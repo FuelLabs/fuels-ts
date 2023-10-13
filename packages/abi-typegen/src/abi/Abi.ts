@@ -24,6 +24,7 @@ export class Abi {
 
   public rawContents: IRawAbi;
   public hexlifiedBinContents?: string;
+  public storageSlotsContents?: string;
 
   public types: IType[];
   public functions: IFunction[];
@@ -34,9 +35,17 @@ export class Abi {
     programType: ProgramTypeEnum;
     rawContents: IRawAbi;
     hexlifiedBinContents?: string;
+    storageSlotsContents?: string;
     outputDir: string;
   }) {
-    const { filepath, outputDir, rawContents, hexlifiedBinContents, programType } = params;
+    const {
+      filepath,
+      outputDir,
+      rawContents,
+      hexlifiedBinContents,
+      programType,
+      storageSlotsContents,
+    } = params;
 
     const abiNameRegex = /([^/]+)-abi\.json$/m;
     const abiName = filepath.match(abiNameRegex);
@@ -58,6 +67,7 @@ export class Abi {
     this.filepath = filepath;
     this.rawContents = rawContents;
     this.hexlifiedBinContents = hexlifiedBinContents;
+    this.storageSlotsContents = storageSlotsContents;
     this.outputDir = outputDir;
 
     const { types, functions, configurables } = this.parse();

@@ -15,6 +15,7 @@ export class AbiTypeGen {
   public readonly abis: Abi[];
   public readonly abiFiles: IFile[];
   public readonly binFiles: IFile[];
+  public readonly storageSlotsFiles: IFile[];
   public readonly outputDir: string;
 
   public readonly files: IFile[];
@@ -22,20 +23,27 @@ export class AbiTypeGen {
   constructor(params: {
     abiFiles: IFile[];
     binFiles: IFile[];
+    storageSlotsFiles: IFile[];
     outputDir: string;
     programType: ProgramTypeEnum;
   }) {
-    const { abiFiles, binFiles, outputDir, programType } = params;
+    const { abiFiles, binFiles, outputDir, programType, storageSlotsFiles } = params;
 
     this.outputDir = outputDir;
 
     this.abiFiles = abiFiles;
     this.binFiles = binFiles;
+    this.storageSlotsFiles = storageSlotsFiles;
 
     // Creates a `Abi` for each abi file
     this.abis = this.abiFiles.map((abiFile) => {
       const binFilepath = abiFile.path.replace('-abi.json', '.bin');
       const relatedBinFile = this.binFiles.find(({ path }) => path === binFilepath);
+
+      const storageSlotFilepath = abiFile.path.replace('-storage_slots.json', '.bin');
+      const relatedStorageSlotsFile = this.storageSlotsFiles.find(
+        ({ path }) => path === storageSlotFilepath
+      );
 
       if (!relatedBinFile) {
         validateBinFile({
@@ -50,6 +58,7 @@ export class AbiTypeGen {
         filepath: abiFile.path,
         rawContents: JSON.parse(abiFile.contents as string),
         hexlifiedBinContents: relatedBinFile?.contents,
+        storageSlotsContents: relatedStorageSlotsFile?.contents,
         outputDir,
         programType,
       });

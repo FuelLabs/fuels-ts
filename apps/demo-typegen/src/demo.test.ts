@@ -3,8 +3,6 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
-import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
-
 import { DemoContractAbi__factory } from './generated-types';
 import bytecode from './generated-types/DemoContractAbi.hex';
 
@@ -34,9 +32,7 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     // Deploy
-    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
-      storageSlots,
-    });
+    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet);
 
     // Call
     const { value } = await contract.functions.return_input(1337).call();
