@@ -143,6 +143,13 @@ export abstract class AbiCoder {
       return new TupleCoder(coders);
     }
 
+    if (resolvedAbiType.type === 'str') {
+      throw new FuelError(
+        ErrorCode.INVALID_DATA,
+        'String slices can not be decoded from logs. Convert the slice to `str[N]` with `__to_str_array`'
+      );
+    }
+
     throw new FuelError(
       ErrorCode.CODER_NOT_FOUND,
       `Coder not found: ${JSON.stringify(resolvedAbiType)}.`

@@ -49,7 +49,7 @@ impl AdvancedLogging for Contract {
             difficulty: Difficulty::Medium(true),
         };
 
-        log("Game State");
+        log(__to_str_array("Game State"));
         log(state);
 
         log(__to_str_array("Contract Id"));
