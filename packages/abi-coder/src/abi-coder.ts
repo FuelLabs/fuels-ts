@@ -3,6 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
 import { ArrayCoder } from './coders/array';
+import { AssetIdCoder } from './coders/asset-id';
 import { B256Coder } from './coders/b256';
 import { B512Coder } from './coders/b512';
 import { BooleanCoder } from './coders/boolean';
@@ -69,6 +70,8 @@ export abstract class AbiCoder {
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
+      case 'struct AssetId':
+        return new AssetIdCoder();
       case BYTES_CODER_TYPE:
         return new ByteCoder();
       case STD_STRING_CODER_TYPE:
