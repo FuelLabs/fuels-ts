@@ -28,7 +28,7 @@ describe('launchCustomProviderAndGetWallets', () => {
     expect(error).toMatchObject(expectedError);
   });
 
-  it('default: two wallets, one asset (BaseAssetId), one coin, 1_000_000_000 amount', async () => {
+  it('default: two wallets, one asset (BaseAssetId), one coin, 1_000_000_00 amount', async () => {
     await using providerAndWallets = await launchCustomProviderAndGetWallets();
     const { wallets } = providerAndWallets;
 
@@ -41,7 +41,7 @@ describe('launchCustomProviderAndGetWallets', () => {
       const coin = coins[0];
 
       expect(coin.assetId).toBe(BaseAssetId);
-      expect(coin.amount.toNumber()).toBe(1_000_000_000);
+      expect(coin.amount.toNumber()).toBe(1_000_000_00);
     });
 
     await Promise.all(promises);

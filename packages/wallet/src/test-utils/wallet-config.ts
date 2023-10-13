@@ -13,7 +13,7 @@ export class WalletConfig {
   public wallets: WalletUnlocked[];
 
   public static default() {
-    return new WalletConfig(2, 1, 1, 1_000_000_000);
+    return new WalletConfig(2, 1, 1, 1_000_000_00);
   }
 
   /**
