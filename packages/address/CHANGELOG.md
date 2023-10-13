@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.62.0
+
+## 0.61.0
+
+### Minor Changes
+
+- Improve developer experience of `fromEvmAddress` address helper function, by [@danielbate](https://github.com/danielbate) (See [#1309](https://github.com/FuelLabs/fuels-ts/pull/1309))
+
 ## 0.60.0
 
 ## 0.59.0

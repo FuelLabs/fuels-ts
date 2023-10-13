@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.62.0
+
+## 0.61.0
+
+### Patch Changes
+
+- 🐞 fix: launchNode will create a GENESIS_KEY if not already set, by [@dmihal](https://github.com/dmihal) (See [#1305](https://github.com/FuelLabs/fuels-ts/pull/1305))
+
 ## 0.60.0
 
 ### Minor Changes
