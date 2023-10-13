@@ -55,7 +55,7 @@ impl MyContract for Contract {
         4294967295000
     }
     fn types_str(x: str[5]) -> str[5] {
-        "Hello"
+        __to_str_array("Hello")
     }
     fn types_bool(x: bool) -> bool {
         true
