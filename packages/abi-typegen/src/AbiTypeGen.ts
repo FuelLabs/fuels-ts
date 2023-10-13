@@ -40,7 +40,7 @@ export class AbiTypeGen {
       const binFilepath = abiFile.path.replace('-abi.json', '.bin');
       const relatedBinFile = this.binFiles.find(({ path }) => path === binFilepath);
 
-      const storageSlotFilepath = abiFile.path.replace('-storage_slots.json', '.bin');
+      const storageSlotFilepath = abiFile.path.replace('-abi.json', '-storage_slots.json');
       const relatedStorageSlotsFile = this.storageSlotsFiles.find(
         ({ path }) => path === storageSlotFilepath
       );
