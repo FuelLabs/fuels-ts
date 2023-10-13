@@ -1,5 +1,4 @@
 import { hexlify } from '@ethersproject/bytes';
-import { vi } from 'vitest';
 
 import faucets from './.fuel-core/configs/faucets.json';
 
