@@ -4,7 +4,6 @@ import type { SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
 
 import type { WalletUnlocked } from '../wallets';
 
-import { defaultChainConfig } from './defaultChainConfig';
 import { WalletConfig } from './wallet-config';
 
 interface ChainConfigCoin {
@@ -28,17 +27,17 @@ export async function launchCustomProviderAndGetWallets<
   },
   ReturnType = Dispose extends true ? R & AsyncDisposable : R & { cleanup: () => Promise<void> },
 >(
-  { walletConfig = WalletConfig.default(), providerOptions, nodeOptions }: Partial<Options> = {},
+  { walletConfig = new WalletConfig(), providerOptions, nodeOptions }: Partial<Options> = {},
   runCleanup?: Dispose
 ): Promise<ReturnType> {
   const { wallets, coins } = walletConfig;
 
-  const chainConfig = structuredClone(defaultChainConfig);
-
-  chainConfig.initial_state = {
-    ...chainConfig.initial_state,
-    coins,
-    messages: [],
+  const chainConfig = {
+    ...nodeOptions?.chainConfig,
+    initial_state: {
+      ...nodeOptions?.chainConfig?.initial_state,
+      coins: coins.concat(nodeOptions?.chainConfig?.initial_state?.coins || []),
+    },
   };
 
   const { provider, cleanup } = await setupTestProvider(

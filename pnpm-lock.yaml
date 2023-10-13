@@ -641,9 +641,6 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
-      '@fuel-ts/contract':
-        specifier: workspace:*
-        version: link:../contract
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -976,6 +973,9 @@ importers:
       tai64:
         specifier: ^1.0.0
         version: 1.0.0
+      tree-kill:
+        specifier: ^1.2.2
+        version: 1.2.2
     devDependencies:
       '@fuel-ts/utils':
         specifier: workspace:*
@@ -998,6 +998,9 @@ importers:
       get-graphql-schema:
         specifier: ^2.1.2
         version: 2.1.2
+      type-fest:
+        specifier: ^4.4.0
+        version: 4.4.0
 
   packages/script:
     dependencies:
@@ -1098,9 +1101,6 @@ importers:
 
   packages/utils:
     dependencies:
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1199,6 +1199,9 @@ importers:
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
       tree-kill:
         specifier: ^1.2.2
         version: 1.2.2
@@ -1209,6 +1212,9 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.1
@@ -17373,6 +17379,11 @@ packages:
     resolution: {integrity: sha512-StmrZmK3eD9mDF9Vt7UhqthrDSk66O9iYl5t5a0TSoVkHjl0XZx/xuc/BRz4urAXXGHOY5OLsE0RdJFIApSFmw==}
     engines: {node: '>=14.16'}
     dev: false
+
+  /type-fest@4.4.0:
+    resolution: {integrity: sha512-HT3RRs7sTfY22KuPQJkD/XjbTbxgP2Je5HPt6H6JEGvcjHd5Lqru75EbrP3tb4FYjNJ+DjLp+MNQTFQU0mhXNw==}
+    engines: {node: '>=16'}
+    dev: true
 
   /type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}

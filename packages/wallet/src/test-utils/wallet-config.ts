@@ -8,26 +8,41 @@ import { WalletUnlocked } from '../wallets';
 
 import type { ChainConfig } from './launch-custom-provider-and-get-wallets';
 
+interface WalletConfigOptions {
+  /**
+   * Number of wallets to generate.
+   */
+  numWallets: number;
+
+  /**
+   * Number of unique asset ids each wallet will own.
+   */
+  numOfAssets: number;
+
+  /**
+   * Number of coins (UTXOs) per asset id.
+   */
+  coinsPerAsset: number;
+
+  /**
+   * For each coin, the amount it'll contain.
+   */
+  amountPerCoin: number;
+}
+
 export class WalletConfig {
   public coins: ChainConfig['coins'];
   public wallets: WalletUnlocked[];
 
-  public static default() {
-    return new WalletConfig(2, 1, 1, 1_000_000_00);
-  }
-
   /**
-   * @param numWallets - number of wallets to generate.
-   * @param numOfAssets - number of unique asset ids each wallet will own.
-   * @param coinsPerAsset - number of coins (UTXOs) per asset id.
-   * @param amountPerCoin - for each coin, the amount it'll contain.
+   * Used for configuring the wallets that should exist in the genesis block of a test node.
    */
-  constructor(
-    numWallets: number,
-    numOfAssets: number,
-    coinsPerAsset: number,
-    amountPerCoin: number
-  ) {
+  constructor({
+    numWallets = 1,
+    numOfAssets = 1,
+    coinsPerAsset = 1,
+    amountPerCoin = 1_000_000_00,
+  }: Partial<WalletConfigOptions> = {}) {
     WalletConfig.guard(numWallets, numOfAssets, coinsPerAsset, amountPerCoin);
     const wallets: WalletUnlocked[] = [];
     for (let index = 0; index < numWallets; index++) {
