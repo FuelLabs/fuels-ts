@@ -1,6 +1,6 @@
 # Bytes
 
-A dynamic array of byte values can be represented using the `Bytes` type, type used to represent raw bytes.
+A dynamic array of byte values can be represented using the `Bytes` type, which represents raw bytes.
 
 <<< @/../../docs-snippets/src/guide/types/bytes.test.ts#bytes-1{ts:line-numbers}
 
