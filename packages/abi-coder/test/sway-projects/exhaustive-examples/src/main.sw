@@ -137,6 +137,7 @@ abi MyContract {
     fn bytes(arg: Bytes) -> Bytes;
     fn raw_slice(arg: raw_slice) -> raw_slice;
     fn dynamic_string(arg: String) -> String;
+    fn asset_id(arg: AssetId) -> AssetId;
 
     fn tuple_as_param(x: (u8, StructA<StructB<u64>, str[3]>)) -> (u8, StructA<StructB<u64>, str[3]>);
     fn array_simple(x: [u8; 4]) -> [u8; 4];
@@ -257,6 +258,10 @@ impl MyContract for Contract {
     }
 
     fn dynamic_string(arg: String) -> String {
+        arg
+    }
+
+    fn asset_id(arg: AssetId) -> AssetId {
         arg
     }
 
