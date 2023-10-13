@@ -26,7 +26,7 @@ beforeAll(async () => {
 
 test('allow sending coins to payable functions', async () => {
   // This should not fail because the function is payable
-  await expect(async () =>
+  await expect(
     contract.functions
       .payable()
       .callParams({
