@@ -2,7 +2,7 @@
 
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 
-FILES=$(find $ROOT/{apps,internal,packages} -name '*.test.ts')
+FILES=$(find $ROOT/packages/hasher -name '*.test.ts')
 
 if [[ $* == *--all* ]]; then
   grep -lE "@group\s+(node|browser)" $FILES

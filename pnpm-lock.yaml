@@ -740,20 +740,20 @@ importers:
   packages/hasher:
     dependencies:
       '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
+        specifier: file:../address
+        version: file:packages/address
       '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
+        specifier: file:../crypto
+        version: file:packages/crypto
       '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
+        specifier: file:../math
+        version: file:packages/math
       '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
+        specifier: file:../providers
+        version: file:packages/providers
       '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
+        specifier: file:../transactions
+        version: file:packages/transactions
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -762,8 +762,8 @@ importers:
         version: 0.29.0
     devDependencies:
       '@fuel-ts/testcases':
-        specifier: workspace:*
-        version: link:../testcases
+        specifier: file:../testcases
+        version: file:packages/testcases
       '@types/ramda':
         specifier: ^0.29.3
         version: 0.29.3
@@ -19886,3 +19886,83 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
+
+  file:packages/address:
+    resolution: {directory: packages/address, type: directory}
+    name: '@fuel-ts/address'
+    version: 0.60.0
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/crypto': link:packages/crypto
+      '@fuel-ts/errors': link:packages/errors
+      '@fuel-ts/interfaces': link:packages/interfaces
+      '@fuel-ts/versions': link:packages/versions
+      bech32: 2.0.0
+    dev: false
+
+  file:packages/crypto:
+    resolution: {directory: packages/crypto, type: directory}
+    name: '@fuel-ts/crypto'
+    version: 0.60.0
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/pbkdf2': 5.7.0
+      '@fuel-ts/errors': link:packages/errors
+      ethereum-cryptography: 2.1.2
+    dev: false
+
+  file:packages/math:
+    resolution: {directory: packages/math, type: directory}
+    name: '@fuel-ts/math'
+    version: 0.60.0
+    dependencies:
+      '@fuel-ts/errors': link:packages/errors
+      '@types/bn.js': 5.1.1
+      bn.js: 5.2.1
+    dev: false
+
+  file:packages/providers:
+    resolution: {directory: packages/providers, type: directory}
+    name: '@fuel-ts/providers'
+    version: 0.60.0
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/networks': 5.7.1
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/abi-coder': link:packages/abi-coder
+      '@fuel-ts/address': link:packages/address
+      '@fuel-ts/crypto': link:packages/crypto
+      '@fuel-ts/errors': link:packages/errors
+      '@fuel-ts/interfaces': link:packages/interfaces
+      '@fuel-ts/math': link:packages/math
+      '@fuel-ts/transactions': link:packages/transactions
+      '@fuel-ts/versions': link:packages/versions
+      graphql: 16.6.0
+      graphql-request: 5.0.0(graphql@16.6.0)
+      graphql-sse: 2.2.1(graphql@16.6.0)
+      graphql-tag: 2.12.6(graphql@16.6.0)
+      ramda: 0.29.0
+      tai64: 1.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  file:packages/testcases:
+    resolution: {directory: packages/testcases, type: directory}
+    name: '@fuel-ts/testcases'
+    version: 0.60.0
+    dev: true
+
+  file:packages/transactions:
+    resolution: {directory: packages/transactions, type: directory}
+    name: '@fuel-ts/transactions'
+    version: 0.60.0
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      '@fuel-ts/abi-coder': link:packages/abi-coder
+      '@fuel-ts/address': link:packages/address
+      '@fuel-ts/errors': link:packages/errors
+      '@fuel-ts/math': link:packages/math
+    dev: false
