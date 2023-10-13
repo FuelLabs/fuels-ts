@@ -1,6 +1,6 @@
 # RawSlice
 
-A dynamic array of values can be represented using the `RawSlice` type. A raw slice can be a value reference or from a raw pointer.
+A dynamic array of values can be represented using the `RawSlice` type. A raw slice can be a value reference or a raw pointer.
 
 <<< @/../../docs-snippets/src/guide/types/raw-slice.test.ts#raw-slice-1{ts:line-numbers}
 
