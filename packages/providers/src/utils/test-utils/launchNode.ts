@@ -93,6 +93,19 @@ export const launchNode = async ({
         });
       });
 
+    // Process exit.
+    process.on('exit', cleanup);
+
+    // Catches ctrl+c event.
+    process.on('SIGINT', cleanup);
+
+    // Catches "kill pid" (for example: nodemon restart).
+    process.on('SIGUSR1', cleanup);
+    process.on('SIGUSR2', cleanup);
+
+    // Catches uncaught exceptions.
+    process.on('uncaughtException', cleanup);
+
     child.stderr.setEncoding('utf8');
 
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
@@ -108,8 +121,9 @@ export const launchNode = async ({
 
       timeout ??= setTimeout(() => {
         removeSideffects();
+        const logs = nodeMessages!.join();
 
-        reject(new FuelError(FuelError.CODES.INVALID_INPUT_PARAMETERS, nodeMessages!.join('\n')));
+        reject(new FuelError(FuelError.CODES.INVALID_INPUT_PARAMETERS, logs));
       }, 1000);
 
       const graphQLServerStarted = chunk.indexOf(graphQLStartSubstring) !== -1;
@@ -122,17 +136,4 @@ export const launchNode = async ({
         resolve({ cleanup, ip: nodeIp, port: nodePort });
       }
     });
-
-    // Process exit.
-    process.on('exit', cleanup);
-
-    // Catches ctrl+c event.
-    process.on('SIGINT', cleanup);
-
-    // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', cleanup);
-    process.on('SIGUSR2', cleanup);
-
-    // Catches uncaught exceptions.
-    process.on('uncaughtException', cleanup);
   });
