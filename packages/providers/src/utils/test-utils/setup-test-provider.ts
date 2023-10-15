@@ -4,7 +4,7 @@ import type { PartialDeep } from 'type-fest';
 import type { ProviderOptions } from '../..';
 import { Provider } from '../..';
 
-import type { ChainConfig } from './chain-config-interfaces';
+import type { ChainConfig } from './fuel-node-interfaces';
 import { defaultChainConfig } from './defaultChainConfig';
 import type { LaunchNodeOptions } from './launchNode';
 import { launchNode } from './launchNode';

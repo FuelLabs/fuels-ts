@@ -1,4 +1,4 @@
-import type { ChainConfig } from './chain-config-interfaces';
+import type { ChainConfig } from './fuel-node-interfaces';
 
 export const defaultChainConfig: ChainConfig = {
   chain_name: 'local_testnet',

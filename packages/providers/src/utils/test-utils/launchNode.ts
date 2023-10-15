@@ -6,8 +6,8 @@ import os from 'os';
 import path from 'path';
 import kill from 'tree-kill';
 
-import type { ChainConfig } from './chain-config-interfaces';
 import { defaultChainConfig } from './defaultChainConfig';
+import type { ChainConfig } from './fuel-node-interfaces';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
