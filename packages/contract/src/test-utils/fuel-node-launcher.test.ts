@@ -91,7 +91,7 @@ describe('TestNodeLauncher', () => {
 
   test('multiple contracts can be deployed with different wallets', async () => {
     await using launched = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig({ numWallets: 2 }),
+      walletConfig: new WalletConfig({ wallets: 2 }),
       deployContracts: [
         { contractDir: simpleContractPath },
         { contractDir: simpleContractPath, walletIndex: 1 },
@@ -109,7 +109,7 @@ describe('TestNodeLauncher', () => {
 
   test('multiple contracts can be deployed with different wallets', async () => {
     await using launched = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig({ numWallets: 2 }),
+      walletConfig: new WalletConfig({ wallets: 2 }),
       deployContracts: [
         { contractDir: simpleContractPath },
         { contractDir: simpleContractPath, walletIndex: 1 },

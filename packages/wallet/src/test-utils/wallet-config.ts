@@ -1,23 +1,25 @@
-import { hexlify } from '@ethersproject/bytes';
-import { BaseAssetId } from '@fuel-ts/address/configs';
-import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { toHex } from '@fuel-ts/math';
 
 import { WalletUnlocked } from '../wallets';
 
+import { AssetId } from './asset-id';
 import type { ChainConfig } from './launch-custom-provider-and-get-wallets';
 
 interface WalletConfigOptions {
   /**
-   * Number of wallets to generate.
+   * If `number`, this sets the number of wallets to generate.
+   *
+   * If `WalletUnlocked[]`, their addresses are used for seed data and their providers are set.
    */
-  numWallets: number | WalletUnlocked[];
+  wallets: number | WalletUnlocked[];
 
   /**
-   * Number of unique asset ids each wallet will own.
+   * If `number`, the number of unique asset ids each wallet will own.
+   *
+   * If `AssetId[]`, the asset ids the each wallet will own besides `AssetId.BaseAssetId`.
    */
-  numOfAssets: number;
+  assets: number | AssetId[];
 
   /**
    * Number of coins (UTXOs) per asset id.
@@ -38,39 +40,42 @@ export class WalletConfig {
    * Used for configuring the wallets that should exist in the genesis block of a test node.
    */
   constructor({
-    numWallets = 1,
-    numOfAssets = 1,
+    wallets = 1,
+    assets = 1,
     coinsPerAsset = 1,
     amountPerCoin = 1_000_000_00,
   }: Partial<WalletConfigOptions> = {}) {
-    WalletConfig.guard(numWallets, numOfAssets, coinsPerAsset, amountPerCoin);
-    let wallets: WalletUnlocked[] = [];
+    WalletConfig.guard({ wallets, assets, coinsPerAsset, amountPerCoin });
 
-    if (Array.isArray(numWallets)) {
-      wallets = numWallets;
+    if (Array.isArray(wallets)) {
+      this.wallets = wallets;
     } else {
-      for (let index = 0; index < numWallets; index++) {
+      const generatedWallets: WalletUnlocked[] = [];
+      for (let index = 0; index < wallets; index++) {
         // @ts-expect-error will be updated later
-        wallets.push(WalletUnlocked.generate({ provider: null }));
+        generatedWallets.push(WalletUnlocked.generate({ provider: null }));
       }
+      this.wallets = generatedWallets;
     }
 
-    this.wallets = wallets;
-
-    this.coins = WalletConfig.createAssets(wallets, numOfAssets, coinsPerAsset, amountPerCoin);
+    this.coins = WalletConfig.createAssets(this.wallets, assets, coinsPerAsset, amountPerCoin);
   }
 
   private static createAssets(
     wallets: WalletUnlocked[],
-    numberOfAssets: number,
+    assets: number | AssetId[],
     coinsPerAsset: number,
     amountPerCoin: number
   ) {
     const coins: ChainConfig['coins'] = [];
 
-    const assetIds: string[] = [];
-    for (let index = 0; index < numberOfAssets; index++) {
-      assetIds.push(index === 0 ? BaseAssetId : hexlify(randomBytes(32)));
+    let assetIds: string[] = [AssetId.BaseAssetId.value];
+    if (Array.isArray(assets)) {
+      assetIds = assetIds.concat(assets.map((a) => a.value));
+    } else {
+      for (let index = 0; index < assets - 1; index++) {
+        assetIds.push(AssetId.random().value);
+      }
     }
 
     wallets
@@ -90,22 +95,20 @@ export class WalletConfig {
     return coins;
   }
 
-  private static guard(
-    numWallets: number | WalletUnlocked[],
-    numberOfAssets: number,
-    coinsPerAsset: number,
-    amountPerCoin: number
-  ) {
+  private static guard({ wallets, assets, coinsPerAsset, amountPerCoin }: WalletConfigOptions) {
     if (
-      (Array.isArray(numWallets) && numWallets.length === 0) ||
-      (typeof numWallets === 'number' && numWallets <= 0)
+      (Array.isArray(wallets) && wallets.length === 0) ||
+      (typeof wallets === 'number' && wallets <= 0)
     ) {
       throw new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
       );
     }
-    if (numberOfAssets <= 0) {
+    if (
+      (Array.isArray(assets) && assets.length === 0) ||
+      (typeof assets === 'number' && assets <= 0)
+    ) {
       throw new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'

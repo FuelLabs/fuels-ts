@@ -52,7 +52,12 @@ describe('launchCustomProviderAndGetWallets', () => {
     const amountPerCoin = 15;
 
     await using providerAndWallets = await launchCustomProviderAndGetWallets({
-      walletConfig: new WalletConfig({ numWallets, numOfAssets, coinsPerAsset, amountPerCoin }),
+      walletConfig: new WalletConfig({
+        wallets: numWallets,
+        assets: numOfAssets,
+        coinsPerAsset,
+        amountPerCoin,
+      }),
     });
     const { wallets } = providerAndWallets;
 

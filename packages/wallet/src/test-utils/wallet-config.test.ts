@@ -3,12 +3,13 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { WalletUnlocked } from '../wallets';
 
+import { AssetId } from './asset-id';
 import { WalletConfig } from './wallet-config';
 
 describe('WalletConfig', () => {
   it('throws on invalid number of wallets', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ numWallets: -1 }),
+      () => new WalletConfig({ wallets: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -16,7 +17,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ numWallets: 0 }),
+      () => new WalletConfig({ wallets: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -24,7 +25,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ numWallets: [] }),
+      () => new WalletConfig({ wallets: [] }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -34,7 +35,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid number of assets', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ numOfAssets: -1 }),
+      () => new WalletConfig({ assets: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
@@ -42,7 +43,14 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ numOfAssets: 0 }),
+      () => new WalletConfig({ assets: 0 }),
+      new FuelError(
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
+        'Number of assets per wallet must be greater than zero.'
+      )
+    );
+    await expectToThrowFuelError(
+      () => new WalletConfig({ assets: [] }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
@@ -87,15 +95,22 @@ describe('WalletConfig', () => {
   });
 
   it('allows custom wallets to be provided', () => {
-    // @ts-expect-error currently mandatory - shouldn't be
+    // @ts-expect-error currently mandatory - shouldn't be?
     const wallet1 = WalletUnlocked.generate({ provider: null });
-    // @ts-expect-error currently mandatory - shouldn't be
+    // @ts-expect-error currently mandatory - shouldn't be?
     const wallet2 = WalletUnlocked.generate({ provider: null });
 
-    const { wallets } = new WalletConfig({ numWallets: [wallet1, wallet2] });
+    const { wallets } = new WalletConfig({ wallets: [wallet1, wallet2] });
 
     expect(wallets).toEqual([wallet1, wallet2]);
   });
 
-  it('allows custom assets to be provided', () => {});
+  it('allows custom assets to be provided', () => {
+    const assetId = AssetId.random();
+    const { coins } = new WalletConfig({ assets: [assetId] });
+
+    expect(coins[0].asset_id).toEqual(AssetId.BaseAssetId.value);
+    expect(coins[1].asset_id).toEqual(assetId.value);
+    expect(coins.length).toBe(2);
+  });
 });
