@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { spawn, spawnSync } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
@@ -20,8 +21,7 @@ export interface LaunchNodeOptions {
   /**
    * Used to access the fuel node's logs.
    *
-   * @param text text the node prints out during its operation.
-   * @returns void
+   * @param text - text the node prints out during its operation.
    */
   logger: (text: string) => void;
 }
@@ -48,7 +48,7 @@ export const launchNode = async ({
   logger,
 }: Partial<LaunchNodeOptions> = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
-  new Promise(async (resolve) => {
+  new Promise(async (resolve, reject) => {
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
 
     const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
@@ -76,18 +76,17 @@ export const launchNode = async ({
       ...args,
     ]);
 
+    function removeSideffects() {
+      child.stdout.removeAllListeners();
+      child.stderr.removeAllListeners();
+      spawnSync('rm', ['-rf', tempDirPath]);
+    }
+
     // Cleanup function where fuel-core is stopped.
     const cleanup = () =>
       new Promise<void>((resolveFn, rejectFn) => {
         kill(Number(child.pid), (err) => {
-          // Remove all the listeners we've added.
-          child.stdout.removeAllListeners();
-          child.stderr.removeAllListeners();
-
-          // Remove the temporary folder and all its contents.
-          if (!chainConfigPath) {
-            spawnSync('rm', ['-rf', tempDirPath]);
-          }
+          removeSideffects();
 
           if (err) rejectFn(err);
           resolveFn();
@@ -99,12 +98,25 @@ export const launchNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
+    let timeout: NodeJS.Timeout | undefined;
+    let nodeMessages: string[] | null = [];
+
     // Look for a specific graphql start point in the output.
     child!.stderr.on('data', (chunk: string) => {
       if (logger) logger(chunk);
-      // Look for the graphql service start.
-      if (chunk.indexOf(graphQLStartSubstring) !== -1) {
-        // Resolve with the cleanup method.
+      nodeMessages?.push(chunk);
+
+      timeout ??= setTimeout(() => {
+        removeSideffects();
+
+        reject(new FuelError(FuelError.CODES.INVALID_INPUT_PARAMETERS, nodeMessages!.join('\n')));
+      }, 1000);
+
+      const graphQLServerStarted = chunk.indexOf(graphQLStartSubstring) !== -1;
+
+      if (graphQLServerStarted) {
+        clearTimeout(timeout);
+        nodeMessages = null;
         const [nodeIp, nodePort] = chunk.split(' ').at(-1)!.trim().split(':');
 
         resolve({ cleanup, ip: nodeIp, port: nodePort });

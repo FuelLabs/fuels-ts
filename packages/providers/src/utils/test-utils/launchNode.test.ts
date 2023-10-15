@@ -1,8 +1,11 @@
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import fs from 'fs';
 import fsAsync from 'fs/promises';
 import http from 'http';
 import { parse } from 'url';
 
+import { defaultChainConfig } from './defaultChainConfig';
 import { launchNode } from './launchNode';
 
 function sleep(time: number) {
@@ -28,6 +31,27 @@ async function nodeIsRunning(ip: string, port: string) {
 
 describe('launchNode', () => {
   afterAll(() => jest.clearAllMocks());
+
+  it('throws an error if the node fails to start due to bad input', async () => {
+    await expectToThrowFuelError(
+      async () => {
+        const badCoin = { amount: '0', asset_id: '3212', owner: '4343' };
+
+        await launchNode({
+          chainConfig: {
+            ...defaultChainConfig,
+            initial_state: {
+              coins: [badCoin],
+              messages: [],
+            },
+          },
+        });
+      },
+      {
+        code: FuelError.CODES.INVALID_INPUT_PARAMETERS,
+      }
+    );
+  });
 
   it('cleanup kills the started node', async () => {
     const { cleanup, ip, port } = await launchNode();
