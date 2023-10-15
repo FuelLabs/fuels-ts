@@ -1,4 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
 import type { Provider, ProviderOptions } from '@fuel-ts/providers';
 import type { LaunchNodeOptions } from '@fuel-ts/utils/test-utils';
@@ -56,16 +57,31 @@ export class TestNodeLauncher {
 
     const contracts = [];
 
-    if (deployContracts.length > 0) {
-      const factories = deployContracts.map((config) =>
-        TestNodeLauncher.prepareContractFactory(config, wallets[config.walletIndex ?? 0])
-      );
+    try {
+      if (deployContracts.length > 0) {
+        const factories = deployContracts.map((config) => {
+          if (
+            config.walletIndex &&
+            (config.walletIndex < 0 || config.walletIndex >= wallets.length)
+          ) {
+            throw new FuelError(
+              FuelError.CODES.INVALID_INPUT_PARAMETERS,
+              `Invalid walletIndex ${config.walletIndex}; wallets array contains ${wallets.length} elements.`
+            );
+          }
 
-      for (let i = 0; i < factories.length; i++) {
-        const f = factories[i];
-        const contract = await f.factory.deployContract(f.deployConfig);
-        contracts.push(contract);
+          return TestNodeLauncher.prepareContractFactory(config, wallets[config.walletIndex ?? 0]);
+        });
+
+        for (let i = 0; i < factories.length; i++) {
+          const f = factories[i];
+          const contract = await f.factory.deployContract(f.deployConfig);
+          contracts.push(contract);
+        }
       }
+    } catch (err) {
+      await cleanup();
+      throw err;
     }
 
     return {
