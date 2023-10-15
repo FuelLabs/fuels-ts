@@ -8,7 +8,7 @@ import { TestNodeLauncher } from './fuel-node-launcher';
 const simpleContractPath = join(__dirname, '../../test/fixtures/simple-contract');
 
 describe('TestNodeLauncher', () => {
-  it('kills the node after going out of scope', async () => {
+  test('kills the node after going out of scope', async () => {
     let url = '';
 
     {
@@ -30,7 +30,7 @@ describe('TestNodeLauncher', () => {
     });
   });
 
-  it('can deploy a contract', async () => {
+  test('a contract can be deployed', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [{ contractDir: simpleContractPath }],
     });
@@ -43,7 +43,7 @@ describe('TestNodeLauncher', () => {
     expect(response.value).toBe(true);
   });
 
-  it('can deploy a contract with a second wallet via indexes', async () => {
+  test('a contract can be deployed with a non-default wallet', async () => {
     await using launched = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({ numWallets: 2 }),
       deployContracts: [{ contractDir: simpleContractPath, walletIndex: 1 }],
