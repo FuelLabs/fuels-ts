@@ -17,6 +17,13 @@ export interface LaunchNodeOptions {
   args: string[];
   useSystemFuelCore: boolean;
   chainConfig: ChainConfig;
+  /**
+   * Used to access the fuel node's logs.
+   *
+   * @param text text the node prints out during its operation.
+   * @returns void
+   */
+  logger: (text: string) => void;
 }
 
 export type LaunchNodeResult = Promise<{
@@ -38,6 +45,7 @@ export const launchNode = async ({
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
   chainConfig = defaultChainConfig,
+  logger,
 }: Partial<LaunchNodeOptions> = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
@@ -93,6 +101,7 @@ export const launchNode = async ({
 
     // Look for a specific graphql start point in the output.
     child!.stderr.on('data', (chunk: string) => {
+      if (logger) logger(chunk);
       // Look for the graphql service start.
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         // Resolve with the cleanup method.

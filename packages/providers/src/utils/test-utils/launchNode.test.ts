@@ -59,6 +59,19 @@ describe('launchNode', () => {
     expect(!fs.existsSync(tempFilePath));
   });
 
+  it("can be given a logger function to access the node's logs as they're printed out", async () => {
+    const logs = [];
+    const { cleanup } = await launchNode({
+      logger: (text) => {
+        logs.push(text);
+      },
+    });
+
+    await cleanup();
+
+    expect(logs.length).toBeGreaterThan(0);
+  });
+
   it('kills node on event:exit', async () => {
     const { ip, port } = await launchNode();
 
