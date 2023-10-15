@@ -1,6 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { AssetId } from '@fuel-ts/wallet/dist/test-utils/asset-id';
 import {
   setupTestProvider,
   seedTestWallet,
@@ -457,27 +458,24 @@ describe('Contract', () => {
   });
 
   it('Single call with forwarding a alt token', async () => {
+    const altToken = AssetId.random();
+
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [200, altToken],
+        forward: [200, altToken.value],
         gasLimit: 1000000,
       })
       .txParams({
@@ -489,21 +487,18 @@ describe('Contract', () => {
   });
 
   it('MultiCall with multiple forwarding', async () => {
+    const altToken = AssetId.random();
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     const { value } = await contract
       .multiCall([
@@ -511,10 +506,10 @@ describe('Contract', () => {
           forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
-          forward: [200, altToken],
+          forward: [200, altToken.value],
         }),
         contract.functions.return_context_asset().callParams({
-          forward: [0, altToken],
+          forward: [0, altToken.value],
         }),
       ])
       .txParams({
@@ -526,21 +521,18 @@ describe('Contract', () => {
   });
 
   it('Check if gas per call is lower than transaction', async () => {
+    const altToken = AssetId.random();
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     await expect(
       contract
@@ -550,7 +542,7 @@ describe('Contract', () => {
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
-            forward: [200, altToken],
+            forward: [200, altToken.value],
             gasLimit: 200,
           }),
         ])
@@ -600,28 +592,26 @@ describe('Contract', () => {
   });
 
   it('Get transaction cost', async () => {
+    const altToken = AssetId.random();
+
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
         forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [200, altToken],
+        forward: [200, altToken.value],
       }),
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
@@ -641,21 +631,19 @@ describe('Contract', () => {
   });
 
   it('Get transaction cost with gasPrice 1', async () => {
+    const altToken = AssetId.random();
+
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     const invocationScope = contract
       .multiCall([
@@ -663,7 +651,7 @@ describe('Contract', () => {
           forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
-          forward: [200, altToken],
+          forward: [200, altToken.value],
         }),
       ])
       .txParams({
@@ -690,28 +678,26 @@ describe('Contract', () => {
   });
 
   it('Get transaction cost with gasPrice 2', async () => {
+    const altToken = AssetId.random();
+
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
         forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [200, altToken],
+        forward: [200, altToken.value],
       }),
     ]);
     // Get transaction cost using gasPrice
@@ -863,21 +849,19 @@ describe('Contract', () => {
   });
 
   it('dryRun and get should not validate the signature', async () => {
+    const altToken = AssetId.random();
+
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
-      wallets: [wallet],
       contracts: [contract],
     } = nodeLauncherResult;
-    const altToken = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
 
     const { value } = await contract
       .multiCall([
@@ -885,7 +869,7 @@ describe('Contract', () => {
           forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
-          forward: [200, altToken],
+          forward: [200, altToken.value],
         }),
       ])
       .dryRun();
@@ -1102,11 +1086,11 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
+    const altToken = AssetId.random();
+
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
-        numWallets: 1,
-        numOfAssets: 2,
-        coinsPerAsset: 1,
+        assets: [altToken],
         amountPerCoin: 500,
       }),
       deployContracts: [{ contractDir: contractPath }],
@@ -1116,16 +1100,15 @@ describe('Contract', () => {
       wallets: [wallet],
     } = nodeLauncherResult;
 
-    const asset = (await wallet.getCoins()).find((x) => x.assetId !== BaseAssetId)!.assetId;
-    const initialBalance = new BN(await contract.getBalance(asset)).toNumber();
+    const initialBalance = new BN(await contract.getBalance(altToken.value)).toNumber();
 
     const amountToContract = 100;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, asset);
+    const tx = await wallet.transferToContract(contract.id, amountToContract, altToken.value);
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(asset)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(altToken.value)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
