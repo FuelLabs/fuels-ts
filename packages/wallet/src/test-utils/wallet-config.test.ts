@@ -10,7 +10,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ numWallets: -1 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
       )
     );
@@ -18,7 +18,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ numWallets: 0 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
       )
     );
@@ -26,7 +26,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ numWallets: [] }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
       )
     );
@@ -36,7 +36,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ numOfAssets: -1 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
       )
     );
@@ -44,7 +44,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ numOfAssets: 0 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
       )
     );
@@ -54,7 +54,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ coinsPerAsset: -1 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
       )
     );
@@ -62,7 +62,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ coinsPerAsset: 0 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
       )
     );
@@ -72,7 +72,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ amountPerCoin: -1 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
       )
     );
@@ -80,7 +80,7 @@ describe('WalletConfig', () => {
     await expectToThrowFuelError(
       () => new WalletConfig({ amountPerCoin: 0 }),
       new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
       )
     );

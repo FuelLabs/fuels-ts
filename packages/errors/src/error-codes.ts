@@ -11,7 +11,7 @@ export enum ErrorCode {
   TYPE_NOT_FOUND = 'type-not-found',
   TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
-  JSON_ABI_ERROR = 'abi-main-method-missing',
+  JSON_ABI_ERROR = 'json-abi-error',
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
   CODER_NOT_FOUND = 'coder-not-found',
@@ -31,7 +31,6 @@ export enum ErrorCode {
   INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
-  INVALID_WALLET_CONFIG = 'invalid-wallet-config',
 
   // errors
   PARSE_FAILED = 'parse-failed',

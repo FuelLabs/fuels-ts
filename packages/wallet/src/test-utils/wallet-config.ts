@@ -101,25 +101,25 @@ export class WalletConfig {
       (typeof numWallets === 'number' && numWallets <= 0)
     ) {
       throw new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
       );
     }
     if (numberOfAssets <= 0) {
       throw new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
       );
     }
     if (coinsPerAsset <= 0) {
       throw new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
       );
     }
     if (amountPerCoin <= 0) {
       throw new FuelError(
-        FuelError.CODES.INVALID_WALLET_CONFIG,
+        FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
       );
     }
