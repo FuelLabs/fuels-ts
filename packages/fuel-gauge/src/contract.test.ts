@@ -463,7 +463,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -491,7 +490,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -517,7 +515,7 @@ describe('Contract', () => {
         gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
-    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), altToken]));
+    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), altToken.value]));
   });
 
   it('Check if gas per call is lower than transaction', async () => {
@@ -525,7 +523,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -597,7 +594,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -636,7 +632,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -683,7 +678,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -854,7 +848,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 1000,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
@@ -1091,7 +1084,6 @@ describe('Contract', () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({
         assets: [altToken],
-        amountPerCoin: 500,
       }),
       deployContracts: [{ contractDir: contractPath }],
     });
