@@ -7,7 +7,7 @@ const authTestingPath = getContractPath('auth_testing_contract');
 describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: authTestingPath }],
+      deployContracts: [{ contractDir: authTestingPath }],
     });
 
     const {
@@ -21,7 +21,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: authTestingPath }],
+      deployContracts: [{ contractDir: authTestingPath }],
     });
 
     const {
@@ -38,7 +38,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: authTestingPath }],
+      deployContracts: [{ contractDir: authTestingPath }],
     });
 
     const {

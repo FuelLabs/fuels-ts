@@ -8,7 +8,7 @@ const advancedLoggingOtherPath = getContractPath('advanced-logging-other-contrac
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: advancedLoggingPath }],
+      deployContracts: [{ contractDir: advancedLoggingPath }],
     });
 
     const {
@@ -60,7 +60,7 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=true]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: advancedLoggingPath }],
+      deployContracts: [{ contractDir: advancedLoggingPath }],
     });
 
     const {
@@ -77,7 +77,7 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=false]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: advancedLoggingPath }],
+      deployContracts: [{ contractDir: advancedLoggingPath }],
     });
 
     const {
@@ -115,8 +115,8 @@ describe('Advanced Logging', () => {
   it('can get log data from a downstream Contract', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: advancedLoggingPath },
-        { projectDir: advancedLoggingOtherPath },
+        { contractDir: advancedLoggingPath },
+        { contractDir: advancedLoggingOtherPath },
       ],
     });
 

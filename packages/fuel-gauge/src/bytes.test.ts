@@ -21,7 +21,7 @@ type Wrapper = {
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesPath }],
+      deployContracts: [{ contractDir: bytesPath }],
     });
 
     const {
@@ -37,7 +37,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes output [100 items]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesPath }],
+      deployContracts: [{ contractDir: bytesPath }],
     });
 
     const {
@@ -52,7 +52,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesPath }],
+      deployContracts: [{ contractDir: bytesPath }],
     });
 
     const {
@@ -66,7 +66,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: bytesPath }],
+      deployContracts: [{ contractDir: bytesPath }],
     });
 
     const {

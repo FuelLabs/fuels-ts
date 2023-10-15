@@ -28,7 +28,7 @@ const defaultValues = {
 describe('Configurable Contract', () => {
   it('should assert default values', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: configurableContractPath }],
+      deployContracts: [{ contractDir: configurableContractPath }],
     });
 
     const {
@@ -57,7 +57,7 @@ describe('Configurable Contract', () => {
 
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -78,7 +78,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -99,7 +99,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -120,7 +120,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -141,7 +141,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -162,7 +162,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -183,7 +183,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -207,7 +207,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -228,7 +228,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -249,7 +249,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 
@@ -274,7 +274,7 @@ describe('Configurable Contract', () => {
     };
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       deployContracts: [
-        { projectDir: configurableContractPath, options: { configurableConstants } },
+        { contractDir: configurableContractPath, options: { configurableConstants } },
       ],
     });
 

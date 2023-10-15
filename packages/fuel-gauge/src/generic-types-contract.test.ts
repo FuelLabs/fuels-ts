@@ -1,12 +1,12 @@
 import { TestNodeLauncher, toHex } from 'fuels';
 import { join } from 'path';
 
-const projectDir = join(__dirname, '../fixtures/forc-projects/generic-types-contract');
+const contractDir = join(__dirname, '../fixtures/forc-projects/generic-types-contract');
 
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir }],
+      deployContracts: [{ contractDir }],
     });
 
     const {

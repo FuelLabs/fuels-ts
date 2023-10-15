@@ -213,7 +213,7 @@ describe('Contract', () => {
 
   it('should fail to execute call if gasLimit is too low', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -237,7 +237,7 @@ describe('Contract', () => {
 
   it('adds multiple contracts on invocation', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }, { projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }, { contractDir: contractPath }],
     });
 
     const {
@@ -253,7 +253,7 @@ describe('Contract', () => {
 
   it('adds multiple contracts on multicalls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }, { projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }, { contractDir: contractPath }],
     });
 
     const {
@@ -285,7 +285,7 @@ describe('Contract', () => {
 
   it('submits multiple calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -300,7 +300,7 @@ describe('Contract', () => {
 
   it('submits multiple calls, six calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -325,7 +325,7 @@ describe('Contract', () => {
 
   it('submits multiple calls, eight calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -360,7 +360,7 @@ describe('Contract', () => {
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -383,7 +383,7 @@ describe('Contract', () => {
 
   it('adds multiple contracts on multicalls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }, { projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }, { contractDir: contractPath }],
     });
 
     const {
@@ -410,7 +410,7 @@ describe('Contract', () => {
 
   it('dryRuns multiple calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -425,7 +425,7 @@ describe('Contract', () => {
 
   it('simulates multiple calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -442,7 +442,7 @@ describe('Contract', () => {
 
   it('Returns gasUsed and transactionId', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -459,7 +459,7 @@ describe('Contract', () => {
   it('Single call with forwarding a alt token', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -486,7 +486,7 @@ describe('Contract', () => {
   it('MultiCall with multiple forwarding', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -518,7 +518,7 @@ describe('Contract', () => {
   it('Check if gas per call is lower than transaction', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -551,7 +551,7 @@ describe('Contract', () => {
 
   it('can forward gas to multicall calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -587,7 +587,7 @@ describe('Contract', () => {
   it('Get transaction cost', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -623,7 +623,7 @@ describe('Contract', () => {
   it('Get transaction cost with gasPrice 1', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -667,7 +667,7 @@ describe('Contract', () => {
   it('Get transaction cost with gasPrice 2', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -708,7 +708,7 @@ describe('Contract', () => {
 
   it('Fail before submit if gasLimit is lower than gasUsed', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -734,7 +734,7 @@ describe('Contract', () => {
 
   it('calls array functions', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -772,7 +772,7 @@ describe('Contract', () => {
 
   it('calls enum functions', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -835,7 +835,7 @@ describe('Contract', () => {
   it('dryRun and get should not validate the signature', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 1000),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -859,7 +859,7 @@ describe('Contract', () => {
 
   it('Parse TX to JSON and parse back to TX', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -979,7 +979,7 @@ describe('Contract', () => {
 
   it('should ensure multicall does not allow multiple calls that return heap types', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -1005,7 +1005,7 @@ describe('Contract', () => {
 
   it('should ensure multicall only allows calls that return a heap type on last position', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
 
     const {
@@ -1028,7 +1028,7 @@ describe('Contract', () => {
 
   it('Read only call', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
     const {
       contracts: [contract],
@@ -1046,7 +1046,7 @@ describe('Contract', () => {
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
     const {
       contracts: [contract],
@@ -1069,7 +1069,7 @@ describe('Contract', () => {
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig(1, 2, 1, 500),
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
     const {
       contracts: [contract],
@@ -1092,7 +1092,7 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
     const {
       provider,
@@ -1122,7 +1122,7 @@ describe('Contract', () => {
 
   it('should ensure ScriptResultDecoderError works for dryRun and simulate calls', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ projectDir: contractPath }],
+      deployContracts: [{ contractDir: contractPath }],
     });
     const {
       contracts: [contract],
