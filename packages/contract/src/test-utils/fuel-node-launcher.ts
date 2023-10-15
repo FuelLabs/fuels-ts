@@ -11,7 +11,17 @@ import type { DeployContractOptions } from '../contract-factory';
 import ContractFactory from '../contract-factory';
 
 interface DeployContractConfig {
-  projectDir: string;
+  /**
+   * Directory of contract to be deployed. The sway program **must** be built beforehand.
+   */
+  contractDir: string;
+  /**
+   * Index of wallet to be used for deployment. Defaults to `0` (first wallet).
+   */
+  walletIndex?: number;
+  /**
+   * Options for contract deployment taken from `ContractFactory`.
+   */
   options?: DeployContractOptions;
 }
 
@@ -23,7 +33,7 @@ interface TestNodeLauncherOptions {
 }
 
 export class TestNodeLauncher {
-  static async launch({
+  static async launch<TContracts extends Contract[] = Contract[]>({
     providerOptions = {},
     walletConfig,
     nodeOptions = {},
@@ -32,7 +42,7 @@ export class TestNodeLauncher {
     {
       wallets: WalletUnlocked[];
       provider: Provider;
-      contracts: Contract[];
+      contracts: TContracts;
     } & AsyncDisposable
   > {
     const { provider, wallets, cleanup } = await launchCustomProviderAndGetWallets(
@@ -44,21 +54,26 @@ export class TestNodeLauncher {
       false
     );
 
-    // Da li napraviti zaseban wallet ili definisati onako kako su u rust-sdk uradili da mora specificirati ime za deployanje?
     const contracts = [];
 
     if (deployContracts.length > 0) {
       const factories = deployContracts.map((config) =>
-        TestNodeLauncher.prepareContractFactory(config, wallets[0])
+        TestNodeLauncher.prepareContractFactory(config, wallets[config.walletIndex ?? 0])
       );
 
-      for (const f of factories) {
+      for (let i = 0; i < factories.length; i++) {
+        const f = factories[i];
         const contract = await f.factory.deployContract(f.deployConfig);
         contracts.push(contract);
       }
     }
 
-    return { provider, wallets, contracts, [Symbol.asyncDispose]: cleanup };
+    return {
+      provider,
+      wallets,
+      contracts: contracts as TContracts,
+      [Symbol.asyncDispose]: cleanup,
+    };
   }
 
   private static prepareContractFactory(
@@ -66,7 +81,7 @@ export class TestNodeLauncher {
     wallet: WalletUnlocked
   ) {
     const { abiContents, binHexlified, storageSlots } = getForcProject<JsonAbi>(
-      contractConfig.projectDir
+      contractConfig.contractDir
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);

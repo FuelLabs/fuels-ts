@@ -25,11 +25,9 @@ describe('launchCustomProviderAndGetWallets', () => {
       await p.getBlockNumber();
     });
 
-    const expectedError = {
+    expect(error).toMatchObject({
       code: 'ECONNREFUSED',
-    };
-
-    expect(error).toMatchObject(expectedError);
+    });
   });
 
   it('default: one wallets, one asset (BaseAssetId), one coin, 1_000_000_00 amount', async () => {

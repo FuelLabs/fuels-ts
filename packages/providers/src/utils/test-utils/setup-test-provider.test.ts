@@ -20,11 +20,9 @@ describe('launchTestProvider', () => {
       await p.getBlockNumber();
     });
 
-    const expectedError = {
+    expect(error).toMatchObject({
       code: 'ECONNREFUSED',
-    };
-
-    expect(error).toMatchObject(expectedError);
+    });
   });
 
   it('can partially extend the default node configs', async () => {
