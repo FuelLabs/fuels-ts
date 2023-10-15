@@ -1,6 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import { WalletUnlocked } from '../wallets';
+
 import { WalletConfig } from './wallet-config';
 
 describe('WalletConfig', () => {
@@ -15,6 +17,14 @@ describe('WalletConfig', () => {
 
     await expectToThrowFuelError(
       () => new WalletConfig({ numWallets: 0 }),
+      new FuelError(
+        FuelError.CODES.INVALID_WALLET_CONFIG,
+        'Number of wallets must be greater than zero.'
+      )
+    );
+
+    await expectToThrowFuelError(
+      () => new WalletConfig({ numWallets: [] }),
       new FuelError(
         FuelError.CODES.INVALID_WALLET_CONFIG,
         'Number of wallets must be greater than zero.'
@@ -75,4 +85,17 @@ describe('WalletConfig', () => {
       )
     );
   });
+
+  it('allows custom wallets to be provided', () => {
+    // @ts-expect-error currently mandatory - shouldn't be
+    const wallet1 = WalletUnlocked.generate({ provider: null });
+    // @ts-expect-error currently mandatory - shouldn't be
+    const wallet2 = WalletUnlocked.generate({ provider: null });
+
+    const { wallets } = new WalletConfig({ numWallets: [wallet1, wallet2] });
+
+    expect(wallets).toEqual([wallet1, wallet2]);
+  });
+
+  it('allows custom assets to be provided', () => {});
 });

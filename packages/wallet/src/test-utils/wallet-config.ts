@@ -12,7 +12,7 @@ interface WalletConfigOptions {
   /**
    * Number of wallets to generate.
    */
-  numWallets: number;
+  numWallets: number | WalletUnlocked[];
 
   /**
    * Number of unique asset ids each wallet will own.
@@ -44,10 +44,15 @@ export class WalletConfig {
     amountPerCoin = 1_000_000_00,
   }: Partial<WalletConfigOptions> = {}) {
     WalletConfig.guard(numWallets, numOfAssets, coinsPerAsset, amountPerCoin);
-    const wallets: WalletUnlocked[] = [];
-    for (let index = 0; index < numWallets; index++) {
-      // @ts-expect-error will be updated later
-      wallets.push(WalletUnlocked.generate({ provider: null }));
+    let wallets: WalletUnlocked[] = [];
+
+    if (Array.isArray(numWallets)) {
+      wallets = numWallets;
+    } else {
+      for (let index = 0; index < numWallets; index++) {
+        // @ts-expect-error will be updated later
+        wallets.push(WalletUnlocked.generate({ provider: null }));
+      }
     }
 
     this.wallets = wallets;
@@ -86,12 +91,15 @@ export class WalletConfig {
   }
 
   private static guard(
-    numWallets: number,
+    numWallets: number | WalletUnlocked[],
     numberOfAssets: number,
     coinsPerAsset: number,
     amountPerCoin: number
   ) {
-    if (numWallets <= 0) {
+    if (
+      (Array.isArray(numWallets) && numWallets.length === 0) ||
+      (typeof numWallets === 'number' && numWallets <= 0)
+    ) {
       throw new FuelError(
         FuelError.CODES.INVALID_WALLET_CONFIG,
         'Number of wallets must be greater than zero.'
