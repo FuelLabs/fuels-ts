@@ -1,12 +1,12 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
-import { AssetId } from '@fuel-ts/wallet/dist/test-utils/asset-id';
 import {
   setupTestProvider,
   seedTestWallet,
   launchCustomProviderAndGetWallets,
   WalletConfig,
+  AssetId,
 } from '@fuel-ts/wallet/test-utils';
 import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
