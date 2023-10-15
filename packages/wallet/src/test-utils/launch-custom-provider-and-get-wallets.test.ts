@@ -6,6 +6,7 @@ import { Signer } from '@fuel-ts/signer';
 
 import { WalletUnlocked } from '../wallets';
 
+import { AssetId } from './asset-id';
 import { launchCustomProviderAndGetWallets } from './launch-custom-provider-and-get-wallets';
 import { WalletConfig } from './wallet-config';
 
@@ -43,6 +44,34 @@ describe('launchCustomProviderAndGetWallets', () => {
 
     expect(coin.assetId).toBe(BaseAssetId);
     expect(coin.amount.toNumber()).toBe(1_000_000_00);
+  });
+
+  it('can be given custom wallet and asset id', async () => {
+    // @ts-expect-error will be updated in launchCustomProviderAndGetWallets
+    const wallet = WalletUnlocked.generate({ provider: null });
+    const assetId = AssetId.random();
+    await using providerAndWallets = await launchCustomProviderAndGetWallets({
+      walletConfig: new WalletConfig({ wallets: [wallet], assets: [assetId] }),
+    });
+
+    const { provider, wallets } = providerAndWallets;
+
+    expect(wallets.length).toBe(1);
+    expect(wallets[0]).toBe(wallet);
+    expect(wallet.provider).toBe(provider);
+
+    const coins = await wallet.getCoins();
+    expect(coins.length).toBe(2);
+
+    const coin1 = coins[0];
+
+    expect(coin1.assetId).toBe(BaseAssetId);
+    expect(coin1.amount.toNumber()).toBe(1_000_000_00);
+
+    const coin2 = coins[1];
+
+    expect(coin2.assetId).toBe(assetId.value);
+    expect(coin2.amount.toNumber()).toBe(1_000_000_00);
   });
 
   it('can return multiple wallets with multiple assets, coins and amounts', async () => {
