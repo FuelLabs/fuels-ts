@@ -458,7 +458,12 @@ describe('Contract', () => {
 
   it('Single call with forwarding a alt token', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -485,7 +490,12 @@ describe('Contract', () => {
 
   it('MultiCall with multiple forwarding', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -517,7 +527,12 @@ describe('Contract', () => {
 
   it('Check if gas per call is lower than transaction', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -586,7 +601,12 @@ describe('Contract', () => {
 
   it('Get transaction cost', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -622,7 +642,12 @@ describe('Contract', () => {
 
   it('Get transaction cost with gasPrice 1', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -666,7 +691,12 @@ describe('Contract', () => {
 
   it('Get transaction cost with gasPrice 2', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -834,7 +864,12 @@ describe('Contract', () => {
 
   it('dryRun and get should not validate the signature', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 1000),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 1000,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
 
@@ -1068,7 +1103,12 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     await using nodeLauncherResult = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig(1, 2, 1, 500),
+      walletConfig: new WalletConfig({
+        numWallets: 1,
+        numOfAssets: 2,
+        coinsPerAsset: 1,
+        amountPerCoin: 500,
+      }),
       deployContracts: [{ contractDir: contractPath }],
     });
     const {
