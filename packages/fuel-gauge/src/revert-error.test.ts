@@ -1,6 +1,6 @@
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
-import type { Provider } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
 import {
   ScriptResultDecoderError,
   SendMessageRevertError,
@@ -9,28 +9,30 @@ import {
   TransferToAddressRevertError,
   bn,
   ContractFactory,
+  Provider,
   BaseAssetId,
+  FUEL_NETWORK_URL,
 } from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../fixtures/forc-projects/revert-error/out/debug/revert-error-abi.json';
 
+let contractInstance: Contract;
+let wallet: WalletUnlocked;
+
 describe('Revert Error Testing', () => {
-  const setup = async (provider: Provider) => {
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
       path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
     );
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    const contractInstance = await factory.deployContract();
-
-    return { contractInstance };
-  };
+    contractInstance = await factory.deployContract();
+  });
 
   it('can pass required checks [valid]', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -49,8 +51,6 @@ describe('Revert Error Testing', () => {
   });
 
   it('can throw RequireRevertError [invalid price]', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     const INPUT_PRICE = bn(0);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -60,8 +60,6 @@ describe('Revert Error Testing', () => {
   });
 
   it('can throw RequireRevertError [invalid token id]', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(55);
 
@@ -71,8 +69,6 @@ describe('Revert Error Testing', () => {
   });
 
   it('can throw AssertFailedRevertError', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -86,8 +82,6 @@ describe('Revert Error Testing', () => {
    * we could not get this sway function to revert
    */
   it.skip('can throw SendMessageRevertError', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     await expect(contractInstance.functions.failed_message().call()).rejects.toThrow(
       SendMessageRevertError
     );
@@ -100,16 +94,12 @@ describe('Revert Error Testing', () => {
    * https://fuellabs.github.io/sway/master/reference/documentation/operations/asset/transfer/address.html
    */
   it.skip('can throw TransferToAddressRevertError', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     await expect(contractInstance.functions.failed_transfer_revert().call()).rejects.toThrow(
       TransferToAddressRevertError
     );
   });
 
   it('can throw ScriptResultDecoderError', async () => {
-    using provider = await setupTestProvider();
-    const { contractInstance } = await setup(provider);
     await expect(contractInstance.functions.failed_transfer().call()).rejects.toThrow(
       ScriptResultDecoderError
     );

@@ -1,10 +1,9 @@
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('instantiates the WalletManager', async () => {
-    using provider = await setupTestProvider();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region getting-started-with-wallet-manager-1
     const walletManager = new WalletManager();
     // #endregion getting-started-with-wallet-manager-1

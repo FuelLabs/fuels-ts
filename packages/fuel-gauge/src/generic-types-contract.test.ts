@@ -1,17 +1,24 @@
-import { TestNodeLauncher, toHex } from 'fuels';
+import { readFileSync } from 'fs';
+import { toHex } from 'fuels';
 import { join } from 'path';
 
-const contractDir = join(__dirname, '../fixtures/forc-projects/generic-types-contract');
+import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
+
+import { setup } from './utils';
+
+const contractBytecode = readFileSync(
+  join(
+    __dirname,
+    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
+  )
+);
 
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir }],
+    const contract = await setup({
+      abi: abiJSON,
+      contractBytecode,
     });
-
-    const {
-      contracts: [contract],
-    } = nodeLauncherResult;
 
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
     const bimArg1 = 'Yes';

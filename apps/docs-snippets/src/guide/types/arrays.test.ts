@@ -1,9 +1,16 @@
+import type { Contract } from 'fuels';
 import { BN } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
+  let contract: Contract;
+
+  beforeAll(async () => {
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
+  });
+
   it('should successfully demonstrate typed arrays examples', () => {
     // #region arrays-1
     const numberArray: number[] = [1, 2, 3, 4, 5]; // in Sway: [u8; 5]
@@ -16,8 +23,6 @@ describe(__filename, () => {
   });
 
   it('should successfully execute echo u64 array contract call', async () => {
-    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
-
     // #region arrays-2
     const u64Array = [10000000, 20000000];
 
@@ -30,8 +35,6 @@ describe(__filename, () => {
   });
 
   it('should throw an error for array length mismatch', async () => {
-    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
-
     let error: unknown;
     try {
       // #region arrays-3
@@ -46,8 +49,6 @@ describe(__filename, () => {
   });
 
   it('should throw an error for array type mismatch', async () => {
-    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
-
     let error: unknown;
     try {
       // #region arrays-4

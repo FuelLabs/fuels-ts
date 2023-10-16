@@ -1,9 +1,9 @@
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { WalletManager } from '@fuel-ts/wallet-manager';
+import { FUEL_NETWORK_URL, Provider } from 'fuels';
 
 describe(__filename, () => {
   it('should', async () => {
-    using provider = await setupTestProvider();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     // #region locking-and-unlocking-wallet-manager-1
     const walletManager = new WalletManager();

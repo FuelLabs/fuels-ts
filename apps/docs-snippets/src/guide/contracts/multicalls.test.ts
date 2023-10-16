@@ -1,11 +1,17 @@
-import type { WalletUnlocked } from 'fuels';
+import type { Contract } from 'fuels';
 import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
-  const setup = async (wallet: WalletUnlocked) => {
+  let echoContract: Contract;
+  let counterContract: Contract;
+  let contextContract: Contract;
+
+  beforeAll(async () => {
+    const wallet = await getTestWallet();
+
     const counterArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
     const echoArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
     const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
@@ -26,19 +32,14 @@ describe(__filename, () => {
       wallet
     );
 
-    const echoContract = await factory1.deployContract();
-    const counterContract = await factory2.deployContract({
+    echoContract = await factory1.deployContract();
+    counterContract = await factory2.deployContract({
       storageSlots: counterArtifacts.storageSlots,
     });
-    const contextContract = await factory3.deployContract();
-
-    return { echoContract, counterContract, contextContract };
-  };
+    contextContract = await factory3.deployContract();
+  });
 
   it('should successfully submit multiple calls from the same contract function', async () => {
-    using wallet = await getTestWallet();
-    const { counterContract } = await setup(wallet);
-
     // #region multicall-1
     const { value: results } = await counterContract
       .multiCall([
@@ -58,9 +59,6 @@ describe(__filename, () => {
   });
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
-    using wallet = await getTestWallet();
-    const { counterContract, echoContract } = await setup(wallet);
-
     // #region multicall-2
     const chain = echoContract.multiCall([
       echoContract.functions.echo_u8(17),
@@ -80,9 +78,6 @@ describe(__filename, () => {
   });
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
-    using wallet = await getTestWallet();
-    const { contextContract, echoContract } = await setup(wallet);
-
     // #region multicall-3
     const { value: results } = await contextContract
       .multiCall([

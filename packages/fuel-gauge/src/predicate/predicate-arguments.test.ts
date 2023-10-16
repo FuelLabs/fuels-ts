@@ -1,5 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
-import type { JsonAbi, BigNumberish } from 'fuels';
+import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, Provider } from 'fuels';
 import { toHex, toNumber, Predicate } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
@@ -17,6 +16,10 @@ import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
   describe('Arguments', () => {
+    let wallet: WalletUnlocked;
+    let receiver: WalletLocked;
+    let provider: Provider;
+
     const AddressAbiInputs: JsonAbi = {
       types: [
         {
@@ -145,10 +148,12 @@ describe('Predicate', () => {
       configurables: [],
     };
 
-    it('calls a predicate with valid address data and returns true', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
+    beforeEach(async () => {
+      [wallet, receiver] = await setupWallets();
+      provider = wallet.provider;
+    });
 
+    it('calls a predicate with valid address data and returns true', async () => {
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
@@ -172,8 +177,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid address data and returns false', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 10;
       const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
@@ -186,14 +189,10 @@ describe('Predicate', () => {
 
       predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
-      await expect(predicate.transfer(receiver.address, amountToPredicate / 2)).rejects.toThrow(
-        'Invalid transaction'
-      );
+      await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
@@ -215,8 +214,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 10;
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
@@ -228,13 +225,11 @@ describe('Predicate', () => {
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate.setData(100).transfer(receiver.address, amountToPredicate / 2)
+        predicate.setData(100).transfer(receiver.address, amountToPredicate)
       ).rejects.toThrow('Invalid transaction');
     });
 
     it('calls a predicate with valid struct data and returns true', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[Validation]>(
@@ -265,8 +260,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid struct data and returns false', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 10;
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
@@ -287,13 +280,11 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, amountToPredicate - 5)
+          .transfer(receiver.address, amountToPredicate)
       ).rejects.toThrow('Invalid transaction');
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[Validation]>(
@@ -327,8 +318,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with an invalid main struct argument and returns false', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
@@ -352,8 +341,6 @@ describe('Predicate', () => {
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(
@@ -379,8 +366,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const amountToReceiver = 50;
       const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
@@ -406,8 +391,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid multiple arguments and returns false', async () => {
-      using provider = await setupTestProvider();
-      const [wallet, receiver] = await setupWallets(provider);
       const amountToPredicate = 100;
       const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 

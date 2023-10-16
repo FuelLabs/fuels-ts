@@ -1,11 +1,17 @@
+import type { Contract } from 'fuels';
 import { BN } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
+  let contract: Contract;
+
+  beforeAll(async () => {
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+  });
+
   it('should successfully echo tuple in a contract call', async () => {
-    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
     // #region tuples-1
     // Sway let tuple2: (u8, bool, u64) = (100, false, 10000);
     // #region tuples-3

@@ -1,11 +1,8 @@
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
-
 import { getSetupContract } from './utils';
 
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
-    using provider = await setupTestProvider();
-    const contract = await getSetupContract('collision_in_fn_names')(provider);
+    const contract = await getSetupContract('collision_in_fn_names')();
 
     expect((await contract.functions.new().call()).value.toNumber()).toEqual(12345);
   });

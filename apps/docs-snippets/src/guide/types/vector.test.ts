@@ -1,13 +1,19 @@
+import type { Contract } from 'fuels';
 import { BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
-  it('should successfully execute and validate contract call', async () => {
-    using contract = await createAndDeployContractFromProject(
+  let contract: Contract;
+
+  beforeAll(async () => {
+    contract = await createAndDeployContractFromProject(
       SnippetProjectEnum.ECHO_EMPLOYEE_DATA_VECTOR
     );
+  });
+
+  it('should successfully execute and validate contract call', async () => {
     // #region vector-1
     // Sway Vec<u8>
     // #context const basicU8Vector = [1, 2, 3];

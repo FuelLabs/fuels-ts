@@ -1,20 +1,21 @@
-import { RequireRevertError, ScriptResultDecoderError, TestNodeLauncher } from 'fuels';
+import type { Contract } from 'fuels';
+import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
-import { getContractPath } from './utils';
+import { getSetupContract } from './utils';
 
-const advancedLoggingPath = getContractPath('advanced-logging');
-const advancedLoggingOtherPath = getContractPath('advanced-logging-other-contract');
+const setupContract = getSetupContract('advanced-logging');
+const setupOtherContract = getSetupContract('advanced-logging-other-contract');
+
+let contractInstance: Contract;
+let otherContractInstance: Contract;
+
+beforeAll(async () => {
+  contractInstance = await setupContract();
+  otherContractInstance = await setupOtherContract({ cache: false });
+});
 
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: advancedLoggingPath }],
-    });
-
-    const {
-      contracts: [contractInstance],
-    } = nodeLauncherResult;
-
     const { value, logs } = await contractInstance.functions.test_function().call();
 
     expect(value).toBeTruthy();
@@ -59,14 +60,6 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: advancedLoggingPath }],
-    });
-
-    const {
-      contracts: [contractInstance],
-    } = nodeLauncherResult;
-
     const { value, logs } = await contractInstance.functions
       .test_function_with_require(1, 1)
       .call();
@@ -76,14 +69,6 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: advancedLoggingPath }],
-    });
-
-    const {
-      contracts: [contractInstance],
-    } = nodeLauncherResult;
-
     const invocation = contractInstance.functions.test_function_with_require(1, 3);
     try {
       await invocation.call();
@@ -113,17 +98,6 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from a downstream Contract', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [
-        { contractDir: advancedLoggingPath },
-        { contractDir: advancedLoggingOtherPath },
-      ],
-    });
-
-    const {
-      contracts: [contractInstance, otherContractInstance],
-    } = nodeLauncherResult;
-
     const INPUT = 3;
     const { value, logs } = await contractInstance.functions
       .test_log_from_other_contract(INPUT, otherContractInstance.id)

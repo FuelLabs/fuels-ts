@@ -1,6 +1,15 @@
-import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
-import type { BN, Provider } from 'fuels';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { BN } from 'fuels';
+import {
+  type Contract,
+  bn,
+  Predicate,
+  Wallet,
+  Address,
+  BaseAssetId,
+  Provider,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 
 import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
 import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
@@ -17,7 +26,9 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-const setup = async (provider: Provider, balance = 5_000) => {
+const setup = async (balance = 5_000) => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
@@ -25,12 +36,13 @@ const setup = async (provider: Provider, balance = 5_000) => {
 };
 
 const setupContract = getSetupContract('raw-slice');
+let contractInstance: Contract;
+beforeAll(async () => {
+  contractInstance = await setupContract();
+});
 
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
-    using provider = await setupTestProvider();
-    const contractInstance = await setupContract(provider);
-
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_raw_slice(INPUT).call<BN[]>();
@@ -39,8 +51,6 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input', async () => {
-    using provider = await setupTestProvider();
-    const contractInstance = await setupContract(provider);
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
@@ -49,8 +59,6 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [nested]', async () => {
-    using provider = await setupTestProvider();
-    const contractInstance = await setupContract(provider);
     const slice = [40, 41, 42];
     const INPUT = {
       inner: [slice, slice],
@@ -64,11 +72,8 @@ describe('Raw Slice Tests', () => {
     expect(value).toBeUndefined();
   });
 
-  it('should test raw slice input [predicate-raw slice]', async () => {
-    using provider = await setupTestProvider();
-
-    // Create wallet
-    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+  it('should test raw slice input [predicate-raw-slice]', async () => {
+    const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
     const amountToReceiver = 50;
@@ -105,8 +110,7 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test bytes input [script-raw-slice]', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await setup();
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
 

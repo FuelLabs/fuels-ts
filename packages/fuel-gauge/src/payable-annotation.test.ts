@@ -1,6 +1,3 @@
-import { FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
@@ -19,41 +16,37 @@ const setupContract = createSetupConfig({
 });
 
 test('allow sending coins to payable functions', async () => {
-  using provider = await setupTestProvider();
-  const contract = await setupContract(provider);
+  const contract = await setupContract();
 
-  const result = await contract.functions
-    .payable()
-    .callParams({
-      forward: {
-        amount: bn(100),
-        assetId: BaseAssetId,
-      },
-    })
-    .call();
   // This should not fail because the function is payable
-  expect(result).toBeTruthy();
+  expect(
+    contract.functions
+      .payable()
+      .callParams({
+        forward: {
+          amount: bn(100),
+          assetId: BaseAssetId,
+        },
+      })
+      .call()
+  ).resolves.toBeTruthy();
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
-  using provider = await setupTestProvider();
-  const contract = await setupContract(provider);
-  // This should fail because the function is not payable
+  const contract = await setupContract();
 
-  await expectToThrowFuelError(
-    () =>
-      contract.functions
-        .non_payable()
-        .callParams({
-          forward: {
-            amount: bn(100),
-            assetId: BaseAssetId,
-          },
-        })
-        .call(),
-    {
-      code: FuelError.CODES.TRANSACTION_ERROR,
-      message: `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`,
-    }
+  // This should fail because the function is not payable
+  await expect(async () =>
+    contract.functions
+      .non_payable()
+      .callParams({
+        forward: {
+          amount: bn(100),
+          assetId: BaseAssetId,
+        },
+      })
+      .call()
+  ).rejects.toThrowError(
+    `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`
   );
 });

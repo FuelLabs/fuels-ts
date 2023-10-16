@@ -1,9 +1,12 @@
+import type { WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
+  let wallet: WalletUnlocked;
+
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_CONFIGURABLES
   );
@@ -19,8 +22,11 @@ describe(__filename, () => {
     },
   };
 
+  beforeAll(async () => {
+    wallet = await getTestWallet();
+  });
+
   it('should successfully set new values for all configurable constants', async () => {
-    using wallet = await getTestWallet();
     // #region configurable-constants-2
     const configurableConstants: typeof defaultValues = {
       age: 30,
@@ -49,7 +55,6 @@ describe(__filename, () => {
   });
 
   it('should successfully set new value for one configurable constant', async () => {
-    using wallet = await getTestWallet();
     // #region configurable-constants-3
     const configurableConstants = {
       age: 10,
@@ -71,8 +76,6 @@ describe(__filename, () => {
   });
 
   it('should throw when not properly setting new values for structs', async () => {
-    using wallet = await getTestWallet();
-
     // #region configurable-constants-4
     const configurableConstants = {
       my_struct: {

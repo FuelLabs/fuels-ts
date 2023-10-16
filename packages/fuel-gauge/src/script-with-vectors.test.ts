@@ -1,10 +1,12 @@
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BigNumberish, BN, Provider } from 'fuels';
-import { BaseAssetId } from 'fuels';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { BigNumberish, BN } from 'fuels';
+import { BaseAssetId, FUEL_NETWORK_URL, Provider } from 'fuels';
 
 import { getScript } from './utils';
 
-const setup = async (provider: Provider, balance = 5_000) => {
+const setup = async (balance = 5_000) => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
@@ -13,8 +15,7 @@ const setup = async (provider: Provider, balance = 5_000) => {
 
 describe('Script With Vectors', () => {
   it('can call script and use main argument [array]', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await setup();
     const someArray = [1, 100];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
 
@@ -24,8 +25,7 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [vec]', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await setup();
     const someVec = [7, 2, 1, 5];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
 
@@ -47,8 +47,8 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await setup();
+
     const importantDates = [
       {
         dates: [
@@ -87,8 +87,8 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await setup(provider);
+    const wallet = await setup();
+
     const scores = [24, 56, 43];
 
     const importantDates = [

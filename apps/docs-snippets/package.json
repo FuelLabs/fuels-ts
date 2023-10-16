@@ -11,9 +11,7 @@
     "fuels": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/wallet-manager": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/providers": "workspace:*"
+    "@fuel-ts/wallet-manager": "workspace:*"
   },
   "keywords": [],
   "author": "",

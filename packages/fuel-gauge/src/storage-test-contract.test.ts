@@ -1,7 +1,6 @@
-import { setupTestProvider , generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Provider } from 'fuels';
-import { toHex, ContractFactory, BaseAssetId } from 'fuels';
+import { toHex, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json';
@@ -12,7 +11,8 @@ const binPath = join(
   '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin'
 );
 
-const setup = async (provider: Provider) => {
+const setup = async () => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
@@ -32,8 +32,7 @@ const setup = async (provider: Provider) => {
 
 describe('StorageTestContract', () => {
   it('can increment counter', async () => {
-    using provider = await setupTestProvider();
-    const contract = await setup(provider);
+    const contract = await setup();
 
     // Call contract
     const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
@@ -46,7 +45,7 @@ describe('StorageTestContract', () => {
   });
 
   it('can increment counter - using custom inline storage slots', async () => {
-    using provider = await setupTestProvider();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const bytecode = readFileSync(binPath);
     const factory = new ContractFactory(bytecode, abi, wallet);

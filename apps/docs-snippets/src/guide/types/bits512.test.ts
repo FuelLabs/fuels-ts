@@ -1,12 +1,17 @@
+import type { Contract } from 'fuels';
 import { Wallet } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
-  it('should successfully call contract function and validate b512', async () => {
-    using contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+  let contract: Contract;
 
+  beforeAll(async () => {
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+  });
+
+  it('should successfully call contract function and validate b512', async () => {
     // #region bits512-1
     // #context pub struct B512 {
     // #context   bytes: [b256; 2],

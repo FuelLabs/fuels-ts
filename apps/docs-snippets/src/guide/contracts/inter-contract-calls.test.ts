@@ -5,10 +5,14 @@ import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../project
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
+  let wallet: WalletUnlocked;
+
   let simpleToken: Contract;
   let tokenDepositor: Contract;
 
-  const setup = async (wallet: WalletUnlocked) => {
+  beforeAll(async () => {
+    wallet = await getTestWallet();
+
     const tokenArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.SIMPLE_TOKEN);
     const depositorArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.TOKEN_DEPOSITOR);
 
@@ -23,12 +27,9 @@ describe(__filename, () => {
       depositorArtifacts.abiContents,
       wallet
     ).deployContract();
-  };
+  });
 
   it('should successfully make call to another contract', async () => {
-    using wallet = await getTestWallet();
-    await setup(wallet);
-
     // #region inter-contract-calls-3
     const amountToDeposit = 70;
 

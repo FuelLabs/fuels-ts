@@ -1,10 +1,17 @@
-import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { TransactionResponse, Wallet } from 'fuels';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { WalletUnlocked } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
 describe('TransactionSummary', () => {
+  let provider: Provider;
+  let adminWallet: WalletUnlocked;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    adminWallet = await generateTestWallet(provider, [[1_000]]);
+  });
+
   it('should ensure create method waits till a transaction response is given', async () => {
-    using provider = await setupTestProvider();
-    const adminWallet = await generateTestWallet(provider, [[1_000]]);
     const destination = Wallet.generate({
       provider,
     });
@@ -19,9 +26,6 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
-    using provider = await setupTestProvider();
-    const adminWallet = await generateTestWallet(provider, [[1_000]]);
-
     const destination = Wallet.generate({
       provider,
     });
@@ -59,9 +63,6 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    using provider = await setupTestProvider();
-    const adminWallet = await generateTestWallet(provider, [[1_000]]);
-
     const destination = Wallet.generate({
       provider,
     });

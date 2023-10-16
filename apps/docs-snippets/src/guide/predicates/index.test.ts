@@ -1,5 +1,4 @@
-import { setupTestProvider } from '@fuel-ts/wallet/test-utils';
-import { Predicate } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 
@@ -12,7 +11,7 @@ describe(__filename, () => {
     // #region predicate-index-2
     // #context import { Predicate, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-    using provider = await setupTestProvider();
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(binary, provider, jsonAbi);
     // #endregion predicate-index-2
 

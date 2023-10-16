@@ -1,6 +1,14 @@
-import { setupTestProvider , seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { CoinTransactionRequestInput, MessageTransactionRequestInput, Provider } from 'fuels';
-import { BaseAssetId, Predicate, bn, ScriptTransactionRequest, InputType } from 'fuels';
+import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
+import {
+  BaseAssetId,
+  Provider,
+  Predicate,
+  bn,
+  ScriptTransactionRequest,
+  InputType,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -9,9 +17,14 @@ import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
   describe('Estimate predicate gas', () => {
-    const setup = async (provider: Provider) => {
-      const predicateTrue = new Predicate(predicateTrueBytecode, provider);
-      const predicateStruct = new Predicate<[Validation]>(
+    let provider: Provider;
+    let predicateTrue: Predicate<[]>;
+    let predicateStruct: Predicate<[Validation]>;
+
+    beforeEach(async () => {
+      provider = await Provider.create(FUEL_NETWORK_URL);
+      predicateTrue = new Predicate(predicateTrueBytecode, provider);
+      predicateStruct = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         provider,
         predicateAbiMainArgsStruct
@@ -22,13 +35,9 @@ describe('Predicate', () => {
           amount: bn(1000),
         },
       ]);
-      return { predicateTrue, predicateStruct };
-    };
+    });
 
     it('estimatePredicates should assign gas to the correct input', async () => {
-      using provider = await setupTestProvider();
-      const { predicateTrue, predicateStruct } = await setup(provider);
-
       const tx = new ScriptTransactionRequest();
 
       // Get resources from the predicate struct

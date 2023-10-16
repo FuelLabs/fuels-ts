@@ -4,12 +4,17 @@ import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../project
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
+  let wallet: WalletUnlocked;
+
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 
+  beforeAll(async () => {
+    wallet = await getTestWallet();
+  });
+
   it('should successfully tranfer to setted whitelisted address', async () => {
-    using wallet = await getTestWallet();
     // #region predicate-with-configurable-constants-2
     const newWhitelistedAddress = getRandomB256();
 
@@ -43,7 +48,6 @@ describe(__filename, () => {
   });
 
   it('should successfully tranfer to default whitelisted address', async () => {
-    using wallet = await getTestWallet();
     // #region predicate-with-configurable-constants-3
     const predicate = new Predicate(bin, wallet.provider, abi);
 

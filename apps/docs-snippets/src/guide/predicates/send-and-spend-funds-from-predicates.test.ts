@@ -1,19 +1,23 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
+import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
+  let walletWithFunds: WalletUnlocked;
+
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SIMPLE_PREDICATE
   );
 
-  it('should successfully use predicate to spend assets', async () => {
-    using walletWithFunds = await getTestWallet();
-    const provider = walletWithFunds.provider;
+  beforeAll(async () => {
+    walletWithFunds = await getTestWallet();
+  });
 
+  it('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(bin, provider, abi);
     // #endregion send-and-spend-funds-from-predicates-2
 
@@ -47,9 +51,7 @@ describe(__filename, () => {
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {
-    using walletWithFunds = await getTestWallet();
-    const provider = walletWithFunds.provider;
-
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(bin, provider, abi);
 
     const amountToPredicate = 100;
@@ -78,17 +80,16 @@ describe(__filename, () => {
   });
 
   it('should fail when set wrong input data for predicate', async () => {
-    using walletWithFunds = await getTestWallet();
-    const provider = walletWithFunds.provider;
-
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicateOwner = WalletUnlocked.generate({
       provider,
     });
     const predicate = new Predicate(bin, predicateOwner.provider, abi);
 
-    const amountToPredicate = 1_000_0;
+    const amountToPredicate = 1_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
+
     await tx.waitForResult();
 
     const receiverWallet = WalletUnlocked.generate({
@@ -97,7 +98,9 @@ describe(__filename, () => {
 
     predicate.setData(getRandomB256());
 
-    const { error } = await safeExec(() => predicate.transfer(receiverWallet.address, 1_000));
+    const { error } = await safeExec(() =>
+      predicate.transfer(receiverWallet.address, amountToPredicate)
+    );
 
     // #region send-and-spend-funds-from-predicates-7
     const errorMsg =

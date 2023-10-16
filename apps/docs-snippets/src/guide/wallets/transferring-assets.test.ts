@@ -1,20 +1,24 @@
-import type { WalletUnlocked } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
 import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
-  const setupContract = async (wallet: WalletUnlocked) => {
+  let senderWallet: WalletUnlocked;
+  let deployedContract: Contract;
+
+  beforeAll(async () => {
+    senderWallet = await getTestWallet();
+
     const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
 
-    return factory.deployContract();
-  };
+    deployedContract = await factory.deployContract();
+  });
 
   it('should successfully transfer asset to another wallet', async () => {
-    using senderWallet = await getTestWallet();
     // #region transferring-assets-1
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
@@ -42,9 +46,6 @@ describe(__filename, () => {
   });
 
   it('should successfully transfer asset to a deployed contract', async () => {
-    using senderWallet = await getTestWallet();
-    const deployedContract = await setupContract(senderWallet);
-
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-2
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';

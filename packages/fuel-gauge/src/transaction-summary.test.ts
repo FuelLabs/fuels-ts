@@ -1,5 +1,6 @@
-import { setupTestProvider, generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type {
+  WalletUnlocked,
   TransactionResultReceipt,
   Operation,
   TransactionSummary,
@@ -7,16 +8,26 @@ import type {
 } from 'fuels';
 import {
   BN,
+  FUEL_NETWORK_URL,
   getTransactionsSummaries,
   getTransactionSummary,
   getTransactionSummaryFromRequest,
   BaseAssetId,
+  Provider,
   ScriptTransactionRequest,
   TransactionTypeName,
   Wallet,
 } from 'fuels';
 
 describe('TransactionSummary', () => {
+  let provider: Provider;
+  let wallet: WalletUnlocked;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    wallet = await generateTestWallet(provider, [[2_000, BaseAssetId]]);
+  });
+
   const verifyTransactionSummary = (params: {
     transaction: TransactionResult | TransactionSummary;
     isRequest?: boolean;
@@ -44,8 +55,6 @@ describe('TransactionSummary', () => {
   };
 
   it('should ensure getTransactionSummary executes just fine', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await generateTestWallet(provider, [[2_000, BaseAssetId]]);
     const destination = Wallet.generate({
       provider,
     });
@@ -86,8 +95,6 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await generateTestWallet(provider, [[2_000, BaseAssetId]]);
     const sender = Wallet.generate({
       provider,
     });
@@ -125,8 +132,6 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
-    using provider = await setupTestProvider();
-    const wallet = await generateTestWallet(provider, [[2_000, BaseAssetId]]);
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
       gasPrice: 1,
