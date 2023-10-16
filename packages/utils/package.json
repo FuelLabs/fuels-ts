@@ -36,11 +36,11 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "ethers": "^6.7.1",
     "ramda": "^0.29.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/errors": "workspace:*"
   }
 }

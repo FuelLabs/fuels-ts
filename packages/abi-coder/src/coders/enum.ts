@@ -1,6 +1,6 @@
-import { concat } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber } from '@fuel-ts/math';
+import { concatBytes } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import { concatWithDynamicData } from '../utilities';
@@ -50,7 +50,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     const caseIndex = Object.keys(this.coders).indexOf(value);
 
     const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
-    return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
+    return concatBytes([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
