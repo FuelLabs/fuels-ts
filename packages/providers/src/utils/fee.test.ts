@@ -1,6 +1,6 @@
-import { arrayify } from '@ethersproject/bytes';
 import { BN, bn } from '@fuel-ts/math';
 import { ReceiptType, type Witness } from '@fuel-ts/transactions';
+import { getBytesCopy } from 'ethers';
 
 import { MOCK_TX_BYTES_HEX } from '../../test/fixtures/transaction-summary';
 import type { TransactionResultReceipt } from '../transaction-response';
@@ -109,7 +109,7 @@ describe(__filename, () => {
 
   describe('calculateTxChargeableBytes', () => {
     it('should calculate properly transaction chargeable bytes just fine', () => {
-      const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
+      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
       const transactionWitnesses: Witness[] = [{ dataLength: 0, data: '0x' }];
 
       const chargeableBytesFee = calculateTxChargeableBytes({
@@ -121,7 +121,7 @@ describe(__filename, () => {
     });
 
     it('should handle an empty witnesses array', () => {
-      const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
+      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
       const offset = 520;
       const transactionWitnesses: Witness[] = [
         {
@@ -140,7 +140,7 @@ describe(__filename, () => {
     });
 
     it('should round up the result', () => {
-      const transactionBytes = arrayify(MOCK_TX_BYTES_HEX);
+      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
       const offset = 760;
       const transactionWitnesses: Witness[] = [
         {
