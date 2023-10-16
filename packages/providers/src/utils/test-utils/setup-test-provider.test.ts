@@ -25,6 +25,30 @@ describe('launchTestProvider', () => {
     });
   });
 
+  test('kills the node if error happens post-launch', async () => {
+    const port = '9876';
+    try {
+      await setupTestProvider({ providerOptions: { cacheUtxo: -500 } });
+    } catch (err) {
+      expect(err).toBeDefined();
+
+      const { error } = await safeExec(async () => {
+        const url = `http://127.0.0.1:${port}/graphql`;
+        const p = await Provider.create(url);
+        await p.getBlockNumber();
+      });
+
+      expect(error).toMatchObject({
+        code: 'ECONNREFUSED',
+      });
+
+      return;
+    }
+
+    // Should never reach here; using fail() gives a ReferenceError and would crash the whole program
+    expect(false).toBe(true);
+  });
+
   it('can partially extend the default node configs', async () => {
     const coin = {
       owner: '0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d',

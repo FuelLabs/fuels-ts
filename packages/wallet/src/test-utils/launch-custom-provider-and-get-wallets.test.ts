@@ -31,7 +31,7 @@ describe('launchCustomProviderAndGetWallets', () => {
     });
   });
 
-  it('default: one wallets, one asset (BaseAssetId), one coin, 1_000_000_00 amount', async () => {
+  it('default: one wallet, one asset (BaseAssetId), one coin, 1_000_000_00 amount', async () => {
     await using providerAndWallets = await launchCustomProviderAndGetWallets();
     const { wallets } = providerAndWallets;
 

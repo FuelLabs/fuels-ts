@@ -1,5 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import fs from 'fs';
 import fsAsync from 'fs/promises';
 import http from 'http';

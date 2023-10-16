@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -188,7 +189,6 @@ export type FetchRequestOptions = {
   method: 'POST';
   headers: { [key: string]: string };
   body: string;
-  signal?: AbortSignal;
 };
 
 /*

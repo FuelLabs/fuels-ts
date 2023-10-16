@@ -16,8 +16,7 @@
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/providers": "workspace:*"
+    "@fuel-ts/utils": "workspace:*"
   },
   "version": null
 }

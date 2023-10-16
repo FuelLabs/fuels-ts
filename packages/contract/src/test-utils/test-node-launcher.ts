@@ -55,9 +55,9 @@ export class TestNodeLauncher {
       false
     );
 
-    const contracts = [];
-
     try {
+      const contracts = [];
+
       if (deployContracts.length > 0) {
         const factories = deployContracts.map((config) => {
           if (
@@ -79,17 +79,17 @@ export class TestNodeLauncher {
           contracts.push(contract);
         }
       }
+
+      return {
+        provider,
+        wallets,
+        contracts: contracts as TContracts,
+        [Symbol.asyncDispose]: cleanup,
+      };
     } catch (err) {
       await cleanup();
       throw err;
     }
-
-    return {
-      provider,
-      wallets,
-      contracts: contracts as TContracts,
-      [Symbol.asyncDispose]: cleanup,
-    };
   }
 
   private static prepareContractFactory(

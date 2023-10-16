@@ -52,8 +52,7 @@ export async function launchCustomProviderAndGetWallets<
   );
 
   wallets.forEach((wallet) => {
-    // eslint-disable-next-line no-param-reassign
-    wallet.provider = provider;
+    wallet.connect(provider);
   });
 
   const dispose = runCleanup ?? true;

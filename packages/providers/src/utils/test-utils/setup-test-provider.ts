@@ -4,8 +4,8 @@ import type { PartialDeep } from 'type-fest';
 import type { ProviderOptions } from '../..';
 import { Provider } from '../..';
 
-import type { ChainConfig } from './fuel-node-interfaces';
 import { defaultChainConfig } from './defaultChainConfig';
+import type { ChainConfig } from './fuel-node-interfaces';
 import type { LaunchNodeOptions } from './launchNode';
 import { launchNode } from './launchNode';
 
@@ -35,16 +35,25 @@ export async function setupTestProvider<Dispose extends boolean = true>(
   };
 
   const { cleanup, ip, port } = await launchNode(nodeOptions);
-  const provider = await Provider.create(`http://${ip}:${port}/graphql`, options?.providerOptions);
 
-  const dispose = runCleanup ?? true;
-  // @ts-expect-error TODO: fix later
-  return dispose
-    ? Object.assign(provider, {
-        [Symbol.asyncDispose]: cleanup,
-      })
-    : {
-        provider,
-        cleanup,
-      };
+  try {
+    const provider = await Provider.create(
+      `http://${ip}:${port}/graphql`,
+      options?.providerOptions
+    );
+
+    const dispose = runCleanup ?? true;
+    // @ts-expect-error TODO: fix later
+    return dispose
+      ? Object.assign(provider, {
+          [Symbol.asyncDispose]: cleanup,
+        })
+      : {
+          provider,
+          cleanup,
+        };
+  } catch (err) {
+    await cleanup();
+    throw err;
+  }
 }

@@ -52,9 +52,7 @@ export class ResolvedAbiType {
     const typeParametersAndArgsMap = typeParameters.reduce(
       (obj, typeParameter, typeParameterIndex) => {
         const o: Record<number, JsonAbiArgument> = { ...obj };
-        o[typeParameter] = structuredClone(
-          arg.typeArguments?.[typeParameterIndex]
-        ) as JsonAbiArgument;
+        o[typeParameter] = structuredClone(arg.typeArguments?.[typeParameterIndex]);
         return o;
       },
       {} as Record<number, JsonAbiArgument>
