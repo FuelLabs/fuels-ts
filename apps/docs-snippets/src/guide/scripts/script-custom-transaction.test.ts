@@ -1,9 +1,9 @@
-import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   BN,
   ContractFactory,
   BaseAssetId,
-  ScriptTransactionRequest,
+  ScriptTransactionRequest} from 'fuels';
+import type { CoinQuantityLike, Contract ,
   type WalletUnlocked,
 } from 'fuels';
 
