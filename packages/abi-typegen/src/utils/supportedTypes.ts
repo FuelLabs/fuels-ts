@@ -2,11 +2,14 @@ import { ArrayType } from '../abi/types/ArrayType';
 import { B256Type } from '../abi/types/B256Type';
 import { B512Type } from '../abi/types/B512Type';
 import { BoolType } from '../abi/types/BoolType';
+import { BytesType } from '../abi/types/BytesType';
 import { EnumType } from '../abi/types/EnumType';
 import { EvmAddressType } from '../abi/types/EvmAddressType';
 import { GenericType } from '../abi/types/GenericType';
 import { OptionType } from '../abi/types/OptionType';
 import { RawUntypedPtr } from '../abi/types/RawUntypedPtr';
+import { RawUntypedSlice } from '../abi/types/RawUntypedSlice';
+import { StdStringType } from '../abi/types/StdStringType';
 import { StrType } from '../abi/types/StrType';
 import { StructType } from '../abi/types/StructType';
 import { TupleType } from '../abi/types/TupleType';
@@ -21,10 +24,13 @@ export const supportedTypes = [
   B256Type,
   B512Type,
   BoolType,
+  BytesType,
   EnumType,
   GenericType,
   OptionType,
   RawUntypedPtr,
+  RawUntypedSlice,
+  StdStringType,
   StrType,
   StructType,
   TupleType,

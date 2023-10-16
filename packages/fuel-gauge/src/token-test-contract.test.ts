@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
@@ -35,7 +37,7 @@ describe('TokenTestContract', () => {
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
     const tokenContractId = { value: token.id.toB256() };
-    const addressId = { value: userWallet.address };
+    const addressId = { value: userWallet.address.toB256() };
 
     // Mint some coins
     const { transactionResult } = await token.functions
@@ -74,7 +76,9 @@ describe('TokenTestContract', () => {
       Wallet.generate({ provider })
     );
 
-    const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({ value: wallet.address }));
+    const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({
+      value: wallet.address.toB256(),
+    }));
 
     const token = await setup();
 
@@ -131,7 +135,7 @@ describe('TokenTestContract', () => {
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
     const addressId = {
-      value: userWallet.address,
+      value: userWallet.address.toB256(),
     };
 
     // mint 100 coins
@@ -155,5 +159,19 @@ describe('TokenTestContract', () => {
 
     // the contract should now have only 50 coins
     expect((await getBalance()).toHex()).toEqual(bn(50).toHex());
+  });
+
+  it('throws when passing entire Address object as address parameter', async () => {
+    const userWallet = Wallet.generate({ provider });
+    const token = await setup();
+    const addressParameter = {
+      value: userWallet.address,
+    };
+    const assetId = BaseAssetId;
+
+    await expectToThrowFuelError(
+      () => token.functions.transfer_coins_to_output(addressParameter, assetId, 50).call(),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid b256.')
+    );
   });
 });

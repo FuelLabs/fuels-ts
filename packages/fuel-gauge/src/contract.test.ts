@@ -237,7 +237,7 @@ describe('Contract', () => {
     });
 
     const scope = contract.functions
-      .call_external_foo(1336, otherContract.id)
+      .call_external_foo(1336, otherContract.id.toB256())
       .txParams({ gasPrice });
 
     const { value: results } = await scope.call();
@@ -252,7 +252,7 @@ describe('Contract', () => {
     });
     const calls = [
       contract.functions.foo(1336),
-      contract.functions.call_external_foo(1336, otherContract.id),
+      contract.functions.call_external_foo(1336, otherContract.id.toB256()),
     ];
 
     const scope = contract.multiCall(calls).addContracts([otherContract]).txParams({ gasPrice: 1 });

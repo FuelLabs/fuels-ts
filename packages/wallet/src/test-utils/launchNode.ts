@@ -1,10 +1,10 @@
-import { hexlify } from '@ethersproject/bytes';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
+import { hexlify } from 'ethers';
 import fsSync from 'fs';
 import fs from 'fs/promises';
 import os from 'os';
