@@ -1,8 +1,8 @@
-import { type BytesLike } from '@ethersproject/bytes';
-import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
+import * as getBytesCopyMod from 'ethers';
+import type { BytesLike } from 'ethers';
 
 import {
   composeScriptForTransferringToContract,
@@ -38,7 +38,9 @@ describe('util', () => {
 
     const encode = vi.spyOn(NumberCoder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
 
-    const arrayify = vi.spyOn(arrayfyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
+    const arrayify = vi
+      .spyOn(getBytesCopyMod, 'getBytesCopy')
+      .mockReturnValue(Uint8Array.from(byte));
 
     const contractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;

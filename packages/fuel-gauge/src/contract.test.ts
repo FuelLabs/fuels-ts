@@ -233,7 +233,7 @@ describe('Contract', () => {
       cache: false,
     });
 
-    const scope = contract.functions.call_external_foo(1336, otherContract.id);
+    const scope = contract.functions.call_external_foo(1336, otherContract.id.toB256());
 
     const { value: results } = await scope.call();
 
@@ -247,7 +247,7 @@ describe('Contract', () => {
     });
     const calls = [
       contract.functions.foo(1336),
-      contract.functions.call_external_foo(1336, otherContract.id),
+      contract.functions.call_external_foo(1336, otherContract.id.toB256()),
     ];
 
     const scope = contract.multiCall(calls).addContracts([otherContract]);

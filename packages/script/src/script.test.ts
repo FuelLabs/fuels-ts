@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
@@ -13,6 +12,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { getBytesCopy } from 'ethers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -68,7 +68,7 @@ const callScript = async <TData, TResult>(
 };
 
 // #region script-init
-// #context import { Script, AbiCoder, arrayify } from 'fuels';
+// #context import { Script, AbiCoder, getBytesCopy } from 'fuels';
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {
@@ -89,7 +89,7 @@ describe('Script', () => {
       (myStruct: MyStruct) => {
         const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
 
-        return arrayify(encoded);
+        return getBytesCopy(encoded);
       },
       (scriptResult) => {
         if (scriptResult.returnReceipt.type === ReceiptType.Revert) {

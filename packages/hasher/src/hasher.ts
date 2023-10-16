@@ -6,7 +6,7 @@ import { transactionRequestify, TransactionType } from '@fuel-ts/providers';
 import type { UtxoId } from '@fuel-ts/transactions';
 import { OutputType, InputType, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from 'ethers';
-import { concat, sha256 } from 'ethers';
+import { sha256, concat } from 'ethers';
 import { clone } from 'ramda';
 
 /**

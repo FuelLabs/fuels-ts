@@ -1,5 +1,18 @@
 # @fuel-ts/errors
 
+## 0.62.0
+
+### Minor Changes
+
+- Reverted GraphQL subscriptions, thus removing `Provider.operations.statusChange`, by [@nedsalk](https://github.com/nedsalk) (See [#1333](https://github.com/FuelLabs/fuels-ts/pull/1333))
+
+## 0.61.0
+
+### Minor Changes
+
+- Check mismatch of fuel client version and supported version: throw on major/minor mismatch, warn on patch mismatch, by [@nedsalk](https://github.com/nedsalk) (See [#1287](https://github.com/FuelLabs/fuels-ts/pull/1287))
+- Improve developer experience of `fromEvmAddress` address helper function, by [@danielbate](https://github.com/danielbate) (See [#1309](https://github.com/FuelLabs/fuels-ts/pull/1309))
+
 ## 0.60.0
 
 ### Minor Changes

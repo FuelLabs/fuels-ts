@@ -104,7 +104,7 @@ describe('Advanced Logging', () => {
   it('can get log data from a downstream Contract', async () => {
     const INPUT = 3;
     const { value, logs } = await contractInstance.functions
-      .test_log_from_other_contract(INPUT, otherContractInstance.id)
+      .test_log_from_other_contract(INPUT, otherContractInstance.id.toB256())
       .addContracts([otherContractInstance])
       .call();
 

@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify } from 'ethers';
 
 import faucets from './.fuel-core/configs/faucets.json';
 
@@ -28,8 +28,7 @@ const getPrivateKeyForCurrentWorker = () => {
     throw new Error(`At most ${faucets.length} workers are supported.`);
   }
 
-  const privateKey = hexlify([workerId]);
-
+  const privateKey = hexlify(Uint8Array.from([workerId]));
   return privateKey;
 };
 

@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.62.0
+
+## 0.61.0
+
+### Minor Changes
+
+- Add StdString dynamic string type, by [@camsjams](https://github.com/camsjams) (See [#1277](https://github.com/FuelLabs/fuels-ts/pull/1277))
+- made prop transactionRequest protected on BaseInvocationScope in favor of getTransactionRequest, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1296](https://github.com/FuelLabs/fuels-ts/pull/1296))
+
+### Patch Changes
+
+- refactor: purge the usage of the hardcoded constant `VM_TX_MEMORY`, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1318](https://github.com/FuelLabs/fuels-ts/pull/1318))
+
 ## 0.60.0
 
 ### Minor Changes

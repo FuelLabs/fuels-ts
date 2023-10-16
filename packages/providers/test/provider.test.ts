@@ -1,17 +1,17 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { versions } from '@fuel-ts/versions';
+import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import { getBytesCopy, hexlify } from 'ethers';
+import type { BytesLike } from 'ethers';
+import * as GraphQL from 'graphql-request';
 
-import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -21,6 +21,8 @@ import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
+import { MOCK_CHAIN } from './fixtures/chain';
+import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 // https://stackoverflow.com/a/72885576
 jest.mock('@fuel-ts/versions', () => ({
@@ -55,6 +57,7 @@ const getCustomFetch =
     }
     return fetch(url, options);
   };
+
 // TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
@@ -68,7 +71,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.5');
+    expect(version).toEqual('0.20.6');
   });
 
   it('can call()', async () => {
@@ -97,7 +100,7 @@ describe('Provider', () => {
           Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
           Opcode::RET(REG_ONE)
         */
-        arrayify('0x504000ca504400ba3341100024040000'),
+        getBytesCopy('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
       inputs: CoinInputs,
       witnesses: ['0x'],
@@ -150,7 +153,7 @@ describe('Provider', () => {
           Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
           Opcode::RET(REG_ONE)
         */
-        arrayify('0x504000ca504400ba3341100024040000'),
+        getBytesCopy('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
     });
 
@@ -206,15 +209,22 @@ describe('Provider', () => {
 
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
-    const provider = await Provider.create(providerUrl1, {
-      fetch: (url: string, options: FetchRequestOptions) =>
-        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
-    });
+    const provider = await Provider.create(providerUrl1);
 
     expect(provider.url).toBe(providerUrl1);
-    expect(await provider.getVersion()).toEqual(providerUrl1);
+
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient').mockImplementation(
+      () =>
+        ({
+          request: () =>
+            Promise.resolve({
+              chain: MOCK_CHAIN,
+              nodeInfo: MOCK_NODE_INFO,
+            }),
+        } as unknown as GraphQL.GraphQLClient)
+    );
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
@@ -222,8 +232,7 @@ describe('Provider', () => {
 
     await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-
-    expect(await provider.getVersion()).toEqual(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -384,7 +393,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -443,7 +452,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -517,7 +526,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -576,7 +585,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -684,51 +693,6 @@ describe('Provider', () => {
       '0x0000000000000000000000000000000000000000000000000000000000000008'
     );
     expect(messageStatus).toMatchSnapshot();
-  });
-
-  it('default timeout is undefined', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    expect(provider.options.timeout).toBeUndefined();
-  });
-
-  it('throws TimeoutError on timeout when calling an operation', async () => {
-    const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-      await provider.getTransaction('will fail due to timeout');
-    });
-
-    expect(error).toMatchObject({
-      code: 23,
-      name: 'TimeoutError',
-      message: 'The operation was aborted due to timeout',
-    });
-  });
-
-  it('throws TimeoutError on timeout when calling a subscription', async () => {
-    const { error } = await safeExec(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL, { timeout: 0 });
-      provider.operations.statusChange({ transactionId: 'doesnt matter, will be aborted' });
-    });
-    expect(error).toMatchObject({
-      code: 23,
-      name: 'TimeoutError',
-      message: 'The operation was aborted due to timeout',
-    });
-  });
-
-  it('errors returned from node via subscriptions are thrown', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    await expectToThrowFuelError(
-      async () => {
-        for await (const iterator of provider.operations.statusChange({
-          transactionId: 'Invalid ID that will cause node to return errors',
-        })) {
-          if (iterator) break;
-        }
-      },
-      { code: ErrorCode.FUEL_NODE_ERROR }
-    );
   });
 
   it('can connect', async () => {
@@ -869,30 +833,5 @@ describe('Provider', () => {
       code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
       message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
     });
-  });
-
-  it('warns on difference between patch client version and supported patch version', async () => {
-    const { FUEL_CORE } = versions;
-    const [major, minor, patch] = FUEL_CORE.split('.');
-
-    const patchMismatch = patch === '0' ? 1 : parseInt(patch, 10) - 1;
-    const mock = {
-      isMajorSupported: true,
-      isMinorSupported: true,
-      isPatchSupported: false,
-      supportedVersion: `${major}.${minor}.${patchMismatch}`,
-    };
-    if (mock.supportedVersion === FUEL_CORE) throw new Error();
-
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementation(() => mock);
-
-    const warnSpy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
-    await Provider.create(FUEL_NETWORK_URL);
-
-    expect(warnSpy).toHaveBeenCalledWith(
-      ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      `The patch versions of the client and sdk differ. Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
-    );
   });
 });
