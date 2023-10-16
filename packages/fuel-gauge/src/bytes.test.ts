@@ -1,17 +1,12 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, type Contract } from 'fuels';
+import { bn, Predicate, Wallet, Address, BaseAssetId, TestNodeLauncher } from 'fuels';
+import type { BN } from 'fuels';
 
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
 
-import { getScript, getSetupContract } from './utils';
+import { getContractDir, getScript } from './utils';
 
-const setupContract = getSetupContract('bytes');
-let contractInstance: Contract;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-});
+const bytesContractDir = getContractDir('bytes');
 
 type SomeEnum = {
   First?: boolean;
@@ -23,17 +18,16 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-const setup = async (balance = 5_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
-
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+
+    const {
+      contracts: [contractInstance],
+    } = nodeLauncherResult;
+
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -42,6 +36,13 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output [100 items]', async () => {
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+
+    const {
+      contracts: [contractInstance],
+    } = nodeLauncherResult;
     const INPUT = 100;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -50,6 +51,13 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input', async () => {
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+
+    const {
+      contracts: [contractInstance],
+    } = nodeLauncherResult;
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
@@ -57,6 +65,13 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [nested]', async () => {
+    await using nodeLauncherResult = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+
+    const {
+      contracts: [contractInstance],
+    } = nodeLauncherResult;
     const bytes = [40, 41, 42];
 
     const INPUT: Wrapper = {
@@ -69,7 +84,11 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
-    const wallet = await setup();
+    await using nodeLauncherResult = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = nodeLauncherResult;
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 100;
     const amountToReceiver = 50;
@@ -102,7 +121,11 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [script-bytes]', async () => {
-    const wallet = await setup();
+    await using nodeLauncherResult = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = nodeLauncherResult;
+
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-bytes', wallet);
 
