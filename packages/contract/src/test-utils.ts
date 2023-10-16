@@ -1,1 +1,1 @@
-export * from './test-utils/fuel-node-launcher';
+export * from './test-utils/test-node-launcher';

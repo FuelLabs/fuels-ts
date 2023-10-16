@@ -4,7 +4,7 @@ import { Provider } from '@fuel-ts/providers';
 import { WalletConfig } from '@fuel-ts/wallet/test-utils';
 import { join } from 'path';
 
-import { TestNodeLauncher } from './fuel-node-launcher';
+import { TestNodeLauncher } from './test-node-launcher';
 
 const simpleContractPath = join(__dirname, '../../test/fixtures/simple-contract');
 
