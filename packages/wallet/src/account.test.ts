@@ -15,14 +15,20 @@ import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
-import { setupTestProvider } from './test-utils';
+import { FUEL_NETWORK_URL } from './configs';
 
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
   ...jest.requireActual('@fuel-ts/providers'),
 }));
 
+let provider: Provider;
+
 afterEach(jest.restoreAllMocks);
+
+beforeAll(async () => {
+  provider = await Provider.create(FUEL_NETWORK_URL);
+});
 
 describe('Account', () => {
   const assets = [
@@ -31,8 +37,7 @@ describe('Account', () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  it('Create wallet using a address', async () => {
-    using provider = await setupTestProvider();
+  it('Create wallet using a address', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -43,7 +48,6 @@ describe('Account', () => {
   });
 
   it('should get coins just fine', async () => {
-    using provider = await setupTestProvider();
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -58,7 +62,6 @@ describe('Account', () => {
   });
 
   it('should throw if coins length is higher than 9999', async () => {
-    using provider = await setupTestProvider();
     const dummyCoins: Coin[] = new Array(10000);
 
     const getCoins = async () => Promise.resolve(dummyCoins);
@@ -86,7 +89,6 @@ describe('Account', () => {
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
-    using provider = await setupTestProvider();
     // #region Message-getResourcesToSpend
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -103,7 +105,6 @@ describe('Account', () => {
   });
 
   it('should get messages just fine', async () => {
-    using provider = await setupTestProvider();
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
       provider
@@ -113,7 +114,6 @@ describe('Account', () => {
   });
 
   it('should throw if messages length is higher than 9999', async () => {
-    using provider = await setupTestProvider();
     // mocking
     const messages: Message[] = new Array(10000);
     const mockedGetMessages = async () => Promise.resolve(messages);
@@ -142,7 +142,6 @@ describe('Account', () => {
   });
 
   it('should get single asset balance just fine', async () => {
-    using provider = await setupTestProvider();
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -154,7 +153,6 @@ describe('Account', () => {
   });
 
   it('should get multiple balances just fine', async () => {
-    using provider = await setupTestProvider();
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -164,7 +162,6 @@ describe('Account', () => {
   });
 
   it('should throw if balances length is higher than 9999', async () => {
-    using provider = await setupTestProvider();
     const dummyBalace: CoinQuantity[] = new Array(10000);
 
     const mockedGetBalances = async () => Promise.resolve(dummyBalace);
@@ -193,13 +190,12 @@ describe('Account', () => {
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
-    using provider = await setupTestProvider();
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    const newProviderInstance = await Provider.create(provider.url);
+    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
 
     expect(account.provider).not.toBe(newProviderInstance);
 
@@ -210,7 +206,6 @@ describe('Account', () => {
   });
 
   it('should execute fund just as fine', async () => {
-    using provider = await setupTestProvider();
     const fee = {
       amount: bn(1),
       assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
@@ -247,7 +242,6 @@ describe('Account', () => {
   });
 
   it('should execute transfer just as fine', async () => {
-    using provider = await setupTestProvider();
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const destination = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
@@ -331,7 +325,6 @@ describe('Account', () => {
   });
 
   it('should execute withdrawToBaseLayer just fine', async () => {
-    using provider = await setupTestProvider();
     const recipient = Address.fromRandom();
     const txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {};
     const amount = bn(1);
@@ -409,7 +402,6 @@ describe('Account', () => {
   });
 
   it('should execute sendTransaction just fine', async () => {
-    using provider = await setupTestProvider();
     const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
@@ -446,7 +438,6 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    using provider = await setupTestProvider();
     const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const callResult = 'callResult' as unknown as CallResult;

@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
-import { launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { getBytesCopy } from 'ethers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -21,6 +23,15 @@ import { Script } from './index';
 const scriptBin = readFileSync(
   join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
 );
+
+const setup = async () => {
+  const provider = await Provider.create(FUEL_NETWORK_URL);
+
+  // Create wallet
+  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+
+  return wallet;
+};
 
 const callScript = async <TData, TResult>(
   account: Account,
@@ -57,7 +68,7 @@ const callScript = async <TData, TResult>(
 };
 
 // #region script-init
-// #context import { Script, AbiCoder, arrayify } from 'fuels';
+// #context import { Script, AbiCoder, getBytesCopy } from 'fuels';
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {
@@ -74,7 +85,7 @@ describe('Script', () => {
       (myStruct: MyStruct) => {
         const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
 
-        return arrayify(encoded);
+        return getBytesCopy(encoded);
       },
       (scriptResult) => {
         if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
@@ -92,11 +103,7 @@ describe('Script', () => {
   // #endregion script-init
 
   it('can call a script', async () => {
-    await using launchResult = await launchCustomProviderAndGetWallets();
-    const {
-      wallets: [wallet],
-    } = launchResult;
-
+    const wallet = await setup();
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -111,11 +118,7 @@ describe('Script', () => {
   });
 
   it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
-    await using launchResult = await launchCustomProviderAndGetWallets();
-    const {
-      wallets: [wallet],
-    } = launchResult;
-
+    const wallet = await setup();
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -127,10 +130,7 @@ describe('Script', () => {
   });
 
   it('should throw if script has no configurable to be set', async () => {
-    await using launchResult = await launchCustomProviderAndGetWallets();
-    const {
-      wallets: [wallet],
-    } = launchResult;
+    const wallet = await setup();
 
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
@@ -142,10 +142,7 @@ describe('Script', () => {
   });
 
   it('should throw when setting configurable with wrong name', async () => {
-    await using launchResult = await launchCustomProviderAndGetWallets();
-    const {
-      wallets: [wallet],
-    } = launchResult;
+    const wallet = await setup();
 
     const jsonAbiWithConfigurablesMock: JsonAbi = {
       ...jsonAbiMock,
