@@ -21,18 +21,17 @@ export interface LaunchCustomProviderAndGetWalletsOptions extends SetupTestProvi
 
 export async function launchCustomProviderAndGetWallets<
   Dispose extends boolean = true,
-  R = {
+  ReturnType = {
     wallets: WalletUnlocked[];
     provider: Provider;
-  },
-  ReturnType = Dispose extends true ? R & AsyncDisposable : R & { cleanup: () => Promise<void> },
+  } & (Dispose extends true ? AsyncDisposable : { cleanup: () => Promise<void> }),
 >(
   {
     walletConfig = new WalletConfig(),
     providerOptions,
     nodeOptions,
   }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {},
-  runCleanup?: Dispose
+  dispose?: Dispose
 ): Promise<ReturnType> {
   const { wallets, coins } = walletConfig;
 
@@ -59,18 +58,17 @@ export async function launchCustomProviderAndGetWallets<
     wallet.connect(provider);
   });
 
-  const dispose = runCleanup ?? true;
-
-  // @ts-expect-error whaa
-  return dispose
-    ? {
-        wallets,
-        provider,
-        [Symbol.asyncDispose]: cleanup,
-      }
-    : {
-        wallets,
-        provider,
-        cleanup,
-      };
+  return (
+    dispose
+      ? {
+          wallets,
+          provider,
+          [Symbol.asyncDispose]: cleanup,
+        }
+      : {
+          wallets,
+          provider,
+          cleanup,
+        }
+  ) as ReturnType;
 }

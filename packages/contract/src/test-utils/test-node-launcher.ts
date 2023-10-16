@@ -29,19 +29,27 @@ interface TestNodeLauncherOptions extends LaunchCustomProviderAndGetWalletsOptio
   deployContracts: DeployContractConfig[];
 }
 
+interface TestNodeLauncherReturn<TContracts> {
+  wallets: WalletUnlocked[];
+  provider: Provider;
+  contracts: TContracts;
+}
+
 export class TestNodeLauncher {
-  static async launch<TContracts extends Contract[] = Contract[]>({
-    providerOptions = {},
-    walletConfig,
-    nodeOptions = {},
-    deployContracts = [],
-  }: Partial<TestNodeLauncherOptions> = {}): Promise<
+  static async launch<
+    TContracts extends Contract[] = Contract[],
+    Dispose extends boolean = true,
+    ReturnType = TestNodeLauncherReturn<TContracts> &
+      (Dispose extends true ? AsyncDisposable : { cleanup: () => Promise<void> }),
+  >(
     {
-      wallets: WalletUnlocked[];
-      provider: Provider;
-      contracts: TContracts;
-    } & AsyncDisposable
-  > {
+      providerOptions = {},
+      walletConfig,
+      nodeOptions = {},
+      deployContracts = [],
+    }: Partial<TestNodeLauncherOptions> = {},
+    runCleanup?: Dispose
+  ): Promise<ReturnType> {
     const { provider, wallets, cleanup } = await launchCustomProviderAndGetWallets(
       {
         walletConfig,
@@ -54,12 +62,21 @@ export class TestNodeLauncher {
     try {
       const contracts = await TestNodeLauncher.deployContracts(deployContracts, wallets);
 
-      return {
-        provider,
-        wallets,
-        contracts: contracts as TContracts,
-        [Symbol.asyncDispose]: cleanup,
-      };
+      return (
+        runCleanup
+          ? {
+              provider,
+              wallets,
+              contracts: contracts as TContracts,
+              [Symbol.asyncDispose]: cleanup,
+            }
+          : {
+              provider,
+              wallets,
+              contracts: contracts as TContracts,
+              cleanup,
+            }
+      ) as ReturnType;
     } catch (err) {
       await cleanup();
       throw err;

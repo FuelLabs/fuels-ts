@@ -17,14 +17,12 @@ export interface SetupTestProviderOptions {
     }
   >;
 }
-export async function setupTestProvider<Dispose extends boolean = true>(
-  options?: Partial<SetupTestProviderOptions>,
-  runCleanup?: Dispose
-): Promise<
-  Dispose extends true
+export async function setupTestProvider<
+  Dispose extends boolean = true,
+  R = Dispose extends true
     ? Provider & AsyncDisposable
-    : { provider: Provider; cleanup: () => Promise<void> }
-> {
+    : { provider: Provider; cleanup: () => Promise<void> },
+>(options?: Partial<SetupTestProviderOptions>, dispose?: Dispose): Promise<R> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.asyncDispose ??= Symbol('Symbol.asyncDispose');
 
@@ -42,16 +40,16 @@ export async function setupTestProvider<Dispose extends boolean = true>(
       options?.providerOptions
     );
 
-    const dispose = runCleanup ?? true;
-    // @ts-expect-error TODO: fix later
-    return dispose
-      ? Object.assign(provider, {
-          [Symbol.asyncDispose]: cleanup,
-        })
-      : {
-          provider,
-          cleanup,
-        };
+    return (
+      dispose
+        ? Object.assign(provider, {
+            [Symbol.asyncDispose]: cleanup,
+          })
+        : {
+            provider,
+            cleanup,
+          }
+    ) as R;
   } catch (err) {
     await cleanup();
     throw err;
