@@ -41,7 +41,7 @@ describe('Predicate', () => {
     });
 
     it('includes predicate as input when sending a transaction', async () => {
-      const sendTransactionMock = jest
+      const sendTransactionMock = vi
         .spyOn(Account.prototype, 'sendTransaction')
         .mockImplementation(() => []);
 
@@ -54,7 +54,7 @@ describe('Predicate', () => {
     });
 
     it('includes predicate as input when simulating a transaction', async () => {
-      const sendTransactionMock = jest
+      const sendTransactionMock = vi
         .spyOn(Account.prototype, 'simulateTransaction')
         .mockImplementation(() => []);
 

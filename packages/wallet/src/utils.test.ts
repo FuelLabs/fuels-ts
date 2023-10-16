@@ -9,11 +9,21 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-// TODO: FIX VITETEST MOCKS
-// jest.mock('@fuels/vm-asm', () => ({
-//   __esModule: true,
-//   ...jest.requireActual('@fuels/vm-asm'),
-// }));
+vi.mock('@fuels/vm-asm', async () => {
+  const mod = await vi.importActual('@fuels/vm-asm');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+vi.mock('ethers', async () => {
+  const mod = await vi.importActual('ethers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 /**
  * @group browser

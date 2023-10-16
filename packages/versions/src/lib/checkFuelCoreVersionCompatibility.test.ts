@@ -2,12 +2,14 @@ import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompati
 import * as getSupportedVersionsMod from './getSupportedVersions';
 
 describe('getDifferenceToUserFuelCoreVersion', () => {
-  afterAll(() => jest.restoreAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should validate all possible version mismatches', () => {
     const supportedVersion = '0.1.2';
 
-    jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+    vi.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
       FUELS: '1', // not under test
       FORC: '1', // not under test
       FUEL_CORE: supportedVersion,

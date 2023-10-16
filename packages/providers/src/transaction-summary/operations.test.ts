@@ -881,7 +881,7 @@ describe('operations', () => {
     });
   });
 
-  describe('should ensure getTransactionTypeName works as expected', () => {
+  it('should ensure getTransactionTypeName works as expected', () => {
     expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeName.Create);
     expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeName.Mint);
     expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);

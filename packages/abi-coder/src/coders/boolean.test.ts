@@ -3,11 +3,13 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { BooleanCoder } from './boolean';
 
-// TODO: FIX VITETEST MOCKS
-// jest.mock('@fuel-ts/math', () => ({
-//   __esModule: true,
-//   ...jest.requireActual('@fuel-ts/math'),
-// }));
+vi.mock('@fuel-ts/math', async () => {
+  const mod = await vi.importActual('@fuel-ts/math');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 /**
  * @group node

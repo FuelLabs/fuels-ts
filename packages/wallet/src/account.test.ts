@@ -17,11 +17,13 @@ import * as providersMod from '@fuel-ts/providers';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
-// TODO: FIX VITETEST MOCKS
-// jest.mock('@fuel-ts/providers', () => ({
-//   __esModule: true,
-//   ...jest.requireActual('@fuel-ts/providers'),
-// }));
+vi.mock('@fuel-ts/providers', async () => {
+  const mod = await vi.importActual('@fuel-ts/providers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 let provider: Provider;
 

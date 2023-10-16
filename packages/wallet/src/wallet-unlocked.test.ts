@@ -20,11 +20,13 @@ import * as keystoreWMod from './keystore-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-// TODO: FIX VITETEST MOCKS
-// jest.mock('@fuel-ts/providers', () => ({
-//   __esModule: true,
-//   ...jest.requireActual('@fuel-ts/providers'),
-// }));
+vi.mock('@fuel-ts/providers', async () => {
+  const mod = await vi.importActual('@fuel-ts/providers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 /**
  * @group browser

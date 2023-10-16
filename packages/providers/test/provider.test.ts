@@ -24,11 +24,13 @@ import { messageProofResponse, messageStatusResponse } from './fixtures';
 import { MOCK_CHAIN } from './fixtures/chain';
 import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
-// https://stackoverflow.com/a/72885576
-jest.mock('@fuel-ts/versions', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/versions'),
-}));
+vi.mock('@fuel-ts/versions', async () => {
+  const mod = await vi.importActual('@fuel-ts/versions');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -215,7 +217,7 @@ describe('Provider', () => {
 
     expect(provider.url).toBe(providerUrl1);
 
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient').mockImplementation(
+    const spyGraphQLClient = vi.spyOn(GraphQL, 'GraphQLClient').mockImplementation(
       () =>
         ({
           request: () =>
@@ -803,7 +805,7 @@ describe('Provider', () => {
 
     if (mock.supportedVersion === FUEL_CORE) throw new Error();
 
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
@@ -826,7 +828,7 @@ describe('Provider', () => {
 
     if (mock.supportedVersion === FUEL_CORE) throw new Error();
 
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {

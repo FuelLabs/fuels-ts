@@ -2,12 +2,13 @@ import * as childProcessMod from 'child_process';
 
 import { getUserVersions } from './getUserVersions';
 
-// https://stackoverflow.com/a/72885576
-// TODO: FIX VITETEST MOCKS
-// jest.mock('child_process', () => ({
-//   __esModule: true,
-//   ...jest.requireActual('child_process'),
-// }));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 /**
  * @group node
