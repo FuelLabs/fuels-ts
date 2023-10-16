@@ -11,6 +11,7 @@ vi.mock('fs', async () => {
   const mod = await vi.importActual('fs');
   return {
     __esModule: true,
+    // @ts-expect-error spreading module import
     ...mod,
   };
 });

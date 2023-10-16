@@ -13,6 +13,7 @@ vi.mock('@fuels/vm-asm', async () => {
   const mod = await vi.importActual('@fuels/vm-asm');
   return {
     __esModule: true,
+    // @ts-expect-error spreading module import
     ...mod,
   };
 });
@@ -21,6 +22,7 @@ vi.mock('ethers', async () => {
   const mod = await vi.importActual('ethers');
   return {
     __esModule: true,
+    // @ts-expect-error spreading module import
     ...mod,
   };
 });

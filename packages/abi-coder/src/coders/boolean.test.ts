@@ -7,6 +7,7 @@ vi.mock('@fuel-ts/math', async () => {
   const mod = await vi.importActual('@fuel-ts/math');
   return {
     __esModule: true,
+    // @ts-expect-error spreading module import
     ...mod,
   };
 });
