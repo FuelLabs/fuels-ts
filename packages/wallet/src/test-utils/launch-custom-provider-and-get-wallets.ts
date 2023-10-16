@@ -15,7 +15,7 @@ export interface ChainConfig {
   coins: ChainConfigCoin[];
 }
 
-interface Options extends SetupTestProviderOptions {
+export interface LaunchCustomProviderAndGetWalletsOptions extends SetupTestProviderOptions {
   walletConfig: WalletConfig;
 }
 
@@ -27,7 +27,11 @@ export async function launchCustomProviderAndGetWallets<
   },
   ReturnType = Dispose extends true ? R & AsyncDisposable : R & { cleanup: () => Promise<void> },
 >(
-  { walletConfig = new WalletConfig(), providerOptions, nodeOptions }: Partial<Options> = {},
+  {
+    walletConfig = new WalletConfig(),
+    providerOptions,
+    nodeOptions,
+  }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {},
   runCleanup?: Dispose
 ): Promise<ReturnType> {
   const { wallets, coins } = walletConfig;

@@ -13,7 +13,6 @@ import {
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
-import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 

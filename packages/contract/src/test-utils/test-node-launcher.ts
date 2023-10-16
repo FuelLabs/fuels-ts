@@ -1,11 +1,10 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
-import type { Provider, ProviderOptions } from '@fuel-ts/providers';
-import type { LaunchNodeOptions } from '@fuel-ts/utils/test-utils';
+import type { Provider } from '@fuel-ts/providers';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
-import type { WalletConfig } from '@fuel-ts/wallet/test-utils';
+import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/wallet/test-utils';
 import { launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
 
 import type { DeployContractOptions } from '../contract-factory';
@@ -26,10 +25,7 @@ interface DeployContractConfig {
   options?: DeployContractOptions;
 }
 
-interface TestNodeLauncherOptions {
-  providerOptions: Partial<ProviderOptions>;
-  walletConfig: WalletConfig;
-  nodeOptions: LaunchNodeOptions;
+interface TestNodeLauncherOptions extends LaunchCustomProviderAndGetWalletsOptions {
   deployContracts: DeployContractConfig[];
 }
 
@@ -56,29 +52,7 @@ export class TestNodeLauncher {
     );
 
     try {
-      const contracts = [];
-
-      if (deployContracts.length > 0) {
-        const factories = deployContracts.map((config) => {
-          if (
-            config.walletIndex &&
-            (config.walletIndex < 0 || config.walletIndex >= wallets.length)
-          ) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_INPUT_PARAMETERS,
-              `Invalid walletIndex ${config.walletIndex}; wallets array contains ${wallets.length} elements.`
-            );
-          }
-
-          return TestNodeLauncher.prepareContractFactory(config, wallets[config.walletIndex ?? 0]);
-        });
-
-        for (let i = 0; i < factories.length; i++) {
-          const f = factories[i];
-          const contract = await f.factory.deployContract(f.deployConfig);
-          contracts.push(contract);
-        }
-      }
+      const contracts = await TestNodeLauncher.deployContracts(deployContracts, wallets);
 
       return {
         provider,
@@ -90,6 +64,34 @@ export class TestNodeLauncher {
       await cleanup();
       throw err;
     }
+  }
+
+  private static async deployContracts(
+    deployContracts: DeployContractConfig[],
+    wallets: WalletUnlocked[]
+  ) {
+    const contracts: Contract[] = [];
+
+    if (deployContracts.length === 0) return contracts;
+
+    const factories = deployContracts.map((config) => {
+      if (config.walletIndex && (config.walletIndex < 0 || config.walletIndex >= wallets.length)) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_INPUT_PARAMETERS,
+          `Invalid walletIndex ${config.walletIndex}; wallets array contains ${wallets.length} elements.`
+        );
+      }
+
+      return TestNodeLauncher.prepareContractFactory(config, wallets[config.walletIndex ?? 0]);
+    });
+
+    for (let i = 0; i < factories.length; i++) {
+      const f = factories[i];
+      const contract = await f.factory.deployContract(f.deployConfig);
+      contracts.push(contract);
+    }
+
+    return contracts;
   }
 
   private static prepareContractFactory(

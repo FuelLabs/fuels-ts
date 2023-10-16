@@ -326,7 +326,7 @@ describe('Provider', () => {
 
   it('can cacheUtxo [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
-      await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: -500 } });
+      await setupTestProvider({ providerOptions: { cacheUtxo: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
