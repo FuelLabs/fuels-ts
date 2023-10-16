@@ -24,16 +24,12 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/abi": "^5.7.0",
-    "@ethersproject/bignumber": "^5.7.0",
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/properties": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
-    "@ethersproject/strings": "^5.7.0",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "ethers": "^6.7.1",
     "type-fest": "^3.1.0"
   }
 }

@@ -1,10 +1,10 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
 import * as elliptic from 'elliptic';
+import { hexlify, concat, getBytesCopy } from 'ethers';
+import type { BytesLike } from 'ethers';
 
 /* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
  * which may not support all module.exports as named exports' error
@@ -45,12 +45,12 @@ class Signer {
 
     // Convert to byte array, normalize private key input allowing it to be BytesLike
     // like remove 0x prefix and accept array of bytes
-    const privateKeyBytes = arrayify(privateKey);
+    const privateKeyBytes = getBytesCopy(privateKey);
     const keyPair = getCurve().keyFromPrivate(privateKeyBytes, 'hex');
 
     // Slice(1) removes the encoding scheme from the public key
-    this.compressedPublicKey = hexlify(keyPair.getPublic(true, 'array'));
-    this.publicKey = hexlify(keyPair.getPublic(false, 'array').slice(1));
+    this.compressedPublicKey = hexlify(Uint8Array.from(keyPair.getPublic(true, 'array')));
+    this.publicKey = hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
     this.privateKey = hexlify(privateKeyBytes);
     this.address = Address.fromPublicKey(this.publicKey);
   }
@@ -64,8 +64,8 @@ class Signer {
    * @returns hashed signature
    */
   sign(data: BytesLike) {
-    const keyPair = getCurve().keyFromPrivate(arrayify(this.privateKey), 'hex');
-    const signature = keyPair.sign(arrayify(data), {
+    const keyPair = getCurve().keyFromPrivate(getBytesCopy(this.privateKey), 'hex');
+    const signature = keyPair.sign(getBytesCopy(data), {
       canonical: true,
     });
     const r = toBytes(signature.r, 32);
@@ -74,7 +74,7 @@ class Signer {
     // add recoveryParam to first s byte
     s[0] |= (signature.recoveryParam || 0) << 7;
 
-    return hexlify(concat([r, s]));
+    return concat([r, s]);
   }
 
   /**
@@ -84,11 +84,11 @@ class Signer {
    * @returns compressed point on the curve
    */
   addPoint(point: BytesLike) {
-    const p0 = getCurve().keyFromPublic(arrayify(this.compressedPublicKey));
-    const p1 = getCurve().keyFromPublic(arrayify(point));
+    const p0 = getCurve().keyFromPublic(getBytesCopy(this.compressedPublicKey));
+    const p1 = getCurve().keyFromPublic(getBytesCopy(point));
     const result = p0.getPublic().add(p1.getPublic());
 
-    return hexlify(result.encode('array', true));
+    return hexlify(Uint8Array.from(result.encode('array', true)));
   }
 
   /**
@@ -98,8 +98,8 @@ class Signer {
    * @param signature - hashed signature
    * @returns public key from signature from the
    */
-  static recoverPublicKey(data: BytesLike, signature: BytesLike) {
-    const signedMessageBytes = arrayify(signature);
+  static recoverPublicKey(data: BytesLike, signature: BytesLike): string {
+    const signedMessageBytes = getBytesCopy(signature);
     const r = signedMessageBytes.slice(0, 32);
     const s = signedMessageBytes.slice(32, 64);
     const recoveryParam = (s[0] & 0x80) >> 7;
@@ -108,11 +108,11 @@ class Signer {
     s[0] &= 0x7f;
 
     const publicKey = getCurve()
-      .recoverPubKey(arrayify(data), { r, s }, recoveryParam)
+      .recoverPubKey(getBytesCopy(data), { r, s }, recoveryParam)
       .encode('array', false)
       .slice(1);
 
-    return publicKey;
+    return hexlify(Uint8Array.from(publicKey));
   }
 
   /**
@@ -133,7 +133,7 @@ class Signer {
    * @returns random 32-byte hashed
    */
   static generatePrivateKey(entropy?: BytesLike) {
-    return entropy ? hash(concat([randomBytes(32), arrayify(entropy)])) : randomBytes(32);
+    return entropy ? hash(concat([randomBytes(32), getBytesCopy(entropy)])) : randomBytes(32);
   }
 
   /**
@@ -143,8 +143,8 @@ class Signer {
    * @returns extended publicKey
    */
   static extendPublicKey(publicKey: BytesLike) {
-    const keyPair = getCurve().keyFromPublic(arrayify(publicKey));
-    return hexlify(keyPair.getPublic(false, 'array').slice(1));
+    const keyPair = getCurve().keyFromPublic(getBytesCopy(publicKey));
+    return hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
   }
 }
 

@@ -1,4 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import type {
   TransactionResponse,
@@ -8,6 +7,7 @@ import type {
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import type { BytesLike } from 'ethers';
 
 import { Account } from './account';
 import { encryptKeystoreWallet } from './keystore-wallet';
