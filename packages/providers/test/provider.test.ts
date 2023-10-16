@@ -12,6 +12,7 @@ import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import * as GraphQL from 'graphql-request';
 
+import type { GqlGetCoinsToSpendQuery } from '../src/__generated__/operations';
 import Provider from '../src/provider';
 import { setupTestProvider } from '../src/test-utils';
 import type {
@@ -64,7 +65,7 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     const version = await provider.getVersion();
 
@@ -72,7 +73,7 @@ describe('Provider', () => {
   });
 
   it('can call()', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -137,7 +138,7 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -184,7 +185,7 @@ describe('Provider', () => {
 
   it('can get all chain info', async () => {
     // #region provider-definition
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const { consensusParameters } = await provider.getChain();
     // #endregion provider-definition
 
@@ -237,7 +238,7 @@ describe('Provider', () => {
   });
 
   it('can accept a custom fetch function', async () => {
-    using providerForUrl = await setupTestProvider();
+    await using providerForUrl = await setupTestProvider();
     const providerUrl = providerForUrl.url;
 
     const provider = await Provider.create(providerUrl, {
@@ -248,7 +249,7 @@ describe('Provider', () => {
 
   it('can force-produce blocks', async () => {
     // #region Provider-produce-blocks
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -269,7 +270,7 @@ describe('Provider', () => {
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -311,13 +312,13 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [undefined]', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     expect(provider.cache).toEqual(undefined);
   });
 
   it('can cacheUtxo [numerical]', async () => {
-    using provider = await setupTestProvider({ cacheUtxo: 2500 });
+    await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 2500 } });
 
     expect(provider.cache).toBeTruthy();
     expect(provider.cache?.ttl).toEqual(2_500);
@@ -325,13 +326,13 @@ describe('Provider', () => {
 
   it('can cacheUtxo [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
-      using provider = await setupTestProvider({ cacheUtxo: -500 });
+      await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     const transactionRequest = new ScriptTransactionRequest({});
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -341,7 +342,11 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    using provider = await setupTestProvider({ cacheUtxo: 1 });
+    await using provider = await setupTestProvider({
+      providerOptions: {
+        cacheUtxo: 1,
+      },
+    });
 
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -363,7 +368,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using provider = await setupTestProvider({ cacheUtxo: 10000 });
+    await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
 
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
@@ -421,7 +426,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    using provider = await setupTestProvider({ cacheUtxo: 10000 });
+    await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -496,7 +501,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using provider = await setupTestProvider({ cacheUtxo: 10000 });
+    await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -553,7 +558,7 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    using provider = await setupTestProvider({ cacheUtxo: 10000 });
+    await using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -640,7 +645,7 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
@@ -692,7 +697,7 @@ describe('Provider', () => {
   });
 
   it('can connect', async () => {
-    using provider = await setupTestProvider();
+    await using provider = await setupTestProvider();
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
