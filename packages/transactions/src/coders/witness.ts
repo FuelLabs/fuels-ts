@@ -1,5 +1,5 @@
-import { concat } from '@ethersproject/bytes';
 import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { concatBytes } from '@fuel-ts/utils';
 
 import { ByteArrayCoder } from './byte-array';
 
@@ -26,7 +26,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
     parts.push(new NumberCoder('u32').encode(value.dataLength));
     parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [Witness, number] {
