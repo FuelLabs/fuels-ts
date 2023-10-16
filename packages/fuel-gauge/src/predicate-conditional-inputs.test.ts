@@ -171,7 +171,7 @@ describe('PredicateConditionalInputs', () => {
       bn(aliceAssetABefore).add(bn(amountToTransfer)).toNumber()
     );
 
-    // predicate transfered the asset to alice
+    // predicate transferred the asset to alice
     expect(bn(predicateAssetAAfter).toNumber()).toBe(
       bn(predicateAssetABefore).sub(bn(amountToTransfer)).toNumber()
     );
