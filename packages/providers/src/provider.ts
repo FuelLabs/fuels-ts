@@ -13,7 +13,6 @@ import {
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
-import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -702,6 +701,7 @@ export default class Provider {
       filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const coins = result.coins.edges!.map((edge) => edge!.node!);
 
     return coins.map((coin) => ({
@@ -970,6 +970,7 @@ export default class Provider {
       filter: { owner: owner.toB256() },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const balances = result.balances.edges!.map((edge) => edge!.node!);
 
     return balances.map((balance) => ({
@@ -997,6 +998,7 @@ export default class Provider {
       owner: address.toB256(),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
