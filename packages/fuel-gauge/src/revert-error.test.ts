@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
-import type { Contract, WalletUnlocked } from 'fuels';
+import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
   ScriptResultDecoderError,
   SendMessageRevertError,
@@ -21,15 +21,17 @@ let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
 describe('Revert Error Testing', () => {
+  let gasPrice: BN;
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
       path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
     );
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    contractInstance = await factory.deployContract();
+    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
+    contractInstance = await factory.deployContract({ gasPrice });
   });
 
   it('can pass required checks [valid]', async () => {
@@ -38,6 +40,7 @@ describe('Revert Error Testing', () => {
 
     const { logs } = await contractInstance.functions
       .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
+      .txParams({ gasPrice })
       .call();
 
     expect(
@@ -55,7 +58,10 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(100);
 
     await expect(
-      contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call()
+      contractInstance.functions
+        .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
+        .txParams({ gasPrice })
+        .call()
     ).rejects.toThrow(RequireRevertError);
   });
 
@@ -64,7 +70,10 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(55);
 
     await expect(
-      contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call()
+      contractInstance.functions
+        .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
+        .txParams({ gasPrice })
+        .call()
     ).rejects.toThrow(RequireRevertError);
   });
 
@@ -73,7 +82,10 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(100);
 
     await expect(
-      contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call()
+      contractInstance.functions
+        .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
+        .txParams({ gasPrice })
+        .call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
 
@@ -94,14 +106,14 @@ describe('Revert Error Testing', () => {
    * https://fuellabs.github.io/sway/master/reference/documentation/operations/asset/transfer/address.html
    */
   it.skip('can throw TransferToAddressRevertError', async () => {
-    await expect(contractInstance.functions.failed_transfer_revert().call()).rejects.toThrow(
-      TransferToAddressRevertError
-    );
+    await expect(
+      contractInstance.functions.failed_transfer_revert().txParams({ gasPrice }).call()
+    ).rejects.toThrow(TransferToAddressRevertError);
   });
 
   it('can throw ScriptResultDecoderError', async () => {
-    await expect(contractInstance.functions.failed_transfer().call()).rejects.toThrow(
-      ScriptResultDecoderError
-    );
+    await expect(
+      contractInstance.functions.failed_transfer().txParams({ gasPrice }).call()
+    ).rejects.toThrow(ScriptResultDecoderError);
   });
 });

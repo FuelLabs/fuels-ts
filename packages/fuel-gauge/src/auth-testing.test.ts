@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
-import type { Contract, WalletUnlocked } from 'fuels';
+import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
   AssertFailedRevertError,
   ContractFactory,
@@ -15,11 +15,13 @@ import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debu
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
+let gasPrice: BN;
 
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
       path.join(
@@ -28,11 +30,14 @@ describe('Auth Testing', () => {
       )
     );
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    contractInstance = await factory.deployContract();
+    contractInstance = await factory.deployContract({ gasPrice });
   });
 
   it('can get is_caller_external', async () => {
-    const { value } = await contractInstance.functions.is_caller_external().call();
+    const { value } = await contractInstance.functions
+      .is_caller_external()
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toBeTruthy();
   });
@@ -40,6 +45,7 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
+      .txParams({ gasPrice })
       .call();
 
     expect(value).toBeTruthy();
@@ -47,7 +53,10 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
-      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
+      contractInstance.functions
+        .check_msg_sender({ value: getRandomB256() })
+        .txParams({ gasPrice })
+        .call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
 });
