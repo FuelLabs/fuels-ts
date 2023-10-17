@@ -1,5 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -10,6 +8,8 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import { getBytesCopy, hexlify } from 'ethers';
+import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';
@@ -96,7 +96,7 @@ describe('Provider', () => {
           Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
           Opcode::RET(REG_ONE)
         */
-        arrayify('0x504000ca504400ba3341100024040000'),
+        getBytesCopy('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
       inputs: CoinInputs,
       witnesses: ['0x'],
@@ -149,7 +149,7 @@ describe('Provider', () => {
           Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
           Opcode::RET(REG_ONE)
         */
-        arrayify('0x504000ca504400ba3341100024040000'),
+        getBytesCopy('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
     });
 
@@ -389,7 +389,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -448,7 +448,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -522,7 +522,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,
@@ -581,7 +581,7 @@ describe('Provider', () => {
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
+      id: getBytesCopy(EXPECTED[1]),
       owner: BaseAssetId,
       assetId: BaseAssetId,
       txPointer: BaseAssetId,

@@ -1,4 +1,3 @@
-import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
@@ -24,6 +23,7 @@ import {
   ReceiptType,
 } from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
+import { getBytesCopy } from 'ethers';
 
 import type { GqlReceipt } from '../__generated__/operations';
 import { GqlReceiptType } from '../__generated__/operations';
@@ -209,7 +209,7 @@ export function assembleReceiptByType(receipt: GqlReceipt) {
       const recipient = hexOrZero(receipt.recipient);
       const nonce = hexOrZero(receipt.nonce);
       const amount = bn(receipt.amount);
-      const data = receipt.data ? arrayify(receipt.data) : Uint8Array.from([]);
+      const data = receipt.data ? getBytesCopy(receipt.data) : Uint8Array.from([]);
       const digest = hexOrZero(receipt.digest);
 
       const messageId = ReceiptMessageOutCoder.getMessageId({

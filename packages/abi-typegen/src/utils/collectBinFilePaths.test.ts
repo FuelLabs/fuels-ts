@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify } from 'ethers';
 import { readFileSync } from 'fs';
 
 import { getProjectResources, ForcProjectsEnum } from '../../test/fixtures/forc-projects';

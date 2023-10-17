@@ -1,11 +1,17 @@
-import { Base58 } from '@ethersproject/basex';
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
-import { pbkdf2 } from '@ethersproject/pbkdf2';
-import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { english } from '@fuel-ts/wordlists';
+import type { BytesLike } from 'ethers';
+import {
+  concat,
+  hexlify,
+  dataSlice,
+  pbkdf2,
+  sha256,
+  computeHmac,
+  encodeBase58,
+  getBytesCopy,
+} from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {
@@ -22,8 +28,8 @@ import {
 // "Bitcoin seed"
 const MasterSecret = toUtf8Bytes('Bitcoin seed');
 // 4 byte: version bytes (mainnet: 0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private)
-const MainnetPRV = 0x0488ade4;
-const TestnetPRV = 0x04358394;
+const MainnetPRV = '0x0488ade4';
+const TestnetPRV = '0x04358394';
 export const MNEMONIC_SIZES = [12, 15, 18, 21, 24];
 
 function assertWordList(wordlist: Array<string>) {
@@ -106,9 +112,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static entropyToMnemonic(entropy: BytesLike, wordlist: Array<string> = english): string {
-    const entropyBytes = arrayify(entropy, {
-      allowMissingPrefix: true,
-    });
+    const entropyBytes = getBytesCopy(entropy);
 
     assertWordList(wordlist);
     assertEntropy(entropyBytes);
@@ -188,7 +192,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static masterKeysFromSeed(seed: string): Uint8Array {
-    const seedArray = arrayify(seed);
+    const seedArray = getBytesCopy(seed);
 
     if (seedArray.length < 16 || seedArray.length > 64) {
       throw new FuelError(
@@ -197,7 +201,7 @@ class Mnemonic {
       );
     }
 
-    return arrayify(computeHmac(SupportedAlgorithm.sha512, MasterSecret, seedArray));
+    return getBytesCopy(computeHmac('sha512', MasterSecret, seedArray));
   }
 
   /**
@@ -209,7 +213,7 @@ class Mnemonic {
    */
   static seedToExtendedKey(seed: string, testnet: boolean = false): string {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
-    const prefix = arrayify(testnet ? TestnetPRV : MainnetPRV);
+    const prefix = getBytesCopy(testnet ? TestnetPRV : MainnetPRV);
     const depth = '0x00';
     const fingerprint = '0x00000000';
     const index = '0x00000000';
@@ -225,9 +229,9 @@ class Mnemonic {
       chainCode,
       concat(['0x00', privateKey]),
     ]);
-    const checksum = hexDataSlice(sha256(sha256(extendedKey)), 0, 4);
+    const checksum = dataSlice(sha256(sha256(extendedKey)), 0, 4);
 
-    return Base58.encode(concat([extendedKey, checksum]));
+    return encodeBase58(concat([extendedKey, checksum]));
   }
 
   /**
@@ -244,7 +248,7 @@ class Mnemonic {
    */
   static generate(size: number = 32, extraEntropy: BytesLike = '') {
     const entropy = extraEntropy
-      ? sha256(concat([randomBytes(size), arrayify(extraEntropy)]))
+      ? sha256(concat([randomBytes(size), getBytesCopy(extraEntropy)]))
       : randomBytes(size);
     return Mnemonic.entropyToMnemonic(entropy);
   }

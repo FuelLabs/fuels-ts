@@ -9,6 +9,11 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -38,7 +43,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/address": "workspace:*",
@@ -62,14 +66,15 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
     "bundle-require": "^4.0.1",
     "chalk": "4",
     "chokidar": "^3.5.3",
     "commander": "^9.4.1",
     "esbuild": "^0.19.3",
+    "ethers": "^6.7.1",
     "glob": "^10.2.6",
     "handlebars": "^4.7.7",
     "joycon": "^3.1.1",

@@ -17,9 +17,6 @@ importers:
       '@changesets/get-github-info':
         specifier: ^0.5.2
         version: 0.5.2
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:packages/forc
@@ -78,8 +75,8 @@ importers:
         specifier: ^2.26.0
         version: 2.26.0(@typescript-eslint/parser@5.59.0)(eslint@8.38.0)
       eslint-plugin-jsdoc:
-        specifier: ^37.9.7
-        version: 37.9.7(eslint@8.38.0)
+        specifier: ^46.8.2
+        version: 46.8.2(eslint@8.38.0)
       eslint-plugin-jsx-a11y:
         specifier: ^6.6.1
         version: 6.6.1(eslint@8.38.0)
@@ -95,6 +92,9 @@ importers:
       eslint-plugin-tsdoc:
         specifier: ^0.2.17
         version: 0.2.17
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       glob:
         specifier: ^10.2.6
         version: 10.2.6
@@ -451,24 +451,6 @@ importers:
 
   packages/abi-coder:
     dependencies:
-      '@ethersproject/abi':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/bignumber':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/properties':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/strings':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -478,18 +460,21 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       type-fest:
         specifier: ^3.1.0
         version: 3.1.0
 
   packages/abi-typegen:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -502,6 +487,9 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       glob:
         specifier: ^10.2.6
         version: 10.2.6
@@ -533,12 +521,6 @@ importers:
 
   packages/address:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -554,6 +536,9 @@ importers:
       bech32:
         specifier: ^2.0.0
         version: 2.0.0
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
     devDependencies:
       '@fuel-ts/testcases':
         specifier: workspace:*
@@ -561,12 +546,6 @@ importers:
 
   packages/contract:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -597,6 +576,9 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
@@ -604,18 +586,15 @@ importers:
 
   packages/crypto:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
       ethereum-cryptography:
         specifier: ^2.1.2
         version: 2.1.2
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/errors:
     dependencies:
@@ -662,9 +641,6 @@ importers:
 
   packages/fuels:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -758,6 +734,9 @@ importers:
       esbuild:
         specifier: ^0.19.3
         version: 0.19.3
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       glob:
         specifier: ^10.2.6
         version: 10.2.6
@@ -801,12 +780,6 @@ importers:
 
   packages/hasher:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -822,6 +795,12 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       ramda:
         specifier: ^0.29.0
         version: 0.29.0
@@ -835,15 +814,6 @@ importers:
 
   packages/hdwallet:
     dependencies:
-      '@ethersproject/basex':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -856,6 +826,9 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/interfaces: {}
 
@@ -873,30 +846,15 @@ importers:
 
   packages/merkle:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/mnemonic:
     dependencies:
-      '@ethersproject/basex':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -906,12 +864,12 @@ importers:
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/predicate:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -945,6 +903,9 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
     devDependencies:
       '@fuel-ts/math':
         specifier: workspace:*
@@ -952,9 +913,6 @@ importers:
 
   packages/program:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -976,6 +934,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -985,6 +946,9 @@ importers:
       '@fuels/vm-asm':
         specifier: 0.36.1
         version: 0.36.1
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
@@ -992,15 +956,6 @@ importers:
 
   packages/providers:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/networks':
-        specifier: ^5.7.1
-        version: 5.7.1
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1025,6 +980,9 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       graphql:
         specifier: ^16.6.0
         version: 16.6.0
@@ -1068,9 +1026,6 @@ importers:
 
   packages/script:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1104,6 +1059,9 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
@@ -1111,12 +1069,6 @@ importers:
 
   packages/signer:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -1132,6 +1084,9 @@ importers:
       elliptic:
         specifier: ^6.5.4
         version: 6.5.4
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
     devDependencies:
       '@fuel-ts/testcases':
         specifier: workspace:*
@@ -1144,12 +1099,6 @@ importers:
 
   packages/transactions:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/sha2':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1162,9 +1111,18 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
 
   packages/utils:
     dependencies:
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       ramda:
         specifier: ^0.29.0
         version: 0.29.0
@@ -1172,9 +1130,6 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -1200,9 +1155,6 @@ importers:
 
   packages/wallet:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1248,6 +1200,9 @@ importers:
       '@fuels/vm-asm':
         specifier: 0.36.1
         version: 0.36.1
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
@@ -1310,6 +1265,9 @@ packages:
   /@adobe/css-tools@4.2.0:
     resolution: {integrity: sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==}
     dev: false
+
+  /@adraffy/ens-normalize@1.9.2:
+    resolution: {integrity: sha512-0h+FrQDqe2Wn+IIGFkTCd4aAwTJ+7834Ek1COohCyV26AXhwQ7WQaz+4F/nLOeVl/3BtWHOHLPsq46V8YB46Eg==}
 
   /@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.18.0)(algoliasearch@4.18.0)(search-insights@2.6.0):
     resolution: {integrity: sha512-009HdfugtGCdC4JdXUbVJClA0q0zh24yyePn+KUGk3rP7j8FEe/m5Yo/z65gn6nP/cM39PxpzqKrL7A6fP6PPw==}
@@ -3392,13 +3350,13 @@ packages:
       - search-insights
     dev: true
 
-  /@es-joy/jsdoccomment@0.20.1:
-    resolution: {integrity: sha512-oeJK41dcdqkvdZy/HctKklJNkt/jh+av3PZARrZEl+fs/8HaHeeYoAvEwOV0u5I6bArTF17JEsTZMY359e/nfQ==}
-    engines: {node: ^12 || ^14 || ^16 || ^17}
+  /@es-joy/jsdoccomment@0.40.1:
+    resolution: {integrity: sha512-YORCdZSusAlBrFpZ77pJjc5r1bQs5caPWtAu+WWmiSo+8XaUzseapVrfAtiRFbQWnrBxxLLEwF6f6ZG/UgCQCg==}
+    engines: {node: '>=16'}
     dependencies:
-      comment-parser: 1.3.0
+      comment-parser: 1.4.0
       esquery: 1.5.0
-      jsdoc-type-pratt-parser: 2.2.5
+      jsdoc-type-pratt-parser: 4.0.0
     dev: true
 
   /@esbuild-kit/cjs-loader@2.4.2:
@@ -3828,185 +3786,6 @@ packages:
   /@eslint/js@8.38.0:
     resolution: {integrity: sha512-IoD2MfUnOV58ghIHCiil01PcohxjbYR/qCxsoC+xNgUwh1EY8jOOrYmu3d3a71+tJJ23uscEV4X2HJWMsPJu4g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  /@ethersproject/abi@5.7.0:
-    resolution: {integrity: sha512-351ktp42TiRcYB3H1OP8yajPeAQstMW/yCFokj/AthP9bLHzQFPlOrxOcwYEDkUAICmOHljvN4K39OMTMUa9RA==}
-    dependencies:
-      '@ethersproject/address': 5.7.0
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.7.0
-      '@ethersproject/hash': 5.7.0
-      '@ethersproject/keccak256': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-      '@ethersproject/strings': 5.7.0
-    dev: false
-
-  /@ethersproject/abstract-provider@5.7.0:
-    resolution: {integrity: sha512-R41c9UkchKCpAqStMYUpdunjo3pkEvZC3FAwZn5S5MGbXoMQOHIdHItezTETxAO5bevtMApSyEhn9+CHcDsWBw==}
-    dependencies:
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/networks': 5.7.1
-      '@ethersproject/properties': 5.7.0
-      '@ethersproject/transactions': 5.7.0
-      '@ethersproject/web': 5.7.1
-    dev: false
-
-  /@ethersproject/abstract-signer@5.7.0:
-    resolution: {integrity: sha512-a16V8bq1/Cz+TGCkE2OPMTOUDLS3grCpdjoJCYNnVBbdYEMSgKrU0+B90s8b6H+ByYTBZN7a3g76jdIJi7UfKQ==}
-    dependencies:
-      '@ethersproject/abstract-provider': 5.7.0
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-    dev: false
-
-  /@ethersproject/address@5.7.0:
-    resolution: {integrity: sha512-9wYhYt7aghVGo758POM5nqcOMaE168Q6aRLJZwUmiqSrAungkG74gSSeKEIR7ukixesdRZGPgVqme6vmxs1fkA==}
-    dependencies:
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/keccak256': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/rlp': 5.7.0
-    dev: false
-
-  /@ethersproject/base64@5.7.0:
-    resolution: {integrity: sha512-Dr8tcHt2mEbsZr/mwTPIQAf3Ai0Bks/7gTw9dSqk1mQvhW3XvRlmDJr/4n+wg1JmCl16NZue17CDh8xb/vZ0sQ==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-    dev: false
-
-  /@ethersproject/basex@5.7.0:
-    resolution: {integrity: sha512-ywlh43GwZLv2Voc2gQVTKBoVQ1mti3d8HK5aMxsfu/nRDnMmNqaSJ3r3n85HBByT8OpoY96SXM1FogC533T4zw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/properties': 5.7.0
-    dev: false
-
-  /@ethersproject/bignumber@5.7.0:
-    resolution: {integrity: sha512-n1CAdIHRWjSucQO3MC1zPSVgV/6dy/fjL9pMrPP9peL+QxEg9wOsVqwD4+818B6LUEtaXzVHQiuivzRoxPxUGw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      bn.js: 5.2.1
-    dev: false
-
-  /@ethersproject/bytes@5.7.0:
-    resolution: {integrity: sha512-nsbxwgFXWh9NyYWo+U8atvmMsSdKJprTcICAkvbBffT75qDocbuggBU0SJiVK2MuTrp0q+xvLkTnGMPK1+uA9A==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-
-  /@ethersproject/constants@5.7.0:
-    resolution: {integrity: sha512-DHI+y5dBNvkpYUMiRQyxRBYBefZkJfo70VUkUAsRjcPs47muV9evftfZ0PJVCXYbAiCgght0DtcF9srFQmIgWA==}
-    dependencies:
-      '@ethersproject/bignumber': 5.7.0
-    dev: false
-
-  /@ethersproject/hash@5.7.0:
-    resolution: {integrity: sha512-qX5WrQfnah1EFnO5zJv1v46a8HW0+E5xuBBDTwMFZLuVTx0tbU2kkx15NqdjxecrLGatQN9FGQKpb1FKdHCt+g==}
-    dependencies:
-      '@ethersproject/abstract-signer': 5.7.0
-      '@ethersproject/address': 5.7.0
-      '@ethersproject/base64': 5.7.0
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/keccak256': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-      '@ethersproject/strings': 5.7.0
-    dev: false
-
-  /@ethersproject/keccak256@5.7.0:
-    resolution: {integrity: sha512-2UcPboeL/iW+pSg6vZ6ydF8tCnv3Iu/8tUmLLzWWGzxWKFFqOBQFLo6uLUv6BDrLgCDfN28RJ/wtByx+jZ4KBg==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      js-sha3: 0.8.0
-    dev: false
-
-  /@ethersproject/logger@5.7.0:
-    resolution: {integrity: sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==}
-
-  /@ethersproject/networks@5.7.1:
-    resolution: {integrity: sha512-n/MufjFYv3yFcUyfhnXotyDlNdFb7onmkSy8aQERi2PjNcnWQ66xXxa3XlS8nCcA8aJKJjIIMNJTC7tu80GwpQ==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/pbkdf2@5.7.0:
-    resolution: {integrity: sha512-oR/dBRZR6GTyaofd86DehG72hY6NpAjhabkhxgr3X2FpJtJuodEl2auADWBZfhDHgVCbu3/H/Ocq2uC6dpNjjw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-    dev: false
-
-  /@ethersproject/properties@5.7.0:
-    resolution: {integrity: sha512-J87jy8suntrAkIZtecpxEPxY//szqr1mlBaYlQ0r4RCaiD2hjheqF9s1LVE8vVuJCXisjIP+JgtK/Do54ej4Sw==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/rlp@5.7.0:
-    resolution: {integrity: sha512-rBxzX2vK8mVF7b0Tol44t5Tb8gomOHkj5guL+HhzQ1yBh/ydjGnpw6at+X6Iw0Kp3OzzzkcKp8N9r0W4kYSs9w==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/sha2@5.7.0:
-    resolution: {integrity: sha512-gKlH42riwb3KYp0reLsFTokByAKoJdgFCwI+CCiX/k+Jm2mbNs6oOaCjYQSlI1+XBVejwH2KrmCbMAT/GnRDQw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      hash.js: 1.1.7
-    dev: false
-
-  /@ethersproject/signing-key@5.7.0:
-    resolution: {integrity: sha512-MZdy2nL3wO0u7gkB4nA/pEf8lu1TlFswPNmy8AiYkfKTdO6eXBJyUdmHO/ehm/htHw9K/qF8ujnTyUAD+Ry54Q==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-      bn.js: 5.2.1
-      elliptic: 6.5.4
-      hash.js: 1.1.7
-    dev: false
-
-  /@ethersproject/strings@5.7.0:
-    resolution: {integrity: sha512-/9nu+lj0YswRNSH0NXYqrh8775XNyEdUQAuf3f+SmOrnVewcJ5SBNAjF7lpgehKi4abvNNXyf+HX86czCdJ8Mg==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.7.0
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/transactions@5.7.0:
-    resolution: {integrity: sha512-kmcNicCp1lp8qanMTC3RIikGgoJ80ztTyvtsFvCYpSCfkjhD0jZ2LOrnbcuxuToLIUYYf+4XwD1rP+B/erDIhQ==}
-    dependencies:
-      '@ethersproject/address': 5.7.0
-      '@ethersproject/bignumber': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/constants': 5.7.0
-      '@ethersproject/keccak256': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-      '@ethersproject/rlp': 5.7.0
-      '@ethersproject/signing-key': 5.7.0
-    dev: false
-
-  /@ethersproject/web@5.7.1:
-    resolution: {integrity: sha512-Gueu8lSvyjBWL4cYsWsjh6MtMwM0+H4HvqFPZfB6dV8ctbP9zFAO73VG1cMWae0FLPCtz0peKPpZY8/ugJJX2w==}
-    dependencies:
-      '@ethersproject/base64': 5.7.0
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/properties': 5.7.0
-      '@ethersproject/strings': 5.7.0
-    dev: false
 
   /@fuels/vm-asm@0.36.1:
     resolution: {integrity: sha512-MXtNDk0WXONIrDJOlk07+X7GegpCz2hfbAgSIWycOD0th2z1GndvMqBryiw/pTVDHLnHe+5TGIODLsprI4RiEw==}
@@ -5227,10 +5006,16 @@ packages:
       '@noble/hashes': 1.3.1
     dev: false
 
+  /@noble/hashes@1.1.2:
+    resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
+
   /@noble/hashes@1.3.1:
     resolution: {integrity: sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==}
     engines: {node: '>= 16'}
     dev: false
+
+  /@noble/secp256k1@1.7.1:
+    resolution: {integrity: sha512-hOUk6AyBFmqVrv7k5WAw/LpszxVbj9gGN4JRkIX52fdFAj1UA61KXmZDvqVEm+pOyec3+fIeZB02LYa/pWOArw==}
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -6069,6 +5854,9 @@ packages:
 
   /@types/node@16.18.34:
     resolution: {integrity: sha512-VmVm7gXwhkUimRfBwVI1CHhwp86jDWR04B5FGebMMyxV90SlCmFujwUHrxTD4oO+SOYU86SoxvhgeRQJY7iXFg==}
+
+  /@types/node@18.15.13:
+    resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
 
   /@types/node@18.15.3:
     resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
@@ -7027,6 +6815,9 @@ packages:
       regex-parser: 2.2.11
     dev: false
 
+  /aes-js@4.0.0-beta.5:
+    resolution: {integrity: sha512-G965FqalsNyrPqgEGON7nIx1e/OVENSgiEIzyC63haUMuvNnwIgIjMs52hlTCKhkBny7A2ORNlfY9Zu+jmGk1Q==}
+
   /agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
@@ -7173,6 +6964,11 @@ packages:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
+
+  /are-docs-informative@0.0.2:
+    resolution: {integrity: sha512-ixiS0nLNNG5jNQzgZJNoUpBKdo9yTYZMGJ+QgT2jmjR7G7+QHRCc4v6LQ3NgE7EBJq+o0ams3waJwkrlBom8Ig==}
+    engines: {node: '>=14'}
+    dev: true
 
   /arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
@@ -7763,7 +7559,6 @@ packages:
   /builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
-    dev: false
 
   /bundle-require@4.0.1(esbuild@0.17.19):
     resolution: {integrity: sha512-9NQkRHlNdNpDBGmLpngF3EFDcwodhMUuLz9PaWYciVcQF9SE4LFjM2DB/xV1Li5JiuDMv7ZUWuC3rGbqR0MAXQ==}
@@ -8162,8 +7957,8 @@ packages:
     engines: {node: ^12.20.0 || >=14}
     dev: false
 
-  /comment-parser@1.3.0:
-    resolution: {integrity: sha512-hRpmWIKgzd81vn0ydoWoyPoALEOnF4wt8yKD35Ib1D6XC2siLiYaiqfGkYrunuKdsXGwpBpHU3+9r+RVw2NZfA==}
+  /comment-parser@1.4.0:
+    resolution: {integrity: sha512-QLyTNiZ2KDOibvFPlZ6ZngVsZ/0gYnE6uTXi5aoDg8ed3AkJAz4sEje3Y8a29hQ1s6A99MZXe47fLAXQ1rTqaw==}
     engines: {node: '>= 12.0.0'}
     dev: true
 
@@ -9453,20 +9248,21 @@ packages:
       - typescript
     dev: false
 
-  /eslint-plugin-jsdoc@37.9.7(eslint@8.38.0):
-    resolution: {integrity: sha512-8alON8yYcStY94o0HycU2zkLKQdcS+qhhOUNQpfONHHwvI99afbmfpYuPqf6PbLz5pLZldG3Te5I0RbAiTN42g==}
-    engines: {node: ^12 || ^14 || ^16 || ^17}
+  /eslint-plugin-jsdoc@46.8.2(eslint@8.38.0):
+    resolution: {integrity: sha512-5TSnD018f3tUJNne4s4gDWQflbsgOycIKEUBoCLn6XtBMgNHxQFmV8vVxUtiPxAQq8lrX85OaSG/2gnctxw9uQ==}
+    engines: {node: '>=16'}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
     dependencies:
-      '@es-joy/jsdoccomment': 0.20.1
-      comment-parser: 1.3.0
+      '@es-joy/jsdoccomment': 0.40.1
+      are-docs-informative: 0.0.2
+      comment-parser: 1.4.0
       debug: 4.3.4
       escape-string-regexp: 4.0.0
       eslint: 8.38.0
       esquery: 1.5.0
-      regextras: 0.8.0
-      semver: 7.3.8
+      is-builtin-module: 3.2.1
+      semver: 7.5.4
       spdx-expression-parse: 3.0.1
     transitivePeerDependencies:
       - supports-color
@@ -9713,6 +9509,21 @@ packages:
       '@scure/bip32': 1.3.1
       '@scure/bip39': 1.2.1
     dev: false
+
+  /ethers@6.7.1:
+    resolution: {integrity: sha512-qX5kxIFMfg1i+epfgb0xF4WM7IqapIIu50pOJ17aebkxxa4BacW5jFrQRmCJpDEg2ZK2oNtR5QjrQ1WDBF29dA==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@adraffy/ens-normalize': 1.9.2
+      '@noble/hashes': 1.1.2
+      '@noble/secp256k1': 1.7.1
+      '@types/node': 18.15.13
+      aes-js: 4.0.0-beta.5
+      tslib: 2.4.0
+      ws: 8.5.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   /event-target-polyfill@0.0.3:
     resolution: {integrity: sha512-ZMc6UuvmbinrCk4RzGyVmRyIsAyxMRlp4CqSrcQRO8Dy0A9ldbiRy5kdtBj4OtP7EClGdqGfIqo9JmOClMsGLQ==}
@@ -10941,6 +10752,13 @@ packages:
   /is-buffer@2.0.5:
     resolution: {integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==}
     engines: {node: '>=4'}
+    dev: true
+
+  /is-builtin-module@3.2.1:
+    resolution: {integrity: sha512-BSLE3HnV2syZ0FK0iMA/yUGplUeMmNz4AW5fnTunbCIqZi4vG3WjJT9FHMy5D69xmAYBHXQhJdALdpwVxV501A==}
+    engines: {node: '>=6'}
+    dependencies:
+      builtin-modules: 3.3.0
     dev: true
 
   /is-callable@1.2.7:
@@ -12284,10 +12102,6 @@ packages:
   /js-sdsl@4.4.1:
     resolution: {integrity: sha512-6Gsx8R0RucyePbWqPssR8DyfuXmLBooYN5cZFZKjHGnQuaf7pEzhtpceagJxVu4LqhYY5EYA7nko3FmeHZ1KbA==}
 
-  /js-sha3@0.8.0:
-    resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
-    dev: false
-
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -12304,8 +12118,8 @@ packages:
     dependencies:
       argparse: 2.0.1
 
-  /jsdoc-type-pratt-parser@2.2.5:
-    resolution: {integrity: sha512-2a6eRxSxp1BW040hFvaJxhsCMI9lT8QB8t14t+NY5tC5rckIR0U9cr2tjOeaFirmEOy6MHvmJnY7zTBHq431Lw==}
+  /jsdoc-type-pratt-parser@4.0.0:
+    resolution: {integrity: sha512-YtOli5Cmzy3q4dP26GraSOeAhqecewG04hoO8DY56CH4KJ9Fvv5qKWUCCo3HZob7esJQHCv6/+bnTy72xZZaVQ==}
     engines: {node: '>=12.0.0'}
     dev: true
 
@@ -15259,11 +15073,6 @@ packages:
       unicode-match-property-value-ecmascript: 2.1.0
     dev: false
 
-  /regextras@0.8.0:
-    resolution: {integrity: sha512-k519uI04Z3SaY0fLX843MRXnDeG2+vHOFsyhiPZvNLe7r8rD2YNRjq4BQLZZ0oAr2NrtvZlICsXysGNFPGa3CQ==}
-    engines: {node: '>=0.1.14'}
-    dev: true
-
   /regjsparser@0.9.1:
     resolution: {integrity: sha512-dQUtn90WanSNl+7mQKcXAgZxvUe7Z0SqXlgzv0za4LwiUhyzBC58yQO3liFoUgu8GiJVInAhJjkj1N0EtQ5nkQ==}
     hasBin: true
@@ -15673,6 +15482,14 @@ packages:
 
   /semver@7.5.3:
     resolution: {integrity: sha512-QBlUtyVk/5EeHbi7X0fw6liDZc7BBmEaSYn01fMU1OUYbf6GPsbTtd8WmnqbI20SeycoHSeiybkE/q1Q+qlThQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      lru-cache: 6.0.0
+    dev: true
+
+  /semver@7.5.4:
+    resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -16757,6 +16574,9 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+
+  /tslib@2.4.0:
+    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
   /tslib@2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
@@ -17987,6 +17807,18 @@ packages:
     peerDependencies:
       bufferutil: ^4.0.1
       utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
+  /ws@8.5.0:
+    resolution: {integrity: sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
     peerDependenciesMeta:
       bufferutil:
         optional: true
