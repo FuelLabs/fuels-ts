@@ -11,7 +11,6 @@ import {
   ContractFactory,
   BaseAssetId,
   FUEL_NETWORK_URL,
-  BN,
 } from 'fuels';
 import { join } from 'path';
 
