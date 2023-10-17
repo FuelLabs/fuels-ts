@@ -1,6 +1,6 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { FuelError, type ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
+import type { BytesLike } from 'ethers';
 
 import type { Option } from './option';
 

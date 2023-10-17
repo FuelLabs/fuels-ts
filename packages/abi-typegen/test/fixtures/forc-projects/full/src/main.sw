@@ -2,6 +2,8 @@ contract;
 
 use std::vm::evm::evm_address::EvmAddress;
 use std::b512::B512;
+use std::string::String;
+use std::bytes::Bytes;
 
 enum MyEnum {
     Checked: (),
@@ -42,6 +44,9 @@ abi MyContract {
     fn types_option(x: Option<u8>) -> Option<u8>;
     fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct>;
     fn types_evm_address(x: EvmAddress) -> EvmAddress;
+    fn types_bytes(x: Bytes) -> Bytes;
+    fn types_raw_slice(x: raw_slice) -> raw_slice;
+    fn types_std_string(x: String) -> String;
 }
 
 impl MyContract for Contract {
@@ -101,5 +106,14 @@ impl MyContract for Contract {
     }
     fn types_evm_address(x: EvmAddress) -> EvmAddress {
         EvmAddress::from(0x0606060606060606060606060606060606060606060606060606060606060606)
+    }
+    fn types_bytes(x: Bytes) -> Bytes {
+        x
+    }
+    fn types_raw_slice(x: raw_slice) -> raw_slice {
+        x
+    }
+    fn types_std_string(x: String) -> String {
+        x
     }
 }

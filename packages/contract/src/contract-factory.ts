@@ -1,5 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -9,8 +7,9 @@ import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers'
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
+import { getBytesCopy, type BytesLike } from 'ethers';
 
-import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
+import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /**
  * Options for deploying a contract.
@@ -44,7 +43,7 @@ export default class ContractFactory {
     accountOrProvider: Account | Provider | null = null
   ) {
     // Force the bytecode to be a byte array
-    this.bytecode = arrayify(bytecode);
+    this.bytecode = getBytesCopy(bytecode);
 
     if (abi instanceof Interface) {
       this.interface = abi;
@@ -93,8 +92,8 @@ export default class ContractFactory {
   createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
-        key: includeHexPrefix(key),
-        value: includeHexPrefix(value),
+        key: hexlifyWithPrefix(key),
+        value: hexlifyWithPrefix(value),
       }))
       .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
@@ -176,7 +175,7 @@ export default class ContractFactory {
 
         const encoded = this.interface.encodeConfigurable(key, value as InputValue);
 
-        const bytes = arrayify(this.bytecode);
+        const bytes = getBytesCopy(this.bytecode);
 
         bytes.set(encoded, offset);
 

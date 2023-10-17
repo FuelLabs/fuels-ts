@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify } from 'ethers';
 import { existsSync, readFileSync } from 'fs';
 
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';

@@ -1,13 +1,18 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Interface, Contract, BytesLike, WalletUnlocked, JsonAbi } from 'fuels';
+import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
 import { Script, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
-const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
+const deployContract = async (
+  factory: ContractFactory,
+  provider: Provider,
+  useCache: boolean = true
+) => {
   if (contractInstance && useCache) return contractInstance;
-  contractInstance = await factory.deployContract();
+  const { minGasPrice } = provider.getGasConfig();
+  contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
   return contractInstance;
 };
 
@@ -32,7 +37,7 @@ export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, cache);
+  const contract = await deployContract(factory, wallet.provider, cache);
   return contract;
 };
 

@@ -6,6 +6,7 @@ import type { IRawAbi } from '../../../src/index';
 export enum ForcProjectsEnum {
   ARRAY_OF_ENUMS = 'array-of-enums',
   ARRAY_WITH_GENERICS = 'array-with-generics',
+  BYTES = 'bytes',
   ENUM_OF_ENUMS = 'enum-of-enums',
   ENUM_OF_STRUCTS = 'enum-of-structs',
   ENUM_SIMPLE = 'enum-simple',
@@ -18,8 +19,10 @@ export enum ForcProjectsEnum {
   OPTION_SIMPLE = 'option-simple',
   PREDICATE = 'predicate',
   PREDICATE_WITH_CONFIGURABLE = 'predicate-with-configurable',
+  RAW_SLICE = 'raw-slice',
   SCRIPT = 'script',
   SCRIPT_WITH_CONFIGURABLE = 'script-with-configurable',
+  STD_STRING = 'std-string',
   STRUCT_NESTED = 'struct-nested',
   STRUCT_SIMPLE = 'struct-simple',
   STRUCT_WITH_ARRAY = 'struct-with-array',

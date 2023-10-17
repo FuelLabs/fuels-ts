@@ -1,5 +1,5 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
+import type { BytesLike } from 'ethers';
+import { sha256 } from 'ethers';
 
 /**
  * The primary hash function for Fuel

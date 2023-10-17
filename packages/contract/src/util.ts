@@ -1,9 +1,8 @@
-import type { BytesLike, DataOptions } from '@ethersproject/bytes';
-import { hexlify, arrayify, concat } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
+import type { BytesLike } from 'ethers';
+import { sha256, hexlify, concat, getBytesCopy } from 'ethers';
 
 /**
  * @hidden
@@ -15,7 +14,7 @@ import { chunkAndPadBytes } from '@fuel-ts/utils';
  */
 export const getContractRoot = (bytecode: BytesLike): string => {
   const chunkSize = 16 * 1024;
-  const bytes = arrayify(bytecode);
+  const bytes = getBytesCopy(bytecode);
   const chunks = chunkAndPadBytes(bytes, chunkSize);
 
   return calcRoot(chunks.map((c) => hexlify(c)));
@@ -53,7 +52,7 @@ export const getContractId = (
   salt: BytesLike,
   stateRoot: BytesLike
 ): string => {
-  const root = getContractRoot(arrayify(bytecode));
+  const root = getContractRoot(getBytesCopy(bytecode));
   const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
   return contractId;
 };
@@ -64,11 +63,9 @@ export const getContractId = (
  * Ensures that a string is hexlified.
  *
  * @param value - The value to be hexlified.
- * @param options - Options for hexlify.
- * @returns The input value hexlified.
+ * @returns The input value hexlified with prefix.
  */
-export const includeHexPrefix = (value: string, options?: DataOptions) =>
-  hexlify(value, {
-    ...options,
-    allowMissingPrefix: true,
-  });
+export const hexlifyWithPrefix = (value: string) => {
+  if (value.startsWith('0x')) return hexlify(value);
+  return hexlify(`0x${value}`);
+};
