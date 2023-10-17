@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.63.0
+
+### Minor Changes
+
+- upgrade fuel-core to 0.20.7, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1357](https://github.com/FuelLabs/fuels-ts/pull/1357))
+
 ## 0.62.0
 
 ## 0.61.0
