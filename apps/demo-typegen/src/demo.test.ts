@@ -4,8 +4,6 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
-import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
-
 import { DemoContractAbi__factory } from './generated-types';
 import bytecode from './generated-types/DemoContractAbi.hex';
 
@@ -43,10 +41,7 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
 
     // Deploy
-    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice,
-      storageSlots,
-    });
+    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, { gasPrice });
 
     // Call
     const { value } = await contract.functions.return_input(1337).txParams({ gasPrice }).call();
