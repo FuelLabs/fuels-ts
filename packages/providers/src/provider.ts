@@ -701,8 +701,7 @@ export default class Provider {
       filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const coins = result.coins.edges!.map((edge) => edge!.node!);
+    const coins = result.coins.edges.map((edge) => edge.node);
 
     return coins.map((coin) => ({
       id: coin.utxoId,
