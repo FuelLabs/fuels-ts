@@ -996,8 +996,7 @@ export default class Provider {
       owner: address.toB256(),
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const messages = result.messages.edges!.map((edge) => edge!.node!);
+    const messages = result.messages.edges.map((edge) => edge.node);
 
     return messages.map((message) => ({
       messageId: InputMessageCoder.getMessageId({
