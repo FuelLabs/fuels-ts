@@ -1,10 +1,4 @@
-## Auto-loading Storage Slots
-
-Code generated using [Typegen](../abi-typegen//generating-types-from-abi.md) automatically [does this](../abi-typegen/using-generated-types.md#autoloading-of-storage-slots) for you.
-
-However, you can customize it like below.
-
-## Using JSON file
+# Storage Slots
 
 When deploying a contract, you can specify the custom storage slots that you want to use.
 
@@ -17,3 +11,7 @@ In the above example, we directly imported the storage slots from a JSON file ge
 Instead of importing from a file, you can also specify the custom storage slots directly in your code:
 
 <<< @/../../../packages/fuel-gauge/src/storage-test-contract.test.ts#contract-deployment-storage-slots-inline{ts:line-numbers}
+
+## Auto-load of Storage Slots
+
+Code generated using [Typegen](../abi-typegen//generating-types-from-abi.md) automatically [load](../abi-typegen/using-generated-types.md#autoloading-of-storage-slots) Storage Slots for you.
