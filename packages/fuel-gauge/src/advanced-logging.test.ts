@@ -8,15 +8,7 @@ const advancedLoggingOtherPath = getContractDir('advanced-logging-other-contract
 
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: advancedLoggingPath }],
-    });
-
-    const {
-      contracts: [contract],
-    } = nodeLauncherResult;
-
-    const { value, logs } = await contract.functions.test_function().call();
+    const { value, logs } = await contractInstance.functions.test_function().call();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
@@ -69,20 +61,16 @@ describe('Advanced Logging', () => {
     } = nodeLauncherResult;
 
     const { value, logs } = await contract.functions.test_function_with_require(1, 1).call();
+    const { value, logs } = await contractInstance.functions
+      .test_function_with_require(1, 1)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
   });
 
   it('can get log data from require [condition=false]', async () => {
-    await using nodeLauncherResult = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: advancedLoggingPath }],
-    });
-
-    const {
-      contracts: [contractInstance],
-    } = nodeLauncherResult;
-
     const invocation = contractInstance.functions.test_function_with_require(1, 3);
     try {
       await invocation.call();
@@ -124,9 +112,9 @@ describe('Advanced Logging', () => {
     } = nodeLauncherResult;
 
     const INPUT = 3;
-    const { value, logs } = await contract.functions
-      .test_log_from_other_contract(INPUT, otherContract.id)
-      .addContracts([otherContract])
+    const { value, logs } = await contractInstance.functions
+      .test_log_from_other_contract(INPUT, otherContractInstance.id.toB256())
+      .addContracts([otherContractInstance])
       .call();
 
     expect(value).toBeTruthy();
