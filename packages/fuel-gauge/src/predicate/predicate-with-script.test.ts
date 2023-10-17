@@ -29,7 +29,7 @@ describe('Predicate', () => {
       gasPrice = provider.getGasConfig().minGasPrice;
     });
 
-    it.skip('calls a predicate and uses proceeds for a script call', async () => {
+    it('calls a predicate and uses proceeds for a script call', async () => {
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
         scriptBytes,
@@ -46,7 +46,7 @@ describe('Predicate', () => {
 
       // setup predicate
       const amountToPredicate = 500_000;
-      const amountToReceiver = 500_000;
+      const amountToReceiver = 110_000;
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         provider,
@@ -68,22 +68,23 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
 
-      await tx.waitForResult();
+      const { fee: predicateTxFee } = await tx.waitForResult();
+
+      const {
+        transactionResult: { fee: receiverTxFee },
+      } = await scriptInstance.functions.main(scriptInput).txParams({ gasPrice }).call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
-
-      // calling the script with the receiver account (with resources)
-      await expect(
-        scriptInstance.functions.main(scriptInput).txParams({ gasPrice }).call()
-      ).resolves.toBeTruthy();
 
       const remainingPredicateBalance = toNumber(await predicate.getBalance());
 
       expect(toNumber(initialReceiverBalance)).toBe(0);
-      expect(initialReceiverBalance + amountToReceiver).toEqual(finalReceiverBalance);
+      expect(initialReceiverBalance + amountToReceiver - receiverTxFee.toNumber()).toEqual(
+        finalReceiverBalance
+      );
 
       expect(remainingPredicateBalance).toEqual(
-        amountToPredicate + initialPredicateBalance - amountToReceiver
+        amountToPredicate + initialPredicateBalance - amountToReceiver - predicateTxFee.toNumber()
       );
     });
   });
