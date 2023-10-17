@@ -58,8 +58,7 @@ export const calculateTransactionFee = ({
 }: CalculateTransactionFeeParams) => {
   const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
 
-  // TODO: Consider gas used by predicates
-  const minGas = bytesGas.add(0); // add gas used per predicates
+  const minGas = bytesGas;
   const maxGas = bytesGas.add(gasLimit);
 
   const minGasToPay = bn(Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber()));
