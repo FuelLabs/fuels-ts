@@ -969,8 +969,7 @@ export default class Provider {
       filter: { owner: owner.toB256() },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const balances = result.balances.edges!.map((edge) => edge!.node!);
+    const balances = result.balances.edges.map((edge) => edge.node);
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
