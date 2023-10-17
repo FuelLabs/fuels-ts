@@ -1,11 +1,16 @@
 {
   "name": "@fuel-ts/utils",
-  "version": "0.61.0",
+  "version": "0.62.0",
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -36,11 +41,11 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "ethers": "^6.7.1",
     "ramda": "^0.29.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/errors": "workspace:*"
   }
 }

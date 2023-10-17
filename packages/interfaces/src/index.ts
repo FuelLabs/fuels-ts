@@ -14,6 +14,8 @@ export type B256Address = string;
 
 export type B256AddressEvm = `0x000000000000000000000000${string}`;
 
+export type Bytes = Uint8Array;
+
 /**
  * @prop value - A 256 bit hash string with the first 12 bytes cleared
  */

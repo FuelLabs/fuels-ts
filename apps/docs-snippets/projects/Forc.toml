@@ -20,4 +20,7 @@ members = [
   "whitelisted-address-predicate",
   "echo-evm-address",
   "script-transfer-to-contract",
+  "echo-bytes",
+  "echo-raw-slice",
+  "echo-std-string",
 ]

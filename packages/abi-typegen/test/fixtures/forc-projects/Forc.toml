@@ -2,6 +2,7 @@
 members = [
   "./array-of-enums",
   "./array-with-generics",
+  "./bytes",
   "./enum-of-enums",
   "./enum-of-structs",
   "./enum-simple",
@@ -14,8 +15,10 @@ members = [
   "./option-simple",
   "./predicate",
   "./predicate-with-configurable",
+  "./raw-slice",
   "./script",
   "./script-with-configurable",
+  "./std-string",
   "./struct-nested",
   "./struct-simple",
   "./struct-with-array",
