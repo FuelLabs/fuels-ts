@@ -860,7 +860,7 @@ describe('Provider', () => {
     expect(estimateTxSpy).toHaveBeenCalled();
   });
 
-  it.only('throws when gas price is lower than min tx gas price', async () => {
+  it('throws when gas price is lower than min tx gas price', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const gasPrice = 1;
     const minGasPrice = bn(1000);
