@@ -42,15 +42,16 @@ const callScript = async <TData, TResult>(
   result: TResult;
   response: TransactionResponse;
 }> => {
+  const { gasPriceFactor, minGasPrice } = account.provider.getGasConfig();
+
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
+    gasPrice: minGasPrice,
   });
   request.setScript(script, data);
 
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
-
-  const { gasPriceFactor } = account.provider.getGasConfig();
 
   requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
 

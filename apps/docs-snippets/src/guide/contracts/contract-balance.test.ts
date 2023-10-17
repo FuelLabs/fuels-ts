@@ -6,9 +6,13 @@ import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
+  let gasPrice: BN;
+  let provider: Provider;
 
   beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
+    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
   it('should successfully get a contract balance', async () => {
@@ -17,8 +21,6 @@ describe(__filename, () => {
 
     const amountToForward = 40;
     const amountToTransfer = 10;
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const recipient = Wallet.generate({
       provider,
@@ -29,6 +31,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
+      .txParams({ gasPrice })
       .call();
 
     const contractBalance = await contract.getBalance(BaseAssetId);

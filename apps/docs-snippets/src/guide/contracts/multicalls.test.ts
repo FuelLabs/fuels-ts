@@ -8,9 +8,11 @@ describe(__filename, () => {
   let echoContract: Contract;
   let counterContract: Contract;
   let contextContract: Contract;
+  let gasPrice: BN;
 
   beforeAll(async () => {
     const wallet = await getTestWallet();
+    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
 
     const counterArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
     const echoArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
@@ -32,11 +34,12 @@ describe(__filename, () => {
       wallet
     );
 
-    echoContract = await factory1.deployContract();
+    echoContract = await factory1.deployContract({ gasPrice });
     counterContract = await factory2.deployContract({
       storageSlots: counterArtifacts.storageSlots,
+      gasPrice,
     });
-    contextContract = await factory3.deployContract();
+    contextContract = await factory3.deployContract({ gasPrice });
   });
 
   it('should successfully submit multiple calls from the same contract function', async () => {
@@ -47,6 +50,7 @@ describe(__filename, () => {
         counterContract.functions.increment_count(2),
         counterContract.functions.increment_count(4),
       ])
+      .txParams({ gasPrice })
       .call();
 
     const initialValue = new BN(results[0]).toNumber();
@@ -60,11 +64,13 @@ describe(__filename, () => {
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-2
-    const chain = echoContract.multiCall([
-      echoContract.functions.echo_u8(17),
-      counterContract.functions.get_count(),
-      counterContract.functions.increment_count(5),
-    ]);
+    const chain = echoContract
+      .multiCall([
+        echoContract.functions.echo_u8(17),
+        counterContract.functions.get_count(),
+        counterContract.functions.increment_count(5),
+      ])
+      .txParams({ gasPrice });
 
     const { value: results } = await chain.call();
 
@@ -86,6 +92,7 @@ describe(__filename, () => {
           forward: [100, BaseAssetId],
         }),
       ])
+      .txParams({ gasPrice })
       .call();
 
     const echoedValue = results[0];
