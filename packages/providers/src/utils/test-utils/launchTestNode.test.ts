@@ -5,16 +5,10 @@ import fsAsync from 'fs/promises';
 import http from 'http';
 import { parse } from 'url';
 
-import { defaultChainConfig } from './defaultChainConfig';
-import { launchNode } from './launchNode';
+import { sleep } from '../sleep';
 
-function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-}
+import { defaultChainConfig } from './defaultChainConfig';
+import { launchTestNode } from './launchTestNode';
 
 async function nodeIsRunning(ip: string, port: string) {
   return new Promise((resolve) => {
@@ -37,7 +31,7 @@ describe('launchNode', () => {
       async () => {
         const badCoin = { amount: '0', asset_id: '3212', owner: '4343' };
 
-        await launchNode({
+        await launchTestNode({
           chainConfig: {
             ...defaultChainConfig,
             initial_state: {
@@ -54,7 +48,7 @@ describe('launchNode', () => {
   });
 
   it('cleanup kills the started node', async () => {
-    const { cleanup, ip, port } = await launchNode();
+    const { cleanup, ip, port } = await launchTestNode();
     expect(await nodeIsRunning(ip, port)).toBe(true);
 
     await cleanup();
@@ -64,7 +58,7 @@ describe('launchNode', () => {
 
   it('can launch a node on a specific port', async () => {
     const port = '5678';
-    const { cleanup, ip } = await launchNode({ port });
+    const { cleanup, ip } = await launchTestNode({ port });
     expect(await nodeIsRunning(ip, port)).toBe(true);
 
     await cleanup();
@@ -73,7 +67,7 @@ describe('launchNode', () => {
   it('creates a temporary config file on launch and deletes it on cleanup', async () => {
     const fsSpy = jest.spyOn(fsAsync, 'writeFile');
 
-    const { cleanup } = await launchNode();
+    const { cleanup } = await launchTestNode();
 
     const tempFilePath = fsSpy.mock.calls[0][0] as string;
     expect(fs.existsSync(tempFilePath));
@@ -85,7 +79,7 @@ describe('launchNode', () => {
 
   it("can be given a logger function to access the node's logs as they're printed out", async () => {
     const logs = [];
-    const { cleanup } = await launchNode({
+    const { cleanup } = await launchTestNode({
       logger: (text) => {
         logs.push(text);
       },
@@ -97,7 +91,7 @@ describe('launchNode', () => {
   });
 
   it('kills node on event:exit', async () => {
-    const { ip, port } = await launchNode();
+    const { ip, port } = await launchTestNode();
 
     process.emit('exit', 0);
 
@@ -108,7 +102,7 @@ describe('launchNode', () => {
   });
 
   it('kills node on event:SIGINT (ctrl+c)', async () => {
-    const { ip, port } = await launchNode();
+    const { ip, port } = await launchTestNode();
 
     process.emit('SIGINT');
 
@@ -119,7 +113,7 @@ describe('launchNode', () => {
   });
 
   it('kills node on event:SIGUSR1', async () => {
-    const { ip, port } = await launchNode();
+    const { ip, port } = await launchTestNode();
 
     process.emit('SIGUSR1');
 
@@ -130,7 +124,7 @@ describe('launchNode', () => {
   });
 
   it('kills node on event:SIGUSR2', async () => {
-    const { ip, port } = await launchNode();
+    const { ip, port } = await launchTestNode();
 
     process.emit('SIGUSR2');
 
@@ -141,7 +135,7 @@ describe('launchNode', () => {
   });
 
   it('kills node on event:uncaughtException', async () => {
-    const { ip, port } = await launchNode();
+    const { ip, port } = await launchTestNode();
 
     process.emit('uncaughtException', new Error());
 

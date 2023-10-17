@@ -39,7 +39,7 @@ export type LaunchNodeResult = Promise<{
  * @param args - additional arguments to pass to fuel-core.
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
  * */
-export const launchNode = async ({
+export const launchTestNode = async ({
   consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   port = '0',
   args = defaultFuelCoreArgs,

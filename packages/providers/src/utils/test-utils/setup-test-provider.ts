@@ -6,8 +6,8 @@ import { Provider } from '../..';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import type { ChainConfig } from './fuel-node-interfaces';
-import type { LaunchNodeOptions } from './launchNode';
-import { launchNode } from './launchNode';
+import type { LaunchNodeOptions } from './launchTestNode';
+import { launchTestNode } from './launchTestNode';
 
 export interface SetupTestProviderOptions {
   providerOptions: Partial<ProviderOptions>;
@@ -32,7 +32,7 @@ export async function setupTestProvider<
     chainConfig: mergeDeepRight(defaultChainConfig, options?.nodeOptions?.chainConfig || {}),
   };
 
-  const { cleanup, ip, port } = await launchNode(nodeOptions);
+  const { cleanup, ip, port } = await launchTestNode(nodeOptions);
 
   try {
     const provider = await Provider.create(
