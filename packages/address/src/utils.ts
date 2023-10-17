@@ -1,5 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
@@ -13,6 +11,8 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
+import { getBytesCopy, hexlify } from 'ethers';
+import type { BytesLike } from 'ethers';
 
 /**
  * Fuel Network HRP (human-readable part) for bech32 encoding
@@ -38,7 +38,7 @@ export function fromBech32(address: Bech32Address): Decoded {
 export function toBech32(address: B256Address): Bech32Address {
   return bech32m.encode(
     FUEL_BECH32_HRP_PREFIX,
-    bech32m.toWords(arrayify(hexlify(address)))
+    bech32m.toWords(getBytesCopy(hexlify(address)))
   ) as Bech32Address;
 }
 

@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
 
-import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
+import { concatBytes } from '@fuel-ts/utils';
 
 import { ByteArrayCoder } from './byte-array';
 import type { Input } from './input';
@@ -92,7 +92,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
     parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [TransactionScript, number] {
@@ -228,7 +228,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
     parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [TransactionCreate, number] {
@@ -320,7 +320,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     parts.push(new NumberCoder('u8').encode(value.outputsCount));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [TransactionMint, number] {
@@ -391,7 +391,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
     }
 
-    return concat(parts);
+    return concatBytes(parts);
   }
 
   decode(data: Uint8Array, offset: number): [Transaction, number] {
