@@ -3,6 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
+  BN,
   bn,
   toHex,
   Interface,
@@ -31,9 +32,11 @@ const abi = JSON.parse(
 );
 
 describe('Contract Factory', () => {
+  let gasPrice: BN;
   const createContractFactory = async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
 
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);
@@ -43,14 +46,17 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract();
+    const contact = await factory.deployContract({ gasPrice });
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    const { value: valueInitial } = await contact.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await contact.functions
+      .initialize_counter(41)
+      .txParams({ gasPrice })
+      .call();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contact.functions.increment_counter(1).call();
+    const { value } = await contact.functions.increment_counter(1).txParams({ gasPrice }).call();
     expect(value.toHex()).toEqual(toHex(42));
 
     const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
@@ -60,13 +66,16 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract();
+    const contact = await factory.deployContract({ gasPrice });
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(100).call();
+    await contact.functions.initialize_counter(100).txParams({ gasPrice }).call();
 
-    const { transactionResult } = await contact.functions.increment_counter(1).call();
+    const { transactionResult } = await contact.functions
+      .increment_counter(1)
+      .txParams({ gasPrice })
+      .call();
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
@@ -88,7 +97,7 @@ describe('Contract Factory', () => {
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
       }),
-      fee: bn(0),
+      fee: expect.any(BN),
       transaction: expect.any(Object),
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
@@ -102,7 +111,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contract = await factory.deployContract();
+    const contract = await factory.deployContract({ gasPrice });
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
@@ -119,21 +128,22 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const contract = await factory.deployContract({
       storageSlots,
+      gasPrice,
     });
 
-    const { value: var1 } = await contract.functions.return_var1().call();
+    const { value: var1 } = await contract.functions.return_var1().txParams({ gasPrice }).call();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().call();
+    const { value: var2 } = await contract.functions.return_var2().txParams({ gasPrice }).call();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().call();
+    const { value: var3 } = await contract.functions.return_var3().txParams({ gasPrice }).call();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().call();
+    const { value: var4 } = await contract.functions.return_var4().txParams({ gasPrice }).call();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().call();
+    const { value: var5 } = await contract.functions.return_var5().txParams({ gasPrice }).call();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -147,6 +157,7 @@ describe('Contract Factory', () => {
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contact = await factory.deployContract({
+      gasPrice,
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
@@ -161,25 +172,26 @@ describe('Contract Factory', () => {
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contract = await factory.deployContract({
+      gasPrice,
       storageSlots: [
         ...storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
 
-    const { value: var1 } = await contract.functions.return_var1().call();
+    const { value: var1 } = await contract.functions.return_var1().txParams({ gasPrice }).call();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().call();
+    const { value: var2 } = await contract.functions.return_var2().txParams({ gasPrice }).call();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().call();
+    const { value: var3 } = await contract.functions.return_var3().txParams({ gasPrice }).call();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().call();
+    const { value: var4 } = await contract.functions.return_var4().txParams({ gasPrice }).call();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().call();
+    const { value: var5 } = await contract.functions.return_var5().txParams({ gasPrice }).call();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
