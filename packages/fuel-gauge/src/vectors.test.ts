@@ -1,5 +1,5 @@
 import { bn, randomBytes, hexlify } from 'fuels';
-import type { BN, type Contract } from 'fuels';
+import type { BN, Contract } from 'fuels';
 
 import { getSetupContract } from './utils';
 
