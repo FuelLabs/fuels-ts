@@ -39,5 +39,6 @@ stop();
 
 See also:
 
-1. [Setting up test wallets](../wallets/test-wallets.md)
-2. [Testing with Jest](./testing-with-jest.md)
+1. [`TestNodeLauncher` utility](./test-node-launcher.md)
+2. [Setting up test wallets](../wallets/test-wallets.md)
+3. [Testing with Jest](./testing-with-jest.md)

@@ -6,7 +6,7 @@ import { join } from 'path';
 
 import { TestNodeLauncher } from './test-node-launcher';
 
-const simpleContractPath = join(__dirname, '../../test/fixtures/simple-contract');
+const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
 
 describe('TestNodeLauncher', () => {
   test('kills the node after going out of scope', async () => {
@@ -59,8 +59,9 @@ describe('TestNodeLauncher', () => {
   });
 
   test('a contract can be deployed', async () => {
+    // #region TestNodeLauncher-deploy-contract
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: simpleContractPath }],
+      deployContracts: [{ contractDir: pathToContractRootDir }],
     });
 
     const {
@@ -69,32 +70,16 @@ describe('TestNodeLauncher', () => {
 
     const response = await contract.functions.test_function().call();
     expect(response.value).toBe(true);
-  });
-
-  test('multiple contracts can be deployed', async () => {
-    await using launched = await TestNodeLauncher.launch({
-      deployContracts: [
-        { contractDir: simpleContractPath },
-        { contractDir: simpleContractPath },
-        { contractDir: simpleContractPath },
-      ],
-    });
-
-    const {
-      contracts: [contract1, contract2, contract3],
-    } = launched;
-
-    expect((await contract1.functions.test_function().call()).value).toBe(true);
-    expect((await contract2.functions.test_function().call()).value).toBe(true);
-    expect((await contract3.functions.test_function().call()).value).toBe(true);
+    // #endregion TestNodeLauncher-deploy-contract
   });
 
   test('multiple contracts can be deployed with different wallets', async () => {
+    // #region TestNodeLauncher-multiple-contracts-and-wallets
     await using launched = await TestNodeLauncher.launch({
       walletConfig: new WalletConfig({ wallets: 2 }),
       deployContracts: [
-        { contractDir: simpleContractPath },
-        { contractDir: simpleContractPath, walletIndex: 1 },
+        { contractDir: pathToContractRootDir },
+        { contractDir: pathToContractRootDir, walletIndex: 1 },
       ],
     });
 
@@ -102,24 +87,13 @@ describe('TestNodeLauncher', () => {
       contracts: [contract1, contract2],
       wallets: [wallet1, wallet2],
     } = launched;
+    // #endregion TestNodeLauncher-multiple-contracts-and-wallets
 
-    expect(contract1.account).toEqual(wallet1);
-    expect(contract2.account).toEqual(wallet2);
-  });
+    const contract1Response = (await contract1.functions.test_function().call()).value;
+    const contract2Response = (await contract2.functions.test_function().call()).value;
 
-  test('multiple contracts can be deployed with different wallets', async () => {
-    await using launched = await TestNodeLauncher.launch({
-      walletConfig: new WalletConfig({ wallets: 2 }),
-      deployContracts: [
-        { contractDir: simpleContractPath },
-        { contractDir: simpleContractPath, walletIndex: 1 },
-      ],
-    });
-
-    const {
-      contracts: [contract1, contract2],
-      wallets: [wallet1, wallet2],
-    } = launched;
+    expect(contract1Response).toBe(true);
+    expect(contract2Response).toBe(true);
 
     expect(contract1.account).toEqual(wallet1);
     expect(contract2.account).toEqual(wallet2);
@@ -129,7 +103,7 @@ describe('TestNodeLauncher', () => {
     await expectToThrowFuelError(
       async () => {
         await TestNodeLauncher.launch({
-          deployContracts: [{ contractDir: simpleContractPath, walletIndex: 1 }],
+          deployContracts: [{ contractDir: pathToContractRootDir, walletIndex: 1 }],
         });
       },
       {

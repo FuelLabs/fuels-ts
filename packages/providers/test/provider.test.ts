@@ -248,9 +248,9 @@ describe('Provider', () => {
   });
 
   it('can force-produce blocks', async () => {
-    // #region Provider-produce-blocks
     await using provider = await setupTestProvider();
 
+    // #region Provider-produce-blocks
     const block = await provider.getBlock('latest');
     if (!block) {
       throw new Error('No latest block');
