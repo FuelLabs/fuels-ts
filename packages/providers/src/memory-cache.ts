@@ -1,6 +1,6 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { hexlify } from 'ethers';
+import type { BytesLike } from 'ethers';
 
 type Cache = {
   [key: string]: {

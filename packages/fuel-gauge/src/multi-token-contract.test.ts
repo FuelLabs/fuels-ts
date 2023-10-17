@@ -90,7 +90,7 @@ describe('MultiTokenContract', () => {
       .multiCall(
         subIds.map((subId) =>
           multiTokenContract.functions.transfer_coins_to_output(
-            { value: userWallet.address },
+            { value: userWallet.address.toB256() },
             helperDict[subId].assetId,
             helperDict[subId].amount
           )

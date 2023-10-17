@@ -6,6 +6,11 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -22,8 +27,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
@@ -33,7 +36,8 @@
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
+    "@fuel-ts/errors": "workspace:*",
+    "ethers": "^6.7.1"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"
