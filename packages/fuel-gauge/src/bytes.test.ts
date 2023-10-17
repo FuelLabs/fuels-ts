@@ -1,26 +1,13 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
 import type { BN } from 'fuels';
-import {
-  type Contract,
-  bn,
-  Predicate,
-  Wallet,
-  Address,
-  BaseAssetId,
-  Provider,
-  FUEL_NETWORK_URL,
-} from 'fuels';
 
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
 
-import { getScript, getSetupContract } from './utils';
+import { getContractDir, getScript } from './utils';
 
-const setupContract = getSetupContract('bytes');
-let contractInstance: Contract;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-});
+const bytesContractDir = getContractDir('bytes');
 
 type SomeEnum = {
   First?: boolean;
@@ -32,54 +19,71 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
-
 describe('Bytes Tests', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
-
   it('should test bytes output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
     const INPUT = 10;
 
     const { value } = await contractInstance.functions
       .return_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice: provider.getGasConfig().minGasPrice })
       .call<number[]>();
 
     expect(value).toStrictEqual(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
   });
 
   it('should test bytes output [100 items]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+
     const INPUT = 100;
 
     const { value } = await contractInstance.functions
       .return_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice: provider.getGasConfig().minGasPrice })
       .call<number[]>();
 
     expect(value).toStrictEqual(new Uint8Array(Array.from({ length: 100 }, (e, i) => i)));
   });
 
   it('should test bytes input', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions
       .accept_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice: provider.getGasConfig().minGasPrice })
       .call<number[]>();
     expect(value).toBeUndefined();
   });
 
   it('should test bytes input [nested]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+
     const bytes = [40, 41, 42];
 
     const INPUT: Wrapper = {
@@ -89,13 +93,20 @@ describe('Bytes Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_nested_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice: provider.getGasConfig().minGasPrice })
       .call<number[]>();
     expect(value).toBeUndefined();
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
-    const wallet = await setup(1_000_000);
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 500_000;
     const amountToReceiver = 50;
@@ -104,7 +115,7 @@ describe('Bytes Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
+      gasPrice: provider.getGasConfig().minGasPrice,
     });
     await setupTx.waitForResult();
 
@@ -117,7 +128,9 @@ describe('Bytes Tests', () => {
     };
     const tx = await predicate
       .setData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, {
+        gasPrice: provider.getGasConfig().minGasPrice,
+      });
     await tx.waitForResult();
 
     // Check the balance of the receiver
@@ -132,7 +145,14 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [script-bytes]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: bytesContractDir }],
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-bytes', wallet);
 
@@ -144,7 +164,7 @@ describe('Bytes Tests', () => {
 
     const { value } = await scriptInstance.functions
       .main(1, INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice: provider.getGasConfig().minGasPrice })
       .call<BN>();
     expect(value.toNumber()).toStrictEqual(0);
   });
