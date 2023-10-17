@@ -1,4 +1,3 @@
-import { arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -19,6 +18,7 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
+import { getBytesCopy } from 'ethers';
 
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -150,7 +150,7 @@ export class TransactionResponse {
    */
   decodeTransaction<TTransactionType = void>(transactionWithReceipts: GqlTransaction) {
     return new TransactionCoder().decode(
-      arrayify(transactionWithReceipts.rawPayload),
+      getBytesCopy(transactionWithReceipts.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
   }
@@ -184,7 +184,7 @@ export class TransactionResponse {
       id: this.id,
       receipts,
       transaction: decodedTransaction,
-      transactionBytes: arrayify(transaction.rawPayload),
+      transactionBytes: getBytesCopy(transaction.rawPayload),
       gqlTransactionStatus: transaction.status,
       gasPerByte,
       gasPriceFactor,

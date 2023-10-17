@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify } from 'ethers';
 import { clone } from 'ramda';
 
 // When parsing a Transaction to JSON we need

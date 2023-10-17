@@ -1,6 +1,6 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { concat, arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { concatBytes } from '@fuel-ts/utils';
+import { getBytesCopy, type BytesLike } from 'ethers';
 
 import { U64Coder } from './coders/u64';
 import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STD_STRING_CODER_TYPE, WORD_SIZE } from './constants';
@@ -33,7 +33,7 @@ export function concatWithDynamicData(items: ReadonlyArray<BytesLike>): Uint8Arr
       });
     }
 
-    const byteArray = arrayify(item);
+    const byteArray = getBytesCopy(item);
     totalIndex += byteArray.byteLength / WORD_SIZE;
 
     return byteArray;
@@ -61,7 +61,7 @@ export function unpackDynamicData(
   dataOffset: number
 ): Uint8Array {
   if (!results.dynamicData) {
-    return concat([results]);
+    return concatBytes([results]);
   }
 
   let cumulativeDynamicByteLength = 0;
@@ -83,7 +83,7 @@ export function unpackDynamicData(
           dataOffset + vData.byteLength + cumulativeDynamicByteLength
         )
       : vData;
-    updatedResults = concat([updatedResults, dataToAppend]);
+    updatedResults = concatBytes([updatedResults, dataToAppend]);
 
     cumulativeDynamicByteLength += dataToAppend.byteLength;
   });

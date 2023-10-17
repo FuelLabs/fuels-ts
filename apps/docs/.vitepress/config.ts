@@ -89,12 +89,20 @@ export default defineConfig({
                 link: '/guide/types/bits512',
               },
               {
+                text: 'Bytes',
+                link: '/guide/types/bytes',
+              },
+              {
                 text: 'Bytes32',
                 link: '/guide/types/bytes32',
               },
               {
                 text: 'String',
                 link: '/guide/types/string',
+              },
+              {
+                text: 'Std String',
+                link: '/guide/types/std-string',
               },
               {
                 text: 'Enums',
@@ -107,6 +115,10 @@ export default defineConfig({
               {
                 text: 'Tuples',
                 link: '/guide/types/tuples',
+              },
+              {
+                text: 'Raw Slice',
+                link: '/guide/types/raw-slice',
               },
               {
                 text: 'Structs',

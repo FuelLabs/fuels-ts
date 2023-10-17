@@ -1,4 +1,4 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { getBytesCopy, hexlify } from 'ethers';
 
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
@@ -15,7 +15,7 @@ describe('WitnessCoder', () => {
 
     expect(encoded).toEqual('0x0000000000000000');
 
-    const [decoded, offset] = new WitnessCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new WitnessCoder().decode(getBytesCopy(encoded), 0);
 
     expect(offset).toEqual(8);
     expect(decoded).toEqual(witness);
@@ -32,7 +32,7 @@ describe('WitnessCoder', () => {
 
     expect(encoded).toEqual('0x0000000000000004deadbeef00000000');
 
-    const [decoded, offset] = new WitnessCoder().decode(arrayify(encoded), 0);
+    const [decoded, offset] = new WitnessCoder().decode(getBytesCopy(encoded), 0);
 
     expect(offset).toEqual(16);
     expect(decoded).toEqual(witness);

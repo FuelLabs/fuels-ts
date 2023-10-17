@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { Network } from '@ethersproject/networks';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
@@ -15,6 +11,9 @@ import {
   TransactionCoder,
 } from '@fuel-ts/transactions';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
+import type { BytesLike } from 'ethers';
+import { getBytesCopy, hexlify, Network } from 'ethers';
+import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -380,10 +379,12 @@ export default class Provider {
    * @returns A promise that resolves to the network configuration object
    */
   async getNetwork(): Promise<Network> {
-    return Promise.resolve({
-      name: 'fuelv2',
-      chainId: 0xdeadbeef,
-    });
+    const {
+      name,
+      consensusParameters: { chainId },
+    } = await this.getChain();
+    const network = new Network(name, chainId.toNumber());
+    return Promise.resolve(network);
   }
 
   /**
@@ -543,7 +544,7 @@ export default class Provider {
 
     const estimatedTransaction = transactionRequest;
     const [decodedTransaction] = new TransactionCoder().decode(
-      arrayify(response.estimatePredicates.rawPayload),
+      getBytesCopy(response.estimatePredicates.rawPayload),
       0
     );
 
@@ -884,7 +885,7 @@ export default class Provider {
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
+        (tx) => new TransactionCoder().decode(getBytesCopy(tx.rawPayload), 0)?.[0]
       ),
     };
   }
@@ -903,7 +904,7 @@ export default class Provider {
       return null;
     }
     return new TransactionCoder().decode(
-      arrayify(transaction.rawPayload),
+      getBytesCopy(transaction.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
   }
