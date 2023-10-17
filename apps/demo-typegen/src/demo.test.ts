@@ -41,10 +41,7 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
 
     // Deploy
-    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice,
-      storageSlots,
-    });
+    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, { gasPrice });
 
     // Call
     const { value } = await contract.functions.return_input(1337).txParams({ gasPrice }).call();
