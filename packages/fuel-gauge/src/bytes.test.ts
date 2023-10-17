@@ -1,4 +1,5 @@
-import { bn, Predicate, Wallet, Address, BaseAssetId, TestNodeLauncher } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
 import type { BN } from 'fuels';
 
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';

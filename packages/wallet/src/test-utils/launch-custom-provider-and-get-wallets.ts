@@ -59,7 +59,7 @@ export async function launchCustomProviderAndGetWallets<
   });
 
   return (
-    dispose
+    dispose ?? true
       ? {
           wallets,
           provider,

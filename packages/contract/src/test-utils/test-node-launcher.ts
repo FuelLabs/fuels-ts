@@ -48,7 +48,7 @@ export class TestNodeLauncher {
       nodeOptions = {},
       deployContracts = [],
     }: Partial<TestNodeLauncherOptions> = {},
-    runCleanup?: Dispose
+    dispose?: Dispose
   ): Promise<ReturnType> {
     const { provider, wallets, cleanup } = await launchCustomProviderAndGetWallets(
       {
@@ -63,7 +63,7 @@ export class TestNodeLauncher {
       const contracts = await TestNodeLauncher.deployContracts(deployContracts, wallets);
 
       return (
-        runCleanup
+        dispose ?? true
           ? {
               provider,
               wallets,

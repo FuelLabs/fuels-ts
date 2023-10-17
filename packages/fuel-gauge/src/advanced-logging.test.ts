@@ -1,4 +1,5 @@
-import { RequireRevertError, ScriptResultDecoderError, TestNodeLauncher } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
 import { getContractDir } from './utils';
 

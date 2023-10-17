@@ -230,6 +230,10 @@ importers:
       web-vitals:
         specifier: ^2.1.4
         version: 2.1.4
+    devDependencies:
+      '@fuel-ts/test-utils':
+        specifier: workspace:*
+        version: link:../../packages/test-utils
 
   apps/demo-react-vite:
     dependencies:
@@ -607,6 +611,9 @@ importers:
 
   packages/fuel-gauge:
     dependencies:
+      '@fuel-ts/test-utils':
+        specifier: workspace:*
+        version: link:../test-utils
       fuels:
         specifier: workspace:*
         version: link:../fuels
@@ -1018,6 +1025,12 @@ importers:
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.14
+
+  packages/test-utils:
+    dependencies:
+      '@fuel-ts/contract':
+        specifier: workspace:*
+        version: link:../contract
 
   packages/testcases: {}
 

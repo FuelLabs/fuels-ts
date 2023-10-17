@@ -24,6 +24,8 @@ export async function setupTestProvider<
     : { provider: Provider; cleanup: () => Promise<void> },
 >(options?: Partial<SetupTestProviderOptions>, dispose?: Dispose): Promise<R> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
+  Symbol.dispose ??= Symbol('Symbol.dispose');
+  // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.asyncDispose ??= Symbol('Symbol.asyncDispose');
 
   const nodeOptions: Partial<LaunchNodeOptions> = {
@@ -41,7 +43,7 @@ export async function setupTestProvider<
     );
 
     return (
-      dispose
+      dispose ?? true
         ? Object.assign(provider, {
             [Symbol.asyncDispose]: cleanup,
           })
