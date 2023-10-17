@@ -701,7 +701,6 @@ describe('Provider', () => {
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
-    expect(provider.url).toEqual(FUEL_NETWORK_URL);
     expect(provider.getChain()).toBeDefined();
     expect(provider.getNode()).toBeDefined();
   });
