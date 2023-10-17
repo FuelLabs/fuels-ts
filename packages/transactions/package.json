@@ -39,11 +39,11 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/address": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "ethers": "^6.7.1"
   }
 }

@@ -47,7 +47,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
@@ -63,6 +62,7 @@
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.36.1",
     "@fuel-ts/errors": "workspace:*",
+    "ethers": "^6.7.1",
     "portfinder": "^1.0.32",
     "tree-kill": "^1.2.2",
     "uuid": "^9.0.0"

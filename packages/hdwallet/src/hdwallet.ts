@@ -1,11 +1,20 @@
-import { Base58 } from '@ethersproject/basex';
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
-import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
+import type { BytesLike } from 'ethers';
+import {
+  toBeHex,
+  dataSlice,
+  hexlify,
+  encodeBase58,
+  decodeBase58,
+  sha256,
+  computeHmac,
+  ripemd160,
+  getBytesCopy,
+  concat,
+} from 'ethers';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;
@@ -17,7 +26,7 @@ const TestnetPRV = hexlify('0x04358394');
 const TestnetPUB = hexlify('0x043587cf');
 
 function base58check(data: Uint8Array): string {
-  return Base58.encode(concat([data, hexDataSlice(sha256(sha256(data)), 0, 4)]));
+  return encodeBase58(concat([data, dataSlice(sha256(sha256(data)), 0, 4)]));
 }
 
 function getExtendedKeyPrefix(isPublic: boolean = false, testnet: boolean = false) {
@@ -94,7 +103,7 @@ class HDWallet {
     }
 
     this.parentFingerprint = config.parentFingerprint || this.parentFingerprint;
-    this.fingerprint = hexDataSlice(ripemd160(sha256(this.publicKey)), 0, 4);
+    this.fingerprint = dataSlice(ripemd160(sha256(this.publicKey)), 0, 4);
     this.depth = config.depth || this.depth;
     this.index = config.index || this.index;
     this.chainCode = config.chainCode;
@@ -112,9 +121,9 @@ class HDWallet {
    * @returns A new instance of HDWallet on the derived index
    */
   deriveIndex(index: number) {
-    const privateKey = this.privateKey && arrayify(this.privateKey);
-    const publicKey = arrayify(this.publicKey);
-    const chainCode = arrayify(this.chainCode);
+    const privateKey = this.privateKey && getBytesCopy(this.privateKey);
+    const publicKey = getBytesCopy(this.publicKey);
+    const chainCode = getBytesCopy(this.chainCode);
     const data = new Uint8Array(37);
 
     if (index & HARDENED_INDEX) {
@@ -128,13 +137,13 @@ class HDWallet {
       // 33 bytes: 0x00 || private key
       data.set(privateKey, 1);
     } else {
-      data.set(arrayify(this.publicKey));
+      data.set(getBytesCopy(this.publicKey));
     }
 
     // child number: ser32(i)
     data.set(toBytes(index, 4), 33);
 
-    const bytes = arrayify(computeHmac(SupportedAlgorithm.sha512, chainCode, data));
+    const bytes = getBytesCopy(computeHmac('sha512', chainCode, data));
     const IL = bytes.slice(0, 32);
     const IR = bytes.slice(32);
 
@@ -191,7 +200,7 @@ class HDWallet {
       );
     }
     const prefix = getExtendedKeyPrefix(this.privateKey == null || isPublic, testnet);
-    const depth = hexlify(this.depth);
+    const depth = hexlify(Uint8Array.from([this.depth]));
     const parentFingerprint = this.parentFingerprint;
     const index = toHex(this.index, 4);
     // last 32 bites from the key
@@ -199,7 +208,9 @@ class HDWallet {
     // first 32 bites from the key
     const key =
       this.privateKey != null && !isPublic ? concat(['0x00', this.privateKey]) : this.publicKey;
-    const extendedKey = concat([prefix, depth, parentFingerprint, index, chainCode, key]);
+    const extendedKey = getBytesCopy(
+      concat([prefix, depth, parentFingerprint, index, chainCode, key])
+    );
 
     return base58check(extendedKey);
   }
@@ -214,13 +225,14 @@ class HDWallet {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
 
     return new HDWallet({
-      chainCode: arrayify(masterKey.slice(32)),
-      privateKey: arrayify(masterKey.slice(0, 32)),
+      chainCode: getBytesCopy(masterKey.slice(32)),
+      privateKey: getBytesCopy(masterKey.slice(0, 32)),
     });
   }
 
   static fromExtendedKey(extendedKey: string) {
-    const bytes = Base58.decode(extendedKey);
+    const decoded = toBeHex(decodeBase58(extendedKey));
+    const bytes = getBytesCopy(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {

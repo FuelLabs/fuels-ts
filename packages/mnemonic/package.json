@@ -27,12 +27,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/basex": "^5.7.0",
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/pbkdf2": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
+    "@fuel-ts/errors": "workspace:*",
+    "ethers": "^6.7.1"
   }
 }

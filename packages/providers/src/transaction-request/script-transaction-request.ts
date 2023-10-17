@@ -1,5 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
@@ -7,6 +5,8 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import { getBytesCopy, hexlify } from 'ethers';
+import type { BytesLike } from 'ethers';
 
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
@@ -49,8 +49,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    */
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arrayify(script ?? returnZeroScript.bytes);
-    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = getBytesCopy(script ?? returnZeroScript.bytes);
+    this.scriptData = getBytesCopy(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   /**
@@ -59,8 +59,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @returns The transaction script object.
    */
   toTransaction(): TransactionScript {
-    const script = arrayify(this.script ?? '0x');
-    const scriptData = arrayify(this.scriptData ?? '0x');
+    const script = getBytesCopy(this.script ?? '0x');
+    const scriptData = getBytesCopy(this.scriptData ?? '0x');
     return {
       type: TransactionType.Script,
       ...super.getBaseTransaction(),

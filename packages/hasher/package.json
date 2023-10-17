@@ -27,13 +27,13 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "ethers": "^6.7.1",
     "ramda": "^0.29.0"
   },
   "devDependencies": {

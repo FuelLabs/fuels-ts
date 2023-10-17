@@ -1,6 +1,5 @@
-import { arrayify } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
+import { getBytesCopy, sha256 } from 'ethers';
 
 import Signer from './signer';
 
@@ -15,7 +14,7 @@ describe('Signer', () => {
   });
 
   it('Initialize publicKey and address for new signer instance with byte array', () => {
-    const signer = new Signer(arrayify(signMessageTest.privateKey));
+    const signer = new Signer(getBytesCopy(signMessageTest.privateKey));
 
     expect(signer.privateKey).toEqual(signMessageTest.privateKey);
     expect(signer.publicKey).toEqual(signMessageTest.publicKey);

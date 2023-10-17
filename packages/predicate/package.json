@@ -27,7 +27,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
@@ -38,7 +37,8 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
+    "@fuel-ts/errors": "workspace:*",
+    "ethers": "^6.7.1"
   },
   "devDependencies": {
     "@fuel-ts/math": "workspace:*"
