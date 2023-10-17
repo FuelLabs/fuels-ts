@@ -86,6 +86,7 @@ export function getNewAbiTypegen(
 
   const stubAbi = JSON.stringify({ types, functions, configurables }, null, 2);
   const stubBin = '0x000';
+  const stubSlot = '[]';
 
   const abiFiles: IFile[] = [
     {
@@ -109,11 +110,23 @@ export function getNewAbiTypegen(
     },
   ];
 
+  const storageSlotsFiles: IFile[] = [
+    {
+      path: './slot1.json',
+      contents: stubSlot,
+    },
+    {
+      path: './slot2.json',
+      contents: stubSlot,
+    },
+  ];
+
   const outputDir = './contracts';
 
   const typegen = new AbiTypeGen({
-    binFiles: includeBinFiles ? binFiles : [],
     abiFiles,
+    binFiles: includeBinFiles ? binFiles : [],
+    storageSlotsFiles,
     outputDir,
     programType,
   });
