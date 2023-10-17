@@ -76,15 +76,14 @@ describe('Predicate', () => {
       expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
     });
 
-    // TODO: unskip after fix fee calculation
-    it.skip('calls a predicate and uses proceeds for a contract call', async () => {
-      const initialReceiverBalance = toNumber(await receiver.getBalance());
-
+    it('calls a predicate and uses proceeds for a contract call', async () => {
       const contract = await new ContractFactory(
         liquidityPoolBytes,
         liquidityPoolAbi,
         wallet
       ).deployContract({ gasPrice });
+
+      const initialReceiverBalance = toNumber(await receiver.getBalance());
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
@@ -126,37 +125,44 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
 
-      await tx.waitForResult();
+      const { fee: predicateTxFee } = await tx.waitForResult();
 
       // calling the contract with the receiver account (with resources)
       const contractAmount = 10;
-      await contract.functions.set_base_token(BaseAssetId).txParams({ gasPrice }).call();
-      await expect(
-        contract.functions
-          .deposit({
-            value: receiver.address.toB256(),
-          })
-          .callParams({
-            forward: [contractAmount, BaseAssetId],
-          })
-          .txParams({
-            gasPrice,
-          })
-          .call()
-      ).resolves.toBeTruthy();
+      const {
+        transactionResult: { fee: receiverTxFee1 },
+      } = await contract.functions.set_base_token(BaseAssetId).txParams({ gasPrice }).call();
+      const {
+        transactionResult: { fee: receiverTxFee2 },
+      } = await contract.functions
+        .deposit({
+          value: receiver.address.toB256(),
+        })
+        .callParams({
+          forward: [contractAmount, BaseAssetId],
+        })
+        .txParams({
+          gasPrice,
+        })
+        .call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
       const remainingPredicateBalance = toNumber(await predicate.getBalance());
 
-      expect(initialReceiverBalance).toBe(0);
+      const expectedFinalReceiverBalance =
+        initialReceiverBalance +
+        amountToReceiver -
+        contractAmount -
+        // ajusting margin of error in transaction fee calculation
+        (receiverTxFee1.toNumber() - 1) -
+        (receiverTxFee2.toNumber() - 1);
 
-      expect(initialReceiverBalance + amountToReceiver).toEqual(
-        finalReceiverBalance + contractAmount + gasPrice.toNumber()
-      );
+      expect(expectedFinalReceiverBalance).toEqual(finalReceiverBalance);
 
-      expect(remainingPredicateBalance).toEqual(
-        amountToPredicate + initialPredicateBalance - amountToReceiver
-      );
+      const expectedFinalPredicateBalance =
+        initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
+
+      expect(expectedFinalPredicateBalance).toEqual(remainingPredicateBalance);
     });
   });
 });
