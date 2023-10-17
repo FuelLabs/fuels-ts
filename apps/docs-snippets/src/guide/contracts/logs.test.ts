@@ -6,9 +6,11 @@ import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
+  let gasPrice: BN;
 
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.LOG_VALUES);
+    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {
@@ -18,7 +20,10 @@ describe(__filename, () => {
     const value3 = 'Fuel';
     const value4 = [1, 2, 3];
 
-    const { logs } = await contract.functions.log_values(value1, value2, value3, value4).call();
+    const { logs } = await contract.functions
+      .log_values(value1, value2, value3, value4)
+      .txParams({ gasPrice })
+      .call();
 
     expect(new BN(logs[0]).toNumber()).toBe(value1);
     expect(logs[1]).toBe(value2);

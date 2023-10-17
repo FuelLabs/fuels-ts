@@ -6,9 +6,10 @@ import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
-
+  let gasPrice: BN;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
+    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {
@@ -20,6 +21,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
+      .txParams({ gasPrice })
       .call();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
@@ -35,6 +37,7 @@ describe(__filename, () => {
           forward: [10, BaseAssetId],
           gasLimit: 1,
         })
+        .txParams({ gasPrice })
         .call()
     ).rejects.toThrow(/OutOfGas/);
     // #endregion call-params-2
@@ -54,6 +57,7 @@ describe(__filename, () => {
       })
       .txParams({
         gasLimit: transactionGasLimit,
+        gasPrice,
       })
       .call();
 
