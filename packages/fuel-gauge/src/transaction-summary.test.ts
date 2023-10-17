@@ -22,10 +22,12 @@ import {
 describe('TransactionSummary', () => {
   let provider: Provider;
   let wallet: WalletUnlocked;
+  let gasPrice: BN;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[2_000, BaseAssetId]]);
+    wallet = await generateTestWallet(provider, [[100_000_000, BaseAssetId]]);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   const verifyTransactionSummary = (params: {
@@ -99,7 +101,7 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(sender.address, 200);
+    const tx1 = await wallet.transfer(sender.address, 500_000, BaseAssetId, { gasPrice });
     const transactionResponse1 = await tx1.waitForResult();
 
     const amountToTransfer = 100;
@@ -108,7 +110,9 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx2 = await sender.transfer(destination.address, amountToTransfer);
+    const tx2 = await sender.transfer(destination.address, amountToTransfer, BaseAssetId, {
+      gasPrice,
+    });
     const transactionResponse2 = await tx2.waitForResult();
 
     const { transactions } = await getTransactionsSummaries({
