@@ -249,14 +249,14 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
     const predicate = new Predicate(predicateBytes, provider, predicateTrueAbi);
 
-    const tx1 = await wallet.transfer(predicate.address, 800_000, BaseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
       gasPrice: minGasPrice,
     });
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const gasPrice = randomGasPrice(minGasPrice, 15);
+    const gasPrice = randomGasPrice(minGasPrice, 9);
     const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, { gasPrice });
 
     const { fee } = await tx2.wait();
