@@ -12,7 +12,7 @@ const contractBytecode = readFileSync(
 );
 
 const setupContract = createSetupConfig({
-  contractBytecode,
+contractBytecode,
   abi: abiJSON,
 });
 

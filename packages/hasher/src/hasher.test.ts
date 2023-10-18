@@ -6,9 +6,7 @@ import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 import { hashMessage, hash, hashTransaction } from './hasher';
 
 /**
- * TODO: Throws value extends undefined
  * @group node
- * @group browser
  */
 describe('Hasher', () => {
   it('Hash message', () => {

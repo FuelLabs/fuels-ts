@@ -7,12 +7,12 @@ import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL
 import { DemoContractAbi__factory } from './generated-types';
 import bytecode from './generated-types/DemoContractAbi.hex';
 
+let gasPrice: BN;
+
 /**
  * @group node
  */
 describe('ExampleContract', () => {
-  let gasPrice: BN;
-
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
