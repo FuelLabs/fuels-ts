@@ -8,7 +8,9 @@ describe('collectStorageSlotsFilePaths.ts', () => {
   const predicate = getProjectResources(ForcProjectsEnum.PREDICATE);
   const contract = getProjectResources(ForcProjectsEnum.MINIMAL);
 
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
 
   test('should collect storage slot files', () => {
     const contractStorageSlots = collectStorageSlotsFilepaths({
