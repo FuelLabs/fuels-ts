@@ -1,18 +1,27 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB256 } from 'fuels';
+import {
+  WalletUnlocked,
+  FUEL_NETWORK_URL,
+  Provider,
+  Predicate,
+  BN,
+  getRandomB256,
+  BaseAssetId,
+} from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
-
+  let gasPrice: BN;
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SIMPLE_PREDICATE
   );
 
   beforeAll(async () => {
     walletWithFunds = await getTestWallet();
+    ({ minGasPrice: gasPrice } = walletWithFunds.provider.getGasConfig());
   });
 
   it('should successfully use predicate to spend assets', async () => {
@@ -22,9 +31,11 @@ describe(__filename, () => {
     // #endregion send-and-spend-funds-from-predicates-2
 
     // #region send-and-spend-funds-from-predicates-3
-    const amountToPredicate = 1_000;
+    const amountToPredicate = 300_000;
 
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+      gasPrice,
+    });
 
     await tx.waitForResult();
     // #endregion send-and-spend-funds-from-predicates-3
@@ -44,7 +55,14 @@ describe(__filename, () => {
       provider,
     });
 
-    const tx2 = await predicate.transfer(receiverWallet.address, amountToPredicate - 100);
+    const tx2 = await predicate.transfer(
+      receiverWallet.address,
+      amountToPredicate - 150_000,
+      BaseAssetId,
+      {
+        gasPrice,
+      }
+    );
 
     await tx2.waitForResult();
     // #endregion send-and-spend-funds-from-predicates-5
@@ -56,7 +74,9 @@ describe(__filename, () => {
 
     const amountToPredicate = 100;
 
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+      gasPrice,
+    });
 
     await tx.waitForResult();
 
@@ -69,7 +89,7 @@ describe(__filename, () => {
     predicate.setData('0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4');
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, predicateBalance)
+      predicate.transfer(receiverWallet.address, predicateBalance, BaseAssetId, { gasPrice })
     );
 
     // #region send-and-spend-funds-from-predicates-6
@@ -86,9 +106,11 @@ describe(__filename, () => {
     });
     const predicate = new Predicate(bin, predicateOwner.provider, abi);
 
-    const amountToPredicate = 1_000;
+    const amountToPredicate = 200_000;
 
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate);
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+      gasPrice,
+    });
 
     await tx.waitForResult();
 
@@ -99,7 +121,7 @@ describe(__filename, () => {
     predicate.setData(getRandomB256());
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, amountToPredicate)
+      predicate.transfer(receiverWallet.address, amountToPredicate, BaseAssetId, { gasPrice })
     );
 
     // #region send-and-spend-funds-from-predicates-7

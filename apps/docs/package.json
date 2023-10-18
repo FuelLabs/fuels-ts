@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "docs",
-  "version": "0.43.4",
+  "version": "0.43.5",
   "description": "",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm run docs && vitepress dev'",

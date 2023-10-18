@@ -1,5 +1,5 @@
-import type { InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import { Predicate } from 'fuels';
+import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { BaseAssetId, Predicate } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
@@ -12,14 +12,16 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
+    let gasPrice: BN;
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
       provider = wallet.provider;
+      gasPrice = provider.getGasConfig().minGasPrice;
     });
 
     it('calls a no argument predicate and returns true', async () => {
-      const amountToPredicate = 100;
+      const amountToPredicate = 100_000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
@@ -27,7 +29,9 @@ describe('Predicate', () => {
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
-      const tx = await predicate.transfer(receiver.address, amountToReceiver);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+        gasPrice,
+      });
       await tx.waitForResult();
 
       await assertBalances(

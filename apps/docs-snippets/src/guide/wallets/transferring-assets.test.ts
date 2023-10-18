@@ -7,15 +7,15 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let senderWallet: WalletUnlocked;
   let deployedContract: Contract;
+  let gasPrice: BN;
 
   beforeAll(async () => {
     senderWallet = await getTestWallet();
 
     const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
-
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-
-    deployedContract = await factory.deployContract();
+    ({ minGasPrice: gasPrice } = senderWallet.provider.getGasConfig());
+    deployedContract = await factory.deployContract({ gasPrice });
   });
 
   it('should successfully transfer asset to another wallet', async () => {
@@ -32,7 +32,8 @@ describe(__filename, () => {
     const response = await senderWallet.transfer(
       destinationWallet.address,
       amountToTransfer,
-      assetId
+      assetId,
+      { gasPrice }
     );
 
     await response.wait();
@@ -58,7 +59,9 @@ describe(__filename, () => {
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
-    const tx = await senderWallet.transferToContract(contractId, amountToTransfer, assetId);
+    const tx = await senderWallet.transferToContract(contractId, amountToTransfer, assetId, {
+      gasPrice,
+    });
     expect(new BN(contractBalance).toNumber()).toBe(0);
 
     await tx.waitForResult();
