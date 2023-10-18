@@ -722,23 +722,23 @@ importers:
   packages/hasher:
     dependencies:
       '@fuel-ts/address':
-        specifier: file:../address
-        version: file:packages/address
+        specifier: workspace:*
+        version: link:../address
       '@fuel-ts/crypto':
-        specifier: file:../crypto
-        version: file:packages/crypto
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/math':
-        specifier: file:../math
-        version: file:packages/math
+        specifier: workspace:*
+        version: link:../math
       '@fuel-ts/providers':
-        specifier: file:../providers
-        version: file:packages/providers
+        specifier: workspace:*
+        version: link:../providers
       '@fuel-ts/transactions':
-        specifier: file:../transactions
-        version: file:packages/transactions
+        specifier: workspace:*
+        version: link:../transactions
       '@fuel-ts/utils':
-        specifier: file:../utils
-        version: file:packages/utils
+        specifier: workspace:*
+        version: link:../utils
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -747,8 +747,8 @@ importers:
         version: 0.29.0
     devDependencies:
       '@fuel-ts/testcases':
-        specifier: file:../testcases
-        version: file:packages/testcases
+        specifier: workspace:*
+        version: link:../testcases
       '@types/ramda':
         specifier: ^0.29.3
         version: 0.29.3
@@ -3716,37 +3716,6 @@ packages:
   /@eslint/js@8.38.0:
     resolution: {integrity: sha512-IoD2MfUnOV58ghIHCiil01PcohxjbYR/qCxsoC+xNgUwh1EY8jOOrYmu3d3a71+tJJ23uscEV4X2HJWMsPJu4g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  /@ethersproject/bytes@5.7.0:
-    resolution: {integrity: sha512-nsbxwgFXWh9NyYWo+U8atvmMsSdKJprTcICAkvbBffT75qDocbuggBU0SJiVK2MuTrp0q+xvLkTnGMPK1+uA9A==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/logger@5.7.0:
-    resolution: {integrity: sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==}
-    dev: false
-
-  /@ethersproject/networks@5.7.1:
-    resolution: {integrity: sha512-n/MufjFYv3yFcUyfhnXotyDlNdFb7onmkSy8aQERi2PjNcnWQ66xXxa3XlS8nCcA8aJKJjIIMNJTC7tu80GwpQ==}
-    dependencies:
-      '@ethersproject/logger': 5.7.0
-    dev: false
-
-  /@ethersproject/pbkdf2@5.7.0:
-    resolution: {integrity: sha512-oR/dBRZR6GTyaofd86DehG72hY6NpAjhabkhxgr3X2FpJtJuodEl2auADWBZfhDHgVCbu3/H/Ocq2uC6dpNjjw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-    dev: false
-
-  /@ethersproject/sha2@5.7.0:
-    resolution: {integrity: sha512-gKlH42riwb3KYp0reLsFTokByAKoJdgFCwI+CCiX/k+Jm2mbNs6oOaCjYQSlI1+XBVejwH2KrmCbMAT/GnRDQw==}
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      hash.js: 1.1.7
-    dev: false
 
   /@fuels/vm-asm@0.36.1:
     resolution: {integrity: sha512-MXtNDk0WXONIrDJOlk07+X7GegpCz2hfbAgSIWycOD0th2z1GndvMqBryiw/pTVDHLnHe+5TGIODLsprI4RiEw==}
@@ -11185,15 +11154,6 @@ packages:
     transitivePeerDependencies:
       - encoding
     dev: true
-
-  /graphql-sse@2.2.1(graphql@16.6.0):
-    resolution: {integrity: sha512-lLpddzD+DqI6zJaaNo04T7uFtHgQtf45vjMxllKZb2Z/4ddX0KED0Ckf3Yeq0FN6+nTzu3vjXcDTOd+Y3dU4BA==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      graphql: '>=0.11 <=16'
-    dependencies:
-      graphql: 16.6.0
-    dev: false
 
   /graphql-tag@2.12.6(graphql@16.6.0):
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
@@ -19637,112 +19597,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
-
-  file:packages/address:
-    resolution: {directory: packages/address, type: directory}
-    name: '@fuel-ts/address'
-    version: 0.62.0
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/crypto': link:packages/crypto
-      '@fuel-ts/errors': link:packages/errors
-      '@fuel-ts/interfaces': link:packages/interfaces
-      '@fuel-ts/versions': link:packages/versions
-      bech32: 2.0.0
-      ethers: 6.7.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false
-
-  file:packages/crypto:
-    resolution: {directory: packages/crypto, type: directory}
-    name: '@fuel-ts/crypto'
-    version: 0.62.0
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/pbkdf2': 5.7.0
-      '@fuel-ts/errors': link:packages/errors
-      ethereum-cryptography: 2.1.2
-      ethers: 6.7.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false
-
-  file:packages/math:
-    resolution: {directory: packages/math, type: directory}
-    name: '@fuel-ts/math'
-    version: 0.62.0
-    dependencies:
-      '@fuel-ts/errors': link:packages/errors
-      '@types/bn.js': 5.1.1
-      bn.js: 5.2.1
-    dev: false
-
-  file:packages/providers:
-    resolution: {directory: packages/providers, type: directory}
-    name: '@fuel-ts/providers'
-    version: 0.62.0
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/networks': 5.7.1
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/abi-coder': link:packages/abi-coder
-      '@fuel-ts/address': link:packages/address
-      '@fuel-ts/crypto': link:packages/crypto
-      '@fuel-ts/errors': link:packages/errors
-      '@fuel-ts/interfaces': link:packages/interfaces
-      '@fuel-ts/math': link:packages/math
-      '@fuel-ts/transactions': link:packages/transactions
-      '@fuel-ts/versions': link:packages/versions
-      ethers: 6.7.1
-      graphql: 16.6.0
-      graphql-request: 5.0.0(graphql@16.6.0)
-      graphql-sse: 2.2.1(graphql@16.6.0)
-      graphql-tag: 2.12.6(graphql@16.6.0)
-      ramda: 0.29.0
-      tai64: 1.0.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - utf-8-validate
-    dev: false
-
-  file:packages/testcases:
-    resolution: {directory: packages/testcases, type: directory}
-    name: '@fuel-ts/testcases'
-    version: 0.62.0
-    dev: true
-
-  file:packages/transactions:
-    resolution: {directory: packages/transactions, type: directory}
-    name: '@fuel-ts/transactions'
-    version: 0.62.0
-    dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/abi-coder': link:packages/abi-coder
-      '@fuel-ts/address': link:packages/address
-      '@fuel-ts/errors': link:packages/errors
-      '@fuel-ts/math': link:packages/math
-      '@fuel-ts/utils': link:packages/utils
-      ethers: 6.7.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false
-
-  file:packages/utils:
-    resolution: {directory: packages/utils, type: directory}
-    name: '@fuel-ts/utils'
-    version: 0.62.0
-    dependencies:
-      ethers: 6.7.1
-      ramda: 0.29.0
-      rimraf: 3.0.2
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false

@@ -22,17 +22,17 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/address": "file:../address",
-    "@fuel-ts/crypto": "file:../crypto",
-    "@fuel-ts/math": "file:../math",
-    "@fuel-ts/providers": "file:../providers",
-    "@fuel-ts/transactions": "file:../transactions",
-    "@fuel-ts/utils": "file:../utils",
+    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.7.1",
     "ramda": "^0.29.0"
   },
   "devDependencies": {
-    "@fuel-ts/testcases": "file:../testcases",
+    "@fuel-ts/testcases": "workspace:*",
     "@types/ramda": "^0.29.3"
   }
 }
