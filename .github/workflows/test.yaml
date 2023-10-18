@@ -112,6 +112,7 @@ jobs:
       - name: Download Coverage for Node Tests
         uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: test.yaml
           name: node
           path: coverage/environments
 
@@ -131,18 +132,18 @@ jobs:
 
       - name: Download Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
-        # TODO: Remove PR != check once #1182 has been merged
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1182)}}
+        # TODO: Remove PR != check once #1310 has been merged
+        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
         with:
           workflow: test.yaml
           branch: master
           name: coverage-master
           path: coverage-master
 
-      # TODO: Delete once #1182 has been merged
+      # TODO: Delete once #1310 has been merged
       - name: Download coverage artifact (temporary)
         uses: dawidd6/action-download-artifact@v2
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1182)}}
+        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
         with:
           workflow: test.yaml
           run_id: 5940564903
