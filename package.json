@@ -13,30 +13,13 @@
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=!docs",
-    "ci:test": "./scripts/ci-test.sh",
-    "ci:test-node": "pnpm ci:test --node",
-    "ci:test-browser": "pnpm ci:test --browser",
+    "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
-
-
-
-    "test": "run-s test:node test:browser",
-    "test:node": "vitest --run --config vite.node.config.ts $(scripts/find-tests.sh --node)",
-    "test:browser": "vitest --run --config vite.browser.config.ts $(scripts/find-tests.sh --browser)",
-    "test:coverage": "run-s test:clean-coverage test:node-coverage test:browser-coverage test:gen-coverage",
-    "test:node-coverage": "pnpm test:node --coverage",
-    "test:browser-coverage": "pnpm test:browser --coverage",
-    "test:clean-coverage": "rimraf coverage",
-    "test:node-watch": "vitest --config vite.node.config.ts $(scripts/find-tests.sh --node)",
-    "test:browser-watch": "vitest --config vite.browser.config.ts $(scripts/find-tests.sh --browser)",
-    "test:gen-coverage": "run-s test:merge-coverage test:report-coverage",
-    "test:open-coverage": "open coverage/report/index.html",
-    "test:merge-coverage": "tsx ./scripts/merge-coverage.ts && nyc merge coverage/environments coverage/merged/coverage.json",
-    "test:report-coverage": "nyc report --temp-dir=coverage/merged --report-dir=coverage/report --exclude-after-remap=false",
-    "test:validate": "tsx ./scripts/validate-tests",
-
-
-
+    "test": "vitest --run --config vite.node.config.ts $(scripts/tests-find.sh --node)",
+    "test:coverage": "pnpm test -- --coverage",
+    "test:coverage-report": "tsx ./scripts/tests-coverage.ts",
+    "test:watch": "vitest --watch --config vite.node.config.ts $(scripts/tests-find.sh --node)",
+    "test:validate": "tsx ./scripts/tests-validate.ts",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check --fix",
