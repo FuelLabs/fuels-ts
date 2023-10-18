@@ -12,7 +12,7 @@ import { U64Coder } from './u64';
 export class StdStringCoder extends Coder<string, string> {
   static memorySize = 1;
   constructor() {
-    super('struct', 'struct String', BASE_VECTOR_OFFSET);
+    super('struct', 'struct String', 1);
   }
 
   encode(value: string): Uint8Array {
