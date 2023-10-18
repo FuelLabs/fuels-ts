@@ -3,6 +3,9 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectStorageSlotsFilepaths } from './collectStorageSlotsFilePaths';
 
+/**
+ * @group node
+ */
 describe('collectStorageSlotsFilePaths.ts', () => {
   const script = getProjectResources(ForcProjectsEnum.SCRIPT);
   const predicate = getProjectResources(ForcProjectsEnum.PREDICATE);
