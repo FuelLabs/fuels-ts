@@ -2,7 +2,7 @@
 
 ## Predicate with multiple arguments
 
-You can pass more than one arugment to a predicate. For example, this is a predicate that evaluates to `true` if the two arguments are not equal:
+You can pass more than one argument to a predicate. For example, this is a predicate that evaluates to `true` if the two arguments are not equal:
 
 <<< @/../../../packages/fuel-gauge/fixtures/forc-projects/predicate-multi-args/src/main.sw#predicate-multi-args-sw{rust:line-numbers}
 
