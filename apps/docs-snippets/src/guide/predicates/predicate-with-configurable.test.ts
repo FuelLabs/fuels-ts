@@ -30,7 +30,7 @@ describe(__filename, () => {
     // set predicate data to be the same as the configurable constant
     predicate.setData(configurable.WHITELISTED);
 
-    // transfering funds to the predicate
+    // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 500_000, BaseAssetId, { gasPrice });
 
     await tx1.waitForResult();
@@ -41,7 +41,7 @@ describe(__filename, () => {
 
     const amountToTransfer = 100;
 
-    // transfering funds from the predicate to destination if predicate returns true
+    // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
       gasPrice,
     });
@@ -61,7 +61,7 @@ describe(__filename, () => {
     // set predicate data to be the same as the configurable constant
     predicate.setData('0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132');
 
-    // transfering funds to the predicate
+    // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 300_000, BaseAssetId, { gasPrice });
 
     await tx1.waitForResult();
@@ -72,7 +72,7 @@ describe(__filename, () => {
 
     const amountToTransfer = 100;
 
-    // transfering funds from the predicate to destination if predicate returns true
+    // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
       gasPrice,
     });
