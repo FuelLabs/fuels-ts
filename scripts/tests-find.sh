@@ -10,4 +10,6 @@ elif [[ $* == *--browser* ]]; then
   grep -lE "@group\s+browser" $FILES
 elif [[ $* == *--node* ]]; then
   grep -lE "@group\s+node" $FILES
+elif [[ $* == *--e2e* ]]; then
+  grep -lE "@group\s+e2e" $FILES
 fi

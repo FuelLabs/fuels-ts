@@ -21,7 +21,7 @@
     "test:watch": "vitest --watch --config vite.node.config.ts $(scripts/tests-find.sh --node)",
     "test:validate": "tsx ./scripts/tests-validate.ts",
     "test:browser": "vitest --run --config vite.browser.config.ts $(scripts/tests-find.sh --browser)",
-    "test:e2e": "jest --no-cache --runInBand packages/fuel-gauge/src/e2e-script.test.ts",
+    "test:e2e": "vitest --run --config vite.node.config.ts $(scripts/tests-find.sh --e2e)",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check --fix",
