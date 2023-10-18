@@ -1,5 +1,3 @@
-import { bn } from '@fuel-ts/math';
-import { transactionRequestify } from '@fuel-ts/providers';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
