@@ -4,10 +4,10 @@ As noted in [the testing intro](./index.md), you are free to test your Sway and 
 
 Here is a simple Sway program that takes an input and then returns it:
 
-<<< @/../../demo-typegen/contract/src/main.sw#Testing-with-vitest-rust{rust:line-numbers}
+<<< @/../../demo-typegen/contract/src/main.sw#Testing-in-ts-rust{rust:line-numbers}
 
 Here is JavaScript code testing the above program using a conventional Vitest setup:
 
-<<< @/../../demo-typegen/src/demo.test.ts#Testing-with-vitest-ts{ts:line-numbers}
+<<< @/../../demo-typegen/src/demo.test.ts#Testing-in-ts-ts{ts:line-numbers}
 
 > **Note:** The TS-SDK has recently migrated to Vitest however it follows a very similar API to Jest, and the above example applies to Jest also.
