@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { BN, bn, toHex, BaseAssetId } from 'fuels';
+import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -22,9 +22,14 @@ const U64_MAX = bn(2).pow(64).sub(1);
  * @group node
  */
 describe('CallTestContract', () => {
+  let gasPrice: BN;
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  });
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setupContract();
-    const { value } = await contract.functions.foo(num).call<BN>();
+    const { value } = await contract.functions.foo(num).txParams({ gasPrice }).call<BN>();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
@@ -37,7 +42,7 @@ describe('CallTestContract', () => {
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
     const contract = await setupContract();
-    const { value } = await contract.functions.boo(struct).call();
+    const { value } = await contract.functions.boo(struct).txParams({ gasPrice }).call();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
@@ -45,10 +50,10 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     const contract = await setupContract();
 
-    const { value: value0 } = await contract.functions.barfoo(0).call();
+    const { value: value0 } = await contract.functions.barfoo(0).txParams({ gasPrice }).call();
     expect(value0.toHex()).toEqual(toHex(63));
 
-    const { value: value1 } = await contract.functions.foobar().call();
+    const { value: value1 } = await contract.functions.foobar().txParams({ gasPrice }).call();
     expect(value1.toHex()).toEqual(toHex(63));
   });
 
@@ -56,7 +61,7 @@ describe('CallTestContract', () => {
     const contract = await setupContract();
 
     // Call method with no params but with no result and no value on config
-    const { value } = await contract.functions.return_void().call();
+    const { value } = await contract.functions.return_void().txParams({ gasPrice }).call();
     expect(value).toEqual(undefined);
   });
 
@@ -130,7 +135,9 @@ describe('CallTestContract', () => {
     async (method, { values, expected }) => {
       const contract = await setupContract();
 
-      const { value } = await contract.functions[method](...values).call();
+      const { value } = await contract.functions[method](...values)
+        .txParams({ gasPrice })
+        .call();
 
       if (BN.isBN(value)) {
         expect(toHex(value)).toBe(toHex(expected));
@@ -147,6 +154,7 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [1_000_000, BaseAssetId],
       })
+      .txParams({ gasPrice })
       .call();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
@@ -160,6 +168,7 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [0, assetId],
       })
+      .txParams({ gasPrice })
       .call();
     expect(value).toBe(assetId);
   });
@@ -173,6 +182,7 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [0, assetId],
       })
+      .txParams({ gasPrice })
       .call();
     expect(value).toBe(assetId);
   });
@@ -184,7 +194,9 @@ describe('CallTestContract', () => {
     const numC = 10;
     const struct = { a: true, b: 1337 };
     const invocationA = contract.functions.foo(0);
-    const multiCallScope = contract.multiCall([invocationA, contract.functions.boo(struct)]);
+    const multiCallScope = contract
+      .multiCall([invocationA, contract.functions.boo(struct)])
+      .txParams({ gasPrice });
 
     // Set arguments of the invocation
     invocationA.setArguments(num);

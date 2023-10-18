@@ -1,4 +1,5 @@
 import { Address } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type {
   CallResult,
@@ -306,7 +307,7 @@ describe('Account', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(request);
 
     // asset id not hexlified
-    await account.transfer(destination, amount);
+    await account.transfer(destination, amount, BaseAssetId, txParam);
 
     expect(addCoinOutput.mock.calls.length).toBe(2);
     expect(addCoinOutput.mock.calls[1]).toEqual([

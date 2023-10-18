@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BigNumberish } from 'fuels';
+import type { BN, BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import predicateVectorTypes from '../fixtures/forc-projects/predicate-vector-types';
@@ -76,7 +76,7 @@ type MainArgs = [
   VecInAStructInAVec // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
-const setup = async (balance = 5_000) => {
+const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
@@ -89,6 +89,13 @@ const setup = async (balance = 5_000) => {
  * @group node
  */
 describe('Vector Types Validation', () => {
+  let gasPrice: BN;
+
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  });
+
   it('can use supported vector types [vector-types-contract]', async () => {
     const setupContract = getSetupContract('vector-types-contract');
     const contractInstance = await setupContract();
@@ -107,6 +114,7 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
+      .txParams({ gasPrice })
       .call();
     expect(value).toBe(true);
   });
@@ -129,6 +137,7 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
+      .txParams({ gasPrice })
       .call();
 
     expect(value.toString()).toBe('1');
@@ -137,7 +146,7 @@ describe('Vector Types Validation', () => {
   it('can use supported vector types [predicate-vector-types]', async () => {
     const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
-    const amountToPredicate = 100;
+    const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     const predicate = new Predicate<MainArgs>(
       predicateVectorTypes,
@@ -146,7 +155,9 @@ describe('Vector Types Validation', () => {
     );
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
+    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+      gasPrice,
+    });
     await setupTx.waitForResult();
 
     const initialPredicateBalance = await predicate.getBalance();
@@ -166,7 +177,7 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
-      .transfer(receiver.address, amountToReceiver);
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
     await tx.waitForResult();
 
     // Check the balance of the receiver

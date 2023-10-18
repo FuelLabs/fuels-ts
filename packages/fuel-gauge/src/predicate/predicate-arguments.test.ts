@@ -1,5 +1,5 @@
-import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, Provider } from 'fuels';
-import { toHex, toNumber, Predicate } from 'fuels';
+import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
+import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
@@ -22,6 +22,9 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
+    let gasPrice: BN;
+    const amountToReceiver = 50;
+    const amountToPredicate = 400_000;
 
     const AddressAbiInputs: JsonAbi = {
       types: [
@@ -150,6 +153,10 @@ describe('Predicate', () => {
       loggedTypes: [],
       configurables: [],
     };
+    beforeAll(async () => {
+      provider = await Provider.create(FUEL_NETWORK_URL);
+      gasPrice = provider.getGasConfig().minGasPrice;
+    });
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
@@ -157,8 +164,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid address data and returns true', async () => {
-      const amountToPredicate = 100;
-      const amountToReceiver = 50;
       const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -166,7 +171,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a')
-        .transfer(receiver.address, amountToReceiver);
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
       await tx.waitForResult();
 
       await assertBalances(
@@ -180,7 +185,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid address data and returns false', async () => {
-      const amountToPredicate = 10;
       const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -196,14 +200,14 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
-      const amountToPredicate = 100;
-      const amountToReceiver = 50;
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
-      const tx = await predicate.setData(1078).transfer(receiver.address, amountToReceiver);
+      const tx = await predicate
+        .setData(1078)
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
       await tx.waitForResult();
 
       await assertBalances(
@@ -217,7 +221,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
-      const amountToPredicate = 10;
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -228,13 +231,13 @@ describe('Predicate', () => {
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate.setData(100).transfer(receiver.address, amountToPredicate)
+        predicate
+          .setData(100)
+          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
 
     it('calls a predicate with valid struct data and returns true', async () => {
-      const amountToPredicate = 100;
-      const amountToReceiver = 50;
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         provider,
@@ -249,7 +252,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver);
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
       await tx.waitForResult();
 
       await assertBalances(
@@ -263,7 +266,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid struct data and returns false', async () => {
-      const amountToPredicate = 10;
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         provider,
@@ -283,13 +285,11 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, amountToPredicate)
+          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
-      const amountToPredicate = 100;
-      const amountToReceiver = 50;
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         provider,
@@ -306,7 +306,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver);
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
       await tx.waitForResult();
       // #endregion predicate-struct-arg
 
@@ -321,7 +321,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with an invalid main struct argument and returns false', async () => {
-      const amountToPredicate = 100;
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         provider,
@@ -339,13 +338,11 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, 50)
+          .transfer(receiver.address, 50, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
-      const amountToPredicate = 100;
-      const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(
         predicateBytesMainArgsVector,
         provider,
@@ -355,7 +352,9 @@ describe('Predicate', () => {
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
-      const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
+      const tx = await predicate
+        .setData([42])
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
       await tx.waitForResult();
 
       await assertBalances(
@@ -369,8 +368,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
-      const amountToPredicate = 100;
-      const amountToReceiver = 50;
       const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -379,7 +376,9 @@ describe('Predicate', () => {
       // #region predicate-multi-args
       // #context const predicate = new Predicate(bytecode, chainId, abi);
       predicate.setData(20, 30);
-      const tx = await predicate.transfer(receiver.address, amountToReceiver);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+        gasPrice,
+      });
       await tx.waitForResult();
       // #endregion predicate-multi-args
 
@@ -394,7 +393,6 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid multiple arguments and returns false', async () => {
-      const amountToPredicate = 100;
       const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -402,9 +400,9 @@ describe('Predicate', () => {
       // Check the UTXOs locked with the predicate hash
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
-      await expect(predicate.setData(20, 20).transfer(receiver.address, 50)).rejects.toThrow(
-        'Invalid transaction'
-      );
+      await expect(
+        predicate.setData(20, 20).transfer(receiver.address, 50, BaseAssetId, { gasPrice })
+      ).rejects.toThrow('Invalid transaction');
     });
   });
 });

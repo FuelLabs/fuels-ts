@@ -5,8 +5,10 @@ import { getSetupContract } from './utils';
 
 const setupContract = getSetupContract('vectors');
 let contractInstance: Contract;
+let gasPrice: BN;
 beforeAll(async () => {
   contractInstance = await setupContract();
+  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 const toNumbers = (nums: BN[]) => nums.map((num: BN) => bn(num).toNumber());
@@ -22,7 +24,10 @@ describe('Vector Tests', () => {
   it('should test u8 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
-    const { value } = await contractInstance.functions.echo_u8(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions
+      .echo_u8(INPUT)
+      .txParams({ gasPrice })
+      .call<number[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -30,7 +35,10 @@ describe('Vector Tests', () => {
   it('should test u16 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
-    const { value } = await contractInstance.functions.echo_u16(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions
+      .echo_u16(INPUT)
+      .txParams({ gasPrice })
+      .call<number[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -38,7 +46,10 @@ describe('Vector Tests', () => {
   it('should test u32 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
-    const { value } = await contractInstance.functions.echo_u32(INPUT).call<number[]>();
+    const { value } = await contractInstance.functions
+      .echo_u32(INPUT)
+      .txParams({ gasPrice })
+      .call<number[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -46,7 +57,10 @@ describe('Vector Tests', () => {
   it('should test u64 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
-    const { value } = await contractInstance.functions.echo_u64(INPUT).call<BN[]>();
+    const { value } = await contractInstance.functions
+      .echo_u64(INPUT)
+      .txParams({ gasPrice })
+      .call<BN[]>();
 
     expect(toNumbers(value)).toStrictEqual(INPUT);
   });
@@ -54,7 +68,10 @@ describe('Vector Tests', () => {
   it('should test bool vector input/output', async () => {
     const INPUT = [true, false, true, true];
 
-    const { value } = await contractInstance.functions.echo_bool(INPUT).call<boolean[]>();
+    const { value } = await contractInstance.functions
+      .echo_bool(INPUT)
+      .txParams({ gasPrice })
+      .call<boolean[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -62,7 +79,10 @@ describe('Vector Tests', () => {
   it('should test b256 vector input/output', async () => {
     const INPUT = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
 
-    const { value } = await contractInstance.functions.echo_b256(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_b256(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -70,7 +90,10 @@ describe('Vector Tests', () => {
   it('should test b512 vector input/output', async () => {
     const INPUT = [hexlify(randomBytes(64)), hexlify(randomBytes(64)), hexlify(randomBytes(64))];
 
-    const { value } = await contractInstance.functions.echo_b512(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_b512(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -78,7 +101,10 @@ describe('Vector Tests', () => {
   it('should test str[1] vector input/output', async () => {
     const INPUT = ['a', 'b', 'c', 'd'];
 
-    const { value } = await contractInstance.functions.echo_str_1(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_str_1(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -86,7 +112,10 @@ describe('Vector Tests', () => {
   it('should test str[9] vector input/output', async () => {
     const INPUT = ['123456789', 'abcdefghi', 'catdogcat', 'onetwoone'];
 
-    const { value } = await contractInstance.functions.echo_str_9(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_str_9(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -98,7 +127,10 @@ describe('Vector Tests', () => {
       [5, 6],
     ];
 
-    const { value } = await contractInstance.functions.echo_tuple_u8(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_tuple_u8(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -110,7 +142,10 @@ describe('Vector Tests', () => {
       [5555, 6],
     ];
 
-    const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call<BN[][]>();
+    const { value } = await contractInstance.functions
+      .echo_tuple_u64(INPUT)
+      .txParams({ gasPrice })
+      .call<BN[][]>();
 
     expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
   });
@@ -121,7 +156,10 @@ describe('Vector Tests', () => {
       [5, 6],
     ];
 
-    const { value } = await contractInstance.functions.echo_array_u8(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_array_u8(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -133,7 +171,10 @@ describe('Vector Tests', () => {
       [11500, 22600, 33700, 55000, 669999],
     ];
 
-    const { value } = await contractInstance.functions.echo_array_u64(INPUT).call<BN[][]>();
+    const { value } = await contractInstance.functions
+      .echo_array_u64(INPUT)
+      .txParams({ gasPrice })
+      .call<BN[][]>();
 
     expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
   });
@@ -147,7 +188,10 @@ describe('Vector Tests', () => {
       [true, true],
     ];
 
-    const { value } = await contractInstance.functions.echo_array_bool(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_array_bool(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -165,7 +209,10 @@ describe('Vector Tests', () => {
       },
     ];
 
-    const { value } = await contractInstance.functions.echo_struct_u8(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_struct_u8(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -183,7 +230,10 @@ describe('Vector Tests', () => {
       },
     ];
 
-    const { value } = await contractInstance.functions.echo_struct_b256(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_struct_b256(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -210,6 +260,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_struct_complex(INPUT)
+      .txParams({ gasPrice })
       .call<ComplexStruct[]>();
 
     expect(
@@ -229,7 +280,10 @@ describe('Vector Tests', () => {
       SmallEnum.Empty,
     ];
 
-    const { value } = await contractInstance.functions.echo_enum_small(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_enum_small(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -247,7 +301,10 @@ describe('Vector Tests', () => {
       },
     ];
 
-    const { value } = await contractInstance.functions.echo_enum_big(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_enum_big(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -255,7 +312,10 @@ describe('Vector Tests', () => {
   it('should test Option<u8> vector input/output', async () => {
     const INPUT = [undefined, 1, undefined, 2, undefined, 3];
 
-    const { value } = await contractInstance.functions.echo_option_u8(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions
+      .echo_option_u8(INPUT)
+      .txParams({ gasPrice })
+      .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -266,7 +326,10 @@ describe('Vector Tests', () => {
       vec: [1, 5, 98],
     };
 
-    const { value } = await contractInstance.functions.echo_vector_inside_struct(INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_vector_inside_struct(INPUT)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -276,7 +339,10 @@ describe('Vector Tests', () => {
       vec: [1, 5, 98],
     };
 
-    const { value } = await contractInstance.functions.echo_vector_inside_enum(INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_vector_inside_enum(INPUT)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -284,7 +350,10 @@ describe('Vector Tests', () => {
   it.skip('should test Vec<u8> inside vector input/output', async () => {
     const INPUT = [[1, 5, 98], [2, 44], [34]];
 
-    const { value } = await contractInstance.functions.echo_vector_inside_vector(INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_vector_inside_vector(INPUT)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -301,6 +370,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_struct_and_vector_tuple(INPUT[0], INPUT[1])
+      .txParams({ gasPrice })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -309,7 +379,10 @@ describe('Vector Tests', () => {
   it.skip('should test Vec<u8> and b256 tuple input/output', async () => {
     const INPUT = [[1, 8, 3, 2, 55, 215], hexlify(randomBytes(32))];
 
-    const { value } = await contractInstance.functions.echo_vector_and_b256_tuple(...INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_vector_and_b256_tuple(...INPUT)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -320,7 +393,10 @@ describe('Vector Tests', () => {
       [1, 254, 55],
     ];
 
-    const { value } = await contractInstance.functions.echo_two_vectors_tuple(...INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_two_vectors_tuple(...INPUT)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -328,7 +404,10 @@ describe('Vector Tests', () => {
   it.skip('should test u32 and three different vectors tuple input/output', async () => {
     const INPUT = [91000, [true, true, false], [95000, 153333], [20000, 65500]];
 
-    const { value } = await contractInstance.functions.echo_u32_then_three_vectors(...INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_u32_then_three_vectors(...INPUT)
+      .txParams({ gasPrice })
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -340,6 +419,7 @@ describe('Vector Tests', () => {
         contractInstance.functions.echo_u8([2, 2]),
         contractInstance.functions.echo_u8([3, 3, 3]),
       ])
+      .txParams({ gasPrice })
       .call();
     expect(results).toStrictEqual([[1], [2, 2], [3, 3, 3]]);
   });

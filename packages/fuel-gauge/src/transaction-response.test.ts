@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import type { BN, WalletUnlocked } from 'fuels';
+import { BaseAssetId, FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
 /**
  * @group node
@@ -8,10 +8,12 @@ import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
+  let gasPrice: BN;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    adminWallet = await generateTestWallet(provider, [[1_000]]);
+    adminWallet = await generateTestWallet(provider, [[500_000]]);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   it('should ensure create method waits till a transaction response is given', async () => {
@@ -19,7 +21,12 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
+    const { id: transactionId } = await adminWallet.transfer(
+      destination.address,
+      100,
+      BaseAssetId,
+      { gasPrice }
+    );
 
     const response = await TransactionResponse.create(transactionId, provider);
 
@@ -33,7 +40,12 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
+    const { id: transactionId } = await adminWallet.transfer(
+      destination.address,
+      100,
+      BaseAssetId,
+      { gasPrice }
+    );
 
     const response = new TransactionResponse(transactionId, provider);
 
@@ -70,7 +82,12 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const { id: transactionId } = await adminWallet.transfer(destination.address, 100);
+    const { id: transactionId } = await adminWallet.transfer(
+      destination.address,
+      100,
+      BaseAssetId,
+      { gasPrice }
+    );
 
     const response = new TransactionResponse(transactionId, provider);
 

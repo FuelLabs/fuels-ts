@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import type { BN, Contract } from 'fuels';
 import { bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
@@ -15,14 +16,20 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
+let contract: Contract;
+let gasPrice: BN;
+
+beforeAll(async () => {
+  contract = await setupContract();
+  ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
+});
+
 /**
  * @group node
  */
 test('allow sending coins to payable functions', async () => {
-  const contract = await setupContract();
-
   // This should not fail because the function is payable
-  expect(
+  await expect(
     contract.functions
       .payable()
       .callParams({
@@ -31,13 +38,12 @@ test('allow sending coins to payable functions', async () => {
           assetId: BaseAssetId,
         },
       })
+      .txParams({ gasPrice })
       .call()
   ).resolves.toBeTruthy();
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
-  const contract = await setupContract();
-
   // This should fail because the function is not payable
   await expect(async () =>
     contract.functions
@@ -48,6 +54,7 @@ test("don't allow sending coins to non-payable functions", async () => {
           assetId: BaseAssetId,
         },
       })
+      .txParams({ gasPrice })
       .call()
   ).rejects.toThrowError(
     `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`

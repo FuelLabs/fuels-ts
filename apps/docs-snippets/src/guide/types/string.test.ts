@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { BN, Contract } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -8,9 +8,10 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
-
+  let gasPrice: BN;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
   it('should validate string', () => {
@@ -38,14 +39,14 @@ describe(__filename, () => {
     // #region string-3
     const longString = 'fuel-sdk-WILL-THROW-ERROR';
 
-    await expect(async () => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
-      'Value length mismatch during encode'
-    );
+    await expect(async () =>
+      contract.functions.echo_str_8(longString).txParams({ gasPrice }).call()
+    ).rejects.toThrowError('Value length mismatch during encode');
 
     const shortString = 'THROWS';
 
     await expect(async () =>
-      contract.functions.echo_str_8(shortString).call()
+      contract.functions.echo_str_8(shortString).txParams({ gasPrice }).call()
     ).rejects.toThrowError('Value length mismatch during encode');
     // #endregion string-3
   });

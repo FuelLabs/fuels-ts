@@ -9,11 +9,12 @@ import { getTestWallet } from '../../utils';
  */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
-
+  let gasPrice: BN;
   const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.SUM_SCRIPT);
 
   beforeAll(async () => {
     wallet = await getTestWallet();
+    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
   });
 
   it('should successfully sum setted configurable constant with inpputed value', async () => {
@@ -28,7 +29,7 @@ describe(__filename, () => {
 
     const inpputedValue = 10;
 
-    const { value } = await script.functions.main(inpputedValue).call();
+    const { value } = await script.functions.main(inpputedValue).txParams({ gasPrice }).call();
 
     const expectedTotal = inpputedValue + configurableConstants.AMOUNT;
 

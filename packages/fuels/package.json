@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.62.0",
+  "version": "0.63.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -9,6 +9,11 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",

@@ -9,14 +9,14 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
-
+  let gasPrice: BN;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.COUNTER);
+    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
-    const gasPrice = 1;
     const gasLimit = 3_500_000;
 
     // #region variable-outputs-1
@@ -33,7 +33,7 @@ describe(__filename, () => {
 
     const { transaction } = transactionResult;
 
-    expect(new BN(transaction.gasPrice).toNumber()).toBe(gasPrice);
+    expect(new BN(transaction.gasPrice).toNumber()).toBe(gasPrice.toNumber());
     expect(new BN(transaction.gasLimit).toNumber()).toBe(gasLimit);
   });
 
@@ -44,6 +44,7 @@ describe(__filename, () => {
         .increment_count(10)
         .txParams({
           gasLimit: 1,
+          gasPrice,
         })
         .call()
     ).rejects.toThrowError(/Gas limit [\s\S]* is lower than the required/);
