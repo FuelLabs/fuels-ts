@@ -32,4 +32,5 @@ const getPrivateKeyForCurrentWorker = () => {
   return privateKey;
 };
 
-process.env.GENESIS_SECRET = getPrivateKeyForCurrentWorker();
+process.env.GENESIS_SECRET =
+  process.env.FUEL_NETWORK_GENESIS_KEY || getPrivateKeyForCurrentWorker();

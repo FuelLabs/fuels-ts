@@ -159,3 +159,28 @@ jobs:
           lcov-base: coverage-master/lcov.info
           delete-old-comments: true
           title: "Coverage Report"
+  
+  live-tests:
+    name: Run Live Tests
+    if: github.head_ref == 'changeset-release/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: pnpm build
+
+      - name: Pretest
+        run: pnpm pretest
+
+      - name: Run Isolated Tests
+        run: pnpm test:e2e
+        env:
+          FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
+          FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
