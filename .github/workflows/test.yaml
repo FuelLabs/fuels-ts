@@ -104,15 +104,14 @@ jobs:
 
       # TODO: Implement browser stage
       # - name: Download Coverage for Browser Tests
-      #   uses: dawidd6/action-download-artifact@v2
+      #   uses: actions/download-artifact@v3
       #   with:
       #     name: browser
       #     path: coverage/environments
 
       - name: Download Coverage for Node Tests
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
-          workflow: test.yaml
           name: node
           path: coverage/environments
 
