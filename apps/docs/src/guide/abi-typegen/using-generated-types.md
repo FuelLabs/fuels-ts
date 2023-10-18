@@ -26,7 +26,9 @@ const { transactionId, value } = await contract.functions.my_fn(1).call();
 console.log(transactionId, value);
 ```
 
-## Using the Generated Contract Factory to Deploy a Contract
+## Contract
+
+Let's use the Contract class to deploy a contract:
 
 ```ts
 import { Wallet } from "fuels";
@@ -40,7 +42,9 @@ const contract = await MyContract__factory.deployContract(bytecode, wallet);
 console.log(contract.id);
 ```
 
-You can also pass in [`DeployContractOptions`](https://github.com/FuelLabs/fuels-ts/blob/a64b67b9fb2d7f764ab9151a21d2266bf2df3643/packages/contract/src/contract-factory.ts#L19-L24) like storage slots and configurable constants to the `deployContract` method:
+### Autoloading of Storage Slots
+
+Typegen tries to resolve, auto-load, and embed the [Storage Slots](../contracts//storage-slots.md) for your Contract within the `MyContract__factory` class. Still, you can override it alongside other options from [`DeployContractOptions`](https://github.com/FuelLabs/fuels-ts/blob/a64b67b9fb2d7f764ab9151a21d2266bf2df3643/packages/contract/src/contract-factory.ts#L19-L24), when calling the `deployContract` method:
 
 ```ts
 import storageSlots from "../contract/out/debug/storage-slots.json";
@@ -50,7 +54,7 @@ const contract = await MyContract__factory.deployContract(bytecode, wallet, {
 });
 ```
 
-## Using Generated Script Types
+## Script
 
 After generating types via:
 
@@ -74,7 +78,7 @@ const { value, logs } = await script.functions.main(1).call();
 console.log({ value, logs });
 ```
 
-## Using Generated Predicate Types
+## Predicate
 
 Consider the following predicate:
 

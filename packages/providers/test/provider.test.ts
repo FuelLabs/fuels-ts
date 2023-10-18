@@ -67,7 +67,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.6');
+    expect(version).toEqual('0.20.7');
   });
 
   it('can call()', async () => {
@@ -123,7 +123,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x67),
+        gasUsed: bn(0xc),
       },
     ];
 
