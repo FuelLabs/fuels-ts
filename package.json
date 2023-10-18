@@ -17,6 +17,9 @@
     "ci:test-node": "pnpm ci:test --node",
     "ci:test-browser": "pnpm ci:test --browser",
     "pretest": "turbo run pretest",
+
+
+
     "test": "run-s test:node test:browser",
     "test:node": "vitest --run --config vite.node.config.ts $(scripts/find-tests.sh --node)",
     "test:browser": "vitest --run --config vite.browser.config.ts $(scripts/find-tests.sh --browser)",
@@ -31,6 +34,9 @@
     "test:merge-coverage": "tsx ./scripts/merge-coverage.ts && nyc merge coverage/environments coverage/merged/coverage.json",
     "test:report-coverage": "nyc report --temp-dir=coverage/merged --report-dir=coverage/report --exclude-after-remap=false",
     "test:validate": "tsx ./scripts/validate-tests",
+
+
+
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check --fix",
@@ -93,7 +99,6 @@
     "nyc": "^15.1.0",
     "open": "^8.4.0",
     "prettier": "^2.8.8",
-    "process": "^0.11.10",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",
     "textlint": "^13.3.2",
