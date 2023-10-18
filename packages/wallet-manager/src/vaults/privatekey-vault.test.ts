@@ -7,7 +7,6 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { PrivateKeyVault } from './privatekey-vault';
 
 /**
- * @group browser
  * @group node
  */
 describe('PrivateKeyVault', () => {

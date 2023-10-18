@@ -1,7 +1,6 @@
 import { fromTai64ToUnix, fromUnixToTai64 } from './time';
 
 /**
- * @group browser
  * @group node
  */
 test('fromTai64ToUnix', () => {

@@ -1,6 +1,9 @@
 import { BytesType } from './BytesType';
 import { StructType } from './StructType';
 
+/**
+ * @group node
+ */
 describe('BytesType.ts', () => {
   test('should properly parse type attributes', () => {
     const bytes = new BytesType({

@@ -41,6 +41,9 @@ const setup = async (balance = 5_000) => {
   return wallet;
 };
 
+/**
+ * @group node
+ */
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     const INPUT = 10;

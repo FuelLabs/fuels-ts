@@ -17,7 +17,6 @@ import predicateAbiConfigurable from '../../fixtures/forc-projects/predicate-wit
 import { fundPredicate, assertBalance } from './utils/predicate';
 
 /**
- * @group browser
  * @group node
  */
 describe('Predicate', () => {

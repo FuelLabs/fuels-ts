@@ -1,5 +1,8 @@
 import { concatBytes } from './concatBytes';
 
+/**
+ * @group node
+ */
 describe('concatBytes', () => {
   it('can concatenate multiple Uint8Arrays', () => {
     const actual = concatBytes([

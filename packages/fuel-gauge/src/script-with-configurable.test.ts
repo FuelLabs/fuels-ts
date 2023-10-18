@@ -20,7 +20,6 @@ const defaultValues = {
 let wallet: WalletUnlocked;
 
 /**
- * @group browser
  * @group node
  */
 describe('Script With Configurable', () => {

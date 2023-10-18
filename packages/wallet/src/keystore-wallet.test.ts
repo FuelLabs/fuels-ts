@@ -4,7 +4,6 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { decryptKeystoreWallet, encryptKeystoreWallet, removeHexPrefix } from './keystore-wallet';
 
 /**
- * @group browser
  * @group node
  */
 describe('Keystore Wallet', () => {

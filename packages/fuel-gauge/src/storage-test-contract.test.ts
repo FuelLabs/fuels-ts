@@ -31,7 +31,6 @@ const setup = async () => {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('StorageTestContract', () => {

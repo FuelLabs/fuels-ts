@@ -3,7 +3,6 @@ import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

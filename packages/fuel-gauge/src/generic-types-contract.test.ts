@@ -14,7 +14,6 @@ const contractBytecode = readFileSync(
 );
 
 /**
- * @group browser
  * @group node
  */
 describe('GenericTypesContract', () => {

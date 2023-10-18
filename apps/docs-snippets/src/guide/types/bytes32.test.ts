@@ -2,7 +2,6 @@ import type { Bytes } from 'fuels';
 import { arrayify, hexlify, randomBytes } from 'fuels';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

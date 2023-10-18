@@ -7,7 +7,6 @@ import { MemoryCache } from '../src/memory-cache';
 const CACHE_ITEMS = [hexlify(randomBytes(8)), randomBytes(8), randomBytes(8)];
 
 /**
- * @group browser
  * @group node
  */
 describe('Memory Cache', () => {

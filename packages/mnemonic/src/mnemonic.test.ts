@@ -4,7 +4,6 @@ import Mnemonic from './mnemonic';
 import MnemonicSpec from './mnemonic-specs';
 
 /**
- * @group browser
  * @group node
  */
 describe('Mnemonic', () => {

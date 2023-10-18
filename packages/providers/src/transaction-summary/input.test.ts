@@ -18,7 +18,6 @@ import {
 } from './input';
 
 /**
- * @group browser
  * @group node
  */
 describe('transaction-summary/input', () => {

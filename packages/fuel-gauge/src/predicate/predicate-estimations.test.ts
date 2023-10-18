@@ -16,7 +16,6 @@ import predicateTrueBytecode from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
 
 /**
- * @group browser
  * @group node
  */
 describe('Predicate', () => {

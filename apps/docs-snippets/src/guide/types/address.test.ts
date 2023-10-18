@@ -1,7 +1,6 @@
 import { Address, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

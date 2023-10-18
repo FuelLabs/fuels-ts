@@ -4,7 +4,6 @@ import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
 
 /**
  * @group node
- * @group browser
  */
 describe('expect-to-throw-fuel-error', () => {
   const otherError = new Error('Original Error');

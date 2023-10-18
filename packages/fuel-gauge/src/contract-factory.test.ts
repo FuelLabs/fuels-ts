@@ -31,7 +31,6 @@ const abi = JSON.parse(
 );
 
 /**
- * @group browser
  * @group node
  */
 describe('Contract Factory', () => {

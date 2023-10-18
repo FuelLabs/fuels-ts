@@ -4,7 +4,6 @@ import { calcRoot, constructTree, getProof } from './binaryMerkleTree';
 import type Node from './types/node';
 
 /**
- * @group browser
  * @group node
  */
 describe('Binary Merkle Tree', () => {

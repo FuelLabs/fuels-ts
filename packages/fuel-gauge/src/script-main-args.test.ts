@@ -26,7 +26,6 @@ type Baz = {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('Script Coverage', () => {

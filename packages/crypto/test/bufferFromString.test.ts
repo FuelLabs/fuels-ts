@@ -2,7 +2,6 @@ import { resolveEnvAppropriateModules } from './utils';
 
 /**
  * @group node
- * @group browser
  */
 describe('bufferFromString', async () => {
   const { bufferFromString } = await resolveEnvAppropriateModules();

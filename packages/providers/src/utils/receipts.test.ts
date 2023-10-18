@@ -26,7 +26,6 @@ import { GqlReceiptType } from '../__generated__/operations';
 import { assembleReceiptByType } from './receipts';
 
 /**
- * @group browser
  * @group node
  */
 describe('assembleReceiptByType', () => {

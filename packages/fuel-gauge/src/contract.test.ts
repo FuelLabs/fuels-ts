@@ -159,7 +159,6 @@ const txPointer = '0x00000000000000000000000000000000';
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
 /**
- * @group browser
  * @group node
  */
 describe('Contract', () => {

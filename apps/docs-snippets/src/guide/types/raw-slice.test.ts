@@ -3,6 +3,9 @@ import type { Contract, BN } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('RawSlice', () => {
   let contract: Contract;
 

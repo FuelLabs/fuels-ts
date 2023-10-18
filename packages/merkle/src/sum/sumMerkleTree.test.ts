@@ -4,7 +4,6 @@ import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';
 
 /**
- * @group browser
  * @group node
  */
 describe('Sum Merkle Tree', () => {

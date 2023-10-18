@@ -7,7 +7,6 @@
 import { format, formatUnits, toBytes, toHex, toNumber } from './functional';
 
 /**
- * @group browser
  * @group node
  */
 describe('Math - Functional shortcuts', () => {

@@ -5,7 +5,6 @@ import { WalletUnlocked } from '../wallets';
 import { launchNodeAndGetWallets } from './launchNode';
 
 /**
- * @group browser
  * @group node
  */
 test('launchNodeAndGetWallets - empty config', async () => {

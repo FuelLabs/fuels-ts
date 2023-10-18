@@ -1,7 +1,6 @@
 import { getSetupContract } from './utils';
 
 /**
- * @group browser
  * @group node
  */
 describe('Edge Cases', () => {

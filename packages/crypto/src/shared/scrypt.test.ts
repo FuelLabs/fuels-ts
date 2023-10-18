@@ -7,7 +7,6 @@ import { scrypt } from './scrypt';
 
 /**
  * @group node
- * @group browser
  */
 describe('scrypt', async () => {
   const { bufferFromString } = await resolveEnvAppropriateModules();

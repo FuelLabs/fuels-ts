@@ -38,7 +38,6 @@ const ABI: JsonAbi = {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('Contract', () => {

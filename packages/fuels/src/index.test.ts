@@ -1,7 +1,6 @@
 import * as fuels from './index';
 
 /**
- * @group browser
  * @group node
  */
 describe('index.js', () => {

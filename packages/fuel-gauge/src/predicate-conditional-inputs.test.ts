@@ -21,7 +21,6 @@ const predicateBytecode = readFileSync(
 );
 
 /**
- * @group browser
  * @group node
  */
 describe('PredicateConditionalInputs', () => {

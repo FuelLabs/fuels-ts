@@ -1,7 +1,6 @@
 import MemoryStorage from './memory-storage';
 
 /**
- * @group browser
  * @group node
  */
 describe('MemoryStorage', () => {

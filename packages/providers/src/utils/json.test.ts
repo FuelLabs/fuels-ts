@@ -4,7 +4,6 @@ import { BN, bn } from '@fuel-ts/math';
 import { normalizeJSON } from './json';
 
 /**
- * @group browser
  * @group node
  */
 describe('JSON parser', () => {

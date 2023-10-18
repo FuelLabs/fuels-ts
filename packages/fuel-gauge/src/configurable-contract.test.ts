@@ -35,7 +35,6 @@ const defaultValues = {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('Configurable Contract', () => {

@@ -11,7 +11,6 @@ import { WalletManager } from './wallet-manager';
 import WalletManagerSpec from './wallet-manager-spec';
 
 /**
- * @group browser
  * @group node
  */
 describe('Wallet Manager', () => {

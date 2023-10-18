@@ -6,6 +6,9 @@ import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { RawSliceCoder } from './raw-slice';
 
+/**
+ * @group node
+ */
 describe('RawSliceCoder', () => {
   it('should encode a raw-slice', () => {
     const coder = new RawSliceCoder();

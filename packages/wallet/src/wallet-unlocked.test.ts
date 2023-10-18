@@ -30,7 +30,6 @@ vi.mock('@fuel-ts/providers', async () => {
 });
 
 /**
- * @group browser
  * @group node
  */
 describe('WalletUnlocked', () => {

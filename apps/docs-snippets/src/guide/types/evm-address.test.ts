@@ -5,7 +5,6 @@ import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 /**
- * @group browser
  * @group node
  */
 describe('EvMAddress', () => {

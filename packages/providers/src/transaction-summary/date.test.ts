@@ -4,6 +4,9 @@ import * as dateMod from './date';
 
 const { fromTai64ToDate: tai64toDate, fromDateToTai64: dateToTai64 } = dateMod;
 
+/**
+ * @group node
+ */
 describe('transaction-summary/date', () => {
   afterEach(() => {
     vi.restoreAllMocks();

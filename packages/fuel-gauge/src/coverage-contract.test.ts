@@ -48,7 +48,6 @@ enum ColorEnumOutput {
 }
 
 /**
- * @group browser
  * @group node
  */
 describe('Coverage Contract', () => {

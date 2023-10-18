@@ -15,7 +15,6 @@ beforeAll(async () => {
 });
 
 /**
- * @group browser
  * @group node
  */
 describe('Advanced Logging', () => {

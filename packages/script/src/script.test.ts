@@ -77,7 +77,6 @@ type MyStruct = {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('Script', () => {

@@ -29,7 +29,6 @@ beforeAll(async () => {
 });
 
 /**
- * @group browser
  * @group node
  */
 describe('TokenTestContract', () => {

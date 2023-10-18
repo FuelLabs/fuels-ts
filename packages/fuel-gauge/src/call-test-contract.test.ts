@@ -19,7 +19,6 @@ const setupContract = createSetupConfig({
 const U64_MAX = bn(2).pow(64).sub(1);
 
 /**
- * @group browser
  * @group node
  */
 describe('CallTestContract', () => {

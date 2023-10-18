@@ -9,7 +9,6 @@ import { FUEL_NETWORK_URL } from './configs';
 import { seedTestWallet, generateTestWallet } from './test-utils';
 
 /**
- * @group browser
  * @group node
  */
 describe('Wallet', () => {

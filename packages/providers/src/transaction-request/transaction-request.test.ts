@@ -5,7 +5,6 @@ import type { TransactionRequestLike } from './types';
 import { transactionRequestify } from './utils';
 
 /**
- * @group browser
  * @group node
  */
 describe('TransactionRequest', () => {

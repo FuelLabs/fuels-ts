@@ -10,7 +10,6 @@ import type { GqlTransactionStatusesNames, GraphqlTransactionStatus } from './ty
 import { TransactionStatus } from './types';
 
 /**
- * @group browser
  * @group node
  */
 describe('status', () => {

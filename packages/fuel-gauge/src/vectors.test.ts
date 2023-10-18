@@ -16,7 +16,6 @@ enum SmallEnum {
 }
 
 /**
- * @group browser
  * @group node
  */
 describe('Vector Tests', () => {

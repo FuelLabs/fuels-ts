@@ -31,6 +31,9 @@ const setup = async (balance = 5_000) => {
   return wallet;
 };
 
+/**
+ * @group node
+ */
 describe('std-lib-string Tests', () => {
   it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions.return_dynamic_string().call<string>();

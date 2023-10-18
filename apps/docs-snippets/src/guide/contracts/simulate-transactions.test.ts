@@ -5,7 +5,6 @@ import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../project
 import { createAndDeployContractFromProject } from '../../utils';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

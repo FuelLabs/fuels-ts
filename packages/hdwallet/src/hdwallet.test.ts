@@ -2,7 +2,6 @@ import HDWallet from './hdwallet';
 import HDWalletSpec from './hdwallet-spec';
 
 /**
- * @group browser
  * @group node
  */
 describe('HDWallet', () => {

@@ -4,7 +4,6 @@ import { getBytesCopy, sha256 } from 'ethers';
 import Signer from './signer';
 
 /**
- * @group browser
  * @group node
  */
 describe('Signer', () => {

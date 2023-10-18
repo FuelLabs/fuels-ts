@@ -3,7 +3,6 @@ import { bn } from './bn';
 import type { BigNumberish } from './types';
 
 /**
- * @group browser
  * @group node
  */
 describe('Math - BN', () => {

@@ -14,7 +14,6 @@ const setup = async (balance = 5_000) => {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('Script With Vectors', () => {

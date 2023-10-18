@@ -1,5 +1,4 @@
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

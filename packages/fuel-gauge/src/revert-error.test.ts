@@ -21,7 +21,6 @@ let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
 /**
- * @group browser
  * @group node
  */
 describe('Revert Error Testing', () => {

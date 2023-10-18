@@ -41,6 +41,9 @@ beforeAll(async () => {
   contractInstance = await setupContract();
 });
 
+/**
+ * @group node
+ */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
     const INPUT = 10;

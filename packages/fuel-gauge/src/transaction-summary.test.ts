@@ -20,7 +20,6 @@ import {
 } from 'fuels';
 
 /**
- * @group browser
  * @group node
  */
 describe('TransactionSummary', () => {

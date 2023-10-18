@@ -6,7 +6,6 @@ import { DeepSparseMerkleSubTree } from './deepSparseMerkleSubTree';
 import { SparseMerkleTree } from './sparseMerkleTree';
 
 /**
- * @group browser
  * @group node
  */
 describe('Sparse Merkle Tree', () => {

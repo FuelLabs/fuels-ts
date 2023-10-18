@@ -1,7 +1,6 @@
 import { safeExec } from './safeExec';
 
 /**
- * @group browser
  * @group node
  */
 describe('safeExec.js', () => {

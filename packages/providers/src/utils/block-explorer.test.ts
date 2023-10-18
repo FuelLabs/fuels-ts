@@ -29,7 +29,6 @@ const testBlockExplorerUrlWithInputs = ({
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('BlockExplorer Utils', () => {

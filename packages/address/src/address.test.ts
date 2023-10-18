@@ -24,7 +24,6 @@ const ADDRESS_BYTES = [
 
 /**
  * @group node
- * @group browser
  */
 describe('Address utils', () => {
   test('fromBech32 (bech32 to decoded bech32)', () => {

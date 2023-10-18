@@ -5,6 +5,9 @@ import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { ByteCoder } from './byte';
 
+/**
+ * @group node
+ */
 describe('ByteCoder', () => {
   it('should encode a byte', () => {
     const coder = new ByteCoder();

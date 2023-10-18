@@ -10,7 +10,6 @@ import { Wallet } from './wallet';
 import { WalletUnlocked } from './wallets';
 
 /**
- * @group browser
  * @group node
  */
 describe('Wallet', () => {

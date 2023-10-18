@@ -11,7 +11,6 @@ import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../project
 import { defaultTxParams, getTestWallet } from '../../utils';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

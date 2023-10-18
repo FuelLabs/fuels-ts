@@ -11,7 +11,6 @@ import {
 } from './fee';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

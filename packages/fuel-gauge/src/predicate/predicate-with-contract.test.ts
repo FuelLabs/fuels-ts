@@ -30,7 +30,6 @@ const liquidityPoolBytes = readFileSync(
 );
 
 /**
- * @group browser
  * @group node
  */
 describe('Predicate', () => {

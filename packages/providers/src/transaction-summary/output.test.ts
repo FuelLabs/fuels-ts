@@ -15,7 +15,6 @@ import {
 } from './output';
 
 /**
- * @group browser
  * @group node
  */
 describe('transaction-summary/output', () => {

@@ -9,7 +9,6 @@ import { DemoContractAbi__factory } from './generated-types';
 import bytecode from './generated-types/DemoContractAbi.hex';
 
 /**
- * @group browser
  * @group node
  */
 describe('ExampleContract', () => {

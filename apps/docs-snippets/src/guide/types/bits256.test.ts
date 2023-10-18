@@ -1,7 +1,6 @@
 import { Address, arrayify, getRandomB256, hexlify } from 'fuels';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

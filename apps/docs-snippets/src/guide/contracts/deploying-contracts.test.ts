@@ -6,7 +6,6 @@ import { SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

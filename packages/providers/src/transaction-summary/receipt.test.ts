@@ -11,7 +11,6 @@ import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from
 import type { MintedAsset, BurnedAsset } from './types';
 
 /**
- * @group browser
  * @group node
  */
 describe('extractMintedAssetsFromReceipts and extractBurnedAssetsFromReceipts', () => {

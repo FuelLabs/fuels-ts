@@ -2,7 +2,6 @@ import { resolveEnvAppropriateModules } from './utils';
 
 /**
  * @group node
- * @group browser
  */
 describe('Keystore', async () => {
   const { encrypt, decrypt } = await resolveEnvAppropriateModules();

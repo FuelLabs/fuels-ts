@@ -28,7 +28,6 @@ vi.mock('ethers', async () => {
 });
 
 /**
- * @group browser
  * @group node
  */
 describe('util', () => {

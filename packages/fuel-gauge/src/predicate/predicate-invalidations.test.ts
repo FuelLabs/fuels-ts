@@ -8,7 +8,6 @@ import type { Validation } from '../types/predicate';
 import { fundPredicate, setupWallets } from './utils/predicate';
 
 /**
- * @group browser
  * @group node
  */
 describe('Predicate', () => {

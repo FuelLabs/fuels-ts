@@ -16,7 +16,6 @@ const setupContract = createSetupConfig({
 });
 
 /**
- * @group browser
  * @group node
  */
 test('allow sending coins to payable functions', async () => {

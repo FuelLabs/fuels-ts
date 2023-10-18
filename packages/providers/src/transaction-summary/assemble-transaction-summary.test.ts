@@ -21,7 +21,6 @@ import type { GraphqlTransactionStatus } from './types';
 import { type Operation } from './types';
 
 /**
- * @group browser
  * @group node
  */
 describe('TransactionSummary', () => {

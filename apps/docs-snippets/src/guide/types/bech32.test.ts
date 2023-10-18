@@ -1,7 +1,6 @@
 import { Address } from 'fuels';
 
 /**
- * @group browser
  * @group node
  */
 describe(__filename, () => {

@@ -1,6 +1,9 @@
 import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompatibility';
 import * as getSupportedVersionsMod from './getSupportedVersions';
 
+/**
+ * @group node
+ */
 describe('getDifferenceToUserFuelCoreVersion', () => {
   afterEach(() => {
     vi.restoreAllMocks();

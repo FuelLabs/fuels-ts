@@ -49,7 +49,6 @@ import type { Operation } from './types';
 import { AddressType, OperationName, TransactionTypeName, ChainName } from './types';
 
 /**
- * @group browser
  * @group node
  */
 describe('operations', () => {

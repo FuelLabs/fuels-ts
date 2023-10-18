@@ -3,6 +3,9 @@ import type { Contract } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('StdString', () => {
   let contract: Contract;
 

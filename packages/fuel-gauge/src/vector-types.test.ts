@@ -86,7 +86,6 @@ const setup = async (balance = 5_000) => {
 };
 
 /**
- * @group browser
  * @group node
  */
 describe('Vector Types Validation', () => {

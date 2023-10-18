@@ -7,7 +7,6 @@ import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 /**
- * @group browser
  * @group node
  */
 describe('Predicate', () => {

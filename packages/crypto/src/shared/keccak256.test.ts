@@ -6,7 +6,6 @@ import { keccak256 } from './keccak256';
 
 /**
  * @group node
- * @group browser
  */
 describe('keccak256', async () => {
   const { bufferFromString } = await resolveEnvAppropriateModules();

@@ -7,7 +7,6 @@ import walletManagerSpec from '../wallet-manager-spec';
 import { MnemonicVault } from './mnemonic-vault';
 
 /**
- * @group browser
  * @group node
  */
 describe('MnemonicVault', () => {
