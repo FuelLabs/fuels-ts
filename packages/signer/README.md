@@ -2,7 +2,7 @@
 
 **@fuel-ts/signer** is a sub-module for interacting with **Fuel**.
 
-This module containts utilities for secp256-k1 signing, verifying and recovery operations.
+This module contains utilities for secp256-k1 signing, verifying and recovery operations.
 
 # Table of contents
 
