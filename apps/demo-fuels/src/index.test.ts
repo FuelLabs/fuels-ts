@@ -8,10 +8,10 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
-import storageSlots from '../backend/sample/out/debug/sample-storage_slots.json';
+import storageSlots from '../sway-programs/sample/out/debug/sample-storage_slots.json';
 
-import bytecode from './backend-api/contracts/SampleAbi.hex';
-import { SampleAbi__factory } from './backend-api/contracts/factories/SampleAbi__factory';
+import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
+import { SampleAbi__factory } from './sway-programs-api/contracts/factories/SampleAbi__factory';
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {

@@ -8,7 +8,7 @@
   * individually, you can also use workspaces (recommended)
   * @param workspace - Path to Sway/Forc Workspace
   */
-workspace: '../backend',
+workspace: '../sway-programs',
 ```
 
 ## contracts
@@ -18,7 +18,7 @@ workspace: '../backend',
  * This property should not be used alongside `workspace`
  * @param contracts - Paths to Sway Contracts
  */
-contracts: ['../backend/contracts'],
+contracts: ['../sway-programs/contracts'],
 ```
 
 ## predicates
@@ -28,7 +28,7 @@ contracts: ['../backend/contracts'],
  * This property should not be used alongside `workspace`
  * @param predicates - Paths to Sway Predicates
  */
-predicates: ['../backend/predicates'],
+predicates: ['../sway-programs/predicates'],
 ```
 
 ## scripts
@@ -38,7 +38,7 @@ predicates: ['../backend/predicates'],
  * This property should not be used alongside `workspace`
  * @param scripts - Path to Sway Scripts
  */
-scripts: ['../backend/scripts'],
+scripts: ['../sway-programs/scripts'],
 ```
 
 ## output
@@ -47,7 +47,7 @@ scripts: ['../backend/scripts'],
 /**
   * @param output - Where to generate Typescript definitions
   */
-output: './src/backend-api',
+output: './src/sway-programs-api',
 ```
 
 ## privateKey
