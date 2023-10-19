@@ -9,7 +9,7 @@ export async function deployContract(
   wallet: WalletUnlocked,
   binaryPath: string,
   abiPath: string,
-  deployConfig?: DeployContractOptions
+  deployConfig: DeployContractOptions
 ) {
   debug(`Deploying contract for ABI: ${abiPath}`);
 
@@ -19,9 +19,9 @@ export async function deployContract(
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const contractFactory = new ContractFactory(bytecode, abi, wallet);
 
-  const config = deployConfig ?? { gasPrice };
-  config.gasPrice = config.gasPrice ?? gasPrice;
+  // eslint-disable-next-line no-param-reassign
+  deployConfig.gasPrice = deployConfig.gasPrice ?? gasPrice;
 
-  const contract = await contractFactory.deployContract(config);
+  const contract = await contractFactory.deployContract(deployConfig);
   return contract.id.toB256();
 }
