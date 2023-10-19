@@ -2,7 +2,7 @@ import { readdirSync, renameSync, rmSync } from 'fs';
 import { join } from 'path';
 import sh from 'shelljs';
 
-const mergeCoverage = () => {
+const restructureCoverageDirectory = () => {
   const coverageDir = join(__dirname, '../coverage/');
   const environmentsDir = join(coverageDir, '/environments/');
   const validEnvironments = ['browser', 'node'];
@@ -23,7 +23,7 @@ const mergeCoverage = () => {
 
 (() => {
   // Structure all coverage environment dirs into a single dir
-  mergeCoverage();
+  restructureCoverageDirectory();
 
   // Merge all coverage files
   sh.exec('nyc merge coverage/environments coverage/merged/coverage.json');
