@@ -5,20 +5,21 @@ import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
 import { debug, log, loggingConfig } from '../../utils/logger';
 
-type ResolveFn = () => void;
-type RejectFn = (reason?: number | Error) => void;
+type OnResultFn = () => void;
+type OnErrorFn = (reason?: number | Error) => void;
 
-export const onForcExit = (resolve: ResolveFn, reject: RejectFn) => (code: number | null) => {
-  if (code) {
-    reject(code);
-    // process.exit()?
-  } else {
-    resolve();
-  }
-};
+export const onForcExit =
+  (onResultFn: OnResultFn, onErrorFn: OnErrorFn) => (code: number | null) => {
+    if (code) {
+      onErrorFn(code);
+      // process.exit()?
+    } else {
+      onResultFn();
+    }
+  };
 
-export const onForcError = (reject: RejectFn) => (error: Error) => {
-  reject(error);
+export const onForcError = (onError: OnErrorFn) => (error: Error) => {
+  onError(error);
 };
 
 export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
