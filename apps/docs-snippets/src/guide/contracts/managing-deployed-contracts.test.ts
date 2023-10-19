@@ -16,8 +16,8 @@ describe(__filename, () => {
     wallet = await getTestWallet();
 
     const factory = new ContractFactory(bin, abi, wallet);
-
-    contract = await factory.deployContract();
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+    contract = await factory.deployContract({ gasPrice });
 
     contractId = contract.id;
   });

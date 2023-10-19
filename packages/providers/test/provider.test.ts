@@ -67,7 +67,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.6');
+    expect(version).toEqual('0.20.7');
   });
 
   it('can call()', async () => {
@@ -123,7 +123,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x67),
+        gasUsed: bn(0xc),
       },
     ];
 
@@ -829,5 +829,63 @@ describe('Provider', () => {
       code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
       message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
     });
+  });
+
+  it('throws when gas limit is lower than tx gas used', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const gasLimit = 1;
+    const gasUsed = bn(1000);
+    const transactionParams = {
+      minGasPrice: bn(1),
+      gasPrice: bn(1),
+      gasUsed,
+      fee: bn(1),
+    };
+
+    const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+
+    const txCostSpy = jest
+      .spyOn(provider, 'getTransactionCost')
+      .mockReturnValue(Promise.resolve(transactionParams));
+
+    await expectToThrowFuelError(
+      () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice: 1, gasLimit })),
+      {
+        code: ErrorCode.GAS_LIMIT_TOO_LOW,
+        message: `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`,
+      }
+    );
+
+    expect(txCostSpy).toHaveBeenCalled();
+    expect(estimateTxSpy).toHaveBeenCalled();
+  });
+
+  it('throws when gas price is lower than min tx gas price', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const gasPrice = 1;
+    const minGasPrice = bn(1000);
+    const transactionParams = {
+      minGasPrice,
+      gasPrice: bn(1),
+      gasUsed: bn(1),
+      fee: bn(1),
+    };
+
+    const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+
+    const txCostSpy = jest
+      .spyOn(provider, 'getTransactionCost')
+      .mockReturnValue(Promise.resolve(transactionParams));
+
+    await expectToThrowFuelError(
+      () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice, gasLimit: 1000 })),
+      {
+        code: ErrorCode.GAS_PRICE_TOO_LOW,
+        message: `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`,
+      }
+    );
+
+    expect(txCostSpy).toHaveBeenCalled();
+    expect(estimateTxSpy).toHaveBeenCalled();
   });
 });
