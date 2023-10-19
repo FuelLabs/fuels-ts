@@ -84,7 +84,7 @@ npx fuels dev
 1. Runs `build` and `deploy` once at the start
 2. Watches your Sway workspace and repeats previous step on every change
 
-> _In `dev` mode, everytime you update a contract on your Forc `workspace`, we re-generate type definitions and factory classs for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
+> _In `dev` mode, everytime you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
 ## `fuels typegen`
 
