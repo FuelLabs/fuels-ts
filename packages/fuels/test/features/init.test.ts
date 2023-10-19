@@ -28,7 +28,7 @@ describe('init', () => {
     expect(chalk.reset(secondRun.error)).toMatch(/Config file exists, aborting./);
   });
 
-  it('should error if not inputs are informed', async () => {
+  it('should error if no inputs are informed', async () => {
     const { error } = await safeExec(() => runInit(['-o', generatedDir].flat()));
 
     expect(error).toBeTruthy();
