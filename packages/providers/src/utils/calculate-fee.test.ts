@@ -10,7 +10,7 @@ import {
   calculateTransactionFee,
   calculateTxChargeableBytes,
   getGasUsedFromReceipts,
-} from './fee';
+} from './calculate-fee';
 
 describe(__filename, () => {
   describe('calculatePriceWithFactor', () => {
