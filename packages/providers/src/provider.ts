@@ -478,7 +478,7 @@ export default class Provider {
     // #endregion Provider-sendTransaction
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
+    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest);
 
     // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
@@ -653,8 +653,7 @@ export default class Provider {
    * @returns A promise that resolves to the transaction cost object.
    */
   async getTransactionCost(
-    transactionRequestLike: TransactionRequestLike,
-    _tolerance: number = 0.2
+    transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
