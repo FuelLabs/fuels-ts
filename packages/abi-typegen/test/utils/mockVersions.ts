@@ -9,10 +9,14 @@ import * as versionsMod from '@fuel-ts/versions';
  *
  * https://stackoverflow.com/a/72885576
  */
-// vi.mock('@fuel-ts/versions', () => ({
-//   __esModule: true,
-//   ...vi.importActual('@fuel-ts/versions'),
-// }));
+vi.mock('@fuel-ts/versions', async () => {
+  const mod = await vi.importActual('@fuel-ts/versions');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
 export function mockVersions(
   values: {
