@@ -42,7 +42,7 @@ describe('startFuelCore', () => {
           fn('IO error');
         } else {
           // The `Binding GraphQL provider to` message simulates a fuel-core
-          // successfull startup log message, usually meaning that the node
+          // successful startup log message, usually meaning that the node
           // is up and waiting for connections
           fn('Binding GraphQL provider to');
         }
