@@ -72,26 +72,14 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     const forcToml = await readForcToml(workspace);
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
-    const projectTypes = await Promise.all(
-      swayMembers.map(async (m) => ({
-        type: await readSwayType(m),
-        path: m,
-      }))
+    await Promise.all(
+      swayMembers.map(async (path) => {
+        const type = await readSwayType(path);
+        config[`${type}s`].push(path);
+      })
     );
 
     config.workspace = workspace;
-
-    config.contracts = projectTypes
-      .filter(({ type }) => type === SwayType.contract)
-      .map(({ path }) => path);
-
-    config.predicates = projectTypes
-      .filter(({ type }) => type === SwayType.predicate)
-      .map(({ path }) => path);
-
-    config.scripts = projectTypes
-      .filter(({ type }) => type === SwayType.script)
-      .map(({ path }) => path);
   }
 
   return config;
