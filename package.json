@@ -19,7 +19,7 @@
     "test:coverage": "tsx ./scripts/tests-coverage.ts",
     "test:watch": "vitest --watch --config vite.node.config.ts $(scripts/tests-find.sh --node)",
     "test:validate": "tsx ./scripts/tests-validate.ts",
-    "test:browser": "vitest --run --config vite.browser.config.ts $(scripts/tests-find.sh --browser)",
+    "test:browser": "tsx ./scripts/tests-browser.ts",
     "test:e2e": "vitest --run --config vite.node.config.ts $(scripts/tests-find.sh --e2e)",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",

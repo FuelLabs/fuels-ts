@@ -63,32 +63,31 @@ jobs:
           name: node
           path: coverage/environments/node
 
-  # TODO: Implement browser stage
-  # test-browser:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  test-browser:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: CI Setup
-  #       uses: ./.github/actions/ci-setup
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
 
-  #     - name: Build
-  #       run: pnpm build
+      - name: Build
+        run: pnpm build
 
-  #     - name: Run Browser Tests
-  #       run: pnpm ci:test --browser
+      - name: Run Browser Tests
+        run: pnpm ci:test --browser
 
-  #     - name: Upload Browser Coverage
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: browser
-  #         path: coverage/environments/browser
+      - name: Upload Browser Coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: browser
+          path: coverage/environments/browser
 
   test:
     runs-on: ubuntu-latest
-    needs: [test-node]
+    needs: [test-node, test-browser]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -102,12 +101,11 @@ jobs:
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
 
-      # TODO: Implement browser stage
-      # - name: Download Coverage for Browser Tests
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: browser
-      #     path: coverage/environments
+      - name: Download Coverage for Browser Tests
+        uses: actions/download-artifact@v3
+        with:
+          name: browser
+          path: coverage/environments
 
       - name: Download Coverage for Node Tests
         uses: actions/download-artifact@v3
@@ -158,7 +156,7 @@ jobs:
           lcov-base: coverage-master/lcov.info
           delete-old-comments: true
           title: "Coverage Report"
-  
+
   live-tests:
     name: Run Live Tests
     if: github.head_ref == 'changeset-release/master'
