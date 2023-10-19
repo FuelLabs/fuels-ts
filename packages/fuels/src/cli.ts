@@ -85,11 +85,9 @@ export const configureCli = () => {
    */
 
   // Typegen
-  const typegen = program
-    .command('typegen')
-    .description(`Generate Typescript from Sway ABI JSON files`);
-
-  configureTypegenCliOptions(typegen);
+  configureTypegenCliOptions(
+    program.command('typegen').description(`Generate Typescript from Sway ABI JSON files`)
+  );
 
   // Versions
   program
