@@ -50,7 +50,7 @@ export function runCliAction(options: ICliParams) {
 }
 
 export function configureCliOptions(program: Command) {
-  program
+  return program
     .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your abi json files')
     .requiredOption('-o, --output <dir>', 'Directory path for generated files')
     .addOption(
