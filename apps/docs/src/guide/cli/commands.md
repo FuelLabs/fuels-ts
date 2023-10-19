@@ -2,7 +2,7 @@
 
 ## `fuels init`
 
-Use it to create a new `fuels.config.ts` file:
+Creates a new `fuels.config.ts` file:
 
 ```console
 npm fuels init -w ../backend -o ./src/backend-api
