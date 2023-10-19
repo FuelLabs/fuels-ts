@@ -51,7 +51,7 @@ export function runCliAction(options: ICliParams) {
 
 export function configureCliOptions(program: Command) {
   return program
-    .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your abi json files')
+    .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to ypoir ABI JSON files')
     .requiredOption('-o, --output <dir>', 'Directory path for generated files')
     .addOption(
       new Option('-c, --contract', 'Generate types for Contracts [default]')
