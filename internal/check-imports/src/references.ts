@@ -149,10 +149,6 @@ log(InputCoinCoder);
  */
 log(runVersions);
 log(versions);
-// log(getBuiltinVersions); // nop
-// log(getSystemVersions); // nop
-// log(compareSystemVersions); // nop
-// log(colorizeUserVersion); // nop
 
 /**
  * wallet-manager
