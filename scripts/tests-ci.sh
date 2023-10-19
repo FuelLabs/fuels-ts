@@ -8,7 +8,7 @@ pnpm node:run > /dev/null 2>&1 &
 
 echo "Started Fuel-Core node in background."
 
-pnpm test:coverage
+pnpm test
 TEST_RESULT=$?
 
 echo "Killing Fuel-Core node."

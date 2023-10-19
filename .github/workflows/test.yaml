@@ -116,7 +116,7 @@ jobs:
           path: coverage/environments
 
       - name: Generate Coverage Report
-        run: pnpm test:coverage-report
+        run: pnpm test:coverage
 
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
