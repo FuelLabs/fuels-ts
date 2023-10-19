@@ -30,7 +30,7 @@ describe('startFuelCore', () => {
   /**
    * This should mimick the stderr.on('data') event, returning both
    * success and error messages, as strings. These messages are like
-   * the ones from `fue-core` startup log messages. We filter them
+   * the ones from `fuel-core` startup log messages. We filter them
    * to know fuel-core state.
    */
   function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
