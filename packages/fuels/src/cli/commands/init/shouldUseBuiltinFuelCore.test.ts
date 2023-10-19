@@ -5,7 +5,7 @@ import * as promptMod from 'prompts';
 import * as loggerMod from '../../utils/logger';
 
 import { makeErrorMessage, makeWarnMessage } from './messages';
-import { shouldUseBuiltinForc } from './shouldUserBuiltinForc';
+import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
 
 jest.mock('@fuel-ts/versions/cli', () => ({
   __esModule: true,

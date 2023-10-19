@@ -6,8 +6,8 @@ import { join, relative } from 'path';
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
 import { log } from '../../utils/logger';
 
+import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
-import { shouldUseBuiltinForc } from './shouldUserBuiltinForc';
 
 export async function init(program: Command) {
   const options = program.opts();
