@@ -1,5 +1,6 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
+import type { CoinTransactionRequestInput, JsonAbi, MessageTransactionRequestInput } from 'fuels';
 import {
   BaseAssetId,
   Provider,
@@ -9,13 +10,19 @@ import {
   InputType,
   FUEL_NETWORK_URL,
 } from 'fuels';
+import { join } from 'path';
 
-import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateTrueBytecode from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
+    getForcProject<JsonAbi>(
+      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
+    );
+  const { binHexlified: predicateTrueBytecode } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-true')
+  );
+
   describe('Estimate predicate gas', () => {
     let provider: Provider;
     let predicateTrue: Predicate<[]>;

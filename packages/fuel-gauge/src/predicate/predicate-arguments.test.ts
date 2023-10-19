@@ -1,20 +1,33 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
+import { join } from 'path';
 
-import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
-import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector';
-import predicateAbiMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector/out/debug/predicate-main-args-vector-abi.json';
-import predicateBytesMulti from '../../fixtures/forc-projects/predicate-multi-args';
-import predicateAbiMulti from '../../fixtures/forc-projects/predicate-multi-args/out/debug/predicate-multi-args-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import predicateBytesU32 from '../../fixtures/forc-projects/predicate-u32';
 import type { Validation } from '../types/predicate';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesAddress } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-address')
+  );
+  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
+    getForcProject<JsonAbi>(
+      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
+    );
+  const { binHexlified: predicateBytesMainArgsVector, abiContents: predicateAbiMainArgsVector } =
+    getForcProject<JsonAbi>(
+      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-vector')
+    );
+  const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } =
+    getForcProject<JsonAbi>(join(__dirname, '../../fixtures/forc-projects/predicate-multi-args'));
+  const { binHexlified: predicateBytesStruct } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-struct')
+  );
+  const { binHexlified: predicateBytesU32 } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-u32')
+  );
+
   describe('Arguments', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;

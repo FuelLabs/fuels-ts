@@ -9,20 +9,18 @@ import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { Account } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { getBytesCopy } from 'ethers';
-import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
 
 import { Script } from './index';
 
-const scriptBin = readFileSync(
-  join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
-);
+const { binHexlified: scriptBin } = getForcProject(join(__dirname, '../test/call-test-script'));
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);

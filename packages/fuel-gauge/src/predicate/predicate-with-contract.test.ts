@@ -1,6 +1,6 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { BN, WalletUnlocked } from 'fuels';
+import type { BN, JsonAbi, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -12,24 +12,26 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
-import liquidityPoolAbi from '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
-const contractBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
-);
-
-const liquidityPoolBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-);
-
 describe('Predicate', () => {
+  const { binHexlified: contractBytes, abiContents: contractAbi } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/call-test-contract')
+  );
+  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
+    getForcProject<JsonAbi>(join(__dirname, '../../fixtures/forc-projects/liquidity-pool'));
+  const { abiContents: predicateAbiMainArgsStruct } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
+  );
+  const { binHexlified: predicateBytesStruct } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-struct')
+  );
+  const { binHexlified: predicateBytesTrue } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-true')
+  );
+
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;

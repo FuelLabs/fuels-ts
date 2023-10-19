@@ -1,5 +1,6 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
+import type { BN, JsonAbi } from 'fuels';
 import {
   type Contract,
   bn,
@@ -10,9 +11,7 @@ import {
   Provider,
   FUEL_NETWORK_URL,
 } from 'fuels';
-
-import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
-import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
+import { join } from 'path';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -87,6 +86,10 @@ describe('Raw Slice Tests', () => {
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     type MainArgs = [Wrapper];
+
+    const { binHexlified: predicateRawSlice, abiContents: predicateRawSliceAbi } =
+      getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/predicate-raw-slice'));
+
     const predicate = new Predicate<MainArgs>(
       predicateRawSlice,
       wallet.provider,

@@ -1,5 +1,5 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type {
   BN,
   Bech32Address,
@@ -31,11 +31,19 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
-import liquidityPoolABI from '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
-import predicateTriple from '../fixtures/forc-projects/predicate-triple-sig';
-import testPredicateTrue from '../fixtures/forc-projects/predicate-true';
-import tokenContractABI from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
+const { abiContents: callTestAbi } = getForcProject<JsonAbi>(
+  join(__dirname, '../fixtures/forc-projects/call-test-contract')
+);
+const { binHexlified: liquidityPoolContractBytecode, abiContents: liquidityPoolABI } =
+  getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/liquidity-pool'));
+const { binHexlified: predicateTriple } = getForcProject<JsonAbi>(
+  join(__dirname, '../fixtures/forc-projects/predicate-triple-sig')
+);
+const { binHexlified: testPredicateTrue } = getForcProject<JsonAbi>(
+  join(__dirname, '../fixtures/forc-projects/predicate-true')
+);
+const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } =
+  getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/token_contract'));
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -126,7 +134,7 @@ describe('Doc Examples', () => {
     const address = Address.fromB256(hexedB256);
     const arrayB256: Uint8Array = arrayify(randomB256Bytes);
     const walletLike: WalletLocked = Wallet.fromAddress(address, provider);
-    const contractLike: Contract = new Contract(address, abiJSON, provider);
+    const contractLike: Contract = new Contract(address, callTestAbi, provider);
 
     expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
     expect(address.equals(contractLike.id as Address)).toBeTruthy();
@@ -461,9 +469,6 @@ describe('Doc Examples', () => {
     // #endregion deposit-and-withdraw-cookbook-wallet-setup
 
     // #region deposit-and-withdraw-cookbook-contract-deployments
-    const tokenContractBytecode = readFileSync(
-      join(__dirname, '../fixtures/forc-projects/token_contract/out/debug/token_contract.bin')
-    );
     const tokenContractFactory = new ContractFactory(
       tokenContractBytecode,
       tokenContractABI,
@@ -472,9 +477,6 @@ describe('Doc Examples', () => {
     const tokenContract = await tokenContractFactory.deployContract({ gasPrice });
     const tokenContractID = tokenContract.id;
 
-    const liquidityPoolContractBytecode = readFileSync(
-      join(__dirname, '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-    );
     const liquidityPoolContractFactory = new ContractFactory(
       liquidityPoolContractBytecode,
       liquidityPoolABI,

@@ -1,21 +1,23 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
+import type { BN, BigNumberish, JsonAbi, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import scriptAbi from '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
-const scriptBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
-);
-
 describe('Predicate', () => {
+  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/script-main-args')
+  );
+  const { binHexlified: predicateBytesStruct } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-struct')
+  );
+  const { abiContents: predicateAbiMainArgsStruct } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
+  );
   describe('With script', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;

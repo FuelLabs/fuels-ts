@@ -1,9 +1,8 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, BigNumberish } from 'fuels';
+import type { BN, BigNumberish, JsonAbi } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-
-import predicateVectorTypes from '../fixtures/forc-projects/predicate-vector-types';
-import predicateVectorTypesAbi from '../fixtures/forc-projects/predicate-vector-types/out/debug/predicate-vector-types-abi.json';
+import { join } from 'path';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -87,6 +86,9 @@ const setup = async (balance = 500_000) => {
 
 describe('Vector Types Validation', () => {
   let gasPrice: BN;
+
+  const { binHexlified: predicateVectorTypes, abiContents: predicateVectorTypesAbi } =
+    getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/predicate-vector-types'));
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

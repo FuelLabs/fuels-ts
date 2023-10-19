@@ -1,22 +1,16 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { BN } from 'fuels';
+import type { BN, JsonAbi } from 'fuels';
 import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
-
-import abi from '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract-abi.json';
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
   // Create wallet
   const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
 
-  // Deploy contract
-  const bytecode = readFileSync(
-    join(
-      __dirname,
-      '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract.bin'
-    )
+  const { binHexlified: bytecode, abiContents: abi } = getForcProject<JsonAbi>(
+    join(__dirname, '../fixtures/forc-projects/multi-token-contract')
   );
   const factory = new ContractFactory(bytecode, abi, wallet);
   const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();

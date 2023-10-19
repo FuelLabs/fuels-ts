@@ -1,6 +1,6 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
+import type { BN, Contract, JsonAbi, WalletUnlocked } from 'fuels';
 import {
   AssertFailedRevertError,
   ContractFactory,
@@ -10,8 +10,6 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 import path from 'path';
-
-import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
@@ -23,13 +21,10 @@ describe('Auth Testing', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
-    const bytecode = fs.readFileSync(
-      path.join(
-        __dirname,
-        '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract.bin'
-      )
-    );
-    const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
+    const projectPath = path.join(__dirname, '../fixtures/forc-projects/auth_testing_contract');
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>(projectPath);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
     contractInstance = await factory.deployContract({ gasPrice });
   });
 

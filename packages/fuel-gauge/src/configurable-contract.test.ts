@@ -1,17 +1,8 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
+import type { CoinQuantityLike, JsonAbi, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
-
-import contractAbi from '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract-abi.json';
-
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract.bin'
-  )
-);
 
 const defaultValues = {
   U8: 10,
@@ -50,7 +41,11 @@ describe('Configurable Contract', () => {
 
     wallet = await generateTestWallet(provider, quantities);
 
-    factory = new ContractFactory(contractBytecode, contractAbi, wallet);
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>(
+      join(__dirname, '../fixtures/forc-projects/configurable-contract')
+    );
+
+    factory = new ContractFactory(binHexlified, abiContents, wallet);
   });
 
   it('should assert default values', async () => {

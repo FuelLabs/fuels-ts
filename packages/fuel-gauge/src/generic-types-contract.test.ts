@@ -1,16 +1,12 @@
-import { readFileSync } from 'fs';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import type { JsonAbi } from 'fuels';
 import { toHex } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
-
 import { setup } from './utils';
 
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
-  )
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getForcProject<JsonAbi>(
+  join(__dirname, '../fixtures/forc-projects/generic-types-contract')
 );
 
 describe('GenericTypesContract', () => {

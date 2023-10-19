@@ -1,12 +1,18 @@
-import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import type { BN, InputValue, JsonAbi, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
-
-import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
+import { join } from 'path';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesFalse } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-false')
+  );
+  const { binHexlified: predicateBytesTrue } = getForcProject<JsonAbi>(
+    join(__dirname, '../../fixtures/forc-projects/predicate-true')
+  );
+
   describe('Evaluations', () => {
     let predicate: Predicate<InputValue[]>;
     let wallet: WalletUnlocked;

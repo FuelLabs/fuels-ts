@@ -1,5 +1,6 @@
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
+import type { BN, JsonAbi } from 'fuels';
 import {
   type Contract,
   bn,
@@ -10,9 +11,7 @@ import {
   Provider,
   FUEL_NETWORK_URL,
 } from 'fuels';
-
-import predicateStdString from '../fixtures/forc-projects/predicate-std-lib-string';
-import predicateStdStringAbi from '../fixtures/forc-projects/predicate-std-lib-string/out/debug/predicate-std-lib-string-abi.json';
+import { join } from 'path';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -34,6 +33,9 @@ const setup = async (balance = 500_000) => {
 };
 
 describe('std-lib-string Tests', () => {
+  const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =
+    getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/predicate-std-lib-string'));
+
   it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions
       .return_dynamic_string()

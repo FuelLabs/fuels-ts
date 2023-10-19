@@ -1,18 +1,17 @@
-import { readFileSync } from 'fs';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import type { JsonAbi } from 'fuels';
 import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
-
 import { createSetupConfig } from './utils';
 
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
+const { binHexlified, abiContents } = getForcProject<JsonAbi>(
+  join(__dirname, '../fixtures/forc-projects/call-test-contract')
 );
 
 const setupContract = createSetupConfig({
-  contractBytecode,
-  abi: abiJSON,
+  contractBytecode: binHexlified,
+  abi: abiContents,
   cache: true,
 });
 
