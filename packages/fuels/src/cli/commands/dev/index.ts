@@ -23,18 +23,14 @@ export const changeListener = (config: FuelsConfig) => async (path: string) => {
 };
 
 export async function dev(config: FuelsConfig) {
-  /**
-   * Create a copy of the config param, so we can safely
-   * re-assign the `providerUrl` param when auto-starting a node.
-   */
-  const configCopy = { ...config };
-
-  if (configCopy.autoStartFuelCore) {
-    const client = await startFuelCore(configCopy);
-    configCopy.providerUrl = client.providerUrl;
+  // here we inject a `providerUrl` into the config if necessary
+  if (config.autoStartFuelCore) {
+    const client = await startFuelCore(config);
+    // eslint-disable-next-line no-param-reassign
+    config.providerUrl = client.providerUrl;
   }
 
-  const { contracts, scripts, predicates, chainConfig, workspace } = configCopy;
+  const { contracts, scripts, predicates, chainConfig, workspace } = config;
 
   const projectDirs = [contracts, scripts, predicates, chainConfig].flat();
 
@@ -44,17 +40,17 @@ export async function dev(config: FuelsConfig) {
 
   const pathsToWatch = projectDirs
     .flatMap((dir) => [
-      globSync(`${dir}/**/*.toml`, { cwd: configCopy.basePath }),
-      globSync(`${dir}/**/*.sw`, { cwd: configCopy.basePath }),
+      globSync(`${dir}/**/*.toml`, { cwd: config.basePath }),
+      globSync(`${dir}/**/*.sw`, { cwd: config.basePath }),
     ])
     .flat();
 
   try {
     // Run once
-    await buildAndDeploy(configCopy);
+    await buildAndDeploy(config);
 
     // Then on every change
-    const onChange = changeListener(configCopy);
+    const onChange = changeListener(config);
 
     fileHandlers.watcher = chokidar
       .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
