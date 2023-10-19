@@ -138,7 +138,7 @@ This guide assumes you have [The Fuel Toolchain](https://docs.fuel.network/docs/
 
 Otherwise, you can use [`fuel-up`](https://docs.fuel.network/docs/fuelup/installation/) to get it up and running.
 
-Check if it's ok with:
+Check if it's working correctly with:
 
 ```console
 forc --version
