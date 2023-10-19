@@ -847,9 +847,9 @@ describe('Provider', () => {
       fee: bn(1),
     };
 
-    const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockImplementation();
 
-    const txCostSpy = jest
+    const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
       .mockReturnValue(Promise.resolve(transactionParams));
 
@@ -876,9 +876,9 @@ describe('Provider', () => {
       fee: bn(1),
     };
 
-    const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockImplementation();
 
-    const txCostSpy = jest
+    const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
       .mockReturnValue(Promise.resolve(transactionParams));
 
