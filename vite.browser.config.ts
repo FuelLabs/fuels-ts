@@ -16,9 +16,6 @@ const config: UserConfig = {
       protocolImports: false,
     }),
   ],
-  define: {
-    'process.env': process.env ?? {},
-  },
   test: {
     coverage: {
       reportsDirectory: 'coverage/environments/browser',
