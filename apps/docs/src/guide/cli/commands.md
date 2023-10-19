@@ -5,7 +5,7 @@
 Creates a new `fuels.config.ts` file:
 
 ```console
-npm fuels init -w ../backend -o ./src/backend-api
+npm fuels init -w ./sway-programs -o ./src/sway-programs-api
 ```
 
 This will give you a minimal configuration:
@@ -15,8 +15,8 @@ This will give you a minimal configuration:
 import { createConfig } from 'fuels'
 
 export createConfig({
-  workspace: '../backend',
-  output: './src/backend-api',
+  workspace: './sway-programs',
+  output: './src/sway-programs-api',
 })
 ```
 
@@ -27,8 +27,8 @@ In a nutshell:
 ├── frontend
 │   ├── fuels.config.ts # your new config
 │   └── src
-│       └── backend-api
-└── backend
+│       └── sway-programs-api
+└── sway-programs
 ```
 
 ### See more
@@ -52,7 +52,7 @@ npx fuels deploy
 
 1. Deploy all Sway contracts under `workspace`
 1. Saves their deployed IDs to:
-   - _`./src/backend-api/contracts.json`_
+   - _`./src/sway-programs-api/contracts.json`_
 
 ```json
 {
@@ -64,8 +64,8 @@ npx fuels deploy
 Use it when instantiating your contracts:
 
 ```ts
-import { MyContract__factory } from "./backend-api";
-import contractIds from './backend-api/contracts.json'
+import { MyContract__factory } from "./sway-programs-api";
+import contractIds from './sway-programs-api/contracts.json'
 
 const contractId = contractIds.myContract1;
 const contract = MyContract__factory.connect(contractId, ..);

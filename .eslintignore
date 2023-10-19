@@ -3,7 +3,7 @@ coverage/
 dist/
 out/
 
-apps/demo-fuels/src/backend-api
+apps/demo-fuels/src/sway-programs-api
 apps/demo-typegen/src/generated-types
 apps/demo-nextjs
 apps/demo-react-cra
