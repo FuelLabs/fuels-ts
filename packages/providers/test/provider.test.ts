@@ -847,7 +847,7 @@ describe('Provider', () => {
       fee: bn(1),
     };
 
-    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
 
     const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
@@ -876,7 +876,7 @@ describe('Provider', () => {
       fee: bn(1),
     };
 
-    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
 
     const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
