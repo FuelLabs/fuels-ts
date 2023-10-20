@@ -35,7 +35,7 @@ members = [
   "script-main-args",
   "script-main-return-struct",
   "script-main-two-args",
-  "script-raw-slice",
+  # "script-raw-slice", see https://github.com/FuelLabs/fuels-ts/issues/1344
   "script-std-lib-string",
   "script-with-configurable",
   "script-with-array",
