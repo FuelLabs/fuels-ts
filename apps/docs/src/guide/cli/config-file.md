@@ -1,100 +1,99 @@
 # Config File
 
-## workspace
+Here you can know more about all configuration options.
+
+## `workspace`
+
+Relative directory path to Forc workspace.
 
 ```ts
-/**
-  * Instead of informing `contracts`, `scripts` and `predicates`
-  * individually, you can also use workspaces (recommended)
-  * @param workspace - Path to Sway/Forc Workspace
-  */
 workspace: '../sway-programs',
 ```
 
-## contracts
+## `contracts`
+
+List of relative directory paths to Sway contracts.
 
 ```ts
-/**
- * This property should not be used alongside `workspace`
- * @param contracts - Paths to Sway Contracts
- */
 contracts: ['../sway-programs/contracts'],
 ```
 
-## predicates
+## `predicates`
+
+List of relative directory paths to Sway predicates.
 
 ```ts
-/**
- * This property should not be used alongside `workspace`
- * @param predicates - Paths to Sway Predicates
- */
 predicates: ['../sway-programs/predicates'],
 ```
 
-## scripts
+## `scripts`
+
+List of relative directory paths to Sway scripts.
 
 ```ts
-/**
- * This property should not be used alongside `workspace`
- * @param scripts - Path to Sway Scripts
- */
 scripts: ['../sway-programs/scripts'],
 ```
 
-## output
+## `output`
+
+Relative directory path for generating Typescript definitions.
 
 ```ts
-/**
-  * @param output - Where to generate Typescript definitions
-  */
 output: './src/sway-programs-api',
 ```
 
-## privateKey
+## `privateKey`
+
+Wallet private key, used when deploying contracts.
+
+Should ideally come from env — `process.env.MY_PRIVATE_KEY`.
 
 ```ts
-/**
- * @param privateKey - Your wallet private key
-  */
- // Should ideally come from env — `process.env.MY_PRIVATE_KEY`
 privateKey: '0x..',
 ```
 
-## providerUrl
+## `providerUrl`
+
+Contracts will be deployed using the provider URL supplied in here.
 
 ```ts
-/**
- * Defaults to http://localhost:4000
- * @param providerUrl - Contracts will be deployed using this provider
- */
-providerUrl: '...',
+// Default: FUEL_NETWORK_URL (from 'fuels')
+providerUrl: 'http://network:port/graphql',
 ```
 
-## chainConfig
+> When auto-starting a `fuel-core` node as part of a `fuels dev` command, this property is overriden with details for the short-lived node.
+
+## `chainConfig`
+
+Relative filepath to custom `chainConfig.json` file to use with `fuel-core`.
 
 ```ts
-/**
- * @param chainConfig - Path to custom `chainConfig.json` file
- */
-chainConfig: '...',
+chainConfig: './my/custom/chainConfig.json',
 ```
 
-## deployConfig
+## `deployConfig`
+
+You can supply a ready-to-go deploy configuration object:
 
 ```ts
-/**
- * This method can be used for crafting custom deployment flows.
- *
- * Sometimes we need to deploy two contracts, and the second
- * depends on the first—in such cases, you can use the contracts
- * object to get the necessary contract ids. Another option is,
- * you could also fetch remote data for some reason.
- */
-deployConfig: async (options: DeployOptions) => {
+deployConfig: {
+  gasPrice: 1,
+};
+```
+
+Or use a function for crafting dynamic deployment flows:
+
+- If you need to fetch and use configs or data from a remote data source
+- If you need to use IDs from already deployed contracts — in this case, we can use the `options.contracts` property to get the necessary contract ID. For example:
+
+```ts
+deployConfig: async (options: ContractDeployOptions) => {
+  // ability to fetch data remotely
   await Promise.resolve(`simulating remote data fetch`);
 
+  // get contract by name
   const contract = options.contracts.find(
-    (c) => c.name === MY_CONTRACT_DEPLOYED_NAME
+    ({ name }) => name === MY_FIRST_DEPLOYED_CONTRACT_NAME
   );
 
   if (!contract) {
@@ -105,8 +104,11 @@ deployConfig: async (options: DeployOptions) => {
     gasPrice: 1,
     storageSlots: [
       {
-        // storage slot to initialize w/ previous contract id
         key: "0x..",
+        /**
+         * Gere we could initialize a storage slot,
+         * using the relevant contract ID.
+         */
         value: contract.contractId,
       },
     ],
@@ -114,58 +116,77 @@ deployConfig: async (options: DeployOptions) => {
 };
 ```
 
-## useBuiltinForc
+## `useBuiltinForc`
+
+Opt-in or out from using builtin `forc` binaries.
+
+When not supplied, will default to using the `system` binaries.
+
+If `system` binaries are not present, will print warning and use `built-in` ones instead.
 
 ```ts
-/**
- * Optional property, defaults to false
- * @param useBuiltinForc - Opt-in or out from using builtin Forc binaries
- */
+// Default: undefined
 useBuiltinForc: false,
 ```
 
-## useBuiltinFuelCore
+## `useBuiltinFuelCore`
+
+Opt-in or out from using builtin `fuel-core` binaries.
+
+When not supplied, will default to using the `system` binaries.
+
+If `system` binaries are not present, will print warning and use `built-in` ones instead.
 
 ```ts
-/**
- * Optional property, defaults to false
- * @param useBuiltinFuelCore -  Opt-in or out from using builtin Fuel Core binaries
- */
+// Default: undefined
 useBuiltinFuelCore: false,
 ```
 
-## autoStartFuelCore
+## `autoStartFuelCore`
+
+If set to false, you will need to spin up a `fuel-core` node by yourself.
+
+This is relevant only for the [`fuels dev`](./commands.md#fuels-dev) command.
 
 ```ts
-/**
- * Optional property, defaults to true
- * @param autoStartFuelCore - When set to false, it will skip spinning up
- * a FuelCore node and you'll need to start the node yourself
- */
 autoStartFuelCore: true,
 ```
 
-## onSuccess
+## `fuelCorePort`
+
+Port to use when starting a `fuel-core` node.
 
 ```ts
-/**
-  * This function is called after a successful run
-  * @param event - The event that triggered this execution
-  * @param config - The loaded `fuels.config`
-  */
+// Default: first free port, starting from 4000
+autoStartFuelCore: true,
+```
+
+## `onSuccess`
+
+Function callback, will be called after a successful run.
+
+Parameters:
+
+- `event` — The event that triggered this execution
+- `config` — The loaded config (`fuels.config.ts`)
+
+```ts
 onSuccess: (event: CommandEvent, config: FuelsConfig) => {
   console.log('fuels:onSuccess', { event, config });
 },
 ```
 
-## onFailure
+## `onFailure`
+
+Function callback, will be called in case of errors.
+
+Parameters:
+
+- `error` — Original error object
+- `config` — The loaded config (`fuels.config.ts`)
 
 ```ts
-/**
-  * This function is called in case of errors
-  * @param error - The error that interrupted the execution
-  */
-onFailure: (error: Error) => {
-  console.log('fuels:onFailure', { error });
+onSuccess: (event: CommandEvent, config: FuelsConfig) => {
+  console.log('fuels:onSuccess', { event, config });
 },
 ```
