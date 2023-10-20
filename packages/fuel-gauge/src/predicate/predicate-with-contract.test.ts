@@ -12,7 +12,7 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
+import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
 import liquidityPoolAbi from '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
 import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';

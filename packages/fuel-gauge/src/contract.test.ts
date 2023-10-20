@@ -23,7 +23,7 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
 
 import { createSetupConfig } from './utils';
 
