@@ -357,7 +357,7 @@ export default defineConfig({
             items: [
               {
                 text: 'The TestNodeLauncher utility',
-                link: '/guide/testing/test-node-launcher',
+                link: '/guide/testing/the-TestNodeLauncher-utility',
               },
               {
                 text: 'Testing with Jest',
