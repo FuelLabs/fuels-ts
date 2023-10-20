@@ -11,13 +11,13 @@ fn main(vector: Vec<u64>) {
             assert(length == 4);
             assert(vector.capacity() == 4);
             assert(vector.is_empty() == false);
-            log("vector.buf.ptr");
+            log(__to_str_array("vector.buf.ptr"));
             log(vector.buf.ptr);
-            log("vector.buf.cap");
+            log(__to_str_array("vector.buf.cap"));
             log(vector.buf.cap);
-            log("vector.len");
+            log(__to_str_array("vector.len"));
             log(vector.len);
-            log("addr_of vector");
+            log(__to_str_array("addr_of vector"));
             log(__addr_of(vector));
             true
         },

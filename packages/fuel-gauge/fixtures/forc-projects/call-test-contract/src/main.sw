@@ -127,7 +127,7 @@ impl TestContract for Contract {
 
     #[payable]
     fn return_context_asset() -> b256 {
-        msg_asset_id()
+        msg_asset_id().value
     }
 
     #[payable]

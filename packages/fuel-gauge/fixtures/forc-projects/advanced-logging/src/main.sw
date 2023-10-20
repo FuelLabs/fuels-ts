@@ -49,19 +49,19 @@ impl AdvancedLogging for Contract {
             difficulty: Difficulty::Medium(true),
         };
 
-        log("Game State");
+        log(__to_str_array("Game State"));
         log(state);
 
-        log("Contract Id");
+        log(__to_str_array("Contract Id"));
         log(contract_id);
 
-        log("Game Ref");
+        log(__to_str_array("Game Ref"));
         log(game_ref);
 
-        log("Game Ref Score");
+        log(__to_str_array("Game Ref Score"));
         log(game_ref.score);
 
-        log("Direct Game");
+        log(__to_str_array("Direct Game"));
         log(Game {
             score: 101,
             time_left: 12,
@@ -73,11 +73,11 @@ impl AdvancedLogging for Contract {
         });
 
         if 1 == 1 {
-            log("Was True");
+            log(__to_str_array("Was True"));
         }
 
         if 1 == 2 {
-            log("The Sky is falling");
+            log(__to_str_array("The Sky is falling"));
         }
 
         true
@@ -98,7 +98,7 @@ impl AdvancedLogging for Contract {
         };
         require(a == b, game_ref);
 
-        log("Hello Tester");
+        log(__to_str_array("Hello Tester"));
         log(state);
 
         true
@@ -106,7 +106,7 @@ impl AdvancedLogging for Contract {
 
     fn test_log_from_other_contract(a: u8, contract_id: b256) -> bool {
         let other_contract = abi(AdvancedLoggingOtherContract, contract_id);
-        log("Hello from main Contract");
+        log(__to_str_array("Hello from main Contract"));
         other_contract.msg_from_other_contract(a);
         true
     }

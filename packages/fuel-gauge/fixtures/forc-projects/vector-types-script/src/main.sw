@@ -224,70 +224,70 @@ fn main(
     vec_in_tuple: (Vec<u32>, Vec<u32>),
     vec_in_a_vec_in_a_struct_in_a_vec: Vec<SomeStruct<Vec<Vec<u32>>>>,
 ) -> bool {
-     {
+    {
         let exp_u32_vec = vec_from([0, 1, 2]);
 
         require(u32_vec == exp_u32_vec, "u32_vec_error");
     }
-     {
+    {
         let mut exp_vec_in_vec = Vec::new();
         exp_vec_in_vec.push(vec_from([0, 1, 2]));
         exp_vec_in_vec.push(vec_from([0, 1, 2]));
 
         require(vec_in_vec == exp_vec_in_vec, "vec_in_vec err");
     }
-     {
+    {
         let mut exp_struct_in_vec = Vec::new();
         exp_struct_in_vec.push(SomeStruct { a: 0u32 });
         exp_struct_in_vec.push(SomeStruct { a: 1u32 });
 
         require(struct_in_vec == exp_struct_in_vec, "struct_in_vec err");
     }
-     {
+    {
         let exp_vec_in_struct = SomeStruct {
             a: vec_from([0, 1, 2]),
         };
 
         require(vec_in_struct.a == exp_vec_in_struct.a, "vec_in_struct err");
     }
-     {
+    {
         let mut exp_array_in_vec = Vec::new();
         exp_array_in_vec.push([0, 1]);
         exp_array_in_vec.push([0, 1]);
 
         require(array_in_vec == exp_array_in_vec, "array_in_vec err");
     }
-     {
+    {
         let exp_vec_in_array = [vec_from([0, 1, 2]), vec_from([0, 1, 2])];
 
         require(vec_in_array == exp_vec_in_array, "vec_in_array err");
     }
-     {
+    {
         let exp_u32_vec = vec_from([0, 1, 2]);
         let exp_vec_in_enum = SomeEnum::a(exp_u32_vec);
 
         require(vec_in_enum == exp_vec_in_enum, "vec_in_enum err");
     }
-     {
+    {
         let mut exp_enum_in_vec = Vec::new();
         exp_enum_in_vec.push(SomeEnum::a(0));
         exp_enum_in_vec.push(SomeEnum::a(1));
 
         require(enum_in_vec == exp_enum_in_vec, "enum_in_vec err");
     }
-     {
+    {
         let mut exp_tuple_in_vec = Vec::new();
         exp_tuple_in_vec.push((0, 0));
         exp_tuple_in_vec.push((1, 1));
 
         require(tuple_in_vec == exp_tuple_in_vec, "tuple_in_vec err");
     }
-     {
+    {
         let exp_vec_in_tuple = (vec_from([0, 1, 2]), vec_from([0, 1, 2]));
 
         require(vec_in_tuple == exp_vec_in_tuple, "vec_in_tuple err");
     }
-     {
+    {
         let mut exp_vec_in_a_vec_in_a_struct_in_a_vec = Vec::new();
 
         let mut inner_vec_1 = Vec::new();
