@@ -10,6 +10,8 @@ import {
   generatedDir,
   initFlagsWorkspace,
 } from '../../../test/utils/runCommands';
+import * as shouldUseBuiltinForcMod from '../commands/init/shouldUseBuiltinForc';
+import * as shouldUseBuiltinFuelCoreMod from '../commands/init/shouldUseBuiltinFuelCore';
 
 import { loadConfig } from './loadConfig';
 
@@ -96,5 +98,31 @@ describe('loadConfig', () => {
     expect(config.contracts.length).toEqual(0);
     expect(config.scripts.length).toEqual(0);
     expect(config.predicates.length).toEqual(1);
+  });
+
+  test(`should smart-set built-in flags`, async () => {
+    await runInit(
+      [
+        ['--predicates', 'project/predicates/*'],
+        ['-o', generatedDir],
+      ].flat()
+    );
+
+    const shouldUseBuiltinForc = jest
+      .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
+      .mockImplementation();
+
+    const shouldUseBuiltinFuelCore = jest
+      .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
+      .mockImplementation();
+
+    const config = await loadConfig(fixturesDir);
+
+    expect(config.contracts.length).toEqual(0);
+    expect(config.scripts.length).toEqual(0);
+    expect(config.predicates.length).toEqual(1);
+
+    expect(shouldUseBuiltinForc).toHaveBeenCalledTimes(1);
+    expect(shouldUseBuiltinFuelCore).toHaveBeenCalledTimes(1);
   });
 });

@@ -3,13 +3,30 @@ import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
 import { mockLogger } from '../utils/mockLogger';
-import { clean, fuelsConfigPath, generatedDir, runInit } from '../utils/runCommands';
+import {
+  clean,
+  fuelsConfigPath,
+  generatedDir,
+  initFlagsAutoStartFuelCore,
+  initFlagsWorkspace,
+  runInit,
+} from '../utils/runCommands';
 
 describe('init', () => {
   beforeEach(clean);
   afterAll(clean);
 
   it('should run `init` command', async () => {
+    await runInit([initFlagsWorkspace, initFlagsAutoStartFuelCore].flat());
+    expect(existsSync(fuelsConfigPath)).toBeTruthy();
+    const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
+    expect(fuelsContents).toMatch(`workspace: 'project',`);
+    expect(fuelsContents).toMatch(`output: 'generated',`);
+    expect(fuelsContents).not.toMatch(`useBuiltinForc: true,`);
+    expect(fuelsContents).not.toMatch(`useBuiltinFuelCore: true,`);
+  });
+
+  it('should run `init` command using built-in flags', async () => {
     await runInit();
     expect(existsSync(fuelsConfigPath)).toBeTruthy();
     const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
