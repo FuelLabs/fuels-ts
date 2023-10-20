@@ -19,7 +19,8 @@ export const onForcExit =
   };
 
 export const onForcError = (onError: OnErrorFn) => (error: Error) => {
-  onError(error);
+  error(err);
+  onError(err);
 };
 
 export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
