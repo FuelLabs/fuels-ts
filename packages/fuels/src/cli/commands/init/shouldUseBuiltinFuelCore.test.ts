@@ -1,6 +1,6 @@
 import * as getSystemForcMod from '@fuel-ts/versions/cli';
 
-import * as loggerMod from '../../utils/logger';
+import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { makeWarnMessage } from './messages';
 import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
@@ -18,8 +18,7 @@ describe('shouldUseBuiltinForc', () => {
       .spyOn(getSystemForcMod, 'getSystemForc')
       .mockReturnValue({ error: null, systemForcVersion: returns.getSystemForc });
 
-    const warn = jest.spyOn(loggerMod, 'warn').mockImplementation();
-    const error = jest.spyOn(loggerMod, 'error').mockImplementation();
+    const { warn, error } = mockLogger();
 
     return {
       getSystemForc,

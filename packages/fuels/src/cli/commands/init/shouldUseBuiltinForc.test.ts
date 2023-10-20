@@ -1,6 +1,6 @@
 import * as getSystemFuelCoreMod from '@fuel-ts/versions/cli';
 
-import * as loggerMod from '../../utils/logger';
+import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { makeWarnMessage } from './messages';
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
@@ -23,8 +23,7 @@ describe('shouldUseBuiltinFuelCore', () => {
       .spyOn(getSystemFuelCoreMod, 'getSystemFuelCore')
       .mockReturnValue({ error: null, systemFuelCoreVersion: returns.getSystemFuelCore });
 
-    const warn = jest.spyOn(loggerMod, 'warn').mockImplementation();
-    const error = jest.spyOn(loggerMod, 'error').mockImplementation();
+    const { warn, error } = mockLogger();
 
     return {
       getSystemFuelCore,

@@ -2,8 +2,8 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
+import { mockLogger } from '../../../../test/utils/mockLogger';
 import type { FuelsConfig } from '../../types';
-import * as logger from '../../utils/logger';
 import { configureLogging, loggingConfig } from '../../utils/logger';
 
 import { killNode, startFuelCore } from './startFuelCore';
@@ -65,9 +65,7 @@ describe('startFuelCore', () => {
       .spyOn(childProcessMod, 'spawn')
       .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
 
-    const error = jest.spyOn(logger, 'error').mockImplementation();
-
-    return { error, spawn, innerMocks };
+    return { spawn, innerMocks };
   }
 
   test('should start `fuel-core` node using built-in binary', async () => {
@@ -106,7 +104,8 @@ describe('startFuelCore', () => {
   });
 
   test('should throw on error', async () => {
-    const { error, innerMocks } = mockSpawn({ shouldError: true });
+    const { innerMocks } = mockSpawn({ shouldError: true });
+    const { error } = mockLogger();
 
     const { error: safeError, result } = await safeExec(async () => startFuelCore(fuelsConfig));
 

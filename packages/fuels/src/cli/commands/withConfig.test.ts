@@ -2,6 +2,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { program } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/config/fuels.config';
+import { mockLogger } from '../../../test/utils/mockLogger';
 import { clean } from '../../../test/utils/runCommands';
 import * as loadConfigMod from '../config/loadConfig';
 import type { FuelsConfig } from '../types';
@@ -54,7 +55,7 @@ describe('withConfig', () => {
       return Promise.resolve([]);
     });
 
-    const error = jest.spyOn(logger, 'error').mockImplementation();
+    const { error } = mockLogger();
 
     return {
       configPath,
