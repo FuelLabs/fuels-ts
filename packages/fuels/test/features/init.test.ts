@@ -2,6 +2,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
+import { mockLogger } from '../utils/mockLogger';
 import { clean, fuelsConfigPath, generatedDir, runInit } from '../utils/runCommands';
 
 describe('init', () => {
@@ -19,11 +20,15 @@ describe('init', () => {
   });
 
   it('should run `init` command and throw for existent config file', async () => {
+    const { error } = mockLogger();
+
     const firstRun = await safeExec(() => runInit());
+    expect(error).toHaveBeenCalledTimes(0);
     expect(firstRun.error).not.toBeTruthy();
 
     // second time will trigger error
     const secondRun = await safeExec(() => runInit());
+    expect(error).toHaveBeenCalledTimes(1);
     expect(secondRun.result).not.toBeTruthy();
     expect(chalk.reset(secondRun.error)).toMatch(/Config file exists, aborting./);
   });

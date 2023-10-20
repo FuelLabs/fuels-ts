@@ -1,6 +1,7 @@
 import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
+import { mockLogger } from '../../../../test/utils/mockLogger';
 import { workspaceDir } from '../../../../test/utils/runCommands';
 import { configureLogging, loggingConfig } from '../../utils/logger';
 
@@ -144,7 +145,9 @@ describe('buildSwayPrograms', () => {
 
   test('should reject on error', () => {
     const reject = jest.fn();
+    const { error } = mockLogger();
     onForcError(reject)(new Error());
     expect(reject).toHaveBeenCalledTimes(1);
+    expect(error).toHaveBeenCalledTimes(1);
   });
 });
