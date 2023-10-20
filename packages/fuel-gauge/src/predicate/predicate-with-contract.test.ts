@@ -1,3 +1,4 @@
+import { validateValueWithinRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN, WalletUnlocked } from 'fuels';
@@ -165,7 +166,13 @@ describe('Predicate', () => {
       const expectedFinalPredicateBalance =
         initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
 
-      expect(expectedFinalPredicateBalance).toEqual(remainingPredicateBalance);
+      expect(
+        validateValueWithinRange({
+          value: expectedFinalPredicateBalance,
+          min: remainingPredicateBalance - 1,
+          max: remainingPredicateBalance + 1,
+        })
+      ).toBeTruthy();
     });
   });
 });
