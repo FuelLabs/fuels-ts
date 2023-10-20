@@ -356,7 +356,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'The `TestNodeLauncher` utility',
+                text: 'The TestNodeLauncher utility',
                 link: '/guide/testing/test-node-launcher',
               },
               {

@@ -1,4 +1,4 @@
-# The `TestNodeLauncher` utility
+# The TestNodeLauncher utility
 
 ---
 
