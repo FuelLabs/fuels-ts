@@ -7,7 +7,7 @@ import kill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
-import { log, loggingConfig } from '../../utils/logger';
+import { error, log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig } from './defaultChainConfig';
 
@@ -98,7 +98,7 @@ export const startFuelCore = async (
         });
       }
       if (/error/i.test(data)) {
-        log(
+        error(
           `Some error occurred. Please, check to see if you have another instance running locally.`
         );
         reject(data.toString());
