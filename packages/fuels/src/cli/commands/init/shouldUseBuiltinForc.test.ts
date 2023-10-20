@@ -1,4 +1,3 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as getSystemFuelCoreMod from '@fuel-ts/versions/cli';
 
 import * as loggerMod from '../../utils/logger';
