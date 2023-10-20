@@ -179,10 +179,6 @@ export default defineConfig({
                 link: '/guide/wallets/signing',
               },
               {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
-              {
                 text: 'Transferring Assets',
                 link: '/guide/wallets/transferring-assets',
               },
@@ -355,10 +351,6 @@ export default defineConfig({
             link: '/guide/testing/',
             collapsed: true,
             items: [
-              {
-                text: 'The TestNodeLauncher utility',
-                link: '/guide/testing/the-TestNodeLauncher-utility',
-              },
               {
                 text: 'Testing with Jest',
                 link: '/guide/testing/testing-with-jest',

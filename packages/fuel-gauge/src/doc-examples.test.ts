@@ -1,4 +1,10 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import {
+  AssetId,
+  WalletConfig,
+  generateTestWallet,
+  seedTestWallet,
+} from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type {
   BN,
@@ -198,44 +204,6 @@ describe('Doc Examples', () => {
     expect(wallet.publicKey).toBeTruthy();
     expect(wallet.address).toEqual(recoveredAddress);
     // #endregion wallet-message-signing
-  });
-
-  it('can create wallets', async () => {
-    // #region wallet-setup
-    // #context import { Provider, bn } from 'fuels';
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
-
-    // single asset
-    const walletA = await generateTestWallet(provider, [[42, BaseAssetId]]);
-
-    // multiple assets
-    const walletB = await generateTestWallet(provider, [
-      // [Amount, AssetId]
-      [100, assetIdA],
-      [200, assetIdB],
-      [30, BaseAssetId],
-    ]);
-
-    // this wallet has no assets
-    const walletC = await generateTestWallet(provider);
-
-    // retrieve balances of wallets
-    const walletABalances = await walletA.getBalances();
-    const walletBBalances = await walletB.getBalances();
-    const walletCBalances = await walletC.getBalances();
-
-    // validate balances
-    expect(walletABalances).toEqual([{ assetId: BaseAssetId, amount: bn(42) }]);
-    expect(walletBBalances).toEqual([
-      { assetId: BaseAssetId, amount: bn(30) },
-      { assetId: assetIdA, amount: bn(100) },
-      { assetId: assetIdB, amount: bn(200) },
-    ]);
-    expect(walletCBalances).toEqual([]);
-    // #endregion wallet-setup
   });
 
   it('can connect to testnet', async () => {
