@@ -174,7 +174,7 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       typescript:
-        specifier: ~5.2.0
+        specifier: ~5.2.2
         version: 5.2.2
 
   apps/demo-nodejs-esm:
@@ -225,7 +225,7 @@ importers:
         specifier: 5.0.1
         version: 5.0.1(@babel/plugin-syntax-flow@7.22.5)(@babel/plugin-transform-react-jsx@7.22.5)(esbuild@0.17.19)(eslint@8.38.0)(react@18.2.0)(typescript@5.2.2)
       typescript:
-        specifier: ~5.2.0
+        specifier: ~5.2.2
         version: 5.2.2
       web-vitals:
         specifier: ^2.1.4
@@ -275,7 +275,7 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4(eslint@8.38.0)
       typescript:
-        specifier: ~5.2.0
+        specifier: ~5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.3.9
