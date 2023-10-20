@@ -11,6 +11,9 @@ echo "Started Fuel-Core node in background."
 if [[ "$*" == *"--browser"* ]]; then
     pnpm test:browser
     TEST_RESULT=$?
+elif [[ "$*" == *"--node"* ]]; then
+    pnpm test
+    TEST_RESULT=$?
 else
     pnpm test
     TEST_RESULT=$?

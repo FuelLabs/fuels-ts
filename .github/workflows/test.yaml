@@ -41,9 +41,13 @@ jobs:
       - name: Validate tests
         run: pnpm test:validate
 
-  test-node:
+  test-matrix:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [node, browser]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,40 +58,18 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Run Node Tests
-        run: pnpm ci:test
+      - name: Run Tests
+        run: pnpm ci:test --${{ matrix.env }}
 
-      - name: Upload Node Coverage
+      - name: Upload Coverage
         uses: actions/upload-artifact@v2
         with:
-          name: node
-          path: coverage/environments/node
-
-  test-browser:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
-
-      - name: Build
-        run: pnpm build
-
-      - name: Run Browser Tests
-        run: pnpm ci:test --browser
-
-      - name: Upload Browser Coverage
-        uses: actions/upload-artifact@v2
-        with:
-          name: browser
-          path: coverage/environments/browser
+          name: ${{ matrix.env }}
+          path: coverage/environments/${{ matrix.env }}
 
   test:
     runs-on: ubuntu-latest
-    needs: [test-node, test-browser]
+    needs: test-matrix
     steps:
       - name: Checkout
         uses: actions/checkout@v3
