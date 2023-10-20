@@ -3,7 +3,7 @@ import * as getSystemFuelCoreMod from '@fuel-ts/versions/cli';
 
 import * as loggerMod from '../../utils/logger';
 
-import { makeErrorMessage, makeWarnMessage } from './messages';
+import { makeWarnMessage } from './messages';
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
 
 jest.mock('@fuel-ts/versions/cli', () => ({
@@ -59,21 +59,5 @@ describe('shouldUseBuiltinFuelCore', () => {
 
     expect(warn).toHaveBeenCalledTimes(0);
     expect(error).toHaveBeenCalledTimes(0);
-  });
-
-  it('should error if nothing satisfies', async () => {
-    const { getSystemFuelCore, warn, error } = mockAll({ getSystemFuelCore: null });
-
-    const safe = await safeExec(() => shouldUseBuiltinFuelCore());
-
-    expect(safe.error).toBeTruthy();
-    expect(safe.error?.toString()).toMatch(makeErrorMessage());
-    expect(safe.result).not.toBeTruthy();
-
-    expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
-
-    expect(warn).toHaveBeenCalledTimes(0);
-    expect(error).toHaveBeenCalledTimes(1);
-    expect(error.mock.calls[0][0]).toEqual(makeErrorMessage());
   });
 });

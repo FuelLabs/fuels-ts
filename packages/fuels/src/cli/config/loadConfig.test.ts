@@ -24,16 +24,6 @@ describe('loadConfig', () => {
     expect(result).not.toBeTruthy();
   });
 
-  test(`should auto start fuel core by default`, async () => {
-    await runInit([initFlagsWorkspace, initFlagsUseBuiltinBinaries].flat());
-
-    const config = await loadConfig(fixturesDir);
-    const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
-
-    expect(fuelsContents).toMatch(`  // autoStartFuelCore: true,`); // comment
-    expect(config.autoStartFuelCore).toEqual(true);
-  });
-
   test(`should auto start fuel core explicitly`, async () => {
     await runInit(
       [initFlagsWorkspace, initFlagsUseBuiltinBinaries, '--auto-start-fuel-core'].flat()

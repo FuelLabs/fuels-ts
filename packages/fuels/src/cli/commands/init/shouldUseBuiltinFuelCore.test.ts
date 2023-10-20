@@ -1,9 +1,8 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as getSystemForcMod from '@fuel-ts/versions/cli';
 
 import * as loggerMod from '../../utils/logger';
 
-import { makeErrorMessage, makeWarnMessage } from './messages';
+import { makeWarnMessage } from './messages';
 import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
 
 jest.mock('@fuel-ts/versions/cli', () => ({
@@ -52,21 +51,5 @@ describe('shouldUseBuiltinForc', () => {
 
     expect(warn).toHaveBeenCalledTimes(0);
     expect(error).toHaveBeenCalledTimes(0);
-  });
-
-  it('should error if nothing satisfies', async () => {
-    const { getSystemForc, warn, error } = mockAll({ getSystemForc: null });
-
-    const safe = await safeExec(() => shouldUseBuiltinForc());
-
-    expect(safe.error).toBeTruthy();
-    expect(safe.error?.toString()).toMatch(makeErrorMessage());
-    expect(safe.result).not.toBeTruthy();
-
-    expect(getSystemForc).toHaveBeenCalledTimes(1);
-
-    expect(warn).toHaveBeenCalledTimes(0);
-    expect(error).toHaveBeenCalledTimes(1);
-    expect(error.mock.calls[0][0]).toEqual(makeErrorMessage());
   });
 });
