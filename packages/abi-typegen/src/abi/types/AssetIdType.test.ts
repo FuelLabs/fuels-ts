@@ -1,6 +1,9 @@
 import { AssetIdType } from './AssetIdType';
 import { BoolType } from './BoolType';
 
+/**
+ * @group node
+ */
 describe('AssetIdType.ts', () => {
   test('should properly parse type attributes', () => {
     const b512 = new AssetIdType({
