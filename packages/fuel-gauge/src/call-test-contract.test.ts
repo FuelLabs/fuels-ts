@@ -7,7 +7,7 @@ import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin')
 );
 
 const setupContract = createSetupConfig({
