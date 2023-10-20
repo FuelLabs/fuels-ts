@@ -3,6 +3,7 @@ import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
 import type { FuelsConfig } from '../../types';
+import * as logger from '../../utils/logger';
 import { configureLogging, loggingConfig } from '../../utils/logger';
 
 import { killNode, startFuelCore } from './startFuelCore';
@@ -64,7 +65,9 @@ describe('startFuelCore', () => {
       .spyOn(childProcessMod, 'spawn')
       .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
 
-    return { spawn, innerMocks };
+    const error = jest.spyOn(logger, 'error').mockImplementation();
+
+    return { error, spawn, innerMocks };
   }
 
   test('should start `fuel-core` node using built-in binary', async () => {
@@ -103,12 +106,14 @@ describe('startFuelCore', () => {
   });
 
   test('should throw on error', async () => {
-    const { innerMocks } = mockSpawn({ shouldError: true });
+    const { error, innerMocks } = mockSpawn({ shouldError: true });
 
-    const { error, result } = await safeExec(async () => startFuelCore(fuelsConfig));
+    const { error: safeError, result } = await safeExec(async () => startFuelCore(fuelsConfig));
 
-    expect(error).toBeTruthy();
+    expect(safeError).toBeTruthy();
     expect(result).not.toBeTruthy();
+
+    expect(error).toHaveBeenCalledTimes(1);
 
     expect(innerMocks.on).toHaveBeenCalledTimes(1);
     expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
