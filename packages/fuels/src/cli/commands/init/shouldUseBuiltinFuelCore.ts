@@ -1,32 +1,17 @@
 import { getSystemFuelCore } from '@fuel-ts/versions/cli';
-import { prompt } from 'prompts';
 
-import { error, warn } from '../../utils/logger';
+import { warn } from '../../utils/logger';
 
-import { makeErrorMessage, makeWarnMessage } from './messages';
+import { makeWarnMessage } from './messages';
 
-export const shouldUseBuiltinFuelCore = async (useBuiltinFuelCore?: boolean) => {
-  if (useBuiltinFuelCore !== undefined) {
-    return useBuiltinFuelCore;
-  }
-
+export const shouldUseBuiltinFuelCore = () => {
+  // first, tries use system binary
   const { systemFuelCoreVersion } = getSystemFuelCore();
-
   if (systemFuelCoreVersion !== null) {
     return false;
   }
 
-  const answer = await prompt({
-    type: 'confirm',
-    name: 'useBuiltinFuelCore',
-    message: "Can't find `fuel-core`. Use built-in executable?",
-  });
-
-  if (answer.useBuiltinFuelCore) {
-    warn(makeWarnMessage('fuel-core'));
-    return true;
-  }
-
-  error(makeErrorMessage());
-  throw new Error(makeErrorMessage());
+  // if its not found, prints warning message and use built-in binary
+  warn(makeWarnMessage('fuel-core'));
+  return true;
 };

@@ -4,6 +4,8 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
+import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
+import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
 
 import { readForcToml, readSwayType } from './forcUtils';
@@ -39,19 +41,22 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
   await validateConfig(userConfig);
 
+  const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
+  const useBuiltinFuelCore = userConfig.useBuiltinForc ?? shouldUseBuiltinFuelCore();
+
   // Start clone-object while initializiung optional props
   const config: FuelsConfig = {
     contracts: [],
     scripts: [],
     predicates: [],
     deployConfig: {},
-    useBuiltinForc: false,
-    useBuiltinFuelCore: false,
     autoStartFuelCore: true,
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,
     ...userConfig,
     basePath: cwd,
+    useBuiltinForc,
+    useBuiltinFuelCore,
   };
 
   // Resolve the output path on loaded config

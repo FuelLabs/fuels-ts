@@ -6,10 +6,7 @@ import { join, relative } from 'path';
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
 import { log } from '../../utils/logger';
 
-import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
-import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
-
-export async function init(program: Command) {
+export function init(program: Command) {
   const options = program.opts();
   const { path } = options;
 
@@ -41,17 +38,14 @@ export async function init(program: Command) {
 
   const output = relative(path, options.output);
 
-  const useBuiltinForc = await shouldUseBuiltinForc(options.useBuiltinForc);
-  const useBuiltinFuelCore = await shouldUseBuiltinFuelCore(options.useBuiltinFuelCore);
-
   const renderedConfig = renderFuelsConfigTemplate({
     workspace,
     contracts,
     scripts,
     predicates,
     output,
-    useBuiltinForc,
-    useBuiltinFuelCore,
+    useBuiltinForc: options.useBuiltinForc,
+    useBuiltinFuelCore: options.shouldUseBuiltinFuelCore,
     autoStartFuelCore: options.autoStartFuelCore,
   });
 
