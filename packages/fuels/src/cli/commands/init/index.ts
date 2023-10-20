@@ -6,9 +6,13 @@ import { join, relative } from 'path';
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
 import { log } from '../../utils/logger';
 
+import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
+import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
+
 export function init(program: Command) {
   const options = program.opts();
-  const { path } = options;
+
+  const { path, autoStartFuelCore } = options;
 
   const fuelsConfigPath = join(path, 'fuels.config.ts');
 
@@ -38,15 +42,18 @@ export function init(program: Command) {
 
   const output = relative(path, options.output);
 
+  const useBuiltinForc = options.useBuiltinForc ?? shouldUseBuiltinForc();
+  const useBuiltinFuelCore = options.useBuiltinForc ?? shouldUseBuiltinFuelCore();
+
   const renderedConfig = renderFuelsConfigTemplate({
     workspace,
     contracts,
     scripts,
     predicates,
     output,
-    useBuiltinForc: options.useBuiltinForc,
-    useBuiltinFuelCore: options.shouldUseBuiltinFuelCore,
-    autoStartFuelCore: options.autoStartFuelCore,
+    useBuiltinForc,
+    useBuiltinFuelCore,
+    autoStartFuelCore,
   });
 
   writeFileSync(fuelsConfigPath, renderedConfig);
