@@ -6,7 +6,7 @@ import { resolve, parse } from 'path';
 
 import type { FuelsConfig, UserFuelsConfig } from '../types';
 
-import { readForcToml, readSwayType, SwayType } from './forcUtils';
+import { readForcToml, readSwayType } from './forcUtils';
 import { validateConfig } from './validateConfig';
 
 export async function loadConfig(cwd: string): Promise<FuelsConfig> {
