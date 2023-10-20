@@ -13,7 +13,7 @@ export function withProgram<CType extends Commands>(
       await fn(program);
     } catch (err) {
       error(err);
-      process.exit(1);
+      throw err;
     }
   };
 }
