@@ -101,26 +101,20 @@ describe('loadConfig', () => {
   });
 
   test(`should smart-set built-in flags`, async () => {
-    await runInit(
-      [
-        ['--predicates', 'project/predicates/*'],
-        ['-o', generatedDir],
-      ].flat()
-    );
+    await runInit(initFlagsWorkspace);
 
     const shouldUseBuiltinForc = jest
       .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
-      .mockImplementation();
+      .mockReturnValue(false);
 
     const shouldUseBuiltinFuelCore = jest
       .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
-      .mockImplementation();
+      .mockReturnValue(true);
 
     const config = await loadConfig(fixturesDir);
 
-    expect(config.contracts.length).toEqual(0);
-    expect(config.scripts.length).toEqual(0);
-    expect(config.predicates.length).toEqual(1);
+    expect(config.useBuiltinForc).toEqual(false);
+    expect(config.useBuiltinFuelCore).toEqual(true);
 
     expect(shouldUseBuiltinForc).toHaveBeenCalledTimes(1);
     expect(shouldUseBuiltinFuelCore).toHaveBeenCalledTimes(1);
