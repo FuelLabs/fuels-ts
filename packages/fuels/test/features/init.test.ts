@@ -50,10 +50,10 @@ describe('init', () => {
     expect(chalk.reset(secondRun.error)).toMatch(/Config file exists, aborting./);
   });
 
-  it('should error if no inputs are informed', async () => {
+  it('should error if no inputs are supplied', async () => {
     const { error } = await safeExec(() => runInit(['-o', generatedDir].flat()));
 
     expect(error).toBeTruthy();
-    expect(error?.toString()).toMatch(/Workspace not informed./i);
+    expect(error?.toString()).toMatch(/Workspace not supplied./i);
   });
 });

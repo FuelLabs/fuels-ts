@@ -244,7 +244,7 @@ describe('runTypegen.js', () => {
 
     // validates execution was ok
     expect(error?.message).toEqual(
-      `At least one parameter should be informed: 'input' or 'filepaths'.`
+      `At least one parameter should be supplied: 'input' or 'filepaths'.`
     );
   });
 });

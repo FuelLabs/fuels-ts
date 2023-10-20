@@ -34,7 +34,7 @@ export function init(program: Command) {
   const noneIsInformed = ![workspace, contracts, scripts, predicates].find((v) => v !== undefined);
 
   if (noneIsInformed) {
-    throw new Error(`Workspace not informed.`);
+    throw new Error(`Workspace not supplied.`);
   }
 
   const output = relative(path, options.output);
