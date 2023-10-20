@@ -44,13 +44,13 @@ describe('Script With Vectors', () => {
     expect(formattedLog).toEqual([
       7,
       'vector.buf.ptr',
-      11288,
+      11304,
       'vector.buf.cap',
       4,
       'vector.len',
       4,
       'addr_of vector',
-      11264,
+      11280,
     ]);
   });
 
