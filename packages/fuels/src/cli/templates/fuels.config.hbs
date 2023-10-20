@@ -1,167 +1,44 @@
-import type {
-  CommandEvent,
-  // DeployOptions,
-  FuelsConfig,
-} from 'fuels';
-
 import { createConfig } from 'fuels';
 
 export default createConfig({
-
-  // ----------------------------------- Inputs
-
-  /**
-   * Instead of informing `contracts`, `scripts` and `predicates`
-   * individually, you can also use workspaces (recommended)
-   * @param workspace - Path to Sway/Forc Workspace
-   */
   {{#if (isDefined workspace)}}
   workspace: '{{workspace}}',
   {{else}}
-  // workspace: './sway-programs',
-  {{/if}}
-
-
-  /**
-   * This property should not be used alongside `workspace`
-   * @param contracts - Paths to Sway Contracts
-   */
-  {{#if (isDefined contracts)}}
+    {{#if (isDefined contracts)}}
   contracts: [
-    {{#each contracts}}
-      '{{this}}',
-    {{/each}}
+      {{#each contracts}}
+        '{{this}}',
+      {{/each}}
   ],
-  {{else}}
-  // contracts: [],
-  {{/if}}
-
-  /**
-   * This property should not be used alongside `workspace`
-   * @param predicates - Paths to Sway Predicates
-   */
-  {{#if (isDefined predicates)}}
+    {{/if}}
+    {{#if (isDefined predicates)}}
   predicates: [
-    {{#each predicates}}
-      '{{this}}',
-    {{/each}}
+      {{#each predicates}}
+        '{{this}}',
+      {{/each}}
   ],
-  {{else}}
-  // predicates: [],
-  {{/if}}
-
-  /**
-   * This property should not be used alongside `workspace`
-   * @param scripts - Path to Sway Scripts
-   */
-  {{#if (isDefined scripts)}}
+    {{/if}}
+    {{#if (isDefined scripts)}}
   scripts: [
-    {{#each scripts}}
-      '{{this}}',
-    {{/each}}
+      {{#each scripts}}
+        '{{this}}',
+      {{/each}}
   ],
-  {{else}}
-  // scripts: [],
+    {{/if}}
   {{/if}}
-
-  /**
-   * @param output - Where to generate Typescript definitions
-   */
   output: '{{output}}',
-
-
-  // ----------------------------------- Node & Deployment settings
-
-  /**
-   * @param privateKey - Your wallet private key
-   */
-  // Should ideally come from env — `process.env.MY_PRIVATE_KEY`
-  privateKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
-
-  /**
-   * Defaults to http://localhost:4000
-   * @param providerUrl - Contracts will be deployed using this provider
-   */
-  // providerUrl: '...',
-
-  /**
-   * @param chainConfig - Path to custom `chainConfig.json` file
-   */
-  // chainConfig: '...',
-
-  /**
-   * This method can be used for crafting custom deployment flows.
-   *
-   * Sometimes we need to deploy two contracts, and the second
-   * depends on the first—in such cases, you can use the contracts
-   * object to get the necessary contract id's. Another option is,
-   * you could also fetch remote data for some reason.
-   */
-  /*
-  deployConfig: async (options: DeployOptions) => {
-
-    await Promise.resolve(`simulating remote data fetch`);
-
-    const contract = options.contracts.find(
-      (c) => c.name === '<my contract deployed name>'
-    );
-
-    if (!contract) {
-      throw new Error('Contract not found!');
-    }
-
-    return {
-      gasPrice: 1,
-      storageSlots: [
-        {
-          // storage slot to initialize w/ previous contract id
-          key: '0x000....0000',
-          value: contract.contractId,
-        },
-      ],
-    };
-  },
-  */
-
-  // ----------------------------------- Forc/FuelCore settings
-  /**
-   * @param useBuiltinForc - Opt-in or out from using builtin Forc binaries
-   */
+  {{#if (isDefined useBuiltinForc)}}
   useBuiltinForc: {{useBuiltinForc}},
-
-  /**
-   * @param useBuiltinFuelCore - Opt-in or out from using builtin Fuel Core binaries
-   */
+  {{/if}}
+  {{#if (isDefined useBuiltinFuelCore)}}
   useBuiltinFuelCore: {{useBuiltinFuelCore}},
-
-  /**
-   * Optional, defaults to true
-   * @param autoStartFuelCore - When set to false, it will skip spinning up
-   * a Fuel Core node. In this case, you'll need to start the node yourself.
-   */
+  {{/if}}
   {{#if (isDefined autoStartFuelCore)}}
   autoStartFuelCore: {{autoStartFuelCore}},
-  {{else}}
-  // autoStartFuelCore: true,
   {{/if}}
-
-
-  // ----------------------------------- Callbacks
-
-  /**
-   * This function is called after a successful run
-   * @param event - The event that triggered this execution
-   * @param config - The loaded `fuels.config`
-   */
-  onSuccess: (_event: CommandEvent, _config: FuelsConfig) => {
-    // console.log('fuels:onSuccess', { event: _event, config: _config });
-  },
-
-  /**
-   * This function is called after an unsuccessful run
-   * @param error - The error that interrupted the execution
-   */
-  onFailure: (_error: Error) => {
-    // console.log('fuels:onFailure', { error: _error });
-  },
 });
+
+/**
+ * More info:
+ * https://fuellabs.github.io/fuels-ts/guide/cli/config-file
+ */
