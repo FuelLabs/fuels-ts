@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
-import { debug, log, loggingConfig } from '../../utils/logger';
+import { debug, error, log, loggingConfig } from '../../utils/logger';
 
 type OnResultFn = () => void;
 type OnErrorFn = (reason?: number | Error) => void;
@@ -18,7 +18,7 @@ export const onForcExit =
     }
   };
 
-export const onForcError = (onError: OnErrorFn) => (error: Error) => {
+export const onForcError = (onError: OnErrorFn) => (err: Error) => {
   error(err);
   onError(err);
 };
