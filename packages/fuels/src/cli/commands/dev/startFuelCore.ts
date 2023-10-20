@@ -68,9 +68,9 @@ export const startFuelCore = async (
 
   return new Promise((resolve, reject) => {
     const pkgRootDir = findPackageRoot();
-    const fuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
+    const builtInFuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
 
-    const command = config.useBuiltinFuelCore ? fuelsCorePath : 'fuel-core';
+    const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });
 
     if (loggingConfig.isLoggingEnabled) {

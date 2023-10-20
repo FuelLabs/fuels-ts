@@ -28,9 +28,9 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
 
   return new Promise<void>((resolve, reject) => {
     const pkgRootDir = findPackageRoot();
-    const forcPath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-forc');
+    const builtInForcPath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-forc');
 
-    const command = config.useBuiltinForc ? forcPath : 'forc';
+    const command = config.useBuiltinForc ? builtInForcPath : 'forc';
     const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
 
     if (loggingConfig.isLoggingEnabled) {
