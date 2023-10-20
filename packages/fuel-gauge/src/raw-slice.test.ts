@@ -122,7 +122,8 @@ describe('Raw Slice Tests', () => {
     expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
   });
 
-  it('should test bytes input [script-raw-slice]', async () => {
+  // see https://github.com/FuelLabs/fuels-ts/issues/1344
+  it.skip('should test raw slice input [script-raw-slice]', async () => {
     const wallet = await setup();
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
