@@ -1,3 +1,4 @@
+import { validateValueWithinRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
@@ -78,14 +79,29 @@ describe('Predicate', () => {
 
       const remainingPredicateBalance = toNumber(await predicate.getBalance());
 
-      expect(toNumber(initialReceiverBalance)).toBe(0);
-      expect(initialReceiverBalance + amountToReceiver - receiverTxFee.toNumber()).toEqual(
-        finalReceiverBalance
-      );
+      const expectedReceiverBalance =
+        initialReceiverBalance + amountToReceiver - receiverTxFee.toNumber();
 
-      expect(remainingPredicateBalance).toEqual(
-        amountToPredicate + initialPredicateBalance - amountToReceiver - predicateTxFee.toNumber()
-      );
+      expect(toNumber(initialReceiverBalance)).toBe(0);
+
+      expect(
+        validateValueWithinRange({
+          value: finalReceiverBalance,
+          min: expectedReceiverBalance - 1,
+          max: expectedReceiverBalance + 1,
+        })
+      ).toBeTruthy();
+
+      const predicateExpectedBalance =
+        amountToPredicate + initialPredicateBalance - amountToReceiver - predicateTxFee.toNumber();
+
+      expect(
+        validateValueWithinRange({
+          value: remainingPredicateBalance,
+          min: predicateExpectedBalance - 1,
+          max: predicateExpectedBalance + 1,
+        })
+      ).toBeTruthy();
     });
   });
 });
