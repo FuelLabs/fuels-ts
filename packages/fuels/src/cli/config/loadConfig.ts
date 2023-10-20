@@ -42,7 +42,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   await validateConfig(userConfig);
 
   const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
-  const useBuiltinFuelCore = userConfig.useBuiltinForc ?? shouldUseBuiltinFuelCore();
+  const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? shouldUseBuiltinFuelCore();
 
   // Start clone-object while initializiung optional props
   const config: FuelsConfig = {
