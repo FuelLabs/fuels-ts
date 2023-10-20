@@ -1,5 +1,7 @@
 import Handlebars, { compile } from 'handlebars';
 
+import { error } from '../utils/logger';
+
 import fuelsConfigTemplate from './fuels.config.hbs';
 
 Handlebars.registerHelper('isDefined', (v) => v !== undefined);
@@ -18,5 +20,11 @@ export function renderFuelsConfigTemplate(props: {
     strict: true,
     noEscape: true,
   });
-  return renderTemplate(props);
+
+  try {
+    return renderTemplate(props);
+  } catch (err) {
+    error(err);
+    throw err;
+  }
 }
