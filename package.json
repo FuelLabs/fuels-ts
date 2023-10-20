@@ -16,6 +16,7 @@
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
     "test": "jest --no-cache --runInBand --coverage",
+    "test:e2e": "jest --no-cache --runInBand packages/fuel-gauge/src/e2e-script.test.ts",
     "test:watch": "jest --no-cache --watchAll",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",

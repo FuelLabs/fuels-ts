@@ -478,12 +478,12 @@ export default class Provider {
     // Resulting in lost of funds on a OutOfGas situation.
     if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
       throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
+        ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
       );
     } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
       throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
+        ErrorCode.GAS_PRICE_TOO_LOW,
         `Gas price '${transactionRequest.gasPrice}' is lower than the required: '${minGasPrice}'.`
       );
     }
@@ -701,7 +701,7 @@ export default class Provider {
       filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges!.map((edge) => edge!.node!);
+    const coins = result.coins.edges.map((edge) => edge.node);
 
     return coins.map((coin) => ({
       id: coin.utxoId,
@@ -969,7 +969,7 @@ export default class Provider {
       filter: { owner: owner.toB256() },
     });
 
-    const balances = result.balances.edges!.map((edge) => edge!.node!);
+    const balances = result.balances.edges.map((edge) => edge.node);
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
@@ -996,7 +996,7 @@ export default class Provider {
       owner: address.toB256(),
     });
 
-    const messages = result.messages.edges!.map((edge) => edge!.node!);
+    const messages = result.messages.edges.map((edge) => edge.node);
 
     return messages.map((message) => ({
       messageId: InputMessageCoder.getMessageId({
