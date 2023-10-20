@@ -12,7 +12,7 @@ configurable {
     U8: u8 = 8u8,
     BOOL: bool = true,
     ARRAY: [u32; 3] = [253u32, 254u32, 255u32],
-    STR_4: str[4] = "fuel",
+    STR_4: str[4] = __to_str_array("fuel"),
     STRUCT: StructA<u8, bool> = StructA {
         propA1: 8u8,
         propA2: true,
@@ -137,6 +137,7 @@ abi MyContract {
     fn bytes(arg: Bytes) -> Bytes;
     fn raw_slice(arg: raw_slice) -> raw_slice;
     fn dynamic_string(arg: String) -> String;
+    fn asset_id(arg: AssetId) -> AssetId;
 
     fn tuple_as_param(x: (u8, StructA<StructB<u64>, str[3]>)) -> (u8, StructA<StructB<u64>, str[3]>);
     fn array_simple(x: [u8; 4]) -> [u8; 4];
@@ -257,6 +258,10 @@ impl MyContract for Contract {
     }
 
     fn dynamic_string(arg: String) -> String {
+        arg
+    }
+
+    fn asset_id(arg: AssetId) -> AssetId {
         arg
     }
 
