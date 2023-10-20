@@ -3,7 +3,7 @@ import type { Command } from 'commander';
 
 import { loadConfig } from '../config/loadConfig';
 import type { Commands, FuelsConfig, CommandEvent } from '../types';
-import { log } from '../utils/logger';
+import { error, log } from '../utils/logger';
 
 export function withConfig<CType extends Commands>(
   program: Command,
@@ -27,8 +27,8 @@ export function withConfig<CType extends Commands>(
       );
       log(`🎉  ${capitalizeString(command)} completed successfully!`);
     } catch (err: unknown) {
+      error(err);
       config.onFailure?.(<Error>err, config);
-      throw err;
     }
   };
 }

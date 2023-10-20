@@ -1,6 +1,7 @@
 import type { Command } from 'commander';
 
 import type { Commands } from '../types';
+import { error } from '../utils/logger';
 
 export function withProgram<CType extends Commands>(
   program: Command,
@@ -8,6 +9,11 @@ export function withProgram<CType extends Commands>(
   fn: (program: Command) => void
 ) {
   return async () => {
-    await fn(program);
+    try {
+      await fn(program);
+    } catch (err) {
+      error(err);
+      process.exit(1);
+    }
   };
 }

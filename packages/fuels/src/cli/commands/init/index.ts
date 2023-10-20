@@ -13,7 +13,7 @@ export function init(program: Command) {
   const fuelsConfigPath = join(path, 'fuels.config.ts');
 
   if (existsSync(fuelsConfigPath)) {
-    throw new Error(`Config file exists, aborting.\n\n  ${fuelsConfigPath}\n`);
+    throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
   }
 
   const workspace = options.workspace ? relative(path, options.workspace) : undefined;
