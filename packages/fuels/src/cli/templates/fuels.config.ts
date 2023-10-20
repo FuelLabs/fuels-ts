@@ -12,8 +12,8 @@ export function renderFuelsConfigTemplate(props: {
   scripts?: string[];
   predicates?: string[];
   output: string;
-  useBuiltinForc: boolean;
-  useBuiltinFuelCore: boolean;
+  useBuiltinForc?: boolean;
+  useBuiltinFuelCore?: boolean;
   autoStartFuelCore?: boolean;
 }) {
   const renderTemplate = compile(fuelsConfigTemplate, {
