@@ -1,6 +1,6 @@
 export const validateValueWithinRange = (params: { value: number; min: number; max: number }) => {
   const { value, min, max } = params;
-  if (value >= min || value <= max) {
+  if (value >= min && value <= max) {
     return true;
   }
 
