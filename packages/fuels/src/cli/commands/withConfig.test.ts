@@ -6,11 +6,13 @@ import { clean } from '../../../test/utils/runCommands';
 import * as loadConfigMod from '../config/loadConfig';
 import type { FuelsConfig } from '../types';
 import { Commands } from '../types';
-import { loggingConfig, configureLogging } from '../utils/logger';
+import * as logger from '../utils/logger';
 
 import { withConfig } from './withConfig';
 
 describe('withConfig', () => {
+  const { loggingConfig, configureLogging } = logger;
+
   const loggingBackup = structuredClone(loggingConfig);
 
   beforeEach(() => {
@@ -52,6 +54,8 @@ describe('withConfig', () => {
       return Promise.resolve([]);
     });
 
+    const error = jest.spyOn(logger, 'error').mockImplementation();
+
     return {
       configPath,
       command,
@@ -59,6 +63,7 @@ describe('withConfig', () => {
       loadConfig,
       onSuccess,
       onFailure,
+      error,
     };
   }
 
@@ -79,22 +84,23 @@ describe('withConfig', () => {
   });
 
   test('onFailure hook in config file', async () => {
-    const { command, deploy, loadConfig, configPath, onSuccess, onFailure } = mockAll({
+    const { command, deploy, error, loadConfig, configPath, onSuccess, onFailure } = mockAll({
       shouldError: true,
     });
 
-    const { error, result } = await safeExec(async () =>
+    const { error: safeError, result } = await safeExec(async () =>
       withConfig(command, Commands.deploy, deploy)()
     );
 
     expect(result).not.toBeTruthy();
-    expect(error).toBeTruthy();
+    expect(safeError).toBeTruthy();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
 
     expect(onSuccess).toHaveBeenCalledTimes(0);
 
+    expect(error).toHaveBeenCalledTimes(1);
     expect(onFailure).toHaveBeenCalledTimes(1);
     expect(onFailure.mock.calls[0][0].toString()).toMatch(/something.+happened/i);
   });

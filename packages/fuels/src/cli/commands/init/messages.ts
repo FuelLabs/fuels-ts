@@ -8,6 +8,3 @@ export const makeWarnMessage = (binaryName: BinaryName) =>
     `Consider installing The Fuel Toolchain:`,
     `  - ${theFuelToolchainLink}`,
   ].join('\n');
-
-export const makeErrorMessage = () =>
-  [`Install The Fuel Toolchain and try again:`, `  - ${theFuelToolchainLink}`].join('\n');

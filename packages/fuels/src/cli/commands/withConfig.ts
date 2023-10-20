@@ -28,7 +28,8 @@ export function withConfig<CType extends Commands>(
       log(`🎉  ${capitalizeString(command)} completed successfully!`);
     } catch (err: unknown) {
       error(err);
-      config.onFailure?.(<Error>err, config);
+      await config.onFailure?.(<Error>err, config);
+      throw err;
     }
   };
 }
