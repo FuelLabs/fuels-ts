@@ -4,7 +4,7 @@ import {
   getContractName,
   getContractCamelCase,
 } from '../../config/forcUtils';
-import type { FuelsConfig, ContractDeployed } from '../../types';
+import type { FuelsConfig, DeployedContract } from '../../types';
 import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
@@ -13,7 +13,7 @@ import { getDeployConfig } from './getDeployConfig';
 import { saveContractIds } from './saveContractIds';
 
 export async function deploy(config: FuelsConfig) {
-  const contracts: ContractDeployed[] = [];
+  const contracts: DeployedContract[] = [];
 
   const wallet = await createWallet(config.providerUrl, config.privateKey);
 

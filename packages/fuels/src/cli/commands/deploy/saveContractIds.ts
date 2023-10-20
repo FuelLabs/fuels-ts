@@ -1,10 +1,10 @@
 import { writeFile, mkdir } from 'fs/promises';
 import { resolve } from 'path';
 
-import type { ContractDeployed } from '../../types';
+import type { DeployedContract } from '../../types';
 import { log } from '../../utils/logger';
 
-export async function saveContractIds(contracts: ContractDeployed[], output: string) {
+export async function saveContractIds(contracts: DeployedContract[], output: string) {
   const contractsMap = contracts.reduce(
     (cConfig, { name, contractId }) => ({
       ...cConfig,

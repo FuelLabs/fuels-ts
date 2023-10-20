@@ -3,8 +3,8 @@ import { fuelsConfig } from '../../test/fixtures/config/fuels.config';
 import type {
   CommandEvent,
   Commands,
-  ContractDeployed,
-  DeployOptions,
+  DeployedContract,
+  ContractDeployOptions,
   FuelsConfig,
   OptionsFunction,
   UserFuelsConfig,
@@ -20,8 +20,8 @@ describe('cli/index.ts', () => {
     const types:
       | Commands
       | CommandEvent
-      | ContractDeployed
-      | DeployOptions
+      | DeployedContract
+      | ContractDeployOptions
       | OptionsFunction
       | UserFuelsConfig
       | FuelsConfig

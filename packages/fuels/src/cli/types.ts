@@ -14,7 +14,7 @@ export type CommandEvent =
     }
   | {
       type: Commands.deploy;
-      data: ContractDeployed[];
+      data: DeployedContract[];
     }
   | {
       type: Commands.dev;
@@ -25,19 +25,19 @@ export type CommandEvent =
       data: unknown;
     };
 
-export type ContractDeployed = {
+export type DeployedContract = {
   name: string;
   contractId: string;
 };
 
-export type DeployOptions = {
-  contracts: ContractDeployed[];
+export type ContractDeployOptions = {
+  contracts: DeployedContract[];
   contractName: string;
   contractPath: string;
 };
 
 export type OptionsFunction = (
-  options: DeployOptions
+  options: ContractDeployOptions
 ) => DeployContractOptions | Promise<DeployContractOptions>;
 
 export type UserFuelsConfig = {
