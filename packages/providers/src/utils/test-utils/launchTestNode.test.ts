@@ -5,12 +5,12 @@ import fsAsync from 'fs/promises';
 import http from 'http';
 import { parse } from 'url';
 
-import { sleep } from '../sleep';
+import { sleepUntilTrue } from '../sleep';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import { launchTestNode } from './launchTestNode';
 
-async function nodeIsRunning(ip: string, port: string) {
+async function nodeIsRunning(ip: string, port: string): Promise<boolean> {
   return new Promise((resolve) => {
     const url = `http://${ip}:${port}/graphql`;
 
@@ -96,7 +96,7 @@ describe('launchNode', () => {
     process.emit('exit', 0);
 
     // give time for cleanup to kill the node
-    await sleep(1000);
+    await sleepUntilTrue(async () => !(await nodeIsRunning(ip, port)), 500);
 
     expect(await nodeIsRunning(ip, port)).toBe(false);
   });
@@ -106,8 +106,7 @@ describe('launchNode', () => {
 
     process.emit('SIGINT');
 
-    // give time for cleanup to kill the node
-    await sleep(1000);
+    await sleepUntilTrue(async () => !(await nodeIsRunning(ip, port)), 500);
 
     expect(await nodeIsRunning(ip, port)).toBe(false);
   });
@@ -117,8 +116,7 @@ describe('launchNode', () => {
 
     process.emit('SIGUSR1');
 
-    // give time for cleanup to kill the node
-    await sleep(1000);
+    await sleepUntilTrue(async () => !(await nodeIsRunning(ip, port)), 500);
 
     expect(await nodeIsRunning(ip, port)).toBe(false);
   });
@@ -128,8 +126,7 @@ describe('launchNode', () => {
 
     process.emit('SIGUSR2');
 
-    // give time for cleanup to kill the node
-    await sleep(1000);
+    await sleepUntilTrue(async () => !(await nodeIsRunning(ip, port)), 500);
 
     expect(await nodeIsRunning(ip, port)).toBe(false);
   });
@@ -139,8 +136,7 @@ describe('launchNode', () => {
 
     process.emit('uncaughtException', new Error());
 
-    // give time for cleanup to kill the node
-    await sleep(1000);
+    await sleepUntilTrue(async () => !(await nodeIsRunning(ip, port)), 500);
 
     expect(await nodeIsRunning(ip, port)).toBe(false);
   });

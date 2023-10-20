@@ -6,3 +6,9 @@ export function sleep(time: number) {
     }, time);
   });
 }
+
+export async function sleepUntilTrue(fn: () => Promise<boolean>, time: number): Promise<void> {
+  while (await fn()) {
+    await sleep(time);
+  }
+}
