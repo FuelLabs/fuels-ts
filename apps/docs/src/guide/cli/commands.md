@@ -5,7 +5,7 @@
 Creates a new `fuels.config.ts` file:
 
 ```console
-npm fuels init -w ./sway-programs -o ./src/sway-programs-api
+npx fuels init -w ./sway-programs -o ./src/sway-programs-api
 ```
 
 This will give you a minimal configuration:
