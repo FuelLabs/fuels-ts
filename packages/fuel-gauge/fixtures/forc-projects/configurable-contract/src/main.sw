@@ -20,10 +20,10 @@ configurable {
     B256: b256 = 0x1d6ebd57dd6a8d7e90889c8c7388f22c30d5c3556080a2b6dc4c521092a0b942,
     ENUM: Colors = Colors::red,
     ARRAY: [[u32; 2]; 2] = [[253u32, 254u32], [255u32, 256u32]],
-    STR_4: str[4] = "fuel",
-    TUPLE: (u8, bool, str[2]) = (12, false, "hi"),
+    STR_4: str[4] = __to_str_array("fuel"),
+    TUPLE: (u8, bool, str[2]) = (12, false, __to_str_array("hi")),
     STRUCT_1: Struct1 = Struct1 {
-        tag: "000",
+        tag: __to_str_array("000"),
         age: 21,
         scores: [1, 3, 4],
     },

@@ -1,6 +1,6 @@
 contract;
 
-use std::{context::{msg_amount}};
+use std::context::msg_amount;
 
 abi ReturnContext {
     #[payable]

@@ -7,11 +7,11 @@ struct Baz {
 }
 
 fn main(foo: u8, bar: Baz) -> u8 {
-    log("u8 foo");
+    log(__to_str_array("u8 foo"));
     log(foo);
-    log("u8 bar");
+    log(__to_str_array("u8 bar"));
     log(bar.x);
-    log("u8 bar");
+    log(__to_str_array("u8 bar"));
     log(bar.x);
     foo + bar.x
 }
