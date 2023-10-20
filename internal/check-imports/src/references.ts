@@ -28,7 +28,7 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { english, Language } from '@fuel-ts/wordlists';
-import type { DeployOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
+import type { DeployContractOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
 import { ScriptRequest, createConfig } from 'fuels';
 
 const { log } = console;
@@ -69,7 +69,7 @@ log(ScriptRequest);
 // CLI stuff
 export const x: UserFuelsConfig | undefined = undefined;
 export const y: FuelsConfig | undefined = undefined;
-export const z: DeployOptions | undefined = undefined;
+export const z: DeployContractOptions | undefined = undefined;
 log(createConfig);
 
 /**
