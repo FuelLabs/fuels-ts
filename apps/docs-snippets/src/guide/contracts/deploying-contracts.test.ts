@@ -1,8 +1,8 @@
+import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
 import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
 
-import { DocSnippetProjectsEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {

@@ -1,7 +1,7 @@
+import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { BN, getRandomB256 } from 'fuels';
 
-import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {

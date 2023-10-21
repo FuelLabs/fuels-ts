@@ -1,3 +1,4 @@
+import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   BN,
@@ -7,7 +8,7 @@ import {
   type WalletUnlocked,
 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
 describe(__filename, () => {

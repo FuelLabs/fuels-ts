@@ -1,6 +1,7 @@
+import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { getSnippetProjectArtifacts } from '../../../projects';
 
 describe(__filename, () => {
   const { abiContents: jsonAbi, binHexlified: binary } = getSnippetProjectArtifacts(

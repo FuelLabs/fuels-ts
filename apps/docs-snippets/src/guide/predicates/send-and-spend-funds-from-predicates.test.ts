@@ -1,4 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import {
   WalletUnlocked,
   FUEL_NETWORK_URL,
@@ -9,7 +10,7 @@ import {
   BaseAssetId,
 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
