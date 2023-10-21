@@ -1,7 +1,6 @@
-import {
-  getProjectResources,
-  AbiTypegenProjectsEnum,
-} from '../../../test/fixtures/forc-projects/index';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
+
+import { getProjectResources } from '../../../test/fixtures/forc-projects/index';
 import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';

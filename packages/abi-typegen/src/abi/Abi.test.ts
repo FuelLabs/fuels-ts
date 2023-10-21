@@ -1,9 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
 
-import {
-  AbiTypegenProjectsEnum,
-  getProjectResources,
-} from '../../test/fixtures/forc-projects/index';
+import { getProjectResources } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseConfigurablesMod from '../utils/parseConfigurables';

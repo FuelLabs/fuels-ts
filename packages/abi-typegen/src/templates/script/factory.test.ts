@@ -1,9 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
 
-import {
-  getProjectResources,
-  AbiTypegenProjectsEnum,
-} from '../../../test/fixtures/forc-projects/index';
+import { getProjectResources } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/factory.hbs';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';

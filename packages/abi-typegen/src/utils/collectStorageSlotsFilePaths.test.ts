@@ -1,4 +1,6 @@
-import { getProjectResources, AbiTypegenProjectsEnum } from '../../test/fixtures/forc-projects';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
+
+import { getProjectResources } from '../../test/fixtures/forc-projects';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectStorageSlotsFilepaths } from './collectStorageSlotsFilePaths';

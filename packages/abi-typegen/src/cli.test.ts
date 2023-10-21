@@ -1,6 +1,7 @@
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { stderr } from 'process';
 
-import { getProjectResources, AbiTypegenProjectsEnum } from '../test/fixtures/forc-projects/index';
+import { getProjectResources } from '../test/fixtures/forc-projects/index';
 
 import { run } from './cli';
 import * as runTypegenMod from './runTypegen';

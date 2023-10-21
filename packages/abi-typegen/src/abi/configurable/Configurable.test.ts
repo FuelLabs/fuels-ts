@@ -1,7 +1,6 @@
-import {
-  getProjectResources,
-  AbiTypegenProjectsEnum,
-} from '../../../test/fixtures/forc-projects/index';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
+
+import { getProjectResources } from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import type { IType } from '../../types/interfaces/IType';
 import * as findTypeMod from '../../utils/findType';

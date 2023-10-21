@@ -1,7 +1,6 @@
-import {
-  getProjectResources,
-  AbiTypegenProjectsEnum,
-} from '../../../test/fixtures/forc-projects/index';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
+
+import { getProjectResources } from '../../../test/fixtures/forc-projects/index';
 import expectedDtsMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/dts.hbs';
 import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/dts.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';

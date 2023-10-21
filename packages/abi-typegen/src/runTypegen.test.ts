@@ -1,11 +1,12 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { existsSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import shelljs from 'shelljs';
 
-import { getProjectResources, AbiTypegenProjectsEnum } from '../test/fixtures/forc-projects/index';
+import { getProjectResources } from '../test/fixtures/forc-projects/index';
 
 import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
