@@ -1,8 +1,9 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, BigNumberish, JsonAbi } from 'fuels';
+import type { BN, BigNumberish } from 'fuels';
 import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { getScript } from './utils';
 
@@ -22,8 +23,8 @@ type Baz = {
 describe('Script Coverage', () => {
   let gasPrice: BN;
 
-  const { binHexlified: scriptBin, abiContents: scriptAbi } = getForcProject<JsonAbi>(
-    join(__dirname, '../fixtures/forc-projects/script-main-args')
+  const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
   );
 
   beforeAll(async () => {

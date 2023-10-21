@@ -1,13 +1,11 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
-import type { JsonAbi } from 'fuels';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 
-const { binHexlified, abiContents } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract')
-);
+const { binHexlified, abiContents } = getFuelGaugeProject(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
 const setupContract = createSetupConfig({
   contractBytecode: binHexlified,

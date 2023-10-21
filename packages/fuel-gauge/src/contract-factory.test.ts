@@ -1,8 +1,7 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { JsonAbi } from 'fuels';
 import {
   BN,
   bn,
@@ -13,7 +12,8 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 describe('Contract Factory', () => {
   let gasPrice: BN;
@@ -22,7 +22,8 @@ describe('Contract Factory', () => {
     binHexlified: byteCode,
     abiContents: abi,
     storageSlots,
-  } = getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/storage-test-contract/'));
+  } = getFuelGaugeProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+
   const createContractFactory = async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);

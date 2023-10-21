@@ -1,6 +1,6 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, CoinQuantityLike, JsonAbi } from 'fuels';
+import type { BN, CoinQuantityLike } from 'fuels';
 import {
   getRandomB256,
   BaseAssetId,
@@ -9,17 +9,18 @@ import {
   Predicate,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../../fixtures';
 
 import { fundPredicate, assertBalance } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =
-    getForcProject<JsonAbi>(join(__dirname, '../../fixtures/forc-projects/predicate-true'));
+  const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
   const { binHexlified: predicateBytesConfigurable, abiContents: predicateAbiConfigurable } =
-    getForcProject<JsonAbi>(
-      join(__dirname, '../../fixtures/forc-projects/predicate-with-configurable')
-    );
+    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
 
   describe('Configurables', () => {
     let wallet: WalletUnlocked;

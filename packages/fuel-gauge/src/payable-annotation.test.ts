@@ -1,12 +1,13 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
-import type { BN, Contract, JsonAbi } from 'fuels';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
+import type { BN, Contract } from 'fuels';
 import { bn, BaseAssetId } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 
-const { binHexlified: contractBytecode, abiContents: abiJSON } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/payable-annotation')
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
 );
 
 const setupContract = createSetupConfig({

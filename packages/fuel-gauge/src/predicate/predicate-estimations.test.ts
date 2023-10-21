@@ -1,6 +1,6 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { CoinTransactionRequestInput, JsonAbi, MessageTransactionRequestInput } from 'fuels';
+import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
 import {
   BaseAssetId,
   Provider,
@@ -10,18 +10,17 @@ import {
   InputType,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
+import { getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
-    getForcProject<JsonAbi>(
-      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
-    );
-  const { binHexlified: predicateTrueBytecode } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-true')
+  const { binHexlified: predicateTrueBytecode } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
   );
+
+  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
   describe('Estimate predicate gas', () => {
     let provider: Provider;

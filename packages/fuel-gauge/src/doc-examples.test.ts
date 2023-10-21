@@ -1,4 +1,4 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type {
   BN,
@@ -29,21 +29,25 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
-const { abiContents: callTestAbi } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract')
-);
+import { getFuelGaugeProject } from '../fixtures';
+
+const { abiContents: callTestAbi } = getFuelGaugeProject(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+
 const { binHexlified: liquidityPoolContractBytecode, abiContents: liquidityPoolABI } =
-  getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/liquidity-pool'));
-const { binHexlified: predicateTriple } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/predicate-triple-sig')
+  getFuelGaugeProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+
+const { binHexlified: predicateTriple } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRIPLE_SIG
 );
-const { binHexlified: testPredicateTrue } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/predicate-true')
+
+const { binHexlified: testPredicateTrue } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
-const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } =
-  getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/token_contract'));
+
+const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.TOKEN_CONTRACT
+);
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';

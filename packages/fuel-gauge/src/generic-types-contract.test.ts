@@ -1,12 +1,12 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
-import type { JsonAbi } from 'fuels';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { toHex } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { setup } from './utils';
 
-const { binHexlified: contractBytecode, abiContents: abiJSON } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/generic-types-contract')
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.GENERIC_TYPES_CONTRACT
 );
 
 describe('GenericTypesContract', () => {

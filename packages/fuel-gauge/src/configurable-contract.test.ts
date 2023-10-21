@@ -1,8 +1,9 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { CoinQuantityLike, JsonAbi, WalletUnlocked } from 'fuels';
+import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 const defaultValues = {
   U8: 10,
@@ -41,8 +42,8 @@ describe('Configurable Contract', () => {
 
     wallet = await generateTestWallet(provider, quantities);
 
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(
-      join(__dirname, '../fixtures/forc-projects/configurable-contract')
+    const { binHexlified, abiContents } = getFuelGaugeProject(
+      FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT
     );
 
     factory = new ContractFactory(binHexlified, abiContents, wallet);

@@ -1,6 +1,6 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, JsonAbi } from 'fuels';
+import type { BN } from 'fuels';
 import {
   type Contract,
   bn,
@@ -11,7 +11,8 @@ import {
   Provider,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -34,7 +35,7 @@ const setup = async (balance = 500_000) => {
 
 describe('std-lib-string Tests', () => {
   const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =
-    getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/predicate-std-lib-string'));
+    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
 
   it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions

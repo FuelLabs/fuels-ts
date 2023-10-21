@@ -1,31 +1,33 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
-import { join } from 'path';
 
+import { getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesAddress } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-address')
+  const { binHexlified: predicateBytesAddress } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_ADDRESS
   );
+
   const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
-    getForcProject<JsonAbi>(
-      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
-    );
+    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+
   const { binHexlified: predicateBytesMainArgsVector, abiContents: predicateAbiMainArgsVector } =
-    getForcProject<JsonAbi>(
-      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-vector')
-    );
-  const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } =
-    getForcProject<JsonAbi>(join(__dirname, '../../fixtures/forc-projects/predicate-multi-args'));
-  const { binHexlified: predicateBytesStruct } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-struct')
+    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_VECTOR);
+
+  const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_MULTI_ARGS
   );
-  const { binHexlified: predicateBytesU32 } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-u32')
+
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_STRUCT
+  );
+
+  const { binHexlified: predicateBytesU32 } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_U32
   );
 
   describe('Arguments', () => {

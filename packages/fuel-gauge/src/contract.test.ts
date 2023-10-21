@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
@@ -21,16 +21,17 @@ import {
   FUEL_NETWORK_URL,
   Predicate,
 } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 
-const { binHexlified: predicateBytecode } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/predicate-true')
+const { binHexlified: predicateBytecode } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
 
-const { binHexlified: contractBytecode, abiContents: abi } = getForcProject<JsonAbi>(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract')
+const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
 const setupContract = createSetupConfig({

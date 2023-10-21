@@ -1,6 +1,6 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, JsonAbi, WalletUnlocked } from 'fuels';
+import type { BN, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -10,26 +10,30 @@ import {
   Predicate,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
+import { getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: contractBytes, abiContents: contractAbi } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/call-test-contract')
+  const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
   );
-  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
-    getForcProject<JsonAbi>(join(__dirname, '../../fixtures/forc-projects/liquidity-pool'));
-  const { abiContents: predicateAbiMainArgsStruct } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
+  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.LIQUIDITY_POOL
   );
-  const { binHexlified: predicateBytesStruct } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-struct')
+
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
   );
-  const { binHexlified: predicateBytesTrue } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-true')
+
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_STRUCT
+  );
+
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
   );
 
   describe('With Contract', () => {

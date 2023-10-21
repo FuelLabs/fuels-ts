@@ -1,8 +1,9 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { CoinQuantityLike, JsonAbi, WalletUnlocked } from 'fuels';
+import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 const defaultValues = {
   FEE: 5,
@@ -13,8 +14,8 @@ let wallet: WalletUnlocked;
 describe('Script With Configurable', () => {
   let gasPrice: BN;
 
-  const { binHexlified: bytecode, abiContents: abi } = getForcProject<JsonAbi>(
-    join(__dirname, '../fixtures/forc-projects/script-with-configurable')
+  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.SCRIPT_WITH_CONFIGURABLE
   );
 
   beforeAll(async () => {

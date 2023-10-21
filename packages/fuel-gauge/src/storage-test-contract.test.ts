@@ -1,14 +1,15 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, JsonAbi } from 'fuels';
+import type { BN } from 'fuels';
 import { toHex, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 const {
   binHexlified: bytecode,
   abiContents: abi,
   storageSlots,
-} = getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/storage-test-contract'));
+} = getFuelGaugeProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);

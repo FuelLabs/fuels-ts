@@ -1,17 +1,15 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
-import type { BN, JsonAbi, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
+import type { BN, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
-import { join } from 'path';
 
+import { getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupWallets } from './utils/predicate';
 
 describe('Predicate', () => {
   const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
-    getForcProject<JsonAbi>(
-      join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
-    );
+    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
   describe('Invalidations', () => {
     let predicate: Predicate<[Validation]>;

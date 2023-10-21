@@ -1,6 +1,6 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, JsonAbi } from 'fuels';
+import type { BN } from 'fuels';
 import {
   type Contract,
   bn,
@@ -11,7 +11,8 @@ import {
   Provider,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -88,7 +89,7 @@ describe('Raw Slice Tests', () => {
     type MainArgs = [Wrapper];
 
     const { binHexlified: predicateRawSlice, abiContents: predicateRawSliceAbi } =
-      getForcProject<JsonAbi>(join(__dirname, '../fixtures/forc-projects/predicate-raw-slice'));
+      getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_RAW_SLICE);
 
     const predicate = new Predicate<MainArgs>(
       predicateRawSlice,

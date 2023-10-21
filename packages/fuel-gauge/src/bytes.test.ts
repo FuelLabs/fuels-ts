@@ -1,6 +1,6 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, JsonAbi } from 'fuels';
+import type { BN } from 'fuels';
 import {
   type Contract,
   bn,
@@ -11,7 +11,8 @@ import {
   Provider,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
+
+import { getFuelGaugeProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -100,8 +101,9 @@ describe('Bytes Tests', () => {
     const amountToReceiver = 50;
     type MainArgs = [Wrapper];
 
-    const projectPath = join(__dirname, '../fixtures/forc-projects/predicate-bytes');
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(projectPath);
+    const { binHexlified, abiContents } = getFuelGaugeProject(
+      FuelGaugeProjectsEnum.PREDICATE_BYTES
+    );
 
     const predicate = new Predicate<MainArgs>(binHexlified, wallet.provider, abiContents);
 

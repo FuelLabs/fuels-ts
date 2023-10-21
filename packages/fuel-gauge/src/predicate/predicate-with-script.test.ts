@@ -1,22 +1,22 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, BigNumberish, JsonAbi, WalletUnlocked } from 'fuels';
+import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
+import { getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/script-main-args')
+  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
   );
-  const { binHexlified: predicateBytesStruct } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-struct')
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_STRUCT
   );
-  const { abiContents: predicateAbiMainArgsStruct } = getForcProject<JsonAbi>(
-    join(__dirname, '../../fixtures/forc-projects/predicate-main-args-struct')
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeProject(
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
   );
   describe('With script', () => {
     let wallet: WalletUnlocked;
