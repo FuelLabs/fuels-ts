@@ -78,12 +78,10 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     const forcToml = readForcToml(workspace);
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
-    await Promise.all(
-      swayMembers.map(async (path) => {
-        const type = readSwayType(path);
-        config[`${type}s`].push(path);
-      })
-    );
+    swayMembers.forEach((path) => {
+      const type = readSwayType(path);
+      config[`${type}s`].push(path);
+    });
 
     config.workspace = workspace;
   }
