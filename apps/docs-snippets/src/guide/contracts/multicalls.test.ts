@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import { getSnippetProjectArtifacts, DocSnippetProjectsEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -14,9 +14,9 @@ describe(__filename, () => {
     const wallet = await getTestWallet();
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
 
-    const counterArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
-    const echoArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
-    const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
+    const counterArtifacts = getSnippetProjectArtifacts(DocSnippetProjectsEnum.COUNTER);
+    const echoArtifacts = getSnippetProjectArtifacts(DocSnippetProjectsEnum.ECHO_VALUES);
+    const contextArtifacts = getSnippetProjectArtifacts(DocSnippetProjectsEnum.RETURN_CONTEXT);
 
     const factory1 = new ContractFactory(
       echoArtifacts.binHexlified,

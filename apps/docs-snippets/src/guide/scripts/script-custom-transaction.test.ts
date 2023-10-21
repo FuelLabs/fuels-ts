@@ -7,7 +7,7 @@ import {
   type WalletUnlocked,
 } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -18,11 +18,11 @@ describe(__filename, () => {
   const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
   const { binHexlified: scriptBin, abiContents } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.SCRIPT_TRANSFER_TO_CONTRACT
+    DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
   );
 
   const { abiContents: contractAbi, binHexlified: contractBin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_VALUES
+    DocSnippetProjectsEnum.ECHO_VALUES
   );
 
   beforeAll(async () => {

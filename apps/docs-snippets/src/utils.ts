@@ -10,7 +10,7 @@ import {
   ContractFactory,
 } from 'fuels';
 
-import type { SnippetProjectEnum } from '../projects';
+import type { DocSnippetProjectsEnum } from '../projects';
 import { getSnippetProjectArtifacts } from '../projects';
 
 export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
@@ -61,7 +61,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
 };
 
 export const createAndDeployContractFromProject = async (
-  project: SnippetProjectEnum
+  project: DocSnippetProjectsEnum
 ): Promise<Contract> => {
   const wallet = await getTestWallet();
   const { abiContents, binHexlified, storageSlots } = getSnippetProjectArtifacts(project);

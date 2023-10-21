@@ -1,14 +1,14 @@
 import type { BN, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import { getSnippetProjectArtifacts, DocSnippetProjectsEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_CONFIGURABLES
+    DocSnippetProjectsEnum.ECHO_CONFIGURABLES
   );
 
   const defaultValues = {

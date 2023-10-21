@@ -1,7 +1,7 @@
 import type { B256AddressEvm, Contract, EvmAddress } from 'fuels';
 import { Address } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe('EvMAddress', () => {
@@ -10,7 +10,7 @@ describe('EvMAddress', () => {
     '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6';
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_EVM_ADDRESS);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_EVM_ADDRESS);
   });
 
   it('should demonstrate typed evm address example', () => {

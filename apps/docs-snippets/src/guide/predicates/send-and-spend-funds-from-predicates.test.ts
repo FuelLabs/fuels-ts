@@ -9,14 +9,14 @@ import {
   BaseAssetId,
 } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
   let gasPrice: BN;
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.SIMPLE_PREDICATE
+    DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
 
   beforeAll(async () => {

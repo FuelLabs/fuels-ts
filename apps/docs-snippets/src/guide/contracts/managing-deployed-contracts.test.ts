@@ -1,7 +1,7 @@
 import type { AbstractAddress, WalletUnlocked } from 'fuels';
 import { ContractFactory, Contract } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -9,7 +9,7 @@ describe(__filename, () => {
   let contractId: AbstractAddress;
   let wallet: WalletUnlocked;
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_VALUES
+    DocSnippetProjectsEnum.ECHO_VALUES
   );
 
   beforeAll(async () => {

@@ -1,7 +1,7 @@
 import type { Contract, WalletUnlocked } from 'fuels';
 import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -12,7 +12,9 @@ describe(__filename, () => {
   beforeAll(async () => {
     senderWallet = await getTestWallet();
 
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
+    const { abiContents, binHexlified } = getSnippetProjectArtifacts(
+      DocSnippetProjectsEnum.COUNTER
+    );
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
     ({ minGasPrice: gasPrice } = senderWallet.provider.getGasConfig());
     deployedContract = await factory.deployContract({ gasPrice });

@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -9,7 +9,7 @@ describe(__filename, () => {
   let gasPrice: BN;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.LOG_VALUES);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.LOG_VALUES);
     ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
