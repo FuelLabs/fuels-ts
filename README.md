@@ -25,7 +25,7 @@ The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop 
 - [The Fuel Forum](https://forum.fuel.network/)
 - [The Fuel Ecosystem](#the-fuel-ecosystem)
 
-# Install
+# Installl
 
 ```sh
 npm install fuels --save
