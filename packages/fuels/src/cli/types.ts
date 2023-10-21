@@ -79,7 +79,10 @@ export type UserFuelsConfig = {
   /** If set to false, you will need to spin up a Fuel core node by yourself */
   autoStartFuelCore?: boolean;
 
-  /** Function port to use when starting a Fuel Core node */
+  /**
+   * Port to use when starting a `fuel-core` node
+   * Default: first free port, starting from 4000
+   */
   fuelCorePort?: number;
 
   /**
