@@ -1,6 +1,7 @@
 contract;
 
 use std::vm::evm::evm_address::EvmAddress;
+use std::b512::B512;
 use std::string::String;
 use std::bytes::Bytes;
 
@@ -29,8 +30,10 @@ abi MyContract {
     fn types_u32(x: u32) -> u32;
     fn types_u64(x: u64) -> u64;
     fn types_str(x: str[5]) -> str[5];
+    fn types_asset_id(x: AssetId) -> AssetId;
     fn types_bool(x: bool) -> bool;
     fn types_b256(x: b256) -> b256;
+    fn types_b512(x: B512) -> B512;
     fn types_struct(x: MyStruct) -> MyStruct;
     fn types_array(x: [u8; 3]) -> [u8; 3];
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8);
@@ -60,13 +63,19 @@ impl MyContract for Contract {
         4294967295000
     }
     fn types_str(x: str[5]) -> str[5] {
-        "Hello"
+        __to_str_array("Hello")
     }
     fn types_bool(x: bool) -> bool {
         true
     }
+    fn types_asset_id(x: AssetId) -> AssetId {
+        x
+    }
     fn types_b256(x: b256) -> b256 {
         0x0000000000000000000000000000000000000000000000000000000000000000
+    }
+    fn types_b512(x: B512) -> B512 {
+        x
     }
     fn types_array(x: [u8; 3]) -> [u8; 3] {
         x

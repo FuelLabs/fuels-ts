@@ -14,7 +14,7 @@ struct MyStruct {
 
 configurable {
     age: u8 = 25,
-    tag: str[4] = "fuel",
+    tag: str[4] = __to_str_array("fuel"),
     grades: [u8; 4] = [3, 4, 3, 2],
     my_struct: MyStruct = MyStruct {
         x: 1,

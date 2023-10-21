@@ -20,6 +20,14 @@ abi RevertError {
     fn failed_transfer_revert();
 }
 
+const BASE_TOKEN_A: AssetId = AssetId {
+    value: 0x0000000000000000000000000000000000000000000000000000000000000001,
+};
+
+const BASE_TOKEN_B: AssetId = AssetId {
+    value: 0x0000000000000000000000000000000000000000000000000000000000000001,
+};
+
 pub struct ValidInputsEvent {
     token_id: u64,
     price: u64,
@@ -50,16 +58,14 @@ impl RevertError for Contract {
     fn failed_transfer() {
         let amount = 1;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
-        let asset = address;
         let user = Address::from(address);
-        transfer_to_address(user, asset, amount);
+        transfer_to_address(user, BASE_TOKEN_A, amount);
     }
 
     fn failed_transfer_revert() {
         let amount = 0;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
-        let asset = address;
         let user = Address::from(address);
-        transfer_to_address(user, asset, amount);
+        transfer_to_address(user, BASE_TOKEN_B, amount);
     }
 }
