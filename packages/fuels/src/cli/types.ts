@@ -43,7 +43,7 @@ export type OptionsFunction = (
 export type UserFuelsConfig = {
   /** Relative directory path to Forc workspace */
   workspace?: string;
-  /** Relative directory path to Sway contracts */
+  /** List of relative directory paths to Sway contracts */
   contracts?: string[];
   /** List of relative directory paths to Sway predicates */
   predicates?: string[];
