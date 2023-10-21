@@ -99,3 +99,9 @@ export enum DocSnippetProjectsEnum {
   ECHO_STD_STRING = 'echo-std-string',
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
 }
+
+export enum ForcProjectDirsEnum {
+  FUEL_GAUGE = 'fuel_gauge',
+  ABI_TYPEGEN = 'abi_typegen',
+  DOCS_SNIPPETS = 'docs_snippets',
+}
