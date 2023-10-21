@@ -75,7 +75,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   } else {
     // Resolve members via workspace
     const workspace = resolve(cwd, userConfig.workspace);
-    const forcToml = await readForcToml(workspace);
+    const forcToml = readForcToml(workspace);
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
     await Promise.all(
