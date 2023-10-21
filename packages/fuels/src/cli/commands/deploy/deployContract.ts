@@ -13,7 +13,7 @@ export async function deployContract(
 ) {
   debug(`Deploying contract for ABI: ${abiPath}`);
 
-  const bytecode = await readFileSync(binaryPath);
+  const bytecode = readFileSync(binaryPath);
   const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
 
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
