@@ -67,7 +67,7 @@ export type UserFuelsConfig = {
   /** Relative filepath to custom `chainConfig.json` to be used when initializing a Fuel Core node */
   chainConfig?: string;
 
-  /** Static of dynbamic deploy configs to be used when deploying contracts */
+  /** Static of dyanmic deploy configs to be used when deploying contracts */
   deployConfig?: DeployContractOptions | OptionsFunction;
 
   /** Opt-in or out from using builtin Forc binaries */
