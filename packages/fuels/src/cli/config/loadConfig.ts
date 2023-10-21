@@ -80,7 +80,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
     await Promise.all(
       swayMembers.map(async (path) => {
-        const type = await readSwayType(path);
+        const type = readSwayType(path);
         config[`${type}s`].push(path);
       })
     );
