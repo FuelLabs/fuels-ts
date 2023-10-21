@@ -139,18 +139,18 @@ You have all the right versions! ⚡
 
 ## `fuels forc`
 
-Simple [wrapper](./builtin-binaries.md) around the `forc` binary.
+Simple [wrapper](./built-in-binaries.md) around the `forc` binary.
 
 Check also:
 
-- [Built-in Binaries](./builtin-binaries.md)
+- [Built-in Binaries](./built-in-binaries.md)
 - [`forc` documentation](https://docs.fuel.network/docs/forc/commands/)
 
 ## `fuels core`
 
-Simple [wrapper](./builtin-binaries.md) around the `fuel-core` binary.
+Simple [wrapper](./built-in-binaries.md) around the `fuel-core` binary.
 
 Check also:
 
-- [Built-in Binaries](./builtin-binaries.md)
+- [Built-in Binaries](./built-in-binaries.md)
 - [`fuel-core` documentation](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)

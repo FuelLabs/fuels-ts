@@ -74,7 +74,7 @@ export default defineConfig({
               },
               {
                 text: 'Built-in Binaries',
-                link: '/guide/cli/builtin-binaries',
+                link: '/guide/cli/built-in-binaries',
               },
             ],
           },
