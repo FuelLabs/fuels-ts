@@ -118,7 +118,7 @@ deployConfig: async (options: ContractDeployOptions) => {
 
 ## `useBuiltinForc`
 
-Opt-in or out from using builtin `forc` binaries.
+Opt-in or out from using [built-in](./builtin-binaries.md) `forc` binaries.
 
 When not supplied, will default to using the `system` binaries.
 
@@ -129,9 +129,13 @@ If `system` binaries are not present, will print warning and use `built-in` ones
 useBuiltinForc: false,
 ```
 
+Check also:
+
+- [Built-in Binaries](./builtin-binaries.md)
+
 ## `useBuiltinFuelCore`
 
-Opt-in or out from using builtin `fuel-core` binaries.
+Opt-in or out from using [built-in](./builtin-binaries.md) `fuel-core` binaries.
 
 When not supplied, will default to using the `system` binaries.
 
@@ -141,6 +145,10 @@ If `system` binaries are not present, will print warning and use `built-in` ones
 // Default: undefined
 useBuiltinFuelCore: false,
 ```
+
+Check also:
+
+- [Built-in Binaries](./builtin-binaries.md)
 
 ## `autoStartFuelCore`
 

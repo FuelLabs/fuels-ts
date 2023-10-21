@@ -69,8 +69,12 @@ export default defineConfig({
                 link: '/guide/cli/commands',
               },
               {
-                text: 'Config file',
+                text: 'Config File',
                 link: '/guide/cli/config-file',
+              },
+              {
+                text: 'Built-in Binaries',
+                link: '/guide/cli/builtin-binaries',
               },
             ],
           },

@@ -1,5 +1,7 @@
 # Commands
 
+The `fuels` CLI consists of a couple commands.
+
 ## `fuels init`
 
 Creates a new `fuels.config.ts` file:
@@ -81,8 +83,11 @@ For a complete example, see:
 npx fuels dev
 ```
 
+The `fuels dev` command do three things:
+
+1. Auto-start a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore))
 1. Runs `build` and `deploy` once at the start
-2. Watches your Sway workspace and repeats previous step on every change
+1. Watches your Forc workspace and repeats previous step on every change
 
 > _In `dev` mode, everytime you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
@@ -132,72 +137,20 @@ You have all the right versions! ⚡
 └───────────┴───────────┴─────────────────┘
 ```
 
-## The Fuel Toolchain
+## `fuels forc`
 
-This guide assumes you have [The Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/) installed already.
+Simple [wrapper](./builtin-binaries.md) around the `forc` binary.
 
-Otherwise, you can use [`fuel-up`](https://docs.fuel.network/docs/fuelup/installation/) to get it up and running.
+Check also:
 
-Check if it's working correctly with:
+- [Built-in Binaries](./builtin-binaries.md)
+- [`forc` documentation](https://docs.fuel.network/docs/forc/commands/)
 
-```console
-forc --version
-```
+## `fuels core`
 
-```console
-fuel-core --version
-```
+Simple [wrapper](./builtin-binaries.md) around the `fuel-core` binary.
 
-Make sure your config is _**not**_ set to use the SDK built-in versions:
+Check also:
 
-```ts
-// fuels.config.ts
-import { createConfig } from 'fuels'
-
-export createConfig({
-  // ...
-  useBuiltinForc: false,
-  useBuiltinFuelCore: false,
-})
-```
-
-Check the docs about `forc` and `fuel-core`:
-
-- [Forc Commands](https://docs.fuel.network/docs/forc/commands/)
-- [Running a local Node using `fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
-
-## Batteries Included
-
-`fuels` conveniently ships with the latest compatible binaries for:
-
-- [`forc`](https://docs.fuel.network/docs/forc/commands/)
-- [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)
-
-In case you haven't configured [The Fuel Toolchain](#the-fuel-toolchain) _yet_, it will ask you if you'd like to use the buit-in versions.
-
-You can auto-accept the built-in versions by explicitly configuring it:
-
-```ts
-// fuels.config.ts
-import { createConfig } from 'fuels'
-
-export createConfig({
-  // ...
-  useBuiltinForc: true,
-  useBuiltinFuelCore: true,
-})
-```
-
-You can also call them directly:
-
-```console
-npx fuels help forc
-npx fuels forc --version
-npx fuels forc test -h
-```
-
-```console
-npx fuels help core
-npx fuels core --version
-npx fuels core run -h
-```
+- [Built-in Binaries](./builtin-binaries.md)
+- [`fuel-core` documentation](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)

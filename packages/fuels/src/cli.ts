@@ -55,7 +55,7 @@ export const configureCli = () => {
   (command = program.command(Commands.init))
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
-    .option('-w, --workspace <path>', 'Relative dir path to Sway workspace')
+    .option('-w, --workspace <path>', 'Relative dir path to Forc workspace')
     .addOption(new Option(`-c, --contracts ${arg}`, `${desc} Contracts`).conflicts('workspace'))
     .addOption(new Option(`-s, --scripts ${arg}`, `${desc} Scripts`).conflicts('workspace'))
     .addOption(new Option(`-p, --predicates ${arg}`, `${desc} Predicates`).conflicts('workspace'))

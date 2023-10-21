@@ -4,8 +4,8 @@ The quickest way to build full stack Fuel dApps.
 
 - [`fuels init`](./commands.md#fuels-init) — Creates a new `fuels.config.ts` file
 - [`fuels build`](./commands.md#fuels-build) — Build Forc workspace and generate Typescript for everything
-- [`fuels deploy`](./commands.md#fuels-deploy) — Deploy workspace contracts locally and save their IDs to JSON file
-- [`fuels dev`](./commands.md#fuels-dev) — Start a local Fuel _node_ and run `build` + `deploy` on every file change
+- [`fuels deploy`](./commands.md#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
+- [`fuels dev`](./commands.md#fuels-dev) — Start local Fuel Core _node_ and `build` + `deploy` on every file change
 
 ## Getting started
 
