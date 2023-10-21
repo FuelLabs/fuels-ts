@@ -1,3 +1,5 @@
+import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
+
 import * as loggerMod from './logger';
 
 describe('logger', () => {
@@ -6,7 +8,7 @@ describe('logger', () => {
   const loggingBackup = structuredClone(loggingConfig);
 
   const reset = () => {
-    jest.restoreAllMocks();
+    resetDiskAndMocks();
     configureLogging(loggingBackup);
   };
 

@@ -3,30 +3,17 @@ import { program } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/config/fuels.config';
 import { mockLogger } from '../../../test/utils/mockLogger';
-import { clean } from '../../../test/utils/runCommands';
+import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
 import * as loadConfigMod from '../config/loadConfig';
 import type { FuelsConfig } from '../types';
 import { Commands } from '../types';
-import * as logger from '../utils/logger';
 
 import { withConfig } from './withConfig';
 
 describe('withConfig', () => {
-  const { loggingConfig, configureLogging } = logger;
-
-  const loggingBackup = structuredClone(loggingConfig);
-
-  beforeEach(() => {
-    jest.restoreAllMocks();
-    configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
-    clean();
-  });
-
-  afterAll(() => {
-    jest.restoreAllMocks();
-    configureLogging(loggingBackup);
-    clean();
-  });
+  beforeAll(mockLogger);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   function mockAll(params: { shouldError: boolean }) {
     const onSuccess = jest.fn();

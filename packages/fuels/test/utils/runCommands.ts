@@ -1,4 +1,3 @@
-import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
 import { Commands } from '../../src';
@@ -66,16 +65,4 @@ export async function runDeploy() {
 
 export async function runDev() {
   return runCommand(Commands.dev);
-}
-
-/**
- * Cleanup routine
- */
-export function clean() {
-  if (existsSync(fuelsConfigPath)) {
-    rmSync(fuelsConfigPath);
-  }
-  if (existsSync(generatedDir)) {
-    rmSync(generatedDir, { recursive: true });
-  }
 }

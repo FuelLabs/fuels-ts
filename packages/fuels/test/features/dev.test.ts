@@ -4,8 +4,9 @@ import type { FuelsConfig } from '../../src';
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
 import * as startCoreMod from '../../src/cli/commands/dev/startFuelCore';
-import { loggingConfig, configureLogging } from '../../src/cli/utils/logger';
-import { clean, runInit, runDev } from '../utils/runCommands';
+import { mockLogger } from '../utils/mockLogger';
+import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
+import { runInit, runDev } from '../utils/runCommands';
 
 jest.mock('chokidar', () => ({
   __esModule: true,
@@ -13,19 +14,9 @@ jest.mock('chokidar', () => ({
 }));
 
 describe('dev', () => {
-  const loggingBackup = structuredClone(loggingConfig);
-
-  beforeEach(() => {
-    jest.restoreAllMocks();
-    configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
-    clean();
-  });
-
-  afterAll(() => {
-    jest.restoreAllMocks();
-    configureLogging(loggingBackup);
-    clean();
-  });
+  beforeAll(mockLogger);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   it('should run `dev` command', async () => {
     const startFuelCore = jest

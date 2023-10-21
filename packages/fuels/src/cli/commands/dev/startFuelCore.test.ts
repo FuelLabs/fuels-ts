@@ -3,8 +3,9 @@ import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
+import { resetDiskAndMocks } from '../../../../test/utils/resetDiskAndMocks';
 import type { FuelsConfig } from '../../types';
-import { configureLogging, loggingConfig } from '../../utils/logger';
+import { configureLogging } from '../../utils/logger';
 
 import { killNode, startFuelCore } from './startFuelCore';
 
@@ -16,17 +17,9 @@ jest.mock('child_process', () => ({
 }));
 
 describe('startFuelCore', () => {
-  const loggingBackup = structuredClone(loggingConfig);
-
-  beforeEach(() => {
-    jest.restoreAllMocks();
-    configureLogging({ isDebugEnabled: false, isLoggingEnabled: false });
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-    configureLogging(loggingBackup);
-  });
+  beforeAll(mockLogger);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   /**
    * This should mimic the stderr.on('data') event, returning both

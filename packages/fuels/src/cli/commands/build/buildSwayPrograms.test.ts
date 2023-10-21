@@ -2,8 +2,9 @@ import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
+import { resetDiskAndMocks } from '../../../../test/utils/resetDiskAndMocks';
 import { workspaceDir } from '../../../../test/utils/runCommands';
-import { configureLogging, loggingConfig } from '../../utils/logger';
+import { configureLogging } from '../../utils/logger';
 
 import * as buildSwayProgramsMod from './buildSwayPrograms';
 
@@ -15,17 +16,9 @@ jest.mock('child_process', () => ({
 describe('buildSwayPrograms', () => {
   const { onForcExit, onForcError } = buildSwayProgramsMod;
 
-  const loggingBackup = structuredClone(loggingConfig);
-
-  beforeEach(() => {
-    jest.restoreAllMocks();
-    configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
-  });
-
-  afterAll(() => {
-    jest.restoreAllMocks();
-    configureLogging(loggingBackup);
-  });
+  beforeAll(mockLogger);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
     const spawnMocks = {
