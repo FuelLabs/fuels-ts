@@ -1,8 +1,15 @@
 import { hexlify } from 'ethers';
 import { existsSync, readFileSync } from 'fs';
-import { basename, join } from 'path';
+import { join } from 'path';
 
 import { normalizeString } from '../utils/normalizeString';
+
+import {
+  ForcProjectDirsEnum,
+  type AbiTypegenProjectsEnum,
+  type DocSnippetProjectsEnum,
+  type FuelGaugeProjectsEnum,
+} from './types/enums';
 
 export interface IGetForcProjectParams {
   projectDir: string;
@@ -44,8 +51,30 @@ export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
   return storageSlots;
 };
 
-export const getForcProject = <T = unknown>(projectDir: string) => {
-  const projectName = basename(projectDir);
+export type ForcProject =
+  | { dir: ForcProjectDirsEnum.FUEL_GAUGE; projectName: FuelGaugeProjectsEnum }
+  | { dir: ForcProjectDirsEnum.DOCS_SNIPPETS; projectName: DocSnippetProjectsEnum }
+  | { dir: ForcProjectDirsEnum.ABI_TYPEGEN; projectName: AbiTypegenProjectsEnum };
+
+export const getForcProject = <T = unknown>(forcProject: ForcProject) => {
+  const { dir, projectName } = forcProject;
+
+  let projectDir: string;
+
+  switch (dir) {
+    case ForcProjectDirsEnum.FUEL_GAUGE:
+      projectDir = join(__dirname, '..', '..', 'fuel-gauge', 'fixtures', 'forc-projects');
+      break;
+    case ForcProjectDirsEnum.ABI_TYPEGEN:
+      projectDir = join(__dirname, '..', '..', 'abi-typegen', 'test', 'fixtures', 'forc-projects');
+      break;
+    default:
+      // ForcProjectDirs.DOCS_SNIPPETS
+      projectDir = join(__dirname, '..', '..', '..', 'apps', 'docs-snippets', 'projects');
+      break;
+  }
+
+  projectDir = join(projectDir, projectName);
 
   const params: IGetForcProjectParams = {
     projectDir,
