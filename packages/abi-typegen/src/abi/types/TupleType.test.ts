@@ -1,4 +1,7 @@
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  getProjectResources,
+  AbiTypegenProjectsEnum,
+} from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -11,7 +14,7 @@ describe('TupleType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(ForcProjectsEnum.TUPLE_SIMPLE);
+    const project = getProjectResources(AbiTypegenProjectsEnum.TUPLE_SIMPLE);
     const rawTypes = project.abiContents.types;
 
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));

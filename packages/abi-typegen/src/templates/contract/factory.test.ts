@@ -1,4 +1,7 @@
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  getProjectResources,
+  AbiTypegenProjectsEnum,
+} from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/contract/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
@@ -12,7 +15,7 @@ describe('templates/factory', () => {
     const { restore } = mockVersions();
 
     // executing
-    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const project = getProjectResources(AbiTypegenProjectsEnum.MINIMAL);
     const rawContents = project.abiContents;
 
     // executing

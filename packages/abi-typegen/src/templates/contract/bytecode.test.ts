@@ -1,4 +1,4 @@
-import { ForcProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects';
+import { AbiTypegenProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects';
 import bytecodeTemplte from '../../../test/fixtures/templates/contract/bytecode.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 
@@ -10,7 +10,7 @@ describe('templates/contract/bytecode', () => {
     const { restore } = mockVersions();
 
     // executing
-    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const project = getProjectResources(AbiTypegenProjectsEnum.MINIMAL);
 
     const rendered = renderBytecodeTemplate({
       hexlifiedBytecode: project.binHexlified,

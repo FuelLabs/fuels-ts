@@ -1,6 +1,9 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  getProjectResources,
+  AbiTypegenProjectsEnum,
+} from '../../../test/fixtures/forc-projects/index';
 import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
 import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
@@ -13,7 +16,7 @@ describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.PREDICATE);
+    const project = getProjectResources(AbiTypegenProjectsEnum.PREDICATE);
 
     const rawContents = project.abiContents;
 
@@ -35,7 +38,7 @@ describe('factory.ts', () => {
   test('should render factory template with configurable', () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    const project = getProjectResources(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
 
     const rawContents = project.abiContents;
 
@@ -57,7 +60,7 @@ describe('factory.ts', () => {
   test('should throw for invalid Predicate ABI', async () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.PREDICATE);
+    const project = getProjectResources(AbiTypegenProjectsEnum.PREDICATE);
     const rawContents = project.abiContents;
 
     // friction here (deletes 'main' function by emptying the functions array)

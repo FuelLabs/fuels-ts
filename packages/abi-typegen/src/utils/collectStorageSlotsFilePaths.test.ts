@@ -1,12 +1,12 @@
-import { getProjectResources, ForcProjectsEnum } from '../../test/fixtures/forc-projects';
+import { getProjectResources, AbiTypegenProjectsEnum } from '../../test/fixtures/forc-projects';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectStorageSlotsFilepaths } from './collectStorageSlotsFilePaths';
 
 describe('collectStorageSlotsFilePaths.ts', () => {
-  const script = getProjectResources(ForcProjectsEnum.SCRIPT);
-  const predicate = getProjectResources(ForcProjectsEnum.PREDICATE);
-  const contract = getProjectResources(ForcProjectsEnum.MINIMAL);
+  const script = getProjectResources(AbiTypegenProjectsEnum.SCRIPT);
+  const predicate = getProjectResources(AbiTypegenProjectsEnum.PREDICATE);
+  const contract = getProjectResources(AbiTypegenProjectsEnum.MINIMAL);
 
   afterEach(jest.restoreAllMocks);
 

@@ -1,4 +1,7 @@
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  getProjectResources,
+  AbiTypegenProjectsEnum,
+} from '../../../test/fixtures/forc-projects/index';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -6,7 +9,7 @@ import { formatEnums } from './formatEnums';
 
 describe('formatEnums.ts', () => {
   test('should format enums just fine', () => {
-    const project = getProjectResources(ForcProjectsEnum.ENUM_OF_ENUMS);
+    const project = getProjectResources(AbiTypegenProjectsEnum.ENUM_OF_ENUMS);
     const abi = new Abi({
       filepath: './enum-simple-abi.json',
       outputDir: './contracts',
