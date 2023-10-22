@@ -84,24 +84,20 @@ describe('Predicate', () => {
 
       expect(toNumber(initialReceiverBalance)).toBe(0);
 
-      expect(
-        expectToBeInRange({
-          value: finalReceiverBalance,
-          min: expectedReceiverBalance - 1,
-          max: expectedReceiverBalance + 1,
-        })
-      ).toBeTruthy();
+      expectToBeInRange({
+        value: finalReceiverBalance,
+        min: expectedReceiverBalance - 1,
+        max: expectedReceiverBalance + 1,
+      });
 
       const predicateExpectedBalance =
         amountToPredicate + initialPredicateBalance - amountToReceiver - predicateTxFee.toNumber();
 
-      expect(
-        expectToBeInRange({
-          value: remainingPredicateBalance,
-          min: predicateExpectedBalance - 1,
-          max: predicateExpectedBalance + 1,
-        })
-      ).toBeTruthy();
+      expectToBeInRange({
+        value: remainingPredicateBalance,
+        min: predicateExpectedBalance - 1,
+        max: predicateExpectedBalance + 1,
+      });
     });
   });
 });

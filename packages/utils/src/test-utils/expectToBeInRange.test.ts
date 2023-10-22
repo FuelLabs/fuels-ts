@@ -22,29 +22,26 @@ describe('expectValueToBeInRange', () => {
   });
 
   it('should return true when value is equal to the minimum', () => {
-    const result = expectToBeInRange({
+    expectToBeInRange({
       value: 5,
       min: 5,
       max: 10,
     });
-    expect(result).toBe(true);
   });
 
   it('should return true when value is equal to the maximum', () => {
-    const result = expectToBeInRange({
+    expectToBeInRange({
       value: 10,
       min: 5,
       max: 10,
     });
-    expect(result).toBe(true);
   });
 
   it('should return true when value is within the range', () => {
-    const result = expectToBeInRange({
+    expectToBeInRange({
       value: 7,
       min: 5,
       max: 10,
     });
-    expect(result).toBe(true);
   });
 });

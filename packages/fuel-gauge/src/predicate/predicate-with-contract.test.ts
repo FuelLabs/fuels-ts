@@ -166,13 +166,11 @@ describe('Predicate', () => {
       const expectedFinalPredicateBalance =
         initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
 
-      expect(
-        expectToBeInRange({
-          value: expectedFinalPredicateBalance,
-          min: remainingPredicateBalance - 1,
-          max: remainingPredicateBalance + 1,
-        })
-      ).toBeTruthy();
+      expectToBeInRange({
+        value: expectedFinalPredicateBalance,
+        min: remainingPredicateBalance - 1,
+        max: remainingPredicateBalance + 1,
+      });
     });
   });
 });
