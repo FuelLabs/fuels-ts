@@ -27,13 +27,17 @@ abi LiquidityPool {
 }
 
 storage {
-    base_token: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000,
+    base_token: AssetId = AssetId {
+        value: 0x0000000000000000000000000000000000000000000000000000000000000000,
+    },
 }
 
 impl LiquidityPool for Contract {
     #[storage(write)]
     fn set_base_token(base_token_id: b256) {
-        storage.base_token.write(base_token_id);
+        storage.base_token.write(AssetId {
+            value: base_token_id,
+        });
     }
 
     #[storage(read), payable]

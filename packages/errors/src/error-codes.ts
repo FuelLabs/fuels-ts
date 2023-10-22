@@ -15,6 +15,7 @@ export enum ErrorCode {
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
   CODER_NOT_FOUND = 'coder-not-found',
+  INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
 
   // address
