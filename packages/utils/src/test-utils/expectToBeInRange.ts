@@ -1,4 +1,4 @@
-export const validateValueWithinRange = (params: { value: number; min: number; max: number }) => {
+export const expectToBeInRange = (params: { value: number; min: number; max: number }) => {
   const { value, min, max } = params;
   if (value >= min && value <= max) {
     return true;

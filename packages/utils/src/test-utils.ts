@@ -1,2 +1,2 @@
 export * from './test-utils/getForcProject';
-export * from './test-utils/validateValueWithinRange';
+export * from './test-utils/expectToBeInRange';

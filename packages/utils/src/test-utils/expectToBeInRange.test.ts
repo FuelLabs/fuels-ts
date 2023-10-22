@@ -1,9 +1,9 @@
-import { validateValueWithinRange } from './validateValueWithinRange';
+import { expectToBeInRange } from './expectToBeInRange';
 
 describe('expectValueToBeInRange', () => {
   it('should throw an error when value is less than the minimum', () => {
     expect(() =>
-      validateValueWithinRange({
+      expectToBeInRange({
         value: 4,
         min: 5,
         max: 10,
@@ -13,7 +13,7 @@ describe('expectValueToBeInRange', () => {
 
   it('should throw an error when value is greater than the maximum', () => {
     expect(() =>
-      validateValueWithinRange({
+      expectToBeInRange({
         value: 11,
         min: 5,
         max: 10,
@@ -22,7 +22,7 @@ describe('expectValueToBeInRange', () => {
   });
 
   it('should return true when value is equal to the minimum', () => {
-    const result = validateValueWithinRange({
+    const result = expectToBeInRange({
       value: 5,
       min: 5,
       max: 10,
@@ -31,7 +31,7 @@ describe('expectValueToBeInRange', () => {
   });
 
   it('should return true when value is equal to the maximum', () => {
-    const result = validateValueWithinRange({
+    const result = expectToBeInRange({
       value: 10,
       min: 5,
       max: 10,
@@ -40,7 +40,7 @@ describe('expectValueToBeInRange', () => {
   });
 
   it('should return true when value is within the range', () => {
-    const result = validateValueWithinRange({
+    const result = expectToBeInRange({
       value: 7,
       min: 5,
       max: 10,

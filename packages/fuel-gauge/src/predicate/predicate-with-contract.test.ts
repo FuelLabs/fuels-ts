@@ -1,4 +1,4 @@
-import { validateValueWithinRange } from '@fuel-ts/utils/test-utils';
+import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN, WalletUnlocked } from 'fuels';
@@ -167,7 +167,7 @@ describe('Predicate', () => {
         initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
 
       expect(
-        validateValueWithinRange({
+        expectToBeInRange({
           value: expectedFinalPredicateBalance,
           min: remainingPredicateBalance - 1,
           max: remainingPredicateBalance + 1,
