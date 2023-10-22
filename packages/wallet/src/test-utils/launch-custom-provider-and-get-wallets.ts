@@ -6,16 +6,8 @@ import type { WalletUnlocked } from '../wallets';
 
 import { WalletConfig } from './wallet-config';
 
-interface ChainConfigCoin {
-  owner: string;
-  asset_id: string;
-  amount: string;
-}
-export interface ChainConfig {
-  coins: ChainConfigCoin[];
-}
-
 export interface LaunchCustomProviderAndGetWalletsOptions extends SetupTestProviderOptions {
+  /** Configures the wallets that should exist in the genesis block of a the test node. */
   walletConfig: WalletConfig;
 }
 

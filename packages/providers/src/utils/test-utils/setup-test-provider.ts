@@ -10,13 +10,16 @@ import type { LaunchNodeOptions } from './launchTestNode';
 import { launchTestNode } from './launchTestNode';
 
 export interface SetupTestProviderOptions {
+  /** Options for configuring the provider. */
   providerOptions: Partial<ProviderOptions>;
+  /** Options for configuring the test node. */
   nodeOptions: Partial<
     Omit<LaunchNodeOptions, 'chainConfig'> & {
       chainConfig: PartialDeep<ChainConfig>;
     }
   >;
 }
+
 export async function setupTestProvider<
   Dispose extends boolean = true,
   R = Dispose extends true

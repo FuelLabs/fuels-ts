@@ -1,10 +1,10 @@
 import { FuelError } from '@fuel-ts/errors';
 import { toHex } from '@fuel-ts/math';
+import type { ChainConfig } from '@fuel-ts/providers/test-utils';
 
 import { WalletUnlocked } from '../wallets';
 
 import { AssetId } from './asset-id';
-import type { ChainConfig } from './launch-custom-provider-and-get-wallets';
 
 interface WalletConfigOptions {
   /**
@@ -32,13 +32,13 @@ interface WalletConfigOptions {
   amountPerCoin: number;
 }
 
+/**
+ * Used for configuring the wallets that should exist in the genesis block of a test node.
+ */
 export class WalletConfig {
-  public coins: ChainConfig['coins'];
+  public coins: ChainConfig['initial_state']['coins'];
   public wallets: WalletUnlocked[];
 
-  /**
-   * Used for configuring the wallets that should exist in the genesis block of a test node.
-   */
   constructor({
     wallets = 1,
     assets = 1,
@@ -67,7 +67,7 @@ export class WalletConfig {
     coinsPerAsset: number,
     amountPerCoin: number
   ) {
-    const coins: ChainConfig['coins'] = [];
+    const coins: ChainConfig['initial_state']['coins'] = [];
 
     let assetIds: string[] = [AssetId.BaseAssetId.value];
     if (Array.isArray(assets)) {
