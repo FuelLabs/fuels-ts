@@ -1,6 +1,8 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
+import { launchTestNode } from '@fuel-ts/providers/test-utils';
+import type { LaunchTestNodeOptions , ChainConfig } from '@fuel-ts/providers/test-utils';
 import { Signer } from '@fuel-ts/signer';
 import { hexlify } from 'ethers';
 import { readFile } from 'fs/promises';
@@ -9,8 +11,7 @@ import type { WalletUnlocked } from '../wallets';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
-import { launchTestNode, ChainConfig } from '@fuel-ts/providers/test-utils';
-import type { LaunchTestNodeOptions } from '@fuel-ts/providers/test-utils';
+
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
 type LaunchNodeOptions = Partial<LaunchTestNodeOptions> & {
