@@ -12,7 +12,7 @@ import type { ChainConfig } from './fuel-node-interfaces';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
-export interface LaunchNodeOptions {
+export interface LaunchTestNodeOptions {
   consensusKey: string;
   port: string;
   args: string[];
@@ -46,7 +46,7 @@ export const launchTestNode = async ({
   useSystemFuelCore = false,
   chainConfig = defaultChainConfig,
   logger,
-}: Partial<LaunchNodeOptions> = {}): LaunchNodeResult =>
+}: Partial<LaunchTestNodeOptions> = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';

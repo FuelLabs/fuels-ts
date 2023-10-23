@@ -2,30 +2,19 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import { spawn } from 'child_process';
-import { randomUUID } from 'crypto';
 import { hexlify } from 'ethers';
-import fsSync from 'fs';
-import fs from 'fs/promises';
-import os from 'os';
-import path from 'path';
-import { getPortPromise } from 'portfinder';
-import kill from 'tree-kill';
+import { readFile } from 'fs/promises';
 
 import type { WalletUnlocked } from '../wallets';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
-
+import { launchTestNode, ChainConfig } from '@fuel-ts/providers/test-utils';
+import type { LaunchTestNodeOptions } from '@fuel-ts/providers/test-utils';
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
-type LaunchNodeOptions = {
+type LaunchNodeOptions = Partial<LaunchTestNodeOptions> & {
   chainConfigPath?: string;
-  consensusKey?: string;
-  ip?: string;
-  port?: string;
-  args?: string[];
-  useSystemFuelCore?: boolean;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -38,48 +27,23 @@ export type LaunchNodeResult = Promise<{
  * Launches a fuel-core node.
  * @param chainConfigPath - path to the chain configuration file.
  * @param consensusKey - the consensus key to use.
- * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
- * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
+ * @param port - the port to bind to. (optional, defaults to whichever port the OS assigns to it)
  * @param args - additional arguments to pass to fuel-core.
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
  * */
 export const launchNode = async ({
   chainConfigPath,
   consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
-  ip,
   port,
   args = defaultFuelCoreArgs,
   useSystemFuelCore = false,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
-    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
-    const graphQLStartSubstring = 'Binding GraphQL provider to';
-
-    const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
-
-    const ipToUse = ip || '0.0.0.0';
-
-    const portToUse =
-      port ||
-      (
-        await getPortPromise({
-          port: 4000, // tries 4000 first, then 4001, then 4002, etc.
-          stopPort: 5000, // don't try ports above 5000
-        })
-      ).toString();
-
-    let chainConfigPathToUse = chainConfigPath;
-
-    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    let config: ChainConfig;
 
     if (!chainConfigPath) {
-      if (!fsSync.existsSync(tempDirPath)) {
-        fsSync.mkdirSync(tempDirPath, { recursive: true });
-      }
-      const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
-
-      let chainConfig = defaultChainConfig;
+      config = defaultChainConfig as unknown as ChainConfig;
 
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
@@ -87,8 +51,8 @@ export const launchNode = async ({
         const signer = new Signer(pk);
         process.env.GENESIS_SECRET = hexlify(pk);
 
-        chainConfig = {
-          ...defaultChainConfig,
+        config = {
+          ...config,
           initial_state: {
             ...defaultChainConfig.initial_state,
             coins: [
@@ -102,71 +66,22 @@ export const launchNode = async ({
           },
         };
       }
-
-      // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
-
-      chainConfigPathToUse = tempChainConfigFilePath;
+    } else {
+      config = JSON.parse(await readFile(chainConfigPath, 'utf-8')) as ChainConfig;
     }
-
-    const child = spawn(command, [
-      'run',
-      '--ip',
-      ipToUse,
-      '--port',
-      portToUse,
-      '--db-type',
-      'in-memory',
-      '--consensus-key',
+    const {
+      cleanup,
+      ip: nodeIp,
+      port: nodePort,
+    } = await launchTestNode({
+      args,
       consensusKey,
-      '--chain',
-      chainConfigPathToUse as string,
-      ...args,
-    ]);
-
-    // Cleanup function where fuel-core is stopped.
-    const cleanup = () => {
-      if (child.pid) {
-        kill(Number(child.pid));
-      }
-
-      // Remove all the listeners we've added.
-      child.stdout.removeAllListeners();
-      child.stderr.removeAllListeners();
-
-      // Remove the temporary folder and all its contents.
-      if (!chainConfigPath) {
-        spawn('rm', ['-rf', tempDirPath]);
-      }
-    };
-
-    child.stderr.setEncoding('utf8');
-
-    // Look for a specific graphql start point in the output.
-    child.stderr.on('data', (chunk: string) => {
-      // Look for the graphql service start.
-      if (chunk.indexOf(graphQLStartSubstring) !== -1) {
-        // Resolve with the cleanup method.
-        resolve({
-          cleanup,
-          ip: ipToUse,
-          port: portToUse,
-        });
-      }
+      port,
+      useSystemFuelCore,
+      chainConfig: config,
     });
 
-    // Process exit.
-    process.on('exit', cleanup);
-
-    // Catches ctrl+c event.
-    process.on('SIGINT', cleanup);
-
-    // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', cleanup);
-    process.on('SIGUSR2', cleanup);
-
-    // Catches uncaught exceptions.
-    process.on('uncaughtException', cleanup);
+    resolve({ cleanup, ip: nodeIp, port: nodePort });
   });
 
 const generateWallets = async (count: number, provider: Provider) => {

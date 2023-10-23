@@ -6,7 +6,7 @@ import { Provider } from '../..';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import type { ChainConfig } from './fuel-node-interfaces';
-import type { LaunchNodeOptions } from './launchTestNode';
+import type { LaunchTestNodeOptions } from './launchTestNode';
 import { launchTestNode } from './launchTestNode';
 
 export interface SetupTestProviderOptions {
@@ -14,7 +14,7 @@ export interface SetupTestProviderOptions {
   providerOptions: Partial<ProviderOptions>;
   /** Options for configuring the test node. */
   nodeOptions: Partial<
-    Omit<LaunchNodeOptions, 'chainConfig'> & {
+    Omit<LaunchTestNodeOptions, 'chainConfig'> & {
       chainConfig: PartialDeep<ChainConfig>;
     }
   >;
@@ -31,7 +31,7 @@ export async function setupTestProvider<
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.asyncDispose ??= Symbol('Symbol.asyncDispose');
 
-  const nodeOptions: Partial<LaunchNodeOptions> = {
+  const nodeOptions: Partial<LaunchTestNodeOptions> = {
     ...options?.nodeOptions,
     consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
     chainConfig: mergeDeepRight(defaultChainConfig, options?.nodeOptions?.chainConfig || {}),
