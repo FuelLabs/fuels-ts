@@ -24,4 +24,5 @@ export const fuelsConfig: FuelsConfig = {
   autoStartFuelCore: true,
   fuelCorePort: 4000,
   providerUrl: FUEL_NETWORK_URL,
+  configPath: __filename,
 };
