@@ -1,47 +1,77 @@
-import * as chokidar from 'chokidar';
+import type { FSWatcher } from 'chokidar';
+import { watch } from 'chokidar';
 import { globSync } from 'glob';
 
+import { loadConfig } from '../../config/loadConfig';
 import type { FuelsConfig } from '../../types';
 import { error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';
+import { withConfigErrorHandler } from '../withConfig';
 
+import type { FuelCoreNode } from './startFuelCore';
 import { startFuelCore } from './startFuelCore';
 
-export const fileHandlers: {
-  watcher?: chokidar.FSWatcher;
-} = {};
+export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
+  handlers.forEach((h) => h.close());
+};
 
 export const buildAndDeploy = async (config: FuelsConfig) => {
   await build(config);
   return deploy(config);
 };
 
-export const changeListener = (config: FuelsConfig) => async (path: string) => {
-  log(`\nFile changed: ${path}`);
-  await buildAndDeploy(config);
+export const getConfigFilepathsToWatch = (config: FuelsConfig) => {
+  const configFilePathsToWatch: string[] = [config.configPath];
+  if (config.chainConfig) {
+    configFilePathsToWatch.push(config.chainConfig);
+  }
+  return configFilePathsToWatch;
 };
 
-export async function dev(config: FuelsConfig) {
-  // here we inject a `providerUrl` into the config if necessary
+export type DevState = {
+  config: FuelsConfig;
+  watchHandlers: FSWatcher[];
+  fuelCore?: FuelCoreNode;
+};
+
+export const workspaceFileChanged = (state: DevState) => async (path: string) => {
+  log(`\nFile changed: ${path}`);
+  await buildAndDeploy(state.config);
+};
+
+export const configFileChanged = (state: DevState) => async (path: string) => {
+  log(`\nFile changed: ${path}`);
+
+  closeAllFileHandlers(state.watchHandlers);
+  state.fuelCore?.killChildProcess();
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    await dev(await loadConfig(state.config.basePath));
+  } catch (err: unknown) {
+    await withConfigErrorHandler(<Error>err, state.config);
+  }
+};
+
+export const dev = async (config: FuelsConfig) => {
+  let fuelCore: FuelCoreNode | undefined;
+
   if (config.autoStartFuelCore) {
-    const client = await startFuelCore(config);
+    fuelCore = await startFuelCore(config);
     // eslint-disable-next-line no-param-reassign
-    config.providerUrl = client.providerUrl;
+    config.providerUrl = fuelCore.providerUrl;
   }
 
-  const { contracts, scripts, predicates, chainConfig, workspace } = config;
+  const configFilePaths = getConfigFilepathsToWatch(config);
 
-  const projectDirs = [contracts, scripts, predicates, chainConfig].flat();
+  const { contracts, scripts, predicates, basePath: cwd } = config;
 
-  if (workspace) {
-    projectDirs.push(workspace);
-  }
-
-  const pathsToWatch = projectDirs
+  const workspaceFilePaths = [contracts, predicates, scripts]
     .flatMap((dir) => [
-      globSync(`${dir}/**/*.toml`, { cwd: config.basePath }),
-      globSync(`${dir}/**/*.sw`, { cwd: config.basePath }),
+      dir,
+      globSync(`${dir}/**/*.toml`, { cwd }),
+      globSync(`${dir}/**/*.sw`, { cwd }),
     ])
     .flat();
 
@@ -49,16 +79,17 @@ export async function dev(config: FuelsConfig) {
     // Run once
     await buildAndDeploy(config);
 
-    // Then on every change
-    const onChange = changeListener(config);
+    const watchHandlers: FSWatcher[] = [];
+    const options = { persistent: true, ignoreInitial: true };
+    const state = { config, watchHandlers, fuelCore };
 
-    fileHandlers.watcher = chokidar
-      .watch(pathsToWatch, { persistent: true, ignoreInitial: true })
-      .on('add', onChange)
-      .on('change', onChange)
-      .on('unlink', onChange);
+    // watch: fuels.config.ts and chainConfig.json
+    watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));
+
+    // watch: Forc's workspace members
+    watchHandlers.push(watch(workspaceFilePaths, options).on('all', workspaceFileChanged(state)));
   } catch (err: unknown) {
     error(err);
     throw err;
   }
-}
+};

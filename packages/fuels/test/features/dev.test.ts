@@ -14,11 +14,9 @@ jest.mock('chokidar', () => ({
 }));
 
 describe('dev', () => {
-  beforeAll(mockLogger);
-  beforeEach(resetDiskAndMocks);
-  afterEach(resetDiskAndMocks);
+  function mockAll() {
+    mockLogger();
 
-  it('should run `dev` command', async () => {
     const startFuelCore = jest
       .spyOn(startCoreMod, 'startFuelCore')
       .mockImplementation((_config: FuelsConfig) =>
@@ -40,6 +38,16 @@ describe('dev', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const watch = jest.spyOn(chokidar, 'watch').mockReturnValue({ on } as any);
 
+    return { startFuelCore, build, deploy, on, watch };
+  }
+
+  beforeAll(mockLogger);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
+
+  it('should run `dev` command', async () => {
+    const { startFuelCore, build, deploy, on, watch } = mockAll();
+
     await runInit();
     await runDev();
 
@@ -47,7 +55,7 @@ describe('dev', () => {
     expect(build).toHaveBeenCalledTimes(1);
     expect(deploy).toHaveBeenCalledTimes(1);
 
-    expect(watch).toHaveBeenCalledTimes(1);
-    expect(on).toHaveBeenCalledTimes(3);
+    expect(watch).toHaveBeenCalledTimes(2);
+    expect(on).toHaveBeenCalledTimes(2);
   });
 });
