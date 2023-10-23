@@ -433,7 +433,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/wordlists
       fuels:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/fuels
 
   internal/tsup: {}
@@ -687,6 +687,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
