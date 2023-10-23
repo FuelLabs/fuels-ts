@@ -89,10 +89,5 @@
     "tsx": "^3.12.7",
     "turbo": "^1.8.8",
     "typescript": "~5.1.6"
-  },
-  "pnpm": {
-    "overrides": {
-      "cross-fetch": "4.0.0"
-    }
   }
 }

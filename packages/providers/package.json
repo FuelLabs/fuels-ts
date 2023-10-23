@@ -43,19 +43,15 @@
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
     "ramda": "^0.29.0",
-    "tai64": "^1.0.0",
-    "eventsource": "^2.0.2",
-    "sse.js": "^1.0.0"
+    "tai64": "^1.0.0"
   },
   "devDependencies": {
     "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "^2.13.7",
     "@graphql-codegen/typescript": "^2.8.0",
-    "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
     "get-graphql-schema": "^2.1.2",
-    "@types/ramda": "^0.29.3",
-    "@types/eventsource": "^1.1.13"
+    "@types/ramda": "^0.29.3"
   }
 }

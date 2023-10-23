@@ -133,7 +133,14 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      await this.sleepBasedOnAttempts(++this.fetchAttempts);
+      for await (const res of this.provider.operations.statusChange({
+        transactionId: this.id,
+      })) {
+        if (res.statusChange) {
+          break;
+        }
+      }
+
       return this.fetch();
     }
 
@@ -203,13 +210,17 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.fetch();
-
-    if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
-      await this.sleepBasedOnAttempts(++this.resultAttempts);
-
-      return this.waitForResult<TTransactionType>(contractsAbiMap);
+    for await (const res of this.provider.operations.statusChange({
+      transactionId: this.id,
+    })) {
+      if (res.statusChange.type !== 'SubmittedStatus') break;
     }
+    await this.fetch();
+    // if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
+    //   await this.sleepBasedOnAttempts(++this.resultAttempts);
+
+    //   return this.waitForResult<TTransactionType>(contractsAbiMap);
+    // }
 
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 

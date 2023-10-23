@@ -13,7 +13,6 @@ import {
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
-import { print } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -28,6 +27,7 @@ import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
+import { Subscriber } from './subscriber';
 import type {
   TransactionRequestLike,
   TransactionRequest,
@@ -349,25 +349,19 @@ export default class Provider {
    */
   private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
-    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
+
+    const fetchFn = (options.fetch as typeof fetch) ?? fetch;
+    const gqlClient = new GraphQLClient(url, { fetch: fetchFn });
 
     // @ts-expect-error This is due to this function being generic and us using multiple libraries. Its type is specified when calling a specific operation via provider.operations.xyz.
     return getOperationsSdk((query, vars) => {
       const isSubscription =
         (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
           ?.operation === 'subscription';
-      if (isSubscription) {
-        const q = print(query);
-        const evntSource = new EventSource(`${this.url}-sub`);
-        return gqlClient.request(query, vars);
 
-        // return this.#subscriptionClient.iterate({
-        //   query: print(query),
-        //   variables: vars as Record<string, unknown>,
-        // });
-      }
-
-      return gqlClient.request(query, vars);
+      return isSubscription
+        ? new Subscriber(this.url, query, vars as Record<string, unknown>, fetchFn).subscribe()
+        : gqlClient.request(query, vars);
     });
   }
 
