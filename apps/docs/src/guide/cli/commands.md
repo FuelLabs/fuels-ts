@@ -25,12 +25,12 @@ export createConfig({
 In a nutshell:
 
 ```sh
-. # current dir
-├── frontend
-│   ├── fuels.config.ts # your new config
-│   └── src
-│       └── sway-programs-api
-└── sway-programs
+.
+├── sway-programs # <— workspace
+├── src
+│   └── sway-programs-api # <— output
+├── fuels.config.ts
+└── package.json
 ```
 
 ### See more
