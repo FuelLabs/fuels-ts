@@ -2,7 +2,7 @@
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
@@ -34,7 +34,7 @@ export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [OutputCoin, number] {
@@ -82,7 +82,7 @@ export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [OutputContract, number] {
@@ -130,7 +130,7 @@ export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [OutputChange, number] {
@@ -178,7 +178,7 @@ export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [OutputVariable, number] {
@@ -226,7 +226,7 @@ export class OutputContractCreatedCoder extends Coder<
     parts.push(new B256Coder().encode(value.contractId));
     parts.push(new B256Coder().encode(value.stateRoot));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [OutputContractCreated, number] {
@@ -297,7 +297,7 @@ export class OutputCoder extends Coder<Output, Output> {
       }
     }
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [Output, number] {
