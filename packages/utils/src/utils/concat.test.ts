@@ -2,6 +2,9 @@ import { getBytesCopy } from 'ethers';
 
 import { concat, concatBytes } from './concat';
 
+/**
+ * @group node
+ */
 describe('concat', () => {
   it('should concatenate multiple BytesLike into a single Uint8Array', () => {
     const byteslike1 = '0xff61ba809b36351b';
