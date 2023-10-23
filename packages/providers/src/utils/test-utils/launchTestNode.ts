@@ -111,29 +111,18 @@ export const launchTestNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    let timeout: NodeJS.Timeout | undefined;
-    let nodeMessages: string[] | null = [];
-
     // Look for a specific graphql start point in the output.
     child!.stderr.on('data', (chunk: string) => {
       if (logger) logger(chunk);
-      nodeMessages?.push(chunk);
 
-      timeout ??= setTimeout(() => {
-        removeSideffects();
-        const logs = nodeMessages!.join();
-
-        reject(new FuelError(FuelError.CODES.INVALID_INPUT_PARAMETERS, logs));
-      }, 1000);
-
-      const graphQLServerStarted = chunk.indexOf(graphQLStartSubstring) !== -1;
-
-      if (graphQLServerStarted) {
-        clearTimeout(timeout);
-        nodeMessages = null;
+      if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         const [nodeIp, nodePort] = chunk.split(' ').at(-1)!.trim().split(':');
 
         resolve({ cleanup, ip: nodeIp, port: nodePort });
+      }
+
+      if (/error/i.test(chunk)) {
+        reject(new FuelError(FuelError.CODES.INVALID_INPUT_PARAMETERS, chunk));
       }
     });
   });
