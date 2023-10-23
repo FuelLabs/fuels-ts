@@ -1,7 +1,4 @@
-import {
-  generateTestWallet,
-  seedTestWallet,
-} from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type {
   BN,
