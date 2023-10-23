@@ -13,5 +13,8 @@ describe('index.js', () => {
     expect(fuels.ScriptResultDecoderError).toBeTruthy();
     expect(fuels.Script).toBeTruthy();
     expect(fuels.FunctionInvocationScope).toBeTruthy();
+    expect(fuels.arrayify).toBeTruthy();
+    expect(fuels.hexlify).toBeTruthy();
+    expect(fuels.concat).toBeTruthy();
   });
 });
