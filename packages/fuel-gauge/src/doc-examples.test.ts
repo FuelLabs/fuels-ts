@@ -1,7 +1,4 @@
-import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import {
-  AssetId,
-  WalletConfig,
   generateTestWallet,
   seedTestWallet,
 } from '@fuel-ts/wallet/test-utils';
