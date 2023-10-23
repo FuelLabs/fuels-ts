@@ -16,6 +16,7 @@ import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Arguments', () => {

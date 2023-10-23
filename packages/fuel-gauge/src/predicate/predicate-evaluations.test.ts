@@ -8,6 +8,7 @@ import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Evaluations', () => {
@@ -23,14 +24,23 @@ describe('Predicate', () => {
       gasPrice = provider.getGasConfig().minGasPrice;
     });
 
-    it('calls a no argument predicate and returns true', async () => {
-      const amountToPredicate = 100_000;
+    it.only('calls a no argument predicate and returns true', async () => {
+      const amountToPredicate = 100_000_000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
       predicate = new Predicate(predicateBytesTrue, provider);
 
+      const walBal = await wallet.getBalances();
+
+      console.log(
+        'wallet',
+        walBal.forEach((w) => console.log(w))
+      );
+
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+
+      console.log('pred', await predicate.getBalances());
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,

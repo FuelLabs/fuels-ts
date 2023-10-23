@@ -17,6 +17,7 @@ import type { Validation } from '../types/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Estimate predicate gas', () => {
