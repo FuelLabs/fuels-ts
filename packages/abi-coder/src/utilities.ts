@@ -1,5 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
 import { U64Coder } from './coders/u64';
@@ -61,7 +61,7 @@ export function unpackDynamicData(
   dataOffset: number
 ): Uint8Array {
   if (!results.dynamicData) {
-    return concatBytes([results]);
+    return concat([results]);
   }
 
   let cumulativeDynamicByteLength = 0;
@@ -83,7 +83,7 @@ export function unpackDynamicData(
           dataOffset + vData.byteLength + cumulativeDynamicByteLength
         )
       : vData;
-    updatedResults = concatBytes([updatedResults, dataToAppend]);
+    updatedResults = concat([updatedResults, dataToAppend]);
 
     cumulativeDynamicByteLength += dataToAppend.byteLength;
   });
