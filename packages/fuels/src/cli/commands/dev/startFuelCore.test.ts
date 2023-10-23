@@ -5,7 +5,7 @@ import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
 import { resetDiskAndMocks } from '../../../../test/utils/resetDiskAndMocks';
 import type { FuelsConfig } from '../../types';
-import { configureLogging } from '../../utils/logger';
+import { configureLogging, loggingConfig } from '../../utils/logger';
 
 import { killNode, startFuelCore } from './startFuelCore';
 
@@ -17,9 +17,11 @@ jest.mock('child_process', () => ({
 }));
 
 describe('startFuelCore', () => {
-  beforeAll(mockLogger);
+  const loggingBackup = structuredClone(loggingConfig);
+
   beforeEach(resetDiskAndMocks);
   afterEach(resetDiskAndMocks);
+  afterEach(() => configureLogging(loggingBackup));
 
   /**
    * This should mimic the stderr.on('data') event, returning both
@@ -92,7 +94,7 @@ describe('startFuelCore', () => {
     expect(spawn.mock.calls[0][0]).toMatch(/^fuel-core$/m);
 
     expect(innerMocks.on).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
   });
 
@@ -108,7 +110,7 @@ describe('startFuelCore', () => {
     expect(error).toHaveBeenCalledTimes(1);
 
     expect(innerMocks.on).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
   });
 
