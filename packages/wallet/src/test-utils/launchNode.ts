@@ -2,7 +2,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { launchTestNode } from '@fuel-ts/providers/test-utils';
-import type { LaunchTestNodeOptions , ChainConfig } from '@fuel-ts/providers/test-utils';
+import type { LaunchTestNodeOptions, ChainConfig } from '@fuel-ts/providers/test-utils';
 import { Signer } from '@fuel-ts/signer';
 import { hexlify } from 'ethers';
 import { readFile } from 'fs/promises';
