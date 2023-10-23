@@ -53,11 +53,12 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     autoStartFuelCore: true,
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,
+    privateKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
     ...userConfig,
     basePath: cwd,
     useBuiltinForc,
     useBuiltinFuelCore,
-    privateKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
+    configPath,
   };
 
   // Resolve the output path on loaded config

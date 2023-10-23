@@ -115,4 +115,5 @@ export type FuelsConfig = UserFuelsConfig &
     >
   > & {
     basePath: string;
+    configPath: string;
   };
