@@ -46,7 +46,7 @@ const symlinkDeps = () =>
 
   sh.exec('pnpm install');
 
-  sh.exec('vitest --run --config vite.browser.config.ts $(scripts/tests-find.sh --browser)');
+  sh.exec('vitest --run --coverage --config vite.browser.config.ts $(scripts/tests-find.sh --browser)');
 
   symlinkDeps();
 
