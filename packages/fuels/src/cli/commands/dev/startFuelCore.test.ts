@@ -19,10 +19,10 @@ jest.mock('child_process', () => ({
 describe('startFuelCore', () => {
   const loggingBackup = structuredClone(loggingConfig);
 
-  beforeEach(resetDiskAndMocks);
-  beforeEach(mockLogger);
-  afterEach(resetDiskAndMocks);
-  afterEach(() => configureLogging(loggingBackup));
+  afterEach(() => {
+    resetDiskAndMocks();
+    configureLogging(loggingBackup);
+  });
 
   /**
    * This should mimic the stderr.on('data') event, returning both
@@ -65,6 +65,8 @@ describe('startFuelCore', () => {
   }
 
   test('should start `fuel-core` node using built-in binary', async () => {
+    mockLogger();
+
     const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
     copyConfig.useBuiltinFuelCore = true;
 

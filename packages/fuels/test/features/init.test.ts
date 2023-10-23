@@ -13,7 +13,6 @@ import {
 } from '../utils/runCommands';
 
 describe('init', () => {
-  beforeEach(resetDiskAndMocks);
   beforeEach(mockLogger);
   afterEach(resetDiskAndMocks);
 

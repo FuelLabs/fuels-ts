@@ -14,6 +14,9 @@ jest.mock('chokidar', () => ({
 }));
 
 describe('dev', () => {
+  beforeEach(mockLogger);
+  afterEach(resetDiskAndMocks);
+
   function mockAll() {
     mockLogger();
 
@@ -40,10 +43,6 @@ describe('dev', () => {
 
     return { startFuelCore, build, deploy, on, watch };
   }
-
-  beforeAll(mockLogger);
-  beforeEach(resetDiskAndMocks);
-  afterEach(resetDiskAndMocks);
 
   it('should run `dev` command', async () => {
     const { startFuelCore, build, deploy, on, watch } = mockAll();
