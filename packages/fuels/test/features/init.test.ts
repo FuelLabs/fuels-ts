@@ -3,8 +3,8 @@ import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
 import { mockLogger } from '../utils/mockLogger';
+import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import {
-  clean,
   fuelsConfigPath,
   generatedDir,
   initFlagsAutoStartFuelCore,
@@ -13,8 +13,8 @@ import {
 } from '../utils/runCommands';
 
 describe('init', () => {
-  beforeEach(clean);
-  afterAll(clean);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   it('should run `init` command', async () => {
     await runInit([initFlagsWorkspace, initFlagsAutoStartFuelCore].flat());

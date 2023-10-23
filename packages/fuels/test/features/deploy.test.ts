@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from 'fs';
 
-import { clean, contractsJsonPath, runBuild, runDeploy, runInit } from '../utils/runCommands';
+import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
+import { contractsJsonPath, runBuild, runDeploy, runInit } from '../utils/runCommands';
 
 describe('deploy', () => {
-  beforeEach(clean);
-  afterAll(clean);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   it('should run `deploy` command', async () => {
     await runInit();

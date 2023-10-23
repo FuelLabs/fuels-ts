@@ -1,8 +1,8 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
 
+import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import {
-  clean,
   contractsFooDir,
   generatedDir,
   initFlagsUseBuiltinBinaries,
@@ -11,8 +11,8 @@ import {
 } from '../utils/runCommands';
 
 describe('build', () => {
-  beforeEach(clean);
-  afterAll(clean);
+  beforeEach(resetDiskAndMocks);
+  afterEach(resetDiskAndMocks);
 
   it('should run `build` command', async () => {
     await runInit();

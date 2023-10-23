@@ -1,8 +1,8 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { readFileSync } from 'fs';
 
+import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
 import {
-  clean,
   runInit,
   fixturesDir,
   fuelsConfigPath,
@@ -16,7 +16,7 @@ import * as shouldUseBuiltinFuelCoreMod from '../commands/init/shouldUseBuiltinF
 import { loadConfig } from './loadConfig';
 
 describe('loadConfig', () => {
-  beforeEach(clean);
+  beforeEach(resetDiskAndMocks);
 
   test('should throw if config path is not found', async () => {
     const cwd = '/non/existent/path';
