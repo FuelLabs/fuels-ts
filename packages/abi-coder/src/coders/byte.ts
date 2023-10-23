@@ -1,6 +1,6 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 
 import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
@@ -50,7 +50,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
       data.push(new Uint8Array(paddingLength));
     }
 
-    return concatBytes(data);
+    return concat(data);
   }
 
   decode(data: Uint8Array, offset: number): [Uint8Array, number] {

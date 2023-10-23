@@ -20,6 +20,8 @@ export * from '@fuel-ts/program/configs';
 export * from '@fuel-ts/providers';
 export * from '@fuel-ts/signer';
 export * from '@fuel-ts/transactions';
+export * from '@fuel-ts/utils';
+export * from '@fuel-ts/wallet';
 export * from '@fuel-ts/transactions/configs';
 export * from '@fuel-ts/wallet';
 export * from '@fuel-ts/wallet/configs';
