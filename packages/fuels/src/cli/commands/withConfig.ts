@@ -5,6 +5,12 @@ import { loadConfig } from '../config/loadConfig';
 import type { Commands, FuelsConfig, CommandEvent } from '../types';
 import { error, log } from '../utils/logger';
 
+export const withConfigErrorHandler = async (err: Error, config: FuelsConfig) => {
+  error(err);
+  await config.onFailure?.(<Error>err, config);
+  throw err;
+};
+
 export function withConfig<CType extends Commands>(
   program: Command,
   command: CType,
@@ -27,9 +33,7 @@ export function withConfig<CType extends Commands>(
       );
       log(`🎉  ${capitalizeString(command)} completed successfully!`);
     } catch (err: unknown) {
-      error(err);
-      await config.onFailure?.(<Error>err, config);
-      throw err;
+      await withConfigErrorHandler(<Error>err, config);
     }
   };
 }
