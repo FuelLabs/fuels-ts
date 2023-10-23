@@ -2,7 +2,7 @@
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, sha256 } from 'ethers';
 
@@ -79,7 +79,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [InputCoin, number] {
@@ -169,7 +169,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new B256Coder().encode(value.contractID));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [InputContract, number] {
@@ -257,7 +257,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(getBytesCopy(value.data || '0x'));
 
-    return sha256(concatBytes(parts));
+    return sha256(concat(parts));
   }
 
   static encodeData(messageData?: BytesLike): Uint8Array {
@@ -283,7 +283,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   static decodeData(messageData: BytesLike): Uint8Array {
@@ -379,7 +379,7 @@ export class InputCoder extends Coder<Input, Input> {
       }
     }
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [Input, number] {

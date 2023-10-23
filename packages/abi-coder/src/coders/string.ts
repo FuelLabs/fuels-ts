@@ -1,5 +1,5 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { Coder } from './abstract-coder';
@@ -23,7 +23,7 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
 
     const encoded = toUtf8Bytes(value);
     const padding = new Uint8Array(this.#paddingLength);
-    return concatBytes([encoded, padding]);
+    return concat([encoded, padding]);
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {

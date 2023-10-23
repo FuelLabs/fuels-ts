@@ -15,7 +15,7 @@
     "build:packages": "turbo run build --filter=!docs",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
-    "test": "vitest --run --config vite.node.config.ts $(scripts/tests-find.sh --node)",
+    "test": "vitest --run --coverage --config vite.node.config.ts $(scripts/tests-find.sh --node)",
     "test:coverage": "tsx ./scripts/tests-coverage.ts",
     "test:watch": "vitest --watch --config vite.node.config.ts $(scripts/tests-find.sh --node)",
     "test:validate": "tsx ./scripts/tests-validate.ts",

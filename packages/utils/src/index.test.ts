@@ -8,5 +8,6 @@ describe('index.js', () => {
     expect(indexMod.normalizeString).toBeTruthy();
     expect(indexMod.chunkAndPadBytes).toBeTruthy();
     expect(indexMod.concatBytes).toBeTruthy();
+    expect(indexMod.concat).toBeTruthy();
   });
 });
