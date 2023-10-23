@@ -65,12 +65,10 @@
     "ethers": "^6.7.1",
     "portfinder": "^1.0.32",
     "tree-kill": "^1.2.2",
-    "uuid": "^9.0.0",
-    "ramda": "^0.29.0"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
-    "@types/uuid": "^9.0.1",
-    "@types/ramda": "^0.29.3"
+    "@types/uuid": "^9.0.1"
   }
 }
