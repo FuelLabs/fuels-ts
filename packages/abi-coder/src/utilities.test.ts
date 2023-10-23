@@ -82,21 +82,9 @@ describe('Abi Coder Utilities', () => {
       6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]),
     };
 
-    const arrayWithVectorData1: Uint8ArrayWithDynamicData = concat([
-      pointer,
-      capacity,
-      length,
-    ]);
-    const arrayWithVectorData2: Uint8ArrayWithDynamicData = concat([
-      pointer,
-      capacity,
-      length,
-    ]);
-    const arrayWithVectorData3: Uint8ArrayWithDynamicData = concat([
-      pointer,
-      capacity,
-      length,
-    ]);
+    const arrayWithVectorData1: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData2: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData3: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
     arrayWithVectorData1.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
     arrayWithVectorData2.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]) };
     arrayWithVectorData3.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]) };
