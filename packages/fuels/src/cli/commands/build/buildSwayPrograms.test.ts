@@ -16,8 +16,8 @@ jest.mock('child_process', () => ({
 describe('buildSwayPrograms', () => {
   const { onForcExit, onForcError } = buildSwayProgramsMod;
 
-  beforeAll(mockLogger);
   beforeEach(resetDiskAndMocks);
+  beforeEach(mockLogger);
   afterEach(resetDiskAndMocks);
 
   function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {

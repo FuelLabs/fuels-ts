@@ -13,8 +13,8 @@ import {
 } from '../utils/runCommands';
 
 describe('init', () => {
-  beforeAll(mockLogger);
   beforeEach(resetDiskAndMocks);
+  beforeEach(mockLogger);
   afterEach(resetDiskAndMocks);
 
   it('should run `init` command', async () => {

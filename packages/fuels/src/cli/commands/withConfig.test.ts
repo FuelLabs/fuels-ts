@@ -11,8 +11,8 @@ import { Commands } from '../types';
 import { withConfig } from './withConfig';
 
 describe('withConfig', () => {
-  beforeAll(mockLogger);
   beforeEach(resetDiskAndMocks);
+  beforeEach(mockLogger);
   afterEach(resetDiskAndMocks);
 
   function mockAll(params: { shouldError: boolean }) {

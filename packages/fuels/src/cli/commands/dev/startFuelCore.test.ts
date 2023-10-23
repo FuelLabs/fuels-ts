@@ -20,6 +20,7 @@ describe('startFuelCore', () => {
   const loggingBackup = structuredClone(loggingConfig);
 
   beforeEach(resetDiskAndMocks);
+  beforeEach(mockLogger);
   afterEach(resetDiskAndMocks);
   afterEach(() => configureLogging(loggingBackup));
 
