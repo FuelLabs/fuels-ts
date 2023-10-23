@@ -26,7 +26,7 @@ export function init(program: Command) {
         return undefined;
       }
       const expanded = globSync(pathOrGlob, { cwd: path });
-      const relatives = expanded.map((e: string) => relative(path, e));
+      const relatives = expanded.map((e) => relative(path, e));
       return relatives;
     }
   );
