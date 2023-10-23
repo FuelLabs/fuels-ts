@@ -8,6 +8,13 @@ export default defineConfig({
     }),
   ],
   test: {
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '/apps/demo-nextjs',
+      '/apps/demo-react-cra',
+      '/apps/demo-react-vite',
+    ],
     globals: true,
     ui: false,
     setupFiles: ['./vite.env.ts'],
@@ -15,6 +22,7 @@ export default defineConfig({
       enabled: true,
       provider: 'istanbul',
       reporter: ['json', 'text', 'text-summary'],
+      exclude: ['**/dist/**', '**/test/**', '**/*.test.ts', '**/*.d.ts'],
     },
   },
 });
