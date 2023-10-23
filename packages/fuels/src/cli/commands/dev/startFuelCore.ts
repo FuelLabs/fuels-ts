@@ -26,16 +26,16 @@ export const createTempChainConfig = (coreDir: string) => {
   return chainConfigPath;
 };
 
-export const startFuelCore = async (
-  config: FuelsConfig
-): Promise<{
+export type FuelCoreNode = {
   bindIp: string;
   accessIp: string;
   port: number;
   providerUrl: string;
   chainConfig: string;
   killChildProcess: () => void;
-}> => {
+};
+
+export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> => {
   log('Starting node..');
 
   const coreDir = join(config.basePath, '.fuels');
