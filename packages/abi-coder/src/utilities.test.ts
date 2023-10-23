@@ -1,4 +1,4 @@
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { unpackDynamicData, concatWithDynamicData } from './utilities';
@@ -12,7 +12,7 @@ describe('Abi Coder Utilities', () => {
     const data2 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const data3 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const data4 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
-    const EXPECTED = concatBytes([data1, data2, data3, data4]);
+    const EXPECTED = concat([data1, data2, data3, data4]);
 
     const RESULT = concatWithDynamicData([data1, data2, data3, data4]);
     expect(RESULT).toEqual(EXPECTED);
@@ -24,7 +24,7 @@ describe('Abi Coder Utilities', () => {
     const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const someData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
-    const EXPECTED: Uint8ArrayWithDynamicData = concatBytes([pointer, capacity, length, someData]);
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([pointer, capacity, length, someData]);
     EXPECTED.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
     const RESULT = concatWithDynamicData([pointer, capacity, length, someData]);
@@ -39,7 +39,7 @@ describe('Abi Coder Utilities', () => {
     const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
-    const EXPECTED: Uint8ArrayWithDynamicData = concatBytes([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointer,
       capacity,
       length,
@@ -52,7 +52,7 @@ describe('Abi Coder Utilities', () => {
       3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
     };
 
-    const arrayWithVectorData: Uint8ArrayWithDynamicData = concatBytes([pointer, capacity, length]);
+    const arrayWithVectorData: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
     arrayWithVectorData.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
     const RESULT = concatWithDynamicData([arrayWithVectorData, arrayWithVectorData]);
@@ -68,7 +68,7 @@ describe('Abi Coder Utilities', () => {
     const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
-    const EXPECTED: Uint8ArrayWithDynamicData = concatBytes([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointer,
       capacity,
       length,
@@ -85,21 +85,9 @@ describe('Abi Coder Utilities', () => {
       6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]),
     };
 
-    const arrayWithVectorData1: Uint8ArrayWithDynamicData = concatBytes([
-      pointer,
-      capacity,
-      length,
-    ]);
-    const arrayWithVectorData2: Uint8ArrayWithDynamicData = concatBytes([
-      pointer,
-      capacity,
-      length,
-    ]);
-    const arrayWithVectorData3: Uint8ArrayWithDynamicData = concatBytes([
-      pointer,
-      capacity,
-      length,
-    ]);
+    const arrayWithVectorData1: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData2: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData3: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
     arrayWithVectorData1.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
     arrayWithVectorData2.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]) };
     arrayWithVectorData3.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]) };
@@ -127,7 +115,7 @@ describe('Abi Coder Utilities', () => {
     const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const someData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
-    const EXPECTED: Uint8ArrayWithDynamicData = concatBytes([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointerA,
       capacity,
       length,
@@ -172,7 +160,7 @@ describe('Abi Coder Utilities', () => {
     const capacity = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const length = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]);
     const data = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16]);
-    const EXPECTED: Uint8ArrayWithDynamicData = concatBytes([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       otherData,
       pointer,
       capacity,

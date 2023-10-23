@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BN } from '@fuel-ts/math';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
@@ -28,7 +28,7 @@ import {
 } from './utils/constants';
 
 function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: number) {
-  const data = encodedData instanceof Uint8Array ? encodedData : concatBytes(encodedData);
+  const data = encodedData instanceof Uint8Array ? encodedData : concat(encodedData);
   const dataLength = data.length / 8;
   const length = new NumberCoder('u8').encode(dataLength);
   const capacity = length;
@@ -37,7 +37,7 @@ function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: numbe
   return {
     offset,
     length: dataLength,
-    vec: concatBytes([o, length, capacity]),
+    vec: concat([o, length, capacity]),
     data,
   };
 }
@@ -592,7 +592,7 @@ describe('Abi interface', () => {
             const data1Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][0]]);
             const data2Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][1]]);
             const data3Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][2]]);
-            const expectedBytes = concatBytes([
+            const expectedBytes = concat([
               // top level vector
               pointer,
               capacity,
@@ -632,7 +632,7 @@ describe('Abi interface', () => {
 
             const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][0]]);
             const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][1]]);
-            const expectedBytes = concatBytes([pointer, capacity, length, data1, data2]);
+            const expectedBytes = concat([pointer, capacity, length, data1, data2]);
 
             return expectedBytes;
           },
@@ -658,7 +658,7 @@ describe('Abi interface', () => {
             const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[1]]);
             const data3 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[2]]);
             const data4 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[3]]);
-            const expectedBytes = concatBytes([
+            const expectedBytes = concat([
               enumCaseOne,
               pointer,
               capacity,
@@ -693,7 +693,7 @@ describe('Abi interface', () => {
             const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[1]]);
             const data3 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[2]]);
             const data4 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[3]]);
-            const expectedBytes = concatBytes([
+            const expectedBytes = concat([
               u8,
               pointer,
               capacity,
@@ -718,7 +718,7 @@ describe('Abi interface', () => {
           const encodedVal =
             encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
           const expectedEncoded =
-            encodedVal instanceof Uint8Array ? encodedVal : concatBytes(encodedVal);
+            encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
           expect(encoded).toEqual(expectedEncoded);
 

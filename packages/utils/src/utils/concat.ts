@@ -1,3 +1,6 @@
+import type { BytesLike } from 'ethers';
+import { getBytesCopy } from 'ethers';
+
 /**
  * Concatenates multiple Uint8Arrays into a single Uint8Array.
  *
@@ -21,4 +24,16 @@ export const concatBytes = (
   }, 0);
 
   return concatenated;
+};
+
+/**
+ * Concatenates multiple BytesLike into a single Uint8Array.
+ *
+ * @param arrays - The arrays to concatenate.
+ * @returns - The concatenated array.
+ */
+export const concat = (arrays: ReadonlyArray<BytesLike>): Uint8Array => {
+  const bytes = arrays.map((v) => getBytesCopy(v));
+
+  return concatBytes(bytes);
 };
