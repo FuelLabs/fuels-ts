@@ -12,79 +12,6 @@ import type { WalletUnlocked } from '../wallets';
 import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
 
-const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
-
-type LaunchNodeOptions = Partial<LaunchTestNodeOptions> & {
-  chainConfigPath?: string;
-};
-
-export type LaunchNodeResult = Promise<{
-  cleanup: () => void;
-  ip: string;
-  port: string;
-}>;
-
-/**
- * Launches a fuel-core node.
- * @param chainConfigPath - path to the chain configuration file.
- * @param consensusKey - the consensus key to use.
- * @param port - the port to bind to. (optional, defaults to whichever port the OS assigns to it)
- * @param args - additional arguments to pass to fuel-core.
- * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
- * */
-export const launchNode = async ({
-  chainConfigPath,
-  consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
-  port,
-  args = defaultFuelCoreArgs,
-  useSystemFuelCore = false,
-}: LaunchNodeOptions): LaunchNodeResult =>
-  // eslint-disable-next-line no-async-promise-executor
-  new Promise(async (resolve) => {
-    let config: ChainConfig;
-
-    if (!chainConfigPath) {
-      config = defaultChainConfig as unknown as ChainConfig;
-
-      // If there's no genesis key, generate one and some coins to the genesis block.
-      if (!process.env.GENESIS_SECRET) {
-        const pk = Signer.generatePrivateKey();
-        const signer = new Signer(pk);
-        process.env.GENESIS_SECRET = hexlify(pk);
-
-        config = {
-          ...config,
-          initial_state: {
-            ...defaultChainConfig.initial_state,
-            coins: [
-              ...defaultChainConfig.initial_state.coins,
-              {
-                owner: signer.address.toHexString(),
-                amount: toHex(1_000_000_000),
-                asset_id: BaseAssetId,
-              },
-            ],
-          },
-        };
-      }
-    } else {
-      config = JSON.parse(await readFile(chainConfigPath, 'utf-8')) as ChainConfig;
-    }
-    const {
-      cleanup,
-      ip: nodeIp,
-      port: nodePort,
-    } = await launchTestNode({
-      args,
-      consensusKey,
-      port,
-      useSystemFuelCore,
-      chainConfig: config,
-    });
-
-    resolve({ cleanup, ip: nodeIp, port: nodePort });
-  });
-
 const generateWallets = async (count: number, provider: Provider) => {
   const wallets: WalletUnlocked[] = [];
   for (let i = 0; i < count; i += 1) {
@@ -109,26 +36,45 @@ export const launchNodeAndGetWallets = async ({
   launchNodeOptions,
   walletCount = 10,
 }: {
-  launchNodeOptions?: Partial<LaunchNodeOptions>;
+  launchNodeOptions?: Partial<LaunchTestNodeOptions> & {
+    chainConfigPath?: string;
+  };
   walletCount?: number;
 } = {}): LaunchNodeAndGetWalletsResult => {
-  const defaultNodeOptions: LaunchNodeOptions = {
-    chainConfigPath: launchNodeOptions?.chainConfigPath,
-    consensusKey: launchNodeOptions?.consensusKey,
-  };
+  let config: ChainConfig;
 
-  const {
-    cleanup: closeNode,
-    ip,
-    port,
-  } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
+  if (!launchNodeOptions?.chainConfigPath) {
+    config = defaultChainConfig as unknown as ChainConfig;
+
+    // If there's no genesis key, generate one and some coins to the genesis block.
+    if (!process.env.GENESIS_SECRET) {
+      const pk = Signer.generatePrivateKey();
+      const signer = new Signer(pk);
+      process.env.GENESIS_SECRET = hexlify(pk);
+
+      config = {
+        ...config,
+        initial_state: {
+          ...defaultChainConfig.initial_state,
+          coins: [
+            ...defaultChainConfig.initial_state.coins,
+            {
+              owner: signer.address.toHexString(),
+              amount: toHex(1_000_000_000),
+              asset_id: BaseAssetId,
+            },
+          ],
+        },
+      };
+    }
+  } else {
+    config = JSON.parse(await readFile(launchNodeOptions.chainConfigPath, 'utf-8')) as ChainConfig;
+  }
+
+  const { cleanup, ip, port } = await launchTestNode({ ...launchNodeOptions, chainConfig: config });
 
   const provider = await Provider.create(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);
-
-  const cleanup = () => {
-    closeNode();
-  };
 
   return { wallets, stop: cleanup, provider };
 };
