@@ -1,4 +1,11 @@
 name: "Test setup"
+inputs:
+  node-version:
+    description: "Node version"
+    default: 18.14.1
+  pnpm-version:
+    description: "PNPM version"
+    default: 8.9.0
 # TODO: Implement when #1310 has been merged
 # inputs:
 #   checkout-fetch-depth:
@@ -7,13 +14,30 @@ name: "Test setup"
 runs:
   using: "composite"
   steps:
+    # TODO: Implement when #1310 has been merged
     # - name: Checkout
     #   uses: actions/checkout@v3
     #   with:
     #     fetch-depth: ${{ inputs.checkout-fetch-depth }}
+    - name: Cache PNPM modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.local/share/pnpm/store/v4
+        key: ${{ runner.os }}-node-${{ inputs.node-version }}-pnpm-${{ inputs.pnpm-version }}-lock-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm
 
-    - name: CI Setup
-      uses: ./.github/actions/ci-setup
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: "https://registry.npmjs.org"
+
+    - name: Setup PNPM
+      uses: pnpm/action-setup@v2.1.0
+      with:
+        version: ${{ inputs.pnpm-version }}
+        run_install: true
 
     - name: Build
       run: pnpm build
