@@ -56,6 +56,8 @@ This property should ideally come from env — `process.env.MY_PRIVATE_KEY`.
 
 <<< @../../../demo-fuels/fuels.config.full.ts#privateKey{ts:line-numbers}
 
+> _When [`autostartFuelCore`](#autostartfuelcore) property is set to `true`, the `privateKey` is overridden with the `consensusKey` of the local short-lived `fuel-core` node started by the [`fuels dev`](./commands.md#fuels-dev) command._
+
 ## `chainConfig`
 
 > - _Used by [`fuels dev`](./commands.md#fuels-dev) only_.
