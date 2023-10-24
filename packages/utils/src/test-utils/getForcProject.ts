@@ -4,14 +4,7 @@ import { join } from 'path';
 
 import { normalizeString } from '../utils/normalizeString';
 
-import {
-  ForcProjectDirsEnum,
-  type AbiTypegenProjectsEnum,
-  type DocSnippetProjectsEnum,
-  type FuelGaugeProjectsEnum,
-} from './types/enums';
-
-export interface IGetForcProjectParams {
+interface IGetForcProjectParams {
   projectDir: string;
   projectName: string;
 }
@@ -51,10 +44,13 @@ export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
   return storageSlots;
 };
 
-export type ForcProject =
-  | { dir: ForcProjectDirsEnum.FUEL_GAUGE; projectName: FuelGaugeProjectsEnum }
-  | { dir: ForcProjectDirsEnum.DOCS_SNIPPETS; projectName: DocSnippetProjectsEnum }
-  | { dir: ForcProjectDirsEnum.ABI_TYPEGEN; projectName: AbiTypegenProjectsEnum };
+export enum ForcProjectDirsEnum {
+  FUEL_GAUGE = 'fuel_gauge',
+  ABI_TYPEGEN = 'abi_typegen',
+  DOCS_SNIPPETS = 'docs_snippets',
+}
+
+export type ForcProject = { dir: ForcProjectDirsEnum; projectName: string };
 
 export const getForcProject = <T = unknown>(forcProject: ForcProject) => {
   const { dir, projectName } = forcProject;
