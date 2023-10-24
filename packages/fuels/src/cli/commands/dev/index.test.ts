@@ -49,7 +49,7 @@ describe('dev', () => {
 
     const buildAndDeploy = jest.spyOn(indexMod, 'buildAndDeploy').mockImplementation();
 
-    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('some/path');
+    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('event', 'some/path');
 
     expect(log).toHaveBeenCalledTimes(1);
     expect(buildAndDeploy).toHaveBeenCalledTimes(1);
@@ -92,7 +92,7 @@ describe('dev', () => {
 
     const config = structuredClone(fuelsConfig);
 
-    await indexMod.configFileChanged({ config, fuelCore, watchHandlers: [] })('some/path');
+    await indexMod.configFileChanged({ config, fuelCore, watchHandlers: [] })('event', 'some/path');
 
     expect(closeAllFileHandlers).toHaveBeenCalledTimes(1);
     expect(killChildProcess).toHaveBeenCalledTimes(1);
@@ -116,7 +116,7 @@ describe('dev', () => {
 
     const config = { onFailure, ...structuredClone(fuelsConfig) };
 
-    await indexMod.configFileChanged({ config, fuelCore, watchHandlers: [] })('some/path');
+    await indexMod.configFileChanged({ config, fuelCore, watchHandlers: [] })('event', 'some/path');
 
     expect(log).toHaveBeenCalledTimes(1);
 
