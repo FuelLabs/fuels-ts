@@ -19,17 +19,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: CI Setup
-        uses: ./.github/actions/ci-setup
+        uses: ./.github/actions/test-setup
 
       - name: Forc Format Check
         run: pnpm forc:check
-
-      - name: Build
-        run: pnpm build
 
       # linting of some tests depends on pretest being run so that it generates the necessary files
       - name: Pretest
@@ -41,7 +35,7 @@ jobs:
       - name: Validate tests
         run: pnpm test:validate
 
-  test-matrix:
+  test-envs:
     runs-on: ubuntu-latest
     needs: build
     strategy:
@@ -49,14 +43,8 @@ jobs:
       matrix:
         env: [node, browser]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: CI Setup
-        uses: ./.github/actions/ci-setup
-
-      - name: Build
-        run: pnpm build
+        uses: ./.github/actions/test-setup
 
       - name: Run Tests
         run: pnpm ci:test --${{ matrix.env }}
@@ -69,16 +57,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: test-matrix
+    needs: test-envs
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: CI Setup
-        uses: ./.github/actions/ci-setup
-
-      - name: Build
-        run: pnpm build
+        uses: ./.github/actions/test-setup
 
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
@@ -130,29 +112,24 @@ jobs:
           path: coverage-master
 
       - name: Report Coverage
-        uses: Nef10/lcov-reporter-action@v0.3.0
+        uses: romeovs/lcov-reporter-action@v0.3.1
         if: ${{ steps.findPr.outputs.number }}
         with:
-          pr_number: ${{ steps.findPr.outputs.number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: coverage/report/lcov.info
           lcov-base: coverage-master/lcov.info
+          delete-old-comments: true
+          title: "Coverage Report"
 
   live-tests:
     name: Run Live Tests
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - name: CI Setup
-        uses: ./.github/actions/ci-setup
-
-      - name: Build
-        run: pnpm build
+        uses: ./.github/actions/test-setup
+        with:
+          checkout-fetch-depth: 0
 
       - name: Pretest
         run: pnpm pretest
