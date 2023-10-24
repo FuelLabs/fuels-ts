@@ -117,13 +117,6 @@ jobs:
           name: coverage-master
           path: coverage/report
 
-      # DELETE
-      - name: Upload Coverage Artifact (temp)
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-master
-          path: coverage/report
-
       - name: Download Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
         # TODO: Remove PR != check once #1310 has been merged
@@ -140,7 +133,7 @@ jobs:
         if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
         with:
           workflow: test.yaml
-          run_id: 5940564903
+          run_id: 6628340271
           name: coverage-master
           path: coverage-master
 
