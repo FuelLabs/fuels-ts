@@ -360,7 +360,7 @@ export default class Provider {
           ?.operation === 'subscription';
 
       return isSubscription
-        ? new Subscriber(this.url, query, vars as Record<string, unknown>, fetchFn).subscribe()
+        ? new Subscriber({url: this.url, query, variables: vars as Record<string, unknown>, fetchFn}).subscribe()
         : gqlClient.request(query, vars);
     });
   }
