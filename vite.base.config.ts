@@ -21,7 +21,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'istanbul',
-      reporter: ['json', 'text', 'text-summary'],
+      reporter: ['json'],
       exclude: ['**/dist/**', '**/test/**', '**/*.test.ts', '**/*.d.ts'],
     },
   },

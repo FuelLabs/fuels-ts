@@ -104,7 +104,7 @@ jobs:
           path: coverage/environments
 
       - name: Generate Coverage Report
-        run: pnpm test:coverage
+        run: pnpm test:coverage-gen
 
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
@@ -113,6 +113,13 @@ jobs:
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
+        with:
+          name: coverage-master
+          path: coverage/report
+
+      # DELETE
+      - name: Upload Coverage Artifact (temp)
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-master
           path: coverage/report
@@ -137,15 +144,17 @@ jobs:
           name: coverage-master
           path: coverage-master
 
+      - name: Generate Coverage Diff
+        run: pnpm test:coverage-diff
+
       - name: Report Coverage
-        uses: romeovs/lcov-reporter-action@v0.3.1
-        if: ${{ steps.findPr.outputs.number }}
+        uses: thollander/actions-comment-pull-request@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: coverage/report/lcov.info
-          lcov-base: coverage-master/lcov.info
-          delete-old-comments: true
-          title: "Coverage Report"
+          filePath: coverage/report/coverage-diff.txt
+          pr_number: ${{ (steps.findPr.outputs.number) }}
+          comment_tag: diff
+          mode: upsert
+          create_if_not_exists: true
 
   live-tests:
     name: Run Live Tests
