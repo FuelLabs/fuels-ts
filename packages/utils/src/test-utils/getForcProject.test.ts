@@ -1,8 +1,8 @@
 import { basename, join } from 'path';
 
+import { getForcProject } from '../../dist/test-utils';
 import { normalizeString } from '../utils/normalizeString';
 
-import { getForcProject } from './getForcProject';
 import {
   AbiTypegenProjectsEnum,
   DocSnippetProjectsEnum,
