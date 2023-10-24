@@ -13,7 +13,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:eslint-comments/recommended',
-    'plugin:@typescript-eslint/recommended',
   ],
   settings: {
     'import/core-modules': ['@internal/tsup'],
