@@ -188,10 +188,6 @@ export class BaseInvocationScope<TReturn = any> {
     // Check if gasLimit is less than the
     // sum of all call gasLimits
     this.checkGasLimitTotal();
-
-    if (this.program.account) {
-      await this.fundWithRequiredCoins();
-    }
   }
 
   /**
