@@ -1,12 +1,12 @@
-import { addressify } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { addressify, getRandomB256 } from '@fuel-ts/address';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
-import type { BigNumberish, BN } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
@@ -477,6 +477,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId: BaseAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
+  }
+
+  getCoinOutputsQuantities(): CoinQuantity[] {
+    const coinsQuantities = this.getCoinOutputs().map(({ amount, assetId }) => ({
+      amount: bn(amount),
+      assetId: assetId.toString(),
+    }));
+
+    return coinsQuantities;
   }
 
   /**
