@@ -480,8 +480,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   fundWithFakeUtxos(quantities: CoinQuantity[]) {
-    const witnessesLength = this.witnesses.length;
+    const hasBaseAssetId = quantities.some(({ assetId }) => assetId === BaseAssetId);
 
+    if (!hasBaseAssetId) {
+      quantities.push({ assetId: BaseAssetId, amount: bn(1) });
+    }
+
+    const witnessesLength = this.witnesses.length;
     const owner = getRandomB256();
     const fakeInputs = quantities.map(({ assetId, amount }, index) => {
       const input: CoinTransactionRequestInput = {
