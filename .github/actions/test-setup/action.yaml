@@ -1,15 +1,16 @@
 name: "Test setup"
-inputs:
-  checkout-fetch-depth:
-    description: "Number of commits to fetch. 0 indicates all history for all branches and tags."
-    default: 1
+# TODO: Implement when #1310 has been merged
+# inputs:
+#   checkout-fetch-depth:
+#     description: "Number of commits to fetch. 0 indicates all history for all branches and tags."
+#     default: 1
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: ${{ inputs.checkout-fetch-depth }}
+    # - name: Checkout
+    #   uses: actions/checkout@v3
+    #   with:
+    #     fetch-depth: ${{ inputs.checkout-fetch-depth }}
 
     - name: CI Setup
       uses: ./.github/actions/ci-setup

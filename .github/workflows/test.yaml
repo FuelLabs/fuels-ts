@@ -19,6 +19,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
@@ -43,6 +46,9 @@ jobs:
       matrix:
         env: [node, browser]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
@@ -59,6 +65,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: test-envs
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
@@ -126,10 +135,13 @@ jobs:
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: CI Setup
         uses: ./.github/actions/test-setup
-        with:
-          checkout-fetch-depth: 0
 
       - name: Pretest
         run: pnpm pretest
