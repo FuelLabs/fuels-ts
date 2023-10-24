@@ -4,6 +4,7 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
+import { consensusKey, defaultConsensusKey } from '../commands/dev/defaultChainConfig';
 import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
 import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
@@ -53,7 +54,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     autoStartFuelCore: true,
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,
-    privateKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
+    privateKey: defaultConsensusKey,
     ...userConfig,
     basePath: cwd,
     useBuiltinForc,

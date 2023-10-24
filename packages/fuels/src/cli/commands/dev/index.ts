@@ -9,6 +9,7 @@ import { build } from '../build';
 import { deploy } from '../deploy';
 import { withConfigErrorHandler } from '../withConfig';
 
+import { defaultConsensusKey } from './defaultChainConfig';
 import type { FuelCoreNode } from './startFuelCore';
 import { startFuelCore } from './startFuelCore';
 
@@ -61,6 +62,8 @@ export const dev = async (config: FuelsConfig) => {
     fuelCore = await startFuelCore(config);
     // eslint-disable-next-line no-param-reassign
     config.providerUrl = fuelCore.providerUrl;
+    // eslint-disable-next-line no-param-reassign
+    config.privateKey = defaultConsensusKey;
   }
 
   const configFilePaths = getConfigFilepathsToWatch(config);
