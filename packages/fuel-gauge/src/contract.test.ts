@@ -23,12 +23,12 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin')
 );
 
 const predicateBytecode = readFileSync(
@@ -573,9 +573,7 @@ describe('Contract', () => {
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, BaseAssetId],
     });
-    const { gasUsed } = await invocationScope.getTransactionCost({
-      tolerance: 0,
-    });
+    const { gasUsed } = await invocationScope.getTransactionCost();
 
     const gasLimit = multiply(gasUsed, 0.5);
     await expect(
@@ -984,9 +982,7 @@ describe('Contract', () => {
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, BaseAssetId],
     });
-    const { gasUsed } = await invocationScope.getTransactionCost({
-      tolerance: 0,
-    });
+    const { gasUsed } = await invocationScope.getTransactionCost();
 
     const gasLimit = multiply(gasUsed, 0.5);
     await expect(
