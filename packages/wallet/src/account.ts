@@ -22,8 +22,9 @@ import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
+  addAmountToAsset,
 } from '@fuel-ts/providers';
-import { getBytesCopy, hexlify } from 'ethers';
+import { getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import {
@@ -233,20 +234,15 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 
-    const { gasPriceFactor } = this.provider.getGasConfig();
+    const { fee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
-    const fee = request.calculateFee(gasPriceFactor);
-    let quantities: CoinQuantityLike[] = [];
+    const quantitiesWithFee = addAmountToAsset({
+      amount: fee,
+      assetId: BaseAssetId,
+      coinQuantities: requiredQuantities,
+    });
 
-    if (fee.assetId === hexlify(assetId)) {
-      fee.amount = fee.amount.add(amount);
-      quantities = [fee];
-    } else {
-      quantities = [[amount, assetId], fee];
-    }
-
-    const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    await this.fund(request, quantitiesWithFee);
 
     return this.sendTransaction(request);
   }
@@ -288,21 +284,15 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractId);
 
-    const { gasPriceFactor } = this.provider.getGasConfig();
+    const { fee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
-    const fee = request.calculateFee(gasPriceFactor);
+    const quantitiesWithFee = addAmountToAsset({
+      amount: fee,
+      assetId: BaseAssetId,
+      coinQuantities: requiredQuantities,
+    });
 
-    let quantities: CoinQuantityLike[] = [];
-
-    if (fee.assetId === hexlify(assetId)) {
-      fee.amount = fee.amount.add(amount);
-      quantities = [fee];
-    } else {
-      quantities = [[amount, assetId], fee];
-    }
-
-    const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    await this.fund(request, quantitiesWithFee);
 
     return this.sendTransaction(request);
   }
