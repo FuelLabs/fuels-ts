@@ -1,4 +1,6 @@
 import { Provider } from '@fuel-ts/providers';
+import path from 'path';
+import { cwd } from 'process';
 
 import { WalletUnlocked } from '../wallets';
 
@@ -12,6 +14,22 @@ test('launchNodeAndGetWallets - empty config', async () => {
     expect(wallet).toBeInstanceOf(WalletUnlocked);
   });
   stop();
+});
+
+test('launchNodeAndGetWallets - custom config', async () => {
+  // #region launchNode-custom-config
+  const { stop, provider } = await launchNodeAndGetWallets({
+    launchNodeOptions: {
+      chainConfigPath: path.join(cwd(), '.fuel-core/configs/chainConfig.json'),
+      args: ['--manual_blocks_enabled'],
+    },
+  });
+  const {
+    consensusParameters: { gasPerByte },
+  } = provider.getChain();
+  expect(gasPerByte.toNumber()).toEqual(4);
+  stop();
+  // #endregion launchNode-custom-config
 });
 
 test('launchNodeAndGetWallets - custom walletCount', async () => {
