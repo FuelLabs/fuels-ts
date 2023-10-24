@@ -118,13 +118,13 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
-    const assets = this.calls
+    const forwardingAssets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
-    return assets;
+    return forwardingAssets;
   }
 
   /**
