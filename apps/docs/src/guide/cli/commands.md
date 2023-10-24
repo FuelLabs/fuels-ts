@@ -57,14 +57,6 @@ npx fuels deploy
 
 Use it when instantiating your contracts:
 
-<!-- ```ts
-import { MyContract__factory } from "./sway-programs-api";
-import contractIds from './sway-programs-api/contracts.json'
-
-const contractId = contractIds.myContract1;
-const contract = MyContract__factory.connect(contractId, ..);
-``` -->
-
 <<< @../../../demo-fuels/src/index.test.ts#using-generated-files{ts:line-numbers}
 
 For a complete example, see:
