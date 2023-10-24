@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import {
+  transactionRequestify,
+  ScriptTransactionRequest,
+  addAmountToAsset,
+} from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
@@ -225,13 +231,19 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The current instance of the class.
    */
-  async fundWithRequiredCoins() {
+  async fundWithRequiredCoins(fee: BN) {
     // Clean coin inputs before add new coins to the request
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
 
-    await this.program.account?.fund(this.transactionRequest, this.requiredCoins);
+    const quantitiesWithFee = addAmountToAsset({
+      amount: fee,
+      assetId: BaseAssetId,
+      coinQuantities: this.requiredCoins,
+    });
+
+    await this.program.account?.fund(this.transactionRequest, quantitiesWithFee);
     return this;
   }
 
@@ -285,6 +297,11 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
+
+    const { fee } = await this.getTransactionCost();
+
+    await this.fundWithRequiredCoins(fee);
+
     const response = await this.program.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
@@ -317,6 +334,11 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
+
+    const { fee } = await this.getTransactionCost();
+
+    await this.fundWithRequiredCoins(fee);
+
     const result = await this.program.account.simulateTransaction(transactionRequest);
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
