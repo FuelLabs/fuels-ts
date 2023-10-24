@@ -12,7 +12,7 @@ import type {
   TransactionResultReturnReceipt,
 } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { getBytesCopy } from 'ethers';
 
@@ -160,7 +160,7 @@ const scriptResultDecoder =
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
-            return concatBytes([encodedScriptReturn, getBytesCopy(nextReturnData.data)]);
+            return concat([encodedScriptReturn, getBytesCopy(nextReturnData.data)]);
           }
 
           return [encodedScriptReturn];
@@ -288,12 +288,12 @@ export const getContractCallScript = (
         scriptData.push(args);
 
         // move offset for next call
-        segmentOffset = dataOffset + concatBytes(scriptData).byteLength;
+        segmentOffset = dataOffset + concat(scriptData).byteLength;
       }
 
       // get asm instructions
       const script = getInstructions(paramOffsets, outputInfos);
-      const finalScriptData = concatBytes(scriptData);
+      const finalScriptData = concat(scriptData);
       return { data: finalScriptData, script };
     },
     () => [new Uint8Array()]

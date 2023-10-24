@@ -1,5 +1,5 @@
 import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
-import { concatBytes } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 
 import { ByteArrayCoder } from './byte-array';
 
@@ -8,6 +8,11 @@ export type Witness = {
   dataLength: number;
   /** Witness data (byte[]) */
   data: string;
+  /**
+   * TODO: Temporary solution, remove after fixing
+   * https://github.com/FuelLabs/fuels-ts/issues/1331
+   */
+  offset?: number;
 };
 
 export class WitnessCoder extends Coder<Witness, Witness> {
@@ -26,7 +31,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
     parts.push(new NumberCoder('u32').encode(value.dataLength));
     parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
 
-    return concatBytes(parts);
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [Witness, number] {
@@ -42,6 +47,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
       {
         dataLength,
         data: witnessData,
+        offset,
       },
       o,
     ];

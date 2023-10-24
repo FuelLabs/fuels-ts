@@ -569,9 +569,7 @@ describe('Contract', () => {
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, BaseAssetId],
     });
-    const { gasUsed } = await invocationScope.getTransactionCost({
-      tolerance: 0,
-    });
+    const { gasUsed } = await invocationScope.getTransactionCost();
 
     const gasLimit = multiply(gasUsed, 0.5);
     await expect(
@@ -980,9 +978,7 @@ describe('Contract', () => {
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, BaseAssetId],
     });
-    const { gasUsed } = await invocationScope.getTransactionCost({
-      tolerance: 0,
-    });
+    const { gasUsed } = await invocationScope.getTransactionCost();
 
     const gasLimit = multiply(gasUsed, 0.5);
     await expect(
