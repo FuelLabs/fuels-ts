@@ -1,8 +1,9 @@
 import { Address } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
-import { max, bn } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -44,6 +45,7 @@ import {
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
+import { uniteCoinQuantities } from './utils/unite-coin-quantities';
 
 const MAX_RETRIES = 10;
 
@@ -125,6 +127,7 @@ export type NodeInfoAndConsensusParameters = {
 
 // #region cost-estimation-1
 export type TransactionCost = {
+  requiredQuantities: CoinQuantity[];
   minGasPrice: BN;
   gasPrice: BN;
   gasUsed: BN;
@@ -653,26 +656,30 @@ export default class Provider {
    * @returns A promise that resolves to the transaction cost object.
    */
   async getTransactionCost(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
+    forwardingQuantities: CoinQuantity[] = []
   ): Promise<TransactionCost> {
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
+    const clonedTransactionRequest = transactionRequestify(clone(transactionRequestLike));
+
+    const { gasPrice, gasLimit } = clonedTransactionRequest;
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const gasLimit = maxGasPerTx;
-    // const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = maxGasPerTx;
-    transactionRequest.gasPrice = bn(0);
+    clonedTransactionRequest.gasLimit = maxGasPerTx;
+    clonedTransactionRequest.gasPrice = minGasPrice;
+
+    const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
+    const allQuantities = uniteCoinQuantities(coinOutputsQuantitites, forwardingQuantities);
+    clonedTransactionRequest.fundWithFakeUtxos(allQuantities);
 
     // Execute dryRun not validated transaction to query gasUsed
-    const { receipts } = await this.call(transactionRequest);
-    const transaction = transactionRequest.toTransaction();
+    const { receipts } = await this.call(clonedTransactionRequest);
+    const transaction = clonedTransactionRequest.toTransaction();
 
     const chargeableBytes = calculateTxChargeableBytes({
-      transactionBytes: transactionRequest.toTransactionBytes(),
+      transactionBytes: clonedTransactionRequest.toTransactionBytes(),
       transactionWitnesses: transaction.witnesses,
     });
 
@@ -687,7 +694,10 @@ export default class Provider {
       gasUsed,
     });
 
+    allQuantities.find(({ assetId }) => assetId === BaseAssetId)?.amount.add(fee);
+
     return {
+      requiredQuantities: allQuantities,
       minGasPrice,
       gasPrice,
       gasUsed,
