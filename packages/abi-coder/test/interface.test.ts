@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { concat } from '@ethersproject/bytes';
 import { BN } from '@fuel-ts/math';
+import { concat } from '@fuel-ts/utils';
 
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
@@ -573,22 +573,22 @@ describe('Abi interface', () => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
 
-            const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 24];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 24]);
+            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.length]);
+            const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.length]);
 
-            const pointerVec1 = [0, 0, 0, 0, 0, 0, 0, offset + 72];
-            const capacityVec1 = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const lengthVec1 = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const data1Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
-            const data2Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
-            const data3Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][2]];
-            const pointerVec2 = [0, 0, 0, 0, 0, 0, 0, offset + 96];
-            const capacityVec2 = [0, 0, 0, 0, 0, 0, 0, input[1].length];
-            const lengthVec2 = [0, 0, 0, 0, 0, 0, 0, input[1].length];
-            const data1Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][0]];
-            const data2Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][1]];
-            const data3Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][2]];
+            const pointerVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 72]);
+            const capacityVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
+            const lengthVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
+            const data1Vec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][0]]);
+            const data2Vec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][1]]);
+            const data3Vec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][2]]);
+            const pointerVec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 96]);
+            const capacityVec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1].length]);
+            const lengthVec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1].length]);
+            const data1Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][0]]);
+            const data2Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][1]]);
+            const data3Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][2]]);
             const expectedBytes = concat([
               // top level vector
               pointer,
@@ -623,12 +623,12 @@ describe('Abi interface', () => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
 
-            const pointer = [0, 0, 0, 0, 0, 0, 0, 24 + offset];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 24 + offset]);
+            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
+            const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
 
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
+            const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][0]]);
+            const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][1]]);
             const expectedBytes = concat([pointer, capacity, length, data1, data2]);
 
             return expectedBytes;
@@ -647,14 +647,14 @@ describe('Abi interface', () => {
           encodedValue: (input?: any, _offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-            const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
-            const pointer = [0, 0, 0, 0, 0, 0, 0, 32];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
-            const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
-            const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+            const enumCaseOne = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]);
+            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 32]);
+            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
+            const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
+            const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[0]]);
+            const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[1]]);
+            const data3 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[2]]);
+            const data4 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[3]]);
             const expectedBytes = concat([
               enumCaseOne,
               pointer,
@@ -682,14 +682,14 @@ describe('Abi interface', () => {
           encodedValue: (input?: any, offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-            const u8 = [0, 0, 0, 0, 0, 0, 0, 7];
-            const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 32];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
-            const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
-            const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+            const u8 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 7]);
+            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 32]);
+            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
+            const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
+            const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[0]]);
+            const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[1]]);
+            const data3 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[2]]);
+            const data4 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[3]]);
             const expectedBytes = concat([
               u8,
               pointer,

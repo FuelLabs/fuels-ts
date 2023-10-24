@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { getBytesCopy, type BytesLike } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
@@ -98,7 +97,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
 
-    return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0);
+    return AbiCoder.decode(this.jsonAbi, loggedType, getBytesCopy(data), 0);
   }
 
   updateExternalLoggedTypes(id: string, loggedTypes: Interface) {

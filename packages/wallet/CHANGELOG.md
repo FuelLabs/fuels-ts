@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.64.1
+
+## 0.64.0
+
+### Minor Changes
+
+- Added support for integration testing on live node, by [@camsjams](https://github.com/camsjams) (See [#1324](https://github.com/FuelLabs/fuels-ts/pull/1324))
+
+## 0.63.0
+
+### Patch Changes
+
+- refactor: purge usage of `arrayify` from ethers v5 in favor of `getBytes` from ethers v6, by [@danielbate](https://github.com/danielbate) (See [#1255](https://github.com/FuelLabs/fuels-ts/pull/1255))
+
 ## 0.62.0
 
 ## 0.61.0

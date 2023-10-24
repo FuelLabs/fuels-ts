@@ -5,6 +5,7 @@ import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
+  let gasPrice: BN;
 
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
@@ -12,6 +13,7 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     wallet = await getTestWallet();
+    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
   });
 
   it('should successfully tranfer to setted whitelisted address', async () => {
@@ -25,8 +27,8 @@ describe(__filename, () => {
     // set predicate data to be the same as the configurable constant
     predicate.setData(configurable.WHITELISTED);
 
-    // transfering funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 500);
+    // transferring funds to the predicate
+    const tx1 = await wallet.transfer(predicate.address, 500_000, BaseAssetId, { gasPrice });
 
     await tx1.waitForResult();
 
@@ -36,8 +38,10 @@ describe(__filename, () => {
 
     const amountToTransfer = 100;
 
-    // transfering funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
+    // transferring funds from the predicate to destination if predicate returns true
+    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
+      gasPrice,
+    });
 
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-2
@@ -54,8 +58,8 @@ describe(__filename, () => {
     // set predicate data to be the same as the configurable constant
     predicate.setData('0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132');
 
-    // transfering funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 500);
+    // transferring funds to the predicate
+    const tx1 = await wallet.transfer(predicate.address, 300_000, BaseAssetId, { gasPrice });
 
     await tx1.waitForResult();
 
@@ -65,8 +69,10 @@ describe(__filename, () => {
 
     const amountToTransfer = 100;
 
-    // transfering funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
+    // transferring funds from the predicate to destination if predicate returns true
+    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
+      gasPrice,
+    });
 
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-3

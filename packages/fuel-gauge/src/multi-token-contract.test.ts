@@ -9,7 +9,7 @@ import abi from '../fixtures/forc-projects/multi-token-contract/out/debug/multi-
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(
@@ -19,8 +19,8 @@ const setup = async () => {
     )
   );
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
-
+  const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+  const contract = await factory.deployContract({ gasPrice });
   return contract;
 };
 
@@ -32,6 +32,11 @@ const subIds = [
 ];
 
 describe('MultiTokenContract', () => {
+  let gasPrice: BN;
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    gasPrice = provider.getGasConfig().minGasPrice;
+  });
   it('can mint and transfer coins', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // New wallet to transfer coins and check balance
@@ -61,6 +66,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
+      .txParams({ gasPrice })
       .call();
 
     // update assetId on helperDict object
@@ -90,12 +96,13 @@ describe('MultiTokenContract', () => {
       .multiCall(
         subIds.map((subId) =>
           multiTokenContract.functions.transfer_coins_to_output(
-            { value: userWallet.address },
+            { value: userWallet.address.toB256() },
             helperDict[subId].assetId,
             helperDict[subId].amount
           )
         )
       )
+      .txParams({ gasPrice })
       .call();
 
     const validateTransferPromises = subIds.map(async (subId) => {
@@ -145,6 +152,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
+      .txParams({ gasPrice })
       .call();
 
     // update assetId on helperDict object
@@ -176,6 +184,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.burn_coins(subId, helperDict[subId].amountToBurn)
         )
       )
+      .txParams({ gasPrice })
       .call();
 
     const validateBurnPromises = subIds.map(async (subId) => {

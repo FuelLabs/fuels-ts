@@ -1,5 +1,5 @@
-import { concat } from '@ethersproject/bytes';
 import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { concat } from '@fuel-ts/utils';
 
 import { ByteArrayCoder } from './byte-array';
 

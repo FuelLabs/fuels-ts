@@ -1,6 +1,6 @@
-import { concat } from '@ethersproject/bytes';
-import { toUtf8Bytes, toUtf8String } from '@ethersproject/strings';
 import { bn } from '@fuel-ts/math';
+import { concat } from '@fuel-ts/utils';
+import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
@@ -12,7 +12,7 @@ import { U64Coder } from './u64';
 export class StdStringCoder extends Coder<string, string> {
   static memorySize = 1;
   constructor() {
-    super('struct', 'struct String', BASE_VECTOR_OFFSET);
+    super('struct', 'struct String', 1);
   }
 
   encode(value: string): Uint8Array {

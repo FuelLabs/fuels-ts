@@ -1,5 +1,16 @@
 # @fuel-ts/docs-snippets
 
+## 0.64.1
+
+## 0.64.0
+
+## 0.63.0
+
+### Patch Changes
+
+- Add typegen support and docs for new types, by [@camsjams](https://github.com/camsjams) (See [#1342](https://github.com/FuelLabs/fuels-ts/pull/1342))
+- refactor: purge usage of `arrayify` from ethers v5 in favor of `getBytes` from ethers v6, by [@danielbate](https://github.com/danielbate) (See [#1255](https://github.com/FuelLabs/fuels-ts/pull/1255))
+
 ## 0.62.0
 
 ## 0.61.0

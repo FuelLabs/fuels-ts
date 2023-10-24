@@ -28,7 +28,7 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { english, Language } from '@fuel-ts/wordlists';
-import { ScriptRequest } from 'fuels';
+import { ScriptRequest, chunkAndPadBytes, normalizeString, concatBytes, concat, arrayify, hexlify } from 'fuels';
 
 const { log } = console;
 
@@ -135,6 +135,16 @@ log(Signer);
  * transactions
  */
 log(InputCoinCoder);
+
+/**
+ * utils
+ */
+log(chunkAndPadBytes);
+log(normalizeString);
+log(concatBytes);
+log(concat);
+log(arrayify);
+log(hexlify);
 
 /**
  * versions

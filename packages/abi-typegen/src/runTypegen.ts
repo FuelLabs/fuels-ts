@@ -9,6 +9,7 @@ import { AbiTypeGen } from './AbiTypeGen';
 import type { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { collectBinFilepaths } from './utils/collectBinFilePaths';
+import { collectStorageSlotsFilepaths } from './utils/collectStorageSlotsFilePaths';
 
 export interface IGenerateFilesParams {
   cwd: string;
@@ -58,6 +59,8 @@ export function runTypegen(params: IGenerateFilesParams) {
 
   const binFiles = collectBinFilepaths({ filepaths, programType });
 
+  const storageSlotsFiles = collectStorageSlotsFilepaths({ filepaths, programType });
+
   /*
     Starting the engine
   */
@@ -65,6 +68,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     outputDir: output,
     abiFiles,
     binFiles,
+    storageSlotsFiles,
     programType,
   });
 

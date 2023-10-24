@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { arrayify, concat } from '@ethersproject/bytes';
 import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -13,7 +12,9 @@ import type {
   TransactionResultReturnReceipt,
 } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
+import { getBytesCopy } from 'ethers';
 
 import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
@@ -154,12 +155,12 @@ const scriptResultDecoder =
           return [new U64Coder().encode((receipt as TransactionResultReturnReceipt).val)];
         }
         if (receipt.type === ReceiptType.ReturnData) {
-          const encodedScriptReturn = arrayify(receipt.data);
+          const encodedScriptReturn = getBytesCopy(receipt.data);
           if (isOutputDataHeap && isReturnType(filtered[index + 1]?.type)) {
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
-            return concat([encodedScriptReturn, arrayify(nextReturnData.data)]);
+            return concat([encodedScriptReturn, getBytesCopy(nextReturnData.data)]);
           }
 
           return [encodedScriptReturn];
@@ -283,7 +284,7 @@ export const getContractCallScript = (
         }
 
         /// 7. Encoded arguments (optional) (variable length)
-        const args = arrayify(call.data);
+        const args = getBytesCopy(call.data);
         scriptData.push(args);
 
         // move offset for next call

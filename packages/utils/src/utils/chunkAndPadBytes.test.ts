@@ -1,10 +1,10 @@
-import { arrayify } from '@ethersproject/bytes';
+import { getBytesCopy } from 'ethers';
 
 import { chunkAndPadBytes } from './chunkAndPadBytes';
 
 describe('chunkAndPadBytes', () => {
   it('can chunk and pad bytes to 16 KiB', () => {
-    const bytes = arrayify(
+    const bytes = getBytesCopy(
       '0x900000044700000000000000000000345dfcc00110fff3005d4060495d47f000134904407348000c72f0007b36f0000024040000000000002151bd4b'
     );
     const chunkSize = 16 * 1024;

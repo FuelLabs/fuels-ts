@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.62.0",
+  "version": "0.64.1",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -9,6 +9,11 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -47,11 +52,11 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
     "commander": "^9.4.1",
+    "ethers": "^6.7.1",
     "glob": "^10.2.6",
     "handlebars": "^4.7.7",
     "mkdirp": "^1.0.4",

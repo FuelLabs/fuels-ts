@@ -1,6 +1,6 @@
-import { concat } from '@ethersproject/bytes';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber } from '@fuel-ts/math';
+import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import { concatWithDynamicData } from '../utilities';

@@ -1,11 +1,16 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.62.0",
+  "version": "0.64.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -25,9 +30,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/networks": "^5.7.1",
-    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
@@ -35,6 +37,7 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "ethers": "^6.7.1",
     "@fuel-ts/versions": "workspace:*",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",

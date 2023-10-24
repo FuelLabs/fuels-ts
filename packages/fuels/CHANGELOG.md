@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.64.1
+
+### Patch Changes
+
+- include "fuel-ts/utils" in "fuels" umbrella package, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1364](https://github.com/FuelLabs/fuels-ts/pull/1364))
+
+## 0.64.0
+
+## 0.63.0
+
+### Patch Changes
+
+- refactor: purge usage of `arrayify` from ethers v5 in favor of `getBytes` from ethers v6, by [@danielbate](https://github.com/danielbate) (See [#1255](https://github.com/FuelLabs/fuels-ts/pull/1255))
+
 ## 0.62.0
 
 ## 0.61.0

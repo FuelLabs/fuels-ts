@@ -4,7 +4,7 @@ import { BaseAssetId, FUEL_NETWORK_URL, Provider } from 'fuels';
 
 import { getScript } from './utils';
 
-const setup = async (balance = 5_000) => {
+const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
@@ -14,12 +14,17 @@ const setup = async (balance = 5_000) => {
 };
 
 describe('Script With Vectors', () => {
+  let gasPrice: BN;
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  });
   it('can call script and use main argument [array]', async () => {
     const wallet = await setup();
     const someArray = [1, 100];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
 
-    const { logs } = await scriptInstance.functions.main(someArray).call();
+    const { logs } = await scriptInstance.functions.main(someArray).txParams({ gasPrice }).call();
 
     expect(logs.map((n) => n.toNumber())).toEqual([1]);
   });
@@ -29,20 +34,20 @@ describe('Script With Vectors', () => {
     const someVec = [7, 2, 1, 5];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
 
-    const { logs } = await scriptInstance.functions.main(someVec).call();
+    const { logs } = await scriptInstance.functions.main(someVec).txParams({ gasPrice }).call();
 
     const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
 
     expect(formattedLog).toEqual([
       7,
       'vector.buf.ptr',
-      11288,
+      11304,
       'vector.buf.cap',
       4,
       'vector.len',
       4,
       'addr_of vector',
-      11264,
+      11280,
     ]);
   });
 
@@ -82,7 +87,10 @@ describe('Script With Vectors', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
 
-    const { value } = await scriptInstance.functions.main(importantDates).call();
+    const { value } = await scriptInstance.functions
+      .main(importantDates)
+      .txParams({ gasPrice })
+      .call();
     expect((value as unknown as BN).toString()).toBe('1');
   });
 
@@ -149,7 +157,10 @@ describe('Script With Vectors', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
 
-    const { value } = await scriptInstance.functions.main(vectorOfStructs).call();
+    const { value } = await scriptInstance.functions
+      .main(vectorOfStructs)
+      .txParams({ gasPrice })
+      .call();
     expect((value as unknown as BN).toString()).toBe('1');
   });
 });

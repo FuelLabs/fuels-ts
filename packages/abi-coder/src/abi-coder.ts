@@ -3,6 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
 import { ArrayCoder } from './coders/array';
+import { AssetIdCoder } from './coders/asset-id';
 import { B256Coder } from './coders/b256';
 import { B512Coder } from './coders/b512';
 import { BooleanCoder } from './coders/boolean';
@@ -69,6 +70,8 @@ export abstract class AbiCoder {
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
+      case 'struct AssetId':
+        return new AssetIdCoder();
       case BYTES_CODER_TYPE:
         return new ByteCoder();
       case STD_STRING_CODER_TYPE:
@@ -138,6 +141,13 @@ export abstract class AbiCoder {
     if (tupleMatch) {
       const coders = components.map((component) => AbiCoder.getCoderImpl(component));
       return new TupleCoder(coders);
+    }
+
+    if (resolvedAbiType.type === 'str') {
+      throw new FuelError(
+        ErrorCode.INVALID_DATA,
+        'String slices can not be decoded from logs. Convert the slice to `str[N]` with `__to_str_array`'
+      );
     }
 
     throw new FuelError(

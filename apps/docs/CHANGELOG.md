@@ -1,5 +1,15 @@
 # @fuel-ts/docs
 
+## 0.43.7
+
+## 0.43.6
+
+## 0.43.5
+
+### Patch Changes
+
+- Add typegen support and docs for new types, by [@camsjams](https://github.com/camsjams) (See [#1342](https://github.com/FuelLabs/fuels-ts/pull/1342))
+
 ## 0.43.4
 
 ## 0.43.3

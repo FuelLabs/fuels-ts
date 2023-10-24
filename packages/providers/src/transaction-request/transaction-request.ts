@@ -1,5 +1,3 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
@@ -7,6 +5,8 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
+import { getBytesCopy, hexlify } from 'ethers';
+import type { BytesLike } from 'ethers';
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
@@ -474,7 +474,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   hasPredicateInput(): boolean {
     return Boolean(
       this.inputs.find(
-        (input) => 'predicate' in input && input.predicate && input.predicate !== arrayify('0x')
+        (input) => 'predicate' in input && input.predicate && input.predicate !== getBytesCopy('0x')
       )
     );
   }

@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import { concat } from '@ethersproject/bytes';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
+import { concat } from '@fuel-ts/utils';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
