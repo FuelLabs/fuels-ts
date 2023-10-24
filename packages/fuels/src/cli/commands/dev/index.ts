@@ -80,7 +80,7 @@ export const dev = async (config: FuelsConfig) => {
     await buildAndDeploy(config);
 
     const watchHandlers: FSWatcher[] = [];
-    const options = { persistent: true, ignoreInitial: true };
+    const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
     const state = { config, watchHandlers, fuelCore };
 
     // watch: fuels.config.ts and chainConfig.json
