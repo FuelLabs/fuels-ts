@@ -68,6 +68,7 @@ export const dev = async (config: FuelsConfig) => {
   const { contracts, scripts, predicates, basePath: cwd } = config;
 
   const workspaceFilePaths = [contracts, predicates, scripts]
+    .flat()
     .flatMap((dir) => [
       dir,
       globSync(`${dir}/**/*.toml`, { cwd }),
