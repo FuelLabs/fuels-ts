@@ -4,7 +4,7 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
-import { consensusKey, defaultConsensusKey } from '../commands/dev/defaultChainConfig';
+import { defaultConsensusKey } from '../commands/dev/defaultChainConfig';
 import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
 import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
