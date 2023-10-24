@@ -35,12 +35,12 @@ export type DevState = {
   fuelCore?: FuelCoreNode;
 };
 
-export const workspaceFileChanged = (state: DevState) => async (path: string) => {
+export const workspaceFileChanged = (state: DevState) => async (_event: string, path: string) => {
   log(`\nFile changed: ${path}`);
   await buildAndDeploy(state.config);
 };
 
-export const configFileChanged = (state: DevState) => async (path: string) => {
+export const configFileChanged = (state: DevState) => async (_event: string, path: string) => {
   log(`\nFile changed: ${path}`);
 
   closeAllFileHandlers(state.watchHandlers);
