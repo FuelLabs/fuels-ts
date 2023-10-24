@@ -77,7 +77,7 @@ export class Account extends AbstractAccount {
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
-  getResourcesToSpend(
+  async getResourcesToSpend(
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
