@@ -479,6 +479,32 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
+  fundWithFakeUtxos(quantities: CoinQuantity[]) {
+    const witnessesLength = this.witnesses.length;
+
+    const owner = getRandomB256();
+    const fakeInputs = quantities.map(({ assetId, amount }, index) => {
+      const input: CoinTransactionRequestInput = {
+        type: InputType.Coin,
+        id: `${ZeroBytes32}0${index}`,
+        amount,
+        predicateData: '0x',
+        predicate: '0x',
+        assetId,
+        owner,
+        txPointer: ZeroBytes32,
+        witnessIndex: witnessesLength,
+      };
+
+      return input;
+    });
+
+    this.witnesses.push('0x');
+    this.inputs = this.inputs
+      .filter((input) => input.type === InputType.Contract)
+      .concat(fakeInputs);
+  }
+
   getCoinOutputsQuantities(): CoinQuantity[] {
     const coinsQuantities = this.getCoinOutputs().map(({ amount, assetId }) => ({
       amount: bn(amount),
