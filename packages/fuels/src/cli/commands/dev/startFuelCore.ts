@@ -9,7 +9,7 @@ import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
 import { error, log, loggingConfig } from '../../utils/logger';
 
-import { defaultChainConfig } from './defaultChainConfig';
+import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
 
 export const killNode =
   (core: ChildProcessWithoutNullStreams, killFn: (pid: number) => void) => () => {
@@ -48,10 +48,6 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
 
   const providerUrl = `http://${accessIp}:${port}/graphql`;
 
-  // This is the private key of the `consensus.PoA.signing_key` in `defaultChainConfig.ts`.
-  // This key is responsible for validating the transactions.
-  const consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298';
-
   const flags = [
     'run',
     ['--ip', bindIp],
@@ -59,7 +55,7 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
     ['--db-path', coreDir],
     ['--min-gas-price', '0'],
     ['--poa-instant', 'true'],
-    ['--consensus-key', consensusKey],
+    ['--consensus-key', defaultConsensusKey],
     ['--chain', chainConfig],
     '--vm-backtrace',
     '--utxo-validation',
