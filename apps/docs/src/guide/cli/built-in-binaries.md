@@ -6,19 +6,10 @@ In case you haven't installed [The Fuel Toolchain](#the-fuel-toolchain) _yet_, t
 
 Here's how to configure this explicitly:
 
-- [`useBuiltinForc`](./config-file.md#usebuiltinforc)
-- [`useBuiltinFuelCore`](./config-file.md#usebuiltinfuelcore)
+- [`useBuiltinForc`](./config-file.md#usebuiltinforc): `true`
+- [`useBuiltinFuelCore`](./config-file.md#usebuiltinfuelcore): `true`
 
-```ts
-// fuels.config.ts
-import { createConfig } from 'fuels'
-
-export createConfig({
-  // use `built-in` binaries shipped with `fuels`
-  useBuiltinForc: true,
-  useBuiltinFuelCore: true,
-})
-```
+<<< @../../../demo-fuels/fuels.config.explicit-built-in.ts#config-built-in{ts:line-numbers}
 
 You can also call the `built-in` binaries directly:
 
@@ -59,16 +50,7 @@ The `forc` and `fuel-core` binaries will be available in your `system` and `fuel
 
 Here's how to configure this explicitly:
 
-- [`useBuiltinForc`](./config-file.md#usebuiltinforc)
-- [`useBuiltinFuelCore`](./config-file.md#usebuiltinfuelcore)
+- [`useBuiltinForc`](./config-file.md#usebuiltinforc): `false`
+- [`useBuiltinFuelCore`](./config-file.md#usebuiltinfuelcore): `false`
 
-```ts
-// fuels.config.ts
-import { createConfig } from 'fuels'
-
-export createConfig({
-  // use `system` binaries from The Fuel Toolchain
-  useBuiltinForc: false,
-  useBuiltinFuelCore: false,
-})
-```
+<<< @../../../demo-fuels/fuels.config.explicit-system.ts#config-system{ts:line-numbers}

@@ -12,15 +12,7 @@ npx fuels init -w ./sway-programs -o ./src/sway-programs-api
 
 This will give you a minimal configuration:
 
-```ts
-// fuels.config.ts
-import { createConfig } from 'fuels'
-
-export createConfig({
-  workspace: './sway-programs',
-  output: './src/sway-programs-api',
-})
-```
+<<< @../../../demo-fuels/fuels.config.ts#config{ts:line-numbers}
 
 In a nutshell:
 
@@ -65,13 +57,15 @@ npx fuels deploy
 
 Use it when instantiating your contracts:
 
-```ts
+<!-- ```ts
 import { MyContract__factory } from "./sway-programs-api";
 import contractIds from './sway-programs-api/contracts.json'
 
 const contractId = contractIds.myContract1;
 const contract = MyContract__factory.connect(contractId, ..);
-```
+``` -->
+
+<<< @../../../demo-fuels/src/index.test.ts#using-generated-files{ts:line-numbers}
 
 For a complete example, see:
 

@@ -1,13 +1,10 @@
-// #region config
 import { createConfig } from 'fuels';
 
+// #region config-system
 export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-programs-api',
+  shouldUseBuiltinForc: false,
+  shouldUseBuiltinFuelCore: false,
 });
-// #endregion config
-
-/**
- * Check the docs:
- * https://fuellabs.github.io/fuels-ts/guide/cli/config-file
- */
+// #endregion config-system
