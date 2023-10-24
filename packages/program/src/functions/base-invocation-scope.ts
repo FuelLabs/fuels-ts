@@ -219,7 +219,7 @@ export class BaseInvocationScope<TReturn = any> {
     await this.prepareTransaction();
     const request = transactionRequestify(this.transactionRequest);
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins());
 
     return txCost;
   }
