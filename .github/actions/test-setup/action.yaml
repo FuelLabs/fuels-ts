@@ -1,0 +1,18 @@
+name: "Test setup"
+inputs:
+  checkout-fetch-depth:
+    description: "Number of commits to fetch. 0 indicates all history for all branches and tags."
+    default: 1
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: ${{ inputs.checkout-fetch-depth }}
+
+    - name: CI Setup
+      uses: ./.github/actions/ci-setup
+
+    - name: Build
+      run: pnpm build
