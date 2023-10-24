@@ -11,8 +11,15 @@ import type { BN } from 'fuels';
 import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 import { SampleAbi__factory } from './sway-programs-api';
-import contractsIds from './sway-programs-api/contracts.json';
 import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
+
+/**
+ * import contractsIds from './sway-programs-api/contracts.json';
+ * Mimicks json insterad of importing (ids required deploying contracts)
+ */
+const contractsIds = {
+  sample: '0xYWZ',
+};
 
 let gasPrice: BN;
 describe('ExampleContract', () => {
