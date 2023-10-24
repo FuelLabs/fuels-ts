@@ -17,11 +17,11 @@ jest.mock('child_process', () => ({
 }));
 
 describe('startFuelCore', () => {
-  const loggingBackup = structuredClone(loggingConfig);
+  const loggingConfigBkp = loggingConfig;
 
   afterEach(() => {
+    configureLogging(loggingConfigBkp);
     resetDiskAndMocks();
-    configureLogging(loggingBackup);
   });
 
   /**
@@ -65,6 +65,7 @@ describe('startFuelCore', () => {
   }
 
   test('should start `fuel-core` node using built-in binary', async () => {
+    mockSpawn();
     mockLogger();
 
     const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
@@ -86,6 +87,8 @@ describe('startFuelCore', () => {
   });
 
   test('should start `fuel-core` node using system binary', async () => {
+    mockLogger();
+
     const { spawn, innerMocks } = mockSpawn();
 
     await startFuelCore({
@@ -118,7 +121,10 @@ describe('startFuelCore', () => {
   });
 
   test('should pipe stdout', async () => {
+    mockLogger();
+
     jest.spyOn(process.stdout, 'write').mockImplementation();
+
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: true });
 
     const { innerMocks } = mockSpawn();
@@ -130,8 +136,11 @@ describe('startFuelCore', () => {
   });
 
   test('should pipe stdout and stderr', async () => {
+    mockLogger();
+
     jest.spyOn(process.stderr, 'write').mockImplementation();
     jest.spyOn(process.stdout, 'write').mockImplementation();
+
     configureLogging({ isDebugEnabled: true, isLoggingEnabled: true });
 
     const { innerMocks } = mockSpawn();
