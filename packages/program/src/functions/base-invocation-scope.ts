@@ -234,8 +234,8 @@ export class BaseInvocationScope<TReturn = any> {
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
-    const resources = await this.program.account?.getResourcesToSpend(this.requiredCoins);
-    this.transactionRequest.addResources(resources || []);
+
+    await this.program.account?.fund(this.transactionRequest, this.requiredCoins);
     return this;
   }
 
