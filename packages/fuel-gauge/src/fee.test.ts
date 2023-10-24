@@ -13,6 +13,9 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
+/**
+ * @group node
+ */
 describe('Fee', () => {
   const assetA: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetB: string = '0x0202020202020202020202020202020202020202020202020202020202020202';
