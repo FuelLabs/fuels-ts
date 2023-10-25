@@ -1,3 +1,5 @@
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, launchNode } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
@@ -82,30 +84,7 @@ describe('TransactionSummary', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  // it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-  //   const destination = Wallet.generate({
-  //     provider,
-  //   });
-
-  //   const { id: transactionId } = await adminWallet.transfer(
-  //     destination.address,
-  //     100,
-  //     BaseAssetId,
-  //     { gasPrice }
-  //   );
-
-  //   const response = new TransactionResponse(transactionId, provider);
-
-  //   expect(response.gqlTransaction).toBeUndefined();
-
-  //   await response.waitForResult();
-
-  //   expect(response.gqlTransaction?.status?.type).toBeDefined();
-  //   expect(response.gqlTransaction?.status?.type).not.toEqual('SubmittedStatus');
-  //   expect(response.gqlTransaction?.id).toBe(transactionId);
-  // });
-
-  it('[true test] should ensure waitForResult always waits for the transaction to be processed', async () => {
+  it('should ensure waitForResult always waits for the transaction to be processed', async () => {
     const { cleanup, ip, port } = await launchNode({
       args: ['--poa-interval-period', '10s'],
     });
@@ -124,9 +103,9 @@ describe('TransactionSummary', () => {
       BaseAssetId,
       { gasPrice }
     );
-    const response = new TransactionResponse('asdsadflk3jeh', nodeProvider);
+    const response = await TransactionResponse.create(transactionId, nodeProvider);
 
-    // expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
     await response.waitForResult();
 
@@ -135,4 +114,28 @@ describe('TransactionSummary', () => {
 
     cleanup();
   }, 25000);
+
+  it('ensure that an invalid request throws and does not hold test runner (closes all handles)', async () => {
+    const { cleanup, ip, port } = await launchNode({});
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+
+    const response = new TransactionResponse('asdsadflk3jeh', nodeProvider);
+
+    await expectToThrowFuelError(() => response.waitForResult(), {
+      code: FuelError.CODES.INVALID_REQUEST,
+    });
+
+    await expectToThrowFuelError(
+      async () => {
+        for await (const value of nodeProvider.operations.statusChange({
+          transactionId: 'asdfkljer',
+        })) {
+          console.log(value);
+        }
+      },
+
+      { code: FuelError.CODES.INVALID_REQUEST }
+    );
+    cleanup();
+  });
 });

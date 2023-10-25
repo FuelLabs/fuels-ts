@@ -24,10 +24,10 @@ import type {
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { Subscriber } from './subscriber';
 import type {
   TransactionRequestLike,
   TransactionRequest,
@@ -359,9 +359,59 @@ export default class Provider {
         (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
           ?.operation === 'subscription';
 
-      return isSubscription
-        ? new Subscriber({url: this.url, query, variables: vars as Record<string, unknown>, fetchFn}).subscribe()
-        : gqlClient.request(query, vars);
+      if (isSubscription) {
+        return fuelGraphQLSubscriber({
+          url: this.url,
+          query,
+          fetchFn,
+          variables: vars as Record<string, unknown>,
+        });
+        // return subscriber((abortController) =>
+        //   fetchFn(`${url}-sub`, {
+        //     method: 'POST',
+        //     signal: abortController.signal,
+        //     body: JSON.stringify(requestBody),
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       Accept: 'text/event-stream',
+        //     },
+        //   })
+        //     .then((x) => {
+        //       const reader = x.body!.getReader();
+
+        //       let text = '';
+        //       // @ts-expect-error asd
+        //       return reader.read().then(function process(result) {
+        //         text += new TextDecoder().decode(result.value);
+        //         if (!result.done) return reader.read().then(process);
+        //         if (!text.startsWith('data:')) {
+        //           text = '';
+        //           return reader.read().then(process);
+        //         }
+
+        //         const { data, errors } = JSON.parse(text.split('data:')[1]);
+        //         if (!Array.isArray(errors)) return data;
+
+        //         return reader
+        //           .cancel()
+        //           .then(() =>
+        //             Promise.reject(
+        //               new FuelError(
+        //                 FuelError.CODES.INVALID_REQUEST,
+        //                 errors.map((err) => err.message).join('\n\n')
+        //               )
+        //             )
+        //           );
+        //       });
+        //     })
+        //     .then(
+        //       (x) => x,
+        //       (reason) => abortController.abort()
+        //     )
+        // );
+      }
+
+      return gqlClient.request(query, vars);
     });
   }
 
