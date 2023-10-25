@@ -4,10 +4,38 @@ The `fuels` CLI consists of a couple commands.
 
 ## `fuels init`
 
-Creates a new `fuels.config.ts` file:
+```console
+npx fuels help init
+```
+
+```
+Usage: fuels init [options]
+
+Create a sample `fuel.config.ts` file
+
+Options:
+  -p, --path <path>               Path to project root (default: $PWD)
+  -w, --workspace <path>          Relative dir path to Forc workspace
+  -c, --contracts <path|global>   Relative path/globals to  Contracts
+  -s, --scripts <path|global>     Relative path/globals to  Scripts
+  -p, --predicates <path|global>  Relative path/globals to  Predicates
+  -o, --output <path>             Relative dir path for Typescript generation output
+  --use-builtin-forc              Use buit-in `forc` to build Sway programs
+  --use-builtin-fuel-core         Use buit-in `fuel-core` when starting a Fuel node
+  --auto-start-fuel-core          Auto-starts a `fuel-core` node during `dev` command
+  -h, --help                      Display help
+```
+
+Creating a sample `fuel.config.ts` file:
 
 ```console
-npx fuels init -w ./sway-programs -o ./src/sway-programs-api
+npx fuels init --contracts ./my-contracts/* --output ./src/sway-contracts-api
+```
+
+Using [Forc workspaces](https://docs.fuel.network/docs/forc/workspaces/)? Try this instead:
+
+```console
+npx fuels init --workspace ./sway-programs --output ./src/sway-programs-api
 ```
 
 This will give you a minimal configuration:
@@ -18,7 +46,7 @@ In a nutshell:
 
 ```sh
 .
-├── sway-programs # <— workspace
+├── sway-programs # <— forc workspace
 ├── src
 │   └── sway-programs-api # <— output
 ├── fuels.config.ts
