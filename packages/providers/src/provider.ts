@@ -383,7 +383,7 @@ export default class Provider {
         fetchFn(url, requestInit, this.options),
     });
 
-    // @ts-expect-error This is due to this function being generic and us using multiple libraries. Its type is specified when calling a specific operation via provider.operations.xyz.
+    // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
     return getOperationsSdk((query, vars) => {
       const isSubscription =
         (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
