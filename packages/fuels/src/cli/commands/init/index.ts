@@ -9,8 +9,18 @@ import { log } from '../../utils/logger';
 export function init(program: Command) {
   const options = program.opts();
 
-  const { path, workspace, output, autoStartFuelCore, useBuiltinForc, useBuiltinFuelCore } =
-    options;
+  const { path, autoStartFuelCore, useBuiltinForc, useBuiltinFuelCore } = options;
+
+  let workspace: string | undefined;
+  let absoluteWorkspace: string | undefined;
+
+  if (options.workspace) {
+    absoluteWorkspace = resolve(path, options.workspace);
+    workspace = `./${relative(path, absoluteWorkspace)}`;
+  }
+
+  const absoluteOutput = resolve(path, options.output);
+  const output = `./${relative(path, absoluteOutput)}`;
 
   const [contracts, scripts, predicates] = ['contracts', 'scripts', 'predicates'].map(
     (optionName) => {
@@ -39,11 +49,11 @@ export function init(program: Command) {
   }
 
   const renderedConfig = renderFuelsConfigTemplate({
-    workspace: relative(path, resolve(path, workspace)),
+    workspace,
     contracts,
     scripts,
     predicates,
-    output: relative(path, resolve(path, output)),
+    output,
     useBuiltinForc,
     useBuiltinFuelCore,
     autoStartFuelCore,
