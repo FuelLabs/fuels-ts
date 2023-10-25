@@ -1,5 +1,13 @@
 # @fuel-ts/utils
 
+## 0.64.1
+
+### Patch Changes
+
+- `concatBytes` now accept `BytesLike` as input, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1365](https://github.com/FuelLabs/fuels-ts/pull/1365))
+
+## 0.64.0
+
 ## 0.63.0
 
 ### Patch Changes

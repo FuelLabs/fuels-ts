@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.64.1
+
+## 0.64.0
+
+### Patch Changes
+
+- Rearrange error messages regarding insufficient tx params, by [@danielbate](https://github.com/danielbate) (See [#1352](https://github.com/FuelLabs/fuels-ts/pull/1352))
+
 ## 0.63.0
 
 ### Patch Changes
