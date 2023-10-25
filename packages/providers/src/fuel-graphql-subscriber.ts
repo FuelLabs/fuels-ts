@@ -10,6 +10,39 @@ type FuelGraphQLSubscriberOptions = {
   abortController?: AbortController;
 };
 
+class FuelSubscriptionStream implements TransformStream {
+  readable: ReadableStream<FuelError | object>;
+  writable: WritableStream<Uint8Array>;
+  private readableStreamController!: ReadableStreamController<FuelError | object>;
+  private static textDecoder = new TextDecoder();
+
+  constructor() {
+    this.readable = new ReadableStream({
+      start: (controller) => {
+        this.readableStreamController = controller;
+      },
+    });
+
+    this.writable = new WritableStream<Uint8Array>({
+      write: (bytes) => {
+        const text = FuelSubscriptionStream.textDecoder.decode(bytes);
+        // the fuel node sends keep-alive messages that should be ignored
+        if (text.startsWith('data:')) {
+          const { data, errors } = JSON.parse(text.split('data:')[1]);
+          if (Array.isArray(errors)) {
+            this.readableStreamController.enqueue(
+              new FuelError(
+                FuelError.CODES.INVALID_REQUEST,
+                errors.map((err) => err.message).join('\n\n')
+              )
+            );
+          } else this.readableStreamController.enqueue(data);
+        }
+      },
+    });
+  }
+}
+
 export async function* fuelGraphQLSubscriber({
   url,
   variables,
@@ -27,32 +60,9 @@ export async function* fuelGraphQLSubscriber({
       Accept: 'text/event-stream',
     },
   });
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
 
-  const streamReader = new ReadableStream({
-    async start(controller) {
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) {
-          controller.close();
-          return;
-        }
-        // the fuel node sends keep-alive messages that should be ignored
-        if (value.startsWith('data:')) {
-          const { data, errors } = JSON.parse(value.split('data:')[1]);
-          if (Array.isArray(errors)) {
-            controller.enqueue(
-              new FuelError(
-                FuelError.CODES.INVALID_REQUEST,
-                errors.map((err) => err.message).join('\n\n')
-              )
-            );
-          } else controller.enqueue(data);
-        }
-      }
-    },
-  }).getReader();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const streamReader = response.body!.pipeThrough(new FuelSubscriptionStream()).getReader();
 
   for (;;) {
     const { value, done } = await streamReader.read();
