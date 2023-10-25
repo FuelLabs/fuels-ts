@@ -3,13 +3,15 @@ import { execSync } from 'child_process';
 
 import { fuelUpLink } from './fuelUpLink';
 
+const stdio = 'ignore';
+
 export function getSystemForc() {
   let systemForcVersion: string | null = null;
   let error: Error | null = null;
 
   try {
     const reg = /[^0-9.]+/g;
-    systemForcVersion = execSync('forc --version').toString().replace(reg, '');
+    systemForcVersion = execSync('forc --version', { stdio }).toString().replace(reg, '');
   } catch (err: unknown) {
     error = err as Error;
   }
@@ -26,7 +28,7 @@ export function getSystemFuelCore() {
 
   try {
     const reg = /[^0-9.]+/g;
-    systemFuelCoreVersion = execSync('fuel-core --version').toString().replace(reg, '');
+    systemFuelCoreVersion = execSync('fuel-core --version', { stdio }).toString().replace(reg, '');
   } catch (err: unknown) {
     error = err as Error;
   }

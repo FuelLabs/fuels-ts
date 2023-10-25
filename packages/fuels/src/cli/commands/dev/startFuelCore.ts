@@ -7,6 +7,7 @@ import kill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
+import { getBinarySource } from '../../utils/getBinarySource';
 import { error, log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
@@ -36,7 +37,7 @@ export type FuelCoreNode = {
 };
 
 export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> => {
-  log('Starting node..');
+  log(`Starting ${getBinarySource(config.useBuiltinFuelCore)} 'fuel-core' node..`);
 
   const coreDir = join(config.basePath, '.fuels');
 

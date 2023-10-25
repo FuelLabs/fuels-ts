@@ -3,6 +3,7 @@ import { join } from 'path';
 
 import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
+import { getBinarySource } from '../../utils/getBinarySource';
 import { debug, error, log, loggingConfig } from '../../utils/logger';
 
 type OnResultFn = () => void;
@@ -50,7 +51,7 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
 };
 
 export async function buildSwayPrograms(config: FuelsConfig) {
-  log('Building Sway programs..');
+  log(`Building Sway programs using ${getBinarySource(config.useBuiltinFuelCore)} 'forc' binary`);
 
   const paths = config.workspace
     ? [config.workspace]
