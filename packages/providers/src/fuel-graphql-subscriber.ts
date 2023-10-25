@@ -16,7 +16,7 @@ export async function* fuelGraphQLSubscriber({
   query,
   fetchFn,
 }: FuelGraphQLSubscriberOptions) {
-  const streamReader = await fetchFn(`${url}-sub`, {
+  const response = await fetchFn(`${url}-sub`, {
     method: 'POST',
     keepalive: true,
     body: JSON.stringify({
@@ -27,35 +27,33 @@ export async function* fuelGraphQLSubscriber({
       'Content-Type': 'application/json',
       Accept: 'text/event-stream',
     },
-  }).then((x) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const reader = x.body!.pipeThrough(new TextDecoderStream()).getReader();
-
-    return new ReadableStream({
-      start(controller) {
-        reader.read().then(function push(result) {
-          const { done, value } = result;
-          if (done) {
-            controller.close();
-            return;
-          }
-          if (value.startsWith('data:')) {
-            const { data, errors } = JSON.parse(value.split('data:')[1]);
-            if (Array.isArray(errors)) {
-              controller.enqueue(
-                new FuelError(
-                  FuelError.CODES.INVALID_REQUEST,
-                  errors.map((err) => err.message).join('\n\n')
-                )
-              );
-            } else controller.enqueue(data);
-          }
-
-          reader.read().then(push);
-        });
-      },
-    }).getReader();
   });
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
+
+  const streamReader = new ReadableStream({
+    start(controller) {
+      reader.read().then(function push({ value, done }) {
+        if (done) {
+          controller.close();
+          return;
+        }
+        if (value.startsWith('data:')) {
+          const { data, errors } = JSON.parse(value.split('data:')[1]);
+          if (Array.isArray(errors)) {
+            controller.enqueue(
+              new FuelError(
+                FuelError.CODES.INVALID_REQUEST,
+                errors.map((err) => err.message).join('\n\n')
+              )
+            );
+          } else controller.enqueue(data);
+        }
+
+        reader.read().then(push);
+      });
+    },
+  }).getReader();
 
   for (;;) {
     const { value, done } = await streamReader.read();
