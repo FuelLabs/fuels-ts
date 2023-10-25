@@ -32,7 +32,7 @@ export function readForcToml(path: string) {
   const forcPath = join(path, './Forc.toml');
 
   if (!existsSync(forcPath)) {
-    throw new Error(`Toml file not found:\n\t${forcPath}`);
+    throw new Error(`Toml file not found:\n  ${forcPath}`);
   }
 
   if (!forcFiles.has(forcPath)) {
