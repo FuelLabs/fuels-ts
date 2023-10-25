@@ -1,4 +1,3 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
