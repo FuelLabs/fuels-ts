@@ -897,7 +897,7 @@ describe('Provider', () => {
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const value of provider.operations.statusChange({
-          transactionId: 'asdfkljer',
+          transactionId: 'invalid transaction id',
         })) {
           //
         }
@@ -906,7 +906,7 @@ describe('Provider', () => {
       { code: FuelError.CODES.INVALID_REQUEST }
     );
 
-    const response = new TransactionResponse('asdsadflk3jeh', provider);
+    const response = new TransactionResponse('invalid transaction id', provider);
 
     await expectToThrowFuelError(() => response.waitForResult(), {
       code: FuelError.CODES.INVALID_REQUEST,

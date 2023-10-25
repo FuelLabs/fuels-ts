@@ -32,12 +32,14 @@ export async function* fuelGraphQLSubscriber({
   const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
 
   const streamReader = new ReadableStream({
-    start(controller) {
-      reader.read().then(function push({ value, done }) {
+    async start(controller) {
+      for (;;) {
+        const { value, done } = await reader.read();
         if (done) {
           controller.close();
           return;
         }
+        // the fuel node sends keep-alive messages that should be ignored
         if (value.startsWith('data:')) {
           const { data, errors } = JSON.parse(value.split('data:')[1]);
           if (Array.isArray(errors)) {
@@ -49,9 +51,7 @@ export async function* fuelGraphQLSubscriber({
             );
           } else controller.enqueue(data);
         }
-
-        reader.read().then(push);
-      });
+      }
     },
   }).getReader();
 
