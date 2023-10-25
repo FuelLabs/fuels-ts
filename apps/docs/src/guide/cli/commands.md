@@ -9,21 +9,12 @@ npx fuels help init
 ```
 
 ```
-Usage: fuels init [options]
-
-Create a sample `fuel.config.ts` file
-
 Options:
-  -p, --path <path>               Path to project root (default: $PWD)
   -w, --workspace <path>          Relative dir path to Forc workspace
   -c, --contracts <path|global>   Relative path/globals to  Contracts
   -s, --scripts <path|global>     Relative path/globals to  Scripts
   -p, --predicates <path|global>  Relative path/globals to  Predicates
-  -o, --output <path>             Relative dir path for Typescript generation output
-  --use-builtin-forc              Use buit-in `forc` to build Sway programs
-  --use-builtin-fuel-core         Use buit-in `fuel-core` when starting a Fuel node
-  --auto-start-fuel-core          Auto-starts a `fuel-core` node during `dev` command
-  -h, --help                      Display help
+  -o, --output <path>             Relative dir path for Typescript generation
 ```
 
 Creating a sample `fuel.config.ts` file:
@@ -114,10 +105,6 @@ npx fuels help typegen
 ```
 
 ```
-Usage: fuels typegen [options]
-
-Generate Typescript from Sway ABI JSON files
-
 Options:
   -i, --inputs <path|glob...>  Input paths/globals to your Abi JSON files
   -o, --output <dir>           Directory path for generated files
@@ -125,7 +112,6 @@ Options:
   -s, --script                 Generate types for Scripts
   -p, --predicate              Generate types for Predicates
   -S, --silent                 Omit output messages
-  -h, --help                   Display help
 ```
 
 For more info, check:
