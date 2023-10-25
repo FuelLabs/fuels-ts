@@ -200,7 +200,12 @@ export type FetchRequestOptions = {
  * Provider initialization options
  */
 export type ProviderOptions = {
-  fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
+  fetch?: (
+    url: string,
+    options: FetchRequestOptions,
+    providerOptions: ProviderOptions
+  ) => Promise<Response>;
+  timeout?: number;
   cacheUtxo?: number;
 };
 
@@ -236,6 +241,23 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   private static nodeInfoCache: NodeInfoCache = {};
 
+  options: ProviderOptions = {
+    timeout: undefined,
+    cacheUtxo: undefined,
+    fetch: undefined,
+  };
+
+  private static getFetchFn(options: ProviderOptions) {
+    return options.fetch !== undefined
+      ? options.fetch
+      : (url: string, request: FetchRequestOptions) =>
+          fetch(url, {
+            ...request,
+            signal:
+              options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
+          });
+  }
+
   /**
    * Constructor to initialize a Provider.
    *
@@ -247,9 +269,12 @@ export default class Provider {
   protected constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    public options: ProviderOptions = {}
+    options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url, options);
+    this.options = { ...this.options, ...options };
+    this.url = url;
+
+    this.operations = this.createOperations();
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -313,7 +338,7 @@ export default class Provider {
    */
   async connect(url: string) {
     this.url = url;
-    this.operations = this.createOperations(url);
+    this.operations = this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
 
@@ -349,15 +374,14 @@ export default class Provider {
   /**
    * Create GraphQL client and set operations.
    *
-   * @param url - The URL of the Fuel node
-   * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(url: string, options: ProviderOptions = {}) {
-    this.url = url;
-
-    const fetchFn = (options.fetch as typeof fetch) ?? fetch;
-    const gqlClient = new GraphQLClient(url, { fetch: fetchFn });
+  private createOperations() {
+    const fetchFn = Provider.getFetchFn(this.options);
+    const gqlClient = new GraphQLClient(this.url, {
+      fetch: (url: string, requestInit: FetchRequestOptions) =>
+        fetchFn(url, requestInit, this.options),
+    });
 
     // @ts-expect-error This is due to this function being generic and us using multiple libraries. Its type is specified when calling a specific operation via provider.operations.xyz.
     return getOperationsSdk((query, vars) => {
@@ -369,52 +393,10 @@ export default class Provider {
         return fuelGraphQLSubscriber({
           url: this.url,
           query,
-          fetchFn,
+          fetchFn: (url, requestInit) =>
+            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
           variables: vars as Record<string, unknown>,
         });
-        // return subscriber((abortController) =>
-        //   fetchFn(`${url}-sub`, {
-        //     method: 'POST',
-        //     signal: abortController.signal,
-        //     body: JSON.stringify(requestBody),
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       Accept: 'text/event-stream',
-        //     },
-        //   })
-        //     .then((x) => {
-        //       const reader = x.body!.getReader();
-
-        //       let text = '';
-        //       // @ts-expect-error asd
-        //       return reader.read().then(function process(result) {
-        //         text += new TextDecoder().decode(result.value);
-        //         if (!result.done) return reader.read().then(process);
-        //         if (!text.startsWith('data:')) {
-        //           text = '';
-        //           return reader.read().then(process);
-        //         }
-
-        //         const { data, errors } = JSON.parse(text.split('data:')[1]);
-        //         if (!Array.isArray(errors)) return data;
-
-        //         return reader
-        //           .cancel()
-        //           .then(() =>
-        //             Promise.reject(
-        //               new FuelError(
-        //                 FuelError.CODES.INVALID_REQUEST,
-        //                 errors.map((err) => err.message).join('\n\n')
-        //               )
-        //             )
-        //           );
-        //       });
-        //     })
-        //     .then(
-        //       (x) => x,
-        //       (reason) => abortController.abort()
-        //     )
-        // );
       }
 
       return gqlClient.request(query, vars);

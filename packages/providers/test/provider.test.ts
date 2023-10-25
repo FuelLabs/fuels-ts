@@ -12,6 +12,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
+import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -19,7 +20,7 @@ import type {
 } from '../src/transaction-request';
 import { ScriptTransactionRequest } from '../src/transaction-request';
 import { TransactionResponse } from '../src/transaction-response';
-import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
+import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 import { MOCK_CHAIN } from './fixtures/chain';
@@ -206,22 +207,15 @@ describe('Provider', () => {
 
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
 
-    const provider = await Provider.create(providerUrl1);
+    const provider = await Provider.create(providerUrl1, {
+      fetch: (url: string, options: FetchRequestOptions) =>
+        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
+    });
 
     expect(provider.url).toBe(providerUrl1);
-
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient').mockImplementation(
-      () =>
-        ({
-          request: () =>
-            Promise.resolve({
-              chain: MOCK_CHAIN,
-              nodeInfo: MOCK_NODE_INFO,
-            }),
-        } as unknown as GraphQL.GraphQLClient)
-    );
+    expect(await provider.getVersion()).toEqual(providerUrl1);
 
     const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
@@ -229,7 +223,8 @@ describe('Provider', () => {
 
     await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
+
+    expect(await provider.getVersion()).toEqual(providerUrl2);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -910,6 +905,60 @@ describe('Provider', () => {
 
     await expectToThrowFuelError(() => response.waitForResult(), {
       code: FuelError.CODES.INVALID_REQUEST,
+    });
+  });
+
+  it('default timeout is undefined', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    expect(provider.options.timeout).toBeUndefined();
+  });
+
+  it('throws TimeoutError on timeout when calling an operation', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
+    jest
+      .spyOn(global, 'fetch')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TS is throwing error in test, but not in IDE
+      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
+        sleep(timeout).then(() => fetch(input, init))
+      );
+
+    const { error } = await safeExec(async () => {
+      await provider.getBlocks({});
+    });
+
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
+  });
+
+  // skipped because graphql-sse creates their own AbortController which controls timeouts. https://github.com/FuelLabs/fuels-ts/issues/1293
+  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
+
+    jest
+      .spyOn(global, 'fetch')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TS is throwing error in test, but not in IDE
+      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
+        sleep(timeout).then(() => fetch(input, init))
+      );
+
+    const { error } = await safeExec(async () => {
+      for await (const iterator of provider.operations.statusChange({
+        transactionId: 'doesnt matter, will be aborted',
+      })) {
+        // shouldn't be reached
+      }
+    });
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
     });
   });
 });
