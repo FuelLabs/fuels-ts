@@ -39,7 +39,7 @@ describe('loadConfig', () => {
     expect(config.autoStartFuelCore).toEqual(true);
   });
 
-  test(`should resolve individually paths when not using workspaces`, async () => {
+  test(`should resolve individual paths when not using workspaces`, async () => {
     await runInit(
       [
         initFlagsUseBuiltinBinaries,
