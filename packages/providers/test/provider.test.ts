@@ -935,8 +935,7 @@ describe('Provider', () => {
     });
   });
 
-  // skipped because graphql-sse creates their own AbortController which controls timeouts. https://github.com/FuelLabs/fuels-ts/issues/1293
-  it.skip('throws TimeoutError on timeout when calling a subscription', async () => {
+  it('throws TimeoutError on timeout when calling a subscription', async () => {
     const timeout = 500;
     const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
 
@@ -949,6 +948,7 @@ describe('Provider', () => {
       );
 
     const { error } = await safeExec(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const iterator of provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
