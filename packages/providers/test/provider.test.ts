@@ -18,6 +18,7 @@ import type {
   MessageTransactionRequestInput,
 } from '../src/transaction-request';
 import { ScriptTransactionRequest } from '../src/transaction-request';
+import { TransactionResponse } from '../src/transaction-response';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
@@ -887,5 +888,28 @@ describe('Provider', () => {
 
     expect(txCostSpy).toHaveBeenCalled();
     expect(estimateTxSpy).toHaveBeenCalled();
+  });
+
+  it('ensure that an invalid request throws and does not hold the test runner (closes all handles)', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    await expectToThrowFuelError(
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const value of provider.operations.statusChange({
+          transactionId: 'asdfkljer',
+        })) {
+          //
+        }
+      },
+
+      { code: FuelError.CODES.INVALID_REQUEST }
+    );
+
+    const response = new TransactionResponse('asdsadflk3jeh', provider);
+
+    await expectToThrowFuelError(() => response.waitForResult(), {
+      code: FuelError.CODES.INVALID_REQUEST,
+    });
   });
 });

@@ -1,5 +1,3 @@
-import { FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, launchNode } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
@@ -114,28 +112,4 @@ describe('TransactionSummary', () => {
 
     cleanup();
   }, 25000);
-
-  it('ensure that an invalid request throws and does not hold test runner (closes all handles)', async () => {
-    const { cleanup, ip, port } = await launchNode({});
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
-
-    const response = new TransactionResponse('asdsadflk3jeh', nodeProvider);
-
-    await expectToThrowFuelError(() => response.waitForResult(), {
-      code: FuelError.CODES.INVALID_REQUEST,
-    });
-
-    await expectToThrowFuelError(
-      async () => {
-        for await (const value of nodeProvider.operations.statusChange({
-          transactionId: 'asdfkljer',
-        })) {
-          console.log(value);
-        }
-      },
-
-      { code: FuelError.CODES.INVALID_REQUEST }
-    );
-    cleanup();
-  });
 });
