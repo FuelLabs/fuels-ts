@@ -19,8 +19,8 @@ describe('init', () => {
     await runInit([initFlagsWorkspace, initFlagsAutoStartFuelCore].flat());
     expect(existsSync(fuelsConfigPath)).toBeTruthy();
     const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(`workspace: 'project',`);
-    expect(fuelsContents).toMatch(`output: 'generated',`);
+    expect(fuelsContents).toMatch(`workspace: './project',`);
+    expect(fuelsContents).toMatch(`output: './generated',`);
     expect(fuelsContents).not.toMatch(`useBuiltinForc: true,`);
     expect(fuelsContents).not.toMatch(`useBuiltinFuelCore: true,`);
   });
@@ -29,8 +29,8 @@ describe('init', () => {
     await runInit();
     expect(existsSync(fuelsConfigPath)).toBeTruthy();
     const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(`workspace: 'project',`);
-    expect(fuelsContents).toMatch(`output: 'generated',`);
+    expect(fuelsContents).toMatch(`workspace: './project',`);
+    expect(fuelsContents).toMatch(`output: './generated',`);
     expect(fuelsContents).toMatch(`useBuiltinForc: true,`);
     expect(fuelsContents).toMatch(`useBuiltinFuelCore: true,`);
   });
