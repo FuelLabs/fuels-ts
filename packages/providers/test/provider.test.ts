@@ -885,7 +885,7 @@ describe('Provider', () => {
     expect(estimateTxSpy).toHaveBeenCalled();
   });
 
-  it('An invalid subscription request throws and does not hold the test runner (closes all handles)', async () => {
+  it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     await expectToThrowFuelError(
@@ -919,7 +919,7 @@ describe('Provider', () => {
     jest
       .spyOn(global, 'fetch')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error in test, but not in IDE
+      // @ts-ignore TS is throwing error when test is run, but not in IDE
       .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
         sleep(timeout).then(() => fetch(input, init))
       );
@@ -942,7 +942,7 @@ describe('Provider', () => {
     jest
       .spyOn(global, 'fetch')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error in test, but not in IDE
+      // @ts-ignore TS is throwing error when test is run, but not in IDE
       .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
         sleep(timeout).then(() => fetch(input, init))
       );
