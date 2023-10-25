@@ -18,7 +18,6 @@ export async function* fuelGraphQLSubscriber({
 }: FuelGraphQLSubscriberOptions) {
   const response = await fetchFn(`${url}-sub`, {
     method: 'POST',
-    keepalive: true,
     body: JSON.stringify({
       query: print(query),
       variables,
