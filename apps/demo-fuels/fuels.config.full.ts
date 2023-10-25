@@ -87,8 +87,8 @@ export default createConfig({
   // #endregion onSuccess
 
   // #region onFailure
-  onFailure: (event: CommandEvent, config: FuelsConfig) => {
-    console.log('fuels:onSuccess', { event, config });
+  onFailure: (error: Error, config: FuelsConfig) => {
+    console.log('fuels:onFailure', { error, config });
   },
   // #endregion onFailure
 
