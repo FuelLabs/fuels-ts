@@ -1,4 +1,3 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import { program } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/config/fuels.config';
