@@ -1,6 +1,6 @@
 import { ProgramTypeEnum } from '@fuel-ts/abi-typegen';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
-import { writeFileSync } from 'fs';
+import { writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 import { getABIPaths } from '../../config/forcUtils';
@@ -32,7 +32,9 @@ async function generateTypesForProgramType(
 export async function generateTypes(config: FuelsConfig) {
   log('Generating types..');
 
-  const { contracts, scripts, predicates } = config;
+  const { contracts, scripts, predicates, output } = config;
+
+  mkdirSync(output, { recursive: true });
 
   const members = [
     { type: ProgramTypeEnum.CONTRACT, programs: contracts },
