@@ -1,7 +1,7 @@
 import { type Command } from 'commander';
 import { existsSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
-import { join, relative } from 'path';
+import { join, relative, resolve } from 'path';
 
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
 import { log } from '../../utils/logger';
@@ -9,9 +9,8 @@ import { log } from '../../utils/logger';
 export function init(program: Command) {
   const options = program.opts();
 
-  const { path, autoStartFuelCore, useBuiltinForc, useBuiltinFuelCore } = options;
-
-  const workspace = options.workspace ? relative(path, options.workspace) : undefined;
+  const { path, workspace, output, autoStartFuelCore, useBuiltinForc, useBuiltinFuelCore } =
+    options;
 
   const [contracts, scripts, predicates] = ['contracts', 'scripts', 'predicates'].map(
     (optionName) => {
@@ -39,14 +38,12 @@ export function init(program: Command) {
     throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
   }
 
-  const output = relative(path, options.output);
-
   const renderedConfig = renderFuelsConfigTemplate({
-    workspace,
+    workspace: relative(path, resolve(path, workspace)),
     contracts,
     scripts,
     predicates,
-    output,
+    output: relative(path, resolve(path, output)),
     useBuiltinForc,
     useBuiltinFuelCore,
     autoStartFuelCore,
