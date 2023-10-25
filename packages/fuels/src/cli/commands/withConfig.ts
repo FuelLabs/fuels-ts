@@ -5,9 +5,11 @@ import { loadConfig } from '../config/loadConfig';
 import type { Commands, FuelsConfig, CommandEvent } from '../types';
 import { error, log } from '../utils/logger';
 
-export const withConfigErrorHandler = async (err: Error, config: FuelsConfig) => {
+export const withConfigErrorHandler = async (err: Error, config?: FuelsConfig) => {
   error(err);
-  await config.onFailure?.(<Error>err, config);
+  if (config) {
+    await config.onFailure?.(<Error>err, config);
+  }
 };
 
 export function withConfig<CType extends Commands>(
@@ -18,7 +20,14 @@ export function withConfig<CType extends Commands>(
   return async () => {
     const options = program.opts();
 
-    const config = await loadConfig(options.path);
+    let config: FuelsConfig;
+
+    try {
+      config = await loadConfig(options.path);
+    } catch (err) {
+      await withConfigErrorHandler(<Error>err);
+      return;
+    }
 
     try {
       const eventData = await fn(config);
