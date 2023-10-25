@@ -203,7 +203,7 @@ export type ProviderOptions = {
   fetch?: (
     url: string,
     options: FetchRequestOptions,
-    providerOptions: ProviderOptions
+    providerOptions: Omit<ProviderOptions, 'fetch'>
   ) => Promise<Response>;
   timeout?: number;
   cacheUtxo?: number;
