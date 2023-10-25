@@ -97,7 +97,7 @@ export type UserFuelsConfig = {
    * @param error - Original error object
    * @param config - Configuration in use
    */
-  onFailure?: (error: Error, config: FuelsConfig) => void;
+  onFailure?: (event: Error, config: FuelsConfig) => void;
 };
 
 export type FuelsConfig = UserFuelsConfig &
