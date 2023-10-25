@@ -4,7 +4,7 @@ import { createConfig } from 'fuels';
 export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-programs-api',
-  shouldUseBuiltinForc: true,
-  shouldUseBuiltinFuelCore: true,
+  useBuiltinForc: true,
+  useBuiltinFuelCore: true,
 });
 // #endregion config-built-in
