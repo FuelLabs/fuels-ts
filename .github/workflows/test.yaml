@@ -146,7 +146,7 @@ jobs:
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
           comment_tag: diff
-          mode: upsert
+          mode: recreate
           create_if_not_exists: true
 
   live-tests:
