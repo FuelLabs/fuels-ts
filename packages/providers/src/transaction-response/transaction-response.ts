@@ -29,7 +29,6 @@ import type {
   GqlTransaction,
   AbiMap,
 } from '../transaction-summary/types';
-import { sleep } from '../utils';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -126,12 +125,10 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      for await (const res of this.provider.operations.statusChange({
+      for await (const { statusChange } of this.provider.operations.statusChange({
         transactionId: this.id,
       })) {
-        if (res.statusChange) {
-          break;
-        }
+        if (statusChange) break;
       }
 
       return this.fetch();
@@ -203,10 +200,10 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    for await (const res of this.provider.operations.statusChange({
+    for await (const { statusChange } of this.provider.operations.statusChange({
       transactionId: this.id,
     })) {
-      if (res.statusChange.type !== 'SubmittedStatus') break;
+      if (statusChange.type !== 'SubmittedStatus') break;
     }
 
     await this.fetch();
