@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { Contract, Provider } from 'fuels';
 import { BN, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
@@ -9,22 +9,23 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
-  let gasPrice: BN;
+  let provider: Provider;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
-    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
+    provider = contract.provider;
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {
     // #region call-params-1
     const amountToForward = 10;
+    const { minGasPrice } = provider.getGasConfig();
 
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
-      .txParams({ gasPrice })
+      .txParams({ gasPrice: minGasPrice })
       .call();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
@@ -33,6 +34,8 @@ describe(__filename, () => {
 
   it('should throw error due not enough gas', async () => {
     // #region call-params-2
+    const { minGasPrice } = provider.getGasConfig();
+
     await expect(
       contract.functions
         .return_context_amount()
@@ -40,7 +43,7 @@ describe(__filename, () => {
           forward: [10, BaseAssetId],
           gasLimit: 1,
         })
-        .txParams({ gasPrice })
+        .txParams({ gasPrice: minGasPrice })
         .call()
     ).rejects.toThrow(/OutOfGas/);
     // #endregion call-params-2
@@ -48,6 +51,7 @@ describe(__filename, () => {
 
   it('should successfully execute transaction with `txParams` and `callParams`', async () => {
     // #region call-params-3
+    const { minGasPrice } = provider.getGasConfig();
     const amountToForward = 10;
     const contractCallGasLimit = 100;
     const transactionGasLimit = 3_000_000;
@@ -60,7 +64,7 @@ describe(__filename, () => {
       })
       .txParams({
         gasLimit: transactionGasLimit,
-        gasPrice,
+        gasPrice: minGasPrice,
       })
       .call();
 

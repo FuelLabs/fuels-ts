@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
@@ -9,22 +9,22 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
-  let gasPrice: BN;
+  let provider: Provider;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.COUNTER);
-    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
+    provider = contract.provider;
   });
 
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
-    const gasLimit = 3_500_000;
-
     // #region variable-outputs-1
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
-        gasPrice,
-        gasLimit,
+        gasPrice: minGasPrice,
+        gasLimit: maxGasPerTx,
         variableOutputs: 1,
       })
       .call();
@@ -33,18 +33,20 @@ describe(__filename, () => {
 
     const { transaction } = transactionResult;
 
-    expect(new BN(transaction.gasPrice).toNumber()).toBe(gasPrice.toNumber());
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(gasLimit);
+    expect(new BN(transaction.gasPrice).toNumber()).toBe(minGasPrice.toNumber());
+    expect(new BN(transaction.gasLimit).toNumber()).toBe(maxGasPerTx.toNumber());
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {
     // #region transaction-parameters-3
+    const { minGasPrice } = provider.getGasConfig();
+
     await expect(
       contract.functions
         .increment_count(10)
         .txParams({
+          gasPrice: minGasPrice,
           gasLimit: 1,
-          gasPrice,
         })
         .call()
     ).rejects.toThrowError(/Gas limit [\s\S]* is lower than the required/);
