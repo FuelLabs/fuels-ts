@@ -389,17 +389,15 @@ export default class Provider {
         (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
           ?.operation === 'subscription';
 
-      if (isSubscription) {
-        return fuelGraphQLSubscriber({
-          url: this.url,
-          query,
-          fetchFn: (url, requestInit) =>
-            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
-          variables: vars as Record<string, unknown>,
-        });
-      }
-
-      return gqlClient.request(query, vars);
+      return isSubscription
+        ? fuelGraphQLSubscriber({
+            url: this.url,
+            query,
+            fetchFn: (url, requestInit) =>
+              fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+            variables: vars as Record<string, unknown>,
+          })
+        : gqlClient.request(query, vars);
     });
   }
 
