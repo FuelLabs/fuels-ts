@@ -2,7 +2,7 @@
 import { createConfig } from 'fuels';
 
 export default createConfig({
-  workspace: './sway-programs',
+  workspace: './sway-programs', // forc workspace
   output: './src/sway-programs-api',
 });
 // #endregion config
