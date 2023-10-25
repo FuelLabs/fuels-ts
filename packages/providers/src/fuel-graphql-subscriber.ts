@@ -62,10 +62,12 @@ export async function* fuelGraphQLSubscriber({
   });
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const streamReader = response.body!.pipeThrough(new FuelSubscriptionStream()).getReader();
+  const subscriptionsStreamReader = response
+    .body!.pipeThrough(new FuelSubscriptionStream())
+    .getReader();
 
   for (;;) {
-    const { value, done } = await streamReader.read();
+    const { value, done } = await subscriptionsStreamReader.read();
     if (value instanceof FuelError) throw value;
     yield value;
     if (done) break;
