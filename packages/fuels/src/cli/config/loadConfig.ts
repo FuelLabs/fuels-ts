@@ -78,6 +78,16 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     // Resolve members via workspace
     const workspace = resolve(cwd, userConfig.workspace);
     const forcToml = readForcToml(workspace);
+
+    if (!forcToml.workspace) {
+      const workspaceMsg = `Forc workspace not detected in:\n  ${workspace}/Forc.toml`;
+
+      const swayProgramType = readSwayType(workspace);
+      const exampleMsg = `Try using '${swayProgramType}s' instead of 'workspace' in:\n  ${configPath}`;
+
+      throw new Error([workspaceMsg, exampleMsg].join('\n\n'));
+    }
+
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
     swayMembers.forEach((path) => {

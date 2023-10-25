@@ -12,6 +12,7 @@ import {
 } from '../../../test/utils/runCommands';
 import * as shouldUseBuiltinForcMod from '../commands/init/shouldUseBuiltinForc';
 import * as shouldUseBuiltinFuelCoreMod from '../commands/init/shouldUseBuiltinFuelCore';
+import type { FuelsConfig } from '../types';
 
 import { loadConfig } from './loadConfig';
 
@@ -98,6 +99,23 @@ describe('loadConfig', () => {
     expect(config.contracts.length).toEqual(0);
     expect(config.scripts.length).toEqual(0);
     expect(config.predicates.length).toEqual(1);
+  });
+
+  test(`should warn about misconfigured workspace`, async () => {
+    await runInit(
+      [
+        initFlagsUseBuiltinBinaries,
+        // passing contract path in workspace config option
+        ['--workspace', 'project/contracts/bar'],
+        ['--output', generatedDir],
+      ].flat()
+    );
+
+    const { error, result } = await safeExec<Promise<FuelsConfig>>(() => loadConfig(fixturesDir));
+
+    expect(result).not.toBeTruthy();
+    expect(error?.message).toMatch(/forc workspace not detected/i);
+    expect(error?.message).toMatch(/try using 'contracts'/i);
   });
 
   test(`should smart-set built-in flags`, async () => {
