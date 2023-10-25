@@ -11,9 +11,9 @@ type FuelGraphQLSubscriberOptions = {
 };
 
 class FuelSubscriptionStream implements TransformStream {
-  readable: ReadableStream<FuelError | object>;
+  readable: ReadableStream<FuelError | Record<string, unknown>>;
   writable: WritableStream<Uint8Array>;
-  private readableStreamController!: ReadableStreamController<FuelError | object>;
+  private readableStreamController!: ReadableStreamController<FuelError | Record<string, unknown>>;
   private static textDecoder = new TextDecoder();
 
   constructor() {
