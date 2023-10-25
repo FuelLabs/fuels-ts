@@ -11,12 +11,6 @@ export function init(program: Command) {
 
   const { path, autoStartFuelCore, useBuiltinForc, useBuiltinFuelCore } = options;
 
-  const fuelsConfigPath = join(path, 'fuels.config.ts');
-
-  if (existsSync(fuelsConfigPath)) {
-    throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
-  }
-
   const workspace = options.workspace ? relative(path, options.workspace) : undefined;
 
   const [contracts, scripts, predicates] = ['contracts', 'scripts', 'predicates'].map(
@@ -34,7 +28,15 @@ export function init(program: Command) {
   const noneIsInformed = ![workspace, contracts, scripts, predicates].find((v) => v !== undefined);
 
   if (noneIsInformed) {
-    throw new Error(`Workspace not supplied.`);
+    // mimicking commander property validation
+    process.stdout.write(`error: required option '-w, --workspace <path>' not specified\r`);
+    process.exit(1);
+  }
+
+  const fuelsConfigPath = join(path, 'fuels.config.ts');
+
+  if (existsSync(fuelsConfigPath)) {
+    throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
   }
 
   const output = relative(path, options.output);

@@ -39,21 +39,27 @@ describe('init', () => {
   it('should run `init` command and throw for existent config file', async () => {
     const { error } = mockLogger();
 
-    const firstRun = await safeExec(() => runInit());
+    await runInit();
     expect(error).toHaveBeenCalledTimes(0);
-    expect(firstRun.error).not.toBeTruthy();
 
     // second time will trigger error
-    const secondRun = await safeExec(() => runInit());
+    await runInit();
     expect(error).toHaveBeenCalledTimes(1);
-    expect(secondRun.result).not.toBeTruthy();
-    expect(chalk.reset(secondRun.error)).toMatch(/Config file exists, aborting./);
+    expect(chalk.reset(error.mock.calls[0][0])).toMatch(/Config file exists, aborting/);
   });
 
-  it('should error if no inputs are supplied', async () => {
-    const { error } = await safeExec(() => runInit(['-o', generatedDir].flat()));
+  it('should error if no inputs/workspace is supplied', async () => {
+    const write = jest.spyOn(process.stdout, 'write').mockImplementation();
+    const exit = jest.spyOn(process, 'exit').mockImplementation();
 
-    expect(error).toBeTruthy();
-    expect(error?.toString()).toMatch(/Workspace not supplied./i);
+    await runInit(['-o', generatedDir].flat());
+
+    expect(exit).toHaveBeenCalledTimes(1);
+    expect(exit).toHaveBeenCalledWith(1);
+
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(write).toHaveBeenCalledWith(
+      `error: required option '-w, --workspace <path>' not specified\r`
+    );
   });
 });

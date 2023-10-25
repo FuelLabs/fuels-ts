@@ -75,12 +75,7 @@ describe('withConfig', () => {
       shouldError: true,
     });
 
-    const { error: safeError, result } = await safeExec(async () =>
-      withConfig(command, Commands.deploy, deploy)()
-    );
-
-    expect(result).not.toBeTruthy();
-    expect(safeError).toBeTruthy();
+    await withConfig(command, Commands.deploy, deploy)();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
