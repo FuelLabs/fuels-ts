@@ -885,7 +885,7 @@ describe('Provider', () => {
     expect(estimateTxSpy).toHaveBeenCalled();
   });
 
-  it('ensure that an invalid request throws and does not hold the test runner (closes all handles)', async () => {
+  it('An invalid subscription request throws and does not hold the test runner (closes all handles)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     await expectToThrowFuelError(
