@@ -2,7 +2,6 @@ import * as getSystemFuelCoreMod from '@fuel-ts/versions/cli';
 
 import { mockLogger } from '../../../../test/utils/mockLogger';
 
-import { makeWarnMessage } from './messages';
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
 
 jest.mock('@fuel-ts/versions/cli', () => ({
@@ -23,30 +22,27 @@ describe('shouldUseBuiltinFuelCore', () => {
       .spyOn(getSystemFuelCoreMod, 'getSystemFuelCore')
       .mockReturnValue({ error: null, systemFuelCoreVersion: returns.getSystemFuelCore });
 
-    const { warn, error } = mockLogger();
+    const { error } = mockLogger();
 
     return {
       getSystemFuelCore,
-      warn,
       error,
     };
   }
 
   it('should select [built-in] fuel-core', () => {
-    const { getSystemFuelCore, warn, error } = mockAll({ getSystemFuelCore: null });
+    const { getSystemFuelCore, error } = mockAll({ getSystemFuelCore: null });
 
     const useBuiltinFuelCore = shouldUseBuiltinFuelCore();
 
     expect(useBuiltinFuelCore).toEqual(true);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
 
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls[0][0]).toEqual(makeWarnMessage('fuel-core'));
     expect(error).toHaveBeenCalledTimes(0);
   });
 
   it('should select [system] fuel-core', () => {
-    const { getSystemFuelCore, warn, error } = mockAll({
+    const { getSystemFuelCore, error } = mockAll({
       getSystemFuelCore: '1.0.0',
     });
 
@@ -55,7 +51,6 @@ describe('shouldUseBuiltinFuelCore', () => {
     expect(useBuiltinFuelCore).toEqual(false);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
 
-    expect(warn).toHaveBeenCalledTimes(0);
     expect(error).toHaveBeenCalledTimes(0);
   });
 });
