@@ -263,8 +263,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex: 0,
-      predicate: undefined,
-      predicateData: undefined,
     };
 
     if ('getPredicateContent' in coin) {
@@ -309,8 +307,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       recipient: recipient.toB256(),
       amount,
       witnessIndex: 0,
-      predicate: undefined,
-      predicateData: undefined,
     };
 
     if ('getPredicateContent' in message) {
