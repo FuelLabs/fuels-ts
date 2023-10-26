@@ -77,9 +77,8 @@ describe('WalletUnlocked', () => {
     const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = await wallet.signTransaction(transactionRequest);
-    const populatedTransaction = await wallet.populateTransactionWitnessesSignature(
-      transactionRequest
-    );
+    const populatedTransaction =
+      await wallet.populateTransactionWitnessesSignature(transactionRequest);
 
     expect(populatedTransaction.witnesses?.[0]).toBe(signedTransaction);
   });

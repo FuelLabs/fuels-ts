@@ -12,32 +12,19 @@ In order to test your Sway and TS-SDK applications, you can test your code in a 
 2. Using `forc test` see <a :href="url" target="_blank" rel="noreferrer">the Sway docs</a> for more info
 3. Using [the Rust SDK](https://fuellabs.github.io/fuels-rs/v0.31.1/testing/index.html)
 
-### Testing with TS-SDK
+## Testing with the TS-SDK
 
 To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [Vitest](https://vitest.dev/) for its tests.
 
-### Wallet Test Utilities
+### The `TestNodeLauncher` utility
 
-You'll often want to create one or more test wallets when testing your contracts.
+To simplify testing of sway programs in isolation, the SDK provides `TestNodeLauncher`, a utility via which you can spin up a short-lived `fuel-core` node, setup a custom provider and wallets, and deploy contracts in one go.
+Here is a simple contract deployment in a test:
 
-For this, you can find two simple utilities on the wallet package:
+<<< @/../../../packages/contract/src/test-utils/test-node-launcher.test.ts#TestNodeLauncher-deploy-contract{ts:line-numbers}
 
-- [`@fuel-ts/wallet`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/wallet#test-utilities)
+The code above spins up a `fuel-core` node on the first available port your machine provides, deploys your contract to that node, and returns the contract for you to test. After the `launched` variable goes out of scope, resource disposal is run and the node is killed.
 
-On top of these two utilities, if you want to quickly get up and running with a local node, you can use the `launchNodeAndGetWallets` from the `@fuel-ts/wallet/test-utils` package.
+You can also configure wallets and deploy multiple contracts with them:
 
-```ts
-import { launchNodeAndGetWallets } from "@fuel-ts/wallet/test-utils";
-
-const { stop, wallets, provider } = await launchNodeAndGetWallets();
-
-// ... do your tests - deploy contracts using the wallets, fetch info from the provider, etc.
-
-// stop the node when you're done
-stop();
-```
-
-See also:
-
-1. [Setting up test wallets](../wallets/test-wallets.md)
-2. [Testing in TS](./testing-in-ts.md)
+<<< @/../../../packages/contract/src/test-utils/test-node-launcher.test.ts#TestNodeLauncher-multiple-contracts-and-wallets{ts:line-numbers}

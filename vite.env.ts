@@ -21,7 +21,6 @@ import faucets from './.fuel-core/configs/faucets.json';
  * See: https://vitest.dev/config/#setupfiles
  */
 const getPrivateKeyForCurrentWorker = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const workerId = Number.parseInt(process.env.VITEST_POOL_ID!, 10) || 1;
 
   if (workerId > faucets.length) {
