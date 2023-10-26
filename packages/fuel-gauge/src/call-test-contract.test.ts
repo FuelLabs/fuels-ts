@@ -1,20 +1,9 @@
-import { readFileSync } from 'fs';
-import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { BN, bn, toHex, BaseAssetId } from 'fuels';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
+import { getContractDir } from './utils';
 
-import { createSetupConfig } from './utils';
-
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin')
-);
-
-const setupContract = createSetupConfig({
-  contractBytecode,
-  abi: abiJSON,
-  cache: true,
-});
+const callTestContractDir = getContractDir('call-test-contract');
 
 const U64_MAX = bn(2).pow(64).sub(1);
 
@@ -22,13 +11,15 @@ const U64_MAX = bn(2).pow(64).sub(1);
  * @group node
  */
 describe('CallTestContract', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+
     const { value } = await contract.functions.foo(num).txParams({ gasPrice }).call<BN>();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
@@ -41,14 +32,27 @@ describe('CallTestContract', () => {
     [{ a: false, b: U64_MAX.sub(1) }],
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+
     const { value } = await contract.functions.boo(struct).txParams({ gasPrice }).call();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
   it('can call a function with empty arguments', async () => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
     const { value: value0 } = await contract.functions.barfoo(0).txParams({ gasPrice }).call();
     expect(value0.toHex()).toEqual(toHex(63));
@@ -58,7 +62,13 @@ describe('CallTestContract', () => {
   });
 
   it('function with empty return should resolve undefined', async () => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
     // Call method with no params but with no result and no value on config
     const { value } = await contract.functions.return_void().txParams({ gasPrice }).call();
@@ -133,7 +143,13 @@ describe('CallTestContract', () => {
   ])(
     `Test call with multiple arguments and different types -> %s`,
     async (method, { values, expected }) => {
-      const contract = await setupContract();
+      await using launched = await TestNodeLauncher.launch({
+        deployContracts: [callTestContractDir],
+      });
+      const {
+        contracts: [contract],
+      } = launched;
+      const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
       const { value } = await contract.functions[method](...values)
         .txParams({ gasPrice })
@@ -148,7 +164,13 @@ describe('CallTestContract', () => {
   );
 
   it('Forward amount value on contract call', async () => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -160,7 +182,13 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract call', async () => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const { value } = await contract.functions
@@ -174,7 +202,13 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract simulate call', async () => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const { value } = await contract.functions
@@ -188,7 +222,13 @@ describe('CallTestContract', () => {
   });
 
   it('can make multiple calls', async () => {
-    const contract = await setupContract();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
     const num = 1337;
     const numC = 10;
