@@ -1,10 +1,13 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type { BN, Contract } from 'fuels';
 import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
-import { getSetupContract } from './utils';
+import { getContractDir, getSetupContract } from './utils';
 
 const setupContract = getSetupContract('advanced-logging');
 const setupOtherContract = getSetupContract('advanced-logging-other-contract');
+const advancedLoggingDir = getContractDir('advanced-logging');
+const advancedLoggingOtherContractDir = getContractDir('advanced-logging-other-contract');
 
 let contractInstance: Contract;
 let otherContractInstance: Contract;
@@ -23,6 +26,9 @@ beforeAll(async () => {
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [{ contractDir: advancedLoggingDir }, { contractDir: advancedLoggingDir }],
+    });
     const { value, logs } = await contractInstance.functions
       .test_function()
       .txParams({ gasPrice })
