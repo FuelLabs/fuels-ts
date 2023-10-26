@@ -16,10 +16,9 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const configJoycon = new JoyCon();
 
   const configPath = await configJoycon.resolve({
-    files: ['fuels.config.ts'],
+    files: ['fuels.config.ts', 'fuels.config.js'],
     cwd,
     stopDir: parse(cwd).root,
-    packageKey: 'tsup',
   });
 
   if (!configPath) {
