@@ -22,7 +22,7 @@ type Wrapper = {
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: bytesContractDir }],
+      deployContracts: [bytesContractDir],
     });
     const {
       provider,
@@ -40,7 +40,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes output [100 items]', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: bytesContractDir }],
+      deployContracts: [bytesContractDir],
     });
     const {
       provider,
@@ -59,7 +59,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: bytesContractDir }],
+      deployContracts: [bytesContractDir],
     });
     const {
       provider,
@@ -77,7 +77,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: bytesContractDir }],
+      deployContracts: [bytesContractDir],
     });
     const {
       provider,
@@ -100,7 +100,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [predicate-bytes]', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: bytesContractDir }],
+      deployContracts: [bytesContractDir],
     });
     const {
       provider,
@@ -146,7 +146,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [script-bytes]', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: bytesContractDir }],
+      deployContracts: [bytesContractDir],
     });
     const {
       provider,
