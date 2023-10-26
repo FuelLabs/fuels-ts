@@ -1,17 +1,9 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { BN, getRandomB256 } from 'fuels';
 
-import contractAbi from '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract-abi.json';
+import { getContractDir } from './utils';
 
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract.bin'
-  )
-);
+const configurableContractDir = getContractDir('configurable-contract');
 
 const defaultValues = {
   U8: 10,
@@ -38,26 +30,13 @@ const defaultValues = {
  * @group node
  */
 describe('Configurable Contract', () => {
-  let wallet: WalletUnlocked;
-  let factory: ContractFactory;
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-    const quantities: CoinQuantityLike[] = [
-      {
-        amount: 1_000_000,
-        assetId: BaseAssetId,
-      },
-    ];
-
-    wallet = await generateTestWallet(provider, quantities);
-
-    factory = new ContractFactory(contractBytecode, contractAbi, wallet);
-  });
-
   it('should assert default values', async () => {
-    const contract = await factory.deployContract({ gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [configurableContractDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_configurables().simulate();
 
@@ -80,8 +59,14 @@ describe('Configurable Contract', () => {
     };
 
     expect(defaultValues.U8).not.toBe(configurableConstants.U8);
-
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_u8().simulate();
 
@@ -95,7 +80,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U16).not.toBe(configurableConstants.U16);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_u16().simulate();
 
@@ -109,7 +101,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U32).not.toBe(configurableConstants.U32);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_u32().simulate();
 
@@ -123,7 +122,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U64).not.toBe(configurableConstants.U64);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_u64().simulate();
 
@@ -137,7 +143,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.BOOL).not.toBe(configurableConstants.BOOL);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_bool().simulate();
 
@@ -151,7 +164,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.B256).not.toBe(configurableConstants.B256);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_b256().simulate();
 
@@ -165,7 +185,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.ENUM).not.toBe(configurableConstants.ENUM);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_enum().simulate();
 
@@ -182,7 +209,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.ARRAY).not.toStrictEqual(configurableConstants.ARRAY);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_array().simulate();
 
@@ -196,7 +230,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.STR_4).not.toBe(configurableConstants.STR_4);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_str4().simulate();
 
@@ -210,7 +251,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.TUPLE).not.toStrictEqual(configurableConstants.TUPLE);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_tuple().simulate();
 
@@ -228,7 +276,14 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.STRUCT_1).not.toStrictEqual(configurableConstants.STRUCT_1);
 
-    const contract = await factory.deployContract({ configurableConstants, gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        { contractDir: configurableContractDir, options: { configurableConstants } },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { value } = await contract.functions.echo_struct().simulate();
 
