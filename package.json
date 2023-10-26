@@ -94,10 +94,10 @@
     "tsx": "^3.12.7",
     "turbo": "^1.8.8",
     "typescript": "~5.2.2",
-    "vite": "^4.3.9",
+    "vite": "^4.5.0",
     "vite-plugin-node-polyfills": "^0.15.0",
     "vite-plugin-plain-text": "^1.4.2",
-    "vitest": "^0.34.3",
+    "vitest": "^0.34.6",
     "webdriverio": "^8.15.8"
   },
   "pnpm": {

@@ -150,7 +150,7 @@ importers:
         specifier: ~5.2.2
         version: 5.2.2
       vite:
-        specifier: ^4.3.9
+        specifier: ^4.5.0
         version: 4.5.0(@types/node@18.15.3)
       vite-plugin-node-polyfills:
         specifier: ^0.15.0
@@ -159,7 +159,7 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2
       vitest:
-        specifier: ^0.34.3
+        specifier: ^0.34.6
         version: 0.34.6(@vitest/browser@0.34.3)(@vitest/ui@0.34.3)(webdriverio@8.15.8)
       webdriverio:
         specifier: ^8.15.8
@@ -282,7 +282,7 @@ importers:
         version: 5.59.0(eslint@8.38.0)(typescript@5.2.2)
       '@vitejs/plugin-react':
         specifier: ^4.0.0
-        version: 4.0.0(vite@4.3.9)
+        version: 4.0.0(vite@4.5.0)
       eslint:
         specifier: ^8.38.0
         version: 8.38.0
@@ -297,7 +297,7 @@ importers:
         version: 5.2.2
       vite:
         specifier: ^4.3.9
-        version: 4.3.9(@types/node@18.15.3)
+        version: 4.5.0(@types/node@18.15.3)
 
   apps/demo-typegen:
     dependencies:
@@ -6683,7 +6683,7 @@ packages:
   /@ungap/structured-clone@1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  /@vitejs/plugin-react@4.0.0(vite@4.3.9):
+  /@vitejs/plugin-react@4.0.0(vite@4.5.0):
     resolution: {integrity: sha512-HX0XzMjL3hhOYm+0s95pb0Z7F8O81G7joUHgfDd/9J/ZZf5k4xX6QAMFkKsHFxaHlf6X7GD7+XuaZ66ULiJuhQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -6693,19 +6693,19 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.22.5(@babel/core@7.22.5)
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.5)
       react-refresh: 0.14.0
-      vite: 4.3.9(@types/node@18.15.3)
+      vite: 4.5.0(@types/node@18.15.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@vitejs/plugin-vue@4.2.3(vite@4.3.9)(vue@3.2.47):
+  /@vitejs/plugin-vue@4.2.3(vite@4.5.0)(vue@3.2.47):
     resolution: {integrity: sha512-R6JDUfiZbJA9cMiguQ7jxALsgiprjBeHL5ikpXfJCH62pPHtI+JdJ5xWj6Ev73yXSlYl86+blXn1kZHQ7uElxw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.3.9(@types/node@18.15.3)
+      vite: 4.5.0(@types/node@18.15.3)
       vue: 3.2.47
     dev: true
 
@@ -19609,39 +19609,6 @@ packages:
       minimatch: 6.2.0
     dev: true
 
-  /vite@4.3.9(@types/node@18.15.3):
-    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 18.15.3
-      esbuild: 0.17.19
-      postcss: 8.4.24
-      rollup: 3.25.3
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /vite@4.5.0(@types/node@16.18.34):
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -19736,12 +19703,12 @@ packages:
     dependencies:
       '@docsearch/css': 3.5.1
       '@docsearch/js': 3.5.1(@algolia/client-search@4.18.0)(search-insights@2.6.0)
-      '@vitejs/plugin-vue': 4.2.3(vite@4.3.9)(vue@3.2.47)
+      '@vitejs/plugin-vue': 4.2.3(vite@4.5.0)(vue@3.2.47)
       '@vue/devtools-api': 6.5.0
       '@vueuse/core': 9.13.0(vue@3.2.47)
       body-scroll-lock: 4.0.0-beta.0
       shiki: 0.14.3
-      vite: 4.3.9(@types/node@18.15.3)
+      vite: 4.5.0(@types/node@18.15.3)
       vue: 3.2.47
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -19749,6 +19716,7 @@ packages:
       - '@types/react'
       - '@vue/composition-api'
       - less
+      - lightningcss
       - react
       - react-dom
       - sass
