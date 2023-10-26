@@ -31,7 +31,7 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
 import liquidityPoolABI from '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
 import predicateTriple from '../fixtures/forc-projects/predicate-triple-sig';
 import testPredicateTrue from '../fixtures/forc-projects/predicate-true';

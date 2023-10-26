@@ -3,7 +3,11 @@ import { type Transaction } from '@fuel-ts/transactions';
 import { hexlify } from 'ethers';
 
 import type { TransactionResultReceipt } from '../transaction-response';
-import { calculateTransactionFee } from '../utils';
+import {
+  calculateTransactionFee,
+  calculateTxChargeableBytes,
+  getGasUsedFromReceipts,
+} from '../utils';
 
 import { fromTai64ToDate } from './date';
 import {
@@ -19,7 +23,7 @@ import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './typ
 
 export interface AssembleTransactionSummaryParams {
   id?: string;
-  gasPerByte?: BN;
+  gasPerByte: BN;
   gasPriceFactor: BN;
   transaction: Transaction;
   transactionBytes: Uint8Array;
@@ -45,16 +49,22 @@ export function assembleTransactionSummary<TTransactionType = void>(
     maxInputs,
   } = params;
 
-  const gasPrice = bn(transaction.gasPrice);
+  const { gasLimit = bn(0), witnesses } = transaction;
 
-  const { gasUsed, fee } = calculateTransactionFee({
-    receipts,
-    gasPrice,
+  const gasPrice = bn(transaction.gasPrice);
+  const gasUsed = getGasUsedFromReceipts(receipts);
+  const chargeableBytes = calculateTxChargeableBytes({
     transactionBytes,
-    transactionWitnesses: transaction?.witnesses || [],
+    transactionWitnesses: witnesses,
+  });
+
+  const { fee } = calculateTransactionFee({
+    gasUsed,
+    gasPrice,
+    gasLimit,
     gasPerByte,
     gasPriceFactor,
-    transactionType: transaction.type,
+    chargeableBytes,
   });
 
   const operations = getOperations({
