@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.65.0
+
+### Patch Changes
+
+- 🐞 Fixed usage of process, by [@camsjams](https://github.com/camsjams) (See [#1378](https://github.com/FuelLabs/fuels-ts/pull/1378))
+
 ## 0.64.1
 
 ## 0.64.0
