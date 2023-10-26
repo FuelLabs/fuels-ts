@@ -16,7 +16,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const configJoycon = new JoyCon();
 
   const configPath = await configJoycon.resolve({
-    files: ['fuels.config.ts', 'fuels.config.js'],
+    files: ['ts', 'js', 'cjs', 'mjs'].map((e) => `fuels.config.${e}`),
     cwd,
     stopDir: parse(cwd).root,
   });
