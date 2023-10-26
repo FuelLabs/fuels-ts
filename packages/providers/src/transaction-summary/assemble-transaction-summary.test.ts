@@ -17,8 +17,7 @@ import {
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import type { GraphqlTransactionStatus } from './types';
-import { type Operation } from './types';
+import type { GraphqlTransactionStatus, Operation } from './types';
 
 /**
  * @group node
