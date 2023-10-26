@@ -1,25 +1,10 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import type { BN, Contract } from 'fuels';
 import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
-import { getContractDir, getSetupContract } from './utils';
+import { getContractDir } from './utils';
 
-const setupContract = getSetupContract('advanced-logging');
-const setupOtherContract = getSetupContract('advanced-logging-other-contract');
 const advancedLoggingDir = getContractDir('advanced-logging');
 const advancedLoggingOtherContractDir = getContractDir('advanced-logging-other-contract');
-
-let contractInstance: Contract;
-let otherContractInstance: Contract;
-
-let gasPrice: BN;
-
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  otherContractInstance = await setupOtherContract({ cache: false });
-
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
-});
 
 /**
  * @group node
@@ -27,12 +12,13 @@ beforeAll(async () => {
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [{ contractDir: advancedLoggingDir }, { contractDir: advancedLoggingDir }],
+      deployContracts: [advancedLoggingDir],
     });
-    const { value, logs } = await contractInstance.functions
-      .test_function()
-      .txParams({ gasPrice })
-      .call();
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+    const { value, logs } = await contract.functions.test_function().txParams({ gasPrice }).call();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
@@ -76,7 +62,14 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
-    const { value, logs } = await contractInstance.functions
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [advancedLoggingDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+    const { value, logs } = await contract.functions
       .test_function_with_require(1, 1)
       .txParams({ gasPrice })
       .call();
@@ -86,9 +79,14 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
-    const invocation = contractInstance.functions
-      .test_function_with_require(1, 3)
-      .txParams({ gasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [advancedLoggingDir],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+    const invocation = contract.functions.test_function_with_require(1, 3).txParams({ gasPrice });
     try {
       await invocation.call();
 
@@ -117,10 +115,18 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from a downstream Contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [advancedLoggingDir, advancedLoggingOtherContractDir],
+    });
+    const {
+      contracts: [contract, otherContract],
+    } = launched;
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+
     const INPUT = 3;
-    const { value, logs } = await contractInstance.functions
-      .test_log_from_other_contract(INPUT, otherContractInstance.id.toB256())
-      .addContracts([otherContractInstance])
+    const { value, logs } = await contract.functions
+      .test_log_from_other_contract(INPUT, otherContract.id.toB256())
+      .addContracts([otherContract])
       .txParams({ gasPrice })
       .call();
 
