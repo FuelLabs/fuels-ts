@@ -90,7 +90,7 @@ describe('withConfig', () => {
   });
 
   test('should handle error when loading config file', async () => {
-    const { command, deploy, error, loadConfig, configPath, onSuccess, onFailure } = mockAll({
+    const { command, deploy, error, loadConfig, configPath, onSuccess } = mockAll({
       shouldErrorOnLoadConfig: true,
     });
 
