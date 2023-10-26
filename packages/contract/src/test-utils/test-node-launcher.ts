@@ -26,7 +26,7 @@ interface DeployContractConfig {
 }
 
 interface TestNodeLauncherOptions extends LaunchCustomProviderAndGetWalletsOptions {
-  deployContracts: DeployContractConfig[];
+  deployContracts: (DeployContractConfig | string)[];
 }
 
 interface TestNodeLauncherReturn<TContracts> {
@@ -84,7 +84,7 @@ export class TestNodeLauncher {
   }
 
   private static async deployContracts(
-    deployContracts: DeployContractConfig[],
+    deployContracts: TestNodeLauncherOptions['deployContracts'],
     wallets: WalletUnlocked[]
   ) {
     const contracts: Contract[] = [];
@@ -92,6 +92,9 @@ export class TestNodeLauncher {
     if (deployContracts.length === 0) return contracts;
 
     const factories = deployContracts.map((config) => {
+      if (typeof config === 'string') {
+        return TestNodeLauncher.prepareContractFactory(config, undefined, wallets[0]);
+      }
       if (config.walletIndex && (config.walletIndex < 0 || config.walletIndex >= wallets.length)) {
         throw new FuelError(
           FuelError.CODES.INVALID_INPUT_PARAMETERS,
@@ -99,7 +102,11 @@ export class TestNodeLauncher {
         );
       }
 
-      return TestNodeLauncher.prepareContractFactory(config, wallets[config.walletIndex ?? 0]);
+      return TestNodeLauncher.prepareContractFactory(
+        config.contractDir,
+        config.options,
+        wallets[config.walletIndex ?? 0]
+      );
     });
 
     for (let i = 0; i < factories.length; i++) {
@@ -112,19 +119,18 @@ export class TestNodeLauncher {
   }
 
   private static prepareContractFactory(
-    contractConfig: DeployContractConfig,
+    contractDir: string,
+    deployOptions: DeployContractConfig['options'],
     wallet: WalletUnlocked
   ) {
-    const { abiContents, binHexlified, storageSlots } = getForcProject<JsonAbi>(
-      contractConfig.contractDir
-    );
+    const { abiContents, binHexlified, storageSlots } = getForcProject<JsonAbi>(contractDir);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     return {
       factory,
       deployConfig: {
-        ...contractConfig.options,
-        storageSlots: contractConfig.options?.storageSlots ?? storageSlots,
+        ...deployOptions,
+        storageSlots: deployOptions?.storageSlots ?? storageSlots,
       },
     };
   }

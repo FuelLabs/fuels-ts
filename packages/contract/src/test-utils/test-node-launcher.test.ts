@@ -59,9 +59,22 @@ describe('TestNodeLauncher', () => {
   });
 
   test('a contract can be deployed', async () => {
-    // #region TestNodeLauncher-deploy-contract
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [{ contractDir: pathToContractRootDir }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const response = await contract.functions.test_function().call();
+    expect(response.value).toBe(true);
+  });
+
+  test('a contract can be deployed by providing just the path', async () => {
+    // #region TestNodeLauncher-deploy-contract
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [pathToContractRootDir],
     });
 
     const {
