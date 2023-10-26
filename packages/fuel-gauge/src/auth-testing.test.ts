@@ -1,42 +1,24 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
-import {
-  AssertFailedRevertError,
-  ContractFactory,
-  BaseAssetId,
-  Provider,
-  getRandomB256,
-  FUEL_NETWORK_URL,
-} from 'fuels';
-import path from 'path';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { AssertFailedRevertError, getRandomB256 } from 'fuels';
 
-import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
+import { getContractDir } from './utils';
 
-let contractInstance: Contract;
-let wallet: WalletUnlocked;
-let gasPrice: BN;
+const authTestingDir = getContractDir('auth_testing_contract');
 
 /**
  * @group node
  */
 describe('Auth Testing', () => {
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
-
-    const bytecode = fs.readFileSync(
-      path.join(
-        __dirname,
-        '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract.bin'
-      )
-    );
-    const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    contractInstance = await factory.deployContract({ gasPrice });
-  });
-
   it('can get is_caller_external', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [authTestingDir],
+    });
+    const {
+      contracts: [contractInstance],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const { value } = await contractInstance.functions
       .is_caller_external()
       .txParams({ gasPrice })
@@ -46,6 +28,16 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [authTestingDir],
+    });
+    const {
+      contracts: [contractInstance],
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
       .txParams({ gasPrice })
@@ -55,6 +47,15 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [authTestingDir],
+    });
+    const {
+      contracts: [contractInstance],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     await expect(
       contractInstance.functions
         .check_msg_sender({ value: getRandomB256() })
