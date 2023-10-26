@@ -4,13 +4,33 @@
 
 ## Properties
 
-### gasPerByte
+### chargeableBytes
 
-• `Optional` **gasPerByte**: `BN`
+• **chargeableBytes**: `BN`
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:92](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L92)
+[packages/providers/src/utils/calculate-fee.ts:47](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/providers/src/utils/calculate-fee.ts#L47)
+
+___
+
+### gasLimit
+
+• **gasLimit**: `BN`
+
+#### Defined in
+
+[packages/providers/src/utils/calculate-fee.ts:44](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/providers/src/utils/calculate-fee.ts#L44)
+
+___
+
+### gasPerByte
+
+• **gasPerByte**: `BN`
+
+#### Defined in
+
+[packages/providers/src/utils/calculate-fee.ts:45](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/providers/src/utils/calculate-fee.ts#L45)
 
 ___
 
@@ -20,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:86](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L86)
+[packages/providers/src/utils/calculate-fee.ts:43](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/providers/src/utils/calculate-fee.ts#L43)
 
 ___
 
@@ -30,54 +50,14 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:91](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L91)
+[packages/providers/src/utils/calculate-fee.ts:46](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/providers/src/utils/calculate-fee.ts#L46)
 
 ___
 
-### margin
+### gasUsed
 
-• `Optional` **margin**: `number`
-
-#### Defined in
-
-[packages/providers/src/utils/fee.ts:87](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L87)
-
-___
-
-### receipts
-
-• **receipts**: `TransactionResultReceipt`[]
+• **gasUsed**: `BN`
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:85](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L85)
-
-___
-
-### transactionBytes
-
-• **transactionBytes**: `Uint8Array`
-
-#### Defined in
-
-[packages/providers/src/utils/fee.ts:88](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L88)
-
-___
-
-### transactionType
-
-• **transactionType**: [`TransactionType`](/api/Providers/TransactionType.md)
-
-#### Defined in
-
-[packages/providers/src/utils/fee.ts:90](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L90)
-
-___
-
-### transactionWitnesses
-
-• **transactionWitnesses**: `Witness`[]
-
-#### Defined in
-
-[packages/providers/src/utils/fee.ts:89](https://github.com/FuelLabs/fuels-ts/blob/39f48277/packages/providers/src/utils/fee.ts#L89)
+[packages/providers/src/utils/calculate-fee.ts:42](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/providers/src/utils/calculate-fee.ts#L42)
