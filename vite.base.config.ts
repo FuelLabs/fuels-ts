@@ -7,6 +7,7 @@ export default defineConfig({
       namedExport: false,
     }),
   ],
+  esbuild: { target: 'es2022' },
   test: {
     exclude: [
       '**/node_modules/**',
