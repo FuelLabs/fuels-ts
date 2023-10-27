@@ -70,7 +70,7 @@ export default createConfig({
         {
           key: '0x..',
           /**
-           * Gere we could initialize a storage slot,
+           * Here we could initialize a storage slot,
            * using the relevant contract ID.
            */
           value: contract.contractId,
