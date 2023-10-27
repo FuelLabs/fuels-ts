@@ -24,7 +24,7 @@ export async function setupTestProvider<
   Dispose extends boolean = true,
   R = Dispose extends true
     ? Provider & AsyncDisposable
-    : { provider: Provider; cleanup: () => Promise<void> },
+    : { provider: Provider; cleanup: () => Promise<void>; chainConfig: ChainConfig },
 >(options?: Partial<SetupTestProviderOptions>, dispose?: Dispose): Promise<R> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
@@ -37,7 +37,7 @@ export async function setupTestProvider<
     chainConfig: mergeDeepRight(defaultChainConfig, options?.nodeOptions?.chainConfig || {}),
   };
 
-  const { cleanup, ip, port } = await launchTestNode(nodeOptions);
+  const { cleanup, ip, port, chainConfig } = await launchTestNode(nodeOptions);
 
   try {
     const provider = await Provider.create(
@@ -53,6 +53,7 @@ export async function setupTestProvider<
         : {
             provider,
             cleanup,
+            chainConfig,
           }
     ) as R;
   } catch (err) {

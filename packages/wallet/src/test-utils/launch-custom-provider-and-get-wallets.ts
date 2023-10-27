@@ -1,6 +1,6 @@
 import type { Provider } from '@fuel-ts/providers';
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
-import type { SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
+import type { ChainConfig, SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
 
 import type { WalletUnlocked } from '../wallets';
 
@@ -16,31 +16,31 @@ export async function launchCustomProviderAndGetWallets<
   ReturnType = {
     wallets: WalletUnlocked[];
     provider: Provider;
-  } & (Dispose extends true ? AsyncDisposable : { cleanup: () => Promise<void> }),
+  } & (Dispose extends true
+    ? AsyncDisposable
+    : {
+        cleanup: () => Promise<void>;
+        deployedChainConfig: ChainConfig;
+        customChainConfig: Partial<ChainConfig>;
+      }),
 >(
   {
-    walletConfig = new WalletConfig(),
-    providerOptions,
-    nodeOptions,
+    walletConfig = WalletConfig.DEFAULT,
+    providerOptions = {},
+    nodeOptions = {},
   }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {},
   dispose?: Dispose
 ): Promise<ReturnType> {
-  const { wallets, coins } = walletConfig;
+  const { wallets } = walletConfig;
 
-  const chainConfig = {
-    ...nodeOptions?.chainConfig,
-    initial_state: {
-      ...nodeOptions?.chainConfig?.initial_state,
-      coins: coins.concat(nodeOptions?.chainConfig?.initial_state?.coins || []),
-    },
-  };
+  const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 
-  const { provider, cleanup } = await setupTestProvider(
+  const { provider, cleanup, chainConfig } = await setupTestProvider(
     {
       providerOptions,
       nodeOptions: {
         ...nodeOptions,
-        chainConfig,
+        chainConfig: customChainConfig,
       },
     },
     false
@@ -61,6 +61,8 @@ export async function launchCustomProviderAndGetWallets<
           wallets,
           provider,
           cleanup,
+          deployedChainConfig: chainConfig,
+          customChainConfig,
         }
   ) as ReturnType;
 }

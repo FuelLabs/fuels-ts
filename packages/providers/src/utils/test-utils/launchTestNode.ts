@@ -30,6 +30,7 @@ export type LaunchNodeResult = Promise<{
   cleanup: () => Promise<void>;
   ip: string;
   port: string;
+  chainConfig: ChainConfig;
 }>;
 
 /**
@@ -118,7 +119,7 @@ export const launchTestNode = async ({
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         const [nodeIp, nodePort] = chunk.split(' ').at(-1)!.trim().split(':');
 
-        resolve({ cleanup, ip: nodeIp, port: nodePort });
+        resolve({ cleanup, ip: nodeIp, port: nodePort, chainConfig });
       }
 
       if (/error/i.test(chunk)) {

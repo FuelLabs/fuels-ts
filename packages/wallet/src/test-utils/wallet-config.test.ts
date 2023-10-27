@@ -107,7 +107,9 @@ describe('WalletConfig', () => {
 
   it('allows custom assets to be provided', () => {
     const assetId = AssetId.random();
-    const { coins } = new WalletConfig({ assets: [assetId] });
+    const {
+      initial_state: { coins },
+    } = new WalletConfig({ assets: [assetId] }).apply({});
 
     expect(coins[0].asset_id).toEqual(AssetId.BaseAssetId.value);
     expect(coins[1].asset_id).toEqual(assetId.value);

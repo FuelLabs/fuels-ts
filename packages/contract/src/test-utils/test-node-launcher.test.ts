@@ -2,12 +2,16 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { Provider } from '@fuel-ts/providers';
 import { WalletConfig } from '@fuel-ts/wallet/test-utils';
+import * as walletTestUtils from '@fuel-ts/wallet/test-utils';
 import { join } from 'path';
 
 import { TestNodeLauncher } from './test-node-launcher';
 
 const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
 
+/**
+ * @group node
+ */
 describe('TestNodeLauncher', () => {
   test('kills the node after going out of scope', async () => {
     let url = '';
@@ -125,4 +129,44 @@ describe('TestNodeLauncher', () => {
       }
     );
   });
+
+  test("can launch multiple nodes and cache their info for 'launch' calls", async () => {
+    await TestNodeLauncher.prepareCache(2);
+
+    const spy = vi.spyOn(walletTestUtils, 'launchCustomProviderAndGetWallets');
+
+    await using firstNode = await TestNodeLauncher.launch();
+    await using secondNode = await TestNodeLauncher.launch();
+
+    expect(spy).toBeCalledTimes(0);
+
+    await using thirdNode = await TestNodeLauncher.launch();
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  test('launches a new node if the chainConfig is different from the cached one', async () => {
+    await TestNodeLauncher.prepareCache(1, {
+      nodeOptions: {
+        chainConfig: {
+          chain_name: 'X',
+        },
+      },
+    });
+
+    const spy = vi.spyOn(walletTestUtils, 'launchCustomProviderAndGetWallets');
+
+    await using node = await TestNodeLauncher.launch({
+      nodeOptions: {
+        chainConfig: {
+          chain_name: 'Y',
+        },
+      },
+    });
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  // test('launches a new node if the providerOptions are different from the cached one', async () => {});
+  // test('launches a new node if the nodeOptions are different from the cached one', async () => {});
 });

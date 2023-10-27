@@ -1,6 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { toHex } from '@fuel-ts/math';
 import type { ChainConfig } from '@fuel-ts/providers/test-utils';
+import type { PartialDeep } from 'type-fest';
 
 import { WalletUnlocked } from '../wallets';
 
@@ -36,8 +37,9 @@ interface WalletConfigOptions {
  * Used for configuring the wallets that should exist in the genesis block of a test node.
  */
 export class WalletConfig {
-  public coins: ChainConfig['initial_state']['coins'];
+  private coins: ChainConfig['initial_state']['coins'];
   public wallets: WalletUnlocked[];
+  public static DEFAULT = new WalletConfig();
 
   constructor({
     wallets = 1,
@@ -59,6 +61,18 @@ export class WalletConfig {
     }
 
     this.coins = WalletConfig.createAssets(this.wallets, assets, coinsPerAsset, amountPerCoin);
+  }
+
+  apply(chainConfig: PartialDeep<ChainConfig> | undefined): PartialDeep<ChainConfig> & {
+    initial_state: { coins: ChainConfig['initial_state']['coins'] };
+  } {
+    return {
+      ...chainConfig,
+      initial_state: {
+        ...chainConfig?.initial_state,
+        coins: this.coins.concat(chainConfig?.initial_state?.coins || []),
+      },
+    };
   }
 
   private static createAssets(
