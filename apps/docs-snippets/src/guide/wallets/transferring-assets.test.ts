@@ -1,4 +1,4 @@
-import type { Contract, WalletUnlocked } from 'fuels';
+import type { Contract, Provider, TxParams, WalletUnlocked } from 'fuels';
 import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
@@ -7,15 +7,15 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let senderWallet: WalletUnlocked;
   let deployedContract: Contract;
-  let gasPrice: BN;
+  let provider: Provider;
 
   beforeAll(async () => {
     senderWallet = await getTestWallet();
-
+    provider = senderWallet.provider;
     const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-    ({ minGasPrice: gasPrice } = senderWallet.provider.getGasConfig());
-    deployedContract = await factory.deployContract({ gasPrice });
+    const { minGasPrice } = senderWallet.provider.getGasConfig();
+    deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
   });
 
   it('should successfully transfer asset to another wallet', async () => {
@@ -29,11 +29,18 @@ describe(__filename, () => {
     const amountToTransfer = 500;
     const assetId = BaseAssetId;
 
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
+    const txParams: TxParams = {
+      gasPrice: minGasPrice,
+      gasLimit: maxGasPerTx,
+    };
+
     const response = await senderWallet.transfer(
       destinationWallet.address,
       amountToTransfer,
       assetId,
-      { gasPrice }
+      txParams
     );
 
     await response.wait();
@@ -59,9 +66,19 @@ describe(__filename, () => {
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
-    const tx = await senderWallet.transferToContract(contractId, amountToTransfer, assetId, {
-      gasPrice,
-    });
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
+    const txParams: TxParams = {
+      gasPrice: minGasPrice,
+      gasLimit: maxGasPerTx,
+    };
+
+    const tx = await senderWallet.transferToContract(
+      contractId,
+      amountToTransfer,
+      assetId,
+      txParams
+    );
     expect(new BN(contractBalance).toNumber()).toBe(0);
 
     await tx.waitForResult();

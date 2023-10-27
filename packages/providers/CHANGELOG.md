@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.65.0
+
+### Minor Changes
+
+- 🐞 fix how transaction fee is calculated, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1307](https://github.com/FuelLabs/fuels-ts/pull/1307))
+
+### Patch Changes
+
+- Upgrading `fuel-core` to `0.20.8`, by [@arboleya](https://github.com/arboleya) (See [#1376](https://github.com/FuelLabs/fuels-ts/pull/1376))
+
 ## 0.64.1
 
 ## 0.64.0
