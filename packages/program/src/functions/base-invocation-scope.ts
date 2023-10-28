@@ -298,7 +298,16 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { fee } = await this.getTransactionCost();
+    const { fee, gasUsed } = await this.getTransactionCost();
+
+    if (gasUsed.gt(bn(transactionRequest.gasLimit))) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
+
+    this.transactionRequest.gasLimit = gasUsed;
 
     await this.fundWithRequiredCoins(fee);
 
@@ -335,7 +344,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { fee } = await this.getTransactionCost();
+    const { gasUsed, fee } = await this.getTransactionCost();
+
+    transactionRequest.gasLimit = gasUsed;
 
     await this.fundWithRequiredCoins(fee);
 
