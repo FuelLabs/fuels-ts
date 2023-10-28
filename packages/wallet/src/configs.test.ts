@@ -1,3 +1,6 @@
+/**
+ * @group node
+ */
 describe('Configs', () => {
   it('exports FUEL_NETWORK_URL', async () => {
     const configs = await import('./configs');
