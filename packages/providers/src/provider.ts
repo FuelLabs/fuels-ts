@@ -674,14 +674,14 @@ export default class Provider {
     const allQuantities = uniteCoinQuantities(coinOutputsQuantitites, forwardingQuantities);
     clonedTransactionRequest.fundWithFakeUtxos(allQuantities);
 
+    const transactionBytes = clonedTransactionRequest.toTransactionBytes();
+    const chargeableBytes = calculateTxChargeableBytes({
+      transactionBytes,
+      transactionWitnesses: new TransactionCoder().decode(transactionBytes, 0)[0].witnesses,
+    });
+
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(clonedTransactionRequest);
-    const transaction = clonedTransactionRequest.toTransaction();
-
-    const chargeableBytes = calculateTxChargeableBytes({
-      transactionBytes: clonedTransactionRequest.toTransactionBytes(),
-      transactionWitnesses: transaction.witnesses,
-    });
 
     const gasUsed = getGasUsedFromReceipts(receipts);
 
