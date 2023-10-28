@@ -9,7 +9,7 @@ describe('Configs - undefined process', () => {
   const originalProcess = process;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     // @ts-expect-error - test to assert undefined process
     // eslint-disable-next-line no-global-assign
@@ -35,7 +35,7 @@ describe('Configs - overridden env', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     process.env = { ...originalEnv, FUEL_NETWORK_URL: 'some-other-network-url' };
   });
