@@ -1,4 +1,4 @@
-import { addressify, getRandomB256 } from '@fuel-ts/address';
+import { Address, addressify, getRandomB256 } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
@@ -486,28 +486,21 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       quantities.push({ assetId: BaseAssetId, amount: bn(1) });
     }
 
-    const witnessesLength = this.witnesses.length;
     const owner = getRandomB256();
-    const fakeInputs = quantities.map(({ assetId, amount }, index) => {
-      const input: CoinTransactionRequestInput = {
-        type: InputType.Coin,
-        id: `${ZeroBytes32}0${index}`,
-        amount,
-        predicateData: '0x',
-        predicate: '0x',
-        assetId,
-        owner,
-        txPointer: ZeroBytes32,
-        witnessIndex: witnessesLength,
-      };
 
-      return input;
-    });
+    this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
 
-    this.witnesses.push('0x');
-    this.inputs = this.inputs
-      .filter((input) => input.type === InputType.Contract)
-      .concat(fakeInputs);
+    const fakeResources = quantities.map(({ assetId }, idx) => ({
+      id: `${ZeroBytes32}0${idx}`,
+      amount: bn(1_000_000_000_000_000),
+      assetId,
+      owner: Address.fromB256(owner),
+      maturity: 0,
+      blockCreated: bn(1),
+      txCreatedIdx: bn(1),
+    }));
+
+    this.addResources(fakeResources);
   }
 
   getCoinOutputsQuantities(): CoinQuantity[] {
