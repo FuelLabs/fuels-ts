@@ -44,7 +44,6 @@ export async function setupTestProvider<
       `http://${ip}:${port}/graphql`,
       options?.providerOptions
     );
-
     return (
       dispose ?? true
         ? Object.assign(provider, {

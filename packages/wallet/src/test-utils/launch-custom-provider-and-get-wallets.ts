@@ -21,11 +21,10 @@ export async function launchCustomProviderAndGetWallets<
     : {
         cleanup: () => Promise<void>;
         deployedChainConfig: ChainConfig;
-        customChainConfig: Partial<ChainConfig>;
       }),
 >(
   {
-    walletConfig = WalletConfig.DEFAULT,
+    walletConfig = new WalletConfig(),
     providerOptions = {},
     nodeOptions = {},
   }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {},
@@ -62,7 +61,6 @@ export async function launchCustomProviderAndGetWallets<
           provider,
           cleanup,
           deployedChainConfig: chainConfig,
-          customChainConfig,
         }
   ) as ReturnType;
 }

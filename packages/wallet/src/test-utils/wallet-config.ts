@@ -39,7 +39,6 @@ interface WalletConfigOptions {
 export class WalletConfig {
   private coins: ChainConfig['initial_state']['coins'];
   public wallets: WalletUnlocked[];
-  public static DEFAULT = new WalletConfig();
 
   constructor({
     wallets = 1,

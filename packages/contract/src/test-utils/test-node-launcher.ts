@@ -38,22 +38,23 @@ interface TestNodeLauncherReturn<TContracts> {
 }
 
 type NodeInfo = Awaited<ReturnType<typeof launchCustomProviderAndGetWallets<false>>>;
-type Cache = {
+type TestNodeLauncherCache = {
   nodes: NodeInfo[];
   chainConfig: ChainConfig;
 } & SetupTestProviderOptions;
-// & LaunchCustomProviderAndGetWalletsOptions;
 export class TestNodeLauncher {
-  private static cache: Cache | undefined = undefined;
-  private static DEFAULT_OPTIONS: TestNodeLauncherOptions = {
-    walletConfig: WalletConfig.DEFAULT,
+  private static cache: TestNodeLauncherCache | undefined = undefined;
+  private static getOptions = (options?: Partial<TestNodeLauncherOptions>) => ({
+    walletConfig: new WalletConfig(),
     deployContracts: [],
     nodeOptions: {},
     providerOptions: {},
-  };
+    ...options,
+  });
 
   static async cleanCache() {
-    if (!this.cache) return;
+    if (!this.cache || this.cache.nodes.length === 0) return;
+
     const cleanups: Promise<void>[] = [];
 
     this.cache.nodes.forEach(({ cleanup }) => {
@@ -67,9 +68,10 @@ export class TestNodeLauncher {
     options?: Partial<LaunchCustomProviderAndGetWalletsOptions>
   ) {
     const launchPromises: Promise<NodeInfo>[] = [];
-    const opt = options ? { ...this.DEFAULT_OPTIONS, ...options } : this.DEFAULT_OPTIONS;
     for (let i = 0; i < count; i++) {
-      launchPromises.push(launchCustomProviderAndGetWallets(opt, false));
+      launchPromises.push(
+        launchCustomProviderAndGetWallets(TestNodeLauncher.getOptions(options), false)
+      );
     }
 
     await Promise.all(launchPromises).then((x) => {
@@ -95,7 +97,7 @@ export class TestNodeLauncher {
       if (typeof value === 'object') {
         if (obj[key] === undefined) return false;
 
-        equal = this.partialEqual(
+        equal = TestNodeLauncher.partialEqual(
           value as Record<string, unknown>,
           obj[key] as Record<string, unknown>
         );
@@ -125,7 +127,6 @@ export class TestNodeLauncher {
       // this.partialEqual(nodeOptions, this.cache.nodeOptions) &&
       // this.partialEqual(providerOptions, this.cache.providerOptions)
     ) {
-      console.log('using cache');
       return this.cache.nodes.pop();
     }
 
@@ -138,12 +139,11 @@ export class TestNodeLauncher {
     ReturnType = TestNodeLauncherReturn<TContracts> &
       (Dispose extends true ? AsyncDisposable : { cleanup: () => Promise<void> }),
   >(options?: Partial<TestNodeLauncherOptions>, dispose?: Dispose): Promise<ReturnType> {
-    const { walletConfig, nodeOptions, providerOptions, deployContracts } = options
-      ? { ...this.DEFAULT_OPTIONS, ...options }
-      : this.DEFAULT_OPTIONS;
+    const { walletConfig, nodeOptions, providerOptions, deployContracts } =
+      this.getOptions(options);
 
     const { provider, wallets, cleanup } =
-      (this.getFromCache({ walletConfig, nodeOptions, providerOptions }) as NodeInfo) ??
+      (TestNodeLauncher.getFromCache({ walletConfig, nodeOptions, providerOptions }) as NodeInfo) ??
       (await launchCustomProviderAndGetWallets(
         {
           walletConfig,
