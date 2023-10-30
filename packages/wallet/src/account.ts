@@ -234,12 +234,10 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 
-    const { fee, gasUsed, requiredQuantities } = await this.provider.getTransactionCost(request);
-
-    request.gasLimit = gasUsed;
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
     const quantitiesWithFee = addAmountToAsset({
-      amount: fee,
+      amount: maxFee,
       assetId: BaseAssetId,
       coinQuantities: requiredQuantities,
     });
@@ -286,12 +284,12 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractId);
 
-    const { fee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
-
-    request.gasLimit = gasUsed;
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request, [
+      { amount: bn(amount), assetId: String(assetId) },
+    ]);
 
     const quantitiesWithFee = addAmountToAsset({
-      amount: fee,
+      amount: maxFee,
       assetId: BaseAssetId,
       coinQuantities: requiredQuantities,
     });
