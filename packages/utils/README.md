@@ -48,7 +48,7 @@ console.log(safeExec(() => 123));
 console.log(
   safeExec(() => {
     throw new Error("Some error");
-  })
+  }),
 );
 // { error: (Error: 'Some error'), result: null }
 ```
