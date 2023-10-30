@@ -1,11 +1,9 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { WalletConfig } from '@fuel-ts/wallet/test-utils';
-import type { BN, Message, Contract } from 'fuels';
+import type { BN } from 'fuels';
 import {
-  arrayify,
   bn,
   toHex,
-  Provider,
   Wallet,
   ScriptTransactionRequest,
   BaseAssetId,
@@ -13,11 +11,10 @@ import {
   isCoin,
   randomBytes,
   hexlify,
-  FUEL_NETWORK_URL,
   getRandomB256,
 } from 'fuels';
 
-import { getContractDir, getSetupContract } from './utils';
+import { getContractDir } from './utils';
 
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
@@ -47,7 +44,10 @@ enum ColorEnumOutput {
 /**
  * @group node
  */
-describe.concurrent('Coverage Contract', () => {
+describe('Coverage Contract', () => {
+  beforeAll(async () => {
+    await TestNodeLauncher.prepareCache(50);
+  });
   it('can return outputs', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [coverageContractDir],

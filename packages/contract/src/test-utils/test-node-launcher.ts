@@ -2,12 +2,12 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
 import type { Provider } from '@fuel-ts/providers';
-import type { ChainConfig } from '@fuel-ts/providers/test-utils';
+import type { ChainConfig, SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/wallet/test-utils';
 import { WalletConfig, launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
-import { whereEq, equals } from 'ramda';
+import { equals } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
 import ContractFactory from '../contract-factory';
@@ -41,7 +41,7 @@ type NodeInfo = Awaited<ReturnType<typeof launchCustomProviderAndGetWallets<fals
 type Cache = {
   nodes: NodeInfo[];
   chainConfig: ChainConfig;
-};
+} & SetupTestProviderOptions;
 // & LaunchCustomProviderAndGetWalletsOptions;
 export class TestNodeLauncher {
   private static cache: Cache | undefined = undefined;
@@ -51,6 +51,16 @@ export class TestNodeLauncher {
     nodeOptions: {},
     providerOptions: {},
   };
+
+  static async cleanCache() {
+    if (!this.cache) return;
+    const cleanups: Promise<void>[] = [];
+
+    this.cache.nodes.forEach(({ cleanup }) => {
+      cleanups.push(cleanup());
+    });
+    await Promise.all(cleanups);
+  }
 
   static async prepareCache(
     count: number,
@@ -64,13 +74,15 @@ export class TestNodeLauncher {
 
     await Promise.all(launchPromises).then((x) => {
       this.cache = {
-        nodes: x,
+        nodes: (this.cache?.nodes ?? []).concat(x),
         chainConfig: x[0].deployedChainConfig,
+        providerOptions: x[0].provider.options,
+        nodeOptions: options?.nodeOptions ?? {},
       };
     });
   }
 
-  private static partialEqual<T extends Record<string, unknown>>(
+  private static partialEqual(
     spec: Record<string, unknown>,
     obj: Record<string, unknown>
   ): boolean {
@@ -99,6 +111,7 @@ export class TestNodeLauncher {
   private static getFromCache({
     walletConfig,
     nodeOptions,
+    providerOptions,
   }: LaunchCustomProviderAndGetWalletsOptions) {
     const partialChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 
@@ -108,8 +121,13 @@ export class TestNodeLauncher {
         partialChainConfig,
         this.cache.chainConfig as unknown as Record<string, unknown>
       )
-    )
+      // &&
+      // this.partialEqual(nodeOptions, this.cache.nodeOptions) &&
+      // this.partialEqual(providerOptions, this.cache.providerOptions)
+    ) {
+      console.log('using cache');
       return this.cache.nodes.pop();
+    }
 
     return undefined;
   }

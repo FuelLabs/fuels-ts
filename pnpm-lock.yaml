@@ -23,6 +23,9 @@ importers:
       '@fuel-ts/fuel-core':
         specifier: workspace:*
         version: link:packages/fuel-core
+      '@fuel-ts/test-utils':
+        specifier: workspace:*
+        version: link:packages/test-utils
       '@internal/tsup':
         specifier: workspace:*
         version: link:internal/tsup
