@@ -307,7 +307,6 @@ export class BaseInvocationScope<TReturn = any> {
       );
     }
 
-    this.transactionRequest.gasLimit = gasUsed;
     await this.fundWithRequiredCoins(maxFee);
 
     const response = await this.program.account.sendTransaction(transactionRequest);
@@ -343,9 +342,8 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { gasUsed, maxFee } = await this.getTransactionCost();
+    const { maxFee } = await this.getTransactionCost();
 
-    transactionRequest.gasLimit = gasUsed;
     await this.fundWithRequiredCoins(maxFee);
 
     const result = await this.program.account.simulateTransaction(transactionRequest);
