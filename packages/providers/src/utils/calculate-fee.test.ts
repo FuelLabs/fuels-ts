@@ -57,8 +57,11 @@ describe(__filename, () => {
         Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
       );
 
-      const partialFee = Math.ceil(gasUsed.mul(gasPrice).toNumber() / gasPriceFactor.toNumber());
-      const expectedFee = expectedMinGasToPay.add(partialFee);
+      const expectedFeeFromGasUsed = bn(
+        Math.ceil(gasUsed.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
+      );
+      const expectedMinFee = expectedMinGasToPay.add(expectedFeeFromGasUsed);
+      const expectedMaxFee = expectedMaxGasToPay.add(expectedFeeFromGasUsed);
 
       const result = calculateTransactionFee({
         gasPrice,
@@ -69,9 +72,11 @@ describe(__filename, () => {
         chargeableBytes,
       });
 
-      expect(result.fee.toNumber()).toEqual(expectedFee.toNumber());
+      expect(result.minFee.toNumber()).toEqual(expectedMinFee.toNumber());
+      expect(result.maxFee.toNumber()).toEqual(expectedMaxFee.toNumber());
       expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
       expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
+      expect(result.feeFromGasUsed.toNumber()).toEqual(expectedFeeFromGasUsed.toNumber());
     });
 
     it('should calculate transaction fee for multiple receipts', () => {
@@ -92,8 +97,11 @@ describe(__filename, () => {
         Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
       );
 
-      const partialFee = Math.ceil(gasUsed.mul(gasPrice).toNumber() / gasPriceFactor.toNumber());
-      const expectedFee = expectedMinGasToPay.add(partialFee);
+      const expectedFeeFromGasUsed = bn(
+        Math.ceil(gasUsed.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
+      );
+      const expectedMinFee = expectedMinGasToPay.add(expectedFeeFromGasUsed);
+      const expectedMaxFee = expectedMaxGasToPay.add(expectedFeeFromGasUsed);
 
       const result = calculateTransactionFee({
         gasPrice,
@@ -104,9 +112,11 @@ describe(__filename, () => {
         chargeableBytes,
       });
 
-      expect(result.fee.toNumber()).toEqual(expectedFee.toNumber());
+      expect(result.minFee.toNumber()).toEqual(expectedMinFee.toNumber());
+      expect(result.maxFee.toNumber()).toEqual(expectedMaxFee.toNumber());
       expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
       expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
+      expect(result.feeFromGasUsed.toNumber()).toEqual(expectedFeeFromGasUsed.toNumber());
     });
   });
 
