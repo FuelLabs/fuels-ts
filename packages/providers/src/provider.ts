@@ -3,7 +3,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
+import { bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -131,7 +131,8 @@ export type TransactionCost = {
   minGasPrice: BN;
   gasPrice: BN;
   gasUsed: BN;
-  fee: BN;
+  minFee: BN;
+  maxFee: BN;
 };
 // #endregion cost-estimation-1
 
@@ -661,8 +662,11 @@ export default class Provider {
   ): Promise<TransactionCost> {
     const clonedTransactionRequest = transactionRequestify(clone(transactionRequestLike));
 
-    const { gasPrice, gasLimit } = clonedTransactionRequest;
+    const { gasLimit } = clonedTransactionRequest;
+    let { gasPrice } = clonedTransactionRequest;
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
+
+    gasPrice = max(gasPrice, minGasPrice);
 
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
@@ -685,7 +689,7 @@ export default class Provider {
 
     const gasUsed = getGasUsedFromReceipts(receipts);
 
-    const { minFee } = calculateTransactionFee({
+    const { minFee, maxFee } = calculateTransactionFee({
       gasPrice,
       gasPerByte,
       gasPriceFactor,
@@ -694,14 +698,13 @@ export default class Provider {
       gasUsed,
     });
 
-    allQuantities.find(({ assetId }) => assetId === BaseAssetId)?.amount.add(fee);
-
     return {
       requiredQuantities: allQuantities,
       minGasPrice,
       gasPrice,
       gasUsed,
-      fee: minFee,
+      minFee,
+      maxFee,
     };
   }
 
