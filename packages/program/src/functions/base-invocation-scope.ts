@@ -5,7 +5,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity } from '@fuel-ts/providers';
+import type { Provider, CoinQuantity, CallResult } from '@fuel-ts/providers';
 import {
   transactionRequestify,
   ScriptTransactionRequest,
@@ -362,17 +362,15 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    const provider = this.getProvider();
+    const { receipts } = await this.getTransactionCost();
 
-    const transactionRequest = await this.getTransactionRequest();
-    const request = transactionRequestify(transactionRequest);
-    const response = await provider.call(request, {
-      utxoValidation: false,
-    });
+    const callResult: CallResult = {
+      receipts,
+    };
 
     const result = await InvocationCallResult.build<T>(
       this.functionInvocationScopes,
-      response,
+      callResult,
       this.isMultiCall
     );
 
