@@ -298,7 +298,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { fee, gasUsed } = await this.getTransactionCost();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
 
     if (gasUsed.gt(bn(transactionRequest.gasLimit))) {
       throw new FuelError(
@@ -308,8 +308,7 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     this.transactionRequest.gasLimit = gasUsed;
-
-    await this.fundWithRequiredCoins(fee);
+    await this.fundWithRequiredCoins(maxFee);
 
     const response = await this.program.account.sendTransaction(transactionRequest);
 
@@ -344,11 +343,10 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { gasUsed, fee } = await this.getTransactionCost();
+    const { gasUsed, maxFee } = await this.getTransactionCost();
 
     transactionRequest.gasLimit = gasUsed;
-
-    await this.fundWithRequiredCoins(fee);
+    await this.fundWithRequiredCoins(maxFee);
 
     const result = await this.program.account.simulateTransaction(transactionRequest);
 
