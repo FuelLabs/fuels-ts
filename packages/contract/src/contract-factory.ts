@@ -153,13 +153,7 @@ export default class ContractFactory {
 
     transactionRequest.gasLimit = gasUsed;
 
-    const quantitiesWithFee = addAmountToAsset({
-      amount: maxFee,
-      assetId: BaseAssetId,
-      coinQuantities: requiredQuantities,
-    });
-
-    await this.account.fund(transactionRequest, quantitiesWithFee);
+    await this.account.fund(transactionRequest, requiredQuantities, maxFee);
     const response = await this.account.sendTransaction(transactionRequest);
     await response.wait();
 
