@@ -128,6 +128,7 @@ export type NodeInfoAndConsensusParameters = {
 // #region cost-estimation-1
 export type TransactionCost = {
   requiredQuantities: CoinQuantity[];
+  receipts: TransactionResultReceipt[];
   minGasPrice: BN;
   gasPrice: BN;
   gasUsed: BN;
@@ -701,6 +702,7 @@ export default class Provider {
     return {
       requiredQuantities: allQuantities,
       minGasPrice,
+      receipts,
       gasPrice,
       gasUsed,
       minFee,
