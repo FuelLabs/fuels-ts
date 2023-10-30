@@ -685,7 +685,7 @@ export default class Provider {
 
     const gasUsed = getGasUsedFromReceipts(receipts);
 
-    const { fee } = calculateTransactionFee({
+    const { minFee } = calculateTransactionFee({
       gasPrice,
       gasPerByte,
       gasPriceFactor,
@@ -701,7 +701,7 @@ export default class Provider {
       minGasPrice,
       gasPrice,
       gasUsed,
-      fee,
+      fee: minFee,
     };
   }
 
