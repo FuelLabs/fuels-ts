@@ -21,7 +21,7 @@ import faucets from './.fuel-core/configs/faucets.json';
  * See: https://jestjs.io/docs/environment-variables#jest_worker_id
  */
 const getPrivateKeyForCurrentWorker = () => {
-   
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const workerId = Number.parseInt(process.env.JEST_WORKER_ID!, 10);
 
   if (workerId > faucets.length) {
