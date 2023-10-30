@@ -243,7 +243,12 @@ export class BaseInvocationScope<TReturn = any> {
       coinQuantities: this.requiredCoins,
     });
 
-    await this.program.account?.fund(this.transactionRequest, quantitiesWithFee);
+    await this.program.account?.fund(
+      this.transactionRequest,
+      this.requiredCoins,
+      quantitiesWithFee
+    );
+
     return this;
   }
 
