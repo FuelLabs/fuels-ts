@@ -10,7 +10,6 @@ import {
   Wallet,
   bn,
 } from 'fuels';
-import { join } from 'path';
 
 import { getProgramDir } from './utils';
 
@@ -287,6 +286,8 @@ describe('Fee', () => {
       provider,
     } = launched;
     const { minGasPrice } = provider.getGasConfig();
+
+    console.log(provider.url, wallet.provider.url);
 
     const path = getProgramDir('predicate-true');
 

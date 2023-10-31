@@ -7,7 +7,7 @@ import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/wallet/test-utils';
 import { WalletConfig, launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
-import { equals } from 'ramda';
+import { equals, omit } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
 import ContractFactory from '../contract-factory';
@@ -127,11 +127,14 @@ export class TestNodeLauncher {
       this.partialEqual(
         partialChainConfig,
         this.cache.chainConfig as unknown as Record<string, unknown>
-      )
+      ) &&
+      this.partialEqual(
+        omit(['chain_config'], nodeOptions),
+        omit(['chain_config'], this.cache.nodeOptions)
+      ) &&
+      this.partialEqual(providerOptions, this.cache.providerOptions)
     ) {
-      // &&
-      // this.partialEqual(nodeOptions, this.cache.nodeOptions) &&
-      // this.partialEqual(providerOptions, this.cache.providerOptions)
+      console.log('using cache!');
       return this.cache.nodes.pop();
     }
 

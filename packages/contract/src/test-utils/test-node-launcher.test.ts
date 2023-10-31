@@ -129,7 +129,9 @@ describe('TestNodeLauncher', () => {
       }
     );
   });
+});
 
+describe('TestNodeLauncher caching', () => {
   test("can launch multiple nodes and cache their info for 'launch' calls", async () => {
     await TestNodeLauncher.prepareCache(2);
 
@@ -185,5 +187,9 @@ describe('TestNodeLauncher', () => {
     await using node = await TestNodeLauncher.launch({ nodeOptions: { logger: () => {} } });
 
     expect(spy).toBeCalledTimes(1);
+  });
+
+  test('throws when wallet config has wallets instead of number???', () => {
+    expect(true).toBeFalsy();
   });
 });

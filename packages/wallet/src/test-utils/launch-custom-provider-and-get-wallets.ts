@@ -30,7 +30,7 @@ export async function launchCustomProviderAndGetWallets<
   }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {},
   dispose?: Dispose
 ): Promise<ReturnType> {
-  const { wallets } = walletConfig;
+  const wallets = walletConfig.getWallets();
 
   const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 

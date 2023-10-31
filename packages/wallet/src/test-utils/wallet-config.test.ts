@@ -100,7 +100,7 @@ describe('WalletConfig', () => {
     // @ts-expect-error currently mandatory - shouldn't be?
     const wallet2 = WalletUnlocked.generate({ provider: null });
 
-    const { wallets } = new WalletConfig({ wallets: [wallet1, wallet2] });
+    const { getWallets: wallets } = new WalletConfig({ wallets: [wallet1, wallet2] });
 
     expect(wallets).toEqual([wallet1, wallet2]);
   });
@@ -119,6 +119,8 @@ describe('WalletConfig', () => {
   it('generated wallets are deterministic', () => {
     const config1 = new WalletConfig();
     const config2 = new WalletConfig();
-    expect(config1.wallets[0].address.toB256()).toEqual(config2.wallets[0].address.toB256());
+    expect(config1.getWallets()[0].address.toB256()).toEqual(
+      config2.getWallets()[0].address.toB256()
+    );
   });
 });
