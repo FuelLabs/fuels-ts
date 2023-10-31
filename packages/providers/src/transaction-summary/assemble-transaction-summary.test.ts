@@ -17,8 +17,7 @@ import {
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import type { GraphqlTransactionStatus } from './types';
-import { type Operation } from './types';
+import type { GraphqlTransactionStatus, Operation } from './types';
 
 describe('TransactionSummary', () => {
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';

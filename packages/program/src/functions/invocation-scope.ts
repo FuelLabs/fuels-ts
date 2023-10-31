@@ -17,7 +17,7 @@ import { BaseInvocationScope } from './base-invocation-scope';
  */
 export class FunctionInvocationScope<
   TArgs extends Array<any> = Array<any>,
-  TReturn = any
+  TReturn = any,
 > extends BaseInvocationScope<TReturn> {
   protected func: FunctionFragment;
   private callParameters?: CallParams;
