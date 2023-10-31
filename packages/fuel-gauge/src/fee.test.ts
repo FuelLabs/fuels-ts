@@ -1,38 +1,30 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, BaseWalletUnlocked, CoinQuantityLike, JsonAbi } from 'fuels';
+import { AssetId, WalletConfig } from '@fuel-ts/wallet/test-utils';
+import type { BN, CoinQuantityLike, JsonAbi } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
-  FUEL_NETWORK_URL,
   Predicate,
-  Provider,
   ScriptTransactionRequest,
   Wallet,
   bn,
 } from 'fuels';
 import { join } from 'path';
 
+import { getContractDir } from './utils';
+
+const multiTokenContractDir = getContractDir('multi-token-contract');
+const callTestContractDir = getContractDir('call-test-contract');
+
 /**
  * @group node
  */
 describe('Fee', () => {
-  const assetA: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const assetB: string = '0x0202020202020202020202020202020202020202020202020202020202020202';
+  const assetA = AssetId.random();
+  const assetB = AssetId.random();
 
-  let wallet: BaseWalletUnlocked;
-  let provider: Provider;
-  let minGasPrice: number;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    minGasPrice = provider.getGasConfig().minGasPrice.toNumber();
-    wallet = await generateTestWallet(provider, [
-      [1_000_000_000],
-      [1_000_000_000, assetA],
-      [1_000_000_000, assetB],
-    ]);
-  });
+  const walletConfig = new WalletConfig({ assets: [assetA, assetB] });
 
   const expectFeeInMarginOfError = (fee: BN, expectedFee: BN) => {
     const feeNumber = fee.toNumber();
@@ -51,18 +43,28 @@ describe('Fee', () => {
     }
   };
 
-  const randomGasPrice = (minValue: number, maxValue: number) => {
-    const randomValue = Math.floor(Math.random() * (maxValue - minValue + 1) + minValue);
+  const randomGasPrice = (minValue: BN, maxValue: number) => {
+    const val = minValue.toNumber();
+    const randomValue = Math.floor(Math.random() * (maxValue - val + 1) + val);
     return bn(randomValue);
   };
 
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length, { walletConfig });
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/multi-token-contract');
-
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [multiTokenContractDir],
+      walletConfig,
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice } = contract.provider.getGasConfig();
 
     // minting coins
     let balanceBefore = await wallet.getBalance();
@@ -98,12 +100,24 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on simple transfer transactions', async () => {
-    const destination = Wallet.generate({ provider });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [multiTokenContractDir],
+      walletConfig,
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const { minGasPrice } = contract.provider.getGasConfig();
 
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
 
     const gasPrice = randomGasPrice(minGasPrice, 15);
+
+    const destination = Wallet.generate({ provider });
 
     const tx = await wallet.transfer(destination.address, amountToTransfer, BaseAssetId, {
       gasPrice,
@@ -117,6 +131,18 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on multi transfer transactions', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [multiTokenContractDir],
+      walletConfig,
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const { minGasPrice } = contract.provider.getGasConfig();
+
     const destination1 = Wallet.generate({ provider });
     const destination2 = Wallet.generate({ provider });
     const destination3 = Wallet.generate({ provider });
@@ -131,13 +157,13 @@ describe('Fee', () => {
     });
 
     request.addCoinOutput(destination1.address, amountToTransfer, BaseAssetId);
-    request.addCoinOutput(destination2.address, amountToTransfer, assetA);
-    request.addCoinOutput(destination3.address, amountToTransfer, assetB);
+    request.addCoinOutput(destination2.address, amountToTransfer, assetA.value);
+    request.addCoinOutput(destination3.address, amountToTransfer, assetB.value);
 
     const quantities: CoinQuantityLike[] = [
       [20_000 + amountToTransfer, BaseAssetId],
-      [amountToTransfer, assetA],
-      [amountToTransfer, assetB],
+      [amountToTransfer, assetA.value],
+      [amountToTransfer, assetB.value],
     ];
 
     const resources = await wallet.getResourcesToSpend(quantities);
@@ -154,9 +180,17 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract deploy', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/multi-token-contract');
+    await using launched = await TestNodeLauncher.launch({
+      walletConfig,
+    });
 
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice } = provider.getGasConfig();
+
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>(multiTokenContractDir);
 
     const balanceBefore = await wallet.getBalance();
 
@@ -175,12 +209,17 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract call', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/call-test-contract');
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+      walletConfig,
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+      provider,
+    } = launched;
 
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const { minGasPrice } = provider.getGasConfig();
 
     const gasPrice = randomGasPrice(minGasPrice, 15);
     const balanceBefore = await wallet.getBalance();
@@ -202,12 +241,17 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated a contract multi call', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/call-test-contract');
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [callTestContractDir],
+      walletConfig,
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+      provider,
+    } = launched;
 
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const { minGasPrice } = provider.getGasConfig();
 
     const gasPrice = randomGasPrice(minGasPrice, 15);
     const balanceBefore = await wallet.getBalance();
@@ -235,7 +279,16 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/predicate-true');
+    await using launched = await TestNodeLauncher.launch({
+      walletConfig,
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice } = provider.getGasConfig();
+
+    const path = getContractDir('predicate-true');
 
     const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
 
@@ -246,12 +299,16 @@ describe('Fee', () => {
     });
     await tx1.wait();
 
+    console.log('post tx1');
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
+    console.log('balanceBefore', balanceBefore);
     const gasPrice = randomGasPrice(minGasPrice, 9);
     const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, { gasPrice });
 
     const { fee } = await tx2.wait();
+
+    console.log('post tx2');
 
     const balanceAfter = await predicate.getBalance();
     const balanceDiff = balanceBefore.sub(balanceAfter).sub(transferAmount);
