@@ -1,15 +1,10 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { bn, randomBytes, hexlify } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import type { BN } from 'fuels';
 
-import { getSetupContract } from './utils';
+import { getProgramDir } from './utils';
 
-const setupContract = getSetupContract('vectors');
-let contractInstance: Contract;
-let gasPrice: BN;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
-});
+const contractDir = getProgramDir('vectors');
 
 const toNumbers = (nums: BN[]) => nums.map((num: BN) => bn(num).toNumber());
 
@@ -21,7 +16,22 @@ enum SmallEnum {
  * @group node
  */
 describe('Vector Tests', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('should test u8 vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
     const { value } = await contractInstance.functions
@@ -33,6 +43,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test u16 vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
     const { value } = await contractInstance.functions
@@ -44,6 +63,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test u32 vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
     const { value } = await contractInstance.functions
@@ -55,6 +83,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test u64 vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
     const { value } = await contractInstance.functions
@@ -66,6 +103,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test bool vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [true, false, true, true];
 
     const { value } = await contractInstance.functions
@@ -77,6 +123,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test b256 vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
 
     const { value } = await contractInstance.functions
@@ -88,6 +143,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test b512 vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [hexlify(randomBytes(64)), hexlify(randomBytes(64)), hexlify(randomBytes(64))];
 
     const { value } = await contractInstance.functions
@@ -99,6 +163,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test str[1] vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = ['a', 'b', 'c', 'd'];
 
     const { value } = await contractInstance.functions
@@ -110,6 +183,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test str[9] vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = ['123456789', 'abcdefghi', 'catdogcat', 'onetwoone'];
 
     const { value } = await contractInstance.functions
@@ -121,6 +203,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test (u8, u8) vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       [1, 2],
       [3, 4],
@@ -136,6 +227,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test (u64, u64) vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       [111, 2222],
       [333, 4445],
@@ -151,6 +251,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test [u8; 2] vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       [1, 2],
       [5, 6],
@@ -165,6 +274,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test [u64; 5] vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       [1, 2, 3, 4, 5],
       [500, 600, 700, 9000, 9999],
@@ -180,6 +298,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test [bool; 2] vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       [true, true],
       [true, false],
@@ -197,6 +324,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test U8Struct vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       {
         i: 1,
@@ -218,6 +354,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test B256Struct vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       {
         i: hexlify(randomBytes(32)),
@@ -239,6 +384,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test ComplexStruct vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     type ComplexStruct = { foo: number; bar: BN; baz: string };
     const INPUT = [
       {
@@ -272,6 +426,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test SmallEnum vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       SmallEnum.Empty,
       SmallEnum.Empty,
@@ -289,6 +452,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test BigEnum vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       {
         AddressA: hexlify(randomBytes(32)),
@@ -310,6 +482,15 @@ describe('Vector Tests', () => {
   });
 
   it('should test Option<u8> vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [undefined, 1, undefined, 2, undefined, 3];
 
     const { value } = await contractInstance.functions
@@ -321,6 +502,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test Vec<u8> inside struct input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = {
       num: 2,
       vec: [1, 5, 98],
@@ -335,6 +525,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test Vec<u8> inside enum input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = {
       vec: [1, 5, 98],
     };
@@ -348,6 +547,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test Vec<u8> inside vector input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [[1, 5, 98], [2, 44], [34]];
 
     const { value } = await contractInstance.functions
@@ -359,6 +567,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test struct and Vec<u8> input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       {
         foo: 1,
@@ -377,6 +594,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test Vec<u8> and b256 tuple input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [[1, 8, 3, 2, 55, 215], hexlify(randomBytes(32))];
 
     const { value } = await contractInstance.functions
@@ -388,6 +614,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test two vectors tuple input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [
       [219, 229],
       [1, 254, 55],
@@ -402,6 +637,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test u32 and three different vectors tuple input/output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = [91000, [true, true, false], [95000, 153333], [20000, 65500]];
 
     const { value } = await contractInstance.functions
@@ -413,6 +657,15 @@ describe('Vector Tests', () => {
   });
 
   it.skip('should test multiCall vectors', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      provider,
+      contracts: [contractInstance],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const { value: results } = await contractInstance
       .multiCall([
         contractInstance.functions.echo_u8([1]),
