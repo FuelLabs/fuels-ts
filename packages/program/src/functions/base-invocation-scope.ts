@@ -346,15 +346,19 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    const { receipts } = await this.getTransactionCost();
+    const provider = this.getProvider();
 
-    const callResult: CallResult = {
-      receipts,
-    };
+    const { maxFee } = await this.getTransactionCost();
+
+    await this.fundWithRequiredCoins(maxFee);
+    const transactionRequest = await this.getTransactionRequest();
+    const response = await provider.call(transactionRequest, {
+      utxoValidation: false,
+    });
 
     const result = await InvocationCallResult.build<T>(
       this.functionInvocationScopes,
-      callResult,
+      response,
       this.isMultiCall
     );
 
