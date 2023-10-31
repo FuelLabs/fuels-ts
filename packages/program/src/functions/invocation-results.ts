@@ -124,7 +124,7 @@ export class InvocationResult<T = any> {
  */
 export class FunctionInvocationResult<
   T = any,
-  TTransactionType = void
+  TTransactionType = void,
 > extends InvocationResult<T> {
   readonly transactionId: string;
   readonly transactionResponse: TransactionResponse;
