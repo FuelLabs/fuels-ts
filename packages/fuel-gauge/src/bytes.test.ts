@@ -5,9 +5,9 @@ import type { BN } from 'fuels';
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
 
-import { getContractDir, getScript } from './utils';
+import { getProgramDir, getScript } from './utils';
 
-const bytesContractDir = getContractDir('bytes');
+const bytesContractDir = getProgramDir('bytes');
 
 type SomeEnum = {
   First?: boolean;

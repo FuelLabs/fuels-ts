@@ -1,8 +1,8 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
-const contractDir = getContractDir('collision_in_fn_names');
+const contractDir = getProgramDir('collision_in_fn_names');
 /**
  * @group node
  */

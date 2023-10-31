@@ -76,5 +76,5 @@ export const getScript = <TInput extends unknown[], TOutput>(
       )
   );
 
-export const getContractDir = (contractName: string) =>
+export const getProgramDir = (contractName: string) =>
   join(__dirname, `../fixtures/forc-projects/${contractName}`);

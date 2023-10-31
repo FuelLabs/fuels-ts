@@ -14,7 +14,7 @@ import {
   getRandomB256,
 } from 'fuels';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
@@ -23,7 +23,7 @@ const B256 = '0x000000000000000000000000000000000000000000000000000000000000002a
 const B512 =
   '0x059bc9c43ea1112f3eb2bd30415de72ed24c1c4416a1316f0f48cc6f958073f42a6d8c12e4829826316d8dcf444498717b5a2fbf27defac367271065f6a1d4a5';
 
-const coverageContractDir = getContractDir('coverage-contract');
+const coverageContractDir = getProgramDir('coverage-contract');
 
 enum SmallEnum {
   Empty = 'Empty',

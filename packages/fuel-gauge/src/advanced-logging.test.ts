@@ -1,10 +1,10 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
-const advancedLoggingDir = getContractDir('advanced-logging');
-const advancedLoggingOtherContractDir = getContractDir('advanced-logging-other-contract');
+const advancedLoggingDir = getProgramDir('advanced-logging');
+const advancedLoggingOtherContractDir = getProgramDir('advanced-logging-other-contract');
 
 /**
  * @group node

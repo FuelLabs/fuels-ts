@@ -1,9 +1,9 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN, getRandomB256 } from 'fuels';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
-const configurableContractDir = getContractDir('configurable-contract');
+const configurableContractDir = getProgramDir('configurable-contract');
 
 const defaultValues = {
   U8: 10,

@@ -12,10 +12,10 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
-const multiTokenContractDir = getContractDir('multi-token-contract');
-const callTestContractDir = getContractDir('call-test-contract');
+const multiTokenContractDir = getProgramDir('multi-token-contract');
+const callTestContractDir = getProgramDir('call-test-contract');
 
 /**
  * @group node
@@ -288,7 +288,7 @@ describe('Fee', () => {
     } = launched;
     const { minGasPrice } = provider.getGasConfig();
 
-    const path = getContractDir('predicate-true');
+    const path = getProgramDir('predicate-true');
 
     const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
 

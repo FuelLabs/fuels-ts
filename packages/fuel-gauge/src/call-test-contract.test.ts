@@ -1,9 +1,9 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN, bn, toHex, BaseAssetId } from 'fuels';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
-const callTestContractDir = getContractDir('call-test-contract');
+const callTestContractDir = getProgramDir('call-test-contract');
 
 const U64_MAX = bn(2).pow(64).sub(1);
 

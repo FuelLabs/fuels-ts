@@ -1,9 +1,9 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { AssertFailedRevertError, getRandomB256 } from 'fuels';
 
-import { getContractDir } from './utils';
+import { getProgramDir } from './utils';
 
-const authTestingDir = getContractDir('auth_testing_contract');
+const authTestingDir = getProgramDir('auth_testing_contract');
 
 /**
  * @group node
