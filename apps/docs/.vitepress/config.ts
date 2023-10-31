@@ -379,6 +379,10 @@ export default defineConfig({
                 link: '/guide/testing/testing-with-jest',
               },
               {
+                text: 'Setting Up a Custom Chain',
+                link: '/guide/testing/setting-up-a-custom-chain',
+              },
+              {
                 text: 'Tweaking the Blockchain',
                 link: '/guide/testing/tweaking-the-blockchain',
               },
