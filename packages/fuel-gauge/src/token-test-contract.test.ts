@@ -1,44 +1,35 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type { BN } from 'fuels';
-import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+import { toHex, Wallet, bn, BaseAssetId } from 'fuels';
 
-import abi from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
+import { getProgramDir } from './utils';
 
-let provider: Provider;
-
-const setup = async () => {
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
-  const { minGasPrice } = wallet.provider.getGasConfig();
-
-  // Deploy contract
-  const bytecode = readFileSync(
-    join(__dirname, '../fixtures/forc-projects/token_contract/out/debug/token_contract.bin')
-  );
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({ gasPrice: minGasPrice });
-
-  return contract;
-};
-
-let gasPrice: BN;
-beforeAll(async () => {
-  provider = await Provider.create(FUEL_NETWORK_URL);
-  gasPrice = provider.getGasConfig().minGasPrice;
-});
+const contractDir = getProgramDir('token_contract');
 
 /**
  * @group node
  */
 describe('TokenTestContract', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('Can mint and transfer coins', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [token],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
-    const token = await setup();
     const tokenContractId = { value: token.id.toB256() };
     const addressId = { value: userWallet.address.toB256() };
 
@@ -75,6 +66,15 @@ describe('TokenTestContract', () => {
   });
 
   it('Automatically add variableOuputs', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [token],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const [wallet1, wallet2, wallet3] = Array.from({ length: 3 }, () =>
       Wallet.generate({ provider })
     );
@@ -82,8 +82,6 @@ describe('TokenTestContract', () => {
     const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({
       value: wallet.address.toB256(),
     }));
-
-    const token = await setup();
 
     const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
     await functionCallOne.dryRun();
@@ -135,8 +133,16 @@ describe('TokenTestContract', () => {
   });
 
   it('Contract getBalance', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [token],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const userWallet = Wallet.generate({ provider });
-    const token = await setup();
     const addressId = {
       value: userWallet.address.toB256(),
     };
@@ -165,8 +171,15 @@ describe('TokenTestContract', () => {
   });
 
   it('throws when passing entire Address object as address parameter', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [token],
+      provider,
+    } = launched;
+
     const userWallet = Wallet.generate({ provider });
-    const token = await setup();
     const addressParameter = {
       value: userWallet.address,
     };
