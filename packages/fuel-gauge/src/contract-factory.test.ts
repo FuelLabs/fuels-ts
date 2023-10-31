@@ -1,33 +1,21 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { readFileSync } from 'fs';
-import {
-  BN,
-  bn,
-  toHex,
-  Interface,
-  Provider,
-  ContractFactory,
-  BaseAssetId,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { BN, bn, toHex, Interface, ContractFactory } from 'fuels';
 import { join } from 'path';
 
-import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+import storageSlots from '../fixtures/forc-projects/storage-test/out/debug/storage-test-storage_slots.json';
 
 // load the byteCode of the contract, generated from Sway source
 const byteCode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
+  join(__dirname, '../fixtures/forc-projects/storage-test/out/debug/storage-test.bin')
 );
 
 // load the JSON abi of the contract, generated from Sway source
 const abi = JSON.parse(
   readFileSync(
-    join(
-      __dirname,
-      '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
-    )
+    join(__dirname, '../fixtures/forc-projects/storage-test/out/debug/storage-test-abi.json')
   ).toString()
 );
 
@@ -35,19 +23,20 @@ const abi = JSON.parse(
  * @group node
  */
 describe('Contract Factory', () => {
-  let gasPrice: BN;
-  const createContractFactory = async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-    // send byteCode and ABI to ContractFactory to load
-    const factory = new ContractFactory(byteCode, abi, wallet);
-    return factory;
-  };
+    return () => TestNodeLauncher.killCachedNodes();
+  });
 
   it('Creates a factory from inputs that can return call results', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
 
     const contact = await factory.deployContract({ gasPrice });
 
@@ -67,7 +56,13 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
 
     const contact = await factory.deployContract({ gasPrice });
 
@@ -112,7 +107,13 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can prepare call data', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
 
     const contract = await factory.deployContract({ gasPrice });
 
@@ -128,7 +129,13 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage fixed var names', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
     const contract = await factory.deployContract({
       storageSlots,
       gasPrice,
@@ -156,7 +163,12 @@ describe('Contract Factory', () => {
   });
 
   it('should ensure transaction request is created with gas limit sets to 0', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
 
     const { transactionRequest } = factory.createTransactionRequest();
 
@@ -164,7 +176,13 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contact = await factory.deployContract({
@@ -179,7 +197,13 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
-    const factory = await createContractFactory();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contract = await factory.deployContract({
