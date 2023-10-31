@@ -1,33 +1,23 @@
-import { readFileSync } from 'fs';
-import type { BN, Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { bn, BaseAssetId } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation-abi.json';
+import { getProgramDir } from './utils';
 
-import { createSetupConfig } from './utils';
-
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation.bin')
-);
-
-const setupContract = createSetupConfig({
-  contractBytecode,
-  abi: abiJSON,
-});
-
-let contract: Contract;
-let gasPrice: BN;
-
-beforeAll(async () => {
-  contract = await setupContract();
-  ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
-});
+const contractDir = getProgramDir('payable-annotation');
 
 /**
  * @group node
  */
 test('allow sending coins to payable functions', async () => {
+  await using launched = await TestNodeLauncher.launch({
+    deployContracts: [contractDir],
+  });
+  const {
+    contracts: [contract],
+  } = launched;
+
+  const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+
   // This should not fail because the function is payable
   await expect(
     contract.functions
@@ -44,6 +34,15 @@ test('allow sending coins to payable functions', async () => {
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
+  await using launched = await TestNodeLauncher.launch({
+    deployContracts: [contractDir],
+  });
+  const {
+    contracts: [contract],
+  } = launched;
+
+  const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+
   // This should fail because the function is not payable
   await expect(async () =>
     contract.functions
