@@ -346,6 +346,8 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
+    assert(this.program.account, 'Wallet is required!');
+
     const provider = this.getProvider();
 
     const { maxFee } = await this.getTransactionCost();
