@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import { existsSync, rmSync, writeFileSync, rm, mkdir, renameSync } from 'fs';
+import { existsSync, rmSync, writeFileSync, mkdirSync, renameSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
@@ -55,7 +55,7 @@ import {
       execSync(`rm -rf ${binDir}/*`);
     } else {
       // Create the `fuel-core-binaries` directory if it doesn't exist
-      mkdir(binDir);
+      mkdirSync(binDir);
     }
 
     // Download
