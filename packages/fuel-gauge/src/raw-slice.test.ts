@@ -1,11 +1,11 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
+import type { BN } from 'fuels';
 
 import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
 import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
 
-import { getScript, getSetupContract } from './utils';
+import { getProgramDir, getScript } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -17,28 +17,27 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
-
-const setupContract = getSetupContract('raw-slice');
-let contractInstance: Contract;
-let gasPrice: BN;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
-});
+const contractDir = getProgramDir('raw-slice');
 
 /**
  * @group node
  */
 describe('Raw Slice Tests', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
   it('should test raw slice output', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const INPUT = 10;
 
     const { value } = await contractInstance.functions
@@ -50,6 +49,15 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions
@@ -61,6 +69,15 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [nested]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const slice = [40, 41, 42];
     const INPUT = {
       inner: [slice, slice],
@@ -76,7 +93,16 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [predicate-raw-slice]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+      wallets: [wallet],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
@@ -118,7 +144,16 @@ describe('Raw Slice Tests', () => {
 
   // see https://github.com/FuelLabs/fuels-ts/issues/1344
   it.skip('should test raw slice input [script-raw-slice]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+      wallets: [wallet],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
 
