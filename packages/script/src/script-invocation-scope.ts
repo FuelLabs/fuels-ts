@@ -13,7 +13,7 @@ import { ByteArrayCoder } from '@fuel-ts/transactions';
 
 export class ScriptInvocationScope<
   TArgs extends Array<any> = Array<any>,
-  TReturn = any
+  TReturn = any,
 > extends FunctionInvocationScope<TArgs, TReturn> {
   scriptRequest!: ScriptRequest<TArgs, TReturn>;
 
