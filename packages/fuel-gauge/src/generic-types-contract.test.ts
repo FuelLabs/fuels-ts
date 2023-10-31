@@ -1,27 +1,21 @@
-import { readFileSync } from 'fs';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { toHex } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
+import { getProgramDir } from './utils';
 
-import { setup } from './utils';
-
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
-  )
-);
+const contractDir = getProgramDir('generic-types-contract');
 
 /**
  * @group node
  */
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
-    const contract = await setup({
-      abi: abiJSON,
-      contractBytecode,
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
     });
+    const {
+      contracts: [contract],
+    } = launched;
 
     const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 

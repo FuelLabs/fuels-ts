@@ -300,16 +300,12 @@ describe('Fee', () => {
     });
     await tx1.wait();
 
-    console.log('post tx1');
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    console.log('balanceBefore', balanceBefore);
     const gasPrice = randomGasPrice(minGasPrice, 9);
     const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, { gasPrice });
 
     const { fee } = await tx2.wait();
-
-    console.log('post tx2');
 
     const balanceAfter = await predicate.getBalance();
     const balanceDiff = balanceBefore.sub(balanceAfter).sub(transferAmount);
