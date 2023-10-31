@@ -1,7 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { readFileSync } from 'fs';
-import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { BN, Script } from 'fuels';
 import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-abi.json';
@@ -17,27 +16,24 @@ const defaultValues = {
   FEE: 5,
 };
 
-let wallet: WalletUnlocked;
-
 /**
  * @group node
  */
 describe('Script With Configurable', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-    const quantities: CoinQuantityLike[] = [
-      {
-        amount: 1_000_000,
-        assetId: BaseAssetId,
-      },
-    ];
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-    wallet = await generateTestWallet(provider, quantities);
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should returns true when input value matches default configurable constant', async () => {
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const script = new Script(bytecode, abi, wallet);
 
     script.setConfigurableConstants(defaultValues);
@@ -49,6 +45,13 @@ describe('Script With Configurable', () => {
   });
 
   it('should returns false when input value differs from default configurable constant', async () => {
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const configurableConstants = { FEE: 71 };
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
@@ -67,6 +70,13 @@ describe('Script With Configurable', () => {
   });
 
   it('should returns true when input value matches manually set configurable constant', async () => {
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const configurableConstants = { FEE: 35 };
 
     const script = new Script(bytecode, abi, wallet);
@@ -83,6 +93,13 @@ describe('Script With Configurable', () => {
   });
 
   it('should returns false when input value differs from manually set configurable constant', async () => {
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const configurableConstants = { FEE: 10 };
 
     const input = { FEE: 15 };
