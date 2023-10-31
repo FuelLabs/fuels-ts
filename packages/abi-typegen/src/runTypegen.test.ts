@@ -1,9 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { existsSync } from 'fs';
+import { existsSync, cpSync, renameSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import shelljs from 'shelljs';
 
 import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
 
@@ -31,8 +29,8 @@ describe('runTypegen.js', () => {
     const fromBin = project.binPath;
     const toBin = fromBin.replace('.bin', '2.bin');
 
-    shelljs.cp(from, to);
-    shelljs.cp(fromBin, toBin);
+    cpSync(from, to);
+    cpSync(fromBin, toBin);
 
     // executes program
     const fn = () =>
@@ -159,7 +157,7 @@ describe('runTypegen.js', () => {
     const tempBinPath = `${project.binPath}--BKP`;
 
     // IMPORTANT: renames bin file to yield error
-    shelljs.mv(project.binPath, tempBinPath);
+    renameSync(project.binPath, tempBinPath);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -184,7 +182,7 @@ describe('runTypegen.js', () => {
     const { error } = await safeExec(fn);
 
     // restore bin to original place
-    shelljs.mv(tempBinPath, project.binPath);
+    renameSync(tempBinPath, project.binPath);
 
     // validates execution was ok
     expect(error?.message).toMatch(/Could not find BIN file for counterpart Script ABI\./gm);

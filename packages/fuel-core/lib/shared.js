@@ -1,6 +1,6 @@
+import { execSync } from 'child_process';
 import fs from 'fs/promises';
 import { join, dirname } from 'path';
-import sh from 'shelljs';
 import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -43,11 +43,11 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
 export const buildFromGitBranch = (branchName) => {
-  sh.exec('rm -rf fuel-core-repo');
-  sh.exec('rm -rf fuel-core-binaries');
-  sh.exec(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
-  sh.exec(`cd fuel-core-repo && cargo build`, { silent: true });
-  sh.exec('mkdir fuel-core-binaries');
-  sh.exec('cp fuel-core-repo/target/debug/fuel-core fuel-core-binaries/fuel-core');
-  sh.exec(`rm -rf fuel-core-repo`);
+  execSync('rm -rf fuel-core-repo');
+  execSync('rm -rf fuel-core-binaries');
+  execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
+  execSync(`cd fuel-core-repo && cargo build`, { silent: true });
+  execSync('mkdir fuel-core-binaries');
+  execSync('cp fuel-core-repo/target/debug/fuel-core fuel-core-binaries/fuel-core');
+  execSync(`rm -rf fuel-core-repo`);
 };

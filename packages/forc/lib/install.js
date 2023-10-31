@@ -4,7 +4,6 @@ import { execSync } from 'child_process';
 import { existsSync, rmSync, writeFileSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
-import sh from 'shelljs';
 
 import {
   __dirname,
@@ -15,6 +14,7 @@ import {
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const { info } = console;
 
@@ -53,7 +53,7 @@ import {
     await writeFileSync(pkgPath, buf);
 
     // Extract
-    sh.exec(`tar xzf "${pkgPath}" -C "${binDir}"`);
+    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
 
     // Cleanup
     await rmSync(pkgPath);
