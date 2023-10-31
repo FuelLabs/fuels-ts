@@ -243,7 +243,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @hidden
    */
-  protected constructor(
+  constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
     public options: ProviderOptions = {}
@@ -310,9 +310,9 @@ export default class Provider {
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
-  async connect(url: string) {
+  async connect(url: string, options?: ProviderOptions) {
     this.url = url;
-    this.operations = this.createOperations(url);
+    this.operations = this.createOperations(url, options);
     await this.fetchChainAndNodeInfo();
   }
 
@@ -352,7 +352,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(url: string, options: ProviderOptions = {}) {
+  createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
