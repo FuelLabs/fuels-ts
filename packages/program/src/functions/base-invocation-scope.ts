@@ -218,8 +218,7 @@ export class BaseInvocationScope<TReturn = any> {
   async getTransactionCost(options?: TransactionCostOptions) {
     const provider = this.getProvider();
 
-    await this.prepareTransaction();
-    const request = transactionRequestify(this.transactionRequest);
+    const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins());
 
