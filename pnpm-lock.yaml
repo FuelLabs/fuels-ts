@@ -38,9 +38,6 @@ importers:
       '@types/node-fetch':
         specifier: ^2.6.2
         version: 2.6.2
-      '@types/shelljs':
-        specifier: ^0.8.11
-        version: 0.8.11
       '@types/web':
         specifier: ^0.0.65
         version: 0.0.65
@@ -119,9 +116,6 @@ importers:
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
-      shelljs:
-        specifier: ^0.8.5
-        version: 0.8.5
       textlint:
         specifier: ^13.3.2
         version: 13.3.2
@@ -607,18 +601,12 @@ importers:
       node-fetch:
         specifier: ^2.6.7
         version: 2.6.7
-      shelljs:
-        specifier: ^0.8.5
-        version: 0.8.5
 
   packages/fuel-core:
     dependencies:
       node-fetch:
         specifier: ^2.6.7
         version: 2.6.7
-      shelljs:
-        specifier: ^0.8.5
-        version: 0.8.5
 
   packages/fuel-gauge:
     dependencies:
@@ -6048,13 +6036,6 @@ packages:
       '@types/node': 16.18.34
     dev: false
 
-  /@types/shelljs@0.8.11:
-    resolution: {integrity: sha512-x9yaMvEh5BEaZKeVQC4vp3l+QoFj3BXcd4aYfuKSzIIyihjdVARAadYy3SMNIz0WCCdS2vB9JL/U6GQk5PaxQw==}
-    dependencies:
-      '@types/glob': 8.1.0
-      '@types/node': 16.18.34
-    dev: true
-
   /@types/sockjs@0.3.33:
     resolution: {integrity: sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==}
     dependencies:
@@ -11288,10 +11269,6 @@ packages:
       has: 1.0.3
       side-channel: 1.0.4
 
-  /interpret@1.4.0:
-    resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
-    engines: {node: '>= 0.10'}
-
   /invariant@2.2.4:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
     dependencies:
@@ -15846,12 +15823,6 @@ packages:
     dependencies:
       picomatch: 2.3.1
 
-  /rechoir@0.6.2:
-    resolution: {integrity: sha512-HFM8rkZ+i3zrV+4LQjwQ0W+ez98pApMGM3HUrN04j3CqzPOzl9nmP15Y8YXNm8QHGv/eacOVEjqhmWpkRV0NAw==}
-    engines: {node: '>= 0.10'}
-    dependencies:
-      resolve: 1.22.2
-
   /recursive-readdir@2.2.3:
     resolution: {integrity: sha512-8HrF5ZsXk5FAH9dgsx3BlUer73nIhuj+9OrQwEbLTPOBzGkL1lsFCR01am+v+0m2Cmbs1nP12hLDl5FA7EszKA==}
     engines: {node: '>=6.0.0'}
@@ -16511,15 +16482,6 @@ packages:
 
   /shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
-
-  /shelljs@0.8.5:
-    resolution: {integrity: sha512-TiwcRcrkhHvbrZbnRcFYMLl30Dfov3HKqzp5tO5b4pt6G/SezKcYhmDg15zXVBswHmctSAQKznqNW2LO5tTDow==}
-    engines: {node: '>=4'}
-    hasBin: true
-    dependencies:
-      glob: 7.2.3
-      interpret: 1.4.0
-      rechoir: 0.6.2
 
   /shiki@0.14.3:
     resolution: {integrity: sha512-U3S/a+b0KS+UkTyMjoNojvTgrBHjgp7L6ovhFVZsXmBGnVdQ4K4U9oK0z63w538S91ATngv1vXigHCSWOwnr+g==}
