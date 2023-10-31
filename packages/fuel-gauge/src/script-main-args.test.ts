@@ -1,7 +1,7 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { readFileSync } from 'fs';
-import type { BN, BigNumberish } from 'fuels';
-import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import type { BigNumberish } from 'fuels';
+import { bn, Script } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
@@ -12,15 +12,6 @@ const scriptBin = readFileSync(
   join(__dirname, '../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
 );
 
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
-
 type Baz = {
   x: number;
 };
@@ -29,14 +20,20 @@ type Baz = {
  * @group node
  */
 describe('Script Coverage', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const wallet = await setup();
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('can call script and use main arguments', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
@@ -49,7 +46,13 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [two args, read logs]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
     const foo = 33;
     const bar: Baz = {
@@ -66,7 +69,13 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [two args, struct return]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
     const foo = 1;
     const bar: Baz = {
@@ -81,7 +90,13 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [tx params]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 
