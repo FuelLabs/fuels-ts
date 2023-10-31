@@ -1,4 +1,4 @@
-import { BaseAssetId } from 'fuels';
+import { BaseAssetId, ScriptTransactionRequest } from 'fuels';
 import type { InputValue, BN, BigNumberish, WalletUnlocked, Predicate } from 'fuels';
 
 export const fundPredicate = async <T extends InputValue[]>(
@@ -7,9 +7,17 @@ export const fundPredicate = async <T extends InputValue[]>(
   amountToPredicate: BigNumberish
 ): Promise<BN> => {
   const { minGasPrice } = wallet.provider.getGasConfig();
-  const tx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+
+  const request = new ScriptTransactionRequest({
     gasPrice: minGasPrice,
   });
+
+  request.addCoinOutput(predicate.address, amountToPredicate, BaseAssetId);
+  const { minFee, requiredQuantities, gasUsed } = await wallet.provider.getTransactionCost(request);
+  request.gasLimit = gasUsed;
+  await wallet.fund(request, requiredQuantities, minFee);
+
+  const tx = await wallet.sendTransaction(request);
   await tx.waitForResult();
 
   return predicate.getBalance();
