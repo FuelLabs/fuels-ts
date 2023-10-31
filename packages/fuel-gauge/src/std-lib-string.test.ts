@@ -1,34 +1,34 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { bn, Predicate, Wallet, Address, BaseAssetId } from 'fuels';
+import type { BN } from 'fuels';
 
 import predicateStdString from '../fixtures/forc-projects/predicate-std-lib-string';
 import predicateStdStringAbi from '../fixtures/forc-projects/predicate-std-lib-string/out/debug/predicate-std-lib-string-abi.json';
 
-import { getScript, getSetupContract } from './utils';
+import { getProgramDir, getScript } from './utils';
 
-const setupContract = getSetupContract('std-lib-string');
-let contractInstance: Contract;
-let gasPrice: BN;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
-});
-
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
+const contractDir = getProgramDir('std-lib-string');
 
 /**
  * @group node
  */
 describe('std-lib-string Tests', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('should test std-lib-string return', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const { value } = await contractInstance.functions
       .return_dynamic_string()
       .txParams({ gasPrice })
@@ -37,6 +37,15 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test std-lib-string input', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const INPUT = 'Hello World';
 
     const { value } = await contractInstance.functions
@@ -48,7 +57,13 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test String input [predicate-std-lib-string]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
@@ -84,7 +99,13 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test String input [script-std-lib-string]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     type MainArgs = [string];
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
