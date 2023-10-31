@@ -1,11 +1,10 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
-import { CreateTransactionRequest, addAmountToAsset } from '@fuel-ts/providers';
+import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { Account } from '@fuel-ts/wallet';
 import { getBytesCopy, type BytesLike } from 'ethers';
