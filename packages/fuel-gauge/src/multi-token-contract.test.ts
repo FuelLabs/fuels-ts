@@ -1,28 +1,10 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type { BN } from 'fuels';
-import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
+import { Wallet, bn } from 'fuels';
 
-import abi from '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract-abi.json';
+import { getProgramDir } from './utils';
 
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
-
-  // Deploy contract
-  const bytecode = readFileSync(
-    join(
-      __dirname,
-      '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract.bin'
-    )
-  );
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-  const contract = await factory.deployContract({ gasPrice });
-  return contract;
-};
+const contractDir = getProgramDir('multi-token-contract');
 
 // hardcoded subIds on MultiTokenContract
 const subIds = [
@@ -35,16 +17,25 @@ const subIds = [
  * @group node
  */
 describe('MultiTokenContract', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    gasPrice = provider.getGasConfig().minGasPrice;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
+
   it('can mint and transfer coins', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [multiTokenContract],
+      provider,
+    } = launched;
+
+    const { minGasPrice: gasPrice } = multiTokenContract.provider.getGasConfig();
+
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
-    const multiTokenContract = await setup();
     const contractId = { value: multiTokenContract.id.toB256() };
 
     const helperDict: { [key: string]: { assetId: string; amount: number } } = {
@@ -121,7 +112,15 @@ describe('MultiTokenContract', () => {
   });
 
   it('can burn coins', async () => {
-    const multiTokenContract = await setup();
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [multiTokenContract],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = multiTokenContract.provider.getGasConfig();
+
     const contractId = { value: multiTokenContract.id.toB256() };
 
     const helperDict: {
