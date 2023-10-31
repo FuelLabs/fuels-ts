@@ -30,6 +30,12 @@ const defaultValues = {
  * @group node
  */
 describe('Configurable Contract', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('should assert default values', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [configurableContractDir],
