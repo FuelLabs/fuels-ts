@@ -20,7 +20,6 @@ export default defineConfig({
     globals: true,
     ui: false,
     setupFiles: ['./vite.env.ts'],
-    // globalSetup: ['./vite.setup.ts'],
     testTimeout: 15000,
     coverage: {
       enabled: false,

@@ -37,9 +37,12 @@ interface TestNodeLauncherReturn<TContracts> {
   contracts: TContracts;
 }
 
-type NodeInfo = Awaited<ReturnType<typeof launchCustomProviderAndGetWallets<false>>>;
+interface NodeInfo extends Awaited<ReturnType<typeof launchCustomProviderAndGetWallets<false>>> {
+  fromCache?: boolean;
+}
 type TestNodeLauncherCache = {
   nodes: NodeInfo[];
+  cleanups: Array<() => Promise<void>>;
   chainConfig: ChainConfig;
 } & SetupTestProviderOptions;
 export class TestNodeLauncher {
@@ -57,9 +60,10 @@ export class TestNodeLauncher {
 
     const cleanups: Promise<void>[] = [];
 
-    this.cache.nodes.forEach(({ cleanup }) => {
+    this.cache.cleanups.forEach((cleanup) => {
       cleanups.push(cleanup());
     });
+
     await Promise.all(cleanups);
   }
 
@@ -76,7 +80,8 @@ export class TestNodeLauncher {
 
     await Promise.all(launchPromises).then((x) => {
       this.cache = {
-        nodes: (this.cache?.nodes ?? []).concat(x),
+        nodes: (this.cache?.nodes ?? []).concat(x.map((node) => ({ ...node, fromCache: true }))),
+        cleanups: x.map(({ cleanup }) => cleanup),
         chainConfig: x[0].deployedChainConfig,
         providerOptions: x[0].provider.options,
         nodeOptions: options?.nodeOptions ?? {},
@@ -123,10 +128,10 @@ export class TestNodeLauncher {
         partialChainConfig,
         this.cache.chainConfig as unknown as Record<string, unknown>
       )
+    ) {
       // &&
       // this.partialEqual(nodeOptions, this.cache.nodeOptions) &&
       // this.partialEqual(providerOptions, this.cache.providerOptions)
-    ) {
       return this.cache.nodes.pop();
     }
 
@@ -142,7 +147,7 @@ export class TestNodeLauncher {
     const { walletConfig, nodeOptions, providerOptions, deployContracts } =
       this.getOptions(options);
 
-    const { provider, wallets, cleanup } =
+    const { provider, wallets, cleanup, fromCache } =
       (TestNodeLauncher.getFromCache({ walletConfig, nodeOptions, providerOptions }) as NodeInfo) ??
       (await launchCustomProviderAndGetWallets(
         {
@@ -162,7 +167,9 @@ export class TestNodeLauncher {
               provider,
               wallets,
               contracts: contracts as TContracts,
-              [Symbol.asyncDispose]: cleanup,
+              [Symbol.asyncDispose]: async () => {
+                if (!fromCache) await cleanup();
+              },
             }
           : {
               provider,

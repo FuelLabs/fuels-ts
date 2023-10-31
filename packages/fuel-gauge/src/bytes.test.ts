@@ -22,7 +22,12 @@ type Wrapper = {
 /**
  * @group node
  */
-describe('Bytes Tests', () => {
+describe.concurrent('Bytes Tests', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.cleanCache();
+  });
   it('should test bytes output', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [bytesContractDir],

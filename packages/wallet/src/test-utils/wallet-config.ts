@@ -52,9 +52,11 @@ export class WalletConfig {
       this.wallets = wallets;
     } else {
       const generatedWallets: WalletUnlocked[] = [];
-      for (let index = 0; index < wallets; index++) {
+      for (let index = 1; index <= wallets; index++) {
+        const pk = new Uint8Array(32);
+        pk[31] = index;
         // @ts-expect-error will be updated later
-        generatedWallets.push(WalletUnlocked.generate({ provider: null }));
+        generatedWallets.push(new WalletUnlocked(pk, null));
       }
       this.wallets = generatedWallets;
     }

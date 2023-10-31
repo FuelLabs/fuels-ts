@@ -45,13 +45,12 @@ enum ColorEnumOutput {
  * @group node
  */
 describe('Coverage Contract', () => {
-  beforeAll(async () => {
-    const start = vi.getRealSystemTime();
-    await TestNodeLauncher.prepareCache(52);
-    const end = vi.getRealSystemTime();
-    console.log('time', start, end, (end - start) / 1000, 's');
-    return async () => TestNodeLauncher.cleanCache();
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.cleanCache();
   });
+
   it('can return outputs', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [coverageContractDir],
