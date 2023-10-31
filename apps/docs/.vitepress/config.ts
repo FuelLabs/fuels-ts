@@ -360,7 +360,7 @@ export default defineConfig({
                 link: '/guide/testing/testing-with-jest',
               },
               {
-                text: 'Setting up a custom chain',
+                text: 'Setting Up a Custom Chain',
                 link: '/guide/testing/setting-up-a-custom-chain',
               },
               {
