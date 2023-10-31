@@ -1,29 +1,26 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type { BigNumberish, BN } from 'fuels';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider } from 'fuels';
 
 import { getScript } from './utils';
-
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
-
-  return wallet;
-};
 
 /**
  * @group node
  */
 describe('Script With Vectors', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
+
   it('can call script and use main argument [array]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const someArray = [1, 100];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
 
@@ -33,7 +30,13 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [vec]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const someVec = [7, 2, 1, 5];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
 
@@ -55,7 +58,12 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
 
     const importantDates = [
       {
@@ -98,7 +106,12 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    const wallet = await setup();
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
 
     const scores = [24, 56, 43];
 
