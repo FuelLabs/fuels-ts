@@ -146,9 +146,8 @@ export default class ContractFactory {
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
 
-    const { requiredQuantities, maxFee, gasUsed } = await this.account.provider.getTransactionCost(
-      transactionRequest
-    );
+    const { requiredQuantities, maxFee, gasUsed } =
+      await this.account.provider.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = gasUsed;
 

@@ -747,9 +747,8 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
-    const { requiredQuantities, maxFee } = await provider.getTransactionCost(
-      transactionRequestParsed
-    );
+    const { requiredQuantities, maxFee } =
+      await provider.getTransactionCost(transactionRequestParsed);
 
     // Fund tx
     await wallet.fund(transactionRequestParsed, requiredQuantities, maxFee);
@@ -811,9 +810,8 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
-    const { gasUsed, minFee, requiredQuantities } = await contract.provider.getTransactionCost(
-      transactionRequestParsed
-    );
+    const { gasUsed, minFee, requiredQuantities } =
+      await contract.provider.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = gasUsed;
 
