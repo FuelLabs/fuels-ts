@@ -1,6 +1,6 @@
 #!/usr/bin/env node
+import { execSync } from 'child_process';
 import { globSync } from 'glob';
-import sh from 'shelljs';
 
 (() => {
   const mdFiles = globSync('**/*.md', {
@@ -14,8 +14,9 @@ import sh from 'shelljs';
   });
   const filesWithLintErrors: string[] = [];
   mdFiles.forEach((file) => {
-    const { code } = sh.exec(`pnpm textlint ${file}`);
-    if (code !== 0) {
+    try {
+      execSync(`pnpm textlint ${file}`).toString();
+    } catch (error) {
       filesWithLintErrors.push(file);
     }
   });
