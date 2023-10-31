@@ -1,6 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type {
-  WalletUnlocked,
   TransactionResultReceipt,
   Operation,
   TransactionSummary,
@@ -8,12 +7,10 @@ import type {
 } from 'fuels';
 import {
   BN,
-  FUEL_NETWORK_URL,
   getTransactionsSummaries,
   getTransactionSummary,
   getTransactionSummaryFromRequest,
   BaseAssetId,
-  Provider,
   ScriptTransactionRequest,
   TransactionTypeName,
   Wallet,
@@ -23,14 +20,10 @@ import {
  * @group node
  */
 describe('TransactionSummary', () => {
-  let provider: Provider;
-  let wallet: WalletUnlocked;
-  let gasPrice: BN;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[100_000_000, BaseAssetId]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   const verifyTransactionSummary = (params: {
@@ -60,6 +53,12 @@ describe('TransactionSummary', () => {
   };
 
   it('should ensure getTransactionSummary executes just fine', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const destination = Wallet.generate({
       provider,
     });
@@ -100,6 +99,13 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const sender = Wallet.generate({
       provider,
     });
@@ -139,6 +145,12 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
       gasPrice: 1,
