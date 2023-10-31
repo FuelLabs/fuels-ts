@@ -18,16 +18,19 @@ test('launchNodeAndGetWallets - empty config', async () => {
 
 test('launchNodeAndGetWallets - custom config', async () => {
   // #region launchNode-custom-config
+  const chainConfigPath = path.join(cwd(), '.fuel-core/configs/chainConfig.json');
+  
   const { stop, provider } = await launchNodeAndGetWallets({
     launchNodeOptions: {
-      chainConfigPath: path.join(cwd(), '.fuel-core/configs/chainConfig.json'),
+      chainConfigPath,
       args: ['--manual_blocks_enabled'],
     },
   });
-  const {
-    consensusParameters: { gasPerByte },
-  } = provider.getChain();
+  
+  const { consensusParameters: { gasPerByte } } = provider.getChain();
+  
   expect(gasPerByte.toNumber()).toEqual(4);
+  
   stop();
   // #endregion launchNode-custom-config
 });
