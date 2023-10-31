@@ -1,22 +1,24 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, WalletUnlocked } from 'fuels';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { BaseAssetId, TransactionResponse, Wallet } from 'fuels';
 
 /**
  * @group node
  */
 describe('TransactionSummary', () => {
-  let provider: Provider;
-  let adminWallet: WalletUnlocked;
-  let gasPrice: BN;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    adminWallet = await generateTestWallet(provider, [[500_000]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should ensure create method waits till a transaction response is given', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const destination = Wallet.generate({
       provider,
     });
@@ -36,6 +38,13 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const destination = Wallet.generate({
       provider,
     });
@@ -78,6 +87,13 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure waitForResult always waits for the transaction to be processed', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const destination = Wallet.generate({
       provider,
     });
