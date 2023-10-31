@@ -1,6 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import {
   ScriptResultDecoderError,
   SendMessageRevertError,
@@ -8,36 +6,32 @@ import {
   AssertFailedRevertError,
   TransferToAddressRevertError,
   bn,
-  ContractFactory,
-  Provider,
-  BaseAssetId,
-  FUEL_NETWORK_URL,
 } from 'fuels';
-import path from 'path';
 
-import FactoryAbi from '../fixtures/forc-projects/revert-error/out/debug/revert-error-abi.json';
+import { getProgramDir } from './utils';
 
-let contractInstance: Contract;
-let wallet: WalletUnlocked;
+const contractDir = getProgramDir('revert-error');
 
 /**
  * @group node
  */
 describe('Revert Error Testing', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-    const bytecode = fs.readFileSync(
-      path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
-    );
-    const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
-    contractInstance = await factory.deployContract({ gasPrice });
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('can pass required checks [valid]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -57,6 +51,15 @@ describe('Revert Error Testing', () => {
   });
 
   it('can throw RequireRevertError [invalid price]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const INPUT_PRICE = bn(0);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -69,6 +72,15 @@ describe('Revert Error Testing', () => {
   });
 
   it('can throw RequireRevertError [invalid token id]', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(55);
 
@@ -81,6 +93,15 @@ describe('Revert Error Testing', () => {
   });
 
   it('can throw AssertFailedRevertError', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -97,6 +118,13 @@ describe('Revert Error Testing', () => {
    * we could not get this sway function to revert
    */
   it.skip('can throw SendMessageRevertError', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
     await expect(contractInstance.functions.failed_message().call()).rejects.toThrow(
       SendMessageRevertError
     );
@@ -109,12 +137,30 @@ describe('Revert Error Testing', () => {
    * https://fuellabs.github.io/sway/master/reference/documentation/operations/asset/transfer/address.html
    */
   it.skip('can throw TransferToAddressRevertError', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     await expect(
       contractInstance.functions.failed_transfer_revert().txParams({ gasPrice }).call()
     ).rejects.toThrow(TransferToAddressRevertError);
   });
 
   it('can throw ScriptResultDecoderError', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [contractDir],
+    });
+    const {
+      contracts: [contractInstance],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contractInstance.provider.getGasConfig();
+
     await expect(
       contractInstance.functions.failed_transfer().txParams({ gasPrice }).call()
     ).rejects.toThrow(ScriptResultDecoderError);
