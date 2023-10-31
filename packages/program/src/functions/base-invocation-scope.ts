@@ -1,16 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, CallResult } from '@fuel-ts/providers';
-import {
-  transactionRequestify,
-  ScriptTransactionRequest,
-  addAmountToAsset,
-} from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
@@ -236,17 +231,7 @@ export class BaseInvocationScope<TReturn = any> {
       (i) => i.type !== InputType.Coin
     );
 
-    const quantitiesWithFee = addAmountToAsset({
-      amount: fee,
-      assetId: BaseAssetId,
-      coinQuantities: this.requiredCoins,
-    });
-
-    await this.program.account?.fund(
-      this.transactionRequest,
-      this.requiredCoins,
-      quantitiesWithFee
-    );
+    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, fee);
 
     return this;
   }
