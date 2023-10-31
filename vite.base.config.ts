@@ -9,7 +9,6 @@ export default defineConfig({
   ],
   esbuild: { target: 'es2022' },
   test: {
-    logHeapUsage: true,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
@@ -22,7 +21,7 @@ export default defineConfig({
     setupFiles: ['./vite.env.ts'],
     testTimeout: 15000,
     coverage: {
-      enabled: false,
+      enabled: true,
       provider: 'istanbul',
       reporter: ['json'],
       exclude: ['**/dist/**', '**/test/**', '**/*.test.ts', '**/*.d.ts'],

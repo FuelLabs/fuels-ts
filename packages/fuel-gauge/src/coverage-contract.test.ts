@@ -48,7 +48,7 @@ describe('Coverage Contract', () => {
   beforeAll(async (ctx) => {
     await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-    return () => TestNodeLauncher.cleanCache();
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('can return outputs', async () => {

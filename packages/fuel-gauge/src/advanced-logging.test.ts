@@ -10,6 +10,12 @@ const advancedLoggingOtherContractDir = getContractDir('advanced-logging-other-c
  * @group node
  */
 describe('Advanced Logging', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('can get log data', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [advancedLoggingDir],

@@ -11,6 +11,12 @@ const U64_MAX = bn(2).pow(64).sub(1);
  * @group node
  */
 describe('CallTestContract', () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [callTestContractDir],

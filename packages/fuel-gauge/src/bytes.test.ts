@@ -26,7 +26,7 @@ describe.concurrent('Bytes Tests', () => {
   beforeAll(async (ctx) => {
     await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-    return () => TestNodeLauncher.cleanCache();
+    return () => TestNodeLauncher.killCachedNodes();
   });
   it('should test bytes output', async () => {
     await using launched = await TestNodeLauncher.launch({
