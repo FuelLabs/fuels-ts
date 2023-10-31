@@ -24,7 +24,7 @@ import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './uti
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
-  FnName extends TAbi['functions'][number]['name'] = string
+  FnName extends TAbi['functions'][number]['name'] = string,
 > {
   readonly signature: string;
   readonly selector: string;

@@ -1,15 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
-import {
-  type Contract,
-  bn,
-  Predicate,
-  Wallet,
-  Address,
-  BaseAssetId,
-  Provider,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { BN, Contract } from 'fuels';
 
 import predicateStdString from '../fixtures/forc-projects/predicate-std-lib-string';
 import predicateStdStringAbi from '../fixtures/forc-projects/predicate-std-lib-string/out/debug/predicate-std-lib-string-abi.json';
