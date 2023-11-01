@@ -1,8 +1,9 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { WalletConfig } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import type { BigNumberish } from 'fuels';
+import { WalletUnlocked, toNumber, BaseAssetId, Script, Predicate } from 'fuels';
 import { join } from 'path';
 
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -21,19 +22,15 @@ const scriptBytes = readFileSync(
  */
 describe('Predicate', () => {
   describe('With script', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
-    let provider: Provider;
-    let gasPrice: BN;
-
-    beforeEach(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-      receiver = await generateTestWallet(provider);
-      gasPrice = provider.getGasConfig().minGasPrice;
-    });
-
     it('calls a predicate and uses proceeds for a script call', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
+      const receiver = WalletUnlocked.generate({ provider });
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
         scriptBytes,

@@ -1,64 +1,45 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
-import type { BN, WalletUnlocked } from 'fuels';
-import {
-  BaseAssetId,
-  ContractFactory,
-  toNumber,
-  Contract,
-  Provider,
-  Predicate,
-  FUEL_NETWORK_URL,
-} from 'fuels';
-import { join } from 'path';
+import { WalletConfig } from '@fuel-ts/wallet/test-utils';
+import { BaseAssetId, toNumber, Contract, Predicate, WalletUnlocked } from 'fuels';
 
-import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
-import liquidityPoolAbi from '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
 import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
+import { getProgramDir } from '../utils';
 
-import { fundPredicate, setupContractWithConfig } from './utils/predicate';
+import { fundPredicate } from './utils/predicate';
 
-const contractBytes = readFileSync(
-  join(
-    __dirname,
-    '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin'
-  )
-);
-
-const liquidityPoolBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-);
+const callTestContractDir = getProgramDir('call-test-contract');
+const liquidityPoolDir = getProgramDir('liquidity-pool');
 
 /**
  * @group node
  */
 describe('Predicate', () => {
   describe('With Contract', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
-    let provider: Provider;
-    let gasPrice: BN;
-    beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
-    });
+    const walletConfig = new WalletConfig({ wallets: 2 });
+    beforeAll(async (ctx) => {
+      await TestNodeLauncher.prepareCache(ctx.tasks.length, {
+        walletConfig,
+      });
 
-    beforeEach(async () => {
-      wallet = await generateTestWallet(provider, [[2_000_000, BaseAssetId]]);
-      receiver = await generateTestWallet(provider);
+      return () => TestNodeLauncher.killCachedNodes();
     });
 
     it('calls a predicate from a contract function', async () => {
-      const setupContract = setupContractWithConfig({
-        contractBytecode: contractBytes,
-        abi: contractAbi,
-        cache: true,
+      await using launched = await TestNodeLauncher.launch({
+        walletConfig,
+        deployContracts: [callTestContractDir],
       });
-      const contract = await setupContract();
+      const {
+        wallets: [wallet],
+        provider,
+        contracts: [contract],
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const amountToPredicate = 500_000;
       const predicate = new Predicate<[Validation]>(
         predicateBytesTrue,
@@ -84,16 +65,21 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
-      const contract = await new ContractFactory(
-        liquidityPoolBytes,
-        liquidityPoolAbi,
-        wallet
-      ).deployContract({ gasPrice });
+      await using launched = await TestNodeLauncher.launch({
+        walletConfig,
+        deployContracts: [liquidityPoolDir],
+      });
+      const {
+        wallets: [wallet],
+        provider,
+        contracts: [contract],
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
+      const receiver = WalletUnlocked.generate({ provider });
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
 
-      // calling the contract with the receiver account (no resources)
-      contract.account = receiver;
       await expect(
         contract.functions
           .deposit({
