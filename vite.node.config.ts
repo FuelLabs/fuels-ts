@@ -8,6 +8,7 @@ const config: UserConfig = {
     coverage: {
       reportsDirectory: 'coverage/environments/node',
     },
+    include: ['packages/fuel-gauge/src/**/*.test.ts'],
   },
 };
 
