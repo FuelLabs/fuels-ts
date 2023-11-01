@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Test Setup
-        uses: ./.github/actions/ci-setup
+        uses: ./.github/actions/test-setup
 
       - name: Forc Format Check
         run: pnpm forc:check
