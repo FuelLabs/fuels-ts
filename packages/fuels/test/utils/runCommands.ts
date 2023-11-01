@@ -19,7 +19,7 @@ export const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
 
 export const fuelsConfigPath = join(fixturesDir, 'fuels.config.ts');
 export const generatedDir = join(fixturesDir, 'generated');
-export const contractsJsonPath = join(generatedDir, 'contracts.json');
+export const contractsJsonPath = join(generatedDir, 'contract-ids.json');
 export const fooContractFactoryPath = join(
   generatedDir,
   'contracts',

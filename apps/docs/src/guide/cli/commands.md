@@ -65,7 +65,7 @@ npx fuels deploy
 
 1. Deploy all Sway contracts under `workspace`
 1. Saves their deployed IDs to:
-   - _`./src/sway-programs-api/contracts.json`_
+   - _`./src/sway-programs-api/contract-ids.json`_
 
 ```json
 {

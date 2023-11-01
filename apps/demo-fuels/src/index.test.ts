@@ -97,7 +97,7 @@ describe('ExampleContract', () => {
 
     // #region using-generated-files
     // #context import { SampleAbi__factory } from './sway-programs-api';
-    // #context import contractsIds from './sway-programs-api/contracts.json';
+    // #context import contractsIds from './sway-programs-api/contract-ids.json';
 
     // #context /**
     // #context   * Get IDs using:
