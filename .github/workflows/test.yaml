@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Test Setup
+      - name: CI Setup
         uses: ./.github/actions/test-setup
 
       - name: Forc Format Check
