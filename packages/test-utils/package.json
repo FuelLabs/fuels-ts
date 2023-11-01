@@ -27,6 +27,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/contract": "workspace:*"
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
   }
 }

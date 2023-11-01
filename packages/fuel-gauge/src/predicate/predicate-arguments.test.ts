@@ -1,16 +1,6 @@
-import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import { WalletConfig } from '@fuel-ts/wallet/test-utils';
-import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
-import {
-  Provider,
-  FUEL_NETWORK_URL,
-  toHex,
-  toNumber,
-  Predicate,
-  BaseAssetId,
-  hexlify,
-  randomBytes,
-} from 'fuels';
+import { TestNodeLauncher, WalletConfig } from '@fuel-ts/test-utils';
+import type { JsonAbi, BigNumberish } from 'fuels';
+import { toNumber, Predicate, BaseAssetId, hexlify, randomBytes } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
@@ -256,11 +246,9 @@ describe('Predicate', () => {
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-      const initialReceiverBalance = await receiver.getBalance();
 
       // Check there are UTXO locked with the predicate hash
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
-      expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
         predicate

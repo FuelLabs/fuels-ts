@@ -1,34 +1,38 @@
-import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { TestNodeLauncher, WalletConfig } from '@fuel-ts/test-utils';
 import { BaseAssetId, Predicate } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 
-import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
+import { assertBalances, fundPredicate } from './utils/predicate';
 
 /**
  * @group node
  */
 describe('Predicate', () => {
   describe('Evaluations', () => {
-    let predicate: Predicate<InputValue[]>;
-    let wallet: WalletUnlocked;
-    let receiver: WalletLocked;
-    let provider: Provider;
-    let gasPrice: BN;
+    const walletConfig = new WalletConfig({ wallets: 2 });
+    beforeAll(async (ctx) => {
+      await TestNodeLauncher.prepareCache(ctx.tasks.length, {
+        walletConfig,
+      });
 
-    beforeEach(async () => {
-      [wallet, receiver] = await setupWallets();
-      provider = wallet.provider;
-      gasPrice = provider.getGasConfig().minGasPrice;
+      return () => TestNodeLauncher.killCachedNodes();
     });
 
     it('calls a no argument predicate and returns true', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const amountToPredicate = 100_000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
-      predicate = new Predicate(predicateBytesTrue, provider);
+      const predicate = new Predicate(predicateBytesTrue, provider);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
@@ -48,10 +52,16 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns false', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+
       const amountToPredicate = 100;
       const amountToReceiver = 50;
 
-      predicate = new Predicate(predicateBytesFalse, provider);
+      const predicate = new Predicate(predicateBytesFalse, provider);
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

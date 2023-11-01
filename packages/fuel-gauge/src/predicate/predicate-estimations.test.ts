@@ -1,15 +1,6 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
-import {
-  BaseAssetId,
-  Provider,
-  Predicate,
-  bn,
-  ScriptTransactionRequest,
-  InputType,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { BaseAssetId, Predicate, bn, ScriptTransactionRequest, InputType } from 'fuels';
 
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';

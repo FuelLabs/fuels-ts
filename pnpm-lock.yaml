@@ -1063,6 +1063,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../contract
+      '@fuel-ts/wallet':
+        specifier: workspace:*
+        version: link:../wallet
 
   packages/testcases: {}
 
