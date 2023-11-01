@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-import sh from 'shelljs';
+import { execSync } from 'child_process';
 
 (() => {
   // Update
-  sh.exec(`pnpm --filter @fuel-ts/forc run update`);
+  execSync(`pnpm --filter @fuel-ts/forc run update`);
 
   // Remove lockfiles so latest stdlib can be used
-  sh.exec(`rm packages/**/Forc.lock`);
+  execSync(`rm packages/**/Forc.lock`);
 
   // Run all tasks that use Forc
-  sh.exec(`pnpm exec turbo run prebuild --force`);
+  execSync(`pnpm execSync turbo run prebuild --force`);
 })();
