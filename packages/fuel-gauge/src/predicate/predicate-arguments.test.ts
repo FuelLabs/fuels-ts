@@ -1,5 +1,16 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { WalletConfig } from '@fuel-ts/wallet/test-utils';
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
+import {
+  Provider,
+  FUEL_NETWORK_URL,
+  toHex,
+  toNumber,
+  Predicate,
+  BaseAssetId,
+  hexlify,
+  randomBytes,
+} from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
@@ -12,17 +23,13 @@ import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct'
 import predicateBytesU32 from '../../fixtures/forc-projects/predicate-u32';
 import type { Validation } from '../types/predicate';
 
-import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
+import { assertBalances, fundPredicate } from './utils/predicate';
 
 /**
  * @group node
  */
 describe('Predicate', () => {
   describe('Arguments', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletLocked;
-    let provider: Provider;
-    let gasPrice: BN;
     const amountToReceiver = 50;
     const amountToPredicate = 400_000;
 
@@ -153,17 +160,24 @@ describe('Predicate', () => {
       loggedTypes: [],
       configurables: [],
     };
-    beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
-    });
 
-    beforeEach(async () => {
-      [wallet, receiver] = await setupWallets();
-      provider = wallet.provider;
+    const walletConfig = new WalletConfig({ wallets: 2 });
+    beforeAll(async (ctx) => {
+      await TestNodeLauncher.prepareCache(ctx.tasks.length, {
+        walletConfig,
+      });
+
+      return () => TestNodeLauncher.killCachedNodes();
     });
 
     it('calls a predicate with valid address data and returns true', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -185,21 +199,32 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid address data and returns false', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+
       const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-      const initialReceiverBalance = await receiver.getBalance();
 
       // Check there are UTXO locked with the predicate hash
       expect(initialPredicateBalance.gte(amountToPredicate));
-      expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
-      predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
+      predicate.setData(hexlify(randomBytes(32)));
 
       await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -221,6 +246,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -238,6 +270,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid struct data and returns true', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         provider,
@@ -266,6 +305,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid struct data and returns false', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         provider,
@@ -273,11 +319,9 @@ describe('Predicate', () => {
       );
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-      const initialReceiverBalance = await receiver.getBalance();
 
       // Check there are UTXO locked with the predicate hash
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
-      expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
         predicate
@@ -290,6 +334,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         provider,
@@ -321,6 +372,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with an invalid main struct argument and returns false', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         provider,
@@ -343,6 +401,13 @@ describe('Predicate', () => {
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate<[BigNumberish[]]>(
         predicateBytesMainArgsVector,
         provider,
@@ -368,6 +433,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -393,6 +465,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid multiple arguments and returns false', async () => {
+      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      const {
+        wallets: [wallet, receiver],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate(predicateBytesMulti, provider, predicateAbiMulti);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);

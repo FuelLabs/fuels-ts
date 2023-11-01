@@ -1,9 +1,9 @@
-import { bn, toHex, toNumber } from 'fuels';
-import type { InputValue, BN, BigNumberish, WalletLocked, Predicate } from 'fuels';
+import { bn, toNumber } from 'fuels';
+import type { InputValue, BN, BigNumberish, Predicate, Account } from 'fuels';
 
 export const assertBalances = async <T extends InputValue[]>(
   predicate: Predicate<T>,
-  receiver: WalletLocked,
+  receiver: Account,
   initialPredicateBalance: BN,
   initialReceiverBalance: BN,
   amountToPredicate: BigNumberish,
@@ -12,7 +12,6 @@ export const assertBalances = async <T extends InputValue[]>(
   // Check there are UTXO locked with the predicate hash
   expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(toNumber(amountToPredicate));
   // !isSkippingInitialReceiverBalance && expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
-  expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
   // Check the balance of the receiver
   const finalReceiverBalance = await receiver.getBalance();
