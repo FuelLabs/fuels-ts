@@ -1,13 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, CoinQuantityLike } from 'fuels';
-import {
-  getRandomB256,
-  BaseAssetId,
-  Provider,
-  WalletUnlocked,
-  Predicate,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { getRandomB256, BaseAssetId, WalletUnlocked, Predicate } from 'fuels';
 
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import predicateAbiTrue from '../../fixtures/forc-projects/predicate-true/out/debug/predicate-true-abi.json';
@@ -21,8 +13,6 @@ import { fundPredicate, assertBalance } from './utils/predicate';
  */
 describe('Predicate', () => {
   describe('Configurables', () => {
-    let wallet: WalletUnlocked;
-    let gasPrice: BN;
     const amountToPredicate = 500_000;
 
     const defaultValues = {
@@ -30,21 +20,19 @@ describe('Predicate', () => {
       ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
     };
 
-    beforeEach(async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL);
-      ({ minGasPrice: gasPrice } = provider.getGasConfig());
-
-      const quantities: CoinQuantityLike[] = [
-        {
-          amount: 1_000_000,
-          assetId: BaseAssetId,
-        },
-      ];
-
-      wallet = await generateTestWallet(provider, quantities);
+    beforeAll(async (ctx) => {
+      await TestNodeLauncher.prepareCache(ctx.tasks.length);
+      return () => TestNodeLauncher.killCachedNodes();
     });
 
     it('calls a predicate with configurables using default values', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const predicate = new Predicate(
         predicateBytesConfigurable,
         wallet.provider,
@@ -75,6 +63,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where first param is equal', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const configurableConstants = { FEE: 35 };
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
@@ -109,6 +104,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where second param is equal', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const configurableConstants = { ADDRESS: getRandomB256() };
 
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
@@ -143,6 +145,13 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where both params are equal', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+      const { minGasPrice: gasPrice } = provider.getGasConfig();
+
       const configurableConstants = {
         FEE: 90,
         ADDRESS: getRandomB256(),
@@ -152,7 +161,7 @@ describe('Predicate', () => {
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
       const predicate = new Predicate(
         predicateBytesConfigurable,
-        wallet.provider,
+        provider,
         predicateAbiConfigurable,
         configurableConstants
       );
@@ -160,7 +169,7 @@ describe('Predicate', () => {
       const amountToTransfer = 300;
 
       const destination = WalletUnlocked.generate({
-        provider: wallet.provider,
+        provider,
       });
 
       await assertBalance(destination, 0, BaseAssetId);
@@ -179,24 +188,34 @@ describe('Predicate', () => {
     });
 
     it('throws when configurable data is not set', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
       const predicate = new Predicate(
         predicateBytesConfigurable,
-        wallet.provider,
+        provider,
         predicateAbiConfigurable
       );
 
       const destination = WalletUnlocked.generate({
-        provider: wallet.provider,
+        provider,
       });
+
+      await fundPredicate(wallet, predicate, amountToPredicate);
 
       await expect(predicate.transfer(destination.address, 300)).rejects.toThrow(
         'Invalid transaction'
       );
     });
 
-    it('throws when setting configurable but predicate has none', () => {
+    it('throws when setting configurable but predicate has none', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const { provider } = launched;
+
       expect(() => {
-        const predicate = new Predicate(predicateBytesTrue, wallet.provider, predicateAbiTrue, {
+        const predicate = new Predicate(predicateBytesTrue, provider, predicateAbiTrue, {
           constant: 'NADA',
         });
 
@@ -204,13 +223,16 @@ describe('Predicate', () => {
       }).toThrow('Predicate has no configurable constants to be set');
     });
 
-    it('throws when setting invalid configurable', () => {
+    it('throws when setting invalid configurable', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const { provider } = launched;
+
       const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
 
       expect(() => {
         const predicate = new Predicate(
           predicateBytesConfigurable,
-          wallet.provider,
+          provider,
           predicateAbiConfigurable,
           {
             NOPE: 'NADA',
@@ -221,7 +243,12 @@ describe('Predicate', () => {
       }).toThrow(errMsg);
     });
 
-    it('throws when setting a configurable with no ABI', () => {
+    it('throws when setting a configurable with no ABI', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        wallets: [wallet],
+      } = launched;
+
       const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
 
       expect(() => {
