@@ -73,6 +73,8 @@ describe('StorageTestContract', () => {
   });
 
   it('can increment counter - using custom inline storage slots', async () => {
+    // #region contract-deployment-storage-slots-inline
+
     const customStorageSlots = [
       {
         key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',
@@ -99,13 +101,14 @@ describe('StorageTestContract', () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [{ contractDir, options: { storageSlots: customStorageSlots } }],
     });
+
+    // #endregion contract-deployment-storage-slots-inline
     const {
       contracts: [contract],
       provider,
     } = launched;
     const { minGasPrice: gasPrice } = provider.getGasConfig();
 
-    // #endregion contract-deployment-storage-slots-inline
     const { value: initializeResult } = await contract.functions
       .initialize_counter(1300)
       .txParams({ gasPrice })
