@@ -1,3 +1,4 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
 import {
@@ -15,32 +16,27 @@ import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-m
 import predicateTrueBytecode from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
 
+import { fundPredicate } from './utils/predicate';
+
 /**
  * @group node
  */
 describe('Predicate', () => {
   describe('Estimate predicate gas', () => {
-    let provider: Provider;
-    let predicateTrue: Predicate<[]>;
-    let predicateStruct: Predicate<[Validation]>;
-
-    beforeEach(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      predicateTrue = new Predicate(predicateTrueBytecode, provider);
-      predicateStruct = new Predicate<[Validation]>(
+    it('estimatePredicates should assign gas to the correct input', async () => {
+      await using launched = await TestNodeLauncher.launch();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+      const predicateTrue = new Predicate(predicateTrueBytecode, provider);
+      const predicateStruct = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         provider,
         predicateAbiMainArgsStruct
       );
-      await seedTestWallet(predicateStruct, [
-        {
-          assetId: BaseAssetId,
-          amount: bn(1000),
-        },
-      ]);
-    });
 
-    it('estimatePredicates should assign gas to the correct input', async () => {
+      await fundPredicate(wallet, predicateStruct, 1_000);
       const tx = new ScriptTransactionRequest();
 
       // Get resources from the predicate struct
