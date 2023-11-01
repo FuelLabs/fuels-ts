@@ -58,7 +58,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     transactionWitnesses: witnesses,
   });
 
-  const { fee } = calculateTransactionFee({
+  const { minFee: fee } = calculateTransactionFee({
     gasUsed,
     gasPrice,
     gasLimit,

@@ -1,15 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
-import {
-  type Contract,
-  bn,
-  Predicate,
-  Wallet,
-  Address,
-  BaseAssetId,
-  Provider,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { BN, Contract } from 'fuels';
 
 import predicateBytes from '../fixtures/forc-projects/predicate-bytes';
 import predicateBytesAbi from '../fixtures/forc-projects/predicate-bytes/out/debug/predicate-bytes-abi.json';
