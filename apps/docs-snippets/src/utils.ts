@@ -20,8 +20,6 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // instantiate the genesis wallet with its secret key
   const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || '0x01', provider);
 
-  // define the quantity of assets to transfer to the test wallet
-
   // create a new test wallet
   const testWallet = Wallet.generate({ provider });
 
