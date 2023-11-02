@@ -167,39 +167,36 @@ export const launchTestNodes = async ({
   chainConfig = defaultChainConfig,
   logger,
 }: Partial<LaunchTestNodesOptions> = {}): LaunchNodesResult =>
-  // eslint-disable-next-line no-async-promise-executor
-  new Promise(async (resolve, reject) => {
+  new Promise((resolve, reject) => {
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
 
-    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    // const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
 
-    if (!fsSync.existsSync(tempDirPath)) {
-      fsSync.mkdirSync(tempDirPath, { recursive: true });
-    }
-    const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
+    // if (!fsSync.existsSync(tempDirPath)) {
+    //   fsSync.mkdirSync(tempDirPath, { recursive: true });
+    // }
+    // const chainConfigPath = process.env.TEST_CHAIN_CONFIG_PATH!;
+    //    ?? path.join(tempDirPath, '.chainConfig.json');
 
+    // if (!process.env.TEST_CHAIN_CONFIG_PATH) {
+    //   await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
+    // }
     // Write a temporary chain configuration file.
-    await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
 
     // const commandName = `fuel-core-${randomUUID()}`;
 
-    const theCommand = `    
-    (for i in {1..${nodeCount}}; do
-      exec fuel-core run --ip 127.0.0.1 --port 0 --db-type in-memory --consensus-key ${consensusKey} --chain ${chainConfigPath} & echo $! &
-    done)
-    `;
+    console.log(process.env.TEST_SCRIPT_PATH);
+    const scriptFilePath = process.env.TEST_SCRIPT_PATH!;
+    //  ?? path.join(tempDirPath, 'script.sh');
+    // if (!process.env.TEST_SCRIPT_PATH) writeFileSync(scriptFilePath, theCommand);
 
-    const scriptFilePath = path.join(tempDirPath, 'script.sh');
-    writeFileSync(scriptFilePath, theCommand);
-
-    execSync(`chmod +x ${scriptFilePath}`);
-    const child = spawn('bash', [scriptFilePath]);
+    const child = spawn('bash', [scriptFilePath, `${nodeCount}`]);
 
     function removeSideffects() {
       child.stdout!.removeAllListeners();
       child.stderr!.removeAllListeners();
-      spawnSync('rm', ['-rf', tempDirPath]);
-      spawnSync('rm', ['-rf', scriptFilePath]);
+      // spawnSync('rm', ['-rf', tempDirPath]);
+      // spawnSync('rm', ['-rf', scriptFilePath]);
     }
 
     const pids: string[] = [];
@@ -208,12 +205,14 @@ export const launchTestNodes = async ({
     const cleanup = () =>
       new Promise<void>((resolveFn, rejectFn) => {
         execSync(`kill ${pids.join(' ')}`);
-        kill(Number(child.pid), (err) => {
-          removeSideffects();
+        removeSideffects();
+        resolveFn();
+        // kill(Number(child.pid), (err) => {
+        //   removeSideffects();
 
-          if (err) rejectFn(err);
-          resolveFn();
-        });
+        //   if (err) rejectFn(err);
+        //   resolveFn();
+        // });
       });
 
     // Process exit.

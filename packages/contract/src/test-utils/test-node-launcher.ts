@@ -212,6 +212,11 @@ export class TestNodeLauncher {
     ReturnType = TestNodeLauncherReturn<TContracts> &
       (Dispose extends true ? AsyncDisposable : { cleanup: () => Promise<void> }),
   >(options?: Partial<TestNodeLauncherOptions>, dispose?: Dispose): Promise<ReturnType> {
+    // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
+    Symbol.dispose ??= Symbol('Symbol.dispose');
+    // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
+    Symbol.asyncDispose ??= Symbol('Symbol.asyncDispose');
+
     const { walletConfig, nodeOptions, providerOptions, deployContracts } =
       this.getOptions(options);
 
