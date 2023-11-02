@@ -76,8 +76,8 @@ jobs:
           name: node
           path: coverage/environments
 
-      - name: Generate Coverage Report
-        run: pnpm test:coverage-gen
+      - name: Generate Coverage
+        run: pnpm test:coverage-merge
 
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
