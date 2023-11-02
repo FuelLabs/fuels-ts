@@ -1,12 +1,10 @@
-import { resolveEnvAppropriateModules } from './utils';
+import { envs } from './envs';
 
 /**
  * @group node
  */
-describe('Keystore', async () => {
-  const { encrypt, decrypt } = await resolveEnvAppropriateModules();
-
-  it('Encrypt and Decrypt', async () => {
+describe('Keystore', () => {
+  it.each(envs)('Encrypt and Decrypt', async ({ encrypt, decrypt }) => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
       name: 'test',
@@ -22,7 +20,7 @@ describe('Keystore', async () => {
     expect(decryptedResult).toEqual(data);
   });
 
-  it('Decrypt with wrong password should throw', async () => {
+  it.each(envs)('Decrypt with wrong password should throw', async ({ encrypt, decrypt }) => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
       name: 'test',
@@ -32,7 +30,7 @@ describe('Keystore', async () => {
     await expect(decrypt(`${password}123`, encryptedResult)).rejects.toThrow('Invalid credentials');
   });
 
-  it('Decrypt Loop', async () => {
+  it.each(envs)('Decrypt Loop', async ({ decrypt }) => {
     const INPUTS = [
       {
         data: '07yJczBTonXWyKdJfEcx',
