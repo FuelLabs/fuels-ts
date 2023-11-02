@@ -1,6 +1,4 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
 
 import type { CoinQuantity } from '../coin-quantity';
 
@@ -18,11 +16,6 @@ export const uniteCoinQuantities = (arr1: CoinQuantity[], arr2: CoinQuantity[]):
   // Process both arrays
   arr1.forEach(addToMap);
   arr2.forEach(addToMap);
-
-  // adding base asset if not present
-  if (!resultMap[BaseAssetId]) {
-    resultMap[BaseAssetId] = bn(1);
-  }
 
   // Convert the resultMap back to an array
   return Object.entries(resultMap).map(([assetId, amount]) => ({ assetId, amount }));
