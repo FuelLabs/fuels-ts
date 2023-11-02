@@ -16,6 +16,7 @@
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
     "test": "vitest --run --coverage --config vite.node.config.ts $(scripts/tests-find.sh --node)",
+    "test:filter": "vitest --run --coverage --config vite.node.config.ts",
     "test:coverage-gen": "tsx ./scripts/tests-coverage-gen.ts",
     "test:coverage-diff": "tsx ./scripts/tests-coverage-diff.ts",
     "test:watch": "vitest --watch --config vite.node.config.ts $(scripts/tests-find.sh --node)",
