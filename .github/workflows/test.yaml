@@ -25,9 +25,6 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
-      - name: Build
-        run: pnpm build
-
       - name: Forc Format Check
         run: pnpm forc:check
 
