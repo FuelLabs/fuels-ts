@@ -1,20 +1,20 @@
 #!/bin/bash
 
-pkill fuel-core
+# pkill fuel-core
 
-pnpm node:clean
+# pnpm node:clean
 
-pnpm node:run > /dev/null 2>&1 &
+# pnpm node:run > /dev/null 2>&1 &
 
-echo "Started Fuel-Core node in background."
+# echo "Started Fuel-Core node in background."
 
 pnpm test
 TEST_RESULT=$?
 
-echo "Killing Fuel-Core node."
+# echo "Killing Fuel-Core node."
 
-pkill fuel-core
+# pkill fuel-core
 
-pnpm node:clean
+# pnpm node:clean
 
 exit $TEST_RESULT
