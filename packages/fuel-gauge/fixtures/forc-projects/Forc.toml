@@ -43,7 +43,7 @@ members = [
   "script-with-vector-advanced",
   "script-with-vector-mixed",
   "std-lib-string",
-  "storage-test-contract",
+  "storage-test",
   "token_abi",
   "token_contract",
   "vector-types-contract",
