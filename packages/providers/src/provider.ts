@@ -671,8 +671,9 @@ export default class Provider {
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    clonedTransactionRequest.gasLimit = maxGasPerTx;
-    clonedTransactionRequest.gasPrice = minGasPrice;
+    clonedTransactionRequest.gasPrice = bn(0);
+    clonedTransactionRequest.gasLimit =
+      clonedTransactionRequest.type === TransactionType.Create ? bn(0) : maxGasPerTx;
 
     const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
     const allQuantities = uniteCoinQuantities(coinOutputsQuantitites, forwardingQuantities);
