@@ -1,4 +1,4 @@
-name: "Test setup"
+name: "Test Setup"
 inputs:
   node-version:
     description: "Node version"
@@ -6,19 +6,9 @@ inputs:
   pnpm-version:
     description: "PNPM version"
     default: 8.9.0
-# TODO: Implement when #1310 has been merged
-# inputs:
-#   checkout-fetch-depth:
-#     description: "Number of commits to fetch. 0 indicates all history for all branches and tags."
-#     default: 1
 runs:
   using: "composite"
   steps:
-    # TODO: Implement when #1310 has been merged
-    # - name: Checkout
-    #   uses: actions/checkout@v3
-    #   with:
-    #     fetch-depth: ${{ inputs.checkout-fetch-depth }}
     - name: Cache PNPM modules
       uses: actions/cache@v3
       with:
