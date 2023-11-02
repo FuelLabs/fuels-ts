@@ -504,6 +504,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.addResources(fakeResources);
   }
 
+  /**
+   * Retrieves an array of CoinQuantity for each coin output present in the transaction.
+   * a transaction.
+   *
+   * @returns  CoinQuantity array.
+   */
   getCoinOutputsQuantities(): CoinQuantity[] {
     const coinsQuantities = this.getCoinOutputs().map(({ amount, assetId }) => ({
       amount: bn(amount),
