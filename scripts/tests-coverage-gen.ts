@@ -5,7 +5,7 @@ import { join } from 'path';
 const restructureCoverageDirectory = () => {
   const coverageDir = join(__dirname, '../coverage/');
   const environmentsDir = join(coverageDir, '/environments/');
-  const validEnvironments = ['browser', 'node'];
+  const validEnvironments = ['node'];
 
   const environments = readdirSync(environmentsDir);
   environments.forEach((environment) => {
