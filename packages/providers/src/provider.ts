@@ -668,15 +668,21 @@ export default class Provider {
 
     gasPrice = max(gasPrice, minGasPrice);
 
-    // Set gasLimit to the maximum of the chain
-    // and gasPrice to 0 for measure
-    // Transaction without arrive to OutOfGas
+    /**
+     * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
+     * This simplifies the funding with fake utxos, since the coin quantities required
+     * will only be amounts being transferred (coin output) and amounts being forwarded
+     * to contract calls.
+     */
     clonedTransactionRequest.gasPrice = bn(0);
     clonedTransactionRequest.gasLimit =
       clonedTransactionRequest.type === TransactionType.Create ? bn(0) : maxGasPerTx;
 
+    // Getting coin quantities from amounts being transferred
     const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
     const allQuantities = uniteCoinQuantities(coinOutputsQuantitites, forwardingQuantities);
+    // Funding transaction with fake utxos
     clonedTransactionRequest.fundWithFakeUtxos(allQuantities);
 
     const transactionBytes = clonedTransactionRequest.toTransactionBytes();
@@ -685,7 +691,7 @@ export default class Provider {
       transactionWitnesses: new TransactionCoder().decode(transactionBytes, 0)[0].witnesses,
     });
 
-    // Execute dryRun not validated transaction to query gasUsed
+    // Executing dryRun with fake utxos to get gasUsed
     const { receipts } = await this.call(clonedTransactionRequest);
 
     const gasUsed = getGasUsedFromReceipts(receipts);
