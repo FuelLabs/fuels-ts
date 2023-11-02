@@ -23,8 +23,7 @@ export function setup() {
 
   const scriptFilePath = path.join(tempDirPath, 'script.sh');
 
-  const command = `#!/usr/bin/env bash
-
+  const command = `
 (for i in $(seq $1); do
     fuel-core run --ip 127.0.0.1 --port 0 --db-type in-memory --consensus-key 0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298 --chain ${chainConfigPath} &
     echo $! &
