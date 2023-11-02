@@ -37,5 +37,6 @@ done)
 
 export function teardown() {
   console.log('running teardown');
+
   execSync(`rm -rf ${tempDirPath}`);
 }
