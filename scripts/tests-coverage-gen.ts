@@ -1,6 +1,6 @@
+import { execSync } from 'child_process';
 import { readdirSync, renameSync, rmSync } from 'fs';
 import { join } from 'path';
-import sh from 'shelljs';
 
 const restructureCoverageDirectory = () => {
   const coverageDir = join(__dirname, '../coverage/');
@@ -26,10 +26,10 @@ const restructureCoverageDirectory = () => {
   restructureCoverageDirectory();
 
   // Merge all coverage files
-  sh.exec('nyc merge coverage/environments coverage/merged/coverage.json');
+  execSync('nyc merge coverage/environments coverage/merged/coverage.json');
 
   // Generate coverage report
-  sh.exec(
+  execSync(
     'nyc report --temp-dir=coverage/merged --report-dir=coverage/report --exclude-after-remap=false'
   );
 })();
