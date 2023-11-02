@@ -39,9 +39,8 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
     .forEach(({ amount, assetId }) => request.addCoinOutput(testWallet.address, amount, assetId));
 
   // get the cost of the transaction
-  const { minFee, requiredQuantities, gasUsed } = await genesisWallet.provider.getTransactionCost(
-    request
-  );
+  const { minFee, requiredQuantities, gasUsed } =
+    await genesisWallet.provider.getTransactionCost(request);
 
   request.gasLimit = gasUsed;
 
@@ -71,6 +70,7 @@ export const createAndDeployContractFromProject = async (
   return contractFactory.deployContract({
     storageSlots,
     gasPrice: minGasPrice,
+    gasLimit: 0,
   });
 };
 
