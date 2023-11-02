@@ -1,6 +1,8 @@
-import { toNumber } from '@fuel-ts/math';
+import { Address } from '@fuel-ts/address';
+import { bn, toNumber } from '@fuel-ts/math';
 import { TransactionType } from '@fuel-ts/transactions';
 
+import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike } from './types';
 import { transactionRequestify } from './utils';
 
@@ -43,6 +45,46 @@ describe('TransactionRequest', () => {
       };
 
       expect(() => transactionRequestify(txRequestLike)).toThrow('Invalid transaction type: 5');
+    });
+  });
+
+  describe('getCoinOutputsQuantities', () => {
+    it('should correctly map all the coin outputs to CoinQuantity', () => {
+      const transactionRequest = new ScriptTransactionRequest();
+
+      const assetIdA = '0x0000000000000000000000000000000000000000000000000000000000000000';
+      const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
+
+      const address1 = Address.fromRandom();
+      const address2 = Address.fromRandom();
+
+      const amount1 = 100;
+      const amount2 = 300;
+
+      transactionRequest.addCoinOutput(address1, amount1, assetIdA);
+      transactionRequest.addCoinOutput(address2, amount2, assetIdB);
+
+      const result = transactionRequest.getCoinOutputsQuantities();
+
+      expect(result).toEqual([
+        {
+          amount: bn(amount1),
+          assetId: assetIdA,
+        },
+        {
+          amount: bn(amount2),
+          assetId: assetIdB,
+        },
+      ]);
+    });
+
+    it('should return an empty array if there are no coin outputs', () => {
+      // Mock the getCoinOutputs method
+      const transactionRequest = new ScriptTransactionRequest();
+
+      const result = transactionRequest.getCoinOutputsQuantities();
+
+      expect(result).toEqual([]);
     });
   });
 });
