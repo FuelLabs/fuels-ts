@@ -491,9 +491,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
     this.outputs = this.outputs.filter((output) => output.type !== OutputType.Change);
 
-    const fakeResources = quantities.map(({ assetId }, idx) => ({
+    const fakeResources = quantities.map(({ assetId, amount }, idx) => ({
       id: `${ZeroBytes32}0${idx}`,
-      amount: bn(1_000_000_000_000_000),
+      amount,
       assetId,
       owner: Address.fromB256(owner),
       maturity: 0,
