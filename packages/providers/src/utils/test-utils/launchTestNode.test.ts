@@ -24,7 +24,9 @@ async function nodeIsRunning(ip: string, port: string): Promise<boolean> {
 }
 
 describe('launchNode', () => {
-  afterAll(() => {vi.clearAllMocks();});
+  afterAll(() => {
+    vi.clearAllMocks();
+  });
 
   it('throws an error if the node fails to start due to bad input', async () => {
     await expectToThrowFuelError(
@@ -54,6 +56,10 @@ describe('launchNode', () => {
     await cleanup();
 
     expect(await nodeIsRunning(ip, port)).toBe(false);
+  });
+
+  it('can launch multiple nodes', () => {
+    expect(true).toBeFalsy();
   });
 
   it('can launch a node on a specific port', async () => {

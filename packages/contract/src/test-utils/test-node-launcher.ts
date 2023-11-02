@@ -1,16 +1,23 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
-import type { Provider } from '@fuel-ts/providers';
-import type { ChainConfig, SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
+import { Provider } from '@fuel-ts/providers';
+import { launchTestNodes } from '@fuel-ts/providers/test-utils';
+import type {
+  LaunchTestNodesOptions,
+  ChainConfig,
+  SetupTestProviderOptions,
+} from '@fuel-ts/providers/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/wallet/test-utils';
 import { WalletConfig, launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
-import { equals, omit } from 'ramda';
+import { equals, mergeDeepRight, omit } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
 import ContractFactory from '../contract-factory';
+
+import { defaultChainConfig } from './defaultChainConfig';
 
 interface DeployContractConfig {
   /**
@@ -45,6 +52,7 @@ type TestNodeLauncherCache = {
   cleanups: Array<() => Promise<void>>;
   chainConfig: ChainConfig;
 } & SetupTestProviderOptions;
+
 export class TestNodeLauncher {
   private static cache: TestNodeLauncherCache | undefined = undefined;
   private static getOptions = (options?: Partial<TestNodeLauncherOptions>) => ({
@@ -67,26 +75,83 @@ export class TestNodeLauncher {
     await Promise.all(cleanups);
   }
 
+  static async fasterLaunchStuff({
+    walletConfig = new WalletConfig(),
+    providerOptions = {},
+    nodeOptions = {},
+    nodeCount = 10,
+  }: Partial<LaunchCustomProviderAndGetWalletsOptions & { nodeCount: number }> = {}) {
+    const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
+
+    const nodeOpts: Partial<LaunchTestNodesOptions> = {
+      ...nodeOptions,
+      consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
+      chainConfig: mergeDeepRight(defaultChainConfig, customChainConfig || {}),
+    };
+    const { results, cleanupAll, chainConfig } = await launchTestNodes({
+      nodeCount,
+      ...nodeOpts,
+    });
+
+    let providers: Provider[] = [];
+
+    const providerPromises = results.map(({ ip, port }) =>
+      Provider.create(`http://${ip}:${port}/graphql`, providerOptions)
+    );
+
+    await Promise.all(providerPromises).then((p) => {
+      providers = p;
+    });
+    const cacheee: { provider: Provider; wallets: WalletUnlocked[] }[] = [];
+
+    providers.forEach((provider) => {
+      const wallets = walletConfig.getWallets();
+
+      wallets.forEach((wallet) => {
+        wallet.connect(provider);
+      });
+      cacheee.push({ provider, wallets });
+    });
+
+    this.cache = {
+      nodes: cacheee.map((x) => ({
+        ...x,
+        fromCache: true,
+        deployedChainConfig: chainConfig,
+        cleanup: () => Promise.resolve(),
+      })),
+      chainConfig,
+      cleanups: [cleanupAll],
+      nodeOptions,
+      providerOptions,
+    };
+  }
+
   static async prepareCache(
-    count: number,
+    nodeCount: number,
     options?: Partial<LaunchCustomProviderAndGetWalletsOptions>
   ) {
-    const launchPromises: Promise<NodeInfo>[] = [];
-    for (let i = 0; i < count; i++) {
-      launchPromises.push(
-        launchCustomProviderAndGetWallets(TestNodeLauncher.getOptions(options), false)
-      );
+    if (process.env.FUEL_TEST_NODE_LAUNCHER_CI === 'true') {
+      throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'no fuel-core nodes available.');
     }
 
-    await Promise.all(launchPromises).then((x) => {
-      this.cache = {
-        nodes: (this.cache?.nodes ?? []).concat(x.map((node) => ({ ...node, fromCache: true }))),
-        cleanups: x.map(({ cleanup }) => cleanup),
-        chainConfig: x[0].deployedChainConfig,
-        providerOptions: x[0].provider.options,
-        nodeOptions: options?.nodeOptions ?? {},
-      };
-    });
+    await this.fasterLaunchStuff({ ...options, nodeCount });
+    // const launchPromises: Promise<NodeInfo>[] = [];
+    // for (let i = 0; i < nodeCount; i++) {
+    //   launchPromises.push(
+    //     launchCustomProviderAndGetWallets(TestNodeLauncher.getOptions(options), false)
+    //   );
+    // }
+
+    // await Promise.all(launchPromises).then((x) => {
+    //   this.cache = {
+    //     nodes: (this.cache?.nodes ?? []).concat(x.map((node) => ({ ...node, fromCache: true }))),
+    //     cleanups: x.map(({ cleanup }) => cleanup),
+    //     chainConfig: x[0].deployedChainConfig,
+    //     providerOptions: x[0].provider.options,
+    //     nodeOptions: options?.nodeOptions ?? {},
+    //   };
+    // });
   }
 
   private static partialEqual(

@@ -5,10 +5,10 @@ import baseConfig from './vite.base.config';
 
 const config: UserConfig = {
   test: {
+    include: ['packages/fuel-gauge/src/**/*.test.ts'],
     coverage: {
       reportsDirectory: 'coverage/environments/node',
     },
-    include: ['packages/fuel-gauge/src/**/*.test.ts'],
   },
 };
 

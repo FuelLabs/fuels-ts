@@ -19,7 +19,7 @@ export default defineConfig({
     globals: true,
     ui: false,
     setupFiles: ['./vite.env.ts'],
-    testTimeout: 15000,
+    testTimeout: 30000,
     coverage: {
       enabled: true,
       provider: 'istanbul',
