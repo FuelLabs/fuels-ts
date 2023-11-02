@@ -668,16 +668,6 @@ export default class Provider {
 
     gasPrice = max(gasPrice, minGasPrice);
 
-    /**
-     * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
-     * This simplifies the funding with fake utxos, since the coin quantities required
-     * will only be amounts being transferred (coin output) and amounts being forwarded
-     * to contract calls.
-     */
-    clonedTransactionRequest.gasPrice = bn(0);
-    clonedTransactionRequest.gasLimit =
-      clonedTransactionRequest.type === TransactionType.Create ? bn(0) : maxGasPerTx;
-
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
@@ -691,10 +681,26 @@ export default class Provider {
       transactionWitnesses: new TransactionCoder().decode(transactionBytes, 0)[0].witnesses,
     });
 
-    // Executing dryRun with fake utxos to get gasUsed
-    const { receipts } = await this.call(clonedTransactionRequest);
+    let gasUsed = bn(0);
+    let receipts: TransactionResultReceipt[] = [];
+    const isTransactionCreate = clonedTransactionRequest.type === TransactionType.Create;
 
-    const gasUsed = getGasUsedFromReceipts(receipts);
+    // Transactions of type Create does not consume any gas so we can the dryRun
+    if (!isTransactionCreate) {
+      /**
+       * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
+       * This simplifies the funding with fake utxos, since the coin quantities required
+       * will only be amounts being transferred (coin outputs) and amounts being forwarded
+       * to contract calls.
+       */
+      clonedTransactionRequest.gasPrice = bn(0);
+      clonedTransactionRequest.gasLimit = maxGasPerTx;
+
+      // Executing dryRun with fake utxos to get gasUsed
+      const result = await this.call(clonedTransactionRequest);
+      receipts = result.receipts;
+      gasUsed = getGasUsedFromReceipts(receipts);
+    }
 
     const { minFee, maxFee } = calculateTransactionFee({
       gasPrice,
