@@ -20,7 +20,7 @@
     "test:coverage-gen": "tsx ./scripts/tests-coverage-gen.ts",
     "test:coverage-diff": "tsx ./scripts/tests-coverage-diff.ts",
     "test:watch": "vitest --watch --config vite.node.config.ts $(scripts/tests-find.sh --node)",
-    "test:validate": "tsx ./scripts/tests-validate.ts",
+    "test:validate": "./scripts/tests-validate.sh",
     "test:e2e": "vitest --run --config vite.node.config.ts $(scripts/tests-find.sh --e2e)",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
