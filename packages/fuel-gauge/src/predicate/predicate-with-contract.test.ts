@@ -1,6 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { WalletConfig } from '@fuel-ts/wallet/test-utils';
 import { BaseAssetId, toNumber, Contract, Predicate, WalletUnlocked } from 'fuels';
 
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -19,18 +18,14 @@ const liquidityPoolDir = getProgramDir('liquidity-pool');
  */
 describe('Predicate', () => {
   describe('With Contract', () => {
-    const walletConfig = new WalletConfig({ wallets: 2 });
     beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length, {
-        walletConfig,
-      });
+      await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
       return () => TestNodeLauncher.killCachedNodes();
     });
 
     it('calls a predicate from a contract function', async () => {
       await using launched = await TestNodeLauncher.launch({
-        walletConfig,
         deployContracts: [callTestContractDir],
       });
       const {
@@ -66,7 +61,6 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       await using launched = await TestNodeLauncher.launch({
-        walletConfig,
         deployContracts: [liquidityPoolDir],
       });
       const {

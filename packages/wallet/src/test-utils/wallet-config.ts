@@ -54,8 +54,8 @@ export class WalletConfig {
   };
 
   constructor({
-    wallets = 1,
-    assets = 1,
+    wallets = 2,
+    assets = [AssetId.A, AssetId.B],
     coinsPerAsset = 1,
     amountPerCoin = 1_000_000_00,
   }: Partial<WalletConfigOptions> = {}) {

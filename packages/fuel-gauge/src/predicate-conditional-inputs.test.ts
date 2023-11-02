@@ -1,16 +1,7 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import { AssetId, WalletConfig, generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { AssetId, generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BN } from 'fuels';
-import {
-  Provider,
-  FUEL_NETWORK_URL,
-  BaseAssetId,
-  Predicate,
-  Wallet,
-  ScriptTransactionRequest,
-  bn,
-} from 'fuels';
+import { BaseAssetId, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../fixtures/forc-projects/predicate-conditional-inputs/out/debug/predicate-conditional-inputs-abi.json';
@@ -26,20 +17,17 @@ const predicateBytecode = readFileSync(
  * @group node
  */
 describe('PredicateConditionalInputs', () => {
-  const assetIdA = AssetId.random();
-  const assetIdB = AssetId.random();
-  const walletConfig = new WalletConfig({
-    assets: [assetIdA, assetIdB],
-  });
+  const assetIdA = AssetId.A;
+  const assetIdB = AssetId.B;
 
   beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length, { walletConfig });
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
     return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
-    await using launched = await TestNodeLauncher.launch({ walletConfig });
+    await using launched = await TestNodeLauncher.launch();
     const { provider } = launched;
 
     const { minGasPrice: gasPrice } = provider.getGasConfig();
@@ -116,7 +104,7 @@ describe('PredicateConditionalInputs', () => {
   });
 
   it('should execute custom transaction where predicate transfer to Alice (PREDICATE PAYS FEES)', async () => {
-    await using launched = await TestNodeLauncher.launch({ walletConfig });
+    await using launched = await TestNodeLauncher.launch();
     const { provider } = launched;
 
     const { minGasPrice: gasPrice } = provider.getGasConfig();

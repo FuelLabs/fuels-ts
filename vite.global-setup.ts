@@ -25,14 +25,16 @@ export function setup() {
 
   const theCommand = `#!/usr/bin/env bash
 
-for i in $(seq $1); do
-    exec fuel-core run --ip 127.0.0.1 --port 0 --db-type in-memory --consensus-key 0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298 --chain /tmp/.fuels-ts/2d0df68c-22cd-4d4b-9343-d465e1aa94ab/.chainConfig.json &
+(for i in $(seq $1); do
+    fuel-core run --ip 127.0.0.1 --port 0 --db-type in-memory --consensus-key 0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298 --chain ${chainConfigPath} &
     echo $! &
-done
+done)
   `;
   fs.writeFileSync(scriptFilePath, theCommand);
   process.env.TEST_SCRIPT_PATH = scriptFilePath;
   console.log('finished setup');
+  const file = fs.readFileSync(scriptFilePath).toString();
+  console.log(file);
 }
 
 export function teardown() {

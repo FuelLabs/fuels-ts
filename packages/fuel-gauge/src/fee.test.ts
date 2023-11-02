@@ -1,6 +1,6 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
-import { AssetId, WalletConfig } from '@fuel-ts/wallet/test-utils';
+import { AssetId } from '@fuel-ts/wallet/test-utils';
 import type { BN, CoinQuantityLike, JsonAbi } from 'fuels';
 import {
   BaseAssetId,
@@ -20,10 +20,8 @@ const callTestContractDir = getProgramDir('call-test-contract');
  * @group node
  */
 describe('Fee', () => {
-  const assetA = AssetId.random();
-  const assetB = AssetId.random();
-
-  const walletConfig = new WalletConfig({ assets: [assetA, assetB] });
+  const assetA = AssetId.A;
+  const assetB = AssetId.B;
 
   const expectFeeInMarginOfError = (fee: BN, expectedFee: BN) => {
     const feeNumber = fee.toNumber();
@@ -49,7 +47,7 @@ describe('Fee', () => {
   };
 
   beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length, { walletConfig });
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
     return () => TestNodeLauncher.killCachedNodes();
   });
@@ -57,7 +55,6 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [multiTokenContractDir],
-      walletConfig,
     });
     const {
       contracts: [contract],
@@ -101,7 +98,6 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated on simple transfer transactions', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [multiTokenContractDir],
-      walletConfig,
     });
     const {
       contracts: [contract],
@@ -132,7 +128,6 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated on multi transfer transactions', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [multiTokenContractDir],
-      walletConfig,
     });
     const {
       contracts: [contract],
@@ -179,9 +174,7 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract deploy', async () => {
-    await using launched = await TestNodeLauncher.launch({
-      walletConfig,
-    });
+    await using launched = await TestNodeLauncher.launch({});
 
     const {
       wallets: [wallet],
@@ -210,7 +203,6 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated on a contract call', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [callTestContractDir],
-      walletConfig,
     });
     const {
       contracts: [contract],
@@ -242,7 +234,6 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated a contract multi call', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [callTestContractDir],
-      walletConfig,
     });
     const {
       contracts: [contract],
@@ -278,16 +269,12 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
-    await using launched = await TestNodeLauncher.launch({
-      walletConfig,
-    });
+    await using launched = await TestNodeLauncher.launch({});
     const {
       wallets: [wallet],
       provider,
     } = launched;
     const { minGasPrice } = provider.getGasConfig();
-
-    console.log(provider.url, wallet.provider.url);
 
     const path = getProgramDir('predicate-true');
 

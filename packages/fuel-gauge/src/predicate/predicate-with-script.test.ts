@@ -1,6 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { WalletConfig } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
 import { WalletUnlocked, toNumber, BaseAssetId, Script, Predicate } from 'fuels';

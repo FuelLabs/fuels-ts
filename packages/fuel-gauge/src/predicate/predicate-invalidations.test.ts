@@ -1,4 +1,4 @@
-import { TestNodeLauncher, WalletConfig } from '@fuel-ts/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BaseAssetId, Predicate } from 'fuels';
 
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
@@ -19,11 +19,8 @@ describe('Predicate', () => {
       total_complete: 100,
     };
 
-    const walletConfig = new WalletConfig({ wallets: 2 });
     beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length, {
-        walletConfig,
-      });
+      await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
       return () => TestNodeLauncher.killCachedNodes();
     });
@@ -31,7 +28,7 @@ describe('Predicate', () => {
     beforeAll(async () => {});
 
     it('throws if sender does not have enough resources for tx and gas', async () => {
-      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      await using launched = await TestNodeLauncher.launch();
       const {
         wallets: [wallet, receiver],
         provider,
@@ -51,7 +48,7 @@ describe('Predicate', () => {
     });
 
     it('throws if the passed gas limit is too low', async () => {
-      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      await using launched = await TestNodeLauncher.launch();
       const {
         wallets: [wallet, receiver],
         provider,

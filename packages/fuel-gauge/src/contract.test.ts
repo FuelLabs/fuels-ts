@@ -158,15 +158,14 @@ const complexFragment: JsonAbi = {
 const contractDir = getProgramDir('call-test-contract');
 const txPointer = '0x00000000000000000000000000000000';
 
-const AltToken = AssetId.random();
+const AltToken = AssetId.A;
 
 /**
  * @group node
  */
 describe('Contract', () => {
-  const walletConfig = new WalletConfig({ assets: [AltToken] });
   beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length, { walletConfig });
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
     return () => TestNodeLauncher.killCachedNodes();
   });
@@ -888,6 +887,7 @@ describe('Contract', () => {
     const externalWallet = Wallet.generate({
       provider,
     });
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),

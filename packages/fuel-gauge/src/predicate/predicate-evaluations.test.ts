@@ -1,4 +1,4 @@
-import { TestNodeLauncher, WalletConfig } from '@fuel-ts/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BaseAssetId, Predicate } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
@@ -11,17 +11,14 @@ import { assertBalances, fundPredicate } from './utils/predicate';
  */
 describe('Predicate', () => {
   describe('Evaluations', () => {
-    const walletConfig = new WalletConfig({ wallets: 2 });
     beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length, {
-        walletConfig,
-      });
+      await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
       return () => TestNodeLauncher.killCachedNodes();
     });
 
     it('calls a no argument predicate and returns true', async () => {
-      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      await using launched = await TestNodeLauncher.launch();
       const {
         wallets: [wallet, receiver],
         provider,
@@ -52,7 +49,7 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns false', async () => {
-      await using launched = await TestNodeLauncher.launch({ walletConfig });
+      await using launched = await TestNodeLauncher.launch();
       const {
         wallets: [wallet, receiver],
         provider,
