@@ -155,7 +155,7 @@ describe('TokenTestContract', () => {
     const { mintedAssets } = transactionResult;
     const assetId = mintedAssets?.[0].assetId || '';
 
-    const getBalance = async () => token.getBalance(assetId);
+    const getBalance = () => token.getBalance(assetId);
 
     // at the start, the contract should have 100 coins
     expect((await getBalance()).toHex()).toEqual(bn(100).toHex());

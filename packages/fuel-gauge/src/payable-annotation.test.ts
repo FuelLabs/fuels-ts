@@ -44,7 +44,7 @@ test("don't allow sending coins to non-payable functions", async () => {
   const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
 
   // This should fail because the function is not payable
-  await expect(async () =>
+  await expect(() =>
     contract.functions
       .non_payable()
       .callParams({
