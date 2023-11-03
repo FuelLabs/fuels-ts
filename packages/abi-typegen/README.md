@@ -36,7 +36,7 @@ Usage: fuels-typegen [options]
 generate typescript from contract abi json files
 
 Options:
-  -i, --inputs <path|glob...>  input paths/globals to your abi json files
+  -i, --inputs <path|glob...>  input paths/globals to your ABI JSON files
   -o, --output <dir>           directory path for generated files
   -c, --contract               generate types for contracts [default]
   -s, --script                 generate types for scripts
