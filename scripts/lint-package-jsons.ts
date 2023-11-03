@@ -54,7 +54,7 @@ const faultyPackageJsons = execSync('find packages/ apps/ -name package.json')
       message += `\n\tengines.pnpm: ${pnpm} should be ${rootPnpmVersion}`;
     if (packageManager !== rootPackageManager)
       message += `\n\tpackageManager: ${packageManager} should be ${rootPackageManager}`;
-    if (author !== rootAuthor) message += `\n\tauthor: ${author} should be ${rootAuthor}`;
+    if (author !== rootAuthor) message += `\n\tauthor: "${author}" should be "${rootAuthor}"`;
 
     return message;
   });
