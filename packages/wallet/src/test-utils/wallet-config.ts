@@ -57,7 +57,7 @@ export class WalletConfig {
     wallets = 2,
     assets = [AssetId.A, AssetId.B],
     coinsPerAsset = 1,
-    amountPerCoin = 1_000_000_00,
+    amountPerCoin = 10_000_000_000,
   }: Partial<WalletConfigOptions> = {}) {
     WalletConfig.guard({ wallets, assets, coinsPerAsset, amountPerCoin });
     this.options = {
