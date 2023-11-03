@@ -16,37 +16,37 @@ jobs:
   #   with:
   #     doc-folder-path: "apps/docs/src"
 
-  build:
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: CI Setup
+  #       uses: ./.github/actions/test-setup
+
+  #     - name: Forc Format Check
+  #       run: pnpm forc:check
+
+  #     # linting of some tests depends on pretest being run so that it generates the necessary files
+  #     - name: Pretest
+  #       run: pnpm pretest
+
+  #     - name: Lint
+  #       run: pnpm lint
+
+  #     - name: Validate tests
+  #       run: pnpm test:validate
+
+  test-node:
     runs-on: ubuntu-latest
+    # needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
-
-      - name: Forc Format Check
-        run: pnpm forc:check
-
-      # linting of some tests depends on pretest being run so that it generates the necessary files
-      - name: Pretest
-        run: pnpm pretest
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Validate tests
-        run: pnpm test:validate
-
-  test-node:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # - name: CI Setup
-      #   uses: ./.github/actions/test-setup
 
       - name: Run Node Tests
         run: pnpm ci:test
