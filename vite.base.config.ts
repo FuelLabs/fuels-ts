@@ -9,7 +9,7 @@ export default defineConfig({
   ],
   esbuild: { target: 'es2022' },
   test: {
-    hookTimeout: 30000,
+    maxThreads: 5,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
