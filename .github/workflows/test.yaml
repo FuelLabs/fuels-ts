@@ -48,6 +48,9 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
+      - name: install fuelup
+        run: curl --proto '=https' --tlsv1.2 -sSf https://install.fuel.network/fuelup-init.sh | sh -s -- --no-modify-path
+
       - name: Run Node Tests
         run: pnpm ci:test
 

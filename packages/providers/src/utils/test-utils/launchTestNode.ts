@@ -202,13 +202,13 @@ export const launchTestNodes = async ({
     // Cleanup function where fuel-core is stopped.
     const cleanup = () =>
       new Promise<void>((resolveFn, rejectFn) => {
-        execSync(pids.map((pid) => `pkill -TERM -P ${pid}`).join(';'));
+        // execSync(pids.map((pid) => `pkill -TERM -P ${pid}`).join(';'));
 
         // pids.forEach((pid) => {
         //   execSync(`pkill -TERM -P ${pid}`);
         // });
 
-        // execSync(`kill ${pids.join(' ')}`);
+        execSync(`kill ${pids.join(' ')}`);
         removeSideffects();
         resolveFn();
         // kill(Number(child.pid), (err) => {
