@@ -31,7 +31,7 @@ export function setup() {
 done)
   `;
   fs.writeFileSync(scriptFilePath, command);
-  // execSync(`chmod +x ${scriptFilePath}`);
+  execSync(`chmod +x ${scriptFilePath}`);
   process.env.TEST_SCRIPT_PATH = scriptFilePath;
   console.log('finished setup');
 }

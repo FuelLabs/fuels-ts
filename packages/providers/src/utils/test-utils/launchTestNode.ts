@@ -190,7 +190,7 @@ export const launchTestNodes = async ({
     //  ?? path.join(tempDirPath, 'script.sh');
     // if (!process.env.TEST_SCRIPT_PATH) writeFileSync(scriptFilePath, theCommand);
 
-    const child = spawn('bash', [scriptFilePath, `${nodeCount}`]);
+    const child = spawn(scriptFilePath, [`${nodeCount}`], { shell: '/bin/bash' });
 
     function removeSideffects() {
       child.stdout!.removeAllListeners();
