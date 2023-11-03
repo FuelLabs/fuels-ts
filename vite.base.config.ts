@@ -9,8 +9,7 @@ export default defineConfig({
   ],
   esbuild: { target: 'es2022' },
   test: {
-    maxThreads: 5,
-    minThreads: 5,
+    minThreads: 5, // ubuntu-latest has two CPUs (four threads?)
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
