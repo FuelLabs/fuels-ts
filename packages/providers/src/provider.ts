@@ -352,7 +352,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  createOperations(url: string, options: ProviderOptions = {}) {
+  private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
