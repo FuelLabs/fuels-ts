@@ -234,6 +234,8 @@ export default class Provider {
 
   private static chainInfoCache: ChainInfoCache = {};
   private static nodeInfoCache: NodeInfoCache = {};
+  
+  private providerOptions: ProviderOptions = {}
 
   /**
    * Constructor to initialize a Provider.
@@ -259,6 +261,7 @@ export default class Provider {
    */
   static async create(url: string, options: ProviderOptions = {}) {
     const provider = new Provider(url, options);
+    provider.providerOptions = options;
     await provider.fetchChainAndNodeInfo();
     return provider;
   }
@@ -312,7 +315,7 @@ export default class Provider {
    */
   async connect(url: string, options?: ProviderOptions) {
     this.url = url;
-    this.operations = this.createOperations(url, options);
+    this.operations = this.createOperations(url, options || this.providerOptions);
     await this.fetchChainAndNodeInfo();
   }
 
