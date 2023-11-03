@@ -259,6 +259,12 @@ export const launchTestNodes = async ({
         }
       });
     }
+    child.addListener('exit', (x) => {
+      console.log('exit', x);
+    });
+    child.addListener('close', (code) => {
+      console.log('close', code);
+    });
     child!.stdout.on('data', pidListener);
     child!.stderr.on('data', fuelNodeListener);
   });
