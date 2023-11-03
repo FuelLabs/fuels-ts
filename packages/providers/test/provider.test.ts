@@ -22,8 +22,6 @@ import { TransactionResponse } from '../src/transaction-response';
 import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
-import { MOCK_CHAIN } from './fixtures/chain';
-import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 // https://stackoverflow.com/a/72885576
 jest.mock('@fuel-ts/versions', () => ({
