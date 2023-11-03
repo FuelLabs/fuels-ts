@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "./contracts/bar",
+  "./contracts/foo",
+  "./scripts/script",
+  "./predicates/predicate",
+]

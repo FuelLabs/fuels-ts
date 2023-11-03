@@ -14,7 +14,7 @@
       - packages/versions/scripts/replaceVersions.ts
 
     Which will replace static versions at:
-      - packages/versions/src/lib/getSupportedVersions.ts
+      - packages/versions/src/lib/getBuiltinVersions.ts
 
     If no env variables are set, it uses the current versions
     from the original locations mentioned in the 1st step.
@@ -35,7 +35,8 @@
     place already and ready to be built and released.
 */
 
-import { getSupportedVersions } from './lib/getSupportedVersions';
+import { getBuiltinVersions } from './lib/getBuiltinVersions';
 
-export const versions = getSupportedVersions();
+export const versions = getBuiltinVersions();
+
 export * from './lib/checkFuelCoreVersionCompatibility';

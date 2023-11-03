@@ -25,9 +25,10 @@ export function runTypegen(params: IGenerateFilesParams) {
 
   const cwdBasename = basename(cwd);
 
-  let { log } = console;
-  if (silent) {
-    log = () => ({});
+  function log(...args: unknown[]) {
+    if (!silent) {
+      process.stdout.write(`${args.join(' ')}\n`);
+    }
   }
 
   /*
@@ -42,7 +43,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   } else {
     throw new FuelError(
       ErrorCode.MISSING_REQUIRED_PARAMETER,
-      `At least one parameter should be informed: 'input' or 'filepaths'.`
+      `At least one parameter should be supplied: 'input' or 'filepaths'.`
     );
   }
 
