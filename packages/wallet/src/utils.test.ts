@@ -1,4 +1,4 @@
-import { NumberCoder } from '@fuel-ts/abi-coder';
+import { U64Coder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
 import * as getBytesCopyMod from 'ethers';
@@ -24,9 +24,7 @@ describe('util', () => {
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
-    const encode = jest
-      .spyOn(NumberCoder.prototype, 'encode')
-      .mockReturnValue(Uint8Array.from(byte));
+    const encode = jest.spyOn(U64Coder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
 
     const arrayify = jest
       .spyOn(getBytesCopyMod, 'getBytesCopy')
