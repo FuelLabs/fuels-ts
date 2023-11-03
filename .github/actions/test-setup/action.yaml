@@ -1,8 +1,8 @@
-name: "CI Setup"
+name: "Test Setup"
 inputs:
   node-version:
     description: "Node version"
-    default: 18.18.2
+    default: 18.14.1
   pnpm-version:
     description: "PNPM version"
     default: 8.9.0
@@ -28,3 +28,7 @@ runs:
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
+
+    - name: Build
+      run: pnpm build
+      shell: bash

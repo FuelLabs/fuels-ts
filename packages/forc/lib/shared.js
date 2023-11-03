@@ -1,6 +1,6 @@
+import { execSync } from 'child_process';
 import fs from 'fs/promises';
 import path, { join, dirname } from 'path';
-import sh from 'shelljs';
 import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -48,18 +48,18 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
 export const buildFromGitBranch = (branchName) => {
-  sh.exec('rm -rf sway-repo');
-  sh.exec('rm -rf forc-binaries');
-  sh.exec(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
-  sh.exec(`cd sway-repo && cargo build`);
-  sh.exec('mkdir forc-binaries');
-  sh.exec('cp sway-repo/target/debug/forc forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-deploy forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-doc forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-fmt forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-lsp forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-run forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-submit forc-binaries/');
-  sh.exec('cp sway-repo/target/debug/forc-tx forc-binaries/');
-  sh.exec(`rm -rf sway-repo`);
+  execSync('rm -rf sway-repo');
+  execSync('rm -rf forc-binaries');
+  execSync(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
+  execSync(`cd sway-repo && cargo build`);
+  execSync('mkdir forc-binaries');
+  execSync('cp sway-repo/target/debug/forc forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-deploy forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-doc forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-fmt forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-lsp forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-run forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-submit forc-binaries/');
+  execSync('cp sway-repo/target/debug/forc-tx forc-binaries/');
+  execSync(`rm -rf sway-repo`);
 };

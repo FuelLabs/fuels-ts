@@ -13,7 +13,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:eslint-comments/recommended',
-    'plugin:@typescript-eslint/recommended',
   ],
   settings: {
     'import/core-modules': ['@internal/tsup'],
@@ -28,6 +27,7 @@ module.exports = {
         selector: 'ForOfStatement',
       },
     ],
+    '@typescript-eslint/no-non-null-assertion': 1,
     // Disable error on devDependencies importing since this isn't a TS library
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-await-in-loop': 0,

@@ -10,7 +10,6 @@ import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
-import * as GraphQL from 'graphql-request';
 
 import type { FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
