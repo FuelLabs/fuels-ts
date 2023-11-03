@@ -1,4 +1,4 @@
-name: "CI Setup"
+name: "Test Setup"
 inputs:
   node-version:
     description: "Node version"
@@ -28,3 +28,7 @@ runs:
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
+
+    - name: Build
+      run: pnpm build
+      shell: bash
