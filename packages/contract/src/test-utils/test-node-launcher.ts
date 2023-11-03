@@ -64,7 +64,6 @@ export class TestNodeLauncher {
   });
 
   static async killCachedNodes() {
-    console.log('cleanups', this.cache?.cleanups);
     if (!this.cache || this.cache.cleanups.length === 0) return;
     const cleanups: Promise<void>[] = [];
 

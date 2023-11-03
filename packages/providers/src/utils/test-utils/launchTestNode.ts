@@ -258,7 +258,6 @@ export const launchTestNodes = async ({
 
           nodeInfos.push({ ip: nodeIp, port: nodePort });
           if (nodeInfos.length === nodeCount && pids.length === nodeCount) {
-            console.log(pids);
             resolve({ results: nodeInfos, cleanupAll: cleanup, chainConfig });
           }
         }
