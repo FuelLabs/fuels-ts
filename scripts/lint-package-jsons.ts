@@ -38,20 +38,20 @@ const faultyPackageJsons = execSync('find packages/ apps/ -name package.json')
   .filter((packageJson) => !packageJson.private)
   .filter(
     ({ engines: { node, pnpm }, packageManager, author }) =>
-      rootNodeVersion !== node ||
-      rootPnpmVersion !== pnpm ||
-      rootPackageManager !== packageManager ||
-      rootAuthor !== author
+      node !== rootNodeVersion ||
+      pnpm !== rootPnpmVersion ||
+      packageManager !== rootPackageManager ||
+      author !== rootAuthor
   )
   .map(({ path, engines: { node, pnpm }, packageManager, author }) => {
     let message = `\n${path}`;
-    if (rootNodeVersion !== node)
+    if (node !== rootNodeVersion)
       message += `\n\tengines.node: ${node} should be ${rootNodeVersion}`;
-    if (rootPnpmVersion !== pnpm)
+    if (pnpm !== rootPnpmVersion)
       message += `\n\tengines.pnpm: ${pnpm} should be ${rootPnpmVersion}`;
-    if (rootPackageManager !== packageManager)
+    if (packageManager !== rootPackageManager)
       message += `\n\tpackageManager: ${packageManager} should be ${rootPackageManager}`;
-    if (rootAuthor !== author) message += `\n\tauthor: ${author} should be ${rootAuthor}`;
+    if (author !== rootAuthor) message += `\n\tauthor: ${author} should be ${rootAuthor}`;
 
     return message;
   });
