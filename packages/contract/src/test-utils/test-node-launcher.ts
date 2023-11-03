@@ -98,6 +98,7 @@ export class TestNodeLauncher {
     const { results, cleanupAll, chainConfig } = await launchTestNodes({
       nodeCount,
       ...nodeOpts,
+      logger: console.log,
     });
 
     let providers: Provider[] = [];
