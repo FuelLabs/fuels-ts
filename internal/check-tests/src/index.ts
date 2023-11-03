@@ -1,17 +1,13 @@
-const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-
 const isNode =
   typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
 
 export const testEach = (): string => {
   let env: string;
 
-  if (isBrowser) {
-    env = 'browser';
-  } else if (isNode) {
+  if (isNode) {
     env = 'node';
   } else {
-    throw new Error('Oops, no browser/node detected');
+    throw new Error('Oops, invalid test environment detected');
   }
 
   return env;

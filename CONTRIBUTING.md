@@ -110,6 +110,12 @@ pnpm test
 # watch all tests
 pnpm test:watch
 
+# run tests for a specific package
+pnpm test:filter packages/my-desired-package
+
+# run tests for a specific file
+pnpm test:filter packages/my-desired-package/src/my.test.ts
+
 # run tests while passing other flags to sub-program
 pnpm test -- --coverage --my-other-flag
 ```

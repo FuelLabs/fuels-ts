@@ -1,22 +1,24 @@
-import * as ethereumCryptography from 'ethereum-cryptography/keccak';
+import { bufferFromString } from '..';
 
-import { resolveEnvAppropriateModules } from '../../test/utils';
+import { keccak256 as keccak } from './keccak256';
 
-import { keccak256 } from './keccak256';
+const data = bufferFromString('hashedKey');
+
+vi.mock('ethereum-cryptography/keccak', () => ({
+  keccak256: vi.fn(() => data),
+}));
 
 /**
  * @group node
  */
-describe('keccak256', async () => {
-  const { bufferFromString } = await resolveEnvAppropriateModules();
-
+describe('keccak256', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
   it('hashes using keccak256', () => {
-    const data = bufferFromString('aGVsbG8='); // hello str
-    const hashedKey = keccak256(data);
-    expect(hashedKey).toEqual(ethereumCryptography.keccak256(data));
+    const hashedKey = keccak(data);
+
+    expect(hashedKey).toEqual(data);
   });
 });

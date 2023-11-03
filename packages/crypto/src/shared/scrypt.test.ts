@@ -1,41 +1,37 @@
-import * as ethereumCryptography from 'ethereum-cryptography/scrypt';
-
-import { resolveEnvAppropriateModules } from '../../test/utils';
+import { bufferFromString } from '..';
 import type { IScryptParams } from '../types';
 
 import { scrypt } from './scrypt';
 
+const data = bufferFromString('hashedKey');
+
+vi.mock('ethereum-cryptography/scrypt', () => ({
+  scryptSync: vi.fn(() => data),
+}));
+
 /**
  * @group node
  */
-describe('scrypt', async () => {
-  const { bufferFromString } = await resolveEnvAppropriateModules();
-
+describe('scrypt', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('hashes using scrypt', async () => {
+  it('hashes using scrypt', () => {
     const password = bufferFromString('password');
     const salt = bufferFromString('salt');
-    const dklen = 32;
-    const n = 2;
-    const p = 4;
-    const r = 2;
 
     const params: IScryptParams = {
+      dklen: 32,
+      n: 2,
+      p: 4,
       password,
+      r: 2,
       salt,
-      dklen,
-      n,
-      p,
-      r,
     };
 
     const hashedKey = scrypt(params);
 
-    const expectedKey = await ethereumCryptography.scrypt(password, salt, n, r, p, dklen);
-
-    expect(hashedKey).toEqual(expectedKey);
+    expect(hashedKey).toEqual(data);
   });
 });

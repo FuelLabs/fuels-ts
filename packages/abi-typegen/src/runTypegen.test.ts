@@ -238,8 +238,8 @@ describe('runTypegen.js', () => {
     const fromBin = project.binPath;
     const toBin = fromBin.replace('.bin', '2.bin');
 
-    shelljs.cp(from, to);
-    shelljs.cp(fromBin, toBin);
+    cpSync(from, to);
+    cpSync(fromBin, toBin);
 
     // mocking
     const log = vi.spyOn(console, 'log').mockImplementation(vi.fn().mockReturnValue({}));
