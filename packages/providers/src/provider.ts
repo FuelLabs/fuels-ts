@@ -234,7 +234,7 @@ export default class Provider {
 
   private static chainInfoCache: ChainInfoCache = {};
   private static nodeInfoCache: NodeInfoCache = {};
-  
+
   private providerOptions: ProviderOptions = {}
 
   /**
