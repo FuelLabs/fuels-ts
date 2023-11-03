@@ -8,6 +8,7 @@ import path from 'path';
 const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
 
 export function setup() {
+  process.env.TEST_NODE_COUNT = '1';
   console.log('running setup');
   if (!fs.existsSync(tempDirPath)) {
     fs.mkdirSync(tempDirPath, { recursive: true });
@@ -37,5 +38,6 @@ done)
 export function teardown() {
   console.log('running teardown');
 
+  console.log('we need this many nodes:', process.env.TEST_NODE_COUNT);
   execSync(`rm -rf ${tempDirPath}`);
 }

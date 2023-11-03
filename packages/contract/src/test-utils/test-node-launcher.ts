@@ -81,6 +81,13 @@ export class TestNodeLauncher {
     nodeOptions = {},
     nodeCount = 10,
   }: Partial<LaunchCustomProviderAndGetWalletsOptions & { nodeCount: number }> = {}) {
+    console.log('TEST_NODE_COUNT');
+
+    console.log(process.env.TEST_NODE_COUNT);
+    process.env.TEST_NODE_COUNT = `${
+      Number.parseInt(process.env.TEST_NODE_COUNT!, 10) + nodeCount
+    }`;
+    console.log(process.env.TEST_NODE_COUNT);
     const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 
     const nodeOpts: Partial<LaunchTestNodesOptions> = {
