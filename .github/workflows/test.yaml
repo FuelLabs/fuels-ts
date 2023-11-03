@@ -45,8 +45,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
+      # - name: CI Setup
+      #   uses: ./.github/actions/test-setup
 
       - name: Run Node Tests
         run: pnpm ci:test
