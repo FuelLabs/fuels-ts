@@ -17,7 +17,10 @@ const {
   packageManager: rootPackageManager,
 } = JSON.parse(readFileSync('package.json', 'utf-8')) as PackageJson;
 
-if (rootAuthor !== 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)') throw new Error();
+if (rootAuthor !== 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)')
+  throw new Error(
+    "The package.json's author field should be 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)' "
+  );
 
 const faultyPackageJsons = execSync('find packages/ apps/ -name package.json')
   .toString()
