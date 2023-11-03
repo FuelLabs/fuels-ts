@@ -45,6 +45,6 @@ export function teardown() {
   console.log('running teardown');
 
   // console.log('we need this many nodes:', process.env.TEST_NODE_COUNT);
-  execSync(`rm -rf ${tempDirPath}`);
+  // execSync(`rm -rf ${tempDirPath}`);
   // console.log(execSync('sleep 5s; ps -A | grep fuel-core').toString());
 }
