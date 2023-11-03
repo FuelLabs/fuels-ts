@@ -64,8 +64,8 @@ export class TestNodeLauncher {
   });
 
   static async killCachedNodes() {
+    console.log('cleanups', this.cache?.cleanups);
     if (!this.cache || this.cache.cleanups.length === 0) return;
-
     const cleanups: Promise<void>[] = [];
 
     this.cache.cleanups.forEach((cleanup) => {
@@ -79,15 +79,8 @@ export class TestNodeLauncher {
     walletConfig = new WalletConfig(),
     providerOptions = {},
     nodeOptions = {},
-    nodeCount = 10,
+    nodeCount,
   }: Partial<LaunchCustomProviderAndGetWalletsOptions & { nodeCount: number }> = {}) {
-    console.log('TEST_NODE_COUNT');
-
-    console.log(process.env.TEST_NODE_COUNT);
-    process.env.TEST_NODE_COUNT = `${
-      Number.parseInt(process.env.TEST_NODE_COUNT!, 10) + nodeCount
-    }`;
-    console.log(process.env.TEST_NODE_COUNT);
     const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 
     const nodeOpts: Partial<LaunchTestNodesOptions> = {
@@ -206,7 +199,6 @@ export class TestNodeLauncher {
       ) &&
       this.partialEqual(providerOptions, this.cache.providerOptions)
     ) {
-      console.log('using cache!');
       return this.cache.nodes.pop();
     }
 

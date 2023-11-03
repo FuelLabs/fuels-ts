@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
-import { execSync, spawn, spawnSync } from 'child_process';
+import { exec, execSync, spawn, spawnSync } from 'child_process';
 import { randomUUID } from 'crypto';
-import fsSync, { writeFileSync } from 'fs';
+import fsSync from 'fs';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
@@ -185,12 +185,10 @@ export const launchTestNodes = async ({
 
     // const commandName = `fuel-core-${randomUUID()}`;
 
-    console.log(process.env.TEST_SCRIPT_PATH);
-    const scriptFilePath = process.env.TEST_SCRIPT_PATH!;
     //  ?? path.join(tempDirPath, 'script.sh');
     // if (!process.env.TEST_SCRIPT_PATH) writeFileSync(scriptFilePath, theCommand);
 
-    const child = spawn(scriptFilePath, [`${nodeCount}`], { shell: '/bin/bash' });
+    const child = spawn('bash', [process.env.TEST_SCRIPT_PATH!, `${nodeCount}`]);
 
     function removeSideffects() {
       child.stdout!.removeAllListeners();
@@ -204,7 +202,12 @@ export const launchTestNodes = async ({
     // Cleanup function where fuel-core is stopped.
     const cleanup = () =>
       new Promise<void>((resolveFn, rejectFn) => {
-        execSync(`kill ${pids.join(' ')}`);
+        execSync(pids.map((pid) => `pkill -TERM -P ${pid}`).join(';'));
+        // pids.forEach((pid) => {
+        //   execSync(`pkill -TERM -P ${pid}`);
+        // });
+
+        // execSync(`kill ${pids.join(' ')}`);
         removeSideffects();
         resolveFn();
         // kill(Number(child.pid), (err) => {
@@ -254,17 +257,18 @@ export const launchTestNodes = async ({
 
           nodeInfos.push({ ip: nodeIp, port: nodePort });
           if (nodeInfos.length === nodeCount && pids.length === nodeCount) {
+            console.log(pids);
             resolve({ results: nodeInfos, cleanupAll: cleanup, chainConfig });
           }
         }
       });
     }
-    child.addListener('exit', (x) => {
-      console.log('exit', x);
-    });
-    child.addListener('close', (code) => {
-      console.log('close', code);
-    });
+    // child.addListener('exit', (x) => {
+    //   console.log('exit', x);
+    // });
+    // child.addListener('close', (code) => {
+    //   console.log('close', code);
+    // });
     child!.stdout.on('data', pidListener);
     child!.stderr.on('data', fuelNodeListener);
   });
