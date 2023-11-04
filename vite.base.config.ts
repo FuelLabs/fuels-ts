@@ -1,15 +1,7 @@
-import { execSync } from 'child_process';
 import plainText from 'vite-plugin-plain-text';
 import { defineConfig } from 'vitest/config';
 
-console.log(execSync("cat /proc/cpuinfo | awk '/^processor/{print $3}'").toString());
-const vCpuCount =
-  parseInt(
-    execSync("cat /proc/cpuinfo | awk '/^processor/{print $3}' | tail -n 1").toString(),
-    10
-  ) + 1; // we add one because the result is zero-indexed
-
-console.log('vCPUs', vCpuCount);
+console.log('CI', process.env.CI);
 export default defineConfig({
   plugins: [
     plainText('**/*.hbs', {
@@ -18,8 +10,8 @@ export default defineConfig({
   ],
   esbuild: { target: 'es2022' },
   test: {
-    maxThreads: vCpuCount * 2 + 1,
-    minThreads: vCpuCount * 2, // ubuntu-latest has two CPUs (four threads?)
+    maxThreads: process.env.CI ? 6 : undefined,
+    minThreads: process.env.CI ? 4 : undefined,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
