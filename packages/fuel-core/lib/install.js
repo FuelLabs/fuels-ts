@@ -72,4 +72,4 @@ import {
     execSync(`rm -rf  ${fileName}`);
     await rmSync(pkgPath);
   }
-})();
+})().catch(process.stderr.write);
