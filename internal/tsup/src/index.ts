@@ -31,7 +31,7 @@ export const indexAndConfigs: Options = {
   },
 };
 
-export const indexBinAndCli: Options = {
+export const indexBinAndCliConfig: Options = {
   ...tsupDefaults,
   entry: {
     index: 'src/index.ts',

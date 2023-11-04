@@ -1,9 +1,9 @@
 import semver from 'semver';
 
-import { getSupportedVersions } from './getSupportedVersions';
+import { getBuiltinVersions } from './getBuiltinVersions';
 
 export function checkFuelCoreVersionCompatibility(networkVersion: string) {
-  const { FUEL_CORE: supportedVersion } = getSupportedVersions();
+  const { FUEL_CORE: supportedVersion } = getBuiltinVersions();
 
   const networkMajor = semver.major(networkVersion);
   const networkMinor = semver.minor(networkVersion);

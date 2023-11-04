@@ -3,11 +3,13 @@ coverage/
 dist/
 out/
 
+apps/demo-fuels/src/sway-programs-api
 apps/demo-typegen/src/generated-types
 apps/demo-nextjs
 apps/demo-react-cra
 apps/demo-react-vite
 
+packages/fuels/test/fixtures/project
 packages/providers/src/__generated__
 
 out
