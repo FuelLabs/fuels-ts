@@ -22,7 +22,7 @@ type Wrapper = {
 /**
  * @group node
  */
-describe.concurrent('Bytes Tests', () => {
+describe('Bytes Tests', () => {
   beforeAll(async (ctx) => {
     await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
