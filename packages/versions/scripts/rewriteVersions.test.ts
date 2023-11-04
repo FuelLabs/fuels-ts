@@ -99,7 +99,7 @@ describe('rewriteVersions.js', () => {
 
     expect(writeFileSync).toHaveBeenCalledTimes(1);
 
-    expect(lastCall?.[0]).toMatch(/packages\/versions\/src\/lib\/getSupportedVersions\.ts/);
+    expect(lastCall?.[0]).toMatch(/packages\/versions\/src\/lib\/getBuiltinVersions\.ts/);
     expect(lastCall?.[1]).toMatch(new RegExp(`FORC: '${versions.FORC}'`));
     expect(lastCall?.[1]).toMatch(new RegExp(`FUEL_CORE: '${versions.FUEL_CORE}'`));
     expect(lastCall?.[1]).toMatch(new RegExp(`FUELS: '${versions.FUELS}'`));

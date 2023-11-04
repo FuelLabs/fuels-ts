@@ -2,45 +2,48 @@ import { bold, green } from 'chalk';
 import CliTable from 'cli-table';
 
 import { colorizeUserVersion } from './lib/colorizeUserVersion';
-import { compareUserVersions } from './lib/compareUserVersions';
-import { getSupportedVersions } from './lib/getSupportedVersions';
-import { getUserVersions } from './lib/getUserVersions';
+import { compareSystemVersions } from './lib/compareSystemVersions';
+import { fuelUpLink } from './lib/fuelUpLink';
+import { getBuiltinVersions } from './lib/getBuiltinVersions';
+import { getSystemVersions } from './lib/getSystemVersions';
+
+export * from './lib/compareSystemVersions';
+export * from './lib/fuelUpLink';
+export * from './lib/getSystemVersions';
 
 export function runVersions() {
   const { error, info } = console;
 
-  const supportedVersions = getSupportedVersions();
+  const supportedVersions = getBuiltinVersions();
 
   const cliTable = new CliTable({
     head: ['', bold('Supported'), bold(`Yours / System`)],
   });
 
-  const fuelUpLink = green('https://github.com/fuellabs/fuelup');
+  const { systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
 
-  const { userForcVersion, userFuelCoreVersion } = getUserVersions({ fuelUpLink });
-
-  const comparisons = compareUserVersions({
-    userForcVersion,
-    userFuelCoreVersion,
+  const comparisons = compareSystemVersions({
+    systemForcVersion,
+    systemFuelCoreVersion,
   });
 
   const userForcColorized = colorizeUserVersion({
-    version: userForcVersion,
-    isGt: comparisons.userForcIsGt,
-    isOk: comparisons.userForcIsEq,
+    version: systemForcVersion,
+    isGt: comparisons.systemForcIsGt,
+    isOk: comparisons.systemForcIsEq,
   });
 
   const userFuelCoreColorized = colorizeUserVersion({
-    version: userFuelCoreVersion,
-    isGt: comparisons.userFuelCoreIsGt,
-    isOk: comparisons.userFuelCoreIsEq,
+    version: systemFuelCoreVersion,
+    isGt: comparisons.systemFuelCoreIsGt,
+    isOk: comparisons.systemFuelCoreIsEq,
   });
 
   cliTable.push(['Forc', supportedVersions.FORC, userForcColorized]);
   cliTable.push(['Fuel-Core', supportedVersions.FUEL_CORE, userFuelCoreColorized]);
 
-  const someIsGt = comparisons.userForcIsGt || comparisons.userFuelCoreIsGt;
-  const bothAreExact = comparisons.userForcIsEq && comparisons.userFuelCoreIsEq;
+  const someIsGt = comparisons.systemForcIsGt || comparisons.systemFuelCoreIsGt;
+  const bothAreExact = comparisons.systemForcIsEq && comparisons.systemFuelCoreIsEq;
 
   if (someIsGt) {
     info(`Your system's components are newer than the ones supported!`);
@@ -52,7 +55,7 @@ export function runVersions() {
     process.exit(0);
   } else {
     error(`You're using outdated versions — update them with:`);
-    error(`  ${fuelUpLink}`);
+    error(`  ${green(fuelUpLink)}`);
     error(cliTable.toString());
     process.exit(1);
   }

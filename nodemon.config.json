@@ -8,7 +8,7 @@
     "**/*.mjs",
     "**/dist/**",
     "**/Forc.lock",
-    "**/getSupportedVersions.ts",
+    "**/getBuiltinVersions.ts",
     "**/out/debug/**",
     "apps/demo-typegen/src/generated-types/**"
   ]

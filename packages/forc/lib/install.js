@@ -58,4 +58,4 @@ import {
     // Cleanup
     await rmSync(pkgPath);
   }
-})();
+})().catch(process.stderr.write);

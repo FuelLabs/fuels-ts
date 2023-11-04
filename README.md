@@ -49,19 +49,29 @@ console.log(new Wallet("0x0000...0000"));
 
 Fuels include some utility commands via built-in CLI tool.
 
+Check the [docs](https://fuellabs.github.io/fuels-ts) for more info.
+
 ```console
 $ npm add fuels
 $ npx fuels --help
 Usage: fuels [options] [command]
 
 Options:
-  -V, --version      output the version number
-  -h, --help         display help for command
+  -D, --debug        Enables verbose logging (default: false)
+  -S, --silent       Omit output messages (default: false)
+  -v, --version      Output the version number
+  -h, --help         Display help
 
 Commands:
-  versions           check for version incompatibilities
-  typegen [options]  generate typescript from contract abi json files
-  help [command]     display help for command
+  init [options]     Create a sample `fuel.config.ts` file
+  dev [options]      Start a Fuel node and run build + deploy on every file change
+  build [options]    Build Sway programs and generate Typescript for them
+  deploy [options]   Deploy contracts to the Fuel network
+  typegen [options]  Generate Typescript from Sway ABI JSON files
+  versions           Check for version incompatibilities
+  core               Wrapper around Fuel Core binary
+  forc               Wrapper around Forc binary
+  help [command]     Display help for command
 ```
 
 # The Fuel Ecosystem
