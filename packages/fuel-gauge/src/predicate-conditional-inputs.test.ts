@@ -1,5 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import { AssetId, generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { AssetId } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { BaseAssetId, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { join } from 'path';
@@ -28,7 +28,10 @@ describe('PredicateConditionalInputs', () => {
 
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
     await using launched = await TestNodeLauncher.launch();
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
 
     const { minGasPrice: gasPrice } = provider.getGasConfig();
 
@@ -37,11 +40,6 @@ describe('PredicateConditionalInputs', () => {
     });
 
     const amountToTransfer = 1000;
-
-    const adminWallet = await generateTestWallet(provider, [
-      [500_000, BaseAssetId],
-      [500_000, assetIdA.value],
-    ]);
 
     const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
       MAKER: aliceWallet.address.toB256(),
@@ -105,7 +103,10 @@ describe('PredicateConditionalInputs', () => {
 
   it('should execute custom transaction where predicate transfer to Alice (PREDICATE PAYS FEES)', async () => {
     await using launched = await TestNodeLauncher.launch();
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
 
     const { minGasPrice: gasPrice } = provider.getGasConfig();
 
@@ -114,12 +115,6 @@ describe('PredicateConditionalInputs', () => {
     });
 
     const amountToTransfer = 1000;
-
-    const adminWallet = await generateTestWallet(provider, [
-      [500_000, BaseAssetId],
-      [500_000, assetIdA.value],
-      [500_000, assetIdB.value],
-    ]);
 
     const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
       MAKER: aliceWallet.address.toB256(),
