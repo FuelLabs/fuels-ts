@@ -1,5 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import { BaseAssetId, Predicate } from 'fuels';
+import { BaseAssetId, Predicate, WalletUnlocked, toNumber } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
@@ -20,22 +20,28 @@ describe('Predicate', () => {
     it('calls a no argument predicate and returns true', async () => {
       await using launched = await TestNodeLauncher.launch();
       const {
-        wallets: [wallet, receiver],
+        wallets: [wallet],
         provider,
       } = launched;
       const { minGasPrice: gasPrice } = provider.getGasConfig();
 
       const amountToPredicate = 100_000;
       const amountToReceiver = 50;
+
+      const receiver = WalletUnlocked.generate({ provider });
+
       const initialReceiverBalance = await receiver.getBalance();
 
       const predicate = new Predicate(predicateBytesTrue, provider);
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
+      console.log(gasPrice, toNumber(initialPredicateBalance));
+
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
       });
+
       await tx.waitForResult();
 
       await assertBalances(

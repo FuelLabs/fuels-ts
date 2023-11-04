@@ -74,6 +74,7 @@ describe('Predicate', () => {
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
 
+      contract.account = receiver;
       await expect(
         contract.functions
           .deposit({
