@@ -219,7 +219,7 @@ describe('Provider', () => {
               chain: MOCK_CHAIN,
               nodeInfo: MOCK_NODE_INFO,
             }),
-        } as unknown as GraphQL.GraphQLClient)
+        }) as unknown as GraphQL.GraphQLClient
     );
 
     const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');

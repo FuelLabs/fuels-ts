@@ -1,4 +1,4 @@
-import { NumberCoder } from '@fuel-ts/abi-coder';
+import { U64Coder } from '@fuel-ts/abi-coder';
 import type { B256Address } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
 import * as asm from '@fuels/vm-asm';
@@ -43,7 +43,7 @@ export const formatScriptDataForTransferringToContract = (
   amountToTransfer: BigNumberish,
   assetId: BytesLike
 ) => {
-  const numberCoder = new NumberCoder('u16');
+  const numberCoder = new U64Coder();
 
   const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
 

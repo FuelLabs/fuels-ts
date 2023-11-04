@@ -1,0 +1,44 @@
+import { createConfig } from 'fuels';
+
+export default createConfig({
+  {{#if (isDefined workspace)}}
+  workspace: '{{workspace}}',
+  {{else}}
+    {{#if (isDefined contracts)}}
+  contracts: [
+      {{#each contracts}}
+        '{{this}}',
+      {{/each}}
+  ],
+    {{/if}}
+    {{#if (isDefined predicates)}}
+  predicates: [
+      {{#each predicates}}
+        '{{this}}',
+      {{/each}}
+  ],
+    {{/if}}
+    {{#if (isDefined scripts)}}
+  scripts: [
+      {{#each scripts}}
+        '{{this}}',
+      {{/each}}
+  ],
+    {{/if}}
+  {{/if}}
+  output: '{{output}}',
+  {{#if (isDefined useBuiltinForc)}}
+  useBuiltinForc: {{useBuiltinForc}},
+  {{/if}}
+  {{#if (isDefined useBuiltinFuelCore)}}
+  useBuiltinFuelCore: {{useBuiltinFuelCore}},
+  {{/if}}
+  {{#if (isDefined autoStartFuelCore)}}
+  autoStartFuelCore: {{autoStartFuelCore}},
+  {{/if}}
+});
+
+/**
+ * Check the docs:
+ * https://fuellabs.github.io/fuels-ts/guide/cli/config-file
+ */

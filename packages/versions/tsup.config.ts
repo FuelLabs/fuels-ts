@@ -1,3 +1,3 @@
-import { indexBinAndCli } from '@internal/tsup';
+import { indexBinAndCliConfig } from '@internal/tsup';
 
-export default indexBinAndCli;
+export default indexBinAndCliConfig;

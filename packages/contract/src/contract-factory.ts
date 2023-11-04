@@ -110,12 +110,11 @@ export default class ContractFactory {
       );
     }
 
-    const { maxGasPerTx } = this.provider.getGasConfig();
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: maxGasPerTx,
+      gasLimit: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,

@@ -1,6 +1,6 @@
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
-import expectedDtsMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/dts.hbs';
 import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/dts.hbs';
+import expectedDtsMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/dts.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';

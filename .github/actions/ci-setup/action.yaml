@@ -1,4 +1,4 @@
-name: "CI setup"
+name: "CI Setup"
 inputs:
   node-version:
     description: "Node version"
