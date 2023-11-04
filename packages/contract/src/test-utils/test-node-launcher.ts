@@ -283,7 +283,10 @@ export class TestNodeLauncher {
 
     for (let i = 0; i < factories.length; i++) {
       const f = factories[i];
-      const contract = await f.factory.deployContract(f.deployConfig);
+      const contract = await f.factory.deployContract({
+        gasPrice: f.factory.account?.provider.getGasConfig().minGasPrice,
+        ...f.deployConfig,
+      });
       contracts.push(contract);
     }
 
