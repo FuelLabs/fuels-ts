@@ -250,7 +250,7 @@ describe('Predicate', () => {
       await expect(
         predicate
           .setData(100)
-          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
+          .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
 
@@ -314,7 +314,7 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
+          .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
 
@@ -381,7 +381,7 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, 50, BaseAssetId, { gasPrice })
+          .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
 
@@ -465,7 +465,9 @@ describe('Predicate', () => {
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
       await expect(
-        predicate.setData(20, 20).transfer(receiver.address, 50, BaseAssetId, { gasPrice })
+        predicate
+          .setData(20, 20)
+          .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
   });
