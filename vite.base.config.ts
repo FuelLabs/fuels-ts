@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 import plainText from 'vite-plugin-plain-text';
 import { defineConfig } from 'vitest/config';
 
+console.log(execSync("cat /proc/cpuinfo | awk '/^processor/{print $3}'").toString());
 const vCpuCount =
   parseInt(
     execSync("cat /proc/cpuinfo | awk '/^processor/{print $3}' | tail -n 1").toString(),
@@ -17,8 +18,8 @@ export default defineConfig({
   ],
   esbuild: { target: 'es2022' },
   test: {
-    maxThreads: vCpuCount + 1,
-    minThreads: vCpuCount, // ubuntu-latest has two CPUs (four threads?)
+    maxThreads: vCpuCount * 2 + 1,
+    minThreads: vCpuCount * 2, // ubuntu-latest has two CPUs (four threads?)
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
