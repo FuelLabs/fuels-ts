@@ -3,7 +3,10 @@ import plainText from 'vite-plugin-plain-text';
 import { defineConfig } from 'vitest/config';
 
 const vCpuCount =
-  parseInt(execSync("cat /proc/cpuinfo | awk '/^processor/{print $3}'").toString(), 10) + 1; // we add one because the result is zero-indexed
+  parseInt(
+    execSync("cat /proc/cpuinfo | awk '/^processor/{print $3}' | tail -n 1").toString(),
+    10
+  ) + 1; // we add one because the result is zero-indexed
 
 console.log('vCPUs', vCpuCount);
 export default defineConfig({
