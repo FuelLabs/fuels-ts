@@ -36,8 +36,6 @@ describe('Predicate', () => {
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
-      console.log(gasPrice, toNumber(initialPredicateBalance));
-
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
       });
