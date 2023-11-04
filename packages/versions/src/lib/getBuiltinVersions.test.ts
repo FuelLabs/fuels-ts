@@ -1,13 +1,13 @@
 import { readVersionsFromFiles } from '../../scripts/rewriteVersions';
 
-import { getSupportedVersions } from './getSupportedVersions';
+import { getBuiltinVersions } from './getBuiltinVersions';
 
 /**
  * @group node
  */
-describe('getSupportedVersions.js', () => {
+describe('getBuiltinVersions.js', () => {
   test('should return received version of default', () => {
-    const versions = getSupportedVersions();
+    const versions = getBuiltinVersions();
     const versionsFromFiles = readVersionsFromFiles();
 
     expect(versions.FORC).toEqual(versionsFromFiles.FORC);

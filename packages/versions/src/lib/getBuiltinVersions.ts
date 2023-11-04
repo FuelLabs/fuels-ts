@@ -1,4 +1,4 @@
-export function getSupportedVersions() {
+export function getBuiltinVersions() {
   return {
     FORC: '0.46.1',
     FUEL_CORE: '0.20.8',

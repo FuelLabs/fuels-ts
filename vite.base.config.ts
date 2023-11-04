@@ -32,7 +32,14 @@ export default defineConfig({
       enabled: true,
       provider: 'istanbul',
       reporter: ['json'],
-      exclude: ['**/dist/**', '**/test/**', '**/*.test.ts', '**/*.d.ts'],
+      exclude: [
+        '**/dist/**',
+        '**/test/**',
+        '**/*.test.ts',
+        '**/*.d.ts',
+        '/fuel-gauge/',
+        '/apps/demo-*',
+      ],
     },
   },
 });

@@ -50,25 +50,25 @@ export function runCliAction(options: ICliParams) {
 }
 
 export function configureCliOptions(program: Command) {
-  program
-    .requiredOption('-i, --inputs <path|glob...>', 'input paths/globals to your abi json files')
-    .requiredOption('-o, --output <dir>', 'directory path for generated files')
+  return program
+    .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
+    .requiredOption('-o, --output <dir>', 'Directory path for generated files')
     .addOption(
-      new Option('-c, --contract', 'generate types for Contracts [default]')
+      new Option('-c, --contract', 'Generate types for Contracts [default]')
         .conflicts(['script', 'predicate'])
         .implies({ script: undefined, predicate: undefined })
     )
     .addOption(
-      new Option('-s, --script', 'generate types for Scripts')
+      new Option('-s, --script', 'Generate types for Scripts')
         .conflicts(['contract', 'predicate'])
         .implies({ contract: undefined, predicate: undefined })
     )
     .addOption(
-      new Option('-p, --predicate', 'generate types for Predicates')
+      new Option('-p, --predicate', 'Generate types for Predicates')
         .conflicts(['contract', 'script'])
         .implies({ contract: undefined, script: undefined })
     )
-    .option('-S, --silent', 'omit output messages')
+    .option('-S, --silent', 'Omit output messages')
     .action(runCliAction);
 }
 
