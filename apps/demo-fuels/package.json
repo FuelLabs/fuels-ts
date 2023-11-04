@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "demo-fuels",
+  "description": "Simple demo using Fuels CLI",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "scripts": {
+    "pretest": "pnpm fuels build"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/errors": "workspace:^",
+    "@fuel-ts/wallet": "workspace:^",
+    "fuels": "workspace:*"
+  }
+}

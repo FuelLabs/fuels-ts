@@ -28,7 +28,17 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { WalletManager } from '@fuel-ts/wallet-manager';
 import { english, Language } from '@fuel-ts/wordlists';
-import { ScriptRequest, chunkAndPadBytes, normalizeString, concatBytes, concat, arrayify, hexlify } from 'fuels';
+import type { DeployContractOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
+import {
+  ScriptRequest,
+  chunkAndPadBytes,
+  normalizeString,
+  concatBytes,
+  concat,
+  arrayify,
+  hexlify,
+  createConfig,
+} from 'fuels';
 
 const { log } = console;
 
@@ -60,9 +70,16 @@ log(Address.fromPublicKey('asdfasdf'));
 log(ContractFactory);
 
 /**
- * fuels (reading class re-exported by umbrella)
+ * fuels
  */
+// class re-exported by umbrella
 log(ScriptRequest);
+
+// CLI stuff
+export const x: UserFuelsConfig | undefined = undefined;
+export const y: FuelsConfig | undefined = undefined;
+export const z: DeployContractOptions | undefined = undefined;
+log(createConfig);
 
 /**
  * hasher
@@ -151,10 +168,6 @@ log(hexlify);
  */
 log(runVersions);
 log(versions);
-// log(getSupportedVersions); // nop
-// log(getUserVersions); // nop
-// log(compareUserVersions); // nop
-// log(colorizeUserVersion); // nop
 
 /**
  * wallet-manager

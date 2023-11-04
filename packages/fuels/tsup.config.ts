@@ -1,3 +1,11 @@
-import { indexBinAndCli } from '@internal/tsup';
+import { indexBinAndCliConfig } from '@internal/tsup';
+import type { Options } from 'tsup';
 
-export default indexBinAndCli;
+const options: Options = {
+  ...indexBinAndCliConfig,
+  loader: {
+    '.hbs': 'text',
+  },
+};
+
+export default options;
