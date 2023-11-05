@@ -246,7 +246,7 @@ export default class Provider {
   protected constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    public options: ProviderOptions = {}
+    public options: ProviderOptions
   ) {
     this.operations = this.createOperations(url, options);
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
