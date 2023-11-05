@@ -2,7 +2,7 @@ import type { BN } from '@fuel-ts/math';
 
 import type { CoinQuantity } from '../coin-quantity';
 
-export const uniteCoinQuantities = (arr1: CoinQuantity[], arr2: CoinQuantity[]): CoinQuantity[] => {
+export const mergeQuantities = (arr1: CoinQuantity[], arr2: CoinQuantity[]): CoinQuantity[] => {
   const resultMap: { [key: string]: BN } = {};
 
   function addToMap({ amount, assetId }: CoinQuantity) {

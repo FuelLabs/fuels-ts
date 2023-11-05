@@ -2,9 +2,9 @@ import { bn } from '@fuel-ts/math';
 
 import type { CoinQuantity } from '../coin-quantity';
 
-import { uniteCoinQuantities } from './unite-coin-quantities';
+import { mergeQuantities } from './merge-quantities';
 
-describe('uniteCoinQuantities', () => {
+describe('mergeQuantities', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
@@ -12,7 +12,7 @@ describe('uniteCoinQuantities', () => {
     const arr1: CoinQuantity[] = [{ assetId: assetIdA, amount: bn(10) }];
     const arr2: CoinQuantity[] = [{ assetId: assetIdB, amount: bn(20) }];
 
-    const result = uniteCoinQuantities(arr1, arr2);
+    const result = mergeQuantities(arr1, arr2);
     expect(result).toEqual([
       { assetId: assetIdA, amount: bn(10) },
       { assetId: assetIdB, amount: bn(20) },
@@ -23,7 +23,7 @@ describe('uniteCoinQuantities', () => {
     const arr1: CoinQuantity[] = [{ assetId: assetIdA, amount: bn(10) }];
     const arr2: CoinQuantity[] = [{ assetId: assetIdA, amount: bn(20) }];
 
-    const result = uniteCoinQuantities(arr1, arr2);
+    const result = mergeQuantities(arr1, arr2);
     expect(result).toEqual([{ assetId: assetIdA, amount: bn(10).add(20) }]);
   });
 
@@ -31,7 +31,7 @@ describe('uniteCoinQuantities', () => {
     const arr1: CoinQuantity[] = [];
     const arr2: CoinQuantity[] = [{ assetId: assetIdB, amount: bn(20) }];
 
-    const result = uniteCoinQuantities(arr1, arr2);
+    const result = mergeQuantities(arr1, arr2);
     expect(result).toEqual([{ assetId: assetIdB, amount: bn(20) }]);
   });
 
@@ -39,7 +39,7 @@ describe('uniteCoinQuantities', () => {
     const arr1: CoinQuantity[] = [];
     const arr2: CoinQuantity[] = [];
 
-    const result = uniteCoinQuantities(arr1, arr2);
+    const result = mergeQuantities(arr1, arr2);
     expect(result).toEqual([]);
   });
 });

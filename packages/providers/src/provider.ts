@@ -44,7 +44,7 @@ import {
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
-import { uniteCoinQuantities } from './utils/unite-coin-quantities';
+import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
@@ -671,7 +671,7 @@ export default class Provider {
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = uniteCoinQuantities(coinOutputsQuantitites, forwardingQuantities);
+    const allQuantities = mergeQuantities(coinOutputsQuantitites, forwardingQuantities);
     // Funding transaction with fake utxos
     clonedTransactionRequest.fundWithFakeUtxos(allQuantities);
 
