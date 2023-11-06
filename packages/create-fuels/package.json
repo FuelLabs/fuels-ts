@@ -1,0 +1,29 @@
+{
+  "name": "create-fuels",
+  "version": "0.65.0",
+  "description": "",
+  "bin": {
+    "create-fuels": "create-fuels.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "engines": {
+    "node": "^18.14.1",
+    "pnpm": "^8.9.0"
+  },
+  "packageManager": "pnpm@8.9.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "chalk": "4",
+    "commander": "^9.4.1",
+    "tar": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/got": "^9.6.12"
+  }
+}
