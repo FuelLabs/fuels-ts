@@ -59,8 +59,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
+      - name: Setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.14.1
+          registry-url: "https://registry.npmjs.org"
 
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
@@ -71,8 +74,11 @@ jobs:
           name: node
           path: coverage/environments
 
+      - name: Install
+        run: pnpm install --filter @internal/scripts
+
       - name: Generate Coverage
-        run: pnpm test:coverage-merge
+        run: pnpm --filter @internal/scripts test:coverage-merge
 
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
@@ -106,7 +112,7 @@ jobs:
           path: coverage-master
 
       - name: Generate Coverage Diff
-        run: pnpm test:coverage-diff
+        run: pnpm --filter @internal/scripts test:coverage-diff
 
       - name: Report Coverage
         uses: thollander/actions-comment-pull-request@v2

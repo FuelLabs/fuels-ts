@@ -50,9 +50,6 @@ importers:
       conventional-changelog-angular:
         specifier: ^5.0.13
         version: 5.0.13
-      coverage-diff:
-        specifier: ^3.2.0
-        version: 3.2.0
       dotenv:
         specifier: ^9.0.2
         version: 9.0.2
@@ -104,9 +101,6 @@ importers:
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
-      nyc:
-        specifier: ^15.1.0
-        version: 15.1.0
       open:
         specifier: ^8.4.0
         version: 8.4.0
@@ -451,6 +445,15 @@ importers:
         version: link:../../packages/fuels
 
   internal/check-tests: {}
+
+  internal/scripts:
+    devDependencies:
+      coverage-diff:
+        specifier: ^3.2.0
+        version: 3.2.0
+      nyc:
+        specifier: ^15.1.0
+        version: 15.1.0
 
   internal/tsup: {}
 
@@ -1561,7 +1564,7 @@ packages:
       '@babel/helper-replace-supers': 7.22.5
       '@babel/helper-skip-transparent-expression-wrappers': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.5
-      semver: 6.3.0
+      semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
 
@@ -1574,7 +1577,7 @@ packages:
       '@babel/core': 7.22.5
       '@babel/helper-annotate-as-pure': 7.22.5
       regexpu-core: 5.3.2
-      semver: 6.3.0
+      semver: 6.3.1
     dev: false
 
   /@babel/helper-define-polyfill-provider@0.4.0(@babel/core@7.22.5):
@@ -1588,7 +1591,7 @@ packages:
       debug: 4.3.4
       lodash.debounce: 4.0.8
       resolve: 1.22.2
-      semver: 6.3.0
+      semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4576,7 +4579,7 @@ packages:
       graceful-fs: 4.2.11
       istanbul-lib-coverage: 3.2.0
       istanbul-lib-instrument: 5.2.1
-      istanbul-lib-report: 3.0.0
+      istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 4.0.1
       istanbul-reports: 3.1.5
       jest-haste-map: 27.5.1
@@ -6383,7 +6386,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.8
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@5.2.2)
       typescript: 5.2.2
     transitivePeerDependencies:
@@ -6465,7 +6468,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.60.1(typescript@5.2.2)
       eslint: 8.52.0
       eslint-scope: 5.1.1
-      semver: 7.3.8
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -7468,7 +7471,7 @@ packages:
       '@babel/compat-data': 7.22.5
       '@babel/core': 7.22.5
       '@babel/helper-define-polyfill-provider': 0.4.0(@babel/core@7.22.5)
-      semver: 6.3.0
+      semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -12005,6 +12008,7 @@ packages:
       istanbul-lib-coverage: 3.2.0
       make-dir: 3.1.0
       supports-color: 7.2.0
+    dev: true
 
   /istanbul-lib-report@3.0.1:
     resolution: {integrity: sha512-GCfE1mtsHGOELCU8e/Z7YWzpmybrx/+dSTfLrvY8qRmaY6zXTKWn6WQIjaAFw069icm6GVMNkgu0NzI4iPZUNw==}

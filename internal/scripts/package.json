@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "@internal/scripts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test:coverage-merge": "tsx ./src/tests-coverage-merge.ts",
+    "test:coverage-diff": "tsx ./src/tests-coverage-diff.ts"
+  },
+  "license": "Apache-2.0",
+  "version": null,
+  "devDependencies": {
+    "coverage-diff": "^3.2.0",
+    "nyc": "^15.1.0"
+  }
+}

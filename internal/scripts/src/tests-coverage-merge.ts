@@ -3,7 +3,7 @@ import { readdirSync, renameSync, rmSync } from 'fs';
 import { join } from 'path';
 
 const restructureCoverageDirectory = () => {
-  const coverageDir = join(__dirname, '../coverage/');
+  const coverageDir = join(__dirname, '../../../coverage');
   const environmentsDir = join(coverageDir, '/environments/');
   const validEnvironments = ['node'];
 
@@ -26,10 +26,10 @@ const restructureCoverageDirectory = () => {
   restructureCoverageDirectory();
 
   // Merge all coverage files
-  execSync('nyc merge coverage/environments coverage/merged/coverage.json');
+  execSync('nyc merge ../../coverage/environments ../../coverage/merged/coverage.json');
 
   // Generate coverage report
   execSync(
-    'nyc report --temp-dir=coverage/merged --report-dir=coverage/report --exclude-after-remap=false'
+    'nyc report --temp-dir=../../coverage/merged --report-dir=../../coverage/report --exclude-after-remap=false'
   );
 })();
