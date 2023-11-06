@@ -1,8 +1,95 @@
 import { bn } from '@fuel-ts/math';
 
+import type { Policy } from './policy';
 import { PoliciesCoder, PolicyType } from './policy';
 
-describe('PolicyCoder', () => {
+describe('PoliciesCoder', () => {
+  describe('encode', () => {
+    it('should encode policy correctly (GasPrice)', () => {
+      const policies: Policy[] = [{ type: PolicyType.GasPrice, data: bn(57) }];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 57]));
+    });
+
+    it('should encode policy correctly (WitnessLimit)', () => {
+      const policies: Policy[] = [{ type: PolicyType.WitnessLimit, data: bn(10) }];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 10]));
+    });
+
+    it('should encode policy correctly (Maturity)', () => {
+      const policies: Policy[] = [{ type: PolicyType.Maturity, data: 254 }];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 254]));
+    });
+
+    it('should encode policy correctly (MaxFee)', () => {
+      const policies: Policy[] = [{ type: PolicyType.MaxFee, data: bn(76) }];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 76]));
+    });
+
+    it('should encode policy correctly (GasPrice + MaxFee)', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.GasPrice, data: bn(19) },
+        { type: PolicyType.MaxFee, data: bn(76) },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 76])
+      );
+    });
+
+    it('should encode policy correctly (WitnessLimit + Maturity)', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+        { type: PolicyType.Maturity, data: 26 },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26])
+      );
+    });
+
+    it('should encode policy correctly (WitnessLimit + Maturity + MaxFee)', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+        { type: PolicyType.Maturity, data: 26 },
+        { type: PolicyType.MaxFee, data: bn(199) },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([
+          0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 199,
+        ])
+      );
+    });
+
+    it('should encode policy correctly (GasPrice + WitnessLimit + Maturity + MaxFee)', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.GasPrice, data: bn(28) },
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+        { type: PolicyType.Maturity, data: 26 },
+        { type: PolicyType.MaxFee, data: bn(199) },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([
+          0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0,
+          0, 0, 199,
+        ])
+      );
+    });
+  });
+
   describe('decode', () => {
     it('should decode gasPrice', () => {
       // gasPrice is 100
