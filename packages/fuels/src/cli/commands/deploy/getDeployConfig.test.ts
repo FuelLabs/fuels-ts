@@ -1,5 +1,8 @@
 import { getDeployConfig } from './getDeployConfig';
 
+/**
+ * @group node
+ */
 describe('getDeployConfig', () => {
   test('deploy options as object', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

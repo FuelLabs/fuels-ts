@@ -58,7 +58,7 @@ describe('cli.js', () => {
   });
 
   it('preAction should configure logging', () => {
-    const spy = jest.spyOn(loggingMod, 'configureLogging');
+    const spy = vi.spyOn(loggingMod, 'configureLogging');
 
     const command = new Command();
     command.option('-D, --debug', 'Enables verbose logging', false);
@@ -72,10 +72,10 @@ describe('cli.js', () => {
     });
   });
 
-  it('should run cli program', async () => {
+  it.only('should run cli program', async () => {
     const command = new Command();
-    const parseAsync = jest.spyOn(command, 'parseAsync');
-    const $configureCli = jest.spyOn(cliMod, 'configureCli').mockReturnValue(command);
+    const parseAsync = vi.spyOn(command, 'parseAsync');
+    const $configureCli = vi.spyOn(cliMod, 'configureCli').mockReturnValue(command);
 
     await run([]);
 

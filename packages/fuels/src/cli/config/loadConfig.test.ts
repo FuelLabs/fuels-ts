@@ -16,8 +16,13 @@ import type { FuelsConfig } from '../types';
 
 import { loadConfig } from './loadConfig';
 
+/**
+ * @group node
+ */
 describe('loadConfig', () => {
-  beforeEach(resetDiskAndMocks);
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   test('should throw if config path is not found', async () => {
     const cwd = '/non/existent/path';
@@ -121,11 +126,11 @@ describe('loadConfig', () => {
   test(`should smart-set built-in flags`, async () => {
     await runInit(initFlagsWorkspace);
 
-    const shouldUseBuiltinForc = jest
+    const shouldUseBuiltinForc = vi
       .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
       .mockReturnValue(false);
 
-    const shouldUseBuiltinFuelCore = jest
+    const shouldUseBuiltinFuelCore = vi
       .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
       .mockReturnValue(true);
 

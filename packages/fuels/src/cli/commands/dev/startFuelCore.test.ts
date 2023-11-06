@@ -11,11 +11,18 @@ import { killNode, startFuelCore } from './startFuelCore';
 
 type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
 
-jest.mock('child_process', () => ({
-  __esModule: true,
-  ...jest.requireActual('child_process'),
-}));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('startFuelCore', () => {
   const loggingConfigBkp = loggingConfig;
 
@@ -47,17 +54,17 @@ describe('startFuelCore', () => {
     };
 
     const innerMocks = {
-      on: jest.fn(),
+      on: vi.fn(),
       stderr: {
-        pipe: jest.fn(),
-        on: jest.fn(stderrOn),
+        pipe: vi.fn(),
+        on: vi.fn(stderrOn),
       },
       stdout: {
-        pipe: jest.fn(),
+        pipe: vi.fn(),
       },
     };
 
-    const spawn = jest
+    const spawn = vi
       .spyOn(childProcessMod, 'spawn')
       .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
 
@@ -123,7 +130,7 @@ describe('startFuelCore', () => {
   test('should pipe stdout', async () => {
     mockLogger();
 
-    jest.spyOn(process.stdout, 'write').mockImplementation();
+    vi.spyOn(process.stdout, 'write').mockImplementation();
 
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: true });
 
@@ -138,8 +145,8 @@ describe('startFuelCore', () => {
   test('should pipe stdout and stderr', async () => {
     mockLogger();
 
-    jest.spyOn(process.stderr, 'write').mockImplementation();
-    jest.spyOn(process.stdout, 'write').mockImplementation();
+    vi.spyOn(process.stderr, 'write').mockImplementation();
+    vi.spyOn(process.stdout, 'write').mockImplementation();
 
     configureLogging({ isDebugEnabled: true, isLoggingEnabled: true });
 
@@ -152,7 +159,7 @@ describe('startFuelCore', () => {
   });
 
   test('should kill process only if PID exists', () => {
-    const kill = jest.fn();
+    const kill = vi.fn();
 
     const mock1 = { pid: undefined } as ChildProcessWithoutNullStreams;
     killNode(mock1, kill)();

@@ -16,5 +16,5 @@ export function deleteGeneratedFiles() {
 
 export function resetDiskAndMocks() {
   deleteGeneratedFiles();
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 }

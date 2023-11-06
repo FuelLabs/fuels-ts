@@ -3,9 +3,16 @@ import { existsSync, readFileSync } from 'fs';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { contractsJsonPath, runBuild, runDeploy, runInit } from '../utils/runCommands';
 
+/**
+ * @group node
+ */
 describe('deploy', () => {
-  beforeEach(resetDiskAndMocks);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   it('should run `deploy` command', async () => {
     await runInit();

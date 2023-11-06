@@ -11,8 +11,15 @@ import {
   runInit,
 } from '../utils/runCommands';
 
+/**
+ * @group node
+ */
 describe('init', () => {
-  beforeEach(mockLogger);
+
+
+  
+  beforeEach(() => ({
+  })mockLogger);
   afterEach(resetDiskAndMocks);
 
   it('should run `init` command', async () => {
@@ -48,8 +55,8 @@ describe('init', () => {
   });
 
   it('should error if no inputs/workspace is supplied', async () => {
-    const write = jest.spyOn(process.stdout, 'write').mockImplementation();
-    const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const write = vi.spyOn(process.stdout, 'write').mockImplementation();
+    const exit = vi.spyOn(process, 'exit').mockImplementation();
 
     await runInit(['-o', generatedDir].flat());
 

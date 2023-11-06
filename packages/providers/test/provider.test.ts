@@ -257,7 +257,7 @@ describe('Provider', () => {
      * Mocking and initializing Provider with an invalid fetcher just
      * to ensure it'll be properly overriden in `connect` method below
      */
-    const fetchChainAndNodeInfo = jest
+    const fetchChainAndNodeInfo = vi
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
       .mockImplementation();
 
