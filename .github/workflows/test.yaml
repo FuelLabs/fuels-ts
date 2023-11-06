@@ -59,11 +59,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup
+      - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: 18.14.1
           registry-url: "https://registry.npmjs.org"
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 8.9.0
+          run_install: false
+
+      - name: Install
+        run: pnpm install --filter @internal/scripts
 
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
@@ -73,9 +82,6 @@ jobs:
         with:
           name: node
           path: coverage/environments
-
-      - name: Install
-        run: pnpm install --filter @internal/scripts
 
       - name: Generate Coverage
         run: pnpm --filter @internal/scripts test:coverage-merge
