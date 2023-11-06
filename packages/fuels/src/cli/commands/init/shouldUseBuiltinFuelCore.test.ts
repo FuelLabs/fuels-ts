@@ -13,7 +13,6 @@ vi.mock('@fuel-ts/versions/cli', async () => {
   };
 });
 
-
 /**
  * @group node
  */
