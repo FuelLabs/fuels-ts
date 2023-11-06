@@ -142,14 +142,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
         receiptsRoot,
         script,
         scriptData,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         inputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         outputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         witnesses,
       },
       o,
@@ -277,17 +271,9 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
         outputsCount,
         witnessesCount,
         salt,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         storageSlots,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         inputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         outputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         witnesses,
       },
       o,
