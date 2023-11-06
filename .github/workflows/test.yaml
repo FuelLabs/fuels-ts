@@ -18,7 +18,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    name: Test - ${{ matrix.env }}
+    name: ${{ matrix.env }}
     strategy:
       fail-fast: false
       matrix:
