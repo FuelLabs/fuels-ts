@@ -1,5 +1,7 @@
 import { Coder, NumberCoder, U64Coder } from '@fuel-ts/abi-coder';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
+import { concat } from '@fuel-ts/utils';
 
 // Bitfield of used policy types.
 export enum PolicyType {
@@ -37,7 +39,27 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
   }
 
   encode(policies: Policy[]): Uint8Array {
-    throw new Error('Implement me');
+    const parts: Uint8Array[] = [];
+
+    policies.forEach(({ data, type }) => {
+      switch (type) {
+        case PolicyType.MaxFee:
+        case PolicyType.GasPrice:
+        case PolicyType.WitnessLimit:
+          parts.push(new U64Coder().encode(data));
+          break;
+
+        case PolicyType.Maturity:
+          parts.push(new NumberCoder('u32').encode(data));
+          break;
+
+        default: {
+          throw new FuelError(ErrorCode.INVALID_POLICY_TYPE, `Invalid policy type: ${type}`);
+        }
+      }
+    });
+
+    return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number, policyTypes: number): [Policy[], number] {
