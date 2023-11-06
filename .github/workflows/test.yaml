@@ -70,7 +70,7 @@ jobs:
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
 
-      - name: Download Coverage for Node Tests
+      - name: Download Coverage Artifact for Node Tests
         uses: actions/download-artifact@v3
         with:
           name: node
@@ -83,14 +83,14 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Upload Coverage Artifact
+      - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
           path: coverage/report
 
-      - name: Download Coverage Artifact
+      - name: Download Master Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
         # TODO: Remove PR != check once #1310 has been merged
         if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
@@ -101,7 +101,7 @@ jobs:
           path: coverage-master
 
       # TODO: Delete once #1310 has been merged
-      - name: Download coverage artifact (temporary)
+      - name: Download Master Coverage Artifact (temporary)
         uses: dawidd6/action-download-artifact@v2
         if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
         with:
@@ -115,6 +115,7 @@ jobs:
 
       - name: Report Coverage
         uses: thollander/actions-comment-pull-request@v2
+        if: ${{ steps.findPr.outputs.number }}
         with:
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
