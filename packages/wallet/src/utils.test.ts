@@ -58,8 +58,7 @@ describe('util', () => {
     const assetId: BytesLike = BaseAssetId;
 
     const scriptData = formatScriptDataForTransferringToContract(
-      contractId,
-      amountToTransfer,
+      contractId,      amountToTransfer,
       assetId
     );
 

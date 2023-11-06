@@ -14,5 +14,5 @@
     "sourceMap": true,
     "types": ["vitest/globals", "node", "node-fetch", "web"]
   },
-  "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
+  "exclude": ["**/dist", "**/node_modules"]
 }

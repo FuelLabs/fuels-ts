@@ -5,6 +5,9 @@ import * as fuels from './index';
  */
 describe('index.js', () => {
   test('should export everything', () => {
+    expect(fuels.hexlify).toBeTruthy();
+    expect(fuels.arrayify).toBeTruthy();
+
     expect(fuels.Interface).toBeTruthy();
     expect(fuels.Address).toBeTruthy();
     expect(fuels.Contract).toBeTruthy();

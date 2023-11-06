@@ -246,6 +246,38 @@ describe('Provider', () => {
     const provider = await Provider.create(providerUrl, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
     });
+
+    expect(await provider.getVersion()).toEqual('0.30.0');
+  });
+
+  it('can accept options override in connect method', async () => {
+    const providerUrl = FUEL_NETWORK_URL;
+
+    /**
+     * Mocking and initializing Provider with an invalid fetcher just
+     * to ensure it'll be properly overriden in `connect` method below
+     */
+    const fetchChainAndNodeInfo = jest
+      .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
+      .mockImplementation();
+
+    const provider = await Provider.create(providerUrl, {
+      fetch: () => {
+        throw new Error('This should never happen');
+      },
+    });
+
+    expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+
+    /**
+     * Restore mock and call connect with a proper fetch override
+     */
+    fetchChainAndNodeInfo.mockRestore();
+
+    await provider.connect(providerUrl, {
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+    });
+
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 

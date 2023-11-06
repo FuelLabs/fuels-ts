@@ -902,13 +902,14 @@ describe('Contract', () => {
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[10_000_000_000, BaseAssetId]]);
 
     const contract = await setupContract();
 
     const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
-    const amountToContract = 200;
+    const u64Amount = bn(5_000_000_000);
+    const amountToContract = u64Amount;
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, BaseAssetId, {
       gasPrice,
@@ -918,7 +919,7 @@ describe('Contract', () => {
 
     const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
-    expect(finalBalance).toBe(initialBalance + amountToContract);
+    expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {

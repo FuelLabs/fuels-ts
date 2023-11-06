@@ -51,7 +51,7 @@ export const readVersions = () => {
 export const rewriteVersions = () => {
   const { FUELS, FORC, FUEL_CORE } = readVersions();
 
-  const filepath = join(__dirname, '..', 'src', 'lib', 'getSupportedVersions.ts');
+  const filepath = join(__dirname, '..', 'src', 'lib', 'getBuiltinVersions.ts');
 
   let contents = readFileSync(filepath, 'utf8');
 

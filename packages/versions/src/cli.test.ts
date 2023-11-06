@@ -1,8 +1,8 @@
 import { runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
-import * as compareUserVersionsMod from './lib/compareUserVersions';
-import * as getSupportedVersionsMod from './lib/getSupportedVersions';
-import * as getUserVersionsMod from './lib/getUserVersions';
+import * as compareSystemVersionsMod from './lib/compareSystemVersions';
+import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
+import * as getSystemVersionsMod from './lib/getSystemVersions';
 
 /**
  * @group node
@@ -21,20 +21,20 @@ describe('cli.js', () => {
     Test (mocking) utility
   */
   function mockAllDeps(params: {
-    userForcIsGt: boolean;
-    userForcIsEq: boolean;
-    userFuelCoreIsGt: boolean;
-    userFuelCoreIsEq: boolean;
-    userForcVersion: string;
-    userFuelCoreVersion: string;
+    systemForcIsGt: boolean;
+    systemForcIsEq: boolean;
+    systemFuelCoreIsGt: boolean;
+    systemFuelCoreIsEq: boolean;
+    systemForcVersion: string;
+    systemFuelCoreVersion: string;
   }) {
     const {
-      userForcVersion,
-      userFuelCoreVersion,
-      userFuelCoreIsGt,
-      userFuelCoreIsEq,
-      userForcIsGt,
-      userForcIsEq,
+      systemForcVersion,
+      systemFuelCoreVersion,
+      systemFuelCoreIsGt,
+      systemFuelCoreIsEq,
+      systemForcIsGt,
+      systemForcIsEq,
     } = params;
 
     const error = vi.spyOn(console, 'error').mockImplementation(() => []);
@@ -45,19 +45,19 @@ describe('cli.js', () => {
       ({ version }) => version
     );
 
-    vi.spyOn(compareUserVersionsMod, 'compareUserVersions').mockImplementation(() => ({
-      userForcIsGt,
-      userFuelCoreIsGt,
-      userForcIsEq,
-      userFuelCoreIsEq,
+    vi.spyOn(compareSystemVersionsMod, 'compareSystemVersions').mockImplementation(() => ({
+      systemForcIsGt,
+      systemFuelCoreIsGt,
+      systemForcIsEq,
+      systemFuelCoreIsEq,
     }));
 
-    vi.spyOn(getUserVersionsMod, 'getUserVersions').mockImplementation(() => ({
-      userForcVersion,
-      userFuelCoreVersion,
+    vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
+      systemForcVersion,
+      systemFuelCoreVersion,
     }));
 
-    vi.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+    vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
       FORC: '1.0.0',
       FUEL_CORE: '1.0.0',
       FUELS: '1.0.0',
@@ -76,12 +76,12 @@ describe('cli.js', () => {
   test('should inform about newer versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
-      userForcVersion: '1.1.1',
-      userFuelCoreVersion: '1.1.1',
-      userFuelCoreIsGt: true,
-      userFuelCoreIsEq: false,
-      userForcIsGt: true,
-      userForcIsEq: false,
+      systemForcVersion: '1.1.1',
+      systemFuelCoreVersion: '1.1.1',
+      systemFuelCoreIsGt: true,
+      systemFuelCoreIsEq: false,
+      systemForcIsGt: true,
+      systemForcIsEq: false,
     });
 
     // executing
@@ -96,12 +96,12 @@ describe('cli.js', () => {
   test('should inform about exact versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
-      userForcVersion: '1.0.0',
-      userFuelCoreVersion: '1.0.0',
-      userFuelCoreIsGt: false,
-      userFuelCoreIsEq: true,
-      userForcIsGt: false,
-      userForcIsEq: true,
+      systemForcVersion: '1.0.0',
+      systemFuelCoreVersion: '1.0.0',
+      systemFuelCoreIsGt: false,
+      systemFuelCoreIsEq: true,
+      systemForcIsGt: false,
+      systemForcIsEq: true,
     });
 
     // executing
@@ -116,12 +116,12 @@ describe('cli.js', () => {
   test('should warn about older versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
-      userForcVersion: '0.0.1',
-      userFuelCoreVersion: '0.0.1',
-      userFuelCoreIsGt: false,
-      userFuelCoreIsEq: false,
-      userForcIsGt: false,
-      userForcIsEq: false,
+      systemForcVersion: '0.0.1',
+      systemFuelCoreVersion: '0.0.1',
+      systemFuelCoreIsGt: false,
+      systemFuelCoreIsEq: false,
+      systemForcIsGt: false,
+      systemForcIsEq: false,
     });
 
     // executing

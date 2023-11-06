@@ -1,5 +1,5 @@
 import { checkFuelCoreVersionCompatibility } from './checkFuelCoreVersionCompatibility';
-import * as getSupportedVersionsMod from './getSupportedVersions';
+import * as getBuiltinVersionsMod from './getBuiltinVersions';
 
 /**
  * @group node
@@ -12,7 +12,7 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
   it('should validate all possible version mismatches', () => {
     const supportedVersion = '0.1.2';
 
-    vi.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+    vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
       FUELS: '1', // not under test
       FORC: '1', // not under test
       FUEL_CORE: supportedVersion,
