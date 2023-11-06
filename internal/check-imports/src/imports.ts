@@ -2,9 +2,10 @@ import * as abiCoder from '@fuel-ts/abi-coder';
 import * as abiTypegen from '@fuel-ts/abi-typegen';
 import * as address from '@fuel-ts/address';
 import * as contract from '@fuel-ts/contract';
+import * as crypto from '@fuel-ts/crypto';
+import * as errors from '@fuel-ts/errors';
 // forc-bin
 // fuels-gauge
-import * as crypto from '@fuel-ts/crypto';
 import * as hasher from '@fuel-ts/hasher';
 import * as hdwallet from '@fuel-ts/hdwallet';
 import * as interfaces from '@fuel-ts/interfaces';
@@ -32,6 +33,7 @@ log([
   abiTypegen,
   address,
   contract,
+  errors,
   fuels,
   hasher,
   hdwallet,

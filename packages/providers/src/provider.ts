@@ -310,9 +310,9 @@ export default class Provider {
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
    */
-  async connect(url: string) {
+  async connect(url: string, options?: ProviderOptions) {
     this.url = url;
-    this.operations = this.createOperations(url);
+    this.operations = this.createOperations(url, options ?? this.options);
     await this.fetchChainAndNodeInfo();
   }
 
