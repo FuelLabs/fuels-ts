@@ -20,7 +20,7 @@ vi.mock('chokidar', async () => {
 /**
  * @group node
  */
-describe('dev', () => {\
+describe('dev', () => {
   beforeEach(() => {
     mockLogger();
   });

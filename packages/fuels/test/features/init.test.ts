@@ -15,12 +15,12 @@ import {
  * @group node
  */
 describe('init', () => {
-
-
-  
-  beforeEach(() => ({
-  })mockLogger);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    mockLogger();
+  });
+  afterEach(() => {
+    resetDiskAndMocks();
+  });
 
   it('should run `init` command', async () => {
     await runInit([initFlagsWorkspace, initFlagsAutoStartFuelCore].flat());
