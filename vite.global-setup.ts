@@ -1,7 +1,7 @@
-import { WalletConfig, defaultChainConfig } from '@fuel-ts/test-utils';
+import { WalletConfig } from '@fuel-ts/test-utils';
 import { execSync } from 'child_process';
 import { randomUUID } from 'crypto';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 
@@ -12,6 +12,10 @@ export function setup() {
   if (!fs.existsSync(tempDirPath)) {
     fs.mkdirSync(tempDirPath, { recursive: true });
   }
+
+  const defaultChainConfig = JSON.parse(
+    readFileSync('.fuel-core/configs/chainConfig.json', 'utf-8')
+  );
 
   const chainConfigPath = path.join(tempDirPath, 'chainConfig.json');
 
@@ -58,6 +62,5 @@ export function teardown() {
   console.log('running teardown');
 
   // console.log('we need this many nodes:', process.env.TEST_NODE_COUNT);
-  // execSync(`rm -rf ${tempDirPath}`);
-  // console.log(execSync('sleep 5s; ps -A | grep fuel-core').toString());
+  execSync(`rm -rf ${tempDirPath}`);
 }
