@@ -4,13 +4,22 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
 
-vi.mock('@fuel-ts/versions/cli', () => ({
-  __esModule: true,
-  ...vi.requireActual('@fuel-ts/versions/cli'),
-}));
+vi.mock('@fuel-ts/versions/cli', async () => {
+  const mod = await vi.importActual('@fuel-ts/versions/cli');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('shouldUseBuiltinForc', () => {
-  beforeEach(vi.restoreAllMocks);
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   function mockAll(returns: { getSystemForc: string | null }) {
     const getSystemForc = vi

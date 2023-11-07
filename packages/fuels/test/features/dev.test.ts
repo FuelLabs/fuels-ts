@@ -8,14 +8,25 @@ import { mockLogger } from '../utils/mockLogger';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { runInit, runDev } from '../utils/runCommands';
 
-vi.mock('chokidar', () => ({
-  __esModule: true,
-  ...vi.requireActual('chokidar'),
-}));
+vi.mock('chokidar', async () => {
+  const mod = await vi.importActual('chokidar');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('dev', () => {
-  beforeEach(mockLogger);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    mockLogger();
+  });
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   function mockAll() {
     mockLogger();
@@ -33,8 +44,8 @@ describe('dev', () => {
         })
       );
 
-    const build = vi.spyOn(buildMod, 'build').mockImplementation(() => {});
-    const deploy = vi.spyOn(deployMod, 'deploy').mockImplementation(() => {});
+    const build = vi.spyOn(buildMod, 'build').mockImplementation();
+    const deploy = vi.spyOn(deployMod, 'deploy').mockImplementation();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const on: any = vi.fn(() => ({ on }));

@@ -9,6 +9,9 @@ import * as withConfigMod from '../withConfig';
 import * as indexMod from '.';
 import type { FuelCoreNode } from './startFuelCore';
 
+/**
+ * @group node
+ */
 describe('dev', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -17,9 +20,7 @@ describe('dev', () => {
   function mockAll() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const killChildProcess: any = vi.fn();
-    const closeAllFileHandlers = vi
-      .spyOn(indexMod, 'closeAllFileHandlers')
-      .mockImplementation(() => {});
+    const closeAllFileHandlers = vi.spyOn(indexMod, 'closeAllFileHandlers').mockImplementation();
     const fuelCore = { killChildProcess } as FuelCoreNode;
     const onFailure = vi.fn();
 
@@ -51,7 +52,7 @@ describe('dev', () => {
   test('workspaceFileChanged should log change and call `buildAndDeploy`', async () => {
     const { log } = mockLogger();
 
-    const buildAndDeploy = vi.spyOn(indexMod, 'buildAndDeploy').mockImplementation(() => {});
+    const buildAndDeploy = vi.spyOn(indexMod, 'buildAndDeploy').mockImplementation();
 
     await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('event', 'some/path');
 

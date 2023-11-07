@@ -1,6 +1,9 @@
 import { compareSystemVersions } from './compareSystemVersions';
 import * as getBuiltinVersionsMod from './getBuiltinVersions';
 
+/**
+ * @group node
+ */
 describe('compareSystemVersions.js', () => {
   /*
     Hooks
@@ -11,7 +14,9 @@ describe('compareSystemVersions.js', () => {
     spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
   });
 
-  afterEach(vi.restoreAllMocks);
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   /*
     Tests

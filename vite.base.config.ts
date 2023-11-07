@@ -33,7 +33,7 @@ export default defineConfig({
         '**/test/**',
         '**/*.test.ts',
         '**/*.d.ts',
-        '/fuel-gauge/',
+        'packages/fuel-gauge/**',
         '/apps/demo-*',
       ],
     },

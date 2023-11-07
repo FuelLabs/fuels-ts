@@ -11,11 +11,18 @@ import { killNode, startFuelCore } from './startFuelCore';
 
 type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
 
-vi.mock('child_process', () => ({
-  __esModule: true,
-  ...vi.requireActual('child_process'),
-}));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('startFuelCore', () => {
   const loggingConfigBkp = loggingConfig;
 
@@ -123,7 +130,7 @@ describe('startFuelCore', () => {
   test('should pipe stdout', async () => {
     mockLogger();
 
-    vi.spyOn(process.stdout, 'write').mockImplementation(() => {});
+    vi.spyOn(process.stdout, 'write').mockImplementation();
 
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: true });
 
@@ -138,8 +145,8 @@ describe('startFuelCore', () => {
   test('should pipe stdout and stderr', async () => {
     mockLogger();
 
-    vi.spyOn(process.stderr, 'write').mockImplementation(() => {});
-    vi.spyOn(process.stdout, 'write').mockImplementation(() => {});
+    vi.spyOn(process.stderr, 'write').mockImplementation();
+    vi.spyOn(process.stdout, 'write').mockImplementation();
 
     configureLogging({ isDebugEnabled: true, isLoggingEnabled: true });
 

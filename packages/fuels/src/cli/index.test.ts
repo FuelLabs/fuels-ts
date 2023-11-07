@@ -11,6 +11,9 @@ import type {
 } from './index';
 import { createConfig } from './index';
 
+/**
+ * @group node
+ */
 describe('cli/index.ts', () => {
   test('should create config via cli index', () => {
     expect(createConfig(fuelsConfig)).toEqual(fuelsConfig);

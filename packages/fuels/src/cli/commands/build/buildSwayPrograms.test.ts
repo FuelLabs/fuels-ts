@@ -8,16 +8,27 @@ import { configureLogging } from '../../utils/logger';
 
 import * as buildSwayProgramsMod from './buildSwayPrograms';
 
-vi.mock('child_process', () => ({
-  __esModule: true,
-  ...vi.requireActual('child_process'),
-}));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('buildSwayPrograms', () => {
   const { onForcExit, onForcError } = buildSwayProgramsMod;
 
-  beforeEach(mockLogger);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    mockLogger();
+  });
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
     const spawnMocks = {
@@ -93,7 +104,7 @@ describe('buildSwayPrograms', () => {
     const config = customConfig(workspaceDir);
     const { spawn, spawnMocks } = mockSpawn();
 
-    vi.spyOn(process.stdout, 'write').mockImplementation(() => {});
+    vi.spyOn(process.stdout, 'write').mockImplementation();
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
 
     await buildSwayProgramsMod.buildSwayProgram(config, config.workspace);
@@ -107,8 +118,8 @@ describe('buildSwayPrograms', () => {
     const config = customConfig(workspaceDir);
     const { spawn, spawnMocks } = mockSpawn();
 
-    vi.spyOn(process.stderr, 'write').mockImplementation(() => {});
-    vi.spyOn(process.stdout, 'write').mockImplementation(() => {});
+    vi.spyOn(process.stderr, 'write').mockImplementation();
+    vi.spyOn(process.stdout, 'write').mockImplementation();
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
 
     await buildSwayProgramsMod.buildSwayProgram(config, config.workspace);

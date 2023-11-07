@@ -9,9 +9,16 @@ import { Commands } from '../types';
 
 import { withConfig } from './withConfig';
 
+/**
+ * @group node
+ */
 describe('withConfig', () => {
-  beforeEach(mockLogger);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    mockLogger();
+  });
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   function mockAll(params?: { shouldErrorOnDeploy?: boolean; shouldErrorOnLoadConfig?: boolean }) {
     const onSuccess = vi.fn();

@@ -4,18 +4,31 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
 
-vi.mock('@fuel-ts/versions/cli', () => ({
-  __esModule: true,
-  ...vi.requireActual('@fuel-ts/versions/cli'),
-}));
+vi.mock('@fuel-ts/versions/cli', async () => {
+  const mod = await vi.importActual('@fuel-ts/versions/cli');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
-vi.mock('prompts', () => ({
-  __esModule: true,
-  ...vi.requireActual('prompts'),
-}));
+vi.mock('prompts', async () => {
+  const mod = await vi.importActual('prompts');
+  return {
+    __esModule: true,
+    // @ts-expect-error spreading module import
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('shouldUseBuiltinFuelCore', () => {
-  beforeEach(vi.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   function mockAll(returns: { getSystemFuelCore: string | null }) {
     const getSystemFuelCore = vi

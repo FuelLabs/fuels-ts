@@ -10,9 +10,16 @@ import {
   runInit,
 } from '../utils/runCommands';
 
+/**
+ * @group node
+ */
 describe('build', () => {
-  beforeEach(resetDiskAndMocks);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   it('should run `build` command', async () => {
     await runInit();

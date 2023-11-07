@@ -8,14 +8,24 @@ import * as loggingMod from './cli/utils/logger';
  * @group node
  */
 describe('cli.js', () => {
-  test('should call `versions` sub-program', () => {
-    const { configureCli, run, onPreAction } = cliMod;
+  const { configureCli, run, onPreAction } = cliMod;
 
-    beforeEach(() => {
-      vi.resetAllMocks();
-    });
-    afterAll(() => {
-      vi.resetAllMocks();
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('shoud configure cli', () => {
+    const program = configureCli();
+
+    // top level props and opts
+    expect(program.name()).toEqual('fuels');
+    expect(program.opts()).toEqual({
+      debug: false,
+      silent: false,
     });
 
     it('shoud configure cli', () => {
@@ -46,8 +56,8 @@ describe('cli.js', () => {
       expect(forc).toBeTruthy();
       expect(core).toBeTruthy();
 
-      // checking default options
-      const path = process.cwd();
+  it('preAction should configure logging', () => {
+    const spy = vi.spyOn(loggingMod, 'configureLogging');
 
       expect(init?.opts()).toEqual({ path });
       expect(dev?.opts()).toEqual({ path });
@@ -57,8 +67,10 @@ describe('cli.js', () => {
       expect(core?.opts()).toEqual({});
     });
 
-    it('preAction should configure logging', () => {
-      const spy = vi.spyOn(loggingMod, 'configureLogging');
+  it.only('should run cli program', async () => {
+    const command = new Command();
+    const parseAsync = vi.spyOn(command, 'parseAsync');
+    const $configureCli = vi.spyOn(cliMod, 'configureCli').mockReturnValue(command);
 
       const command = new Command();
       command.option('-D, --debug', 'Enables verbose logging', false);

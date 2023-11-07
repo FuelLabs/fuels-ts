@@ -16,8 +16,13 @@ import type { FuelsConfig } from '../types';
 
 import { loadConfig } from './loadConfig';
 
+/**
+ * @group node
+ */
 describe('loadConfig', () => {
-  beforeEach(resetDiskAndMocks);
+  beforeEach(() => {
+    resetDiskAndMocks();
+  });
 
   test('should throw if config path is not found', async () => {
     const cwd = '/non/existent/path';
