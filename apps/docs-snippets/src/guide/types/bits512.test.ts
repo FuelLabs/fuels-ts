@@ -1,20 +1,20 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { Wallet } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-  });
-
   it('should successfully call contract function and validate b512', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region bits512-1
     // #context pub struct B512 {
     // #context   bytes: [b256; 2],

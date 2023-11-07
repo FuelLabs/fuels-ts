@@ -1,22 +1,20 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN, getRandomB256 } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(
-      SnippetProjectEnum.ECHO_EMPLOYEE_DATA_VECTOR
-    );
-  });
-
   it('should successfully execute and validate contract call', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-employee-data-vector')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region vector-1
     // Sway Vec<u8>
     // #context const basicU8Vector = [1, 2, 3];

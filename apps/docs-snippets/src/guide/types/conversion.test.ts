@@ -1,15 +1,5 @@
-import type { Bytes, WalletLocked } from 'fuels';
-import {
-  Wallet,
-  FUEL_NETWORK_URL,
-  Provider,
-  Contract,
-  Address,
-  ZeroBytes32,
-  arrayify,
-  hexlify,
-  randomBytes,
-} from 'fuels';
+import type { Bytes, WalletLocked, Provider } from 'fuels';
+import { Wallet, Contract, Address, ZeroBytes32, arrayify, hexlify, randomBytes } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 
@@ -18,11 +8,6 @@ import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../project
  */
 describe(__filename, () => {
   const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
-  let provider: Provider;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
 
   it('should successfully convert between b256 and bytes32', () => {
     // #region conversion-1
@@ -41,6 +26,7 @@ describe(__filename, () => {
   });
 
   it('should successfully validate contract id equality', () => {
+    const provider = undefined as unknown as Provider;
     // #region conversion-2
     // #context import { FUEL_NETWORK_URL } from 'fuels';
 
@@ -53,6 +39,8 @@ describe(__filename, () => {
   });
 
   it('should successfully validate a wallet address equality', () => {
+    const provider = undefined as unknown as Provider;
+
     // #region conversion-3
     const address = Address.fromRandom();
 

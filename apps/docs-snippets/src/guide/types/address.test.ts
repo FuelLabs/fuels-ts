@@ -1,4 +1,5 @@
-import { Address, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import type { Provider } from 'fuels';
+import { Address, Wallet } from 'fuels';
 
 /**
  * @group node
@@ -15,9 +16,11 @@ describe(__filename, () => {
     // #endregion address-2
   });
 
-  it('should successfully generate new address instance from public key', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  it('should successfully generate new address instance from public key', () => {
+    const provider = undefined as unknown as Provider;
     // #region address-3
+    // #context const provider = await Provider.create(FUEL_NETWORK_URL);
+
     const wallet = Wallet.generate({
       provider,
     });

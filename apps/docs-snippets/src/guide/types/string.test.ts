@@ -1,17 +1,15 @@
-import type { BN, Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let gasPrice: BN;
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should validate string', () => {
@@ -28,6 +26,13 @@ describe(__filename, () => {
   });
 
   it('should successfully execute and validate echoed 8 contract call', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region string-2
     const { value } = await contract.functions.echo_str_8('fuel-sdk').simulate();
 
@@ -36,6 +41,15 @@ describe(__filename, () => {
   });
 
   it('will throw given an input string that is too long or too short', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
+
     // #region string-3
     const longString = 'fuel-sdk-WILL-THROW-ERROR';
 

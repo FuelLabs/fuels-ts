@@ -1,19 +1,24 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should successfully echo a simple enum in a contract call', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-enum')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
     // #region enum-3
     const enumVariant = 'Completed';
 
@@ -24,6 +29,12 @@ describe(__filename, () => {
   });
 
   it('should successfully echo a enum in a contract call (UserError Enum)', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-enum')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
     // #region enum-6
     const userErroVar = 'InsufficientPermissions';
 
@@ -36,6 +47,12 @@ describe(__filename, () => {
   });
 
   it('should successfully echo a enum in a contract call (StateError Enum)', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-enum')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
     // #region enum-7
     const stateErrorVar = 'Completed';
 

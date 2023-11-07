@@ -1,19 +1,25 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe('StdString', () => {
-  let contract: Contract;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_STD_STRING);
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should pass a std string to a contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-std-string')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region std-string-1
 
     const stdString = 'Hello World';
@@ -25,6 +31,13 @@ describe('StdString', () => {
   });
 
   it('should retrieve a std string from a contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-std-string')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region std-string-2
 
     const stdString = 'Hello Fuel';

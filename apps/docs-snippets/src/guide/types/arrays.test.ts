@@ -1,19 +1,17 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
+    return () => TestNodeLauncher.killCachedNodes();
   });
-
   it('should successfully demonstrate typed arrays examples', () => {
     // #region arrays-1
     const numberArray: number[] = [1, 2, 3, 4, 5]; // in Sway: [u8; 5]
@@ -26,7 +24,15 @@ describe(__filename, () => {
   });
 
   it('should successfully execute echo u64 array contract call', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-u64-array')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region arrays-2
+
     const u64Array = [10000000, 20000000];
 
     const { value } = await contract.functions.echo_u64_array(u64Array).simulate();
@@ -38,6 +44,13 @@ describe(__filename, () => {
   });
 
   it('should throw an error for array length mismatch', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-u64-array')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     let error: unknown;
     try {
       // #region arrays-3
@@ -52,6 +65,13 @@ describe(__filename, () => {
   });
 
   it('should throw an error for array type mismatch', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-u64-array')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     let error: unknown;
     try {
       // #region arrays-4

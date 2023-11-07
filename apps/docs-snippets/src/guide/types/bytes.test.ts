@@ -1,19 +1,25 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe('Bytes', () => {
-  let contract: Contract;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_BYTES);
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should pass bytes to a contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-bytes')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region bytes-1
 
     const bytes = [40, 41, 42];
@@ -25,6 +31,13 @@ describe('Bytes', () => {
   });
 
   it('should retrieve bytes from a contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-bytes')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region bytes-2
 
     const bytes = [8, 42, 77];

@@ -1,19 +1,25 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('sum-option-u8')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region options-1
     // Sway Option<u8>
     // #region options-3
@@ -29,6 +35,13 @@ describe(__filename, () => {
   });
 
   it('should successfully execute contract call to sum 2 option inputs (1 INPUT)', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('sum-option-u8')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region options-4
     const input: number | undefined = 5;
 

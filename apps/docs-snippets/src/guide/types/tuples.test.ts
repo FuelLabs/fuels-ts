@@ -1,20 +1,20 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-  });
-
   it('should successfully echo tuple in a contract call', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region tuples-1
     // Sway let tuple2: (u8, bool, u64) = (100, false, 10000);
     // #region tuples-3

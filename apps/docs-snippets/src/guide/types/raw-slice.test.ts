@@ -1,19 +1,25 @@
-import type { Contract, BN } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import type { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe('RawSlice', () => {
-  let contract: Contract;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_RAW_SLICE);
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should pass a raw slice to a contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-raw-slice')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
     // #region raw-slice-1
 
     const rawSlice = [40, 41, 42];
@@ -25,6 +31,12 @@ describe('RawSlice', () => {
   });
 
   it('should retrieve a raw slice from a contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-raw-slice')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
     // #region raw-slice-2
 
     const rawSlice = [8, 42, 77];
