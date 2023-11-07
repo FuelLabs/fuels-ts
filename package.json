@@ -14,7 +14,7 @@
     "build": "turbo run build --filter=!docs",
     "build:packages": "turbo run build --filter=!docs",
     "ci:test": "./scripts/tests-ci.sh",
-    "pretest": "cd packages/fuel-gauge && pnpm pretest && cd -",
+    "pretest": "turbo run pretest",
     "test": "vitest --run --coverage --config vite.node.config.ts",
     "test:coverage-gen": "tsx ./scripts/tests-coverage-gen.ts",
     "test:coverage-diff": "tsx ./scripts/tests-coverage-diff.ts",
