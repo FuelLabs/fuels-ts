@@ -1,12 +1,12 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { FUEL_NETWORK_URL, Provider } from 'fuels';
+import type { Provider } from 'fuels';
 
 /**
  * @group node
  */
 describe(__filename, () => {
   it('should', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const provider = undefined as unknown as Provider;
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     // #region locking-and-unlocking-wallet-manager-1
     const walletManager = new WalletManager();

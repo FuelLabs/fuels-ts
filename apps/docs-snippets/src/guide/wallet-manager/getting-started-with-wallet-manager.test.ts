@@ -1,12 +1,14 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import type { Provider } from 'fuels';
+import { Wallet } from 'fuels';
 
 /**
  * @group node
  */
 describe(__filename, () => {
   it('instantiates the WalletManager', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const provider = undefined as unknown as Provider;
+
     // #region getting-started-with-wallet-manager-1
     const walletManager = new WalletManager();
     // #endregion getting-started-with-wallet-manager-1
