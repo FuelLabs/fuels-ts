@@ -1,43 +1,29 @@
-import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
-import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
+import { TestNodeLauncher, AssetId } from '@fuel-ts/test-utils';
+import { BN, ScriptTransactionRequest } from 'fuels';
+import type { CoinQuantityLike } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { defaultTxParams, getTestWallet } from '../../utils';
+import { defaultTxParams, getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let contract: Contract;
-
-  const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
-
   const { binHexlified: scriptBin, abiContents } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SCRIPT_TRANSFER_TO_CONTRACT
   );
 
-  const { abiContents: contractAbi, binHexlified: contractBin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_VALUES
-  );
-
-  beforeAll(async () => {
-    const seedQuantities: CoinQuantityLike[] = [
-      [1000, assetIdA],
-      [500, assetIdB],
-      [300_000, BaseAssetId],
-    ];
-
-    wallet = await getTestWallet(seedQuantities);
-    const factory = new ContractFactory(contractBin, contractAbi, wallet);
-    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-    contract = await factory.deployContract({ gasPrice });
-  });
-
   it('transfer multiple assets to a contract', async () => {
-    const contractInitialBalanceAssetA = await contract.getBalance(assetIdA);
-    const contractInitialBalanceAssetB = await contract.getBalance(assetIdB);
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
+
+    const contractInitialBalanceAssetA = await contract.getBalance(AssetId.A.value);
+    const contractInitialBalanceAssetB = await contract.getBalance(AssetId.B.value);
 
     expect(contractInitialBalanceAssetA).toStrictEqual(new BN(0));
     expect(contractInitialBalanceAssetB).toStrictEqual(new BN(0));
@@ -56,11 +42,17 @@ describe(__filename, () => {
     });
 
     // 2. Instantiate the script main arguments
-    const scriptArguments = [contract.id.toB256(), assetIdA, new BN(1000), assetIdB, new BN(500)];
+    const scriptArguments = [
+      contract.id.toB256(),
+      AssetId.A.value,
+      new BN(1000),
+      AssetId.B.value,
+      new BN(500),
+    ];
 
     // 3. Get the resources for inputs and outpoints
     const fee = request.calculateFee(gasPriceFactor);
-    const quantities: CoinQuantityLike[] = [[1000, assetIdA], [500, assetIdB], fee];
+    const quantities: CoinQuantityLike[] = [[1000, AssetId.A.value], [500, AssetId.B.value], fee];
     const resources = await wallet.getResourcesToSpend(quantities);
 
     // 4. Populate the script data and inputs/outputs
@@ -74,8 +66,8 @@ describe(__filename, () => {
     await tx.waitForResult();
 
     // #endregion custom-transactions-2
-    const contractFinalBalanceAssetA = await contract.getBalance(assetIdA);
-    const contractFinalBalanceAssetB = await contract.getBalance(assetIdB);
+    const contractFinalBalanceAssetA = await contract.getBalance(AssetId.A.value);
+    const contractFinalBalanceAssetB = await contract.getBalance(AssetId.B.value);
 
     expect(contractFinalBalanceAssetA).toStrictEqual(new BN(1000));
     expect(contractFinalBalanceAssetB).toStrictEqual(new BN(500));
