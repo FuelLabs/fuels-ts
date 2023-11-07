@@ -11,4 +11,5 @@ The `Bytes` type can be integrated with your contract calls. Consider the follow
 <<< @/../../docs-snippets/projects/echo-bytes/src/main.sw#bytes-1{ts:line-numbers}
 
 A `Bytes` array can be created using a native JavaScript array of numbers or Big Numbers, and sent to a Sway contract:
+
 <<< @/../../docs-snippets/src/guide/types/bytes.test.ts#bytes-2{ts:line-numbers}
