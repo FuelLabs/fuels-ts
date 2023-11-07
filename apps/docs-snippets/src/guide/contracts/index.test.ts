@@ -1,6 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
-import { SnippetProjectEnum } from '../../../projects';
 import { getProgramDir } from '../../utils';
 
 /**
@@ -9,7 +8,7 @@ import { getProgramDir } from '../../utils';
 describe(__filename, () => {
   it('should successfully call contract and echo values', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [getProgramDir(SnippetProjectEnum.ECHO_VALUES)],
+      deployContracts: [getProgramDir('echo-values')],
     });
 
     const {

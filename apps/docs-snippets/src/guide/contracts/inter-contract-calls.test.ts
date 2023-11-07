@@ -1,7 +1,6 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
 import { getProgramDir } from '../../utils';
 
 /**
@@ -10,10 +9,7 @@ import { getProgramDir } from '../../utils';
 describe(__filename, () => {
   it('should successfully make call to another contract', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [
-        getProgramDir(SnippetProjectEnum.SIMPLE_TOKEN),
-        getProgramDir(SnippetProjectEnum.TOKEN_DEPOSITOR),
-      ],
+      deployContracts: [getProgramDir('simple-token'), getProgramDir('token-depositor')],
     });
     const {
       contracts: [simpleToken, tokenDepositor],

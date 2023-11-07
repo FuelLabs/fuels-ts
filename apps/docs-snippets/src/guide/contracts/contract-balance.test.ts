@@ -1,10 +1,7 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { Wallet, BN, BaseAssetId } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
 import { getProgramDir } from '../../utils';
-
-const projectDir = getProgramDir(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
 
 /**
  * @group node
@@ -12,7 +9,7 @@ const projectDir = getProgramDir(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
 describe(__filename, () => {
   it('should successfully get a contract balance', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [projectDir],
+      deployContracts: [getProgramDir('transfer-to-address')],
     });
 
     const {

@@ -1,10 +1,7 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { WalletUnlocked } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
 import { getProgramDir } from '../../utils';
-
-const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT);
 
 /**
  * @group node
@@ -12,7 +9,7 @@ const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT
 describe(__filename, () => {
   it('should successfully update contract instance wallet', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [returnContextContractDir],
+      deployContracts: [getProgramDir('return-context')],
     });
 
     const {

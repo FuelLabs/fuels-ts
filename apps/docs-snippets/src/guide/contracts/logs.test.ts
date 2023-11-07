@@ -1,9 +1,7 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject, getProgramDir } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
@@ -11,7 +9,7 @@ import { createAndDeployContractFromProject, getProgramDir } from '../../utils';
 describe(__filename, () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     await using launched = await TestNodeLauncher.launch({
-      deployContracts: [getProgramDir(SnippetProjectEnum.LOG_VALUES)],
+      deployContracts: [getProgramDir('log-values')],
     });
     const {
       contracts: [contract],

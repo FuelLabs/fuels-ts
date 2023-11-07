@@ -1,10 +1,9 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN, BaseAssetId } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
 import { getProgramDir } from '../../utils';
 
-const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT);
+const returnContextContractDir = getProgramDir('return-context');
 
 /**
  * @group node

@@ -82,5 +82,5 @@ export const defaultTxParams = {
   gasPrice: 1,
 };
 
-export const getProgramDir = (contractName: string) =>
+export const getProgramDir = (contractName: `${SnippetProjectEnum}`) =>
   join(__dirname, `../projects/${contractName}`);
