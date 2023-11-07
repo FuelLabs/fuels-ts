@@ -70,11 +70,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
   ): Promise<PredicateResource[]> {
-    const resources = await this.provider.getResourcesToSpend(
-      this.address,
-      quantities,
-      excludedIds
-    );
+    const resources = await super.getResourcesToSpend(quantities, excludedIds);
 
     return resources.map((r) => ({
       ...r,
