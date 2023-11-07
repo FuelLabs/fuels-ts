@@ -1,9 +1,8 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import type { Contract, Provider } from 'fuels';
 import { BN, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject, getProgramDir } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT);
 
@@ -11,13 +10,6 @@ const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT
  * @group node
  */
 describe(__filename, () => {
-  // let contract: Contract;
-  // let provider: Provider;
-  // beforeAll(async () => {
-  //   contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
-  //   provider = contract.provider;
-  // });
-
   it('should successfully execute contract call with forwarded amount', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [returnContextContractDir],
