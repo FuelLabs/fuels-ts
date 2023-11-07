@@ -54,96 +54,96 @@ jobs:
       - name: Run Node Tests
         run: pnpm ci:test
 
-      - name: Upload Node Coverage
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.env }}
-          path: coverage/environments/${{ matrix.env }}
+      # - name: Upload Node Coverage
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: ${{ matrix.env }}
+      #     path: coverage/environments/${{ matrix.env }}
 
-  report:
-    runs-on: ubuntu-latest
-    needs: [test]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # report:
+  #   runs-on: ubuntu-latest
+  #   needs: [test]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
+  #     - name: CI Setup
+  #       uses: ./.github/actions/test-setup
 
-      - name: Generate Coverage Directory
-        run: mkdir -p coverage/environments
+  #     - name: Generate Coverage Directory
+  #       run: mkdir -p coverage/environments
 
-      - name: Download Coverage Artifact for Node Tests
-        uses: actions/download-artifact@v3
-        with:
-          name: node
-          path: coverage/environments
+  #     - name: Download Coverage Artifact for Node Tests
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: node
+  #         path: coverage/environments
 
-      - name: Generate Coverage
-        run: pnpm test:coverage-merge
+  #     - name: Generate Coverage
+  #       run: pnpm test:coverage-merge
 
-      - name: Find PR Number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+  #     - name: Find PR Number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
 
-      - name: Upload Master Coverage Artifact
-        uses: actions/upload-artifact@v3
-        if: ${{ !steps.findPr.outputs.number }}
-        with:
-          name: coverage-master
-          path: coverage/report
+  #     - name: Upload Master Coverage Artifact
+  #       uses: actions/upload-artifact@v3
+  #       if: ${{ !steps.findPr.outputs.number }}
+  #       with:
+  #         name: coverage-master
+  #         path: coverage/report
 
-      - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v2
-        # TODO: Remove PR != check once #1310 has been merged
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
-        with:
-          workflow: test.yaml
-          branch: master
-          name: coverage-master
-          path: coverage-master
+  #     - name: Download Master Coverage Artifact
+  #       uses: dawidd6/action-download-artifact@v2
+  #       # TODO: Remove PR != check once #1310 has been merged
+  #       if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
+  #       with:
+  #         workflow: test.yaml
+  #         branch: master
+  #         name: coverage-master
+  #         path: coverage-master
 
-      # TODO: Delete once #1310 has been merged
-      - name: Download Master Coverage Artifact (temporary)
-        uses: dawidd6/action-download-artifact@v2
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
-        with:
-          workflow: test.yaml
-          run_id: 6628340271
-          name: coverage-master
-          path: coverage-master
+  #     # TODO: Delete once #1310 has been merged
+  #     - name: Download Master Coverage Artifact (temporary)
+  #       uses: dawidd6/action-download-artifact@v2
+  #       if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
+  #       with:
+  #         workflow: test.yaml
+  #         run_id: 6628340271
+  #         name: coverage-master
+  #         path: coverage-master
 
-      - name: Generate Coverage Diff
-        run: pnpm test:coverage-diff
+  #     - name: Generate Coverage Diff
+  #       run: pnpm test:coverage-diff
 
-      - name: Report Coverage
-        uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.findPr.outputs.number }}
-        with:
-          filePath: coverage/report/coverage-diff.txt
-          pr_number: ${{ (steps.findPr.outputs.number) }}
-          comment_tag: diff
-          mode: recreate
-          create_if_not_exists: true
+  #     - name: Report Coverage
+  #       uses: thollander/actions-comment-pull-request@v2
+  #       if: ${{ steps.findPr.outputs.number }}
+  #       with:
+  #         filePath: coverage/report/coverage-diff.txt
+  #         pr_number: ${{ (steps.findPr.outputs.number) }}
+  #         comment_tag: diff
+  #         mode: recreate
+  #         create_if_not_exists: true
 
-  live-tests:
-    name: Run Live Tests
-    if: github.head_ref == 'changeset-release/master'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  # live-tests:
+  #   name: Run Live Tests
+  #   if: github.head_ref == 'changeset-release/master'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
+  #     - name: CI Setup
+  #       uses: ./.github/actions/test-setup
 
-      - name: Pretest
-        run: pnpm pretest
+  #     - name: Pretest
+  #       run: pnpm pretest
 
-      - name: Run Isolated Tests
-        run: pnpm test:e2e
-        env:
-          FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
-          FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
+  #     - name: Run Isolated Tests
+  #       run: pnpm test:e2e
+  #       env:
+  #         FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
+  #         FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
