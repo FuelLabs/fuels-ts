@@ -74,6 +74,10 @@ export const launchTestNode = async ({
       '127.0.0.1',
       '--port',
       port,
+      '--poa-instant',
+      'true',
+      '--min-gas-price',
+      '1',
       ...args,
     ]);
 
