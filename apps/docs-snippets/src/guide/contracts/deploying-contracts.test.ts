@@ -1,30 +1,28 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { readFileSync } from 'fs';
-import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
+import { Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let PRIVATE_KEY: string;
-  let projectsPath: string;
-  let contractName: string;
-
-  beforeAll(async () => {
-    const wallet = await getTestWallet();
-    PRIVATE_KEY = wallet.privateKey;
-    projectsPath = join(__dirname, '../../../projects');
-    contractName = SnippetProjectEnum.ECHO_VALUES;
-  });
+  const projectsPath = join(__dirname, '../../../projects');
+  const contractName = SnippetProjectEnum.ECHO_VALUES;
 
   it('should successfully deploy and execute contract function', async () => {
-    // #region contract-setup-1
-    // #context const PRIVATE_KEY = "..."
+    await using launched = await TestNodeLauncher.launch();
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const {
+      provider,
+      wallets: [{ privateKey: PRIVATE_KEY }],
+    } = launched;
+
+    // #region contract-setup-1
+    // #context const provider = await Provider.create(...)
+    // #context const PRIVATE_KEY = "..."
 
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     // #endregion contract-setup-1
