@@ -1,19 +1,21 @@
-import type { Contract } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-  });
-
   it('should successfully call contract and echo values', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir(SnippetProjectEnum.ECHO_VALUES)],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region echo-values
     const u8Value = 10;
     const str8Value = 'fuel-sdk';
