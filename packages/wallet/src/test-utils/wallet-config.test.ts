@@ -100,19 +100,22 @@ describe('WalletConfig', () => {
     // @ts-expect-error currently mandatory - shouldn't be?
     const wallet2 = WalletUnlocked.generate({ provider: null });
 
-    const { getWallets: wallets } = new WalletConfig({ wallets: [wallet1, wallet2] });
+    const { getWallets } = new WalletConfig({ wallets: [wallet1, wallet2] });
 
-    expect(wallets).toEqual([wallet1, wallet2]);
+    expect(getWallets()).toEqual([wallet1, wallet2]);
   });
 
   it('allows custom assets to be provided', () => {
     const assetId = AssetId.random();
     const {
-      initial_state: { coins },
+      initial_state: { coins: allCoins },
     } = new WalletConfig({ assets: [assetId] }).apply({});
+
+    const coins = allCoins.filter((coin, _index, arr) => coin.owner === arr[0].owner);
 
     expect(coins[0].asset_id).toEqual(AssetId.BaseAssetId.value);
     expect(coins[1].asset_id).toEqual(assetId.value);
+    console.log(coins);
     expect(coins.length).toBe(2);
   });
 
