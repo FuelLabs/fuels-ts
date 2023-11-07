@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.64.1",
+  "version": "0.65.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -48,6 +48,9 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/forc": "workspace:*",
+    "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
@@ -66,7 +69,24 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
+    "bundle-require": "^4.0.1",
+    "chalk": "4",
+    "chokidar": "^3.5.3",
     "commander": "^9.4.1",
-    "ethers": "^6.7.1"
+    "esbuild": "^0.19.3",
+    "ethers": "^6.7.1",
+    "glob": "^10.2.6",
+    "handlebars": "^4.7.7",
+    "joycon": "^3.1.1",
+    "lodash.camelcase": "^4.3.0",
+    "portfinder": "^1.0.32",
+    "rimraf": "^3.0.2",
+    "toml": "^3.0.0",
+    "tree-kill": "^1.2.2",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/lodash.camelcase": "^4.3.7",
+    "@types/rimraf": "^3.0.2"
   }
 }

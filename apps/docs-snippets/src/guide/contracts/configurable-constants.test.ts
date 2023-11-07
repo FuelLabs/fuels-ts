@@ -1,8 +1,7 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
-import type { BN, WalletUnlocked } from 'fuels';
+import type { Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -23,10 +22,10 @@ describe(__filename, () => {
     },
   };
 
-  let gasPrice: BN;
+  let provider: Provider;
   beforeAll(async () => {
     wallet = await getTestWallet();
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
+    provider = wallet.provider;
   });
 
   it('should successfully set new values for all configurable constants', async () => {
@@ -44,9 +43,12 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
     const contract = await factory.deployContract({
       configurableConstants,
-      gasPrice,
+      gasPrice: minGasPrice,
+      gasLimit: maxGasPerTx,
     });
     // #endregion configurable-constants-2
 
@@ -66,9 +68,12 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
     const contract = await factory.deployContract({
       configurableConstants,
-      gasPrice,
+      gasPrice: minGasPrice,
+      gasLimit: maxGasPerTx,
     });
     // #endregion configurable-constants-3
 
@@ -90,8 +95,14 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
     await expect(
-      factory.deployContract({ configurableConstants, gasPrice })
+      factory.deployContract({
+        configurableConstants,
+        gasPrice: minGasPrice,
+        gasLimit: maxGasPerTx,
+      })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4
   });

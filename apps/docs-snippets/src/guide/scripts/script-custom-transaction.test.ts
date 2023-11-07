@@ -1,14 +1,7 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
-import type { CoinQuantityLike, Contract } from 'fuels';
-import {
-  BN,
-  ContractFactory,
-  BaseAssetId,
-  ScriptTransactionRequest,
-  type WalletUnlocked,
-} from 'fuels';
+import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
+import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
-import { getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
 describe(__filename, () => {

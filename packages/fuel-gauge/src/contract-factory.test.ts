@@ -143,6 +143,14 @@ describe('Contract Factory', () => {
     );
   });
 
+  it('should ensure transaction request is created with gas limit sets to 0', async () => {
+    const factory = await createContractFactory();
+
+    const { transactionRequest } = factory.createTransactionRequest();
+
+    expect(transactionRequest.gasLimit.toNumber()).toBe(0);
+  });
+
   it('Creates a contract with initial storage (dynamic key)', async () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';

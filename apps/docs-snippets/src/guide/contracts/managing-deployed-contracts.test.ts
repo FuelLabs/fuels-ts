@@ -15,7 +15,6 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     wallet = await getTestWallet();
-
     const factory = new ContractFactory(bin, abi, wallet);
     const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
     contract = await factory.deployContract({ gasPrice });

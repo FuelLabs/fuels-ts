@@ -1,18 +1,16 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { Wallet, BN, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
-  let gasPrice: BN;
   let provider: Provider;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS);
-    ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
   it('should successfully get a contract balance', async () => {
@@ -26,12 +24,17 @@ describe(__filename, () => {
       provider,
     });
 
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
     await contract.functions
       .transfer(amountToTransfer, BaseAssetId, recipient.address.toB256())
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
-      .txParams({ gasPrice })
+      .txParams({
+        gasPrice: minGasPrice,
+        gasLimit: maxGasPerTx,
+      })
       .call();
 
     const contractBalance = await contract.getBalance(BaseAssetId);
