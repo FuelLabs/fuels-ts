@@ -1,5 +1,6 @@
-import { execSync } from 'child_process';
+import { error } from 'console';
 import { readFileSync } from 'fs';
+import { globSync } from 'glob';
 
 interface PackageJson {
   private: boolean;
@@ -12,57 +13,45 @@ interface PackageJson {
 }
 
 const {
-  author: rootAuthor,
-  engines: { node: rootNodeVersion, pnpm: rootPnpmVersion },
-  packageManager: rootPackageManager,
+  author,
+  engines: { node, pnpm },
+  packageManager,
 } = JSON.parse(readFileSync('package.json', 'utf-8')) as PackageJson;
 
-if (rootAuthor !== 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)')
-  throw new Error(
-    "The package.json's author field should be 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)' "
-  );
+const expectedAuthor = 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)';
 
-const faultyPackageJsons = execSync('find packages/ apps/ -name package.json')
-  .toString()
-  .split('\n')
-  .filter(
-    (path) =>
-      path !== '' &&
-      !path.includes('/forc/') &&
-      !path.includes('/fuel-core/') &&
-      !path.match(/\/\..*\//) // internal folders like .next/package.json, .vitepress/package.json
-  )
-  .map(
-    (path) =>
-      ({ ...JSON.parse(readFileSync(path.trim(), 'utf-8')), path }) as PackageJson & {
-        path: string;
-      }
-  )
-  .filter((packageJson) => !packageJson.private)
-  .filter(
-    ({ engines: { node, pnpm }, packageManager, author }) =>
-      node !== rootNodeVersion ||
-      pnpm !== rootPnpmVersion ||
-      packageManager !== rootPackageManager ||
-      author !== rootAuthor
-  )
-  .map(({ path, engines: { node, pnpm }, packageManager, author }) => {
-    let message = `\n${path}`;
-    if (node !== rootNodeVersion)
-      message += `\n\tengines.node: ${node} should be ${rootNodeVersion}`;
-    if (pnpm !== rootPnpmVersion)
-      message += `\n\tengines.pnpm: ${pnpm} should be ${rootPnpmVersion}`;
-    if (packageManager !== rootPackageManager)
-      message += `\n\tpackageManager: ${packageManager} should be ${rootPackageManager}`;
-    if (author !== rootAuthor) message += `\n\tauthor: "${author}" should be "${rootAuthor}"`;
+if (author !== expectedAuthor) {
+  error(`The package.json's author field should be '${expectedAuthor}'`);
+  process.exit(1);
+}
 
-    return message;
+const faultyPackageJsons = globSync(`{packages,apps}/*/package.json`)
+  .filter((path) => !/\/forc|fuel-core\//.test(path))
+  .filter((path) => {
+    const json = JSON.parse(readFileSync(path, 'utf-8')) as PackageJson;
+    return json.private
+      ? false
+      : json.author !== author ||
+          json.engines.node !== node ||
+          json.packageManager !== packageManager ||
+          json.engines.pnpm !== pnpm;
   });
 
 if (faultyPackageJsons.length) {
-  throw new Error(
-    `The package.json files listed below differ from the root package.json:\n ${faultyPackageJsons.join(
-      '\n'
-    )}`
+  const expectedConfigs = {
+    author,
+    engines: { node, pnpm },
+    packageManager,
+  };
+
+  error(
+    [
+      `Expected configs:`,
+      JSON.stringify(expectedConfigs, null, 2),
+      `\nPlease review and correct these files:`,
+      faultyPackageJsons.map((f) => ` - ${f}`).join('\n'),
+    ].join('\n')
   );
+
+  process.exit(1);
 }
