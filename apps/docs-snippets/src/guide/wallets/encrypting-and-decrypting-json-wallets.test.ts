@@ -1,11 +1,13 @@
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import type { Provider } from 'fuels';
+import { Wallet } from 'fuels';
 
 /**
  * @group node
  */
 describe(__filename, () => {
   it('should successfully encrypt wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const provider = undefined as unknown as Provider;
     // #region encrypting-and-decrypting-json-wallets-1
     // #context import fs from 'fs';
     // #context import { Wallet } from 'fuels';
@@ -25,7 +27,9 @@ describe(__filename, () => {
   });
 
   it('should successfully decrypt a wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using launched = await TestNodeLauncher.launch();
+    const { provider } = launched;
+
     const jsonWallet = await Wallet.generate({
       provider,
     }).encrypt('my-password');

@@ -1,27 +1,28 @@
-import type { Contract, Provider, TxParams, WalletUnlocked } from 'fuels';
-import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import type { TxParams } from 'fuels';
+import { Address, BN, BaseAssetId, Wallet } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let senderWallet: WalletUnlocked;
-  let deployedContract: Contract;
-  let provider: Provider;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    senderWallet = await getTestWallet();
-    provider = senderWallet.provider;
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
-    const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-    const { minGasPrice } = senderWallet.provider.getGasConfig();
-    deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should successfully transfer asset to another wallet', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('counter')],
+    });
+    const {
+      wallets: [senderWallet],
+      provider,
+    } = launched;
+
     // #region transferring-assets-1
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
@@ -57,6 +58,15 @@ describe(__filename, () => {
   });
 
   it('should successfully transfer asset to a deployed contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('counter')],
+    });
+    const {
+      wallets: [senderWallet],
+      contracts: [deployedContract],
+      provider,
+    } = launched;
+
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-2
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
