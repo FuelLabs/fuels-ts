@@ -1,40 +1,26 @@
-import type { Contract, Provider, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { BN } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let simpleToken: Contract;
-  let tokenDepositor: Contract;
-  let provider: Provider;
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    provider = wallet.provider;
-    const { minGasPrice } = provider.getGasConfig();
-
-    const tokenArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.TOKEN_DEPOSITOR);
-
-    simpleToken = await new ContractFactory(
-      tokenArtifacts.binHexlified,
-      tokenArtifacts.abiContents,
-      wallet
-    ).deployContract({ gasPrice: minGasPrice });
-
-    tokenDepositor = await new ContractFactory(
-      depositorArtifacts.binHexlified,
-      depositorArtifacts.abiContents,
-      wallet
-    ).deployContract({ gasPrice: minGasPrice });
-  });
-
   it('should successfully make call to another contract', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [
+        getProgramDir(SnippetProjectEnum.SIMPLE_TOKEN),
+        getProgramDir(SnippetProjectEnum.TOKEN_DEPOSITOR),
+      ],
+    });
+    const {
+      contracts: [simpleToken, tokenDepositor],
+      wallets: [wallet],
+      provider,
+    } = launched;
+
     // #region inter-contract-calls-3
     const amountToDeposit = 70;
     const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
