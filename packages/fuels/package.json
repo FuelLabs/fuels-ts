@@ -62,7 +62,6 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

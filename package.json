@@ -22,6 +22,7 @@
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
+    "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
     "prettier:check": "prettier --check packages",
     "prettier:format": "prettier --write packages",
     "changeset:publish": "changeset publish --no-git-tag",
