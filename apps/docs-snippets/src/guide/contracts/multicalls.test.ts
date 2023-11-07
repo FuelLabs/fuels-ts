@@ -1,52 +1,21 @@
-import type { Contract, Provider } from 'fuels';
-import { BaseAssetId, BN, ContractFactory } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { BaseAssetId, BN } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let echoContract: Contract;
-  let counterContract: Contract;
-  let contextContract: Contract;
-  let provider: Provider;
-
-  beforeAll(async () => {
-    const wallet = await getTestWallet();
-    provider = wallet.provider;
-    const { minGasPrice: gasPrice } = provider.getGasConfig();
-
-    const counterArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
-    const echoArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
-    const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
-
-    const factory1 = new ContractFactory(
-      echoArtifacts.binHexlified,
-      echoArtifacts.abiContents,
-      wallet
-    );
-    const factory2 = new ContractFactory(
-      counterArtifacts.binHexlified,
-      counterArtifacts.abiContents,
-      wallet
-    );
-    const factory3 = new ContractFactory(
-      contextArtifacts.binHexlified,
-      contextArtifacts.abiContents,
-      wallet
-    );
-
-    echoContract = await factory1.deployContract({ gasPrice });
-    counterContract = await factory2.deployContract({
-      storageSlots: counterArtifacts.storageSlots,
-      gasPrice,
-    });
-    contextContract = await factory3.deployContract({ gasPrice });
-  });
-
   it('should successfully submit multiple calls from the same contract function', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('counter')],
+    });
+    const {
+      contracts: [counterContract],
+      provider,
+    } = launched;
+
     // #region multicall-1
     const { minGasPrice } = provider.getGasConfig();
 
@@ -69,6 +38,14 @@ describe(__filename, () => {
   });
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('counter'), getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [counterContract, echoContract],
+      provider,
+    } = launched;
+
     // #region multicall-2
     const { minGasPrice } = provider.getGasConfig();
 
@@ -92,6 +69,14 @@ describe(__filename, () => {
   });
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values'), getProgramDir('return-context')],
+    });
+    const {
+      contracts: [echoContract, contextContract],
+      provider,
+    } = launched;
+
     // #region multicall-3
     const { minGasPrice } = provider.getGasConfig();
 
