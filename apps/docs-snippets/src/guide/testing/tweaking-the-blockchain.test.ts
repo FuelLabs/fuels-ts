@@ -1,10 +1,13 @@
-import { FUEL_NETWORK_URL, Provider, fromTai64ToUnix } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { fromTai64ToUnix } from 'fuels';
 
 /**
  * @group node
  */
 test('produceBlocks with custom timestamp docs snippet', async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
+  await using launched = await TestNodeLauncher.launch();
+  const { provider } = launched;
+
   const latestBlock = await provider.getBlock('latest');
   if (!latestBlock) {
     throw new Error('No latest block');
