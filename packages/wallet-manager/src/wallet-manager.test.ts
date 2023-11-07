@@ -1,9 +1,8 @@
 import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
-import { Provider } from '@fuel-ts/providers';
+import type { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import MemoryStorage from './storages/memory-storage';
 import type { VaultConfig } from './types';
@@ -14,11 +13,7 @@ import WalletManagerSpec from './wallet-manager-spec';
  * @group node
  */
 describe('Wallet Manager', () => {
-  let provider: Provider;
-
-  beforeEach(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
+  const provider: Provider = undefined as unknown as Provider;
 
   const setupWallet = async (config: VaultConfig) => {
     // #region wallet-manager-mnemonic
