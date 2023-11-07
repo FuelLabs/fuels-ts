@@ -1,22 +1,25 @@
-import type { Contract } from 'fuels';
-import { Wallet, BN, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { Wallet, BN, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
+
+const projectDir = getProgramDir(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
-  });
-
   it('should successfully get a contract balance', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [projectDir],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region contract-balance-3
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
