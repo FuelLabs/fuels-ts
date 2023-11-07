@@ -318,7 +318,7 @@ export class BaseInvocationScope<TReturn = any> {
     /**
      * NOTE: Simulating a transaction with UTXOs validation requires the transaction
      * to be signed by the wallet. This is only possible if the wallet is unlocked.
-     * Since there is no garantee at this point that the account instance is an unlocked wallet
+     * Since there is no guarantee at this point that the account instance is an unlocked wallet
      * (BaseWalletUnlocked instance), we need to check it before run the simulation. Perhaps
      * we should think in a redesign of the AbstractAccount class to avoid this problem.
      */

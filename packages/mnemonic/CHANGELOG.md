@@ -194,7 +194,7 @@
 
 - [#814](https://github.com/FuelLabs/fuels-ts/pull/814) [`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - export `mnemonic` package in `fuels` umbrella package
   create/exports const `MNEMONIC_SIZES`
-  avoid throw error in predicate funciton `Mnemonic.isMnemonicValid`
+  avoid throw error in predicate function `Mnemonic.isMnemonicValid`
 
 ### Patch Changes
 
