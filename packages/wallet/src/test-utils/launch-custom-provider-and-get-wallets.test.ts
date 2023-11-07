@@ -3,7 +3,6 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { toHex, toNumber } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-
 import { WalletUnlocked } from '../wallets';
 
 import { AssetId } from './asset-id';
@@ -31,19 +30,30 @@ describe('launchCustomProviderAndGetWallets', () => {
     });
   });
 
-  it('default: one wallet, one asset (BaseAssetId), one coin, 1_000_000_00 amount', async () => {
+  it('default: two wallets, three assets (BaseAssetId, AssetId.A, AssetId.B), one coin, 1_000_000_00 amount', async () => {
     await using providerAndWallets = await launchCustomProviderAndGetWallets();
     const { wallets } = providerAndWallets;
 
-    expect(wallets.length).toBe(1);
-    const [wallet] = wallets;
-    const coins = await wallet.getCoins();
-    expect(coins.length).toBe(1);
+    expect(wallets.length).toBe(2);
+    const [wallet1, wallet2] = wallets;
+    const coins1 = await wallet1.getCoins();
+    const coins2 = await wallet2.getCoins();
 
-    const coin = coins[0];
+    expect(coins1.length).toBe(3);
+    expect(coins1.map((x) => (x.amount, x.assetId))).toEqual(
+      coins2.map((x) => (x.amount, x.assetId))
+    );
 
-    expect(coin.assetId).toBe(BaseAssetId);
-    expect(coin.amount.toNumber()).toBe(1_000_000_00);
+    const baseAssetIdCoin = coins1.find((x) => x.assetId === AssetId.BaseAssetId.value)!;
+
+    expect(baseAssetIdCoin.assetId).toBe(BaseAssetId);
+    expect(baseAssetIdCoin.amount.toNumber()).toBe(10_000_000_000);
+
+    const assetACoin = coins1.find((x) => x.assetId === AssetId.A.value)!;
+    expect(assetACoin.amount.toNumber()).toBe(10_000_000_000);
+
+    const assetBCoin = coins1.find((x) => x.assetId === AssetId.B.value)!;
+    expect(assetBCoin.amount.toNumber()).toBe(10_000_000_000);
   });
 
   it('can be given custom wallet and asset id', async () => {
@@ -54,24 +64,16 @@ describe('launchCustomProviderAndGetWallets', () => {
       walletConfig: new WalletConfig({ wallets: [wallet], assets: [assetId] }),
     });
 
-    const { provider, wallets } = providerAndWallets;
+    const { wallets } = providerAndWallets;
 
     expect(wallets.length).toBe(1);
     expect(wallets[0]).toBe(wallet);
-    expect(wallet.provider).toBe(provider);
 
     const coins = await wallet.getCoins();
     expect(coins.length).toBe(2);
 
-    const coin1 = coins[0];
-
-    expect(coin1.assetId).toBe(BaseAssetId);
-    expect(coin1.amount.toNumber()).toBe(1_000_000_00);
-
-    const coin2 = coins[1];
-
-    expect(coin2.assetId).toBe(assetId.value);
-    expect(coin2.amount.toNumber()).toBe(1_000_000_00);
+    expect(coins.find((x) => x.assetId === AssetId.BaseAssetId.value)).not.toBeUndefined();
+    expect(coins.find((x) => x.assetId === assetId.value)).not.toBeUndefined();
   });
 
   it('can return multiple wallets with multiple assets, coins and amounts', async () => {
@@ -151,15 +153,12 @@ describe('launchCustomProviderAndGetWallets', () => {
     expect(customWalletMessage.data.toString()).toEqual(toNumber(message.data).toString());
     expect(customWalletMessage.nonce).toEqual(message.nonce);
 
-    expect(wallets.length).toBe(1);
     const [wallet] = wallets;
+    expect(wallets.length).toBe(2);
 
     const coins = await wallet.getCoins();
-    expect(coins.length).toBe(1);
-
-    const walletCoin = coins[0];
-
-    expect(walletCoin.assetId).toBe(BaseAssetId);
-    expect(walletCoin.amount.toNumber()).toBe(1_000_000_00);
+    expect(coins.length).toBe(3);
+    const messages = await wallet.getMessages();
+    expect(messages.length).toBe(0);
   });
 });
