@@ -19,7 +19,7 @@ describe('RawSlice', () => {
     const { value } = await contract.functions.raw_slice_comparison(rawSlice).simulate();
 
     expect(value).toBeTruthy();
-    // #endregion raw-slice-1ß
+    // #endregion raw-slice-1
   });
 
   it('should retrieve a raw slice from a contract', async () => {
