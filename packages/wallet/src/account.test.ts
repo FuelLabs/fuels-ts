@@ -1,5 +1,6 @@
-import { Address } from '@fuel-ts/address';
+import { Address, getRandomB256 } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 import type {
   CallResult,
@@ -14,9 +15,12 @@ import type {
 } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
+import { randomBytes } from 'crypto';
 
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
+import { launchCustomProviderAndGetWallets } from './test-utils';
 
 vi.mock('@fuel-ts/providers', async () => {
   const mod = await vi.importActual('@fuel-ts/providers');
@@ -34,7 +38,9 @@ afterEach(() => {
 });
 
 beforeAll(async () => {
-  provider = await Provider.create(FUEL_NETWORK_URL);
+  const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+  provider = p;
+  return () => cleanup();
 });
 
 /**
@@ -99,26 +105,47 @@ describe('Account', () => {
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
+    await using launched = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const publicKey = wallet.publicKey;
+
     // #region Message-getResourcesToSpend
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
+    const account = new Account(publicKey, provider);
     const resourcesToSpend = await account.getResourcesToSpend([
       {
         amount: bn(2),
-        assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+        assetId: BaseAssetId,
       },
     ]);
-    expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
     // #endregion Message-getResourcesToSpend
+
+    expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
   });
 
   it('should get messages just fine', async () => {
-    const account = new Account(
-      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-      provider
-    );
+    const accountAddress = getRandomB256();
+    await using launched = await launchCustomProviderAndGetWallets({
+      nodeOptions: {
+        chainConfig: {
+          initial_state: {
+            messages: [
+              {
+                sender: getRandomB256(),
+                recipient: accountAddress,
+                nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
+                amount: bn('ffff', 'hex').toHex(),
+                data: '',
+                da_height: '0x00',
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    const account = new Account(accountAddress, provider);
     const messages = await account.getMessages();
     expect(messages.length).toEqual(1);
   });
@@ -135,16 +162,10 @@ describe('Account', () => {
       provider
     );
 
-    let result;
-    let error;
+    const { error } = await safeExec(async () => {
+      await account.getMessages();
+    });
 
-    try {
-      result = await account.getMessages();
-    } catch (err) {
-      error = err;
-    }
-
-    expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
       'Wallets containing more than 9999 messages exceed the current supported limit.'
     );

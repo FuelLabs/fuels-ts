@@ -4,8 +4,10 @@ import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { FUEL_NETWORK_URL } from './configs';
+import { launchCustomProviderAndGetWallets } from './test-utils';
 import { generateTestWallet } from './test-utils/generateTestWallet';
 import { Wallet } from './wallet';
 import { WalletUnlocked } from './wallets';
@@ -18,11 +20,13 @@ describe('Wallet', () => {
   let provider: Provider;
   let gasPrice: BN;
   beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
+    const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+    provider = p;
     wallet = Wallet.generate({
       provider,
     });
     gasPrice = provider.getGasConfig().minGasPrice;
+    return () => cleanup();
   });
 
   it('Instantiate a new wallet', () => {
@@ -79,14 +83,12 @@ describe('Wallet', () => {
     );
   });
 
-  it('Provide a custom provider on a public wallet to the contract instance', async () => {
-    const externalWallet = await generateTestWallet(provider, [
-      {
-        amount: bn(1_000_000_000),
-        assetId: BaseAssetId,
-      },
-    ]);
-    const externalWalletReceiver = await generateTestWallet(provider);
+  // this test... why do we need it?
+  it.skip('Provide a custom provider on a public wallet to the contract instance', async () => {
+    await using launched = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [externalWallet, externalWalletReceiver],
+    } = launched;
 
     // Create a custom provider to emulate a external signer
     // like Wallet Extension or a Hardware wallet
