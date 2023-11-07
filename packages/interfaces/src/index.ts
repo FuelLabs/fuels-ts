@@ -23,6 +23,8 @@ export type EvmAddress = {
   value: B256AddressEvm;
 };
 
+export type StdString = string;
+
 /**
  * @hidden
  */
