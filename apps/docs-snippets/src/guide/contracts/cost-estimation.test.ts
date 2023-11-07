@@ -1,22 +1,30 @@
-import type { Contract, Provider } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
+
+const projectDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT);
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
 
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
-    provider = contract.provider;
+    return () => TestNodeLauncher.killCachedNodes();
   });
-
   it('should successfully get transaction cost estimate for a single contract call', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [projectDir],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region cost-estimation-1
     const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
 
@@ -39,6 +47,15 @@ describe(__filename, () => {
   });
 
   it('should get transaction cost estimate for multi contract calls just fine', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [projectDir],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region cost-estimation-2
     const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
 
