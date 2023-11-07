@@ -1,22 +1,31 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
+  });
+
   it('should successfully simulate contract call with forwarded amount', async () => {
-    const contract = await createAndDeployContractFromProject(
-      SnippetProjectEnum.TRANSFER_TO_ADDRESS
-    );
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('transfer-to-address')],
+    });
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
 
     const amountToForward = 40;
     const amountToTransfer = 10;
-
-    const provider = contract.provider;
 
     const someAddress = Wallet.generate({
       provider,
@@ -36,7 +45,12 @@ describe(__filename, () => {
   });
 
   it('should successfully execute a simulate call', async () => {
-    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
 
     // #region simulate-transactions-2
     const { value } = await contract.functions.echo_u8(15).simulate();
@@ -45,10 +59,17 @@ describe(__filename, () => {
   });
 
   it('should throw when simulating with an unfunded wallet', async () => {
-    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [{ id: contractId }],
+      provider,
+    } = launched;
+
+    const unfundedWallet = Wallet.generate({ provider });
     const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
-    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
+    const deployedContract = new Contract(contractId, abi, unfundedWallet);
 
     const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).simulate());
 
@@ -56,10 +77,17 @@ describe(__filename, () => {
   });
 
   it('should throw when dry running with an unfunded wallet', async () => {
-    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
-    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('echo-values')],
+    });
+    const {
+      contracts: [{ id: contractId }],
+      provider,
+    } = launched;
+
+    const unfundedWallet = Wallet.generate({ provider });
     const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
-    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
+    const deployedContract = new Contract(contractId, abi, unfundedWallet);
 
     const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).dryRun());
 
