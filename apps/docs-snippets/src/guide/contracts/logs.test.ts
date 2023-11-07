@@ -1,22 +1,23 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { createAndDeployContractFromProject, getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.LOG_VALUES);
-    provider = contract.provider;
-  });
-
   it('should successfully execute contract call with forwarded amount', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir(SnippetProjectEnum.LOG_VALUES)],
+    });
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region log-2
     const value1 = 500;
     const value2 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
