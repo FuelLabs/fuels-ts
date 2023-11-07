@@ -1,21 +1,27 @@
-import type { Contract, Provider } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.COUNTER);
-    provider = contract.provider;
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should successfully execute contract call with txParams', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('counter')],
+    });
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region transaction-parameters-2
     // #region variable-outputs-1
     const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
@@ -38,6 +44,14 @@ describe(__filename, () => {
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [getProgramDir('counter')],
+    });
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region transaction-parameters-3
     const { minGasPrice } = provider.getGasConfig();
 
