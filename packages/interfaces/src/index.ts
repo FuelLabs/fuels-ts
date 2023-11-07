@@ -14,7 +14,7 @@ export type B256Address = string;
 
 export type B256AddressEvm = `0x000000000000000000000000${string}`;
 
-export type Bytes = Uint8Array;
+export type Bytes = Uint8Array | number[];
 
 export type RawSlice = Uint8Array | number[];
 
