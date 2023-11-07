@@ -11,4 +11,5 @@ The `StdString` type can be integrated with your contract calls. Consider the fo
 <<< @/../../docs-snippets/projects/echo-std-string/src/main.sw#std-string-1{ts:line-numbers}
 
 A string can be created using a native JavaScript string, and sent to a Sway contract:
+
 <<< @/../../docs-snippets/src/guide/types/std-string.test.ts#std-string-2{ts:line-numbers}
