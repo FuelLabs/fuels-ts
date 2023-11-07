@@ -1,21 +1,24 @@
-import type { Contract } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, WalletUnlocked } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { WalletUnlocked } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { getProgramDir } from '../../utils';
+
+const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT);
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let deployedContract: Contract;
-
-  beforeAll(async () => {
-    deployedContract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
-  });
-
   it('should successfully update contract instance wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [returnContextContractDir],
+    });
+
+    const {
+      contracts: [deployedContract],
+      provider,
+    } = launched;
     const newWallet = WalletUnlocked.generate({
       provider,
     });
