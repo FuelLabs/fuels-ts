@@ -1,4 +1,3 @@
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type {
   BN,
@@ -30,7 +29,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
 
 const { abiContents: callTestAbi } = getFuelGaugeProject(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 

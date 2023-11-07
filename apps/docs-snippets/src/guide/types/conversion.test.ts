@@ -1,4 +1,3 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { Bytes, WalletLocked } from 'fuels';
 import {
   Wallet,
@@ -12,7 +11,7 @@ import {
   randomBytes,
 } from 'fuels';
 
-import { getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 
 describe(__filename, () => {
   const { abiContents: abi } = getSnippetProjectArtifacts(DocSnippetProjectsEnum.ECHO_VALUES);

@@ -1,7 +1,6 @@
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-import { getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 

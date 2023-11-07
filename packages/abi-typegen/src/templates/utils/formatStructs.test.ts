@@ -1,6 +1,7 @@
-import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
-
-import { getProjectResources } from '../../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getProjectResources,
+} from '../../../test/fixtures/forc-projects/index';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 

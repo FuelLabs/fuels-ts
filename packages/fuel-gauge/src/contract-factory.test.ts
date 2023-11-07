@@ -1,6 +1,5 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import {
   BN,
@@ -13,7 +12,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
 
 describe('Contract Factory', () => {
   let gasPrice: BN;

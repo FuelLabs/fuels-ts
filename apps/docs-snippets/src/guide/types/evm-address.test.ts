@@ -1,7 +1,7 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { B256AddressEvm, Contract, EvmAddress } from 'fuels';
 import { Address } from 'fuels';
 
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe('EvMAddress', () => {

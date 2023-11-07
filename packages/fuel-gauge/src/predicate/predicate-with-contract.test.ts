@@ -1,4 +1,4 @@
-import { FuelGaugeProjectsEnum, expectToBeInRange } from '@fuel-ts/utils/test-utils';
+import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, WalletUnlocked } from 'fuels';
 import {
@@ -11,7 +11,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';

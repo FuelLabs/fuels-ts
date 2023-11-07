@@ -1,8 +1,7 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from 'fuels';
 import { Script, BN } from 'fuels';
 
-import { getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {

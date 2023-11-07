@@ -1,4 +1,3 @@
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
 import {
@@ -11,7 +10,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {

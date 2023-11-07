@@ -1,4 +1,3 @@
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, CoinQuantityLike } from 'fuels';
 import {
@@ -10,7 +9,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
 
 import { fundPredicate, assertBalance } from './utils/predicate';
 

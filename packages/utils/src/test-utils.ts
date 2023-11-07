@@ -1,3 +1,2 @@
 export * from './test-utils/getForcProject';
-export * from './test-utils/types/enums';
 export * from './test-utils/expectToBeInRange';

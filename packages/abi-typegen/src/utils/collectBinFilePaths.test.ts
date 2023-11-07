@@ -1,8 +1,7 @@
-import { AbiTypegenProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { hexlify } from 'ethers';
 import { readFileSync } from 'fs';
 
-import { getProjectResources } from '../../test/fixtures/forc-projects';
+import { AbiTypegenProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectBinFilepaths } from './collectBinFilePaths';

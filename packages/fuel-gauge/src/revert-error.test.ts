@@ -1,4 +1,3 @@
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
@@ -14,7 +13,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;

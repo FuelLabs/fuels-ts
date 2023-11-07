@@ -1,7 +1,6 @@
-import { FuelGaugeProjectsEnum } from '@fuel-ts/utils/test-utils';
 import { toHex } from 'fuels';
 
-import { getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
 
 import { setup } from './utils';
 

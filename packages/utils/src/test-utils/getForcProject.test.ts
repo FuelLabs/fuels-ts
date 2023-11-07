@@ -1,14 +1,8 @@
 import { basename, join } from 'path';
 
-import { getForcProject } from '../../dist/test-utils';
 import { normalizeString } from '../utils/normalizeString';
 
-import {
-  AbiTypegenProjectsEnum,
-  DocSnippetProjectsEnum,
-  ForcProjectDirsEnum,
-  FuelGaugeProjectsEnum,
-} from './types/enums';
+import { getForcProject } from './getForcProject';
 
 describe('getForcProject', () => {
   it('should get forc project just fine (DOC SNIPPET PROJECT)', () => {

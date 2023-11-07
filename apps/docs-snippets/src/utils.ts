@@ -1,4 +1,3 @@
-import type { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   FUEL_NETWORK_URL,
@@ -11,6 +10,7 @@ import {
   ContractFactory,
 } from 'fuels';
 
+import type { DocSnippetProjectsEnum } from '../projects';
 import { getSnippetProjectArtifacts } from '../projects';
 
 export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {

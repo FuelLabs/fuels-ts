@@ -1,7 +1,7 @@
-import { DocSnippetProjectsEnum } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, WalletUnlocked } from 'fuels';
 
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
