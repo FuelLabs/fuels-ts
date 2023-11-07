@@ -9,6 +9,7 @@ import {
   coinQuantityfy,
   ContractFactory,
 } from 'fuels';
+import { join } from 'path';
 
 import type { SnippetProjectEnum } from '../projects';
 import { getSnippetProjectArtifacts } from '../projects';
@@ -80,3 +81,6 @@ export const defaultTxParams = {
   gasLimit: 10000,
   gasPrice: 1,
 };
+
+export const getProgramDir = (contractName: string) =>
+  join(__dirname, `../projects/${contractName}`);

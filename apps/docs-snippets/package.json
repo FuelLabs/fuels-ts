@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "fuels": "workspace:*",
+    "@fuel-ts/test-utils": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*"

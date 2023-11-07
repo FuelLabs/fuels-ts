@@ -1,21 +1,33 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import type { Contract, Provider } from 'fuels';
 import { BN, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { createAndDeployContractFromProject, getProgramDir } from '../../utils';
+
+const returnContextContractDir = getProgramDir(SnippetProjectEnum.RETURN_CONTEXT);
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
-    provider = contract.provider;
-  });
+  // let contract: Contract;
+  // let provider: Provider;
+  // beforeAll(async () => {
+  //   contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
+  //   provider = contract.provider;
+  // });
 
   it('should successfully execute contract call with forwarded amount', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [returnContextContractDir],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region call-params-1
     const amountToForward = 10;
     const { minGasPrice } = provider.getGasConfig();
@@ -33,6 +45,15 @@ describe(__filename, () => {
   });
 
   it('should throw error due not enough gas', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [returnContextContractDir],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region call-params-2
     const { minGasPrice } = provider.getGasConfig();
 
@@ -50,6 +71,15 @@ describe(__filename, () => {
   });
 
   it('should successfully execute transaction with `txParams` and `callParams`', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      deployContracts: [returnContextContractDir],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region call-params-3
     const { minGasPrice } = provider.getGasConfig();
     const amountToForward = 10;
