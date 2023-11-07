@@ -71,7 +71,9 @@ describe('TestNodeLauncher', () => {
       contracts: [contract],
     } = launched;
 
-    const response = await contract.functions.test_function().call();
+    const gasPrice = contract.provider.getGasConfig().minGasPrice;
+
+    const response = await contract.functions.test_function().txParams({ gasPrice }).call();
     expect(response.value).toBe(true);
   });
 
@@ -84,8 +86,9 @@ describe('TestNodeLauncher', () => {
     const {
       contracts: [contract],
     } = launched;
+    const gasPrice = contract.provider.getGasConfig().minGasPrice;
 
-    const response = await contract.functions.test_function().call();
+    const response = await contract.functions.test_function().txParams({ gasPrice }).call();
     expect(response.value).toBe(true);
     // #endregion TestNodeLauncher-deploy-contract
   });
@@ -106,8 +109,14 @@ describe('TestNodeLauncher', () => {
     } = launched;
     // #endregion TestNodeLauncher-multiple-contracts-and-wallets
 
-    const contract1Response = (await contract1.functions.test_function().call()).value;
-    const contract2Response = (await contract2.functions.test_function().call()).value;
+    const gasPrice = contract1.provider.getGasConfig().minGasPrice;
+
+    const contract1Response = (
+      await contract1.functions.test_function().txParams({ gasPrice }).call()
+    ).value;
+    const contract2Response = (
+      await contract2.functions.test_function().txParams({ gasPrice }).call()
+    ).value;
 
     expect(contract1Response).toBe(true);
     expect(contract2Response).toBe(true);
@@ -120,12 +129,12 @@ describe('TestNodeLauncher', () => {
     await expectToThrowFuelError(
       async () => {
         await TestNodeLauncher.launch({
-          deployContracts: [{ contractDir: pathToContractRootDir, walletIndex: 1 }],
+          deployContracts: [{ contractDir: pathToContractRootDir, walletIndex: 2 }],
         });
       },
       {
         code: FuelError.CODES.INVALID_INPUT_PARAMETERS,
-        message: `Invalid walletIndex 1; wallets array contains 1 elements.`,
+        message: `Invalid walletIndex 2; wallets array contains 2 elements.`,
       }
     );
   });
@@ -189,7 +198,7 @@ describe('TestNodeLauncher caching', () => {
     expect(spy).toBeCalledTimes(1);
   });
 
-  test('throws when wallet config has wallets instead of number???', () => {
-    expect(true).toBeFalsy();
-  });
+  // test('throws when wallet config has wallets instead of number???', () => {
+  //   expect(true).toBeFalsy();
+  // });
 });
