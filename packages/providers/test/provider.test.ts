@@ -12,7 +12,6 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
-import type { GqlGetCoinsToSpendQuery } from '../src/__generated__/operations';
 import Provider from '../src/provider';
 import { setupTestProvider } from '../src/test-utils';
 import type {
@@ -211,10 +210,10 @@ describe('Provider', () => {
   });
 
   it('can change the provider url of the current instance', async () => {
-    const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    await using provider = await setupTestProvider();
 
-    const provider = await Provider.create(providerUrl1);
+    const providerUrl1 = provider.url;
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
     expect(provider.url).toBe(providerUrl1);
 
@@ -254,19 +253,19 @@ describe('Provider', () => {
   });
 
   it('can accept options override in connect method', async () => {
-    const providerUrl = FUEL_NETWORK_URL;
-
     /**
      * Mocking and initializing Provider with an invalid fetcher just
      * to ensure it'll be properly overriden in `connect` method below
      */
-    const fetchChainAndNodeInfo = jest
+    const fetchChainAndNodeInfo = vi
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
-      .mockImplementation();
+      .mockImplementation(() => {});
 
-    const provider = await Provider.create(providerUrl, {
-      fetch: () => {
-        throw new Error('This should never happen');
+    const provider = await setupTestProvider({
+      providerOptions: {
+        fetch: () => {
+          throw new Error('This should never happen');
+        },
       },
     });
 
@@ -277,7 +276,7 @@ describe('Provider', () => {
      */
     fetchChainAndNodeInfo.mockRestore();
 
-    await provider.connect(providerUrl, {
+    await provider.connect(provider.url, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
     });
 
@@ -698,9 +697,11 @@ describe('Provider', () => {
   });
 
   it('can getMessageProof with all data', async () => {
+    await using realProvider = await setupTestProvider();
+
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    const provider = await Provider.create(realProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageProof', { messageProof: messageProofResponse })(url, options),
     });
@@ -715,9 +716,11 @@ describe('Provider', () => {
   });
 
   it('can getMessageStatus', async () => {
+    await using realProvider = await setupTestProvider();
+
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    const provider = await Provider.create(realProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
     });
@@ -739,7 +742,7 @@ describe('Provider', () => {
   it('should cache chain and node info', async () => {
     Provider.clearChainAndNodeCaches();
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
 
     expect(provider.getChain()).toBeDefined();
     expect(provider.getNode()).toBeDefined();
@@ -752,7 +755,7 @@ describe('Provider', () => {
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -773,7 +776,7 @@ describe('Provider', () => {
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -787,7 +790,7 @@ describe('Provider', () => {
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
 
     const gasConfig = provider.getGasConfig();
 
@@ -799,7 +802,7 @@ describe('Provider', () => {
   });
 
   it('should throws when using getChain or getNode and without cached data', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
 
     Provider.clearChainAndNodeCaches();
 
@@ -837,10 +840,15 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
-      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
-    });
+    await expectToThrowFuelError(
+      async () => {
+        await using provider = await setupTestProvider();
+      },
+      {
+        code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
+      }
+    );
   });
 
   it('throws on difference between minor client version and supported minor version', async () => {
@@ -858,16 +866,21 @@ describe('Provider', () => {
     if (mock.supportedVersion === FUEL_CORE) throw new Error();
 
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => mock);
+    spy.mockImplementation(() => mock);
 
-    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
-      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
-    });
+    await expectToThrowFuelError(
+      async () => {
+        await using provider = await setupTestProvider();
+      },
+      {
+        code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
+        message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
+      }
+    );
   });
 
   it('throws when gas limit is lower than tx gas used', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
     const gasLimit = 1;
     const gasUsed = bn(1000);
     const transactionParams = {
@@ -896,7 +909,7 @@ describe('Provider', () => {
   });
 
   it('throws when gas price is lower than min tx gas price', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using provider = await setupTestProvider();
     const gasPrice = 1;
     const minGasPrice = bn(1000);
     const transactionParams = {
