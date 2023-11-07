@@ -1,35 +1,33 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import {
-  WalletUnlocked,
-  FUEL_NETWORK_URL,
-  Provider,
-  Predicate,
-  BN,
-  getRandomB256,
-  BaseAssetId,
-} from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { WalletUnlocked, Predicate, BN, getRandomB256, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { getTestWallet } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let walletWithFunds: WalletUnlocked;
-  let gasPrice: BN;
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SIMPLE_PREDICATE
   );
 
-  beforeAll(async () => {
-    walletWithFunds = await getTestWallet();
-    ({ minGasPrice: gasPrice } = walletWithFunds.provider.getGasConfig());
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should successfully use predicate to spend assets', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [walletWithFunds],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     // #region send-and-spend-funds-from-predicates-2
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    // #context const provider = await Provider.create(...)
     const predicate = new Predicate(bin, provider, abi);
     // #endregion send-and-spend-funds-from-predicates-2
 
@@ -72,7 +70,13 @@ describe(__filename, () => {
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [walletWithFunds],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const predicate = new Predicate(bin, provider, abi);
 
     const amountToPredicate = 100;
@@ -103,7 +107,13 @@ describe(__filename, () => {
   });
 
   it('should fail when set wrong input data for predicate', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [walletWithFunds],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     const predicateOwner = WalletUnlocked.generate({
       provider,
     });
@@ -124,7 +134,9 @@ describe(__filename, () => {
     predicate.setData(getRandomB256());
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, amountToPredicate, BaseAssetId, { gasPrice })
+      predicate.transfer(receiverWallet.address, 1, BaseAssetId, {
+        gasPrice,
+      })
     );
 
     // #region send-and-spend-funds-from-predicates-7

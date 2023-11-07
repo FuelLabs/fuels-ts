@@ -1,25 +1,30 @@
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { WalletUnlocked, Predicate, BaseAssetId, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { getTestWallet } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let gasPrice: BN;
-
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
+  beforeAll(async (ctx) => {
+    await TestNodeLauncher.prepareCache(ctx.tasks.length);
+
+    return () => TestNodeLauncher.killCachedNodes();
   });
 
   it('should successfully tranfer to setted whitelisted address', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     // #region predicate-with-configurable-constants-2
     const newWhitelistedAddress = getRandomB256();
 
@@ -55,6 +60,13 @@ describe(__filename, () => {
   });
 
   it('should successfully tranfer to default whitelisted address', async () => {
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const { minGasPrice: gasPrice } = provider.getGasConfig();
+
     // #region predicate-with-configurable-constants-3
     const predicate = new Predicate(bin, wallet.provider, abi);
 
