@@ -1,15 +1,12 @@
-import type { Provider, WalletUnlocked } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
 import { ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_CONFIGURABLES
   );
@@ -25,13 +22,14 @@ describe(__filename, () => {
     },
   };
 
-  let provider: Provider;
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    provider = wallet.provider;
-  });
-
   it('should successfully set new values for all configurable constants', async () => {
+    await using launched = await TestNodeLauncher.launch();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     // #region configurable-constants-2
     const configurableConstants: typeof defaultValues = {
       age: 30,
@@ -64,6 +62,13 @@ describe(__filename, () => {
   });
 
   it('should successfully set new value for one configurable constant', async () => {
+    await using launched = await TestNodeLauncher.launch();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     // #region configurable-constants-3
     const configurableConstants = {
       age: 10,
@@ -89,6 +94,13 @@ describe(__filename, () => {
   });
 
   it('should throw when not properly setting new values for structs', async () => {
+    await using launched = await TestNodeLauncher.launch();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     // #region configurable-constants-4
     const configurableConstants = {
       my_struct: {
