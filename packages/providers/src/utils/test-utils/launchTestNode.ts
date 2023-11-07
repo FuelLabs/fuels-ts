@@ -31,6 +31,7 @@ export type LaunchNodeResult = Promise<{
   ip: string;
   port: string;
   chainConfig: ChainConfig;
+  pid: string;
 }>;
 
 /**
@@ -52,50 +53,67 @@ export const launchTestNode = async ({
   new Promise(async (resolve, reject) => {
     const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
 
-    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    // const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
 
-    if (!fsSync.existsSync(tempDirPath)) {
-      fsSync.mkdirSync(tempDirPath, { recursive: true });
-    }
-    const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
+    // if (!fsSync.existsSync(tempDirPath)) {
+    //   fsSync.mkdirSync(tempDirPath, { recursive: true });
+    // }
+    // const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
 
-    // Write a temporary chain configuration file.
-    await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
+    // // Write a temporary chain configuration file.
+    // await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
 
-    const child = spawn(command, [
-      'run',
-      '--db-type',
-      'in-memory',
-      '--consensus-key',
-      consensusKey,
-      '--chain',
-      chainConfigPath as string,
-      '--ip',
-      '127.0.0.1',
-      '--port',
-      port,
-      '--poa-instant',
-      'true',
-      '--min-gas-price',
-      '1',
-      ...args,
-    ]);
+    const child = spawn('bash', [process.env.TEST_SCRIPT_PATH!, `1`]);
+
+    // const child = spawn(command, [
+    //   'run',
+    //   '--db-type',
+    //   'in-memory',
+    //   '--consensus-key',
+    //   consensusKey,
+    //   '--chain',
+    //   chainConfigPath as string,
+    //   '--ip',
+    //   '127.0.0.1',
+    //   '--port',
+    //   port,
+    //   '--poa-instant',
+    //   'true',
+    //   '--min-gas-price',
+    //   '1',
+    //   ...args,
+    // ]);
 
     function removeSideffects() {
       child.stdout.removeAllListeners();
       child.stderr.removeAllListeners();
-      spawnSync('rm', ['-rf', tempDirPath]);
+      // spawnSync('rm', ['-rf', tempDirPath]);
+    }
+
+    const pids: string[] = [];
+
+    function pidListener(bfr: Buffer) {
+      const chunk = bfr.toString();
+      if (logger) logger(chunk);
+      chunk.split('\n').forEach((pid) => {
+        if (pid !== '') pids.push(pid);
+      });
     }
 
     // Cleanup function where fuel-core is stopped.
     const cleanup = () =>
       new Promise<void>((resolveFn, rejectFn) => {
-        kill(Number(child.pid), (err) => {
-          removeSideffects();
+        if (process.env.HAS_CACHE === undefined) execSync(`kill ${pids[0]}`);
+        // execSync(`pkill -TERM -P ${pids[0]}`)
+        removeSideffects();
+        resolveFn();
 
-          if (err) rejectFn(err);
-          resolveFn();
-        });
+        // kill(Number(child.pid), (err) => {
+        //   removeSideffects();
+
+        //   if (err) rejectFn(err);
+        //   resolveFn();
+        // });
       });
 
     // Process exit.
@@ -116,6 +134,7 @@ export const launchTestNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
+    child!.stdout.on('data', pidListener);
     // Look for a specific graphql start point in the output.
     child!.stderr.on('data', (chunk: string) => {
       if (logger) logger(chunk);
@@ -123,7 +142,7 @@ export const launchTestNode = async ({
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         const [nodeIp, nodePort] = chunk.split(' ').at(-1)!.trim().split(':');
 
-        resolve({ cleanup, ip: nodeIp, port: nodePort, chainConfig });
+        resolve({ cleanup, ip: nodeIp, port: nodePort, chainConfig, pid: pids[0] });
       }
 
       if (/error/i.test(chunk)) {

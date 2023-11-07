@@ -6,7 +6,7 @@ import { Provider } from '../..';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import type { ChainConfig } from './fuel-node-interfaces';
-import type { LaunchTestNodeOptions } from './launchTestNode';
+import type { LaunchNodeResult, LaunchTestNodeOptions } from './launchTestNode';
 import { launchTestNode } from './launchTestNode';
 
 export interface SetupTestProviderOptions {
@@ -24,7 +24,9 @@ export async function setupTestProvider<
   Dispose extends boolean = true,
   R = Dispose extends true
     ? Provider & AsyncDisposable
-    : { provider: Provider; cleanup: () => Promise<void>; chainConfig: ChainConfig },
+    : {
+        provider: Provider;
+      } & Awaited<LaunchNodeResult>,
 >(options?: Partial<SetupTestProviderOptions>, dispose?: Dispose): Promise<R> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
@@ -37,7 +39,7 @@ export async function setupTestProvider<
     chainConfig: mergeDeepRight(defaultChainConfig, options?.nodeOptions?.chainConfig || {}),
   };
 
-  const { cleanup, ip, port, chainConfig } = await launchTestNode(nodeOptions);
+  const { cleanup, ip, port, chainConfig, pid } = await launchTestNode(nodeOptions);
 
   try {
     const provider = await Provider.create(
@@ -53,6 +55,7 @@ export async function setupTestProvider<
             provider,
             cleanup,
             chainConfig,
+            pid,
           }
     ) as R;
   } catch (err) {

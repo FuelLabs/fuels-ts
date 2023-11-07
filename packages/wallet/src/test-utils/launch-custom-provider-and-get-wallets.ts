@@ -21,6 +21,7 @@ export async function launchCustomProviderAndGetWallets<
     : {
         cleanup: () => Promise<void>;
         deployedChainConfig: ChainConfig;
+        pid: string;
       }),
 >(
   {
@@ -34,7 +35,7 @@ export async function launchCustomProviderAndGetWallets<
 
   const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 
-  const { provider, cleanup, chainConfig } = await setupTestProvider(
+  const { provider, cleanup, chainConfig, pid } = await setupTestProvider(
     {
       providerOptions,
       nodeOptions: {
@@ -60,6 +61,7 @@ export async function launchCustomProviderAndGetWallets<
           wallets,
           provider,
           cleanup,
+          pid,
           deployedChainConfig: chainConfig,
         }
   ) as ReturnType;

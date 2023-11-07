@@ -12,6 +12,7 @@ import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/wallet/test-utils';
 import { WalletConfig, launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
+import { execSync } from 'child_process';
 import { equals, mergeDeepRight, omit } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
@@ -51,6 +52,7 @@ type TestNodeLauncherCache = {
   nodes: NodeInfo[];
   cleanups: Array<() => Promise<void>>;
   chainConfig: ChainConfig;
+  pids: string[];
 } & SetupTestProviderOptions;
 
 export class TestNodeLauncher {
@@ -64,14 +66,20 @@ export class TestNodeLauncher {
   });
 
   static async killCachedNodes() {
-    if (!this.cache || this.cache.cleanups.length === 0) return;
-    const cleanups: Promise<void>[] = [];
+    if (!this.cache || this.cache.pids.length === 0) return;
 
-    this.cache.cleanups.forEach((cleanup) => {
-      cleanups.push(cleanup());
-    });
+    console.log(this.cache.pids);
+    const pids = [...this.cache.pids];
+    await execSync(`kill ${pids.join(' ')}`);
 
-    await Promise.all(cleanups);
+    this.cache.pids = this.cache.pids.filter((pid) => !pids.includes(pid));
+    // const cleanups: Promise<void>[] = [];
+
+    // this.cache.cleanups.forEach((cleanup) => {
+    //   cleanups.push(cleanup());
+    // });
+
+    // await Promise.all(cleanups);
   }
 
   static async fasterLaunchStuff({
@@ -113,11 +121,13 @@ export class TestNodeLauncher {
     });
 
     this.cache = {
+      pids: [],
       nodes: cacheee.map((x) => ({
         ...x,
         fromCache: true,
         deployedChainConfig: chainConfig,
         cleanup: () => Promise.resolve(),
+        pid: '123',
       })),
       chainConfig,
       cleanups: [cleanupAll],
@@ -130,11 +140,16 @@ export class TestNodeLauncher {
     nodeCount: number,
     options?: Partial<LaunchCustomProviderAndGetWalletsOptions>
   ) {
-    if (process.env.FUEL_TEST_NODE_LAUNCHER_CI === 'true') {
-      throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'no fuel-core nodes available.');
-    }
+    // process.env.HAS_CACHE = 'true';
 
-    await this.fasterLaunchStuff({ ...options, nodeCount });
+    // @ts-expect-error asdf
+    this.cache = {
+      cleanups: [],
+      pids: [],
+    };
+
+    await Promise.resolve();
+    // await this.fasterLaunchStuff({ ...options, nodeCount });
     // const launchPromises: Promise<NodeInfo>[] = [];
     // for (let i = 0; i < nodeCount; i++) {
     //   launchPromises.push(
@@ -218,16 +233,32 @@ export class TestNodeLauncher {
     const { walletConfig, nodeOptions, providerOptions, deployContracts } =
       this.getOptions(options);
 
-    const { provider, wallets, cleanup, fromCache } =
-      (TestNodeLauncher.getFromCache({ walletConfig, nodeOptions, providerOptions }) as NodeInfo) ??
-      (await launchCustomProviderAndGetWallets(
-        {
-          walletConfig,
-          providerOptions,
-          nodeOptions,
-        },
-        false
-      ));
+    // const { provider, wallets, cleanup, fromCache } =
+    //   (TestNodeLauncher.getFromCache({ walletConfig, nodeOptions, providerOptions }) as NodeInfo) ??
+    //   (await launchCustomProviderAndGetWallets(
+    //     {
+    //       walletConfig,
+    //       providerOptions,
+    //       nodeOptions,
+    //     },
+    //     false
+    //   ));
+
+    const { provider, wallets, cleanup, pid } = await launchCustomProviderAndGetWallets(
+      {
+        walletConfig,
+        providerOptions,
+        nodeOptions,
+      },
+      false
+    );
+
+    // if (this.cache && this.cache.pids.length >= 10) {
+    //   // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    //   this.killCachedNodes();
+    //   // this.cache?.pids.push(pid);
+    //   // this.cache?.cleanups.push(cleanup);
+    // }
 
     try {
       const contracts = await TestNodeLauncher.deployContracts(deployContracts, wallets);
@@ -239,7 +270,11 @@ export class TestNodeLauncher {
               wallets,
               contracts: contracts as TContracts,
               [Symbol.asyncDispose]: async () => {
-                if (!fromCache) await cleanup();
+                if (process.env.HAS_CACHE) {
+                  this.cache?.pids.push(pid);
+                  console.log(`adding ${pid} to cache, length: ${this.cache?.pids.length}`);
+                }
+                await cleanup();
               },
             }
           : {
