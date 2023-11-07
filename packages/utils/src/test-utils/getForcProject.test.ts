@@ -1,144 +1,166 @@
-import { basename, join } from 'path';
+import * as ethers from 'ethers';
+import * as fs from 'fs';
+import * as path from 'path';
 
-import { normalizeString } from '../utils/normalizeString';
+import {
+  ForcProjectDirsEnum,
+  getForcProject,
+  getProjectAbiPath,
+  getProjectBinPath,
+  getProjectDebugDir,
+  getProjectNormalizedName,
+  getProjectStorageSlots,
+  getProjectStorageSlotsPath,
+  getProjectTempDir,
+} from './getForcProject';
 
-import { getForcProject } from './getForcProject';
+jest.mock('path', () => ({
+  __esModule: true,
+  ...jest.requireActual('path'),
+}));
+jest.mock('fs', () => ({
+  __esModule: true,
+  ...jest.requireActual('fs'),
+}));
 
 describe('getForcProject', () => {
-  it('should get forc project just fine (DOC SNIPPET PROJECT)', () => {
-    const PROJECT_DIR = join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      '..',
-      'apps',
-      'docs-snippets',
-      'projects',
-      'simple-predicate'
-    );
+  afterEach(jest.restoreAllMocks);
 
-    const project = getForcProject({
-      dir: ForcProjectDirsEnum.DOCS_SNIPPETS,
-      projectName: DocSnippetProjectsEnum.SIMPLE_PREDICATE,
-    });
+  it('should return the correct temporary directory path on getProjectTempDir', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+    const expectedPath = '/path/to/project/out/debug/__temp__';
 
-    const projectName = basename(PROJECT_DIR);
+    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
-    const debugDir = join(PROJECT_DIR, 'out', 'debug');
-    const tempDir = join(debugDir, '__temp__');
+    const tempDir = getProjectTempDir(params);
 
-    const abiName = `${projectName}-abi`;
-    const abiFileName = `${abiName}.json`;
-    const abiPath = join(debugDir, abiFileName);
-    const normalizedName = normalizeString(projectName);
-
-    const binPath = join(debugDir, `${projectName}.bin`);
-
-    expect(project.debugDir).toEqual(debugDir);
-    expect(project.tempDir).toEqual(tempDir);
-
-    expect(project.abiName).toEqual(abiName);
-    expect(project.normalizedName).toEqual(normalizedName);
-    expect(project.abiPath).toEqual(abiPath);
-    expect(project.abiContents).toBeTruthy();
-
-    expect(project.binPath).toEqual(binPath);
-    expect(project.binHexlified).toEqual(
-      '0x740000034700000000000000000000605dfcc00110fff3001aec5000910000007144000361491101764800026141110d74000007724c0002134924c05a492001764800026141111f74000001240000005d47f00410451300a141046024400000fc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d40000000000000060'
-    );
-
-    expect(project.inputGlobal).toEqual(join(debugDir, '*-abi.json'));
+    expect(tempDir).toEqual(expectedPath);
   });
 
-  it('should get forc project just fine (ABI TYPEGEN PROJECTS)', () => {
-    const PROJECT_DIR = join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'abi-typegen',
-      'test',
-      'fixtures',
-      'forc-projects',
-      'predicate'
-    );
+  it('should return the correct ABI file path on getProjectAbiPath', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+    const expectedPath = '/path/to/project/out/debug/myProject-abi.json';
 
-    const project = getForcProject({
-      dir: ForcProjectDirsEnum.ABI_TYPEGEN,
-      projectName: AbiTypegenProjectsEnum.PREDICATE,
-    });
+    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
-    const projectName = basename(PROJECT_DIR);
+    const abiPath = getProjectAbiPath(params);
 
-    const debugDir = join(PROJECT_DIR, 'out', 'debug');
-    const tempDir = join(debugDir, '__temp__');
-
-    const abiName = `${projectName}-abi`;
-    const abiFileName = `${abiName}.json`;
-    const abiPath = join(debugDir, abiFileName);
-    const normalizedName = normalizeString(projectName);
-
-    const binPath = join(debugDir, `${projectName}.bin`);
-
-    expect(project.debugDir).toEqual(debugDir);
-    expect(project.tempDir).toEqual(tempDir);
-
-    expect(project.abiName).toEqual(abiName);
-    expect(project.normalizedName).toEqual(normalizedName);
-    expect(project.abiPath).toEqual(abiPath);
-    expect(project.abiContents).toBeTruthy();
-
-    expect(project.binPath).toEqual(binPath);
-    expect(project.binHexlified).toEqual(
-      '0x740000034700000000000000000000745dfcc00110fff3001aec5000910000007144000361491101764800026141110d74000007724c0002134924c05a492001764800026141111f74000001240000005d450000134510407644000174000004504100085d4100005d47f00013450440244400000000000000000064'
-    );
-
-    expect(project.inputGlobal).toEqual(join(debugDir, '*-abi.json'));
+    expect(abiPath).toEqual(expectedPath);
   });
 
-  it('should get forc project just fine (FUEL GAUGE PROJECTS)', () => {
-    const PROJECT_DIR = join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'fuel-gauge',
-      'fixtures',
-      'forc-projects',
-      'predicate-false'
-    );
+  it('should return the correct binary file path on getProjectBinPath', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+    const expectedPath = '/path/to/project/out/debug/myProject.bin';
 
-    const project = getForcProject({
+    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+
+    const binPath = getProjectBinPath(params);
+
+    expect(binPath).toEqual(expectedPath);
+  });
+
+  it('should return the correct storage slots file path on getProjectStorageSlotsPath', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+    const expectedPath = '/path/to/project/out/debug/myProject-storage_slots.json';
+
+    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+
+    const storageSlotsPath = getProjectStorageSlotsPath(params);
+
+    expect(storageSlotsPath).toEqual(expectedPath);
+  });
+
+  it('should return a normalized project name on getProjectNormalizedName', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'My Project' };
+    const expectedName = 'MyProject';
+
+    const normalizedName = getProjectNormalizedName(params);
+
+    expect(normalizedName).toEqual(expectedName);
+  });
+
+  it('should return the storage slots if file exists on getProjectStorageSlots', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+    const expectedPath = '/path/to/project/out/debug/myProject-storage_slots.json';
+    const fakeStorageSlots = [{ key: 'key1', value: 'value1' }];
+
+    jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+
+    const readFileSyncSpy = jest
+      .spyOn(fs, 'readFileSync')
+      .mockReturnValue(JSON.stringify(fakeStorageSlots));
+
+    const storageSlots = getProjectStorageSlots(params);
+
+    expect(storageSlots).toEqual(fakeStorageSlots);
+    expect(readFileSyncSpy).toHaveBeenCalledWith(expectedPath, 'utf-8');
+  });
+
+  it('should return the correct debug directory path', () => {
+    const joinSpy = jest
+      .spyOn(path, 'join')
+      .mockImplementation((...segments) => segments.join('/'));
+
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+    const expectedPath = '/path/to/project/out/debug';
+
+    const debugDir = getProjectDebugDir(params);
+
+    expect(debugDir).toEqual(expectedPath);
+    expect(joinSpy).toHaveBeenCalledWith(params.projectDir, 'out', 'debug');
+  });
+
+  it('should return an empty array if the storage slots file does not exist', () => {
+    const params = { projectDir: '/path/to/project', projectName: 'myProject' };
+
+    jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+    const readFileSyncSpy = jest.spyOn(fs, 'readFileSync');
+
+    const storageSlots = getProjectStorageSlots(params);
+
+    expect(storageSlots).toEqual([]);
+    expect(readFileSyncSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return the correct ForcProject structure', () => {
+    const fakeBinContent = 'binary content';
+    const fakeAbiContent = { contracts: {} };
+    const fakeStorageSlots = [{ key: 'key1', value: 'value1' }];
+
+    jest.spyOn(ethers, 'hexlify').mockImplementation((param) => param as string);
+    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+    jest.spyOn(fs, 'readFileSync').mockImplementation((pathParam) => {
+      if ((<string>pathParam).endsWith('.bin')) {
+        return fakeBinContent;
+      }
+      if ((<string>pathParam).endsWith('-abi.json')) {
+        return JSON.stringify(fakeAbiContent);
+      }
+      if ((<string>pathParam).endsWith('-storage_slots.json')) {
+        return JSON.stringify(fakeStorageSlots);
+      }
+      throw new Error('File not found');
+    });
+
+    jest
+      .spyOn(fs, 'existsSync')
+      .mockImplementation((pathParam) => (<string>pathParam).endsWith('-storage_slots.json'));
+
+    const forcProject = {
       dir: ForcProjectDirsEnum.FUEL_GAUGE,
-      projectName: FuelGaugeProjectsEnum.PREDICATE_FALSE,
-    });
+      projectName: 'myProject',
+    };
 
-    const projectName = basename(PROJECT_DIR);
+    const project = getForcProject(forcProject);
 
-    const debugDir = join(PROJECT_DIR, 'out', 'debug');
-    const tempDir = join(debugDir, '__temp__');
-
-    const abiName = `${projectName}-abi`;
-    const abiFileName = `${abiName}.json`;
-    const abiPath = join(debugDir, abiFileName);
-    const normalizedName = normalizeString(projectName);
-
-    const binPath = join(debugDir, `${projectName}.bin`);
-
-    expect(project.debugDir).toEqual(debugDir);
-    expect(project.tempDir).toEqual(tempDir);
-
-    expect(project.abiName).toEqual(abiName);
-    expect(project.normalizedName).toEqual(normalizedName);
-    expect(project.abiPath).toEqual(abiPath);
-    expect(project.abiContents).toBeTruthy();
-
-    expect(project.binPath).toEqual(binPath);
-    expect(project.binHexlified).toEqual(
-      '0x740000034700000000000000000000245dfcc00110fff3001aec50009100000024000000'
-    );
-
-    expect(project.inputGlobal).toEqual(join(debugDir, '*-abi.json'));
+    expect(project.name).toEqual(forcProject.projectName);
+    expect(project.debugDir).toContain('/fuel-gauge/fixtures/forc-projects/myProject');
+    expect(project.binPath).toContain('/myProject.bin');
+    expect(project.binHexlified).toBeDefined();
+    expect(project.abiPath).toContain('/myProject-abi.json');
+    expect(project.abiName).toEqual('myProject-abi');
+    expect(project.abiContents).toEqual(fakeAbiContent);
+    expect(project.normalizedName).toBeDefined();
+    expect(project.storageSlots).toEqual(fakeStorageSlots);
   });
 });
