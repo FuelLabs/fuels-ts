@@ -10,24 +10,28 @@ import * as indexMod from '.';
 import type { FuelCoreNode } from './startFuelCore';
 
 describe('dev', () => {
-  beforeEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   function mockAll() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const killChildProcess: any = jest.fn();
-    const closeAllFileHandlers = jest.spyOn(indexMod, 'closeAllFileHandlers').mockImplementation();
+    const killChildProcess: any = vi.fn();
+    const closeAllFileHandlers = vi
+      .spyOn(indexMod, 'closeAllFileHandlers')
+      .mockImplementation(() => {});
     const fuelCore = { killChildProcess } as FuelCoreNode;
-    const onFailure = jest.fn();
+    const onFailure = vi.fn();
 
-    const withConfigErrorHandler = jest
+    const withConfigErrorHandler = vi
       .spyOn(withConfigMod, 'withConfigErrorHandler')
-      .mockImplementation();
+      .mockImplementation(() => {});
 
-    const loadConfig = jest
+    const loadConfig = vi
       .spyOn(loadConfigMod, 'loadConfig')
       .mockReturnValue(Promise.resolve(fuelsConfig));
 
-    const dev = jest.spyOn(indexMod, 'dev').mockImplementation(() => {
+    const dev = vi.spyOn(indexMod, 'dev').mockImplementation(() => {
       throw new Error('The sky became purple');
     });
 
@@ -47,7 +51,7 @@ describe('dev', () => {
   test('workspaceFileChanged should log change and call `buildAndDeploy`', async () => {
     const { log } = mockLogger();
 
-    const buildAndDeploy = jest.spyOn(indexMod, 'buildAndDeploy').mockImplementation();
+    const buildAndDeploy = vi.spyOn(indexMod, 'buildAndDeploy').mockImplementation(() => {});
 
     await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('event', 'some/path');
 
@@ -60,7 +64,7 @@ describe('dev', () => {
 
     const { error } = mockLogger();
 
-    jest.spyOn(indexMod, 'buildAndDeploy').mockImplementation(() => {
+    vi.spyOn(indexMod, 'buildAndDeploy').mockImplementation(() => {
       throw err;
     });
 
@@ -76,7 +80,7 @@ describe('dev', () => {
   });
 
   test('should call `close` on all file handlers', () => {
-    const close = jest.fn();
+    const close = vi.fn();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handlers: any = [{ close }, { close }, { close }];

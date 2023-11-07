@@ -16,8 +16,8 @@ describe('logger', () => {
   afterAll(reset);
 
   function mockStdIO() {
-    const err = jest.spyOn(process.stderr, 'write').mockImplementation();
-    const out = jest.spyOn(process.stdout, 'write').mockImplementation();
+    const err = vi.spyOn(process.stderr, 'write').mockImplementation(() => {});
+    const out = vi.spyOn(process.stdout, 'write').mockImplementation(() => {});
     return { err, out };
   }
 

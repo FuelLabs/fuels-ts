@@ -4,21 +4,21 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
 
-jest.mock('@fuel-ts/versions/cli', () => ({
+vi.mock('@fuel-ts/versions/cli', () => ({
   __esModule: true,
-  ...jest.requireActual('@fuel-ts/versions/cli'),
+  ...vi.requireActual('@fuel-ts/versions/cli'),
 }));
 
-jest.mock('prompts', () => ({
+vi.mock('prompts', () => ({
   __esModule: true,
-  ...jest.requireActual('prompts'),
+  ...vi.requireActual('prompts'),
 }));
 
 describe('shouldUseBuiltinFuelCore', () => {
-  beforeEach(jest.restoreAllMocks);
+  beforeEach(vi.restoreAllMocks);
 
   function mockAll(returns: { getSystemFuelCore: string | null }) {
-    const getSystemFuelCore = jest
+    const getSystemFuelCore = vi
       .spyOn(getSystemFuelCoreMod, 'getSystemFuelCore')
       .mockReturnValue({ error: null, systemFuelCoreVersion: returns.getSystemFuelCore });
 

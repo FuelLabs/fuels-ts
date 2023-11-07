@@ -156,7 +156,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const stdoutWrite = jest.spyOn(process.stdout, 'write').mockImplementation();
+    const stdoutWrite = vi.spyOn(process.stdout, 'write').mockImplementation(() => {});
 
     // setup temp sway project
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);

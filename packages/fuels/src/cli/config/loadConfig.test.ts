@@ -121,11 +121,11 @@ describe('loadConfig', () => {
   test(`should smart-set built-in flags`, async () => {
     await runInit(initFlagsWorkspace);
 
-    const shouldUseBuiltinForc = jest
+    const shouldUseBuiltinForc = vi
       .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
       .mockReturnValue(false);
 
-    const shouldUseBuiltinFuelCore = jest
+    const shouldUseBuiltinFuelCore = vi
       .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
       .mockReturnValue(true);
 
