@@ -479,6 +479,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
+  /**
+   * Funds the transaction with fake UTXOs for each assetId and amount in the
+   * quantities array.
+   *
+   * @param quantities - CoinQuantity Array.
+   */
   fundWithFakeUtxos(quantities: CoinQuantity[]) {
     const hasBaseAssetId = quantities.some(({ assetId }) => assetId === BaseAssetId);
 
