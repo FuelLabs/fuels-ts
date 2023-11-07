@@ -15,6 +15,7 @@ describe(__filename, () => {
 
     return () => TestNodeLauncher.killCachedNodes();
   });
+
   it('should successfully get transaction cost estimate for a single contract call', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [projectDir],
