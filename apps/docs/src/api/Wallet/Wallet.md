@@ -8,7 +8,11 @@
 
 ### constructor
 
-• **new Wallet**()
+• **new Wallet**(): [`Wallet`](/api/Wallet/Wallet.md)
+
+#### Returns
+
+[`Wallet`](/api/Wallet/Wallet.md)
 
 ## Properties
 
@@ -34,7 +38,7 @@
 
 #### Defined in
 
-[wallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L70)
+[wallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L70)
 
 ___
 
@@ -63,7 +67,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L69)
+[wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L69)
 
 ___
 
@@ -94,7 +98,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L60)
+[wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L60)
 
 ___
 
@@ -124,7 +128,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L49)
+[wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L49)
 
 ___
 
@@ -152,13 +156,13 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L39)
+[wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L39)
 
 ## Methods
 
 ### fromAddress
 
-▸ `Static` **fromAddress**(`address`, `provider`): [`WalletLocked`](/api/Wallet/WalletLocked.md)
+▸ **fromAddress**(`address`, `provider`): [`WalletLocked`](/api/Wallet/WalletLocked.md)
 
 Creates a locked wallet instance from an address and a provider.
 
@@ -177,13 +181,13 @@ A locked wallet instance.
 
 #### Defined in
 
-[wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L18)
+[wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L18)
 
 ___
 
 ### fromPrivateKey
 
-▸ `Static` **fromPrivateKey**(`privateKey`, `provider`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ **fromPrivateKey**(`privateKey`, `provider`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Creates an unlocked wallet instance from a private key and a provider.
 
@@ -202,4 +206,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/wallet/src/wallet.ts#L29)
+[wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/wallet/src/wallet.ts#L29)

@@ -6,19 +6,21 @@
 
 - **`AbstractAddress`**
 
-  ↳ [`Address`](/api/Address/Address.md)
-
 ## Constructors
 
 ### constructor
 
-• **new AbstractAddress**()
+• **new AbstractAddress**(): [`AbstractAddress`](/api/Interfaces/AbstractAddress.md)
+
+#### Returns
+
+[`AbstractAddress`](/api/Interfaces/AbstractAddress.md)
 
 ## Methods
 
 ### equals
 
-▸ `Abstract` **equals**(`other`): `boolean`
+▸ **equals**(`other`): `boolean`
 
 #### Parameters
 
@@ -32,13 +34,13 @@
 
 #### Defined in
 
-[index.ts:42](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L42)
+[index.ts:46](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L46)
 
 ___
 
 ### toAddress
 
-▸ `Abstract` **toAddress**(): \`fuel${string}\`
+▸ **toAddress**(): \`fuel${string}\`
 
 #### Returns
 
@@ -46,13 +48,13 @@ ___
 
 #### Defined in
 
-[index.ts:38](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L38)
+[index.ts:42](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L42)
 
 ___
 
 ### toB256
 
-▸ `Abstract` **toB256**(): `string`
+▸ **toB256**(): `string`
 
 #### Returns
 
@@ -60,13 +62,13 @@ ___
 
 #### Defined in
 
-[index.ts:39](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L39)
+[index.ts:43](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L43)
 
 ___
 
 ### toBytes
 
-▸ `Abstract` **toBytes**(): `Uint8Array`
+▸ **toBytes**(): `Uint8Array`
 
 #### Returns
 
@@ -74,13 +76,13 @@ ___
 
 #### Defined in
 
-[index.ts:41](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L41)
+[index.ts:45](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L45)
 
 ___
 
 ### toHexString
 
-▸ `Abstract` **toHexString**(): `string`
+▸ **toHexString**(): `string`
 
 #### Returns
 
@@ -88,13 +90,13 @@ ___
 
 #### Defined in
 
-[index.ts:40](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L40)
+[index.ts:44](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L44)
 
 ___
 
 ### toJSON
 
-▸ `Abstract` **toJSON**(): `string`
+▸ **toJSON**(): `string`
 
 #### Returns
 
@@ -102,13 +104,13 @@ ___
 
 #### Defined in
 
-[index.ts:36](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L36)
+[index.ts:40](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L40)
 
 ___
 
 ### toString
 
-▸ `Abstract` **toString**(): `string`
+▸ **toString**(): `string`
 
 #### Returns
 
@@ -116,4 +118,4 @@ ___
 
 #### Defined in
 
-[index.ts:37](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L37)
+[index.ts:41](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L41)

@@ -16,13 +16,11 @@ Represents the result of a function invocation, with decoded logs and gas usage.
 
   ↳ [`FunctionInvocationResult`](/api/Program/FunctionInvocationResult.md)
 
-  ↳ [`FunctionInvocationResult`](/api/Program/FunctionInvocationResult.md)
-
 ## Constructors
 
 ### constructor
 
-• **new InvocationResult**&lt;`T`\>(`funcScopes`, `callResult`, `isMultiCall`)
+• **new InvocationResult**&lt;`T`\>(`funcScopes`, `callResult`, `isMultiCall`): [`InvocationResult`](/api/Program/InvocationResult.md)&lt;`T`\>
 
 Constructs an instance of InvocationResult.
 
@@ -40,9 +38,13 @@ Constructs an instance of InvocationResult.
 | `callResult` | [`CallResult`](/api/Providers/index.md#callresult) | The call result. |
 | `isMultiCall` | `boolean` | Whether it's a multi-call. |
 
+#### Returns
+
+[`InvocationResult`](/api/Program/InvocationResult.md)&lt;`T`\>
+
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:52](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L52)
+[packages/program/src/functions/invocation-results.ts:52](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L52)
 
 ## Properties
 
@@ -52,7 +54,7 @@ Constructs an instance of InvocationResult.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:40](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L40)
+[packages/program/src/functions/invocation-results.ts:40](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L40)
 
 ___
 
@@ -62,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:42](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L42)
+[packages/program/src/functions/invocation-results.ts:42](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L42)
 
 ___
 
@@ -72,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:41](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L41)
+[packages/program/src/functions/invocation-results.ts:41](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L41)
 
 ___
 
@@ -82,13 +84,13 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L43)
+[packages/program/src/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L43)
 
 ## Methods
 
 ### getDecodedLogs
 
-▸ `Protected` **getDecodedLogs**(`receipts`): `unknown`[]
+▸ **getDecodedLogs**(`receipts`): `unknown`[]
 
 Decodes the logs from the receipts.
 
@@ -106,13 +108,13 @@ The decoded logs.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:108](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L108)
+[packages/program/src/functions/invocation-results.ts:108](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L108)
 
 ___
 
 ### getDecodedValue
 
-▸ `Protected` **getDecodedValue**(`callResult`): `T`
+▸ **getDecodedValue**(`callResult`): `T`
 
 Decodes the value from the call result.
 
@@ -130,13 +132,13 @@ The decoded value.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:82](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L82)
+[packages/program/src/functions/invocation-results.ts:82](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L82)
 
 ___
 
 ### getFirstCallConfig
 
-▸ `Private` **getFirstCallConfig**(): `undefined` \| [`CallConfig`](/api/Program/index.md#callconfig)
+▸ **getFirstCallConfig**(): `undefined` \| [`CallConfig`](/api/Program/index.md#callconfig)
 
 Gets the first call config.
 
@@ -148,4 +150,4 @@ The first call config.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:68](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/program/src/functions/invocation-results.ts#L68)
+[packages/program/src/functions/invocation-results.ts:68](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/program/src/functions/invocation-results.ts#L68)

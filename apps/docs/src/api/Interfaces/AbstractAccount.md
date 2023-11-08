@@ -6,13 +6,15 @@
 
 - **`AbstractAccount`**
 
-  ↳ [`Account`](/api/Wallet/Account.md)
-
 ## Constructors
 
 ### constructor
 
-• **new AbstractAccount**()
+• **new AbstractAccount**(): [`AbstractAccount`](/api/Interfaces/AbstractAccount.md)
+
+#### Returns
+
+[`AbstractAccount`](/api/Interfaces/AbstractAccount.md)
 
 ## Properties
 
@@ -22,7 +24,7 @@
 
 #### Defined in
 
-[index.ts:47](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L47)
+[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L51)
 
 ___
 
@@ -32,13 +34,13 @@ ___
 
 #### Defined in
 
-[index.ts:48](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L48)
+[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L52)
 
 ## Methods
 
 ### getResourcesToSpend
 
-▸ `Abstract` **getResourcesToSpend**(`quantities`, `options?`): `any`
+▸ **getResourcesToSpend**(`quantities`, `options?`): `any`
 
 #### Parameters
 
@@ -53,13 +55,13 @@ ___
 
 #### Defined in
 
-[index.ts:49](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L49)
+[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L53)
 
 ___
 
 ### sendTransaction
 
-▸ `Abstract` **sendTransaction**(`transactionRequest`): `any`
+▸ **sendTransaction**(`transactionRequest`): `any`
 
 #### Parameters
 
@@ -73,13 +75,13 @@ ___
 
 #### Defined in
 
-[index.ts:50](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L50)
+[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L54)
 
 ___
 
 ### simulateTransaction
 
-▸ `Abstract` **simulateTransaction**(`transactionRequest`): `any`
+▸ **simulateTransaction**(`transactionRequest`): `any`
 
 #### Parameters
 
@@ -93,4 +95,4 @@ ___
 
 #### Defined in
 
-[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packag/api/src/index.ts#L51)
+[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packag/api/src/index.ts#L55)

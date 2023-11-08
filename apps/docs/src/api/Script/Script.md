@@ -21,7 +21,7 @@
 
 ### constructor
 
-• **new Script**&lt;`TInput`, `TOutput`\>(`bytecode`, `abi`, `account`)
+• **new Script**&lt;`TInput`, `TOutput`\>(`bytecode`, `abi`, `account`): [`Script`](/api/Script/Script.md)&lt;`TInput`, `TOutput`\>
 
 Create a new instance of the Script class.
 
@@ -40,13 +40,17 @@ Create a new instance of the Script class.
 | `abi` | `JsonAbi` | The ABI interface for the script. |
 | `account` | [`Account`](/api/Wallet/Account.md) | The account associated with the script. |
 
+#### Returns
+
+[`Script`](/api/Script/Script.md)&lt;`TInput`, `TOutput`\>
+
 #### Overrides
 
 AbstractScript.constructor
 
 #### Defined in
 
-[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L70)
+[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L70)
 
 ## Properties
 
@@ -62,7 +66,7 @@ AbstractScript.account
 
 #### Defined in
 
-[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L46)
+[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L46)
 
 ___
 
@@ -78,7 +82,7 @@ AbstractScript.bytes
 
 #### Defined in
 
-[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L36)
+[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L36)
 
 ___
 
@@ -96,7 +100,7 @@ Functions that can be invoked within the script.
 
 #### Defined in
 
-[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L61)
+[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L61)
 
 ___
 
@@ -112,7 +116,7 @@ AbstractScript.interface
 
 #### Defined in
 
-[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L41)
+[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L41)
 
 ___
 
@@ -128,7 +132,7 @@ AbstractScript.provider
 
 #### Defined in
 
-[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L56)
+[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L56)
 
 ___
 
@@ -140,7 +144,7 @@ The script request object.
 
 #### Defined in
 
-[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L51)
+[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L51)
 
 ## Methods
 
@@ -168,4 +172,4 @@ This instance of the `Script`.
 
 #### Defined in
 
-[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/bb4b542a/packages/script/src/script.ts#L91)
+[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/script/src/script.ts#L91)
