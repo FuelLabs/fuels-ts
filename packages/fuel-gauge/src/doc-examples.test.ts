@@ -1,4 +1,10 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import {
+  AssetId,
+  WalletConfig,
+  generateTestWallet,
+  seedTestWallet,
+} from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type {
   BN,
@@ -52,11 +58,16 @@ const ADDRESS_BYTES = new Uint8Array([
  */
 describe('Doc Examples', () => {
   let gasPrice: BN;
+  let provider: Provider;
 
   beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { provider: p, cleanup } = await TestNodeLauncher.launch(undefined, false);
+    provider = p;
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
+
+    return () => cleanup();
   });
+
   test('it has an Address class using bech32Address', () => {
     const address = new Address(ADDRESS_BECH32);
 
@@ -120,9 +131,7 @@ describe('Doc Examples', () => {
     expect(randomB256).toEqual(hexlify(randomB256));
   });
 
-  test('it has conversion tools', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
+  test('it has conversion tools', () => {
     const assetId: string = ZeroBytes32;
     const randomB256Bytes: Bytes = randomBytes(32);
     const hexedB256: string = hexlify(randomB256Bytes);
@@ -141,7 +150,6 @@ describe('Doc Examples', () => {
   });
 
   test('it can work with wallets', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallets
     // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
 
@@ -186,7 +194,6 @@ describe('Doc Examples', () => {
   });
 
   it('it can work sign messages with wallets', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
     // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
     const wallet = WalletUnlocked.generate({
@@ -206,12 +213,12 @@ describe('Doc Examples', () => {
   it('can connect to testnet', async () => {
     // #region provider-testnet
     // #context import { Provider, WalletUnlocked } from 'fuels';
-    const provider = await Provider.create('https://beta-4.fuel.network/graphql');
+    const testnetProvider = await Provider.create('https://beta-4.fuel.network/graphql');
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
     // Create the wallet, passing provider
-    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, testnetProvider);
 
     // #region signer-address
     const signer = new Signer(PRIVATE_KEY);
@@ -222,9 +229,10 @@ describe('Doc Examples', () => {
   });
 
   it('can connect to a local provider', async () => {
+    const localProviderUrl = provider.url;
     // #region provider-local
     // #context import { Provider, WalletUnlocked } from 'fuels';
-    const localProvider = await Provider.create(FUEL_NETWORK_URL);
+    const localProvider = await Provider.create(localProviderUrl);
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
@@ -238,16 +246,17 @@ describe('Doc Examples', () => {
   });
 
   it('can query address with wallets', async () => {
+    await using launched = await TestNodeLauncher.launch({
+      walletConfig: new WalletConfig({ assets: [AssetId.A], amountPerCoin: 42 }),
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
     // #region wallet-query
     // #context import { Provider } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-
-    const wallet = await generateTestWallet(provider, [
-      [42, BaseAssetId],
-      [100, assetIdA],
-    ]);
+    // #context const provider = await Provider.create(...)
+    // #context const wallet = WalletUnlocked.fromPrivateKey(PRIVATE_KEY, provider);
 
     // get single coin
     const coin = await wallet.getCoins(BaseAssetId);
@@ -268,8 +277,8 @@ describe('Doc Examples', () => {
         amount: bn(42),
       }),
       expect.objectContaining({
-        assetId: assetIdA,
-        amount: bn(100),
+        assetId: AssetId.A.value,
+        amount: bn(42),
       }),
     ]);
     // #endregion wallet-query
@@ -278,24 +287,24 @@ describe('Doc Examples', () => {
     const walletBalances = await wallet.getBalances();
     expect(walletBalances).toEqual([
       { assetId: BaseAssetId, amount: bn(42) },
-      { assetId: assetIdA, amount: bn(100) },
+      { assetId: AssetId.A.value, amount: bn(42) },
     ]);
     // #endregion wallet-get-balances
 
     // #region wallet-get-spendable-resources
     const spendableResources = await wallet.getResourcesToSpend([
       { amount: 32, assetId: BaseAssetId, max: 42 },
-      { amount: 50, assetId: assetIdA },
+      { amount: 40, assetId: AssetId.A.value },
     ]);
     expect(spendableResources[0].amount).toEqual(bn(42));
-    expect(spendableResources[1].amount).toEqual(bn(100));
+    expect(spendableResources[1].amount).toEqual(bn(42));
     // #endregion wallet-get-spendable-resources
   });
 
-  it('can create a predicate', async () => {
+  it('can create a predicate', () => {
     // #region predicate-basic
     // #context import { Predicate, arrayify } from 'fuels';
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    // #context const provider = await Provider.create(...)
     const predicate = new Predicate(testPredicateTrue, provider);
 
     expect(predicate.address).toBeTruthy();
@@ -304,21 +313,14 @@ describe('Doc Examples', () => {
   });
 
   it('can create a predicate and use', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    // Setup a private key
-    const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
-    const PRIVATE_KEY_2 = '0x37fa81c84ccd547c30c176b118d5cb892bdb113e8e80141f266519422ef9eefd';
-    const PRIVATE_KEY_3 = '0x976e5c3fa620092c718d852ca703b6da9e3075b9f2ecb8ed42d9f746bf26aafb';
+    await using launched = await TestNodeLauncher.launch({
+      walletConfig: new WalletConfig({ wallets: 3 }),
+    });
+    const {
+      wallets: [wallet1, wallet2, wallet3],
+    } = launched;
 
-    // Create the wallets, passing provider
-    const wallet1: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_1, provider);
-    const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
-    const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
-    const receiver = Wallet.generate({ provider });
-
-    await seedTestWallet(wallet1, [{ assetId: BaseAssetId, amount: bn(1_000_000) }]);
-    await seedTestWallet(wallet2, [{ assetId: BaseAssetId, amount: bn(2_000_000) }]);
-    await seedTestWallet(wallet3, [{ assetId: BaseAssetId, amount: bn(300_000) }]);
+    const receiver = Wallet.generate({ provider: wallet1.provider });
 
     const AbiInputs: JsonAbi = {
       types: [
@@ -380,8 +382,16 @@ describe('Doc Examples', () => {
     await response.waitForResult();
     const predicateBalance = await predicate.getBalance();
 
+    console.log(
+      'predicateBalance',
+      predicateBalance.toNumber(),
+      'initialPredicateBalance',
+      initialPredicateBalance.toNumber(),
+      'sent amount',
+      amountToPredicate
+    );
     // assert that predicate address now has the expected amount to predicate
-    expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
+    expect(predicateBalance).toEqual(initialPredicateBalance.add(amountToPredicate));
 
     const depositOnPredicate = await wallet1.transfer(predicate.address, 200, BaseAssetId, {
       gasPrice,
@@ -419,7 +429,7 @@ describe('Doc Examples', () => {
 
   test.skip('deposit and withdraw cookbook guide', async () => {
     // #region deposit-and-withdraw-cookbook-wallet-setup
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    // #context const provider = await Provider.create(...);
     const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     await seedTestWallet(wallet, [{ assetId: BaseAssetId, amount: bn(100_000) }]);
