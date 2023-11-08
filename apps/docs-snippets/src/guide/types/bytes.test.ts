@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { Contract, Bytes } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -12,8 +12,9 @@ describe('Bytes', () => {
 
   it('should pass bytes to a contract', async () => {
     // #region bytes-1
+    // #context import type { Bytes } from 'fuels';
 
-    const bytes = [40, 41, 42];
+    const bytes: Bytes = [40, 41, 42];
 
     const { value } = await contract.functions.bytes_comparison(bytes).simulate();
 
@@ -23,8 +24,9 @@ describe('Bytes', () => {
 
   it('should retrieve bytes from a contract', async () => {
     // #region bytes-2
+    // #context import type { Bytes } from 'fuels';
 
-    const bytes = [8, 42, 77];
+    const bytes: Bytes = [8, 42, 77];
 
     const { value } = await contract.functions.echo_bytes(bytes).simulate();
 

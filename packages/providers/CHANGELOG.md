@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.66.0
+
+### Minor Changes
+
+- made calculateTransactionFee to return minFee and maxFee, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1383](https://github.com/FuelLabs/fuels-ts/pull/1383))
+
+### Patch Changes
+
+- You can now pass in `ProviderOptions` to `Provider.connect`, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1388](https://github.com/FuelLabs/fuels-ts/pull/1388))
+
 ## 0.65.0
 
 ### Minor Changes
