@@ -153,12 +153,6 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 export type TransactionCreate = {
   type: TransactionType.Create;
 
-  /** Gas price for transaction (u64) */
-  gasPrice: BN;
-
-  /** Gas limit for transaction (u64) */
-  gasLimit: BN;
-
   /** Block until which tx cannot be included (u32) */
   maturity: number;
 
@@ -204,8 +198,6 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new U64Coder().encode(value.gasPrice));
-    parts.push(new U64Coder().encode(value.gasLimit));
     parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
@@ -228,10 +220,6 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new U64Coder().decode(data, o);
-    const gasPrice = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
-    const gasLimit = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
@@ -260,8 +248,6 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     return [
       {
         type: TransactionType.Create,
-        gasPrice,
-        gasLimit,
         maturity,
         bytecodeLength,
         bytecodeWitnessIndex,
