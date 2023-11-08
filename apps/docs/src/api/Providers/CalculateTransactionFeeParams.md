@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/providers/src/utils/calculate-fee.ts:47](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/providers/src/utils/calculate-fee.ts#L47)
+[packages/providers/src/utils/calculate-fee.ts:47](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/utils/calculate-fee.ts#L47)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/calculate-fee.ts:44](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/providers/src/utils/calculate-fee.ts#L44)
+[packages/providers/src/utils/calculate-fee.ts:44](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/utils/calculate-fee.ts#L44)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/calculate-fee.ts:45](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/providers/src/utils/calculate-fee.ts#L45)
+[packages/providers/src/utils/calculate-fee.ts:45](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/utils/calculate-fee.ts#L45)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/calculate-fee.ts:43](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/providers/src/utils/calculate-fee.ts#L43)
+[packages/providers/src/utils/calculate-fee.ts:43](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/utils/calculate-fee.ts#L43)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/calculate-fee.ts:46](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/providers/src/utils/calculate-fee.ts#L46)
+[packages/providers/src/utils/calculate-fee.ts:46](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/utils/calculate-fee.ts#L46)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/calculate-fee.ts:42](https://github.com/FuelLabs/fuels-ts/blob/7a966d34/packages/providers/src/utils/calculate-fee.ts#L42)
+[packages/providers/src/utils/calculate-fee.ts:42](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/utils/calculate-fee.ts#L42)
