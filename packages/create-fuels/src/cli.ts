@@ -10,7 +10,7 @@ export const runScaffoldCli = async () => {
   let projectPath = '';
   new Command(packageJson.name)
     .version(packageJson.version)
-    .arguments('<project-name>')
+    .arguments('<project-name>') // TODO: add support for multiple templates
     .usage(`${chalk.green('<project-name>')} [options]`)
     .showHelpAfterError(true)
     .action((name) => {
@@ -30,9 +30,9 @@ export const runScaffoldCli = async () => {
   console.log('To get started:');
   console.log();
   console.log(`- cd into the project directory: cd ${projectPath}`);
-  console.log(`- Install the dependencies: npm install`);
-  console.log('- Start a local Fuel dev server: npx fuels dev`');
-  console.log('- Run the frontend by running npm run dev');
+  console.log(`- Install the dependencies: pnpm install`);
+  console.log('- Start a local Fuel dev server: pnpx fuels dev`');
+  console.log('- Run the frontend by running pnpm run dev');
   console.log();
   console.log();
   console.log('-> TS SDK docs: https://fuellabs.github.io/fuels-ts/');
