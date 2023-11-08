@@ -15,7 +15,7 @@ export const withConfigErrorHandler = async (err: Error, config?: FuelsConfig) =
 export function withConfig<CType extends Commands>(
   program: Command,
   command: CType,
-  fn: (config: FuelsConfig) => Promise<Extract<CommandEvent, { type: CType }>['data']>
+  fn: (config: FuelsConfig, options?: Command) => Promise<Extract<CommandEvent, { type: CType }>['data']>
 ) {
   return async () => {
     const options = program.opts();
@@ -30,7 +30,7 @@ export function withConfig<CType extends Commands>(
     }
 
     try {
-      const eventData = await fn(config);
+      const eventData = await fn(config, program);
       config.onSuccess?.(
         {
           type: command,
