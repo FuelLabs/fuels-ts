@@ -15,9 +15,8 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "prebuild": "run-p check:*",
-    "check:nextjs": "cd templates/nextjs && pnpm build",
-    "build": "tsup"
+    "build": "tsup",
+    "prepublish": "cp -r ../../templates"
   },
   "dependencies": {
     "fuels": "workspace:*",
