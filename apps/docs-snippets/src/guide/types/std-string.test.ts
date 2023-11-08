@@ -1,4 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import type { StdString } from 'fuels';
 
 import { getProgramDir } from '../../utils';
 
@@ -21,8 +22,9 @@ describe('StdString', () => {
     } = launched;
 
     // #region std-string-1
+    // #context import type { StdString } from 'fuels';
 
-    const stdString = 'Hello World';
+    const stdString: StdString = 'Hello World';
 
     const { value } = await contract.functions.string_comparison(stdString).simulate();
 
@@ -39,8 +41,9 @@ describe('StdString', () => {
     } = launched;
 
     // #region std-string-2
+    // #context import type { StdString } from 'fuels';
 
-    const stdString = 'Hello Fuel';
+    const stdString: StdString = 'Hello Fuel';
 
     const { value } = await contract.functions.echo_string(stdString).simulate();
 

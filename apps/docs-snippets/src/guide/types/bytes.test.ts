@@ -1,4 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import type { Bytes } from 'fuels';
 
 import { getProgramDir } from '../../utils';
 
@@ -21,8 +22,9 @@ describe('Bytes', () => {
     } = launched;
 
     // #region bytes-1
+    // #context import type { Bytes } from 'fuels';
 
-    const bytes = [40, 41, 42];
+    const bytes: Bytes = [40, 41, 42];
 
     const { value } = await contract.functions.bytes_comparison(bytes).simulate();
 
@@ -39,8 +41,9 @@ describe('Bytes', () => {
     } = launched;
 
     // #region bytes-2
+    // #context import type { Bytes } from 'fuels';
 
-    const bytes = [8, 42, 77];
+    const bytes: Bytes = [8, 42, 77];
 
     const { value } = await contract.functions.echo_bytes(bytes).simulate();
 

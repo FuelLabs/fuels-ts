@@ -50,6 +50,11 @@ jobs:
 
       - name: install fuelup
         run: curl --proto '=https' --tlsv1.2 -sSf https://install.fuel.network/fuelup-init.sh | sh -s -- --no-modify-path
+      # - name: Verify package.json integrity
+      #   run: pnpm lint:package-jsons
+
+      # - name: Forc Format Check
+      #   run: pnpm forc:check
 
       - name: Run Node Tests
         run: pnpm ci:test

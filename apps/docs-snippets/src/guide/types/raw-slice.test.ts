@@ -1,5 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import type { BN } from 'fuels';
+import type { BN, RawSlice } from 'fuels';
 
 import { getProgramDir } from '../../utils';
 
@@ -21,8 +21,9 @@ describe('RawSlice', () => {
       contracts: [contract],
     } = launched;
     // #region raw-slice-1
+    // #context import type { RawSlice } from 'fuels';
 
-    const rawSlice = [40, 41, 42];
+    const rawSlice: RawSlice = [40, 41, 42];
 
     const { value } = await contract.functions.raw_slice_comparison(rawSlice).simulate();
 
@@ -38,8 +39,9 @@ describe('RawSlice', () => {
       contracts: [contract],
     } = launched;
     // #region raw-slice-2
+    // #context import type { RawSlice } from 'fuels';
 
-    const rawSlice = [8, 42, 77];
+    const rawSlice: RawSlice = [8, 42, 77];
 
     const { value } = await contract.functions.echo_raw_slice(rawSlice).simulate();
 

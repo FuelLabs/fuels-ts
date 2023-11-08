@@ -23,8 +23,8 @@ describe('RawUntypedSlice.ts', () => {
     expect(suitableForRawUntyped).toEqual(true);
     expect(suitableForStruct).toEqual(false);
 
-    expect(rawSlice.attributes.inputLabel).toEqual('RawUntypedSlice');
-    expect(rawSlice.attributes.outputLabel).toEqual('RawUntypedSlice');
-    expect(rawSlice.requiredFuelsMembersImports).toStrictEqual([]);
+    expect(rawSlice.attributes.inputLabel).toEqual('RawSlice');
+    expect(rawSlice.attributes.outputLabel).toEqual('RawSlice');
+    expect(rawSlice.requiredFuelsMembersImports).toStrictEqual(['RawSlice']);
   });
 });

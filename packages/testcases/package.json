@@ -1,6 +1,7 @@
 {
   "name": "@fuel-ts/testcases",
-  "version": "0.65.0",
+  "private": true,
+  "version": "0.66.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "files": [

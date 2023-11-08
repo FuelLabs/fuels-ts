@@ -12,6 +12,7 @@
 import type {
   BigNumberish,
   BN,
+  Bytes,
   BytesLike,
   Contract,
   DecodedValue,
@@ -19,6 +20,8 @@ import type {
   FunctionFragment,
   Interface,
   InvokeFunction,
+  RawSlice,
+  StdString,
 } from 'fuels';
 
 import type { Option, Enum, Vec } from "./common";
@@ -71,7 +74,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option_geo', values: [Option<MyStructInput>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_raw_slice', values: [RawUntypedSlice]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_raw_slice', values: [RawSlice]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_std_string', values: [StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_str', values: [string]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_struct', values: [MyStructInput]): Uint8Array;
@@ -121,7 +124,7 @@ export class MyContractAbi extends Contract {
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
     types_option_geo: InvokeFunction<[x: Option<MyStructInput>], Option<MyStructOutput>>;
-    types_raw_slice: InvokeFunction<[x: RawUntypedSlice], RawUntypedSlice>;
+    types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;
     types_std_string: InvokeFunction<[x: StdString], StdString>;
     types_str: InvokeFunction<[x: string], string>;
     types_struct: InvokeFunction<[x: MyStructInput], MyStructOutput>;
