@@ -11,5 +11,6 @@
     "@fuel-ts/errors": "workspace:^",
     "@fuel-ts/wallet": "workspace:^",
     "fuels": "workspace:*"
-  }
+  },
+  "version": null
 }

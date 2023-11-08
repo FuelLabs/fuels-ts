@@ -14,10 +14,15 @@ export class RawUntypedSlice extends ArrayType {
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
+    const capitalizedName = 'RawSlice';
+
     this.attributes = {
-      inputLabel: `RawUntypedSlice`,
-      outputLabel: `RawUntypedSlice`,
+      inputLabel: capitalizedName,
+      outputLabel: capitalizedName,
     };
+
+    this.requiredFuelsMembersImports = [capitalizedName];
+
     return this.attributes;
   }
 }
