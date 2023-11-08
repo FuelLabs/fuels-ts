@@ -2,7 +2,7 @@ name: "Test Setup"
 inputs:
   node-version:
     description: "Node version"
-    default: 18.14.1
+    default: 18.17.1
   pnpm-version:
     description: "PNPM version"
     default: 8.9.0
