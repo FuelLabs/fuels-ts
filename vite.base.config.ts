@@ -21,7 +21,7 @@ export default defineConfig({
     ],
     globals: true,
     ui: false,
-    setupFiles: ['./vite.env.ts'],
+    // setupFiles: ['./vite.env.ts'],
     globalSetup: ['vite.global-setup.ts'],
     coverage: {
       enabled: true,
