@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "fuels build && [ -f src/sway-api/contract-ids.json ] || echo '{ \"testContract\": \"0x\"}' > src/sway-api/contract-ids.json",
+    "fuels:init": "fuels build && [ -f src/sway-api/contract-ids.json ] || echo '{ \"testContract\": \"0x\"}' > src/sway-api/contract-ids.json",
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run fuels:init && next build",
     "start": "next start",
     "lint": "next lint"
   },
