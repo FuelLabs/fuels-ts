@@ -16,3 +16,5 @@ out
 CHANGELOG.md
 
 *.hbs
+
+packages/create-fuels/templates/nextjs

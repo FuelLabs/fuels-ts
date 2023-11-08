@@ -6,7 +6,8 @@
     "create-fuels": "create-fuels.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "templates"
   ],
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "engines": {
@@ -24,6 +25,6 @@
     "tar": "^6.2.0"
   },
   "devDependencies": {
-    "@types/got": "^9.6.12"
+    "@types/tar": "^6.1.8"
   }
 }

@@ -1,29 +1,10 @@
 /* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
 import chalk from 'chalk';
 import { Command } from 'commander';
-import { createWriteStream } from 'fs';
-import { mkdir, unlink } from 'fs/promises';
-import { tmpdir } from 'os';
+import { cp, mkdir } from 'fs/promises';
 import { join } from 'path';
-import { pipeline } from 'stream';
-import tar from 'tar';
-import { promisify } from 'util';
 
 import packageJson from '../package.json';
-
-const streamPipeline = promisify(pipeline);
-
-async function downloadTar(url) {
-  const tempFile = join(tmpdir(), `create-fuels.temp-${Date.now()}`);
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Unexpected response ${response.statusText}`);
-  }
-  // @ts-expect-error types mismatch
-  await streamPipeline(response.body, createWriteStream(tempFile));
-  return tempFile;
-}
 
 export const runScaffoldCli = async () => {
   let projectPath = '';
@@ -38,15 +19,8 @@ export const runScaffoldCli = async () => {
     .parse(process.argv);
 
   await mkdir(projectPath);
-  const tempFile = await downloadTar(
-    `https://codeload.github.com/Dhaiwat10/fuel-cli-starter-template/tar.gz/main` // TODO: change this to a repo in the Fuel org
-  );
-  await tar.x({
-    file: tempFile,
-    strip: 1,
-    cwd: join(process.cwd(), projectPath),
-  });
-  await unlink(tempFile);
+
+  await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
 
   console.log();
   console.log();
