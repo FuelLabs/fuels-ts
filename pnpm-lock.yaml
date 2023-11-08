@@ -596,6 +596,9 @@ importers:
         specifier: ^6.2.0
         version: 6.2.0
     devDependencies:
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
       '@types/tar':
         specifier: ^6.1.8
         version: 6.1.8

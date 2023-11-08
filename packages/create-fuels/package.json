@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsup",
-    "prepublish": "cp -r ../../templates"
+    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/injectFuelsVersion.ts"
   },
   "dependencies": {
     "fuels": "workspace:*",
@@ -25,6 +25,7 @@
     "tar": "^6.2.0"
   },
   "devDependencies": {
-    "@types/tar": "^6.1.8"
+    "@types/tar": "^6.1.8",
+    "@fuel-ts/versions": "workspace:*"
   }
 }
