@@ -20,7 +20,7 @@ import { randomBytes } from 'crypto';
 
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
-import { launchCustomProviderAndGetWallets } from './test-utils';
+import { AssetId, launchCustomProviderAndGetWallets } from './test-utils';
 
 vi.mock('@fuel-ts/providers', async () => {
   const mod = await vi.importActual('@fuel-ts/providers');
@@ -80,9 +80,7 @@ describe('Account', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
-      Promise.resolve(dummyCoins)
-    );
+    vi.spyOn(provider, 'getCoins').mockImplementation(async () => Promise.resolve(dummyCoins));
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -170,12 +168,14 @@ describe('Account', () => {
   });
 
   it('should get single asset balance just fine', async () => {
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
+    await using launched = await launchCustomProviderAndGetWallets();
+    const {
+      wallets: [wallet],
+    } = launched;
+    const account = new Account(wallet.address, provider);
+
     const balanceA = await account.getBalance(); // native asset
-    const balanceB = await account.getBalance(assets[1]);
+    const balanceB = await account.getBalance(AssetId.A.value);
     expect(balanceA.gte(1)).toBeTruthy();
     expect(balanceB.gte(1)).toBeTruthy();
   });
