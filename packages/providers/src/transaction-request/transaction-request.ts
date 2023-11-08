@@ -3,8 +3,14 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
-import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
+import type { Policy, TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
+import {
+  TransactionType,
+  TransactionCoder,
+  InputType,
+  OutputType,
+  PolicyType,
+} from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
@@ -56,6 +62,18 @@ export interface BaseTransactionRequestLike {
   witnesses?: TransactionRequestWitness[];
 }
 
+type ToBaseTransactionResponse = Pick<
+  TransactionScript,
+  | 'inputs'
+  | 'inputsCount'
+  | 'outputs'
+  | 'outputsCount'
+  | 'witnesses'
+  | 'witnessesCount'
+  | 'policies'
+  | 'policyTypes'
+>;
+
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
@@ -101,19 +119,29 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @returns The base transaction details.
    */
-  protected getBaseTransaction(): Pick<
-    TransactionScript | TransactionCreate,
-    keyof BaseTransactionRequestLike | 'inputsCount' | 'outputsCount' | 'witnessesCount'
-  > {
+
+  protected getBaseTransaction(): ToBaseTransactionResponse {
     const inputs = this.inputs?.map(inputify) ?? [];
     const outputs = this.outputs?.map(outputify) ?? [];
     const witnesses = this.witnesses?.map(witnessify) ?? [];
+
+    let policyTypes = 0;
+    const policies: Policy[] = [];
+
+    if (this.gasPrice) {
+      policyTypes += PolicyType.GasPrice;
+      policies.push({ data: this.gasPrice, type: PolicyType.GasPrice });
+    }
+    if (this.maturity) {
+      policyTypes += PolicyType.Maturity;
+      policies.push({ data: this.maturity, type: PolicyType.Maturity });
+    }
+
     return {
-      gasPrice: this.gasPrice,
-      gasLimit: this.gasLimit,
-      maturity: this.maturity,
+      policyTypes,
       inputs,
       outputs,
+      policies,
       witnesses,
       inputsCount: inputs.length,
       outputsCount: outputs.length,
