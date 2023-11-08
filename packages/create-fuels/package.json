@@ -18,6 +18,7 @@
     "build": "tsup"
   },
   "dependencies": {
+    "fuels": "workspace:*",
     "chalk": "4",
     "commander": "^9.4.1",
     "tar": "^6.2.0"
