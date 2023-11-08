@@ -142,7 +142,7 @@ export class TestNodeLauncher {
   ) {
     if (!process.env.DEFAULT_CHAIN_CONFIG_PATH || !process.env.TEST_CHAIN_CONFIG_PATH)
       throw new Error();
-    process.env.HAS_CACHE = 'true';
+    // process.env.HAS_CACHE = 'true';
 
     if (!process.env.TEST_CHAIN_CONFIG_PATH) {
       const defaultChainConfig = JSON.parse(

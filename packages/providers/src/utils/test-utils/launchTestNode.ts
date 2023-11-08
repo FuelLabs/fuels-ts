@@ -58,7 +58,7 @@ export const launchTestNode = async ({
     let chainConfigPath = '';
 
     const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
-    if (process.env.HAS_CACHE) {
+    if (process.env.HAS_CACHE || process.env.TEST_CHAIN_CONFIG_PATH) {
       chainConfigPath = process.env.TEST_CHAIN_CONFIG_PATH!;
     } else {
       if (!fsSync.existsSync(tempDirPath)) {
