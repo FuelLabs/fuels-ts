@@ -19,6 +19,7 @@ describe('Wallet', () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
   let gasPrice: BN;
+
   beforeAll(async () => {
     const { provider: p, cleanup } = await setupTestProvider(undefined, false);
     provider = p;

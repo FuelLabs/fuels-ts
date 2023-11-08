@@ -167,6 +167,10 @@ importers:
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
+    devDependencies:
+      '@fuel-ts/test-utils':
+        specifier: workspace:*
+        version: link:../../packages/test-utils
 
   apps/demo-nextjs:
     dependencies:
@@ -314,6 +318,9 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../../packages/forc
+      '@fuel-ts/test-utils':
+        specifier: workspace:*
+        version: link:../../packages/test-utils
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils

@@ -66,13 +66,9 @@ export class TestNodeLauncher {
   static async killCachedNodes() {
     if (!this.cache || this.cache.pids.length === 0) return;
 
-    console.log(this.cache.pids);
-    const pids = [...this.cache.pids];
     // await execSync(pids.map((pid) => `pkill -9 -P ${pid}`).join(';'));
 
-    await execSync(`kill ${pids.join(' ')}`);
-
-    this.cache.pids = this.cache.pids.filter((pid) => !pids.includes(pid));
+    await execSync(`kill ${this.cache.pids.join(' ')}`);
     // const cleanups: Promise<void>[] = [];
 
     // this.cache.cleanups.forEach((cleanup) => {
@@ -144,29 +140,32 @@ export class TestNodeLauncher {
       nodeOptions = {},
     }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}
   ) {
-    if (!process.env.DEFAULT_CHAIN_CONFIG_PATH) throw new Error();
+    if (!process.env.DEFAULT_CHAIN_CONFIG_PATH || !process.env.TEST_CHAIN_CONFIG_PATH)
+      throw new Error();
     process.env.HAS_CACHE = 'true';
 
-    const defaultChainConfig = JSON.parse(
-      fsSync.readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
-    ) as ChainConfig;
+    if (!process.env.TEST_CHAIN_CONFIG_PATH) {
+      const defaultChainConfig = JSON.parse(
+        fsSync.readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
+      ) as ChainConfig;
 
-    const chainConfig = walletConfig.apply(defaultChainConfig) as ChainConfig;
+      const chainConfig = walletConfig.apply(defaultChainConfig) as ChainConfig;
 
-    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
-    if (!fsSync.existsSync(tempDirPath)) {
-      fsSync.mkdirSync(tempDirPath, { recursive: true });
+      const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+      if (!fsSync.existsSync(tempDirPath)) {
+        fsSync.mkdirSync(tempDirPath, { recursive: true });
+      }
+      const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
+      // Write a temporary chain configuration file.
+      await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf-8');
+      process.env.TEST_CHAIN_CONFIG_PATH = chainConfigPath;
     }
-    const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
-    // Write a temporary chain configuration file.
-    await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf-8');
-    process.env.TEST_CHAIN_CONFIG_PATH = chainConfigPath;
 
     // @ts-expect-error asdf
     this.cache = {
       cleanups: [],
       pids: [],
-      chainConfig,
+      // chainConfig,
     };
 
     // await this.fasterLaunchStuff({ ...options, nodeCount });
@@ -268,7 +267,8 @@ export class TestNodeLauncher {
       {
         walletConfig,
         providerOptions,
-        nodeOptions: { useSystemFuelCore: true, ...nodeOptions },
+        nodeOptions,
+        // nodeOptions: { useSystemFuelCore: true, ...nodeOptions },
       },
       false
     );

@@ -45,7 +45,7 @@ export const launchTestNode = async ({
   consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   port = '0',
   args = defaultFuelCoreArgs,
-  useSystemFuelCore = false,
+  useSystemFuelCore = true,
   chainConfig = defaultChainConfig,
   logger,
 }: Partial<LaunchTestNodeOptions> = {}): LaunchNodeResult =>
@@ -56,8 +56,8 @@ export const launchTestNode = async ({
     let chainConfigPath = '';
 
     const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
-    if (process.env.TEST_CHAIN_CONFIG_PATH) {
-      chainConfigPath = process.env.TEST_CHAIN_CONFIG_PATH;
+    if (process.env.HAS_CACHE) {
+      chainConfigPath = process.env.TEST_CHAIN_CONFIG_PATH!;
     } else {
       if (!fsSync.existsSync(tempDirPath)) {
         fsSync.mkdirSync(tempDirPath, { recursive: true });
@@ -95,7 +95,7 @@ export const launchTestNode = async ({
     // Cleanup function where fuel-core is stopped.
     const cleanup = () =>
       new Promise<void>((resolveFn, rejectFn) => {
-        if (process.env.TEST_CHAIN_CONFIG_PATH) {
+        if (process.env.HAS_CACHE) {
           removeSideffects(false);
           resolveFn();
           return;

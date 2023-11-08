@@ -1,26 +1,22 @@
 // #region Testing-in-ts-ts
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
-import { ContractFactory, Provider, toHex, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { TestNodeLauncher } from '@fuel-ts/test-utils';
+import { ContractFactory, toHex, Wallet } from 'fuels';
 
 import { DemoContractAbi__factory } from './generated-types';
 import bytecode from './generated-types/DemoContractAbi.hex';
-
-let gasPrice: BN;
 
 /**
  * @group node
  */
 describe('ExampleContract', () => {
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
-
   it('should return the input', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const gasPrice = provider.getGasConfig().minGasPrice;
 
     // Deploy
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
@@ -42,8 +38,12 @@ describe('ExampleContract', () => {
   });
 
   it('deployContract method', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    await using launched = await TestNodeLauncher.launch({});
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const gasPrice = provider.getGasConfig().minGasPrice;
 
     // Deploy
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, { gasPrice });
@@ -58,8 +58,13 @@ describe('ExampleContract', () => {
 // #endregion Testing-in-ts-ts
 
 it('should throw when simulating via contract factory with wallet with no resources', async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const fundedWallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  await using launched = await TestNodeLauncher.launch({});
+  const {
+    wallets: [fundedWallet],
+    provider,
+  } = launched;
+  const gasPrice = provider.getGasConfig().minGasPrice;
+
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
@@ -72,8 +77,12 @@ it('should throw when simulating via contract factory with wallet with no resour
 });
 
 it('should throw when dry running via contract factory with wallet with no resources', async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const fundedWallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  await using launched = await TestNodeLauncher.launch({});
+  const {
+    wallets: [fundedWallet],
+    provider,
+  } = launched;
+  const gasPrice = provider.getGasConfig().minGasPrice;
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);

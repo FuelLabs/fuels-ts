@@ -12,5 +12,8 @@
     "@fuel-ts/wallet": "workspace:^",
     "fuels": "workspace:*"
   },
+  "devDependencies": {
+    "@fuel-ts/test-utils": "workspace:*"
+  },
   "version": null
 }

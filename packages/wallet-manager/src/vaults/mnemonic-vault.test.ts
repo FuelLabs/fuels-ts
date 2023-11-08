@@ -1,4 +1,5 @@
-import { Provider } from '@fuel-ts/providers';
+import type { Provider } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Wallet } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
@@ -11,11 +12,12 @@ import { MnemonicVault } from './mnemonic-vault';
  */
 describe('MnemonicVault', () => {
   let provider: Provider;
-
   beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
+    const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+    provider = p;
 
+    return () => cleanup();
+  });
   it('Get wallet instance', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,

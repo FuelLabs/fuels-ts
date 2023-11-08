@@ -153,20 +153,18 @@ describe('Account', () => {
   it('should throw if messages length is higher than 9999', async () => {
     const dummyMessages: Message[] = new Array(10000);
 
-    vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
-      Promise.resolve(dummyMessages)
-    );
-
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
       provider
     );
 
+    vi.spyOn(provider, 'getMessages').mockImplementation(() => Promise.resolve(dummyMessages));
+
     const { error } = await safeExec(async () => {
       await account.getMessages();
     });
 
-    expect((<Error>error).message).toEqual(
+    expect(error?.message).toEqual(
       'Wallets containing more than 9999 messages exceed the current supported limit.'
     );
   });

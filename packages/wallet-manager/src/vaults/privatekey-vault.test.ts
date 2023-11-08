@@ -1,5 +1,6 @@
 import { Address } from '@fuel-ts/address';
-import { Provider } from '@fuel-ts/providers';
+import type { Provider } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
@@ -14,10 +15,13 @@ describe('PrivateKeyVault', () => {
   let walletSpec: WalletUnlocked;
 
   beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
+    const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+    provider = p;
     walletSpec = Wallet.generate({
       provider,
     });
+
+    return () => cleanup();
   });
 
   it('should get wallet instance', () => {
