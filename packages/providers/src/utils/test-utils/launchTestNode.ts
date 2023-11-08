@@ -51,7 +51,9 @@ export const launchTestNode = async ({
 }: Partial<LaunchTestNodeOptions> = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
-    const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+    const command = useSystemFuelCore
+      ? path.join(os.homedir(), '.fuelup', 'bin', 'fuel-core')
+      : './node_modules/.bin/fuels-core';
 
     let chainConfigPath = '';
 
@@ -67,28 +69,24 @@ export const launchTestNode = async ({
       await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
     }
 
-    const child = spawn(
-      command,
-      [
-        'run',
-        '--db-type',
-        'in-memory',
-        '--consensus-key',
-        consensusKey,
-        '--chain',
-        chainConfigPath as string,
-        '--ip',
-        '127.0.0.1',
-        '--port',
-        port,
-        '--poa-instant',
-        'true',
-        '--min-gas-price',
-        '1',
-        ...args,
-      ],
-      { cwd: useSystemFuelCore ? path.join(os.homedir(), '.fuelup', 'bin') : undefined }
-    );
+    const child = spawn(command, [
+      'run',
+      '--db-type',
+      'in-memory',
+      '--consensus-key',
+      consensusKey,
+      '--chain',
+      chainConfigPath as string,
+      '--ip',
+      '127.0.0.1',
+      '--port',
+      port,
+      '--poa-instant',
+      'true',
+      '--min-gas-price',
+      '1',
+      ...args,
+    ]);
 
     function removeSideffects(removeTempDir: boolean) {
       child.stdout.removeAllListeners();
