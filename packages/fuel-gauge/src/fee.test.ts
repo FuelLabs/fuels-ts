@@ -189,7 +189,9 @@ describe('Fee', () => {
     const gasPrice = randomGasPrice(minGasPrice, 15);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { transactionRequest } = factory.createTransactionRequest({ gasPrice });
-    await wallet.fund(transactionRequest);
+    const { maxFee, requiredQuantities } = await provider.getTransactionCost(transactionRequest);
+
+    await wallet.fund(transactionRequest, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(transactionRequest);
     const { fee } = await tx.wait();

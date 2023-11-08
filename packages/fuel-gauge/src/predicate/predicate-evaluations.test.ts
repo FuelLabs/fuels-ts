@@ -1,5 +1,5 @@
 import { TestNodeLauncher } from '@fuel-ts/test-utils';
-import { BaseAssetId, Predicate, WalletUnlocked, toNumber } from 'fuels';
+import { BaseAssetId, Predicate, WalletUnlocked } from 'fuels';
 
 import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
@@ -25,7 +25,7 @@ describe('Predicate', () => {
       } = launched;
       const { minGasPrice: gasPrice } = provider.getGasConfig();
 
-      const amountToPredicate = 100_000;
+      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
 
       const receiver = WalletUnlocked.generate({ provider });
@@ -59,7 +59,7 @@ describe('Predicate', () => {
         provider,
       } = launched;
 
-      const amountToPredicate = 100;
+      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
 
       const predicate = new Predicate(predicateBytesFalse, provider);

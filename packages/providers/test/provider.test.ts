@@ -12,6 +12,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
+import type { TransactionCost } from '../src/provider';
 import Provider from '../src/provider';
 import { setupTestProvider } from '../src/test-utils';
 import type {
@@ -883,18 +884,21 @@ describe('Provider', () => {
     await using provider = await setupTestProvider();
     const gasLimit = 1;
     const gasUsed = bn(1000);
-    const transactionParams = {
-      minGasPrice: bn(1),
-      gasPrice: bn(1),
+    const transactionCost: TransactionCost = {
       gasUsed,
-      fee: bn(1),
+      gasPrice: bn(1),
+      minGasPrice: bn(1),
+      maxFee: bn(2),
+      minFee: bn(1),
+      receipts: [],
+      requiredQuantities: [],
     };
 
     const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
 
     const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
-      .mockReturnValue(Promise.resolve(transactionParams));
+      .mockReturnValue(Promise.resolve(transactionCost));
 
     await expectToThrowFuelError(
       () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice: 1, gasLimit })),
@@ -912,18 +916,21 @@ describe('Provider', () => {
     await using provider = await setupTestProvider();
     const gasPrice = 1;
     const minGasPrice = bn(1000);
-    const transactionParams = {
+    const transactionCost: TransactionCost = {
       minGasPrice,
       gasPrice: bn(1),
       gasUsed: bn(1),
-      fee: bn(1),
+      maxFee: bn(2),
+      minFee: bn(1),
+      receipts: [],
+      requiredQuantities: [],
     };
 
     const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
 
     const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
-      .mockReturnValue(Promise.resolve(transactionParams));
+      .mockReturnValue(Promise.resolve(transactionCost));
 
     await expectToThrowFuelError(
       () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice, gasLimit: 1000 })),

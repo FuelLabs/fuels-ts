@@ -39,7 +39,8 @@ describe(__filename, () => {
       })
       .getTransactionCost();
 
-    expect(cost.fee).toBeDefined();
+    expect(cost.minFee).toBeDefined();
+    expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
     expect(cost.gasUsed).toBeDefined();
     expect(cost.minGasPrice).toBeDefined();
@@ -75,7 +76,8 @@ describe(__filename, () => {
 
     const cost = await scope.getTransactionCost();
 
-    expect(cost.fee).toBeDefined();
+    expect(cost.minFee).toBeDefined();
+    expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
     expect(cost.gasUsed).toBeDefined();
     expect(cost.minGasPrice).toBeDefined();
