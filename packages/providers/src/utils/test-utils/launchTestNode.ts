@@ -1,5 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
-import { exec, execSync, spawn, spawnSync } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import fsSync from 'fs';
 import fs from 'fs/promises';
@@ -67,24 +67,28 @@ export const launchTestNode = async ({
       await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
     }
 
-    const child = spawn(command, [
-      'run',
-      '--db-type',
-      'in-memory',
-      '--consensus-key',
-      consensusKey,
-      '--chain',
-      chainConfigPath as string,
-      '--ip',
-      '127.0.0.1',
-      '--port',
-      port,
-      '--poa-instant',
-      'true',
-      '--min-gas-price',
-      '1',
-      ...args,
-    ]);
+    const child = spawn(
+      command,
+      [
+        'run',
+        '--db-type',
+        'in-memory',
+        '--consensus-key',
+        consensusKey,
+        '--chain',
+        chainConfigPath as string,
+        '--ip',
+        '127.0.0.1',
+        '--port',
+        port,
+        '--poa-instant',
+        'true',
+        '--min-gas-price',
+        '1',
+        ...args,
+      ],
+      { cwd: useSystemFuelCore ? path.join(os.homedir(), '.fuelup', 'bin') : undefined }
+    );
 
     function removeSideffects(removeTempDir: boolean) {
       child.stdout.removeAllListeners();
@@ -127,6 +131,19 @@ export const launchTestNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
+    child.addListener('close', (x) => {
+      logger?.(`${x}`);
+    });
+    child.addListener('exit', (x) => {
+      logger?.(`${x}`);
+    });
+    child.addListener('error', (x) => {
+      console.log(x);
+      // logger?.(x);
+    });
+    child!.stdout.on('data', (x) => {
+      logger?.(x.toString());
+    });
     // Look for a specific graphql start point in the output.
     child!.stderr.on('data', (chunk: string) => {
       if (logger) logger(chunk);
