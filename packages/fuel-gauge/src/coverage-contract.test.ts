@@ -44,7 +44,7 @@ enum ColorEnumOutput {
 /**
  * @group node
  */
-describe('Coverage Contract', () => {
+describe.concurrent('Coverage Contract', () => {
   beforeAll(async (ctx) => {
     await TestNodeLauncher.prepareCache(ctx.tasks.length);
 

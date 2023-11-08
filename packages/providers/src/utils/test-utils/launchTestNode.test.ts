@@ -60,7 +60,7 @@ describe('launchNode', () => {
 
   it('can launch a node on a specific port', async () => {
     const port = '5678';
-    const { cleanup, ip } = await launchTestNode({ port });
+    const { cleanup, ip } = await launchTestNode({ port, logger: console.log });
     expect(await nodeIsRunning(ip, port)).toBe(true);
 
     await cleanup();

@@ -1,24 +1,22 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
-import { Provider } from '@fuel-ts/providers';
-import { launchTestNodes } from '@fuel-ts/providers/test-utils';
-import type {
-  LaunchTestNodesOptions,
-  ChainConfig,
-  SetupTestProviderOptions,
-} from '@fuel-ts/providers/test-utils';
+import type { Provider } from '@fuel-ts/providers';
+import type { ChainConfig, SetupTestProviderOptions } from '@fuel-ts/providers/test-utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/wallet/test-utils';
 import { WalletConfig, launchCustomProviderAndGetWallets } from '@fuel-ts/wallet/test-utils';
 import { execSync } from 'child_process';
-import { equals, mergeDeepRight, omit } from 'ramda';
+import { randomUUID } from 'crypto';
+import fsSync from 'fs';
+import fs from 'fs/promises';
+import os from 'os';
+import path from 'path';
+import { equals, omit } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
 import ContractFactory from '../contract-factory';
-
-import { defaultChainConfig } from './defaultChainConfig';
 
 interface DeployContractConfig {
   /**
@@ -70,6 +68,8 @@ export class TestNodeLauncher {
 
     console.log(this.cache.pids);
     const pids = [...this.cache.pids];
+    // await execSync(pids.map((pid) => `pkill -9 -P ${pid}`).join(';'));
+
     await execSync(`kill ${pids.join(' ')}`);
 
     this.cache.pids = this.cache.pids.filter((pid) => !pids.includes(pid));
@@ -82,73 +82,93 @@ export class TestNodeLauncher {
     // await Promise.all(cleanups);
   }
 
-  static async fasterLaunchStuff({
-    walletConfig = new WalletConfig(),
-    providerOptions = {},
-    nodeOptions = {},
-    nodeCount,
-  }: Partial<LaunchCustomProviderAndGetWalletsOptions & { nodeCount: number }> = {}) {
-    const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
+  // static async fasterLaunchStuff({
+  //   walletConfig = new WalletConfig(),
+  //   providerOptions = {},
+  //   nodeOptions = {},
+  //   nodeCount,
+  // }: Partial<LaunchCustomProviderAndGetWalletsOptions & { nodeCount: number }> = {}) {
+  //   const customChainConfig = walletConfig.apply(nodeOptions.chainConfig);
 
-    const nodeOpts: Partial<LaunchTestNodesOptions> = {
-      ...nodeOptions,
-      consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
-      chainConfig: mergeDeepRight(defaultChainConfig, customChainConfig || {}),
-    };
-    const { results, cleanupAll, chainConfig } = await launchTestNodes({
-      nodeCount,
-      ...nodeOpts,
-    });
+  //   const nodeOpts: Partial<LaunchTestNodesOptions> = {
+  //     ...nodeOptions,
+  //     consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
+  //     chainConfig: mergeDeepRight(defaultChainConfig, customChainConfig || {}),
+  //   };
+  //   const { results, cleanupAll, chainConfig } = await launchTestNodes({
+  //     nodeCount,
+  //     ...nodeOpts,
+  //   });
 
-    let providers: Provider[] = [];
+  //   let providers: Provider[] = [];
 
-    const providerPromises = results.map(({ ip, port }) =>
-      Provider.create(`http://${ip}:${port}/graphql`, providerOptions)
-    );
+  //   const providerPromises = results.map(({ ip, port }) =>
+  //     Provider.create(`http://${ip}:${port}/graphql`, providerOptions)
+  //   );
 
-    await Promise.all(providerPromises).then((p) => {
-      providers = p;
-    });
-    const cacheee: { provider: Provider; wallets: WalletUnlocked[] }[] = [];
+  //   await Promise.all(providerPromises).then((p) => {
+  //     providers = p;
+  //   });
+  //   const cacheee: { provider: Provider; wallets: WalletUnlocked[] }[] = [];
 
-    providers.forEach((provider) => {
-      const wallets = walletConfig.getWallets();
+  //   providers.forEach((provider) => {
+  //     const wallets = walletConfig.getWallets();
 
-      wallets.forEach((wallet) => {
-        wallet.connect(provider);
-      });
-      cacheee.push({ provider, wallets });
-    });
+  //     wallets.forEach((wallet) => {
+  //       wallet.connect(provider);
+  //     });
+  //     cacheee.push({ provider, wallets });
+  //   });
 
-    this.cache = {
-      pids: [],
-      nodes: cacheee.map((x) => ({
-        ...x,
-        fromCache: true,
-        deployedChainConfig: chainConfig,
-        cleanup: () => Promise.resolve(),
-        pid: '123',
-      })),
-      chainConfig,
-      cleanups: [cleanupAll],
-      nodeOptions,
-      providerOptions,
-    };
-  }
+  //   this.cache = {
+  //     pids: [],
+  //     nodes: cacheee.map((x) => ({
+  //       ...x,
+  //       fromCache: true,
+  //       deployedChainConfig: chainConfig,
+  //       cleanup: () => Promise.resolve(),
+  //       pid: '123',
+  //     })),
+  //     chainConfig,
+  //     cleanups: [cleanupAll],
+  //     nodeOptions,
+  //     providerOptions,
+  //   };
+  // }
 
   static async prepareCache(
     nodeCount: number,
-    options?: Partial<LaunchCustomProviderAndGetWalletsOptions>
+    {
+      walletConfig = new WalletConfig(),
+      providerOptions = {},
+      nodeOptions = {},
+    }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}
   ) {
-    // process.env.HAS_CACHE = 'true';
+    if (!process.env.DEFAULT_CHAIN_CONFIG_PATH) throw new Error();
+    process.env.HAS_CACHE = 'true';
+
+    const defaultChainConfig = JSON.parse(
+      fsSync.readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
+    ) as ChainConfig;
+
+    const chainConfig = walletConfig.apply(defaultChainConfig) as ChainConfig;
+
+    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    if (!fsSync.existsSync(tempDirPath)) {
+      fsSync.mkdirSync(tempDirPath, { recursive: true });
+    }
+    const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
+    // Write a temporary chain configuration file.
+    await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf-8');
+    process.env.TEST_CHAIN_CONFIG_PATH = chainConfigPath;
 
     // @ts-expect-error asdf
     this.cache = {
       cleanups: [],
       pids: [],
+      chainConfig,
     };
 
-    await Promise.resolve();
     // await this.fasterLaunchStuff({ ...options, nodeCount });
     // const launchPromises: Promise<NodeInfo>[] = [];
     // for (let i = 0; i < nodeCount; i++) {
@@ -248,12 +268,12 @@ export class TestNodeLauncher {
       {
         walletConfig,
         providerOptions,
-        nodeOptions,
+        nodeOptions: { useSystemFuelCore: true, ...nodeOptions },
       },
       false
     );
 
-    // if (this.cache && this.cache.pids.length >= 10) {
+    // if (process.env.HAS_CACHE && this.cache && this.cache.pids.length >= 10) {
     //   // eslint-disable-next-line @typescript-eslint/no-floating-promises
     //   this.killCachedNodes();
     //   // this.cache?.pids.push(pid);
@@ -272,7 +292,6 @@ export class TestNodeLauncher {
               [Symbol.asyncDispose]: async () => {
                 if (process.env.HAS_CACHE) {
                   this.cache?.pids.push(pid);
-                  console.log(`adding ${pid} to cache, length: ${this.cache?.pids.length}`);
                 }
                 await cleanup();
               },
