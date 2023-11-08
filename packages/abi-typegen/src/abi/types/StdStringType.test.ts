@@ -22,6 +22,6 @@ describe('StdStringType.ts', () => {
 
     expect(stdString.attributes.inputLabel).toEqual('StdString');
     expect(stdString.attributes.outputLabel).toEqual('StdString');
-    expect(stdString.requiredFuelsMembersImports).toStrictEqual([]);
+    expect(stdString.requiredFuelsMembersImports).toStrictEqual(['StdString']);
   });
 });
