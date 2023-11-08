@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.66.1
+
+### Patch Changes
+
+- Adjusting package manager configs, by [@arboleya](https://github.com/arboleya) (See [#1415](https://github.com/FuelLabs/fuels-ts/pull/1415))
+
+## 0.66.0
+
+### Minor Changes
+
+- Total revamp of Fuels CLI, providing a frictionless onboarding experience and blazingly fast development cycle.
+  New essential commands includes:
+  - init
+  - build
+  - deploy
+  - dev, by [@arboleya](https://github.com/arboleya) (See [#1291](https://github.com/FuelLabs/fuels-ts/pull/1291))
+
 ## 0.65.0
 
 ## 0.64.1

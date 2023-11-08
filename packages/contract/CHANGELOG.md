@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.66.1
+
+### Patch Changes
+
+- Adjusting package manager configs, by [@arboleya](https://github.com/arboleya) (See [#1415](https://github.com/FuelLabs/fuels-ts/pull/1415))
+
+## 0.66.0
+
+### Minor Changes
+
+- set gas limit to 0 when creating a CreateTransactionRequest on ContractFactory, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1381](https://github.com/FuelLabs/fuels-ts/pull/1381))
+
 ## 0.65.0
 
 ## 0.64.1
