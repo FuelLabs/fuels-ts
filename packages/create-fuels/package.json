@@ -2,6 +2,7 @@
   "name": "create-fuels",
   "version": "0.65.0",
   "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
     "create-fuels": "create-fuels.js"
   },
@@ -9,7 +10,6 @@
     "dist",
     "templates"
   ],
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "engines": {
     "node": "^18.14.1",
     "pnpm": "^8.9.0"
