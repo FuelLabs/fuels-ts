@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "fuels build && [ -f src/sway-api/contract-ids.json ] || echo '{ \"testContract\": \"0x\"}' > src/sway-api/contract-ids.json",
     "dev": "next dev",
-    "prebuild": "fuels build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
