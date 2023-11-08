@@ -216,18 +216,17 @@ describe('Account', () => {
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
+    await using newProvider = await setupTestProvider();
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+    expect(account.provider).not.toBe(newProvider);
 
-    expect(account.provider).not.toBe(newProviderInstance);
+    account.connect(newProvider);
 
-    account.connect(newProviderInstance);
-
-    expect(account.provider).toBe(newProviderInstance);
+    expect(account.provider).toBe(newProvider);
     expect(account.provider).not.toBe(provider);
   });
 
