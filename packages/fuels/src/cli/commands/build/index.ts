@@ -1,11 +1,24 @@
+import { type Command } from 'commander';
+
 import type { FuelsConfig } from '../../types';
 import { log } from '../../utils/logger';
+import { deploy } from '../deploy';
+import { autoStartFuelCore } from '../dev/startFuelCore';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
 import { generateTypes } from './generateTypes';
 
-export async function build(config: FuelsConfig) {
+export async function build(config: FuelsConfig, program?: Command) {
   log('Building..');
+
   await buildSwayPrograms(config);
   await generateTypes(config);
+
+  const options = program?.opts();
+
+  if (options?.autoDeploy) {
+    const fuelCore = await autoStartFuelCore(config);
+    await deploy(config);
+    fuelCore?.killChildProcess();
+  }
 }
