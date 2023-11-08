@@ -1,10 +1,11 @@
 import { Connect } from '@/components/Connect';
-import { Inter } from 'next/font/google';
+import type { TestContractAbi} from '@/sway-api';
+import { TestContractAbi__factory } from '@/sway-api';
 import contractIds from '@/sway-api/contract-ids.json';
-import { TestContractAbi, TestContractAbi__factory } from '@/sway-api';
-import { useEffect, useState } from 'react';
-import { Provider, Wallet, bn } from 'fuels';
 import { useAccount, useFuel } from '@fuel-wallet/react';
+import { Provider, Wallet, bn } from 'fuels';
+import { Inter } from 'next/font/google';
+import { useEffect, useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 const contractId = contractIds.testContract;
@@ -22,20 +23,25 @@ export default function Home() {
       if (account && fuel) {
         const provider = await Provider.create('http://127.0.0.1:4000/graphql');
         const wallet = Wallet.fromPrivateKey('0x01', provider);
-        const contract = TestContractAbi__factory.connect(contractId, wallet!);
-        setContract(contract);
+        const testContract = TestContractAbi__factory.connect(contractId, wallet);
+        setContract(testContract);
       }
-    })();
+    // eslint-disable-next-line no-console
+    })().catch(console.error);
   }, [account, fuel]);
 
   const onTestFunctionCalled = async () => {
     if (!contract) {
+      // eslint-disable-next-line no-alert
       return alert('Contract not loaded');
     }
     const { value } = await contract.functions
       .test_function(bn(valueA), bn(valueB))
       .call();
+
     setReturnedValue(value);
+
+    return value;
   };
 
   return (
@@ -52,13 +58,13 @@ export default function Home() {
         type='number'
         placeholder='Enter number A'
         value={valueA}
-        onChange={(e) => setValueA(parseInt(e.target.value))}
+        onChange={(e) => setValueA(Number(e.target.value))}
         className='px-4 py-2 border border-slate-200 rounded-md my-6'
       />
       <input
         type='number'
         placeholder='Enter number B'
-        onChange={(e) => setValueB(parseInt(e.target.value))}
+        onChange={(e) => setValueB(Number(e.target.value))}
         className='px-4 py-2 border border-slate-200 rounded-md my-2'
       />
 

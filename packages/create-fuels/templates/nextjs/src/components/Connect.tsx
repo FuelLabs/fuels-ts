@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import {
   useConnect,
   useConnectors,
   useDisconnect,
   useIsConnected,
 } from '@fuel-wallet/react';
+import { useState } from 'react';
 
 export const Connect = () => {
   const [connector, setConnector] = useState('');
@@ -25,6 +25,7 @@ export const Connect = () => {
     >
       <select
         onChange={(e) => {
+          // eslint-disable-next-line no-console
           console.log(e.target.value);
           setConnector(e.target.value);
         }}
