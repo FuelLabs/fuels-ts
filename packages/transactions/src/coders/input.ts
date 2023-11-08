@@ -21,6 +21,9 @@ export enum InputType {
 export type InputCoin = {
   type: InputType.Coin;
 
+  /** Index of transaction output (u8) */
+  outputIndex: number;
+
   /** UTXO ID (UtxoId) */
   utxoID: UtxoId;
 
@@ -67,6 +70,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const parts: Uint8Array[] = [];
 
     parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
@@ -88,6 +92,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
     [decoded, o] = new UtxoIdCoder().decode(data, o);
     const utxoID = decoded;
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
@@ -115,6 +121,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
       {
         type: InputType.Coin,
         utxoID,
+        outputIndex,
         owner,
         amount,
         assetId,
@@ -142,6 +149,9 @@ export type InputContract = {
   /** UTXO ID (UtxoId) */
   utxoID: UtxoId;
 
+  /** Index of transaction output (u8) */
+  outputIndex: number;
+
   /** Root of amount of coins owned by contract before transaction execution (b256) */
   balanceRoot: string;
 
@@ -164,6 +174,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     const parts: Uint8Array[] = [];
 
     parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
     parts.push(new TxPointerCoder().encode(value.txPointer));
@@ -178,6 +189,8 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
 
     [decoded, o] = new UtxoIdCoder().decode(data, o);
     const utxoID = decoded;
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const balanceRoot = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
@@ -191,6 +204,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
       {
         type: InputType.Contract,
         utxoID,
+        outputIndex,
         balanceRoot,
         stateRoot,
         txPointer,
