@@ -2,4 +2,4 @@ packages:
   - "apps/*"
   - "internal/*"
   - "packages/*"
-  - "packages/create-fuels/templates/*"
+  # - "packages/create-fuels/templates/*"

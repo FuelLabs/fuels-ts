@@ -36,5 +36,4 @@ yarn-error.log*
 next-env.d.ts
 
 .fuels
-
 sway-api
