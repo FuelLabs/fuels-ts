@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.66.1
+
+### Patch Changes
+
+- Adjusting package manager configs, by [@arboleya](https://github.com/arboleya) (See [#1415](https://github.com/FuelLabs/fuels-ts/pull/1415))
+
+## 0.66.0
+
+### Minor Changes
+
+- 🐞 fix transferToContract for amounts higher than u16, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1395](https://github.com/FuelLabs/fuels-ts/pull/1395))
+
 ## 0.65.0
 
 ### Patch Changes

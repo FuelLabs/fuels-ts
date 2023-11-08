@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.65.0",
+  "version": "0.66.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,10 +10,8 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.14.1",
-    "pnpm": "^8.9.0"
+    "node": "^18.14.1"
   },
-  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -62,7 +60,6 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

@@ -129,6 +129,10 @@ export type RawPayloadParam = {
 
 export type InputOutputParam = InputParam & OutputParam;
 
+export interface GetTransferOperationsParams extends InputOutputParam {
+  receipts: TransactionResultReceipt[];
+}
+
 export type GetOperationParams = {
   transactionType: TransactionType;
   abiMap?: AbiMap;
