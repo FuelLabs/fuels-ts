@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.66.0
+
+### Minor Changes
+
+- Total revamp of Fuels CLI, providing a frictionless onboarding experience and blazingly fast development cycle.
+  New essential commands includes:
+  - init
+  - build
+  - deploy
+  - dev, by [@arboleya](https://github.com/arboleya) (See [#1291](https://github.com/FuelLabs/fuels-ts/pull/1291))
+
 ## 0.65.0
 
 ## 0.64.1
@@ -527,7 +538,7 @@
 
 - [#814](https://github.com/FuelLabs/fuels-ts/pull/814) [`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - export `mnemonic` package in `fuels` umbrella package
   create/exports const `MNEMONIC_SIZES`
-  avoid throw error in predicate funciton `Mnemonic.isMnemonicValid`
+  avoid throw error in predicate function `Mnemonic.isMnemonicValid`
 
 ### Patch Changes
 
