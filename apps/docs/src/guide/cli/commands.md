@@ -77,7 +77,9 @@ npx fuels build --deploy
 Using the `--deploy` flag will aditionally:
 
 1. Auto-start a short-lived `fuel-core` node if _needed_ ([docs](./config-file.md#autostartfuelcore))
-1. Runs and `deploy` and quit
+2. Run `deploy` on that node
+
+This is useful when working with contracts, because a contract's id is generated on deployment.
 
 ## `fuels deploy`
 
