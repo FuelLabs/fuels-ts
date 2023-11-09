@@ -51,11 +51,33 @@ In a nutshell:
 ## `fuels build`
 
 ```console
+npx fuels help build
+```
+
+```
+Options:
+  -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
+  -d, --deploy       Deploy contracts after build (auto-starts a `fuel-core` node if needed)
+  -h, --help         Display help
+```
+
+Examples:
+
+```console
 npx fuels build
 ```
 
 1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
 1.  Generate types for them using `fuels-typegen` <sup>[2](#typegen)</sup>
+
+```console
+npx fuels build --deploy
+```
+
+Using the `--deploy` flag will aditionally:
+
+1. Auto-start a short-lived `fuel-core` node if _needed_ ([docs](./config-file.md#autostartfuelcore))
+1. Runs and `deploy` and quit
 
 ## `fuels deploy`
 
