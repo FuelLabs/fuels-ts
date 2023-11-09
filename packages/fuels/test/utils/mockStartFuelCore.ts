@@ -18,4 +18,4 @@ export const mockStartFuelCore = () => {
     );
 
   return { startFuelCore, killChildProcess };
-}
+};

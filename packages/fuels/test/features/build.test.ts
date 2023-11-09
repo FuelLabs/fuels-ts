@@ -17,7 +17,7 @@ describe('build', () => {
   beforeEach(resetDiskAndMocks);
   afterEach(resetDiskAndMocks);
 
-  function mockAll () {
+  function mockAll() {
     const { startFuelCore, killChildProcess } = mockStartFuelCore();
     const deploy = jest.spyOn(deployMod, 'deploy').mockImplementation();
 

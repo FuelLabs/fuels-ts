@@ -118,4 +118,4 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
   }
 
   return fuelCore;
-}
+};
