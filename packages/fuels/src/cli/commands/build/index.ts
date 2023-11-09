@@ -16,7 +16,7 @@ export async function build(config: FuelsConfig, program?: Command) {
 
   const options = program?.opts();
 
-  if (options?.autoDeploy) {
+  if (options?.deploy) {
     const fuelCore = await autoStartFuelCore(config);
     await deploy(config);
     fuelCore?.killChildProcess();

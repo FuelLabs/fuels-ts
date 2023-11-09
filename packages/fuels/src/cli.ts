@@ -70,7 +70,7 @@ export const configureCli = () => {
   (command = program.command(Commands.build))
     .description('Build Sway programs and generate Typescript for them')
     .addOption(pathOption)
-    .option('--auto-deploy', 'Auto-starts a `fuel-core` node and runs deploy')
+    .option('-d, --deploy', 'Deploy contracts after build (auto-starts a `fuel-core` node if needed)')
     .action(withConfig(command, Commands.build, build));
 
   (command = program.command(Commands.deploy))
