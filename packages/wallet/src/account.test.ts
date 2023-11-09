@@ -16,7 +16,7 @@ import * as providersMod from '@fuel-ts/providers';
 import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { Account } from './account';
-import { AssetId, launchCustomProviderAndGetWallets } from './test-utils';
+import { AssetId, WalletConfig, launchCustomProviderAndGetWallets } from './test-utils';
 
 vi.mock('@fuel-ts/providers', async () => {
   const mod = await vi.importActual('@fuel-ts/providers');
@@ -186,27 +186,25 @@ describe('Account', () => {
   });
 
   it('should throw if balances length is higher than 9999', async () => {
-    const dummyBalances: CoinQuantity[] = new Array(10000);
+    await using launched = await launchCustomProviderAndGetWallets({
+      walletConfig: new WalletConfig({
+        wallets: 1,
+        assets: 10000,
+        coinsPerAsset: 1,
+        amountPerCoin: 1,
+      }),
+    });
 
-    vi.spyOn(Provider.prototype, 'getBalances').mockImplementation(async () =>
-      Promise.resolve(dummyBalances)
-    );
+    const {
+      wallets: [{ publicKey }],
+      provider: p,
+    } = launched;
 
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
+    const account = new Account(publicKey, p);
 
-    let result;
-    let error;
-    try {
-      result = await account.getBalances();
-    } catch (err) {
-      error = err;
-    }
+    const { error } = await safeExec(() => account.getBalances());
 
-    expect(result).toBeUndefined();
-    expect((<Error>error).message).toEqual(
+    expect(error?.message).toEqual(
       'Wallets containing more than 9999 balances exceed the current supported limit.'
     );
   });
