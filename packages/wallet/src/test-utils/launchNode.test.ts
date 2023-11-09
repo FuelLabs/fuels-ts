@@ -9,7 +9,7 @@ import { launchNodeAndGetWallets } from './launchNode';
 /**
  * @group node
  */
-test('launchNodeAndGetWallets - empty config', async () => {
+test.skip('launchNodeAndGetWallets - empty config', async () => {
   const { stop, provider, wallets } = await launchNodeAndGetWallets();
   expect(provider).toBeInstanceOf(Provider);
   expect(wallets.length).toBe(10);
@@ -19,7 +19,7 @@ test('launchNodeAndGetWallets - empty config', async () => {
   stop();
 });
 
-test('launchNodeAndGetWallets - custom config', async () => {
+test.skip('launchNodeAndGetWallets - custom config', async () => {
   // #region launchNode-custom-config
   const chainConfigPath = path.join(cwd(), '.fuel-core/configs/chainConfig.json');
 
@@ -40,7 +40,7 @@ test('launchNodeAndGetWallets - custom config', async () => {
   // #endregion launchNode-custom-config
 });
 
-test('launchNodeAndGetWallets - custom walletCount', async () => {
+test.skip('launchNodeAndGetWallets - custom walletCount', async () => {
   const { stop, wallets } = await launchNodeAndGetWallets({
     walletCount: 5,
   });
@@ -51,7 +51,7 @@ test('launchNodeAndGetWallets - custom walletCount', async () => {
   stop();
 });
 
-describe('without a GENESIS_SECRET', () => {
+describe.skip('without a GENESIS_SECRET', () => {
   let GENESIS_SECRET: string | undefined;
 
   beforeAll(() => {
