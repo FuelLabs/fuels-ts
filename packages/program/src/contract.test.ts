@@ -1,5 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Provider } from '@fuel-ts/providers';
+import type { Provider } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { Account, Wallet } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
@@ -41,15 +42,19 @@ const ABI: JsonAbi = {
  * @group node
  */
 describe('Contract', () => {
-  test('Create contract instance with provider', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  let provider: Provider;
+  beforeAll(async () => {
+    const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+    provider = p;
+    return async () => cleanup();
+  });
+  test('Create contract instance with provider', () => {
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
   });
 
-  test('Create contract instance with wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  test('Create contract instance with wallet', () => {
     const wallet = Wallet.generate({
       provider,
     });
@@ -58,8 +63,7 @@ describe('Contract', () => {
     expect(contract.account).toBe(wallet);
   });
 
-  test('Create contract instance with custom wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  test('Create contract instance with custom wallet', () => {
     const generatedWallet = Wallet.generate({
       provider,
     });
