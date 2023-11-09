@@ -1,7 +1,7 @@
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/dts.hbs';
 import expectedDtsMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/dts.hbs';
-import { mockVersions } from '../../../test/utils/mockVersions';
+import { updateVersions } from '../../../test/utils/updateVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -12,10 +12,6 @@ import { renderDtsTemplate } from './dts';
  */
 describe('templates/dts', () => {
   test('should render dts template', () => {
-    // mocking
-    const { restore } = mockVersions();
-
-    // executing
     const project = getProjectResources(ForcProjectsEnum.FULL);
     const { abiContents: rawContents } = project;
 
@@ -28,15 +24,10 @@ describe('templates/dts', () => {
 
     const rendered = renderDtsTemplate({ abi });
 
-    // validating
-    restore();
-
-    expect(rendered).toEqual(expectedDtsFullTemplate);
+    expect(rendered).toEqual(updateVersions(expectedDtsFullTemplate));
   });
 
   test('should render dts template with configurable', () => {
-    const { restore } = mockVersions();
-
     const project = getProjectResources(ForcProjectsEnum.MINIMAL_WITH_CONFIGURABLE);
 
     const rawContents = project.abiContents;
@@ -50,9 +41,7 @@ describe('templates/dts', () => {
 
     const rendered = renderDtsTemplate({ abi });
 
-    restore();
-
-    expect(rendered).toEqual(expectedDtsMinimalConfigurableTemplate);
+    expect(rendered).toEqual(updateVersions(expectedDtsMinimalConfigurableTemplate));
   });
 
   test('should render dts template w/ custom common types', () => {

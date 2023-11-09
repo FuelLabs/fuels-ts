@@ -1,4 +1,4 @@
-import { mockVersions } from '../../../test/utils/mockVersions';
+import { versions } from '@fuel-ts/versions';
 
 import { renderCommonTemplate } from './common';
 
@@ -7,14 +7,7 @@ import { renderCommonTemplate } from './common';
  */
 describe('templates/common', () => {
   test('should render common template', () => {
-    // mocking
-    const { versions, restore } = mockVersions();
-
-    // executing
     const rendered = renderCommonTemplate();
-
-    // validating
-    restore();
 
     const { FORC, FUELS, FUEL_CORE } = versions;
 

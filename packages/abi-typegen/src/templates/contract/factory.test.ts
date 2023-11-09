@@ -1,6 +1,6 @@
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/contract/factory.hbs';
-import { mockVersions } from '../../../test/utils/mockVersions';
+import { updateVersions } from '../../../test/utils/updateVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -11,14 +11,9 @@ import { renderFactoryTemplate } from './factory';
  */
 describe('templates/factory', () => {
   test('should render factory template', () => {
-    // mocking
-    const { restore } = mockVersions();
-
-    // executing
     const project = getProjectResources(ForcProjectsEnum.MINIMAL);
     const rawContents = project.abiContents;
 
-    // executing
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
@@ -28,9 +23,6 @@ describe('templates/factory', () => {
 
     const rendered = renderFactoryTemplate({ abi });
 
-    // validating
-    restore();
-
-    expect(rendered).toEqual(factoryTemplate);
+    expect(rendered).toEqual(updateVersions(factoryTemplate));
   });
 });

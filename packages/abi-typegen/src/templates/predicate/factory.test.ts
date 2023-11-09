@@ -3,7 +3,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
 import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
-import { mockVersions } from '../../../test/utils/mockVersions';
+import { updateVersions } from '../../../test/utils/updateVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -14,8 +14,6 @@ import { renderFactoryTemplate } from './factory';
  */
 describe('factory.ts', () => {
   test('should render factory template', () => {
-    const { restore } = mockVersions();
-
     const project = getProjectResources(ForcProjectsEnum.PREDICATE);
 
     const rawContents = project.abiContents;
@@ -30,14 +28,10 @@ describe('factory.ts', () => {
 
     const rendered = renderFactoryTemplate({ abi });
 
-    restore();
-
-    expect(rendered).toEqual(factoryTemplate);
+    expect(rendered).toEqual(updateVersions(factoryTemplate));
   });
 
   test('should render factory template with configurable', () => {
-    const { restore } = mockVersions();
-
     const project = getProjectResources(ForcProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
 
     const rawContents = project.abiContents;
@@ -52,14 +46,10 @@ describe('factory.ts', () => {
 
     const rendered = renderFactoryTemplate({ abi });
 
-    restore();
-
-    expect(rendered).toEqual(factoryWithConfigurablesTemplate);
+    expect(rendered).toEqual(updateVersions(factoryWithConfigurablesTemplate));
   });
 
   test('should throw for invalid Predicate ABI', async () => {
-    const { restore } = mockVersions();
-
     const project = getProjectResources(ForcProjectsEnum.PREDICATE);
     const rawContents = project.abiContents;
 
@@ -79,7 +69,5 @@ describe('factory.ts', () => {
     });
 
     expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);
-
-    restore();
   });
 });

@@ -1,40 +1,17 @@
-import { NumberCoder } from '@fuel-ts/abi-coder';
+import { U64Coder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import type { BigNumberish } from '@fuel-ts/math';
-import * as getBytesCopyMod from 'ethers';
-import type { BytesLike } from 'ethers';
+import { BN, type BigNumberish } from '@fuel-ts/math';
+import { getBytesCopy, type BytesLike } from 'ethers';
 
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-vi.mock('@fuels/vm-asm', async () => {
-  const mod = await vi.importActual('@fuels/vm-asm');
-  return {
-    __esModule: true,
-    // @ts-expect-error spreading module import
-    ...mod,
-  };
-});
-
-vi.mock('ethers', async () => {
-  const mod = await vi.importActual('ethers');
-  return {
-    __esModule: true,
-    // @ts-expect-error spreading module import
-    ...mod,
-  };
-});
-
 /**
  * @group node
  */
 describe('util', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
     const script = await composeScriptForTransferringToContract();
     expect(script).toStrictEqual(
@@ -45,14 +22,6 @@ describe('util', () => {
   });
 
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
-    const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
-
-    const encode = vi.spyOn(NumberCoder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
-
-    const arrayify = vi
-      .spyOn(getBytesCopyMod, 'getBytesCopy')
-      .mockReturnValue(Uint8Array.from(byte));
-
     const contractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
     const assetId: BytesLike = BaseAssetId;
@@ -63,9 +32,11 @@ describe('util', () => {
       assetId
     );
 
-    expect(scriptData).toStrictEqual(Uint8Array.from([].concat(...Array(3).fill(byte))));
-
-    expect(arrayify).toHaveBeenCalledTimes(2);
-    expect(encode).toHaveBeenCalledTimes(1);
+    const expected = Uint8Array.from([
+      ...getBytesCopy(contractId),
+      ...new U64Coder().encode(new BN(amountToTransfer)),
+      ...getBytesCopy(assetId),
+    ]);
+    expect(scriptData).toStrictEqual(expected);
   });
 });
