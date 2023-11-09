@@ -1,5 +1,7 @@
 # @fuel-ts/abi-typegen
 
+## 0.67.0
+
 ## 0.66.1
 
 ### Patch Changes
