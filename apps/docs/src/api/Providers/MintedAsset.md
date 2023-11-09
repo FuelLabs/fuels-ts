@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:144](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/transaction-summary/types.ts#L144)
+[packages/providers/src/transaction-summary/types.ts:148](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/types.ts#L148)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:143](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/transaction-summary/types.ts#L143)
+[packages/providers/src/transaction-summary/types.ts:147](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/types.ts#L147)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:142](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/transaction-summary/types.ts#L142)
+[packages/providers/src/transaction-summary/types.ts:146](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/types.ts#L146)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:141](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packages/providers/src/transaction-summary/types.ts#L141)
+[packages/providers/src/transaction-summary/types.ts:145](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/types.ts#L145)

@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L51)
+[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L51)
 
 ___
 
@@ -34,9 +34,31 @@ ___
 
 #### Defined in
 
-[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L52)
+[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L52)
 
 ## Methods
+
+### fund
+
+▸ **fund**(`transactionRequest`, `quantities`, `fee`): `Promise`&lt;`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `transactionRequest` | `any` |
+| `quantities` | `any` |
+| `fee` | `any` |
+
+#### Returns
+
+`Promise`&lt;`void`\>
+
+#### Defined in
+
+[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L56)
+
+___
 
 ### getResourcesToSpend
 
@@ -55,7 +77,7 @@ ___
 
 #### Defined in
 
-[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L53)
+[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L53)
 
 ___
 
@@ -75,7 +97,7 @@ ___
 
 #### Defined in
 
-[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L54)
+[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L54)
 
 ___
 
@@ -95,4 +117,4 @@ ___
 
 #### Defined in
 
-[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L55)
+[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L55)

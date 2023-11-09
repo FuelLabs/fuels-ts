@@ -34,7 +34,7 @@ AbstractProgram.account
 
 #### Defined in
 
-[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L62)
+[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L62)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L73)
+[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L73)
 
 ___
 
@@ -64,7 +64,7 @@ AbstractProgram.interface
 
 #### Defined in
 
-[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L63)
+[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L63)
 
 ___
 
@@ -78,4 +78,4 @@ AbstractProgram.provider
 
 #### Defined in
 
-[index.ts:67](https://github.com/FuelLabs/fuels-ts/blob/d63b2d0f/packag/api/src/index.ts#L67)
+[index.ts:67](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packag/api/src/index.ts#L67)
