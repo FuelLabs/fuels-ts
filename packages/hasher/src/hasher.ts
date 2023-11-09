@@ -3,7 +3,6 @@ import { bufferFromString } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { transactionRequestify, TransactionType } from '@fuel-ts/providers';
-import type { UtxoId } from '@fuel-ts/transactions';
 import { OutputType, InputType, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from 'ethers';
 import { sha256, concat } from 'ethers';
@@ -70,10 +69,8 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike, 
           blockHeight: 0,
           txIndex: 0,
         };
-        inputClone.utxoID = <UtxoId>{
-          transactionId: ZeroBytes32,
-          outputIndex: 0,
-        };
+        inputClone.txId = ZeroBytes32;
+        inputClone.outputIndex = 0;
         inputClone.balanceRoot = ZeroBytes32;
         inputClone.stateRoot = ZeroBytes32;
         return inputClone;
