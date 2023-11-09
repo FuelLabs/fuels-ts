@@ -45,7 +45,7 @@ describe('ExampleContract', () => {
   });
 
   it('deployContract method', async () => {
-    await using launched = await TestNodeLauncher.launch({});
+    await using launched = await TestNodeLauncher.launch();
     const {
       wallets: [wallet],
       provider,
@@ -63,8 +63,13 @@ describe('ExampleContract', () => {
   });
 
   it('should throw when simulating via contract factory with wallet with no resources', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const fundedWallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [fundedWallet],
+      provider,
+    } = launched;
+    const gasPrice = provider.getGasConfig().minGasPrice;
+
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
@@ -118,8 +123,13 @@ describe('ExampleContract', () => {
   });
 
   it('should demo how to use generated files just fine', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    await using launched = await TestNodeLauncher.launch();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const gasPrice = provider.getGasConfig().minGasPrice;
+
     const depoloyed = await SampleAbi__factory.deployContract(bytecode, wallet, { gasPrice });
     const contractsIds = {
       sample: depoloyed.id,
