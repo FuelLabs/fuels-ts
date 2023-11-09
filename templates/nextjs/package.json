@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "fuels:init": "fuels build && [ -f src/sway-api/contract-ids.json ] || echo '{ \"testContract\": \"0x\"}' > src/sway-api/contract-ids.json",
+    "fuels:init": "fuels build --deploy",
     "dev": "next dev",
     "build": "npm run fuels:init && next build",
     "start": "next start",

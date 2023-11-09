@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/injectFuelsVersion.ts"
+    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
   },
   "dependencies": {
     "fuels": "workspace:*",
