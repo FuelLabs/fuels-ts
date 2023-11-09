@@ -10,8 +10,8 @@ export default defineConfig({
   ],
   esbuild: { target: 'es2022' },
   test: {
-    // maxThreads: process.env.CI ? 6 : undefined,
-    // minThreads: process.env.CI ? 4 : undefined,
+    maxThreads: process.env.CI ? 4 : undefined,
+    minThreads: process.env.CI ? 4 : undefined,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
