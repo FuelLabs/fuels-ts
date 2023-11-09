@@ -11,7 +11,7 @@ import { error } from 'console';
     // Checks git status
     const isGitClean = !execSync(`git status --porcelain`).toString().trim();
 
-    // Skip adding/committing/releasing stuff if there's notthing there
+    // Skip adding/committing/releasing stuff if there's nothing new
     if (!isGitClean) {
       execSync(`git add packages/versions/src/lib/getBuiltinVersions.ts`);
       execSync(`git commit -m"ci(scripts): update versions"`);
