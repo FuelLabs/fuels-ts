@@ -7,5 +7,15 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["fuel-gauge", "docs"]
+  "ignore": [
+    "fuel-gauge",
+    "docs",
+    "demo-fuels",
+    "demo-react-cra",
+    "demo-react-vite",
+    "demo-nextjs",
+    "demo-node-esm",
+    "demo-typegen",
+    "@fuel-ts/docs-snippets"
+  ]
 }
