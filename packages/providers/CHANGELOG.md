@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.67.0
+
+### Minor Changes
+
+- ensure transfer to contract transactions returns operation transfer asset, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1400](https://github.com/FuelLabs/fuels-ts/pull/1400))
+- 🐞 Fixing transaction funding, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1372](https://github.com/FuelLabs/fuels-ts/pull/1372))
+
 ## 0.66.1
 
 ### Patch Changes
