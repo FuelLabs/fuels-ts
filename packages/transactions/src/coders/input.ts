@@ -9,8 +9,6 @@ import { getBytesCopy, sha256 } from 'ethers';
 import { ByteArrayCoder } from './byte-array';
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
-import type { UtxoId } from './utxo-id';
-import { UtxoIdCoder } from './utxo-id';
 
 export enum InputType {
   Coin = 0,
@@ -21,11 +19,11 @@ export enum InputType {
 export type InputCoin = {
   type: InputType.Coin;
 
+  /** Hash of transaction (b256) */
+  txId: string;
+
   /** Index of transaction output (u8) */
   outputIndex: number;
-
-  /** UTXO ID (UtxoId) */
-  utxoID: UtxoId;
 
   /** Owning address or script hash (b256) */
   owner: string;
@@ -69,7 +67,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new B256Coder().encode(value.txId));
     parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new U64Coder().encode(value.amount));
@@ -90,7 +88,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new UtxoIdCoder().decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const utxoID = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const outputIndex = decoded;
@@ -120,7 +118,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     return [
       {
         type: InputType.Coin,
-        utxoID,
+        txId: utxoID,
         outputIndex,
         owner,
         amount,
@@ -131,11 +129,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         predicateGasUsed,
         predicateLength,
         predicateDataLength,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         predicate,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         predicateData,
       },
       o,
@@ -146,8 +140,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 export type InputContract = {
   type: InputType.Contract;
 
-  /** UTXO ID (UtxoId) */
-  utxoID: UtxoId;
+  /** Hash of transaction (b256) */
+  txId: string;
 
   /** Index of transaction output (u8) */
   outputIndex: number;
@@ -173,7 +167,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
   encode(value: InputContract): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new B256Coder().encode(value.txId));
     parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
@@ -187,8 +181,8 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new UtxoIdCoder().decode(data, o);
-    const utxoID = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const txId = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
@@ -203,7 +197,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     return [
       {
         type: InputType.Contract,
-        utxoID,
+        txId,
         outputIndex,
         balanceRoot,
         stateRoot,
