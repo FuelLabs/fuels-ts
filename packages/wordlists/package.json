@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wordlists",
-  "version": "0.66.0",
+  "version": "0.66.1",
   "description": "",
   "license": "Apache-2.0",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
@@ -8,10 +8,8 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.14.1",
-    "pnpm": "^8.9.0"
+    "node": "^18.14.1"
   },
-  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",

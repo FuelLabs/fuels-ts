@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.66.0",
+  "version": "0.66.1",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,10 +10,8 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.14.1",
-    "pnpm": "^8.9.0"
+    "node": "^18.14.1"
   },
-  "packageManager": "pnpm@8.9.0",
   "exports": {
     ".": {
       "require": "./dist/index.js",
