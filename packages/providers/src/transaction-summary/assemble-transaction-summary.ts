@@ -1,5 +1,5 @@
 import { bn, type BN } from '@fuel-ts/math';
-import { type Transaction } from '@fuel-ts/transactions';
+import { PolicyType, type Transaction } from '@fuel-ts/transactions';
 import { hexlify } from 'ethers';
 
 import type { TransactionResultReceipt } from '../transaction-response';
@@ -49,9 +49,10 @@ export function assembleTransactionSummary<TTransactionType = void>(
     maxInputs,
   } = params;
 
-  const { gasLimit = bn(0), witnesses } = transaction;
+  const { gasLimit = bn(0), witnesses, policies } = transaction;
 
-  const gasPrice = bn(transaction.gasPrice);
+  const gasPrice =
+    bn(policies?.find((policy) => policy.type === PolicyType.GasPrice)?.data) || bn(0);
   const gasUsed = getGasUsedFromReceipts(receipts);
   const chargeableBytes = calculateTxChargeableBytes({
     transactionBytes,
