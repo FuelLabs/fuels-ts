@@ -1,37 +1,32 @@
+import { scryptSync } from 'ethereum-cryptography/scrypt';
+
 import { bufferFromString } from '..';
 import type { IScryptParams } from '../types';
 
 import { scrypt } from './scrypt';
 
-const data = bufferFromString('hashedKey');
-
-vi.mock('ethereum-cryptography/scrypt', () => ({
-  scryptSync: vi.fn(() => data),
-}));
-
 /**
  * @group node
  */
 describe('scrypt', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('hashes using scrypt', () => {
     const password = bufferFromString('password');
     const salt = bufferFromString('salt');
-
+    const dklen = 32;
+    const n = 2;
+    const p = 4;
+    const r = 2;
     const params: IScryptParams = {
-      dklen: 32,
-      n: 2,
-      p: 4,
+      dklen,
+      n,
+      p,
       password,
-      r: 2,
+      r,
       salt,
     };
 
     const hashedKey = scrypt(params);
 
-    expect(hashedKey).toEqual(data);
+    expect(hashedKey).toEqual(scryptSync(password, salt, n, r, p, dklen));
   });
 });
