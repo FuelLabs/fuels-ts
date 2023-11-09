@@ -1,9 +1,10 @@
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
+import type { Provider } from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import type { InputCoin } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { hexlify } from 'ethers';
 
 import { Predicate } from '../../src/predicate';
@@ -21,7 +22,8 @@ describe('Predicate', () => {
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
+      const { provider: p, cleanup } = await setupTestProvider();
+      provider = p;
       predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
       const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
@@ -37,6 +39,8 @@ describe('Predicate', () => {
         blockCreated: bn(0),
         txCreatedIdx: bn(0),
       });
+
+      return () => cleanup();
     });
 
     it('includes predicate as input when sending a transaction', async () => {

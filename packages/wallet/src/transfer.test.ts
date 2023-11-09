@@ -2,8 +2,9 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
+import type { TransactionResultMessageOutReceipt, Provider } from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 
 import { Wallet } from '.';
 import { FUEL_NETWORK_URL } from './configs';
@@ -17,8 +18,11 @@ describe('Wallet', () => {
   let gasPrice: BN;
 
   beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
+    const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+
+    provider = p;
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    return async () => cleanup();
   });
 
   it('can transfer a single type of coin to a single destination', async () => {

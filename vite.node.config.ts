@@ -5,7 +5,7 @@ import baseConfig from './vite.base.config';
 
 const config: UserConfig = {
   test: {
-    testTimeout: process.env.CI ? 10000 : undefined,
+    testTimeout: process.env.CI ? 10000 : 10000,
     isolate: false,
     exclude: ['packages/fuels/**/*.test.ts'],
     coverage: {

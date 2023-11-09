@@ -1,5 +1,5 @@
-import { Provider } from '@fuel-ts/providers';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import type { Provider } from '@fuel-ts/providers';
+import { setupTestProvider } from '@fuel-ts/providers/test-utils';
 import { hexlify } from 'ethers';
 
 import { Predicate } from '../../src/predicate';
@@ -15,7 +15,9 @@ describe('Predicate', () => {
     let provider: Provider;
 
     beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
+      const { provider: p, cleanup } = await setupTestProvider();
+      provider = p;
+      return () => cleanup();
     });
 
     it('sets predicate address for given byte code', () => {

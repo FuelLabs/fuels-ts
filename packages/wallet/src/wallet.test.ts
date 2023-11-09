@@ -54,25 +54,25 @@ describe('Wallet', () => {
   });
 
   it('encrypts and decrypts a JSON wallet', async () => {
-    wallet = WalletUnlocked.generate({
+    const baseWallet = WalletUnlocked.generate({
       provider,
     });
     const password = 'password';
-    const jsonWallet = await wallet.encrypt(password);
+    const jsonWallet = await baseWallet.encrypt(password);
 
     const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password, provider);
 
-    expect(decryptedWallet.address).toStrictEqual(wallet.address);
-    expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
-    expect(decryptedWallet.address.toB256()).toEqual(wallet.address.toB256());
+    expect(decryptedWallet.address).toStrictEqual(baseWallet.address);
+    expect(decryptedWallet.privateKey).toEqual(baseWallet.privateKey);
+    expect(decryptedWallet.address.toB256()).toEqual(baseWallet.address.toB256());
   });
 
   it('Should fail to decrypt JSON wallet for a given wrong password', async () => {
-    wallet = WalletUnlocked.generate({
+    const baseWallet = WalletUnlocked.generate({
       provider,
     });
     const password = 'password';
-    const jsonWallet = await wallet.encrypt(password);
+    const jsonWallet = await baseWallet.encrypt(password);
 
     const { error, result } = await safeExec(() =>
       Wallet.fromEncryptedJson(jsonWallet, 'wrong-password', provider)
@@ -135,15 +135,18 @@ describe('Wallet', () => {
     Provider.prototype.getContractBalance;
 
     beforeAll(async () => {
-      providerInstance = await Provider.create(FUEL_NETWORK_URL);
+      const { provider: p, cleanup } = await setupTestProvider(undefined, false);
+      providerInstance = p;
 
       walletUnlocked = WalletUnlocked.generate({
         provider: providerInstance,
       });
+
+      return async () => cleanup();
     });
 
     it('Wallet provider should be assigned on creation', async () => {
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      const newProviderInstance = await Provider.create(providerInstance.url);
 
       const myWallet = Wallet.generate({ provider: newProviderInstance });
 
@@ -151,7 +154,7 @@ describe('Wallet', () => {
     });
 
     it('connect should assign a new instance of the provider', async () => {
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      const newProviderInstance = await Provider.create(providerInstance.url);
 
       walletUnlocked.connect(newProviderInstance);
 
@@ -161,7 +164,7 @@ describe('Wallet', () => {
     it('connect should replace the current provider instance', async () => {
       const currentInstance = walletUnlocked.provider;
 
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      const newProviderInstance = await Provider.create(providerInstance.url);
 
       walletUnlocked.connect(newProviderInstance);
 
