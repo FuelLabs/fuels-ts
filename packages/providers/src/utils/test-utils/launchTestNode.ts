@@ -58,16 +58,16 @@ export const launchTestNode = async ({
     let chainConfigPath = '';
 
     const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
-    if (process.env.HAS_CACHE || process.env.TEST_CHAIN_CONFIG_PATH) {
-      chainConfigPath = process.env.TEST_CHAIN_CONFIG_PATH!;
-    } else {
-      if (!fsSync.existsSync(tempDirPath)) {
-        fsSync.mkdirSync(tempDirPath, { recursive: true });
-      }
-      chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
-      // Write a temporary chain configuration file.
-      await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
+    // if (process.env.HAS_CACHE || process.env.TEST_CHAIN_CONFIG_PATH) {
+    //   chainConfigPath = process.env.TEST_CHAIN_CONFIG_PATH!;
+    // } else {
+    if (!fsSync.existsSync(tempDirPath)) {
+      fsSync.mkdirSync(tempDirPath, { recursive: true });
     }
+    chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
+    // Write a temporary chain configuration file.
+    await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf8');
+    // }
 
     const child = spawn(command, [
       'run',

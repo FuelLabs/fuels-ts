@@ -68,7 +68,9 @@ export class TestNodeLauncher {
 
     // await execSync(pids.map((pid) => `pkill -9 -P ${pid}`).join(';'));
 
-    await execSync(`kill ${this.cache.pids.join(' ')}`);
+    const pids = [...this.cache.pids];
+    await execSync(`kill ${pids.join(' ')}`);
+    this.cache.pids = this.cache.pids.filter((x) => !pids.includes(x));
     // const cleanups: Promise<void>[] = [];
 
     // this.cache.cleanups.forEach((cleanup) => {
@@ -140,33 +142,35 @@ export class TestNodeLauncher {
       nodeOptions = {},
     }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}
   ) {
-    if (!process.env.DEFAULT_CHAIN_CONFIG_PATH || !process.env.TEST_CHAIN_CONFIG_PATH)
-      throw new Error();
+    return Promise.resolve();
     // process.env.HAS_CACHE = 'true';
 
-    if (!process.env.TEST_CHAIN_CONFIG_PATH) {
-      const defaultChainConfig = JSON.parse(
-        fsSync.readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
-      ) as ChainConfig;
+    // if (!process.env.DEFAULT_CHAIN_CONFIG_PATH) throw new Error();
+    // process.env.HAS_CACHE = 'true';
 
-      const chainConfig = walletConfig.apply(defaultChainConfig) as ChainConfig;
+    // if (!process.env.TEST_CHAIN_CONFIG_PATH) {
+    //   const defaultChainConfig = JSON.parse(
+    //     fsSync.readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
+    //   ) as ChainConfig;
 
-      const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
-      if (!fsSync.existsSync(tempDirPath)) {
-        fsSync.mkdirSync(tempDirPath, { recursive: true });
-      }
-      const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
-      // Write a temporary chain configuration file.
-      await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf-8');
-      process.env.TEST_CHAIN_CONFIG_PATH = chainConfigPath;
-    }
+    //   const chainConfig = walletConfig.apply(defaultChainConfig) as ChainConfig;
 
-    // @ts-expect-error asdf
-    this.cache = {
-      cleanups: [],
-      pids: [],
-      // chainConfig,
-    };
+    //   const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    //   if (!fsSync.existsSync(tempDirPath)) {
+    //     fsSync.mkdirSync(tempDirPath, { recursive: true });
+    //   }
+    //   const chainConfigPath = path.join(tempDirPath, '.chainConfig.json');
+    //   // Write a temporary chain configuration file.
+    //   await fs.writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf-8');
+    //   process.env.TEST_CHAIN_CONFIG_PATH = chainConfigPath;
+    // }
+
+    // // @ts-expect-error asdf
+    // this.cache = {
+    //   cleanups: [],
+    //   pids: [],
+    //   // chainConfig,
+    // };
 
     // await this.fasterLaunchStuff({ ...options, nodeCount });
     // const launchPromises: Promise<NodeInfo>[] = [];
@@ -268,17 +272,9 @@ export class TestNodeLauncher {
         walletConfig,
         providerOptions,
         nodeOptions,
-        // nodeOptions: { useSystemFuelCore: true, ...nodeOptions },
       },
       false
     );
-
-    // if (process.env.HAS_CACHE && this.cache && this.cache.pids.length >= 10) {
-    //   // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    //   this.killCachedNodes();
-    //   // this.cache?.pids.push(pid);
-    //   // this.cache?.cleanups.push(cleanup);
-    // }
 
     try {
       const contracts = await TestNodeLauncher.deployContracts(deployContracts, wallets);
