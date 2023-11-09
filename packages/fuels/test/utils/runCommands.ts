@@ -47,6 +47,7 @@ export const initFlagsDefault = [
   initFlagsUseBuiltinBinaries,
   initFlagsAutoStartFuelCore,
 ];
+export const buildFlagsDeploy = '--deploy';
 
 /**
  * Command callers
@@ -55,8 +56,8 @@ export async function runInit(flags: string[] = initFlagsDefault.flat()) {
   return runCommand(Commands.init, flags);
 }
 
-export async function runBuild() {
-  return runCommand(Commands.build);
+export async function runBuild(flags: string[] = []) {
+  return runCommand(Commands.build, flags);
 }
 
 export async function runDeploy() {
