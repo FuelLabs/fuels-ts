@@ -159,18 +159,18 @@ describe('startFuelCore', () => {
     let core = { pid: undefined } as ChildProcessWithoutNullStreams;
     killNode({ core, killFn, state })();
     expect(killFn).toHaveBeenCalledTimes(0);
-    expect(state.isDead).toEqual(false);
+    expect(state.isDead).toEqual(true);
 
     // should not kill
     core = { pid: 1 } as ChildProcessWithoutNullStreams;
     killNode({ core, killFn, state })();
     expect(killFn).toHaveBeenCalledTimes(0);
-    expect(state.isDead).toEqual(false);
+    expect(state.isDead).toEqual(true);
 
     // should kill
     state.isDead = false;
     killNode({ core, killFn, state })();
     expect(killFn).toHaveBeenCalledTimes(1);
-    expect(state.isDead).toEqual(true);
+    expect(state.isDead).toEqual(false);
   });
 });
