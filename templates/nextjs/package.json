@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "xprebuild": "fuels build && [ -f src/sway-api/contract-ids.json ] || echo '{ \"testContract\": \"0x\"}' > src/sway-api/contract-ids.json",
+    "xprebuild": "fuels build --deploy",
     "dev": "next dev",
     "build": "pnpm run xprebuild && next build",
     "start": "next start",
