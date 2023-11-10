@@ -519,7 +519,7 @@ describe('Contract', () => {
     const transactionCost = await invocationScope.getTransactionCost();
 
     expect(toNumber(transactionCost.gasPrice)).toBe(gasPrice.toNumber());
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
+    expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
     const { value } = await invocationScope
@@ -552,7 +552,7 @@ describe('Contract', () => {
     const transactionCost = await invocationScope.getTransactionCost();
 
     expect(toNumber(transactionCost.gasPrice)).toBe(minGasPrice.toNumber());
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(1);
+    expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(1);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
     // Test that gasUsed is correctly calculated
@@ -709,6 +709,8 @@ describe('Contract', () => {
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
     const multiCallScope = contract.multiCall(invocationScopes).txParams({ gasPrice });
+    const { maxFee } = await multiCallScope.getTransactionCost();
+    await multiCallScope.fundWithRequiredCoins(maxFee);
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
 
@@ -748,8 +750,12 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
+    const { requiredQuantities, maxFee } =
+      await provider.getTransactionCost(transactionRequestParsed);
+
     // Fund tx
-    await wallet.fund(transactionRequestParsed);
+    await wallet.fund(transactionRequestParsed, requiredQuantities, maxFee);
+
     // Send tx
     const response = await wallet.sendTransaction(transactionRequestParsed);
     const result = await response.waitForResult();
@@ -806,6 +812,13 @@ describe('Contract', () => {
     const txRequestParsed = JSON.parse(txRequest);
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    const { gasUsed, minFee, requiredQuantities } =
+      await contract.provider.getTransactionCost(transactionRequestParsed);
+
+    transactionRequestParsed.gasLimit = gasUsed;
+
+    await contract.account.fund(transactionRequestParsed, requiredQuantities, minFee);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const response = await contract.account!.sendTransaction(transactionRequestParsed);

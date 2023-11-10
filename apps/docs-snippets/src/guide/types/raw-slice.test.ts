@@ -1,4 +1,4 @@
-import type { Contract, BN } from 'fuels';
+import type { Contract, BN, RawSlice } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -15,8 +15,9 @@ describe('RawSlice', () => {
 
   it('should pass a raw slice to a contract', async () => {
     // #region raw-slice-1
+    // #context import type { RawSlice } from 'fuels';
 
-    const rawSlice = [40, 41, 42];
+    const rawSlice: RawSlice = [40, 41, 42];
 
     const { value } = await contract.functions.raw_slice_comparison(rawSlice).simulate();
 
@@ -26,8 +27,9 @@ describe('RawSlice', () => {
 
   it('should retrieve a raw slice from a contract', async () => {
     // #region raw-slice-2
+    // #context import type { RawSlice } from 'fuels';
 
-    const rawSlice = [8, 42, 77];
+    const rawSlice: RawSlice = [8, 42, 77];
 
     const { value } = await contract.functions.echo_raw_slice(rawSlice).simulate();
 

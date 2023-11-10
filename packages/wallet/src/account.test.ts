@@ -7,12 +7,10 @@ import type {
   CoinQuantity,
   Message,
   Resource,
-  ScriptTransactionRequest,
   TransactionRequest,
   TransactionRequestLike,
-  TransactionResponse,
 } from '@fuel-ts/providers';
-import { Provider } from '@fuel-ts/providers';
+import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
@@ -213,39 +211,45 @@ describe('Account', () => {
   });
 
   it('should execute fund just as fine', async () => {
-    const fee = {
-      amount: bn(1),
-      assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
-    };
+    const quantities: CoinQuantity[] = [
+      {
+        amount: bn(10),
+        assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+      },
+    ];
+    const fee = bn(29);
 
-    const resources: Resource[] = [];
+    const request = new ScriptTransactionRequest();
 
-    const calculateFee = vi.fn(() => fee);
-    const addResources = vi.fn();
-
-    const request = {
-      calculateFee,
-      addResources,
-    } as unknown as TransactionRequest;
-
+    const resourcesToSpend: Resource[] = [];
     const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementationOnce(() => Promise.resolve([]));
+      .mockImplementationOnce(() => Promise.resolve(resourcesToSpend));
+
+    const addResourcesSpy = vi.spyOn(request, 'addResources');
+
+    const addAmountToAssetSpy = vi.spyOn(providersMod, 'addAmountToAsset');
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    await account.fund(request);
+    await account.fund(request, quantities, fee);
 
-    expect(calculateFee.mock.calls.length).toBe(1);
+    expect(addAmountToAssetSpy).toBeCalledTimes(1);
+    expect(addAmountToAssetSpy).toHaveBeenCalledWith({
+      amount: fee,
+      assetId: BaseAssetId,
+      coinQuantities: quantities,
+    });
 
-    expect(getResourcesToSpendSpy.mock.calls.length).toBe(1);
-    expect(getResourcesToSpendSpy.mock.calls[0][0]).toEqual([fee]);
+    const expectedTotalResources = [quantities[0], { amount: fee, assetId: BaseAssetId }];
+    expect(getResourcesToSpendSpy).toBeCalledTimes(1);
+    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources);
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResourcesSpy).toBeCalledTimes(1);
+    expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
   });
 
   it('should execute transfer just as fine', async () => {
@@ -258,77 +262,56 @@ describe('Account', () => {
       maturity: 1,
     };
 
-    const fee: CoinQuantity = {
-      amount,
-      assetId,
+    const transactionCost: providersMod.TransactionCost = {
+      gasUsed: bn(234),
+      gasPrice: bn(1),
+      minGasPrice: bn(1),
+      maxFee: bn(2),
+      minFee: bn(1),
+      receipts: [],
+      requiredQuantities: [],
     };
 
-    const calculateFee = vi.fn(() => fee);
-    const addCoinOutput = vi.fn();
-    const addResources = vi.fn();
-
-    const request = {
-      calculateFee,
-      addCoinOutput,
-      addResources,
-    } as unknown as ScriptTransactionRequest;
-
-    const resources: Resource[] = [];
-
-    const getResourcesToSpend = vi
-      .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementation(() => Promise.resolve(resources));
-
-    const sendTransaction = vi
-      .spyOn(Account.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
-
+    const request = new ScriptTransactionRequest();
     vi.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+
+    const transactionResponse = new TransactionResponse('transactionId', provider);
+
+    const addCoinOutputSpy = vi.spyOn(request, 'addCoinOutput');
+
+    const fundSpy = vi
+      .spyOn(Account.prototype, 'fund')
+      .mockImplementation(() => Promise.resolve());
+
+    const sendTransactionSpy = vi
+      .spyOn(Account.prototype, 'sendTransaction')
+      .mockImplementation(() => Promise.resolve(transactionResponse));
+
+    const getTransactionCost = vi
+      .spyOn(Provider.prototype, 'getTransactionCost')
+      .mockImplementation(() => Promise.resolve(transactionCost));
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
-    // asset id already hexlified
+
     await account.transfer(destination, amount, assetId, txParam);
 
-    expect(addCoinOutput.mock.calls.length).toBe(1);
-    expect(addCoinOutput.mock.calls[0]).toEqual([destination, amount, assetId]);
+    expect(addCoinOutputSpy).toHaveBeenCalledTimes(1);
+    expect(addCoinOutputSpy).toHaveBeenCalledWith(destination, amount, assetId);
 
-    expect(calculateFee.mock.calls.length).toBe(1);
+    expect(getTransactionCost).toHaveBeenCalledTimes(1);
 
-    expect(getResourcesToSpend.mock.calls.length).toBe(1);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
+    expect(fundSpy).toHaveBeenCalledTimes(1);
+    expect(fundSpy).toHaveBeenCalledWith(
+      request,
+      transactionCost.requiredQuantities,
+      transactionCost.maxFee
+    );
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
-
-    expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
-
-    // asset id not hexlified
-    await account.transfer(destination, amount, BaseAssetId, txParam);
-
-    expect(addCoinOutput.mock.calls.length).toBe(2);
-    expect(addCoinOutput.mock.calls[1]).toEqual([
-      destination,
-      amount,
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-    ]);
-
-    expect(calculateFee.mock.calls.length).toBe(2);
-
-    expect(getResourcesToSpend.mock.calls.length).toBe(2);
-    expect(getResourcesToSpend.mock.calls[1][0]).toEqual([
-      [amount, '0x0000000000000000000000000000000000000000000000000000000000000000'],
-      fee,
-    ]);
-
-    expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[1][0]).toEqual(resources);
-
-    expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[1][0]).toEqual(request);
+    expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request);
   });
 
   it('should execute withdrawToBaseLayer just fine', async () => {

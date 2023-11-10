@@ -30,6 +30,9 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
+      - name: Verify package.json integrity
+        run: pnpm lint:package-jsons
+
       - name: Forc Format Check
         run: pnpm forc:check
 

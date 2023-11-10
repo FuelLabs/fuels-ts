@@ -24,7 +24,7 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns true', async () => {
-      const amountToPredicate = 100_000;
+      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
@@ -48,7 +48,7 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns false', async () => {
-      const amountToPredicate = 100;
+      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
 
       predicate = new Predicate(predicateBytesFalse, provider);

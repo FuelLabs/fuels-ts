@@ -48,7 +48,7 @@ describe('buildSwayPrograms', () => {
       },
     };
 
-    const spawn = jest
+    const spawn = vi
       .spyOn(childProcessMod, 'spawn')
       .mockImplementation(
         (..._) => spawnMocks as unknown as childProcessMod.ChildProcessWithoutNullStreams
@@ -61,7 +61,7 @@ describe('buildSwayPrograms', () => {
   }
 
   function mockBuildSwayProgram() {
-    const buildSwayProgram = jest
+    const buildSwayProgram = vi
       .spyOn(buildSwayProgramsMod, 'buildSwayProgram')
       .mockReturnValue(Promise.resolve());
 
