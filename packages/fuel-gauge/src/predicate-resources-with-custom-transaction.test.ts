@@ -24,13 +24,15 @@ describe('predicate resources with custom transaction', () => {
   it(`A transaction input's predicateData is always the last one set on the predicate before the resource was added to the custom transaction`, async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
     const amountToTransfer = 1000;
 
     const predicate = new Predicate(predicateBytecode, provider, abiJSON);
 
-    await wallet.transfer(predicate.address, amountToTransfer, BaseAssetId);
+    await wallet.transfer(predicate.address, amountToTransfer, BaseAssetId, {
+      gasPrice: provider.getGasConfig().minGasPrice,
+    });
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1000,
@@ -63,13 +65,15 @@ describe('predicate resources with custom transaction', () => {
 `, async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const adminWallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+    const adminWallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
     const amountToTransfer = 1000;
 
     const predicate = new Predicate(predicateBytecode, provider, abiJSON);
 
-    await adminWallet.transfer(predicate.address, amountToTransfer, BaseAssetId);
+    await adminWallet.transfer(predicate.address, amountToTransfer, BaseAssetId, {
+      gasPrice: provider.getGasConfig().minGasPrice,
+    });
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1000,
