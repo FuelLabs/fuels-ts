@@ -1,4 +1,4 @@
-# Full-Stack Quickstart
+# Fullstack Quickstart
 
 You can quickly bootstrap a full-stack Fuel project locally with the following command:
 
