@@ -1,5 +1,6 @@
 import { ErrorCode } from '@fuel-ts/errors';
 
+import { MAX_BYTES } from '../constants';
 import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -34,7 +35,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (data.length < this.encodedLength) {
+    if (data.length < this.encodedLength || data.length > MAX_BYTES.toNumber()) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid array data size.`);
     }
 

@@ -1,3 +1,5 @@
+import { bn } from "@fuel-ts/math";
+
 export const OPTION_CODER_TYPE = 'enum Option';
 export const VEC_CODER_TYPE = 'struct Vec';
 export const BYTES_CODER_TYPE = 'struct Bytes';
@@ -19,6 +21,7 @@ export const ADDRESS_LEN = BYTES_32;
 export const NONCE_LEN = BYTES_32;
 export const UTXO_LEN = WORD_SIZE * 5;
 export const TX_POINTER_LEN = WORD_SIZE * 2;
+export const MAX_BYTES = bn(2).pow(64).sub(1); // Max u64
 
 export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
   BYTES_32 + // Tx ID

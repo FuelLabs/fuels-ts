@@ -1,6 +1,7 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
+import { MAX_BYTES } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../utilities';
 
@@ -48,7 +49,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (data.length < BASE_VECTOR_OFFSET) {
+    if (data.length < BASE_VECTOR_OFFSET || data.length > MAX_BYTES.toNumber()) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
     }
 
