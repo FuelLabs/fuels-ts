@@ -2,7 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
-import { max, bn } from '@fuel-ts/math';
+import { bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -45,6 +45,7 @@ import {
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
+import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
@@ -126,10 +127,13 @@ export type NodeInfoAndConsensusParameters = {
 
 // #region cost-estimation-1
 export type TransactionCost = {
+  requiredQuantities: CoinQuantity[];
+  receipts: TransactionResultReceipt[];
   minGasPrice: BN;
   gasPrice: BN;
   gasUsed: BN;
-  fee: BN;
+  minFee: BN;
+  maxFee: BN;
 };
 // #endregion cost-estimation-1
 
@@ -697,32 +701,52 @@ export default class Provider {
    * @returns A promise that resolves to the transaction cost object.
    */
   async getTransactionCost(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
+    forwardingQuantities: CoinQuantity[] = []
   ): Promise<TransactionCost> {
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
+    const clonedTransactionRequest = transactionRequestify(clone(transactionRequestLike));
+
+    const { gasLimit } = clonedTransactionRequest;
+    let { gasPrice } = clonedTransactionRequest;
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const gasLimit = maxGasPerTx;
-    // const margin = 1 + tolerance;
 
-    // Set gasLimit to the maximum of the chain
-    // and gasPrice to 0 for measure
-    // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = maxGasPerTx;
-    transactionRequest.gasPrice = bn(0);
+    gasPrice = max(gasPrice, minGasPrice);
 
-    // Execute dryRun not validated transaction to query gasUsed
-    const { receipts } = await this.call(transactionRequest);
-    const transaction = transactionRequest.toTransaction();
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const allQuantities = mergeQuantities(coinOutputsQuantitites, forwardingQuantities);
+    // Funding transaction with fake utxos
+    clonedTransactionRequest.fundWithFakeUtxos(allQuantities);
 
+    const transactionBytes = clonedTransactionRequest.toTransactionBytes();
     const chargeableBytes = calculateTxChargeableBytes({
-      transactionBytes: transactionRequest.toTransactionBytes(),
-      transactionWitnesses: transaction.witnesses,
+      transactionBytes,
+      transactionWitnesses: new TransactionCoder().decode(transactionBytes, 0)[0].witnesses,
     });
 
-    const gasUsed = getGasUsedFromReceipts(receipts);
+    let gasUsed = bn(0);
+    let receipts: TransactionResultReceipt[] = [];
+    const isTransactionCreate = clonedTransactionRequest.type === TransactionType.Create;
 
-    const { minFee } = calculateTransactionFee({
+    // Transactions of type Create does not consume any gas so we can the dryRun
+    if (!isTransactionCreate) {
+      /**
+       * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
+       * This simplifies the funding with fake utxos, since the coin quantities required
+       * will only be amounts being transferred (coin outputs) and amounts being forwarded
+       * to contract calls.
+       */
+      clonedTransactionRequest.gasPrice = bn(0);
+      clonedTransactionRequest.gasLimit = maxGasPerTx;
+
+      // Executing dryRun with fake utxos to get gasUsed
+      const result = await this.call(clonedTransactionRequest);
+      receipts = result.receipts;
+      gasUsed = getGasUsedFromReceipts(receipts);
+    }
+
+    const { minFee, maxFee } = calculateTransactionFee({
       gasPrice,
       gasPerByte,
       gasPriceFactor,
@@ -732,10 +756,13 @@ export default class Provider {
     });
 
     return {
+      requiredQuantities: allQuantities,
       minGasPrice,
+      receipts,
       gasPrice,
       gasUsed,
-      fee: minFee,
+      minFee,
+      maxFee,
     };
   }
 
