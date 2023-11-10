@@ -171,6 +171,6 @@ describe('startFuelCore', () => {
     state.isDead = false;
     killNode({ core, killFn, state })();
     expect(killFn).toHaveBeenCalledTimes(1);
-    expect(state.isDead).toEqual(false);
+    expect(state.isDead).toEqual(true);
   });
 });
