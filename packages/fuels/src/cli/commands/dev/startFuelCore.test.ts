@@ -151,15 +151,26 @@ describe('startFuelCore', () => {
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
   });
 
-  test('should kill process only if PID exists', () => {
-    const kill = jest.fn();
+  test('should kill process only if PID exists and node is alive', () => {
+    const killFn = jest.fn();
+    const state = { isDead: true };
 
-    const mock1 = { pid: undefined } as ChildProcessWithoutNullStreams;
-    killNode(mock1, kill)();
-    expect(kill).toHaveBeenCalledTimes(0);
+    // should not kill
+    let core = { pid: undefined } as ChildProcessWithoutNullStreams;
+    killNode({ core, killFn, state })();
+    expect(killFn).toHaveBeenCalledTimes(0);
+    expect(state.isDead).toEqual(false);
 
-    const mock2 = { pid: 1 } as ChildProcessWithoutNullStreams;
-    killNode(mock2, kill)();
-    expect(kill).toHaveBeenCalledTimes(1);
+    // should not kill
+    core = { pid: 1 } as ChildProcessWithoutNullStreams;
+    killNode({ core, killFn, state })();
+    expect(killFn).toHaveBeenCalledTimes(0);
+    expect(state.isDead).toEqual(false);
+
+    // should kill
+    state.isDead = false;
+    killNode({ core, killFn, state })();
+    expect(killFn).toHaveBeenCalledTimes(1);
+    expect(state.isDead).toEqual(true);
   });
 });
