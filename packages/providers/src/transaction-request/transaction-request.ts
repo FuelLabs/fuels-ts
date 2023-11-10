@@ -270,14 +270,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       input.predicate = predicate;
       input.predicateData = predicateData;
     } else {
-      let witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
-
-      // Insert a dummy witness if no witness exists
-      if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createWitness();
-      }
-
-      input.witnessIndex = witnessIndex;
+      input.witnessIndex = this.getCoinInputWitnessIndexByOwner(owner) ?? this.createWitness();
     }
 
     // Insert the Input
@@ -314,14 +307,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       input.predicate = predicate;
       input.predicateData = predicateData;
     } else {
-      let witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
-
-      // Insert a dummy witness if no witness exists
-      if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createWitness();
-      }
-
-      input.witnessIndex = witnessIndex;
+      input.witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient) ?? this.createWitness();
     }
 
     // Insert the Input
