@@ -1,5 +1,19 @@
 # @fuel-ts/docs-snippets
 
+## 0.67.0
+
+### Minor Changes
+
+- 🐞 Fixing transaction funding, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1372](https://github.com/FuelLabs/fuels-ts/pull/1372))
+
+## 0.66.1
+
+## 0.66.0
+
+### Patch Changes
+
+- Improve typegen support for String, RawSlice and Bytes, by [@danielbate](https://github.com/danielbate) (See [#1412](https://github.com/FuelLabs/fuels-ts/pull/1412))
+
 ## 0.65.0
 
 ## 0.64.1

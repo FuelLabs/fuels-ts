@@ -30,3 +30,23 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
     max: max ? bn(max) : undefined,
   };
 };
+
+export interface IAddAmountToAssetParams {
+  assetId: string;
+  amount: BN;
+  coinQuantities: CoinQuantity[];
+}
+
+export const addAmountToAsset = (params: IAddAmountToAssetParams): CoinQuantity[] => {
+  const { amount, assetId, coinQuantities } = params;
+
+  const assetIdx = coinQuantities.findIndex((coinQuantity) => coinQuantity.assetId === assetId);
+
+  if (assetIdx !== -1) {
+    coinQuantities[assetIdx].amount = coinQuantities[assetIdx].amount.add(amount);
+  } else {
+    coinQuantities.push({ assetId, amount });
+  }
+
+  return coinQuantities;
+};

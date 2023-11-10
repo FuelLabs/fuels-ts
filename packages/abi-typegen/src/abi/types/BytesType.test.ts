@@ -22,6 +22,6 @@ describe('BytesType.ts', () => {
 
     expect(bytes.attributes.inputLabel).toEqual('Bytes');
     expect(bytes.attributes.outputLabel).toEqual('Bytes');
-    expect(bytes.requiredFuelsMembersImports).toStrictEqual([]);
+    expect(bytes.requiredFuelsMembersImports).toStrictEqual(['Bytes']);
   });
 });

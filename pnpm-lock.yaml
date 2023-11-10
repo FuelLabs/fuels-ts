@@ -543,6 +543,9 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -686,9 +689,6 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
-      '@fuel-ts/testcases':
-        specifier: workspace:*
-        version: link:../testcases
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions

@@ -14,10 +14,15 @@ export class BytesType extends ArrayType {
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
+    const capitalizedName = 'Bytes';
+
     this.attributes = {
-      inputLabel: `Bytes`,
-      outputLabel: `Bytes`,
+      inputLabel: capitalizedName,
+      outputLabel: capitalizedName,
     };
+
+    this.requiredFuelsMembersImports = [capitalizedName];
+
     return this.attributes;
   }
 }

@@ -1,5 +1,28 @@
 # Change Log
 
+## 0.67.0
+
+### Minor Changes
+
+- ensure transfer to contract transactions returns operation transfer asset, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1400](https://github.com/FuelLabs/fuels-ts/pull/1400))
+- 🐞 Fixing transaction funding, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1372](https://github.com/FuelLabs/fuels-ts/pull/1372))
+
+## 0.66.1
+
+### Patch Changes
+
+- Adjusting package manager configs, by [@arboleya](https://github.com/arboleya) (See [#1415](https://github.com/FuelLabs/fuels-ts/pull/1415))
+
+## 0.66.0
+
+### Minor Changes
+
+- made calculateTransactionFee to return minFee and maxFee, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1383](https://github.com/FuelLabs/fuels-ts/pull/1383))
+
+### Patch Changes
+
+- You can now pass in `ProviderOptions` to `Provider.connect`, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1388](https://github.com/FuelLabs/fuels-ts/pull/1388))
+
 ## 0.65.0
 
 ### Minor Changes

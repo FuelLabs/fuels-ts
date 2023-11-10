@@ -17,5 +17,6 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*"
-  }
+  },
+  "version": null
 }

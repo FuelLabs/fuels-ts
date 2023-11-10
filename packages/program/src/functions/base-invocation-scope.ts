@@ -2,9 +2,10 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
@@ -118,16 +119,13 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
-    const { gasPriceFactor } = this.getProvider().getGasConfig();
-
-    const assets = this.calls
+    const forwardingAssets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee(gasPriceFactor))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
-    return assets;
+    return forwardingAssets;
   }
 
   /**
@@ -191,10 +189,6 @@ export class BaseInvocationScope<TReturn = any> {
     // Check if gasLimit is less than the
     // sum of all call gasLimits
     this.checkGasLimitTotal();
-
-    if (this.program.account) {
-      await this.fundWithRequiredCoins();
-    }
   }
 
   /**
@@ -219,10 +213,9 @@ export class BaseInvocationScope<TReturn = any> {
   async getTransactionCost(options?: TransactionCostOptions) {
     const provider = this.getProvider();
 
-    await this.prepareTransaction();
-    const request = transactionRequestify(this.transactionRequest);
+    const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins());
 
     return txCost;
   }
@@ -232,13 +225,14 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The current instance of the class.
    */
-  async fundWithRequiredCoins() {
+  async fundWithRequiredCoins(fee: BN) {
     // Clean coin inputs before add new coins to the request
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
-    const resources = await this.program.account?.getResourcesToSpend(this.requiredCoins);
-    this.transactionRequest.addResources(resources || []);
+
+    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, fee);
+
     return this;
   }
 
@@ -292,6 +286,18 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
+
+    const { maxFee, gasUsed } = await this.getTransactionCost();
+
+    if (gasUsed.gt(bn(transactionRequest.gasLimit))) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
+
+    await this.fundWithRequiredCoins(maxFee);
+
     const response = await this.program.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
@@ -312,7 +318,7 @@ export class BaseInvocationScope<TReturn = any> {
     /**
      * NOTE: Simulating a transaction with UTXOs validation requires the transaction
      * to be signed by the wallet. This is only possible if the wallet is unlocked.
-     * Since there is no garantee at this point that the account instance is an unlocked wallet
+     * Since there is no guarantee at this point that the account instance is an unlocked wallet
      * (BaseWalletUnlocked instance), we need to check it before run the simulation. Perhaps
      * we should think in a redesign of the AbstractAccount class to avoid this problem.
      */
@@ -324,6 +330,11 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
+
+    const { maxFee } = await this.getTransactionCost();
+
+    await this.fundWithRequiredCoins(maxFee);
+
     const result = await this.program.account.simulateTransaction(transactionRequest);
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
@@ -335,11 +346,15 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
+    assert(this.program.account, 'Wallet is required!');
+
     const provider = this.getProvider();
 
+    const { maxFee } = await this.getTransactionCost();
+
+    await this.fundWithRequiredCoins(maxFee);
     const transactionRequest = await this.getTransactionRequest();
-    const request = transactionRequestify(transactionRequest);
-    const response = await provider.call(request, {
+    const response = await provider.call(transactionRequest, {
       utxoValidation: false,
     });
 

@@ -1,12 +1,12 @@
-import { addressify } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { Address, addressify, getRandomB256 } from '@fuel-ts/address';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
-import type { BigNumberish, BN } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
@@ -448,6 +448,52 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId: BaseAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
+  }
+
+  /**
+   * Funds the transaction with fake UTXOs for each assetId and amount in the
+   * quantities array.
+   *
+   * @param quantities - CoinQuantity Array.
+   */
+  fundWithFakeUtxos(quantities: CoinQuantity[]) {
+    const hasBaseAssetId = quantities.some(({ assetId }) => assetId === BaseAssetId);
+
+    if (!hasBaseAssetId) {
+      quantities.push({ assetId: BaseAssetId, amount: bn(1) });
+    }
+
+    const owner = getRandomB256();
+
+    this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
+    this.outputs = this.outputs.filter((output) => output.type !== OutputType.Change);
+
+    const fakeResources = quantities.map(({ assetId, amount }, idx) => ({
+      id: `${ZeroBytes32}0${idx}`,
+      amount,
+      assetId,
+      owner: Address.fromB256(owner),
+      maturity: 0,
+      blockCreated: bn(1),
+      txCreatedIdx: bn(1),
+    }));
+
+    this.addResources(fakeResources);
+  }
+
+  /**
+   * Retrieves an array of CoinQuantity for each coin output present in the transaction.
+   * a transaction.
+   *
+   * @returns  CoinQuantity array.
+   */
+  getCoinOutputsQuantities(): CoinQuantity[] {
+    const coinsQuantities = this.getCoinOutputs().map(({ amount, assetId }) => ({
+      amount: bn(amount),
+      assetId: assetId.toString(),
+    }));
+
+    return coinsQuantities;
   }
 
   /**
