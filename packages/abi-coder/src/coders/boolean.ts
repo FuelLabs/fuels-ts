@@ -1,6 +1,8 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { bn, toBytes } from '@fuel-ts/math';
 
+import { WORD_SIZE } from '../constants';
+
 import { Coder } from './abstract-coder';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
@@ -18,11 +20,23 @@ export class BooleanCoder extends Coder<boolean, boolean> {
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {
-    const bytes = bn(data.slice(offset, offset + 8));
-    if (bytes.isZero()) {
-      return [false, offset + 8];
+    if (data.length < WORD_SIZE) {
+      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid boolean data size.');
     }
-    if (!bytes.eq(bn(1))) {
+
+    const byteDataLength = WORD_SIZE;
+    const bytes = data.slice(offset, offset + byteDataLength);
+
+    if (bytes.length !== byteDataLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, `Invalid boolean byte data size.`);
+    }
+
+    const decodedValue = bn(bytes);
+    if (decodedValue.isZero()) {
+      return [false, offset + WORD_SIZE];
+    }
+
+    if (!decodedValue.eq(bn(1))) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid boolean value.`);
     }
     return [true, offset + 8];

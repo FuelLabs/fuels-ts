@@ -57,9 +57,9 @@ describe('EnumCoder', () => {
   });
 
   it('should throw an error when decoded value accesses an invalid index', () => {
-    const input = new Uint8Array(Array.from(Array(3).keys()));
+    const input = new Uint8Array(Array.from(Array(8).keys()));
     expect(() => {
-      coder.decode(input, 1);
+      coder.decode(input, 0);
     }).toThrow('Invalid caseIndex');
   });
 

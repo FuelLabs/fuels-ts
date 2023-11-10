@@ -34,6 +34,10 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    if (data.length < this.encodedLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, `Invalid array data size.`);
+    }
+
     let newOffset = offset;
     const decodedValue = Array(this.length)
       .fill(0)

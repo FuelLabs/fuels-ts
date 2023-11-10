@@ -33,6 +33,10 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
+    if (data.length < this.encodedLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid tuple data size.');
+    }
+
     let newOffset = offset;
     const decodedValue = this.coders.map((coder) => {
       let decoded;

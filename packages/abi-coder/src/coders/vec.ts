@@ -48,12 +48,19 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    if (data.length < BASE_VECTOR_OFFSET) {
+      this.throwError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
+    }
+
     const len = data.slice(16, 24);
     const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
-    const vectorRawData = data.slice(
-      BASE_VECTOR_OFFSET,
-      BASE_VECTOR_OFFSET + length * this.coder.encodedLength
-    );
+    const vectorRawDataLength = length * this.coder.encodedLength;
+    const vectorRawData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + vectorRawDataLength);
+
+    if (vectorRawData.length !== vectorRawDataLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, `Invalid vec byte data size.`);
+    }
+
     return [
       chunkByLength(vectorRawData, this.coder.encodedLength).map(
         (chunk) => this.coder.decode(chunk, 0)[0]

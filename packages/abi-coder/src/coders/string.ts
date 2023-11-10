@@ -27,7 +27,17 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    const bytes = data.slice(offset, offset + this.length);
+    if (data.length < this.length) {
+      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid string data size.');
+    }
+
+    const byteDataLength = this.length;
+    const bytes = data.slice(offset, offset + byteDataLength);
+
+    if (bytes.length !== byteDataLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid string byte data size.');
+    }
+
     const value = toUtf8String(bytes);
 
     const padding = this.#paddingLength;

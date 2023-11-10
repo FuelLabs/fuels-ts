@@ -39,7 +39,11 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
   }
 
   decode(data: Uint8Array, offset: number): [BN[], number] {
-    const internalCoder = new ArrayCoder(new U64Coder(), data.length / 8);
+    if (data.length < BASE_RAW_SLICE_OFFSET || data.length % WORD_SIZE !== 0) {
+      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.');
+    }
+
+    const internalCoder = new ArrayCoder(new U64Coder(), data.length / WORD_SIZE);
     const decoded = internalCoder.decode(data, offset);
 
     return decoded;

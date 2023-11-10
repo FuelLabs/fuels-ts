@@ -2,11 +2,15 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { bn, toHex } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
+import { WORD_SIZE } from '../constants';
+
 import { Coder } from './abstract-coder';
+
+const encodedLength = WORD_SIZE * 4;
 
 export class B256Coder extends Coder<string, string> {
   constructor() {
-    super('b256', 'b256', 32);
+    super('b256', 'b256', encodedLength);
   }
 
   encode(value: string): Uint8Array {
@@ -16,21 +20,29 @@ export class B256Coder extends Coder<string, string> {
     } catch (error) {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
-    if (encodedValue.length !== 32) {
+    if (encodedValue.length !== encodedLength) {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     return encodedValue;
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    let bytes = data.slice(offset, offset + 32);
+    if (data.length < encodedLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, `Invalid b256 data size.`);
+    }
+
+    const byteDataLength = encodedLength;
+    let bytes = data.slice(offset, offset + byteDataLength);
+
     const decoded = bn(bytes);
     if (decoded.isZero()) {
       bytes = new Uint8Array(32);
     }
-    if (bytes.length !== 32) {
-      this.throwError(ErrorCode.DECODE_ERROR, `'Invalid size for b256'.`);
+
+    if (bytes.length !== byteDataLength) {
+      this.throwError(ErrorCode.DECODE_ERROR, `Invalid b256 byte data size.`);
     }
+
     return [toHex(bytes, 32), offset + 32];
   }
 }
