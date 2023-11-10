@@ -110,7 +110,7 @@ The table below describes how Sway types are converted from/to Typescript.
 |         **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
 | **raw untyped ptr** | `123`                          |           `BigNumberish`            |                `BN`                 |
 
-> For more info on Sway types, click [here](https://fuellabs.github.io/sway/latest/basics/index.html)
+> For more info on Sway types, click [here](https://docs.fuel.network/docs/sway/basics/built_in_types/)
 
 ## Contributing
 
