@@ -1,12 +1,14 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { ReceiptType, type Output, TransactionType } from '@fuel-ts/transactions';
+import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import type { Output } from '@fuel-ts/transactions';
 
 import type {
+  TransactionResultReceipt,
   TransactionResultCallReceipt,
   TransactionResultMessageOutReceipt,
-  TransactionResultReceipt,
   TransactionResultTransferOutReceipt,
+  TransactionResultTransferReceipt,
 } from '../transaction-response';
 
 import { getFunctionCall } from './call';
@@ -15,8 +17,14 @@ import {
   getInputAccountAddress,
   getInputContractFromIndex,
   getInputsCoin,
+  getInputsContract,
 } from './input';
-import { getOutputsCoin, getOutputsContract, getOutputsContractCreated } from './output';
+import {
+  getOutputsChange,
+  getOutputsCoin,
+  getOutputsContract,
+  getOutputsContractCreated,
+} from './output';
 import { AddressType, ChainName, OperationName, TransactionTypeName } from './types';
 import type {
   InputOutputParam,
@@ -26,6 +34,7 @@ import type {
   ReceiptParam,
   Operation,
   GetOperationParams,
+  GetTransferOperationsParams,
 } from './types';
 
 /** @hidden */
@@ -311,34 +320,74 @@ export function getContractCallOperations({
 }
 
 /** @hidden */
-export function getTransferOperations({ inputs, outputs }: InputOutputParam): Operation[] {
+export function getTransferOperations({
+  inputs,
+  outputs,
+  receipts,
+}: GetTransferOperationsParams): Operation[] {
   const coinOutputs = getOutputsCoin(outputs);
 
-  let operations: Operation[] = [];
-  coinOutputs.forEach((output) => {
-    const input = getInputFromAssetId(inputs, output.assetId);
+  const [transferReceipt] = getReceiptsByType<TransactionResultTransferReceipt>(
+    receipts,
+    ReceiptType.Transfer
+  );
 
-    if (input) {
-      const inputAddress = getInputAccountAddress(input);
-      operations = addOperation(operations, {
-        name: OperationName.transfer,
-        from: {
-          type: AddressType.account,
-          address: inputAddress,
-        },
-        to: {
-          type: AddressType.account,
-          address: output.to.toString(),
-        },
-        assetsSent: [
-          {
-            assetId: output.assetId.toString(),
-            amount: output.amount,
+  let operations: Operation[] = [];
+
+  // Possible transfer to contract
+  if (transferReceipt) {
+    const changeOutputs = getOutputsChange(outputs);
+    changeOutputs.forEach((output) => {
+      const { assetId } = output;
+      const [contractInput] = getInputsContract(inputs);
+      const utxo = getInputFromAssetId(inputs, assetId);
+
+      if (utxo && contractInput) {
+        const inputAddress = getInputAccountAddress(utxo);
+        operations = addOperation(operations, {
+          name: OperationName.transfer,
+          from: {
+            type: AddressType.account,
+            address: inputAddress,
           },
-        ],
-      });
-    }
-  });
+          to: {
+            type: AddressType.contract,
+            address: contractInput.contractID,
+          },
+          assetsSent: [
+            {
+              assetId: assetId.toString(),
+              amount: transferReceipt.amount,
+            },
+          ],
+        });
+      }
+    });
+  } else {
+    coinOutputs.forEach((output) => {
+      const input = getInputFromAssetId(inputs, output.assetId);
+      if (input) {
+        const inputAddress = getInputAccountAddress(input);
+        operations = addOperation(operations, {
+          name: OperationName.transfer,
+          from: {
+            type: AddressType.account,
+            address: inputAddress,
+          },
+          to: {
+            type: AddressType.account,
+            address: output.to.toString(),
+          },
+          assetsSent: [
+            {
+              assetId: output.assetId.toString(),
+              amount: output.amount,
+            },
+          ],
+        });
+      }
+    });
+  }
 
   return operations;
 }
@@ -408,13 +457,13 @@ export function getOperations({
   if (isTypeCreate(transactionType)) {
     return [
       ...getContractCreatedOperations({ inputs, outputs }),
-      ...getTransferOperations({ inputs, outputs }),
+      ...getTransferOperations({ inputs, outputs, receipts }),
     ];
   }
 
   if (isTypeScript(transactionType)) {
     return [
-      ...getTransferOperations({ inputs, outputs }),
+      ...getTransferOperations({ inputs, outputs, receipts }),
       ...getContractCallOperations({
         inputs,
         outputs,

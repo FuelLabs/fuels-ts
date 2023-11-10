@@ -1,6 +1,6 @@
 {
   "name": "demo-nextjs",
-  "version": "0.1.27",
+  "version": "0.1.29",
   "private": true,
   "scripts": {
     "original:dev": "next dev",

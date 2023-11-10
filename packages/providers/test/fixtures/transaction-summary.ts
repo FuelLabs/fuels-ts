@@ -19,6 +19,7 @@ import type {
   TransactionResultReturnReceipt,
   TransactionResultScriptResultReceipt,
   TransactionResultTransferOutReceipt,
+  TransactionResultTransferReceipt,
 } from '../../src';
 import type {
   AbiMap,
@@ -130,6 +131,16 @@ export const MOCK_RECEIPT_RETURN: TransactionResultReturnReceipt = {
   val: bn(0),
   pc: bn('0x2868'),
   is: bn('0x2868'),
+};
+
+export const MOCK_RECEIPT_TRANSFER: TransactionResultTransferReceipt = {
+  type: ReceiptType.Transfer,
+  from: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  to: '0xaab4884920fa4d3a35fc2977cc442b0caddf87e001ef62321b6c02f5ab0f4115',
+  amount: bn(988),
+  assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  pc: bn(10360),
+  is: bn(10344),
 };
 
 export const MOCK_RECEIPT_TRANSFER_OUT: TransactionResultTransferOutReceipt = {

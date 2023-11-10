@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.67.0
+
+### Patch Changes
+
+- Adding new flag to Fuels CLI build command, by [@arboleya](https://github.com/arboleya) (See [#1419](https://github.com/FuelLabs/fuels-ts/pull/1419))
+
+## 0.66.1
+
+### Patch Changes
+
+- Adjusting package manager configs, by [@arboleya](https://github.com/arboleya) (See [#1415](https://github.com/FuelLabs/fuels-ts/pull/1415))
+
 ## 0.66.0
 
 ### Minor Changes
