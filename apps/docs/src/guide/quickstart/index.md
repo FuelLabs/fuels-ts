@@ -24,6 +24,6 @@ In another terminal window, start the frontend dev server:
 npm run dev
 ```
 
-Your app should now be running on [localhost:3000](http://localhost:3000/).
+Your app should now be running on `localhost:3000`.
 
 Any changes you make to your Sway smart contracts will be hot-reloaded and reflected in the frontend. All of this is enabled thanks to the new [fuels CLI](../cli/index.md). The fuels CLI has several more powerful customization options that will let you tweak your local dev experience to your liking.
