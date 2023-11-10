@@ -10,6 +10,7 @@ import { globSync } from 'glob';
       'apps/demo-nextjs/**',
       'apps/demo-react-cra/**',
       'apps/demo-react-vite/**',
+      'templates/**',
     ],
   });
   const filesWithLintErrors: string[] = [];
