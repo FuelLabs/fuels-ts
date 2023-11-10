@@ -231,11 +231,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const found = this.inputs.find((input) => {
       switch (input.type) {
         case InputType.Coin:
-          return hexlify((<CoinTransactionRequestInput>input).owner) === ownerAddress.toB256();
+          return hexlify(input.owner) === ownerAddress.toB256();
         case InputType.Message:
-          return (
-            hexlify((<MessageTransactionRequestInput>input).recipient) === ownerAddress.toB256()
-          );
+          return hexlify(input.recipient) === ownerAddress.toB256();
         default:
           return false;
       }
