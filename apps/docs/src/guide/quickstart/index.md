@@ -3,13 +3,13 @@
 You can quickly bootstrap a full-stack Fuel project locally with the following command:
 
 ```bash
-npm create fuels project-name
+npm create fuels
 ```
 
-This will setup a new full-stack Fuel project in the `project-name` directory. To get things running, you'll need to install the dependencies and start the development servers:
+This will setup a new full-stack Fuel project. To get things running, you'll need to install the dependencies and start the development servers:
 
 ```bash
-cd project-name
+# (Make sure you cd into your new project directory first!)
 npm install
 ```
 

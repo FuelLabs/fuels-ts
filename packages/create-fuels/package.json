@@ -19,13 +19,15 @@
     "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
   },
   "dependencies": {
-    "fuels": "workspace:*",
     "chalk": "4",
     "commander": "^9.4.1",
+    "fuels": "workspace:*",
+    "prompts": "^2.4.2",
     "tar": "^6.2.0"
   },
   "devDependencies": {
-    "@types/tar": "^6.1.8",
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "@types/prompts": "^2.4.8",
+    "@types/tar": "^6.1.8"
   }
 }

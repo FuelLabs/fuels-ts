@@ -3,20 +3,30 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { cp, mkdir } from 'fs/promises';
 import { join } from 'path';
+import prompts from 'prompts';
 
 import packageJson from '../package.json';
 
 export const runScaffoldCli = async () => {
   let projectPath = '';
-  new Command(packageJson.name)
-    .version(packageJson.version)
-    .arguments('<project-name>') // TODO: add support for multiple templates
-    .usage(`${chalk.green('<project-name>')} [options]`)
-    .showHelpAfterError(true)
-    .action((name) => {
-      projectPath = name;
-    })
-    .parse(process.argv);
+  const program = new Command(packageJson.name).version(packageJson.version).parse(process.argv);
+
+  const res = await prompts({
+    type: 'text',
+    name: 'projectName',
+    message: 'What is the name of your project?',
+    initial: 'my-fuel-project',
+  });
+
+  projectPath = res.projectName;
+
+  if (!projectPath) {
+    console.log(
+      '\nPlease specify the project directory:\n' +
+        `  ${chalk.cyan(program.name())} ${chalk.green('<project-directory>')}\n`
+    );
+    process.exit(1);
+  }
 
   await mkdir(projectPath);
 
