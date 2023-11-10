@@ -79,6 +79,10 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Full-Stack Quickstart',
+            link: '/guide/quickstart/',
+          },
+          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,
