@@ -31,6 +31,14 @@ export const indexAndConfigs: Options = {
   },
 };
 
+export const bindAndCli: Options = {
+  ...tsupDefaults,
+  entry: {
+    bin: 'src/bin.ts',
+    cli: 'src/cli.ts',
+  },
+};
+
 export const indexBinAndCliConfig: Options = {
   ...tsupDefaults,
   entry: {
