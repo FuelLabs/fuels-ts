@@ -3,7 +3,7 @@ import { spawn } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { getPortPromise } from 'portfinder';
-import kill from 'tree-kill';
+import treeKill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
 import { findPackageRoot } from '../../utils/findPackageRoot';
@@ -12,21 +12,6 @@ import { error, log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
 
-export const killNode =
-  (core: ChildProcessWithoutNullStreams, killFn: (pid: number) => void) => () => {
-    if (core.pid) {
-      killFn(Number(core.pid));
-    }
-  };
-
-export const createTempChainConfig = (coreDir: string) => {
-  const chainConfigPath = join(coreDir, 'chainConfig.json');
-  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
-  mkdirSync(dirname(chainConfigPath), { recursive: true });
-  writeFileSync(chainConfigPath, chainConfigJson);
-  return chainConfigPath;
-};
-
 export type FuelCoreNode = {
   bindIp: string;
   accessIp: string;
@@ -34,6 +19,30 @@ export type FuelCoreNode = {
   providerUrl: string;
   chainConfig: string;
   killChildProcess: () => void;
+};
+
+export type KillNodeParams = {
+  core: ChildProcessWithoutNullStreams;
+  killFn: (pid: number) => void;
+  state: {
+    isDead: boolean;
+  };
+};
+
+export const killNode = (params: KillNodeParams) => () => {
+  const { core, state, killFn } = params;
+  if (core.pid && !state.isDead) {
+    state.isDead = true;
+    killFn(Number(core.pid));
+  }
+};
+
+export const createTempChainConfig = (coreDir: string) => {
+  const chainConfigPath = join(coreDir, 'chainConfig.json');
+  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
+  mkdirSync(dirname(chainConfigPath), { recursive: true });
+  writeFileSync(chainConfigPath, chainConfigJson);
+  return chainConfigPath;
 };
 
 export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> => {
@@ -78,7 +87,8 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
       core.stdout.pipe(process.stdout);
     }
 
-    const killChildProcess = killNode(core, kill);
+    const state = { isDead: false };
+    const killChildProcess = killNode({ core, state, killFn: treeKill });
 
     process.on('beforeExit', killChildProcess);
     process.on('uncaughtException', killChildProcess);
