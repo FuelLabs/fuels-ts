@@ -4,7 +4,7 @@ import { concat } from '@fuel-ts/utils';
 import { ByteArrayCoder } from './byte-array';
 
 export type Witness = {
-  /** Length of witness data, in bytes (u16) */
+  /** Length of witness data byte array */
   dataLength: number;
   /** Witness data (byte[]) */
   data: string;
