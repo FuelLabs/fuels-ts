@@ -87,7 +87,7 @@ describe('init', () => {
     const write = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
     const exit = vi.spyOn(process, 'exit').mockResolvedValue({} as never);
 
-    await runCommand(Commands.init, ['-o', paths.outputDir]);
+    await runCommand(Commands.init, ['-p', paths.root, '-o', paths.outputDir]);
 
     expect(exit).toHaveBeenCalledTimes(1);
     expect(exit).toHaveBeenCalledWith(1);

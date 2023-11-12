@@ -68,7 +68,7 @@ export function bootstrapProject(testFilepath: string) {
  */
 export async function runCommand(commandName: string, params: string[] = []) {
   // always `--silent` to avoid polluting tests output
-  const argv = ['node', 'fuels', '--silent', commandName, '-p', testDir].concat(params);
+  const argv = ['node', 'fuels', '--silent', commandName].concat(params);
   return { argv, command: await run(argv) };
 }
 
