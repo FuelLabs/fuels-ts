@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { run } from './cli';
+import { run } from './run';
 import { error } from './cli/utils/logger';
 
 try {
