@@ -1,5 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as childProcessMod from 'child_process';
+import { rmSync, existsSync } from 'fs';
+import { join } from 'path';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
@@ -27,6 +29,15 @@ describe('startFuelCore', () => {
 
   afterEach(() => {
     configureLogging(loggingConfigBkp);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+
+    const chainConfig = join(fuelsConfig.basePath, '.fuels', 'chainConfig.json');
+    if (existsSync(chainConfig)) {
+      rmSync(chainConfig);
+    }
   });
 
   /**
