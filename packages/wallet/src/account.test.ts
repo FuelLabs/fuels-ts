@@ -279,9 +279,7 @@ describe('Account', () => {
 
     const addCoinOutputSpy = vi.spyOn(request, 'addCoinOutput');
 
-    const fundSpy = vi
-      .spyOn(Account.prototype, 'fund')
-      .mockImplementation(() => Promise.resolve());
+    const fundSpy = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
     const sendTransactionSpy = vi
       .spyOn(Account.prototype, 'sendTransaction')

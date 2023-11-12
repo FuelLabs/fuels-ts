@@ -2,8 +2,8 @@ import * as chokidar from 'chokidar';
 
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
-import { mockLogger } from '../utils/mockLogger';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
+import { mockLogger } from '../utils/mockLogger';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
 
