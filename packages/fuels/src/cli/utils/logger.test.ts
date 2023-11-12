@@ -19,8 +19,8 @@ describe('logger', () => {
   afterAll(reset);
 
   function mockStdIO() {
-    const err = vi.spyOn(process.stderr, 'write').mockImplementation();
-    const out = vi.spyOn(process.stdout, 'write').mockImplementation();
+    const err = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+    const out = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
     return { err, out };
   }
 
