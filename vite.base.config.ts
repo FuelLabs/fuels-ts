@@ -21,8 +21,15 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'istanbul',
-      reporter: ['json'],
-      exclude: ['**/dist/**', '**/test/**', '**/*.test.ts', '**/*.d.ts', 'packages/fuel-gauge/**', '/apps/demo-*'],
+      reporter: ['json', 'html'],
+      exclude: [
+        '**/dist/**',
+        '**/test/**',
+        '**/*.test.ts',
+        '**/*.d.ts',
+        'packages/fuel-gauge/**',
+        '/apps/demo-*',
+      ],
     },
   },
 });
