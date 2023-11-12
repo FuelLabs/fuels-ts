@@ -1,9 +1,9 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { join } from 'path';
 
-import type { FuelsConfig } from '../../../src';
+import type { FuelsConfig } from '../../src';
 
-const projectPath = join(__dirname, '..', 'project');
+const projectPath = join(__dirname, 'workspace');
 
 const contractsDir = join(projectPath, 'contracts');
 const scriptsDir = join(projectPath, 'scripts');
@@ -15,7 +15,7 @@ export const fuelsConfig: FuelsConfig = {
   contracts: [join(contractsDir, 'foo'), join(contractsDir, 'bar')],
   scripts: [join(scriptsDir, 'script')],
   predicates: [join(predicatesDir, 'predicate')],
-  output: '/generated-types',
+  output: '/output',
   deployConfig: {
     gasPrice: 5,
   },
