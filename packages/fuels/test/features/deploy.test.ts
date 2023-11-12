@@ -1,27 +1,41 @@
 import { existsSync, readFileSync } from 'fs';
 
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
-import { contractsJsonPath, runBuild, runDeploy, runInit } from '../utils/runCommands';
+import {
+  bootstrapProject,
+  resetConfigAndMocks,
+  runBuild,
+  runDeploy,
+  runInit,
+} from '../utils/runCommands';
 
 /**
  * @group node
  */
 describe('deploy', () => {
-  beforeEach(() => {
-    resetDiskAndMocks();
+  const paths = bootstrapProject(__filename);
+
+  afterEach(() => {
+    resetConfigAndMocks(paths.fuelsConfigPath);
   });
-  beforeEach(() => {
-    resetDiskAndMocks();
+
+  afterAll(() => {
+    resetDiskAndMocks(paths.root);
   });
 
   it('should run `deploy` command', async () => {
-    await runInit();
-    await runBuild();
-    await runDeploy();
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+    });
 
-    expect(existsSync(contractsJsonPath)).toBeTruthy();
+    await runBuild({ root: paths.root });
+    await runDeploy({ root: paths.root });
 
-    const fuelsContents = JSON.parse(readFileSync(contractsJsonPath, 'utf-8'));
+    expect(existsSync(paths.contractsJsonPath)).toBeTruthy();
+
+    const fuelsContents = JSON.parse(readFileSync(paths.contractsJsonPath, 'utf-8'));
     expect(fuelsContents.barFoo).toMatch(/0x/);
     expect(fuelsContents.fooBar).toMatch(/0x/);
   });
