@@ -39,7 +39,7 @@ export function init(program: Command) {
   if (noneIsInformed) {
     // mimicking commander property validation
     process.stdout.write(`error: required option '-w, --workspace <path>' not specified\r`);
-    process.exit(1);
+    return process.exit(1);
   }
 
   const fuelsConfigPath = join(path, 'fuels.config.ts');
