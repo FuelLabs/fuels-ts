@@ -1,9 +1,8 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as childProcessMod from 'child_process';
 
-import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
+import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
-import { resetDiskAndMocks } from '../../../../test/utils/resetDiskAndMocks';
 import type { FuelsConfig } from '../../types';
 import { configureLogging, loggingConfig } from '../../utils/logger';
 
@@ -28,7 +27,6 @@ describe('startFuelCore', () => {
 
   afterEach(() => {
     configureLogging(loggingConfigBkp);
-    resetDiskAndMocks();
   });
 
   /**
@@ -66,7 +64,7 @@ describe('startFuelCore', () => {
 
     const spawn = vi
       .spyOn(childProcessMod, 'spawn')
-      .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
+      .mockReturnValue(innerMocks as unknown as ChildProcessWithoutNullStreams);
 
     return { spawn, innerMocks };
   }
@@ -130,7 +128,7 @@ describe('startFuelCore', () => {
   test('should pipe stdout', async () => {
     mockLogger();
 
-    vi.spyOn(process.stdout, 'write').mockImplementation();
+    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
 
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: true });
 
@@ -145,8 +143,8 @@ describe('startFuelCore', () => {
   test('should pipe stdout and stderr', async () => {
     mockLogger();
 
-    vi.spyOn(process.stderr, 'write').mockImplementation();
-    vi.spyOn(process.stdout, 'write').mockImplementation();
+    vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
 
     configureLogging({ isDebugEnabled: true, isLoggingEnabled: true });
 
@@ -156,6 +154,19 @@ describe('startFuelCore', () => {
 
     expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
+  });
+
+  test('should pipe nothing', async () => {
+    mockLogger();
+
+    configureLogging({ isDebugEnabled: false, isLoggingEnabled: false });
+
+    const { innerMocks } = mockSpawn();
+
+    await startFuelCore(fuelsConfig);
+
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
+    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
   });
 
   test('should kill process only if PID exists and node is alive', () => {

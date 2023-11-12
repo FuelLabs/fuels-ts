@@ -1,6 +1,6 @@
 import { program } from 'commander';
 
-import { fuelsConfig } from '../../../test/fixtures/config/fuels.config';
+import { fuelsConfig } from '../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../test/utils/mockLogger';
 import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
 import * as loadConfigMod from '../config/loadConfig';

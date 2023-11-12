@@ -3,15 +3,14 @@ import { Command } from 'commander';
 import * as cliMod from './cli';
 import { Commands } from './cli/types';
 import * as loggingMod from './cli/utils/logger';
+import { run } from './run';
 
 /**
  * @group node
  */
 describe('cli.js', () => {
-  const { configureCli, run, onPreAction } = cliMod;
-
   beforeEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -19,8 +18,9 @@ describe('cli.js', () => {
   });
 
   it('shoud configure cli', () => {
-    const program = configureCli();
+    const program = cliMod.configureCli();
 
+    expect(program).toBeTruthy();
     // top level props and opts
     expect(program.name()).toEqual('fuels');
     expect(program.opts()).toEqual({
@@ -65,21 +65,25 @@ describe('cli.js', () => {
     command.option('-S, --silent', 'Omit output messages', false);
     command.parse([]);
 
-    onPreAction(command);
+    cliMod.onPreAction(command);
     expect(spy).toBeCalledWith({
       isDebugEnabled: false,
       isLoggingEnabled: true,
     });
   });
 
-  it.only('should run cli program', async () => {
+  it('should run cli program', async () => {
     const command = new Command();
-    const parseAsync = vi.spyOn(command, 'parseAsync');
-    const $configureCli = vi.spyOn(cliMod, 'configureCli').mockReturnValue(command);
+
+    const parseAsync = vi
+      .spyOn(Command.prototype, 'parseAsync')
+      .mockReturnValue(Promise.resolve(command));
+
+    const configureCli = vi.spyOn(cliMod, 'configureCli').mockImplementation(() => new Command());
 
     await run([]);
 
-    expect($configureCli).toHaveBeenCalledTimes(1);
+    expect(configureCli).toHaveBeenCalledTimes(1);
     expect(parseAsync).toHaveBeenCalledTimes(1);
   });
 });
