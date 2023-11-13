@@ -120,24 +120,14 @@ describe(__filename, () => {
   describe('calculateTxChargeableBytes', () => {
     it('should calculate properly transaction chargeable bytes just fine', () => {
       const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
-      const transactionWitnesses: Witness[] = [{ dataLength: 0, data: '0x' }];
 
-      const chargeableBytesFee = calculateTxChargeableBytes({
-        transactionBytes,
-        transactionWitnesses,
-      });
-
-      expect(chargeableBytesFee.toNumber()).toEqual(0);
-    });
-
-    it('should handle an empty witnesses array', () => {
-      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
-      const offset = 520;
+      const dataLengthOffset = 8;
+      const witnessOffset = transactionBytes.length - dataLengthOffset;
       const transactionWitnesses: Witness[] = [
         {
-          dataLength: 64,
-          data: '0x3d8943b87436d54d7f1282ed9b01d38633f8003a37676276bbaf0560390d21f826b5f6e9ea85b1bca435af2bec4982436c20c1294876025f78aaa0143867eb7f',
-          offset,
+          dataLength: 0,
+          data: '0x',
+          offset: witnessOffset,
         },
       ];
 
@@ -146,7 +136,18 @@ describe(__filename, () => {
         transactionWitnesses,
       });
 
-      expect(chargeableBytesFee.toNumber()).toEqual(520);
+      expect(chargeableBytesFee.toNumber()).toEqual(witnessOffset);
+    });
+
+    it('should handle an empty witnesses array', () => {
+      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
+
+      const chargeableBytesFee = calculateTxChargeableBytes({
+        transactionBytes,
+        transactionWitnesses: [],
+      });
+
+      expect(chargeableBytesFee.toNumber()).toEqual(transactionBytes.length);
     });
 
     it('should round up the result', () => {
