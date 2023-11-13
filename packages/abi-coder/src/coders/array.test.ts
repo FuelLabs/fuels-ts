@@ -1,7 +1,7 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import { U8_MAX } from '../../test/utils/constants';
+import { U32_MAX, U8_MAX } from '../../test/utils/constants';
 
 import { ArrayCoder } from './array';
 import { BooleanCoder } from './boolean';
@@ -119,6 +119,16 @@ describe('ArrayCoder', () => {
   it('throws when decoding invalid bytes (too small)', async () => {
     const coder = new ArrayCoder(new NumberCoder('u8'), 8);
     const input = new Uint8Array([0]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid array data size.')
+    );
+  });
+
+  it('throws when decoding vec larger than max size', async () => {
+    const coder = new ArrayCoder(new NumberCoder('u8'), 8);
+    const input = new Uint8Array(U32_MAX + 1);
 
     await expectToThrowFuelError(
       () => coder.decode(input, 0),

@@ -1,6 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import { U32_MAX } from '../../test/utils/constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { BooleanCoder } from './boolean';
@@ -63,6 +64,16 @@ describe('VecCoder', () => {
     await expectToThrowFuelError(
       () => coder.decode(input, 0),
       new FuelError(ErrorCode.DECODE_ERROR, 'Invalid vec byte data size.')
+    );
+  });
+
+  it('throws when decoding vec larger than max size', async () => {
+    const coder = new VecCoder(new NumberCoder('u8'));
+    const input = new Uint8Array(U32_MAX + 1);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid vec data size.')
     );
   });
 });
