@@ -1,4 +1,4 @@
-import { bn } from "@fuel-ts/math";
+import { bn } from '@fuel-ts/math';
 
 export const OPTION_CODER_TYPE = 'enum Option';
 export const VEC_CODER_TYPE = 'struct Vec';
