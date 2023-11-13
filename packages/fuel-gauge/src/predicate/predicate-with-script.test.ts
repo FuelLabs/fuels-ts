@@ -18,6 +18,7 @@ const scriptBytes = readFileSync(
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('With script', () => {

@@ -18,6 +18,7 @@ import { fundPredicate, assertBalance } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Configurables', () => {

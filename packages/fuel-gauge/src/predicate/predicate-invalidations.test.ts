@@ -9,6 +9,7 @@ import { fundPredicate, setupWallets } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Invalidations', () => {
