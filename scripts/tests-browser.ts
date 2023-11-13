@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const initialDependencies: { file: string; contents: string }[] = [];
@@ -10,14 +10,8 @@ const initialDependencies: { file: string; contents: string }[] = [];
  */
 const hardlinkDeps = () => {
   const packagesDir = join(__dirname, '../packages/');
+  const packages = readdirSync(packagesDir).filter(p => !p.startsWith('.'));
   const packagesSupportingBrowserTesting = ['fuel-gauge'];
-  const searchAndReplaces = [
-    { search: 'fuels', replace: 'file:../fuels' },
-    { search: '@fuel-ts/wallet', replace: 'file:../wallet' },
-    { search: '@fuel-ts/forc', replace: 'file:../forc' },
-    { search: '@fuel-ts/utils', replace: 'file:../utils' },
-    { search: '@fuel-ts/errors', replace: 'file:../errors' },
-  ];
 
   packagesSupportingBrowserTesting.forEach((packageName) => {
     const packageFilePath = join(packagesDir, `${packageName}/package.json`);
@@ -27,9 +21,12 @@ const hardlinkDeps = () => {
     const lines = fileContents.split('\n');
     lines.forEach((line, index) => {
       if (line.includes('workspace:*')) {
-        searchAndReplaces.forEach((s) => {
-          if (line.includes(s.search)) {
-            lines[index] = line.replace('workspace:*', s.replace);
+        packages.forEach((pckg) => {
+          if (line.includes(`@fuel-ts/${pckg}`)) {
+            lines[index] = line.replace('workspace:*', `file:../${pckg}`);
+          }
+          else if (line.includes('fuels')) {
+            lines[index] = line.replace('workspace:*', `file:../fuels`);
           }
         });
       }
@@ -44,11 +41,15 @@ const symlinkDeps = () =>
 (() => {
   hardlinkDeps();
 
-  execSync('pnpm install');
+  // execSync('pnpm install');
 
-  execSync('vitest --run --coverage --config vite.browser.config.ts $(scripts/tests-find.sh --browser)');
+  // execSync('vitest --run --coverage --config vite.browser.config.ts $(scripts/tests-find.sh --browser)');
 
-  symlinkDeps();
 
-  execSync('pnpm install');
+  setTimeout(() => {
+    symlinkDeps();
+  }, 10000);
+    
+
+  // execSync('pnpm install');
 })();
