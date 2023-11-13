@@ -6,7 +6,6 @@ const initialDependencies: { file: string; contents: string }[] = [];
 
 /**
  * - Needs refactoring
- * - Make dynamic for package names and replacements
  */
 const hardlinkDeps = () => {
   const packagesDir = join(__dirname, '../packages/');
