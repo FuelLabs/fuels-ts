@@ -100,4 +100,13 @@ describe('B256Coder', () => {
       new FuelError(ErrorCode.DECODE_ERROR, 'Invalid b256 data size.')
     );
   });
+
+  it('should throw an error when decoding an encoded b256 bit hash string that is too long', async () => {
+    const invalidInput = new Uint8Array(Array.from(Array(65).keys()));
+
+    await expectToThrowFuelError(
+      () => coder.decode(invalidInput, 62),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid b256 byte data size.')
+    );
+  });
 });

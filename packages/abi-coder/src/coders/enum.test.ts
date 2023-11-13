@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../test/utils/constants';
@@ -93,5 +95,12 @@ describe('EnumCoder', () => {
         { nope: 42 }
       )
     ).toThrow();
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    await expectToThrowFuelError(
+      () => coder.decode(new Uint8Array(), 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid enum data size.')
+    );
   });
 });
