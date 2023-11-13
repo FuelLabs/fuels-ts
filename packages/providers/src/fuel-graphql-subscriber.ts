@@ -66,7 +66,7 @@ export async function* fuelGraphQLSubscriber({
     .body!.pipeThrough(new FuelSubscriptionStream())
     .getReader();
 
-  for (;;) {
+  while (true) {
     const { value, done } = await subscriptionStreamReader.read();
     if (value instanceof FuelError) throw value;
     yield value;

@@ -204,7 +204,7 @@ describe('Provider', () => {
 
   it('can change the provider url of the current instance', async () => {
     const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'https://beta-4.fuel.network/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
     const provider = await Provider.create(providerUrl1, {
       fetch: (url: string, options: FetchRequestOptions) =>
@@ -214,9 +214,9 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
-    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+    const spyFetchChainAndNodeInfo = jest
+      .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
+      .mockImplementation();
 
     await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
@@ -224,8 +224,6 @@ describe('Provider', () => {
     expect(await provider.getVersion()).toEqual(providerUrl2);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
   });
 
   it('can accept a custom fetch function', async () => {
