@@ -5,11 +5,7 @@ import { BaseAssetId, TransactionResponse, Wallet } from 'fuels';
  * @group node
  */
 describe('TransactionSummary', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should ensure create method waits till a transaction response is given', async () => {
     await using launched = await TestNodeLauncher.launch();

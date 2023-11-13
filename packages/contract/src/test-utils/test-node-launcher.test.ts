@@ -144,49 +144,4 @@ describe('TestNodeLauncher caching', () => {
   test('placeholder', () => {
     expect(true).toBe(true);
   });
-  // test('launches a new node if the chainConfig is different from the cached one', async () => {
-  //   await TestNodeLauncher.prepareCache(1, {
-  //     nodeOptions: {
-  //       chainConfig: {
-  //         chain_name: 'X',
-  //       },
-  //     },
-  //   });
-
-  //   const spy = vi.spyOn(walletTestUtils, 'launchCustomProviderAndGetWallets');
-
-  //   await using node = await TestNodeLauncher.launch({
-  //     nodeOptions: {
-  //       chainConfig: {
-  //         chain_name: 'Y',
-  //       },
-  //     },
-  //   });
-
-  //   expect(spy).toBeCalledTimes(1);
-  // });
-
-  // test('launches a new node if the providerOptions are different from the cached one', async () => {
-  //   await TestNodeLauncher.prepareCache(1);
-
-  //   const spy = vi.spyOn(walletTestUtils, 'launchCustomProviderAndGetWallets');
-
-  //   await using node = await TestNodeLauncher.launch({ providerOptions: { cacheUtxo: 1 } });
-
-  //   expect(spy).toBeCalledTimes(1);
-  // });
-
-  // test('launches a new node if the nodeOptions are different from the cached one', async () => {
-  //   await TestNodeLauncher.prepareCache(1);
-
-  //   const spy = vi.spyOn(walletTestUtils, 'launchCustomProviderAndGetWallets');
-
-  //   await using node = await TestNodeLauncher.launch({ nodeOptions: { logger: () => {} } });
-
-  //   expect(spy).toBeCalledTimes(1);
-  // });
-
-  // test('throws when wallet config has wallets instead of number???', () => {
-  //   expect(true).toBeFalsy();
-  // });
 });

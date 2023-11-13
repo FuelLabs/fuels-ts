@@ -7,12 +7,6 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe('Bytes', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
-
   it('should pass bytes to a contract', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [getProgramDir('echo-bytes')],

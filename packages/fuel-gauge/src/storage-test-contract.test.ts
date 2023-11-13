@@ -40,11 +40,7 @@ const setup = async () => {
  * @group node
  */
 describe('StorageTestContract', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can increment counter', async () => {
     await using launched = await TestNodeLauncher.launch({

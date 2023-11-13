@@ -6,12 +6,6 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
-
   it('should validate string', () => {
     // #region string-1
     // Sway str[2]

@@ -81,11 +81,7 @@ const contractDir = getProgramDir('vector-types-contract');
  * @group node
  */
 describe('Vector Types Validation', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can use supported vector types [vector-types-contract]', async () => {
     await using launched = await TestNodeLauncher.launch({

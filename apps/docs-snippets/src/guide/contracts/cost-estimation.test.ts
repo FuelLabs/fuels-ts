@@ -9,12 +9,6 @@ const projectDir = getProgramDir('return-context');
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
-
   it('should successfully get transaction cost estimate for a single contract call', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [projectDir],

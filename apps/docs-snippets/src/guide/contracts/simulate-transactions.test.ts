@@ -9,12 +9,6 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
-
   it('should successfully simulate contract call with forwarded amount', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [getProgramDir('transfer-to-address')],

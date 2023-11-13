@@ -17,11 +17,7 @@ const subIds = [
  * @group node
  */
 describe('MultiTokenContract', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can mint and transfer coins', async () => {
     await using launched = await TestNodeLauncher.launch({

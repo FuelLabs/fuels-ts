@@ -13,11 +13,7 @@ const contractDir = getProgramDir('std-lib-string');
  * @group node
  */
 describe('std-lib-string Tests', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should test std-lib-string return', async () => {
     await using launched = await TestNodeLauncher.launch({

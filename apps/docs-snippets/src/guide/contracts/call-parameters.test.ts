@@ -9,12 +9,6 @@ const returnContextContractDir = getProgramDir('return-context');
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
-
   it('should successfully execute contract call with forwarded amount', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [returnContextContractDir],

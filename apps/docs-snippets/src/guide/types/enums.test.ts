@@ -6,11 +6,7 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should successfully echo a simple enum in a contract call', async () => {
     await using launched = await TestNodeLauncher.launch({

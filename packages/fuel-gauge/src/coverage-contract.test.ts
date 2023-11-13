@@ -45,11 +45,7 @@ enum ColorEnumOutput {
  * @group node
  */
 describe('Coverage Contract', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can return outputs', async () => {
     await using launched = await TestNodeLauncher.launch({

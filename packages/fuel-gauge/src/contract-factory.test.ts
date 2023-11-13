@@ -23,11 +23,7 @@ const abi = JSON.parse(
  * @group node
  */
 describe('Contract Factory', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('Creates a factory from inputs that can return call results', async () => {
     await using launched = await TestNodeLauncher.launch();

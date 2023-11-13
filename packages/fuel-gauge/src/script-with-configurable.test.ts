@@ -20,11 +20,7 @@ const defaultValues = {
  * @group node
  */
 describe('Script With Configurable', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should returns true when input value matches default configurable constant', async () => {
     await using launched = await TestNodeLauncher.launch({});

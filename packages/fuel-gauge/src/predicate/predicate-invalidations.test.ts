@@ -19,11 +19,7 @@ describe('Predicate', () => {
       total_complete: 100,
     };
 
-    beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-      return () => TestNodeLauncher.killCachedNodes();
-    });
+    beforeAll(async (ctx) => {});
 
     beforeAll(async () => {});
 

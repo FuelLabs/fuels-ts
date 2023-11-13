@@ -151,11 +151,7 @@ describe('Predicate', () => {
       configurables: [],
     };
 
-    beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-      return () => TestNodeLauncher.killCachedNodes();
-    });
+    beforeAll(async (ctx) => {});
 
     it('calls a predicate with valid address data and returns true', async () => {
       await using launched = await TestNodeLauncher.launch();

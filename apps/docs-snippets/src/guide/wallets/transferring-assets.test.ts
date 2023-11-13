@@ -8,11 +8,7 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should successfully transfer asset to another wallet', async () => {
     await using launched = await TestNodeLauncher.launch({

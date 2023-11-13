@@ -16,11 +16,7 @@ const contractDir = getProgramDir('revert-error');
  * @group node
  */
 describe('Revert Error Testing', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can pass required checks [valid]', async () => {
     await using launched = await TestNodeLauncher.launch({

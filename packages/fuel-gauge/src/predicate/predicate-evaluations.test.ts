@@ -11,11 +11,7 @@ import { assertBalances, fundPredicate } from './utils/predicate';
  */
 describe('Predicate', () => {
   describe('Evaluations', () => {
-    beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-      return () => TestNodeLauncher.killCachedNodes();
-    });
+    beforeAll(async (ctx) => {});
 
     it('calls a no argument predicate and returns true', async () => {
       await using launched = await TestNodeLauncher.launch();

@@ -9,11 +9,7 @@ const authTestingDir = getProgramDir('auth_testing_contract');
  * @group node
  */
 describe('Auth Testing', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can get is_caller_external', async () => {
     await using launched = await TestNodeLauncher.launch({

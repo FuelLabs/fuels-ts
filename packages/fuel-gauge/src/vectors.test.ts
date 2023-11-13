@@ -16,11 +16,7 @@ enum SmallEnum {
  * @group node
  */
 describe('Vector Tests', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should test u8 vector input/output', async () => {
     await using launched = await TestNodeLauncher.launch({

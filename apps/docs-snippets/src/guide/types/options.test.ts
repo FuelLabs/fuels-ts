@@ -6,11 +6,7 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe(__filename, () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
     await using launched = await TestNodeLauncher.launch({

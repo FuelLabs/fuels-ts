@@ -46,11 +46,7 @@ describe('Fee', () => {
     return bn(randomValue);
   };
 
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
     await using launched = await TestNodeLauncher.launch({

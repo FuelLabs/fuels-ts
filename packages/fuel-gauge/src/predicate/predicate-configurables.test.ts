@@ -20,10 +20,7 @@ describe('Predicate', () => {
       ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
     };
 
-    beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length);
-      return () => TestNodeLauncher.killCachedNodes();
-    });
+    beforeAll(async (ctx) => {});
 
     it('calls a predicate with configurables using default values', async () => {
       await using launched = await TestNodeLauncher.launch();

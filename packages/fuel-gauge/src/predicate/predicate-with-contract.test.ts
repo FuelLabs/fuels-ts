@@ -18,11 +18,7 @@ const liquidityPoolDir = getProgramDir('liquidity-pool');
  */
 describe('Predicate', () => {
   describe('With Contract', () => {
-    beforeAll(async (ctx) => {
-      await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-      return () => TestNodeLauncher.killCachedNodes();
-    });
+    beforeAll(async (ctx) => {});
 
     it('calls a predicate from a contract function', async () => {
       await using launched = await TestNodeLauncher.launch({

@@ -20,11 +20,7 @@ type Baz = {
  * @group node
  */
 describe('Script Coverage', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can call script and use main arguments', async () => {
     await using launched = await TestNodeLauncher.launch({});

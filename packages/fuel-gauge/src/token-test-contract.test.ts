@@ -12,11 +12,7 @@ const contractDir = getProgramDir('token_contract');
  * @group node
  */
 describe('TokenTestContract', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('Can mint and transfer coins', async () => {
     await using launched = await TestNodeLauncher.launch({

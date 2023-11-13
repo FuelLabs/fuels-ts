@@ -11,11 +11,7 @@ describe(__filename, () => {
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should successfully tranfer to setted whitelisted address', async () => {
     await using launched = await TestNodeLauncher.launch();

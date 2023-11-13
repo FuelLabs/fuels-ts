@@ -20,11 +20,7 @@ import {
  * @group node
  */
 describe('TransactionSummary', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   const verifyTransactionSummary = (params: {
     transaction: TransactionResult | TransactionSummary;

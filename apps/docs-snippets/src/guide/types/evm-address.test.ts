@@ -11,12 +11,6 @@ describe('EvMAddress', () => {
   const Bits256: B256AddressEvm =
     '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6';
 
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
-
   it('should demonstrate typed evm address example', () => {
     // #region evm-address-1
     // #context import type { EvmAddress } from 'fuels';

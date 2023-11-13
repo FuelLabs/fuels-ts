@@ -12,11 +12,7 @@ describe(__filename, () => {
     SnippetProjectEnum.SIMPLE_PREDICATE
   );
 
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should successfully use predicate to spend assets', async () => {
     await using launched = await TestNodeLauncher.launch();

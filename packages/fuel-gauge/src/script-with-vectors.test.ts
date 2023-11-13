@@ -7,11 +7,7 @@ import { getScript } from './utils';
  * @group node
  */
 describe('Script With Vectors', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('can call script and use main argument [array]', async () => {
     await using launched = await TestNodeLauncher.launch();

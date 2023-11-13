@@ -23,11 +23,7 @@ const contractDir = getProgramDir('raw-slice');
  * @group node
  */
 describe('Raw Slice Tests', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
   it('should test raw slice output', async () => {
     await using launched = await TestNodeLauncher.launch({
       deployContracts: [contractDir],

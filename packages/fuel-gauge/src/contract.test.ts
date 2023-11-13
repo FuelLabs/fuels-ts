@@ -164,11 +164,7 @@ const AltToken = AssetId.A;
  * @group node
  */
 describe('Contract', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it.skip('generates function methods on a simple contract', async () => {
     await using launched = await TestNodeLauncher.launch();

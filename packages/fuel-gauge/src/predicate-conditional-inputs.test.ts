@@ -20,11 +20,7 @@ describe('PredicateConditionalInputs', () => {
   const assetIdA = AssetId.A;
   const assetIdB = AssetId.B;
 
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
     await using launched = await TestNodeLauncher.launch();

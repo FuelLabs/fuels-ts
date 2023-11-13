@@ -7,11 +7,7 @@ import { getProgramDir } from '../../utils';
  * @group node
  */
 describe('RawSlice', () => {
-  beforeAll(async (ctx) => {
-    await TestNodeLauncher.prepareCache(ctx.tasks.length);
-
-    return () => TestNodeLauncher.killCachedNodes();
-  });
+  beforeAll(async (ctx) => {});
 
   it('should pass a raw slice to a contract', async () => {
     await using launched = await TestNodeLauncher.launch({
