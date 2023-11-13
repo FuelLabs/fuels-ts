@@ -53,6 +53,8 @@ export interface BaseTransactionRequestLike {
   gasLimit?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** The maximum fee payable by this transaction using BASE_ASSET. */
+  maxFee?: BigNumberish;
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -85,6 +87,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   gasLimit: BN;
   /** Block until which tx cannot be included */
   maturity: number;
+  /** The maximum fee payable by this transaction using BASE_ASSET. */
+  maxFee: BN;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -101,12 +105,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     gasPrice,
     gasLimit,
     maturity,
+    maxFee,
     inputs,
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = bn(gasPrice);
     this.gasLimit = bn(gasLimit);
+    this.maxFee = bn(maxFee);
     this.maturity = maturity ?? 0;
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
