@@ -36,7 +36,7 @@ describe('withConfig', () => {
       .command(Commands.deploy)
       .option('-p, --path <path>', 'Path to project root', configPath);
 
-    const loadConfig = vi.spyOn(loadConfigMod, 'loadConfig').mockImplementation((..._) => {
+    const loadConfig = vi.spyOn(loadConfigMod, 'loadConfig').mockImplementation(() => {
       if (params?.shouldErrorOnLoadConfig) {
         throw new Error('Something happened');
       }
