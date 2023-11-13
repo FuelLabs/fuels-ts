@@ -12,7 +12,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
-import type { TransactionCost } from '../src/provider';
+import type { ChainInfo, NodeInfo, TransactionCost } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -260,7 +260,10 @@ describe('Provider', () => {
      */
     const fetchChainAndNodeInfo = vi
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
-      .mockImplementation();
+      .mockResolvedValue({
+        chain: {} as ChainInfo,
+        nodeInfo: {} as NodeInfo,
+      });
 
     const provider = await Provider.create(providerUrl, {
       fetch: () => {

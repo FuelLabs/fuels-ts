@@ -275,7 +275,7 @@ describe('runTypegen.js', () => {
     cpSync(fromBin, toBin);
 
     // mocking
-    const log = vi.spyOn(console, 'log').mockImplementation(vi.fn().mockReturnValue({}));
+    const write = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
 
     // executes program
     const fn = () =>
@@ -309,6 +309,6 @@ describe('runTypegen.js', () => {
       expect(existsSync(f)).toEqual(true);
     });
 
-    expect(log).toHaveBeenCalled();
+    expect(write).toHaveBeenCalled();
   });
 });
