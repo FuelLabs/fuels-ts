@@ -55,6 +55,8 @@ export interface BaseTransactionRequestLike {
   maturity?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BigNumberish;
+  /** The maximum amount of witness data allowed for the transaction */
+  witnessLimit?: BigNumberish;
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -89,6 +91,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   maturity: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee: BN;
+  /** The maximum amount of witness data allowed for the transaction */
+  witnessLimit: BN;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -106,6 +110,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     gasLimit,
     maturity,
     maxFee,
+    witnessLimit,
     inputs,
     outputs,
     witnesses,
@@ -114,6 +119,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.gasLimit = bn(gasLimit);
     this.maxFee = bn(maxFee);
     this.maturity = maturity ?? 0;
+    this.witnessLimit = bn(witnessLimit);
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
