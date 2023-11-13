@@ -14,7 +14,7 @@ describe('compareSystemVersions.js', () => {
     spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     vi.restoreAllMocks();
   });
 
