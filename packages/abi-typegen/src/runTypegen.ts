@@ -21,7 +21,7 @@ export interface IGenerateFilesParams {
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-  const { cwd, inputs, output, silent, programType, filepaths: originalFilepaths } = params;
+  const { cwd, inputs, output, silent, programType, filepaths: inputFilepaths } = params;
 
   const cwdBasename = basename(cwd);
 
@@ -36,10 +36,10 @@ export function runTypegen(params: IGenerateFilesParams) {
   */
   let filepaths: string[] = [];
 
-  if (!originalFilepaths?.length && inputs?.length) {
+  if (!inputFilepaths?.length && inputs?.length) {
     filepaths = inputs.flatMap((i) => globSync(i, { cwd }));
-  } else if (originalFilepaths?.length) {
-    filepaths = originalFilepaths;
+  } else if (inputFilepaths?.length) {
+    filepaths = inputFilepaths;
   } else {
     throw new FuelError(
       ErrorCode.MISSING_REQUIRED_PARAMETER,
