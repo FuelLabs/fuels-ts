@@ -7,16 +7,16 @@ import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 export interface ICliParams {
   inputs: string[];
   output: string;
-  silent: boolean;
-  contract: boolean;
-  script: boolean;
-  predicate: boolean;
+  silent?: boolean;
+  contract?: boolean;
+  script?: boolean;
+  predicate?: boolean;
 }
 
 export function resolveProgramType(params: {
-  contract: boolean;
-  script: boolean;
-  predicate: boolean;
+  contract?: boolean;
+  script?: boolean;
+  predicate?: boolean;
 }) {
   const { contract, script, predicate } = params;
 
