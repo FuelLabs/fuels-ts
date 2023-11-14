@@ -69,7 +69,7 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike, 
           blockHeight: 0,
           txIndex: 0,
         };
-        inputClone.txId = ZeroBytes32;
+        inputClone.txID = ZeroBytes32;
         inputClone.outputIndex = 0;
         inputClone.balanceRoot = ZeroBytes32;
         inputClone.stateRoot = ZeroBytes32;

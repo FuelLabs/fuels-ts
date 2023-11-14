@@ -20,7 +20,7 @@ export type InputCoin = {
   type: InputType.Coin;
 
   /** Hash of transaction (b256) */
-  txId: string;
+  txID: string;
 
   /** Index of transaction output (u8) */
   outputIndex: number;
@@ -67,7 +67,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder().encode(value.txId));
+    parts.push(new B256Coder().encode(value.txID));
     parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new U64Coder().encode(value.amount));
@@ -89,7 +89,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const utxoID = decoded;
+    const txID = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
@@ -118,7 +118,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     return [
       {
         type: InputType.Coin,
-        txId: utxoID,
+        txID,
         outputIndex,
         owner,
         amount,
@@ -141,7 +141,7 @@ export type InputContract = {
   type: InputType.Contract;
 
   /** Hash of transaction (b256) */
-  txId: string;
+  txID: string;
 
   /** Index of transaction output (u8) */
   outputIndex: number;
@@ -167,7 +167,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
   encode(value: InputContract): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder().encode(value.txId));
+    parts.push(new B256Coder().encode(value.txID));
     parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
@@ -182,7 +182,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const txId = decoded;
+    const txID = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
@@ -197,7 +197,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     return [
       {
         type: InputType.Contract,
-        txId,
+        txID,
         outputIndex,
         balanceRoot,
         stateRoot,
