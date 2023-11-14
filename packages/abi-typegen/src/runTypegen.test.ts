@@ -1,4 +1,5 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { cpSync, existsSync, renameSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
@@ -156,7 +157,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const stdoutWrite = vi.spyOn(process.stdout, 'write').mockImplementation();
+    const stdoutWrite = vi.spyOn(process.stdout, 'write').mockResolvedValue(true);
 
     // setup temp sway project
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);
@@ -310,5 +311,25 @@ describe('runTypegen.js', () => {
     });
 
     expect(write).toHaveBeenCalled();
+  });
+
+  test('should error for no ABI in inputs', async () => {
+    const cwd = process.cwd();
+    const inputs = ['./*-abis.json']; // abi don't exist
+    const output = 'anything';
+    const programType = ProgramTypeEnum.CONTRACT;
+    const silent = true;
+
+    await expectToThrowFuelError(
+      () =>
+        runTypegen({
+          cwd,
+          inputs,
+          output,
+          programType,
+          silent,
+        }),
+      new FuelError(ErrorCode.NO_ABIS_FOUND, `no ABI found at '${inputs[0]}'`)
+    );
   });
 });
