@@ -40,13 +40,18 @@ export function runCliAction(options: ICliParams) {
 
   const programType = resolveProgramType({ contract, script, predicate });
 
-  runTypegen({
-    cwd,
-    inputs,
-    output,
-    programType,
-    silent: !!silent,
-  });
+  try {
+    runTypegen({
+      cwd,
+      inputs,
+      output,
+      programType,
+      silent: !!silent,
+    });
+  } catch (err) {
+    process.stderr.write(`error: ${(<Error>err).message}`);
+    process.exit(1);
+  }
 }
 
 export function configureCliOptions(program: Command) {
