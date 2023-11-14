@@ -2,13 +2,17 @@ import { stderr } from 'process';
 
 import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
 
-import { run } from './cli';
+import { run, runCliAction } from './cli';
 import * as runTypegenMod from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('cli.ts', () => {
-  function mockDeps() {
-    const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation();
+  function mockDeps(params?: { runTypegenError: Error }) {
+    const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation(() => {
+      if (params?.runTypegenError) {
+        throw params?.runTypegenError;
+      }
+    });
     const exit = jest.spyOn(process, 'exit').mockImplementation();
     const err = jest.spyOn(stderr, 'write').mockImplementation();
 
@@ -143,5 +147,22 @@ describe('cli.ts', () => {
 
     const err2 = /error: option '-p, --predicate' cannot be used with option '-c, --contract/;
     expect(err.mock.calls[1][0].toString()).toMatch(err2);
+  });
+
+  test('should handle errors when running cli action', () => {
+    const runTypegenError = new Error('Pretty message');
+
+    const { exit, err } = mockDeps({ runTypegenError });
+
+    const inputs = ['*-no-abis-here.json'];
+    const output = './aything';
+
+    runCliAction({
+      inputs,
+      output,
+    });
+
+    expect(exit).toBeCalledWith(1);
+    expect(err).toBeCalledWith(`error: ${runTypegenError.message}\n`);
   });
 });
