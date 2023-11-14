@@ -58,6 +58,10 @@ export function runTypegen(params: IGenerateFilesParams) {
     return abi;
   });
 
+  if (!abiFiles.length) {
+    throw new FuelError(ErrorCode.NO_ABIS_FOUND, `no ABI found at '${inputs}'`);
+  }
+
   const binFiles = collectBinFilepaths({ filepaths, programType });
 
   const storageSlotsFiles = collectStorageSlotsFilepaths({ filepaths, programType });
