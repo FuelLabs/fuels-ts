@@ -90,9 +90,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** Block until which tx cannot be included */
   maturity: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
-  maxFee: BN;
+  maxFee?: BN;
   /** The maximum amount of witness data allowed for the transaction */
-  witnessLimit: BN;
+  witnessLimit?: BN | undefined;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -117,9 +117,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = bn(gasPrice);
     this.gasLimit = bn(gasLimit);
-    this.maxFee = bn(maxFee);
     this.maturity = maturity ?? 0;
-    this.witnessLimit = bn(witnessLimit);
+    this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
+    this.maxFee = maxFee ? bn(maxFee) : undefined;
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
@@ -143,9 +143,17 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       policyTypes += PolicyType.GasPrice;
       policies.push({ data: this.gasPrice, type: PolicyType.GasPrice });
     }
+    if (this.witnessLimit) {
+      policyTypes += PolicyType.WitnessLimit;
+      policies.push({ data: this.witnessLimit, type: PolicyType.WitnessLimit });
+    }
     if (this.maturity) {
       policyTypes += PolicyType.Maturity;
       policies.push({ data: this.maturity, type: PolicyType.Maturity });
+    }
+    if (this.maxFee) {
+      policyTypes += PolicyType.MaxFee;
+      policies.push({ data: this.maxFee, type: PolicyType.MaxFee });
     }
 
     return {
