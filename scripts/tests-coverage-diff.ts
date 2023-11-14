@@ -9,5 +9,6 @@ const getDiff = () => {
 
 (() => {
   const { results } = getDiff();
-  writeFileSync('coverage/report/coverage-diff.txt', results, { flag: 'w' });
+  const formattedResults = results.split(`${process.cwd()}/`).join('');
+  writeFileSync('coverage/report/coverage-diff.txt', formattedResults, { flag: 'w' });
 })();
