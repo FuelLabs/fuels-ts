@@ -33,15 +33,20 @@ export type PolicyMaxFee = {
   data: BN;
 };
 
+export const sortPolicies = (policies: Policy[]): Policy[] =>
+  policies.sort((a, b) => a.type - b.type);
+
 export class PoliciesCoder extends Coder<Policy[], Policy[]> {
   constructor() {
     super('Policies', 'array Policy', 0);
   }
 
   encode(policies: Policy[]): Uint8Array {
+    const sortedPolicies = sortPolicies(policies);
+
     const parts: Uint8Array[] = [];
 
-    policies.forEach(({ data, type }) => {
+    sortedPolicies.forEach(({ data, type }) => {
       switch (type) {
         case PolicyType.MaxFee:
         case PolicyType.GasPrice:
