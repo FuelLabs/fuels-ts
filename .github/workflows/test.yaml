@@ -55,7 +55,7 @@ jobs:
           name: ${{ matrix.env }}
           path: coverage/environments/${{ matrix.env }}
 
-  test:
+  report:
     runs-on: ubuntu-latest
     needs: [environments]
     steps:
