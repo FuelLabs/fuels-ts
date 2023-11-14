@@ -49,7 +49,7 @@ export function runCliAction(options: ICliParams) {
       silent: !!silent,
     });
   } catch (err) {
-    process.stderr.write(`error: ${(<Error>err).message}`);
+    process.stderr.write(`error: ${(<Error>err).message}\n`);
     process.exit(1);
   }
 }
