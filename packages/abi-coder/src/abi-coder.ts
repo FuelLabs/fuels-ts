@@ -1,5 +1,6 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { resolve } from 'path';
 
 import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
 import { ArrayCoder } from './coders/array';
@@ -117,7 +118,7 @@ export abstract class AbiCoder {
       }
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-      const itemCoder = AbiCoder.getCoderImpl(argType);
+      const itemCoder = AbiCoder.getCoderImpl(argType, true);
       return new VecCoder(itemCoder);
     }
 

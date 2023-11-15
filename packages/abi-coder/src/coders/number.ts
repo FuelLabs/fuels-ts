@@ -13,7 +13,9 @@ export class NumberCoder extends Coder<number, number> {
   baseType: NumberCoderType;
 
   constructor(baseType: NumberCoderType, isArray = false) {
-    super('number', baseType, 8);
+    const paddingLength = isArray ? 1 : 8;
+
+    super('number', baseType, paddingLength);
     this.baseType = baseType;
     switch (baseType) {
       case 'u8':
@@ -28,7 +30,7 @@ export class NumberCoder extends Coder<number, number> {
         break;
     }
 
-    this.paddingLength = isArray ? 1 : 8;
+    this.paddingLength = paddingLength;
   }
 
   encode(value: number | string): Uint8Array {
