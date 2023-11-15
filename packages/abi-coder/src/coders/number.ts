@@ -9,10 +9,11 @@ export class NumberCoder extends Coder<number, number> {
   // This is to align the bits to the total bytes
   // See https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#unsigned-integers
   length: number;
+  paddingLength: number;
   baseType: NumberCoderType;
 
   constructor(baseType: NumberCoderType) {
-    super('number', baseType, 8);
+    super('number', baseType, baseType === 'u8' ? 1 : 8);
     this.baseType = baseType;
     switch (baseType) {
       case 'u8':
@@ -26,6 +27,8 @@ export class NumberCoder extends Coder<number, number> {
         this.length = 4;
         break;
     }
+
+    this.paddingLength = this.baseType === 'u8' ? 1 : 8;
   }
 
   encode(value: number | string): Uint8Array {
@@ -41,13 +44,13 @@ export class NumberCoder extends Coder<number, number> {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
-    return toBytes(bytes, 8);
+    return toBytes(bytes, this.paddingLength);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
-    let bytes = data.slice(offset, offset + 8);
-    bytes = bytes.slice(8 - this.length, 8);
+    let bytes = data.slice(offset, offset + this.paddingLength);
+    bytes = bytes.slice(this.paddingLength - this.length, this.paddingLength);
 
-    return [toNumber(bytes), offset + 8];
+    return [toNumber(bytes), offset + this.paddingLength];
   }
 }
