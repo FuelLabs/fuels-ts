@@ -242,8 +242,8 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const { maxGasPerTx } = this.provider.getGasConfig();
-    const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
+    // TODO: Fix max gax per tx
+    const params: TxParamsType = { gasLimit: 1_000_000, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 

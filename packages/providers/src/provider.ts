@@ -697,7 +697,8 @@ export default class Provider {
        * to contract calls.
        */
       clonedTransactionRequest.gasPrice = bn(0);
-      clonedTransactionRequest.gasLimit = maxGasPerTx;
+      // TODO: Fix max gax per tx
+      clonedTransactionRequest.gasLimit = bn(1_000_000);
 
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.call(clonedTransactionRequest);
