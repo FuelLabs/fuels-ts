@@ -19,7 +19,7 @@ export class BooleanCoder extends Coder<boolean, boolean> {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid boolean value.`);
     }
 
-    return toBytes(value ? 8 : 0, 8);
+    return toBytes(value ? this.paddingLength : 0, this.paddingLength);
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {
