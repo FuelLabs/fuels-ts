@@ -140,7 +140,7 @@ export abstract class AbiCoder {
 
     const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
     if (tupleMatch) {
-      const coders = components.map((component) => AbiCoder.getCoderImpl(component));
+      const coders = components.map((component) => AbiCoder.getCoderImpl(component, true));
       return new TupleCoder(coders);
     }
 
