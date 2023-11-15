@@ -65,7 +65,7 @@ export abstract class AbiCoder {
       case 'raw untyped slice':
         return new RawSliceCoder();
       case 'bool':
-        return new BooleanCoder();
+        return new BooleanCoder(isArray);
       case 'b256':
         return new B256Coder();
       case 'struct B512':

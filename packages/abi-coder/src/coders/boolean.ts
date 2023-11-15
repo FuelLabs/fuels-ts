@@ -4,8 +4,13 @@ import { bn, toBytes } from '@fuel-ts/math';
 import { Coder } from './abstract-coder';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
-  constructor() {
-    super('boolean', 'boolean', 8);
+  paddingLength: number;
+
+  constructor(isArray: boolean = false) {
+    const paddingLength = isArray ? 1 : 8;
+    super('boolean', 'boolean', paddingLength);
+
+    this.paddingLength = paddingLength;
   }
 
   encode(value: boolean): Uint8Array {
@@ -18,13 +23,13 @@ export class BooleanCoder extends Coder<boolean, boolean> {
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {
-    const bytes = bn(data.slice(offset, offset + 8));
+    const bytes = bn(data.slice(offset, offset + this.paddingLength));
     if (bytes.isZero()) {
-      return [false, offset + 8];
+      return [false, offset + this.paddingLength];
     }
     if (!bytes.eq(bn(1))) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid boolean value.`);
     }
-    return [true, offset + 8];
+    return [true, offset + this.paddingLength];
   }
 }
