@@ -93,7 +93,7 @@ scalar Bytes32
 type ChainInfo {
   name: String!
   latestBlock: Block!
-  baseChainHeight: U32!
+  daHeight: U64!
   peerCount: Int!
   consensusParameters: ConsensusParameters!
   gasCosts: GasCosts!
@@ -180,22 +180,45 @@ union CoinType = Coin | MessageCoin
 
 union Consensus = Genesis | PoAConsensus
 
-type ConsensusParameters {
-  contractMaxSize: U64!
+type TxParameters {
   maxInputs: U64!
   maxOutputs: U64!
   maxWitnesses: U64!
   maxGasPerTx: U64!
-  maxScriptLength: U64!
-  maxScriptDataLength: U64!
-  maxStorageSlots: U64!
+  maxSize: U64!
+}
+
+type PredicateParameters {
   maxPredicateLength: U64!
   maxPredicateDataLength: U64!
   maxGasPerPredicate: U64!
+  maxMessageDataLength: U64!
+}
+
+type ScriptParameters {
+  maxScriptLength: U64!
+  maxScriptDataLength: U64!
+}
+
+type ContractParameters {
+  contractMaxSize: U64!
+  maxStorageSlots: U64!
+}
+
+type FeeParameters {
   gasPriceFactor: U64!
   gasPerByte: U64!
-  maxMessageDataLength: U64!
+}
+
+type ConsensusParameters {
+  txParams: TxParameters!
+  predicateParams: PredicateParameters!
+  scriptParams: ScriptParameters!
+  contractParams: ContractParameters!
+  feeParams: FeeParameters!
+  baseAssetId: AssetId!
   chainId: U64!
+  gasCosts: GasCosts!
 }
 
 type Contract {

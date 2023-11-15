@@ -162,33 +162,65 @@ fragment balanceFragment on Balance {
   assetId
 }
 
-fragment consensusParametersFragment on ConsensusParameters {
-  contractMaxSize
+fragment TxParametersFragment on TxParameters {
   maxInputs
   maxOutputs
   maxWitnesses
   maxGasPerTx
-  maxScriptLength
-  maxScriptDataLength
-  maxStorageSlots
+  maxSize
+}
+
+fragment PredicateParametersFragment on PredicateParameters {
   maxPredicateLength
   maxPredicateDataLength
   maxGasPerPredicate
+  maxMessageDataLength
+}
+
+fragment ScriptParametersFragment on ScriptParameters {
+  maxScriptLength
+  maxScriptDataLength
+}
+
+fragment ContractParametersFragment on ContractParameters {
+  contractMaxSize
+  maxStorageSlots
+}
+
+fragment FeeParametersFragment on FeeParameters {
   gasPriceFactor
   gasPerByte
-  maxMessageDataLength
+}
+
+fragment consensusParametersFragment on ConsensusParameters {
+  txParams {
+    ...TxParametersFragment
+  }
+  predicateParams {
+    ...PredicateParametersFragment
+  }
+  scriptParams {
+    ...ScriptParametersFragment
+  }
+  contractParams {
+    ...ContractParametersFragment
+  }
+  feeParams {
+    ...FeeParametersFragment
+  }
+  baseAssetId
   chainId
 }
 
 fragment chainInfoFragment on ChainInfo {
   name
-  baseChainHeight
+  latestBlock {
+    ...blockFragment
+  }
+  daHeight
   peerCount
   consensusParameters {
     ...consensusParametersFragment
-  }
-  latestBlock {
-    ...blockFragment
   }
 }
 
