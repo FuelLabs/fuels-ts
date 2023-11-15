@@ -137,27 +137,30 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
-  const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, peerCount, consensusParameters, latestBlock } = chain;
+
+  const { contractParams, feeParams, predicateParams, scriptParams, txParams } =
+    consensusParameters;
 
   return {
     name,
-    baseChainHeight: bn(baseChainHeight),
+    baseChainHeight: bn(daHeight),
     peerCount,
     consensusParameters: {
-      contractMaxSize: bn(consensusParameters.contractMaxSize),
-      maxInputs: bn(consensusParameters.maxInputs),
-      maxOutputs: bn(consensusParameters.maxOutputs),
-      maxWitnesses: bn(consensusParameters.maxWitnesses),
-      maxGasPerTx: bn(consensusParameters.maxGasPerTx),
-      maxScriptLength: bn(consensusParameters.maxScriptLength),
-      maxScriptDataLength: bn(consensusParameters.maxScriptDataLength),
-      maxStorageSlots: bn(consensusParameters.maxStorageSlots),
-      maxPredicateLength: bn(consensusParameters.maxPredicateLength),
-      maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
-      maxGasPerPredicate: bn(consensusParameters.maxGasPerPredicate),
-      gasPriceFactor: bn(consensusParameters.gasPriceFactor),
-      gasPerByte: bn(consensusParameters.gasPerByte),
-      maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
+      contractMaxSize: bn(contractParams.contractMaxSize),
+      maxInputs: bn(txParams.maxInputs),
+      maxOutputs: bn(txParams.maxOutputs),
+      maxWitnesses: bn(txParams.maxWitnesses),
+      maxGasPerTx: bn(txParams.maxGasPerTx),
+      maxScriptLength: bn(scriptParams.maxScriptLength),
+      maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
+      maxStorageSlots: bn(contractParams.maxStorageSlots),
+      maxPredicateLength: bn(predicateParams.maxPredicateLength),
+      maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
+      maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
+      gasPriceFactor: bn(feeParams.gasPriceFactor),
+      gasPerByte: bn(feeParams.gasPerByte),
+      maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
       chainId: bn(consensusParameters.chainId),
     },
     latestBlock: {
