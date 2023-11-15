@@ -6,6 +6,8 @@ use std::b512::B512;
 abi EchoValues {
     fn echo_u8(value: u8) -> u8;
 
+    fn echo_u8_array() -> [u8; 2];
+
     fn echo_str_8(value: str[8]) -> str[8];
 
     fn echo_tuple(tuple: (u8, bool, u64)) -> (u8, bool, u64);
@@ -16,6 +18,10 @@ abi EchoValues {
 impl EchoValues for Contract {
     fn echo_u8(value: u8) -> u8 {
         value
+    }
+
+    fn echo_u8_array() -> [u8; 2] {
+        [48, 63]
     }
 
     fn echo_str_8(value: str[8]) -> str[8] {

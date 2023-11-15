@@ -39,7 +39,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
       .fill(0)
       .map(() => {
         let decoded;
-        [decoded, newOffset] = this.coder.decode(data, newOffset);
+        [decoded, newOffset] = this.coder.decode(data, newOffset, undefined, true);
         return decoded;
       });
 

@@ -53,12 +53,12 @@ export abstract class AbiCoder {
     return this.getCoder(abi, argument).decode(data, offset) as [DecodedValue | undefined, number];
   }
 
-  private static getCoderImpl(resolvedAbiType: ResolvedAbiType): Coder {
+  private static getCoderImpl(resolvedAbiType: ResolvedAbiType, isArray: boolean = false): Coder {
     switch (resolvedAbiType.type) {
       case 'u8':
       case 'u16':
       case 'u32':
-        return new NumberCoder(resolvedAbiType.type);
+        return new NumberCoder(resolvedAbiType.type, isArray);
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
@@ -103,7 +103,7 @@ export abstract class AbiCoder {
         );
       }
 
-      const arrayElementCoder = AbiCoder.getCoderImpl(arg);
+      const arrayElementCoder = AbiCoder.getCoderImpl(arg, true);
       return new ArrayCoder(arrayElementCoder, length);
     }
 

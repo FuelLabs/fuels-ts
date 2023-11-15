@@ -11,9 +11,10 @@ export class NumberCoder extends Coder<number, number> {
   length: number;
   paddingLength: number;
   baseType: NumberCoderType;
+  isArray: boolean;
 
-  constructor(baseType: NumberCoderType) {
-    super('number', baseType, baseType === 'u8' ? 1 : 8);
+  constructor(baseType: NumberCoderType, isArray = false) {
+    super('number', baseType, 8);
     this.baseType = baseType;
     switch (baseType) {
       case 'u8':
@@ -29,6 +30,7 @@ export class NumberCoder extends Coder<number, number> {
     }
 
     this.paddingLength = this.baseType === 'u8' ? 1 : 8;
+    this.isArray = isArray;
   }
 
   encode(value: number | string): Uint8Array {
@@ -44,13 +46,22 @@ export class NumberCoder extends Coder<number, number> {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
-    return toBytes(bytes, this.paddingLength);
+    const paddedBytes = toBytes(bytes, 8);
+
+    return paddedBytes;
   }
 
-  decode(data: Uint8Array, offset: number): [number, number] {
-    let bytes = data.slice(offset, offset + this.paddingLength);
-    bytes = bytes.slice(this.paddingLength - this.length, this.paddingLength);
+  decode(
+    data: Uint8Array,
+    offset: number,
+    _length?: number,
+    isArray: boolean = false
+  ): [number, number] {
+    const paddedLength = isArray || this.isArray ? 1 : 8;
 
-    return [toNumber(bytes), offset + this.paddingLength];
+    let bytes = data.slice(offset, offset + paddedLength);
+    bytes = bytes.slice(paddedLength - this.length, paddedLength);
+
+    return [toNumber(bytes), offset + paddedLength];
   }
 }
