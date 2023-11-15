@@ -161,7 +161,7 @@ export abstract class AbiCoder {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 
-      o[component.name] = AbiCoder.getCoderImpl(component);
+      o[component.name] = AbiCoder.getCoderImpl(component, true);
       return o;
     }, {});
   }
