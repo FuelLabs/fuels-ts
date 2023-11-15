@@ -56,13 +56,12 @@ describe('ArrayCoder', () => {
 
   it('should encode an enum array with differently typed inputs', () => {
     const coder = new ArrayCoder(
-      new EnumCoder('TestEnum', { a: new NumberCoder('u8'), b: new BooleanCoder() }),
+      new EnumCoder('TestEnum', { a: new NumberCoder('u8', true), b: new BooleanCoder(true) }),
       4
     );
     const expected = new Uint8Array([
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 255,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+      0, 0, 0, 0, 255,
     ]);
     const actual = coder.encode([{ a: 0 }, { b: false }, { b: true }, { a: U8_MAX }]);
 
@@ -71,16 +70,15 @@ describe('ArrayCoder', () => {
 
   it('should decode an enum array with differently typed inputs', () => {
     const coder = new ArrayCoder(
-      new EnumCoder('TestEnum', { a: new NumberCoder('u8'), b: new BooleanCoder() }),
+      new EnumCoder('TestEnum', { a: new NumberCoder('u8', true), b: new BooleanCoder(true) }),
       4
     );
     const expectedValue = [{ a: 0 }, { b: false }, { b: true }, { a: U8_MAX }];
-    const expectedLength = 64;
+    const expectedLength = 36;
     const [actualValue, actualLength] = coder.decode(
       new Uint8Array([
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 255,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 255,
       ]),
       0
     );
