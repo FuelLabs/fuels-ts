@@ -719,11 +719,15 @@ describe('Abi interface', () => {
 
           expect(encoded).toEqual(expectedEncoded);
 
-          if (skipDecoding) return;
+          if (skipDecoding) {
+            return;
+          }
 
           let decoded = fn.decodeOutput(expectedEncoded)[0];
 
-          if (decodedTransformer) decoded = decodedTransformer(decoded);
+          if (decodedTransformer) {
+            decoded = decodedTransformer(decoded);
+          }
 
           const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
 
