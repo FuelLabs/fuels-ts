@@ -52,8 +52,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       jsonAbi,
       configurableConstants
     );
-    const chainId = provider.getChainId();
-    const address = Address.fromB256(getPredicateRoot(predicateBytes, chainId));
+    const address = Address.fromB256(getPredicateRoot(predicateBytes));
     super(address, provider);
 
     this.bytes = predicateBytes;
