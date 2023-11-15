@@ -60,7 +60,8 @@ describe('TransactionCoder', () => {
       inputs: [
         {
           type: InputType.Contract,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           balanceRoot: B256,
           stateRoot: B256,
           contractID: B256,
@@ -111,8 +112,6 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionCreate without inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Create> = {
       type: TransactionType.Create,
-      gasPrice: bn(U32),
-      gasLimit: bn(U32),
       maturity: U32,
       bytecodeLength: U16,
       bytecodeWitnessIndex: U8,
@@ -142,9 +141,6 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionCreate with inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Create> = {
       type: TransactionType.Create,
-      gasPrice: bn(U32),
-      gasLimit: bn(U32),
-      maturity: U32,
       bytecodeLength: U16,
       bytecodeWitnessIndex: U8,
       storageSlotsCount: 1,
@@ -156,7 +152,8 @@ describe('TransactionCoder', () => {
       inputs: [
         {
           type: InputType.Contract,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           balanceRoot: B256,
           stateRoot: B256,
           contractID: B256,
@@ -167,7 +164,8 @@ describe('TransactionCoder', () => {
         },
         {
           type: InputType.Contract,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           balanceRoot: B256,
           stateRoot: B256,
           contractID: B256,
@@ -178,7 +176,8 @@ describe('TransactionCoder', () => {
         },
         {
           type: InputType.Coin,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           owner: B256,
           amount: bn(0),
           assetId: B256,
