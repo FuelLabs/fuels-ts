@@ -32,7 +32,10 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
+type TxParamsType = Pick<
+  TransactionRequestLike,
+  'gasLimit' | 'gasPrice' | 'maturity' | 'maxFee' | 'witnessLimit'
+>;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
