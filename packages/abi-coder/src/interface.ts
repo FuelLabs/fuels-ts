@@ -46,7 +46,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
         f.selector === nameOrSignatureOrSelector
     );
 
-    if (fn !== undefined) return fn;
+    if (fn !== undefined) {
+      return fn;
+    }
 
     throw new FuelError(
       ErrorCode.FUNCTION_NOT_FOUND,

@@ -66,6 +66,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-explicit-any': 'error',
+    curly: ['error', 'all'],
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [

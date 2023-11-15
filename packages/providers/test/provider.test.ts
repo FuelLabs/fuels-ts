@@ -820,7 +820,9 @@ describe('Provider', () => {
       supportedVersion: `${majorMismatch}.${minor}.${patch}`,
     };
 
-    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+    if (mock.supportedVersion === FUEL_CORE) {
+      throw new Error();
+    }
 
     const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
@@ -843,7 +845,9 @@ describe('Provider', () => {
       supportedVersion: `${major}.${minorMismatch}.${patch}`,
     };
 
-    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+    if (mock.supportedVersion === FUEL_CORE) {
+      throw new Error();
+    }
 
     const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);

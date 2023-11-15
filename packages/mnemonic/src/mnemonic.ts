@@ -163,7 +163,9 @@ class Mnemonic {
     }
 
     while (i < words.length) {
-      if (Mnemonic.binarySearch(words[i]) === false) return false;
+      if (Mnemonic.binarySearch(words[i]) === false) {
+        return false;
+      }
       i += 1;
     }
 
@@ -178,9 +180,14 @@ class Mnemonic {
     while (left <= right) {
       const mid: number = Math.floor((left + right) / 2);
 
-      if (words[mid] === target) return true;
-      if (target < words[mid]) right = mid - 1;
-      else left = mid + 1;
+      if (words[mid] === target) {
+        return true;
+      }
+      if (target < words[mid]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
     }
 
     return false;
