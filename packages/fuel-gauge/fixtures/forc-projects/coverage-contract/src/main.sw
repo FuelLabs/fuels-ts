@@ -209,7 +209,7 @@ impl CoverageContract for Contract {
     }
 
     fn get_some_option_u8() -> Option<u8> {
-        let o: Option<u8> = Option::Some(113);
+        let o: Option<u8> = Option::Some(113u8);
         o
     }
 
