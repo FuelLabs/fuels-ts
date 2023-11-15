@@ -44,9 +44,7 @@ export class NumberCoder extends Coder<number, number> {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
-    const paddedBytes = toBytes(bytes, 8);
-
-    return paddedBytes;
+    return toBytes(bytes, this.paddingLength);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
