@@ -3,6 +3,7 @@
  */
 export enum ErrorCode {
   // abi
+  NO_ABIS_FOUND = 'no-abis-found',
   ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
   ABI_MAIN_METHOD_MISSING = 'abi-main-method-missing',
   INVALID_COMPONENT = 'invalid-component',

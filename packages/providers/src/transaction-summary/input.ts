@@ -40,11 +40,15 @@ export function getInputContractFromIndex(
   inputs: Input[],
   inputIndex: number
 ): InputContract | undefined {
-  if (inputIndex == null) return undefined;
+  if (inputIndex == null) {
+    return undefined;
+  }
 
   const contractInput = inputs?.[inputIndex];
 
-  if (!contractInput) return undefined;
+  if (!contractInput) {
+    return undefined;
+  }
   if (contractInput.type !== InputType.Contract) {
     throw new FuelError(
       ErrorCode.INVALID_TRANSACTION_INPUT,
