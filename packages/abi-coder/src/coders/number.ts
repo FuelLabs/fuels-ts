@@ -11,7 +11,6 @@ export class NumberCoder extends Coder<number, number> {
   length: number;
   paddingLength: number;
   baseType: NumberCoderType;
-  isArray: boolean;
 
   constructor(baseType: NumberCoderType, isArray = false) {
     super('number', baseType, 8);
@@ -29,8 +28,7 @@ export class NumberCoder extends Coder<number, number> {
         break;
     }
 
-    this.paddingLength = this.baseType === 'u8' ? 1 : 8;
-    this.isArray = isArray;
+    this.paddingLength = isArray ? 1 : 8;
   }
 
   encode(value: number | string): Uint8Array {
@@ -51,17 +49,10 @@ export class NumberCoder extends Coder<number, number> {
     return paddedBytes;
   }
 
-  decode(
-    data: Uint8Array,
-    offset: number,
-    _length?: number,
-    isArray: boolean = false
-  ): [number, number] {
-    const paddedLength = isArray || this.isArray ? 1 : 8;
+  decode(data: Uint8Array, offset: number): [number, number] {
+    let bytes = data.slice(offset, offset + this.paddingLength);
+    bytes = bytes.slice(this.paddingLength - this.length, this.paddingLength);
 
-    let bytes = data.slice(offset, offset + paddedLength);
-    bytes = bytes.slice(paddedLength - this.length, paddedLength);
-
-    return [toNumber(bytes), offset + paddedLength];
+    return [toNumber(bytes), offset + this.paddingLength];
   }
 }

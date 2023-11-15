@@ -48,10 +48,5 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
 
   abstract encode(value: TInput, length?: number): Uint8Array;
 
-  abstract decode(
-    data: Uint8Array,
-    offset: number,
-    length?: number,
-    isArray?: boolean
-  ): [TDecoded, number];
+  abstract decode(data: Uint8Array, offset: number, length?: number): [TDecoded, number];
 }
