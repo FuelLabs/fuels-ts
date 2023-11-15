@@ -76,7 +76,12 @@ abi VectorContract {
     fn echo_vector_inside_vector(arg: Vec<Vec<u32>>) -> Vec<Vec<u32>>;
     fn echo_vector_inside_enum(arg: EnumWithVector) -> EnumWithVector;
     fn echo_vector_inside_struct(arg: StructWithVector) -> StructWithVector;
-    fn echo_u32_then_three_vectors(x: u32, y: Vec<bool>, z: Vec<u32>, q: Vec<u16>) -> (u32, Vec<bool>, Vec<u32>, Vec<u16>);
+    fn echo_u32_then_three_vectors(
+        x: u32,
+        y: Vec<bool>,
+        z: Vec<u32>,
+        q: Vec<u16>,
+    ) -> (u32, Vec<bool>, Vec<u32>, Vec<u16>);
 }
 
 impl VectorContract for Contract {

@@ -25,13 +25,30 @@ fn expected_bytes() -> Bytes {
 
 fn main(_arg: u64, wrapper: Wrapper<Vec<Bytes>>) {
     if let SomeEnum::Second(enum_bytes) = wrapper.inner_enum {
-        require(enum_bytes == expected_bytes(), "wrapper.inner_enum didn't carry the expected bytes")
+        require(
+            enum_bytes == expected_bytes(),
+            "wrapper.inner_enum didn't carry the expected bytes",
+        )
     } else {
         require(false, "enum was not of variant Second");
     }
 
     let inner_vec = wrapper.inner;
-    require(inner_vec.len() == 2, "Expected wrapper.inner vector to have 2 elements");
-    require(inner_vec.get(0).unwrap() == expected_bytes(), "wrapper.inner[0] didn't match expectation");
-    require(inner_vec.get(1).unwrap() == expected_bytes(), "wrapper.inner[1] didn't match expectation");
+    require(
+        inner_vec
+            .len() == 2,
+        "Expected wrapper.inner vector to have 2 elements",
+    );
+    require(
+        inner_vec
+            .get(0)
+            .unwrap() == expected_bytes(),
+        "wrapper.inner[0] didn't match expectation",
+    );
+    require(
+        inner_vec
+            .get(1)
+            .unwrap() == expected_bytes(),
+        "wrapper.inner[1] didn't match expectation",
+    );
 }
