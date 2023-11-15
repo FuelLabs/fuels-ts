@@ -61,7 +61,9 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   toString(base?: number | 'hex', length?: number) {
     const output = super.toString(base, length);
 
-    if (base === 16 || base === 'hex') return `0x${output}`;
+    if (base === 16 || base === 'hex') {
+      return `0x${output}`;
+    }
 
     return output;
   }
