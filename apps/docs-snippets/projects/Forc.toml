@@ -1,6 +1,6 @@
 [workspace]
 members = [
-   "counter",
+  "counter",
   "echo-enum",
   "log-values",
   "sum-script",
