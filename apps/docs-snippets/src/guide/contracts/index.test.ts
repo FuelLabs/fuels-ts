@@ -33,7 +33,7 @@ describe(__filename, () => {
   it('should echo boolean array', async () => {
     const expected = [true, false];
 
-    const res1 = await contract.functions.echo_boolean_array(expected).simulate();
+    const res1 = await contract.functions.echo_boolean_array().simulate();
 
     expect(res1.value).toMatchObject(expected);
   });
@@ -46,12 +46,28 @@ describe(__filename, () => {
     expect(res1.value).toMatchObject(expected);
   });
 
-  it('echos a mixed array with value', async () => {
+  it('echos a mixed tuple with value', async () => {
     const expected = [73, true];
 
-    const res1 = await contract.functions.echo_mixed_array_with_value(expected).simulate();
+    const res1 = await contract.functions.echo_mixed_tuple_with_value(expected).simulate();
 
     expect(res1.value).toMatchObject(expected);
+  });
+
+  it('echos a mixed tuple', async () => {
+    const expected = [48, true];
+
+    const res1 = await contract.functions.echo_mixed_tuple().simulate();
+
+    expect(res1.value).toMatchObject(expected);
+  });
+
+  it('echos a bigger mixed tuple', async () => {
+    const expected = [48, true, bn(1337)];
+
+    const res1 = await contract.functions.echo_tuple().simulate();
+
+    expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
   it('echos a mixed struct with value', async () => {
@@ -99,9 +115,9 @@ describe(__filename, () => {
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
-  it('echos a u64 struct', async () => {
+  it('echos a mixed struct', async () => {
     const expected = {
-      a: true, // .reverse() thing started
+      a: true, //
       b: bn(1337),
     };
 
@@ -110,17 +126,14 @@ describe(__filename, () => {
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
-  // it('send and echos a u64 struct', async () => {
-  //   const expected = {
-  //     a: true,
-  //     b: 1,
-  //     c: bn(1337),
-  //   };
+  it('send and echos a mixed struct', async () => {
+    const expected = {
+      a: true,
+      b: bn(1337),
+    };
 
-  //   const res1 = await contract.functions.echo_received_mixed_struct(expected).simulate();
+    const res1 = await contract.functions.echo_received_mixed_struct(expected).simulate();
 
-  //   console.log({ res1 });
-
-  //   expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
-  // });
+    expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
+  });
 });

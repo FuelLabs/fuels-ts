@@ -3,6 +3,7 @@ import { bn, toBytes } from '@fuel-ts/math';
 
 import type { SmallBytesOptions } from './abstract-coder';
 import { Coder } from './abstract-coder';
+import { off } from 'process';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
   paddingLength: number;
@@ -14,7 +15,7 @@ export class BooleanCoder extends Coder<boolean, boolean> {
       isRightPadded: false,
     }
   ) {
-    const paddingLength = options.isSmallBytes ? 8 : 1;
+    const paddingLength = options.isSmallBytes ? 1 : 8;
 
     super('boolean', 'boolean', paddingLength);
 
@@ -31,7 +32,7 @@ export class BooleanCoder extends Coder<boolean, boolean> {
 
     const output: Uint8Array = toBytes(value ? 1 : 0, this.paddingLength);
 
-    if (this.options.isSmallBytes) {
+    if (this.options.isRightPadded) {
       return output.reverse();
     }
 
@@ -41,11 +42,8 @@ export class BooleanCoder extends Coder<boolean, boolean> {
   decode(data: Uint8Array, offset: number): [boolean, number] {
     let bytes;
 
-    /**
-     * TODO: Add new option flag and replace second condition -> data[offset] !== 0
-     */
-    if (this.options.isSmallBytes && data[offset] !== 0) {
-      bytes = bn(data.slice(offset, 1)); // offset + 1 ?
+    if (this.options.isRightPadded) {
+      bytes = bn(data.slice(offset, offset + 1));
     } else {
       bytes = bn(data.slice(offset, offset + this.paddingLength));
     }

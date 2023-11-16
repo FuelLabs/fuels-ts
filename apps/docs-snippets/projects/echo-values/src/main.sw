@@ -29,7 +29,9 @@ abi EchoValues {
 
     fn echo_boolean_array_with_value(value: [bool; 2]) -> [bool; 2];
 
-    fn echo_mixed_array_with_value(value: (u8, bool)) -> (u8, bool);
+    fn echo_mixed_tuple_with_value(value: (u8, bool)) -> (u8, bool);
+
+    fn echo_mixed_tuple() -> (u8, bool);
 
     fn echo_mixed_struct_with_value(value: MyStruct) -> MyStruct;
 
@@ -47,7 +49,7 @@ abi EchoValues {
 
     fn echo_str_8(value: str[8]) -> str[8];
 
-    fn echo_tuple(tuple: (u8, bool, u64)) -> (u8, bool, u64);
+    fn echo_tuple() -> (u8, bool, u64);
 
     fn echo_b512(input: B512) -> B512;
 }
@@ -73,8 +75,12 @@ impl EchoValues for Contract {
         value
     }
 
-    fn echo_mixed_array_with_value(value: (u8, bool)) -> (u8, bool) {
+    fn echo_mixed_tuple_with_value(value: (u8, bool)) -> (u8, bool) {
         value
+    }
+
+    fn echo_mixed_tuple() -> (u8, bool) {
+        (48, true)
     }
 
     fn echo_mixed_struct_with_value(value: MyStruct) -> MyStruct {
@@ -123,8 +129,8 @@ impl EchoValues for Contract {
     }
 
     // #region tuples-2
-    fn echo_tuple(tuple: (u8, bool, u64)) -> (u8, bool, u64) {
-        tuple
+    fn echo_tuple() -> (u8, bool, u64) {
+        (48, true, 1337)
     }
     // #endregion tuples-2
 

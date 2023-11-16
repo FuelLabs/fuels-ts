@@ -55,20 +55,23 @@ export class NumberCoder extends Coder<number, number> {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
-    /**
-     * TODO: Replicate exceptions from Boolean.encode method
-     */
+    const output = toBytes(bytes, this.paddingLength);
 
-    return toBytes(bytes, this.paddingLength);
+    if (this.options.isRightPadded) {
+      return output.reverse();
+    }
+
+    return output;
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
-    let bytes = data.slice(offset, offset + this.paddingLength);
-    bytes = bytes.slice(this.paddingLength - this.length, this.paddingLength);
-
-    /**
-     * TODO: Replicate exceptions from Boolean.decode method
-     */
+    let bytes;
+    if (this.options.isRightPadded) {
+      bytes = data.slice(offset, offset + 1);
+    } else {
+      bytes = data.slice(offset, offset + this.paddingLength);
+      bytes = bytes.slice(this.paddingLength - this.length, this.paddingLength);
+    }
 
     return [toNumber(bytes), offset + this.paddingLength];
   }

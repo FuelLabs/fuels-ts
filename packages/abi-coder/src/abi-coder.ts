@@ -128,8 +128,7 @@ export abstract class AbiCoder {
 
     const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
     if (structMatch) {
-      // TODO: Start adding new exceptions (rightPadded?)
-      const coders = AbiCoder.getCoders(components, { isSmallBytes: true });
+      const coders = AbiCoder.getCoders(components, { isRightPadded: true });
       return new StructCoder(structMatch.name, coders);
     }
 
@@ -147,7 +146,7 @@ export abstract class AbiCoder {
     const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
     if (tupleMatch) {
       const coders = components.map((component) =>
-        AbiCoder.getCoderImpl(component, { isSmallBytes: true })
+        AbiCoder.getCoderImpl(component, { isRightPadded: true })
       );
       return new TupleCoder(coders);
     }
