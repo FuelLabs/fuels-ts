@@ -8,6 +8,11 @@ struct MyStruct {
     b: bool,
 }
 
+struct MyMixedStruct {
+    a: bool,
+    b: u64,
+}
+
 enum MyEnum {
     a: u8,
     b: bool,
@@ -31,6 +36,12 @@ abi EchoValues {
     fn echo_mixed_enum_with_value(value: MyEnum) -> MyEnum;
 
     fn echo_u8_vector() -> Vec<u8>;
+
+    fn echo_u64_vector() -> Vec<u64>;
+
+    fn echo_mixed_struct() -> MyMixedStruct;
+
+    fn echo_received_mixed_struct(value: MyMixedStruct) -> MyMixedStruct;
 
     fn echo_u8_vector_with_value(value: Vec<u8>) -> Vec<u8>;
 
@@ -81,6 +92,26 @@ impl EchoValues for Contract {
         myVec.push(78);
 
         myVec
+    }
+
+    fn echo_u64_vector() -> Vec<u64> {
+        let mut myVec: Vec<u64> = Vec::new();
+        myVec.push(1337);
+        myVec.push(1448);
+        myVec.push(1559);
+
+        myVec
+    }
+
+    fn echo_mixed_struct() -> MyMixedStruct {
+        MyMixedStruct {
+            a: true,
+            b: 1337,
+        }
+    }
+
+    fn echo_received_mixed_struct(value: MyMixedStruct) -> MyMixedStruct {
+        value
     }
 
     fn echo_u8_vector_with_value(value: Vec<u8>) -> Vec<u8> {

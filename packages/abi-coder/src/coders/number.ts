@@ -1,6 +1,7 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { toNumber, toBytes } from '@fuel-ts/math';
 
+import type { SmallBytesOptions } from './abstract-coder';
 import { Coder } from './abstract-coder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32';
@@ -11,9 +12,16 @@ export class NumberCoder extends Coder<number, number> {
   length: number;
   paddingLength: number;
   baseType: NumberCoderType;
+  options: SmallBytesOptions;
 
-  constructor(baseType: NumberCoderType, isArray = false) {
-    const paddingLength = isArray ? 1 : 8;
+  constructor(
+    baseType: NumberCoderType,
+    options: SmallBytesOptions = {
+      isSmallBytes: false,
+      isRightPadded: false,
+    }
+  ) {
+    const paddingLength = options.isSmallBytes ? 1 : 8;
 
     super('number', baseType, paddingLength);
     this.baseType = baseType;
@@ -31,6 +39,7 @@ export class NumberCoder extends Coder<number, number> {
     }
 
     this.paddingLength = paddingLength;
+    this.options = options;
   }
 
   encode(value: number | string): Uint8Array {
@@ -46,12 +55,20 @@ export class NumberCoder extends Coder<number, number> {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
+    /**
+     * TODO: Replicate exceptions from Boolean.encode method
+     */
+
     return toBytes(bytes, this.paddingLength);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
     let bytes = data.slice(offset, offset + this.paddingLength);
     bytes = bytes.slice(this.paddingLength - this.length, this.paddingLength);
+
+    /**
+     * TODO: Replicate exceptions from Boolean.decode method
+     */
 
     return [toNumber(bytes), offset + this.paddingLength];
   }

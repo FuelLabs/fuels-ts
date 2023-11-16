@@ -1,8 +1,7 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { resolve } from 'path';
 
-import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
+import type { DecodedValue, InputValue, Coder, SmallBytesOptions } from './coders/abstract-coder';
 import { ArrayCoder } from './coders/array';
 import { AssetIdCoder } from './coders/asset-id';
 import { B256Coder } from './coders/b256';
@@ -54,19 +53,24 @@ export abstract class AbiCoder {
     return this.getCoder(abi, argument).decode(data, offset) as [DecodedValue | undefined, number];
   }
 
-  private static getCoderImpl(resolvedAbiType: ResolvedAbiType, isArray: boolean = false): Coder {
+  private static getCoderImpl(
+    resolvedAbiType: ResolvedAbiType,
+    options: SmallBytesOptions = {
+      isSmallBytes: false,
+    }
+  ): Coder {
     switch (resolvedAbiType.type) {
       case 'u8':
       case 'u16':
       case 'u32':
-        return new NumberCoder(resolvedAbiType.type, isArray);
+        return new NumberCoder(resolvedAbiType.type, options);
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
       case 'raw untyped slice':
         return new RawSliceCoder();
       case 'bool':
-        return new BooleanCoder(isArray);
+        return new BooleanCoder(options);
       case 'b256':
         return new B256Coder();
       case 'struct B512':
@@ -104,7 +108,7 @@ export abstract class AbiCoder {
         );
       }
 
-      const arrayElementCoder = AbiCoder.getCoderImpl(arg, true);
+      const arrayElementCoder = AbiCoder.getCoderImpl(arg, { isSmallBytes: true });
       return new ArrayCoder(arrayElementCoder, length);
     }
 
@@ -118,19 +122,20 @@ export abstract class AbiCoder {
       }
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-      const itemCoder = AbiCoder.getCoderImpl(argType, true);
+      const itemCoder = AbiCoder.getCoderImpl(argType, { isSmallBytes: true });
       return new VecCoder(itemCoder);
     }
 
     const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
     if (structMatch) {
-      const coders = AbiCoder.getCoders(components);
+      // TODO: Start adding new exceptions (rightPadded?)
+      const coders = AbiCoder.getCoders(components, { isSmallBytes: true });
       return new StructCoder(structMatch.name, coders);
     }
 
     const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
     if (enumMatch) {
-      const coders = AbiCoder.getCoders(components);
+      const coders = AbiCoder.getCoders(components, { isSmallBytes: true });
 
       const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
@@ -141,7 +146,9 @@ export abstract class AbiCoder {
 
     const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
     if (tupleMatch) {
-      const coders = components.map((component) => AbiCoder.getCoderImpl(component, true));
+      const coders = components.map((component) =>
+        AbiCoder.getCoderImpl(component, { isSmallBytes: true })
+      );
       return new TupleCoder(coders);
     }
 
@@ -158,11 +165,11 @@ export abstract class AbiCoder {
     );
   }
 
-  private static getCoders(components: readonly ResolvedAbiType[]) {
+  private static getCoders(components: readonly ResolvedAbiType[], options: SmallBytesOptions) {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 
-      o[component.name] = AbiCoder.getCoderImpl(component, true);
+      o[component.name] = AbiCoder.getCoderImpl(component, options);
       return o;
     }, {});
   }

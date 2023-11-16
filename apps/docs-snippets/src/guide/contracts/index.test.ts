@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import { bn, type Contract } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -90,4 +90,37 @@ describe(__filename, () => {
 
     expect(res1.value).toMatchObject(expected); // [ 23 ]
   });
+
+  it('echos a u64 vector', async () => {
+    const expected = [bn(1337), bn(1448), bn(1559)];
+
+    const res1 = await contract.functions.echo_u64_vector().simulate();
+
+    expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
+  });
+
+  it('echos a u64 struct', async () => {
+    const expected = {
+      a: true, // .reverse() thing started
+      b: bn(1337),
+    };
+
+    const res1 = await contract.functions.echo_mixed_struct().simulate();
+
+    expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
+  });
+
+  // it('send and echos a u64 struct', async () => {
+  //   const expected = {
+  //     a: true,
+  //     b: 1,
+  //     c: bn(1337),
+  //   };
+
+  //   const res1 = await contract.functions.echo_received_mixed_struct(expected).simulate();
+
+  //   console.log({ res1 });
+
+  //   expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
+  // });
 });

@@ -6,6 +6,11 @@ import type { Option } from './option';
 
 type Primitive = string | number | boolean;
 
+export type SmallBytesOptions = {
+  isSmallBytes?: boolean;
+  isRightPadded?: boolean;
+};
+
 /**
  * The type of value you can provide to `Coder.encode`
  */
