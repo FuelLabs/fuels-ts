@@ -62,7 +62,7 @@ describe(__filename, () => {
     expect(res1.value).toMatchObject(expected);
   });
 
-  it('echos a mixed struct with value', async () => {
+  it('echos a mixed enum with value', async () => {
     const expectedA = { a: 73 };
     const expectedB = { b: true };
 
