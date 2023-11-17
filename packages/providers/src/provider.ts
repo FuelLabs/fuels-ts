@@ -28,6 +28,7 @@ import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
+import { RetryConfig } from './retry-config';
 import type {
   TransactionRequestLike,
   TransactionRequest,
@@ -211,6 +212,7 @@ export type ProviderOptions = {
   ) => Promise<Response>;
   timeout?: number;
   cacheUtxo?: number;
+  retryConfig?: RetryConfig;
 };
 
 /**
@@ -249,17 +251,20 @@ export default class Provider {
     timeout: undefined,
     cacheUtxo: undefined,
     fetch: undefined,
+    retryConfig: undefined,
   };
 
   private static getFetchFn(options: ProviderOptions) {
     return options.fetch !== undefined
       ? options.fetch
       : (url: string, request: FetchRequestOptions) =>
-          fetch(url, {
-            ...request,
-            signal:
-              options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
-          });
+          RetryConfig.retryable(options.retryConfig, () =>
+            fetch(url, {
+              ...request,
+              signal:
+                options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
+            })
+          );
   }
 
   /**
