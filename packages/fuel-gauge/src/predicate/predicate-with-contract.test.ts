@@ -157,11 +157,14 @@ describe('Predicate', () => {
         initialReceiverBalance +
         amountToReceiver -
         contractAmount -
-        // ajusting margin of error in transaction fee calculation
-        (receiverTxFee1.toNumber() - 1) -
-        (receiverTxFee2.toNumber() - 1);
+        receiverTxFee1.toNumber() -
+        receiverTxFee2.toNumber();
 
-      expect(expectedFinalReceiverBalance).toEqual(finalReceiverBalance);
+      expectToBeInRange({
+        value: finalReceiverBalance,
+        min: expectedFinalReceiverBalance - 1,
+        max: expectedFinalReceiverBalance + 1,
+      });
 
       const expectedFinalPredicateBalance =
         initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
