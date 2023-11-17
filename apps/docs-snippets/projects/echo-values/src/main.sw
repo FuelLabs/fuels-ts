@@ -18,8 +18,19 @@ enum MyEnum {
     b: bool,
 }
 
+configurable {
+    U8: u8 = 58,
+    BOOLEAN: bool = false,
+}
+
 abi EchoValues {
+    fn echo_u8_literal() -> u8;
+
     fn echo_u8(value: u8) -> u8;
+
+    fn echo_boolean_literal() -> bool;
+
+    fn echo_boolean(value: bool) -> bool;
 
     fn echo_u8_array() -> [u8; 2];
 
@@ -52,9 +63,25 @@ abi EchoValues {
     fn echo_tuple() -> (u8, bool, u64);
 
     fn echo_b512(input: B512) -> B512;
+
+    fn echo_configurable_u8() -> u8;
+
+    fn echo_configurable_boolean() -> bool;
 }
 
 impl EchoValues for Contract {
+    fn echo_u8_literal() -> u8 {
+        47
+    }
+
+    fn echo_boolean_literal() -> bool {
+        true
+    }
+
+    fn echo_boolean(value: bool) -> bool {
+        value
+    }
+
     fn echo_u8(value: u8) -> u8 {
         value
     }
@@ -139,5 +166,12 @@ impl EchoValues for Contract {
         input
     }
     // #endregion bits512-3
+    fn echo_configurable_u8() -> u8 {
+        U8
+    }
+
+    fn echo_configurable_boolean() -> bool {
+        BOOLEAN
+    }
 }
 // #endregion understanding-fuel-binary-file

@@ -1,7 +1,7 @@
-import { bn, type Contract } from 'fuels';
+import { bn, ContractFactory, type Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
@@ -135,5 +135,83 @@ describe(__filename, () => {
     const res1 = await contract.functions.echo_received_mixed_struct(expected).simulate();
 
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
+  });
+
+  it('echos a u8 with configurable constant', async () => {
+    const expected = 23;
+    const configurableConstants = {
+      U8: expected,
+    };
+    const configurableWallet = await getTestWallet();
+    const { abiContents, binHexlified } = getSnippetProjectArtifacts(
+      SnippetProjectEnum.ECHO_VALUES
+    );
+    const contractFactory = new ContractFactory(binHexlified, abiContents, configurableWallet);
+    const { minGasPrice } = configurableWallet.provider.getGasConfig();
+    const configurableContract = await contractFactory.deployContract({
+      configurableConstants,
+      gasPrice: minGasPrice,
+      gasLimit: 0,
+    });
+
+    const res1 = await configurableContract.functions.echo_configurable_u8().simulate();
+
+    expect(res1.value).toBe(expected);
+  });
+
+  it('echos a boolean with configurable constant', async () => {
+    const expected = true;
+    const configurableConstants = {
+      BOOLEAN: expected,
+    };
+    const configurableWallet = await getTestWallet();
+    const { abiContents, binHexlified } = getSnippetProjectArtifacts(
+      SnippetProjectEnum.ECHO_VALUES
+    );
+    const contractFactory = new ContractFactory(binHexlified, abiContents, configurableWallet);
+    const { minGasPrice } = configurableWallet.provider.getGasConfig();
+    const configurableContract = await contractFactory.deployContract({
+      configurableConstants,
+      gasPrice: minGasPrice,
+      gasLimit: 0,
+    });
+
+    const res1 = await configurableContract.functions.echo_configurable_boolean().simulate();
+
+    expect(res1.value).toBe(expected);
+  });
+
+  it('echos a u8 literal', async () => {
+    const expected = 47;
+
+    const res1 = await contract.functions.echo_u8_literal().simulate();
+
+    expect(res1.value).toBe(expected);
+  });
+
+  it('echos a boolean literal', async () => {
+    const expected = true;
+
+    const res1 = await contract.functions.echo_boolean_literal().simulate();
+    console.log('literal res', res1.callResult.receipts)
+
+    expect(res1.value).toBe(expected);
+  });
+
+  it('echos a u8 value', async () => {
+    const expected = 47;
+
+    const res1 = await contract.functions.echo_u8(expected).simulate();
+
+    expect(res1.value).toBe(expected);
+  });
+
+  it('echos a boolean value', async () => {
+    const expected = true;
+
+    const res1 = await contract.functions.echo_boolean(expected).simulate();
+    console.log('value res', res1.callResult.receipts);
+
+    expect(res1.value).toBe(expected);
   });
 });
