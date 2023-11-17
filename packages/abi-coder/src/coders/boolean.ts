@@ -3,7 +3,6 @@ import { bn, toBytes } from '@fuel-ts/math';
 
 import type { SmallBytesOptions } from './abstract-coder';
 import { Coder } from './abstract-coder';
-import { off } from 'process';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
   paddingLength: number;
