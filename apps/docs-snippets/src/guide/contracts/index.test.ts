@@ -225,6 +225,23 @@ describe(__filename, () => {
     expect(res1.value).toBe(55);
   });
 
+  it.only('accepts struct and u8', async () => {
+    const res1 = await contract.functions
+      .struct_and_u8(
+        {
+          a: 254,
+          b: true,
+        },
+        230
+      )
+      .simulate();
+
+    expect(res1.value).toEqual({
+      a: 230,
+      b: true,
+    });
+  });
+
   it('echos a boolean value', async () => {
     const expected = true;
 

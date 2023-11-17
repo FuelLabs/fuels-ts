@@ -33,6 +33,7 @@ abi EchoValues {
     fn two_booleans(value1: bool, value2: bool) -> bool;
     fn u8_u64_bool(value1: u8, value2: u64, value3: bool) -> u8;
     fn echo_boolean_literal() -> bool;
+    fn struct_and_u8(value1: MyStruct, value2: u8) -> MyStruct;
 
     fn echo_boolean(value: bool) -> bool;
 
@@ -103,6 +104,17 @@ impl EchoValues for Contract {
         55
     }
 
+    fn struct_and_u8(value1: MyStruct, value2: u8) -> MyStruct {
+        assert_eq(value1.a, 254);
+        assert_eq(value1.b, true);
+
+        let myStruct = MyStruct {
+            a: value2,
+            b: true
+        };
+
+        myStruct
+    }
 
     fn two_booleans(value1: bool, value2: bool) -> bool {
     value2
