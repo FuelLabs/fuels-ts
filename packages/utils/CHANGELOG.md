@@ -1,5 +1,15 @@
 # @fuel-ts/utils
 
+## 0.67.0
+
+## 0.66.1
+
+### Patch Changes
+
+- Adjusting package manager configs, by [@arboleya](https://github.com/arboleya) (See [#1415](https://github.com/FuelLabs/fuels-ts/pull/1415))
+
+## 0.66.0
+
 ## 0.65.0
 
 ## 0.64.1

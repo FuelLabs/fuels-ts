@@ -31,9 +31,9 @@ export interface CalculateTxChargeableBytesParams {
 
 /** @hidden */
 export const calculateTxChargeableBytes = (params: CalculateTxChargeableBytesParams): BN => {
-  const { transactionWitnesses } = params;
+  const { transactionWitnesses, transactionBytes } = params;
 
-  const txChargeableBytes = bn(transactionWitnesses?.[0]?.offset || 0);
+  const txChargeableBytes = bn(transactionWitnesses?.[0]?.offset || transactionBytes.length);
 
   return txChargeableBytes;
 };

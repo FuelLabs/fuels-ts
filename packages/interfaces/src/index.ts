@@ -14,7 +14,9 @@ export type B256Address = string;
 
 export type B256AddressEvm = `0x000000000000000000000000${string}`;
 
-export type Bytes = Uint8Array;
+export type Bytes = Uint8Array | number[];
+
+export type RawSlice = Uint8Array | number[];
 
 /**
  * @prop value - A 256 bit hash string with the first 12 bytes cleared
@@ -22,6 +24,8 @@ export type Bytes = Uint8Array;
 export type EvmAddress = {
   value: B256AddressEvm;
 };
+
+export type StdString = string;
 
 /**
  * @hidden
@@ -49,8 +53,8 @@ export abstract class AbstractAccount {
   abstract getResourcesToSpend(quantities: any[], options?: any): any;
   abstract sendTransaction(transactionRequest: any): any;
   abstract simulateTransaction(transactionRequest: any): any;
+  abstract fund(transactionRequest: any, quantities: any, fee: any): Promise<void>;
 }
-
 /**
  * @hidden
  */
