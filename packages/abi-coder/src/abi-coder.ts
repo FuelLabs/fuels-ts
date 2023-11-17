@@ -34,10 +34,16 @@ import { ResolvedAbiType } from './resolved-abi-type';
 import { findOrThrow } from './utilities';
 
 export abstract class AbiCoder {
-  static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
+  static getCoder(
+    abi: JsonAbi,
+    argument: JsonAbiArgument,
+    options: SmallBytesOptions = {
+      isSmallBytes: false,
+    }
+  ): Coder {
     const resolvedAbiType = new ResolvedAbiType(abi, argument);
 
-    return AbiCoder.getCoderImpl(resolvedAbiType);
+    return AbiCoder.getCoderImpl(resolvedAbiType, options);
   }
 
   static encode(abi: JsonAbi, argument: JsonAbiArgument, value: InputValue) {

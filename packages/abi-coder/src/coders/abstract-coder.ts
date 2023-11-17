@@ -37,10 +37,13 @@ type Primitive = string | number | boolean;
  *    • array
  *    • vector
  *    • enum
+ *    • only one function argument
  *
  *  true —— right padded, and should be used when underneath:
  *    • struct
  *    • tuple
+ *    • multiple function arguments
+ *
  */
 export type SmallBytesOptions = {
   isSmallBytes?: boolean;

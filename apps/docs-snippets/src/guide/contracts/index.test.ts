@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { bn, ContractFactory, type Contract } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
@@ -193,17 +194,35 @@ describe(__filename, () => {
     const expected = true;
 
     const res1 = await contract.functions.echo_boolean_literal().simulate();
-    console.log('literal res', res1.callResult.receipts)
+    console.log('literal res', res1.callResult.receipts);
 
     expect(res1.value).toBe(expected);
   });
 
-  it('echos a u8 value', async () => {
+  it.only('echos a u8 value', async () => {
     const expected = 47;
 
     const res1 = await contract.functions.echo_u8(expected).simulate();
 
     expect(res1.value).toBe(expected);
+  });
+
+  it('accepts two u8 values', async () => {
+    const res1 = await contract.functions.echo_two_u8s(15, 255).simulate();
+
+    expect(res1.value).toBe(255);
+  });
+
+  it.only('accepts two boolean values', async () => {
+    const res1 = await contract.functions.two_booleans(true, true).simulate();
+
+    expect(res1.value).toBe(true);
+  });
+
+  it.only('accepts u8, u64, bool', async () => {
+    const res1 = await contract.functions.u8_u64_bool(255, 10000, true).simulate();
+
+    expect(res1.value).toBe(55);
   });
 
   it('echos a boolean value', async () => {

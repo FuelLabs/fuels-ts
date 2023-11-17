@@ -28,6 +28,10 @@ abi EchoValues {
 
     fn echo_u8(value: u8) -> u8;
 
+    fn echo_two_u8s(value1: u8, value2: u8) -> u8; 
+
+    fn two_booleans(value1: bool, value2: bool) -> bool;
+    fn u8_u64_bool(value1: u8, value2: u64, value3: bool) -> u8;
     fn echo_boolean_literal() -> bool;
 
     fn echo_boolean(value: bool) -> bool;
@@ -85,6 +89,24 @@ impl EchoValues for Contract {
     fn echo_u8(value: u8) -> u8 {
         value
     }
+
+    fn echo_two_u8s(value1: u8, value2: u8) -> u8 {
+
+        value2
+    }   
+
+    fn u8_u64_bool(value1: u8, value2: u64, value3: bool) -> u8 {
+        assert_eq(value1, 255);
+        assert_eq(value2, 10000);
+        assert_eq(value3, true);
+
+        55
+    }
+
+
+    fn two_booleans(value1: bool, value2: bool) -> bool {
+    value2
+    }   
 
     fn echo_u8_array() -> [u8; 2] {
         [48, 63]
