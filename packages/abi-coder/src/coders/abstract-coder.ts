@@ -19,11 +19,12 @@ type Primitive = string | number | boolean;
  *    • standalone
  *    • tuple
  *    • struct
+ *    • enum
  *
  * true — occupies 1 byte, and should be used when underneath:
  *    • array
  *    • vector
- *    • enum
+ *
  *
  *
  * 2) isRightPadded (default=false)
