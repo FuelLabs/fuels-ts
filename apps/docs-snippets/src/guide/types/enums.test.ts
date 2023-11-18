@@ -1,13 +1,13 @@
 import type { Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_ENUM);
   });
 
   it('should successfully echo a simple enum in a contract call', async () => {

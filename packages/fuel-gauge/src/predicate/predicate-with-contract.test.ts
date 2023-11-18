@@ -1,6 +1,5 @@
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
@@ -11,29 +10,31 @@ import {
   Predicate,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
-import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
-import liquidityPoolAbi from '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
-const contractBytes = readFileSync(
-  join(
-    __dirname,
-    '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin'
-  )
-);
-
-const liquidityPoolBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-);
-
 describe('Predicate', () => {
+  const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+  );
+  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
+  );
+
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_STRUCT
+  );
+
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;

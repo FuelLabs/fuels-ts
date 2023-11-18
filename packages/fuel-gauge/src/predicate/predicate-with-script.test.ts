@@ -1,22 +1,23 @@
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import scriptAbi from '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
-const scriptBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
-);
-
 describe('Predicate', () => {
+  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
+  );
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_STRUCT
+  );
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
+  );
   describe('With script', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;

@@ -1,13 +1,13 @@
 import type { Contract, BN, RawSlice } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe('RawSlice', () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_RAW_SLICE);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_RAW_SLICE);
   });
 
   it('should pass a raw slice to a contract', async () => {

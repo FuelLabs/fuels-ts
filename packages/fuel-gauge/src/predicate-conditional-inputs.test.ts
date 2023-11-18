@@ -1,5 +1,4 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
 import {
   Provider,
@@ -10,21 +9,17 @@ import {
   ScriptTransactionRequest,
   bn,
 } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/predicate-conditional-inputs/out/debug/predicate-conditional-inputs-abi.json';
-
-const predicateBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/predicate-conditional-inputs/out/debug/predicate-conditional-inputs.bin'
-  )
-);
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 describe('PredicateConditionalInputs', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
   let gasPrice: BN;
+
+  const { binHexlified: predicateBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_CONDITIONAL_INPUTS
+  );
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

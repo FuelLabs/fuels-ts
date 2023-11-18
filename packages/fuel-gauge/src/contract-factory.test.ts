@@ -1,7 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import {
   BN,
   bn,
@@ -12,27 +11,18 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
-import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
-
-// load the byteCode of the contract, generated from Sway source
-const byteCode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
-);
-
-// load the JSON abi of the contract, generated from Sway source
-const abi = JSON.parse(
-  readFileSync(
-    join(
-      __dirname,
-      '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
-    )
-  ).toString()
-);
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 describe('Contract Factory', () => {
   let gasPrice: BN;
+
+  const {
+    binHexlified: byteCode,
+    abiContents: abi,
+    storageSlots,
+  } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+
   const createContractFactory = async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);

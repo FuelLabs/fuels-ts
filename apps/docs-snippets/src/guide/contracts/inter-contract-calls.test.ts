@@ -1,7 +1,7 @@
 import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -15,8 +15,8 @@ describe(__filename, () => {
     provider = wallet.provider;
     const { minGasPrice } = provider.getGasConfig();
 
-    const tokenArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.TOKEN_DEPOSITOR);
+    const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
+    const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
 
     simpleToken = await new ContractFactory(
       tokenArtifacts.binHexlified,

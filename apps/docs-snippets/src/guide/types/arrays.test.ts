@@ -1,14 +1,14 @@
 import type { Contract } from 'fuels';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_U64_ARRAY);
   });
 
   it('should successfully demonstrate typed arrays examples', () => {

@@ -1,7 +1,7 @@
 import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
 import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -11,12 +11,12 @@ describe(__filename, () => {
   const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
-  const { binHexlified: scriptBin, abiContents } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.SCRIPT_TRANSFER_TO_CONTRACT
+  const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
+    DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
   );
 
-  const { abiContents: contractAbi, binHexlified: contractBin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_VALUES
+  const { abiContents: contractAbi, binHexlified: contractBin } = getDocsSnippetsForcProject(
+    DocSnippetProjectsEnum.ECHO_VALUES
   );
 
   beforeAll(async () => {

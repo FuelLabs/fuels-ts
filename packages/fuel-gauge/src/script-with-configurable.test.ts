@@ -1,17 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import abi from '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-abi.json';
-
-const bytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable.bin'
-  )
-);
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 const defaultValues = {
   FEE: 5,
@@ -21,6 +12,11 @@ let wallet: WalletUnlocked;
 
 describe('Script With Configurable', () => {
   let gasPrice: BN;
+
+  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.SCRIPT_WITH_CONFIGURABLE
+  );
+
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());

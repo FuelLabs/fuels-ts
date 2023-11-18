@@ -1,7 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
   BN,
@@ -21,23 +20,22 @@ import {
   FUEL_NETWORK_URL,
   Predicate,
 } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin')
+const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
 
-const predicateBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/predicate-true/out/debug/predicate-true.bin')
+const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
 const setupContract = createSetupConfig({
   contractBytecode,
-  abi: abiJSON,
+  abi,
 });
 
 const jsonFragment: JsonAbi = {
@@ -739,7 +737,7 @@ describe('Contract', () => {
         assetId: BaseAssetId,
       },
     ]);
-    const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const contract = new ContractFactory(contractBytecode, abi, wallet);
     const { transactionRequest } = contract.createTransactionRequest({ gasPrice });
 
     const txRequest = JSON.stringify(transactionRequest);
@@ -848,7 +846,7 @@ describe('Contract', () => {
         assetId: BaseAssetId,
       },
     ]);
-    const factory = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const factory = new ContractFactory(contractBytecode, abi, wallet);
 
     const contract = await factory.deployContract({ gasPrice });
 
@@ -880,7 +878,7 @@ describe('Contract', () => {
         assetId: BaseAssetId,
       },
     ]);
-    const factory = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const factory = new ContractFactory(contractBytecode, abi, wallet);
 
     const contract = await factory.deployContract({ gasPrice });
 

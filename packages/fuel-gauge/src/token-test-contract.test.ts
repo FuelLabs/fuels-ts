@@ -1,12 +1,14 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
 import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import abi from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+
+const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.TOKEN_CONTRACT
+);
 
 let provider: Provider;
 
@@ -16,9 +18,6 @@ const setup = async () => {
   const { minGasPrice } = wallet.provider.getGasConfig();
 
   // Deploy contract
-  const bytecode = readFileSync(
-    join(__dirname, '../fixtures/forc-projects/token_contract/out/debug/token_contract.bin')
-  );
   const factory = new ContractFactory(bytecode, abi, wallet);
   const contract = await factory.deployContract({ gasPrice: minGasPrice });
 

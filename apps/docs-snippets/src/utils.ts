@@ -10,8 +10,8 @@ import {
   ContractFactory,
 } from 'fuels';
 
-import type { SnippetProjectEnum } from '../projects';
-import { getSnippetProjectArtifacts } from '../projects';
+import type { DocSnippetProjectsEnum } from '../projects';
+import { getDocsSnippetsForcProject } from '../projects';
 
 export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // create a provider using the Fuel network URL
@@ -56,10 +56,10 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
 };
 
 export const createAndDeployContractFromProject = async (
-  project: SnippetProjectEnum
+  project: DocSnippetProjectsEnum
 ): Promise<Contract> => {
   const wallet = await getTestWallet();
-  const { abiContents, binHexlified, storageSlots } = getSnippetProjectArtifacts(project);
+  const { abiContents, binHexlified, storageSlots } = getDocsSnippetsForcProject(project);
 
   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
