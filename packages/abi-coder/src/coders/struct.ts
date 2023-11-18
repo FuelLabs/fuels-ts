@@ -31,6 +31,12 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
   }
 
+  private static rightPadToSwayWordSize(encoded: Uint8Array) {
+    return encoded.length % 8 === 0
+      ? encoded
+      : concatBytes([encoded, new Uint8Array(8 - (encoded.length % 8))]);
+  }
+
   encode(value: InputValueOf<TCoders>) {
     const encodedFields = Object.keys(this.coders).map((fieldName) => {
       const fieldCoder = this.coders[fieldName];
@@ -41,13 +47,9 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
           `Invalid ${this.type}. Field "${fieldName}" not present.`
         );
       }
-      let encoded = fieldCoder.encode(fieldValue);
+      const encoded = fieldCoder.encode(fieldValue);
 
-      if (encoded.length % 8 !== 0) {
-        encoded = concatBytes([encoded, new Uint8Array(8 - (encoded.length % 8))]);
-      }
-
-      return encoded;
+      return StructCoder.rightPadToSwayWordSize(encoded);
     });
 
     return concatWithDynamicData([concatWithDynamicData(encodedFields)]);
@@ -59,7 +61,10 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       const fieldCoder = this.coders[fieldName];
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
-      if (newOffset % 8 !== 0) {
+
+      const offsetIsSwayWordIncrement = newOffset % 8 === 0;
+
+      if (!offsetIsSwayWordIncrement) {
         newOffset += 8 - (newOffset % 8);
       }
 
