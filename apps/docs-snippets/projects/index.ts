@@ -1,5 +1,6 @@
-import { getForcProject, ForcProjectDirsEnum } from '@fuel-ts/utils/test-utils';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { JsonAbi } from 'fuels';
+import { join } from 'path';
 
 export enum DocSnippetProjectsEnum {
   COUNTER = 'counter',
@@ -27,6 +28,6 @@ export enum DocSnippetProjectsEnum {
 
 export const getSnippetProjectArtifacts = (project: DocSnippetProjectsEnum) =>
   getForcProject<JsonAbi>({
-    dir: ForcProjectDirsEnum.DOCS_SNIPPETS,
-    projectName: project,
+    projectDir: join(__dirname, project),
+    projectName: 'docs_snippets',
   });

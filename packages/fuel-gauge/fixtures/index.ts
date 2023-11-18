@@ -1,5 +1,6 @@
-import { ForcProjectDirsEnum, getForcProject } from '@fuel-ts/utils/test-utils';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { JsonAbi } from 'fuels';
+import { join } from 'path';
 
 export enum FuelGaugeProjectsEnum {
   ADVANCED_LOGGING = 'advanced-logging',
@@ -54,6 +55,6 @@ export enum FuelGaugeProjectsEnum {
 
 export const getFuelGaugeProject = (project: FuelGaugeProjectsEnum) =>
   getForcProject<JsonAbi>({
-    dir: ForcProjectDirsEnum.FUEL_GAUGE,
-    projectName: project,
+    projectDir: join(__dirname, 'forc-projects', project),
+    projectName: 'fuel_gauge',
   });

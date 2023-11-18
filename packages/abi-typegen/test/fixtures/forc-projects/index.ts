@@ -1,4 +1,5 @@
-import { ForcProjectDirsEnum, getForcProject } from '@fuel-ts/utils/test-utils';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import { join } from 'path';
 
 import type { IRawAbi } from '../../../src/index';
 
@@ -31,6 +32,6 @@ export enum AbiTypegenProjectsEnum {
 
 export const getProjectResources = (project: AbiTypegenProjectsEnum) =>
   getForcProject<IRawAbi>({
-    dir: ForcProjectDirsEnum.ABI_TYPEGEN,
-    projectName: project,
+    projectDir: join(__dirname, project),
+    projectName: 'abi_typegen',
   });

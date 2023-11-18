@@ -44,39 +44,7 @@ export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
   return storageSlots;
 };
 
-export enum ForcProjectDirsEnum {
-  FUEL_GAUGE = 'fuel_gauge',
-  ABI_TYPEGEN = 'abi_typegen',
-  DOCS_SNIPPETS = 'docs_snippets',
-}
-
-export type ForcProject = { dir: ForcProjectDirsEnum; projectName: string };
-
-export const getForcProject = <T = unknown>(forcProject: ForcProject) => {
-  const { dir, projectName } = forcProject;
-
-  let projectDir: string;
-
-  switch (dir) {
-    case ForcProjectDirsEnum.FUEL_GAUGE:
-      projectDir = join(__dirname, '..', '..', 'fuel-gauge', 'fixtures', 'forc-projects');
-      break;
-    case ForcProjectDirsEnum.ABI_TYPEGEN:
-      projectDir = join(__dirname, '..', '..', 'abi-typegen', 'test', 'fixtures', 'forc-projects');
-      break;
-    default:
-      // ForcProjectDirs.DOCS_SNIPPETS
-      projectDir = join(__dirname, '..', '..', '..', 'apps', 'docs-snippets', 'projects');
-      break;
-  }
-
-  projectDir = join(projectDir, projectName);
-
-  const params: IGetForcProjectParams = {
-    projectDir,
-    projectName,
-  };
-
+export const getForcProject = <T = unknown>(params: IGetForcProjectParams) => {
   const debugDir = getProjectDebugDir(params);
   const tempDir = getProjectTempDir(params);
   const binPath = getProjectBinPath(params);
@@ -93,7 +61,7 @@ export const getForcProject = <T = unknown>(forcProject: ForcProject) => {
   const inputGlobal = `${debugDir}/*-abi.json`;
 
   return {
-    name: projectName,
+    name: params.projectName,
     storageSlots,
     normalizedName,
     debugDir,
