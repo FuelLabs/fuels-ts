@@ -44,6 +44,7 @@ type Primitive = string | number | boolean;
  *    • struct
  *    • tuple
  *    • multiple function arguments
+ *    • configurable
  *
  */
 export type SmallBytesOptions = {

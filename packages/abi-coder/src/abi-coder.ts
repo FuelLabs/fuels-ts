@@ -46,8 +46,13 @@ export abstract class AbiCoder {
     return AbiCoder.getCoderImpl(resolvedAbiType, options);
   }
 
-  static encode(abi: JsonAbi, argument: JsonAbiArgument, value: InputValue) {
-    return this.getCoder(abi, argument).encode(value);
+  static encode(
+    abi: JsonAbi,
+    argument: JsonAbiArgument,
+    value: InputValue,
+    options?: SmallBytesOptions
+  ) {
+    return this.getCoder(abi, argument, options).encode(value);
   }
 
   static decode(

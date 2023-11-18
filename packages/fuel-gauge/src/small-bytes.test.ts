@@ -1,7 +1,9 @@
-import type { Contract } from 'fuels';
-import { bn } from 'fuels';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import type { Contract, JsonAbi } from 'fuels';
+import { bn, ContractFactory } from 'fuels';
+import { join } from 'path';
 
-import { getSetupContract } from './utils';
+import { getSetupContract, createWallet } from './utils';
 
 describe('small-bytes', () => {
   const setupContract = getSetupContract('small-bytes');
@@ -113,49 +115,47 @@ describe('small-bytes', () => {
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
-  // it('echos a u8 with configurable constant', async () => {
-  //   const expected = 23;
-  //   const configurableConstants = {
-  //     U8: expected,
-  //   };
-  //   const configurableWallet = await getTestWallet();
-  //   const { abiContents, binHexlified } = getSnippetProjectArtifacts(
-  //     SnippetProjectEnum.ECHO_VALUES
-  //   );
-  //   const contractFactory = new ContractFactory(binHexlified, abiContents, configurableWallet);
-  //   const { minGasPrice } = configurableWallet.provider.getGasConfig();
-  //   const configurableContract = await contractFactory.deployContract({
-  //     configurableConstants,
-  //     gasPrice: minGasPrice,
-  //     gasLimit: 0,
-  //   });
+  it('echos a u8 with configurable constant', async () => {
+    const expected = 23;
+    const configurableConstants = {
+      U8: expected,
+    };
 
-  //   const res1 = await configurableContract.functions.echo_configurable_u8().simulate();
+    const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const wallet = await createWallet();
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const { minGasPrice } = wallet.provider.getGasConfig();
+    const configurableContract = await factory.deployContract({
+      gasPrice: minGasPrice,
+      configurableConstants,
+    });
 
-  //   expect(res1.value).toBe(expected);
-  // });
+    const res1 = await configurableContract.functions.echo_configurable_u8().simulate();
 
-  // it('echos a boolean with configurable constant', async () => {
-  //   const expected = true;
-  //   const configurableConstants = {
-  //     BOOLEAN: expected,
-  //   };
-  //   const configurableWallet = await getTestWallet();
-  //   const { abiContents, binHexlified } = getSnippetProjectArtifacts(
-  //     SnippetProjectEnum.ECHO_VALUES
-  //   );
-  //   const contractFactory = new ContractFactory(binHexlified, abiContents, configurableWallet);
-  //   const { minGasPrice } = configurableWallet.provider.getGasConfig();
-  //   const configurableContract = await contractFactory.deployContract({
-  //     configurableConstants,
-  //     gasPrice: minGasPrice,
-  //     gasLimit: 0,
-  //   });
+    expect(res1.value).toBe(expected);
+  });
 
-  //   const res1 = await configurableContract.functions.echo_configurable_boolean().simulate();
+  it('echos a boolean with configurable constant', async () => {
+    const expected = true;
+    const configurableConstants = {
+      BOOLEAN: expected,
+    };
 
-  //   expect(res1.value).toBe(expected);
-  // });
+    const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const wallet = await createWallet();
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const { minGasPrice } = wallet.provider.getGasConfig();
+    const configurableContract = await factory.deployContract({
+      gasPrice: minGasPrice,
+      configurableConstants,
+    });
+
+    const res1 = await configurableContract.functions.echo_configurable_boolean().simulate();
+
+    expect(res1.value).toBe(expected);
+  });
 
   it('echos a u8 literal', async () => {
     const expected = 47;
