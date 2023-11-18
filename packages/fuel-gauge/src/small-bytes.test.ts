@@ -70,6 +70,11 @@ describe('small-bytes', () => {
     expect(res2.value).toMatchObject(expectedB);
   });
 
+  it('accepts native enum', async () => {
+    const res1 = await contract.functions.echo_native_enum('B').simulate();
+    expect(res1.value).toEqual('C');
+  });
+
   it('echos a u8 vector with value', async () => {
     const expected = [73, 23];
     const res1 = await contract.functions.echo_u8_vector_with_value(expected).simulate();

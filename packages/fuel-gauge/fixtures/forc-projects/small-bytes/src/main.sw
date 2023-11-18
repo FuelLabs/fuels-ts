@@ -22,6 +22,12 @@ configurable {
     BOOLEAN: bool = false,
 }
 
+enum NativeEnum {
+    A: (),
+    B: (),
+    C: ()
+}
+
 abi EchoValues {
     fn echo_u8_literal() -> u8;
 
@@ -54,6 +60,7 @@ abi EchoValues {
     fn echo_mixed_struct_with_value(value: MyStruct) -> MyStruct;
 
     fn echo_mixed_enum_with_value(value: MyEnum) -> MyEnum;
+    fn echo_native_enum(value: NativeEnum) -> NativeEnum;
 
     fn echo_u8_vector() -> Vec<u8>;
 
@@ -158,6 +165,17 @@ impl EchoValues for Contract {
         };
         value
     }
+
+    fn echo_native_enum(value: NativeEnum) -> NativeEnum {
+        match value {
+            NativeEnum::A => assert(false),
+            NativeEnum::B => assert(true),
+            NativeEnum::C => assert(false),
+        };
+        
+        NativeEnum::C
+    }
+
 
     fn echo_u8_vector() -> Vec<u8> {
         let mut myVec: Vec<u8> = Vec::new();
