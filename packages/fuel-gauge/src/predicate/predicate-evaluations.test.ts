@@ -1,16 +1,16 @@
 import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesTrue } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_TRUE
   );
 
-  const { binHexlified: predicateBytesFalse } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesFalse } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_FALSE
   );
 

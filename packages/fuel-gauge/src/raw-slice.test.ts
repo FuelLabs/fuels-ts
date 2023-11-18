@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -79,7 +79,7 @@ describe('Raw Slice Tests', () => {
     type MainArgs = [Wrapper];
 
     const { binHexlified: predicateRawSlice, abiContents: predicateRawSliceAbi } =
-      getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_RAW_SLICE);
+      getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_RAW_SLICE);
 
     const predicate = new Predicate<MainArgs>(
       predicateRawSlice,

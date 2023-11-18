@@ -9,17 +9,16 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 
 import { fundPredicate, assertBalance } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } = getFuelGaugeProject(
-    FuelGaugeProjectsEnum.PREDICATE_TRUE
-  );
+  const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_TRUE);
 
   const { binHexlified: predicateBytesConfigurable, abiContents: predicateAbiConfigurable } =
-    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
 
   describe('Configurables', () => {
     let wallet: WalletUnlocked;

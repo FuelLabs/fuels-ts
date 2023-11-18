@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 const defaultValues = {
   FEE: 5,
@@ -13,7 +13,7 @@ let wallet: WalletUnlocked;
 describe('Script With Configurable', () => {
   let gasPrice: BN;
 
-  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeProject(
+  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.SCRIPT_WITH_CONFIGURABLE
   );
 

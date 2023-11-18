@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -25,7 +25,7 @@ const setup = async (balance = 500_000) => {
 
 describe('std-lib-string Tests', () => {
   const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =
-    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
 
   it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions

@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -91,7 +91,7 @@ describe('Bytes Tests', () => {
     const amountToReceiver = 50;
     type MainArgs = [Wrapper];
 
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.PREDICATE_BYTES
     );
 

@@ -9,13 +9,13 @@ import {
   BaseAssetId,
 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
   let gasPrice: BN;
-  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
 

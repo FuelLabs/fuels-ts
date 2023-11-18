@@ -53,7 +53,7 @@ export enum FuelGaugeProjectsEnum {
   VECTORS = 'vectors',
 }
 
-export const getFuelGaugeProject = (project: FuelGaugeProjectsEnum) =>
+export const getFuelGaugeForcProject = (project: FuelGaugeProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, 'forc-projects', project),
     projectName: project,

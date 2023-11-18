@@ -21,15 +21,15 @@ import {
   Predicate,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 
-const { binHexlified: predicateBytecode } = getFuelGaugeProject(
+const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
 
-const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeProject(
+const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 

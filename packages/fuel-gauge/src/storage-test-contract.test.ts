@@ -2,13 +2,13 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import { toHex, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 const {
   binHexlified: bytecode,
   abiContents: abi,
   storageSlots,
-} = getFuelGaugeProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+} = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);

@@ -26,7 +26,7 @@ export enum DocSnippetProjectsEnum {
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
 }
 
-export const getSnippetProjectArtifacts = (project: DocSnippetProjectsEnum) =>
+export const getDocsSnippetsForcProject = (project: DocSnippetProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, project),
     projectName: project,

@@ -1,31 +1,30 @@
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesAddress } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesAddress } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_ADDRESS
   );
 
   const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
-    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
   const { binHexlified: predicateBytesMainArgsVector, abiContents: predicateAbiMainArgsVector } =
-    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_VECTOR);
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_VECTOR);
 
-  const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } = getFuelGaugeProject(
-    FuelGaugeProjectsEnum.PREDICATE_MULTI_ARGS
-  );
+  const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MULTI_ARGS);
 
-  const { binHexlified: predicateBytesStruct } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_STRUCT
   );
 
-  const { binHexlified: predicateBytesU32 } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesU32 } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_U32
   );
 

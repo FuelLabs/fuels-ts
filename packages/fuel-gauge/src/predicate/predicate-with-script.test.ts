@@ -3,19 +3,19 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeProject(
+  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
   );
-  const { binHexlified: predicateBytesStruct } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_STRUCT
   );
-  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeProject(
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
   );
   describe('With script', () => {

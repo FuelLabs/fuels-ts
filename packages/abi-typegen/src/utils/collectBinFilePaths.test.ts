@@ -1,16 +1,16 @@
 import { hexlify } from 'ethers';
 import { readFileSync } from 'fs';
 
-import { AbiTypegenProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects';
+import { AbiTypegenProjectsEnum, getTypegenForcProject } from '../../test/fixtures/forc-projects';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectBinFilepaths } from './collectBinFilePaths';
 import * as validateBinFileMod from './validateBinFile';
 
 describe('collectBinFilePaths.ts', () => {
-  const script = getProjectResources(AbiTypegenProjectsEnum.SCRIPT);
-  const predicate = getProjectResources(AbiTypegenProjectsEnum.PREDICATE);
-  const contract = getProjectResources(AbiTypegenProjectsEnum.MINIMAL);
+  const script = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
+  const predicate = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
+  const contract = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
   function mockDeps() {
     const validateBinFile = jest.spyOn(validateBinFileMod, 'validateBinFile').mockImplementation();

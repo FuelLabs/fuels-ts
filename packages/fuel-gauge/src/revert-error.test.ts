@@ -13,7 +13,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
@@ -24,7 +24,7 @@ describe('Revert Error Testing', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
-    const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeProject(
+    const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.REVERT_ERROR
     );
 

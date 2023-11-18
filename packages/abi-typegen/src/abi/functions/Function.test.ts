@@ -1,6 +1,6 @@
 import {
   AbiTypegenProjectsEnum,
-  getProjectResources,
+  getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import { parseTypes } from '../../utils/parseTypes';
 
@@ -11,7 +11,7 @@ describe('Function.ts', () => {
     Method: `getDeclaration`
   */
   test('should properly get function declaration', () => {
-    const project = getProjectResources(AbiTypegenProjectsEnum.MINIMAL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
     const { types: rawAbiTypes, functions } = project.abiContents;
 
@@ -32,7 +32,7 @@ describe('Function.ts', () => {
     Inputs / Output
   */
   test('should compute i/o types for Vector', () => {
-    const project = getProjectResources(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
 
     const { types: rawAbiTypes, functions } = project.abiContents;
 
@@ -48,7 +48,7 @@ describe('Function.ts', () => {
   });
 
   test('should build i/o types for Option', () => {
-    const project = getProjectResources(AbiTypegenProjectsEnum.OPTION_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
 
     const { types: rawAbiTypes, functions } = project.abiContents;
 

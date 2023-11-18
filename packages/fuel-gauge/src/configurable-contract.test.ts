@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 const defaultValues = {
   U8: 10,
@@ -41,7 +41,7 @@ describe('Configurable Contract', () => {
 
     wallet = await generateTestWallet(provider, quantities);
 
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT
     );
 

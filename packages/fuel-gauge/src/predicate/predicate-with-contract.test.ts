@@ -11,28 +11,27 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeProject(
+  const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
   );
-  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } = getFuelGaugeProject(
-    FuelGaugeProjectsEnum.LIQUIDITY_POOL
-  );
+  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
 
-  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeProject(
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
   );
 
-  const { binHexlified: predicateBytesStruct } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_STRUCT
   );
 
-  const { binHexlified: predicateBytesTrue } = getFuelGaugeProject(
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_TRUE
   );
 

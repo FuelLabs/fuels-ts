@@ -11,10 +11,10 @@ import {
   randomBytes,
 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 
 describe(__filename, () => {
-  const { abiContents: abi } = getSnippetProjectArtifacts(DocSnippetProjectsEnum.ECHO_VALUES);
+  const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
   let provider: Provider;
 
   beforeAll(async () => {

@@ -10,14 +10,14 @@ import {
   bn,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 describe('PredicateConditionalInputs', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
   let gasPrice: BN;
 
-  const { binHexlified: predicateBytecode, abiContents: abiJSON } = getFuelGaugeProject(
+  const { binHexlified: predicateBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_CONDITIONAL_INPUTS
   );
 

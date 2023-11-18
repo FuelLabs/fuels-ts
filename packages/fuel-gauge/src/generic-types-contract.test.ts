@@ -1,10 +1,10 @@
 import { toHex } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { setup } from './utils';
 
-const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeProject(
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.GENERIC_TYPES_CONTRACT
 );
 

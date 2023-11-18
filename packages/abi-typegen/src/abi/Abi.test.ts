@@ -2,7 +2,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import {
   AbiTypegenProjectsEnum,
-  getProjectResources,
+  getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
@@ -43,7 +43,7 @@ describe('Abi.ts', () => {
     const inputPath = params.inputPath;
     const outputDir = './out';
 
-    const project = getProjectResources(AbiTypegenProjectsEnum.MINIMAL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
     const rawContents = project.abiContents;
 
     const abi = new Abi({

@@ -1,4 +1,7 @@
-import { AbiTypegenProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -21,7 +24,7 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY);
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
@@ -39,7 +42,7 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: nested', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS);
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));

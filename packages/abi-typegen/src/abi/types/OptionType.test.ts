@@ -1,6 +1,6 @@
 import {
   AbiTypegenProjectsEnum,
-  getProjectResources,
+  getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
@@ -14,7 +14,7 @@ describe('OptionType.ts', () => {
     Test helpers
   */
   function getTypesForContract() {
-    const project = getProjectResources(AbiTypegenProjectsEnum.OPTION_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
     const rawTypes = project.abiContents.types;
 
     const types = rawTypes

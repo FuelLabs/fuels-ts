@@ -9,7 +9,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
@@ -21,7 +21,7 @@ describe('Auth Testing', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT
     );
 

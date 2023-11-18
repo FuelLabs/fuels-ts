@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -88,7 +88,7 @@ describe('Vector Types Validation', () => {
   let gasPrice: BN;
 
   const { binHexlified: predicateVectorTypes, abiContents: predicateVectorTypesAbi } =
-    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_VECTOR_TYPES);
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_VECTOR_TYPES);
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

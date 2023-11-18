@@ -30,7 +30,7 @@ export enum AbiTypegenProjectsEnum {
   VECTOR_SIMPLE = 'vector-simple',
 }
 
-export const getProjectResources = (project: AbiTypegenProjectsEnum) =>
+export const getTypegenForcProject = (project: AbiTypegenProjectsEnum) =>
   getForcProject<IRawAbi>({
     projectDir: join(__dirname, project),
     projectName: project,

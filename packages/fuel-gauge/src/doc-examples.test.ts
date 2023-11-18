@@ -29,24 +29,25 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
-const { abiContents: callTestAbi } = getFuelGaugeProject(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+const { abiContents: callTestAbi } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+);
 
 const { binHexlified: liquidityPoolContractBytecode, abiContents: liquidityPoolABI } =
-  getFuelGaugeProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+  getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
 
-const { binHexlified: predicateTriple } = getFuelGaugeProject(
+const { binHexlified: predicateTriple } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRIPLE_SIG
 );
 
-const { binHexlified: testPredicateTrue } = getFuelGaugeProject(
+const { binHexlified: testPredicateTrue } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
 
-const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } = getFuelGaugeProject(
-  FuelGaugeProjectsEnum.TOKEN_CONTRACT
-);
+const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } =
+  getFuelGaugeForcProject(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';

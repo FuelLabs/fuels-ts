@@ -10,16 +10,16 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
 import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateTrueBytecode } = getFuelGaugeProject(
+  const { binHexlified: predicateTrueBytecode } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_TRUE
   );
 
   const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
-    getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
   describe('Estimate predicate gas', () => {
     let provider: Provider;

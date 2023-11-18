@@ -1,9 +1,9 @@
 import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 
 describe(__filename, () => {
-  const { abiContents: jsonAbi, binHexlified: binary } = getSnippetProjectArtifacts(
+  const { abiContents: jsonAbi, binHexlified: binary } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.RETURN_TRUE_PREDICATE
   );
 

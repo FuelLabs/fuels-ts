@@ -1,6 +1,6 @@
 import {
   AbiTypegenProjectsEnum,
-  getProjectResources,
+  getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
@@ -9,7 +9,7 @@ import { formatStructs } from './formatStructs';
 
 describe('formatStructs.ts', () => {
   test('should format structs just fine', () => {
-    const project = getProjectResources(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
     const abi = new Abi({
       filepath: './struct-simple-abi.json',
       outputDir: './contracts',

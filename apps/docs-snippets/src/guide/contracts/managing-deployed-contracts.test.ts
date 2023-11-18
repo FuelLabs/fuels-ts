@@ -1,14 +1,14 @@
 import type { AbstractAddress, WalletUnlocked } from 'fuels';
 import { ContractFactory, Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
   let contractId: AbstractAddress;
   let wallet: WalletUnlocked;
-  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.ECHO_VALUES
   );
 

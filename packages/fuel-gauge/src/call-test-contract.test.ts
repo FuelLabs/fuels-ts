@@ -1,10 +1,12 @@
 import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 import { createSetupConfig } from './utils';
 
-const { binHexlified, abiContents } = getFuelGaugeProject(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+const { binHexlified, abiContents } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+);
 
 const setupContract = createSetupConfig({
   contractBytecode: binHexlified,

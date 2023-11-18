@@ -11,7 +11,7 @@ import {
   bn,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 describe('Fee', () => {
   const assetA: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -54,7 +54,7 @@ describe('Fee', () => {
   };
 
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
     );
 
@@ -151,7 +151,7 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract deploy', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
     );
 
@@ -174,7 +174,7 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract call', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
@@ -201,7 +201,7 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated a contract multi call', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeProject(
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
@@ -234,7 +234,9 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeProject(FuelGaugeProjectsEnum.PREDICATE_TRUE);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.PREDICATE_TRUE
+    );
 
     const predicate = new Predicate(binHexlified, provider, abiContents);
 

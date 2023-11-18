@@ -1,13 +1,13 @@
 import { WalletUnlocked, Predicate, BaseAssetId, BN, getRandomB256 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   let gasPrice: BN;
 
-  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 

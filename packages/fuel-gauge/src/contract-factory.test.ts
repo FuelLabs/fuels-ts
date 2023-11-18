@@ -12,7 +12,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
 
 describe('Contract Factory', () => {
   let gasPrice: BN;
@@ -21,7 +21,7 @@ describe('Contract Factory', () => {
     binHexlified: byteCode,
     abiContents: abi,
     storageSlots,
-  } = getFuelGaugeProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+  } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
 
   const createContractFactory = async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

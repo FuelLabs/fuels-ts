@@ -1,6 +1,6 @@
 import {
   AbiTypegenProjectsEnum,
-  getProjectResources,
+  getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
@@ -18,7 +18,7 @@ describe('EnumType.ts', () => {
   function getTypesForContract(project: AbiTypegenProjectsEnum) {
     const {
       abiContents: { types: rawTypes },
-    } = getProjectResources(project);
+    } = getTypegenForcProject(project);
 
     const types = rawTypes
       .filter((t) => t.type !== '()')

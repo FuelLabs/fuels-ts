@@ -1,6 +1,6 @@
 import {
   AbiTypegenProjectsEnum,
-  getProjectResources,
+  getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
@@ -18,7 +18,7 @@ describe('StructType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));

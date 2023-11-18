@@ -1,7 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -44,7 +44,7 @@ describe(__filename, () => {
   it('should throw when simulating with an unfunded wallet', async () => {
     const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const unfundedWallet = Wallet.generate({ provider: contract.provider });
-    const { abiContents: abi } = getSnippetProjectArtifacts(DocSnippetProjectsEnum.ECHO_VALUES);
+    const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const deployedContract = new Contract(contract.id, abi, unfundedWallet);
 
     const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).simulate());
@@ -55,7 +55,7 @@ describe(__filename, () => {
   it('should throw when dry running with an unfunded wallet', async () => {
     const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const unfundedWallet = Wallet.generate({ provider: contract.provider });
-    const { abiContents: abi } = getSnippetProjectArtifacts(DocSnippetProjectsEnum.ECHO_VALUES);
+    const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const deployedContract = new Contract(contract.id, abi, unfundedWallet);
 
     const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).dryRun());

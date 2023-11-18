@@ -1,13 +1,13 @@
 import type { Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { DocSnippetProjectsEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.ECHO_CONFIGURABLES
   );
 
