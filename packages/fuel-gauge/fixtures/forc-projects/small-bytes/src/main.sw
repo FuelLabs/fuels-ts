@@ -135,6 +135,8 @@ impl EchoValues for Contract {
     }
 
     fn echo_u8_array_with_value(value: [u8; 2]) -> [u8; 2] {
+        assert_eq(value[0], 48);
+        assert_eq(value[1], 63);
         value
     }
 
