@@ -140,7 +140,7 @@ export abstract class AbiCoder {
 
     const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
     if (enumMatch) {
-      const coders = AbiCoder.getCoders(components, { isSmallBytes: true });
+      const coders = AbiCoder.getCoders(components, { isSmallBytes: false });
 
       const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
