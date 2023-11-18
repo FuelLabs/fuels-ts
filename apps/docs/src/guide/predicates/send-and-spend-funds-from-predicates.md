@@ -16,7 +16,7 @@ This predicate accepts an address of type `b256` and compares it with a hardcode
 
 Let's use the above predicate to validate our transaction.
 
-Once you've compiled the predicate (`forc build`), you'll obtain two important artifacts: the JSON ABI and the predicate's binary code. These are needed to instantiate a new predicate.
+Once you've compiled the predicate (`forc build`) and imported the artifacts into your project (`npx fuels typegen`), you'll obtain two important artifacts: the JSON ABI (property of the generated factory object) and the predicate's binary code (found in the generated hex file). These are needed to instantiate a new predicate.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
