@@ -1,4 +1,5 @@
 import { ErrorCode } from '@fuel-ts/errors';
+import { concatBytes } from '@fuel-ts/utils';
 
 import { concatWithDynamicData } from '../utilities';
 
@@ -40,7 +41,12 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
           `Invalid ${this.type}. Field "${fieldName}" not present.`
         );
       }
-      const encoded = fieldCoder.encode(fieldValue);
+      let encoded = fieldCoder.encode(fieldValue);
+
+      if (encoded.length % 8 !== 0) {
+        encoded = concatBytes([encoded, new Uint8Array(8 - (encoded.length % 8))]);
+      }
+
       return encoded;
     });
 
@@ -53,6 +59,10 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       const fieldCoder = this.coders[fieldName];
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
+      if (newOffset % 8 !== 0) {
+        newOffset += 8 - (newOffset % 8);
+      }
+
       // eslint-disable-next-line no-param-reassign
       obj[fieldName as keyof DecodedValueOf<TCoders>] = decoded;
       return obj;

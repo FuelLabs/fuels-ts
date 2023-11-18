@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { BN, getRandomB256 } from 'fuels';
+import { BN, getDecodedLogs, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -36,13 +36,12 @@ describe(__filename, () => {
         age: 31,
         salary: 9000,
         idHash: getRandomB256(),
-        ratings: [1, 2, 3],
-        isActive: false,
+        ratings: [5, 6, 7],
+        isActive: true,
       },
     ];
     const { value } = await contract.functions.echo_last_employee_data(employees).simulate();
     // #endregion vector-4
-
     expect(value.name).toEqual(employees[1].name);
     expect(value.age).toEqual(employees[1].age);
     expect(new BN(value.salary).toNumber()).toEqual(employees[1].salary);
