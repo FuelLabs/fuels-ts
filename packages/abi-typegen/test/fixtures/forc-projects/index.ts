@@ -33,5 +33,5 @@ export enum AbiTypegenProjectsEnum {
 export const getProjectResources = (project: AbiTypegenProjectsEnum) =>
   getForcProject<IRawAbi>({
     projectDir: join(__dirname, project),
-    projectName: 'abi_typegen',
+    projectName: project,
   });

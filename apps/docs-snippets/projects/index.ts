@@ -29,5 +29,5 @@ export enum DocSnippetProjectsEnum {
 export const getSnippetProjectArtifacts = (project: DocSnippetProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, project),
-    projectName: 'docs_snippets',
+    projectName: project,
   });
