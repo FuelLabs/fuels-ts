@@ -259,7 +259,8 @@ impl MyContract for Contract {
             let mut exp_struct_in_vec = Vec::new();
             exp_struct_in_vec
                 .push(SomeStruct { a: 0u32 });
-            exp_struct_in_vec.push(SomeStruct { a: 1u32 });
+            exp_struct_in_vec
+                .push(SomeStruct { a: 1u32 });
 
             require(struct_in_vec == exp_struct_in_vec, "struct_in_vec err");
         }
@@ -337,8 +338,7 @@ impl MyContract for Contract {
             let inner_inner_vec_4 = vec_from([9, 10, 11]);
             inner_vec_2.push(inner_inner_vec_4);
 
-            exp_vec_in_a_vec_in_a_struct_in_a_vec
-                .push(SomeStruct { a: inner_vec_2 });
+            exp_vec_in_a_vec_in_a_struct_in_a_vec.push(SomeStruct { a: inner_vec_2 });
 
             require(
                 vec_in_a_vec_in_a_struct_in_a_vec == exp_vec_in_a_vec_in_a_struct_in_a_vec,

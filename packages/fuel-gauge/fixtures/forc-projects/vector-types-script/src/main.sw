@@ -316,10 +316,12 @@ fn main(
         let mut inner_vec_2 = Vec::new();
 
         let inner_inner_vec_3 = vec_from([6, 7, 8]);
-        inner_vec_2.push(inner_inner_vec_3);
+        inner_vec_2
+            .push(inner_inner_vec_3);
 
         let inner_inner_vec_4 = vec_from([9, 10, 11]);
-        inner_vec_2.push(inner_inner_vec_4);
+        inner_vec_2
+            .push(inner_inner_vec_4);
 
         exp_vec_in_a_vec_in_a_struct_in_a_vec
             .push(SomeStruct { a: inner_vec_2 });

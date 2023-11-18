@@ -25,7 +25,7 @@ configurable {
 enum NativeEnum {
     A: (),
     B: (),
-    C: ()
+    C: (),
 }
 
 abi EchoValues {
@@ -172,10 +172,9 @@ impl EchoValues for Contract {
             NativeEnum::B => assert(true),
             NativeEnum::C => assert(false),
         };
-        
+
         NativeEnum::C
     }
-
 
     fn echo_u8_vector() -> Vec<u8> {
         let mut myVec: Vec<u8> = Vec::new();
