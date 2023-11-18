@@ -31,6 +31,11 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
   }
 
+  /**
+   * Properties of structs need to be word-aligned.
+   * Because some properties can be small bytes,
+   * we need to pad them with zeros until they are aligned to a word-sized increment.
+   */
   private static rightPadToSwayWordSize(encoded: Uint8Array) {
     return encoded.length % 8 === 0
       ? encoded
@@ -62,6 +67,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
 
+      // see StructCoder.rightPadToSwayWordSize method for explanation
       const offsetIsSwayWordIncrement = newOffset % 8 === 0;
 
       if (!offsetIsSwayWordIncrement) {
