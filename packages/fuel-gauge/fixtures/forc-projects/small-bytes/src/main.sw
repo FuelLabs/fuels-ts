@@ -152,6 +152,10 @@ impl EchoValues for Contract {
     }
 
     fn echo_mixed_enum_with_value(value: MyEnum) -> MyEnum {
+        let val = match value {
+            MyEnum::a(v) => assert_eq(v, 73),
+            MyEnum::b(b) => assert_eq(b, true),
+        };
         value
     }
 
