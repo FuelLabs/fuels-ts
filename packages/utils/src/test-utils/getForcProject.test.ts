@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import {
-  ForcProjectDirsEnum,
   getForcProject,
   getProjectAbiPath,
   getProjectBinPath,
@@ -147,7 +146,7 @@ describe('getForcProject', () => {
       .mockImplementation((pathParam) => (<string>pathParam).endsWith('-storage_slots.json'));
 
     const forcProject = {
-      dir: ForcProjectDirsEnum.FUEL_GAUGE,
+      projectDir: 'fuel_gauge',
       projectName: 'myProject',
     };
 
