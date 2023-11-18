@@ -153,7 +153,7 @@ describe('getForcProject', () => {
     const project = getForcProject(forcProject);
 
     expect(project.name).toEqual(forcProject.projectName);
-    expect(project.debugDir).toContain('/fuel-gauge/fixtures/forc-projects/myProject');
+    expect(project.debugDir).toContain('fuel_gauge/out/debug');
     expect(project.binPath).toContain('/myProject.bin');
     expect(project.binHexlified).toBeDefined();
     expect(project.abiPath).toContain('/myProject-abi.json');
