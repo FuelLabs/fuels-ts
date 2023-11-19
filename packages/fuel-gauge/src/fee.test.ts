@@ -1,6 +1,5 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, BaseWalletUnlocked, CoinQuantityLike, JsonAbi } from 'fuels';
+import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -11,7 +10,8 @@ import {
   Wallet,
   bn,
 } from 'fuels';
-import { join } from 'path';
+
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 describe('Fee', () => {
   const assetA: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -54,9 +54,9 @@ describe('Fee', () => {
   };
 
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/multi-token-contract');
-
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
+    );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const contract = await factory.deployContract({ gasPrice: minGasPrice });
@@ -151,9 +151,9 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract deploy', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/multi-token-contract');
-
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
+    );
 
     const balanceBefore = await wallet.getBalance();
 
@@ -174,9 +174,9 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract call', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/call-test-contract');
-
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const contract = await factory.deployContract({ gasPrice: minGasPrice });
@@ -201,9 +201,9 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated a contract multi call', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/call-test-contract');
-
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const contract = await factory.deployContract({ gasPrice: minGasPrice });
@@ -234,9 +234,9 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
-    const path = join(__dirname, '../fixtures/forc-projects/predicate-true');
-
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.PREDICATE_TRUE
+    );
 
     const predicate = new Predicate(binHexlified, provider, abiContents);
 

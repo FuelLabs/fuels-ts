@@ -12,7 +12,7 @@ In this example, the Typescript `tuple` variable contains three elements of diff
 
 Let's consider a contract function that accepts a tuple as a parameter and returns the same Tuple:
 
-<<< @/../../docs-snippets/projects/echo-values/src/main.sw#tuples-2{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/echo-values/src/main.sw#tuples-2{rust:line-numbers}
 
 To execute and validate the contract function using the SDK, follow these steps:
 

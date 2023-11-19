@@ -9,14 +9,17 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
-import predicateAbiTrue from '../../fixtures/forc-projects/predicate-true/out/debug/predicate-true-abi.json';
-import predicateBytesConfigurable from '../../fixtures/forc-projects/predicate-with-configurable';
-import predicateAbiConfigurable from '../../fixtures/forc-projects/predicate-with-configurable/out/debug/predicate-with-configurable-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
 import { fundPredicate, assertBalance } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_TRUE);
+
+  const { binHexlified: predicateBytesConfigurable, abiContents: predicateAbiConfigurable } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+
   describe('Configurables', () => {
     let wallet: WalletUnlocked;
     let gasPrice: BN;

@@ -1,5 +1,4 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
   ScriptResultDecoderError,
@@ -13,22 +12,23 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import path from 'path';
 
-import FactoryAbi from '../fixtures/forc-projects/revert-error/out/debug/revert-error-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
 describe('Revert Error Testing', () => {
   let gasPrice: BN;
+
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
-    const bytecode = fs.readFileSync(
-      path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
+    const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.REVERT_ERROR
     );
+
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
     contractInstance = await factory.deployContract({ gasPrice });
