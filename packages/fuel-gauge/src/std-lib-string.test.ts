@@ -2,13 +2,14 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
 const setupContract = getSetupContract('std-lib-string');
 let contractInstance: Contract;
 let gasPrice: BN;
+
 beforeAll(async () => {
   contractInstance = await setupContract();
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());

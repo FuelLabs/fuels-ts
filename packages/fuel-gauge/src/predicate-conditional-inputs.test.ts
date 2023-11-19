@@ -10,7 +10,7 @@ import {
   bn,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 describe('PredicateConditionalInputs', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';

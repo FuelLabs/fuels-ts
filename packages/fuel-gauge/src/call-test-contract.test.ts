@@ -1,6 +1,6 @@
 import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { createSetupConfig } from './utils';
 
@@ -15,6 +15,7 @@ const setupContract = createSetupConfig({
 });
 
 const U64_MAX = bn(2).pow(64).sub(1);
+
 describe('CallTestContract', () => {
   let gasPrice: BN;
   beforeAll(async () => {

@@ -29,7 +29,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 const { abiContents: callTestAbi } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
@@ -51,9 +51,12 @@ const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } =
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
+
 const ADDRESS_B256 = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
+
 const ADDRESS_BECH32: Bech32Address =
   'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
+
 const ADDRESS_BYTES = new Uint8Array([
   241, 233, 44, 66, 185, 9, 52, 170, 99, 114, 227, 11, 197, 104, 163, 38, 246, 230, 106, 26, 2, 136,
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,

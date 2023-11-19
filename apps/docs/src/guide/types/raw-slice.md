@@ -8,7 +8,7 @@ A dynamic array of values can be represented using the `RawSlice` type. A raw sl
 
 The `RawSlice` type can be integrated with your contract calls. Consider the following contract that can compare and return a `RawSlice`:
 
-<<< @/../../docs-snippets/projects/echo-raw-slice/src/main.sw#raw-slice-1{ts:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/echo-raw-slice/src/main.sw#raw-slice-1{ts:line-numbers}
 
 A `RawSlice` can be created using a native JavaScript array of numbers or Big Numbers, and sent to a Sway contract:
 

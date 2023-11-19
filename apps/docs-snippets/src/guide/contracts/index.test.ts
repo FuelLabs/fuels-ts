@@ -1,6 +1,6 @@
 import type { Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {

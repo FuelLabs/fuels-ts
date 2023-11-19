@@ -1,7 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {

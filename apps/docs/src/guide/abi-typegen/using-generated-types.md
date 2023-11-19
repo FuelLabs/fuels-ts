@@ -82,7 +82,7 @@ console.log({ value, logs });
 
 Consider the following predicate:
 
-<<< @/../../../packages/fuel-gauge/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{ts:line-numbers}
+<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{ts:line-numbers}
 
 Now, after generating types via:
 

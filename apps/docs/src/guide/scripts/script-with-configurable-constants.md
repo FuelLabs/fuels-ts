@@ -6,7 +6,7 @@ Configurable constants are fairly straightforward to add and set in your scripts
 
 Let's consider the following script:
 
-<<< @/../../docs-snippets/projects/sum-script/src/main.sw#script-with-configurable-contants-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/sum-script/src/main.sw#script-with-configurable-contants-1{rust:line-numbers}
 
 In this script, `AMOUNT` is a configurable constant with a default value of `10`. The main function returns the sum of the `inputted_amount` and the configurable constant `AMOUNT`.
 

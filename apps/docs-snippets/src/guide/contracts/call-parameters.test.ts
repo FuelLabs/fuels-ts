@@ -1,7 +1,7 @@
 import type { Contract, Provider } from 'fuels';
 import { BN, BaseAssetId } from 'fuels';
 
-import { DocSnippetProjectsEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
