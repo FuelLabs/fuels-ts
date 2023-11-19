@@ -122,7 +122,10 @@ describe('small-bytes', () => {
     };
 
     const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>({
+      projectDir: path,
+      projectName: 'small-bytes',
+    });
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { minGasPrice } = wallet.provider.getGasConfig();
@@ -143,7 +146,10 @@ describe('small-bytes', () => {
     };
 
     const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
-    const { binHexlified, abiContents } = getForcProject<JsonAbi>(path);
+    const { binHexlified, abiContents } = getForcProject<JsonAbi>({
+      projectDir: path,
+      projectName: 'small-bytes',
+    });
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { minGasPrice } = wallet.provider.getGasConfig();
