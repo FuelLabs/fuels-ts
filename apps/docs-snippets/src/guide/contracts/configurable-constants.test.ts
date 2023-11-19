@@ -52,7 +52,7 @@ describe('configurable-constants', () => {
     });
     // #endregion configurable-constants-2
 
-    const { value } = await contract.functions.echo_configurables().simulate();
+    const { value } = await contract.functions.echo_configurables(true).simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(configurableConstants.tag);
@@ -77,7 +77,7 @@ describe('configurable-constants', () => {
     });
     // #endregion configurable-constants-3
 
-    const { value } = await contract.functions.echo_configurables().simulate();
+    const { value } = await contract.functions.echo_configurables(false).simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(defaultValues.tag);
