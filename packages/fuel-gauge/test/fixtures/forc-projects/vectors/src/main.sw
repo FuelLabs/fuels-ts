@@ -89,9 +89,23 @@ impl VectorContract for Contract {
         input
     }
     fn echo_u16(input: Vec<u16>) -> Vec<u16> {
+        assert_eq(input.get(0).unwrap(), 8);
+        assert_eq(input.get(1).unwrap(), 6);
+        assert_eq(input.get(2).unwrap(), 7);
+        assert_eq(input.get(3).unwrap(), 5);
+        assert_eq(input.get(4).unwrap(), 3);
+        assert_eq(input.get(5).unwrap(), 0);
+        assert_eq(input.get(6).unwrap(), 9);
         input
     }
     fn echo_u32(input: Vec<u32>) -> Vec<u32> {
+        assert_eq(input.get(0).unwrap(), 8);
+        assert_eq(input.get(1).unwrap(), 6);
+        assert_eq(input.get(2).unwrap(), 7);
+        assert_eq(input.get(3).unwrap(), 5);
+        assert_eq(input.get(4).unwrap(), 3);
+        assert_eq(input.get(5).unwrap(), 0);
+        assert_eq(input.get(6).unwrap(), 9);
         input
     }
     fn echo_u64(input: Vec<u64>) -> Vec<u64> {

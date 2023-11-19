@@ -21,7 +21,7 @@ export class NumberCoder extends Coder<number, number> {
       isRightPadded: false,
     }
   ) {
-    const paddingLength = options.isSmallBytes ? 1 : 8;
+    const paddingLength = options.isSmallBytes && baseType === 'u8' ? 1 : 8;
 
     super('number', baseType, paddingLength);
     this.baseType = baseType;
