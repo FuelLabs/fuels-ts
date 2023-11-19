@@ -29,7 +29,7 @@ abi EchoConfigurables {
 
 impl EchoConfigurables for Contract {
     fn echo_configurables(updated_grades: bool) -> (u8, str[4], [u8; 4], MyStruct) {
-        if(updated_grades) {
+        if (updated_grades) {
             assert_eq(grades[0], 10);
             assert_eq(grades[1], 9);
             assert_eq(grades[2], 8);
@@ -40,7 +40,6 @@ impl EchoConfigurables for Contract {
             assert_eq(grades[2], 3);
             assert_eq(grades[3], 2);
         }
-
         (age, tag, grades, my_struct)
     }
 }
