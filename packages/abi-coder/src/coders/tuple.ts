@@ -1,7 +1,11 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import { concatBytes } from '@fuel-ts/utils';
 
-import { concatWithDynamicData } from '../utilities';
+import {
+  concatWithDynamicData,
+  getWordSizePadding,
+  isMultipleOfWordSize,
+  rightPadToWordSize,
+} from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import { Coder } from './abstract-coder';
@@ -25,17 +29,6 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
     this.coders = coders;
   }
 
-  /**
-   * Properties of structs need to be word-aligned.
-   * Because some properties can be small bytes,
-   * we need to pad them with zeros until they are aligned to a word-sized increment.
-   */
-  private static rightPadToSwayWordSize(encoded: Uint8Array) {
-    return encoded.length % 8 === 0
-      ? encoded
-      : concatBytes([encoded, new Uint8Array(8 - (encoded.length % 8))]);
-  }
-
   encode(value: InputValueOf<TCoders>): Uint8Array {
     if (this.coders.length !== value.length) {
       this.throwError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
@@ -44,7 +37,10 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
     return concatWithDynamicData(
       this.coders.map((coder, i) => {
         const encoded = coder.encode(value[i]);
-        return TupleCoder.rightPadToSwayWordSize(encoded);
+        if (!isMultipleOfWordSize(encoded.length)) {
+          return rightPadToWordSize(encoded);
+        }
+        return encoded;
       })
     );
   }
@@ -55,12 +51,10 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
       let decoded;
       [decoded, newOffset] = coder.decode(data, newOffset);
 
-      // see TupleCoder.rightPadToSwayWordSize method for explanation
-      const offsetIsSwayWordIncrement = newOffset % 8 === 0;
-
-      if (!offsetIsSwayWordIncrement) {
-        newOffset += 8 - (newOffset % 8);
+      if (!isMultipleOfWordSize(offset)) {
+        newOffset += getWordSizePadding(offset);
       }
+
       return decoded;
     });
 
