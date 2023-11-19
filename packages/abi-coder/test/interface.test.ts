@@ -139,7 +139,7 @@ describe('Abi interface', () => {
 
     it('encodes configurables', () => {
       const encoded = exhaustiveExamplesInterface.encodeConfigurable('U8', 55);
-      expect(encoded).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 55]));
+      expect(encoded).toEqual(new Uint8Array([55, 0, 0, 0, 0, 0, 0, 0]));
     });
 
     it('throws when encoding non-existent configurable', () => {
