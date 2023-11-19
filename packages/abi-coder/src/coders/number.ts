@@ -57,14 +57,14 @@ export class NumberCoder extends Coder<number, number> {
 
     const output = toBytes(bytes, this.paddingLength);
 
-    if (this.options.isRightPadded) {
-      return output.reverse();
+    if (this.baseType !== 'u8') {
+      return output;
     }
 
-    return output;
+    return this.options.isRightPadded ? output.reverse() : output;
   }
 
-  decode(data: Uint8Array, offset: number): [number, number] {
+  private decodeU8(data: Uint8Array, offset: number): [number, number] {
     let bytes;
     if (this.options.isRightPadded) {
       bytes = data.slice(offset, offset + 1);
@@ -74,5 +74,15 @@ export class NumberCoder extends Coder<number, number> {
     }
 
     return [toNumber(bytes), offset + this.paddingLength];
+  }
+
+  decode(data: Uint8Array, offset: number): [number, number] {
+    if (this.baseType === 'u8') {
+      return this.decodeU8(data, offset);
+    }
+
+    const bytes = data.slice(offset, offset + 8).slice(8 - this.length, 8);
+
+    return [toNumber(bytes), offset + 8];
   }
 }
