@@ -1,4 +1,2 @@
 [workspace]
-members = [
-  "simple",
-]
+members = ["simple"]
