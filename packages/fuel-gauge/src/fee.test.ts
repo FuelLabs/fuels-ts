@@ -11,7 +11,7 @@ import {
   bn,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 describe('Fee', () => {
   const assetA: string = '0x0101010101010101010101010101010101010101010101010101010101010101';

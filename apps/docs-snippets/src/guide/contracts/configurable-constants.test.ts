@@ -1,7 +1,7 @@
 import type { Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {

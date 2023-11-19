@@ -21,7 +21,7 @@ import {
   Predicate,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { createSetupConfig } from './utils';
 

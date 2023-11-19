@@ -9,7 +9,7 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;

@@ -1,7 +1,7 @@
 import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
 import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
 describe(__filename, () => {

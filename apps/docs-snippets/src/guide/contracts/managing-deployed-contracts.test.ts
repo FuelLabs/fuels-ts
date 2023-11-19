@@ -1,7 +1,7 @@
 import type { AbstractAddress, WalletUnlocked } from 'fuels';
 import { ContractFactory, Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {

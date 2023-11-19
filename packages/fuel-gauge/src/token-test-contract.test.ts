@@ -4,7 +4,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.TOKEN_CONTRACT
@@ -25,6 +25,7 @@ const setup = async () => {
 };
 
 let gasPrice: BN;
+
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
   gasPrice = provider.getGasConfig().minGasPrice;

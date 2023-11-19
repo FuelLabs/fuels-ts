@@ -1,7 +1,7 @@
 import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../fixtures';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 

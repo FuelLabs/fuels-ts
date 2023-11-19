@@ -1,6 +1,6 @@
 import { WalletUnlocked, Predicate, BaseAssetId, BN, getRandomB256 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {

@@ -10,8 +10,8 @@ import {
   ContractFactory,
 } from 'fuels';
 
-import type { DocSnippetProjectsEnum } from '../projects';
-import { getDocsSnippetsForcProject } from '../projects';
+import type { DocSnippetProjectsEnum } from '../test/fixtures/forc-projects';
+import { getDocsSnippetsForcProject } from '../test/fixtures/forc-projects';
 
 export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // create a provider using the Fuel network URL
