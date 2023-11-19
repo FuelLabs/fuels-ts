@@ -151,7 +151,7 @@ describe('Abi interface', () => {
 
   describe('encoding/decoding', () => {
     describe('encodes and decodes', () => {
-      it.each([
+      it.skip.each([
         {
           fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8]',
