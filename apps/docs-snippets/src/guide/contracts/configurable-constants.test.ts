@@ -1,14 +1,14 @@
 import type { Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
 
-  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_CONFIGURABLES
+  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
+    DocSnippetProjectsEnum.ECHO_CONFIGURABLES
   );
 
   const defaultValues = {
