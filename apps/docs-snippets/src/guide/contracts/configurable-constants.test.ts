@@ -4,7 +4,7 @@ import { ContractFactory } from 'fuels';
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-describe(__filename, () => {
+describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
 
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
