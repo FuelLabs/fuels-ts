@@ -406,16 +406,14 @@ describe('Abi interface', () => {
               { a: true, b: 2 },
             ],
           ],
-          encodedValue: Uint8Array.from(
-            [
-              BOOL_TRUE_ENCODED,
-              EMPTY_8_BYTE_ARRAY.slice().fill(1, 7, 7),
-              EMPTY_8_BYTE_ARRAY,
-              U32_MAX_ENCODED,
-              BOOL_TRUE_ENCODED,
-              EMPTY_8_BYTE_ARRAY.slice().fill(2, 7, 7),
-            ].flatMap((x) => x) as unknown as number[]
-          ),
+          encodedValue: [
+            BOOL_TRUE_ENCODED,
+            EMPTY_8_BYTE_ARRAY.slice().fill(1, 7),
+            EMPTY_8_BYTE_ARRAY,
+            U32_MAX_ENCODED,
+            BOOL_TRUE_ENCODED,
+            EMPTY_8_BYTE_ARRAY.slice().fill(2, 7),
+          ],
         },
         {
           fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
