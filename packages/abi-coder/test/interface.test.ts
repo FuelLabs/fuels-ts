@@ -652,23 +652,13 @@ describe('Abi interface', () => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
             const enumCaseOne = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]);
-            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 32]);
+            const pointer = EMPTY_8_BYTE_ARRAY.slice().fill(enumCaseOne.length + 3 * WORD_SIZE, 7);
+
             const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
-            const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[0]]);
-            const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[1]]);
-            const data3 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[2]]);
-            const data4 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[3]]);
-            const expectedBytes = concat([
-              enumCaseOne,
-              pointer,
-              capacity,
-              length,
-              data1,
-              data2,
-              data3,
-              data4,
-            ]);
+            const vectorData = Uint8Array.from(input.vec);
+
+            const expectedBytes = concat([enumCaseOne, pointer, capacity, length, vectorData]);
             return expectedBytes;
           },
           offset: 0,
@@ -710,8 +700,8 @@ describe('Abi interface', () => {
           offset: 16,
         },
       ])(
-        'asd',
-        // '$title: $value',
+        // 'asd',
+        '$title: $value',
         ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
