@@ -66,8 +66,8 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
 
-      if (!isMultipleOfWordSize(offset)) {
-        newOffset += getWordSizePadding(offset);
+      if (!isMultipleOfWordSize(newOffset)) {
+        newOffset += getWordSizePadding(newOffset);
       }
 
       // eslint-disable-next-line no-param-reassign

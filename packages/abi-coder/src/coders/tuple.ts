@@ -51,8 +51,8 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
       let decoded;
       [decoded, newOffset] = coder.decode(data, newOffset);
 
-      if (!isMultipleOfWordSize(offset)) {
-        newOffset += getWordSizePadding(offset);
+      if (!isMultipleOfWordSize(newOffset)) {
+        newOffset += getWordSizePadding(newOffset);
       }
 
       return decoded;
