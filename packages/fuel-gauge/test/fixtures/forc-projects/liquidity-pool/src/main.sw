@@ -35,9 +35,11 @@ storage {
 impl LiquidityPool for Contract {
     #[storage(write)]
     fn set_base_token(base_token_id: b256) {
-        storage.base_token.write(AssetId {
-            value: base_token_id,
-        });
+        storage
+            .base_token
+            .write(AssetId {
+                value: base_token_id,
+            });
     }
 
     #[storage(read), payable]

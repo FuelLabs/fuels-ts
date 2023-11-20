@@ -25,3 +25,6 @@ members = [
   "./tuple-simple",
   "./vector-simple",
 ]
+
+[patch.'https://github.com/fuellabs/sway']
+std = { git = "https://github.com/fuellabs/sway", branch = "master" }
