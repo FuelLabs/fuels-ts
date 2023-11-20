@@ -27,9 +27,14 @@ import {
   U8_MAX_ENCODED,
 } from './utils/constants';
 
-function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: number) {
+function encodeVectorFully(
+  encodedData: Uint8Array[] | Uint8Array,
+  offset: number,
+  dataLength?: number
+) {
   const data = encodedData instanceof Uint8Array ? encodedData : concat(encodedData);
-  const dataLength = data.length / 8;
+  // eslint-disable-next-line no-param-reassign
+  dataLength ??= data.length / 8;
   const length = new NumberCoder('u8').encode(dataLength);
   const capacity = length;
   const o = new NumberCoder('u32').encode(offset);
@@ -461,10 +466,8 @@ describe('Abi interface', () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           encodedValue: () => {
-            const vector = encodeVectorFully(
-              [BOOL_TRUE_ENCODED, EMPTY_8_BYTE_ARRAY, BOOL_TRUE_ENCODED, BOOL_TRUE_ENCODED],
-              3 * WORD_SIZE
-            );
+            const data = Uint8Array.from([1, 0, 1, 1]);
+            const vector = encodeVectorFully(data, 3 * WORD_SIZE, data.length);
             return [vector.vec, vector.data] as Uint8Array[];
           },
         },
@@ -715,9 +718,6 @@ describe('Abi interface', () => {
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);
 
-          if (_title === '[array] with structs') {
-            console.log(encoded);
-          }
           const encodedVal =
             encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
           const expectedEncoded =
