@@ -58,7 +58,7 @@
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.36.1",
+    "@fuels/vm-asm": "0.42.1",
     "@fuel-ts/errors": "workspace:*",
     "ethers": "^6.7.1",
     "portfinder": "^1.0.32",
