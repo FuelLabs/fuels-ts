@@ -676,31 +676,19 @@ describe('Abi interface', () => {
           encodedValue: (input?: any, offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-            const u8 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 7]);
-            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 32]);
+            const u8 = EMPTY_8_BYTE_ARRAY.slice().fill(7, 0, 1);
+            const pointer = EMPTY_8_BYTE_ARRAY.slice().fill(offset + u8.length + 3 * WORD_SIZE, 7);
             const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
-            const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[0]]);
-            const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[1]]);
-            const data3 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[2]]);
-            const data4 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec[3]]);
-            const expectedBytes = concat([
-              u8,
-              pointer,
-              capacity,
-              length,
-              data1,
-              data2,
-              data3,
-              data4,
-            ]);
+            const vectorData = Uint8Array.from(input.vec);
+
+            const expectedBytes = concat([u8, pointer, capacity, length, vectorData]);
 
             return expectedBytes;
           },
           offset: 16,
         },
       ])(
-        // 'asd',
         '$title: $value',
         ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
           const encoded = Array.isArray(value)
