@@ -499,9 +499,12 @@ describe('Abi interface', () => {
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
           encodedValue: () => {
+            const data = Uint8Array.from([U8_MAX, 0, U8_MAX, U8_MAX]);
+
             const fullyEncodedVector = encodeVectorFully(
-              [U8_MAX_ENCODED, EMPTY_8_BYTE_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
-              3 * WORD_SIZE + B256_ENCODED.length
+              data,
+              3 * WORD_SIZE + B256_ENCODED.length,
+              data.length
             );
             return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data] as Uint8Array[];
           },
