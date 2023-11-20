@@ -246,8 +246,11 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
-    request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
+    // TODO: use user values
+    request.gasLimit = bn(10_000);
     request.gasPrice = bn(txParams.gasPrice || request.gasPrice);
+    request.maxFee = bn(txParams.maxFee || request.maxFee || 100_000);
+    request.witnessLimit = bn(txParams.witnessLimit || request.witnessLimit || 720);
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     return this;
