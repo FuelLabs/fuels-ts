@@ -13,7 +13,7 @@ type Primitive = string | number | boolean;
  *
  * 1) isSmallBytes (default=false)
  *
- * Describes how many bytes it will ocuppy:
+ * Describes how many bytes it will occupy:
  *
  * false — occupies 8 bytes (default), and should be used when underneath:
  *    • standalone
