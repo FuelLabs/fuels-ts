@@ -213,12 +213,12 @@ export class Account extends AbstractAccount {
     quantities: CoinQuantity[],
     fee: BN
   ): Promise<void> {
+    // TODO: Rollback to fee value after fix fee calculation
     addAmountToAsset({
-      amount: fee,
+      amount: bn(1),
       assetId: BaseAssetId,
       coinQuantities: quantities,
     });
-
     const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
   }
@@ -356,7 +356,7 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    // await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(transactionRequest);
   }
 
@@ -368,7 +368,7 @@ export class Account extends AbstractAccount {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    // await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.simulate(transactionRequest);
   }
 }
