@@ -6,6 +6,8 @@ import { join } from 'path';
 import { getSetupContract, createWallet } from './utils';
 
 describe('small-bytes', () => {
+  const smallBytesProjectDir = join(__dirname, '../test/fixtures/forc-projects/small-bytes');
+
   const setupContract = getSetupContract('small-bytes');
 
   let contract: Contract;
@@ -121,11 +123,11 @@ describe('small-bytes', () => {
       U8: expected,
     };
 
-    const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
-      projectDir: path,
+      projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
     });
+
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { minGasPrice } = wallet.provider.getGasConfig();
@@ -145,11 +147,11 @@ describe('small-bytes', () => {
       BOOLEAN: expected,
     };
 
-    const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
-      projectDir: path,
+      projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
     });
+
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { minGasPrice } = wallet.provider.getGasConfig();
