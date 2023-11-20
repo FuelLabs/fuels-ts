@@ -171,6 +171,16 @@ describe('small-bytes', () => {
     expect(res1.value).toBe(expected);
   });
 
+  it('echos a u16', async () => {
+    const res1 = await contract.functions.echo_u16(30000).simulate();
+    expect(res1.value).toBe(30000 * 2);
+  });
+
+  it('echos a u32', async () => {
+    const res1 = await contract.functions.echo_u32(100000).simulate();
+    expect(res1.value).toBe(100000 * 2);
+  });
+
   it('echos a boolean literal', async () => {
     const expected = true;
     const res1 = await contract.functions.echo_boolean_literal().simulate();
