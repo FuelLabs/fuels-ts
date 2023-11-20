@@ -4,7 +4,6 @@ import { bn } from '@fuel-ts/math';
 import { U32_MAX } from '../../test/utils/constants';
 
 import { BooleanCoder } from './boolean';
-import { NumberCoder } from './number';
 import { StructCoder } from './struct';
 import { U64Coder } from './u64';
 

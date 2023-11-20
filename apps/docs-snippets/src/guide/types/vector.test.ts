@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { BN, getDecodedLogs, getRandomB256 } from 'fuels';
+import { BN, getRandomB256 } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
