@@ -29,7 +29,6 @@ export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
 // SCRIPT_FIXED_SIZE = 104
 export const SCRIPT_FIXED_SIZE =
   WORD_SIZE + // Identifier
-  WORD_SIZE + // Gas price
   WORD_SIZE + // Gas limit
   WORD_SIZE + // Maturity
   WORD_SIZE + // Script size
