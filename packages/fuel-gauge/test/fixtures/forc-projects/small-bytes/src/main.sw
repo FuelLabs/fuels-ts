@@ -33,6 +33,10 @@ abi EchoValues {
 
     fn echo_u8(value: u8) -> u8;
 
+    fn echo_u16(value: u16) -> u16;
+
+    fn echo_u32(value: u32) -> u32;
+
     fn echo_two_u8s(value1: u8, value2: u8) -> u8;
 
     fn two_booleans(value1: bool, value2: bool) -> bool;
@@ -98,6 +102,14 @@ impl EchoValues for Contract {
 
     fn echo_u8(value: u8) -> u8 {
         value
+    }
+
+    fn echo_u16(value: u16) -> u16 {
+        value * 2
+    }
+
+    fn echo_u32(value: u32) -> u32 {
+        value * 2
     }
 
     fn echo_two_u8s(value1: u8, value2: u8) -> u8 {

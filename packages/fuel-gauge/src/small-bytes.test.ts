@@ -6,6 +6,8 @@ import { join } from 'path';
 import { getSetupContract, createWallet } from './utils';
 
 describe('small-bytes', () => {
+  const smallBytesProjectDir = join(__dirname, '../test/fixtures/forc-projects/small-bytes');
+
   const setupContract = getSetupContract('small-bytes');
 
   let contract: Contract;
@@ -121,11 +123,11 @@ describe('small-bytes', () => {
       U8: expected,
     };
 
-    const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
-      projectDir: path,
+      projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
     });
+
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { minGasPrice } = wallet.provider.getGasConfig();
@@ -145,11 +147,11 @@ describe('small-bytes', () => {
       BOOLEAN: expected,
     };
 
-    const path = join(__dirname, '../fixtures/forc-projects/small-bytes');
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
-      projectDir: path,
+      projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
     });
+
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { minGasPrice } = wallet.provider.getGasConfig();
@@ -167,6 +169,16 @@ describe('small-bytes', () => {
     const expected = 47;
     const res1 = await contract.functions.echo_u8_literal().simulate();
     expect(res1.value).toBe(expected);
+  });
+
+  it('echos a u16', async () => {
+    const res1 = await contract.functions.echo_u16(30000).simulate();
+    expect(res1.value).toBe(30000 * 2);
+  });
+
+  it('echos a u32', async () => {
+    const res1 = await contract.functions.echo_u32(100000).simulate();
+    expect(res1.value).toBe(100000 * 2);
   });
 
   it('echos a boolean literal', async () => {
