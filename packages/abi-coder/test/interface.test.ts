@@ -35,9 +35,9 @@ function encodeVectorFully(
   const data = encodedData instanceof Uint8Array ? encodedData : concat(encodedData);
   // eslint-disable-next-line no-param-reassign
   dataLength ??= data.length / 8;
+  const o = new NumberCoder('u32').encode(offset);
   const length = new NumberCoder('u8').encode(dataLength);
   const capacity = length;
-  const o = new NumberCoder('u32').encode(offset);
 
   return {
     offset,
@@ -518,11 +518,10 @@ describe('Abi interface', () => {
             [U8_MAX, 0, U8_MAX, U8_MAX],
           ],
           encodedValue: () => {
-            const vec1 = encodeVectorFully([U8_MAX_ENCODED, U8_MAX_ENCODED], 2 * 3 * WORD_SIZE);
-            const vec2 = encodeVectorFully(
-              [U8_MAX_ENCODED, EMPTY_8_BYTE_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
-              vec1.offset + vec1.length * WORD_SIZE
-            );
+            const vec1Data = Uint8Array.from([U8_MAX, U8_MAX]);
+            const vec2Data = Uint8Array.from([U8_MAX, 0, U8_MAX, U8_MAX]);
+            const vec1 = encodeVectorFully(vec1Data, 2 * 3 * WORD_SIZE, vec1Data.length);
+            const vec2 = encodeVectorFully(vec2Data, vec1.offset + vec1.length, vec2Data.length);
             return [vec1.vec, vec2.vec, vec1.data, vec2.data];
           },
         },
