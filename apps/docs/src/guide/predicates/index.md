@@ -21,7 +21,7 @@ This method is not only more efficient but also helps to prevent traffic jams on
 
 A predicate in Sway can be as simple as the following:
 
-<<< @/../../docs-snippets/projects/return-true-predicate/src/main.sw#predicate-index-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/return-true-predicate/src/main.sw#predicate-index-1{rust:line-numbers}
 
 In this minimal example, the `main` function does not accept any parameters and simply returns true.
 

@@ -12,7 +12,7 @@ The `Contract` class includes a method called `getBalance` that retrieves the av
 
 Consider a simple contract that transfers a specified amount of a given asset to an address:
 
-<<< @/../../docs-snippets/projects/transfer-to-address/src/main.sw#contract-balance-2{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/transfer-to-address/src/main.sw#contract-balance-2{rust:line-numbers}
 
 The `transfer` function has three parameters:
 
