@@ -36,7 +36,9 @@ class FuelSubscriptionStream implements TransformStream {
                 errors.map((err) => err.message).join('\n\n')
               )
             );
-          } else this.readableStreamController.enqueue(data);
+          } else {
+            this.readableStreamController.enqueue(data);
+          }
         }
       },
     });
@@ -68,8 +70,12 @@ export async function* fuelGraphQLSubscriber({
 
   while (true) {
     const { value, done } = await subscriptionStreamReader.read();
-    if (value instanceof FuelError) throw value;
+    if (value instanceof FuelError) {
+      throw value;
+    }
     yield value;
-    if (done) break;
+    if (done) {
+      break;
+    }
   }
 }

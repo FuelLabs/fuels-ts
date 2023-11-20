@@ -128,7 +128,9 @@ export class TransactionResponse {
       for await (const { statusChange } of this.provider.operations.statusChange({
         transactionId: this.id,
       })) {
-        if (statusChange) break;
+        if (statusChange) {
+          break;
+        }
       }
 
       return this.fetch();
@@ -203,7 +205,9 @@ export class TransactionResponse {
     for await (const { statusChange } of this.provider.operations.statusChange({
       transactionId: this.id,
     })) {
-      if (statusChange.type !== 'SubmittedStatus') break;
+      if (statusChange.type !== 'SubmittedStatus') {
+        break;
+      }
     }
 
     await this.fetch();
