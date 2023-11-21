@@ -14,6 +14,7 @@ try {
   }
 } catch (err) {
   error(err.toString());
+  process.exit(1);
 }
 
 /**
