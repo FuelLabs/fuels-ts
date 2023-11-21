@@ -242,7 +242,10 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const request = new ScriptTransactionRequest(txParams);
+    const { minGasPrice } = this.provider.getGasConfig();
+    const params = { gasPrice: minGasPrice, ...txParams };
+
+    const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 
     const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
@@ -273,6 +276,9 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const { minGasPrice } = this.provider.getGasConfig();
+    const params = { gasPrice: minGasPrice, ...txParams };
+
     const script = await composeScriptForTransferringToContract();
 
     const scriptData = formatScriptDataForTransferringToContract(
@@ -282,7 +288,7 @@ export class Account extends AbstractAccount {
     );
 
     const request = new ScriptTransactionRequest({
-      ...txParams,
+      ...params,
       script,
       scriptData,
     });
