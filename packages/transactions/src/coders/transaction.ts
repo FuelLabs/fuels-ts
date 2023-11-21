@@ -132,10 +132,10 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     return [
       {
         type: TransactionType.Script,
-        policyTypes,
         gasLimit,
         scriptLength,
         scriptDataLength,
+        policyTypes,
         inputsCount,
         outputsCount,
         witnessesCount,
