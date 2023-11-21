@@ -64,11 +64,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.program = program;
     this.isMultiCall = isMultiCall;
 
-    const provider = program.provider as Provider;
-    const { maxGasPerTx } = provider.getGasConfig();
-    this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: maxGasPerTx,
-    });
+    this.transactionRequest = new ScriptTransactionRequest();
   }
 
   /**
@@ -246,11 +242,14 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
+    const { minGasPrice, maxGasPerTx } = this.getProvider().getGasConfig();
+
     // TODO: use user values
     request.gasLimit = bn(10_000);
-    request.gasPrice = bn(txParams.gasPrice || request.gasPrice);
-    request.maxFee = bn(txParams.maxFee || request.maxFee || 100_000);
+    request.gasPrice = bn(txParams.gasPrice || request.gasPrice || minGasPrice);
+    request.maxFee = bn(txParams.maxFee || request.maxFee || maxGasPerTx);
     request.witnessLimit = bn(txParams.witnessLimit || request.witnessLimit || 720);
+    request.maturity = txParams.maturity || request.maturity;
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     return this;
