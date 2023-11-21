@@ -147,7 +147,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       policyTypes += PolicyType.WitnessLimit;
       policies.push({ data: this.witnessLimit, type: PolicyType.WitnessLimit });
     }
-    if (this.maturity) {
+    if (this.maturity > 0) {
       policyTypes += PolicyType.Maturity;
       policies.push({ data: this.maturity, type: PolicyType.Maturity });
     }
