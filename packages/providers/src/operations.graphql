@@ -235,9 +235,7 @@ fragment GasCostsFragment on GasCosts {
   lw
   mint
   mlog
-  mod
   modi
-  move
   movi
   mroo
   mul
@@ -251,8 +249,6 @@ fragment GasCostsFragment on GasCosts {
   popl
   pshh
   pshl
-  ret_contract
-  rvrt_contract
   sb
   sll
   slli
@@ -384,20 +380,20 @@ fragment GasCostsFragment on GasCosts {
       unitsPerGas
     }
   }
-  contract_root {
+  contractRoot {
     LightOperation {
       base
       unitsPerGas
     }
   }
-  state_root {
+  stateRoot {
     LightOperation {
       base
       unitsPerGas
     }
   }
-  new_storage_per_byte
-  vm_initialization
+  newStoragePerByte
+  vmInitialization
 }
 
 fragment consensusParametersFragment on ConsensusParameters {

@@ -320,7 +320,6 @@ type FailureStatus {
 
 type GasCosts {
   add: U64!
-  add: U64!
   addi: U64!
   aloc: U64!
   and: U64!
@@ -362,9 +361,7 @@ type GasCosts {
   lw: U64!
   mint: U64!
   mlog: U64!
-  mod: U64!
   modi: U64!
-  move: U64!
   movi: U64!
   mroo: U64!
   mul: U64!
@@ -378,8 +375,6 @@ type GasCosts {
   popl: U64!
   pshh: U64!
   pshl: U64!
-  ret_contract: U64!
-  rvrt_contract: U64!
   sb: U64!
   sll: U64!
   slli: U64!
@@ -426,10 +421,10 @@ type GasCosts {
   smo: DependentCost!
   srwq: DependentCost!
   swwq: DependentCost!
-  contract_root: DependentCost!
-  state_root: DependentCost!
-  new_storage_per_byte: U64!
-  vm_initialization: U64!
+  contractRoot: DependentCost!
+  stateRoot: DependentCost!
+  newStoragePerByte: U64!
+  vmInitialization: U64!
 }
 
 type Genesis {
