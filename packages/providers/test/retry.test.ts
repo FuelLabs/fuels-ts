@@ -63,7 +63,9 @@ describe('Retries correctly', () => {
     expect(callTimes.length - 1).toBe(maxAttempts); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) => {
-      if (index === 0) return; // initial call doesn't count as it's not a retry
+      if (index === 0) {
+        return;
+      } // initial call doesn't count as it's not a retry
 
       const waitTime = callTime - callTimes[index - 1];
 

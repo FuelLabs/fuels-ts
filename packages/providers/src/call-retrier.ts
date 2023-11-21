@@ -18,7 +18,9 @@ export interface RetryOptions {
 }
 
 function getWaitDuration(options: RetryOptions, attempt: number) {
-  if (attempt === 0) return options.baseDuration;
+  if (attempt === 0) {
+    return options.baseDuration;
+  }
 
   switch (options.backoff) {
     case 'linear':
@@ -37,16 +39,22 @@ export async function retrier(
   options: RetryOptions | undefined,
   retryAttempt: number = 0
 ) {
-  if (options === undefined) return call();
+  if (options === undefined) {
+    return call();
+  }
 
   try {
     return await call();
   } catch (e: unknown) {
     const error = e as Error & { cause?: { code?: string } };
 
-    if (error.cause?.code !== 'ECONNREFUSED') throw e;
+    if (error.cause?.code !== 'ECONNREFUSED') {
+      throw e;
+    }
 
-    if (retryAttempt === options.maxAttempts) throw e;
+    if (retryAttempt === options.maxAttempts) {
+      throw e;
+    }
 
     // eslint-disable-next-line no-param-reassign
     retryAttempt += 1;
