@@ -338,7 +338,7 @@ export class Account extends AbstractAccount {
 
     // build the transaction
     const { maxGasPerTx } = this.provider.getGasConfig();
-    const params = { script, gasLimit: maxGasPerTx, ...txParams };
+    const params = { script, gasLimit: maxGasPerTx.div(2), ...txParams };
     const request = new ScriptTransactionRequest(params);
 
     const { gasPriceFactor } = this.provider.getGasConfig();
