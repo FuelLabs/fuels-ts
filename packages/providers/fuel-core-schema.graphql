@@ -285,9 +285,18 @@ type ContractOutput {
   stateRoot: Bytes32!
 }
 
-type DependentCost {
+type LightOperation {
   base: U64!
-  depPerUnit: U64!
+  unitsPerGas: U64!
+}
+
+type HeavyOperation {
+  base: U64!
+  gasPerUnit: U64!
+}
+
+type DependentCost {
+  LightOperation: LightOperation!
 }
 
 input ExcludeInput {
@@ -311,6 +320,7 @@ type FailureStatus {
 
 type GasCosts {
   add: U64!
+  add: U64!
   addi: U64!
   aloc: U64!
   and: U64!
@@ -325,8 +335,8 @@ type GasCosts {
   croo: U64!
   div: U64!
   divi: U64!
-  ecr1: U64!
   eck1: U64!
+  ecr1: U64!
   ed19: U64!
   eq: U64!
   exp: U64!
@@ -346,17 +356,15 @@ type GasCosts {
   jnzb: U64!
   jnef: U64!
   jneb: U64!
-  k256: U64!
   lb: U64!
   log: U64!
   lt: U64!
   lw: U64!
-  mcpi: U64!
   mint: U64!
   mlog: U64!
-  modOp: U64!
+  mod: U64!
   modi: U64!
-  moveOp: U64!
+  move: U64!
   movi: U64!
   mroo: U64!
   mul: U64!
@@ -366,11 +374,13 @@ type GasCosts {
   not: U64!
   or: U64!
   ori: U64!
-  ret: U64!
-  rvrt: U64!
-  s256: U64!
+  poph: U64!
+  popl: U64!
+  pshh: U64!
+  pshl: U64!
+  ret_contract: U64!
+  rvrt_contract: U64!
   sb: U64!
-  scwq: U64!
   sll: U64!
   slli: U64!
   srl: U64!
@@ -380,7 +390,6 @@ type GasCosts {
   subi: U64!
   sw: U64!
   sww: U64!
-  swwq: U64!
   time: U64!
   tr: U64!
   tro: U64!
@@ -403,15 +412,24 @@ type GasCosts {
   call: DependentCost!
   ccp: DependentCost!
   csiz: DependentCost!
+  k256: DependentCost!
   ldc: DependentCost!
   logd: DependentCost!
   mcl: DependentCost!
   mcli: DependentCost!
   mcp: DependentCost!
+  mcpi: DependentCost!
   meq: DependentCost!
-  retd: DependentCost!
+  retd_contract: DependentCost!
+  s256: DependentCost!
+  scwq: DependentCost!
   smo: DependentCost!
   srwq: DependentCost!
+  swwq: DependentCost!
+  contract_root: DependentCost!
+  state_root: DependentCost!
+  new_storage_per_byte: U64!
+  vm_initialization: U64!
 }
 
 type Genesis {

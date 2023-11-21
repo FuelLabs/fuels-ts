@@ -192,6 +192,214 @@ fragment FeeParametersFragment on FeeParameters {
   gasPerByte
 }
 
+fragment GasCostsFragment on GasCosts {
+  add
+  addi
+  aloc
+  and
+  andi
+  bal
+  bhei
+  bhsh
+  burn
+  cb
+  cfei
+  cfsi
+  croo
+  div
+  divi
+  eck1
+  ecr1
+  ed19
+  eq
+  exp
+  expi
+  flag
+  gm
+  gt
+  gtf
+  ji
+  jmp
+  jne
+  jnei
+  jnzi
+  jmpf
+  jmpb
+  jnzf
+  jnzb
+  jnef
+  jneb
+  lb
+  log
+  lt
+  lw
+  mint
+  mlog
+  mod
+  modi
+  move
+  movi
+  mroo
+  mul
+  muli
+  mldv
+  noop
+  not
+  or
+  ori
+  poph
+  popl
+  pshh
+  pshl
+  ret_contract
+  rvrt_contract
+  sb
+  sll
+  slli
+  srl
+  srli
+  srw
+  sub
+  subi
+  sw
+  sww
+  time
+  tr
+  tro
+  wdcm
+  wqcm
+  wdop
+  wqop
+  wdml
+  wqml
+  wddv
+  wqdv
+  wdmd
+  wqmd
+  wdam
+  wqam
+  wdmm
+  wqmm
+  xor
+  xori
+  call {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  ccp {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  csiz {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  k256 {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  ldc {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  logd {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  mcl {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  mcli {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  mcp {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  mcpi {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  meq {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  retd_contract {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  s256 {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  scwq {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  smo {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  srwq {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  swwq {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  contract_root {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  state_root {
+    LightOperation {
+      base
+      unitsPerGas
+    }
+  }
+  new_storage_per_byte
+  vm_initialization
+}
+
 fragment consensusParametersFragment on ConsensusParameters {
   txParams {
     ...TxParametersFragment
@@ -207,6 +415,9 @@ fragment consensusParametersFragment on ConsensusParameters {
   }
   feeParams {
     ...FeeParametersFragment
+  }
+  gasCosts {
+    ...GasCostsFragment
   }
   baseAssetId
   chainId
