@@ -48,7 +48,7 @@ describe('Predicate', () => {
         predicate.setData(validation).transfer(receiver.address, 50, BaseAssetId, {
           gasLimit: 1,
         })
-      ).rejects.toThrow(/Invalid transaction/i);
+      ).rejects.toThrow(/Gas price '0' is lower than the required: '1'./i);
     });
   });
 });
