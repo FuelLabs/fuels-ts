@@ -60,7 +60,7 @@ describe('Predicate', () => {
       await fundPredicate(wallet, predicate, amountToPredicate);
 
       await expect(predicate.transfer(receiver.address, amountToReceiver)).rejects.toThrow(
-        'Invalid transaction'
+        'PredicateVerificationFailed'
       );
     });
   });
