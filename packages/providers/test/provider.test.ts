@@ -68,7 +68,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.8');
+    expect(version).toEqual('0.21.0-rc.1');
   });
 
   it('can call()', async () => {
@@ -111,20 +111,20 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
-        pc: bn(0x2870),
-        is: bn(0x2868),
+        pc: bn(0x2868),
+        is: bn(0x2860),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: bn(1),
-        pc: bn(0x2874),
-        is: bn(0x2868),
+        pc: bn(0x286c),
+        is: bn(0x2860),
       },
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0xc),
+        gasUsed: bn(0x18),
       },
     ];
 
