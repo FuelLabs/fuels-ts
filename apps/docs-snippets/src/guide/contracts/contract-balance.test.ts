@@ -24,7 +24,7 @@ describe(__filename, () => {
       provider,
     });
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     await contract.functions
       .transfer(amountToTransfer, BaseAssetId, recipient.address.toB256())
@@ -33,7 +33,6 @@ describe(__filename, () => {
       })
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       })
       .call();
 

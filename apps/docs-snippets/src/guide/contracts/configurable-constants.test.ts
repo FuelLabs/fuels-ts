@@ -1,7 +1,10 @@
 import type { Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe('configurable-constants', () => {
@@ -43,12 +46,11 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
     });
     // #endregion configurable-constants-2
 
@@ -68,12 +70,11 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
     });
     // #endregion configurable-constants-3
 
@@ -95,13 +96,12 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     await expect(
       factory.deployContract({
         configurableConstants,
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4
