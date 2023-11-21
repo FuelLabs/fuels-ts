@@ -242,12 +242,12 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    // TODO: Fix max gax per tx
-    const params: TxParamsType = { gasLimit: 1_000_000, ...txParams };
-    const request = new ScriptTransactionRequest(params);
+    const request = new ScriptTransactionRequest(txParams);
     request.addCoinOutput(destination, amount, assetId);
 
-    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
 
     await this.fund(request, requiredQuantities, maxFee);
 
@@ -281,9 +281,7 @@ export class Account extends AbstractAccount {
       assetId
     );
 
-    const { maxGasPerTx } = this.provider.getGasConfig();
     const request = new ScriptTransactionRequest({
-      gasLimit: maxGasPerTx,
       ...txParams,
       script,
       scriptData,
@@ -291,9 +289,12 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractId);
 
-    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request, [
-      { amount: bn(amount), assetId: String(assetId) },
-    ]);
+    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(
+      request,
+      [{ amount: bn(amount), assetId: String(assetId) }]
+    );
+
+    request.gasLimit = gasUsed;
 
     await this.fund(request, requiredQuantities, maxFee);
 
