@@ -192,6 +192,17 @@ fragment FeeParametersFragment on FeeParameters {
   gasPerByte
 }
 
+fragment DependentCostFragment on DependentCost {
+  ... on LightOperation {
+    base
+    unitsPerGas
+  }
+  ... on HeavyOperation {
+    base
+    gasPerUnit
+  }
+}
+
 fragment GasCostsFragment on GasCosts {
   add
   addi
@@ -208,8 +219,8 @@ fragment GasCostsFragment on GasCosts {
   croo
   div
   divi
-  eck1
   ecr1
+  eck1
   ed19
   eq
   exp
@@ -235,9 +246,9 @@ fragment GasCostsFragment on GasCosts {
   lw
   mint
   mlog
-  mod
+  modOp
   modi
-  move
+  moveOp
   movi
   mroo
   mul
@@ -251,8 +262,8 @@ fragment GasCostsFragment on GasCosts {
   popl
   pshh
   pshl
-  ret_contract
-  rvrt_contract
+  ret
+  rvrt
   sb
   sll
   slli
@@ -283,121 +294,64 @@ fragment GasCostsFragment on GasCosts {
   xor
   xori
   call {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   ccp {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   csiz {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   k256 {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   ldc {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   logd {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   mcl {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   mcli {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   mcp {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   mcpi {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   meq {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
-  retd_contract {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+  retd {
+    ...DependentCostFragment
   }
   s256 {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   scwq {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   smo {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   srwq {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
   swwq {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+    ...DependentCostFragment
   }
-  contract_root {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+  contractRoot {
+    ...DependentCostFragment
   }
-  state_root {
-    LightOperation {
-      base
-      unitsPerGas
-    }
+  stateRoot {
+    ...DependentCostFragment
   }
-  new_storage_per_byte
-  vm_initialization
+  vmInitialization
+  newStoragePerByte
 }
 
 fragment consensusParametersFragment on ConsensusParameters {
@@ -537,13 +491,13 @@ query estimatePredicates($encodedTransaction: HexString!) {
   }
 }
 
-query getBlock($blockId: BlockId, $blockHeight: U64) {
-  block(id: $blockId, height: $blockHeight) {
+query getBlock($blockId: BlockId, $height: U32) {
+  block(id: $blockId, height: $height) {
     ...blockFragment
   }
 }
 
-query getBlockWithTransactions($blockId: BlockId, $blockHeight: U64) {
+query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
@@ -670,13 +624,13 @@ query getMessages(
 
 query getMessageProof(
   $transactionId: TransactionId!
-  $messageId: MessageId!
+  $nonce: Nonce!
   $commitBlockId: BlockId
   $commitBlockHeight: U32
 ) {
   messageProof(
     transactionId: $transactionId
-    messageId: $messageId
+    nonce: $nonce
     commitBlockId: $commitBlockId
     commitBlockHeight: $commitBlockHeight
   ) {
@@ -704,7 +658,7 @@ mutation submit($encodedTransaction: HexString!) {
 
 mutation produceBlocks(
   $startTimestamp: Tai64Timestamp
-  $blocksToProduce: U64!
+  $blocksToProduce: U32!
 ) {
   produceBlocks(
     blocksToProduce: $blocksToProduce
