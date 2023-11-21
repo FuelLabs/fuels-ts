@@ -333,7 +333,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { maxFee } = await this.getTransactionCost();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
+
+    transactionRequest.gasLimit = gasUsed;
 
     await this.fundWithRequiredCoins(maxFee);
 
