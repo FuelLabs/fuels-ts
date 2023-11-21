@@ -3,13 +3,14 @@ import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type {
-  TransactionScript,
-  Policy,
-  TransactionCreate,
+import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
+import {
+  PolicyType,
+  TransactionCoder,
+  InputType,
+  OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { PolicyType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify } from 'ethers';
 
