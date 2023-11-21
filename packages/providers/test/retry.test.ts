@@ -1,7 +1,6 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import Provider from '../src/provider';
-import { RetryConfig } from '../src/retry-config';
 
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
@@ -27,9 +26,9 @@ describe('Retries correctly', () => {
     const maxAttempts = 4;
     const duration = 150;
 
-    const retryConfig = new RetryConfig({ maxAttempts, duration, backoff });
+    const retryOptions = { maxAttempts, baseDuration: duration, backoff };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL, { retryConfig });
+    const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
 
     const expectedChainInfo = await provider.operations.getChain();
 
@@ -40,19 +39,9 @@ describe('Retries correctly', () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore TS is throwing error when test is run, but not in IDE
     fetchSpy.mockImplementation((input: RequestInfo | URL, init: RequestInit | undefined) => {
-      // const time = Date.now();
-
-      // if (fetchSpy.mock.calls.length === 1) {
-      //   initialCallTime = time;
-      // } else {
-      //   retryCallTimes.push(time);
-      // }
-
       callTimes.push(Date.now());
 
       if (fetchSpy.mock.calls.length <= maxAttempts) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore asd
         const error = new Error();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore TS is throwing error when test is run, but not in IDE
@@ -93,9 +82,9 @@ describe('Retries correctly', () => {
     const maxAttempts = 5;
     const duration = 100;
 
-    const retryConfig = new RetryConfig({ maxAttempts, duration, backoff: 'fixed' });
+    const retryOptions = { maxAttempts, baseDuration: duration, backoff: 'fixed' as const };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL, { retryConfig });
+    const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
 
     const fetchSpy = jest
       .spyOn(global, 'fetch')

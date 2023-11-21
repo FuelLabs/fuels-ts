@@ -21,6 +21,8 @@ import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
 } from './__generated__/operations';
+import type { RetryOptions } from './call-retrier';
+import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -28,7 +30,6 @@ import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { RetryConfig } from './retry-config';
 import type {
   TransactionRequestLike,
   TransactionRequest,
@@ -212,7 +213,7 @@ export type ProviderOptions = {
   ) => Promise<Response>;
   timeout?: number;
   cacheUtxo?: number;
-  retryConfig?: RetryConfig;
+  retryOptions?: RetryOptions;
 };
 
 /**
@@ -251,20 +252,23 @@ export default class Provider {
     timeout: undefined,
     cacheUtxo: undefined,
     fetch: undefined,
-    retryConfig: undefined,
+    retryOptions: undefined,
   };
 
   private static getFetchFn(options: ProviderOptions) {
-    return options.fetch !== undefined
-      ? options.fetch
-      : (url: string, request: FetchRequestOptions) =>
-          RetryConfig.retryable(options.retryConfig, () =>
+    const fetchFn =
+      options.fetch !== undefined
+        ? options.fetch
+        : (url: string, request: FetchRequestOptions) =>
             fetch(url, {
               ...request,
               signal:
                 options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
-            })
-          );
+            });
+
+    type FetchParams = Parameters<NonNullable<ProviderOptions['fetch']>>;
+
+    return (...args: FetchParams) => retrier(() => fetchFn(...args), options.retryOptions);
   }
 
   /**
