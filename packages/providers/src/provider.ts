@@ -19,6 +19,7 @@ import { clone } from 'ramda';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
+  GqlGasCosts,
   GqlGetBlocksQueryVariables,
 } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -96,6 +97,7 @@ export type ChainInfo = {
   baseChainHeight: BN;
   peerCount: number;
   consensusParameters: ConsensusParameters;
+  gasCosts: GqlGasCosts;
   latestBlock: {
     id: string;
     height: BN;
@@ -139,7 +141,7 @@ export type TransactionCost = {
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   const { name, daHeight, peerCount, consensusParameters, latestBlock } = chain;
 
-  const { contractParams, feeParams, predicateParams, scriptParams, txParams } =
+  const { contractParams, feeParams, predicateParams, scriptParams, txParams, gasCosts } =
     consensusParameters;
 
   return {
@@ -163,6 +165,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
       chainId: bn(consensusParameters.chainId),
     },
+    gasCosts,
     latestBlock: {
       id: latestBlock.id,
       height: bn(latestBlock.header.height),
