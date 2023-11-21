@@ -311,8 +311,8 @@
     "croo": 16,
     "div": 1,
     "divi": 1,
-    "ecr1": 3000,
     "eck1": 951,
+    "ecr1": 3000,
     "ed19": 3000,
     "eq": 1,
     "exp": 1,
@@ -332,17 +332,15 @@
     "jnzb": 1,
     "jnef": 1,
     "jneb": 1,
-    "k256": 11,
     "lb": 1,
     "log": 9,
     "lt": 1,
     "lw": 1,
-    "mcpi": 33,
     "mint": 135,
     "mlog": 1,
-    "modOp": 1,
+    "mod": 1,
     "modi": 1,
-    "moveOp": 1,
+    "move": 1,
     "movi": 1,
     "mroo": 2,
     "mul": 1,
@@ -352,11 +350,13 @@
     "not": 1,
     "or": 1,
     "ori": 1,
-    "ret": 13,
-    "rvrt": 13,
-    "s256": 2,
+    "poph": 2,
+    "popl": 2,
+    "pshh": 2,
+    "pshl": 2,
+    "ret_contract": 13,
+    "rvrt_contract": 13,
     "sb": 1,
-    "scwq": 13,
     "sll": 1,
     "slli": 1,
     "srl": 1,
@@ -365,8 +365,7 @@
     "sub": 1,
     "subi": 1,
     "sw": 1,
-    "sww": 43,
-    "swwq": 44,
+    "sww": 67,
     "time": 1,
     "tr": 105,
     "tro": 60,
@@ -387,53 +386,121 @@
     "xor": 1,
     "xori": 1,
     "call": {
-      "base": 144,
-      "dep_per_unit": 214
+      "LightOperation": {
+        "base": 144,
+        "units_per_gas": 214
+      }
     },
     "ccp": {
-      "base": 15,
-      "dep_per_unit": 103
+      "LightOperation": {
+        "base": 15,
+        "units_per_gas": 103
+      }
     },
     "csiz": {
-      "base": 17,
-      "dep_per_unit": 790
+      "LightOperation": {
+        "base": 17,
+        "units_per_gas": 790
+      }
+    },
+    "k256": {
+      "LightOperation": {
+        "base": 11,
+        "units_per_gas": 214
+      }
     },
     "ldc": {
-      "base": 15,
-      "dep_per_unit": 272
+      "LightOperation": {
+        "base": 15,
+        "units_per_gas": 272
+      }
     },
     "logd": {
-      "base": 26,
-      "dep_per_unit": 64
+      "LightOperation": {
+        "base": 26,
+        "units_per_gas": 64
+      }
     },
     "mcl": {
-      "base": 1,
-      "dep_per_unit": 3333
+      "LightOperation": {
+        "base": 1,
+        "units_per_gas": 3333
+      }
     },
     "mcli": {
-      "base": 1,
-      "dep_per_unit": 3333
+      "LightOperation": {
+        "base": 1,
+        "units_per_gas": 3333
+      }
     },
     "mcp": {
-      "base": 1,
-      "dep_per_unit": 2000
+      "LightOperation": {
+        "base": 1,
+        "units_per_gas": 2000
+      }
+    },
+    "mcpi": {
+      "LightOperation": {
+        "base": 3,
+        "units_per_gas": 2000
+      }
     },
     "meq": {
-      "base": 1,
-      "dep_per_unit": 2500
+      "LightOperation": {
+        "base": 1,
+        "units_per_gas": 2500
+      }
     },
-    "retd": {
-      "base": 29,
-      "dep_per_unit": 62
+    "retd_contract": {
+      "LightOperation": {
+        "base": 29,
+        "units_per_gas": 62
+      }
+    },
+    "s256": {
+      "LightOperation": {
+        "base": 2,
+        "units_per_gas": 214
+      }
+    },
+    "scwq": {
+      "LightOperation": {
+        "base": 13,
+        "units_per_gas": 5
+      }
     },
     "smo": {
-      "base": 209,
-      "dep_per_unit": 55
+      "LightOperation": {
+        "base": 209,
+        "units_per_gas": 55
+      }
     },
     "srwq": {
-      "base": 47,
-      "dep_per_unit": 5
-    }
+      "LightOperation": {
+        "base": 47,
+        "units_per_gas": 5
+      }
+    },
+    "swwq": {
+      "LightOperation": {
+        "base": 44,
+        "units_per_gas": 5
+      }
+    },
+    "contract_root": {
+      "LightOperation": {
+        "base": 75,
+        "units_per_gas": 1
+      }
+    },
+    "state_root": {
+      "LightOperation": {
+        "base": 412,
+        "units_per_gas": 1
+      }
+    },
+    "new_storage_per_byte": 1,
+    "vm_initialization": 2000
   },
   "consensus": {
     "PoA": {
