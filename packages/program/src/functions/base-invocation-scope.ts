@@ -354,10 +354,14 @@ export class BaseInvocationScope<TReturn = any> {
 
     const provider = this.getProvider();
 
-    const { maxFee } = await this.getTransactionCost();
+    const transactionRequest = await this.getTransactionRequest();
+
+    const { maxFee, gasUsed } = await this.getTransactionCost();
+
+    transactionRequest.gasLimit = gasUsed;
 
     await this.fundWithRequiredCoins(maxFee);
-    const transactionRequest = await this.getTransactionRequest();
+
     const response = await provider.call(transactionRequest, {
       utxoValidation: false,
     });
