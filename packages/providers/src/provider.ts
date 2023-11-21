@@ -668,7 +668,7 @@ export default class Provider {
 
     const { gasLimit } = clonedTransactionRequest;
     let { gasPrice } = clonedTransactionRequest;
-    const { minGasPrice, gasPerByte, gasPriceFactor } = this.getGasConfig();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
 
     gasPrice = max(gasPrice, minGasPrice);
 
@@ -698,8 +698,7 @@ export default class Provider {
        * to contract calls.
        */
       clonedTransactionRequest.gasPrice = bn(0);
-      // TODO: Fix max gax per tx
-      // clonedTransactionRequest.gasLimit = bn(1_000_000);
+      clonedTransactionRequest.gasLimit = maxGasPerTx.div(2);
 
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.call(clonedTransactionRequest);
