@@ -165,7 +165,7 @@ describe('Wallet', () => {
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
-      messageOutReceipt.messageId,
+      messageOutReceipt.nonce,
       nextBlock.blockId
     );
     // #endregion Message-getMessageProof
