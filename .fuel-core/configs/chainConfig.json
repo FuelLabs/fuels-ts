@@ -311,8 +311,8 @@
     "croo": 16,
     "div": 1,
     "divi": 1,
-    "eck1": 951,
     "ecr1": 3000,
+    "eck1": 951,
     "ed19": 3000,
     "eq": 1,
     "exp": 1,
@@ -338,7 +338,9 @@
     "lw": 1,
     "mint": 135,
     "mlog": 1,
+    "modOp": 1,
     "modi": 1,
+    "moveOp": 1,
     "movi": 1,
     "mroo": 2,
     "mul": 1,
@@ -352,6 +354,8 @@
     "popl": 2,
     "pshh": 2,
     "pshl": 2,
+    "ret": 13,
+    "rvrt": 13,
     "sb": 1,
     "sll": 1,
     "slli": 1,
@@ -447,7 +451,7 @@
         "units_per_gas": 2500
       }
     },
-    "retd_contract": {
+    "retd": {
       "LightOperation": {
         "base": 29,
         "units_per_gas": 62

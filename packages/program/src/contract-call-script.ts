@@ -249,16 +249,10 @@ export const getContractCallScript = (
 
         let gasForwardedSize = 0;
 
-        if (call.gas) {
-          scriptData.push(new U64Coder().encode(call.gas));
-
-          gasForwardedSize = WORD_SIZE;
-        }
-
         paramOffsets.push({
-          gasForwardedOffset: call.gas ? segmentOffset + WORD_SIZE + ASSET_ID_LEN : 0,
           amountOffset: segmentOffset,
           assetIdOffset: segmentOffset + WORD_SIZE,
+          gasForwardedOffset: call.gas ? segmentOffset + WORD_SIZE + ASSET_ID_LEN : 0,
           callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
         });
 
@@ -272,6 +266,11 @@ export const getContractCallScript = (
         /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
         /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
+        if (call.gas) {
+          scriptData.push(new U64Coder().encode(call.gas));
+
+          gasForwardedSize = WORD_SIZE;
+        }
 
         /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
         // If the method call takes custom inputs or has more than

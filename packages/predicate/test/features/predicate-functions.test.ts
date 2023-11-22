@@ -8,7 +8,7 @@ import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
 describe('Predicate', () => {
   describe('Functions', () => {
-    const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
+    const predicateAddress = '0x6b6ef590390f0a7de75f8275ab5d7877c17236caba2514039c6565ec15f79111';
     let provider: Provider;
 
     beforeAll(async () => {

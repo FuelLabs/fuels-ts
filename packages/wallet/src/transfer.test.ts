@@ -28,7 +28,7 @@ describe('Wallet', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499978) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
@@ -144,7 +144,7 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499969) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499911) }]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
@@ -165,7 +165,7 @@ describe('Wallet', () => {
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
-      messageOutReceipt.messageId,
+      messageOutReceipt.nonce,
       nextBlock.blockId
     );
     // #endregion Message-getMessageProof
@@ -215,6 +215,6 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499869) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
   });
 });

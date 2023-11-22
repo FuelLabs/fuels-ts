@@ -206,7 +206,9 @@ describe('Predicate', () => {
 
       predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
-      await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
+      await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow(
+        /PredicateVerificationFailed/
+      );
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
@@ -244,7 +246,7 @@ describe('Predicate', () => {
         predicate
           .setData(100)
           .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('calls a predicate with valid struct data and returns true', async () => {
@@ -296,7 +298,7 @@ describe('Predicate', () => {
             total_complete: 0,
           })
           .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
@@ -349,7 +351,7 @@ describe('Predicate', () => {
             total_complete: 0,
           })
           .transfer(receiver.address, 50, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
@@ -412,7 +414,7 @@ describe('Predicate', () => {
 
       await expect(
         predicate.setData(20, 20).transfer(receiver.address, 50, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });
 });
