@@ -190,7 +190,7 @@ describe('Predicate', () => {
       });
 
       await expect(predicate.transfer(destination.address, 300)).rejects.toThrow(
-        'Invalid transaction'
+        /PredicateVerificationFailed/
       );
     });
 
