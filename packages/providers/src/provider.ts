@@ -844,9 +844,9 @@ export default class Provider {
   ): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: bn(idOrHeight).toString(10) };
+      variables = { height: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: (await this.getBlockNumber()).toString(10) };
+      variables = { height: (await this.getBlockNumber()).toString(10) };
     } else if (idOrHeight.length === 66) {
       variables = { blockId: idOrHeight };
     } else {
@@ -1081,12 +1081,12 @@ export default class Provider {
       /** The transaction to get message from */
       transactionId: string;
       /** The message id from MessageOut receipt */
-      messageId: string;
+      nonce: string;
       commitBlockId?: string;
       commitBlockHeight?: string;
     } = {
       transactionId,
-      messageId,
+      nonce: messageId,
     };
 
     if (commitBlockId && commitBlockHeight) {
