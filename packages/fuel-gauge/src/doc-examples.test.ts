@@ -434,7 +434,7 @@ describe('Doc Examples', () => {
     // assert that predicate address now has the expected amount to predicate
     expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
-    const depositOnPredicate = await wallet1.transfer(predicate.address, 400, BaseAssetId, {
+    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
       gasPrice,
     });
     // Wait for Transaction to succeed
@@ -443,7 +443,7 @@ describe('Doc Examples', () => {
 
     // assert that predicate address now has the updated expected amount to predicate
     expect(bn(updatedPredicateBalance)).toEqual(
-      initialPredicateBalance.add(amountToPredicate).add(400)
+      initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
     const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
