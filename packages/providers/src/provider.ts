@@ -1072,8 +1072,7 @@ export default class Provider {
   async getMessageProof(
     /** The transaction to get message from */
     transactionId: string,
-    /** The message id from MessageOut receipt */
-    messageId: string,
+    nonce: string,
     commitBlockId?: string,
     commitBlockHeight?: BN
   ): Promise<MessageProof | null> {
@@ -1086,7 +1085,7 @@ export default class Provider {
       commitBlockHeight?: string;
     } = {
       transactionId,
-      nonce: messageId,
+      nonce,
     };
 
     if (commitBlockId && commitBlockHeight) {
@@ -1123,7 +1122,6 @@ export default class Provider {
       messageBlockHeader,
       commitBlockHeader,
       blockProof,
-      nonce,
       sender,
       recipient,
       amount,
