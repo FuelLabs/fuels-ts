@@ -14,6 +14,7 @@ import {
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify } from 'ethers';
 
+import type { GqlConsensusParameters } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
@@ -24,6 +25,7 @@ import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
 import { NoWitnessAtIndexError, ChangeOutputCollisionError } from './errors';
+import { getMinGas } from './gas';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -513,6 +515,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
+   * @hidden
+   */
+  chargeableByteSize() {
+    const witnessSize = this.witnesses.reduce((t, w) => t + getBytesCopy(w).length, 0);
+    return this.toTransactionBytes().length - witnessSize;
+  }
+
+  /**
    * Return the minimum amount in native coins required to create
    * a transaction. This is required even if the gasPrice is 0.
    *
@@ -525,6 +535,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId: BaseAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
+  }
+
+  calculateMinGas(consensusParameters: GqlConsensusParameters): BN {
+    return getMinGas(this, consensusParameters);
   }
 
   /**

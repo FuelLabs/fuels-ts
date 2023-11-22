@@ -3,11 +3,15 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
+import { type BN } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
+import type { GqlConsensusParameters } from '../__generated__/operations';
+
+import { getMinGas } from './gas';
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
 import { returnZeroScript } from './scripts';

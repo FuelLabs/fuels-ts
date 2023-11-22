@@ -193,6 +193,7 @@ fragment FeeParametersFragment on FeeParameters {
 }
 
 fragment DependentCostFragment on DependentCost {
+  __typename
   ... on LightOperation {
     base
     unitsPerGas

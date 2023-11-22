@@ -12,6 +12,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
+import { addAmountToAsset } from '../src/coin-quantity';
 import type { TransactionCost } from '../src/provider';
 import Provider from '../src/provider';
 import type {
