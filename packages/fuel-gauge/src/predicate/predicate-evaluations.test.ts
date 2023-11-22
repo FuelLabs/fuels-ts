@@ -1,12 +1,19 @@
 import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
-import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
+  const { binHexlified: predicateBytesFalse } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_FALSE
+  );
+
   describe('Evaluations', () => {
     let predicate: Predicate<InputValue[]>;
     let wallet: WalletUnlocked;

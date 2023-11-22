@@ -1,16 +1,11 @@
-import { readFileSync } from 'fs';
 import { toHex } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { setup } from './utils';
 
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
-  )
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.GENERIC_TYPES_CONTRACT
 );
 
 describe('GenericTypesContract', () => {
