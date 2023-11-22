@@ -25,7 +25,7 @@ import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
 import { NoWitnessAtIndexError, ChangeOutputCollisionError } from './errors';
-import { getMinGas, resolveGasDependentCosts } from './gas';
+import { getMinGas } from './gas';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,

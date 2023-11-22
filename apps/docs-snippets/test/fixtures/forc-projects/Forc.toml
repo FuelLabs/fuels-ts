@@ -12,6 +12,7 @@ members = [
   "return-context",
   "token-depositor",
   "simple-predicate",
+  "complex-predicate",
   "simple-token-abi",
   "echo-configurables",
   "transfer-to-address",

@@ -14,10 +14,6 @@ export function gasUsedByInputs(
 ) {
   const witnessCache: Array<number> = [];
   const totalGas = inputs.reduce((total, input) => {
-    if ('witnessIndex' in input && !witnessCache.includes(input.witnessIndex)) {
-      witnessCache.push(input.witnessIndex);
-      return total.add(gasCosts.ecr1);
-    }
     if ('predicate' in input && input.predicate) {
       return total.add(
         bn(gasCosts.vmInitialization)
@@ -26,6 +22,10 @@ export function gasUsedByInputs(
           )
           .add(bn(input.predicateGasUsed))
       );
+    }
+    if ('witnessIndex' in input && !witnessCache.includes(input.witnessIndex)) {
+      witnessCache.push(input.witnessIndex);
+      return total.add(gasCosts.ecr1);
     }
     return total;
   }, bn());
