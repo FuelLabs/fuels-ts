@@ -48,7 +48,7 @@ describe('Hasher', () => {
     });
 
     expect(hashTransaction(transactionRequest, 0)).toEqual(
-      '0x940f4913b21c8cc4d29faea57a3386c88ae212d32b0a74b3bb73dced098cd43b'
+      '0xc0f5e25f37294c5b0218b377cae9622df03a05dc540374827c9e7a7f65560842'
     );
   });
 });
