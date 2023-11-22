@@ -83,7 +83,7 @@ export class FunctionFragment<
 
   #getOutputEncodedLength(): number {
     try {
-      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output); // TODO: review small-byte options
       if (heapCoder instanceof VecCoder) {
         return heapCoder.coder.encodedLength;
       }
@@ -183,7 +183,7 @@ export class FunctionFragment<
 
     const result = nonEmptyInputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
-        const coder = AbiCoder.getCoder(this.jsonAbi, input);
+        const coder = AbiCoder.getCoder(this.jsonAbi, input); // TODO: review small-byte options
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {
@@ -207,7 +207,7 @@ export class FunctionFragment<
     }
 
     const bytes = getBytesCopy(data);
-    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output); // TODO: review small-byte options
 
     if (outputAbiType.type === 'raw untyped slice') {
       (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
