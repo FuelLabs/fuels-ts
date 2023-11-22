@@ -9,9 +9,9 @@ import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import type { GqlConsensusParameters } from '../__generated__/operations';
+import type { GqlGasCosts } from '../__generated__/operations';
+import { resolveGasDependentCosts } from '../utils/gas';
 
-import { getMinGas } from './gas';
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
 import { returnZeroScript } from './scripts';
@@ -179,5 +179,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const abiInterface = new Interface(abi);
     this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;
+  }
+
+  metadataGas(gasCosts: GqlGasCosts): BN {
+    return resolveGasDependentCosts(this.byteSize(), gasCosts.s256);
   }
 }

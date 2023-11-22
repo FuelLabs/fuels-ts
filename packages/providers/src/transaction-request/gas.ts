@@ -1,27 +1,11 @@
 import { bn } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
-import type {
-  GqlConsensusParameters,
-  GqlDependentCost,
-  GqlGasCosts,
-} from '../__generated__/operations';
+import type { GqlConsensusParameters, GqlGasCosts } from '../__generated__/operations';
+import { resolveGasDependentCosts } from '../utils/gas';
 
 import type { TransactionRequestInput } from './input';
-import { TransactionType, type BaseTransactionRequest } from './transaction-request';
-
-export function resolveGasDependentCosts(byteSize: number, gasDependentCost: GqlDependentCost) {
-  const base = bn(gasDependentCost.base);
-  let dependentValue = bn(0);
-  if (gasDependentCost.__typename === 'LightOperation') {
-    dependentValue = bn(byteSize).div(bn(gasDependentCost.unitsPerGas));
-  }
-  if (gasDependentCost.__typename === 'HeavyOperation') {
-    dependentValue = bn(byteSize).mul(bn(gasDependentCost.gasPerUnit));
-  }
-  console.log(base, dependentValue, gasDependentCost.__typename);
-  return base.add(dependentValue);
-}
+import type { BaseTransactionRequest } from './transaction-request';
 
 export function gasUsedByInputs(
   inputs: Array<TransactionRequestInput>,
@@ -54,22 +38,11 @@ export function getMinGas(
   consensusParameters: GqlConsensusParameters
 ) {
   const { gasCosts, feeParams } = consensusParameters;
-  const vmInitGas = bn(gasCosts.vmInitialization); // 2000
-  console.log('vmInitGas', vmInitGas.toString());
-  // 456
-  const chargeableByteSize = transaction.chargeableByteSize();
-  console.log('chargeableByteSize', chargeableByteSize);
-  const bytesGas = bn(chargeableByteSize).mul(feeParams.gasPerByte); // 1824
-  console.log('bytesGas', bytesGas.toString());
-  const inputsGas = gasUsedByInputs(transaction.inputs, transaction.byteSize(), gasCosts); // 3256
-  console.log('inputsGas', inputsGas.toString());
-
-  let metadataGas = bn(0); // 4
-  const tx = transaction.toTransaction();
-  if (tx.type === TransactionType.Script) {
-    metadataGas = resolveGasDependentCosts(transaction.byteSize(), gasCosts.s256);
-  }
-  console.log('metadataGas', metadataGas.toString());
-
-  return vmInitGas.add(bytesGas).add(inputsGas).add(metadataGas).maxU64();
+  const vmInitGas = bn(gasCosts.vmInitialization);
+  const byteSize = transaction.byteSize();
+  const bytesGas = bn(byteSize).mul(feeParams.gasPerByte);
+  const inputsGas = gasUsedByInputs(transaction.inputs, byteSize, gasCosts);
+  const metadataGas = transaction.metadataGas(gasCosts);
+  const minGas = vmInitGas.add(bytesGas).add(inputsGas).add(metadataGas).maxU64();
+  return minGas;
 }
