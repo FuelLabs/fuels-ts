@@ -9,7 +9,10 @@ import {
   BaseAssetId,
 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -125,8 +128,7 @@ describe(__filename, () => {
     );
 
     // #region send-and-spend-funds-from-predicates-7
-    const errorMsg =
-      'Invalid transaction: The transaction contains a predicate which failed to validate';
+    const errorMsg = 'PredicateVerificationFailed';
     // #endregion send-and-spend-funds-from-predicates-7
 
     expect((<Error>error).message).toMatch(errorMsg);
