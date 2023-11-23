@@ -328,6 +328,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       witnessIndex,
       predicate: predicate?.bytes,
       predicateData: predicate?.predicateData,
+      getPredicateData: predicate?.getPredicateData,
     };
 
     // Insert the Input
@@ -372,6 +373,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       witnessIndex,
       predicate: predicate?.bytes,
       predicateData: predicate?.predicateData,
+      getPredicateData: predicate?.getPredicateData,
     };
 
     // Insert the Input
