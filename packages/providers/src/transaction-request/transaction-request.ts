@@ -12,19 +12,20 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import type { BytesLike } from 'ethers';
-import { getBytesCopy, hexlify } from 'ethers';
+import { concat, getBytesCopy, hexlify } from 'ethers';
 
-import type { GqlConsensusParameters, GqlGasCosts } from '../__generated__/operations';
+import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { MessageCoin } from '../message';
+import type { ChainInfo } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
-import { NoWitnessAtIndexError, ChangeOutputCollisionError } from './errors';
+import { ChangeOutputCollisionError, NoWitnessAtIndexError } from './errors';
 import { getMinGas } from './gas';
 import type {
   TransactionRequestInput,
@@ -208,7 +209,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * Creates an empty witness without any side effects and returns the index
    */
   protected createWitness() {
-    this.witnesses.push('0x');
+    // Push a dummy witness with same byte size as a real witness signature
+    this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
   }
 
@@ -492,10 +494,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       (output) => hexlify(output.assetId) === assetId
     );
 
+    // TODO: do we need this yet?
     // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== addressify(to).toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
+    // if (changeOutput && hexlify(changeOutput.to) !== addressify(to).toB256()) {
+    //   throw new ChangeOutputCollisionError();
+    // }
 
     // Insert a ChangeOutput if it does not exist
     if (!changeOutput) {
@@ -524,8 +527,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * @hidden
    */
-  calculateMinGas(consensusParameters: GqlConsensusParameters): BN {
-    return getMinGas(this, consensusParameters);
+  calculateMinGas(chainInfo: ChainInfo): BN {
+    return getMinGas(this, chainInfo);
   }
 
   /**

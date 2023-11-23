@@ -10,6 +10,9 @@ import {
   ScriptTransactionRequest,
   Address,
   Predicate,
+  U64Coder,
+  hexlify,
+  getGasUsedFromReceipts,
 } from 'fuels';
 
 import {
@@ -25,15 +28,15 @@ describe(__filename, () => {
       provider
     );
     await seedTestWallet(wallet, [[500_000, BaseAssetId]]);
-    const { minGasPrice, maxGasPerTx } = await provider.getGasConfig();
+
+    /**
+     * Create a contract transaction
+     */
     const { abiContents, binHexlified, storageSlots } = getDocsSnippetsForcProject(
       DocSnippetProjectsEnum.COUNTER
     );
-
     const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { transactionRequest } = contractFactory.createTransactionRequest({
-      gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
+    const { transactionRequest: request } = contractFactory.createTransactionRequest({
       storageSlots,
     });
     const resources = await provider.getResourcesToSpend(wallet.address, [
@@ -42,19 +45,19 @@ describe(__filename, () => {
         assetId: BaseAssetId,
       },
     ]);
-    transactionRequest.addResources(resources);
-    const {
-      chain: { consensusParameters },
-    } = await provider.operations.getChain();
+    request.addResources(resources);
 
-    // TODO: need to fix it to fake witness signature for calculateMinGas
-    // to avoid doing populate signature twice
-    const txSigned1 = await wallet.populateTransactionWitnessesSignature(transactionRequest);
-    const minGas = await txSigned1.calculateMinGas(consensusParameters);
-    txSigned1.gasLimit = maxGasPerTx.sub(minGas);
-    const txSigned2 = await wallet.populateTransactionWitnessesSignature(txSigned1);
+    /**
+     * Get the transaction cost to se a strict gasLimit and min gasPrice
+     */
+    const txCost = await provider.getTransactionCost(request);
+    request.gasLimit = txCost.gasUsed;
+    request.gasPrice = txCost.gasPrice;
 
-    const result = await provider.sendTransaction(txSigned2);
+    /**
+     * Send transaction
+     */
+    const result = await wallet.sendTransaction(request);
     const { status } = await result.waitForResult();
 
     expect(status).toBe(TransactionStatus.success);
@@ -67,15 +70,16 @@ describe(__filename, () => {
       provider
     );
     await seedTestWallet(sender, [[500_000, BaseAssetId]]);
-    const { minGasPrice, maxGasPerTx } = await provider.getGasConfig();
-    const destination = Address.fromRandom();
-    const amount = bn(100);
+
+    /**
+     * Create a script transaction
+     */
+    const { binHexlified } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COMPLEX_SCRIPT);
     const request = new ScriptTransactionRequest({
-      gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
-      script: '0x',
+      script: binHexlified,
+      scriptData: hexlify(new U64Coder().encode(bn(2000))),
     });
-    request.addCoinOutput(destination, amount, BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
     const resources = await provider.getResourcesToSpend(sender.address, [
       {
         amount: bn(100_000),
@@ -83,21 +87,23 @@ describe(__filename, () => {
       },
     ]);
     request.addResources(resources);
-    const {
-      chain: { consensusParameters },
-    } = await provider.operations.getChain();
 
-    // TODO: need to fix it to fake witness signature for calculateMinGas
-    // to avoid doing populate signature twice
-    const txSigned1 = await sender.populateTransactionWitnessesSignature(request);
-    const minGas = await txSigned1.calculateMinGas(consensusParameters);
-    txSigned1.gasLimit = maxGasPerTx.sub(minGas);
-    const txSigned2 = await sender.populateTransactionWitnessesSignature(txSigned1);
+    /**
+     * Get the transaction cost to se a strict gasLimit and min gasPrice
+     */
+    const txCost = await provider.getTransactionCost(request);
+    request.gasLimit = txCost.gasUsed;
+    request.gasPrice = txCost.gasPrice;
 
-    const result = await provider.sendTransaction(txSigned2);
-    const { status } = await result.waitForResult();
+    /**
+     * Send transaction
+     */
+    const result = await sender.sendTransaction(request);
+    const { status, receipts } = await result.waitForResult();
+    const gasUsed = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
+    expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
   });
 
   it('test min_gas predicate', async () => {
@@ -105,17 +111,18 @@ describe(__filename, () => {
     const { abiContents, binHexlified } = getDocsSnippetsForcProject(
       DocSnippetProjectsEnum.COMPLEX_PREDICATE
     );
+    /**
+     * Setup predicate
+     */
     const predicate = new Predicate(binHexlified, provider, abiContents);
+    predicate.setData(bn(1000));
     await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
-    const { minGasPrice, maxGasPerTx } = await provider.getGasConfig();
-    const destination = Address.fromRandom();
-    const amount = bn(100);
-    const request = new ScriptTransactionRequest({
-      gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
-      script: '0x',
-    });
-    request.addCoinOutput(destination, amount, BaseAssetId);
+
+    /**
+     * Create a script transaction transfer
+     */
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
     const resources = await provider.getResourcesToSpend(predicate.address, [
       {
         amount: bn(100_000),
@@ -123,25 +130,91 @@ describe(__filename, () => {
       },
     ]);
     request.addResources(resources);
-    request.witnesses = [];
-    predicate.setData(bn(1000));
-    const {
-      chain: { consensusParameters },
-    } = await provider.operations.getChain();
 
-    const txSigned = await predicate.populateTransactionPredicateData(request);
-    // Here we need to verify if we can always use gasLimit to 0, because transactions
-    // that include predicates that verify the transaction hash will need to have a gasLimit
-    // equal to the one to be submitted.
-    txSigned.gasLimit = bn(0);
-    const txEstimated = await provider.estimatePredicates(txSigned);
+    /**
+     * Get the transaction cost to se a strict gasLimit and min gasPrice
+     */
+    const txCost = await provider.getTransactionCost(request);
+    request.gasLimit = txCost.gasUsed;
+    request.gasPrice = txCost.gasPrice;
 
-    const minGas = await txEstimated.calculateMinGas(consensusParameters);
-    txEstimated.gasLimit = maxGasPerTx.sub(minGas);
-
-    const result = await provider.sendTransaction(txEstimated);
-    const { status } = await result.waitForResult();
+    /**
+     * Send transaction predicate
+     */
+    const result = await predicate.sendTransaction(request);
+    const { status, receipts } = await result.waitForResult();
+    const gasUsed = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
+    expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
+  });
+
+  it('test min_gas mix account and predicate with script', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { abiContents, binHexlified } = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.COMPLEX_PREDICATE
+    );
+    /**
+     * Setup account
+     */
+    const wallet = Wallet.fromPrivateKey(
+      '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
+      provider
+    );
+    await seedTestWallet(wallet, [[500_000, BaseAssetId]]);
+
+    /**
+     * Setup predicate
+     */
+    const predicate = new Predicate(binHexlified, provider, abiContents);
+    predicate.setData(bn(1000));
+    await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
+
+    /**
+     * Create a script transaction
+     */
+    const { binHexlified: scriptBin } = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.COMPLEX_SCRIPT
+    );
+    const request = new ScriptTransactionRequest({
+      script: scriptBin,
+      scriptData: hexlify(new U64Coder().encode(bn(2000))),
+    });
+    // add predicate transfer
+    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
+    const resourcesPredicate = await provider.getResourcesToSpend(predicate.address, [
+      {
+        amount: bn(100_000),
+        assetId: BaseAssetId,
+      },
+    ]);
+    request.addPredicateResources(resourcesPredicate, predicate);
+    // add account transfer
+    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
+    const resourcesWallet = await provider.getResourcesToSpend(wallet.address, [
+      {
+        amount: bn(100_000),
+        assetId: BaseAssetId,
+      },
+    ]);
+    request.addResources(resourcesWallet);
+
+    /**
+     * Get the transaction cost to se a strict gasLimit and min gasPrice
+     */
+    const txCost = await provider.getTransactionCost(request);
+    request.gasLimit = txCost.gasUsed;
+    request.gasPrice = txCost.gasPrice;
+
+    /**
+     * Send transaction predicate
+     */
+    await wallet.populateTransactionWitnessesSignature(request);
+    const result = await predicate.sendTransaction(request);
+    const { status, receipts } = await result.waitForResult();
+    const gasUsed = getGasUsedFromReceipts(receipts);
+
+    expect(status).toBe(TransactionStatus.success);
+    expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
   });
 });

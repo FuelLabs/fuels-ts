@@ -15,6 +15,7 @@ export enum DocSnippetProjectsEnum {
   TOKEN_DEPOSITOR = 'token-depositor',
   SIMPLE_PREDICATE = 'simple-predicate',
   COMPLEX_PREDICATE = 'complex-predicate',
+  COMPLEX_SCRIPT = 'complex-script',
   ECHO_CONFIGURABLES = 'echo-configurables',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
   RETURN_TRUE_PREDICATE = 'return-true-predicate',

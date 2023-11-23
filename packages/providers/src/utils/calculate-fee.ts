@@ -8,9 +8,10 @@ import type {
   TransactionResultScriptResultReceipt,
 } from '../transaction-response';
 
+// bn(Math.ceil(gasUsed.toNumber() / priceFactor.toNumber()) * gasPrice.toNumber());
 /** @hidden */
-export const calculatePriceWithFactor = (gasUsed: BN, gasPrice: BN, priceFactor: BN): BN =>
-  bn(Math.ceil(gasUsed.toNumber() / priceFactor.toNumber()) * gasPrice.toNumber());
+export const calculatePriceWithFactor = (gas: BN, gasPrice: BN, priceFactor: BN): BN =>
+  gas.mul(gasPrice).divRound(priceFactor);
 
 /** @hidden */
 export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): BN => {

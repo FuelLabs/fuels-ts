@@ -1,7 +1,8 @@
 import { bn } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
-import type { GqlConsensusParameters, GqlGasCosts } from '../__generated__/operations';
+import type { GqlGasCosts } from '../__generated__/operations';
+import type { ChainInfo } from '../provider';
 import { resolveGasDependentCosts } from '../utils/gas';
 
 import type { TransactionRequestInput } from './input';
@@ -33,14 +34,14 @@ export function gasUsedByInputs(
   return totalGas;
 }
 
-export function getMinGas(
-  transaction: BaseTransactionRequest,
-  consensusParameters: GqlConsensusParameters
-) {
-  const { gasCosts, feeParams } = consensusParameters;
+export function getMinGas(transaction: BaseTransactionRequest, chainInfo: ChainInfo) {
+  const {
+    gasCosts,
+    consensusParameters: { gasPerByte },
+  } = chainInfo;
   const vmInitGas = bn(gasCosts.vmInitialization);
   const byteSize = transaction.byteSize();
-  const bytesGas = bn(byteSize).mul(feeParams.gasPerByte);
+  const bytesGas = bn(byteSize).mul(gasPerByte);
   const inputsGas = gasUsedByInputs(transaction.inputs, byteSize, gasCosts);
   const metadataGas = transaction.metadataGas(gasCosts);
   const minGas = vmInitGas.add(bytesGas).add(inputsGas).add(metadataGas).maxU64();
