@@ -89,8 +89,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   abstract type: TransactionType;
   /** Gas price for transaction */
   gasPrice: BN;
-  /** Gas limit for transaction */
-  gasLimit: BN;
   /** Block until which tx cannot be included */
   maturity: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
@@ -111,7 +109,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   constructor({
     gasPrice,
-    gasLimit,
     maturity,
     maxFee,
     witnessLimit,
@@ -120,7 +117,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     witnesses,
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = bn(gasPrice);
-    this.gasLimit = bn(gasLimit);
     this.maturity = maturity ?? 0;
     this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
     this.maxFee = maxFee ? bn(maxFee) : undefined;
