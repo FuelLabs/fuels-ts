@@ -407,4 +407,31 @@ export const defaultChainConfig = {
       signing_key: '0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d',
     },
   },
+  consensus_parameters: {
+    tx_params: {
+      max_inputs: 255,
+      max_outputs: 255,
+      max_witnesses: 255,
+      max_gas_per_tx: 10000000,
+      max_size: 17825792,
+    },
+    predicate_params: {
+      max_predicate_length: 1048576,
+      max_predicate_data_length: 1048576,
+      max_gas_per_predicate: 10000000,
+      max_message_data_length: 1048576,
+    },
+    script_params: {
+      max_script_length: 1048576,
+      max_script_data_length: 1048576,
+    },
+    contract_params: {
+      contract_max_size: 16777216,
+      max_storage_slots: 255,
+    },
+    fee_params: {
+      gas_price_factor: 92,
+      gas_per_byte: 4,
+    },
+  },
 };

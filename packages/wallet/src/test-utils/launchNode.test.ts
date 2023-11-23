@@ -6,7 +6,7 @@ import { WalletUnlocked } from '../wallets';
 
 import { launchNodeAndGetWallets } from './launchNode';
 
-describe.skip('launchNode', () => {
+describe('launchNode', () => {
   test('launchNodeAndGetWallets - empty config', async () => {
     const { stop, provider, wallets } = await launchNodeAndGetWallets();
     expect(provider).toBeInstanceOf(Provider);
@@ -24,7 +24,7 @@ describe.skip('launchNode', () => {
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
         chainConfigPath,
-        args: ['--manual_blocks_enabled'],
+        args: ['--poa-instant', 'true'],
       },
     });
 
