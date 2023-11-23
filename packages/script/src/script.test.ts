@@ -13,15 +13,14 @@ import type { Account } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { getBytesCopy } from 'ethers';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
+import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
 
 import { Script } from './index';
 
-const scriptBin = readFileSync(
-  join(__dirname, '../test/fixtures/forc-projects/call-test-script/out/debug/call-test-script.bin')
+const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcProject(
+  ScriptProjectsEnum.CALL_TEST_SCRIPT
 );
 
 const setup = async () => {
@@ -80,7 +79,7 @@ type MyStruct = {
 describe('Script', () => {
   let scriptRequest: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(() => {
-    const abiInterface = new Interface(jsonAbiFragmentMock);
+    const abiInterface = new Interface(scriptJsonAbi);
     scriptRequest = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
