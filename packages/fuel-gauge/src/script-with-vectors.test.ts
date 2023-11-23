@@ -24,7 +24,10 @@ describe('Script With Vectors', () => {
     const someArray = [1, 100];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
 
-    const { logs } = await scriptInstance.functions.main(someArray).txParams({ gasPrice }).call();
+    const { logs } = await scriptInstance.functions
+      .main(someArray)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     expect(logs.map((n) => n.toNumber())).toEqual([1]);
   });
@@ -34,7 +37,9 @@ describe('Script With Vectors', () => {
     const someVec = [7, 2, 1, 5];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
 
-    const scriptInvocationScope = scriptInstance.functions.main(someVec).txParams({ gasPrice });
+    const scriptInvocationScope = scriptInstance.functions
+      .main(someVec)
+      .txParams({ gasPrice, gasLimit: 10_000 });
 
     const { logs } = await scriptInvocationScope.call();
 
@@ -91,7 +96,7 @@ describe('Script With Vectors', () => {
 
     const { value } = await scriptInstance.functions
       .main(importantDates)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect((value as unknown as BN).toString()).toBe('1');
   });
@@ -161,7 +166,7 @@ describe('Script With Vectors', () => {
 
     const { value } = await scriptInstance.functions
       .main(vectorOfStructs)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect((value as unknown as BN).toString()).toBe('1');
   });

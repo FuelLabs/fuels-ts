@@ -70,7 +70,10 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions
+      .mint_coins(subId, 1_000)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -85,7 +88,10 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions
+      .mint_coins(subId, 1_000)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     balanceAfter = await wallet.getBalance();
 

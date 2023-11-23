@@ -39,7 +39,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await contractInstance.functions
       .return_raw_slice(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[]>();
 
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -50,7 +50,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_raw_slice(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toBeUndefined();
@@ -65,7 +65,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_nested_raw_slice(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toBeUndefined();
@@ -130,7 +130,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await scriptInstance.functions
       .main(1, INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[]>();
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });

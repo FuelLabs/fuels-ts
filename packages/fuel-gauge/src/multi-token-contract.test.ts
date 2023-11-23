@@ -61,7 +61,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // update assetId on helperDict object
@@ -97,7 +97,7 @@ describe('MultiTokenContract', () => {
           )
         )
       )
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const validateTransferPromises = subIds.map(async (subId) => {
@@ -147,7 +147,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // update assetId on helperDict object
@@ -179,7 +179,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.burn_coins(subId, helperDict[subId].amountToBurn)
         )
       )
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const validateBurnPromises = subIds.map(async (subId) => {

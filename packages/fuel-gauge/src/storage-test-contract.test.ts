@@ -41,12 +41,12 @@ describe('StorageTestContract', () => {
     // Call contract
     const { value: initializeResult } = await contract.functions
       .initialize_counter(1300)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
     const { value: incrementResult } = await contract.functions
       .increment_counter(37)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
@@ -87,12 +87,12 @@ describe('StorageTestContract', () => {
     // #endregion contract-deployment-storage-slots-inline
     const { value: initializeResult } = await contract.functions
       .initialize_counter(1300)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
     const { value: incrementResult } = await contract.functions
       .increment_counter(37)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
