@@ -57,6 +57,13 @@ export type InputCoin = {
 
   /** Predicate input data (parameters) (byte[]) */
   predicateData: string;
+
+  /**
+   * A temporary solution for retrieving 'predicateData' with the correct offset.
+   * This helper function should not be considered part of an InputCoin, but
+   * rather as a utility to obtain the predicate data with the appropriate offset.
+   */
+  getPredicateData?: (txLengh: number) => Uint8Array;
 };
 
 export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
@@ -247,6 +254,13 @@ export type InputMessage = {
 
   /** Predicate input data (parameters) (byte[]) */
   predicateData: string;
+
+  /**
+   * A temporary solution for retrieving 'predicateData' with the correct offset.
+   * This helper function should not be considered part of an InputMessage, but
+   * rather as a utility to obtain the predicate data with the appropriate offset.
+   */
+  getPredicateData?: (txLengh: number) => Uint8Array;
 };
 
 export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
