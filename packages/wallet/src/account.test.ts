@@ -264,6 +264,9 @@ describe('Account', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const request = new ScriptTransactionRequest();
