@@ -39,6 +39,9 @@ export type CoinTransactionRequestInput = {
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  /** Temporary solution to get the predicate Data with the correct offset */
+  getPredicateData?: (txLengh: number) => Uint8Array;
 };
 
 export type MessageTransactionRequestInput = {
@@ -70,6 +73,9 @@ export type MessageTransactionRequestInput = {
 
   /** data of message */
   data?: BytesLike;
+
+  /** Temporary solution to get the predicate Data with the correct offset */
+  getPredicateData?: (txLengh: number) => Uint8Array;
 };
 
 export type ContractTransactionRequestInput = {
@@ -112,6 +118,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
+        getPredicateData: value?.getPredicateData,
       };
     }
     case InputType.Contract: {
@@ -146,6 +153,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         predicateData: hexlify(predicateData),
         data: hexlify(data),
         dataLength: data.length,
+        getPredicateData: value?.getPredicateData,
       };
     }
     default: {
