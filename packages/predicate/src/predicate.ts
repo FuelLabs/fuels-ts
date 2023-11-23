@@ -2,7 +2,6 @@ import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
   INPUT_COIN_FIXED_SIZE,
-  SCRIPT_FIXED_SIZE,
   WORD_SIZE,
   calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
@@ -29,6 +28,7 @@ import { getPredicateRoot } from './utils';
 export class Predicate<ARGS extends InputValue[]> extends Account implements AbstractPredicate {
   bytes: Uint8Array;
   predicateData: Uint8Array = Uint8Array.from([]);
+  getPredicateData?: (txLengh: number) => Uint8Array;
   interface?: Interface;
 
   // TODO: Since provider is no longer optional, we can maybe remove `chainId` from the constructor.
@@ -74,6 +74,8 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
         input.predicateData = this.predicateData;
+        // eslint-disable-next-line no-param-reassign
+        input.getPredicateData = this.getPredicateData;
       }
     });
 
@@ -115,10 +117,11 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     const VM_TX_MEMORY = calculateVmTxMemory({
       maxInputs: this.provider.getChain().consensusParameters.maxInputs.toNumber(),
     });
-    const OFFSET =
-      VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
+    const SEMI_OFFSET = VM_TX_MEMORY + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
 
-    this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
+    this.getPredicateData = (txLength: number) =>
+      mainFn?.encodeArguments(args, SEMI_OFFSET + txLength) || new Uint8Array();
+
     return this;
   }
 
