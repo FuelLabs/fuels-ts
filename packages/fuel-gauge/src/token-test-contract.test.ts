@@ -14,7 +14,7 @@ let provider: Provider;
 
 const setup = async () => {
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
   const { minGasPrice } = wallet.provider.getGasConfig();
 
   // Deploy contract
@@ -50,7 +50,10 @@ describe('TokenTestContract', () => {
     const assetId = mintedAssets?.[0].assetId;
 
     const getBalance = async () => {
-      const { value } = await token.functions.get_balance(tokenContractId, assetId).simulate<BN>();
+      const { value } = await token.functions
+        .get_balance(tokenContractId, assetId)
+        .txParams({ gasLimit: 10_000 })
+        .simulate<BN>();
       return value;
     };
     // Check balance is correct
@@ -83,7 +86,7 @@ describe('TokenTestContract', () => {
     const token = await setup();
 
     const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
-    await functionCallOne.dryRun();
+    await functionCallOne.txParams({ gasLimit: 10_000 }).dryRun();
     const { transactionResult } = await functionCallOne
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
@@ -104,7 +107,7 @@ describe('TokenTestContract', () => {
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     const functionCallTwo = token.functions.mint_to_addresses(addresses, 10);
-    await functionCallTwo.simulate();
+    await functionCallTwo.txParams({ gasLimit: 10_000 }).simulate();
     await functionCallTwo.txParams({ gasPrice, gasLimit: 10_000 }).call();
 
     balances = await wallet1.getBalances();

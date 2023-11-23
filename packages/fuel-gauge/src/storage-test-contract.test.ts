@@ -50,7 +50,10 @@ describe('StorageTestContract', () => {
       .call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
-    const { value: count } = await contract.functions.counter().simulate();
+    const { value: count } = await contract.functions
+      .counter()
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     expect(count.toHex()).toEqual(toHex(1337));
   });
 
@@ -96,7 +99,10 @@ describe('StorageTestContract', () => {
       .call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
-    const { value: count } = await contract.functions.counter().simulate();
+    const { value: count } = await contract.functions
+      .counter()
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     expect(count.toHex()).toEqual(toHex(1337));
   });
 });

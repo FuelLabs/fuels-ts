@@ -72,7 +72,7 @@ describe('Predicate', () => {
         .callParams({
           forward: [500, BaseAssetId],
         })
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call();
 
       expect(value.toString()).toEqual('500');
@@ -102,6 +102,7 @@ describe('Predicate', () => {
           })
           .txParams({
             gasPrice,
+            gasLimit: 10_000,
           })
           .call()
       ).rejects.toThrow(/not enough coins to fit the target/);
@@ -136,7 +137,10 @@ describe('Predicate', () => {
       const contractAmount = 10;
       const {
         transactionResult: { fee: receiverTxFee1 },
-      } = await contract.functions.set_base_token(BaseAssetId).txParams({ gasPrice }).call();
+      } = await contract.functions
+        .set_base_token(BaseAssetId)
+        .txParams({ gasPrice, gasLimit: 10_000 })
+        .call();
       const {
         transactionResult: { fee: receiverTxFee2 },
       } = await contract.functions
@@ -148,6 +152,7 @@ describe('Predicate', () => {
         })
         .txParams({
           gasPrice,
+          gasLimit: 10_000,
         })
         .call();
 

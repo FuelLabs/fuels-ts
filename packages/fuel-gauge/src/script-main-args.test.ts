@@ -88,11 +88,7 @@ describe('Script Coverage', () => {
     const foo = 42;
 
     await expect(
-      scriptInstance.functions
-        .main(foo)
-        .txParams({ gasLimit: 10, gasPrice: 400 })
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call()
+      scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call()
     ).rejects.toThrow(/Gas limit '10' is lower than the required/);
   });
 });
