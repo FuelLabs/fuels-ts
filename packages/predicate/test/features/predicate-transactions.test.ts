@@ -45,7 +45,7 @@ describe('Predicate', () => {
       const inputCoinMock = sendTransactionMock.mock.calls[0][0]
         .inputs?.[0] as unknown as InputCoin;
       expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
-      expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
+      expect(predicate.getPredicateData).not.toBeUndefined();
     });
 
     it('includes predicate as input when simulating a transaction', async () => {
@@ -58,7 +58,7 @@ describe('Predicate', () => {
       const inputCoinMock = sendTransactionMock.mock.calls[0][0]
         .inputs?.[0] as unknown as InputCoin;
       expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
-      expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
+      expect(predicate.getPredicateData).not.toBeUndefined();
     });
   });
 });

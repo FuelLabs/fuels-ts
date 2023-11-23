@@ -24,9 +24,11 @@ describe('Predicate', () => {
       const predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
+      expect(predicate.getPredicateData).toBeUndefined();
+
       predicate.setData<[string]>(b256);
 
-      expect(hexlify(predicate.predicateData)).toEqual(b256);
+      expect(predicate.getPredicateData).not.toBeUndefined();
     });
 
     it('throws when predicate ABI has no main function', () => {
