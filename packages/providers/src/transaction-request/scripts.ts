@@ -10,7 +10,7 @@ export const returnZeroScript: AbstractScriptRequest<void> = {
       Opcode::NOOP
     */
   // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
-  bytes: getBytesCopy('0x24000000'),
+  bytes: getBytesCopy('0x'),
   encodeScriptData: () => new Uint8Array(0),
 };
 

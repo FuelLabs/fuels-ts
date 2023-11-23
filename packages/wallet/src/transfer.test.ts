@@ -7,7 +7,7 @@ import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { Wallet } from '.';
 import { FUEL_NETWORK_URL } from './configs';
-import { seedTestWallet, generateTestWallet } from './test-utils';
+import { generateTestWallet, seedTestWallet } from './test-utils';
 
 describe('Wallet', () => {
   let provider: Provider;

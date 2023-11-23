@@ -49,15 +49,11 @@ export function assembleTransactionSummary<TTransactionType = void>(
     maxInputs,
   } = params;
 
-  const { gasLimit = bn(0), witnesses, policies } = transaction;
+  const { gasLimit = bn(0), policies } = transaction;
 
   const gasPrice =
     bn(policies?.find((policy) => policy.type === PolicyType.GasPrice)?.data) || bn(0);
   const gasUsed = getGasUsedFromReceipts(receipts);
-  const chargeableBytes = calculateTxChargeableBytes({
-    transactionBytes,
-    transactionWitnesses: witnesses,
-  });
 
   const { minFee: fee } = calculateTransactionFee({
     gasUsed,
@@ -65,7 +61,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     gasLimit,
     gasPerByte,
     gasPriceFactor,
-    chargeableBytes,
+    chargeableBytes: bn(transactionBytes.length),
   });
 
   const operations = getOperations({

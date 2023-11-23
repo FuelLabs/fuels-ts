@@ -3,10 +3,14 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
+import { type BN } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
+
+import type { GqlGasCosts } from '../__generated__/operations';
+import { resolveGasDependentCosts } from '../utils/gas';
 
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
@@ -175,5 +179,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const abiInterface = new Interface(abi);
     this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;
+  }
+
+  metadataGas(gasCosts: GqlGasCosts): BN {
+    return resolveGasDependentCosts(this.byteSize(), gasCosts.s256);
   }
 }
