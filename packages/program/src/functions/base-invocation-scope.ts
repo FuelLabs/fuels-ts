@@ -242,23 +242,14 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
-    const { maxGasPerTx, minGasPrice } = this.getProvider().getGasConfig();
+    const { minGasPrice } = this.getProvider().getGasConfig();
 
-    // TODO: add helper to give preference to previously set tx params
-    request.gasPrice = bn(txParams.gasPrice || minGasPrice);
-    request.gasLimit = bn(txParams.gasLimit || maxGasPerTx.div(2));
+    request.gasPrice = bn(txParams.gasPrice || request.gasPrice || minGasPrice);
+    request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
 
-    if (request.maxFee) {
-      request.maxFee = bn(txParams.maxFee);
-    }
-
-    if (request.witnessLimit) {
-      request.witnessLimit = bn(txParams.witnessLimit);
-    }
-
-    if (txParams.maturity) {
-      request.maturity = txParams.maturity;
-    }
+    request.maxFee = txParams.maxFee ? bn(txParams.maxFee) : request.maxFee;
+    request.witnessLimit = txParams.witnessLimit ? bn(txParams.witnessLimit) : request.witnessLimit;
+    request.maturity = txParams.maturity || request.maturity;
 
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
@@ -343,9 +334,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-
-    transactionRequest.gasLimit = gasUsed;
+    const { maxFee } = await this.getTransactionCost();
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -366,9 +355,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-
-    transactionRequest.gasLimit = gasUsed;
+    const { maxFee } = await this.getTransactionCost();
 
     await this.fundWithRequiredCoins(maxFee);
 
