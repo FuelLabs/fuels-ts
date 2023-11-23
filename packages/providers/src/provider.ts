@@ -14,7 +14,7 @@ import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
 import { GraphQLClient } from 'graphql-request';
-import { clone, min } from 'ramda';
+import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -40,8 +40,6 @@ import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculatePriceWithFactor,
-  calculateTransactionFee,
-  calculateTxChargeableBytes,
   fromUnixToTai64,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
@@ -524,17 +522,19 @@ export default class Provider {
       estimatePredicates: false,
     });
 
-    // Fail transaction before submit to avoid submit failure
-    // Resulting in lost of funds on a OutOfGas situation.
-    if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
+    if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
       throw new FuelError(
         ErrorCode.GAS_PRICE_TOO_LOW,
         `Gas price '${transactionRequest.gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
+    }
+
+    const isScriptTransaction = transactionRequest instanceof ScriptTransactionRequest;
+
+    if (isScriptTransaction && bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
@@ -713,6 +713,7 @@ export default class Provider {
     const { minGasPrice } = this.getNode();
     const { maxGasPerTx: gasLimit, gasPriceFactor } = chainInfo.consensusParameters;
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
+    const isScriptTransaction = transactionRequest instanceof ScriptTransactionRequest;
     let gasUsed = bn(0);
 
     /**
@@ -720,7 +721,9 @@ export default class Provider {
      */
     if (transactionRequest.hasPredicateInput() && estimatePredicates) {
       // Remove gasLimit to avoid gasLimit when estimating predicates
-      transactionRequest.gasLimit = bn(0);
+      if (isScriptTransaction) {
+        transactionRequest.gasLimit = bn(0);
+      }
       await this.estimatePredicates(transactionRequest);
     }
 
