@@ -22,10 +22,10 @@ import type { MessageCoin } from '../message';
 import type { ChainInfo } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { calculatePriceWithFactor, normalizeJSON } from '../utils';
+import { normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
-import { ChangeOutputCollisionError, NoWitnessAtIndexError } from './errors';
+import { NoWitnessAtIndexError } from './errors';
 import { getMinGas } from './gas';
 import type {
   TransactionRequestInput,
@@ -531,21 +531,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   calculateMinGas(chainInfo: ChainInfo): BN {
     return getMinGas(this, chainInfo);
-  }
-
-  /**
-   * Return the minimum amount in native coins required to create
-   * a transaction. This is required even if the gasPrice is 0.
-   *
-   * @returns The minimum amount in coins required to create a transaction.
-   */
-  calculateFee(gasPriceFactor: BN): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, gasPriceFactor);
-
-    return {
-      assetId: BaseAssetId,
-      amount: gasFee.isZero() ? bn(1) : gasFee,
-    };
   }
 
   /**
