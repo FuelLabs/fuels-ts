@@ -1,8 +1,8 @@
 import type { IType } from '../../types/interfaces/IType';
 
-import { ArrayType } from './ArrayType';
+import { AType } from './AType';
 
-export class StdStringType extends ArrayType {
+export class StdStringType extends AType implements IType {
   public static swayType = 'struct String';
 
   public name = 'stdString';
@@ -14,10 +14,15 @@ export class StdStringType extends ArrayType {
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
+    const capitalizedName = 'StdString';
+
     this.attributes = {
-      inputLabel: `StdString`,
-      outputLabel: `StdString`,
+      inputLabel: capitalizedName,
+      outputLabel: capitalizedName,
     };
+
+    this.requiredFuelsMembersImports = [capitalizedName];
+
     return this.attributes;
   }
 }

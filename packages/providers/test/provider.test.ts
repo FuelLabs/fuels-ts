@@ -12,6 +12,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
+import type { TransactionCost } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -829,7 +830,9 @@ describe('Provider', () => {
       supportedVersion: `${majorMismatch}.${minor}.${patch}`,
     };
 
-    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+    if (mock.supportedVersion === FUEL_CORE) {
+      throw new Error();
+    }
 
     const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
@@ -852,7 +855,9 @@ describe('Provider', () => {
       supportedVersion: `${major}.${minorMismatch}.${patch}`,
     };
 
-    if (mock.supportedVersion === FUEL_CORE) throw new Error();
+    if (mock.supportedVersion === FUEL_CORE) {
+      throw new Error();
+    }
 
     const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
@@ -867,18 +872,21 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const gasLimit = 1;
     const gasUsed = bn(1000);
-    const transactionParams = {
-      minGasPrice: bn(1),
-      gasPrice: bn(1),
+    const transactionCost: TransactionCost = {
       gasUsed,
-      fee: bn(1),
+      gasPrice: bn(1),
+      minGasPrice: bn(1),
+      maxFee: bn(2),
+      minFee: bn(1),
+      receipts: [],
+      requiredQuantities: [],
     };
 
     const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
 
     const txCostSpy = jest
       .spyOn(provider, 'getTransactionCost')
-      .mockReturnValue(Promise.resolve(transactionParams));
+      .mockReturnValue(Promise.resolve(transactionCost));
 
     await expectToThrowFuelError(
       () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice: 1, gasLimit })),
@@ -896,18 +904,21 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const gasPrice = 1;
     const minGasPrice = bn(1000);
-    const transactionParams = {
+    const transactionCost: TransactionCost = {
       minGasPrice,
       gasPrice: bn(1),
       gasUsed: bn(1),
-      fee: bn(1),
+      maxFee: bn(2),
+      minFee: bn(1),
+      receipts: [],
+      requiredQuantities: [],
     };
 
     const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
 
     const txCostSpy = jest
       .spyOn(provider, 'getTransactionCost')
-      .mockReturnValue(Promise.resolve(transactionParams));
+      .mockReturnValue(Promise.resolve(transactionCost));
 
     await expectToThrowFuelError(
       () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice, gasLimit: 1000 })),

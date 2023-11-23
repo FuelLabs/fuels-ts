@@ -17,6 +17,7 @@ import {
   MOCK_RECEIPT_RETURN_DATA_1,
   MOCK_RECEIPT_RETURN_DATA_2,
   MOCK_RECEIPT_SCRIPT_RESULT,
+  MOCK_RECEIPT_TRANSFER,
   MOCK_RECEIPT_TRANSFER_OUT,
   MOCK_TRANSACTION_RAWPAYLOAD,
 } from '../../test/fixtures/transaction-summary';
@@ -261,6 +262,36 @@ describe('operations', () => {
       const operations = getTransferOperations({
         inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+        receipts: [],
+      });
+      expect(operations.length).toEqual(1);
+
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getTransferOperations return transfer operations from coin inputs (CONTRACT_TRANSFER)', () => {
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0x3dc'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          type: AddressType.account,
+        },
+        name: OperationName.transfer,
+        to: {
+          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+          type: AddressType.contract,
+        },
+      };
+
+      const operations = getTransferOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_CHANGE],
+        receipts: [MOCK_RECEIPT_TRANSFER],
       });
       expect(operations.length).toEqual(1);
 
@@ -289,9 +320,39 @@ describe('operations', () => {
       const operations = getTransferOperations({
         inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+        receipts: [],
       });
 
       expect(operations.length).toEqual(1);
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getTransferOperations return transfer operations from message inputs (CONTRACT_TRANSFER)', () => {
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0x3dc'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
+          type: AddressType.account,
+        },
+        name: OperationName.transfer,
+        to: {
+          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+          type: AddressType.contract,
+        },
+      };
+
+      const operations = getTransferOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
+        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_CHANGE],
+        receipts: [MOCK_RECEIPT_TRANSFER],
+      });
+      expect(operations.length).toEqual(1);
+
       expect(operations[0]).toStrictEqual(expected);
     });
 
@@ -299,6 +360,7 @@ describe('operations', () => {
       const operations = getTransferOperations({
         inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
         outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
+        receipts: [],
       });
 
       expect(operations.length).toEqual(0);

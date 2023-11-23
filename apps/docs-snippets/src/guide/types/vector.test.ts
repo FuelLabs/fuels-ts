@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { BN, getRandomB256 } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -9,7 +9,7 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(
-      SnippetProjectEnum.ECHO_EMPLOYEE_DATA_VECTOR
+      DocSnippetProjectsEnum.ECHO_EMPLOYEE_DATA_VECTOR
     );
   });
 

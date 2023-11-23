@@ -1,22 +1,21 @@
-import { readFileSync } from 'fs';
 import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { createSetupConfig } from './utils';
 
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin')
+const { binHexlified, abiContents } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
 const setupContract = createSetupConfig({
-  contractBytecode,
-  abi: abiJSON,
+  contractBytecode: binHexlified,
+  abi: abiContents,
   cache: true,
 });
 
 const U64_MAX = bn(2).pow(64).sub(1);
+
 describe('CallTestContract', () => {
   let gasPrice: BN;
   beforeAll(async () => {

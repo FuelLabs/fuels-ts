@@ -7,15 +7,12 @@ interface PackageJson {
   author: string;
   engines: {
     node: string;
-    pnpm: string;
   };
-  packageManager: string;
 }
 
 const {
   author,
-  engines: { node, pnpm },
-  packageManager,
+  engines: { node },
 } = JSON.parse(readFileSync('package.json', 'utf-8')) as PackageJson;
 
 const expectedAuthor = 'Fuel Labs <contact@fuel.sh> (https://fuel.network/)';
@@ -29,19 +26,13 @@ const faultyPackageJsons = globSync(`{packages,apps}/*/package.json`)
   .filter((path) => !/\/forc|fuel-core\//.test(path))
   .filter((path) => {
     const json = JSON.parse(readFileSync(path, 'utf-8')) as PackageJson;
-    return json.private
-      ? false
-      : json.author !== author ||
-          json.engines.node !== node ||
-          json.packageManager !== packageManager ||
-          json.engines.pnpm !== pnpm;
+    return json.private ? false : json.author !== author || json.engines.node !== node;
   });
 
 if (faultyPackageJsons.length) {
   const expectedConfigs = {
     author,
-    engines: { node, pnpm },
-    packageManager,
+    engines: { node },
   };
 
   error(

@@ -1,7 +1,7 @@
 import type { Contract, Provider, TxParams, WalletUnlocked } from 'fuels';
 import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -11,8 +11,11 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     senderWallet = await getTestWallet();
+
+    const { abiContents, binHexlified } = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.COUNTER
+    );
     provider = senderWallet.provider;
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
     const { minGasPrice } = senderWallet.provider.getGasConfig();
     deployedContract = await factory.deployContract({ gasPrice: minGasPrice });

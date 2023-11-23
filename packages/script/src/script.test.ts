@@ -16,12 +16,12 @@ import { getBytesCopy } from 'ethers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
+import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
 
 import { Script } from './index';
 
 const scriptBin = readFileSync(
-  join(__dirname, '../test/call-test-script/out/debug/call-test-script.bin')
+  join(__dirname, '../test/fixtures/forc-projects/call-test-script/out/debug/call-test-script.bin')
 );
 
 const setup = async () => {
