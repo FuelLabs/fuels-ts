@@ -225,7 +225,11 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
         base: '412',
         unitsPerGas: '1',
       },
-      vmInitialization: '2000',
+      vmInitialization: {
+        __typename: 'HeavyOperation',
+        base: '2000',
+        gasPerUnit: '0',
+      },
       newStoragePerByte: '1',
     },
   },
