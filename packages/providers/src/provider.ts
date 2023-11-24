@@ -712,11 +712,9 @@ export default class Provider {
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const chainInfo = this.getChain();
-    const { minGasPrice } = this.getNode();
-    const { maxGasPerTx: gasLimit, gasPriceFactor } = chainInfo.consensusParameters;
+    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const isScriptTransaction = transactionRequest instanceof ScriptTransactionRequest;
-    let gasUsed = bn(0);
+    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
 
     /**
      * Estimate predicates gasUsed
@@ -732,10 +730,6 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    const minGas = transactionRequest.calculateMinGas(chainInfo);
-    const maxGas = gasLimit.sub(minGas);
-    // Min gas price now is the minGas;
-    gasUsed = minGas;
 
     /**
      * Fund with fake UTXOs to avoid not enough funds error
@@ -750,8 +744,13 @@ export default class Provider {
     /**
      * Estimate gasUsed for script transactions
      */
-    // Transactions of type Create does not consume any gas so we can the dryRun
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
+
+    // Min gas price now is the minGas;
+    let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
+    // Transactions of type Create does not consume any gas so we can the dryRun
     if (transactionRequest.type === TransactionType.Script) {
       /**
        * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
@@ -759,10 +758,10 @@ export default class Provider {
        * will only be amounts being transferred (coin outputs) and amounts being forwarded
        * to contract calls.
        */
-      transactionRequest.gasPrice = bn(0);
       // Calculate the gasLimit again as we insert a fake UTXO and signer
-      transactionRequest.gasLimit = gasLimit.sub(transactionRequest.calculateMinGas(chainInfo));
 
+      transactionRequest.gasPrice = bn(0);
+      transactionRequest.gasLimit = maxGas;
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.call(transactionRequest, {
         estimateTxDependencies,
