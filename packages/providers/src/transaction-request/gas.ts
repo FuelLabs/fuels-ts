@@ -11,14 +11,14 @@ import type { BaseTransactionRequest } from './transaction-request';
 
 export function gasUsedByInputs(
   inputs: Array<TransactionRequestInput>,
-  _txBytesSize: number, // TODO: this is going to change
+  txBytesSize: number,
   gasCosts: GqlGasCosts
 ) {
   const witnessCache: Array<number> = [];
   const totalGas = inputs.reduce((total, input) => {
     if ('predicate' in input && input.predicate) {
       return total.add(
-        bn(gasCosts.vmInitialization)
+        resolveGasDependentCosts(txBytesSize, gasCosts.vmInitialization)
           .add(
             resolveGasDependentCosts(getBytesCopy(input.predicate).length, gasCosts.contractRoot)
           )
@@ -40,8 +40,8 @@ export function getMinGas(transaction: BaseTransactionRequest, chainInfo: ChainI
     gasCosts,
     consensusParameters: { gasPerByte },
   } = chainInfo;
-  const vmInitGas = bn(gasCosts.vmInitialization);
   const byteSize = transaction.byteSize();
+  const vmInitGas = resolveGasDependentCosts(byteSize, gasCosts.vmInitialization);
   const bytesGas = bn(byteSize).mul(gasPerByte);
   const inputsGas = gasUsedByInputs(transaction.inputs, byteSize, gasCosts);
   const metadataGas = transaction.metadataGas(gasCosts);
