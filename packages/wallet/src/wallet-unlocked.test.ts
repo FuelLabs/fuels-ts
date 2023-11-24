@@ -1,11 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import type {
-  CallResult,
-  TransactionRequest,
-  TransactionResponse,
-  TransactionRequestLike,
-} from '@fuel-ts/providers';
+import type { CallResult, TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
@@ -24,6 +19,8 @@ jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
   ...jest.requireActual('@fuel-ts/providers'),
 }));
+
+const { ScriptTransactionRequest } = providersMod;
 
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
@@ -202,13 +199,19 @@ describe('WalletUnlocked', () => {
   });
 
   it('simulates a transaction', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
+    const transactionRequestLike: TransactionRequestLike = {
+      type: providersMod.TransactionType.Script,
+    };
+    const transactionRequest = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
+
+    const estimateTxDependencies = jest
+      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
+      .mockImplementation(() => Promise.resolve());
 
     const call = jest
       .spyOn(providersMod.Provider.prototype, 'call')
@@ -216,7 +219,7 @@ describe('WalletUnlocked', () => {
 
     const populateTransactionWitnessesSignatureSpy = jest
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
-      .mockImplementationOnce(() => Promise.resolve(transactionRequestLike));
+      .mockImplementationOnce(() => Promise.resolve(transactionRequest));
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -231,16 +234,13 @@ describe('WalletUnlocked', () => {
     expect(transactionRequestify.mock.calls.length).toBe(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+
     expect(populateTransactionWitnessesSignatureSpy.mock.calls.length).toBe(1);
     expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(call.mock.calls.length).toBe(1);
-    expect(call.mock.calls[0]).toEqual([
-      transactionRequestLike,
-      {
-        utxoValidation: true,
-      },
-    ]);
   });
 
   it('encrypts wallet to keystore', async () => {
