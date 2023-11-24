@@ -57,7 +57,6 @@ describe('TokenTestContract', () => {
       return value;
     };
     // Check balance is correct
-
     await token.functions.mint_coins(100).txParams({ gasPrice, gasLimit: 10_000 }).call();
 
     expect((await getBalance()).toHex()).toEqual(toHex(200));
