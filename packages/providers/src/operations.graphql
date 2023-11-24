@@ -351,7 +351,9 @@ fragment GasCostsFragment on GasCosts {
   stateRoot {
     ...DependentCostFragment
   }
-  vmInitialization
+  vmInitialization {
+    ...DependentCostFragment
+  }
   newStoragePerByte
 }
 

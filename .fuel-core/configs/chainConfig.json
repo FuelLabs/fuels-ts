@@ -499,8 +499,13 @@
         "units_per_gas": 1
       }
     },
-    "new_storage_per_byte": 1,
-    "vm_initialization": 2000
+    "vm_initialization": {
+      "HeavyOperation": {
+        "base": 2000,
+        "gas_per_unit": 0
+      }
+    },
+    "new_storage_per_byte": 1
   },
   "consensus": {
     "PoA": {
