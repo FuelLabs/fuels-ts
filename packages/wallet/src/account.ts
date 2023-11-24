@@ -362,7 +362,8 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    return this.provider.sendTransaction(transactionRequest);
+    await this.provider.estimateTxDependencies(transactionRequest);
+    return this.provider.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   /**
@@ -373,6 +374,7 @@ export class Account extends AbstractAccount {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    return this.provider.simulate(transactionRequest);
+    await this.provider.estimateTxDependencies(transactionRequest);
+    return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 }

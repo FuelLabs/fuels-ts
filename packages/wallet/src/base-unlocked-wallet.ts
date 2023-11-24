@@ -113,8 +113,10 @@ export class BaseWalletUnlocked extends Account {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(
-      await this.populateTransactionWitnessesSignature(transactionRequest)
+      await this.populateTransactionWitnessesSignature(transactionRequest),
+      { estimateTxDependencies: false }
     );
   }
 
@@ -126,10 +128,12 @@ export class BaseWalletUnlocked extends Account {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.call(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {
         utxoValidation: true,
+        estimateTxDependencies: false,
       }
     );
   }
