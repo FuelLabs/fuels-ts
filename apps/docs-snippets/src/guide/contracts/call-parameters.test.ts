@@ -22,7 +22,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
-      .txParams({ gasPrice: minGasPrice })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
@@ -40,7 +40,7 @@ describe(__filename, () => {
           forward: [10, BaseAssetId],
           gasLimit: 1,
         })
-        .txParams({ gasPrice: minGasPrice })
+        .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
         .call()
     ).rejects.toThrow(/OutOfGas/);
     // #endregion call-params-2

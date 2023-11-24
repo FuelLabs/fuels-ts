@@ -327,7 +327,6 @@ describe('Account', () => {
     const addResources = jest.fn();
 
     const request = {
-      calculateFee,
       addResources,
     } as unknown as ScriptTransactionRequest;
 
@@ -357,8 +356,6 @@ describe('Account', () => {
     expect(result).toEqual(transactionResponse);
 
     expect(scriptTransactionRequest.mock.calls.length).toBe(1);
-
-    expect(calculateFee.mock.calls.length).toBe(1);
 
     expect(addResources.mock.calls.length).toBe(1);
     expect(addResources.mock.calls[0][0]).toEqual(resources);
@@ -397,10 +394,6 @@ describe('Account', () => {
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
-      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
-
     const sendTransaction = jest
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
@@ -417,9 +410,6 @@ describe('Account', () => {
     expect(transactionRequestify.mock.calls.length).toEqual(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
-    expect(estimateTxDependencies.mock.calls.length).toEqual(1);
-    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
-
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
   });
@@ -432,10 +422,6 @@ describe('Account', () => {
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
-
-    const estimateTxDependencies = jest
-      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
 
     const simulate = jest
       .spyOn(providersMod.Provider.prototype, 'simulate')
@@ -452,9 +438,6 @@ describe('Account', () => {
 
     expect(transactionRequestify.mock.calls.length).toBe(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
-
-    expect(estimateTxDependencies.mock.calls.length).toBe(1);
-    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);

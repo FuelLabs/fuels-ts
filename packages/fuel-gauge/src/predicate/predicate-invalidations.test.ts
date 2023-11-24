@@ -37,7 +37,9 @@ describe('Predicate', () => {
 
     it('throws if sender does not have enough resources for tx and gas', async () => {
       await expect(
-        predicate.setData(validation).transfer(receiver.address, predicateBalance)
+        predicate.setData(validation).transfer(receiver.address, predicateBalance, BaseAssetId, {
+          gasLimit: 10_000,
+        })
       ).rejects.toThrow(/not enough coins to fit the target/i);
     });
 

@@ -51,7 +51,6 @@ describe(__filename, () => {
      * Get the transaction cost to se a strict gasLimit and min gasPrice
      */
     const txCost = await provider.getTransactionCost(request);
-    request.gasLimit = txCost.gasUsed;
     request.gasPrice = txCost.gasPrice;
 
     /**

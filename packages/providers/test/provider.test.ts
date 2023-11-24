@@ -12,7 +12,6 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 import * as GraphQL from 'graphql-request';
 
-import { addAmountToAsset } from '../src/coin-quantity';
 import type { TransactionCost } from '../src/provider';
 import Provider from '../src/provider';
 import type {
@@ -881,6 +880,9 @@ describe('Provider', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
@@ -913,6 +915,9 @@ describe('Provider', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
