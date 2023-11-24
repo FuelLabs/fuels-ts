@@ -33,6 +33,7 @@ describe(__filename, () => {
       })
       .txParams({
         gasPrice: minGasPrice,
+        gasLimit: 10_000,
       })
       .call();
 

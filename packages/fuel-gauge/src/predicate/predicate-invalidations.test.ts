@@ -44,7 +44,6 @@ describe('Predicate', () => {
     });
 
     it('throws if the passed gas limit is too low', async () => {
-      // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
       // fuel-client we should change with the proper error message
       await expect(
         predicate.setData(validation).transfer(receiver.address, 50, BaseAssetId, {

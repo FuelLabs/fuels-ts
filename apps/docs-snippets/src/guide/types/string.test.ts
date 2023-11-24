@@ -26,7 +26,10 @@ describe(__filename, () => {
 
   it('should successfully execute and validate echoed 8 contract call', async () => {
     // #region string-2
-    const { value } = await contract.functions.echo_str_8('fuel-sdk').simulate();
+    const { value } = await contract.functions
+      .echo_str_8('fuel-sdk')
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual('fuel-sdk');
     // #endregion string-2
