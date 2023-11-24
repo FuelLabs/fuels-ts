@@ -69,13 +69,7 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
-    const { gasPriceFactor } = wallet.provider.getGasConfig();
-
-    const calculatedFee = request.calculateFee(gasPriceFactor);
-
-    const resources = await wallet.getResourcesToSpend([
-      [calculatedFee.amount.add(amountToTransfer), BaseAssetId],
-    ]);
+    const resources = await wallet.getResourcesToSpend([[100_000]]);
 
     request.addResources(resources);
 
@@ -141,14 +135,7 @@ describe('TransactionSummary', () => {
       gasPrice: 1,
     });
 
-    const { gasPriceFactor } = wallet.provider.getGasConfig();
-
-    const fee = request.calculateFee(gasPriceFactor);
-
-    const amountToTransfer = 100;
-    const resources = await wallet.getResourcesToSpend([
-      [fee.amount.add(amountToTransfer), BaseAssetId],
-    ]);
+    const resources = await wallet.getResourcesToSpend([[100_000, BaseAssetId]]);
 
     request.addResources(resources);
 
