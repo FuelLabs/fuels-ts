@@ -627,13 +627,15 @@ export default class Provider {
       return;
     }
 
-    const encodedTransaction = transactionRequest.hasPredicateInput()
-      ? hexlify((await this.estimatePredicates(transactionRequest)).toTransactionBytes())
-      : hexlify(transactionRequest.toTransactionBytes());
+    let txRequest = transactionRequest;
+
+    if (txRequest.hasPredicateInput()) {
+      txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
+    }
 
     do {
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction,
+        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
         utxoValidation: false,
       });
       const receipts = gqlReceipts.map(processGqlReceipt);
@@ -647,11 +649,11 @@ export default class Provider {
         return;
       }
 
-      if (transactionRequest instanceof ScriptTransactionRequest) {
-        transactionRequest.addVariableOutputs(missingOutputVariableCount);
+      if (txRequest instanceof ScriptTransactionRequest) {
+        txRequest.addVariableOutputs(missingOutputVariableCount);
 
         missingOutputContractIds.forEach(({ contractId }) =>
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
+          txRequest.addContractInputAndOutput(Address.fromString(contractId))
         );
       }
 
