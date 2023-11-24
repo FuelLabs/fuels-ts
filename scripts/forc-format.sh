@@ -9,13 +9,23 @@ for i in $forc_projects; do
 
     eval "$forc_fmt"
 
-    authors_line=$(
-        awk '/authors.*/ { print NR }' Forc.toml
-    )
-    if [ -n "$authors_line" ]; then
-        new_content=$(awk -v line="$authors_line" 'NR==2 {$0="authors = [\"Fuel Labs <contact@fuel.sh>\"]"} 1' Forc.toml)
-        echo "$new_content" >Forc.toml
+    if [ "$(head -n 1 Forc.toml)" != '[project]' ]; then
+        cd "$main_dir" || exit
+        continue
     fi
+
+    authors_line=$(
+        awk '/authors =.*/ { print NR }' Forc.toml
+    )
+
+    new_content=""
+    if [ "$authors_line" = "" ]; then
+        new_content=$(awk 'NR == 2 {print "authors = [\"Fuel Labs <contact@fuel.sh>\"]"} 1' Forc.toml)
+    else
+        new_content=$(awk -v line="$authors_line" 'NR == line {$0="authors = [\"Fuel Labs <contact@fuel.sh>\"]"} 1' Forc.toml)
+    fi
+
+    echo "$new_content" >Forc.toml
 
     cd "$main_dir" || exit
 done
