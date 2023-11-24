@@ -24,7 +24,7 @@ describe(__filename, () => {
 
     const { logs } = await contract.functions
       .log_values(value1, value2, value3, value4)
-      .txParams({ gasPrice: minGasPrice })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(logs[0]).toNumber()).toBe(value1);
