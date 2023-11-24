@@ -26,7 +26,7 @@ import { normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
 import { NoWitnessAtIndexError } from './errors';
-import { getMinGas } from './gas';
+import { getMaxGas, getMinGas } from './gas';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -527,6 +527,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   calculateMinGas(chainInfo: ChainInfo): BN {
     return getMinGas(this, chainInfo);
+  }
+
+  calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
+    return getMaxGas(this, chainInfo, minGas);
   }
 
   /**

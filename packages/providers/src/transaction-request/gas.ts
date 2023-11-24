@@ -1,3 +1,4 @@
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
@@ -46,4 +47,17 @@ export function getMinGas(transaction: BaseTransactionRequest, chainInfo: ChainI
   const metadataGas = transaction.metadataGas(gasCosts);
   const minGas = vmInitGas.add(bytesGas).add(inputsGas).add(metadataGas).maxU64();
   return minGas;
+}
+
+export function getMaxGas(transaction: BaseTransactionRequest, chainInfo: ChainInfo, minGas: BN) {
+  const {
+    consensusParameters: { gasPerByte },
+  } = chainInfo;
+
+  const witnessesLength = transaction.witnesses.reduce((acc, { length }) => acc + length, 0);
+  const remainingAllowedWitnessGas = bn(transaction.witnessLimit)
+    .sub(witnessesLength)
+    .mul(gasPerByte);
+
+  return remainingAllowedWitnessGas.add(minGas);
 }
