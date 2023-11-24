@@ -54,10 +54,15 @@ export function getMaxGas(transaction: BaseTransactionRequest, chainInfo: ChainI
     consensusParameters: { gasPerByte },
   } = chainInfo;
 
-  const witnessesLength = transaction.witnesses.reduce((acc, { length }) => acc + length, 0);
-  const remainingAllowedWitnessGas = bn(transaction.witnessLimit)
-    .sub(witnessesLength)
-    .mul(gasPerByte);
+  let remainingAllowedWitnessGas = bn(0);
+
+  const witnessesLength = transaction
+    .toTransaction()
+    .witnesses.reduce((acc, { dataLength }) => acc + dataLength, 0);
+
+  if (transaction.witnessLimit && transaction.witnessLimit.gte(witnessesLength)) {
+    remainingAllowedWitnessGas = bn(transaction.witnessLimit).sub(witnessesLength).mul(gasPerByte);
+  }
 
   return remainingAllowedWitnessGas.add(minGas);
 }
