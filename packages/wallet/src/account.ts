@@ -336,17 +336,14 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    // build the transaction
-    const { maxGasPerTx } = this.provider.getGasConfig();
-    const params = { script, gasLimit: maxGasPerTx.div(2), ...txParams };
+    const params = { script, ...txParams };
     const request = new ScriptTransactionRequest(params);
 
-    // TODO: Fix me
-    const fee = { amount: bn(0), assetId: BaseAssetId };
-    let quantities: CoinQuantityLike[] = [];
-    fee.amount = fee.amount.add(amount);
-    quantities = [fee];
-    const resources = await this.getResourcesToSpend(quantities);
+    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(request);
+
+    await this.fund(request, requiredQuantities, maxFee);
+
+    const resources = await this.getResourcesToSpend(requiredQuantities);
     request.addResources(resources);
 
     return this.sendTransaction(request);
