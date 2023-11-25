@@ -87,7 +87,7 @@ describe('Address utils', () => {
   });
 
   test('isB256 (no hex prefix)', () => {
-    const result = utils.isB256('ef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
+    const result = utils.isB256(ADDRESS_B256.substring(2));
 
     expect(result).toBeFalsy();
   });
@@ -123,9 +123,7 @@ describe('Address utils', () => {
   });
 
   test('isPublicKey (no hex prefix)', () => {
-    const result = utils.isPublicKey(
-      '2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e'
-    );
+    const result = utils.isPublicKey(PUBLIC_KEY.substring(2));
 
     expect(result).toBeFalsy();
   });
@@ -155,7 +153,7 @@ describe('Address utils', () => {
   });
 
   test('isEvmAddress (no hex prefix)', () => {
-    const result = utils.isEvmAddress('07a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
+    const result = utils.isEvmAddress(ADDRESS_EVM.substring(2));
 
     expect(result).toBeFalsy();
   });
@@ -256,11 +254,31 @@ describe('Address class', () => {
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
+  test('create an Address class using invalid public key (no hex prefix)', async () => {
+    const address = PUBLIC_KEY.substring(2);
+
+    const expectedError = new FuelError(
+      FuelError.CODES.INVALID_PUBLIC_KEY,
+      `Invalid Public Key: ${address}.`
+    );
+    await expectToThrowFuelError(() => Address.fromPublicKey(address), expectedError);
+  });
+
   test('create an Address class using b256Address', () => {
     const address = Address.fromB256(ADDRESS_B256);
 
     expect(address.toAddress()).toEqual(ADDRESS_BECH32);
     expect(address.toB256()).toEqual(ADDRESS_B256);
+  });
+
+  test('create an Address class using invalid b256Address (no hex prefix)', async () => {
+    const address = ADDRESS_B256.substring(2);
+
+    const expectedError = new FuelError(
+      FuelError.CODES.INVALID_B256_ADDRESS,
+      `Invalid B256 Address: ${address}.`
+    );
+    await expectToThrowFuelError(() => Address.fromB256(address), expectedError);
   });
 
   test('when parsing to JSON it should show the bech32 address', () => {
@@ -333,5 +351,15 @@ describe('Address class', () => {
 
     expect(address.toEvmAddress()).toMatchObject(evmAddressWrapped);
     expect(address.toB256()).toEqual(ADDRESS_B256_EVM_PADDED);
+  });
+
+  test('create an Address class using invalid Evm Address (no hex prefix)', async () => {
+    const address = ADDRESS_EVM.substring(2);
+
+    const expectedError = new FuelError(
+      FuelError.CODES.INVALID_EVM_ADDRESS,
+      `Invalid Evm Address: ${address}.`
+    );
+    await expectToThrowFuelError(() => Address.fromEvmAddress(address), expectedError);
   });
 });
