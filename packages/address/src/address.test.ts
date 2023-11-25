@@ -89,7 +89,7 @@ describe('Address utils', () => {
   test('isB256 (no hex prefix)', () => {
     const result = utils.isB256('ef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
 
-    expect(result).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 
   test('isB256 (using toB256)', () => {
@@ -127,7 +127,7 @@ describe('Address utils', () => {
       '2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e'
     );
 
-    expect(result).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 
   test('isEvmAddress (EvmAddress)', () => {
@@ -157,7 +157,7 @@ describe('Address utils', () => {
   test('isEvmAddress (no hex prefix)', () => {
     const result = utils.isEvmAddress('07a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
 
-    expect(result).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 
   test('getBytesFromBech32 (bech32 to Uint8Array)', () => {
