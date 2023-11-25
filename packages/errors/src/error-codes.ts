@@ -49,6 +49,7 @@ export enum ErrorCode {
   CONVERTING_FAILED = 'converting-error',
   ELEMENT_NOT_FOUND = 'element-not-found',
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
+  UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',

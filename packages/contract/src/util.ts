@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
@@ -69,5 +70,6 @@ export const hexlifyWithPrefix = (value: string) => {
   if (value.startsWith('0x')) {
     return hexlify(value);
   }
-  return hexlify(`0x${value}`);
+
+  throw new FuelError(FuelError.CODES.UNEXPECTED_HEX_VALUE, `Value should be hex string ${value}.`);
 };
