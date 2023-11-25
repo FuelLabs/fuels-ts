@@ -187,6 +187,5 @@ export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => 
     throw new FuelError(FuelError.CODES.INVALID_EVM_ADDRESS, 'Invalid EVM address format.');
   }
 
-  const prefixedAddress = address.startsWith('0x') ? address : `0x${address}`;
-  return prefixedAddress.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
+  return address.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
 };
