@@ -85,5 +85,12 @@
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
     "@types/rimraf": "^3.0.2"
-  }
+  },
+  "keywords": [
+    "ethereum",
+    "fuels",
+    "fuel-vm",
+    "sway",
+    "typescript"
+  ]
 }
