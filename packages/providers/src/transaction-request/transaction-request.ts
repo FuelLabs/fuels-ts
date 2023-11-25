@@ -125,6 +125,33 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.witnesses = witnesses ?? [];
   }
 
+  static getPolicyMeta(req: BaseTransactionRequest) {
+    let policyTypes = 0;
+    const policies: Policy[] = [];
+
+    if (req.gasPrice) {
+      policyTypes += PolicyType.GasPrice;
+      policies.push({ data: req.gasPrice, type: PolicyType.GasPrice });
+    }
+    if (req.witnessLimit) {
+      policyTypes += PolicyType.WitnessLimit;
+      policies.push({ data: req.witnessLimit, type: PolicyType.WitnessLimit });
+    }
+    if (req.maturity > 0) {
+      policyTypes += PolicyType.Maturity;
+      policies.push({ data: req.maturity, type: PolicyType.Maturity });
+    }
+    if (req.maxFee) {
+      policyTypes += PolicyType.MaxFee;
+      policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
+    }
+
+    return {
+      policyTypes,
+      policies,
+    };
+  }
+
   /**
    * Method to obtain the base transaction details.
    *
@@ -136,25 +163,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const outputs = this.outputs?.map(outputify) ?? [];
     const witnesses = this.witnesses?.map(witnessify) ?? [];
 
-    let policyTypes = 0;
-    const policies: Policy[] = [];
-
-    if (this.gasPrice) {
-      policyTypes += PolicyType.GasPrice;
-      policies.push({ data: this.gasPrice, type: PolicyType.GasPrice });
-    }
-    if (this.witnessLimit) {
-      policyTypes += PolicyType.WitnessLimit;
-      policies.push({ data: this.witnessLimit, type: PolicyType.WitnessLimit });
-    }
-    if (this.maturity > 0) {
-      policyTypes += PolicyType.Maturity;
-      policies.push({ data: this.maturity, type: PolicyType.Maturity });
-    }
-    if (this.maxFee) {
-      policyTypes += PolicyType.MaxFee;
-      policies.push({ data: this.maxFee, type: PolicyType.MaxFee });
-    }
+    const { policyTypes, policies } = BaseTransactionRequest.getPolicyMeta(this);
 
     return {
       policyTypes,
