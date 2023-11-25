@@ -22,6 +22,7 @@ export enum ErrorCode {
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
+  INVALID_B256_ADDRESS = 'invalid-b256-address',
 
   // provider
   INVALID_URL = 'invalid-url',
@@ -30,6 +31,7 @@ export enum ErrorCode {
   MISSING_PROVIDER = 'missing-provider',
 
   // wallet
+  INVALID_PUBLIC_KEY = 'invalid-public-key',
   INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
