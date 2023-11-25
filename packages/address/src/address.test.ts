@@ -87,7 +87,7 @@ describe('Address utils', () => {
   });
 
   test('isB256 (no hex prefix)', () => {
-    const result = utils.isB256(ADDRESS_B256.substring(2));
+    const result = utils.isB256(ADDRESS_B256.slice(2));
 
     expect(result).toBeFalsy();
   });
@@ -123,7 +123,7 @@ describe('Address utils', () => {
   });
 
   test('isPublicKey (no hex prefix)', () => {
-    const result = utils.isPublicKey(PUBLIC_KEY.substring(2));
+    const result = utils.isPublicKey(PUBLIC_KEY.slice(2));
 
     expect(result).toBeFalsy();
   });
@@ -153,7 +153,7 @@ describe('Address utils', () => {
   });
 
   test('isEvmAddress (no hex prefix)', () => {
-    const result = utils.isEvmAddress(ADDRESS_EVM.substring(2));
+    const result = utils.isEvmAddress(ADDRESS_EVM.slice(2));
 
     expect(result).toBeFalsy();
   });
@@ -255,7 +255,7 @@ describe('Address class', () => {
   });
 
   test('create an Address class using invalid public key (no hex prefix)', async () => {
-    const address = PUBLIC_KEY.substring(2);
+    const address = PUBLIC_KEY.slice(2);
 
     const expectedError = new FuelError(
       FuelError.CODES.INVALID_PUBLIC_KEY,
@@ -272,7 +272,7 @@ describe('Address class', () => {
   });
 
   test('create an Address class using invalid b256Address (no hex prefix)', async () => {
-    const address = ADDRESS_B256.substring(2);
+    const address = ADDRESS_B256.slice(2);
 
     const expectedError = new FuelError(
       FuelError.CODES.INVALID_B256_ADDRESS,
@@ -354,7 +354,7 @@ describe('Address class', () => {
   });
 
   test('create an Address class using invalid Evm Address (no hex prefix)', async () => {
-    const address = ADDRESS_EVM.substring(2);
+    const address = ADDRESS_EVM.slice(2);
 
     const expectedError = new FuelError(
       FuelError.CODES.INVALID_EVM_ADDRESS,
