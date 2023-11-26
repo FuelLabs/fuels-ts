@@ -118,6 +118,10 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
   }
 
   #getPredicateData(txLength: number): Uint8Array {
+    if (!this.predicateArgs.length) {
+      return new Uint8Array();
+    }
+
     const mainFn = this.interface?.functions.main;
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
