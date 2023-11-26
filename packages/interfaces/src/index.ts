@@ -92,7 +92,6 @@ export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;
   abstract predicateData: Uint8Array;
-  getPredicateData?: (txLengh: number) => Uint8Array;
 
   abstract types?: ReadonlyArray<any>;
 }
