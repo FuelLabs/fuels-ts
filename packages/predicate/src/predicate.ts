@@ -76,7 +76,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         // eslint-disable-next-line no-param-reassign
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.#getPredicateData(policies.length * WORD_SIZE);
+        input.predicateData = this.#getPredicateData(policies.length);
       }
     });
 
@@ -117,7 +117,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     return this;
   }
 
-  #getPredicateData(txLength: number): Uint8Array {
+  #getPredicateData(policiesLength: number): Uint8Array {
     if (!this.predicateArgs.length) {
       return new Uint8Array();
     }
@@ -134,7 +134,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       INPUT_COIN_FIXED_SIZE +
       WORD_SIZE +
       paddedCode.byteLength +
-      txLength;
+      policiesLength * WORD_SIZE;
 
     return mainFn?.encodeArguments(this.predicateArgs, OFFSET) || new Uint8Array();
   }
