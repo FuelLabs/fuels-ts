@@ -24,7 +24,7 @@ describe('Predicate', () => {
       const predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-      expect(predicate.predicateArgs).toBeUndefined();
+      expect(predicate.predicateArgs).toEqual([]);
 
       predicate.setData<[string]>(b256);
 
