@@ -1,18 +1,9 @@
 /* eslint-disable max-classes-per-file */
 
-import {
-  Coder,
-  ArrayCoder,
-  U64Coder,
-  B256Coder,
-  NumberCoder,
-  SCRIPT_FIXED_SIZE,
-  WORD_SIZE,
-} from '@fuel-ts/abi-coder';
+import { Coder, ArrayCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
-import { hexlify } from 'ethers';
 
 import { ByteArrayCoder } from './byte-array';
 import type { Input } from './input';
@@ -99,6 +90,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     parts.push(new ByteArrayCoder(value.scriptLength).encode(value.script));
     parts.push(new ByteArrayCoder(value.scriptDataLength).encode(value.scriptData));
     parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
     parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
 
