@@ -23,10 +23,10 @@ import type { ChainInfo } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { normalizeJSON } from '../utils';
+import { getMaxGas, getMinGas } from '../utils/gas';
 
 import type { CoinTransactionRequestOutput } from '.';
 import { NoWitnessAtIndexError } from './errors';
-import { getMaxGas, getMinGas } from './gas';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -533,11 +533,31 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @hidden
    */
   calculateMinGas(chainInfo: ChainInfo): BN {
-    return getMinGas(this, chainInfo);
+    const { gasCosts, consensusParameters } = chainInfo;
+    const { gasPerByte } = consensusParameters;
+    return getMinGas({
+      gasPerByte,
+      gasCosts,
+      inputs: this.inputs,
+      txBytesSize: this.byteSize(),
+      metadataGas: this.metadataGas(gasCosts),
+    });
   }
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
-    return getMaxGas(this, chainInfo, minGas);
+    const { consensusParameters } = chainInfo;
+    const { gasPerByte } = consensusParameters;
+
+    const witnessesLength = this.toTransaction().witnesses.reduce(
+      (acc, wit) => acc + wit.dataLength,
+      0
+    );
+    return getMaxGas({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: this.witnessLimit,
+    });
   }
 
   /**

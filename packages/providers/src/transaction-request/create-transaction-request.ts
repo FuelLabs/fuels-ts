@@ -6,7 +6,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
-import { resolveGasDependentCosts } from '../utils/gas';
+import { calculateMetadataGasForTxCreate } from '../utils/gas';
 
 import type { ContractCreatedTransactionRequestOutput } from './output';
 import type { TransactionRequestStorageSlot } from './storage-slot';
@@ -115,16 +115,11 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
   }
 
   metadataGas(gasCosts: GqlGasCosts): BN {
-    const { bytecodeWitnessIndex, witnesses } = this;
-    const contractBytesSize = bn(getBytesCopy(witnesses[bytecodeWitnessIndex] || '0x').length);
-    const contractRootGas = resolveGasDependentCosts(contractBytesSize, gasCosts.contractRoot);
-    const stateRootSize = this.storageSlots.length;
-    const stateRootGas = resolveGasDependentCosts(stateRootSize, gasCosts.stateRoot);
-    const txIdGas = resolveGasDependentCosts(this.byteSize(), gasCosts.s256);
-    // See https://github.com/FuelLabs/fuel-specs/blob/master/src/identifiers/contract-id.md
-    const contractIdInputSize = bn(4 + 32 + 32 + 32);
-    const contractIdGas = resolveGasDependentCosts(contractIdInputSize, gasCosts.s256);
-    const metadataGas = contractRootGas.add(stateRootGas).add(txIdGas).add(contractIdGas);
-    return metadataGas.maxU64();
+    return calculateMetadataGasForTxCreate({
+      contractBytesSize: bn(getBytesCopy(this.witnesses[this.bytecodeWitnessIndex] || '0x').length),
+      gasCosts,
+      stateRootSize: this.storageSlots.length,
+      txBytesSize: this.byteSize(),
+    });
   }
 }

@@ -10,7 +10,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
-import { resolveGasDependentCosts } from '../utils/gas';
+import { calculateMetadataGasForTxScript } from '../utils/gas';
 
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
@@ -185,6 +185,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   metadataGas(gasCosts: GqlGasCosts): BN {
-    return resolveGasDependentCosts(this.byteSize(), gasCosts.s256);
+    return calculateMetadataGasForTxScript({
+      gasCosts,
+      txBytesSize: this.byteSize(),
+    });
   }
 }
