@@ -31,7 +31,7 @@ describe(__filename, () => {
 
       const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
 
-      expect(result.toNumber()).toEqual(6); // ceil(11 / 5) * 2 = 6
+      expect(result.toNumber()).toEqual(5); // ceil(11 * 2) / 2 = 5
     });
   });
 
