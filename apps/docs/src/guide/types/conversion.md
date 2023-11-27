@@ -10,13 +10,13 @@ The following example demonstrates how to convert between `Bytes32` and to `b256
 
 ## 2. ContractId
 
-The Contract `id` property has the [AbstractAddress](./address#abstractaddress-class) type. This means that a contract ID can be converted amoung all the supported convertions from the `AbstractClass`.
+The Contract `id` property has the [AbstractAddress](./address#abstractaddress-class) type. This means that a contract ID can be converted among all the supported convertions from the `AbstractClass`.
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-2{ts:line-numbers}
 
 ## 3. Wallet Address
 
-The Wallet `address` property has the [AbstractAddress](./address#abstractaddress-class) type. So just like a contract ID, it can be converted amoung all the supported convertions from the `AbstractClass`.
+The Wallet `address` property has the [AbstractAddress](./address#abstractaddress-class) type. So just like a contract ID, it can be converted among all the supported convertions from the `AbstractClass`.
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-3{ts:line-numbers}
 

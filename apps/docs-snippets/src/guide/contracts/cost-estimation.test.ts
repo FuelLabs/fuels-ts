@@ -1,7 +1,6 @@
-import type { Contract, Provider } from 'fuels';
-import { BaseAssetId } from 'fuels';
+import { BaseAssetId, type Contract, type Provider } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -9,7 +8,7 @@ describe(__filename, () => {
   let provider: Provider;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
     provider = contract.provider;
   });
 
@@ -28,7 +27,8 @@ describe(__filename, () => {
       })
       .getTransactionCost();
 
-    expect(cost.fee).toBeDefined();
+    expect(cost.minFee).toBeDefined();
+    expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
     expect(cost.gasUsed).toBeDefined();
     expect(cost.minGasPrice).toBeDefined();
@@ -55,7 +55,8 @@ describe(__filename, () => {
 
     const cost = await scope.getTransactionCost();
 
-    expect(cost.fee).toBeDefined();
+    expect(cost.minFee).toBeDefined();
+    expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
     expect(cost.gasUsed).toBeDefined();
     expect(cost.minGasPrice).toBeDefined();

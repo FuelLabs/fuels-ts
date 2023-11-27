@@ -8,7 +8,7 @@ Let's consider an example where a predicate is used to validate an asset transfe
 
 The following snippet illustrates how this could be implemented:
 
-<<< @/../../docs-snippets/projects/whitelisted-address-predicate/src/main.sw#predicate-with-configurable-constants-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/whitelisted-address-predicate/src/main.sw#predicate-with-configurable-constants-1{rust:line-numbers}
 
 In this example, you'll notice the use of a configurable constant named `WHITELISTED`. This constant has a default value that represents the default approved address.
 

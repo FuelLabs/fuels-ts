@@ -1,12 +1,19 @@
 import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
-import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
+  const { binHexlified: predicateBytesFalse } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_FALSE
+  );
+
   describe('Evaluations', () => {
     let predicate: Predicate<InputValue[]>;
     let wallet: WalletUnlocked;
@@ -21,7 +28,7 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns true', async () => {
-      const amountToPredicate = 100_000;
+      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
@@ -45,7 +52,7 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns false', async () => {
-      const amountToPredicate = 100;
+      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
 
       predicate = new Predicate(predicateBytesFalse, provider);

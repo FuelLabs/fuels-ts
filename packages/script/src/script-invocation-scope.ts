@@ -57,6 +57,9 @@ export class ScriptInvocationScope<
     assert(this.program.account, 'Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee } = await this.getTransactionCost();
+    await this.fundWithRequiredCoins(maxFee);
+
     const response = await this.program.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(

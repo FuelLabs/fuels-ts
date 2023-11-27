@@ -1,14 +1,14 @@
 import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
   let provider: Provider;
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.COUNTER);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     provider = contract.provider;
   });
 

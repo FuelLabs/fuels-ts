@@ -1,13 +1,13 @@
 import type { Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.SUM_OPTION_U8);
   });
 
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {

@@ -1,7 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
   BN,
@@ -21,23 +20,22 @@ import {
   FUEL_NETWORK_URL,
   Predicate,
 } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { createSetupConfig } from './utils';
 
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin')
+const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
 
-const predicateBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/predicate-true/out/debug/predicate-true.bin')
+const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
 const setupContract = createSetupConfig({
   contractBytecode,
-  abi: abiJSON,
+  abi,
 });
 
 const jsonFragment: JsonAbi = {
@@ -516,7 +514,7 @@ describe('Contract', () => {
     const transactionCost = await invocationScope.getTransactionCost();
 
     expect(toNumber(transactionCost.gasPrice)).toBe(gasPrice.toNumber());
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
+    expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
     const { value } = await invocationScope
@@ -549,7 +547,7 @@ describe('Contract', () => {
     const transactionCost = await invocationScope.getTransactionCost();
 
     expect(toNumber(transactionCost.gasPrice)).toBe(minGasPrice.toNumber());
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(1);
+    expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(1);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
     // Test that gasUsed is correctly calculated
@@ -706,6 +704,8 @@ describe('Contract', () => {
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
     const multiCallScope = contract.multiCall(invocationScopes).txParams({ gasPrice });
+    const { maxFee } = await multiCallScope.getTransactionCost();
+    await multiCallScope.fundWithRequiredCoins(maxFee);
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
 
@@ -737,7 +737,7 @@ describe('Contract', () => {
         assetId: BaseAssetId,
       },
     ]);
-    const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const contract = new ContractFactory(contractBytecode, abi, wallet);
     const { transactionRequest } = contract.createTransactionRequest({ gasPrice });
 
     const txRequest = JSON.stringify(transactionRequest);
@@ -745,8 +745,12 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
+    const { requiredQuantities, maxFee } =
+      await provider.getTransactionCost(transactionRequestParsed);
+
     // Fund tx
-    await wallet.fund(transactionRequestParsed);
+    await wallet.fund(transactionRequestParsed, requiredQuantities, maxFee);
+
     // Send tx
     const response = await wallet.sendTransaction(transactionRequestParsed);
     const result = await response.waitForResult();
@@ -804,6 +808,13 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
+    const { gasUsed, minFee, requiredQuantities } =
+      await contract.provider.getTransactionCost(transactionRequestParsed);
+
+    transactionRequestParsed.gasLimit = gasUsed;
+
+    await contract.account.fund(transactionRequestParsed, requiredQuantities, minFee);
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const response = await contract.account!.sendTransaction(transactionRequestParsed);
     const {
@@ -835,7 +846,7 @@ describe('Contract', () => {
         assetId: BaseAssetId,
       },
     ]);
-    const factory = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const factory = new ContractFactory(contractBytecode, abi, wallet);
 
     const contract = await factory.deployContract({ gasPrice });
 
@@ -867,7 +878,7 @@ describe('Contract', () => {
         assetId: BaseAssetId,
       },
     ]);
-    const factory = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const factory = new ContractFactory(contractBytecode, abi, wallet);
 
     const contract = await factory.deployContract({ gasPrice });
 

@@ -1,14 +1,14 @@
 import type { Contract } from 'fuels';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
   });
 
   it('should successfully echo tuple in a contract call', async () => {

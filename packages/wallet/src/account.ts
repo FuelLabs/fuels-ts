@@ -22,8 +22,9 @@ import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
+  addAmountToAsset,
 } from '@fuel-ts/providers';
-import { getBytesCopy, hexlify } from 'ethers';
+import { getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import {
@@ -204,11 +205,18 @@ export class Account extends AbstractAccount {
    * @param request - The transaction request.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
-  async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const { gasPriceFactor } = this.provider.getGasConfig();
-    const fee = request.calculateFee(gasPriceFactor);
-    const resources = await this.getResourcesToSpend([fee]);
+  async fund<T extends TransactionRequest>(
+    request: T,
+    quantities: CoinQuantity[],
+    fee: BN
+  ): Promise<void> {
+    addAmountToAsset({
+      amount: fee,
+      assetId: BaseAssetId,
+      coinQuantities: quantities,
+    });
 
+    const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
   }
 
@@ -236,20 +244,9 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 
-    const { gasPriceFactor } = this.provider.getGasConfig();
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
-    const fee = request.calculateFee(gasPriceFactor);
-    let quantities: CoinQuantityLike[] = [];
-
-    if (fee.assetId === hexlify(assetId)) {
-      fee.amount = fee.amount.add(amount);
-      quantities = [fee];
-    } else {
-      quantities = [[amount, assetId], fee];
-    }
-
-    const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
   }
@@ -291,21 +288,11 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractId);
 
-    const { gasPriceFactor } = this.provider.getGasConfig();
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request, [
+      { amount: bn(amount), assetId: String(assetId) },
+    ]);
 
-    const fee = request.calculateFee(gasPriceFactor);
-
-    let quantities: CoinQuantityLike[] = [];
-
-    if (fee.assetId === hexlify(assetId)) {
-      fee.amount = fee.amount.add(amount);
-      quantities = [fee];
-    } else {
-      quantities = [[amount, assetId], fee];
-    }
-
-    const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
   }

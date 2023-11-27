@@ -5,7 +5,7 @@ import { concat } from '@fuel-ts/utils';
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
-import exhaustiveExamplesAbi from './sway-projects/exhaustive-examples/out/debug/exhaustive-examples-abi.json';
+import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/debug/exhaustive-examples-abi.json';
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -719,11 +719,15 @@ describe('Abi interface', () => {
 
           expect(encoded).toEqual(expectedEncoded);
 
-          if (skipDecoding) return;
+          if (skipDecoding) {
+            return;
+          }
 
           let decoded = fn.decodeOutput(expectedEncoded)[0];
 
-          if (decodedTransformer) decoded = decodedTransformer(decoded);
+          if (decodedTransformer) {
+            decoded = decodedTransformer(decoded);
+          }
 
           const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
 

@@ -2,7 +2,7 @@ import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { JsonAbi } from 'fuels';
 import { join } from 'path';
 
-export enum SnippetProjectEnum {
+export enum DocSnippetProjectsEnum {
   COUNTER = 'counter',
   ECHO_ENUM = 'echo-enum',
   LOG_VALUES = 'log-values',
@@ -26,5 +26,8 @@ export enum SnippetProjectEnum {
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
 }
 
-export const getSnippetProjectArtifacts = (project: SnippetProjectEnum) =>
-  getForcProject<JsonAbi>(join(__dirname, project));
+export const getDocsSnippetsForcProject = (project: DocSnippetProjectsEnum) =>
+  getForcProject<JsonAbi>({
+    projectDir: join(__dirname, project),
+    projectName: project,
+  });

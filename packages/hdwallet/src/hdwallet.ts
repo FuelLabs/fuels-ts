@@ -238,8 +238,9 @@ class HDWallet {
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {
       throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Provided key is not a valid extended key.');
     }
-    if (!validChecksum)
+    if (!validChecksum) {
       throw new FuelError(ErrorCode.HD_WALLET_ERROR, 'Provided key has an invalid checksum.');
+    }
 
     const depth = bytes[4];
     const parentFingerprint = hexlify(bytes.slice(5, 9));
