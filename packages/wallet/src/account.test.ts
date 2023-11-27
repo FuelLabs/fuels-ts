@@ -317,11 +317,7 @@ describe('Account', () => {
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const addResources = jest.fn();
-
-    const request = {
-      addResources,
-    } as unknown as ScriptTransactionRequest;
+    const request = new ScriptTransactionRequest();
 
     const quantities: CoinQuantity[] = [
       {
@@ -352,10 +348,6 @@ describe('Account', () => {
       .spyOn(providersMod.Provider.prototype, 'getTransactionCost')
       .mockImplementation(() => Promise.resolve(cost));
 
-    const getResourcesToSpend = jest
-      .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementation(() => Promise.resolve([]));
-
     const fund = jest.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
     const sendTransaction = jest
@@ -373,12 +365,6 @@ describe('Account', () => {
 
     expect(scriptTransactionRequest).toHaveBeenCalledTimes(1);
 
-    expect(getResourcesToSpend).toHaveBeenCalledTimes(1);
-    expect(getResourcesToSpend).toHaveBeenCalledWith(quantities);
-
-    expect(addResources).toHaveBeenCalledTimes(1);
-    expect(addResources).toHaveBeenCalledWith([]);
-
     expect(sendTransaction).toHaveBeenCalledTimes(1);
     expect(sendTransaction).toHaveBeenCalledWith(request);
 
@@ -391,12 +377,6 @@ describe('Account', () => {
     expect(result).toEqual(transactionResponse);
 
     expect(scriptTransactionRequest).toHaveBeenCalledTimes(2);
-
-    expect(addResources).toHaveBeenCalledTimes(2);
-    expect(addResources).toHaveBeenCalledWith([]);
-
-    expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
-    expect(getResourcesToSpend).toHaveBeenCalledWith(quantities);
 
     expect(sendTransaction).toHaveBeenCalledTimes(2);
     expect(sendTransaction).toHaveBeenCalledWith(request);
