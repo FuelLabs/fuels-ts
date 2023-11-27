@@ -22,7 +22,10 @@ describe('Wallet', () => {
     const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId, { gasPrice });
+    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await response.wait();
 
     const senderBalances = await sender.getBalances();
@@ -43,15 +46,15 @@ describe('Wallet', () => {
         gasPrice,
       });
       await result.wait();
-    }).rejects.toThrowError(`Gas limit '${bn(0)}' is lower than the required: '${bn(1)}'.`);
+    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
 
     const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasLimit: 10000,
+      gasLimit: 10_000,
       gasPrice,
     });
     await response.wait();
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499978) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499_921) }]);
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
@@ -187,7 +190,10 @@ describe('Wallet', () => {
     await seedTestWallet(sender, [[500_000, BaseAssetId]]);
     await seedTestWallet(sender, [[500_000, BaseAssetId]]);
 
-    const transfer = await sender.transfer(receiver.address, 110, BaseAssetId, { gasPrice });
+    const transfer = await sender.transfer(receiver.address, 110, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await transfer.wait();
 
     const receiverBalances = await receiver.getBalances();
@@ -206,7 +212,7 @@ describe('Wallet', () => {
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 110;
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice, gasLimit: 10_000 });
     const result = await tx.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
@@ -215,6 +221,6 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499804) }]);
   });
 });

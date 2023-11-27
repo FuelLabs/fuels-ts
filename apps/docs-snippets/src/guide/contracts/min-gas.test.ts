@@ -79,30 +79,25 @@ describe(__filename, () => {
       scriptData: hexlify(new U64Coder().encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
-    const resources = await provider.getResourcesToSpend(sender.address, [
-      {
-        amount: bn(100_000),
-        assetId: BaseAssetId,
-      },
-    ]);
-    request.addResources(resources);
 
     /**
      * Get the transaction cost to se a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request);
-    request.gasLimit = txCost.gasUsed;
-    request.gasPrice = txCost.gasPrice;
+    const costs = await provider.getTransactionCost(request);
+
+    await sender.fund(request, costs.requiredQuantities, costs.maxFee);
+
+    request.gasLimit = bn(20_000);
+    request.gasPrice = costs.gasPrice;
 
     /**
      * Send transaction
      */
     const result = await sender.sendTransaction(request);
-    const { status, receipts } = await result.waitForResult();
-    const gasUsed = getGasUsedFromReceipts(receipts);
+    const { status, gasUsed: txGasUsed } = await result.wait();
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
+    expect(costs.gasUsed.toString()).toBe(txGasUsed.toString());
   });
 
   it('test min_gas predicate', async () => {

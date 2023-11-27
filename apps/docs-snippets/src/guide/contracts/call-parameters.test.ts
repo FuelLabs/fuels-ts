@@ -40,9 +40,9 @@ describe(__filename, () => {
           forward: [10, BaseAssetId],
           gasLimit: 1,
         })
-        .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
+        .txParams({ gasPrice: minGasPrice })
         .call()
-    ).rejects.toThrow(/OutOfGas/);
+    ).rejects.toThrow(/Gas limit '1' is lower than the required: /);
     // #endregion call-params-2
   });
 

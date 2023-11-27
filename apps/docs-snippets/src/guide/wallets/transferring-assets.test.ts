@@ -39,6 +39,7 @@ describe(__filename, () => {
 
     const txParams: TxParams = {
       gasPrice: minGasPrice,
+      gasLimit: 10_000,
     };
 
     const response = await senderWallet.transfer(
@@ -75,6 +76,7 @@ describe(__filename, () => {
 
     const txParams: TxParams = {
       gasPrice: minGasPrice,
+      gasLimit: 10_000,
     };
 
     const tx = await senderWallet.transferToContract(

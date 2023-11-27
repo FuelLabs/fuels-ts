@@ -95,7 +95,10 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(sender.address, 500_000, BaseAssetId, { gasPrice });
+    const tx1 = await wallet.transfer(sender.address, 500_000, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     const transactionResponse1 = await tx1.waitForResult();
 
     const amountToTransfer = 100;
@@ -106,6 +109,7 @@ describe('TransactionSummary', () => {
 
     const tx2 = await sender.transfer(destination.address, amountToTransfer, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     const transactionResponse2 = await tx2.waitForResult();
 

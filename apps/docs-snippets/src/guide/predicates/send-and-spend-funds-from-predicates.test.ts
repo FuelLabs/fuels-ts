@@ -38,6 +38,7 @@ describe(__filename, () => {
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx.waitForResult();
@@ -64,6 +65,7 @@ describe(__filename, () => {
       BaseAssetId,
       {
         gasPrice,
+        gasLimit: 10_000,
       }
     );
 
@@ -79,6 +81,7 @@ describe(__filename, () => {
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx.waitForResult();
@@ -92,7 +95,10 @@ describe(__filename, () => {
     predicate.setData('0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4');
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, predicateBalance, BaseAssetId, { gasPrice })
+      predicate.transfer(receiverWallet.address, predicateBalance, BaseAssetId, {
+        gasPrice,
+        gasLimit: 10_000,
+      })
     );
 
     // #region send-and-spend-funds-from-predicates-6
@@ -113,6 +119,7 @@ describe(__filename, () => {
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx.waitForResult();
@@ -124,7 +131,10 @@ describe(__filename, () => {
     predicate.setData(getRandomB256());
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, amountToPredicate, BaseAssetId, { gasPrice })
+      predicate.transfer(receiverWallet.address, amountToPredicate, BaseAssetId, {
+        gasPrice,
+        gasLimit: 10_000,
+      })
     );
 
     // #region send-and-spend-funds-from-predicates-7

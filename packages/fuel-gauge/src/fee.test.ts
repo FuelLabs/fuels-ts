@@ -110,6 +110,7 @@ describe('Fee', () => {
 
     const tx = await wallet.transfer(destination.address, amountToTransfer, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     const { fee } = await tx.wait();
 
@@ -248,13 +249,17 @@ describe('Fee', () => {
 
     const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
       gasPrice: minGasPrice,
+      gasLimit: 10_000,
     });
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
     const gasPrice = randomGasPrice(minGasPrice, 9);
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, { gasPrice });
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     const { fee } = await tx2.wait();
 

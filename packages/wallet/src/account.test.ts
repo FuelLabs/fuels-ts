@@ -322,14 +322,30 @@ describe('Account', () => {
       assetId,
     };
 
-    const calculateFee = jest.fn(() => fee);
     const addResources = jest.fn();
 
     const request = {
       addResources,
     } as unknown as ScriptTransactionRequest;
 
-    const resources: Resource[] = [];
+    const quantities: CoinQuantity[] = [
+      {
+        amount: bn(1),
+        assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      },
+    ];
+    const cost: providersMod.TransactionCost = {
+      gasPrice: bn(1),
+      gasUsed: bn(1),
+      maxFee: bn(1),
+      maxGas: bn(1),
+      minFee: bn(1),
+      minGas: bn(1),
+      minGasPrice: bn(1),
+      receipts: [],
+      requiredQuantities: quantities,
+      usedFee: bn(1),
+    };
 
     const transactionResponse = {} as unknown as TransactionResponse;
 
@@ -337,9 +353,15 @@ describe('Account', () => {
       .spyOn(providersMod, 'ScriptTransactionRequest')
       .mockImplementation(() => request);
 
+    const getTransactionCost = jest
+      .spyOn(providersMod.Provider.prototype, 'getTransactionCost')
+      .mockImplementation(() => Promise.resolve(cost));
+
     const getResourcesToSpend = jest
       .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementation(() => Promise.resolve(resources));
+      .mockImplementation(() => Promise.resolve([]));
+
+    const fund = jest.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
     const sendTransaction = jest
       .spyOn(Account.prototype, 'sendTransaction')
@@ -357,13 +379,17 @@ describe('Account', () => {
     expect(scriptTransactionRequest.mock.calls.length).toBe(1);
 
     expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResources.mock.calls[0][0]).toEqual([]);
+    expect(addResources.mock.calls[0][0]).toEqual([]);
 
     expect(getResourcesToSpend.mock.calls.length).toBe(1);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
+    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([]);
 
     expect(sendTransaction.mock.calls.length).toBe(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+
+    expect(getTransactionCost).toHaveBeenCalledTimes(1);
+    expect(fund).toHaveBeenCalledTimes(1);
 
     // without txParams
     result = await account.withdrawToBaseLayer(recipient, amount);
@@ -372,10 +398,8 @@ describe('Account', () => {
 
     expect(scriptTransactionRequest.mock.calls.length).toBe(2);
 
-    expect(calculateFee.mock.calls.length).toBe(2);
-
     expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResources.mock.calls[0][0]).toEqual([]);
 
     expect(getResourcesToSpend.mock.calls.length).toBe(2);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);

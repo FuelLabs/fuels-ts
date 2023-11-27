@@ -589,7 +589,7 @@ describe('Contract', () => {
           gasLimit,
         })
         .call<BN>()
-    ).rejects.toThrowError(`Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`);
+    ).rejects.toThrowError(/Gas limit '${gasLimit}' is lower than the required: /);
   });
 
   it('calls array functions', async () => {
@@ -942,6 +942,7 @@ describe('Contract', () => {
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx.waitForResult();
@@ -967,6 +968,7 @@ describe('Contract', () => {
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, asset, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx.waitForResult();
@@ -991,12 +993,14 @@ describe('Contract', () => {
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx1.waitForResult();
 
     const tx2 = await predicate.transferToContract(contract.id, amountToContract, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
 
     await tx2.waitForResult();

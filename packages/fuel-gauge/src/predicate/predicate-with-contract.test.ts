@@ -129,7 +129,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 

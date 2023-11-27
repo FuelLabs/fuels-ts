@@ -427,6 +427,7 @@ describe('Doc Examples', () => {
 
     const response = await wallet1.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await response.waitForResult();
     const predicateBalance = await predicate.getBalance();
@@ -436,6 +437,7 @@ describe('Doc Examples', () => {
 
     const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     // Wait for Transaction to succeed
     await depositOnPredicate.waitForResult();
@@ -455,7 +457,7 @@ describe('Doc Examples', () => {
 
     const tx = await predicate
       .setData(signatures)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // check balances

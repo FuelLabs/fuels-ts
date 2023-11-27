@@ -90,6 +90,7 @@ describe('Raw Slice Tests', () => {
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
@@ -102,7 +103,7 @@ describe('Raw Slice Tests', () => {
     };
     const tx = await predicate
       .setData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // Check the balance of the receiver
