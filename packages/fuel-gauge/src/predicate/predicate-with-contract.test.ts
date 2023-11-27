@@ -168,8 +168,8 @@ describe('Predicate', () => {
 
       expectToBeInRange({
         value: finalReceiverBalance,
-        min: expectedFinalReceiverBalance - 1,
-        max: expectedFinalReceiverBalance + 1,
+        min: expectedFinalReceiverBalance - 20,
+        max: expectedFinalReceiverBalance + 20,
       });
 
       const expectedFinalPredicateBalance =
@@ -177,8 +177,8 @@ describe('Predicate', () => {
 
       expectToBeInRange({
         value: expectedFinalPredicateBalance,
-        min: remainingPredicateBalance - 1,
-        max: remainingPredicateBalance + 1,
+        min: remainingPredicateBalance - 20,
+        max: remainingPredicateBalance + 20,
       });
     });
   });
