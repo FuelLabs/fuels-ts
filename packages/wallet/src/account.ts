@@ -215,7 +215,7 @@ export class Account extends AbstractAccount {
   ): Promise<void> {
     // TODO: Rollback to fee value after fix fee calculation
     addAmountToAsset({
-      amount: bn(1),
+      amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: quantities,
     });
@@ -248,9 +248,7 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
 
-    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
-
-    request.gasLimit = gasUsed;
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
     await this.fund(request, requiredQuantities, maxFee);
 
@@ -295,12 +293,9 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractId);
 
-    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(
-      request,
-      [{ amount: bn(amount), assetId: String(assetId) }]
-    );
-
-    request.gasLimit = gasUsed;
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request, [
+      { amount: bn(amount), assetId: String(assetId) },
+    ]);
 
     await this.fund(request, requiredQuantities, maxFee);
 
