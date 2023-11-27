@@ -86,6 +86,7 @@ type ConsensusParameters = {
   gasPerByte: BN;
   maxMessageDataLength: BN;
   chainId: BN;
+  gasCosts: GqlGasCosts;
 };
 
 /**
@@ -166,6 +167,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       gasPerByte: bn(feeParams.gasPerByte),
       maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
       chainId: bn(consensusParameters.chainId),
+      gasCosts,
     },
     gasCosts,
     latestBlock: {
@@ -331,7 +333,7 @@ export default class Provider {
    */
   getGasConfig() {
     const { minGasPrice } = this.getNode();
-    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte } =
+    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte, gasCosts } =
       this.getChain().consensusParameters;
     return {
       minGasPrice,
@@ -339,6 +341,7 @@ export default class Provider {
       maxGasPerPredicate,
       gasPriceFactor,
       gasPerByte,
+      gasCosts,
     };
   }
 
