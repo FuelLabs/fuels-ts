@@ -104,8 +104,6 @@ export function calculateMetadataGasForTxCreate({
   return metadataGas.maxU64();
 }
 
-// return resolveGasDependentCosts(this.byteSize(), gasCosts.s256);
-
 export function calculateMetadataGasForTxScript({
   gasCosts,
   txBytesSize,
