@@ -9,6 +9,7 @@ for i in $forc_projects; do
 
     eval "$forc_fmt"
 
+    # format authors field only on projects, not on workspaces
     if [ "$(head -n 1 Forc.toml)" != '[project]' ]; then
         cd "$main_dir" || exit
         continue
