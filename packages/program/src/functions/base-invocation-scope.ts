@@ -376,7 +376,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Obtains the ID of a transaction.
-   * 
+   *
    * @param chainId - the chainId to use to hash the transaction with
    * @returns the ID of the transaction.
    */
