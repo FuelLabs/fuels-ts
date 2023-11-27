@@ -99,7 +99,11 @@ export function assembleTransactionSummary<TTransactionType = void>(
     txBytesSize: transactionBytes.length,
   });
 
-  const fee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
+  const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
+
+  const usedFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
+
+  const fee = minFee.add(usedFee);
 
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);
