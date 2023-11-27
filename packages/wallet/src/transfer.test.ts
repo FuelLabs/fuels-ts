@@ -135,8 +135,8 @@ describe('Wallet', () => {
     );
     const amount = 10;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice });
-    const result = await tx.wait();
+    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice, gasLimit: 10_000 });
+    const result = await tx.waitForResult();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
 
@@ -156,14 +156,20 @@ describe('Wallet', () => {
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
 
-    const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT, { gasPrice });
+    const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     // #region Message-getMessageProof
-    const result = await tx.wait();
+    const result = await tx.waitForResult();
 
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
-    const resp = await sender.transfer(sender.address, AMOUNT, BaseAssetId, { gasPrice });
-    const nextBlock = await resp.wait();
+    const resp = await sender.transfer(recipient, AMOUNT, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
+    const nextBlock = await resp.waitForResult();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
@@ -221,6 +227,6 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499804) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
   });
 });
