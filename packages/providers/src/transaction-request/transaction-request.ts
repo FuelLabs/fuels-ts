@@ -555,6 +555,20 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     const owner = getRandomB256();
 
+    const witnessToRemove = this.inputs.reduce(
+      (acc, input) => {
+        if (input.type === InputType.Coin || input.type === InputType.Message) {
+          if (!acc[input.witnessIndex]) {
+            acc[input.witnessIndex] = true;
+          }
+        }
+
+        return acc;
+      },
+      {} as Record<number, boolean>
+    );
+
+    this.witnesses = this.witnesses.filter((_, idx) => !witnessToRemove[idx]);
     this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
     this.outputs = this.outputs.filter((output) => output.type !== OutputType.Change);
 
