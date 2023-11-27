@@ -338,9 +338,6 @@ export class Account extends AbstractAccount {
 
     await this.fund(request, requiredQuantities, maxFee);
 
-    const resources = await this.getResourcesToSpend(requiredQuantities);
-    request.addResources(resources);
-
     return this.sendTransaction(request);
   }
 
