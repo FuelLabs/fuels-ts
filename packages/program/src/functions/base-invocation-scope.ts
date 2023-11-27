@@ -192,7 +192,10 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected checkGasLimitTotal() {
     const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
-    if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
+
+    if (this.transactionRequest.gasLimit.eq(0)) {
+      this.transactionRequest.gasLimit = gasLimitOnCalls;
+    } else if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
       throw new FuelError(
         ErrorCode.TRANSACTION_ERROR,
         "Transaction's gasLimit must be equal to or greater than the combined forwarded gas of all calls."
