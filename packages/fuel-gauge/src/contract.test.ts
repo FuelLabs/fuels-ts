@@ -589,7 +589,7 @@ describe('Contract', () => {
           gasLimit,
         })
         .call<BN>()
-    ).rejects.toThrowError(/Gas limit '${gasLimit}' is lower than the required: /);
+    ).rejects.toThrowError(new RegExp(`Gas limit '${gasLimit}' is lower than the required: `));
   });
 
   it('calls array functions', async () => {

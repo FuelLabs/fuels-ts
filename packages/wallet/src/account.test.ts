@@ -232,12 +232,12 @@ describe('Account', () => {
 
     expect(addAmountToAssetSpy).toBeCalledTimes(1);
     expect(addAmountToAssetSpy).toHaveBeenCalledWith({
-      amount: fee,
+      amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: quantities,
     });
 
-    const expectedTotalResources = [quantities[0], { amount: fee, assetId: BaseAssetId }];
+    const expectedTotalResources = [quantities[0], { amount: bn(fee), assetId: BaseAssetId }];
     expect(getResourcesToSpendSpy).toBeCalledTimes(1);
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources);
 
@@ -317,11 +317,6 @@ describe('Account', () => {
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const fee: CoinQuantity = {
-      amount,
-      assetId,
-    };
-
     const addResources = jest.fn();
 
     const request = {
@@ -331,7 +326,7 @@ describe('Account', () => {
     const quantities: CoinQuantity[] = [
       {
         amount: bn(1),
-        assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        assetId,
       },
     ];
     const cost: providersMod.TransactionCost = {
@@ -376,17 +371,16 @@ describe('Account', () => {
 
     expect(result).toEqual(transactionResponse);
 
-    expect(scriptTransactionRequest.mock.calls.length).toBe(1);
+    expect(scriptTransactionRequest).toHaveBeenCalledTimes(1);
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual([]);
-    expect(addResources.mock.calls[0][0]).toEqual([]);
+    expect(getResourcesToSpend).toHaveBeenCalledTimes(1);
+    expect(getResourcesToSpend).toHaveBeenCalledWith(quantities);
 
-    expect(getResourcesToSpend.mock.calls.length).toBe(1);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([]);
+    expect(addResources).toHaveBeenCalledTimes(1);
+    expect(addResources).toHaveBeenCalledWith([]);
 
-    expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction).toHaveBeenCalledTimes(1);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
 
     expect(getTransactionCost).toHaveBeenCalledTimes(1);
     expect(fund).toHaveBeenCalledTimes(1);
@@ -396,16 +390,16 @@ describe('Account', () => {
 
     expect(result).toEqual(transactionResponse);
 
-    expect(scriptTransactionRequest.mock.calls.length).toBe(2);
+    expect(scriptTransactionRequest).toHaveBeenCalledTimes(2);
 
-    expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[0][0]).toEqual([]);
+    expect(addResources).toHaveBeenCalledTimes(2);
+    expect(addResources).toHaveBeenCalledWith([]);
 
-    expect(getResourcesToSpend.mock.calls.length).toBe(2);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
+    expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
+    expect(getResourcesToSpend).toHaveBeenCalledWith(quantities);
 
-    expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction).toHaveBeenCalledTimes(2);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
   });
 
   it('should execute sendTransaction just fine', async () => {
