@@ -9,7 +9,7 @@ describe('arrayify', () => {
     expect(arrayify('0x00010203')).toEqual(new Uint8Array([0, 1, 2, 3]));
   });
 
-  it('rerurns Uint8Array from Buffer', () => {
+it('returns Uint8Array from Buffer', () => {
     expect(arrayify(Buffer.from('20'))).toEqual(new Uint8Array([50, 48]));
   });
 
