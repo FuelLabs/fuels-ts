@@ -529,7 +529,7 @@ export default class Provider {
       );
     }
 
-    const isScriptTransaction = transactionRequest instanceof ScriptTransactionRequest;
+    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
 
     if (isScriptTransaction && bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
       throw new FuelError(
@@ -712,7 +712,7 @@ export default class Provider {
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
+    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const isScriptTransaction = transactionRequest.type === TransactionType.Script;
 
@@ -751,7 +751,7 @@ export default class Provider {
     let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
     // Transactions of type Create does not consume any gas so we can the dryRun
-    if (transactionRequest.type === TransactionType.Script) {
+    if (isScriptTransaction) {
       /**
        * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
        * This simplifies the funding with fake utxos, since the coin quantities required
@@ -761,7 +761,7 @@ export default class Provider {
       // Calculate the gasLimit again as we insert a fake UTXO and signer
 
       transactionRequest.gasPrice = bn(0);
-      transactionRequest.gasLimit = maxGas;
+      transactionRequest.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.call(transactionRequest, {
         estimateTxDependencies,
