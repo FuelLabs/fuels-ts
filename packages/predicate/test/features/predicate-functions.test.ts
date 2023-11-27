@@ -1,6 +1,5 @@
 import { Provider } from '@fuel-ts/providers';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
-import { hexlify } from 'ethers';
 
 import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';

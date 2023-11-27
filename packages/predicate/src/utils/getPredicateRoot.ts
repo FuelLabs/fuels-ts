@@ -1,4 +1,4 @@
-import { hash, uint64ToBytesBE } from '@fuel-ts/hasher';
+import { hash } from '@fuel-ts/hasher';
 import { calcRoot } from '@fuel-ts/merkle';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
 import { hexlify, concat, getBytesCopy } from 'ethers';
