@@ -203,6 +203,7 @@ describe(__filename, () => {
     /**
      * Send transaction predicate
      */
+    predicate.populateTransactionPredicateData(request);
     await wallet.populateTransactionWitnessesSignature(request);
     const result = await predicate.sendTransaction(request);
     const { status, receipts } = await result.waitForResult();
