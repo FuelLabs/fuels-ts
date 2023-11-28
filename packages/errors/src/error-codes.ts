@@ -60,6 +60,7 @@ export enum ErrorCode {
   INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
   TRANSACTION_ERROR = 'transaction-error',
   INVALID_POLICY_TYPE = 'invalid-policy-type',
+  DUPLICATED_POLICY = 'duplicated-policy',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
