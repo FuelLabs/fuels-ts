@@ -1,7 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { hashTransaction } from '@fuel-ts/hasher';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -244,31 +243,23 @@ export class Account extends AbstractAccount {
     const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    console.log({
-      inputs1: JSON.stringify(request.inputs),
-      length: request.inputs.length,
-    });
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
     await this.fund(request, requiredQuantities, maxFee);
-    console.log({
-      inputs2: JSON.stringify(request.inputs),
-      length: request.inputs.length,
-    });
 
     return this.sendTransaction(request);
   }
 
   /**
-   * Returns the transaction ID for a transfer transaction, without sending it.
+   * A helper that prepares a transaction request for calculating the transaction ID.
    *
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer.
    * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
-   * @returns A promise that resolves to the transaction ID.
+   * @returns A promise that resolves to the prepared transaction request.
    */
-  protected async prepareTxRequestForIdCalculation(
+  protected async prepareTransferTxRequestForIdCalculation(
     /** Address of the destination */
     destination: AbstractAddress,
     /** Amount of coins */
@@ -282,16 +273,8 @@ export class Account extends AbstractAccount {
     const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    console.log({
-      inputs3: JSON.stringify(request.inputs),
-      length: request.inputs.length,
-    });
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
     await this.fund(request, requiredQuantities, maxFee);
-    console.log({
-      inputs4: JSON.stringify(request.inputs),
-      length: request.inputs.length,
-    });
     return request;
   }
 

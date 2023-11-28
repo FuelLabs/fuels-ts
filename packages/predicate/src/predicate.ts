@@ -18,7 +18,7 @@ import type {
   TransactionRequestLike,
   TransactionResponse,
 } from '@fuel-ts/providers';
-import { ScriptTransactionRequest, transactionRequestify } from '@fuel-ts/providers';
+import { transactionRequestify } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import type { TxParamsType } from '@fuel-ts/wallet';
 import { Account } from '@fuel-ts/wallet';
@@ -105,7 +105,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
    * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
    * @returns A promise that resolves to the transaction ID.
    */
-  async getTransferTransactionId(
+  async getTransferTxId(
     /** Address of the destination */
     destination: AbstractAddress,
     /** Amount of coins */
@@ -115,7 +115,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<string> {
-    const request = await super.prepareTxRequestForIdCalculation(
+    const request = await super.prepareTransferTxRequestForIdCalculation(
       destination,
       amount,
       assetId,
