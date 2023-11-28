@@ -9,7 +9,10 @@ import {
   BaseAssetId,
 } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -24,7 +27,7 @@ describe(__filename, () => {
     ({ minGasPrice: gasPrice } = walletWithFunds.provider.getGasConfig());
   });
 
-  it('should successfully use predicate to spend assets', async () => {
+  it.only('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(bin, provider, abi);
@@ -37,7 +40,7 @@ describe(__filename, () => {
       gasPrice,
     });
 
-    await tx.waitForResult();
+    // await tx.waitForResult();
     // #endregion send-and-spend-funds-from-predicates-3
 
     const initialPredicateBalance = new BN(await predicate.getBalance()).toNumber();
@@ -55,6 +58,20 @@ describe(__filename, () => {
       provider,
     });
 
+    console.log({
+      predicateBalances: await predicate.getBalances(),
+    });
+
+    // #region send-and-spend-funds-from-predicates-8
+    const txId = await predicate.getTransferTransactionId(
+      receiverWallet.address,
+      amountToPredicate - 150_000,
+      BaseAssetId,
+      {
+        gasPrice,
+      }
+    );
+
     const tx2 = await predicate.transfer(
       receiverWallet.address,
       amountToPredicate - 150_000,
@@ -66,6 +83,11 @@ describe(__filename, () => {
 
     await tx2.waitForResult();
     // #endregion send-and-spend-funds-from-predicates-5
+
+    const txIdFromExecutedTx = tx2.id;
+
+    // #endregion send-and-spend-funds-from-predicates-8
+    expect(txId).toEqual(txIdFromExecutedTx);
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {

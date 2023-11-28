@@ -458,4 +458,23 @@ describe('Account', () => {
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);
   });
+
+  it('getTransferTransactionId should return the transaction id', async () => {
+    const amount = bn(1);
+    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const destination = Address.fromAddressOrString(
+      '0x0101010101010101010101010101010101010101000000000000000000000000'
+    );
+    const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
+      gasLimit: bn(1),
+      gasPrice: bn(1),
+      maturity: 1,
+    };
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+    const txId = await account.getTransferTransactionId(destination, amount, assetId, txParam);
+    expect(txId.length).toEqual(66);
+  });
 });
