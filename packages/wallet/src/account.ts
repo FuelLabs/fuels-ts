@@ -17,6 +17,7 @@ import type {
   ExcludeResourcesOption,
   TransactionResponse,
   Provider,
+  ScriptTransactionRequestLike,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -32,8 +33,8 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-type TxParamsType = Pick<
-  TransactionRequestLike,
+export type TxParamsType = Pick<
+  ScriptTransactionRequestLike,
   'gasLimit' | 'gasPrice' | 'maturity' | 'maxFee' | 'witnessLimit'
 >;
 

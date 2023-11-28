@@ -12,6 +12,7 @@ import type {
 import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
+import type { TxParamsType } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
@@ -249,7 +250,7 @@ describe('Account', () => {
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const destination = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
-    const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
+    const txParam: TxParamsType = {
       gasLimit: bn(1),
       gasPrice: bn(1),
       maturity: 1,
@@ -312,7 +313,7 @@ describe('Account', () => {
 
   it('should execute withdrawToBaseLayer just fine', async () => {
     const recipient = Address.fromRandom();
-    const txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {};
+    const txParams: TxParamsType = {};
     const amount = bn(1);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
