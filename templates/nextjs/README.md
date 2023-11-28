@@ -11,6 +11,9 @@ npm install
 2. Start the Fuel development server. This server will start a local Fuel node and provide hot-reloading for your smart contracts.
 
 ```bash
+npm run fuels:dev
+
+# or
 npx fuels dev
 ```
 

@@ -1,12 +1,9 @@
-import { Connect } from "@/components/Connect";
 import type { TestContractAbi } from "@/sway-api";
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { Provider, Wallet, bn } from "fuels";
-import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
 const contractId = contractIds.testContract;
 
 export default function Home() {
@@ -32,21 +29,16 @@ export default function Home() {
     }
     const { value } = await contract.functions
       .test_function(bn(valueA), bn(valueB))
+      .txParams({
+        gasPrice: 1,
+      })
       .call();
-
     setReturnedValue(value);
-
     return value;
   };
 
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center p-24 ${inter.className}`}
-    >
-      <Connect />
-
-      <hr className="border border-slate-200 w-8/12 my-6" />
-
+    <main className={`flex min-h-screen flex-col items-center p-24`}>
       <h3>Contract ID: {contractId}</h3>
 
       <input

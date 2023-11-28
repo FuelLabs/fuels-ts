@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "xprebuild": "fuels build --deploy",
+    "fuels:dev": "fuels dev",
     "dev": "next dev",
     "build": "pnpm run xprebuild && next build",
     "start": "next start",

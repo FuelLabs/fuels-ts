@@ -15,7 +15,7 @@ npm install
 
 ```bash
 # Start a local Fuel node and hot-reload for your Sway smart contracts
-npx fuels dev
+npm run fuels:dev
 ```
 
 In another terminal window, start the frontend dev server:
