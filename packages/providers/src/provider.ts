@@ -359,7 +359,7 @@ export default class Provider {
     const chain = await this.fetchChain();
     const nodeInfo = await this.fetchNode();
 
-    // TODO: uncomment version validation
+    // TODO: Uncomment version validation after Forc is released.
     // Provider.ensureClientVersionIsSupported(nodeInfo);
 
     return {
