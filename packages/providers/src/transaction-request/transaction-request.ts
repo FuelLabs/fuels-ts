@@ -53,8 +53,6 @@ export {
 export interface BaseTransactionRequestLike {
   /** Gas price for transaction */
   gasPrice?: BigNumberish;
-  /** Gas limit for transaction */
-  gasLimit?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
