@@ -1,10 +1,10 @@
 import { hexlify } from 'ethers';
 import { existsSync, readFileSync } from 'fs';
-import { basename, join } from 'path';
+import { join } from 'path';
 
 import { normalizeString } from '../utils/normalizeString';
 
-export interface IGetForcProjectParams {
+interface IGetForcProjectParams {
   projectDir: string;
   projectName: string;
 }
@@ -44,14 +44,7 @@ export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
   return storageSlots;
 };
 
-export const getForcProject = <T = unknown>(projectDir: string) => {
-  const projectName = basename(projectDir);
-
-  const params: IGetForcProjectParams = {
-    projectDir,
-    projectName,
-  };
-
+export const getForcProject = <T = unknown>(params: IGetForcProjectParams) => {
   const debugDir = getProjectDebugDir(params);
   const tempDir = getProjectTempDir(params);
   const binPath = getProjectBinPath(params);
@@ -68,7 +61,7 @@ export const getForcProject = <T = unknown>(projectDir: string) => {
   const inputGlobal = `${debugDir}/*-abi.json`;
 
   return {
-    name: projectName,
+    name: params.projectName,
     storageSlots,
     normalizedName,
     debugDir,

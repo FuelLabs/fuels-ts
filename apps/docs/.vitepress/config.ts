@@ -368,6 +368,10 @@ export default defineConfig({
                 link: '/guide/scripts/calling-a-script',
               },
               {
+                text: 'Preparing A Script',
+                link: '/guide/scripts/preparing-a-script',
+              },
+              {
                 text: 'Script With Configurable Constants',
                 link: '/guide/scripts/script-with-configurable-constants',
               },

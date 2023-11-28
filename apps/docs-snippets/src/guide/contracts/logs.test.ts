@@ -1,7 +1,7 @@
 import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -9,7 +9,7 @@ describe(__filename, () => {
   let provider: Provider;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.LOG_VALUES);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.LOG_VALUES);
     provider = contract.provider;
   });
 

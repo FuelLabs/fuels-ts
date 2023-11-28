@@ -1,20 +1,33 @@
 import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
 
-import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
-import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector';
-import predicateAbiMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector/out/debug/predicate-main-args-vector-abi.json';
-import predicateBytesMulti from '../../fixtures/forc-projects/predicate-multi-args';
-import predicateAbiMulti from '../../fixtures/forc-projects/predicate-multi-args/out/debug/predicate-multi-args-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import predicateBytesU32 from '../../fixtures/forc-projects/predicate-u32';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesAddress } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_ADDRESS
+  );
+
+  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+
+  const { binHexlified: predicateBytesMainArgsVector, abiContents: predicateAbiMainArgsVector } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_VECTOR);
+
+  const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MULTI_ARGS);
+
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_STRUCT
+  );
+
+  const { binHexlified: predicateBytesU32 } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_U32
+  );
+
   describe('Arguments', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
