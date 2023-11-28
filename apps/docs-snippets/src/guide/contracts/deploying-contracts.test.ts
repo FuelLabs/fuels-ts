@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -13,8 +13,9 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
     PRIVATE_KEY = wallet.privateKey;
-    projectsPath = join(__dirname, '../../../projects');
-    contractName = SnippetProjectEnum.ECHO_VALUES;
+    projectsPath = join(__dirname, '../../../test/fixtures/forc-projects');
+
+    contractName = DocSnippetProjectsEnum.ECHO_VALUES;
   });
 
   it('should successfully deploy and execute contract function', async () => {
