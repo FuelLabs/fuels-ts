@@ -199,10 +199,6 @@ export type CursorPaginationArgs = {
   before?: string | null;
 };
 
-export type BuildPredicateOptions = {
-  fundTransaction?: boolean;
-} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
-
 export type FetchRequestOptions = {
   method: 'POST';
   headers: { [key: string]: string };
