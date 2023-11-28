@@ -1,3 +1,5 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import type { Policy } from './policy';
@@ -86,6 +88,41 @@ describe('PoliciesCoder', () => {
           0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0,
           0, 0, 199,
         ])
+      );
+    });
+
+    it('should ensure unsorted policies array will not reflect in error when encoding', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.MaxFee, data: bn(199) },
+        { type: PolicyType.GasPrice, data: bn(28) },
+        { type: PolicyType.Maturity, data: 26 },
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([
+          0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0,
+          0, 0, 199,
+        ])
+      );
+    });
+
+    it('should throw an error when a duplicated policy is found', async () => {
+      const policies: Policy[] = [
+        { type: PolicyType.MaxFee, data: bn(199) },
+        { type: PolicyType.MaxFee, data: bn(199) },
+        { type: PolicyType.GasPrice, data: bn(28) },
+        { type: PolicyType.Maturity, data: 26 },
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+      ];
+
+      await expectToThrowFuelError(
+        () => new PoliciesCoder().encode(policies),
+        new FuelError(
+          ErrorCode.DUPLICATED_POLICY,
+          `Duplicate policy type found: ${PolicyType.MaxFee}`
+        )
       );
     });
   });
