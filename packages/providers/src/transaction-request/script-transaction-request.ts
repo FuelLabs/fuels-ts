@@ -3,7 +3,8 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
-import { bn, type BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
@@ -22,6 +23,8 @@ import { BaseTransactionRequest } from './transaction-request';
  * @hidden
  */
 export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike {
+  /** Gas limit for transaction */
+  gasLimit?: BigNumberish;
   /** Script to execute */
   script?: BytesLike;
   /** Script input data (parameters) */
