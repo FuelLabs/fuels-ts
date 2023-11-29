@@ -115,12 +115,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<string> {
-    const request = await super.prepareTransferTxRequestForIdCalculation(
-      destination,
-      amount,
-      assetId,
-      txParams
-    );
+    const request = await super.prepareTransferTxRequest(destination, amount, assetId, txParams);
     const populatedRequest = this.populateTransactionPredicateData(request);
     return hashTransaction(populatedRequest, this.provider.getChainId());
   }
