@@ -134,14 +134,14 @@ describe('gas', () => {
 
       const expectedGasFromPredicate1 = vmCost.add(
         resolveGasDependentCosts(
-          getBytesCopy(predicateInput1.predicate!).length,
+          getBytesCopy(predicateInput1?.predicate || '0x').length,
           gasCosts.contractRoot
         ).add(predicateGasUsed1)
       );
 
       const expectedGasFromPredicate2 = vmCost.add(
         resolveGasDependentCosts(
-          getBytesCopy(predicateInput2.predicate!).length,
+          getBytesCopy(predicateInput2?.predicate || '0x').length,
           gasCosts.contractRoot
         ).add(predicateGasUsed2)
       );
