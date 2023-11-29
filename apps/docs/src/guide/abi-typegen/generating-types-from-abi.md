@@ -5,7 +5,7 @@
 First we install `fuels` to our project:
 
 ```console
-yarn add fuels
+pnpm add fuels
 ```
 
 ## Help
@@ -13,7 +13,7 @@ yarn add fuels
 A first glance at the docs:
 
 ```console
-$ yarn exec fuels typegen -h
+$ pnpm fuels typegen -h
 
 Usage: fuels typegen [options]
 
@@ -36,7 +36,7 @@ You can generate types for a Sway contract using the command below:
 <!-- gen_types:example:start -->
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 <!-- gen_types:example:end -->
@@ -57,7 +57,7 @@ You can omit the `--contract` option here since it's the default.
 To generate types for a Sway script, use the `--script` flag:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 ## Generating Types for Predicates
@@ -65,7 +65,7 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 To generate types for a Sway predicate, use the `--predicate` flag:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 ---

@@ -12,10 +12,6 @@ To begin, you need to add the `fuels` dependency to your project. You can do thi
 npm install fuels --save
 ```
 
-```sh [yarn]
-yarn add fuels
-```
-
 ```sh [pnpm]
 pnpm add fuels
 ```
