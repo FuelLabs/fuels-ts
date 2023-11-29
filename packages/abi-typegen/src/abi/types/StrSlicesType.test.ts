@@ -20,8 +20,8 @@ describe('StrType.ts', () => {
     expect(suitableForStrSlices).toEqual(true);
     expect(suitableForU16).toEqual(false);
 
-    expect(strSlices.attributes.inputLabel).toEqual('string');
-    expect(strSlices.attributes.outputLabel).toEqual('string');
+    expect(strSlices.attributes.inputLabel).toEqual('StrSlices');
+    expect(strSlices.attributes.outputLabel).toEqual('StrSlices');
     expect(strSlices.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });
