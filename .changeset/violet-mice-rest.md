@@ -18,4 +18,4 @@
 "@fuel-ts/wallet": minor
 ---
 
-add support from TX policies
+add support for TX policies
