@@ -143,7 +143,7 @@ describe(__filename, () => {
     expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
   });
 
-  it('test min_gas mix account and predicate with script', async () => {
+  it('sets gas requirements (account and predicate with script)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { abiContents, binHexlified } = getDocsSnippetsForcProject(
       DocSnippetProjectsEnum.COMPLEX_PREDICATE
