@@ -21,7 +21,7 @@ import {
 } from '../../../test/fixtures/forc-projects';
 
 describe(__filename, () => {
-  it('test min_gas contract', async () => {
+  it('sets gas requirements (contract)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(
       '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
