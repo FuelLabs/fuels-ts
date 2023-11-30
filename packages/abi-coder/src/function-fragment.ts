@@ -83,7 +83,7 @@ export class FunctionFragment<
 
   #getOutputEncodedLength(): number {
     try {
-      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output); // TODO: review small-byte options
+      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
       if (heapCoder instanceof VecCoder) {
         return heapCoder.coder.encodedLength;
       }
