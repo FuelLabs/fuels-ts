@@ -183,7 +183,7 @@ export class FunctionFragment<
 
     const result = nonEmptyInputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
-        const coder = AbiCoder.getCoder(this.jsonAbi, input); // TODO: review small-byte options
+        const coder = AbiCoder.getCoder(this.jsonAbi, input);
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {
