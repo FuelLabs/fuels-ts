@@ -47,8 +47,8 @@ export const runScaffoldCli = async (explicitProjectPath?: string) => {
   log();
   log(`- cd into the project directory: cd ${projectPath}`);
   log(`- Install the dependencies: pnpm install`);
-  log(`- Start a local Fuel dev server: pnpx fuels dev`);
-  log(`- Run the frontend by running pnpm run dev`);
+  log(`- Start a local Fuel dev server: pnpm fuels:dev`);
+  log(`- Run the frontend: pnpm run dev`);
   log();
   log();
   log('-> TS SDK docs: https://fuellabs.github.io/fuels-ts/');
