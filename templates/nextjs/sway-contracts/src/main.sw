@@ -1,11 +1,27 @@
 contract;
 
-abi MyContract {
-    fn test_function(a: u8, b: u8) -> u8;
+abi Counter {
+    #[storage(read)]
+    fn get_count() -> u64;
+
+    #[storage(write, read)]
+    fn increment_counter(amount: u64) -> u64;
 }
 
-impl MyContract for Contract {
-    fn test_function(a: u8, b: u8) -> u8 {
-        a + b
+storage {
+    counter: u64 = 0,
+}
+
+impl Counter for Contract {
+    #[storage(read)]
+    fn get_count() -> u64 {
+        storage.counter.try_read().unwrap_or(0)
+    }
+
+    #[storage(write, read)]
+    fn increment_counter(amount: u64) -> u64 {
+        let current = storage.counter.try_read().unwrap_or(0);
+        storage.counter.write(current + amount);
+        storage.counter.try_read().unwrap_or(0)
     }
 }

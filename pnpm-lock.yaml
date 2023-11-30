@@ -1268,6 +1268,12 @@ importers:
 
   templates/nextjs:
     dependencies:
+      '@fuel-ui/css':
+        specifier: ^0.21.1
+        version: 0.21.1
+      '@fuel-ui/react':
+        specifier: ^0.21.1
+        version: 0.21.1(@types/react-dom@18.2.4)(@types/react@18.2.9)(csstype@3.1.2)
       '@fuel-wallet/react':
         specifier: 0.13.7-master-e0854e6
         version: 0.13.7-master-e0854e6(@fuel-ui/css@0.21.1)(@fuel-ui/react@0.21.1)(dexie@3.2.4)(fuels@packages+fuels)(react-dom@18.2.0)(react@18.2.0)

@@ -11,6 +11,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fuel-ui/css": "^0.21.1",
+    "@fuel-ui/react": "^0.21.1",
     "@fuel-wallet/react": "0.13.7-master-e0854e6",
     "fuels": "workspace:*",
     "next": "14.0.1",
