@@ -7,8 +7,11 @@ import {
   calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractPredicate } from '@fuel-ts/interfaces';
+import { hashTransaction } from '@fuel-ts/hasher';
+import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import type {
   CallResult,
   Provider,
@@ -17,6 +20,7 @@ import type {
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import type { TxParamsType } from '@fuel-ts/wallet';
 import { Account } from '@fuel-ts/wallet';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify } from 'ethers';
@@ -90,6 +94,30 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
     return super.sendTransaction(transactionRequest);
+  }
+
+  /**
+   * Returns the transaction ID for a transfer transaction, without sending it.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @returns A promise that resolves to the transaction ID.
+   */
+  async getTransferTxId(
+    /** Address of the destination */
+    destination: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<string> {
+    const request = await super.prepareTransferTxRequest(destination, amount, assetId, txParams);
+    const populatedRequest = this.populateTransactionPredicateData(request);
+    return hashTransaction(populatedRequest, this.provider.getChainId());
   }
 
   /**
