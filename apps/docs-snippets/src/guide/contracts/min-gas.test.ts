@@ -81,7 +81,7 @@ describe(__filename, () => {
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
 
     /**
-     * Get the transaction cost to se a strict gasLimit and min gasPrice
+     * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
     const costs = await provider.getTransactionCost(request);
 
