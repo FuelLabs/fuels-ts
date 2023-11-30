@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
 import { Command } from 'commander';
-import { cp, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { cp, mkdir, readdir } from 'fs/promises';
 import { join } from 'path';
 import prompts from 'prompts';
 
@@ -24,6 +25,12 @@ export const runScaffoldCli = async (explicitProjectPath?: string) => {
     });
 
     projectPath = res.projectName;
+  }
+
+  if (existsSync(projectPath)) {
+    // throw and exit
+    chalk.red(`A folder already exists at ${projectPath}. Please choose a different project name.`);
+    process.exit(1);
   }
 
   if (!projectPath) {
