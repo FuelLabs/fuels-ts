@@ -48,7 +48,7 @@ describe(__filename, () => {
     request.addResources(resources);
 
     /**
-     * Get the transaction cost to se a strict gasLimit and min gasPrice
+     * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
     const txCost = await provider.getTransactionCost(request);
     request.gasPrice = txCost.gasPrice;
