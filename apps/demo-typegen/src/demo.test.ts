@@ -136,26 +136,35 @@ test('Example script', async () => {
   expect(value.toNumber()).toBe(10);
 });
 
-// TODO: investigate - this test is currently failing due to some gas errors. 'not enough coins to fit the target'. even though everything is setup correctly.
-test.skip('Example predicate', async () => {
+test('Example predicate', async () => {
   // #region typegen-demo-predicate
   // #context import { PredicateAbi__factory } from './types';
+
+  // In this exchange, we are first transferring some coins to the predicate
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
   const predicate = PredicateAbi__factory.createInstance(provider);
 
-  const tx = await wallet.transfer(predicate.address, 100, BaseAssetId, {
+  const tx = await wallet.transfer(predicate.address, 100_000, BaseAssetId, {
     gasPrice: provider.getGasConfig().minGasPrice,
+    gasLimit: 50,
   });
   await tx.wait();
 
-  const tx2 = await predicate.transfer(receiver.address, 100, BaseAssetId, {
+  const initialPredicateBalance = await predicate.getBalance();
+
+  // Then we are transferring some coins from the predicate to a random address (receiver)
+  const tx2 = await predicate.transfer(receiver.address, 50_000, BaseAssetId, {
     gasPrice: provider.getGasConfig().minGasPrice,
+    gasLimit: 50,
   });
   await tx2.wait();
 
-  expect((await wallet.getBalance()).toNumber()).toEqual(500);
+  expect((await receiver.getBalance()).toNumber()).toEqual(50_000);
+  expect((await predicate.getBalance()).toNumber()).toBeLessThan(
+    initialPredicateBalance.toNumber()
+  );
   // #endregion typegen-demo-predicate
 });
