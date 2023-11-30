@@ -25,29 +25,30 @@ export default function Home() {
       const wallet = Wallet.fromPrivateKey("0x01", provider);
       const testContract = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
-      const { value: counter } = await testContract.functions
+      const { value } = await testContract.functions
         .get_count()
         .txParams({
           gasPrice: 1,
         })
         .simulate();
-      setCounter(counter.toNumber());
+      setCounter(value.toNumber());
       // eslint-disable-next-line no-console
     })().catch(console.error);
   }, []);
 
+  // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
     if (!contract) {
       // eslint-disable-next-line no-alert
       return alert("Contract not loaded");
     }
-    const { value: counter } = await contract.functions
+    const { value } = await contract.functions
       .increment_counter(bn(1))
       .txParams({
         gasPrice: 1,
       })
       .call();
-    setCounter(counter.toNumber());
+    setCounter(value.toNumber());
   };
 
   return (

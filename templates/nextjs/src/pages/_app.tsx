@@ -1,11 +1,6 @@
 import "@/styles/globals.css";
+import { darkTheme, setFuelThemes, ThemeProvider } from "@fuel-ui/react";
 import { FuelProvider } from "@fuel-wallet/react";
-import {
-  createTheme,
-  darkTheme,
-  setFuelThemes,
-  ThemeProvider,
-} from "@fuel-ui/react";
 import type { AppProps } from "next/app";
 
 setFuelThemes({
