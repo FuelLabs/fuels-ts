@@ -38,6 +38,12 @@ Note the method transfer has two parameters: the recipient's address and the int
 
 Once the predicate resolves with a return value `true` based on its predefined condition, our predicate successfully spends its funds by means of a transfer to a desired wallet.
 
+---
+
+You can also use the `getTransferTxId` helper to obtain the transaction ID of the transfer beforehand, without actually executing it.
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
+
 ## Spending Entire Predicate Held Amount
 
 Trying to forward the entire amount held by the predicate results in an error because no funds are left to cover the transaction fees. Attempting this will result in an error message like:
