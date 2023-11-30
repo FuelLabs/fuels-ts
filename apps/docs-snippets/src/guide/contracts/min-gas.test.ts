@@ -100,7 +100,7 @@ describe(__filename, () => {
     expect(costs.gasUsed.toString()).toBe(txGasUsed.toString());
   });
 
-  it('test min_gas predicate', async () => {
+  it('sets gas requirements (predicate)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { abiContents, binHexlified } = getDocsSnippetsForcProject(
       DocSnippetProjectsEnum.COMPLEX_PREDICATE
