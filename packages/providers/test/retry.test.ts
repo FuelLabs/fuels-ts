@@ -106,7 +106,7 @@ describe('Retries correctly', () => {
     expect(callTimes.length - 1).toBe(maxAttempts); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
-      assertBackoff(callTime, index, callTimes, duration * duration * (2 ^ (index - 1)))
+      assertBackoff(callTime, index, callTimes, duration * (2 ^ (index - 1)))
     );
   });
 
