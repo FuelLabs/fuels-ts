@@ -2,6 +2,7 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import Provider from '../src/provider';
 
+// TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 function mockFetch(maxAttempts: number, callTimes: number[]) {
