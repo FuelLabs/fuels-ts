@@ -249,7 +249,9 @@ describe('Account', () => {
   it('should execute transfer just as fine', async () => {
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const destination = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
+    const destination = Address.fromAddressOrString(
+      '0x0101010101010101010101010101010101010101000000000000000000000000'
+    );
     const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
       gasLimit: bn(1),
       gasPrice: bn(1),

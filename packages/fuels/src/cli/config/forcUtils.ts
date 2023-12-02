@@ -83,3 +83,8 @@ export function getABIPath(contractPath: string) {
 export function getABIPaths(paths: string[]) {
   return Promise.all(paths.map((path) => getABIPath(path)));
 }
+
+export const getStorageSlotsPath = (contractPath: string) => {
+  const projectName = getContractName(contractPath);
+  return join(contractPath, `/out/debug/${projectName}-storage_slots.json`);
+};
