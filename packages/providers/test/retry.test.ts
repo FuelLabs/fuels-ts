@@ -8,15 +8,13 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 function mockFetch(maxAttempts: number, callTimes: number[]) {
   const fetchSpy = jest.spyOn(global, 'fetch');
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore TS is throwing error when test is run, but not in IDE
-  fetchSpy.mockImplementation((input: RequestInfo | URL, init: RequestInit | undefined) => {
+  fetchSpy.mockImplementation((...args: unknown[]) => {
     callTimes.push(Date.now());
 
     if (fetchSpy.mock.calls.length <= maxAttempts) {
       const error = new Error();
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error when test is run, but not in IDE
+      // @ts-ignore TS is not happy with this property, but it works. ts-expect-error doesn't work for some reason, so I chose ts-ignore
       error.cause = {
         code: 'ECONNREFUSED',
       };
@@ -26,7 +24,7 @@ function mockFetch(maxAttempts: number, callTimes: number[]) {
 
     fetchSpy.mockRestore();
 
-    return fetch(input, init);
+    return fetch(args[0] as URL, args[1] as RequestInit);
   });
 }
 
