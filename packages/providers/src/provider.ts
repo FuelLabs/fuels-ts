@@ -729,6 +729,8 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
 
     /**
      * Fund with fake UTXOs to avoid not enough funds error
@@ -743,10 +745,7 @@ export default class Provider {
     /**
      * Estimate gasUsed for script transactions
      */
-    const minGas = transactionRequest.calculateMinGas(chainInfo);
-    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
 
-    // Min gas price now is the minGas;
     let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
     // Transactions of type Create does not consume any gas so we can the dryRun
@@ -767,6 +766,9 @@ export default class Provider {
       });
       receipts = result.receipts;
       gasUsed = getGasUsedFromReceipts(receipts);
+    } else {
+      // For CreateTransaction the gasUsed is going to be the minGas
+      gasUsed = minGas;
     }
 
     return {
