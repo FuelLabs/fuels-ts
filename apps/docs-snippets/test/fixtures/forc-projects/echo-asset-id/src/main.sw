@@ -1,3 +1,4 @@
+// #region asset-id-1
 contract;
 
 abi EvmTest {
@@ -18,3 +19,4 @@ impl EvmTest for Contract {
         asset_id == ASSET_ID
     }
 }
+// #endregion asset-id-1
