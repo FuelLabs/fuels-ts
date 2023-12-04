@@ -72,7 +72,7 @@ describe('MultiTokenContract', () => {
     // define helper to get contract balance
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
-        .get_balance(address, assetId)
+        .get_balance(address, { value: assetId })
         .simulate<BN>();
       return value;
     };
@@ -92,7 +92,7 @@ describe('MultiTokenContract', () => {
         subIds.map((subId) =>
           multiTokenContract.functions.transfer_coins_to_output(
             { value: userWallet.address.toB256() },
-            helperDict[subId].assetId,
+            { value: helperDict[subId].assetId },
             helperDict[subId].amount
           )
         )
@@ -158,7 +158,7 @@ describe('MultiTokenContract', () => {
     // define helper to get contract balance
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
-        .get_balance(address, assetId)
+        .get_balance(address, { value: assetId })
         .simulate<BN>();
       return value;
     };
