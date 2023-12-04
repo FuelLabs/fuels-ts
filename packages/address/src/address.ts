@@ -110,7 +110,7 @@ export default class Address extends AbstractAddress {
 
   /**
    * Wraps the `bech32Address` property and returns as an `AssetId`.
-   * 
+   *
    * @returns The `bech32Address` property as an {@link AssetId | `AssetId`}
    */
   toAssetId(): AssetId {
