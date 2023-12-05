@@ -25,5 +25,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "[sway]": {
     "editor.defaultFormatter": "FuelLabs.sway-vscode-plugin"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }

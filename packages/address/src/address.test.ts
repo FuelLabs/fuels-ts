@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { B256AddressEvm, Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
+import type { AssetId, B256AddressEvm, Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
@@ -340,6 +340,14 @@ describe('Address class', () => {
 
     expect(evmAddress).toBeDefined();
     expect(evmAddress.value).toBe(ADDRESS_B256_EVM_PADDED);
+  });
+
+  test('create an AssetId from B256', () => {
+    const address = Address.fromB256(ADDRESS_B256);
+    const assetId: AssetId = address.toAssetId();
+
+    expect(assetId).toBeDefined();
+    expect(assetId.value).toBe(ADDRESS_B256);
   });
 
   test('create an Address from an Evm Address', () => {

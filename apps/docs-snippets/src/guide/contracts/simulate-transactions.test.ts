@@ -1,7 +1,11 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import type { AssetId } from 'fuels';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -19,9 +23,13 @@ describe(__filename, () => {
       provider,
     }).address.toB256();
 
+    const assetId: AssetId = {
+      value: BaseAssetId,
+    };
+
     // #region simulate-transactions-1
     const { gasUsed } = await contract.functions
-      .transfer(amountToTransfer, BaseAssetId, someAddress)
+      .transfer(amountToTransfer, assetId, someAddress)
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
