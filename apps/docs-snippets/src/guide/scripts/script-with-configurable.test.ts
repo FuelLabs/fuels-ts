@@ -1,16 +1,23 @@
-import type { WalletUnlocked } from 'fuels';
+import type { WalletUnlocked, Provider } from 'fuels';
 import { Script, BN } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   let gasPrice: BN;
-  const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.SUM_SCRIPT);
+  let provider: Provider;
+  const { abiContents, binHexlified } = getDocsSnippetsForcProject(
+    DocSnippetProjectsEnum.SUM_SCRIPT
+  );
 
   beforeAll(async () => {
     wallet = await getTestWallet();
+    provider = wallet.provider;
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
   });
 
@@ -32,5 +39,36 @@ describe(__filename, () => {
 
     expect(new BN(value as number).toNumber()).toEqual(expectedTotal);
     // #endregion script-with-configurable-contants-2
+  });
+
+  it('prepares a script and retrieves the id before submission', async () => {
+    const argument = 10;
+    const expected = 20;
+
+    // #region preparing-scripts
+    const script = new Script(binHexlified, abiContents, wallet);
+    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+
+    const tx = await script.functions.main(argument);
+
+    // Set the call parameters
+    tx.callParams({ gasLimit: 100 });
+
+    // Set the transaction parameters
+    tx.txParams({ gasPrice: minGasPrice, gasLimit: maxGasPerTx });
+
+    // Get the entire transaction request prior to
+    const txRequest = await tx.getTransactionRequest();
+
+    // Get the transaction ID
+    const txId = await tx.getTransactionId();
+
+    // Retrieve the value of the call and the actual gas used
+    const { value, gasUsed } = await tx.call();
+    // #endregion preparing-scripts
+    expect(txRequest).toBeDefined();
+    expect(txId).toBeDefined();
+    expect(new BN(value as number).toNumber()).toEqual(expected);
+    expect(new BN(gasUsed).toNumber()).toBeGreaterThan(0);
   });
 });

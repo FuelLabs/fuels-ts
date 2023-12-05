@@ -1,13 +1,15 @@
 import type { BN, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
-import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupWallets } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+
   describe('Invalidations', () => {
     let predicate: Predicate<[Validation]>;
     let predicateBalance: BN;

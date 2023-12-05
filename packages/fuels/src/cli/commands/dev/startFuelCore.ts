@@ -3,29 +3,16 @@ import { spawn } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { getPortPromise } from 'portfinder';
-import kill from 'tree-kill';
+import treeKill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
-import { findPackageRoot } from '../../utils/findPackageRoot';
 import { getBinarySource } from '../../utils/getBinarySource';
 import { error, log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
 
-export const killNode =
-  (core: ChildProcessWithoutNullStreams, killFn: (pid: number) => void) => () => {
-    if (core.pid) {
-      killFn(Number(core.pid));
-    }
-  };
-
-export const createTempChainConfig = (coreDir: string) => {
-  const chainConfigPath = join(coreDir, 'chainConfig.json');
-  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
-  mkdirSync(dirname(chainConfigPath), { recursive: true });
-  writeFileSync(chainConfigPath, chainConfigJson);
-  return chainConfigPath;
-};
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const npmWhich = require('npm-which')(__dirname);
 
 export type FuelCoreNode = {
   bindIp: string;
@@ -34,6 +21,30 @@ export type FuelCoreNode = {
   providerUrl: string;
   chainConfig: string;
   killChildProcess: () => void;
+};
+
+export type KillNodeParams = {
+  core: ChildProcessWithoutNullStreams;
+  killFn: (pid: number) => void;
+  state: {
+    isDead: boolean;
+  };
+};
+
+export const killNode = (params: KillNodeParams) => () => {
+  const { core, state, killFn } = params;
+  if (core.pid && !state.isDead) {
+    state.isDead = true;
+    killFn(Number(core.pid));
+  }
+};
+
+export const createTempChainConfig = (coreDir: string) => {
+  const chainConfigPath = join(coreDir, 'chainConfig.json');
+  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
+  mkdirSync(dirname(chainConfigPath), { recursive: true });
+  writeFileSync(chainConfigPath, chainConfigJson);
+  return chainConfigPath;
 };
 
 export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> => {
@@ -64,8 +75,8 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
   ].flat();
 
   return new Promise((resolve, reject) => {
-    const pkgRootDir = findPackageRoot();
-    const builtInFuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
+    // This line finds the path to the built-in fuels-core binary
+    const builtInFuelsCorePath = npmWhich.sync('fuels-core');
 
     const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });
@@ -78,7 +89,8 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
       core.stdout.pipe(process.stdout);
     }
 
-    const killChildProcess = killNode(core, kill);
+    const state = { isDead: false };
+    const killChildProcess = killNode({ core, state, killFn: treeKill });
 
     process.on('beforeExit', killChildProcess);
     process.on('uncaughtException', killChildProcess);

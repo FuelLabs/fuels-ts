@@ -4,7 +4,7 @@
 
 You can pass more than one argument to a predicate. For example, this is a predicate that evaluates to `true` if the two arguments are not equal:
 
-<<< @/../../../packages/fuel-gauge/fixtures/forc-projects/predicate-multi-args/src/main.sw#predicate-multi-args-sw{rust:line-numbers}
+<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/predicate-multi-args/src/main.sw#predicate-multi-args-sw{rust:line-numbers}
 
 You can pass the two arguments to this predicate like this:
 
@@ -14,7 +14,7 @@ You can pass the two arguments to this predicate like this:
 
 You can also pass a struct as an argument to a predicate. This is one such predicate that expects a struct as an argument:
 
-<<< @/../../../packages/fuel-gauge/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{rust:line-numbers}
+<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{rust:line-numbers}
 
 You can pass a struct as an argument to this predicate like this:
 

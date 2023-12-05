@@ -14,7 +14,7 @@ An EVM Address only has 20 bytes therefore the first 12 bytes of the `Bits256` v
 
 The `EvmAddress` type can be integrated with your contract calls. Consider the following contract that can compare and return an EVM Address:
 
-<<< @/../../docs-snippets/projects/echo-evm-address/src/main.sw#evm-address-1{ts:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/echo-evm-address/src/main.sw#evm-address-1{ts:line-numbers}
 
 The `EvmAddress` type can be used with the SDK and passed to the contract function as follows:
 

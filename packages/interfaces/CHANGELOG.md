@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.68.0
+
+### Patch Changes
+
+- Introduce internal hexlify and arrayify functions, by [@danielbate](https://github.com/danielbate) (See [#1401](https://github.com/FuelLabs/fuels-ts/pull/1401))
+
 ## 0.67.0
 
 ### Minor Changes

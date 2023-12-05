@@ -1,14 +1,12 @@
-import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
 import { bn, BaseAssetId } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { createSetupConfig } from './utils';
 
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation.bin')
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
 );
 
 const setupContract = createSetupConfig({

@@ -3,6 +3,7 @@
  */
 export enum ErrorCode {
   // abi
+  NO_ABIS_FOUND = 'no-abis-found',
   ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
   ABI_MAIN_METHOD_MISSING = 'abi-main-method-missing',
   INVALID_COMPONENT = 'invalid-component',
@@ -21,6 +22,7 @@ export enum ErrorCode {
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
+  INVALID_B256_ADDRESS = 'invalid-b256-address',
 
   // provider
   INVALID_URL = 'invalid-url',
@@ -29,6 +31,7 @@ export enum ErrorCode {
   MISSING_PROVIDER = 'missing-provider',
 
   // wallet
+  INVALID_PUBLIC_KEY = 'invalid-public-key',
   INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
@@ -46,6 +49,7 @@ export enum ErrorCode {
   CONVERTING_FAILED = 'converting-error',
   ELEMENT_NOT_FOUND = 'element-not-found',
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
+  UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',

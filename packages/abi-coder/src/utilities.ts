@@ -154,7 +154,9 @@ export function findOrThrow<T>(
   }
 ): T {
   const found = arr.find(predicate);
-  if (found === undefined) throwFn();
+  if (found === undefined) {
+    throwFn();
+  }
 
   return found;
 }

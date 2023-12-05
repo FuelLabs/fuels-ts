@@ -8,7 +8,7 @@ This guide will demonstrate how to send and spend funds using a predicate.
 
 Consider the following predicate:
 
-<<< @/../../docs-snippets/projects/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
 This predicate accepts an address of type `b256` and compares it with a hardcoded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
 
@@ -37,6 +37,12 @@ We are now ready to use our predicate to execute our transfer. We can achieve th
 Note the method transfer has two parameters: the recipient's address and the intended transfer amount.
 
 Once the predicate resolves with a return value `true` based on its predefined condition, our predicate successfully spends its funds by means of a transfer to a desired wallet.
+
+---
+
+You can also use the `getTransferTxId` helper to obtain the transaction ID of the transfer beforehand, without actually executing it.
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
 
 ## Spending Entire Predicate Held Amount
 
