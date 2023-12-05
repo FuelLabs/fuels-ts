@@ -1,5 +1,5 @@
 import type { Contract, Provider } from 'fuels';
-import { BN } from 'fuels';
+import { BN, PolicyType } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -30,7 +30,12 @@ describe(__filename, () => {
 
     const { transaction } = transactionResult;
 
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(10000);
+    const gasLimitPolicy = transaction.policies?.find(
+      (policy) => policy.type === PolicyType.GasPrice
+    );
+
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10000);
+    expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(minGasPrice.toNumber());
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {
