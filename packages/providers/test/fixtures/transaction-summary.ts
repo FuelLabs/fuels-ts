@@ -271,7 +271,7 @@ export const MOCK_ABIMAP = {
 };
 
 export const MOCK_TRANSACTION: Transaction = {
-  gasLimit: bn(100000000),
+  scriptGasLimit: bn(100000000),
   inputsCount: 3,
   inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
   outputsCount: 3,

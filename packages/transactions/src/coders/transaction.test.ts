@@ -16,7 +16,7 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript without inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
-      gasLimit: bn(U32),
+      scriptGasLimit: bn(U32),
       scriptLength: U16,
       scriptDataLength: U16,
       policyTypes: 5,
@@ -50,7 +50,7 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript with inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
-      gasLimit: bn(U32),
+      scriptGasLimit: bn(U32),
       scriptLength: U16,
       scriptDataLength: U16,
       policyTypes: 7,

@@ -74,7 +74,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const scriptData = getBytesCopy(this.scriptData ?? '0x');
     return {
       type: TransactionType.Script,
-      gasLimit: this.gasLimit,
+      scriptGasLimit: this.gasLimit,
       ...super.getBaseTransaction(),
       scriptLength: script.length,
       scriptDataLength: scriptData.length,

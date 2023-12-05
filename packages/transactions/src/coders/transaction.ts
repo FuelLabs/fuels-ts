@@ -29,7 +29,7 @@ export type TransactionScript = {
   type: TransactionType.Script;
 
   /** Gas limit for transaction (u64) */
-  gasLimit: BN;
+  scriptGasLimit: BN;
 
   /** Script length, in instructions (u16) */
   scriptLength: number;
@@ -79,7 +79,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   encode(value: TransactionScript): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new U64Coder().encode(value.gasLimit));
+    parts.push(new U64Coder().encode(value.scriptGasLimit));
     parts.push(new NumberCoder('u16').encode(value.scriptLength));
     parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
@@ -101,7 +101,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     let decoded;
     let o = offset;
     [decoded, o] = new U64Coder().decode(data, o);
-    const gasLimit = decoded;
+    const scriptGasLimit = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const scriptLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
@@ -132,7 +132,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     return [
       {
         type: TransactionType.Script,
-        gasLimit,
+        scriptGasLimit,
         scriptLength,
         scriptDataLength,
         policyTypes,
