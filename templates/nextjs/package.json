@@ -16,13 +16,13 @@
     "@fuel-wallet/react": "0.13.7-master-e0854e6",
     "fuels": "workspace:*",
     "next": "14.0.1",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^18.2",
+    "react-dom": "^18.2"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.2",
+    "@types/react-dom": "^18.2",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.1",
