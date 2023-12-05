@@ -13,11 +13,7 @@ describe('Predicate', () => {
     FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
   );
 
-  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_STRUCT
-  );
-
-  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
+  const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
   );
 

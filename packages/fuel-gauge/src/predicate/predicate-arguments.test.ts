@@ -7,9 +7,8 @@ import type { Validation } from '../types/predicate';
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
-  const { binHexlified: predicateBytesAddress } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_ADDRESS
-  );
+  const { binHexlified: predicateBytesAddress, abiContents: predicateAbiMainArgsAddress } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_ADDRESS);
 
   const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
@@ -20,13 +19,8 @@ describe('Predicate', () => {
   const { binHexlified: predicateBytesMulti, abiContents: predicateAbiMulti } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MULTI_ARGS);
 
-  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_STRUCT
-  );
-
-  const { binHexlified: predicateBytesU32 } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_U32
-  );
+  const { binHexlified: predicateBytesMainArgsU32, abiContents: predicateAbiMainArgsU32 } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_U32);
 
   describe('Arguments', () => {
     let wallet: WalletUnlocked;
@@ -36,133 +30,6 @@ describe('Predicate', () => {
     const amountToReceiver = 50;
     const amountToPredicate = 400_000;
 
-    const AddressAbiInputs: JsonAbi = {
-      types: [
-        {
-          typeId: 0,
-          type: 'bool',
-          components: null,
-          typeParameters: null,
-        },
-        {
-          typeId: 1,
-          type: 'b256',
-          components: null,
-          typeParameters: null,
-        },
-      ],
-      functions: [
-        {
-          inputs: [
-            {
-              name: 'data',
-              type: 1,
-              typeArguments: null,
-            },
-          ],
-          name: 'main',
-          output: {
-            name: '',
-            type: 0,
-            typeArguments: null,
-          },
-          attributes: null,
-        },
-      ],
-      loggedTypes: [],
-      configurables: [],
-    };
-
-    const U32AbiInputs: JsonAbi = {
-      types: [
-        {
-          typeId: 0,
-          type: 'bool',
-          components: null,
-          typeParameters: null,
-        },
-        {
-          typeId: 1,
-          type: 'u32',
-          components: null,
-          typeParameters: null,
-        },
-      ],
-      functions: [
-        {
-          inputs: [
-            {
-              name: 'data',
-              type: 1,
-              typeArguments: null,
-            },
-          ],
-          name: 'main',
-          output: {
-            name: '',
-            type: 0,
-            typeArguments: null,
-          },
-          attributes: null,
-        },
-      ],
-      loggedTypes: [],
-      configurables: [],
-    };
-
-    const StructAbiInputs: JsonAbi = {
-      types: [
-        {
-          typeId: 0,
-          type: 'bool',
-          components: null,
-          typeParameters: null,
-        },
-        {
-          typeId: 1,
-          type: 'struct Validation',
-          components: [
-            {
-              name: 'has_account',
-              type: 0,
-              typeArguments: null,
-            },
-            {
-              name: 'total_complete',
-              type: 2,
-              typeArguments: null,
-            },
-          ],
-          typeParameters: null,
-        },
-        {
-          typeId: 2,
-          type: 'u64',
-          components: null,
-          typeParameters: null,
-        },
-      ],
-      functions: [
-        {
-          inputs: [
-            {
-              name: 'data',
-              type: 1,
-              typeArguments: null,
-            },
-          ],
-          name: 'main',
-          output: {
-            name: '',
-            type: 0,
-            typeArguments: null,
-          },
-          attributes: null,
-        },
-      ],
-      loggedTypes: [],
-      configurables: [],
-    };
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       gasPrice = provider.getGasConfig().minGasPrice;
@@ -174,7 +41,11 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid address data and returns true', async () => {
-      const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
+      const predicate = new Predicate<[string]>(
+        predicateBytesAddress,
+        provider,
+        predicateAbiMainArgsAddress
+      );
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -195,7 +66,11 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid address data and returns false', async () => {
-      const predicate = new Predicate<[string]>(predicateBytesAddress, provider, AddressAbiInputs);
+      const predicate = new Predicate<[string]>(
+        predicateBytesAddress,
+        provider,
+        predicateAbiMainArgsAddress
+      );
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -210,7 +85,11 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
-      const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
+      const predicate = new Predicate<[number]>(
+        predicateBytesMainArgsU32,
+        provider,
+        predicateAbiMainArgsU32
+      );
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -231,7 +110,11 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
-      const predicate = new Predicate<[number]>(predicateBytesU32, provider, U32AbiInputs);
+      const predicate = new Predicate<[number]>(
+        predicateBytesMainArgsU32,
+        provider,
+        predicateAbiMainArgsU32
+      );
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
@@ -243,58 +126,6 @@ describe('Predicate', () => {
       await expect(
         predicate
           .setData(100)
-          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
-    });
-
-    it('calls a predicate with valid struct data and returns true', async () => {
-      const predicate = new Predicate<[Validation]>(
-        predicateBytesStruct,
-        provider,
-        StructAbiInputs
-      );
-
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-      const initialReceiverBalance = await receiver.getBalance();
-
-      const tx = await predicate
-        .setData({
-          has_account: true,
-          total_complete: 100,
-        })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
-      await tx.waitForResult();
-
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
-    });
-
-    it('calls a predicate with invalid struct data and returns false', async () => {
-      const predicate = new Predicate<[Validation]>(
-        predicateBytesStruct,
-        provider,
-        StructAbiInputs
-      );
-
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-      const initialReceiverBalance = await receiver.getBalance();
-
-      // Check there are UTXO locked with the predicate hash
-      expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
-      expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
-
-      await expect(
-        predicate
-          .setData({
-            has_account: false,
-            total_complete: 0,
-          })
           .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
       ).rejects.toThrow('Invalid transaction');
     });
