@@ -29,6 +29,8 @@ members = [
   "predicate-u32",
   "predicate-vector-types",
   "predicate-with-configurable",
+  "complex-predicate",
+  "complex-script",
   "raw-slice",
   "revert-error",
   "script-bytes",
