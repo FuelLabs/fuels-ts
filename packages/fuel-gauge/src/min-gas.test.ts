@@ -15,10 +15,7 @@ import {
   getGasUsedFromReceipts,
 } from 'fuels';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 describe(__filename, () => {
   it('sets gas requirements (contract)', async () => {
@@ -32,9 +29,11 @@ describe(__filename, () => {
     /**
      * Create a contract transaction
      */
-    const { abiContents, binHexlified, storageSlots } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.COUNTER
+
+    const { abiContents, binHexlified, storageSlots } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.COVERAGE_CONTRACT
     );
+
     const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
     const { transactionRequest: request } = contractFactory.createTransactionRequest({
       storageSlots,
@@ -73,7 +72,8 @@ describe(__filename, () => {
     /**
      * Create a script transaction
      */
-    const { binHexlified } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COMPLEX_SCRIPT);
+    const { binHexlified } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_SCRIPT);
+
     const request = new ScriptTransactionRequest({
       script: binHexlified,
       scriptData: hexlify(new U64Coder().encode(bn(2000))),
@@ -102,9 +102,10 @@ describe(__filename, () => {
 
   it('sets gas requirements (predicate)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.COMPLEX_PREDICATE
+    const { abiContents, binHexlified } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.COMPLEX_PREDICATE
     );
+
     /**
      * Setup predicate
      */
@@ -145,8 +146,8 @@ describe(__filename, () => {
 
   it('sets gas requirements (account and predicate with script)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.COMPLEX_PREDICATE
+    const { abiContents, binHexlified } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.COMPLEX_PREDICATE
     );
     /**
      * Setup account
@@ -167,8 +168,8 @@ describe(__filename, () => {
     /**
      * Create a script transaction
      */
-    const { binHexlified: scriptBin } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.COMPLEX_SCRIPT
+    const { binHexlified: scriptBin } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.COMPLEX_SCRIPT
     );
     const request = new ScriptTransactionRequest({
       script: scriptBin,
