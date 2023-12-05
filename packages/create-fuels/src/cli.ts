@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
+import { execSync } from 'child_process';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import { cp, mkdir, readdir } from 'fs/promises';
+import { cp, mkdir } from 'fs/promises';
 import { join } from 'path';
 import prompts from 'prompts';
 
@@ -12,8 +13,13 @@ const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
 
-export const runScaffoldCli = async (explicitProjectPath?: string) => {
+export const runScaffoldCli = async (
+  explicitProjectPath?: string,
+  explicitPackageManger?: string,
+  shouldInstallDeps = true
+) => {
   let projectPath = explicitProjectPath || '';
+  let packageManager = explicitPackageManger || '';
   const program = new Command(packageJson.name).version(packageJson.version);
 
   if (!explicitProjectPath) {
@@ -41,9 +47,30 @@ export const runScaffoldCli = async (explicitProjectPath?: string) => {
     process.exit(1);
   }
 
+  if (!explicitPackageManger) {
+    const packageManagerInput = await prompts({
+      type: 'select',
+      name: 'packageManager',
+      message: 'Select a package manager',
+      choices: [
+        { title: 'pnpm', value: 'pnpm' },
+        { title: 'npm', value: 'npm' },
+        { title: 'yarn', value: 'yarn' },
+        { title: 'bun', value: 'bun' },
+      ],
+      initial: 0,
+    });
+    packageManager = packageManagerInput.packageManager;
+  }
+
   await mkdir(projectPath);
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
+
+  if (shouldInstallDeps) {
+    process.chdir(projectPath);
+    execSync(`${packageManager} install`, { stdio: 'inherit' });
+  }
 
   log();
   log();
@@ -53,9 +80,12 @@ export const runScaffoldCli = async (explicitProjectPath?: string) => {
   log('To get started:');
   log();
   log(`- cd into the project directory: cd ${projectPath}`);
-  log(`- Install the dependencies: pnpm install`);
-  log(`- Start a local Fuel dev server: pnpm fuels:dev`);
-  log(`- Run the frontend: pnpm run dev`);
+  log(
+    `- Start a local Fuel dev server: ${packageManager} ${
+      packageManager === 'npm' && 'run '
+    }fuels:dev`
+  );
+  log(`- Run the frontend: ${packageManager} ${packageManager === 'npm' && 'run '}dev`);
   log();
   log();
   log('-> TS SDK docs: https://fuellabs.github.io/fuels-ts/');
