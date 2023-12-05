@@ -134,6 +134,10 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromPublicKey(publicKey: string): Address {
+    if (!isPublicKey(publicKey)) {
+      throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
+    }
+
     const b256Address = sha256(hexlify(getBytesCopy(publicKey)));
     return new Address(toBech32(b256Address));
   }
@@ -145,6 +149,13 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromB256(b256Address: string): Address {
+    if (!isB256(b256Address)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${b256Address}.`
+      );
+    }
+
     return new Address(toBech32(b256Address));
   }
 
@@ -218,6 +229,13 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromEvmAddress(evmAddress: string): Address {
+    if (!isEvmAddress(evmAddress)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_EVM_ADDRESS,
+        `Invalid Evm Address: ${evmAddress}.`
+      );
+    }
+
     const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
 
     return new Address(toBech32(paddedAddress));
