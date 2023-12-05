@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.68.0
+
+### Patch Changes
+
+- 🐞 Fixed calculation of chargeable bytes when transaction has no witnesses, by [@nedsalk](https://github.com/nedsalk) (See [#1428](https://github.com/FuelLabs/fuels-ts/pull/1428))
+
 ## 0.67.0
 
 ### Minor Changes
