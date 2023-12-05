@@ -199,14 +199,20 @@ describe('gas', () => {
       const witnessLimit = bn(800);
       const witnessesLength = 128;
       const minGas = bn(567);
+      const gasLimit = bn(10_000);
 
-      const expectedMaxGas = witnessLimit.sub(bn(witnessesLength)).mul(gasPerByte).add(minGas);
+      const expectedMaxGas = witnessLimit
+        .sub(bn(witnessesLength))
+        .mul(gasPerByte)
+        .add(minGas)
+        .add(gasLimit);
 
       const maxGas = getMaxGas({
         gasPerByte,
         witnessLimit,
         witnessesLength,
         minGas,
+        gasLimit,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();

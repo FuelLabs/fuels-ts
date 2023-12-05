@@ -69,10 +69,11 @@ export interface IGetMaxGasParams {
   witnessLimit?: BN;
   gasPerByte: BN;
   minGas: BN;
+  gasLimit?: BN;
 }
 
 export function getMaxGas(params: IGetMaxGasParams) {
-  const { gasPerByte, witnessesLength, witnessLimit, minGas } = params;
+  const { gasPerByte, witnessesLength, witnessLimit, minGas, gasLimit = bn(0) } = params;
 
   let remainingAllowedWitnessGas = bn(0);
 
@@ -80,7 +81,7 @@ export function getMaxGas(params: IGetMaxGasParams) {
     remainingAllowedWitnessGas = bn(witnessLimit).sub(witnessesLength).mul(gasPerByte);
   }
 
-  return remainingAllowedWitnessGas.add(minGas);
+  return remainingAllowedWitnessGas.add(minGas).add(gasLimit);
 }
 
 export function calculateMetadataGasForTxCreate({
