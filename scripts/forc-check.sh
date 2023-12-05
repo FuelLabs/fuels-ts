@@ -7,6 +7,8 @@ forc_fmt=$(realpath ./packages/forc/forc-binaries/forc-fmt)
 ERRORED=0
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
+
 for i in $forc_projects; do
     cd "${i/Forc.toml/''}" || exit
     eval "$forc_fmt" --check
@@ -20,8 +22,7 @@ for i in $forc_projects; do
         continue
     fi
 
-    authors=$(cat Forc.toml | grep authors)
-    if [ "$authors" != "authors = [\"Fuel Labs <contact@fuel.sh>\"]" ]; then
+    if [ "$authors" != "$(grep "authors =" Forc.toml)" ]; then
         echo -e authors field should be: $RED"authors = [\"Fuel Labs <contact@fuel.sh>\"]"$NC but is $RED"$authors"$NC
         ERRORED=1
     fi
