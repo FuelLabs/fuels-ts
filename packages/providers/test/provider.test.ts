@@ -18,8 +18,9 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from '../src/transaction-request';
-import { ScriptTransactionRequest } from '../src/transaction-request';
+import { CreateTransactionRequest, ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
+import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 import { MOCK_CHAIN } from './fixtures/chain';
@@ -938,5 +939,61 @@ describe('Provider', () => {
 
     expect(txCostSpy).toHaveBeenCalled();
     expect(estimateTxSpy).toHaveBeenCalled();
+  });
+
+  it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { gasPerByte } = provider.getGasConfig();
+
+    const gasLimit = bn(1000);
+    const transactionRequest = new ScriptTransactionRequest({
+      gasLimit,
+    });
+
+    const maxGasSpy = jest.spyOn(gasMod, 'getMaxGas');
+
+    const chainInfo = provider.getChain();
+    const minGas = bn(200);
+
+    const witnessesLength = transactionRequest
+      .toTransaction()
+      .witnesses.reduce((acc, wit) => acc + wit.dataLength, 0);
+
+    transactionRequest.calculateMaxGas(chainInfo, minGas);
+    expect(maxGasSpy).toHaveBeenCalledWith({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: transactionRequest.witnessLimit,
+      gasLimit: transactionRequest.gasLimit,
+    });
+  });
+
+  it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { gasPerByte } = provider.getGasConfig();
+
+    const transactionRequest = new CreateTransactionRequest({
+      witnesses: [ZeroBytes32],
+    });
+
+    transactionRequest.addContractCreatedOutput(ZeroBytes32, ZeroBytes32);
+
+    const maxGasSpy = jest.spyOn(gasMod, 'getMaxGas');
+
+    const chainInfo = provider.getChain();
+    const minGas = bn(700);
+
+    const witnessesLength = transactionRequest
+      .toTransaction()
+      .witnesses.reduce((acc, wit) => acc + wit.dataLength, 0);
+
+    transactionRequest.calculateMaxGas(chainInfo, minGas);
+    expect(maxGasSpy).toHaveBeenCalledWith({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: transactionRequest.witnessLimit,
+    });
   });
 });
