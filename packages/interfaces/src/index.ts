@@ -27,6 +27,13 @@ export type EvmAddress = {
   value: B256AddressEvm;
 };
 
+/**
+ * @prop value - A wrapped 256 bit hash string
+ */
+export type AssetId = {
+  value: B256Address;
+};
+
 export type StdString = string;
 
 /**
