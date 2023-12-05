@@ -13,9 +13,8 @@ describe('Predicate', () => {
     FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
   );
 
-  const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
-  );
+  const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
   describe('With script', () => {
     let wallet: WalletUnlocked;

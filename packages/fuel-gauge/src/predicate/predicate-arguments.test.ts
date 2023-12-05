@@ -1,4 +1,4 @@
-import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish, BN } from 'fuels';
+import type { WalletLocked, WalletUnlocked, BigNumberish, BN } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
