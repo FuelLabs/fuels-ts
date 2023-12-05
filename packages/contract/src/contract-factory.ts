@@ -148,7 +148,6 @@ export default class ContractFactory {
     const { requiredQuantities, maxFee } =
       await this.account.provider.getTransactionCost(transactionRequest);
 
-    // TODO: use user input MAX FEE
     transactionRequest.gasPrice = this.account.provider.getGasConfig().minGasPrice;
     transactionRequest.maxFee = this.account.provider.getGasConfig().maxGasPerTx;
 
