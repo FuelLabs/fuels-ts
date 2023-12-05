@@ -11,7 +11,8 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
-import { calculateMetadataGasForTxScript } from '../utils/gas';
+import type { ChainInfo } from '../provider';
+import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
@@ -144,6 +145,24 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     }
 
     return this.outputs.length - 1;
+  }
+
+  calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
+    const { consensusParameters } = chainInfo;
+    const { gasPerByte } = consensusParameters;
+
+    const witnessesLength = this.toTransaction().witnesses.reduce(
+      (acc, wit) => acc + wit.dataLength,
+      0
+    );
+
+    return getMaxGas({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: this.witnessLimit,
+      gasLimit: this.gasLimit,
+    });
   }
 
   /**
