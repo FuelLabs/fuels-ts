@@ -14,7 +14,6 @@ fn extract_pulic_key_and_match(signature: B512, expected_public_key: b256) -> u6
 }
 
 fn main(signatures: [B512; 3]) -> bool {
-
     let public_keys = [
         0xe10f526b192593793b7a1559a391445faba82a1d669e3eb2dcd17f9c121b24b1,
         0x54944e5b8189827e470e5a8bacfc6c3667397dc4e1eef7ef3519d16d6d6c6610,
