@@ -53,7 +53,7 @@ Creates an instance of the Predicate class.
 
 #### Defined in
 
-[predicate/src/predicate.ts:44](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L44)
+[predicate/src/predicate.ts:48](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L48)
 
 ## Properties
 
@@ -87,7 +87,7 @@ AbstractPredicate.bytes
 
 #### Defined in
 
-[predicate/src/predicate.ts:30](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L30)
+[predicate/src/predicate.ts:34](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L34)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[predicate/src/predicate.ts:32](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L32)
+[predicate/src/predicate.ts:36](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L36)
 
 ___
 
@@ -111,7 +111,7 @@ AbstractPredicate.predicateData
 
 #### Defined in
 
-[predicate/src/predicate.ts:31](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L31)
+[predicate/src/predicate.ts:35](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L35)
 
 ___
 
@@ -324,6 +324,33 @@ wallet/dist/account.d.ts:40
 
 ___
 
+### getTransferTxId
+
+▸ **getTransferTxId**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`&lt;`string`\>
+
+Returns the transaction ID for a transfer transaction, without sending it.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
+| `amount` | `BigNumberish` | `undefined` | The amount of coins to transfer. |
+| `assetId` | `BytesLike` | `BaseAssetId` | The asset ID of the coins to transfer. |
+| `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | `{}` | The transaction parameters (gasLimit, gasPrice, maturity). |
+
+#### Returns
+
+`Promise`&lt;`string`\>
+
+A promise that resolves to the transaction ID.
+
+#### Defined in
+
+[predicate/src/predicate.ts:108](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L108)
+
+___
+
 ### populateTransactionPredicateData
 
 ▸ **populateTransactionPredicateData**(`transactionRequestLike`): [`TransactionRequest`](/api/Providers/index.md#transactionrequest)
@@ -344,7 +371,38 @@ The transaction request with predicate data.
 
 #### Defined in
 
-[predicate/src/predicate.ts:69](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L69)
+[predicate/src/predicate.ts:73](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L73)
+
+___
+
+### prepareTransferTxRequest
+
+▸ **prepareTransferTxRequest**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`&lt;[`TransactionRequest`](/api/Providers/index.md#transactionrequest)\>
+
+A helper that prepares a transaction request for calculating the transaction ID.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the destination. |
+| `amount` | `BigNumberish` | The amount of coins to transfer. |
+| `assetId?` | `BytesLike` | The asset ID of the coins to transfer. |
+| `txParams?` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | The transaction parameters (gasLimit, gasPrice, maturity). |
+
+#### Returns
+
+`Promise`&lt;[`TransactionRequest`](/api/Providers/index.md#transactionrequest)\>
+
+A promise that resolves to the prepared transaction request.
+
+#### Inherited from
+
+[Account](/api/Wallet/Account.md).[prepareTransferTxRequest](/api/Wallet/Account.md#preparetransfertxrequest)
+
+#### Defined in
+
+wallet/dist/account.d.ts:101
 
 ___
 
@@ -372,7 +430,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[predicate/src/predicate.ts:90](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L90)
+[predicate/src/predicate.ts:94](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L94)
 
 ___
 
@@ -402,7 +460,7 @@ The Predicate instance with updated predicate data.
 
 #### Defined in
 
-[predicate/src/predicate.ts:112](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L112)
+[predicate/src/predicate.ts:140](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L140)
 
 ___
 
@@ -430,7 +488,7 @@ A promise that resolves to the call result.
 
 #### Defined in
 
-[predicate/src/predicate.ts:101](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L101)
+[predicate/src/predicate.ts:129](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L129)
 
 ___
 
@@ -447,7 +505,7 @@ Transfers coins to a destination address.
 | `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the destination. |
 | `amount` | `BigNumberish` | The amount of coins to transfer. |
 | `assetId?` | `BytesLike` | The asset ID of the coins to transfer. |
-| `txParams?` | `TxParamsType` | The transaction parameters (gasLimit, gasPrice, maturity). |
+| `txParams?` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | The transaction parameters (gasLimit, gasPrice, maturity). |
 
 #### Returns
 
@@ -478,7 +536,7 @@ Transfers coins to a contract address.
 | `contractId` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the contract. |
 | `amount` | `BigNumberish` | The amount of coins to transfer. |
 | `assetId?` | `BytesLike` | The asset ID of the coins to transfer. |
-| `txParams?` | `TxParamsType` | The optional transaction parameters. |
+| `txParams?` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | The optional transaction parameters. |
 
 #### Returns
 
@@ -492,7 +550,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-wallet/dist/account.d.ts:101
+wallet/dist/account.d.ts:119
 
 ___
 
@@ -508,7 +566,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | Address of the recipient on the base chain. |
 | `amount` | `BigNumberish` | Amount of base asset. |
-| `txParams?` | `TxParamsType` | The optional transaction parameters. |
+| `txParams?` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | The optional transaction parameters. |
 
 #### Returns
 
@@ -522,7 +580,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-wallet/dist/account.d.ts:118
+wallet/dist/account.d.ts:136
 
 ___
 
@@ -553,7 +611,7 @@ An object containing the new predicate bytes and interface.
 
 #### Defined in
 
-[predicate/src/predicate.ts:134](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L134)
+[predicate/src/predicate.ts:162](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L162)
 
 ___
 
@@ -579,4 +637,4 @@ The mutated bytes with the configurable constants set.
 
 #### Defined in
 
-[predicate/src/predicate.ts:174](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/predicate/src/predicate.ts#L174)
+[predicate/src/predicate.ts:202](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/predicate/src/predicate.ts#L202)

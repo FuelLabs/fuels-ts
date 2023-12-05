@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:32](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L32)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:32](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L32)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L26)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L26)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:27](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L27)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:27](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L27)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:30](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L30)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:30](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L30)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:25](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L25)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:25](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L25)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:33](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L33)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:33](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L33)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:31](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L31)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:31](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L31)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:28](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L28)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:28](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L28)
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:29](https://github.com/FuelLabs/fuels-ts/blob/c431eaba/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L29)
+[packages/providers/src/transaction-summary/assemble-transaction-summary.ts:29](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packages/providers/src/transaction-summary/assemble-transaction-summary.ts#L29)
