@@ -765,6 +765,9 @@ importers:
       lodash.camelcase:
         specifier: ^4.3.0
         version: 4.3.0
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
@@ -16770,6 +16773,14 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
+  /npm-path@2.0.4:
+    resolution: {integrity: sha512-IFsj0R9C7ZdR5cP+ET342q77uSRdtWOlWpih5eC+lu29tIDbNEgDbzgVJ5UFvYHWhxDZ5TFkJafFioO0pPQjCw==}
+    engines: {node: '>=0.8'}
+    hasBin: true
+    dependencies:
+      which: 1.3.1
+    dev: false
+
   /npm-run-all@4.1.5:
     resolution: {integrity: sha512-Oo82gJDAVcaMdi3nuoKFavkIHBRVqQ1qvMb+9LHk/cF4P6B2m8aP04hGf7oL6wZ9BuGwX1onlLhpuoofSyoQDQ==}
     engines: {node: '>= 4'}
@@ -16798,6 +16809,16 @@ packages:
     dependencies:
       path-key: 4.0.0
     dev: true
+
+  /npm-which@3.0.1:
+    resolution: {integrity: sha512-CM8vMpeFQ7MAPin0U3wzDhSGV0hMHNwHU0wjo402IVizPDrs45jSfSuoC+wThevY88LQti8VvaAnqYAeVy3I1A==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dependencies:
+      commander: 2.20.3
+      npm-path: 2.0.4
+      which: 1.3.1
+    dev: false
 
   /nth-check@1.0.2:
     resolution: {integrity: sha512-WeBOdju8SnzPN5vTUJYxYUxLeXpCaVP5i5e0LF8fg7WORF2Wd7wFX/pk0tYZk7s8T+J7VLy0Da6J1+wCT0AtHg==}
