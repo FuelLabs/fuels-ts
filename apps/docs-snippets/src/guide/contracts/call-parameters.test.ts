@@ -71,7 +71,7 @@ describe(__filename, () => {
     } = result;
 
     expect(new BN(value).toNumber()).toBe(10);
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(transactionGasLimit);
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(transactionGasLimit);
     // #endregion call-params-3
   });
 });
