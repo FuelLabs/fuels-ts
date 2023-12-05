@@ -82,10 +82,10 @@ export const runScaffoldCli = async (
   log(`- cd into the project directory: cd ${projectPath}`);
   log(
     `- Start a local Fuel dev server: ${packageManager} ${
-      packageManager === 'npm' ?? 'run '
+      packageManager === 'npm' ? 'run ' : ''
     }fuels:dev`
   );
-  log(`- Run the frontend: ${packageManager} ${packageManager === 'npm' ?? 'run '}dev`);
+  log(`- Run the frontend: ${packageManager} ${packageManager === 'npm' ? 'run ' : ''}dev`);
   log();
   log();
   log('-> TS SDK docs: https://fuellabs.github.io/fuels-ts/');
