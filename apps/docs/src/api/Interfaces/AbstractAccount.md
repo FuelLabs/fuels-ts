@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packag/api/src/index.ts#L53)
+[index.ts:60](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packag/api/src/index.ts#L60)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packag/api/src/index.ts#L54)
+[index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packag/api/src/index.ts#L61)
 
 ## Methods
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[index.ts:58](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packag/api/src/index.ts#L58)
+[index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packag/api/src/index.ts#L65)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packag/api/src/index.ts#L55)
+[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packag/api/src/index.ts#L62)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packag/api/src/index.ts#L56)
+[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packag/api/src/index.ts#L63)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-[index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/15936ba1/packag/api/src/index.ts#L57)
+[index.ts:64](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packag/api/src/index.ts#L64)
