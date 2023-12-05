@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.69.0
+
+### Minor Changes
+
+- Improve support of Asset ID, by [@danielbate](https://github.com/danielbate) (See [#1476](https://github.com/FuelLabs/fuels-ts/pull/1476))
+
 ## 0.68.0
 
 ### Minor Changes
