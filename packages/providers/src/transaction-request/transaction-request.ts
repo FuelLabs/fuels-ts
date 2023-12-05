@@ -497,12 +497,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       (output) => hexlify(output.assetId) === assetId
     );
 
-    // TODO: do we need this yet?
-    // Throw if the existing ChangeOutput is not for the same owner
-    // if (changeOutput && hexlify(changeOutput.to) !== addressify(to).toB256()) {
-    //   throw new ChangeOutputCollisionError();
-    // }
-
     // Insert a ChangeOutput if it does not exist
     if (!changeOutput) {
       this.pushOutput({
