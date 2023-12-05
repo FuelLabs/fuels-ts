@@ -165,6 +165,7 @@ export function findOrThrow<T>(
  * Because some properties can be single-bytes, we need to pad them
  * with zeros until they are aligned to a word-sized increment.
  * This is the case for `tuple` and `struct` properties.
+ * Please refer to packages/abi-coder/src/coders/abstract-coder.ts for more details
  */
 export const isMultipleOfWordSize = (length: number) => length % WORD_SIZE === 0;
 
