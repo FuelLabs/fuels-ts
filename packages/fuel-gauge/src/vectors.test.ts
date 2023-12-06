@@ -23,7 +23,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -34,7 +34,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_u16(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -45,7 +45,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_u32(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -56,7 +56,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_u64(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[]>();
 
     expect(toNumbers(value)).toStrictEqual(INPUT);
@@ -67,7 +67,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_bool(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<boolean[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -78,7 +78,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_b256(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -89,7 +89,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_b512(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -100,7 +100,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_str_1(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -111,7 +111,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_str_9(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -126,7 +126,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_tuple_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -141,7 +141,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_tuple_u64(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[][]>();
 
     expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
@@ -155,7 +155,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_array_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -170,7 +170,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_array_u64(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[][]>();
 
     expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
@@ -187,7 +187,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_array_bool(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -208,7 +208,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_struct_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -229,7 +229,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_struct_b256(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -257,7 +257,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_struct_complex(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<ComplexStruct[]>();
 
     expect(
@@ -279,7 +279,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_enum_small(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -300,7 +300,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_enum_big(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -311,7 +311,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_option_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
@@ -325,7 +325,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_vector_inside_struct(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -338,7 +338,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_vector_inside_enum(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -349,7 +349,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_vector_inside_vector(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -367,7 +367,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_struct_and_vector_tuple(INPUT[0], INPUT[1])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -378,7 +378,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_vector_and_b256_tuple(...INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -392,7 +392,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_two_vectors_tuple(...INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -403,7 +403,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions
       .echo_u32_then_three_vectors(...INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(INPUT);
@@ -416,7 +416,7 @@ describe('Vector Tests', () => {
         contractInstance.functions.echo_u8([2, 2]),
         contractInstance.functions.echo_u8([3, 3, 3]),
       ])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(results).toStrictEqual([[1], [2, 2], [3, 3, 3]]);
   });

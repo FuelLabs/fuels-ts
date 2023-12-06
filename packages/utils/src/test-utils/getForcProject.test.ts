@@ -17,6 +17,7 @@ jest.mock('path', () => ({
   __esModule: true,
   ...jest.requireActual('path'),
 }));
+
 jest.mock('fs', () => ({
   __esModule: true,
   ...jest.requireActual('fs'),

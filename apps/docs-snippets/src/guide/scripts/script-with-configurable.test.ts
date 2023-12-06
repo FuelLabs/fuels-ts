@@ -33,7 +33,10 @@ describe(__filename, () => {
 
     const inpputedValue = 10;
 
-    const { value } = await script.functions.main(inpputedValue).txParams({ gasPrice }).call();
+    const { value } = await script.functions
+      .main(inpputedValue)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     const expectedTotal = inpputedValue + configurableConstants.AMOUNT;
 
@@ -47,15 +50,15 @@ describe(__filename, () => {
 
     // #region preparing-scripts
     const script = new Script(binHexlified, abiContents, wallet);
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
-    const tx = await script.functions.main(argument);
+    const tx = script.functions.main(argument);
 
     // Set the call parameters
     tx.callParams({ gasLimit: 100 });
 
     // Set the transaction parameters
-    tx.txParams({ gasPrice: minGasPrice, gasLimit: maxGasPerTx });
+    tx.txParams({ gasPrice: minGasPrice, gasLimit: 10_000 });
 
     // Get the entire transaction request prior to
     const txRequest = await tx.getTransactionRequest();

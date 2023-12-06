@@ -114,7 +114,6 @@ export default class ContractFactory {
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
@@ -146,10 +145,11 @@ export default class ContractFactory {
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
 
-    const { requiredQuantities, maxFee, gasUsed } =
+    const { requiredQuantities, maxFee } =
       await this.account.provider.getTransactionCost(transactionRequest);
 
-    transactionRequest.gasLimit = gasUsed;
+    transactionRequest.gasPrice = this.account.provider.getGasConfig().minGasPrice;
+    transactionRequest.maxFee = this.account.provider.getGasConfig().maxGasPerTx;
 
     await this.account.fund(transactionRequest, requiredQuantities, maxFee);
     const response = await this.account.sendTransaction(transactionRequest);
