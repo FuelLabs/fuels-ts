@@ -1,3 +1,4 @@
+import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
 import {
@@ -64,13 +65,16 @@ describe('Fee', () => {
     // minting coins
     let balanceBefore = await wallet.getBalance();
 
-    let gasPrice = randomGasPrice(minGasPrice, 15);
+    let gasPrice = randomGasPrice(minGasPrice, 7);
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions
+      .mint_coins(subId, 1_000)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -81,11 +85,14 @@ describe('Fee', () => {
     // burning coins
     balanceBefore = await wallet.getBalance();
 
-    gasPrice = randomGasPrice(minGasPrice, 15);
+    gasPrice = randomGasPrice(minGasPrice, 7);
 
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions
+      .mint_coins(subId, 1_000)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     balanceAfter = await wallet.getBalance();
 
@@ -100,17 +107,22 @@ describe('Fee', () => {
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
 
-    const gasPrice = randomGasPrice(minGasPrice, 15);
+    const gasPrice = randomGasPrice(minGasPrice, 7);
 
     const tx = await wallet.transfer(destination.address, amountToTransfer, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     const { fee } = await tx.wait();
 
     const balanceAfter = await wallet.getBalance();
-    const balanceDiff = balanceBefore.sub(amountToTransfer).sub(balanceAfter);
+    const balanceDiff = balanceBefore.sub(amountToTransfer).sub(balanceAfter).toNumber();
 
-    expect(expectFeeInMarginOfError(fee, balanceDiff)).toBeTruthy();
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
   });
 
   it('should ensure fee is properly calculated on multi transfer transactions', async () => {
@@ -119,7 +131,7 @@ describe('Fee', () => {
     const destination3 = Wallet.generate({ provider });
 
     const amountToTransfer = 120;
-    const gasPrice = randomGasPrice(minGasPrice, 15);
+    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const request = new ScriptTransactionRequest({
@@ -145,9 +157,13 @@ describe('Fee', () => {
     const { fee } = await tx.wait();
 
     const balanceAfter = await wallet.getBalance();
-    const balanceDiff = balanceBefore.sub(amountToTransfer).sub(balanceAfter);
+    const balanceDiff = balanceBefore.sub(amountToTransfer).sub(balanceAfter).toNumber();
 
-    expect(expectFeeInMarginOfError(fee, balanceDiff)).toBeTruthy();
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
   });
 
   it('should ensure fee is properly calculated on a contract deploy', async () => {
@@ -157,7 +173,7 @@ describe('Fee', () => {
 
     const balanceBefore = await wallet.getBalance();
 
-    const gasPrice = randomGasPrice(minGasPrice, 15);
+    const gasPrice = randomGasPrice(minGasPrice, 7);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { transactionRequest } = factory.createTransactionRequest({ gasPrice });
     const { maxFee, requiredQuantities } = await provider.getTransactionCost(transactionRequest);
@@ -168,9 +184,13 @@ describe('Fee', () => {
     const { fee } = await tx.wait();
 
     const balanceAfter = await wallet.getBalance();
-    const balanceDiff = balanceBefore.sub(balanceAfter);
+    const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
 
-    expect(expectFeeInMarginOfError(fee, balanceDiff)).toBeTruthy();
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
   });
 
   it('should ensure fee is properly calculated on a contract call', async () => {
@@ -181,7 +201,7 @@ describe('Fee', () => {
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const contract = await factory.deployContract({ gasPrice: minGasPrice });
 
-    const gasPrice = randomGasPrice(minGasPrice, 15);
+    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const {
@@ -195,9 +215,13 @@ describe('Fee', () => {
       .call();
 
     const balanceAfter = await wallet.getBalance();
-    const balanceDiff = balanceBefore.sub(balanceAfter);
+    const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
 
-    expect(expectFeeInMarginOfError(fee, balanceDiff)).toBeTruthy();
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
   });
 
   it('should ensure fee is properly calculated a contract multi call', async () => {
@@ -208,7 +232,7 @@ describe('Fee', () => {
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const contract = await factory.deployContract({ gasPrice: minGasPrice });
 
-    const gasPrice = randomGasPrice(minGasPrice, 15);
+    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const scope = contract
@@ -228,9 +252,13 @@ describe('Fee', () => {
     } = await scope.call();
 
     const balanceAfter = await wallet.getBalance();
-    const balanceDiff = balanceBefore.sub(balanceAfter);
+    const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
 
-    expect(expectFeeInMarginOfError(fee, balanceDiff)).toBeTruthy();
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
@@ -242,19 +270,27 @@ describe('Fee', () => {
 
     const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
       gasPrice: minGasPrice,
+      gasLimit: 10_000,
     });
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
     const gasPrice = randomGasPrice(minGasPrice, 9);
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, { gasPrice });
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     const { fee } = await tx2.wait();
 
     const balanceAfter = await predicate.getBalance();
-    const balanceDiff = balanceBefore.sub(balanceAfter).sub(transferAmount);
+    const balanceDiff = balanceBefore.sub(balanceAfter).sub(transferAmount).toNumber();
 
-    expect(expectFeeInMarginOfError(fee, balanceDiff)).toBeTruthy();
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
   });
 });

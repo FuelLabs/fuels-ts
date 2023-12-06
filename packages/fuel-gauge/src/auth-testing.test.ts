@@ -32,7 +32,7 @@ describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     const { value } = await contractInstance.functions
       .is_caller_external()
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -41,7 +41,7 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -51,7 +51,7 @@ describe('Auth Testing', () => {
     await expect(
       contractInstance.functions
         .check_msg_sender({ value: getRandomB256() })
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call()
     ).rejects.toThrow(AssertFailedRevertError);
   });

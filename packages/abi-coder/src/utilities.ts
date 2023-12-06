@@ -1,5 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { concat } from '@fuel-ts/utils';
+import { concat, concatBytes } from '@fuel-ts/utils';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
 import { U64Coder } from './coders/u64';
@@ -160,3 +160,21 @@ export function findOrThrow<T>(
 
   return found;
 }
+
+/**
+ * Because some properties can be single-bytes, we need to pad them
+ * with zeros until they are aligned to a word-sized increment.
+ * This is the case for `tuple` and `struct` properties.
+ * Please refer to packages/abi-coder/src/coders/abstract-coder.ts for more details
+ */
+export const isMultipleOfWordSize = (length: number) => length % WORD_SIZE === 0;
+
+export const getWordSizePadding = (length: number) => WORD_SIZE - (length % WORD_SIZE);
+
+export const rightPadToWordSize = (encoded: Uint8Array) => {
+  if (isMultipleOfWordSize(encoded.length)) {
+    return encoded;
+  }
+  const padding = new Uint8Array(WORD_SIZE - (encoded.length % WORD_SIZE));
+  return concatBytes([encoded, padding]);
+};

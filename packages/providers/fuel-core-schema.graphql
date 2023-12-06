@@ -88,12 +88,17 @@ type BlockEdge {
 
 scalar BlockId
 
+input Breakpoint {
+  contract: ContractId!
+  pc: U64!
+}
+
 scalar Bytes32
 
 type ChainInfo {
   name: String!
   latestBlock: Block!
-  baseChainHeight: U32!
+  daHeight: U64!
   peerCount: Int!
   consensusParameters: ConsensusParameters!
   gasCosts: GasCosts!
@@ -181,21 +186,14 @@ union CoinType = Coin | MessageCoin
 union Consensus = Genesis | PoAConsensus
 
 type ConsensusParameters {
-  contractMaxSize: U64!
-  maxInputs: U64!
-  maxOutputs: U64!
-  maxWitnesses: U64!
-  maxGasPerTx: U64!
-  maxScriptLength: U64!
-  maxScriptDataLength: U64!
-  maxStorageSlots: U64!
-  maxPredicateLength: U64!
-  maxPredicateDataLength: U64!
-  maxGasPerPredicate: U64!
-  gasPriceFactor: U64!
-  gasPerByte: U64!
-  maxMessageDataLength: U64!
+  txParams: TxParameters!
+  predicateParams: PredicateParameters!
+  scriptParams: ScriptParameters!
+  contractParams: ContractParameters!
+  feeParams: FeeParameters!
+  baseAssetId: AssetId!
   chainId: U64!
+  gasCosts: GasCosts!
 }
 
 type Contract {
@@ -262,10 +260,12 @@ type ContractOutput {
   stateRoot: Bytes32!
 }
 
-type DependentCost {
-  base: U64!
-  depPerUnit: U64!
+type ContractParameters {
+  contractMaxSize: U64!
+  maxStorageSlots: U64!
 }
+
+union DependentCost = LightOperation | HeavyOperation
 
 input ExcludeInput {
   """
@@ -284,6 +284,11 @@ type FailureStatus {
   time: Tai64Timestamp!
   reason: String!
   programState: ProgramState
+}
+
+type FeeParameters {
+  gasPriceFactor: U64!
+  gasPerByte: U64!
 }
 
 type GasCosts {
@@ -323,12 +328,10 @@ type GasCosts {
   jnzb: U64!
   jnef: U64!
   jneb: U64!
-  k256: U64!
   lb: U64!
   log: U64!
   lt: U64!
   lw: U64!
-  mcpi: U64!
   mint: U64!
   mlog: U64!
   modOp: U64!
@@ -343,11 +346,13 @@ type GasCosts {
   not: U64!
   or: U64!
   ori: U64!
+  poph: U64!
+  popl: U64!
+  pshh: U64!
+  pshl: U64!
   ret: U64!
   rvrt: U64!
-  s256: U64!
   sb: U64!
-  scwq: U64!
   sll: U64!
   slli: U64!
   srl: U64!
@@ -357,7 +362,6 @@ type GasCosts {
   subi: U64!
   sw: U64!
   sww: U64!
-  swwq: U64!
   time: U64!
   tr: U64!
   tro: U64!
@@ -380,15 +384,24 @@ type GasCosts {
   call: DependentCost!
   ccp: DependentCost!
   csiz: DependentCost!
+  k256: DependentCost!
   ldc: DependentCost!
   logd: DependentCost!
   mcl: DependentCost!
   mcli: DependentCost!
   mcp: DependentCost!
+  mcpi: DependentCost!
   meq: DependentCost!
   retd: DependentCost!
+  s256: DependentCost!
+  scwq: DependentCost!
   smo: DependentCost!
   srwq: DependentCost!
+  swwq: DependentCost!
+  contractRoot: DependentCost!
+  stateRoot: DependentCost!
+  vmInitialization: DependentCost!
+  newStoragePerByte: U64!
 }
 
 type Genesis {
@@ -466,6 +479,11 @@ type Header {
   applicationHash: Bytes32!
 }
 
+type HeavyOperation {
+  base: U64!
+  gasPerUnit: U64!
+}
+
 scalar HexString
 
 union Input = InputCoin | InputContract | InputMessage
@@ -501,6 +519,11 @@ type InputMessage {
   data: HexString!
   predicate: HexString!
   predicateData: HexString!
+}
+
+type LightOperation {
+  base: U64!
+  unitsPerGas: U64!
 }
 
 type MerkleProof {
@@ -558,8 +581,6 @@ type MessageEdge {
   node: Message!
 }
 
-scalar MessageId
-
 type MessageProof {
   messageProof: MerkleProof!
   blockProof: MerkleProof!
@@ -583,6 +604,15 @@ type MessageStatus {
 }
 
 type Mutation {
+  startSession: ID!
+  endSession(id: ID!): Boolean!
+  reset(id: ID!): Boolean!
+  execute(id: ID!, op: String!): Boolean!
+  setSingleStepping(id: ID!, enable: Boolean!): Boolean!
+  setBreakpoint(id: ID!, breakpoint: Breakpoint!): Boolean!
+  startTx(id: ID!, txJson: String!): RunResult!
+  continueTx(id: ID!): RunResult!
+
   """
   Execute a dry-run of the transaction using a fork of current state, no changes are committed.
   """
@@ -601,7 +631,7 @@ type Mutation {
   `Trigger::Interval { block_time }`, produces blocks with `block_time ` intervals between
   them. The `start_timestamp` is the timestamp in seconds.
   """
-  produceBlocks(startTimestamp: Tai64Timestamp, blocksToProduce: U64!): U32!
+  produceBlocks(startTimestamp: Tai64Timestamp, blocksToProduce: U32!): U32!
 }
 
 type NodeInfo {
@@ -621,6 +651,15 @@ union Output =
   | ChangeOutput
   | VariableOutput
   | ContractCreated
+
+"""
+A separate `Breakpoint` type to be used as an output, as a single
+type cannot act as both input and output type in async-graphql
+"""
+type OutputBreakpoint {
+  contract: ContractId!
+  pc: U64!
+}
 
 """
 Information about pagination in a connection
@@ -654,12 +693,28 @@ type PoAConsensus {
   signature: Signature!
 }
 
+type Policies {
+  gasPrice: U64
+  witnessLimit: U64
+  maturity: U32
+  maxFee: U64
+}
+
+type PredicateParameters {
+  maxPredicateLength: U64!
+  maxPredicateDataLength: U64!
+  maxGasPerPredicate: U64!
+  maxMessageDataLength: U64!
+}
+
 type ProgramState {
   returnType: ReturnType!
   data: HexString!
 }
 
 type Query {
+  register(id: ID!, register: U32!): U64!
+  memory(id: ID!, start: U32!, size: U32!): String!
   balance(
     """
     address of the owner
@@ -687,7 +742,7 @@ type Query {
     """
     Height of the block
     """
-    height: U64
+    height: U32
   ): Block
   blocks(first: Int, after: String, last: Int, before: String): BlockConnection!
   chain: ChainInfo!
@@ -799,7 +854,7 @@ type Query {
   ): MessageConnection!
   messageProof(
     transactionId: TransactionId!
-    messageId: MessageId!
+    nonce: Nonce!
     commitBlockId: BlockId
     commitBlockHeight: U32
   ): MessageProof
@@ -859,7 +914,30 @@ enum ReturnType {
   REVERT
 }
 
+type RunResult {
+  state: RunState!
+  breakpoint: OutputBreakpoint
+  jsonReceipts: [String!]!
+}
+
+enum RunState {
+  """
+  All breakpoints have been processed, and the program has terminated
+  """
+  COMPLETED
+
+  """
+  Stopped on a breakpoint
+  """
+  BREAKPOINT
+}
+
 scalar Salt
+
+type ScriptParameters {
+  maxScriptLength: U64!
+  maxScriptDataLength: U64!
+}
 
 scalar Signature
 
@@ -877,7 +955,7 @@ input SpendQueryElementInput {
   """
   The maximum number of currencies for selection.
   """
-  max: U64
+  max: U32
 }
 
 type SqueezedOutStatus {
@@ -928,15 +1006,20 @@ type Transaction {
   id: TransactionId!
   inputAssetIds: [AssetId!]
   inputContracts: [Contract!]
+  inputContract: InputContract
+  policies: Policies
   gasPrice: U64
-  gasLimit: U64
+  scriptGasLimit: U64
   maturity: U32
+  mintAmount: U64
+  mintAssetId: AssetId
   txPointer: TxPointer
   isScript: Boolean!
   isCreate: Boolean!
   isMint: Boolean!
   inputs: [Input!]
   outputs: [Output!]!
+  outputContract: ContractOutput
   witnesses: [HexString!]
   receiptsRoot: Bytes32
   status: TransactionStatus
@@ -994,11 +1077,21 @@ union TransactionStatus =
   | SqueezedOutStatus
   | FailureStatus
 
+type TxParameters {
+  maxInputs: U8!
+  maxOutputs: U8!
+  maxWitnesses: U32!
+  maxGasPerTx: U64!
+  maxSize: U64!
+}
+
 scalar TxPointer
 
 scalar U32
 
 scalar U64
+
+scalar U8
 
 scalar UtxoId
 

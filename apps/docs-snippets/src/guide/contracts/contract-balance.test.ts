@@ -25,7 +25,7 @@ describe(__filename, () => {
       provider,
     });
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const asset: AssetId = {
       value: BaseAssetId,
@@ -38,7 +38,7 @@ describe(__filename, () => {
       })
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
+        gasLimit: 10_000,
       })
       .call();
 

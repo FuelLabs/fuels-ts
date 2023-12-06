@@ -18,7 +18,10 @@ describe(__filename, () => {
     const tuple: [number, boolean, number] = [100, false, 10000];
     // #endregion tuples-1
 
-    const { value } = await contract.functions.echo_tuple(tuple).simulate();
+    const { value } = await contract.functions
+      .echo_tuple(tuple)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(tuple).toEqual([value[0], value[1], new BN(value[2]).toNumber()]);
     // #endregion tuples-3
