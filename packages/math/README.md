@@ -27,7 +27,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ### Installation
 
 ```sh
-yarn add @fuel-ts/math
+pnpm add @fuel-ts/math
 # or
 npm add @fuel-ts/math
 ```
@@ -37,7 +37,7 @@ npm add @fuel-ts/math
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

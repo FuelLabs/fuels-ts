@@ -25,7 +25,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ### Installation
 
 ```sh
-yarn add @fuel-ts/wallet-manager
+pnpm add @fuel-ts/wallet-manager
 # or
 npm add @fuel-ts/wallet-manager
 ```
@@ -35,7 +35,7 @@ npm add @fuel-ts/wallet-manager
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

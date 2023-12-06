@@ -23,7 +23,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ## Installation
 
 ```sh
-yarn add @fuel-ts/utils
+pnpm add @fuel-ts/utils
 # or
 npm add @fuel-ts/utils
 ```

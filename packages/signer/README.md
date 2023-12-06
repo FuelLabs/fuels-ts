@@ -25,7 +25,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ### Installation
 
 ```sh
-yarn add @fuel-ts/signer
+pnpm add @fuel-ts/signer
 # or
 npm add @fuel-ts/signer
 ```
@@ -35,7 +35,7 @@ npm add @fuel-ts/signer
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

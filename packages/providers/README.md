@@ -23,7 +23,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/providers
 ### Installation
 
 ```sh
-yarn add @fuel-ts/providers
+pnpm add @fuel-ts/providers
 # or
 npm add @fuel-ts/providers
 ```
@@ -33,7 +33,7 @@ npm add @fuel-ts/providers
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```
