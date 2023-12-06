@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.69.1
+
+## 0.69.0
+
+## 0.68.0
+
+### Patch Changes
+
+- - Standardizing all forc projects across all packages
+  - Fixing turbo caching configs for `pretest` pipeline
+  - Reducing verbosity of `pretest` pipeline, by [@arboleya](https://github.com/arboleya) (See [#1442](https://github.com/FuelLabs/fuels-ts/pull/1442))
+
 ## 0.67.0
 
 ### Minor Changes

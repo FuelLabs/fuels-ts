@@ -2,7 +2,6 @@ import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
-import { join } from 'path';
 
 import { build } from './cli/commands/build';
 import { deploy } from './cli/commands/deploy';
@@ -11,7 +10,7 @@ import { init } from './cli/commands/init';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
 import { Commands } from './cli/types';
-import { findPackageRoot } from './cli/utils/findPackageRoot';
+import { findBinPath } from './cli/utils/findBinPath';
 import { configureLogging } from './cli/utils/logger';
 
 export const onPreAction = (command: Command) => {
@@ -100,14 +99,12 @@ export const configureCli = () => {
    * Binary wrappers
    */
 
-  const binDir = join(findPackageRoot(), 'node_modules', '.bin');
-
   program.command('core', 'Wrapper around Fuel Core binary', {
-    executableFile: join(binDir, 'fuels-core'),
+    executableFile: findBinPath('fuels-core'),
   });
 
   program.command('forc', 'Wrapper around Forc binary', {
-    executableFile: join(binDir, 'fuels-forc'),
+    executableFile: findBinPath('fuels-forc'),
   });
 
   return program;

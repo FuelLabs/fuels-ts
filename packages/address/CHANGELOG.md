@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.69.1
+
+## 0.69.0
+
+### Minor Changes
+
+- Improve support of Asset ID, by [@danielbate](https://github.com/danielbate) (See [#1476](https://github.com/FuelLabs/fuels-ts/pull/1476))
+
+## 0.68.0
+
+### Minor Changes
+
+- Remove hexlify logic on values that are not hex, by [@camsjams](https://github.com/camsjams) (See [#1454](https://github.com/FuelLabs/fuels-ts/pull/1454))
+
 ## 0.67.0
 
 ## 0.66.1
