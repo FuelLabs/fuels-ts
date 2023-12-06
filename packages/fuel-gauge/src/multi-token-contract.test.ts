@@ -72,7 +72,7 @@ describe('MultiTokenContract', () => {
     // define helper to get contract balance
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
-        .get_balance(address, assetId)
+        .get_balance(address, { value: assetId })
         .txParams({ gasPrice, gasLimit: 10_000 })
         .simulate<BN>();
       return value;

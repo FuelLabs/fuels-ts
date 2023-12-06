@@ -36,7 +36,13 @@ describe('AssetId', () => {
     const assetId: AssetId = address.toAssetId();
     // #endregion asset-id-2
 
-    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
+    const { value } = await contract.functions
+      .echo_asset_id_comparison(assetId)
+      .txParams({
+        gasLimit: 10_000,
+        gasPrice: 1,
+      })
+      .simulate();
 
     expect(value).toBeTruthy();
   });
@@ -49,7 +55,13 @@ describe('AssetId', () => {
       value: Bits256,
     };
 
-    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
+    const { value } = await contract.functions
+      .echo_asset_id_comparison(assetId)
+      .txParams({
+        gasLimit: 10_000,
+        gasPrice: 1,
+      })
+      .simulate();
 
     expect(value).toBeTruthy();
     // #endregion asset-id-3
@@ -63,7 +75,13 @@ describe('AssetId', () => {
       value: Bits256,
     };
 
-    const { value } = await contract.functions.echo_asset_id().simulate();
+    const { value } = await contract.functions
+      .echo_asset_id()
+      .txParams({
+        gasLimit: 10_000,
+        gasPrice: 1,
+      })
+      .simulate();
 
     expect(value).toEqual(assetId);
     // #endregion asset-id-4
