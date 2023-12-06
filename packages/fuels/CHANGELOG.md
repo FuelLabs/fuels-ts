@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.69.1
+
+### Patch Changes
+
+- 🐞 fix: bin path for `fuels-forc`, add support bun's structure, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1481](https://github.com/FuelLabs/fuels-ts/pull/1481))
+
 ## 0.69.0
 
 ## 0.68.0
