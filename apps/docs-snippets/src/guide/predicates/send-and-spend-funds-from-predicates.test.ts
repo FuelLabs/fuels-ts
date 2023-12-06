@@ -9,10 +9,7 @@ import {
   BaseAssetId,
 } from 'fuels';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
+import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -53,22 +50,11 @@ describe(__filename, () => {
     predicate.setData(inputAddress);
     // #endregion send-and-spend-funds-from-predicates-4
 
+    // #region send-and-spend-funds-from-predicates-5
     const receiverWallet = WalletUnlocked.generate({
       provider,
     });
 
-    // #region send-and-spend-funds-from-predicates-8
-    const txId = await predicate.getTransferTxId(
-      receiverWallet.address,
-      amountToPredicate - 150_000,
-      BaseAssetId,
-      {
-        gasPrice,
-      }
-    );
-    // #endregion send-and-spend-funds-from-predicates-8
-
-    // #region send-and-spend-funds-from-predicates-5
     const tx2 = await predicate.transfer(
       receiverWallet.address,
       amountToPredicate - 150_000,
@@ -80,9 +66,6 @@ describe(__filename, () => {
 
     await tx2.waitForResult();
     // #endregion send-and-spend-funds-from-predicates-5
-    const txIdFromExecutedTx = tx2.id;
-
-    expect(txId).toEqual(txIdFromExecutedTx);
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {

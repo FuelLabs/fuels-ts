@@ -870,9 +870,6 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
@@ -894,6 +891,10 @@ importers:
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
+    devDependencies:
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
 
   packages/program:
     dependencies:
