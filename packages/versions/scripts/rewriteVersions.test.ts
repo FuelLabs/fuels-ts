@@ -86,8 +86,7 @@ describe('rewriteVersions.js', () => {
     expect(versions.FUELS).toEqual(versionsFromFiles.FUELS);
   });
 
-  // TODO: unskip test after Forc release
-  test.skip('should rewrite files', () => {
+  test('should rewrite files', () => {
     // mocking
     const writeFileSync = jest.spyOn(fsMod, 'writeFileSync').mockImplementation();
 
