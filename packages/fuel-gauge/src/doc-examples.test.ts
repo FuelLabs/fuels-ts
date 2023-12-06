@@ -253,7 +253,8 @@ describe('Doc Examples', () => {
     // #endregion wallet-setup
   });
 
-  it('can connect to testnet', async () => {
+  // TODO: Stop skipping test after beta 5 url released
+  it.skip('can connect to testnet', async () => {
     // #region provider-testnet
     // #context import { Provider, WalletUnlocked } from 'fuels';
     const provider = await Provider.create('https://beta-4.fuel.network/graphql');
@@ -426,6 +427,7 @@ describe('Doc Examples', () => {
 
     const response = await wallet1.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await response.waitForResult();
     const predicateBalance = await predicate.getBalance();
@@ -433,8 +435,9 @@ describe('Doc Examples', () => {
     // assert that predicate address now has the expected amount to predicate
     expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
-    const depositOnPredicate = await wallet1.transfer(predicate.address, 200, BaseAssetId, {
+    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     // Wait for Transaction to succeed
     await depositOnPredicate.waitForResult();
@@ -442,7 +445,7 @@ describe('Doc Examples', () => {
 
     // assert that predicate address now has the updated expected amount to predicate
     expect(bn(updatedPredicateBalance)).toEqual(
-      initialPredicateBalance.add(amountToPredicate).add(200)
+      initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
     const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -454,7 +457,7 @@ describe('Doc Examples', () => {
 
     const tx = await predicate
       .setData(signatures)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // check balances

@@ -181,7 +181,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a')
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -206,7 +206,9 @@ describe('Predicate', () => {
 
       predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
-      await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
+      await expect(
+        predicate.transfer(receiver.address, 50, BaseAssetId, { gasLimit: 10_000 })
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
@@ -217,7 +219,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData(1078)
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -241,10 +243,11 @@ describe('Predicate', () => {
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate
-          .setData(100)
-          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+        predicate.setData(100).transfer(receiver.address, amountToPredicate, BaseAssetId, {
+          gasPrice,
+          gasLimit: 10_000,
+        })
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('calls a predicate with valid struct data and returns true', async () => {
@@ -262,7 +265,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -295,8 +298,11 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, amountToPredicate, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+          .transfer(receiver.address, amountToPredicate, BaseAssetId, {
+            gasPrice,
+            gasLimit: 10_000,
+          })
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
@@ -316,7 +322,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
       await tx.waitForResult();
       // #endregion predicate-struct-arg
 
@@ -348,8 +354,8 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, 50, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+          .transfer(receiver.address, 50, BaseAssetId, { gasPrice, gasLimit: 10_000 })
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
@@ -364,7 +370,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData([42])
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -388,6 +394,7 @@ describe('Predicate', () => {
       predicate.setData(20, 30);
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
+        gasLimit: 10_000,
       });
       await tx.waitForResult();
       // #endregion predicate-multi-args
@@ -411,8 +418,10 @@ describe('Predicate', () => {
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
       await expect(
-        predicate.setData(20, 20).transfer(receiver.address, 50, BaseAssetId, { gasPrice })
-      ).rejects.toThrow('Invalid transaction');
+        predicate
+          .setData(20, 20)
+          .transfer(receiver.address, 50, BaseAssetId, { gasPrice, gasLimit: 10_000 })
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });
 });

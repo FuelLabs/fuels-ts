@@ -118,7 +118,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       }
     );
 
-    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value);
+    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
+      isRightPadded: true,
+    });
   }
 
   getTypeById(typeId: number) {

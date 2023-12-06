@@ -9,8 +9,6 @@ import { getBytesCopy, sha256 } from 'ethers';
 import { ByteArrayCoder } from './byte-array';
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
-import type { UtxoId } from './utxo-id';
-import { UtxoIdCoder } from './utxo-id';
 
 export enum InputType {
   Coin = 0,
@@ -21,8 +19,11 @@ export enum InputType {
 export type InputCoin = {
   type: InputType.Coin;
 
-  /** UTXO ID (UtxoId) */
-  utxoID: UtxoId;
+  /** Hash of transaction (b256) */
+  txID: string;
+
+  /** Index of transaction output (u8) */
+  outputIndex: number;
 
   /** Owning address or script hash (b256) */
   owner: string;
@@ -66,7 +67,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new B256Coder().encode(value.txID));
+    parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
@@ -86,8 +88,10 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new UtxoIdCoder().decode(data, o);
-    const utxoID = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const txID = decoded;
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
@@ -114,7 +118,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     return [
       {
         type: InputType.Coin,
-        utxoID,
+        txID,
+        outputIndex,
         owner,
         amount,
         assetId,
@@ -124,11 +129,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         predicateGasUsed,
         predicateLength,
         predicateDataLength,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         predicate,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         predicateData,
       },
       o,
@@ -139,8 +140,11 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 export type InputContract = {
   type: InputType.Contract;
 
-  /** UTXO ID (UtxoId) */
-  utxoID: UtxoId;
+  /** Hash of transaction (b256) */
+  txID: string;
+
+  /** Index of transaction output (u8) */
+  outputIndex: number;
 
   /** Root of amount of coins owned by contract before transaction execution (b256) */
   balanceRoot: string;
@@ -163,7 +167,8 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
   encode(value: InputContract): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new B256Coder().encode(value.txID));
+    parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
     parts.push(new TxPointerCoder().encode(value.txPointer));
@@ -176,8 +181,10 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new UtxoIdCoder().decode(data, o);
-    const utxoID = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const txID = decoded;
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const balanceRoot = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
@@ -190,7 +197,8 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     return [
       {
         type: InputType.Contract,
-        utxoID,
+        txID,
+        outputIndex,
         balanceRoot,
         stateRoot,
         txPointer,

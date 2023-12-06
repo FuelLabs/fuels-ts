@@ -1,7 +1,10 @@
 import type { WalletUnlocked } from 'fuels';
 import { Script, BN } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -28,7 +31,10 @@ describe(__filename, () => {
 
     const inpputedValue = 10;
 
-    const { value } = await script.functions.main(inpputedValue).txParams({ gasPrice }).call();
+    const { value } = await script.functions
+      .main(inpputedValue)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     const expectedTotal = inpputedValue + configurableConstants.AMOUNT;
 
