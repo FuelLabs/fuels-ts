@@ -28,7 +28,7 @@ describe('Predicate', () => {
   );
 
   const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_STRUCT
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
   );
 
   const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
