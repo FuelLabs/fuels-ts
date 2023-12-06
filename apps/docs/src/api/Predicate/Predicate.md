@@ -53,7 +53,7 @@ Creates an instance of the Predicate class.
 
 #### Defined in
 
-[predicate/src/predicate.ts:48](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L48)
+[predicate/src/predicate.ts:48](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L48)
 
 ## Properties
 
@@ -87,7 +87,7 @@ AbstractPredicate.bytes
 
 #### Defined in
 
-[predicate/src/predicate.ts:34](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L34)
+[predicate/src/predicate.ts:34](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L34)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[predicate/src/predicate.ts:36](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L36)
+[predicate/src/predicate.ts:36](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L36)
 
 ___
 
@@ -111,7 +111,7 @@ AbstractPredicate.predicateData
 
 #### Defined in
 
-[predicate/src/predicate.ts:35](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L35)
+[predicate/src/predicate.ts:35](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L35)
 
 ___
 
@@ -347,7 +347,7 @@ A promise that resolves to the transaction ID.
 
 #### Defined in
 
-[predicate/src/predicate.ts:108](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L108)
+[predicate/src/predicate.ts:108](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L108)
 
 ___
 
@@ -371,7 +371,7 @@ The transaction request with predicate data.
 
 #### Defined in
 
-[predicate/src/predicate.ts:73](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L73)
+[predicate/src/predicate.ts:73](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L73)
 
 ___
 
@@ -430,7 +430,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[predicate/src/predicate.ts:94](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L94)
+[predicate/src/predicate.ts:94](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L94)
 
 ___
 
@@ -460,7 +460,7 @@ The Predicate instance with updated predicate data.
 
 #### Defined in
 
-[predicate/src/predicate.ts:140](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L140)
+[predicate/src/predicate.ts:140](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L140)
 
 ___
 
@@ -488,7 +488,7 @@ A promise that resolves to the call result.
 
 #### Defined in
 
-[predicate/src/predicate.ts:129](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L129)
+[predicate/src/predicate.ts:129](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L129)
 
 ___
 
@@ -611,7 +611,7 @@ An object containing the new predicate bytes and interface.
 
 #### Defined in
 
-[predicate/src/predicate.ts:162](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L162)
+[predicate/src/predicate.ts:162](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L162)
 
 ___
 
@@ -637,4 +637,4 @@ The mutated bytes with the configurable constants set.
 
 #### Defined in
 
-[predicate/src/predicate.ts:202](https://github.com/FuelLabs/fuels-ts/blob/38e5593e/packages/predicate/src/predicate.ts#L202)
+[predicate/src/predicate.ts:202](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L202)
