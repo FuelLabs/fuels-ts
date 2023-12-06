@@ -1,7 +1,7 @@
 export function getBuiltinVersions() {
   return {
-    FORC: 'feat/transaction-policies',
-    FUEL_CORE: 'git:master',
+    FORC: '0.48.0',
+    FUEL_CORE: '0.21.0',
     FUELS: '0.67.0',
   };
 }
