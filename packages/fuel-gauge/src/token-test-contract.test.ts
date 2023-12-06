@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN } from 'fuels';
+import type { AssetId, BN } from 'fuels';
 import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -47,7 +47,7 @@ describe('TokenTestContract', () => {
 
     const { mintedAssets } = transactionResult;
 
-    const assetId = mintedAssets?.[0].assetId;
+    const assetId: AssetId = { value: mintedAssets?.[0].assetId };
 
     const getBalance = async () => {
       const { value } = await token.functions
@@ -69,7 +69,7 @@ describe('TokenTestContract', () => {
 
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
-    const tokenBalance = balances.find((b) => b.assetId === assetId);
+    const tokenBalance = balances.find((b) => b.assetId === assetId.value);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
 
@@ -151,9 +151,9 @@ describe('TokenTestContract', () => {
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     const { mintedAssets } = transactionResult;
-    const assetId = mintedAssets?.[0].assetId || '';
+    const assetId: AssetId = { value: mintedAssets?.[0].assetId || '' };
 
-    const getBalance = async () => token.getBalance(assetId);
+    const getBalance = async () => token.getBalance(assetId.value);
 
     // at the start, the contract should have 100 coins
     expect((await getBalance()).toHex()).toEqual(bn(100).toHex());
@@ -174,7 +174,7 @@ describe('TokenTestContract', () => {
     const addressParameter = {
       value: userWallet.address,
     };
-    const assetId = BaseAssetId;
+    const assetId: AssetId = { value: BaseAssetId };
 
     await expectToThrowFuelError(
       () => token.functions.transfer_coins_to_output(addressParameter, assetId, 50).call(),

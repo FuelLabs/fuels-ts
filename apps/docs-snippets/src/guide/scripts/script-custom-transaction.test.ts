@@ -58,7 +58,13 @@ describe(__filename, () => {
     });
 
     // 2. Instantiate the script main arguments
-    const scriptArguments = [contract.id.toB256(), assetIdA, new BN(1000), assetIdB, new BN(500)];
+    const scriptArguments = [
+      contract.id.toB256(),
+      { value: assetIdA },
+      new BN(1000),
+      { value: assetIdB },
+      new BN(500),
+    ];
 
     // 3. Populate the script data and add the contract input and output
     request.setData(abiContents, scriptArguments).addContractInputAndOutput(contract.id);

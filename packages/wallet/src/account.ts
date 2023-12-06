@@ -243,17 +243,42 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const request = await this.prepareTransferTxRequest(destination, amount, assetId, txParams);
+    return this.sendTransaction(request);
+  }
+
+  /**
+   * A helper that prepares a transaction request for calculating the transaction ID.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @returns A promise that resolves to the prepared transaction request.
+   */
+  protected async prepareTransferTxRequest(
+    /** Address of the destination */
+    destination: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionRequest> {
     const { minGasPrice } = this.provider.getGasConfig();
+
     const params = { gasPrice: minGasPrice, ...txParams };
 
     const request = new ScriptTransactionRequest(params);
+
     request.addCoinOutput(destination, amount, assetId);
 
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
 
     await this.fund(request, requiredQuantities, maxFee);
 
-    return this.sendTransaction(request);
+    return request;
   }
 
   /**

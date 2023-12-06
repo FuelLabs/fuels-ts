@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.69.0
+
+## 0.68.0
+
+### Patch Changes
+
+- Add transaction id helper function to base invocation scope, by [@danielbate](https://github.com/danielbate) (See [#1466](https://github.com/FuelLabs/fuels-ts/pull/1466))
+
 ## 0.67.0
 
 ### Minor Changes

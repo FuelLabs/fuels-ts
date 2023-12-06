@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { hashTransaction } from '@fuel-ts/hasher';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
@@ -372,5 +373,18 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = <Provider>this.program.provider;
 
     return provider;
+  }
+
+  /**
+   * Obtains the ID of a transaction.
+   *
+   * @param chainId - the chainId to use to hash the transaction with
+   * @returns the ID of the transaction.
+   */
+  async getTransactionId(chainId?: number): Promise<string> {
+    const chainIdToHash = chainId ?? (await this.getProvider().getChainId());
+
+    const transactionRequest = await this.getTransactionRequest();
+    return hashTransaction(transactionRequest, chainIdToHash);
   }
 }
