@@ -133,7 +133,9 @@ abi MyContract {
     fn struct_simple(x: SimpleStruct) -> SimpleStruct;
     fn struct_generic_simple(x: StructB<u8>) -> StructB<u8>;
     fn struct_with_tuple(x: StructB<(bool, u64)>) -> StructB<(bool, u64)>;
-    fn struct_with_implicitGenerics(arg: StructWithImplicitGenerics<b256, u8>) -> StructWithImplicitGenerics<b256, u8>;
+    fn struct_with_implicitGenerics(
+        arg: StructWithImplicitGenerics<b256, u8>,
+    ) -> StructWithImplicitGenerics<b256, u8>;
     fn bytes(arg: Bytes) -> Bytes;
     fn raw_slice(arg: raw_slice) -> raw_slice;
     fn dynamic_string(arg: String) -> String;
@@ -147,7 +149,12 @@ abi MyContract {
     fn arg_then_vector_u8(a: SimpleStruct, x: Vec<u8>) -> (SimpleStruct, Vec<u8>);
     fn vector_u8_then_arg(x: Vec<u8>, y: b256) -> (Vec<u8>, b256);
     fn two_u8_vectors(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>);
-    fn u32_then_three_vectors_u64(x: u32, y: Vec<u64>, z: Vec<u64>, q: Vec<u64>) -> (u32, Vec<u64>, Vec<u64>, Vec<u64>);
+    fn u32_then_three_vectors_u64(
+        x: u32,
+        y: Vec<u64>,
+        z: Vec<u64>,
+        q: Vec<u64>,
+    ) -> (u32, Vec<u64>, Vec<u64>, Vec<u64>);
     fn enum_simple(x: Color) -> Color;
     fn enum_with_builtin_type(x: EnumWithBuiltinType) -> EnumWithBuiltinType;
     fn enum_with_structs(x: EnumWithStructs) -> EnumWithStructs;
@@ -168,7 +175,12 @@ abi MyContract {
     fn take_enum(enum_arg: TestEnum) -> bool;
     fn my_struct(my_u64: u64, my_struct: MyStruct) -> u64;
     fn array_of_structs(arg1: [MyStructWithEnum; 3]) -> str[3];
-    fn complex_function(arg1: MyGenericStruct<[b256; 3], u8>, arg2: [MyGenericStruct<u64, bool>; 4], arg3: (str[5], bool), arg4: MyOtherStruct);
+    fn complex_function(
+        arg1: MyGenericStruct<[b256; 3], u8>,
+        arg2: [MyGenericStruct<u64, bool>; 4],
+        arg3: (str[5], bool),
+        arg4: MyOtherStruct,
+    );
 }
 
 impl MyContract for Contract {

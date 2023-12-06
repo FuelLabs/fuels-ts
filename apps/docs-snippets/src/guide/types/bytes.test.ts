@@ -16,7 +16,10 @@ describe('Bytes', () => {
 
     const bytes: Bytes = [40, 41, 42];
 
-    const { value } = await contract.functions.bytes_comparison(bytes).simulate();
+    const { value } = await contract.functions
+      .bytes_comparison(bytes)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toBeTruthy();
     // #endregion bytes-1
@@ -28,7 +31,10 @@ describe('Bytes', () => {
 
     const bytes: Bytes = [8, 42, 77];
 
-    const { value } = await contract.functions.echo_bytes(bytes).simulate();
+    const { value } = await contract.functions
+      .echo_bytes(bytes)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toStrictEqual(new Uint8Array(bytes));
     // #endregion bytes-2

@@ -42,7 +42,7 @@ describe('Bytes Tests', () => {
 
     const { value } = await contractInstance.functions
       .return_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toStrictEqual(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
@@ -53,7 +53,7 @@ describe('Bytes Tests', () => {
 
     const { value } = await contractInstance.functions
       .return_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toStrictEqual(new Uint8Array(Array.from({ length: 100 }, (e, i) => i)));
@@ -64,7 +64,7 @@ describe('Bytes Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
     expect(value).toBeUndefined();
   });
@@ -79,7 +79,7 @@ describe('Bytes Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_nested_bytes(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
     expect(value).toBeUndefined();
   });
@@ -100,6 +100,7 @@ describe('Bytes Tests', () => {
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
@@ -112,7 +113,7 @@ describe('Bytes Tests', () => {
     };
     const tx = await predicate
       .setData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // Check the balance of the receiver
@@ -139,7 +140,7 @@ describe('Bytes Tests', () => {
 
     const { value } = await scriptInstance.functions
       .main(1, INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN>();
     expect(value.toNumber()).toStrictEqual(0);
   });

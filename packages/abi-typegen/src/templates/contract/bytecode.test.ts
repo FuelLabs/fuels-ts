@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects';
-import bytecodeTemplte from '../../../test/fixtures/templates/contract/bytecode.hbs';
+import bytecodeTemplate from '../../../test/fixtures/templates/contract/bytecode.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 
 import { renderBytecodeTemplate } from './bytecode';
@@ -22,6 +22,6 @@ describe('templates/contract/bytecode', () => {
     // validating
     restore();
 
-    expect(rendered).toEqual(bytecodeTemplte);
+    expect(rendered.trim()).toEqual(bytecodeTemplate);
   });
 });

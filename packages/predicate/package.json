@@ -28,7 +28,6 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
