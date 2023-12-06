@@ -24,6 +24,3 @@ members = [
   "echo-raw-slice",
   "echo-std-string",
 ]
-
-[patch.'https://github.com/fuellabs/sway']
-std = { git = "https://github.com/fuellabs/sway", branch = "feat/transaction-policies" }
