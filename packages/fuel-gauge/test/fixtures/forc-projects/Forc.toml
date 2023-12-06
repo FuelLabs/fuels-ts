@@ -23,7 +23,7 @@ members = [
   "predicate-multi-args",
   "predicate-raw-slice",
   "predicate-std-lib-string",
-  "predicate-struct",
+  "predicate-input-data",
   "predicate-triple-sig",
   "predicate-true",
   "predicate-u32",
