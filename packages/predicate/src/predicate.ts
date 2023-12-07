@@ -76,7 +76,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         // eslint-disable-next-line no-param-reassign
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.#getPredicateData(policies.length);
+        input.predicateData = this.getPredicateData(policies.length);
       }
     });
 
@@ -117,7 +117,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     return this;
   }
 
-  #getPredicateData(policiesLength: number): Uint8Array {
+  private getPredicateData(policiesLength: number): Uint8Array {
     if (!this.predicateArgs.length) {
       return new Uint8Array();
     }
