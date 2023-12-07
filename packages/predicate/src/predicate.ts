@@ -7,18 +7,21 @@ import {
   SCRIPT_FIXED_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractPredicate } from '@fuel-ts/interfaces';
+import type { AbstractAddress, AbstractPredicate, BytesLike } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import type {
   CallResult,
   Provider,
+  TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
 } from '@fuel-ts/providers';
 import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import type { TxParamsType } from '@fuel-ts/wallet';
 import { Account } from '@fuel-ts/wallet';
-import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify } from 'ethers';
 
 import { getPredicateRoot } from './utils';
@@ -81,6 +84,29 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     });
 
     return request;
+  }
+
+  /**
+   * A helper that creates a transfer transaction request and returns it.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @returns A promise that resolves to the prepared transaction request.
+   */
+  async createTransfer(
+    /** Address of the destination */
+    destination: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionRequest> {
+    const request = await super.createTransfer(destination, amount, assetId, txParams);
+    return this.populateTransactionPredicateData(request);
   }
 
   /**
