@@ -1,4 +1,4 @@
-import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/hasher';
 import type {
   TransactionResponse,
   TransactionRequestLike,
@@ -81,8 +81,8 @@ export class BaseWalletUnlocked extends Account {
    */
   async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const chainId = (await this.provider.getChain()).consensusParameters.chainId.toNumber();
-    const hashedTransaction = hashTransaction(transactionRequest, chainId);
+    const chainId = this.provider.getChain().consensusParameters.chainId.toNumber();
+    const hashedTransaction = transactionRequest.getTransactionId(chainId);
     const signature = await this.signer().sign(hashedTransaction);
 
     return signature;
