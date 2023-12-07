@@ -33,6 +33,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
+      .txParams({ gasPrice: 1, gasLimit: 10_000 })
       .simulate();
 
     // #context console.log('The gas used on this call was: ', gasUsed')
@@ -44,7 +45,10 @@ describe(__filename, () => {
     const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
 
     // #region simulate-transactions-2
-    const { value } = await contract.functions.echo_u8(15).simulate();
+    const { value } = await contract.functions
+      .echo_u8(15)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     // #endregion simulate-transactions-2
     expect(value).toEqual(15);
   });

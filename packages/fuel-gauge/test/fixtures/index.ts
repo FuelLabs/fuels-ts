@@ -11,6 +11,8 @@ export enum FuelGaugeProjectsEnum {
   BYTES = 'bytes',
   CALL_TEST_CONTRACT = 'call-test-contract',
   CONFIGURABLE_CONTRACT = 'configurable-contract',
+  COMPLEX_SCRIPT = 'complex-script',
+  COMPLEX_PREDICATE = 'complex-predicate',
   COLLISION_IN_FN_NAMES = 'collision_in_fn_names',
   COVERAGE_CONTRACT = 'coverage-contract',
   GENERIC_TYPES_CONTRACT = 'generic-types-contract',

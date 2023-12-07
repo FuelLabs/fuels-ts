@@ -67,6 +67,7 @@ describe('Predicate', () => {
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
         gasPrice,
+        gasLimit: 10_000,
       });
 
       await tx.waitForResult();
@@ -101,6 +102,7 @@ describe('Predicate', () => {
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
         gasPrice,
+        gasLimit: 10_000,
       });
 
       await tx.waitForResult();
@@ -135,6 +137,7 @@ describe('Predicate', () => {
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
         gasPrice,
+        gasLimit: 10_000,
       });
 
       await tx.waitForResult();
@@ -171,6 +174,7 @@ describe('Predicate', () => {
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
         gasPrice,
+        gasLimit: 10_000,
       });
 
       await tx.waitForResult();
@@ -189,9 +193,9 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await expect(predicate.transfer(destination.address, 300)).rejects.toThrow(
-        'Invalid transaction'
-      );
+      await expect(
+        predicate.transfer(destination.address, 300, BaseAssetId, { gasLimit: 10_000 })
+      ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
     it('throws when setting configurable but predicate has none', () => {

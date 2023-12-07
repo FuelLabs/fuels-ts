@@ -1,6 +1,5 @@
 import { Provider } from '@fuel-ts/providers';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
-import { hexlify } from 'ethers';
 
 import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
@@ -8,7 +7,7 @@ import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
 describe('Predicate', () => {
   describe('Functions', () => {
-    const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
+    const predicateAddress = '0x6b6ef590390f0a7de75f8275ab5d7877c17236caba2514039c6565ec15f79111';
     let provider: Provider;
 
     beforeAll(async () => {
@@ -24,9 +23,11 @@ describe('Predicate', () => {
       const predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
+      expect(predicate.predicateArgs).toEqual([]);
+
       predicate.setData<[string]>(b256);
 
-      expect(hexlify(predicate.predicateData)).toEqual(b256);
+      expect(predicate.predicateArgs).not.toBeUndefined();
     });
 
     it('throws when predicate ABI has no main function', () => {

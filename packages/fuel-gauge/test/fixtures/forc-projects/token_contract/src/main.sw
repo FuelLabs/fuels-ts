@@ -5,7 +5,8 @@ use std::{context::balance_of, context::msg_amount, token::*};
 use token_abi::Token;
 use std::constants::ZERO_B256;
 
-const BASE_TOKEN: b256 = ZERO_B256
+const BASE_TOKEN: b256 = ZERO_B256;
+
 impl Token for Contract {
     fn mint_coins(mint_amount: u64) {
         mint(BASE_TOKEN, mint_amount);
