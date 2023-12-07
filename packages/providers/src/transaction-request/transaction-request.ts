@@ -612,6 +612,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return coinsQuantities;
   }
 
+  abstract getTransactionId(chainId: number): string;
+
   /**
    * Return the minimum amount in native coins required to create
    * a transaction.
