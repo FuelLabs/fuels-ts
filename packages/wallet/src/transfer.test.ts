@@ -35,6 +35,25 @@ describe('Wallet', () => {
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
+  it('can create transfer request just fine', async () => {
+    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    const request = await sender.createTransfer(receiver.address, 1, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
+
+    const response = await sender.sendTransaction(request);
+    await response.wait();
+
+    const senderBalances = await sender.getBalances();
+    const receiverBalances = await receiver.getBalances();
+
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
+    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+  });
+
   it('can transfer with custom TX Params', async () => {
     const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
