@@ -14,6 +14,7 @@ import type { GqlGasCosts } from '../__generated__/operations';
 import type { ChainInfo } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
+import { hashTransaction } from './hash-transaction';
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
 import { returnZeroScript } from './scripts';
@@ -191,6 +192,10 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     });
 
     return this;
+  }
+
+  getTransactionId(chainId: number): string {
+    return hashTransaction(this, chainId);
   }
 
   /**
