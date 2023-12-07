@@ -35,7 +35,10 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(defaultValues);
 
-    const { value } = await script.functions.main(defaultValues.FEE).txParams({ gasPrice }).call();
+    const { value } = await script.functions
+      .main(defaultValues.FEE)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // expected to be true
     expect(new BN(value as number).toNumber()).toEqual(1);
@@ -52,7 +55,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions
       .main(configurableConstants.FEE)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // expected to be false
@@ -68,7 +71,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions
       .main(configurableConstants.FEE)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // expected to be true
@@ -86,7 +89,10 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const { value } = await script.functions.main(input.FEE).txParams({ gasPrice }).call();
+    const { value } = await script.functions
+      .main(input.FEE)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // expected to be false
     expect(new BN(value as number).toNumber()).toEqual(0);

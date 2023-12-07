@@ -24,7 +24,7 @@ describe('Predicate', () => {
 
     beforeAll(async () => {
       [wallet, receiver] = await setupWallets();
-      const amountToPredicate = 100;
+      const amountToPredicate = 10_000;
       provider = wallet.provider;
       predicate = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
@@ -37,18 +37,19 @@ describe('Predicate', () => {
 
     it('throws if sender does not have enough resources for tx and gas', async () => {
       await expect(
-        predicate.setData(validation).transfer(receiver.address, predicateBalance)
+        predicate.setData(validation).transfer(receiver.address, predicateBalance, BaseAssetId, {
+          gasLimit: 10_000,
+        })
       ).rejects.toThrow(/not enough coins to fit the target/i);
     });
 
     it('throws if the passed gas limit is too low', async () => {
-      // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
       // fuel-client we should change with the proper error message
       await expect(
-        predicate.setData(validation).transfer(receiver.address, 50, BaseAssetId, {
-          gasLimit: 1,
+        predicate.setData(validation).transfer(receiver.address, 1000, BaseAssetId, {
+          gasLimit: 0,
         })
-      ).rejects.toThrow(/Invalid transaction/i);
+      ).rejects.toThrow(/Gas limit '0' is lower than the required:./i);
     });
   });
 });

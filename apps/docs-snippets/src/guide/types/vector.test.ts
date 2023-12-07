@@ -36,13 +36,15 @@ describe(__filename, () => {
         age: 31,
         salary: 9000,
         idHash: getRandomB256(),
-        ratings: [1, 2, 3],
-        isActive: false,
+        ratings: [5, 6, 7],
+        isActive: true,
       },
     ];
-    const { value } = await contract.functions.echo_last_employee_data(employees).simulate();
+    const { value } = await contract.functions
+      .echo_last_employee_data(employees)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     // #endregion vector-4
-
     expect(value.name).toEqual(employees[1].name);
     expect(value.age).toEqual(employees[1].age);
     expect(new BN(value.salary).toNumber()).toEqual(employees[1].salary);
