@@ -1,10 +1,10 @@
 # Wallet Manager
 
-The WalletManager is a robust tool designed for managing vaults of wallets. It offers robust management of vaults, including support for custom storage and powerful encryption of all held vaults.
+The `WalletManager` is a robust tool designed for managing vaults of wallets. It offers robust management of vaults, including support for custom storage and powerful encryption of all held vaults.
 
 ## Key Features
 
-### Managing Vaults with WalletManager
+### Managing Vaults with `WalletManager`
 
 This includes adding new wallets to specific vaults, retrieving all wallets from a vault, exporting specific vaults, and exporting private keys. The `WalletManager` class currently supports two types of vaults: `PrivateKeyVault` and `MnemonicVault`.
 
