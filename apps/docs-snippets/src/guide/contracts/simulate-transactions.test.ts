@@ -1,7 +1,11 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import type { AssetId } from 'fuels';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -19,12 +23,17 @@ describe(__filename, () => {
       provider,
     }).address.toB256();
 
+    const assetId: AssetId = {
+      value: BaseAssetId,
+    };
+
     // #region simulate-transactions-1
     const { gasUsed } = await contract.functions
-      .transfer(amountToTransfer, BaseAssetId, someAddress)
+      .transfer(amountToTransfer, assetId, someAddress)
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
+      .txParams({ gasPrice: 1, gasLimit: 10_000 })
       .simulate();
 
     // #context console.log('The gas used on this call was: ', gasUsed')
@@ -36,7 +45,10 @@ describe(__filename, () => {
     const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
 
     // #region simulate-transactions-2
-    const { value } = await contract.functions.echo_u8(15).simulate();
+    const { value } = await contract.functions
+      .echo_u8(15)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     // #endregion simulate-transactions-2
     expect(value).toEqual(15);
   });

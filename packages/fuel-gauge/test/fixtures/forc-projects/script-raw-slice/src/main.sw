@@ -14,9 +14,24 @@ struct Wrapper<T> {
 fn validate_raw_slice(input: raw_slice) {
     let vec: Vec<u64> = Vec::from(input);
     require(vec.len() == 3, "raw slice len is not 3");
-    require(vec.get(2).unwrap() == 42, "expected 3rd slice entry to be 42");
-    require(vec.get(1).unwrap() == 41, "expected 2nd slice entry to be 41");
-    require(vec.get(0).unwrap() == 40, "expected 1st slice entry to be 40");
+    require(
+        vec
+            .get(2)
+            .unwrap() == 42,
+        "expected 3rd slice entry to be 42",
+    );
+    require(
+        vec
+            .get(1)
+            .unwrap() == 41,
+        "expected 2nd slice entry to be 41",
+    );
+    require(
+        vec
+            .get(0)
+            .unwrap() == 40,
+        "expected 1st slice entry to be 40",
+    );
 }
 
 fn validate_vec(vec: Vec<raw_slice>) {

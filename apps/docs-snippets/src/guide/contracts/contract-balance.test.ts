@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { Contract, AssetId } from 'fuels';
 import { Wallet, BN, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -15,6 +15,7 @@ describe(__filename, () => {
 
   it('should successfully get a contract balance', async () => {
     // #region contract-balance-3
+    // #context import type { AssetId } from 'fuels';
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
     const amountToForward = 40;
@@ -24,16 +25,20 @@ describe(__filename, () => {
       provider,
     });
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
+
+    const asset: AssetId = {
+      value: BaseAssetId,
+    };
 
     await contract.functions
-      .transfer(amountToTransfer, BaseAssetId, recipient.address.toB256())
+      .transfer(amountToTransfer, asset, recipient.address.toB256())
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
+        gasLimit: 10_000,
       })
       .call();
 

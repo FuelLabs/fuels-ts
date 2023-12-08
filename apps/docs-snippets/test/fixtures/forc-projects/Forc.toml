@@ -19,6 +19,7 @@ members = [
   "echo-employee-data-vector",
   "whitelisted-address-predicate",
   "echo-evm-address",
+  "echo-asset-id",
   "script-transfer-to-contract",
   "echo-bytes",
   "echo-raw-slice",
