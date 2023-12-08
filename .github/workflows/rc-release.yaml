@@ -1,4 +1,4 @@
-name: Release to @pr-<number> tag on npm
+name: Release to @rc tag on npm
 on:
   pull_request:
     branches:
