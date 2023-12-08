@@ -3,6 +3,9 @@ import { StdStringType } from './StdStringType';
 import { StrSliceType } from './StrSliceType';
 import { StrType } from './StrType';
 
+/**
+ * @group node
+ */
 describe('StrSlicesType.ts', () => {
   test('should properly parse type attributes', () => {
     const strSlices = new StrSliceType({

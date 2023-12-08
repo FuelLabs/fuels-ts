@@ -17,6 +17,9 @@ import {
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('sets gas requirements (contract)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

@@ -16,6 +16,9 @@ import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures
 
 import { createSetupConfig } from './utils';
 
+/**
+ * @group node
+ */
 describe('Policies', () => {
   let provider: Provider;
   beforeAll(async () => {
