@@ -217,7 +217,7 @@ describe('Doc Examples', () => {
 
   it('can create wallets', async () => {
     // #region wallet-setup
-    // #context import { Provider, bn } from 'fuels';
+    // #context import { Provider, bn, FUEL_NETWORK_URL } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -274,7 +274,7 @@ describe('Doc Examples', () => {
 
   it('can connect to a local provider', async () => {
     // #region provider-local
-    // #context import { Provider, WalletUnlocked } from 'fuels';
+    // #context import { Provider, WalletUnlocked, FUEL_NETWORK_URL } from 'fuels';
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
@@ -290,7 +290,7 @@ describe('Doc Examples', () => {
 
   it('can query address with wallets', async () => {
     // #region wallet-query
-    // #context import { Provider } from 'fuels';
+    // #context import { Provider, FUEL_NETWORK_URL } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -345,7 +345,7 @@ describe('Doc Examples', () => {
 
   it('can create a predicate', async () => {
     // #region predicate-basic
-    // #context import { Predicate, arrayify } from 'fuels';
+    // #context import { Predicate, arrayify, FUEL_NETWORK_URL } from 'fuels';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(testPredicateTrue, provider);
 
