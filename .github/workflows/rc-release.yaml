@@ -6,7 +6,7 @@ on:
       - "rc/*"
 
 env:
-  RC_NAME: ${{ github.head_ref }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   release-pr:
@@ -36,7 +36,7 @@ jobs:
           RC_NAME=${GITHUB_REF_NAME#rc//}
           echo "RC_NAME=$RC_NAME" >> $GITHUB_ENV
 
-      - name: Release to @${{ env.RC_NAME }} tag on npm
+      - name: Release to @${{ env.BRANCH_NAME }} tag on npm
         id: release
         run: |
           pnpm changeset:next
@@ -48,7 +48,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RC_NAME: ${{ env.RC_NAME }}
+          RC_NAME: ${{ env.BRANCH_NAME }}
 
       - uses: mshick/add-pr-comment@v2
         with:
