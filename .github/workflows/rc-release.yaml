@@ -3,7 +3,6 @@ on:
   pull_request:
     branches:
       - rc/*
-  workflow_dispatch:
 
 jobs:
   release-pr:
