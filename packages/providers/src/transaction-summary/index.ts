@@ -7,4 +7,4 @@ export * from './get-transaction-summary';
 export * from './assemble-transaction-summary';
 export * from './receipt';
 export * from './date';
-export * from './fee';
+export * from './calculate-transaction-fee';

@@ -4,7 +4,7 @@ import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions
 import { PolicyType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GqlConsensusParameters, GqlFeeParameters } from '../__generated__/operations';
 import { calculatePriceWithFactor } from '../utils';
 import {
   calculateMetadataGasForTxCreate,
@@ -13,16 +13,23 @@ import {
   getMinGas,
 } from '../utils/gas';
 
+interface FeeParams extends Pick<GqlFeeParameters, 'gasPerByte' | 'gasPriceFactor'> {}
+
 export type CalculateTransactionFeeParams = {
   gasUsed: BN;
-  gasPerByte: BN;
   rawPayload: string;
-  gasPriceFactor: BN;
-  gasCosts: GqlGasCosts;
+  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & { feeParams: FeeParams };
 };
 
 export const calculateTransactionFee = (params: CalculateTransactionFeeParams) => {
-  const { rawPayload, gasUsed, gasPriceFactor, gasCosts, gasPerByte } = params;
+  const {
+    gasUsed,
+    rawPayload,
+    consensusParameters: { gasCosts, feeParams },
+  } = params;
+
+  const gasPerByte = bn(feeParams.gasPerByte);
+  const gasPriceFactor = bn(feeParams.gasPriceFactor);
 
   const transactionBytes = getBytesCopy(rawPayload);
 
@@ -30,10 +37,10 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
 
   if (transaction.type === TransactionType.Mint) {
     return {
-      feeFromGasUsed: bn(0),
+      fee: bn(0),
       minFee: bn(0),
       maxFee: bn(0),
-      fee: bn(0),
+      feeFromGasUsed: bn(0),
     };
   }
 
@@ -43,11 +50,6 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
 
   let metadataGas = bn(0);
   let gasLimit = bn(0);
-
-  let feeFromGasUsed = bn(0);
-  let minFee = bn(0);
-  let maxFee = bn(0);
-  let fee = bn(0);
 
   if (type === TransactionType.Create) {
     const { bytecodeWitnessIndex, storageSlots } = transaction as TransactionCreate;
@@ -98,10 +100,10 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     witnessLimit,
   });
 
-  feeFromGasUsed = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
-  minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
-  maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor);
-  fee = minFee.add(feeFromGasUsed);
+  const feeFromGasUsed = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
+  const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
+  const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor);
+  const fee = minFee.add(feeFromGasUsed);
 
   return {
     fee,

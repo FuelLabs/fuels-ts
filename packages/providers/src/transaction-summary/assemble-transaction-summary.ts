@@ -6,8 +6,8 @@ import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { getGasUsedFromReceipts } from '../utils';
 
+import { calculateTransactionFee } from './calculate-transaction-fee';
 import { fromTai64ToDate } from './date';
-import { calculateTransactionFee } from './fee';
 import {
   getOperations,
   getTransactionTypeName,
@@ -66,11 +66,15 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const typeName = getTransactionTypeName(transaction.type);
 
   const { fee } = calculateTransactionFee({
-    gasCosts,
-    gasPerByte,
-    gasPriceFactor,
     gasUsed,
     rawPayload,
+    consensusParameters: {
+      gasCosts,
+      feeParams: {
+        gasPerByte: gasPerByte.toString(),
+        gasPriceFactor: gasPriceFactor.toString(),
+      },
+    },
   });
 
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
