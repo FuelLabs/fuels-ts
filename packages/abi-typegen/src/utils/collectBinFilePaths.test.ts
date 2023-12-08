@@ -1,7 +1,7 @@
 import { hexlify } from 'ethers';
 import { readFileSync } from 'fs';
 
-import { getProjectResources, ForcProjectsEnum } from '../../test/fixtures/forc-projects';
+import { AbiTypegenProjectsEnum, getTypegenForcProject } from '../../test/fixtures/forc-projects';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectBinFilepaths } from './collectBinFilePaths';
@@ -11,9 +11,9 @@ import * as validateBinFileMod from './validateBinFile';
  * @group node
  */
 describe('collectBinFilePaths.ts', () => {
-  const script = getProjectResources(ForcProjectsEnum.SCRIPT);
-  const predicate = getProjectResources(ForcProjectsEnum.PREDICATE);
-  const contract = getProjectResources(ForcProjectsEnum.MINIMAL);
+  const script = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
+  const predicate = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
+  const contract = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
   function mockDeps() {
     const validateBinFile = vi

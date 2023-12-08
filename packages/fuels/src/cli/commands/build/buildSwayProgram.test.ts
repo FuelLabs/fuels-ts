@@ -2,7 +2,7 @@ import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
-import * as findPackageRootMod from '../../utils/findPackageRoot';
+import * as findBinPathMod from '../../utils/findBinPath';
 import { configureLogging } from '../../utils/logger';
 
 import { buildSwayProgram } from './buildSwayProgram';
@@ -25,7 +25,7 @@ describe('buildSwayPrograms', () => {
   });
 
   function mockAll(params: { shouldError: boolean } = { shouldError: false }) {
-    const findPackageRoot = vi.spyOn(findPackageRootMod, 'findPackageRoot').mockReturnValue('');
+    const findBinPath = vi.spyOn(findBinPathMod, 'findBinPath').mockReturnValue('');
 
     const spawnMocks = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,7 +49,7 @@ describe('buildSwayPrograms', () => {
     return {
       spawn,
       spawnMocks,
-      findPackageRoot,
+      findBinPath,
     };
   }
 

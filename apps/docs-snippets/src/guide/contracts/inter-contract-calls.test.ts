@@ -1,7 +1,10 @@
 import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 /**
@@ -18,8 +21,8 @@ describe(__filename, () => {
     provider = wallet.provider;
     const { minGasPrice } = provider.getGasConfig();
 
-    const tokenArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.TOKEN_DEPOSITOR);
+    const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
+    const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
 
     simpleToken = await new ContractFactory(
       tokenArtifacts.binHexlified,
@@ -37,10 +40,10 @@ describe(__filename, () => {
   it('should successfully make call to another contract', async () => {
     // #region inter-contract-calls-3
     const amountToDeposit = 70;
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
     const { value: initialBalance } = await simpleToken.functions
       .get_balance(wallet.address.toB256())
-      .txParams({ gasPrice: minGasPrice, gasLimit: maxGasPerTx })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(initialBalance).toNumber()).toBe(0);
@@ -48,12 +51,12 @@ describe(__filename, () => {
     await tokenDepositor.functions
       .deposit_to_simple_token(simpleToken.id.toB256(), amountToDeposit)
       .addContracts([simpleToken])
-      .txParams({ gasPrice: minGasPrice, gasLimit: maxGasPerTx })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     const { value: finalBalance } = await simpleToken.functions
       .get_balance(wallet.address.toB256())
-      .txParams({ gasPrice: minGasPrice, gasLimit: maxGasPerTx })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(finalBalance).toNumber()).toBe(amountToDeposit);

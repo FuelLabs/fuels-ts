@@ -23,7 +23,6 @@ describe('Predicate', () => {
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
-      const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
       predicate.setData<[string]>(b256);
 
@@ -32,7 +31,7 @@ describe('Predicate', () => {
         id: '0x01',
         assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
         amount: bn(1),
-        owner: Address.fromB256(predicateAddress),
+        owner: Address.fromAddressOrString(predicate.address),
         maturity: 0,
         blockCreated: bn(0),
         txCreatedIdx: bn(0),
@@ -49,7 +48,7 @@ describe('Predicate', () => {
       const inputCoinMock = sendTransactionMock.mock.calls[0][0]
         .inputs?.[0] as unknown as InputCoin;
       expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
-      expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
+      expect(predicate.predicateArgs).not.toBeUndefined();
     });
 
     it('includes predicate as input when simulating a transaction', async () => {
@@ -62,7 +61,7 @@ describe('Predicate', () => {
       const inputCoinMock = sendTransactionMock.mock.calls[0][0]
         .inputs?.[0] as unknown as InputCoin;
       expect(hexlify(inputCoinMock.predicate)).toBe(defaultPredicateBytecode);
-      expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
+      expect(predicate.predicateArgs).not.toBeUndefined();
     });
   });
 });

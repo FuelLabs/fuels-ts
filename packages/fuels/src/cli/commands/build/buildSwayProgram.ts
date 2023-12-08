@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { join } from 'path';
 
 import type { FuelsConfig } from '../../types';
-import { findPackageRoot } from '../../utils/findPackageRoot';
+import { findBinPath } from '../../utils/findBinPath';
 import { debug, loggingConfig } from '../../utils/logger';
 
 import { onForcExit, onForcError } from './forcHandlers';
@@ -11,7 +11,7 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
   debug('Building Sway program', path);
 
   return new Promise<void>((resolve, reject) => {
-    const pkgRootDir = findPackageRoot();
+    const pkgRootDir = findBinPath('fuels-forc');
     const builtInForcPath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-forc');
 
     const command = config.useBuiltinForc ? builtInForcPath : 'forc';

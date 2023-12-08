@@ -115,7 +115,8 @@ export class BaseWalletUnlocked extends Account {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(
-      await this.populateTransactionWitnessesSignature(transactionRequest)
+      await this.populateTransactionWitnessesSignature(transactionRequest),
+      { estimateTxDependencies: false }
     );
   }
 
@@ -132,6 +133,7 @@ export class BaseWalletUnlocked extends Account {
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {
         utxoValidation: true,
+        estimateTxDependencies: false,
       }
     );
   }

@@ -3,6 +3,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 
 import { InputType } from './input';
 import { OutputType } from './output';
+import { PolicyType } from './policy';
 import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
 
@@ -18,17 +19,20 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript without inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
-      gasPrice: bn(U32),
-      gasLimit: bn(U32),
-      maturity: U32,
+      scriptGasLimit: bn(U32),
       scriptLength: U16,
       scriptDataLength: U16,
+      policyTypes: 5,
       inputsCount: 0,
       outputsCount: 0,
       witnessesCount: 0,
       receiptsRoot: B256,
       script: B256,
       scriptData: B256,
+      policies: [
+        { type: PolicyType.GasPrice, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+      ],
       inputs: [],
       outputs: [],
       witnesses: [],
@@ -37,7 +41,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000000000000000003e800000000000003e800000000000003e800000000000000200000000000000020000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x000000000000000000000000000003e8000000000000002000000000000000200000000000000005000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e800000000000003e8'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(getBytesCopy(encoded), 0);
@@ -49,21 +53,26 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript with inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
-      gasPrice: bn(U32),
-      gasLimit: bn(U32),
-      maturity: U32,
+      scriptGasLimit: bn(U32),
       scriptLength: U16,
       scriptDataLength: U16,
+      policyTypes: 7,
       inputsCount: 1,
       outputsCount: 1,
       witnessesCount: 3,
       receiptsRoot: B256,
       script: B256,
       scriptData: B256,
+      policies: [
+        { type: PolicyType.GasPrice, data: bn(U32) },
+        { type: PolicyType.WitnessLimit, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+      ],
       inputs: [
         {
           type: InputType.Contract,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           balanceRoot: B256,
           stateRoot: B256,
           contractID: B256,
@@ -100,7 +109,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000000000000000003e800000000000003e800000000000003e800000000000000200000000000000020000000000000000100000000000000010000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000101000000000000000000000000000002010100000000000000000000000000030101010000000000'
+      '0x000000000000000000000000000003e8000000000000002000000000000000200000000000000007000000000000000100000000000000010000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e800000000000003e800000000000003e80000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000101000000000000000000000000000002010100000000000000000000000000030101010000000000'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(getBytesCopy(encoded), 0);
@@ -114,16 +123,15 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionCreate without inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Create> = {
       type: TransactionType.Create,
-      gasPrice: bn(U32),
-      gasLimit: bn(U32),
-      maturity: U32,
       bytecodeLength: U16,
       bytecodeWitnessIndex: U8,
+      policyTypes: 1,
       storageSlotsCount: 0,
       inputsCount: 0,
       outputsCount: 0,
       witnessesCount: 0,
       salt: B256,
+      policies: [{ type: PolicyType.GasPrice, data: bn(U32) }],
       storageSlots: [],
       inputs: [],
       outputs: [],
@@ -133,7 +141,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000100000000000003e800000000000003e800000000000003e8000000000000002000000000000000010000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x00000000000000010000000000000020000000000000000100000000000000010000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e8'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(getBytesCopy(encoded), 0);
@@ -145,21 +153,26 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionCreate with inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Create> = {
       type: TransactionType.Create,
-      gasPrice: bn(U32),
-      gasLimit: bn(U32),
-      maturity: U32,
       bytecodeLength: U16,
       bytecodeWitnessIndex: U8,
+      policyTypes: 15,
       storageSlotsCount: 1,
       inputsCount: 3,
       outputsCount: 2,
       witnessesCount: 1,
       salt: B256,
+      policies: [
+        { type: PolicyType.GasPrice, data: bn(U32) },
+        { type: PolicyType.WitnessLimit, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+        { type: PolicyType.MaxFee, data: bn(U32) },
+      ],
       storageSlots: [{ key: B256, value: B256 }],
       inputs: [
         {
           type: InputType.Contract,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           balanceRoot: B256,
           stateRoot: B256,
           contractID: B256,
@@ -170,7 +183,8 @@ describe('TransactionCoder', () => {
         },
         {
           type: InputType.Contract,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           balanceRoot: B256,
           stateRoot: B256,
           contractID: B256,
@@ -181,7 +195,8 @@ describe('TransactionCoder', () => {
         },
         {
           type: InputType.Coin,
-          utxoID: { transactionId: B256, outputIndex: 0 },
+          txID: B256,
+          outputIndex: 0,
           owner: B256,
           amount: bn(0),
           assetId: B256,
@@ -223,7 +238,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000100000000000003e800000000000003e800000000000003e8000000000000002000000000000000010000000000000001000000000000000300000000000000020000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000020d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x000000000000000100000000000000200000000000000001000000000000000f0000000000000001000000000000000300000000000000020000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e800000000000003e800000000000003e800000000000003e8d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000020d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(getBytesCopy(encoded), 0);

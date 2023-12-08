@@ -1,7 +1,7 @@
 import type { Contract, Provider } from 'fuels';
 import { BN, BaseAssetId } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 /**
@@ -11,7 +11,7 @@ describe(__filename, () => {
   let contract: Contract;
   let provider: Provider;
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
     provider = contract.provider;
   });
 
@@ -25,7 +25,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
-      .txParams({ gasPrice: minGasPrice })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
@@ -45,7 +45,7 @@ describe(__filename, () => {
         })
         .txParams({ gasPrice: minGasPrice })
         .call()
-    ).rejects.toThrow(/OutOfGas/);
+    ).rejects.toThrow(/Gas limit '1' is lower than the required: /);
     // #endregion call-params-2
   });
 
@@ -74,7 +74,7 @@ describe(__filename, () => {
     } = result;
 
     expect(new BN(value).toNumber()).toBe(10);
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(transactionGasLimit);
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(transactionGasLimit);
     // #endregion call-params-3
   });
 });

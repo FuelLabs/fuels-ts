@@ -1,6 +1,9 @@
 import { stderr } from 'process';
 
-import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../test/fixtures/forc-projects/index';
 
 import { run, runCliAction } from './cli';
 import * as runTypegenMod from './runTypegen';
@@ -34,7 +37,7 @@ describe('cli.ts', () => {
   test('should call runTypegen with proper params: for Contracts', async () => {
     const { runTypegen } = mockDeps();
 
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
 
@@ -54,7 +57,7 @@ describe('cli.ts', () => {
   test('should call runTypegen with proper params: for Scripts', async () => {
     const { runTypegen, exit } = mockDeps();
 
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
 
@@ -76,7 +79,7 @@ describe('cli.ts', () => {
   test('should call runTypegen with proper params: for Predicates', async () => {
     const { runTypegen, exit } = mockDeps();
 
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
 
@@ -98,7 +101,7 @@ describe('cli.ts', () => {
   test('should error if called with incompatible parameters: -s, -c', async () => {
     const { exit, err } = mockDeps();
 
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
 
@@ -119,7 +122,7 @@ describe('cli.ts', () => {
   test('should error if called with incompatible parameters: -s, -p', async () => {
     const { exit, err } = mockDeps();
 
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
 
@@ -140,7 +143,7 @@ describe('cli.ts', () => {
   test('should error if called with incompatible parameters: -p, -c', async () => {
     const { exit, err } = mockDeps();
 
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
 

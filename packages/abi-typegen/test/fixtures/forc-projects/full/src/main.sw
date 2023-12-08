@@ -105,7 +105,9 @@ impl MyContract for Contract {
         x
     }
     fn types_evm_address(x: EvmAddress) -> EvmAddress {
-        EvmAddress::from(0x0606060606060606060606060606060606060606060606060606060606060606)
+        EvmAddress::from(
+            0x0606060606060606060606060606060606060606060606060606060606060606,
+        )
     }
     fn types_bytes(x: Bytes) -> Bytes {
         x

@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.67.0",
+  "version": "0.69.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -76,6 +76,7 @@
     "handlebars": "^4.7.7",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
+    "npm-which": "^3.0.1",
     "portfinder": "^1.0.32",
     "rimraf": "^3.0.2",
     "toml": "^3.0.0",
@@ -85,5 +86,14 @@
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
     "@types/rimraf": "^3.0.2"
-  }
+  },
+  "keywords": [
+    "ethereum",
+    "forc",
+    "fuel",
+    "fuels",
+    "fuel-vm",
+    "sway",
+    "typescript"
+  ]
 }

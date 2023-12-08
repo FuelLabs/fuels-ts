@@ -1,8 +1,52 @@
-import type { FuelsConfig } from '../../types';
-import { getBinarySource } from '../../utils/getBinarySource';
-import { log } from '../../utils/logger';
+import { spawn } from 'child_process';
 
-import { buildSwayProgram } from './buildSwayProgram';
+import type { FuelsConfig } from '../../types';
+import { findBinPath } from '../../utils/findBinPath';
+import { getBinarySource } from '../../utils/getBinarySource';
+import { log, debug, error, loggingConfig } from '../../utils/logger';
+
+type OnResultFn = () => void;
+type OnErrorFn = (reason?: number | Error) => void;
+
+export const onForcExit =
+  (onResultFn: OnResultFn, onErrorFn: OnErrorFn) => (code: number | null) => {
+    if (code) {
+      onErrorFn(code);
+      // process.exit()?
+    } else {
+      onResultFn();
+    }
+  };
+
+export const onForcError = (onError: OnErrorFn) => (err: Error) => {
+  error(err);
+  onError(err);
+};
+
+export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
+  debug('Building Sway program', path);
+
+  return new Promise<void>((resolve, reject) => {
+    const builtInForcPath = findBinPath('fuels-forc');
+
+    const command = config.useBuiltinForc ? builtInForcPath : 'forc';
+    const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
+
+    if (loggingConfig.isLoggingEnabled) {
+      forc.stderr?.pipe(process.stderr);
+    }
+
+    if (loggingConfig.isDebugEnabled) {
+      forc.stdout?.pipe(process.stdout);
+    }
+
+    const onExit = onForcExit(resolve, reject);
+    const onError = onForcError(reject);
+
+    forc.on('exit', onExit);
+    forc.on('error', onError);
+  });
+};
 
 export async function buildSwayPrograms(config: FuelsConfig) {
   log(`Building Sway programs using ${getBinarySource(config.useBuiltinFuelCore)} 'forc' binary`);

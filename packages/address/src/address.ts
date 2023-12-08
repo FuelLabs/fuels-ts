@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
+import type { Bech32Address, B256Address, EvmAddress, AssetId } from '@fuel-ts/interfaces';
 import { getBytesCopy, hexlify, sha256 } from 'ethers';
 
 import {
@@ -109,6 +109,17 @@ export default class Address extends AbstractAddress {
   }
 
   /**
+   * Wraps the `bech32Address` property and returns as an `AssetId`.
+   *
+   * @returns The `bech32Address` property as an {@link AssetId | `AssetId`}
+   */
+  toAssetId(): AssetId {
+    return {
+      value: this.toB256(),
+    } as AssetId;
+  }
+
+  /**
    * Returns the value of the `bech32Address` property
    *
    * @returns The value of `bech32Address` property
@@ -134,6 +145,10 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromPublicKey(publicKey: string): Address {
+    if (!isPublicKey(publicKey)) {
+      throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
+    }
+
     const b256Address = sha256(hexlify(getBytesCopy(publicKey)));
     return new Address(toBech32(b256Address));
   }
@@ -145,6 +160,13 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromB256(b256Address: string): Address {
+    if (!isB256(b256Address)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${b256Address}.`
+      );
+    }
+
     return new Address(toBech32(b256Address));
   }
 
@@ -218,6 +240,13 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromEvmAddress(evmAddress: string): Address {
+    if (!isEvmAddress(evmAddress)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_EVM_ADDRESS,
+        `Invalid Evm Address: ${evmAddress}.`
+      );
+    }
+
     const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
 
     return new Address(toBech32(paddedAddress));

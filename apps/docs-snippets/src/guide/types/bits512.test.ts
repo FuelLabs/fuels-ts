@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { Wallet } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 /**
@@ -11,7 +11,7 @@ describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
   });
 
   it('should successfully call contract function and validate b512', async () => {
@@ -37,7 +37,10 @@ describe(__filename, () => {
     // #region bits512-4
     const b512 = wallet.publicKey;
 
-    const { value } = await contract.functions.echo_b512(b512).simulate();
+    const { value } = await contract.functions
+      .echo_b512(b512)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual(b512);
     // #endregion bits512-4

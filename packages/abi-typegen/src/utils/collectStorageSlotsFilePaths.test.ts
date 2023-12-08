@@ -1,4 +1,4 @@
-import { getProjectResources, ForcProjectsEnum } from '../../test/fixtures/forc-projects';
+import { AbiTypegenProjectsEnum, getTypegenForcProject } from '../../test/fixtures/forc-projects';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectStorageSlotsFilepaths } from './collectStorageSlotsFilePaths';
@@ -7,9 +7,9 @@ import { collectStorageSlotsFilepaths } from './collectStorageSlotsFilePaths';
  * @group node
  */
 describe('collectStorageSlotsFilePaths.ts', () => {
-  const script = getProjectResources(ForcProjectsEnum.SCRIPT);
-  const predicate = getProjectResources(ForcProjectsEnum.PREDICATE);
-  const contract = getProjectResources(ForcProjectsEnum.MINIMAL);
+  const script = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
+  const predicate = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
+  const contract = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
   beforeEach(() => {
     vi.resetAllMocks();

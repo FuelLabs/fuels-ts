@@ -1,4 +1,7 @@
-import { ForcProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import { findType } from '../../utils/findType';
@@ -15,10 +18,10 @@ describe('EnumType.ts', () => {
   /*
     Test helpers
   */
-  function getTypesForContract(project: ForcProjectsEnum) {
+  function getTypesForContract(project: AbiTypegenProjectsEnum) {
     const {
       abiContents: { types: rawTypes },
-    } = getProjectResources(project);
+    } = getTypegenForcProject(project);
 
     const types = rawTypes
       .filter((t) => t.type !== '()')
@@ -47,7 +50,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: simple enums', () => {
-    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_SIMPLE);
+    const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_SIMPLE);
 
     const myEnum = findType({ types, typeId: 1 }) as EnumType;
 
@@ -61,7 +64,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: use native TS enum on a simple enum', () => {
-    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_SIMPLE_NATIVE);
+    const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE);
 
     const myEnum = findType({ types, typeId: 1 }) as EnumType;
 
@@ -75,7 +78,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: use SDK enum on a complex enum', () => {
-    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_OF_STRUCTS);
+    const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_OF_STRUCTS);
 
     const myEnum = findType({ types, typeId: 0 }) as EnumType;
 
@@ -89,7 +92,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: enums of enums', () => {
-    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_OF_ENUMS);
+    const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_OF_ENUMS);
 
     const myEnum = findType({ types, typeId: 2 }) as EnumType;
 
@@ -103,7 +106,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: enums of structs', () => {
-    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_OF_STRUCTS);
+    const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_OF_STRUCTS);
 
     const myEnum = findType({ types, typeId: 0 }) as EnumType;
 
@@ -117,7 +120,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: array of enums', () => {
-    const { types } = getTypesForContract(ForcProjectsEnum.ARRAY_OF_ENUMS);
+    const { types } = getTypesForContract(AbiTypegenProjectsEnum.ARRAY_OF_ENUMS);
 
     const myEnum = findType({ types, typeId: 3 }) as EnumType;
 

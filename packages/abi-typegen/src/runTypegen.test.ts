@@ -4,7 +4,10 @@ import { cpSync, existsSync, renameSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
 
-import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../test/fixtures/forc-projects/index';
 
 import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -14,7 +17,7 @@ import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
  */
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -70,7 +73,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should run typegen, using: filepaths', async () => {
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -116,7 +119,7 @@ describe('runTypegen.js', () => {
 
   test('should run typegen for Scripts, using: filepaths', async () => {
     // setup temp sway project
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -160,7 +163,7 @@ describe('runTypegen.js', () => {
     const stdoutWrite = vi.spyOn(process.stdout, 'write').mockResolvedValue(true);
 
     // setup temp sway project
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -190,7 +193,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should raise error for non-existent Script BIN file', async () => {
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const tempBinPath = `${project.binPath}--BKP`;
 
     // IMPORTANT: renames bin file to yield error
@@ -227,7 +230,7 @@ describe('runTypegen.js', () => {
 
   test('should warn about minimum parameters', async () => {
     // setup temp sway project
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
