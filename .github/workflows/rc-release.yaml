@@ -1,8 +1,9 @@
 name: Release to @rc tag on npm
+
 on:
   pull_request:
     branches:
-      - rc/*
+      - 'rc/*'
 
 env:
   RC_NAME: ${{ github.head_ref }}
