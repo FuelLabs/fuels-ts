@@ -1,17 +1,13 @@
-import { bn, type BN } from '@fuel-ts/math';
-import { PolicyType, type Transaction } from '@fuel-ts/transactions';
+import { type BN } from '@fuel-ts/math';
+import { type Transaction } from '@fuel-ts/transactions';
 import { hexlify } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
-import { calculatePriceWithFactor, getGasUsedFromReceipts } from '../utils';
-import {
-  calculateMetadataGasForTxCreate,
-  calculateMetadataGasForTxScript,
-  getMinGas,
-} from '../utils/gas';
+import { getGasUsedFromReceipts } from '../utils';
 
 import { fromTai64ToDate } from './date';
+import { calculateTransactionFee } from './fee';
 import {
   getOperations,
   getTransactionTypeName,
@@ -53,57 +49,29 @@ export function assembleTransactionSummary<TTransactionType = void>(
     gasCosts,
   } = params;
 
-  const { policies } = transaction;
-
-  const gasPrice =
-    bn(policies?.find((policy) => policy.type === PolicyType.GasPrice)?.data) || bn(0);
   const gasUsed = getGasUsedFromReceipts(receipts);
+
+  const rawPayload = hexlify(transactionBytes);
 
   const operations = getOperations({
     transactionType: transaction.type,
     inputs: transaction.inputs || [],
     outputs: transaction.outputs || [],
     receipts,
-    rawPayload: hexlify(transactionBytes),
+    rawPayload,
     abiMap,
     maxInputs,
   });
 
   const typeName = getTransactionTypeName(transaction.type);
 
-  const isScriptTx = isTypeScript(transaction.type);
-  let metadataGas: BN;
-
-  if (isScriptTx) {
-    metadataGas = calculateMetadataGasForTxScript({
-      gasCosts,
-      txBytesSize: transactionBytes.length,
-    });
-  } else {
-    const { storageSlotsCount = 0, witnesses = [], bytecodeWitnessIndex = -1 } = transaction;
-    const contractBytesSize = bn(witnesses[bytecodeWitnessIndex]?.dataLength || 0);
-
-    metadataGas = calculateMetadataGasForTxCreate({
-      contractBytesSize,
-      gasCosts,
-      stateRootSize: storageSlotsCount,
-      txBytesSize: transactionBytes.length,
-    });
-  }
-
-  const minGas = getMinGas({
+  const { fee } = calculateTransactionFee({
     gasCosts,
     gasPerByte,
-    inputs: transaction.inputs || [],
-    metadataGas,
-    txBytesSize: transactionBytes.length,
+    gasPriceFactor,
+    gasUsed,
+    rawPayload,
   });
-
-  const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
-
-  const usedFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
-
-  const fee = minFee.add(usedFee);
 
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);
