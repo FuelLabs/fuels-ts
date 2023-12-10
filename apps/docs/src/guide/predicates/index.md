@@ -2,7 +2,7 @@
   import { data } from '../../versions.data'
   const { forc } = data
   const introUrl = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
-  const debbugUrl = `https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/predicates.html?#debugging-predicates`
+  const debugUrl = `https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/predicates.html?#debugging-predicates`
 </script>
 
 # Predicates
@@ -47,4 +47,4 @@ In the next section, we provide a step-by-step guide on how to interact with a p
 
 ## Debugging Predicates
 
-Currently there is no way to <a :href="debbugUrl" target="_blank" rel="noreferrer">debbug a predicate</a> yet. In the meantime, a practical workaround is to initially write, test, and debug your predicate as a script, which has more debugging tools available. Once it's working as expected, you can then convert it back into a predicate.
+Currently there is no way to <a :href="debugUrl" target="_blank" rel="noreferrer">debug a predicate</a> yet. In the meantime, a practical workaround is to initially write, test, and debug your predicate as a script, which has more debugging tools available. Once it's working as expected, you can then convert it back into a predicate.
