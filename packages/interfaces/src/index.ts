@@ -18,11 +18,20 @@ export type Bytes = Uint8Array | number[];
 
 export type RawSlice = Uint8Array | number[];
 
+export type BytesLike = Uint8Array | string;
+
 /**
  * @prop value - A 256 bit hash string with the first 12 bytes cleared
  */
 export type EvmAddress = {
   value: B256AddressEvm;
+};
+
+/**
+ * @prop value - A wrapped 256 bit hash string
+ */
+export type AssetId = {
+  value: B256Address;
 };
 
 export type StdString = string;

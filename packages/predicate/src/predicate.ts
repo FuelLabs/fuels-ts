@@ -2,9 +2,9 @@ import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import {
   Interface,
   INPUT_COIN_FIXED_SIZE,
-  SCRIPT_FIXED_SIZE,
   WORD_SIZE,
   calculateVmTxMemory,
+  SCRIPT_FIXED_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -15,7 +15,7 @@ import type {
   TransactionRequestLike,
   TransactionResponse,
 } from '@fuel-ts/providers';
-import { transactionRequestify } from '@fuel-ts/providers';
+import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
 import type { BytesLike } from 'ethers';
@@ -29,6 +29,7 @@ import { getPredicateRoot } from './utils';
 export class Predicate<ARGS extends InputValue[]> extends Account implements AbstractPredicate {
   bytes: Uint8Array;
   predicateData: Uint8Array = Uint8Array.from([]);
+  predicateArgs: ARGS = [] as unknown as ARGS;
   interface?: Interface;
 
   // TODO: Since provider is no longer optional, we can maybe remove `chainId` from the constructor.
@@ -52,8 +53,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       jsonAbi,
       configurableConstants
     );
-    const chainId = provider.getChainId();
-    const address = Address.fromB256(getPredicateRoot(predicateBytes, chainId));
+    const address = Address.fromB256(getPredicateRoot(predicateBytes));
     super(address, provider);
 
     this.bytes = predicateBytes;
@@ -69,12 +69,14 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
   populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
     const request = transactionRequestify(transactionRequestLike);
 
+    const { policies } = BaseTransactionRequest.getPolicyMeta(request);
+
     request.inputs?.forEach((input) => {
       if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
         // eslint-disable-next-line no-param-reassign
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.predicateData;
+        input.predicateData = this.#getPredicateData(policies.length);
       }
     });
 
@@ -110,6 +112,16 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
    * @returns The Predicate instance with updated predicate data.
    */
   setData<T extends ARGS>(...args: T) {
+    this.predicateArgs = args;
+
+    return this;
+  }
+
+  #getPredicateData(policiesLength: number): Uint8Array {
+    if (!this.predicateArgs.length) {
+      return new Uint8Array();
+    }
+
     const mainFn = this.interface?.functions.main;
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
@@ -117,10 +129,14 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
       maxInputs: this.provider.getChain().consensusParameters.maxInputs.toNumber(),
     });
     const OFFSET =
-      VM_TX_MEMORY + SCRIPT_FIXED_SIZE + INPUT_COIN_FIXED_SIZE + WORD_SIZE + paddedCode.byteLength;
+      VM_TX_MEMORY +
+      SCRIPT_FIXED_SIZE +
+      INPUT_COIN_FIXED_SIZE +
+      WORD_SIZE +
+      paddedCode.byteLength +
+      policiesLength * WORD_SIZE;
 
-    this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
-    return this;
+    return mainFn?.encodeArguments(this.predicateArgs, OFFSET) || new Uint8Array();
   }
 
   /**

@@ -1,7 +1,10 @@
 import type { Contract, Provider } from 'fuels';
 import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -15,9 +18,9 @@ describe(__filename, () => {
     provider = wallet.provider;
     const { minGasPrice: gasPrice } = provider.getGasConfig();
 
-    const counterArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
-    const echoArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
-    const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
+    const counterArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COUNTER);
+    const echoArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
+    const contextArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
 
     const factory1 = new ContractFactory(
       echoArtifacts.binHexlified,
@@ -53,7 +56,7 @@ describe(__filename, () => {
         counterContract.functions.increment_count(2),
         counterContract.functions.increment_count(4),
       ])
-      .txParams({ gasPrice: minGasPrice })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     const initialValue = new BN(results[0]).toNumber();
@@ -75,7 +78,7 @@ describe(__filename, () => {
         counterContract.functions.get_count(),
         counterContract.functions.increment_count(5),
       ])
-      .txParams({ gasPrice: minGasPrice });
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 });
 
     const { value: results } = await chain.call();
 
@@ -99,7 +102,7 @@ describe(__filename, () => {
           forward: [100, BaseAssetId],
         }),
       ])
-      .txParams({ gasPrice: minGasPrice })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     const echoedValue = results[0];

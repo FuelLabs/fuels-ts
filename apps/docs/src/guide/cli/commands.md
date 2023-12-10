@@ -8,7 +8,7 @@ The `fuels` CLI consists of a couple commands.
 npx fuels help init
 ```
 
-```
+```console
 Options:
   -w, --workspace <path>          Relative dir path to Forc workspace
   -c, --contracts <path|global>   Relative path/globals to  Contracts
@@ -54,7 +54,7 @@ In a nutshell:
 npx fuels help build
 ```
 
-```
+```console
 Options:
   -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
   -d, --deploy       Deploy contracts after build (auto-starts a `fuel-core` node if needed)
@@ -74,7 +74,7 @@ npx fuels build
 npx fuels build --deploy
 ```
 
-Using the `--deploy` flag will aditionally:
+Using the `--deploy` flag will additionally:
 
 1. Auto-start a short-lived `fuel-core` node if _needed_ ([docs](./config-file.md#autostartfuelcore))
 2. Run `deploy` on that node
@@ -128,7 +128,7 @@ Manually generates type definitions and factory classes from ABI JSON files.
 npx fuels help typegen
 ```
 
-```
+```console
 Options:
   -i, --inputs <path|glob...>  Input paths/globals to your Abi JSON files
   -o, --output <dir>           Directory path for generated files

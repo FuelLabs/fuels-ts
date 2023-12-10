@@ -1,0 +1,7 @@
+[project]
+authors = ["Fuel Labs <contact@fuel.sh>"]
+license = "Apache-2.0"
+name = "advanced-logging-other-contract"
+
+[dependencies]
+advanced-logging-other-contract-abi = { path = "../advanced-logging-other-contract-abi" }

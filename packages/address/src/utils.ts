@@ -61,7 +61,7 @@ export function isBech32(address: BytesLike): boolean {
  * @hidden
  */
 export function isB256(address: string): boolean {
-  return (address.length === 66 || address.length === 64) && /(0x)?[0-9a-f]{64}$/i.test(address);
+  return address.length === 66 && /(0x)[0-9a-f]{64}$/i.test(address);
 }
 
 /**
@@ -70,7 +70,7 @@ export function isB256(address: string): boolean {
  * @hidden
  */
 export function isPublicKey(address: string): boolean {
-  return (address.length === 130 || address.length === 128) && /(0x)?[0-9a-f]{128}$/i.test(address);
+  return address.length === 130 && /(0x)[0-9a-f]{128}$/i.test(address);
 }
 
 /**
@@ -79,7 +79,7 @@ export function isPublicKey(address: string): boolean {
  * @hidden
  */
 export function isEvmAddress(address: string): boolean {
-  return (address.length === 42 || address.length === 40) && /(0x)?[0-9a-f]{40}$/i.test(address);
+  return address.length === 42 && /(0x)[0-9a-f]{40}$/i.test(address);
 }
 
 /**
@@ -187,6 +187,5 @@ export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => 
     throw new FuelError(FuelError.CODES.INVALID_EVM_ADDRESS, 'Invalid EVM address format.');
   }
 
-  const prefixedAddress = address.startsWith('0x') ? address : `0x${address}`;
-  return prefixedAddress.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
+  return address.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
 };

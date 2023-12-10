@@ -1,7 +1,6 @@
-import type { Contract, Provider } from 'fuels';
-import { BaseAssetId } from 'fuels';
+import { BaseAssetId, type Contract, type Provider } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
@@ -9,13 +8,13 @@ describe(__filename, () => {
   let provider: Provider;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
     provider = contract.provider;
   });
 
   it('should successfully get transaction cost estimate for a single contract call', async () => {
     // #region cost-estimation-1
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const cost = await contract.functions
       .return_context_amount()
@@ -24,7 +23,6 @@ describe(__filename, () => {
       })
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       })
       .getTransactionCost();
 
@@ -38,7 +36,7 @@ describe(__filename, () => {
 
   it('should get transaction cost estimate for multi contract calls just fine', async () => {
     // #region cost-estimation-2
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const scope = contract
       .multiCall([
@@ -51,7 +49,6 @@ describe(__filename, () => {
       ])
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       });
 
     const cost = await scope.getTransactionCost();

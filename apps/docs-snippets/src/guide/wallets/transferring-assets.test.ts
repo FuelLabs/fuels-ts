@@ -1,7 +1,10 @@
 import type { Contract, Provider, TxParams, WalletUnlocked } from 'fuels';
 import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -11,8 +14,11 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     senderWallet = await getTestWallet();
+
+    const { abiContents, binHexlified } = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.COUNTER
+    );
     provider = senderWallet.provider;
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
     const { minGasPrice } = senderWallet.provider.getGasConfig();
     deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
@@ -29,11 +35,11 @@ describe(__filename, () => {
     const amountToTransfer = 500;
     const assetId = BaseAssetId;
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const txParams: TxParams = {
       gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
+      gasLimit: 10_000,
     };
 
     const response = await senderWallet.transfer(
@@ -66,11 +72,11 @@ describe(__filename, () => {
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const txParams: TxParams = {
       gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
+      gasLimit: 10_000,
     };
 
     const tx = await senderWallet.transferToContract(

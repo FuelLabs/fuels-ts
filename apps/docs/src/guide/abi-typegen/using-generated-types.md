@@ -10,7 +10,7 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts
 import { Wallet } from "fuels";
@@ -64,7 +64,7 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts
 import { Wallet } from "fuels";
@@ -82,7 +82,7 @@ console.log({ value, logs });
 
 Consider the following predicate:
 
-<<< @/../../../packages/fuel-gauge/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{ts:line-numbers}
+<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{ts:line-numbers}
 
 Now, after generating types via:
 
@@ -92,7 +92,7 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts
 import { Wallet } from "fuels";

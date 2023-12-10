@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.69.1
+
+### Patch Changes
+
+- 🐞 fix: bin path for `fuels-forc`, add support bun's structure, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1481](https://github.com/FuelLabs/fuels-ts/pull/1481))
+
+## 0.69.0
+
+## 0.68.0
+
+### Patch Changes
+
+- 🐞 Fixing graceful shutdown of short-lived node, by [@arboleya](https://github.com/arboleya) (See [#1425](https://github.com/FuelLabs/fuels-ts/pull/1425))
+- The fuels CLI's deploy now auto-loads storage slots for contracts, just like typegen, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1473](https://github.com/FuelLabs/fuels-ts/pull/1473))
+- 🐞 fix: make `startFuelCore` package manager agnostic, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1477](https://github.com/FuelLabs/fuels-ts/pull/1477))
+- Updated npm keywords, by [@camsjams](https://github.com/camsjams) (See [#1453](https://github.com/FuelLabs/fuels-ts/pull/1453))
+- Introduce internal hexlify and arrayify functions, by [@danielbate](https://github.com/danielbate) (See [#1401](https://github.com/FuelLabs/fuels-ts/pull/1401))
+
 ## 0.67.0
 
 ### Patch Changes

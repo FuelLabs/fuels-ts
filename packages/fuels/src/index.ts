@@ -1,6 +1,3 @@
-export { hexlify, getBytesCopy as arrayify } from 'ethers';
-export type { BytesLike } from 'ethers';
-
 export { Script } from '@fuel-ts/script';
 export * from './cli/index';
 export * from '@fuel-ts/abi-coder';

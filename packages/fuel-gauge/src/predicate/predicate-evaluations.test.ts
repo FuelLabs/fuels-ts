@@ -1,12 +1,19 @@
 import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
-import predicateBytesFalse from '../../fixtures/forc-projects/predicate-false';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
 describe('Predicate', () => {
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
+  const { binHexlified: predicateBytesFalse } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_FALSE
+  );
+
   describe('Evaluations', () => {
     let predicate: Predicate<InputValue[]>;
     let wallet: WalletUnlocked;
@@ -31,6 +38,7 @@ describe('Predicate', () => {
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
+        gasLimit: 10_000,
       });
       await tx.waitForResult();
 
@@ -52,9 +60,12 @@ describe('Predicate', () => {
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 
-      await expect(predicate.transfer(receiver.address, amountToReceiver)).rejects.toThrow(
-        'Invalid transaction'
-      );
+      await expect(
+        predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+          gasPrice,
+          gasLimit: 10_000,
+        })
+      ).rejects.toThrow('PredicateVerificationFailed');
     });
   });
 });

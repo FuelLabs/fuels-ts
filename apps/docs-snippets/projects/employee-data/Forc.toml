@@ -1,7 +1,0 @@
-[project]
-authors = ["FuelLabs"]
-entry = "lib.sw"
-license = "Apache-2.0"
-name = "employee-data"
-
-[dependencies]

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "pretest": {
+      "outputMode": "errors-only",
+      "inputs": ["contract/src/*.sw", "contract/Forc.toml"],
+      "outputs": ["contract/out/debug/**"]
+    }
+  }
+}

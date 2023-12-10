@@ -1,5 +1,4 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
   AssertFailedRevertError,
@@ -9,9 +8,8 @@ import {
   getRandomB256,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import path from 'path';
 
-import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
@@ -23,20 +21,18 @@ describe('Auth Testing', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
-    const bytecode = fs.readFileSync(
-      path.join(
-        __dirname,
-        '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract.bin'
-      )
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT
     );
-    const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
     contractInstance = await factory.deployContract({ gasPrice });
   });
 
   it('can get is_caller_external', async () => {
     const { value } = await contractInstance.functions
       .is_caller_external()
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -45,7 +41,7 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -55,7 +51,7 @@ describe('Auth Testing', () => {
     await expect(
       contractInstance.functions
         .check_msg_sender({ value: getRandomB256() })
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call()
     ).rejects.toThrow(AssertFailedRevertError);
   });

@@ -1,6 +1,9 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseConfigurablesMod from '../utils/parseConfigurables';
@@ -40,7 +43,7 @@ describe('Abi.ts', () => {
     const inputPath = params.inputPath;
     const outputDir = './out';
 
-    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
     const rawContents = project.abiContents;
 
     const abi = new Abi({

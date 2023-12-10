@@ -1,16 +1,11 @@
-import { readFileSync } from 'fs';
 import { toHex } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { setup } from './utils';
 
-const contractBytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
-  )
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.GENERIC_TYPES_CONTRACT
 );
 
 describe('GenericTypesContract', () => {
@@ -79,7 +74,7 @@ describe('GenericTypesContract', () => {
           },
         }
       )
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const arg1 = {
@@ -111,7 +106,7 @@ describe('GenericTypesContract', () => {
 
     const { value: call2 } = await contract.functions
       .generic_complex_type_function(arg1, arg2)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toEqual(bimArg1);

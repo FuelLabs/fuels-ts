@@ -1,5 +1,19 @@
 # @fuel-ts/abi-typegen
 
+## 0.69.1
+
+## 0.69.0
+
+## 0.68.0
+
+### Minor Changes
+
+- add string slice support in typegen, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1468](https://github.com/FuelLabs/fuels-ts/pull/1468))
+
+### Patch Changes
+
+- Improves inputs validation and adds pretty error messages, by [@arboleya](https://github.com/arboleya) (See [#1433](https://github.com/FuelLabs/fuels-ts/pull/1433))
+
 ## 0.67.0
 
 ## 0.66.1

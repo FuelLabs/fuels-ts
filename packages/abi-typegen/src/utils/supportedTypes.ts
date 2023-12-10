@@ -10,6 +10,7 @@ import { OptionType } from '../abi/types/OptionType';
 import { RawUntypedPtr } from '../abi/types/RawUntypedPtr';
 import { RawUntypedSlice } from '../abi/types/RawUntypedSlice';
 import { StdStringType } from '../abi/types/StdStringType';
+import { StrSliceType } from '../abi/types/StrSliceType';
 import { StrType } from '../abi/types/StrType';
 import { StructType } from '../abi/types/StructType';
 import { TupleType } from '../abi/types/TupleType';
@@ -32,6 +33,7 @@ export const supportedTypes = [
   RawUntypedSlice,
   StdStringType,
   StrType,
+  StrSliceType,
   StructType,
   TupleType,
   U16Type,
