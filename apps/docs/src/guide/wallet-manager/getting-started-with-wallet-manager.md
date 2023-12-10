@@ -20,7 +20,7 @@ By default, a `WalletManager` instance is locked when created. Before using it, 
 
 Once your `WalletManager` is unlocked, it can manage your wallets.
 
-## Managing Vaults with WalletManager
+## Managing Vaults with `WalletManager`
 
 A vault in `WalletManager` serves as a secure container for wallets. The `WalletManager` manages wallets by interacting with these vaults, supporting operations such as `getAccounts`, which returns public information about all wallets stored in the vault, and `exportAccount`, which exports a private key for a given wallet address.
 
@@ -50,10 +50,10 @@ This will output something like this:
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-6{bash:line-numbers}
 
-As you can see, the WalletManager assigns unique `vaultIds` for each vault. The first vault you added has a `vaultId` of `0`, and the second one has a `vaultId` of `1`.
+As you can see, the `WalletManager` assigns unique `vaultIds` for each vault. The first vault you added has a `vaultId` of `0`, and the second one has a `vaultId` of `1`.
 
 Let's retrieve your wallet instance with the `getWallet` method:
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-7{ts:line-numbers}
 
-This guide walked through the steps to instantiate a WalletManager, set up its first vault, and retrieve vault information. The following sections will explore more functionalities of WalletManager, and go deeper into the usage of its vaults and the details of its storage system.
+This guide walked through the steps to instantiate a `WalletManager`, set up its first vault, and retrieve vault information. The following sections will explore more functionalities of `WalletManager`, and go deeper into the usage of its vaults and the details of its storage system.
