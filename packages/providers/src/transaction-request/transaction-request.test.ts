@@ -46,7 +46,9 @@ describe('TransactionRequest', () => {
 
       expect(txRequest.type).toEqual(txRequestLike.type);
       expect(toNumber(txRequest.gasPrice)).toEqual(txRequestLike.gasPrice);
-      expect(toNumber(txRequest.gasLimit)).toEqual(txRequestLike.gasLimit);
+      expect(toNumber((<ScriptTransactionRequest>txRequest).gasLimit)).toEqual(
+        txRequestLike.gasLimit
+      );
       expect(txRequest.maturity).toEqual(txRequestLike.maturity);
       expect(txRequest.inputs).toEqual(txRequestLike.inputs);
       expect(txRequest.outputs).toEqual(txRequestLike.outputs);

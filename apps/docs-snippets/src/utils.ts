@@ -68,7 +68,6 @@ export const createAndDeployContractFromProject = async (
   return contractFactory.deployContract({
     storageSlots,
     gasPrice: minGasPrice,
-    gasLimit: 0,
   });
 };
 

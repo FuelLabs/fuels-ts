@@ -41,10 +41,8 @@ export const MOCK_INPUT_COIN: InputCoin = {
   predicateLength: 0,
   txPointer: { blockHeight: 0, txIndex: 0 },
   type: InputType.Coin,
-  utxoID: {
-    transactionId: '0xf23da6e1d6a55d05f2a0ebbb90b6b161d9e70f1723680f610f08c98279bc6855',
-    outputIndex: 1,
-  },
+  txID: '0xf23da6e1d6a55d05f2a0ebbb90b6b161d9e70f1723680f610f08c98279bc6855',
+  outputIndex: 1,
   witnessIndex: 0,
 };
 export const MOCK_INPUT_CONTRACT: InputContract = {
@@ -56,10 +54,8 @@ export const MOCK_INPUT_CONTRACT: InputContract = {
     txIndex: 0,
   },
   type: InputType.Contract,
-  utxoID: {
-    outputIndex: 0,
-    transactionId: '0xf23da6e1d6a55d05f2a0ebbb90b6b161d9e70f1723680f610f08c98279bc6855',
-  },
+  outputIndex: 0,
+  txID: '0xf23da6e1d6a55d05f2a0ebbb90b6b161d9e70f1723680f610f08c98279bc6855',
 };
 
 export const MOCK_INPUT_MESSAGE: InputMessage = {
@@ -275,8 +271,7 @@ export const MOCK_ABIMAP = {
 };
 
 export const MOCK_TRANSACTION: Transaction = {
-  gasLimit: bn(100000000),
-  gasPrice: bn(1),
+  scriptGasLimit: bn(100000000),
   inputsCount: 3,
   inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
   outputsCount: 3,

@@ -6,13 +6,11 @@ import { getPortPromise } from 'portfinder';
 import treeKill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
+import { findBinPath } from '../../utils/findBinPath';
 import { getBinarySource } from '../../utils/getBinarySource';
 import { error, log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const npmWhich = require('npm-which')(__dirname);
 
 export type FuelCoreNode = {
   bindIp: string;
@@ -75,8 +73,7 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
   ].flat();
 
   return new Promise((resolve, reject) => {
-    // This line finds the path to the built-in fuels-core binary
-    const builtInFuelsCorePath = npmWhich.sync('fuels-core');
+    const builtInFuelsCorePath = findBinPath('fuels-core');
 
     const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });

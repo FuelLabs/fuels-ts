@@ -22,7 +22,7 @@ It tells the SDK about the <a :href="abiUrl" target="_blank" rel="noreferrer">AB
 
 Given the following Sway smart contract:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```rust:line-numbers
 contract;

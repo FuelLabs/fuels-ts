@@ -3,10 +3,16 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
+import { bn } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
+
+import type { GqlGasCosts } from '../__generated__/operations';
+import type { ChainInfo } from '../provider';
+import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
@@ -18,6 +24,8 @@ import { BaseTransactionRequest } from './transaction-request';
  * @hidden
  */
 export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike {
+  /** Gas limit for transaction */
+  gasLimit?: BigNumberish;
   /** Script to execute */
   script?: BytesLike;
   /** Script input data (parameters) */
@@ -37,6 +45,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   /** Type of the transaction */
   type = TransactionType.Script as const;
+  /** Gas limit for transaction */
+  gasLimit: BN;
   /** Script to execute */
   script: Uint8Array;
   /** Script input data (parameters) */
@@ -47,8 +57,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    *
    * @param scriptTransactionRequestLike - The initial values for the instance.
    */
-  constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
+  constructor({ script, scriptData, gasLimit, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
+    this.gasLimit = bn(gasLimit);
     this.script = getBytesCopy(script ?? returnZeroScript.bytes);
     this.scriptData = getBytesCopy(scriptData ?? returnZeroScript.encodeScriptData());
   }
@@ -63,6 +74,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const scriptData = getBytesCopy(this.scriptData ?? '0x');
     return {
       type: TransactionType.Script,
+      scriptGasLimit: this.gasLimit,
       ...super.getBaseTransaction(),
       scriptLength: script.length,
       scriptDataLength: scriptData.length,
@@ -135,6 +147,24 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
+  calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
+    const { consensusParameters } = chainInfo;
+    const { gasPerByte } = consensusParameters;
+
+    const witnessesLength = this.toTransaction().witnesses.reduce(
+      (acc, wit) => acc + wit.dataLength,
+      0
+    );
+
+    return getMaxGas({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: this.witnessLimit,
+      gasLimit: this.gasLimit,
+    });
+  }
+
   /**
    * Adds a contract input and output to the transaction request.
    *
@@ -174,5 +204,12 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const abiInterface = new Interface(abi);
     this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;
+  }
+
+  metadataGas(gasCosts: GqlGasCosts): BN {
+    return calculateMetadataGasForTxScript({
+      gasCosts,
+      txBytesSize: this.byteSize(),
+    });
   }
 }

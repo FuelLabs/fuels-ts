@@ -18,7 +18,6 @@ export const returnZeroScript: AbstractScriptRequest<void> = {
 export const withdrawScript: AbstractScriptRequest<void> = {
   /*
           The following code loads some basic values into registers and calls SMO to create an output message
-  
           5040C010 	- ADDI r16 $is i16   [r16 now points to memory 16 bytes from the start of this program (start of receiver data)]
           5D44C006	- LW r17 $is i6      [r17 set to the 6th word in this program (6*8=48 bytes from the start of this program)]
           4C400011	- SMO r16 r0 r0 r17  [send message out to address starting at memory position r16 with amount in r17]

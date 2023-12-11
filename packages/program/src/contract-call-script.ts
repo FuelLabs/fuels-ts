@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
+import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
@@ -246,13 +246,14 @@ export const getContractCallScript = (
           isHeap: call.isOutputDataHeap,
           encodedLength: call.outputEncodedLength,
         });
+
+        let gasForwardedSize = 0;
+
         paramOffsets.push({
-          gasForwardedOffset: call.gas
-            ? segmentOffset + WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE
-            : 0,
           amountOffset: segmentOffset,
           assetIdOffset: segmentOffset + WORD_SIZE,
-          callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN,
+          gasForwardedOffset: call.gas ? segmentOffset + WORD_SIZE + ASSET_ID_LEN : 0,
+          callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
         });
 
         /// script data, consisting of the following items in the given order:
@@ -265,8 +266,6 @@ export const getContractCallScript = (
         /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
         /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        let gasForwardedSize = 0;
-
         if (call.gas) {
           scriptData.push(new U64Coder().encode(call.gas));
 
