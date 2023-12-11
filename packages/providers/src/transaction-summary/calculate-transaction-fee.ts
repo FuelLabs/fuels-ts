@@ -13,7 +13,12 @@ import {
   getMinGas,
 } from '../utils/gas';
 
-interface FeeParams extends Pick<GqlFeeParameters, 'gasPerByte' | 'gasPriceFactor'> {}
+type FeeParams =
+  | Pick<GqlFeeParameters, 'gasPerByte' | 'gasPriceFactor'>
+  | {
+      gasPerByte: BN | number;
+      gasPriceFactor: BN | number;
+    };
 
 export type CalculateTransactionFeeParams = {
   gasUsed: BN;
