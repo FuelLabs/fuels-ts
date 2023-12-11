@@ -1,8 +1,9 @@
-import { versions } from '@fuel-ts/versions';
-import { exec } from 'child_process';
-import { compare } from 'compare-versions';
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { versions } = require('@fuel-ts/versions');
+const exec = require('child_process');
+const { compare } = require('compare-versions');
+const { readFileSync, readdirSync } = require('fs');
+const { join } = require('path');
 
 const DELETE_TAGS = /next|pr/;
 const { FUELS: CURRENT_VERSION } = versions;
