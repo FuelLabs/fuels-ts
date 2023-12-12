@@ -23,7 +23,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/contracts
 ### Installation
 
 ```sh
-yarn add @fuel-ts/contract
+pnpm add @fuel-ts/contract
 # or
 npm add @fuel-ts/contract
 ```
@@ -33,7 +33,7 @@ npm add @fuel-ts/contract
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

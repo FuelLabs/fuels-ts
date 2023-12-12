@@ -23,7 +23,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/predicate
 ### Installation
 
 ```sh
-yarn add @fuel-ts/predicate
+pnpm add @fuel-ts/predicate
 # or
 npm add @fuel-ts/predicate
 ```
@@ -33,7 +33,7 @@ npm add @fuel-ts/predicate
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```
