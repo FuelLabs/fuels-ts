@@ -38,7 +38,7 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
 
   const transactionBytes = getBytesCopy(rawPayload);
 
-  const [transaction] = new TransactionCoder().decode(getBytesCopy(rawPayload), 0);
+  const [transaction] = new TransactionCoder().decode(transactionBytes, 0);
 
   if (transaction.type === TransactionType.Mint) {
     return {
