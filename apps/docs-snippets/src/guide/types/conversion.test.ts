@@ -60,7 +60,7 @@ describe(__filename, () => {
 
     const b256 = '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f';
     const addressInstance = Address.fromDynamicInput(b256);
-    const bech32 = addressInstance.toBech32();
+    const bech32 = addressInstance.bech32Address;
     // fuel1d5cfwekq78r0zq73g7eg0747etkaxxltrqx5tncm7lvg89awe3hswhqjhs
 
     // #endregion conversion-7
