@@ -30,9 +30,17 @@ my-fuel-dapp # NextJS app or similar
 
 Add it to your `my-fuel-dapp` project:
 
-```console
+::: code-group
+
+```console [npm]
 npm install fuels --save
 ```
+
+```console [pnpm]
+pnpm add fuels
+```
+
+:::
 
 ## Double-checking
 
