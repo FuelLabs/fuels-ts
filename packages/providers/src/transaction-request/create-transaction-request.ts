@@ -96,6 +96,13 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     );
   }
 
+  /**
+   * Gets the Transaction Request by hashing the transaction.
+   *
+   * @param chainId - The chain ID.
+   *
+   * @returns - A hash of the transaction, which is the transaction ID.
+   */
   getTransactionId(chainId: number): string {
     return hashTransaction(this, chainId);
   }
