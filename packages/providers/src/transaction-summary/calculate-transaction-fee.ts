@@ -59,14 +59,12 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
   if (type === TransactionType.Create) {
     const { bytecodeWitnessIndex, storageSlots } = transaction as TransactionCreate;
 
-    const contractBytesSize = bn(
-      getBytesCopy(witnesses?.[bytecodeWitnessIndex]?.data || '0x').length
-    );
+    const contractBytesSize = bn(getBytesCopy(witnesses[bytecodeWitnessIndex].data).length);
 
     metadataGas = calculateMetadataGasForTxCreate({
       contractBytesSize,
       gasCosts,
-      stateRootSize: storageSlots?.length || 0,
+      stateRootSize: storageSlots.length || 0,
       txBytesSize: transactionBytes.length,
     });
   } else {
