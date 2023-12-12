@@ -1,10 +1,29 @@
 import type { BN, BNInput } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { Input } from '@fuel-ts/transactions';
+import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 
 import type { GqlDependentCost, GqlGasCosts } from '../__generated__/operations';
 import type { TransactionRequestInput } from '../transaction-request';
+import type {
+  TransactionResultReceipt,
+  TransactionResultScriptResultReceipt,
+} from '../transaction-response';
+
+/** @hidden */
+export const calculatePriceWithFactor = (gas: BN, gasPrice: BN, priceFactor: BN): BN =>
+  bn(Math.ceil(gas.mul(gasPrice).toNumber() / priceFactor.toNumber()));
+
+/** @hidden */
+export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): BN => {
+  const scriptResult = receipts.filter(
+    (receipt) => receipt.type === ReceiptType.ScriptResult
+  ) as TransactionResultScriptResultReceipt[];
+
+  const gasUsed = scriptResult.reduce((prev, receipt) => prev.add(receipt.gasUsed), bn(0));
+
+  return gasUsed;
+};
 
 export function resolveGasDependentCosts(byteSize: BNInput, gasDependentCost: GqlDependentCost) {
   const base = bn(gasDependentCost.base);
