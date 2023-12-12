@@ -1,14 +1,10 @@
-import type { Bytes, WalletLocked, AssetId } from 'fuels';
+import type { WalletLocked, AssetId } from 'fuels';
 import {
   Wallet,
   FUEL_NETWORK_URL,
   Provider,
   Contract,
   Address,
-  ZeroBytes32,
-  arrayify,
-  hexlify,
-  randomBytes,
   isBech32,
   toBech32,
   toB256,
