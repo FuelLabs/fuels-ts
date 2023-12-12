@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   clean-npm-versions:
-    name: Unpublish versions next, preview, master...
+    name: Unpublish versions next and pr
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
       - uses: actions/checkout@v3

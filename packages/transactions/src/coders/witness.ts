@@ -8,11 +8,6 @@ export type Witness = {
   dataLength: number;
   /** Witness data (byte[]) */
   data: string;
-  /**
-   * TODO: Temporary solution, remove after fixing
-   * https://github.com/FuelLabs/fuels-ts/issues/1331
-   */
-  offset?: number;
 };
 
 export class WitnessCoder extends Coder<Witness, Witness> {
@@ -47,7 +42,6 @@ export class WitnessCoder extends Coder<Witness, Witness> {
       {
         dataLength,
         data: witnessData,
-        offset,
       },
       o,
     ];
