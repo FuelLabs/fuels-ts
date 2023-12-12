@@ -1,5 +1,4 @@
 import { bn } from '@fuel-ts/math';
-import { describe } from 'node:test';
 
 import { MOCK_CHAIN } from '../../test/fixtures/chain';
 import {
