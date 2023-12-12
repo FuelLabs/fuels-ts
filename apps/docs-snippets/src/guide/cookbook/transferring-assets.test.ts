@@ -29,7 +29,7 @@ describe(__filename, () => {
     // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
-    const destinationWallet = Wallet.generate({
+    const destination = Wallet.generate({
       provider: senderWallet.provider,
     });
     const amountToTransfer = 500;
@@ -39,11 +39,11 @@ describe(__filename, () => {
 
     const txParams: TxParams = {
       gasPrice: minGasPrice,
-      gasLimit: 10_000,
+      gasLimit: 1_000,
     };
 
     const response = await senderWallet.transfer(
-      destinationWallet.address,
+      destination.address,
       amountToTransfer,
       assetId,
       txParams
@@ -52,7 +52,7 @@ describe(__filename, () => {
     await response.wait();
 
     // Retrieve balances
-    const receiverBalance = await destinationWallet.getBalance(assetId);
+    const receiverBalance = await destination.getBalance(assetId);
 
     // Validate new balance
     expect(new BN(receiverBalance).toNumber()).toEqual(amountToTransfer);
@@ -76,7 +76,7 @@ describe(__filename, () => {
 
     const txParams: TxParams = {
       gasPrice: minGasPrice,
-      gasLimit: 10_000,
+      gasLimit: 1_000,
     };
 
     const tx = await senderWallet.transferToContract(

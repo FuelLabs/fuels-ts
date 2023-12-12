@@ -2,9 +2,9 @@
 
 This documentation provides a guide on how to transfer assets between wallets and to contracts using the SDK.
 
-## Transferring Assets Between Wallets
+## Transferring Assets Between Accounts
 
-The `wallet.transfer` function is used to initiate a transaction that transfers an asset from one wallet to another. This function requires three parameters:
+The `account.transfer` function is used to initiate a transaction that transfers an asset from one wallet to another. This function requires three parameters:
 
 1. The receiver's wallet address.
 2. The amount of the asset to be transferred.
@@ -14,13 +14,13 @@ Upon execution, this function returns a promise that resolves to a transaction r
 
 ### Example
 
-Here is an illustration on how to use the `wallet.transfer` function:
+Here is an illustration on how to use the `account.transfer` function:
 
-<<< @/../../docs-snippets/src/guide/wallets/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
 
 ## Transferring Assets To Contracts
 
-When transferring assets to a deployed contract, we use the `transferToContract` method. This method closely mirrors the `wallet.transfer` method in terms of parameter structure.
+When transferring assets to a deployed contract, we use the `transferToContract` method. This method closely mirrors the `account.transfer` method in terms of parameter structure.
 
 However, instead of supplying the target wallet's address, as done in `myWallet.address` for the transfer method, we need to provide an instance of [Address](../types/address.md) created from the deployed contract id.
 
@@ -30,6 +30,6 @@ If you have the [Contract](../contracts/) instance of the deployed contract, you
 
 Here's an example demonstrating how to use `transferToContract`:
 
-<<< @/../../docs-snippets/src/guide/wallets/transferring-assets.test.ts#transferring-assets-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-2{ts:line-numbers}
 
 Remember to always invoke the `waitForResult()` function on the transaction response. This ensures that the transaction has been successfully mined before proceeding.
