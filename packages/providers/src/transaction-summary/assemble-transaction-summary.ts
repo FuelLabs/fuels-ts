@@ -20,10 +20,10 @@ import { processGraphqlStatus } from './status';
 import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 
 export interface AssembleTransactionSummaryParams {
-  id?: string;
   gasPerByte: BN;
   gasPriceFactor: BN;
   transaction: Transaction;
+  id?: string;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
@@ -71,8 +71,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
     consensusParameters: {
       gasCosts,
       feeParams: {
-        gasPerByte: gasPerByte.toString(),
-        gasPriceFactor: gasPriceFactor.toString(),
+        gasPerByte,
+        gasPriceFactor,
       },
     },
   });
