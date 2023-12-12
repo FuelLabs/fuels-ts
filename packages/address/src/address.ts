@@ -60,6 +60,15 @@ export default class Address extends AbstractAddress {
   }
 
   /**
+   * Returns the `bech32Address` property
+   *
+   * @returns The `bech32Address` property
+   */
+  toBech32(): Bech32Address {
+    return this.bech32Address;
+  }
+
+  /**
    * Converts and returns the `bech32Address` property to a byte array
    *
    * @returns The `bech32Address` property as a byte array
