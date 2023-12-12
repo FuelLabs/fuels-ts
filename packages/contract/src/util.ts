@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes } from '@fuel-ts/utils';
@@ -63,11 +64,17 @@ export const getContractId = (
  * Ensures that a string is hexlified.
  *
  * @param value - The value to be hexlified.
+ * @param isKnownHex - Required if using hex values that need to be converted
  * @returns The input value hexlified with prefix.
  */
-export const hexlifyWithPrefix = (value: string) => {
+export const hexlifyWithPrefix = (value: string, isKnownHex = false) => {
   if (value.startsWith('0x')) {
     return hexlify(value);
   }
-  return hexlify(`0x${value}`);
+
+  if (isKnownHex) {
+    return hexlify(`0x${value}`);
+  }
+
+  throw new FuelError(FuelError.CODES.UNEXPECTED_HEX_VALUE, `Value should be hex string ${value}.`);
 };

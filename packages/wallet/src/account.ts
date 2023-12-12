@@ -17,6 +17,7 @@ import type {
   ExcludeResourcesOption,
   TransactionResponse,
   Provider,
+  ScriptTransactionRequestLike,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -32,7 +33,10 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
+export type TxParamsType = Pick<
+  ScriptTransactionRequestLike,
+  'gasLimit' | 'gasPrice' | 'maturity' | 'maxFee' | 'witnessLimit'
+>;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
@@ -210,12 +214,12 @@ export class Account extends AbstractAccount {
     quantities: CoinQuantity[],
     fee: BN
   ): Promise<void> {
+    // TODO: Rollback to fee value after fix fee calculation
     addAmountToAsset({
-      amount: fee,
+      amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: quantities,
     });
-
     const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
   }
@@ -239,9 +243,12 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const { maxGasPerTx } = this.provider.getGasConfig();
-    const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
+    const { minGasPrice } = this.provider.getGasConfig();
+
+    const params = { gasPrice: minGasPrice, ...txParams };
+
     const request = new ScriptTransactionRequest(params);
+
     request.addCoinOutput(destination, amount, assetId);
 
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
@@ -270,6 +277,9 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const { minGasPrice } = this.provider.getGasConfig();
+    const params = { gasPrice: minGasPrice, ...txParams };
+
     const script = await composeScriptForTransferringToContract();
 
     const scriptData = formatScriptDataForTransferringToContract(
@@ -278,10 +288,8 @@ export class Account extends AbstractAccount {
       assetId
     );
 
-    const { maxGasPerTx } = this.provider.getGasConfig();
     const request = new ScriptTransactionRequest({
-      gasLimit: maxGasPerTx,
-      ...txParams,
+      ...params,
       script,
       scriptData,
     });
@@ -326,19 +334,12 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    // build the transaction
-    const { maxGasPerTx } = this.provider.getGasConfig();
-    const params = { script, gasLimit: maxGasPerTx, ...txParams };
+    const params = { script, ...txParams };
     const request = new ScriptTransactionRequest(params);
 
-    const { gasPriceFactor } = this.provider.getGasConfig();
+    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(request);
 
-    const fee = request.calculateFee(gasPriceFactor);
-    let quantities: CoinQuantityLike[] = [];
-    fee.amount = fee.amount.add(amount);
-    quantities = [fee];
-    const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
   }
@@ -354,7 +355,7 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
-    return this.provider.sendTransaction(transactionRequest);
+    return this.provider.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   /**
@@ -366,6 +367,6 @@ export class Account extends AbstractAccount {
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
-    return this.provider.simulate(transactionRequest);
+    return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 }

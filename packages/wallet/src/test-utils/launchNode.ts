@@ -2,6 +2,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { hexlify } from 'ethers';
@@ -10,14 +11,14 @@ import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
-import kill from 'tree-kill';
+import treeKill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
 import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
 
-const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
+const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation'];
 
 type LaunchNodeOptions = {
   chainConfigPath?: string;
@@ -33,6 +34,34 @@ export type LaunchNodeResult = Promise<{
   ip: string;
   port: string;
 }>;
+
+export type KillNodeParams = {
+  child: ChildProcessWithoutNullStreams;
+  configPath: string;
+  killFn: (pid: number) => void;
+  state: {
+    isDead: boolean;
+  };
+};
+
+export const killNode = (params: KillNodeParams) => {
+  const { child, configPath, state, killFn } = params;
+  if (!state.isDead) {
+    if (child.pid) {
+      state.isDead = true;
+      killFn(Number(child.pid));
+    }
+
+    // Remove all the listeners we've added.
+    child.stdout.removeAllListeners();
+    child.stderr.removeAllListeners();
+
+    // Remove the temporary folder and all its contents.
+    if (fsSync.existsSync(configPath)) {
+      fsSync.rmSync(configPath, { recursive: true });
+    }
+  }
+};
 
 // #region launchNode-launchNodeOptions
 /**
@@ -54,7 +83,7 @@ export const launchNode = async ({
   useSystemFuelCore = false,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
-  new Promise(async (resolve) => {
+  new Promise(async (resolve, reject) => {
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
@@ -126,20 +155,13 @@ export const launchNode = async ({
       ...args,
     ]);
 
-    // Cleanup function where fuel-core is stopped.
-    const cleanup = () => {
-      if (child.pid) {
-        kill(Number(child.pid));
-      }
-
-      // Remove all the listeners we've added.
-      child.stdout.removeAllListeners();
-      child.stderr.removeAllListeners();
-
-      // Remove the temporary folder and all its contents.
-      if (!chainConfigPath) {
-        spawn('rm', ['-rf', tempDirPath]);
-      }
+    const cleanupConfig: KillNodeParams = {
+      child,
+      configPath: tempDirPath,
+      killFn: treeKill,
+      state: {
+        isDead: false,
+      },
     };
 
     child.stderr.setEncoding('utf8');
@@ -150,25 +172,30 @@ export const launchNode = async ({
       if (chunk.indexOf(graphQLStartSubstring) !== -1) {
         // Resolve with the cleanup method.
         resolve({
-          cleanup,
+          cleanup: () => killNode(cleanupConfig),
           ip: ipToUse,
           port: portToUse,
         });
       }
+      if (/error/i.test(chunk)) {
+        reject(chunk.toString());
+      }
     });
 
     // Process exit.
-    process.on('exit', cleanup);
+    process.on('exit', killNode);
 
     // Catches ctrl+c event.
-    process.on('SIGINT', cleanup);
+    process.on('SIGINT', killNode);
 
     // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', cleanup);
-    process.on('SIGUSR2', cleanup);
+    process.on('SIGUSR1', killNode);
+    process.on('SIGUSR2', killNode);
 
     // Catches uncaught exceptions.
-    process.on('uncaughtException', cleanup);
+    process.on('uncaughtException', killNode);
+
+    child.on('error', reject);
   });
 
 const generateWallets = async (count: number, provider: Provider) => {

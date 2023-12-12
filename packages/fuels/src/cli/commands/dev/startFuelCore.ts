@@ -6,7 +6,7 @@ import { getPortPromise } from 'portfinder';
 import treeKill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
-import { findPackageRoot } from '../../utils/findPackageRoot';
+import { findBinPath } from '../../utils/findBinPath';
 import { getBinarySource } from '../../utils/getBinarySource';
 import { error, log, loggingConfig } from '../../utils/logger';
 
@@ -73,8 +73,7 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
   ].flat();
 
   return new Promise((resolve, reject) => {
-    const pkgRootDir = findPackageRoot();
-    const builtInFuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
+    const builtInFuelsCorePath = findBinPath('fuels-core');
 
     const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });

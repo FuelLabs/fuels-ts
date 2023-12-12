@@ -1,13 +1,15 @@
 import { bn, type BN } from '@fuel-ts/math';
-import { type Transaction } from '@fuel-ts/transactions';
+import { PolicyType, type Transaction } from '@fuel-ts/transactions';
 import { hexlify } from 'ethers';
 
+import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
+import { calculatePriceWithFactor, getGasUsedFromReceipts } from '../utils';
 import {
-  calculateTransactionFee,
-  calculateTxChargeableBytes,
-  getGasUsedFromReceipts,
-} from '../utils';
+  calculateMetadataGasForTxCreate,
+  calculateMetadataGasForTxScript,
+  getMinGas,
+} from '../utils/gas';
 
 import { fromTai64ToDate } from './date';
 import {
@@ -31,6 +33,7 @@ export interface AssembleTransactionSummaryParams {
   receipts: TransactionResultReceipt[];
   abiMap?: AbiMap;
   maxInputs: BN;
+  gasCosts: GqlGasCosts;
 }
 
 /** @hidden */
@@ -38,34 +41,23 @@ export function assembleTransactionSummary<TTransactionType = void>(
   params: AssembleTransactionSummaryParams
 ) {
   const {
+    id,
     receipts,
     gasPerByte,
     gasPriceFactor,
     transaction,
     transactionBytes,
-    id,
     gqlTransactionStatus,
     abiMap = {},
     maxInputs,
+    gasCosts,
   } = params;
 
-  const { gasLimit = bn(0), witnesses } = transaction;
+  const { policies } = transaction;
 
-  const gasPrice = bn(transaction.gasPrice);
+  const gasPrice =
+    bn(policies?.find((policy) => policy.type === PolicyType.GasPrice)?.data) || bn(0);
   const gasUsed = getGasUsedFromReceipts(receipts);
-  const chargeableBytes = calculateTxChargeableBytes({
-    transactionBytes,
-    transactionWitnesses: witnesses,
-  });
-
-  const { minFee: fee } = calculateTransactionFee({
-    gasUsed,
-    gasPrice,
-    gasLimit,
-    gasPerByte,
-    gasPriceFactor,
-    chargeableBytes,
-  });
 
   const operations = getOperations({
     transactionType: transaction.type,
@@ -78,6 +70,40 @@ export function assembleTransactionSummary<TTransactionType = void>(
   });
 
   const typeName = getTransactionTypeName(transaction.type);
+
+  const isScriptTx = isTypeScript(transaction.type);
+  let metadataGas: BN;
+
+  if (isScriptTx) {
+    metadataGas = calculateMetadataGasForTxScript({
+      gasCosts,
+      txBytesSize: transactionBytes.length,
+    });
+  } else {
+    const { storageSlotsCount = 0, witnesses = [], bytecodeWitnessIndex = -1 } = transaction;
+    const contractBytesSize = bn(witnesses[bytecodeWitnessIndex]?.dataLength || 0);
+
+    metadataGas = calculateMetadataGasForTxCreate({
+      contractBytesSize,
+      gasCosts,
+      stateRootSize: storageSlotsCount,
+      txBytesSize: transactionBytes.length,
+    });
+  }
+
+  const minGas = getMinGas({
+    gasCosts,
+    gasPerByte,
+    inputs: transaction.inputs || [],
+    metadataGas,
+    txBytesSize: transactionBytes.length,
+  });
+
+  const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
+
+  const usedFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
+
+  const fee = minFee.add(usedFee);
 
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);

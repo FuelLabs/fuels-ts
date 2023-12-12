@@ -19,7 +19,7 @@ const deployContract = async (
 };
 
 let walletInstance: WalletUnlocked;
-const createWallet = async () => {
+export const createWallet = async () => {
   if (walletInstance) {
     return walletInstance;
   }

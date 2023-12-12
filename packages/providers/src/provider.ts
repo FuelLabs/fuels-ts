@@ -19,6 +19,7 @@ import { clone } from 'ramda';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
+  GqlGasCosts,
   GqlGetBlocksQueryVariables,
 } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -38,8 +39,7 @@ import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
-  calculateTransactionFee,
-  calculateTxChargeableBytes,
+  calculatePriceWithFactor,
   fromUnixToTai64,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
@@ -86,6 +86,7 @@ type ConsensusParameters = {
   gasPerByte: BN;
   maxMessageDataLength: BN;
   chainId: BN;
+  gasCosts: GqlGasCosts;
 };
 
 /**
@@ -96,6 +97,7 @@ export type ChainInfo = {
   baseChainHeight: BN;
   peerCount: number;
   consensusParameters: ConsensusParameters;
+  gasCosts: GqlGasCosts;
   latestBlock: {
     id: string;
     height: BN;
@@ -130,36 +132,44 @@ export type TransactionCost = {
   receipts: TransactionResultReceipt[];
   minGasPrice: BN;
   gasPrice: BN;
+  minGas: BN;
+  maxGas: BN;
   gasUsed: BN;
   minFee: BN;
   maxFee: BN;
+  usedFee: BN;
 };
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
-  const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, peerCount, consensusParameters, latestBlock } = chain;
+
+  const { contractParams, feeParams, predicateParams, scriptParams, txParams, gasCosts } =
+    consensusParameters;
 
   return {
     name,
-    baseChainHeight: bn(baseChainHeight),
+    baseChainHeight: bn(daHeight),
     peerCount,
     consensusParameters: {
-      contractMaxSize: bn(consensusParameters.contractMaxSize),
-      maxInputs: bn(consensusParameters.maxInputs),
-      maxOutputs: bn(consensusParameters.maxOutputs),
-      maxWitnesses: bn(consensusParameters.maxWitnesses),
-      maxGasPerTx: bn(consensusParameters.maxGasPerTx),
-      maxScriptLength: bn(consensusParameters.maxScriptLength),
-      maxScriptDataLength: bn(consensusParameters.maxScriptDataLength),
-      maxStorageSlots: bn(consensusParameters.maxStorageSlots),
-      maxPredicateLength: bn(consensusParameters.maxPredicateLength),
-      maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
-      maxGasPerPredicate: bn(consensusParameters.maxGasPerPredicate),
-      gasPriceFactor: bn(consensusParameters.gasPriceFactor),
-      gasPerByte: bn(consensusParameters.gasPerByte),
-      maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
+      contractMaxSize: bn(contractParams.contractMaxSize),
+      maxInputs: bn(txParams.maxInputs),
+      maxOutputs: bn(txParams.maxOutputs),
+      maxWitnesses: bn(txParams.maxWitnesses),
+      maxGasPerTx: bn(txParams.maxGasPerTx),
+      maxScriptLength: bn(scriptParams.maxScriptLength),
+      maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
+      maxStorageSlots: bn(contractParams.maxStorageSlots),
+      maxPredicateLength: bn(predicateParams.maxPredicateLength),
+      maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
+      maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
+      gasPriceFactor: bn(feeParams.gasPriceFactor),
+      gasPerByte: bn(feeParams.gasPerByte),
+      maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
       chainId: bn(consensusParameters.chainId),
+      gasCosts,
     },
+    gasCosts,
     latestBlock: {
       id: latestBlock.id,
       height: bn(latestBlock.header.height),
@@ -189,10 +199,6 @@ export type CursorPaginationArgs = {
   before?: string | null;
 };
 
-export type BuildPredicateOptions = {
-  fundTransaction?: boolean;
-} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
-
 export type FetchRequestOptions = {
   method: 'POST';
   headers: { [key: string]: string };
@@ -208,11 +214,34 @@ export type ProviderOptions = {
 };
 
 /**
- * Provider Call transaction params
+ * UTXO Validation Param
  */
-export type ProviderCallParams = {
+export type UTXOValidationParams = {
   utxoValidation?: boolean;
 };
+
+/**
+ * Transaction estimation Param
+ */
+export type EstimateTransactionParams = {
+  estimateTxDependencies?: boolean;
+};
+
+export type EstimatePredicateParams = {
+  estimatePredicates?: boolean;
+};
+
+export type TransactionCostParams = EstimateTransactionParams & EstimatePredicateParams;
+
+/**
+ * Provider Call transaction params
+ */
+export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParams;
+
+/**
+ * Provider Send transaction params
+ */
+export type ProviderSendTxParams = EstimateTransactionParams;
 
 /**
  * URL - Consensus Params mapping.
@@ -300,7 +329,7 @@ export default class Provider {
    */
   getGasConfig() {
     const { minGasPrice } = this.getNode();
-    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte } =
+    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte, gasCosts } =
       this.getChain().consensusParameters;
     return {
       minGasPrice,
@@ -308,6 +337,7 @@ export default class Provider {
       maxGasPerPredicate,
       gasPriceFactor,
       gasPerByte,
+      gasCosts,
     };
   }
 
@@ -474,27 +504,35 @@ export default class Provider {
    */
   // #region Provider-sendTransaction
   async sendTransaction(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     this.#cacheInputs(transactionRequest.inputs);
-    await this.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.estimateTxDependencies(transactionRequest);
+    }
     // #endregion Provider-sendTransaction
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest);
+    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, [], {
+      estimateTxDependencies: false,
+      estimatePredicates: false,
+    });
 
-    // Fail transaction before submit to avoid submit failure
-    // Resulting in lost of funds on a OutOfGas situation.
-    if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
+    if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
       throw new FuelError(
         ErrorCode.GAS_PRICE_TOO_LOW,
         `Gas price '${transactionRequest.gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
+    }
+
+    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
+
+    if (isScriptTransaction && bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
@@ -518,10 +556,12 @@ export default class Provider {
    */
   async call(
     transactionRequestLike: TransactionRequestLike,
-    { utxoValidation }: ProviderCallParams = {}
+    { utxoValidation, estimateTxDependencies = true }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.estimateTxDependencies(transactionRequest);
+    }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -585,13 +625,15 @@ export default class Provider {
       return;
     }
 
-    const encodedTransaction = transactionRequest.hasPredicateInput()
-      ? hexlify((await this.estimatePredicates(transactionRequest)).toTransactionBytes())
-      : hexlify(transactionRequest.toTransactionBytes());
+    let txRequest = transactionRequest;
+
+    if (txRequest.hasPredicateInput()) {
+      txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
+    }
 
     do {
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction,
+        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
         utxoValidation: false,
       });
       const receipts = gqlReceipts.map(processGqlReceipt);
@@ -605,11 +647,11 @@ export default class Provider {
         return;
       }
 
-      if (transactionRequest instanceof ScriptTransactionRequest) {
-        transactionRequest.addVariableOutputs(missingOutputVariableCount);
+      if (txRequest instanceof ScriptTransactionRequest) {
+        txRequest.addVariableOutputs(missingOutputVariableCount);
 
         missingOutputContractIds.forEach(({ contractId }) =>
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
+          txRequest.addContractInputAndOutput(Address.fromString(contractId))
         );
       }
 
@@ -627,9 +669,14 @@ export default class Provider {
    * @param transactionRequestLike - The transaction request object.
    * @returns A promise that resolves to the call result object.
    */
-  async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async simulate(
+    transactionRequestLike: TransactionRequestLike,
+    { estimateTxDependencies = true }: EstimateTransactionParams = {}
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.estimateTxDependencies(transactionRequest);
+    }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -658,67 +705,113 @@ export default class Provider {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    forwardingQuantities: CoinQuantity[] = []
+    forwardingQuantities: CoinQuantity[] = [],
+    { estimateTxDependencies = true, estimatePredicates = true }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
-    const clonedTransactionRequest = transactionRequestify(clone(transactionRequestLike));
+    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
+    const chainInfo = this.getChain();
+    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
+    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
+    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
 
-    const { gasLimit } = clonedTransactionRequest;
-    let { gasPrice } = clonedTransactionRequest;
-    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = this.getGasConfig();
+    /**
+     * Estimate predicates gasUsed
+     */
+    if (transactionRequest.hasPredicateInput() && estimatePredicates) {
+      // Remove gasLimit to avoid gasLimit when estimating predicates
+      if (isScriptTransaction) {
+        transactionRequest.gasLimit = bn(0);
+      }
+      await this.estimatePredicates(transactionRequest);
+    }
 
-    gasPrice = max(gasPrice, minGasPrice);
+    /**
+     * Calculate minGas and maxGas based on the real transaction
+     */
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
 
+    /**
+     * Fund with fake UTXOs to avoid not enough funds error
+     */
     // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantitites = clonedTransactionRequest.getCoinOutputsQuantities();
+    const coinOutputsQuantities = transactionRequest.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantitites, forwardingQuantities);
+    const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
     // Funding transaction with fake utxos
-    clonedTransactionRequest.fundWithFakeUtxos(allQuantities);
+    transactionRequest.fundWithFakeUtxos(allQuantities);
 
-    const transactionBytes = clonedTransactionRequest.toTransactionBytes();
-    const chargeableBytes = calculateTxChargeableBytes({
-      transactionBytes,
-      transactionWitnesses: new TransactionCoder().decode(transactionBytes, 0)[0].witnesses,
-    });
+    /**
+     * Estimate gasUsed for script transactions
+     */
 
-    let gasUsed = bn(0);
+    let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
-    const isTransactionCreate = clonedTransactionRequest.type === TransactionType.Create;
-
     // Transactions of type Create does not consume any gas so we can the dryRun
-    if (!isTransactionCreate) {
+    if (isScriptTransaction) {
       /**
        * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
        * This simplifies the funding with fake utxos, since the coin quantities required
        * will only be amounts being transferred (coin outputs) and amounts being forwarded
        * to contract calls.
        */
-      clonedTransactionRequest.gasPrice = bn(0);
-      clonedTransactionRequest.gasLimit = maxGasPerTx;
+      // Calculate the gasLimit again as we insert a fake UTXO and signer
 
+      transactionRequest.gasPrice = bn(0);
+      transactionRequest.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
       // Executing dryRun with fake utxos to get gasUsed
-      const result = await this.call(clonedTransactionRequest);
+      const result = await this.call(transactionRequest, {
+        estimateTxDependencies,
+      });
       receipts = result.receipts;
       gasUsed = getGasUsedFromReceipts(receipts);
+    } else {
+      // For CreateTransaction the gasUsed is going to be the minGas
+      gasUsed = minGas;
     }
-
-    const { minFee, maxFee } = calculateTransactionFee({
-      gasPrice,
-      gasPerByte,
-      gasPriceFactor,
-      chargeableBytes,
-      gasLimit,
-      gasUsed,
-    });
 
     return {
       requiredQuantities: allQuantities,
-      minGasPrice,
       receipts,
-      gasPrice,
       gasUsed,
-      minFee,
-      maxFee,
+      minGasPrice,
+      gasPrice,
+      minGas,
+      maxGas,
+      usedFee: calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor),
+      minFee: calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor),
+      maxFee: calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor),
+    };
+  }
+
+  async getResourcesForTransaction(
+    owner: AbstractAddress,
+    transactionRequestLike: TransactionRequestLike,
+    forwardingQuantities: CoinQuantity[] = []
+  ) {
+    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
+    const transactionCost = await this.getTransactionCost(transactionRequest, forwardingQuantities);
+
+    // Add the required resources to the transaction from the owner
+    transactionRequest.addResources(
+      await this.getResourcesToSpend(owner, transactionCost.requiredQuantities)
+    );
+    // Refetch transaction costs with the new resources
+    // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
+    // returning a specific gasUsed by the predicate.
+    // Also for the dryRun we could have the same issue as we are going to run twice the dryRun and the
+    // estimateTxDependencies as we don't have access to the transaction, maybe returning the transaction would
+    // be better.
+    const { requiredQuantities, ...txCost } = await this.getTransactionCost(
+      transactionRequest,
+      forwardingQuantities
+    );
+    const resources = await this.getResourcesToSpend(owner, requiredQuantities);
+
+    return {
+      resources,
+      requiredQuantities,
+      ...txCost,
     };
   }
 
@@ -837,9 +930,9 @@ export default class Provider {
   ): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: bn(idOrHeight).toString(10) };
+      variables = { height: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: (await this.getBlockNumber()).toString(10) };
+      variables = { height: (await this.getBlockNumber()).toString(10) };
     } else if (idOrHeight.length === 66) {
       variables = { blockId: idOrHeight };
     } else {
@@ -1065,8 +1158,7 @@ export default class Provider {
   async getMessageProof(
     /** The transaction to get message from */
     transactionId: string,
-    /** The message id from MessageOut receipt */
-    messageId: string,
+    nonce: string,
     commitBlockId?: string,
     commitBlockHeight?: BN
   ): Promise<MessageProof | null> {
@@ -1074,12 +1166,12 @@ export default class Provider {
       /** The transaction to get message from */
       transactionId: string;
       /** The message id from MessageOut receipt */
-      messageId: string;
+      nonce: string;
       commitBlockId?: string;
       commitBlockHeight?: string;
     } = {
       transactionId,
-      messageId,
+      nonce,
     };
 
     if (commitBlockId && commitBlockHeight) {
@@ -1116,7 +1208,6 @@ export default class Provider {
       messageBlockHeader,
       commitBlockHeader,
       blockProof,
-      nonce,
       sender,
       recipient,
       amount,

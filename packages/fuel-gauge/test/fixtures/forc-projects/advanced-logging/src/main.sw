@@ -45,7 +45,9 @@ impl AdvancedLogging for Contract {
             ammo: 10,
             game_id: 10_11_12u64,
             state: GameState::Playing(1),
-            contract_Id: ContractId::from(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF),
+            contract_Id: ContractId::from(
+                0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+            ),
             difficulty: Difficulty::Medium(true),
         };
 
@@ -93,7 +95,9 @@ impl AdvancedLogging for Contract {
             ammo: 10,
             game_id: 10_11_12u64,
             state: GameState::Playing(1),
-            contract_Id: ContractId::from(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF),
+            contract_Id: ContractId::from(
+                0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+            ),
             difficulty: Difficulty::Medium(true),
         };
         require(a == b, game_ref);

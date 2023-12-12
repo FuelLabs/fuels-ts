@@ -31,7 +31,7 @@ describe('std-lib-string Tests', () => {
   it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions
       .return_dynamic_string()
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string>();
     expect(value).toBe('Hello World');
   });
@@ -41,7 +41,7 @@ describe('std-lib-string Tests', () => {
 
     const { value } = await contractInstance.functions
       .accepts_dynamic_string(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeUndefined();
@@ -62,6 +62,7 @@ describe('std-lib-string Tests', () => {
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
@@ -69,7 +70,7 @@ describe('std-lib-string Tests', () => {
     const initialReceiverBalance = await receiver.getBalance();
     const tx = await predicate
       .setData(1, 2, 'Hello World')
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // Check the balance of the receiver
@@ -89,7 +90,10 @@ describe('std-lib-string Tests', () => {
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
 
-    const { value } = await scriptInstance.functions.main(INPUT).txParams({ gasPrice }).call<BN>();
+    const { value } = await scriptInstance.functions
+      .main(INPUT)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call<BN>();
 
     expect(value.toNumber()).toStrictEqual(0);
   });

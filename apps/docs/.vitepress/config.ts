@@ -92,6 +92,10 @@ export default defineConfig({
                 link: '/guide/types/evm-address',
               },
               {
+                text: 'Asset Id',
+                link: '/guide/types/asset-id',
+              },
+              {
                 text: 'Arrays',
                 link: '/guide/types/arrays',
               },
@@ -362,6 +366,10 @@ export default defineConfig({
               {
                 text: 'Calling A Script',
                 link: '/guide/scripts/calling-a-script',
+              },
+              {
+                text: 'Preparing A Script',
+                link: '/guide/scripts/preparing-a-script',
               },
               {
                 text: 'Script With Configurable Constants',

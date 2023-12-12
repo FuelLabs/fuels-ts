@@ -10,7 +10,7 @@ Consider the following predicate:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
-This predicate accepts an address of type `b256` and compares it with a hardcoded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
+This predicate accepts an address of type `b256` and compares it with a hard-coded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
 
 ## Interacting with the Predicate Using SDK
 
@@ -46,7 +46,7 @@ Trying to forward the entire amount held by the predicate results in an error be
 
 ## Predicate Validation Failure
 
-What happens when a predicate fails to validate? Recall our predicate only validates if the `input_address` matches the hardcoded `valid_address`. Hence, if we set a different data from the `valid_address`, the predicate will fail to validate.
+What happens when a predicate fails to validate? Recall our predicate only validates if the `input_address` matches the hard-coded `valid_address`. Hence, if we set a different data from the `valid_address`, the predicate will fail to validate.
 
 When a predicate fails to validate, the SDK throws an error that starts like this:
 

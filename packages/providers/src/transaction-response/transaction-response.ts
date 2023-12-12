@@ -177,7 +177,7 @@ export class TransactionResponse {
 
     const receipts = transaction.receipts?.map(processGqlReceipt) || [];
 
-    const { gasPerByte, gasPriceFactor } = this.provider.getGasConfig();
+    const { gasPerByte, gasPriceFactor, gasCosts } = this.provider.getGasConfig();
     const maxInputs = this.provider.getChain().consensusParameters.maxInputs;
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
@@ -190,6 +190,7 @@ export class TransactionResponse {
       gasPriceFactor,
       abiMap: contractsAbiMap,
       maxInputs,
+      gasCosts,
     });
 
     return transactionSummary;

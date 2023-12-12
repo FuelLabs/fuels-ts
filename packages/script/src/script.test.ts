@@ -13,15 +13,14 @@ import type { Account } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { getBytesCopy } from 'ethers';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
+import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
 
 import { Script } from './index';
 
-const scriptBin = readFileSync(
-  join(__dirname, '../test/fixtures/forc-projects/call-test-script/out/debug/call-test-script.bin')
+const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcProject(
+  ScriptProjectsEnum.CALL_TEST_SCRIPT
 );
 
 const setup = async () => {
@@ -42,7 +41,7 @@ const callScript = async <TData, TResult>(
   result: TResult;
   response: TransactionResponse;
 }> => {
-  const { gasPriceFactor, minGasPrice } = account.provider.getGasConfig();
+  const { minGasPrice } = account.provider.getGasConfig();
 
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
@@ -53,7 +52,7 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
+  requiredCoinQuantities.push({ amount: 1000, assetId: BaseAssetId });
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
@@ -80,7 +79,7 @@ type MyStruct = {
 describe('Script', () => {
   let scriptRequest: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(() => {
-    const abiInterface = new Interface(jsonAbiFragmentMock);
+    const abiInterface = new Interface(scriptJsonAbi);
     scriptRequest = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {

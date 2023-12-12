@@ -52,7 +52,11 @@ impl RevertError for Contract {
         data.push(1);
         data.push(2);
         data.push(3);
-        send_message(0x0000000000000000000000000000000000000000000000000000000000000000, data, 0);
+        send_message(
+            0x0000000000000000000000000000000000000000000000000000000000000000,
+            data,
+            0,
+        );
     }
 
     fn failed_transfer() {

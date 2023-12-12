@@ -22,7 +22,10 @@ describe('ExampleContract', () => {
     const contract = await factory.deployContract({ gasPrice });
 
     // Call
-    const { value } = await contract.functions.return_input(1337).txParams({ gasPrice }).call();
+    const { value } = await contract.functions
+      .return_input(1337)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -31,7 +34,7 @@ describe('ExampleContract', () => {
     const contractInstance = DemoContractAbi__factory.connect(contract.id, wallet);
     const { value: v2 } = await contractInstance.functions
       .return_input(1337)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(v2.toHex()).toBe(toHex(1337));
   });
@@ -44,7 +47,10 @@ describe('ExampleContract', () => {
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, { gasPrice });
 
     // Call
-    const { value } = await contract.functions.return_input(1337).txParams({ gasPrice }).call();
+    const { value } = await contract.functions
+      .return_input(1337)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -61,7 +67,9 @@ it('should throw when simulating via contract factory with wallet with no resour
   const contract = await factory.deployContract({ gasPrice });
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
+  const { error } = await safeExec(() =>
+    contractInstance.functions.return_input(1337).txParams({ gasLimit: 10_000 }).simulate()
+  );
 
   expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });
@@ -75,7 +83,9 @@ it('should throw when dry running via contract factory with wallet with no resou
   const contract = await factory.deployContract({ gasPrice });
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).dryRun());
+  const { error } = await safeExec(() =>
+    contractInstance.functions.return_input(1337).txParams({ gasLimit: 10_000 }).dryRun()
+  );
 
   expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });
