@@ -31,7 +31,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ## Installation
 
 ```sh
-yarn add @fuel-ts/versions
+pnpm add @fuel-ts/versions
 # or
 npm add @fuel-ts/versions
 ```
@@ -64,7 +64,7 @@ You have all the right versions! ⚡
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```
