@@ -15,9 +15,10 @@ jobs:
     uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
     with:
       doc-folder-path: "apps/docs/src"
+      spellcheck-config-path: "apps/docs/.spellcheck.yml"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
       - name: Checkout
         uses: actions/checkout@v3
