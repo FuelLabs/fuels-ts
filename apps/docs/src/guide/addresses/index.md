@@ -14,6 +14,6 @@ At times, these can even be wrapped in a [Struct](../types/structs.md). Such as 
 
 <<< @/../../docs-snippets/src/guide/types/evm-address.test.ts#addresses-3{ts:line-numbers}
 
-The TS-SDK makes converting between these addresses simple using the [Address](../types/address.md) helper which provides various utilities for conversion.
+The TS-SDK makes converting between these addresses simple using the [Address](../types/address.md) helper, which provides various utilities for conversion.
 
 The following [conversion guide](./conversion.md) will show how to utilize this class to convert between address formats, as well as Sway Standard Types.
