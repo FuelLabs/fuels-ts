@@ -21,6 +21,7 @@ import type {
   GqlChainInfoFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
+  GqlPeerInfo,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -96,7 +97,6 @@ type ConsensusParameters = {
 export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
-  peerCount: number;
   consensusParameters: ConsensusParameters;
   gasCosts: GqlGasCosts;
   latestBlock: {
@@ -117,6 +117,7 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
+  peers: GqlPeerInfo[];
 };
 
 export type NodeInfoAndConsensusParameters = {
@@ -143,7 +144,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
-  const { name, daHeight, peerCount, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const { contractParams, feeParams, predicateParams, scriptParams, txParams, gasCosts } =
     consensusParameters;
@@ -151,7 +152,6 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   return {
     name,
     baseChainHeight: bn(daHeight),
-    peerCount,
     consensusParameters: {
       contractMaxSize: bn(contractParams.contractMaxSize),
       maxInputs: bn(txParams.maxInputs),
@@ -489,6 +489,7 @@ export default class Provider {
       nodeVersion: nodeInfo.nodeVersion,
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
+      peers: nodeInfo.peers,
     };
 
     Provider.nodeInfoCache[this.url] = processedNodeInfo;
