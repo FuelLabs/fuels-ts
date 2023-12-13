@@ -13,21 +13,29 @@ import {
   getProjectTempDir,
 } from './getForcProject';
 
-vi.mock('path', () => ({
-  __esModule: true,
-  ...vi.requireActual('path'),
-}));
+vi.mock('path', async () => {
+  const mod = await vi.importActual('path');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
-vi.mock('fs', () => ({
-  __esModule: true,
-  ...vi.requireActual('fs'),
-}));
+vi.mock('fs', async () => {
+  const mod = await vi.importActual('fs');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 /**
  * @group node
  */
 describe('getForcProject', () => {
-  afterEach(vi.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should return the correct temporary directory path on getProjectTempDir', () => {
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
