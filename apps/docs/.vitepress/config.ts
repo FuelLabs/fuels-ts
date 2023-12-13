@@ -151,10 +151,6 @@ export default defineConfig({
                 text: 'Vectors',
                 link: '/guide/types/vectors',
               },
-              {
-                text: 'Conversion',
-                link: '/guide/types/conversion',
-              },
             ],
           },
           {
@@ -309,6 +305,17 @@ export default defineConfig({
               {
                 text: 'The Fuelvm Binary File',
                 link: '/guide/contracts/the-fuelvm-binary-file',
+              },
+            ],
+          },
+          {
+            text: 'Addresses',
+            link: '/guide/addresses',
+            collapsed: true,
+            items: [
+              {
+                text: 'Conversion',
+                link: 'guide/addresses/conversion',
               },
             ],
           },
