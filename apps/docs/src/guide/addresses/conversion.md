@@ -8,7 +8,7 @@ By instantiating an `Address`, we can validate a `Bech32` address and easily con
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-5{ts:line-numbers}
 
-Or if you'd prefer to use utility functions directly for validation and conversion, you can use `isBech32` and `toB256`:
+Or, if you'd prefer to use utility functions directly for validation and conversion, you can use `isBech32` and `toB256`:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-6{ts:line-numbers}
 
