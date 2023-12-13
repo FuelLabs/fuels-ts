@@ -613,6 +613,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
+   * Gets the Transaction Request by hashing the transaction.
+   *
+   * @param chainId - The chain ID.
+   *
+   * @returns - A hash of the transaction, which is the transaction ID.
+   */
+  abstract getTransactionId(chainId: number): string;
+
+  /**
    * Return the minimum amount in native coins required to create
    * a transaction.
    *

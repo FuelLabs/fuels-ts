@@ -1,4 +1,4 @@
-import type { B256AddressEvm, Contract, EvmAddress } from 'fuels';
+import type { Contract, EvmAddress, B256AddressEvm } from 'fuels';
 import { Address } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -22,7 +22,18 @@ describe('EvMAddress', () => {
     };
     // #endregion evm-address-1
 
+    // #region addresses-3
+    // #context import type { EvmAddress } from 'fuels';
+
+    const address: EvmAddress = {
+      value: '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6',
+    };
+    // #endregion addresses-3
+
     expect(evmAddress.value).toBe(Bits256);
+    expect(address.value).toBe(
+      '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6'
+    );
   });
 
   it('should create an Evm Address from a B256Address', async () => {

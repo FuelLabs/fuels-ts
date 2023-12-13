@@ -151,10 +151,6 @@ export default defineConfig({
                 text: 'Vectors',
                 link: '/guide/types/vectors',
               },
-              {
-                text: 'Conversion',
-                link: '/guide/types/conversion',
-              },
             ],
           },
           {
@@ -204,10 +200,6 @@ export default defineConfig({
               {
                 text: 'Test Wallets',
                 link: '/guide/wallets/test-wallets',
-              },
-              {
-                text: 'Transferring Assets',
-                link: '/guide/wallets/transferring-assets',
               },
             ],
           },
@@ -317,10 +309,25 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Addresses',
+            link: '/guide/addresses',
+            collapsed: true,
+            items: [
+              {
+                text: 'Conversion',
+                link: 'guide/addresses/conversion',
+              },
+            ],
+          },
+          {
             text: 'Cookbook',
             link: '/guide/cookbook/',
             collapsed: true,
             items: [
+              {
+                text: 'Transferring Assets',
+                link: '/guide/cookbook/transferring-assets',
+              },
               {
                 text: 'Custom Transactions',
                 link: '/guide/cookbook/custom-transactions',
