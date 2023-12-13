@@ -201,10 +201,6 @@ export default defineConfig({
                 text: 'Test Wallets',
                 link: '/guide/wallets/test-wallets',
               },
-              {
-                text: 'Transferring Assets',
-                link: '/guide/wallets/transferring-assets',
-              },
             ],
           },
           {
@@ -328,6 +324,10 @@ export default defineConfig({
             link: '/guide/cookbook/',
             collapsed: true,
             items: [
+              {
+                text: 'Transferring Assets',
+                link: '/guide/cookbook/transferring-assets',
+              },
               {
                 text: 'Custom Transactions',
                 link: '/guide/cookbook/custom-transactions',

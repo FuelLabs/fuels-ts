@@ -1,13 +1,13 @@
 import { randomBytes } from '@fuel-ts/crypto';
-import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/hasher';
 import type { CallResult, TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
-import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 import type { BytesLike } from 'ethers';
+
+import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
 
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import { FUEL_NETWORK_URL } from './configs';
@@ -48,42 +48,39 @@ describe('WalletUnlocked', () => {
     // #region wallet-transaction-signing
     // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
-    const chainId = (await wallet.provider.getChain()).consensusParameters.chainId.toNumber();
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
+    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
+    const chainId = wallet.provider.getChain().consensusParameters.chainId.toNumber();
     const verifiedAddress = Signer.recoverAddress(
-      hashTransaction(transactionRequest, chainId),
+      SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction
     );
 
-    expect(signedTransaction).toEqual(signTransactionTest.signedTransaction);
+    expect(signedTransaction).toEqual(SIGNED_TX);
     expect(verifiedAddress).toEqual(wallet.address);
     // #endregion wallet-transaction-signing
   });
 
   it('Populate transaction witnesses signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
+    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
     const populatedTransaction =
-      await wallet.populateTransactionWitnessesSignature(transactionRequest);
+      await wallet.populateTransactionWitnessesSignature(SCRIPT_TX_REQUEST);
 
     expect(populatedTransaction.witnesses?.[0]).toBe(signedTransaction);
   });
 
   it('Populate transaction multi-witnesses signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     const privateKey = randomBytes(32);
     const otherWallet = new WalletUnlocked(privateKey, provider);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
-    const otherSignedTransaction = await otherWallet.signTransaction(transactionRequest);
+    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
+    const otherSignedTransaction = await otherWallet.signTransaction(SCRIPT_TX_REQUEST);
     const populatedTransaction = await wallet.populateTransactionWitnessesSignature({
-      ...transactionRequest,
-      witnesses: [...transactionRequest.witnesses, otherSignedTransaction],
+      ...SCRIPT_TX_REQUEST,
+      witnesses: [...SCRIPT_TX_REQUEST.witnesses, otherSignedTransaction],
     });
 
     expect(populatedTransaction.witnesses?.length).toBe(2);
@@ -93,8 +90,7 @@ describe('WalletUnlocked', () => {
 
   it('Check if send transaction adds signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
-    const transactionRequest = sendTransactionTest.transaction;
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     let signature: BytesLike | undefined;
     // Intercept Provider.sendTransaction to collect signature
     const spy = jest
@@ -105,7 +101,7 @@ describe('WalletUnlocked', () => {
       });
 
     // Call send transaction should populate signature field
-    await wallet.sendTransaction(transactionRequest);
+    await wallet.sendTransaction(SCRIPT_TX_REQUEST);
 
     // Provider sendTransaction should be called
     expect(spy).toBeCalled();
@@ -202,12 +198,12 @@ describe('WalletUnlocked', () => {
     const transactionRequestLike: TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
-    const transactionRequest = new ScriptTransactionRequest();
+    const transactionReq = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
-      .mockImplementation(() => transactionRequest);
+      .mockImplementation(() => transactionReq);
 
     const estimateTxDependencies = jest
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
@@ -219,7 +215,7 @@ describe('WalletUnlocked', () => {
 
     const populateTransactionWitnessesSignatureSpy = jest
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
-      .mockImplementationOnce(() => Promise.resolve(transactionRequest));
+      .mockImplementationOnce(() => Promise.resolve(transactionReq));
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -235,10 +231,10 @@ describe('WalletUnlocked', () => {
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
     expect(estimateTxDependencies.mock.calls.length).toBe(1);
-    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionReq);
 
     expect(populateTransactionWitnessesSignatureSpy.mock.calls.length).toBe(1);
-    expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionReq);
 
     expect(call.mock.calls.length).toBe(1);
   });

@@ -8,6 +8,7 @@ import type { BytesLike } from 'ethers';
 import type { GqlGasCosts } from '../__generated__/operations';
 import { calculateMetadataGasForTxCreate } from '../utils/gas';
 
+import { hashTransaction } from './hash-transaction';
 import type { ContractCreatedTransactionRequestOutput } from './output';
 import type { TransactionRequestStorageSlot } from './storage-slot';
 import { storageSlotify } from './storage-slot';
@@ -93,6 +94,17 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
       (output): output is ContractCreatedTransactionRequestOutput =>
         output.type === OutputType.ContractCreated
     );
+  }
+
+  /**
+   * Gets the Transaction Request by hashing the transaction.
+   *
+   * @param chainId - The chain ID.
+   *
+   * @returns - A hash of the transaction, which is the transaction ID.
+   */
+  getTransactionId(chainId: number): string {
+    return hashTransaction(this, chainId);
   }
 
   /**
