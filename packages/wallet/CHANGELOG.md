@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.69.1
+
+## 0.69.0
+
+## 0.68.0
+
+### Patch Changes
+
+- New helper method `Predicate.getTransferTxId`, which lets you calculate the transaction ID for a Predicate.transfer transaction, before actually sending it, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1467](https://github.com/FuelLabs/fuels-ts/pull/1467))
+
 ## 0.67.0
 
 ### Minor Changes

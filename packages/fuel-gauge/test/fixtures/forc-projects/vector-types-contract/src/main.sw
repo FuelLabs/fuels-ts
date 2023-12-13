@@ -212,7 +212,19 @@ impl Eq for Vec<SomeStruct<Vec<Vec<u32>>>> {
 }
 
 abi MyContract {
-    fn test_all(u32_vec: Vec<u32>, vec_in_vec: Vec<Vec<u32>>, struct_in_vec: Vec<SomeStruct<u32>>, vec_in_struct: SomeStruct<Vec<u32>>, array_in_vec: Vec<[u64; 2]>, vec_in_array: [Vec<u32>; 2], vec_in_enum: SomeEnum<Vec<u32>>, enum_in_vec: Vec<SomeEnum<u32>>, tuple_in_vec: Vec<(u32, u32)>, vec_in_tuple: (Vec<u32>, Vec<u32>), vec_in_a_vec_in_a_struct_in_a_vec: Vec<SomeStruct<Vec<Vec<u32>>>>) -> bool;
+    fn test_all(
+        u32_vec: Vec<u32>,
+        vec_in_vec: Vec<Vec<u32>>,
+        struct_in_vec: Vec<SomeStruct<u32>>,
+        vec_in_struct: SomeStruct<Vec<u32>>,
+        array_in_vec: Vec<[u64; 2]>,
+        vec_in_array: [Vec<u32>; 2],
+        vec_in_enum: SomeEnum<Vec<u32>>,
+        enum_in_vec: Vec<SomeEnum<u32>>,
+        tuple_in_vec: Vec<(u32, u32)>,
+        vec_in_tuple: (Vec<u32>, Vec<u32>),
+        vec_in_a_vec_in_a_struct_in_a_vec: Vec<SomeStruct<Vec<Vec<u32>>>>,
+    ) -> bool;
 }
 
 impl MyContract for Contract {
@@ -236,15 +248,19 @@ impl MyContract for Contract {
         }
         {
             let mut exp_vec_in_vec = Vec::new();
-            exp_vec_in_vec.push(vec_from([0, 1, 2]));
-            exp_vec_in_vec.push(vec_from([0, 1, 2]));
+            exp_vec_in_vec
+                .push(vec_from([0, 1, 2]));
+            exp_vec_in_vec
+                .push(vec_from([0, 1, 2]));
 
             require(vec_in_vec == exp_vec_in_vec, "vec_in_vec err");
         }
         {
             let mut exp_struct_in_vec = Vec::new();
-            exp_struct_in_vec.push(SomeStruct { a: 0u32 });
-            exp_struct_in_vec.push(SomeStruct { a: 1u32 });
+            exp_struct_in_vec
+                .push(SomeStruct { a: 0u32 });
+            exp_struct_in_vec
+                .push(SomeStruct { a: 1u32 });
 
             require(struct_in_vec == exp_struct_in_vec, "struct_in_vec err");
         }
@@ -257,8 +273,10 @@ impl MyContract for Contract {
         }
         {
             let mut exp_array_in_vec = Vec::new();
-            exp_array_in_vec.push([0, 1]);
-            exp_array_in_vec.push([0, 1]);
+            exp_array_in_vec
+                .push([0, 1]);
+            exp_array_in_vec
+                .push([0, 1]);
 
             require(array_in_vec == exp_array_in_vec, "array_in_vec err");
         }
@@ -275,15 +293,19 @@ impl MyContract for Contract {
         }
         {
             let mut exp_enum_in_vec = Vec::new();
-            exp_enum_in_vec.push(SomeEnum::a(0));
-            exp_enum_in_vec.push(SomeEnum::a(1));
+            exp_enum_in_vec
+                .push(SomeEnum::a(0));
+            exp_enum_in_vec
+                .push(SomeEnum::a(1));
 
             require(enum_in_vec == exp_enum_in_vec, "enum_in_vec err");
         }
         {
             let mut exp_tuple_in_vec = Vec::new();
-            exp_tuple_in_vec.push((0, 0));
-            exp_tuple_in_vec.push((1, 1));
+            exp_tuple_in_vec
+                .push((0, 0));
+            exp_tuple_in_vec
+                .push((1, 1));
 
             require(tuple_in_vec == exp_tuple_in_vec, "tuple_in_vec err");
         }
@@ -298,12 +320,15 @@ impl MyContract for Contract {
             let mut inner_vec_1 = Vec::new();
 
             let inner_inner_vec_1 = vec_from([0, 1, 2]);
-            inner_vec_1.push(inner_inner_vec_1);
+            inner_vec_1
+                .push(inner_inner_vec_1);
 
             let inner_inner_vec_2 = vec_from([3, 4, 5]);
-            inner_vec_1.push(inner_inner_vec_2);
+            inner_vec_1
+                .push(inner_inner_vec_2);
 
-            exp_vec_in_a_vec_in_a_struct_in_a_vec.push(SomeStruct { a: inner_vec_1 });
+            exp_vec_in_a_vec_in_a_struct_in_a_vec
+                .push(SomeStruct { a: inner_vec_1 });
 
             let mut inner_vec_2 = Vec::new();
 
@@ -315,7 +340,10 @@ impl MyContract for Contract {
 
             exp_vec_in_a_vec_in_a_struct_in_a_vec.push(SomeStruct { a: inner_vec_2 });
 
-            require(vec_in_a_vec_in_a_struct_in_a_vec == exp_vec_in_a_vec_in_a_struct_in_a_vec, "vec_in_a_vec_in_a_struct_in_a_vec err");
+            require(
+                vec_in_a_vec_in_a_struct_in_a_vec == exp_vec_in_a_vec_in_a_struct_in_a_vec,
+                "vec_in_a_vec_in_a_struct_in_a_vec err",
+            );
         }
 
         true

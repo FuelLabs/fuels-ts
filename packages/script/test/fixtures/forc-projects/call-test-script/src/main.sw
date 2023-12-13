@@ -1,7 +1,5 @@
 script;
 
-use std::tx::tx_script_data;
-
 fn log<T>(v: T) {
     asm(r1: v) {
         log  r1 zero zero zero;
@@ -19,8 +17,7 @@ struct MyStruct {
     arg_two: u64,
 }
 
-fn main() -> MyStruct {
-    let my_struct = tx_script_data::<MyStruct>();
+fn main(my_struct: MyStruct) -> MyStruct {
     log(my_struct.arg_one);
     log(my_struct.arg_two);
     MyStruct {

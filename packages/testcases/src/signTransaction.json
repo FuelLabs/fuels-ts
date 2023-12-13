@@ -1,10 +1,11 @@
 {
   "transaction": {
     "type": 0,
-    "gasPrice": "0x00",
     "gasLimit": "0x0F4240",
     "script": "0x24400000",
     "scriptData": "0x",
+    "policyType": 10,
+    "policies": [{ "type": 1, "data": "0x10" }],
     "inputs": [
       {
         "type": 0,
@@ -33,7 +34,7 @@
   "privateKey": "0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1",
   "publicKey": "0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e",
   "address": "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
-  "hashedTransaction": "0xb5d3b275fc1ccb0fa848b69f00170e616888a5e141bce753686f4bb0185face0",
-  "signedTransaction": "0xcd47883815cc9496b85805905e6006ebb5a7b2f269ef5d665211e32b6d578add62a4f9be489d826f5cc3c1376122f745a4245acf4d8f1471d42bd78e76072578",
+  "hashedTransaction": "0x48ee795d94ea9562a3dbb9979cb44bb3dfd341eb755c378b14a3cd6886189980",
+  "signedTransaction": "0x90475d8acc473b32d13db3ec8fe53468e62570f242260ed616e45a7fef16e8d611df812f98025b1a9fbfe611ab2aab1ee7ecf6d95caeb75d7c4ece5b95b28b5d",
   "chainId": 0
 }

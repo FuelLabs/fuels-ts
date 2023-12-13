@@ -48,7 +48,7 @@ npm install fuels --save
 
 ## Import
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Wallet } from "fuels";
@@ -62,7 +62,7 @@ console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 
 ## Calling Contracts
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
@@ -85,7 +85,7 @@ console.log(transactionId, value);
 
 ## Deploying Contracts
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Provider, ContractFactory } from "fuels";

@@ -92,6 +92,10 @@ export default defineConfig({
                 link: '/guide/types/evm-address',
               },
               {
+                text: 'Asset Id',
+                link: '/guide/types/asset-id',
+              },
+              {
                 text: 'Arrays',
                 link: '/guide/types/arrays',
               },

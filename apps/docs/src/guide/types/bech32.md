@@ -1,4 +1,4 @@
-# Bech32
+# `Bech32`
 
 The SDK uses the `Bech32` type as the core property of the `Address` class, specifically through the `bech32Address` property.
 

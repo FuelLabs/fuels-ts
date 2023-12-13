@@ -7,5 +7,5 @@ export const MOCK_NODE_INFO: GqlNodeInfoFragmentFragment = {
   minGasPrice: '0',
   maxTx: '4064',
   maxDepth: '10',
-  nodeVersion: '0.20.4',
+  nodeVersion: '0.21.0',
 };

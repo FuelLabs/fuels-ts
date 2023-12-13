@@ -1,8 +1,12 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { bn, type BN } from '@fuel-ts/math';
 import type { TransactionCreate } from '@fuel-ts/transactions';
 import { TransactionType, OutputType } from '@fuel-ts/transactions';
-import { hexlify } from 'ethers';
+import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
+
+import type { GqlGasCosts } from '../__generated__/operations';
+import { calculateMetadataGasForTxCreate } from '../utils/gas';
 
 import type { ContractCreatedTransactionRequestOutput } from './output';
 import type { TransactionRequestStorageSlot } from './storage-slot';
@@ -107,6 +111,15 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
       type: OutputType.ContractCreated,
       contractId,
       stateRoot,
+    });
+  }
+
+  metadataGas(gasCosts: GqlGasCosts): BN {
+    return calculateMetadataGasForTxCreate({
+      contractBytesSize: bn(getBytesCopy(this.witnesses[this.bytecodeWitnessIndex] || '0x').length),
+      gasCosts,
+      stateRootSize: this.storageSlots.length,
+      txBytesSize: this.byteSize(),
     });
   }
 }

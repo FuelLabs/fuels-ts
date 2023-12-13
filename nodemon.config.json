@@ -5,6 +5,7 @@
   "ignore": [
     "**/__generated__/**",
     "**/*.js",
+    "**/*.test.ts",
     "**/*.mjs",
     "**/dist/**",
     "**/Forc.lock",

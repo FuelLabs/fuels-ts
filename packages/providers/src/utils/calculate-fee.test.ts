@@ -1,16 +1,9 @@
-import { BN, bn } from '@fuel-ts/math';
-import { ReceiptType, type Witness } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { BN } from '@fuel-ts/math';
+import { ReceiptType } from '@fuel-ts/transactions';
 
-import { MOCK_TX_BYTES_HEX } from '../../test/fixtures/transaction-summary';
 import type { TransactionResultReceipt } from '../transaction-response';
 
-import {
-  calculatePriceWithFactor,
-  calculateTransactionFee,
-  calculateTxChargeableBytes,
-  getGasUsedFromReceipts,
-} from './calculate-fee';
+import { calculatePriceWithFactor, getGasUsedFromReceipts } from './calculate-fee';
 
 describe(__filename, () => {
   describe('calculatePriceWithFactor', () => {
@@ -31,142 +24,7 @@ describe(__filename, () => {
 
       const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
 
-      expect(result.toNumber()).toEqual(6); // ceil(11 / 5) * 2 = 6
-    });
-  });
-
-  describe('calculateTransactionFee', () => {
-    it('should calculate transaction fee for script correctly', () => {
-      const gasUsed = bn(1700);
-      const gasLimit = bn(10);
-      const gasPrice = bn(50);
-      const gasPriceFactor = bn(92);
-      const gasPerByte = bn(4);
-      const chargeableBytes = bn(440);
-
-      const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
-      const minGas = bytesGas.add(0);
-      const maxGas = bytesGas.add(gasLimit);
-      const expectedMinGasToPay = bn(
-        Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
-      );
-      const expectedMaxGasToPay = bn(
-        Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
-      );
-
-      const expectedFeeFromGasUsed = bn(
-        Math.ceil(gasUsed.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
-      );
-      const expectedMinFee = expectedMinGasToPay.add(expectedFeeFromGasUsed);
-      const expectedMaxFee = expectedMaxGasToPay.add(expectedFeeFromGasUsed);
-
-      const result = calculateTransactionFee({
-        gasPrice,
-        gasUsed,
-        gasLimit,
-        gasPerByte,
-        gasPriceFactor,
-        chargeableBytes,
-      });
-
-      expect(result.minFee.toNumber()).toEqual(expectedMinFee.toNumber());
-      expect(result.maxFee.toNumber()).toEqual(expectedMaxFee.toNumber());
-      expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
-      expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
-      expect(result.feeFromGasUsed.toNumber()).toEqual(expectedFeeFromGasUsed.toNumber());
-    });
-
-    it('should calculate transaction fee for multiple receipts', () => {
-      const gasUsed = new BN(900);
-      const gasLimit = bn(10);
-      const gasPrice = new BN(50);
-      const gasPriceFactor = new BN(1000000);
-      const gasPerByte = new BN(1);
-      const chargeableBytes = bn(1120);
-
-      const bytesGas = chargeableBytes.mul(gasPerByte.toNumber());
-      const minGas = bytesGas.add(0);
-      const maxGas = bytesGas.add(gasLimit);
-      const expectedMinGasToPay = bn(
-        Math.ceil(minGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
-      );
-      const expectedMaxGasToPay = bn(
-        Math.ceil(maxGas.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
-      );
-
-      const expectedFeeFromGasUsed = bn(
-        Math.ceil(gasUsed.mul(gasPrice).toNumber() / gasPriceFactor.toNumber())
-      );
-      const expectedMinFee = expectedMinGasToPay.add(expectedFeeFromGasUsed);
-      const expectedMaxFee = expectedMaxGasToPay.add(expectedFeeFromGasUsed);
-
-      const result = calculateTransactionFee({
-        gasPrice,
-        gasUsed,
-        gasLimit,
-        gasPerByte,
-        gasPriceFactor,
-        chargeableBytes,
-      });
-
-      expect(result.minFee.toNumber()).toEqual(expectedMinFee.toNumber());
-      expect(result.maxFee.toNumber()).toEqual(expectedMaxFee.toNumber());
-      expect(result.minGasToPay.toNumber()).toEqual(expectedMinGasToPay.toNumber());
-      expect(result.maxGasToPay.toNumber()).toEqual(expectedMaxGasToPay.toNumber());
-      expect(result.feeFromGasUsed.toNumber()).toEqual(expectedFeeFromGasUsed.toNumber());
-    });
-  });
-
-  describe('calculateTxChargeableBytes', () => {
-    it('should calculate properly transaction chargeable bytes just fine', () => {
-      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
-
-      const dataLengthOffset = 8;
-      const witnessOffset = transactionBytes.length - dataLengthOffset;
-      const transactionWitnesses: Witness[] = [
-        {
-          dataLength: 0,
-          data: '0x',
-          offset: witnessOffset,
-        },
-      ];
-
-      const chargeableBytesFee = calculateTxChargeableBytes({
-        transactionBytes,
-        transactionWitnesses,
-      });
-
-      expect(chargeableBytesFee.toNumber()).toEqual(witnessOffset);
-    });
-
-    it('should handle an empty witnesses array', () => {
-      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
-
-      const chargeableBytesFee = calculateTxChargeableBytes({
-        transactionBytes,
-        transactionWitnesses: [],
-      });
-
-      expect(chargeableBytesFee.toNumber()).toEqual(transactionBytes.length);
-    });
-
-    it('should round up the result', () => {
-      const transactionBytes = getBytesCopy(MOCK_TX_BYTES_HEX);
-      const offset = 760;
-      const transactionWitnesses: Witness[] = [
-        {
-          dataLength: 64,
-          data: '0x741af9e1379d78d1882d6058888cb704f3ba5b4854ca919e6a26b759dbd6931877323cfbf6ced0ba63b18fbb15926fadd877218c93b8d9972564168b6198208d',
-          offset,
-        },
-      ];
-
-      const chargeableBytesFee = calculateTxChargeableBytes({
-        transactionBytes,
-        transactionWitnesses,
-      });
-
-      expect(chargeableBytesFee.toNumber()).toEqual(760);
+      expect(result.toNumber()).toEqual(5); // ceil(11 * 2) / 2 = 5
     });
   });
 

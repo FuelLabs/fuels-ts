@@ -167,33 +167,233 @@ fragment balanceFragment on Balance {
   assetId
 }
 
-fragment consensusParametersFragment on ConsensusParameters {
-  contractMaxSize
+fragment TxParametersFragment on TxParameters {
   maxInputs
   maxOutputs
   maxWitnesses
   maxGasPerTx
-  maxScriptLength
-  maxScriptDataLength
-  maxStorageSlots
+  maxSize
+}
+
+fragment PredicateParametersFragment on PredicateParameters {
   maxPredicateLength
   maxPredicateDataLength
   maxGasPerPredicate
+  maxMessageDataLength
+}
+
+fragment ScriptParametersFragment on ScriptParameters {
+  maxScriptLength
+  maxScriptDataLength
+}
+
+fragment ContractParametersFragment on ContractParameters {
+  contractMaxSize
+  maxStorageSlots
+}
+
+fragment FeeParametersFragment on FeeParameters {
   gasPriceFactor
   gasPerByte
-  maxMessageDataLength
+}
+
+fragment DependentCostFragment on DependentCost {
+  __typename
+  ... on LightOperation {
+    base
+    unitsPerGas
+  }
+  ... on HeavyOperation {
+    base
+    gasPerUnit
+  }
+}
+
+fragment GasCostsFragment on GasCosts {
+  add
+  addi
+  aloc
+  and
+  andi
+  bal
+  bhei
+  bhsh
+  burn
+  cb
+  cfei
+  cfsi
+  croo
+  div
+  divi
+  ecr1
+  eck1
+  ed19
+  eq
+  exp
+  expi
+  flag
+  gm
+  gt
+  gtf
+  ji
+  jmp
+  jne
+  jnei
+  jnzi
+  jmpf
+  jmpb
+  jnzf
+  jnzb
+  jnef
+  jneb
+  lb
+  log
+  lt
+  lw
+  mint
+  mlog
+  modOp
+  modi
+  moveOp
+  movi
+  mroo
+  mul
+  muli
+  mldv
+  noop
+  not
+  or
+  ori
+  poph
+  popl
+  pshh
+  pshl
+  ret
+  rvrt
+  sb
+  sll
+  slli
+  srl
+  srli
+  srw
+  sub
+  subi
+  sw
+  sww
+  time
+  tr
+  tro
+  wdcm
+  wqcm
+  wdop
+  wqop
+  wdml
+  wqml
+  wddv
+  wqdv
+  wdmd
+  wqmd
+  wdam
+  wqam
+  wdmm
+  wqmm
+  xor
+  xori
+  call {
+    ...DependentCostFragment
+  }
+  ccp {
+    ...DependentCostFragment
+  }
+  csiz {
+    ...DependentCostFragment
+  }
+  k256 {
+    ...DependentCostFragment
+  }
+  ldc {
+    ...DependentCostFragment
+  }
+  logd {
+    ...DependentCostFragment
+  }
+  mcl {
+    ...DependentCostFragment
+  }
+  mcli {
+    ...DependentCostFragment
+  }
+  mcp {
+    ...DependentCostFragment
+  }
+  mcpi {
+    ...DependentCostFragment
+  }
+  meq {
+    ...DependentCostFragment
+  }
+  retd {
+    ...DependentCostFragment
+  }
+  s256 {
+    ...DependentCostFragment
+  }
+  scwq {
+    ...DependentCostFragment
+  }
+  smo {
+    ...DependentCostFragment
+  }
+  srwq {
+    ...DependentCostFragment
+  }
+  swwq {
+    ...DependentCostFragment
+  }
+  contractRoot {
+    ...DependentCostFragment
+  }
+  stateRoot {
+    ...DependentCostFragment
+  }
+  vmInitialization {
+    ...DependentCostFragment
+  }
+  newStoragePerByte
+}
+
+fragment consensusParametersFragment on ConsensusParameters {
+  txParams {
+    ...TxParametersFragment
+  }
+  predicateParams {
+    ...PredicateParametersFragment
+  }
+  scriptParams {
+    ...ScriptParametersFragment
+  }
+  contractParams {
+    ...ContractParametersFragment
+  }
+  feeParams {
+    ...FeeParametersFragment
+  }
+  gasCosts {
+    ...GasCostsFragment
+  }
+  baseAssetId
   chainId
 }
 
 fragment chainInfoFragment on ChainInfo {
   name
-  baseChainHeight
+  latestBlock {
+    ...blockFragment
+  }
+  daHeight
   peerCount
   consensusParameters {
     ...consensusParametersFragment
-  }
-  latestBlock {
-    ...blockFragment
   }
 }
 
@@ -299,13 +499,13 @@ query estimatePredicates($encodedTransaction: HexString!) {
   }
 }
 
-query getBlock($blockId: BlockId, $blockHeight: U64) {
-  block(id: $blockId, height: $blockHeight) {
+query getBlock($blockId: BlockId, $height: U32) {
+  block(id: $blockId, height: $height) {
     ...blockFragment
   }
 }
 
-query getBlockWithTransactions($blockId: BlockId, $blockHeight: U64) {
+query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
@@ -432,13 +632,13 @@ query getMessages(
 
 query getMessageProof(
   $transactionId: TransactionId!
-  $messageId: MessageId!
+  $nonce: Nonce!
   $commitBlockId: BlockId
   $commitBlockHeight: U32
 ) {
   messageProof(
     transactionId: $transactionId
-    messageId: $messageId
+    nonce: $nonce
     commitBlockId: $commitBlockId
     commitBlockHeight: $commitBlockHeight
   ) {
@@ -466,7 +666,7 @@ mutation submit($encodedTransaction: HexString!) {
 
 mutation produceBlocks(
   $startTimestamp: Tai64Timestamp
-  $blocksToProduce: U64!
+  $blocksToProduce: U32!
 ) {
   produceBlocks(
     blocksToProduce: $blocksToProduce

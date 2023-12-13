@@ -30,7 +30,7 @@ describe('TransactionSummary', () => {
       destination.address,
       100,
       BaseAssetId,
-      { gasPrice }
+      { gasPrice, gasLimit: 10_000 }
     );
 
     const response = await TransactionResponse.create(transactionId, provider);
@@ -49,7 +49,7 @@ describe('TransactionSummary', () => {
       destination.address,
       100,
       BaseAssetId,
-      { gasPrice }
+      { gasPrice, gasLimit: 10_000 }
     );
 
     const response = new TransactionResponse(transactionId, provider);
@@ -99,7 +99,7 @@ describe('TransactionSummary', () => {
       destination.address,
       100,
       BaseAssetId,
-      { gasPrice }
+      { gasPrice, gasLimit: 10_000 }
     );
     const response = await TransactionResponse.create(transactionId, nodeProvider);
 
