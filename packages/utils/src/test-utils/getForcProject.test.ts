@@ -100,9 +100,7 @@ describe('getForcProject', () => {
   });
 
   it('should return the correct debug directory path', () => {
-    const joinSpy = vi
-      .spyOn(path, 'join')
-      .mockImplementation((...segments) => segments.join('/'));
+    const joinSpy = vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
     const expectedPath = '/path/to/project/out/debug';
@@ -145,9 +143,9 @@ describe('getForcProject', () => {
       throw new Error('File not found');
     });
 
-    vi
-      .spyOn(fs, 'existsSync')
-      .mockImplementation((pathParam) => (<string>pathParam).endsWith('-storage_slots.json'));
+    vi.spyOn(fs, 'existsSync').mockImplementation((pathParam) =>
+      (<string>pathParam).endsWith('-storage_slots.json')
+    );
 
     const forcProject = {
       projectDir: 'fuel_gauge',
