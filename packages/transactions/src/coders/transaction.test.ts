@@ -249,52 +249,40 @@ describe('TransactionCoder', () => {
     );
   });
 
-  it('Can encode/decode TransactionMint with outputs', () => {
+  it('Can encode/decode TransactionMint', () => {
     const transaction: Transaction<TransactionType.Mint> = {
       type: TransactionType.Mint,
-      outputsCount: 1,
-      outputs: [
-        {
-          type: OutputType.Coin,
-          to: B256,
-          amount: bn(1),
-          assetId: B256,
-        },
-      ],
       txPointer: {
         blockHeight: 0,
         txIndex: 0,
       },
+      inputContract: {
+        type: InputType.Contract,
+        txID: B256,
+        outputIndex: 0,
+        balanceRoot: B256,
+        stateRoot: B256,
+        contractID: B256,
+        txPointer: {
+          blockHeight: 0,
+          txIndex: 0,
+        },
+      },
+      outputContract: {
+        type: OutputType.Contract,
+        inputIndex: 0,
+        balanceRoot: B256,
+        stateRoot: B256,
+      },
+      mintAmount: bn(0),
+      mintAssetId: B256,
     };
 
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x00000000000000020000000000000000000000000000000000000000000000010000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x000000000000000200000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
-
-    const [decoded, offset] = new TransactionCoder().decode(getBytesCopy(encoded), 0);
-
-    expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(JSON.parse(JSON.stringify(decoded))).toMatchObject(
-      JSON.parse(JSON.stringify(transaction))
-    );
-  });
-
-  it('Can encode/decode TransactionMint without outputs', () => {
-    const transaction: Transaction<TransactionType.Mint> = {
-      type: TransactionType.Mint,
-      outputsCount: 0,
-      outputs: [],
-      txPointer: {
-        blockHeight: 0,
-        txIndex: 0,
-      },
-    };
-
-    const encoded = hexlify(new TransactionCoder().encode(transaction));
-
-    expect(encoded).toEqual('0x0000000000000002000000000000000000000000000000000000000000000000');
 
     const [decoded, offset] = new TransactionCoder().decode(getBytesCopy(encoded), 0);
 
