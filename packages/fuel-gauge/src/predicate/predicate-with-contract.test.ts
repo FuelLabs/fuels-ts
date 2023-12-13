@@ -16,17 +16,6 @@ import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
-const contractBytes = readFileSync(
-  join(
-    __dirname,
-    '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin'
-  )
-);
-
-const liquidityPoolBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-);
-
 /**
  * @group node
  */

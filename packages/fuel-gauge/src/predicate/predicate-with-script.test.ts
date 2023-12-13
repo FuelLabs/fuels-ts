@@ -8,10 +8,6 @@ import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
-const scriptBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
-);
-
 /**
  * @group node
  */
