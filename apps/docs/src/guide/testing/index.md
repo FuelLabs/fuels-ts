@@ -14,7 +14,7 @@ In order to test your Sway and TS-SDK applications, you can test your code in a 
 
 ### Testing with TS-SDK
 
-To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [Vitest](https://vitest.dev/) for its tests.
+To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [`Vitest`](https://vitest.dev/) for its tests.
 
 ### Wallet Test Utilities
 
