@@ -256,7 +256,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should write messages to stdout', async () => {
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
