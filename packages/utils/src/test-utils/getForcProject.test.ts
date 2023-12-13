@@ -13,6 +13,14 @@ import {
   getProjectTempDir,
 } from './getForcProject';
 
+vi.mock('ethers', async () => {
+  const mod = await vi.importActual('ethers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
 vi.mock('path', async () => {
   const mod = await vi.importActual('path');
   return {
