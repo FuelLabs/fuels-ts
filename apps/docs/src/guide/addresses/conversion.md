@@ -24,7 +24,7 @@ And by using the `isB256` and `toBech32` utilities:
 
 ## Converting a Contract ID
 
-The Contract `id` property has the [`AbstractAddress`](../types/address#abstractaddress-class) type, therefore it be converted using the `Address` class functions such as `toAddress` and `toB256`;
+The Contract `id` property has the [`AbstractAddress`](../types/address#abstractaddress-class) type. Therefore, it can be converted using the `Address` class functions such as `toAddress` and `toB256`:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-2{ts:line-numbers}
 
