@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { versions } = require('@fuel-ts/versions');
 const exec = require('child_process');
 const { compare } = require('compare-versions');
 const { readFileSync, readdirSync } = require('fs');
 const { join } = require('path');
 
 const DELETE_TAGS = /next|pr/;
-const { FUELS: CURRENT_VERSION } = versions;
+const { version: CURRENT_VERSION } = require('../packages/fuels/package.json');
+
 const DELETE_PACKAGES = process.env.DELETE_PACKAGES === 'true';
 const dryRun = DELETE_PACKAGES ? '' : '--dry-run';
 

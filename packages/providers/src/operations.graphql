@@ -386,7 +386,6 @@ fragment chainInfoFragment on ChainInfo {
     ...blockFragment
   }
   daHeight
-  peerCount
   consensusParameters {
     ...consensusParametersFragment
   }
@@ -419,6 +418,14 @@ fragment nodeInfoFragment on NodeInfo {
   maxTx
   maxDepth
   nodeVersion
+  peers {
+    id
+    addresses
+    clientVersion
+    blockHeight
+    lastHeartbeatMs
+    appScore
+  }
 }
 
 query getNodeInfo {
