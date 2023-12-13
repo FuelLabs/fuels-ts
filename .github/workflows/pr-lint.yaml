@@ -19,14 +19,6 @@ jobs:
       - uses: amannn/action-semantic-pull-request@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          types: |
-            feat
-            fix
-            chore
-            docs
-            ci
-            rc
 
   validate-changeset:
     name: Validate PR Changeset
