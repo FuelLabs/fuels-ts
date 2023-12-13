@@ -11,7 +11,6 @@ vi.mock('child_process', async () => {
   const mod = await vi.importActual('child_process');
   return {
     __esModule: true,
-    // @ts-expect-error spreading module import
     ...mod,
   };
 });

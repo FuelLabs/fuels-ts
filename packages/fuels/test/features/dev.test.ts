@@ -11,7 +11,6 @@ vi.mock('chokidar', async () => {
   const mod = await vi.importActual('chokidar');
   return {
     __esModule: true,
-    // @ts-expect-error spreading module import
     ...mod,
   };
 });

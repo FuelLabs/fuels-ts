@@ -19,7 +19,6 @@ vi.mock('@fuel-ts/providers', async () => {
   const mod = await vi.importActual('@fuel-ts/providers');
   return {
     __esModule: true,
-    // @ts-expect-error spreading module import
     ...mod,
   };
 });
