@@ -2,7 +2,7 @@
 
 Addresses and varying address formats are commonplace when interacting with decentralized applications. Furthermore, different networks may enforce different address formats.
 
-The Fuel Network uses the [`Bech32`](../types/bech32.md) address format for it's interactions, an example of which can be seen below:
+The Fuel Network uses the [`Bech32`](../types/bech32.md) address format for its interactions, an example of which can be seen below:
 
 <<< @/../../docs-snippets/src/guide/types/bech32.test.ts#addresses-1{ts:line-numbers}
 
