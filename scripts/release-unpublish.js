@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const exec = require('child_process');
 const { compare } = require('compare-versions');
-const { readFileSync, readdirSync } = require('fs');
-const { join } = require('path');
+const { readFileSync, readdirSync } = require('node:fs');
+const { join } = require('node:path');
+const util = require('node:util');
+const exec = util.promisify(require('node:child_process').exec);
 
 const DELETE_TAGS = /next|pr/;
 const { version: CURRENT_VERSION } = require('../packages/fuels/package.json');
