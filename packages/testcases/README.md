@@ -1,8 +1,8 @@
-# `@fuel-ts/hdwallet`
+# `@fuel-ts/testcases`
 
-**@fuel-ts/hdwallet** is a sub-module for interacting with **Fuel**.
+**@fuel-ts/testcases** is a sub-module for interacting with **Fuel**.
 
-This module is an implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarchy for Deterministic Wallets, also known as Hierarchal Deterministic (HD) Wallets.
+This module contains the testcases used to verify various Fuel operations and SDK utilities.
 
 # Table of contents
 
@@ -25,9 +25,9 @@ See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/)
 ### Installation
 
 ```sh
-pnpm add @fuel-ts/hdwallet
+pnpm add @fuel-ts/testcases
 # or
-npm add @fuel-ts/hdwallet
+npm add @fuel-ts/testcases
 ```
 
 ### Full SDK Installation
@@ -42,12 +42,12 @@ npm add fuels
 
 ## Contributing
 
-In order to contribute to `@fuel-ts/hdwallet`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
+In order to contribute to `@fuel-ts/testcases`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
-The `@fuel-ts/hdwallet` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `@fuel-ts/testcases` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/hdwallet` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `@fuel-ts/testcases` is `Apache 2.0`, see [LICENSE](./LICENSE).

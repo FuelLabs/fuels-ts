@@ -7,15 +7,15 @@
 
 [![test](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml/badge.svg)](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml)
 [![npm](https://img.shields.io/npm/v/fuels)](https://www.npmjs.com/package/fuels)
-[![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://fuellabs.github.io/fuels-ts/)
+[![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://docs.fuel.network/docs/fuels-ts/)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 
 # Resources
 
-The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop for resources.
+The [documentation](https://docs.fuel.network/docs/fuels-ts/) site is your main stop for resources.
 
 - [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
-- [Documentation](https://fuellabs.github.io/fuels-ts)
+- [Documentation](https://docs.fuel.network/docs/fuels-ts/)
   - [Wallets](https://fuellabs.github.io/fuels-ts/guide/wallets/)
   - [Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/)
   - [Scripts](https://fuellabs.github.io/fuels-ts/guide/scripts/)
@@ -51,7 +51,7 @@ console.log(new Wallet("0x0000...0000"));
 
 Fuels include some utility commands via built-in CLI tool.
 
-Check the [docs](https://fuellabs.github.io/fuels-ts) for more info.
+Check the [docs](https://docs.fuel.network/docs/fuels-ts/) for more info.
 
 ```console
 $ npm add fuels
