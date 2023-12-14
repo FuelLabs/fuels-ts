@@ -46,9 +46,10 @@ jobs:
           echo "RC Version: ${{ env.RC_NAME }}"
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot ${{ env.RC_NAME }}
-          changesets=$(pnpm changeset publish --tag ${{ env.RC_NAME }})
-          echo "changesets: $changesets"
+          pnpm changeset version --snapshot dan
+          changesets=$(pnpm changeset publish --tag dan
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+dan-\d+' | head -1)
+          echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
