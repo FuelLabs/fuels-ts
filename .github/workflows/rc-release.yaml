@@ -34,16 +34,16 @@ jobs:
 
       - name: Replace head ref
         uses: frabert/replace-string-action@v2
-        id: new_ref
+        id: rc_name
         with:
           string: ${{ github.ref }}
-          pattern: "/"
-          replace-with: "-"
+          pattern: "rc/"
+          replace-with: ""
 
-      - name: Release to @${{ steps.new_ref.outputs.replaced }} tag on npm
+      - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
         id: release
         run: |
-          echo "${{ steps.new_ref.outputs.replaced }}}}"
+          echo "${{ steps.rc_name.outputs.replaced }}"
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot rc-${{ env.RC_NAME }}
@@ -54,11 +54,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RC_NAME: ${{ steps.new_ref.outputs.replaced }}
+          RC_NAME: ${{ steps.rc_name.outputs.replaced }}
 
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            This RC is published in NPM with version **${{ steps.new_ref.outputs.replaced }}**
+            This RC is published in NPM with version **rc-${{ steps.rc_name.outputs.replaced }}**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
