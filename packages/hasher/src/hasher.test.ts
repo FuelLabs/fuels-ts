@@ -1,10 +1,10 @@
-import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
-
 import { hashMessage, hash } from './hasher';
 
 describe('Hasher', () => {
   it('Hash message', () => {
-    expect(hashMessage(signMessageTest.message)).toEqual(signMessageTest.hashedMessage);
+    const message = 'my message';
+    const hashedMessage = '0xea38e30f75767d7e6c21eba85b14016646a3b60ade426ca966dac940a5db1bab';
+    expect(hashMessage(message)).toEqual(hashedMessage);
   });
 
   it('Hash "20"', () => {
