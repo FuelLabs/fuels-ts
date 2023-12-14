@@ -27,7 +27,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ### Installation
 
 ```sh
-yarn add @fuel-ts/errors
+pnpm add @fuel-ts/errors
 # or
 npm add @fuel-ts/errors
 ```

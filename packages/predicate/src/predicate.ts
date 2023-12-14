@@ -7,18 +7,21 @@ import {
   SCRIPT_FIXED_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractPredicate } from '@fuel-ts/interfaces';
+import type { AbstractAddress, AbstractPredicate, BytesLike } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import type {
   CallResult,
   Provider,
+  TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
 } from '@fuel-ts/providers';
 import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import type { TxParamsType } from '@fuel-ts/wallet';
 import { Account } from '@fuel-ts/wallet';
-import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify } from 'ethers';
 
 import { getPredicateRoot } from './utils';
@@ -32,12 +35,10 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
   predicateArgs: ARGS = [] as unknown as ARGS;
   interface?: Interface;
 
-  // TODO: Since provider is no longer optional, we can maybe remove `chainId` from the constructor.
   /**
    * Creates an instance of the Predicate class.
    *
    * @param bytes - The bytes of the predicate.
-   * @param chainId - The chain ID for which the predicate is used.
    * @param provider - The provider used to interact with the blockchain.
    * @param jsonAbi - The JSON ABI of the predicate.
    * @param configurableConstants - Optional configurable constants for the predicate.
@@ -76,11 +77,34 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
         // eslint-disable-next-line no-param-reassign
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.#getPredicateData(policies.length);
+        input.predicateData = this.getPredicateData(policies.length);
       }
     });
 
     return request;
+  }
+
+  /**
+   * A helper that creates a transfer transaction request and returns it.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @returns A promise that resolves to the prepared transaction request.
+   */
+  async createTransfer(
+    /** Address of the destination */
+    destination: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionRequest> {
+    const request = await super.createTransfer(destination, amount, assetId, txParams);
+    return this.populateTransactionPredicateData(request);
   }
 
   /**
@@ -117,7 +141,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     return this;
   }
 
-  #getPredicateData(policiesLength: number): Uint8Array {
+  private getPredicateData(policiesLength: number): Uint8Array {
     if (!this.predicateArgs.length) {
       return new Uint8Array();
     }

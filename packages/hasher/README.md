@@ -25,7 +25,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ### Installation
 
 ```sh
-yarn add @fuel-ts/hasher
+pnpm add @fuel-ts/hasher
 # or
 npm add @fuel-ts/hasher
 ```
@@ -35,7 +35,7 @@ npm add @fuel-ts/hasher
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```
