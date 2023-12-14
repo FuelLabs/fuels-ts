@@ -45,14 +45,15 @@ jobs:
         run: |
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot pr-${{ env.PR_NUMBER }}
-          changetsets=$(pnpm changeset publish --tag pr-${{ env.PR_NUMBER }})
-          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ env.PR_NUMBER }}-\d+' | head -1)
+          pnpm changeset version --snapshot pr-${{ env.RC_NAME }}
+          changetsets=$(pnpm changeset publish --tag pr-${{ env.RC_NAME }})
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ env.RC_NAME }}-\d+' | head -1)
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          RC_NAME: ${{ steps.new_head_ref.outputs.replaced }}
 
       - uses: mshick/add-pr-comment@v2
         with:
