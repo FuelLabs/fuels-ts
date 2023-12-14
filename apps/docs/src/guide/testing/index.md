@@ -1,7 +1,7 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const url = `https://fuellabs.github.io/sway/v${forc}/book/forc/commands/forc_test.html`
+  const url = `https://docs.fuel.network/docs/forc/commands/forc_test/`
 </script>
 
 # Testing
