@@ -780,12 +780,6 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
@@ -962,6 +956,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
