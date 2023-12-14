@@ -16,11 +16,11 @@ The [documentation](https://docs.fuel.network/docs/fuels-ts/) site is your main 
 
 - [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
 - [Documentation](https://docs.fuel.network/docs/fuels-ts/)
-  - [Wallets](https://fuellabs.github.io/fuels-ts/guide/wallets/)
-  - [Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/)
-  - [Scripts](https://fuellabs.github.io/fuels-ts/guide/scripts/)
-  - [Predicates](https://fuellabs.github.io/fuels-ts/guide/predicates/)
-  - [ABI Typegen](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
+  - [Wallets](https://docs.fuel.network/docs/fuels-ts/wallets/)
+  - [Contracts](https://docs.fuel.network/docs/fuels-ts/contracts/)
+  - [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/)
+  - [Predicates](https://docs.fuel.network/docs/fuels-ts/predicates/)
+  - [ABI Typegen](https://docs.fuel.network/docs/fuels-ts/abi-typegen/)
 - [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
 - [The Fuel Forum](https://forum.fuel.network/)
 - [The Fuel Ecosystem](#the-fuel-ecosystem)
@@ -80,7 +80,7 @@ Commands:
 
 Learn more about the Fuel Ecosystem.
 
-- [🌴 Sway](https://fuellabs.github.io/sway/) — The new language, empowering everyone to build reliable and efficient smart contracts
+- [🌴 Sway](https://docs.fuel.network/docs/sway/) — The new language, empowering everyone to build reliable and efficient smart contracts
 - [🧰 Forc](https://fuellabs.github.io/sway/v0.30.1/forc/index.html) — The Fuel toolbox: _Build, deploy and manage your sway projects_
 - [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) — The new FuelVM, a blazingly fast blockchain VM
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) — The Fuel protocol specifications
