@@ -75,11 +75,7 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
   return new Promise((resolve, reject) => {
     const builtInFuelsCorePath = findBinPath('fuels-core');
 
-    console.log('builtInFuelsCorePath', builtInFuelsCorePath);
-
     const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
-
-    console.log('command', command);
 
     const core = spawn(command, flags, { stdio: 'pipe' });
 
