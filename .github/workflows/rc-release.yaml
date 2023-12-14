@@ -53,7 +53,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RC_NAME: ${{ steps.new_head_ref.outputs.replaced }}
+          RC_NAME: salamander
 
       - uses: mshick/add-pr-comment@v2
         with:
