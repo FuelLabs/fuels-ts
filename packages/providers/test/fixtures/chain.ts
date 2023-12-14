@@ -4,7 +4,6 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
   __typename: 'ChainInfo',
   name: 'local_testnet',
   daHeight: '234',
-  peerCount: 0,
   consensusParameters: {
     __typename: 'ConsensusParameters',
     txParams: {

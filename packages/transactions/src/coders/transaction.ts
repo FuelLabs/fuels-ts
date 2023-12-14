@@ -6,10 +6,10 @@ import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
 import { ByteArrayCoder } from './byte-array';
-import type { Input } from './input';
-import { InputCoder } from './input';
-import type { Output } from './output';
-import { OutputCoder } from './output';
+import type { Input, InputContract } from './input';
+import { InputCoder, InputContractCoder } from './input';
+import type { Output, OutputContract } from './output';
+import { OutputCoder, OutputContractCoder } from './output';
 import type { Policy } from './policy';
 import { PoliciesCoder } from './policy';
 import { StorageSlotCoder } from './storage-slot';
@@ -278,14 +278,20 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
 export type TransactionMint = {
   type: TransactionType.Mint;
 
-  /** Number of outputs (u8) */
-  outputsCount: number;
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
   /** The location of the Mint transaction in the block. */
   txPointer: TxPointer;
+
+  /** The contract utxo that assets are minted to. */
+  inputContract: InputContract;
+
+  /** The contract utxo that assets are being minted to. */
+  outputContract: OutputContract;
+
+  /** The amount of funds minted. */
+  mintAmount: BN;
+
+  /** The asset ID corresponding to the minted amount. */
+  mintAssetId: string;
 };
 
 export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint> {
@@ -297,8 +303,10 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     const parts: Uint8Array[] = [];
 
     parts.push(new TxPointerCoder().encode(value.txPointer));
-    parts.push(new NumberCoder('u8').encode(value.outputsCount));
-    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new InputContractCoder().encode(value.inputContract));
+    parts.push(new OutputContractCoder().encode(value.outputContract));
+    parts.push(new U64Coder().encode(value.mintAmount));
+    parts.push(new B256Coder().encode(value.mintAssetId));
 
     return concat(parts);
   }
@@ -309,17 +317,23 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
 
     [decoded, o] = new TxPointerCoder().decode(data, o);
     const txPointer = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
-    const outputsCount = decoded;
-    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
-    const outputs = decoded;
+    [decoded, o] = new InputContractCoder().decode(data, o);
+    const inputContract = decoded;
+    [decoded, o] = new OutputContractCoder().decode(data, o);
+    const outputContract = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const mintAmount = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const mintAssetId = decoded;
 
     return [
       {
         type: TransactionType.Mint,
-        outputsCount,
-        outputs,
         txPointer,
+        inputContract,
+        outputContract,
+        mintAmount,
+        mintAssetId,
       },
       o,
     ];

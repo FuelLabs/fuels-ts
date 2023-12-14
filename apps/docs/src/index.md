@@ -34,17 +34,17 @@ Learn more about the Fuel Ecosystem.
 
 ## Install
 
-#### YARN
+::: code-group
 
-```sh
-yarn add fuels
+```sh [pnpm]
+pnpm add fuels
 ```
 
-#### NPM
-
-```sh
+```sh [npm]
 npm install fuels --save
 ```
+
+:::
 
 ## Import
 
