@@ -47,6 +47,8 @@ jobs:
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot ${{ steps.new_head_ref.outputs.replaced }}
+          changesets=$(pnpm changeset publish --tag ${{ steps.new_head_ref.outputs.replaced }})
+          echo "changesets: $changesets"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
