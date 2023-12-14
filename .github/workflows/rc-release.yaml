@@ -34,30 +34,31 @@ jobs:
 
       - name: Replace head ref
         uses: frabert/replace-string-action@v2
-        id: new_head_ref
+        id: new_ref
         with:
-          string: "${{ github.head_ref }}"
+          string: ${{ github.ref }}
           pattern: "/"
           replace-with: "-"
 
-      - name: Release to @${{ steps.new_head_ref.outputs.replaced }} tag on npm
+      - name: Release to @${{ steps.new_ref.outputs.replaced }} tag on npm
         id: release
         run: |
+          echo "${{ steps.new_ref.outputs.replaced }}}}"
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot pr-${{ env.RC_NAME }}
-          changetsets=$(pnpm changeset publish --tag pr-${{ env.RC_NAME }})
-          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ env.RC_NAME }}-\d+' | head -1)
+          pnpm changeset version --snapshot rc-${{ env.RC_NAME }}
+          changetsets=$(pnpm changeset publish --tag rc-${{ env.RC_NAME }})
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-rc-${{ env.RC_NAME }}-\d+' | head -1)
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RC_NAME: salamander
+          RC_NAME: ${{ steps.new_ref.outputs.replaced }}
 
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            This RC is published in NPM with version **${{ steps.new_head_ref.outputs.replaced }}**
+            This RC is published in NPM with version **${{ steps.new_ref.outputs.replaced }}**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
