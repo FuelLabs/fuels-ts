@@ -29,6 +29,7 @@ export default defineConfig({
         '**/*.d.ts',
         'packages/fuel-gauge/**',
         '/apps/demo-*',
+        'apps/docs'
       ],
     },
   },
