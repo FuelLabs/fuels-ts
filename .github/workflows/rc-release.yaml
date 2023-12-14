@@ -1,13 +1,9 @@
 name: Release to @rc-<name> tag on npm
 
-# TODO: Implement when PR complete
-# on:
-#   push:
-#     branches:
-#       - "rc/*"
-
 on:
-  pull_request:
+  push:
+    branches:
+      - "rc/*"
 
 jobs:
   release-pr:
@@ -54,7 +50,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RC_NAME: salamander
+          RC_NAME: ${{ steps.rc_name.outputs.replaced }}
 
       - uses: mshick/add-pr-comment@v2
         with:
