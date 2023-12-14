@@ -45,10 +45,6 @@ jobs:
         run: |
           echo "RC Version: ${{ steps.new_head_ref.outputs.replaced }}"
           pnpm changeset:next
-          git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot ${{ steps.new_head_ref.outputs.replaced }}
-          changetsets=$(pnpm changeset publish --tag ${{ steps.new_head_ref.outputs.replaced }})
-          echo "published_version=$changetsets" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
