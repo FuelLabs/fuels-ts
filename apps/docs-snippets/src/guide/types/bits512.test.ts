@@ -32,7 +32,7 @@ describe(__filename, () => {
 
     // #context console.log(walllet.publicKey);
 
-    // #context > 0x97e3a666e4cd34b6b3cf778ef5ec617de4439b68f7a629245442a1fece7713094a1cb0aa7ad0ac253ca1ea47d4618f9090b2a881e829e091fb2c426763e94cca
+    // 0x97e3a666e4cd34b6b3cf778ef5ec617de4439b68f7a629245442a1fece7713094a1cb0aa7ad0ac253ca1ea47d4618f9090b2a881e829e091fb2c426763e94cca
     // #endregion bits512-2
     // #region bits512-4
     const b512 = wallet.publicKey;

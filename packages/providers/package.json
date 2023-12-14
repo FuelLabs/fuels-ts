@@ -34,6 +34,7 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "ethers": "^6.7.1",
     "@fuel-ts/versions": "workspace:*",
