@@ -141,7 +141,7 @@ test('Example script', async () => {
     .main()
     .txParams({
       gasPrice: provider.getGasConfig().minGasPrice,
-      gasLimit: provider.getGasConfig().maxGasPerTx,
+      gasLimit: 10_000,
     })
     .call();
   // #endregion typegen-demo-script
