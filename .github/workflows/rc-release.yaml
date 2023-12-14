@@ -43,6 +43,7 @@ jobs:
       - name: Release to @${{ steps.new_head_ref.outputs.replaced }} tag on npm
         id: release
         run: |
+          echo "RC Version: ${{ steps.new_head_ref.outputs.replaced }}"
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot ${{ steps.new_head_ref.outputs.replaced }}
