@@ -38,6 +38,14 @@ Note the method transfer has two parameters: the recipient's address and the int
 
 Once the predicate resolves with a return value `true` based on its predefined condition, our predicate successfully spends its funds by means of a transfer to a desired wallet.
 
+---
+
+In a similar approach, you can use the `createTransfer` method, which returns a `ScriptTransactionRequest`. Then, we can submit this transaction request by calling the `sendTransaction` method.
+
+This can be useful if you need the transaction ID before actually submitting it to the node.
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
+
 ## Spending Entire Predicate Held Amount
 
 Trying to forward the entire amount held by the predicate results in an error because no funds are left to cover the transaction fees. Attempting this will result in an error message like:
