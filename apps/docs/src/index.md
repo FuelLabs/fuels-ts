@@ -15,7 +15,7 @@ Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/in
 
 ## Developer Quickstart Guide
 
-We recommend starting with the [Developer Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) for a walk through on building your first DApp on Fuel.
+We recommend starting with the [Developer Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/) for a walk through on building your first DApp on Fuel.
 
 - [Guide](./guide/)
 - [Sample Application](https://github.com/FuelLabs/beta2-quickstart)
