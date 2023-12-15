@@ -29,6 +29,7 @@ export default function Home() {
         .get_count()
         .txParams({
           gasPrice: 1,
+          gasLimit: 10_000,
         })
         .simulate();
       setCounter(value.toNumber());
@@ -46,6 +47,7 @@ export default function Home() {
       .increment_counter(bn(1))
       .txParams({
         gasPrice: 1,
+        gasLimit: 10_000,
       })
       .call();
     setCounter(value.toNumber());
