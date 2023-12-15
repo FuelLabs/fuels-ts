@@ -43,8 +43,5 @@
     "@fuel-ts/versions": "workspace:*",
     "bech32": "^2.0.0",
     "ethers": "^6.7.1"
-  },
-  "devDependencies": {
-    "@fuel-ts/testcases": "workspace:*"
   }
 }

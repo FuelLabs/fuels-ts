@@ -264,6 +264,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   maxU64(): BN {
     return this.gte(this.MAX_U64) ? new BN(this.MAX_U64) : this;
   }
+
+  normalizeZeroToOne(): BN {
+    return this.isZero() ? new BN(1) : this;
+  }
   // END ANCHOR: OVERRIDES to avoid losing references
 }
 
