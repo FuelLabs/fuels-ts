@@ -144,10 +144,6 @@ log(Script);
 log(Signer);
 
 /**
- * testcases
- */
-
-/**
  * transactions
  */
 log(InputCoinCoder);
