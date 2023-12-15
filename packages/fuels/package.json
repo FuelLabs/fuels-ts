@@ -95,9 +95,5 @@
     "fuel-vm",
     "sway",
     "typescript"
-  ],
-  "trustedDependencies": [
-    "@fuel-ts/fuel-core",
-    "@fuel-ts/forc"
   ]
 }
