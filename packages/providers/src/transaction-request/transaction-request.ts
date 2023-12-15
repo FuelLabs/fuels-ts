@@ -3,7 +3,12 @@ import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
+import type {
+  TransactionScript,
+  Policy,
+  TransactionCreate,
+  InputCoin,
+} from '@fuel-ts/transactions';
 import {
   PolicyType,
   TransactionCoder,
@@ -559,42 +564,36 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param quantities - CoinQuantity Array.
    */
   fundWithFakeUtxos(quantities: CoinQuantity[]) {
-    const hasBaseAssetId = quantities.some(({ assetId }) => assetId === BaseAssetId);
-
-    if (!hasBaseAssetId) {
-      quantities.push({ assetId: BaseAssetId, amount: bn(1) });
-    }
-
-    const owner = getRandomB256();
-
-    const witnessToRemove = this.inputs.reduce(
-      (acc, input) => {
-        if (input.type === InputType.Coin || input.type === InputType.Message) {
-          if (!acc[input.witnessIndex]) {
-            acc[input.witnessIndex] = true;
-          }
+    const getId = () => ZeroBytes32 + String(Math.ceil(Math.random() * 99)).padStart(2, '0');
+    const addFakeUTXO = (assetId: string, quantity: BN) => {
+      const assetInput = this.inputs.find((i) => {
+        if ('assetId' in i) {
+          return i.assetId === assetId;
         }
+        return false;
+      });
 
-        return acc;
-      },
-      {} as Record<number, boolean>
-    );
+      if (assetInput && 'assetId' in assetInput) {
+        assetInput.id = getId();
+        assetInput.amount = quantity;
+        return;
+      }
 
-    this.witnesses = this.witnesses.filter((_, idx) => !witnessToRemove[idx]);
-    this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
-    this.outputs = this.outputs.filter((output) => output.type !== OutputType.Change);
+      this.addResources([
+        {
+          id: getId(),
+          amount: quantity,
+          assetId,
+          owner: Address.fromRandom(),
+          maturity: 0,
+          blockCreated: bn(1),
+          txCreatedIdx: bn(1),
+        },
+      ]);
+    };
 
-    const fakeResources = quantities.map(({ assetId, amount }, idx) => ({
-      id: `${ZeroBytes32}0${idx}`,
-      amount,
-      assetId,
-      owner: Address.fromB256(owner),
-      maturity: 0,
-      blockCreated: bn(1),
-      txCreatedIdx: bn(1),
-    }));
-
-    this.addResources(fakeResources);
+    addFakeUTXO(BaseAssetId, bn(100_000_000_000));
+    quantities.map((q) => addFakeUTXO(q.assetId, q.amount));
   }
 
   /**
