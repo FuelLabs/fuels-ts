@@ -13,6 +13,7 @@ import {
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
+import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -47,7 +48,6 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import { mergeQuantities } from './utils/merge-quantities';
-import { DocumentNode } from 'graphql';
 
 const MAX_RETRIES = 10;
 
