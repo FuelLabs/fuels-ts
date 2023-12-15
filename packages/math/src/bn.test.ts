@@ -477,6 +477,12 @@ describe('Math - BN', () => {
     }).toThrow("Decimal can't have more than 5 digits.");
   });
 
+  it('should normalize zero to one', () => {
+    expect(bn(0).normalizeZeroToOne().eq(1)).toBeTruthy();
+
+    expect(bn(2).normalizeZeroToOne().eq(1)).not.toBeTruthy();
+  });
+
   it('should match valueOf to toString with no base arguments', () => {
     expect(bn('1000000000').valueOf()).toEqual('1000000000');
     expect(bn('2').valueOf()).toEqual('2');

@@ -820,6 +820,14 @@ export default class Provider {
       gasUsed = minGas;
     }
 
+    const usedFee = calculatePriceWithFactor(
+      gasUsed,
+      gasPrice,
+      gasPriceFactor
+    ).normalizeZeroToOne();
+    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+
     return {
       requiredQuantities: allQuantities,
       receipts,
@@ -828,9 +836,9 @@ export default class Provider {
       gasPrice,
       minGas,
       maxGas,
-      usedFee: calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor),
-      minFee: calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor),
-      maxFee: calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor),
+      usedFee,
+      minFee,
+      maxFee,
     };
   }
 
