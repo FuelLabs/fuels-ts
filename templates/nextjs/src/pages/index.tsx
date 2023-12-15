@@ -22,7 +22,8 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const provider = await Provider.create("http://127.0.0.1:4000/graphql");
-      const wallet = Wallet.fromPrivateKey("0x01", provider); // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
+      // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
+      const wallet = Wallet.fromPrivateKey("0x01", provider); 
       const testContract = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
       const { value } = await testContract.functions
