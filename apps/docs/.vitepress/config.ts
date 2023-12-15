@@ -80,7 +80,7 @@ export default defineConfig({
           },
           {
             text: 'Quickstart',
-            link: '/guide/quickstart',
+            link: '/guide/quickstart/',
           },
           {
             text: 'Types',
