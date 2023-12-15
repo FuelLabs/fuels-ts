@@ -25,5 +25,5 @@ npm run dev
 
 ## Learn More
 
-- [Fuel TS SDK docs](https://fuellabs.github.io/fuel-ts/)
+- [Fuel TS SDK docs](https://fuellabs.github.io/fuels-ts/)
 - [Fuel Docs Portal](https://docs.fuel.network/)
