@@ -33,7 +33,7 @@ jobs:
         id: rc_name
         with:
           string: ${{ github.ref }}
-          pattern: "rc/"
+          pattern: "refs/heads/rc/"
           replace-with: "rc-"
 
       - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
