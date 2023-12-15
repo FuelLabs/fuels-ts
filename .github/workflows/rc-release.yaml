@@ -42,15 +42,13 @@ jobs:
           echo "${{ steps.rc_name.outputs.replaced }}"
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot rc-${{ env.RC_NAME }}
-          changetsets=$(pnpm changeset publish --tag rc-${{ env.RC_NAME }})
-          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-rc-${{ env.RC_NAME }}-\d+' | head -1)
+          pnpm changeset version --snapshot rc-${{ steps.rc_name.outputs.replaced }}
+          changetsets=$(pnpm changeset publish --tag rc-${{ steps.rc_name.outputs.replaced }})
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-rc-${{ steps.rc_name.outputs.replaced }}-\d+' | head -1)
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          RC_NAME: ${{ steps.rc_name.outputs.replaced }}
 
       - uses: mshick/add-pr-comment@v2
         with:
