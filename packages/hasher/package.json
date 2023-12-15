@@ -33,7 +33,6 @@
     "ramda": "^0.29.0"
   },
   "devDependencies": {
-    "@fuel-ts/testcases": "workspace:*",
     "@types/ramda": "^0.29.3"
   }
 }

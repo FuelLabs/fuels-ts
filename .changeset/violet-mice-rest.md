@@ -11,7 +11,6 @@
 "@fuel-ts/program": minor
 "@fuel-ts/providers": minor
 "@fuel-ts/script": minor
-"@fuel-ts/testcases": minor
 "@fuel-ts/transactions": minor
 "@fuel-ts/utils": minor
 "@fuel-ts/versions": minor
