@@ -207,20 +207,22 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    *
    * @param request - The transaction request.
+   * @param coinQuantities - The coin quantities required to execute the transaction.
+   * @param fee - The estimated transaction fee.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(
     request: T,
-    quantities: CoinQuantity[],
+    coinQuantities: CoinQuantity[],
     fee: BN
   ): Promise<void> {
-    // TODO: Rollback to fee value after fix fee calculation
-    addAmountToAsset({
+    const updatedQuantities = addAmountToAsset({
       amount: bn(fee),
       assetId: BaseAssetId,
-      coinQuantities: quantities,
+      coinQuantities,
     });
-    const resources = await this.getResourcesToSpend(quantities);
+
+    const resources = await this.getResourcesToSpend(updatedQuantities);
     request.addResources(resources);
   }
 

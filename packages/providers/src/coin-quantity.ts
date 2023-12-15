@@ -38,7 +38,9 @@ export interface IAddAmountToAssetParams {
 }
 
 export const addAmountToAsset = (params: IAddAmountToAssetParams): CoinQuantity[] => {
-  const { amount, assetId, coinQuantities } = params;
+  const { amount, assetId } = params;
+
+  const coinQuantities = [...params.coinQuantities];
 
   const assetIdx = coinQuantities.findIndex((coinQuantity) => coinQuantity.assetId === assetId);
 
