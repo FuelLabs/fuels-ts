@@ -1,16 +1,8 @@
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn, toNumber } from '@fuel-ts/math';
-import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import { TransactionType } from '@fuel-ts/transactions';
 
-import {
-  MOCK_REQUEST_CHANGE_OUTPUT,
-  MOCK_REQUEST_COIN_INPUT,
-  MOCK_REQUEST_COIN_OUTPUT,
-  MOCK_REQUEST_CONTRACT_INPUT,
-  MOCK_REQUEST_CONTRACT_OUTPUT,
-  MOCK_REQUEST_MESSAGE_INPUT,
-} from '../../test/fixtures/inputs-and-outputs';
 import type { CoinQuantity } from '../coin-quantity';
 
 import type { CoinTransactionRequestInput } from './input';
