@@ -47,6 +47,7 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import { mergeQuantities } from './utils/merge-quantities';
+import { DocumentNode } from 'graphql';
 
 const MAX_RETRIES = 10;
 
@@ -418,22 +419,26 @@ export default class Provider {
         fetchFn(url, requestInit, this.options),
     });
 
-    // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
-    return getOperationsSdk((query, vars) => {
-      const isSubscription =
-        (query.definitions.find((x) => x.kind === 'OperationDefinition') as { operation: string })
-          ?.operation === 'subscription';
+    const executeQuery = async (query: DocumentNode, vars: Record<string, unknown>) => {
+      const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
+        operation: string;
+      };
+      const isSubscription = opDefinition?.operation === 'subscription';
 
-      return isSubscription
-        ? fuelGraphQLSubscriber({
-            url: this.url,
-            query,
-            fetchFn: (url, requestInit) =>
-              fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
-            variables: vars as Record<string, unknown>,
-          })
-        : gqlClient.request(query, vars);
-    });
+      if (isSubscription) {
+        return fuelGraphQLSubscriber({
+          url: this.url,
+          query,
+          fetchFn: (url, requestInit) =>
+            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+          variables: vars,
+        });
+      }
+      return gqlClient.request(query, vars);
+    };
+
+    // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
+    return getOperationsSdk(executeQuery);
   }
 
   /**
