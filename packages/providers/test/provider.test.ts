@@ -500,7 +500,9 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve({ coinsToSpend: [] })
+    ) as unknown as typeof provider.operations.getCoinsToSpend;
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
 
@@ -632,7 +634,9 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve({ coinsToSpend: [] })
+    ) as unknown as typeof provider.operations.getCoinsToSpend;
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [
