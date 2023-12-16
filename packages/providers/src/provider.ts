@@ -419,7 +419,7 @@ export default class Provider {
         fetchFn(url, requestInit, this.options),
     });
 
-    const executeQuery = async (query: DocumentNode, vars: Record<string, unknown>) => {
+    const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
       };
