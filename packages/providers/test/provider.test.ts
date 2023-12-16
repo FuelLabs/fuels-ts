@@ -501,7 +501,6 @@ describe('Provider', () => {
 
     const owner = Address.fromRandom();
     const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
-    // @ts-expect-error mock
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
 
@@ -634,7 +633,6 @@ describe('Provider', () => {
 
     const owner = Address.fromRandom();
     const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
-    // @ts-expect-error mock
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [
@@ -962,10 +960,10 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
     jest
       .spyOn(global, 'fetch')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error when test is run, but not in IDE
-      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
-        sleep(timeout).then(() => fetch(input, init))
+      .mockImplementationOnce((...args: unknown[]) =>
+        sleep(timeout).then(() =>
+          fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+        )
       );
 
     const { error } = await safeExec(async () => {
@@ -985,10 +983,10 @@ describe('Provider', () => {
 
     jest
       .spyOn(global, 'fetch')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error when test is run, but not in IDE
-      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
-        sleep(timeout).then(() => fetch(input, init))
+      .mockImplementationOnce((...args: unknown[]) =>
+        sleep(timeout).then(() =>
+          fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+        )
       );
 
     const { error } = await safeExec(async () => {
