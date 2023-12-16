@@ -263,8 +263,24 @@ type NodeInfoCache = Record<string, NodeInfo>;
 /**
  * A provider for connecting to a node
  */
+
+type Operations<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  OpSdk extends Record<string, (...args: any) => unknown> = ReturnType<typeof getOperationsSdk>,
+> = {
+  [K in keyof OpSdk]: ReturnType<OpSdk[K]> extends AsyncIterable<infer R>
+    ? K extends keyof R
+      ? (...args: Parameters<OpSdk[K]>) => AsyncIterable<R[K]>
+      : `Name your operation's field the same as your operation's name 
+      (e.g. subscription mySub(xx) {
+        mySub(xx) { <-- this field name should be the same as the operation name above
+          ...myFragment
+        }
+      })`
+    : OpSdk[K];
+};
 export default class Provider {
-  operations: ReturnType<typeof getOperationsSdk>;
+  operations: Operations;
   cache?: MemoryCache;
 
   static clearChainAndNodeCaches() {
@@ -412,7 +428,7 @@ export default class Provider {
    *
    * @returns The operation SDK object
    */
-  private createOperations() {
+  private createOperations(): Operations {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (url: string, requestInit: FetchRequestOptions) =>

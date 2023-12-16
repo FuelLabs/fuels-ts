@@ -16,7 +16,7 @@ class FuelSubscriptionStream implements TransformStream {
   private readableStreamController!: ReadableStreamController<FuelError | Record<string, unknown>>;
   private static textDecoder = new TextDecoder();
 
-  constructor() {
+  constructor(subscriptionName: string) {
     this.readable = new ReadableStream({
       start: (controller) => {
         this.readableStreamController = controller;
@@ -37,7 +37,7 @@ class FuelSubscriptionStream implements TransformStream {
               )
             );
           } else {
-            this.readableStreamController.enqueue(data);
+            this.readableStreamController.enqueue(data[subscriptionName]);
           }
         }
       },
@@ -63,9 +63,12 @@ export async function* fuelGraphQLSubscriber({
     },
   });
 
+  const subscriptionName = (
+    query.definitions.find((q) => q.kind === 'OperationDefinition') as { name: { value: string } }
+  )?.name.value;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const subscriptionStreamReader = response
-    .body!.pipeThrough(new FuelSubscriptionStream())
+    .body!.pipeThrough(new FuelSubscriptionStream(subscriptionName))
     .getReader();
 
   while (true) {
