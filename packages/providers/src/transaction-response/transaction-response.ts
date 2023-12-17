@@ -125,9 +125,11 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      for await (const { statusChange } of this.provider.operations.statusChange({
+      const subscription = this.provider.operations.statusChange({
         transactionId: this.id,
-      })) {
+      });
+
+      for await (const { statusChange } of subscription) {
         if (statusChange) {
           break;
         }
@@ -203,9 +205,11 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    for await (const { statusChange } of this.provider.operations.statusChange({
+    const subscription = this.provider.operations.statusChange({
       transactionId: this.id,
-    })) {
+    });
+
+    for await (const { statusChange } of subscription) {
       if (statusChange.type !== 'SubmittedStatus') {
         break;
       }
