@@ -207,21 +207,51 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    *
    * @param request - The transaction request.
+   * @param coinQuantities - The coin quantities required to execute the transaction.
+   * @param fee - The estimated transaction fee.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(
     request: T,
-    quantities: CoinQuantity[],
+    coinQuantities: CoinQuantity[],
     fee: BN
   ): Promise<void> {
-    // TODO: Rollback to fee value after fix fee calculation
-    addAmountToAsset({
+    const updatedQuantities = addAmountToAsset({
       amount: bn(fee),
       assetId: BaseAssetId,
-      coinQuantities: quantities,
+      coinQuantities,
     });
-    const resources = await this.getResourcesToSpend(quantities);
+
+    const resources = await this.getResourcesToSpend(updatedQuantities);
     request.addResources(resources);
+  }
+
+  /**
+   * A helper that creates a transfer transaction request and returns it.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @returns A promise that resolves to the prepared transaction request.
+   */
+  async createTransfer(
+    /** Address of the destination */
+    destination: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionRequest> {
+    const { minGasPrice } = this.provider.getGasConfig();
+    const params = { gasPrice: minGasPrice, ...txParams };
+    const request = new ScriptTransactionRequest(params);
+    request.addCoinOutput(destination, amount, assetId);
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
+    await this.fund(request, requiredQuantities, maxFee);
+    return request;
   }
 
   /**
@@ -243,18 +273,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const { minGasPrice } = this.provider.getGasConfig();
-
-    const params = { gasPrice: minGasPrice, ...txParams };
-
-    const request = new ScriptTransactionRequest(params);
-
-    request.addCoinOutput(destination, amount, assetId);
-
-    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
-
-    await this.fund(request, requiredQuantities, maxFee);
-
+    const request = await this.createTransfer(destination, amount, assetId, txParams);
     return this.sendTransaction(request);
   }
 

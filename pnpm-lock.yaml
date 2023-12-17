@@ -542,10 +542,6 @@ importers:
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
-    devDependencies:
-      '@fuel-ts/testcases':
-        specifier: workspace:*
-        version: link:../testcases
 
   packages/contract:
     dependencies:
@@ -783,12 +779,6 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
@@ -799,9 +789,6 @@ importers:
         specifier: ^0.29.0
         version: 0.29.0
     devDependencies:
-      '@fuel-ts/testcases':
-        specifier: workspace:*
-        version: link:../testcases
       '@types/ramda':
         specifier: ^0.29.3
         version: 0.29.3
@@ -965,6 +952,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
@@ -1082,14 +1072,9 @@ importers:
         specifier: ^6.7.1
         version: 6.7.1
     devDependencies:
-      '@fuel-ts/testcases':
-        specifier: workspace:*
-        version: link:../testcases
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.14
-
-  packages/testcases: {}
 
   packages/transactions:
     dependencies:
@@ -1207,9 +1192,6 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
     devDependencies:
-      '@fuel-ts/testcases':
-        specifier: workspace:*
-        version: link:../testcases
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.1

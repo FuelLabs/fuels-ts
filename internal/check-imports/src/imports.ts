@@ -17,7 +17,6 @@ import * as program from '@fuel-ts/program';
 import * as providers from '@fuel-ts/providers';
 import * as script from '@fuel-ts/script';
 import * as signer from '@fuel-ts/signer';
-// testcases
 import * as transactions from '@fuel-ts/transactions';
 import * as utils from '@fuel-ts/utils';
 import * as versions from '@fuel-ts/versions';
