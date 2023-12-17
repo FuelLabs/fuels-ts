@@ -125,7 +125,7 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      for await (const statusChange of this.provider.operations.statusChange({
+      for await (const { statusChange } of this.provider.operations.statusChange({
         transactionId: this.id,
       })) {
         if (statusChange) {
@@ -203,7 +203,7 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    for await (const statusChange of this.provider.operations.statusChange({
+    for await (const { statusChange } of this.provider.operations.statusChange({
       transactionId: this.id,
     })) {
       if (statusChange.type !== 'SubmittedStatus') {
