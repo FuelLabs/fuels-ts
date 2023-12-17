@@ -994,11 +994,11 @@ describe('Provider', () => {
       );
 
     const { error } = await safeExec(async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const iterator of provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
-        // shouldn't be reached
+        // shouldn't be reached and should fail if reached
+        expect(iterator).toBeFalsy();
       }
     });
     expect(error).toMatchObject({
