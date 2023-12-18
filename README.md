@@ -7,20 +7,20 @@
 
 [![test](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml/badge.svg)](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml)
 [![npm](https://img.shields.io/npm/v/fuels)](https://www.npmjs.com/package/fuels)
-[![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://fuellabs.github.io/fuels-ts/)
+[![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://docs.fuel.network/docs/fuels-ts/)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 
 # Resources
 
-The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop for resources.
+The [documentation](https://docs.fuel.network/docs/fuels-ts/) site is your main stop for resources.
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
-- [Documentation](https://fuellabs.github.io/fuels-ts)
-  - [Wallets](https://fuellabs.github.io/fuels-ts/guide/wallets/)
-  - [Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/)
-  - [Scripts](https://fuellabs.github.io/fuels-ts/guide/scripts/)
-  - [Predicates](https://fuellabs.github.io/fuels-ts/guide/predicates/)
-  - [ABI Typegen](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
+- [Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/)
+- [Documentation](https://docs.fuel.network/docs/fuels-ts/)
+  - [Wallets](https://docs.fuel.network/docs/fuels-ts/wallets/)
+  - [Contracts](https://docs.fuel.network/docs/fuels-ts/contracts/)
+  - [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/)
+  - [Predicates](https://docs.fuel.network/docs/fuels-ts/predicates/)
+  - [ABI Typegen](https://docs.fuel.network/docs/fuels-ts/abi-typegen/)
 - [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
 - [The Fuel Forum](https://forum.fuel.network/)
 - [The Fuel Ecosystem](#the-fuel-ecosystem)
@@ -49,7 +49,7 @@ console.log(new Wallet("0x0000...0000"));
 
 Fuels include some utility commands via built-in CLI tool.
 
-Check the [docs](https://fuellabs.github.io/fuels-ts) for more info.
+Check the [docs](https://docs.fuel.network/docs/fuels-ts/) for more info.
 
 ```console
 $ npm add fuels
@@ -78,8 +78,8 @@ Commands:
 
 Learn more about the Fuel Ecosystem.
 
-- [🌴 Sway](https://fuellabs.github.io/sway/) — The new language, empowering everyone to build reliable and efficient smart contracts
-- [🧰 Forc](https://fuellabs.github.io/sway/v0.30.1/forc/index.html) — The Fuel toolbox: _Build, deploy and manage your sway projects_
+- [🌴 Sway](https://docs.fuel.network/docs/sway/) — The new language, empowering everyone to build reliable and efficient smart contracts
+- [🧰 Forc](https://docs.fuel.network/docs/forc/) — The Fuel toolbox: _Build, deploy and manage your sway projects_
 - [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) — The new FuelVM, a blazingly fast blockchain VM
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) — The Fuel protocol specifications
 - [💼 Fuels Wallet](https://github.com/FuelLabs/fuels-wallet) — The Official Fuels Wallet

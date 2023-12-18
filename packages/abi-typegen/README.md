@@ -17,7 +17,7 @@ See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/
 
 ## Documentation
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/abi-typegen/)
 
 ## Installation
 
