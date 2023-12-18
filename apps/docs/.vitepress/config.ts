@@ -83,8 +83,8 @@ export default defineConfig({
             link: '/guide/quickstart/',
             items: [
               {
-                text: 'Address',
-                link: '/guide/types/address',
+                text: 'Test',
+                link: '/guide/quickstart/test',
               },
             ],
           },
