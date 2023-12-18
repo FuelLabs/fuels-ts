@@ -16,7 +16,7 @@ This module contains the utilities for encoding and decoding address and contrac
 
 ## Documentation
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/types/address.html)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/types/address/)
 
 ## Usage
 
