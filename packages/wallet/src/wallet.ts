@@ -67,5 +67,14 @@ export class Wallet {
    * @returns An unlocked wallet instance.
    */
   static fromExtendedKey = WalletUnlocked.fromExtendedKey;
+
+  /**
+   * Create a Wallet Unlocked from an encrypted JSON.
+   *
+   * @param jsonWallet - The encrypted JSON keystore.
+   * @param password - The password to decrypt the JSON.
+   * @param provider - A Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static fromEncryptedJson = WalletUnlocked.fromEncryptedJson;
 }

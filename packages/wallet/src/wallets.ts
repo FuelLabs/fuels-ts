@@ -106,6 +106,14 @@ export class WalletUnlocked extends BaseWalletUnlocked {
     return new WalletUnlocked(<string>hdWallet.privateKey, provider);
   }
 
+  /**
+   * Create a Wallet Unlocked from an encrypted JSON.
+   *
+   * @param jsonWallet - The encrypted JSON keystore.
+   * @param password - The password to decrypt the JSON.
+   * @param provider - A Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static async fromEncryptedJson(
     jsonWallet: string,
     password: string,
