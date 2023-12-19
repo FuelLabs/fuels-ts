@@ -53,6 +53,13 @@ jobs:
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            This RC is published in NPM with version **${{ steps.rc_name.outputs.replaced }}**
+            RC published under the `**${{ steps.rc_name.outputs.replaced }}**` tag.
+              
+            Install it:
+            ```bash
+            pnpm add fuels@{{ steps.rc_name.outputs.replaced }}
+            ```
+            Check it out:
+            - https://www.npmjs.com/package/fuels/v/{{ steps.rc_name.outputs.replaced }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
