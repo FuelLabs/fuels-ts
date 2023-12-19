@@ -44,7 +44,7 @@ Options:
   -s, --script                 Generate types for Scripts
   -p, --predicate              Generate types for Predicates
   -S, --silent                 Omit output messages
-  -h, --help                   display help for comman
+  -h, --help                   display help for command
 ```
 
 ## Generating types
