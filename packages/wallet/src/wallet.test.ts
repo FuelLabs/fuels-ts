@@ -22,12 +22,7 @@ describe('Wallet', () => {
     gasPrice = provider.getGasConfig().minGasPrice;
   });
 
-  it('Instantiate a new wallet', () => {
-    const lockedWallet = Wallet.fromAddress(wallet.address, provider);
-    expect(lockedWallet.address).toEqual(wallet.address);
-  });
-
-  it('Create a locked wallet', () => {
+  it('should instantiate a new wallet', () => {
     const lockedWallet = Wallet.fromAddress(wallet.address, provider);
     expect(lockedWallet.address).toEqual(wallet.address);
   });
