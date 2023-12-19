@@ -50,7 +50,7 @@ export class Account extends AbstractAccount {
   /**
    * The provider used to interact with the network.
    */
-  provider: Provider;
+  #provider?: Provider;
 
   /**
    * Creates a new Account instance.
@@ -58,10 +58,34 @@ export class Account extends AbstractAccount {
    * @param address - The address of the account.
    * @param provider - A Provider instance.
    */
-  constructor(address: string | AbstractAddress, provider: Provider) {
+  constructor(address: string | AbstractAddress, provider?: Provider) {
     super();
-    this.provider = provider;
+    this.#provider = provider;
     this.address = Address.fromDynamicInput(address);
+  }
+
+  /**
+   * The provider used to interact with the network.
+   *
+   * @returns A Provider instance.
+   *
+   * @throws `FuelError` if the provider is not set.
+   */
+  get provider(): Provider {
+    if (!this.#provider) {
+      throw new FuelError(ErrorCode.MISSING_PROVIDER, 'Provider not set');
+    }
+
+    return this.#provider;
+  }
+
+  /**
+   * Sets the provider for the account.
+   *
+   * @param provider - A Provider instance.
+   */
+  set provider(provider: Provider) {
+    this.#provider = provider;
   }
 
   /**
@@ -71,7 +95,7 @@ export class Account extends AbstractAccount {
    * @returns The updated Provider instance.
    */
   connect(provider: Provider): Provider {
-    this.provider = provider;
+    this.#provider = provider;
     return this.provider;
   }
 
