@@ -4,7 +4,6 @@ import type { CallResult, TransactionResponse, TransactionRequestLike } from '@f
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import type { BytesLike } from 'ethers';
 
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
@@ -29,25 +28,30 @@ const { ScriptTransactionRequest } = providersMod;
  * @group node
  */
 describe('WalletUnlocked', () => {
+  const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
+  const expectedPublicKey =
+    '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
+  const expectedAddress = 'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
+  const expectedMessage = 'my message';
+  const expectedSignedMessage =
+    '0x8eeb238db1adea4152644f1cd827b552dfa9ab3f4939718bb45ca476d167c6512a656f4d4c7356bfb9561b14448c230c6e7e4bd781df5ee9e5999faa6495163d';
+
   it('Instantiate a new wallet', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signMessageTest.privateKey, provider);
+    const wallet = new WalletUnlocked(expectedPrivateKey, provider);
 
-    expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
-    expect(wallet.address.toAddress()).toEqual(signMessageTest.address);
+    expect(wallet.publicKey).toEqual(expectedPublicKey);
+    expect(wallet.address.toAddress()).toEqual(expectedAddress);
   });
 
   it('Sign a message using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signMessageTest.privateKey, provider);
-    const signedMessage = await wallet.signMessage(signMessageTest.message);
-    const verifiedAddress = Signer.recoverAddress(
-      hashMessage(signMessageTest.message),
-      signedMessage
-    );
+    const wallet = new WalletUnlocked(expectedPrivateKey, provider);
+    const signedMessage = await wallet.signMessage(expectedMessage);
+    const verifiedAddress = Signer.recoverAddress(hashMessage(expectedMessage), signedMessage);
 
     expect(verifiedAddress).toEqual(wallet.address);
-    expect(signedMessage).toEqual(signMessageTest.signedMessage);
+    expect(signedMessage).toEqual(expectedSignedMessage);
   });
 
   it('Sign a transaction using wallet instance', async () => {

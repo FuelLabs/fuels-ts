@@ -1,4 +1,3 @@
-import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import { getBytesCopy, sha256 } from 'ethers';
 
 import Signer from './signer';
@@ -7,44 +6,53 @@ import Signer from './signer';
  * @group node
  */
 describe('Signer', () => {
-  it('Initialize publicKey and address for new signer instance', () => {
-    const signer = new Signer(signMessageTest.privateKey);
+  const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
+  const expectedPublicKey =
+    '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
+  const expectedAddress = 'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
+  const expectedMessage = 'my message';
+  const expectedB256Address = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
+  const expectedSignedMessage =
+    '0x8eeb238db1adea4152644f1cd827b552dfa9ab3f4939718bb45ca476d167c6512a656f4d4c7356bfb9561b14448c230c6e7e4bd781df5ee9e5999faa6495163d';
 
-    expect(signer.privateKey).toEqual(signMessageTest.privateKey);
-    expect(signer.publicKey).toEqual(signMessageTest.publicKey);
-    expect(signer.address.toAddress()).toEqual(signMessageTest.address);
-    expect(signer.address.toB256()).toEqual(signMessageTest.b256Address);
+  it('Initialize publicKey and address for new signer instance', () => {
+    const signer = new Signer(expectedPrivateKey);
+
+    expect(signer.privateKey).toEqual(expectedPrivateKey);
+    expect(signer.publicKey).toEqual(expectedPublicKey);
+    expect(signer.address.toAddress()).toEqual(expectedAddress);
+    expect(signer.address.toB256()).toEqual(expectedB256Address);
   });
 
   it('Initialize publicKey and address for new signer instance with byte array', () => {
-    const signer = new Signer(getBytesCopy(signMessageTest.privateKey));
+    const signer = new Signer(getBytesCopy(expectedPrivateKey));
 
-    expect(signer.privateKey).toEqual(signMessageTest.privateKey);
-    expect(signer.publicKey).toEqual(signMessageTest.publicKey);
-    expect(signer.address.toAddress()).toEqual(signMessageTest.address);
-    expect(signer.address.toB256()).toEqual(signMessageTest.b256Address);
+    expect(signer.privateKey).toEqual(expectedPrivateKey);
+    expect(signer.publicKey).toEqual(expectedPublicKey);
+    expect(signer.address.toAddress()).toEqual(expectedAddress);
+    expect(signer.address.toB256()).toEqual(expectedB256Address);
   });
 
   it('Sign message', () => {
-    const signer = new Signer(signMessageTest.privateKey);
-    const signedMessage = signer.sign(sha256(Buffer.from(signMessageTest.message)));
+    const signer = new Signer(expectedPrivateKey);
+    const signedMessage = signer.sign(sha256(Buffer.from(expectedMessage)));
 
-    expect(signedMessage).toEqual(signMessageTest.signedMessage);
+    expect(signedMessage).toEqual(expectedSignedMessage);
   });
 
   it('Recover publicKey and address from signed message', () => {
-    const signer = new Signer(signMessageTest.privateKey);
-    const hashedMessage = sha256(Buffer.from(signMessageTest.message));
+    const signer = new Signer(expectedPrivateKey);
+    const hashedMessage = sha256(Buffer.from(expectedMessage));
     const signedMessage = signer.sign(hashedMessage);
 
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 
-    expect(recoveredAddress.toAddress()).toEqual(signMessageTest.address);
-    expect(recoveredAddress.toB256()).toEqual(signMessageTest.b256Address);
+    expect(recoveredAddress.toAddress()).toEqual(expectedAddress);
+    expect(recoveredAddress.toB256()).toEqual(expectedB256Address);
   });
 
   it('Extend publicKey from compact publicKey', () => {
-    const signer = new Signer(signMessageTest.privateKey);
+    const signer = new Signer(expectedPrivateKey);
 
     expect(signer.publicKey).toEqual(Signer.extendPublicKey(signer.compressedPublicKey));
   });

@@ -1,7 +1,7 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const url = `https://fuellabs.github.io/sway/v${forc}/book/forc/commands/forc_test.html`
+  const url = `https://docs.fuel.network/docs/forc/commands/forc_test/`
 </script>
 
 # Testing
@@ -10,7 +10,7 @@ In order to test your Sway and TS-SDK applications, you can test your code in a 
 
 1. Testing with TS-SDK: Compiling you Sway code and connecting to the methods using TS-SDK and JS testing frameworks
 2. Using `forc test` see <a :href="url" target="_blank" rel="noreferrer">the Sway docs</a> for more info
-3. Using [the Rust SDK](https://fuellabs.github.io/fuels-rs/v0.31.1/testing/index.html)
+3. Using [the Rust SDK](https://docs.fuel.network/docs/fuels-rs/testing/)
 
 ### Testing with TS-SDK
 

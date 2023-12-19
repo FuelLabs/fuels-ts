@@ -1,8 +1,8 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const introUrl = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
-  const debugUrl = `https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/predicates.html?#debugging-predicates`
+  const introUrl = `https://docs.fuel.network/docs/sway/introduction/`
+  const debugUrl = `https://docs.fuel.network/docs/sway/sway-program-types/predicates/#debugging-predicates`
 </script>
 
 # Predicates

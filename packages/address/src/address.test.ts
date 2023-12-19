@@ -1,12 +1,12 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AssetId, B256AddressEvm, Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
-import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
 import * as utils from './utils';
 
-const PUBLIC_KEY = signMessageTest.publicKey;
+const PUBLIC_KEY =
+  '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
 const ADDRESS_B256_EVM_PADDED: B256AddressEvm =
   '0x00000000000000000000000007a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
@@ -21,6 +21,9 @@ const ADDRESS_BYTES = [
   239, 134, 175, 169, 105, 108, 240, 220, 99, 133, 226, 196, 7, 166, 225, 89, 161, 16, 60, 239, 183,
   226, 174, 6, 54, 251, 51, 211, 203, 42, 158, 74,
 ];
+
+const expectedAddress = 'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
+const expectedB256Address = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
 
 /**
  * @group node
@@ -253,8 +256,8 @@ describe('Address class', () => {
   test('create an Address class using public key', () => {
     const address = Address.fromPublicKey(PUBLIC_KEY);
 
-    expect(address.toAddress()).toEqual(signMessageTest.address);
-    expect(address.toB256()).toEqual(signMessageTest.b256Address);
+    expect(address.toAddress()).toEqual(expectedAddress);
+    expect(address.toB256()).toEqual(expectedB256Address);
   });
 
   test('create an Address class using invalid public key (no hex prefix)', async () => {
@@ -285,8 +288,8 @@ describe('Address class', () => {
   });
 
   test('when parsing to JSON it should show the bech32 address', () => {
-    const result = Address.fromB256(signMessageTest.b256Address);
-    expect(JSON.stringify(result)).toEqual(`"${signMessageTest.address}"`);
+    const result = Address.fromB256(expectedB256Address);
+    expect(JSON.stringify(result)).toEqual(`"${expectedAddress}"`);
   });
 
   test('valueOf matches toString', () => {
@@ -298,20 +301,20 @@ describe('Address class', () => {
   test('create an Address class fromDynamicInput [public key]', () => {
     const address = Address.fromDynamicInput(PUBLIC_KEY);
 
-    expect(address.toAddress()).toEqual(signMessageTest.address);
-    expect(address.toB256()).toEqual(signMessageTest.b256Address);
+    expect(address.toAddress()).toEqual(expectedAddress);
+    expect(address.toB256()).toEqual(expectedB256Address);
   });
 
   test('create an Address class fromDynamicInput [b256Address]', () => {
-    const address = Address.fromDynamicInput(signMessageTest.b256Address);
+    const address = Address.fromDynamicInput(expectedB256Address);
 
-    expect(address.toAddress()).toEqual(signMessageTest.address);
+    expect(address.toAddress()).toEqual(expectedAddress);
   });
 
   test('create an Address class fromDynamicInput [bech32Address]', () => {
-    const address = Address.fromDynamicInput(signMessageTest.address);
+    const address = Address.fromDynamicInput(expectedAddress);
 
-    expect(address.toB256()).toEqual(signMessageTest.b256Address);
+    expect(address.toB256()).toEqual(expectedB256Address);
   });
 
   test('create an Address class fromDynamicInput [evmAddress]', () => {

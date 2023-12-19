@@ -16,7 +16,7 @@ This module allows for a simple way to serialize calls and transactions to an on
 
 ## Documentation
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/contracts/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/contracts/)
 
 ## Usage
 
