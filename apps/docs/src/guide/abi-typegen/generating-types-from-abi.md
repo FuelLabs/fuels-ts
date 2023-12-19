@@ -17,15 +17,16 @@ $ pnpm fuels typegen -h
 
 Usage: fuels typegen [options]
 
-generate typescript from contract abi json files
+Generate Typescript from Sway ABI JSON files
 
 Options:
-  -i, --inputs <path|glob... input paths/globals to your ABI JSON files
-  -o, --output <dir>           directory path for generated files
-  -c, --contract               generate code for contracts [default]
-  -s, --script                 generate code for scripts
-  --silent                     omit output messages
-  -h, --help                   display help for command
+  -i, --inputs <path|glob...>  Input paths/globals to your ABI JSON files
+  -o, --output <dir>           Directory path for generated files
+  -c, --contract               Generate types for Contracts [default]
+  -s, --script                 Generate types for Scripts
+  -p, --predicate              Generate types for Predicates
+  -S, --silent                 Omit output messages
+  -h, --help                   Display help
 ```
 
 ## Generating Types for Contracts
