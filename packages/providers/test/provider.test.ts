@@ -936,11 +936,11 @@ describe('Provider', () => {
 
     await expectToThrowFuelError(
       async () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const value of provider.operations.statusChange({
           transactionId: 'invalid transaction id',
         })) {
-          //
+          // shouldn't be reached and should fail if reached
+          expect(value).toBeFalsy();
         }
       },
 
