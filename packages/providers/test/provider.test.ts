@@ -4,7 +4,6 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
-import * as mathMod from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
