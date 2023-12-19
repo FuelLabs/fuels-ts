@@ -23,10 +23,10 @@ export class Wallet {
    * Creates an unlocked wallet instance from a private key and a provider.
    *
    * @param privateKey - The private key of the wallet.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @returns An unlocked wallet instance.
    */
-  static fromPrivateKey(privateKey: BytesLike, provider: Provider) {
+  static fromPrivateKey(privateKey: BytesLike, provider?: Provider) {
     return new WalletUnlocked(privateKey, provider);
   }
 

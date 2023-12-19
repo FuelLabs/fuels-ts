@@ -47,6 +47,12 @@ describe('Wallet', () => {
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
   });
 
+  it('Should instantiate from privateKey, without a provider', () => {
+    const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
+    expect(unlockedWallet.address).toStrictEqual(wallet.address);
+    expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+  });
+
   it('encrypts and decrypts a JSON wallet', async () => {
     wallet = WalletUnlocked.generate({
       provider,
