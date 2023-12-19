@@ -8,7 +8,7 @@ import { transactionRequestify, Provider } from '@fuel-ts/providers';
 import { FUEL_NETWORK_URL } from './configs';
 import { generateTestWallet } from './test-utils/generateTestWallet';
 import { Wallet } from './wallet';
-import { WalletUnlocked } from './wallets';
+import { WalletLocked, WalletUnlocked } from './wallets';
 
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
@@ -22,9 +22,10 @@ describe('Wallet', () => {
     gasPrice = provider.getGasConfig().minGasPrice;
   });
 
-  it('should instantiate a new wallet', () => {
+  it('should instantiate a new locked wallet', () => {
     const lockedWallet = Wallet.fromAddress(wallet.address, provider);
     expect(lockedWallet.address).toEqual(wallet.address);
+    expect(lockedWallet).toBeInstanceOf(WalletLocked);
   });
 
   it('Unlock a locked wallet', () => {
