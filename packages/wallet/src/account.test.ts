@@ -204,6 +204,21 @@ describe('Account', () => {
     expect(account.provider).not.toBe(provider);
   });
 
+  it('should be able to set a provider', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(account.provider).not.toBe(newProviderInstance);
+
+    account.provider = newProviderInstance;
+
+    expect(account.provider).toBe(newProviderInstance);
+    expect(account.provider).not.toBe(provider);
+  });
+
   it('should execute fund just as fine', async () => {
     const quantities: CoinQuantity[] = [
       {
