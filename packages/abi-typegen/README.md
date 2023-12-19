@@ -24,7 +24,7 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/abi-typeg
 ```sh
 pnpm add @fuel-ts/abi-typegen
 # or
-nppnpmm add @fuel-ts/abi-typegen
+npm add @fuel-ts/abi-typegen
 ```
 
 ## Help
