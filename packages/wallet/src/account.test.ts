@@ -46,6 +46,22 @@ describe('Account', () => {
     );
   });
 
+  it('should create account using an address, without a provider', () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    expect(account.address.toB256()).toEqual(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+  });
+
+  it('should throw an error when using a provider dependent method, without a provider', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    await expect(() => account.getBalance()).rejects.toThrow(/Provider not set/);
+  });
+
   it('should get coins just fine', async () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
