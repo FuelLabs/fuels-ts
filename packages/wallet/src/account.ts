@@ -56,7 +56,7 @@ export class Account extends AbstractAccount {
    * Creates a new Account instance.
    *
    * @param address - The address of the account.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance  (optional).
    */
   constructor(address: string | AbstractAddress, provider?: Provider) {
     super();
