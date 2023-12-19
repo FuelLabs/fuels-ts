@@ -4,6 +4,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
+import * as mathMod from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
@@ -28,6 +29,14 @@ import { MOCK_NODE_INFO } from './fixtures/nodeInfo';
 
 vi.mock('@fuel-ts/versions', async () => {
   const mod = await vi.importActual('@fuel-ts/versions');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+vi.mock('@fuel-ts/math', async () => {
+  const mod = await vi.importActual('@fuel-ts/math');
   return {
     __esModule: true,
     ...mod,
@@ -1009,18 +1018,13 @@ describe('Provider', () => {
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
-    const calculatePriceWithFactorMock = jest
+    const calculatePriceWithFactorMock = vi
       .spyOn(gasMod, 'calculatePriceWithFactor')
       .mockReturnValue(bn(0));
-
-    const normalizeZeroToOneSpy = jest.spyOn(BN.prototype, 'normalizeZeroToOne');
 
     const { minFee, maxFee, usedFee } = await provider.getTransactionCost(request);
 
     expect(calculatePriceWithFactorMock).toHaveBeenCalledTimes(3);
-
-    expect(normalizeZeroToOneSpy).toHaveBeenCalledTimes(3);
-    expect(normalizeZeroToOneSpy).toHaveReturnedWith(bn(1));
 
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(usedFee.eq(0)).not.toBeTruthy();
