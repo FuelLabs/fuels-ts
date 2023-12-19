@@ -251,7 +251,7 @@ export class Account extends AbstractAccount {
             // caching this utxo to avoid fetching it again if requests needs to be funded
             cachedUtxos.push(input.id);
           }
-        } else if (input.recipient === owner && quantitiesDict[BaseAssetId]) {
+        } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
           quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
 
           // caching this message to avoid fetching it again if requests needs to be funded
