@@ -36,7 +36,7 @@ describe('Account', () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  it('Create wallet using a address', () => {
+  it('should create account using an address, with a provider', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
