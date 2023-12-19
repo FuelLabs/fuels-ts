@@ -42,8 +42,8 @@ export class Wallet {
    * Create a Wallet Unlocked from a seed.
    *
    * @param seed - The seed phrase.
-   * @param path - The derivation path (optional).
    * @param provider - A Provider instance (optional).
+   * @param path - The derivation path (optional).
    * @returns An unlocked wallet instance.
    */
   static fromSeed = WalletUnlocked.fromSeed;
