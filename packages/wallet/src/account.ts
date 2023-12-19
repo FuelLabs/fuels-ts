@@ -410,8 +410,12 @@ export class Account extends AbstractAccount {
 
     const params = { script, ...txParams };
     const request = new ScriptTransactionRequest(params);
+    const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
 
-    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(request);
+    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(
+      request,
+      forwardingQuantities
+    );
 
     await this.fund(request, requiredQuantities, maxFee);
 
