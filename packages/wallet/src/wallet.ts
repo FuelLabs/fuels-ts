@@ -52,9 +52,9 @@ export class Wallet {
    * Create a Wallet Unlocked from a mnemonic phrase.
    *
    * @param mnemonic - The mnemonic phrase.
+   * @param provider - A Provider instance (optional).
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
-   * @param provider - A Provider instance (optional).
    * @returns An unlocked wallet instance.
    */
   static fromMnemonic = WalletUnlocked.fromMnemonic;
