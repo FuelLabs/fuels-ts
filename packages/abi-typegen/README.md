@@ -31,17 +31,20 @@ npm add @fuel-ts/abi-typegen
 
 ```console
 $ fuels-typegen -h
+
+Generate Typescript from Sway ABI JSON files
+
 Usage: fuels-typegen [options]
 
-generate typescript from contract abi json files
-
 Options:
-  -i, --inputs <path|glob...>  input paths/globals to your ABI JSON files
-  -o, --output <dir>           directory path for generated files
-  -c, --contract               generate types for contracts [default]
-  -s, --script                 generate types for scripts
-  --silent                     omit output messages
-  -h, --help                   display help for command
+  -V, --version                output the version number
+  -i, --inputs <path|glob...>  Input paths/globals to your ABI JSON files
+  -o, --output <dir>           Directory path for generated files
+  -c, --contract               Generate types for Contracts [default]
+  -s, --script                 Generate types for Scripts
+  -p, --predicate              Generate types for Predicates
+  -S, --silent                 Omit output messages
+  -h, --help                   display help for comman
 ```
 
 ## Generating types
