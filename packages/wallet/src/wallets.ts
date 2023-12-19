@@ -50,7 +50,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * @param generateOptions - Options to customize the generation process (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static generate(generateOptions: GenerateOptions): WalletUnlocked {
+  static generate(generateOptions?: GenerateOptions): WalletUnlocked {
     const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
 
     return new WalletUnlocked(privateKey, generateOptions?.provider);
