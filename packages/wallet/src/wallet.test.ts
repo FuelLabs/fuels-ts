@@ -28,6 +28,12 @@ describe('Wallet', () => {
     expect(lockedWallet).toBeInstanceOf(WalletLocked);
   });
 
+  it('should instantiate a new locked wallet, without a provider', () => {
+    const lockedWallet = Wallet.fromAddress(wallet.address);
+    expect(lockedWallet.address).toEqual(wallet.address);
+    expect(lockedWallet).toBeInstanceOf(WalletLocked);
+  });
+
   it('Unlock a locked wallet', () => {
     const lockedWallet = Wallet.fromAddress(wallet.address, provider);
     const unlockedWallet = lockedWallet.unlock(wallet.privateKey);

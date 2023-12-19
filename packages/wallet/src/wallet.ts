@@ -12,10 +12,10 @@ export class Wallet {
    * Creates a locked wallet instance from an address and a provider.
    *
    * @param address - The address of the wallet.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @returns A locked wallet instance.
    */
-  static fromAddress(address: string | AbstractAddress, provider: Provider): WalletLocked {
+  static fromAddress(address: string | AbstractAddress, provider?: Provider): WalletLocked {
     return new WalletLocked(address, provider);
   }
 
