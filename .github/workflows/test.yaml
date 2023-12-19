@@ -24,6 +24,7 @@ jobs:
       fail-fast: false
       matrix:
         env: [node]
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -126,6 +127,7 @@ jobs:
     name: Run Live Tests
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
