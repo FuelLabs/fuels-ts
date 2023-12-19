@@ -22,11 +22,6 @@ export class BaseWalletUnlocked extends Account {
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 
   /**
-   * The provider used to interact with the Fuel network.
-   */
-  provider: Provider;
-
-  /**
    * A function that returns the wallet's signer.
    */
   signer: () => Signer;
@@ -41,7 +36,6 @@ export class BaseWalletUnlocked extends Account {
     const signer = new Signer(privateKey);
     super(signer.address, provider);
     this.signer = () => signer;
-    this.provider = provider;
   }
 
   /**
