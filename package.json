@@ -10,7 +10,6 @@
   },
   "packageManager": "pnpm@8.9.0",
   "scripts": {
-    "dan": "tsx ./scripts/release-unpublish.ts",
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=!docs",
@@ -91,7 +90,7 @@
     "textlint-rule-no-dead-link": "^5.1.2",
     "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
-    "tsx": "^3.12.7",
+    "tsx": "^4.7.0",
     "turbo": "^1.8.8",
     "typescript": "~5.2.2",
     "vite": "^5.0.8",
