@@ -13,10 +13,18 @@ describe('buildSwayPrograms', () => {
     mockLogger();
   });
 
-  test('building Sway programs using workspace', async () => {
-    const buildSwayProgramSpy = vi
+  function mockBuildSwayProgram() {
+    const buildSwayProgram = vi
       .spyOn(buildSwayProgramMod, 'buildSwayProgram')
       .mockReturnValue(Promise.resolve());
+
+    return {
+      buildSwayProgram,
+    };
+  }
+
+  test('building Sway programs using workspace', async () => {
+    const { buildSwayProgram } = mockBuildSwayProgram();
 
     const config = {
       ...structuredClone(fuelsConfig),
@@ -25,21 +33,19 @@ describe('buildSwayPrograms', () => {
 
     await buildSwayPrograms(config);
 
-    expect(buildSwayProgramSpy).toHaveBeenCalledTimes(1);
-    expect(buildSwayProgramSpy).toHaveBeenCalledWith(config, config.workspace);
+    expect(buildSwayProgram).toHaveBeenCalledTimes(1);
+    expect(buildSwayProgram).toHaveBeenCalledWith(config, config.workspace);
   });
 
   test('building Sway programs using individual configs', async () => {
-    const buildSwayProgramSpy = vi
-      .spyOn(buildSwayProgramMod, 'buildSwayProgram')
-      .mockReturnValue(Promise.resolve());
+    const { buildSwayProgram } = mockBuildSwayProgram();
 
     await buildSwayPrograms(fuelsConfig);
 
-    expect(buildSwayProgramSpy).toHaveBeenCalledTimes(4);
-    expect(buildSwayProgramSpy).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[0]);
-    expect(buildSwayProgramSpy).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[1]);
-    expect(buildSwayProgramSpy).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.scripts[0]);
-    expect(buildSwayProgramSpy).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.predicates[0]);
+    expect(buildSwayProgram).toHaveBeenCalledTimes(4);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[0]);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[1]);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.scripts[0]);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.predicates[0]);
   });
 });
