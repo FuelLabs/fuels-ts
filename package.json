@@ -62,7 +62,7 @@
     "@types/web": "^0.0.65",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
-    "@vitest/coverage-istanbul": "^1.0.4",
+    "@vitest/coverage-istanbul": "^1.1.0",
     "compare-versions": "^6.1.0",
     "conventional-changelog-angular": "^5.0.13",
     "coverage-diff": "^3.2.0",
