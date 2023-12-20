@@ -19,6 +19,9 @@ fragment transactionStatusFragment on TransactionStatus {
       returnType
       data
     }
+    receipts: receipts {
+      ...receiptFragment
+    }
   }
   ... on FailureStatus {
     block {
@@ -26,6 +29,9 @@ fragment transactionStatusFragment on TransactionStatus {
     }
     time
     reason
+    receipts: receipts {
+      ...receiptFragment
+    }
   }
 }
 
