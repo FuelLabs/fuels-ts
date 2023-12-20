@@ -17,9 +17,10 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from '../src/transaction-request';
-import { ScriptTransactionRequest } from '../src/transaction-request';
+import { ScriptTransactionRequest , CreateTransactionRequest } from '../src/transaction-request';
 import { TransactionResponse } from '../src/transaction-response';
 import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
+import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 
@@ -66,7 +67,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.20.8');
+    expect(version).toEqual('0.22.0');
   });
 
   it('can call()', async () => {
@@ -109,20 +110,20 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
-        pc: bn(0x2870),
-        is: bn(0x2868),
+        pc: bn(0x2868),
+        is: bn(0x2860),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: bn(1),
-        pc: bn(0x2874),
-        is: bn(0x2868),
+        pc: bn(0x286c),
+        is: bn(0x2860),
       },
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0xc),
+        gasUsed: bn(0x18),
       },
     ];
 
@@ -499,8 +500,9 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
-    // @ts-expect-error mock
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve({ coinsToSpend: [] })
+    ) as unknown as typeof provider.operations.getCoinsToSpend;
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
 
@@ -632,8 +634,9 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
-    // @ts-expect-error mock
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve({ coinsToSpend: [] })
+    ) as unknown as typeof provider.operations.getCoinsToSpend;
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [
@@ -870,6 +873,9 @@ describe('Provider', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
@@ -902,6 +908,9 @@ describe('Provider', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
@@ -927,11 +936,11 @@ describe('Provider', () => {
 
     await expectToThrowFuelError(
       async () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for await (const value of provider.operations.statusChange({
           transactionId: 'invalid transaction id',
         })) {
-          //
+          // shouldn't be reached and should fail if reached
+          expect(value).toBeFalsy();
         }
       },
 
@@ -955,10 +964,10 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
     jest
       .spyOn(global, 'fetch')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error when test is run, but not in IDE
-      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
-        sleep(timeout).then(() => fetch(input, init))
+      .mockImplementationOnce((...args: unknown[]) =>
+        sleep(timeout).then(() =>
+          fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+        )
       );
 
     const { error } = await safeExec(async () => {
@@ -978,18 +987,18 @@ describe('Provider', () => {
 
     jest
       .spyOn(global, 'fetch')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error when test is run, but not in IDE
-      .mockImplementationOnce((input: RequestInfo | URL, init: RequestInit | undefined) =>
-        sleep(timeout).then(() => fetch(input, init))
+      .mockImplementationOnce((...args: unknown[]) =>
+        sleep(timeout).then(() =>
+          fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+        )
       );
 
     const { error } = await safeExec(async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const iterator of provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
-        // shouldn't be reached
+        // shouldn't be reached and should fail if reached
+        expect(iterator).toBeFalsy();
       }
     });
     expect(error).toMatchObject({
@@ -997,5 +1006,84 @@ describe('Provider', () => {
       name: 'TimeoutError',
       message: 'The operation was aborted due to timeout',
     });
+  });
+  it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { gasPerByte } = provider.getGasConfig();
+
+    const gasLimit = bn(1000);
+    const transactionRequest = new ScriptTransactionRequest({
+      gasLimit,
+    });
+
+    const maxGasSpy = jest.spyOn(gasMod, 'getMaxGas');
+
+    const chainInfo = provider.getChain();
+    const minGas = bn(200);
+
+    const witnessesLength = transactionRequest
+      .toTransaction()
+      .witnesses.reduce((acc, wit) => acc + wit.dataLength, 0);
+
+    transactionRequest.calculateMaxGas(chainInfo, minGas);
+    expect(maxGasSpy).toHaveBeenCalledWith({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: transactionRequest.witnessLimit,
+      gasLimit: transactionRequest.gasLimit,
+    });
+  });
+
+  it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { gasPerByte } = provider.getGasConfig();
+
+    const transactionRequest = new CreateTransactionRequest({
+      witnesses: [ZeroBytes32],
+    });
+
+    transactionRequest.addContractCreatedOutput(ZeroBytes32, ZeroBytes32);
+
+    const maxGasSpy = jest.spyOn(gasMod, 'getMaxGas');
+
+    const chainInfo = provider.getChain();
+    const minGas = bn(700);
+
+    const witnessesLength = transactionRequest
+      .toTransaction()
+      .witnesses.reduce((acc, wit) => acc + wit.dataLength, 0);
+
+    transactionRequest.calculateMaxGas(chainInfo, minGas);
+    expect(maxGasSpy).toHaveBeenCalledWith({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: transactionRequest.witnessLimit,
+    });
+  });
+
+  it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const request = new ScriptTransactionRequest();
+
+    // forcing calculatePriceWithFactor to return 0
+    const calculatePriceWithFactorMock = jest
+      .spyOn(gasMod, 'calculatePriceWithFactor')
+      .mockReturnValue(bn(0));
+
+    const normalizeZeroToOneSpy = jest.spyOn(BN.prototype, 'normalizeZeroToOne');
+
+    const { minFee, maxFee, usedFee } = await provider.getTransactionCost(request);
+
+    expect(calculatePriceWithFactorMock).toHaveBeenCalledTimes(3);
+
+    expect(normalizeZeroToOneSpy).toHaveBeenCalledTimes(3);
+    expect(normalizeZeroToOneSpy).toHaveReturnedWith(bn(1));
+
+    expect(maxFee.eq(0)).not.toBeTruthy();
+    expect(usedFee.eq(0)).not.toBeTruthy();
+    expect(minFee.eq(0)).not.toBeTruthy();
   });
 });

@@ -22,7 +22,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
-      .txParams({ gasPrice: minGasPrice })
+      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
@@ -42,7 +42,7 @@ describe(__filename, () => {
         })
         .txParams({ gasPrice: minGasPrice })
         .call()
-    ).rejects.toThrow(/OutOfGas/);
+    ).rejects.toThrow(/Gas limit '1' is lower than the required: /);
     // #endregion call-params-2
   });
 
@@ -71,7 +71,7 @@ describe(__filename, () => {
     } = result;
 
     expect(new BN(value).toNumber()).toBe(10);
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(transactionGasLimit);
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(transactionGasLimit);
     // #endregion call-params-3
   });
 });

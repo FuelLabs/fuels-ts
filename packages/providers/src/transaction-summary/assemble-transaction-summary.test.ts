@@ -14,12 +14,17 @@ import {
   MOCK_SUBMITTED_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
 } from '../../test/fixtures/transaction-summary';
+import type { GqlGasCosts } from '../__generated__/operations';
+import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import type { GraphqlTransactionStatus, Operation } from './types';
 
 describe('TransactionSummary', () => {
+  let provider: Provider;
+  let gasCosts: GqlGasCosts;
+
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
   const gasPerByte = bn(2);
   const gasPriceFactor = bn(3);
@@ -34,6 +39,11 @@ describe('TransactionSummary', () => {
     MOCK_RECEIPT_SCRIPT_RESULT,
   ];
 
+  beforeAll(async () => {
+    provider = await Provider.create('http://127.0.0.1:4000/graphql');
+    gasCosts = provider.getChain().gasCosts;
+  });
+
   const runTest = (status: GraphqlTransactionStatus, expected: Record<string, unknown>) => {
     const transactionSummary = assembleTransactionSummary({
       id,
@@ -44,6 +54,8 @@ describe('TransactionSummary', () => {
       receipts,
       gqlTransactionStatus: status,
       maxInputs,
+      gasCosts,
+      abiMap: {},
     });
 
     expect(transactionSummary).toMatchObject(expected);

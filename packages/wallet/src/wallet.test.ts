@@ -114,7 +114,7 @@ describe('Wallet', () => {
       externalWalletReceiver.address,
       bn(1_000_000),
       BaseAssetId,
-      { gasPrice }
+      { gasPrice, gasLimit: 10_000 }
     );
     await response.wait();
 

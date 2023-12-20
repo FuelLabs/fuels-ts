@@ -74,7 +74,7 @@ describe('GenericTypesContract', () => {
           },
         }
       )
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const arg1 = {
@@ -106,7 +106,7 @@ describe('GenericTypesContract', () => {
 
     const { value: call2 } = await contract.functions
       .generic_complex_type_function(arg1, arg2)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toEqual(bimArg1);

@@ -5,7 +5,7 @@
 First we install `fuels` to our project:
 
 ```console
-yarn add fuels
+pnpm add fuels
 ```
 
 ## Help
@@ -13,19 +13,20 @@ yarn add fuels
 A first glance at the docs:
 
 ```console
-$ yarn exec fuels typegen -h
+$ pnpm fuels typegen -h
 
 Usage: fuels typegen [options]
 
-generate typescript from contract abi json files
+Generate Typescript from Sway ABI JSON files
 
 Options:
-  -i, --inputs <path|glob... input paths/globals to your ABI JSON files
-  -o, --output <dir>           directory path for generated files
-  -c, --contract               generate code for contracts [default]
-  -s, --script                 generate code for scripts
-  --silent                     omit output messages
-  -h, --help                   display help for command
+  -i, --inputs <path|glob...>  Input paths/globals to your ABI JSON files
+  -o, --output <dir>           Directory path for generated files
+  -c, --contract               Generate types for Contracts [default]
+  -s, --script                 Generate types for Scripts
+  -p, --predicate              Generate types for Predicates
+  -S, --silent                 Omit output messages
+  -h, --help                   Display help
 ```
 
 ## Generating Types for Contracts
@@ -36,7 +37,7 @@ You can generate types for a Sway contract using the command below:
 <!-- gen_types:example:start -->
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 <!-- gen_types:example:end -->
@@ -57,7 +58,7 @@ You can omit the `--contract` option here since it's the default.
 To generate types for a Sway script, use the `--script` flag:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 ## Generating Types for Predicates
@@ -65,7 +66,7 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 To generate types for a Sway predicate, use the `--predicate` flag:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 ---

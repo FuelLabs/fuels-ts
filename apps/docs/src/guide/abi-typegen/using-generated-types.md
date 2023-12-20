@@ -5,117 +5,48 @@
 After generating types via:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
-
-```ts
-import { Wallet } from "fuels";
-import { MyContract__factory } from "./types";
-
-const contractId = "0x...";
-const wallet = Wallet.fromAddress("...");
-const contract = MyContract__factory.connect(contractId, wallet);
-
-// All contract methods are available under functions with the correct types
-const { transactionId, value } = await contract.functions.my_fn(1).call();
-
-console.log(transactionId, value);
-```
+<<< @/../../demo-typegen/src/demo.test.ts#typegen-demo-contract-factory-connect{ts:line-numbers}
 
 ## Contract
 
 Let's use the Contract class to deploy a contract:
 
-```ts
-import { Wallet } from "fuels";
-import { MyContract__factory } from "./types";
-import bytecode from "./types/MyContract.hex.ts";
-
-const wallet = Wallet.fromAddress("...");
-
-const contract = await MyContract__factory.deployContract(bytecode, wallet);
-
-console.log(contract.id);
-```
+<<< @/../../demo-typegen/src/demo.test.ts#typegen-demo-contract-factory-deploy{ts:line-numbers}
 
 ### Autoloading of Storage Slots
 
 Typegen tries to resolve, auto-load, and embed the [Storage Slots](../contracts//storage-slots.md) for your Contract within the `MyContract__factory` class. Still, you can override it alongside other options from [`DeployContractOptions`](https://github.com/FuelLabs/fuels-ts/blob/a64b67b9fb2d7f764ab9151a21d2266bf2df3643/packages/contract/src/contract-factory.ts#L19-L24), when calling the `deployContract` method:
 
-```ts
-import storageSlots from "../contract/out/debug/storage-slots.json";
-
-const contract = await MyContract__factory.deployContract(bytecode, wallet, {
-  storageSlots,
-});
-```
+<<< @/../../demo-typegen/src/demo.test.ts#typegen-demo-contract-storage-slots{ts:line-numbers}
 
 ## Script
 
 After generating types via:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
-
-```ts
-import { Wallet } from "fuels";
-import { MyScript__factory } from "./types";
-
-const wallet = Wallet.fromAddress("...");
-const script = ScriptAbi__factory.createInstance(wallet);
-
-const { value, logs } = await script.functions.main(1).call();
-
-console.log({ value, logs });
-```
+<<< @/../../demo-typegen/src/demo.test.ts#typegen-demo-script{ts:line-numbers}
 
 ## Predicate
 
-Consider the following predicate:
-
-<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/predicate-main-args-struct/src/main.sw#Predicate-main-args{ts:line-numbers}
-
-Now, after generating types via:
+After generating types via:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
-
-```ts
-import { Wallet } from "fuels";
-import { MyPredicate__factory } from "./types";
-
-const wallet = Wallet.fromAddress("...");
-const predicate = MyPredicate__factory.createInstance();
-
-await predicate
-  .setData({
-    has_account: true,
-    total_complete: 100,
-  })
-  .transfer(wallet.address, <amount>);
-
-const walletBalance = await wallet.getBalance();
-const predicateBalance = await predicate.getBalance();
-
-console.log({
-  walletBalance,
-  predicateBalance,
-});
-```
+<<< @/../../demo-typegen/src/demo.test.ts#typegen-demo-predicate{ts:line-numbers}
 
 See also:
 

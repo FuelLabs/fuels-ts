@@ -45,12 +45,18 @@ describe('PredicateConditionalInputs', () => {
     });
 
     // transfer asset A to predicate so it can transfer to alice
-    const tx1 = await adminWallet.transfer(predicate.address, 100_000, assetIdA, { gasPrice });
+    const tx1 = await adminWallet.transfer(predicate.address, 100_000, assetIdA, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     await tx1.waitForResult();
 
     // transfer base asset to Alice so she can pay the fees
-    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, BaseAssetId, { gasPrice });
+    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     await tx2.waitForResult();
 
@@ -116,18 +122,27 @@ describe('PredicateConditionalInputs', () => {
     });
 
     // transfer asset A to predicate so it can transfer to alice
-    const tx1 = await adminWallet.transfer(predicate.address, 2_000, assetIdA, { gasPrice });
+    const tx1 = await adminWallet.transfer(predicate.address, 2_000, assetIdA, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     await tx1.waitForResult();
 
     // transfer base asset to predicate so it can pay the fees
-    const tx2 = await adminWallet.transfer(predicate.address, 2_000, BaseAssetId, { gasPrice });
+    const tx2 = await adminWallet.transfer(predicate.address, 2_000, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     await tx2.waitForResult();
 
     // transfer asset B to Alice so it can add symbolic UTXOs to the transaction
     // inputs in order to the predicate validate her inputs in the transaction.
-    const tx3 = await adminWallet.transfer(aliceWallet.address, 2_000, assetIdB, { gasPrice });
+    const tx3 = await adminWallet.transfer(aliceWallet.address, 2_000, assetIdB, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
 
     await tx3.waitForResult();
 

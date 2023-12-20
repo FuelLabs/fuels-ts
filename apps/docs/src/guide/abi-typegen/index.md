@@ -2,13 +2,13 @@
   import { data } from '../../versions.data'
   const { forc } = data
   const abiUrl = `
-    https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/smart_contracts.html#the-abi-declaration
+    https://docs.fuel.network/docs/sway/sway-program-types/smart_contracts/#the-abi-declaration
   `
   const contractsUrl = `
-    https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/smart_contracts.html
+    https://docs.fuel.network/docs/sway/sway-program-types/smart_contracts/
   `
   const scriptsUrl = `
-    https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/scripts.html
+    https://docs.fuel.network/docs/sway/sway-program-types/scripts/
   `
 </script>
 
@@ -22,7 +22,7 @@ It tells the SDK about the <a :href="abiUrl" target="_blank" rel="noreferrer">AB
 
 Given the following Sway smart contract:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```rust:line-numbers
 contract;

@@ -111,7 +111,11 @@ export class FunctionFragment<
       shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
     }
 
-    const coders = nonEmptyInputs.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
+    const coders = nonEmptyInputs.map((t) =>
+      AbiCoder.getCoder(this.jsonAbi, t, {
+        isRightPadded: nonEmptyInputs.length > 1,
+      })
+    );
 
     const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);

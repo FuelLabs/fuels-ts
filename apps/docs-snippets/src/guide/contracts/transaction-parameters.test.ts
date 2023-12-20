@@ -1,5 +1,5 @@
 import type { Contract, Provider } from 'fuels';
-import { BN } from 'fuels';
+import { BN, PolicyType } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -15,13 +15,13 @@ describe(__filename, () => {
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
     // #region variable-outputs-1
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
+        gasLimit: 10_000,
         variableOutputs: 1,
       })
       .call();
@@ -30,8 +30,12 @@ describe(__filename, () => {
 
     const { transaction } = transactionResult;
 
-    expect(new BN(transaction.gasPrice).toNumber()).toBe(minGasPrice.toNumber());
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(maxGasPerTx.toNumber());
+    const gasLimitPolicy = transaction.policies?.find(
+      (policy) => policy.type === PolicyType.GasPrice
+    );
+
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10000);
+    expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(minGasPrice.toNumber());
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {

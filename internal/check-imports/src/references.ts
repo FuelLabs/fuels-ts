@@ -6,7 +6,7 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
-import { hashTransaction, hashMessage } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractPredicate } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
@@ -84,7 +84,6 @@ log(createConfig);
 /**
  * hasher
  */
-log(hashTransaction);
 log(hashMessage);
 
 /**
@@ -143,10 +142,6 @@ log(Script);
  * signer
  */
 log(Signer);
-
-/**
- * testcases
- */
 
 /**
  * transactions

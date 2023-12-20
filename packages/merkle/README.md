@@ -23,14 +23,14 @@ This module contains:
 
 <!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/)
 
 ## Usage
 
 ### Installation
 
 ```sh
-yarn add @fuel-ts/merkle
+pnpm add @fuel-ts/merkle
 # or
 npm add @fuel-ts/merkle
 ```
@@ -40,7 +40,7 @@ npm add @fuel-ts/merkle
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

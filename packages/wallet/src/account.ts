@@ -17,6 +17,7 @@ import type {
   ExcludeResourcesOption,
   TransactionResponse,
   Provider,
+  ScriptTransactionRequestLike,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -32,7 +33,10 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-export type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
+export type TxParamsType = Pick<
+  ScriptTransactionRequestLike,
+  'gasLimit' | 'gasPrice' | 'maturity' | 'maxFee' | 'witnessLimit'
+>;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
@@ -203,21 +207,51 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    *
    * @param request - The transaction request.
+   * @param coinQuantities - The coin quantities required to execute the transaction.
+   * @param fee - The estimated transaction fee.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(
     request: T,
-    quantities: CoinQuantity[],
+    coinQuantities: CoinQuantity[],
     fee: BN
   ): Promise<void> {
-    addAmountToAsset({
-      amount: fee,
+    const updatedQuantities = addAmountToAsset({
+      amount: bn(fee),
       assetId: BaseAssetId,
-      coinQuantities: quantities,
+      coinQuantities,
     });
 
-    const resources = await this.getResourcesToSpend(quantities);
+    const resources = await this.getResourcesToSpend(updatedQuantities);
     request.addResources(resources);
+  }
+
+  /**
+   * A helper that creates a transfer transaction request and returns it.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @returns A promise that resolves to the prepared transaction request.
+   */
+  async createTransfer(
+    /** Address of the destination */
+    destination: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionRequest> {
+    const { minGasPrice } = this.provider.getGasConfig();
+    const params = { gasPrice: minGasPrice, ...txParams };
+    const request = new ScriptTransactionRequest(params);
+    request.addCoinOutput(destination, amount, assetId);
+    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
+    await this.fund(request, requiredQuantities, maxFee);
+    return request;
   }
 
   /**
@@ -239,36 +273,8 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const request = await this.prepareTransferTxRequest(destination, amount, assetId, txParams);
+    const request = await this.createTransfer(destination, amount, assetId, txParams);
     return this.sendTransaction(request);
-  }
-
-  /**
-   * A helper that prepares a transaction request for calculating the transaction ID.
-   *
-   * @param destination - The address of the destination.
-   * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
-   * @returns A promise that resolves to the prepared transaction request.
-   */
-  protected async prepareTransferTxRequest(
-    /** Address of the destination */
-    destination: AbstractAddress,
-    /** Amount of coins */
-    amount: BigNumberish,
-    /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
-    /** Tx Params */
-    txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
-    const { maxGasPerTx } = this.provider.getGasConfig();
-    const params: TxParamsType = { gasLimit: maxGasPerTx, ...txParams };
-    const request = new ScriptTransactionRequest(params);
-    request.addCoinOutput(destination, amount, assetId);
-    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
-    await this.fund(request, requiredQuantities, maxFee);
-    return request;
   }
 
   /**
@@ -290,6 +296,9 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const { minGasPrice } = this.provider.getGasConfig();
+    const params = { gasPrice: minGasPrice, ...txParams };
+
     const script = await composeScriptForTransferringToContract();
 
     const scriptData = formatScriptDataForTransferringToContract(
@@ -298,10 +307,8 @@ export class Account extends AbstractAccount {
       assetId
     );
 
-    const { maxGasPerTx } = this.provider.getGasConfig();
     const request = new ScriptTransactionRequest({
-      gasLimit: maxGasPerTx,
-      ...txParams,
+      ...params,
       script,
       scriptData,
     });
@@ -346,19 +353,12 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    // build the transaction
-    const { maxGasPerTx } = this.provider.getGasConfig();
-    const params = { script, gasLimit: maxGasPerTx, ...txParams };
+    const params = { script, ...txParams };
     const request = new ScriptTransactionRequest(params);
 
-    const { gasPriceFactor } = this.provider.getGasConfig();
+    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(request);
 
-    const fee = request.calculateFee(gasPriceFactor);
-    let quantities: CoinQuantityLike[] = [];
-    fee.amount = fee.amount.add(amount);
-    quantities = [fee];
-    const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
   }
@@ -374,7 +374,7 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
-    return this.provider.sendTransaction(transactionRequest);
+    return this.provider.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   /**
@@ -386,6 +386,6 @@ export class Account extends AbstractAccount {
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
-    return this.provider.simulate(transactionRequest);
+    return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 }

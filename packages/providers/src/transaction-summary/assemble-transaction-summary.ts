@@ -1,14 +1,12 @@
-import { bn, type BN } from '@fuel-ts/math';
+import { type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
 import { hexlify } from 'ethers';
 
+import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
-import {
-  calculateTransactionFee,
-  calculateTxChargeableBytes,
-  getGasUsedFromReceipts,
-} from '../utils';
+import { getGasUsedFromReceipts } from '../utils';
 
+import { calculateTransactionFee } from './calculate-transaction-fee';
 import { fromTai64ToDate } from './date';
 import {
   getOperations,
@@ -22,15 +20,16 @@ import { processGraphqlStatus } from './status';
 import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 
 export interface AssembleTransactionSummaryParams {
-  id?: string;
   gasPerByte: BN;
   gasPriceFactor: BN;
   transaction: Transaction;
+  id?: string;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
   abiMap?: AbiMap;
   maxInputs: BN;
+  gasCosts: GqlGasCosts;
 }
 
 /** @hidden */
@@ -38,46 +37,45 @@ export function assembleTransactionSummary<TTransactionType = void>(
   params: AssembleTransactionSummaryParams
 ) {
   const {
+    id,
     receipts,
     gasPerByte,
     gasPriceFactor,
     transaction,
     transactionBytes,
-    id,
     gqlTransactionStatus,
     abiMap = {},
     maxInputs,
+    gasCosts,
   } = params;
 
-  const { gasLimit = bn(0), witnesses } = transaction;
-
-  const gasPrice = bn(transaction.gasPrice);
   const gasUsed = getGasUsedFromReceipts(receipts);
-  const chargeableBytes = calculateTxChargeableBytes({
-    transactionBytes,
-    transactionWitnesses: witnesses,
-  });
 
-  const { minFee: fee } = calculateTransactionFee({
-    gasUsed,
-    gasPrice,
-    gasLimit,
-    gasPerByte,
-    gasPriceFactor,
-    chargeableBytes,
-  });
+  const rawPayload = hexlify(transactionBytes);
 
   const operations = getOperations({
     transactionType: transaction.type,
     inputs: transaction.inputs || [],
     outputs: transaction.outputs || [],
     receipts,
-    rawPayload: hexlify(transactionBytes),
+    rawPayload,
     abiMap,
     maxInputs,
   });
 
   const typeName = getTransactionTypeName(transaction.type);
+
+  const { fee } = calculateTransactionFee({
+    gasUsed,
+    rawPayload,
+    consensusParameters: {
+      gasCosts,
+      feeParams: {
+        gasPerByte,
+        gasPriceFactor,
+      },
+    },
+  });
 
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);

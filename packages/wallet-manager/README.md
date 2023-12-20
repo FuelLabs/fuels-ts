@@ -18,14 +18,14 @@ This module is a coordination wrapper to manage multiple wallet `Vaults` and sto
 
 <!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/)
 
 ## Usage
 
 ### Installation
 
 ```sh
-yarn add @fuel-ts/wallet-manager
+pnpm add @fuel-ts/wallet-manager
 # or
 npm add @fuel-ts/wallet-manager
 ```
@@ -35,7 +35,7 @@ npm add @fuel-ts/wallet-manager
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

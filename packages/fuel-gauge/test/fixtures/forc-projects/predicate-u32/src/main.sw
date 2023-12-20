@@ -1,9 +1,6 @@
 predicate;
 
-use std::inputs::input_predicate_data;
-
-fn main() -> bool {
-    let received: u32 = input_predicate_data(0);
+fn main(received: u32) -> bool {
     let expected: u32 = 1078;
 
     received == expected

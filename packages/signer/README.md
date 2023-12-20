@@ -18,14 +18,14 @@ This module contains utilities for secp256-k1 signing, verifying and recovery op
 
 <!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/)
 
 ## Usage
 
 ### Installation
 
 ```sh
-yarn add @fuel-ts/signer
+pnpm add @fuel-ts/signer
 # or
 npm add @fuel-ts/signer
 ```
@@ -35,7 +35,7 @@ npm add @fuel-ts/signer
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

@@ -6,7 +6,7 @@ To interact with a deployed contract using the SDK without redeploying it, you o
 
 The `contractId` property from the `Contract` class is of type `AbstractAddress`, an abstract class that is exclusively extended by the `Address` class.
 
-The `Address` class wrapps all methods from the `AbstractAddress` class and adds a single property: `bech32Address`. This property is a string encoded in [Bech32](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
+The `Address` class wraps all methods from the `AbstractAddress` class and adds a single property: `bech32Address`. This property is a string encoded in [`Bech32`](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
 
 When you log the `contractId` property of an instantiated Contract using `console.log`, the output appears as follows:
 
@@ -18,11 +18,11 @@ When you log the `contractId` property of an instantiated Contract using `consol
 
 ---
 
-If you have already an instantiated and deployed contract in hands you can create another contract instance simply by using the `contractId` property and the contract JSON abi:
+If you have already an instantiated and deployed contract in hands you can create another contract instance simply by using the `contractId` property and the contract JSON ABI:
 
 <<< @/../../docs-snippets/src/guide/contracts/managing-deployed-contracts.test.ts#managing-deployed-contracts-1{ts:line-numbers}
 
-The previous example assumes that you have a `Contract` instance at hand. However, some Fuel tools and Sway use the [b256](../types/bits256.md) type format, a hex-encoded string-like type, for contract IDs.
+The previous example assumes that you have a `Contract` instance at hand. However, some Fuel tools and Sway use the [`b256`](../types/bits256.md) type format, a hex-encoded string-like type, for contract IDs.
 
 You might have this format instead, for example, if you have deployed your contract with `forc deploy`.
 

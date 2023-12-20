@@ -1,0 +1,65 @@
+name: Release to @rc-<name> tag on npm
+
+on:
+  push:
+    branches:
+      - "rc/*"
+
+jobs:
+  release-pr:
+    name: "Release RC to npm"
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Ensure NPM access
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build
+        run: pnpm build
+
+      - name: Get RC name
+        uses: frabert/replace-string-action@v2
+        id: rc_name
+        with:
+          string: ${{ github.ref }}
+          pattern: "refs/heads/rc/"
+          replace-with: "rc-"
+
+      - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
+        id: release
+        run: |
+          echo "${{ steps.rc_name.outputs.replaced }}"
+          pnpm changeset:next
+          git add .changeset/fuel-labs-ci.md
+          pnpm changeset version --snapshot ${{ steps.rc_name.outputs.replaced }}
+          changetsets=$(pnpm changeset publish --tag ${{ steps.rc_name.outputs.replaced }})
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-${{ steps.rc_name.outputs.replaced }}-\d+' | head -1)
+          echo "published_version=$published_version" >> $GITHUB_OUTPUT
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            RC published under the `**${{ steps.rc_name.outputs.replaced }}**` tag.
+              
+            Install it:
+            ```bash
+            pnpm add fuels@{{ steps.rc_name.outputs.replaced }}
+            ```
+            Check it out:
+            - https://www.npmjs.com/package/fuels/v/{{ steps.rc_name.outputs.replaced }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

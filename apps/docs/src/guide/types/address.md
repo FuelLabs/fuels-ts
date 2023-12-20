@@ -2,7 +2,7 @@
 
 In Sway, the `Address` type serves as a type-safe wrapper around the primitive `b256` type. The SDK takes a different approach and has its own abstraction for the `Address` type.
 
-## AbstractAddress Class
+## `AbstractAddress` Class
 
 The SDK defines the `AbstractAddress` class, which provides a set of utility functions for easy manipulation and conversion between address formats.
 
@@ -10,7 +10,7 @@ The SDK defines the `AbstractAddress` class, which provides a set of utility fun
 
 ## Address Class
 
-Besides conforming to the interface of the `AbstractAddress`, the `Address` also defines one property; `bech32Address`, which is of the [Bech32](./bech32.md) type.
+Besides conforming to the interface of the `AbstractAddress`, the `Address` also defines one property; `bech32Address`, which is of the [`Bech32`](./bech32.md) type.
 
 <<< @/../../../packages/address/src/address.ts#address-2{ts:line-numbers}
 
@@ -18,7 +18,7 @@ Besides conforming to the interface of the `AbstractAddress`, the `Address` also
 
 Thanks to the utility functions provided by the `AbstractAddress` class, there are several ways to create an `Address` instance:
 
-### From a Bech32 Address
+### From a `Bech32` Address
 
 To create an `Address` from a `Bech32` address, use the following code snippet:
 
@@ -40,7 +40,7 @@ To create an `Address` from a 256-bit address, use the following code snippet:
 
 The `Address` class also provides some practical utility functions:
 
-1. `fromString`: Create a new `Address` from an ambiguous source that may be a Bech32 or B256 address:
+1. `fromString`: Create a new `Address` from an ambiguous source that may be a `Bech32` or `B256` address:
 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-5{ts:line-numbers}
 

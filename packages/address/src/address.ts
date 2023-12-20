@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
+import type { Bech32Address, B256Address, EvmAddress, AssetId } from '@fuel-ts/interfaces';
 import { getBytesCopy, hexlify, sha256 } from 'ethers';
 
 import {
@@ -106,6 +106,17 @@ export default class Address extends AbstractAddress {
     return {
       value: clearFirst12BytesFromB256(b256Address),
     } as EvmAddress;
+  }
+
+  /**
+   * Wraps the `bech32Address` property and returns as an `AssetId`.
+   *
+   * @returns The `bech32Address` property as an {@link AssetId | `AssetId`}
+   */
+  toAssetId(): AssetId {
+    return {
+      value: this.toB256(),
+    } as AssetId;
   }
 
   /**

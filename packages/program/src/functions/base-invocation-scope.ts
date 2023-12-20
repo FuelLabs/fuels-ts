@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { hashTransaction } from '@fuel-ts/hasher';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
@@ -65,11 +64,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.program = program;
     this.isMultiCall = isMultiCall;
 
-    const provider = program.provider as Provider;
-    const { maxGasPerTx } = provider.getGasConfig();
-    this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: maxGasPerTx,
-    });
+    this.transactionRequest = new ScriptTransactionRequest();
   }
 
   /**
@@ -197,7 +192,10 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected checkGasLimitTotal() {
     const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
-    if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
+
+    if (this.transactionRequest.gasLimit.eq(0)) {
+      this.transactionRequest.gasLimit = gasLimitOnCalls;
+    } else if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
       throw new FuelError(
         ErrorCode.TRANSACTION_ERROR,
         "Transaction's gasLimit must be equal to or greater than the combined forwarded gas of all calls."
@@ -247,8 +245,15 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
+    const { minGasPrice } = this.getProvider().getGasConfig();
+
+    request.gasPrice = bn(txParams.gasPrice || request.gasPrice || minGasPrice);
     request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
-    request.gasPrice = bn(txParams.gasPrice || request.gasPrice);
+
+    request.maxFee = txParams.maxFee ? bn(txParams.maxFee) : request.maxFee;
+    request.witnessLimit = txParams.witnessLimit ? bn(txParams.witnessLimit) : request.witnessLimit;
+    request.maturity = txParams.maturity || request.maturity;
+
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     return this;
@@ -288,14 +293,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
 
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-
-    if (gasUsed.gt(bn(transactionRequest.gasLimit))) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
+    const { maxFee } = await this.getTransactionCost();
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -351,10 +349,12 @@ export class BaseInvocationScope<TReturn = any> {
 
     const provider = this.getProvider();
 
+    const transactionRequest = await this.getTransactionRequest();
+
     const { maxFee } = await this.getTransactionCost();
 
     await this.fundWithRequiredCoins(maxFee);
-    const transactionRequest = await this.getTransactionRequest();
+
     const response = await provider.call(transactionRequest, {
       utxoValidation: false,
     });
@@ -384,6 +384,6 @@ export class BaseInvocationScope<TReturn = any> {
     const chainIdToHash = chainId ?? (await this.getProvider().getChainId());
 
     const transactionRequest = await this.getTransactionRequest();
-    return hashTransaction(transactionRequest, chainIdToHash);
+    return transactionRequest.getTransactionId(chainIdToHash);
   }
 }

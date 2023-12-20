@@ -96,10 +96,8 @@ export const inputify = (value: TransactionRequestInput): Input => {
       const predicateData = getBytesCopy(value.predicateData ?? '0x');
       return {
         type: InputType.Coin,
-        utxoID: {
-          transactionId: hexlify(getBytesCopy(value.id).slice(0, 32)),
-          outputIndex: getBytesCopy(value.id)[32],
-        },
+        txID: hexlify(getBytesCopy(value.id).slice(0, 32)),
+        outputIndex: getBytesCopy(value.id)[32],
         owner: hexlify(value.owner),
         amount: bn(value.amount),
         assetId: hexlify(value.assetId),
@@ -119,10 +117,8 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Contract: {
       return {
         type: InputType.Contract,
-        utxoID: {
-          transactionId: ZeroBytes32,
-          outputIndex: 0,
-        },
+        txID: ZeroBytes32,
+        outputIndex: 0,
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,
         txPointer: {

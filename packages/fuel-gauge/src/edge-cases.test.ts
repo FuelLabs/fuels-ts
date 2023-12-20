@@ -7,7 +7,9 @@ describe('Edge Cases', () => {
     const { minGasPrice } = contract.provider.getGasConfig();
 
     expect(
-      (await contract.functions.new().txParams({ gasPrice: minGasPrice }).call()).value.toNumber()
+      (
+        await contract.functions.new().txParams({ gasPrice: minGasPrice, gasLimit: 10_000 }).call()
+      ).value.toNumber()
     ).toEqual(12345);
   });
 });

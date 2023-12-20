@@ -125,9 +125,11 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      for await (const { statusChange } of this.provider.operations.statusChange({
+      const subscription = this.provider.operations.statusChange({
         transactionId: this.id,
-      })) {
+      });
+
+      for await (const { statusChange } of subscription) {
         if (statusChange) {
           break;
         }
@@ -176,7 +178,7 @@ export class TransactionResponse {
 
     const receipts = transaction.receipts?.map(processGqlReceipt) || [];
 
-    const { gasPerByte, gasPriceFactor } = this.provider.getGasConfig();
+    const { gasPerByte, gasPriceFactor, gasCosts } = this.provider.getGasConfig();
     const maxInputs = this.provider.getChain().consensusParameters.maxInputs;
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
@@ -189,6 +191,7 @@ export class TransactionResponse {
       gasPriceFactor,
       abiMap: contractsAbiMap,
       maxInputs,
+      gasCosts,
     });
 
     return transactionSummary;
@@ -202,9 +205,11 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    for await (const { statusChange } of this.provider.operations.statusChange({
+    const subscription = this.provider.operations.statusChange({
       transactionId: this.id,
-    })) {
+    });
+
+    for await (const { statusChange } of subscription) {
       if (statusChange.type !== 'SubmittedStatus') {
         break;
       }

@@ -92,15 +92,7 @@ impl ConfigurableContract for Contract {
     fn echo_configurables() -> (u8, u16, u32, u64, bool, b256, Colors, [[u32; 2]; 2], str[4], (u8, bool, str[2]), Struct1) {
         (
             U8,
-            U16,
-            U32,
-            U64,
-            BOOL,
-            B256,
-            ENUM,
-            ARRAY,
-            STR_4,
-            TUPLE,
+            U16, U32, U64, BOOL, B256, ENUM, ARRAY, STR_4, TUPLE,
             STRUCT_1,
         )
     }
