@@ -1,4 +1,14 @@
 {
   "extends": "@istanbuljs/nyc-config-typescript",
-  "reporter": ["json-summary"]
+  "reporter": ["json-summary"],
+  "exclude": [
+    "node_modules",
+    "**/dist/**",
+    "**/test/**",
+    "**/*.test.ts",
+    "**/*.d.ts",
+    "packages/fuel-gauge/**",
+    "/apps/demo-*",
+    "apps/docs"
+  ]
 }
