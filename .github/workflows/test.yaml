@@ -49,7 +49,9 @@ jobs:
         run: pnpm test:validate
 
       - name: Run Tests - ${{ matrix.env }}
-        run: pnpm ci:test --${{ matrix.env }}
+        run: |
+          export NODE_OPTIONS=--max_old_space_size=4096
+          pnpm ci:test --${{ matrix.env }}
 
       - name: Upload Coverage - ${{ matrix.env }}
         uses: actions/upload-artifact@v2
