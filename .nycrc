@@ -2,7 +2,7 @@
   "extends": "@istanbuljs/nyc-config-typescript",
   "reporter": ["json-summary"],
   "exclude": [
-    "node_modules",
+    "**/node_modules/**",
     "**/dist/**",
     "**/test/**",
     "**/*.test.ts",
