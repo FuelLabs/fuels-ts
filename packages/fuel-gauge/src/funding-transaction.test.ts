@@ -9,6 +9,9 @@ import {
   bn,
 } from 'fuels';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let mainWallet: Account;
   let provider: Provider;
