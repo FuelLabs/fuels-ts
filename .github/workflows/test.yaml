@@ -19,11 +19,12 @@ jobs:
 
   environments:
     runs-on: buildjet-4vcpu-ubuntu-2204
-    name: ${{ matrix.env }}
+    name: ${{ matrix.env }} - ${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
         env: [node]
+        version: [18, 20]
     timeout-minutes: 25
     steps:
       - name: Checkout
@@ -31,6 +32,8 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
+        with:
+          node-version: ${{ matrix.version }}
 
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
