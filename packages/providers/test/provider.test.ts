@@ -17,7 +17,7 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from '../src/transaction-request';
-import { ScriptTransactionRequest , CreateTransactionRequest } from '../src/transaction-request';
+import { ScriptTransactionRequest, CreateTransactionRequest } from '../src/transaction-request';
 import { TransactionResponse } from '../src/transaction-response';
 import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
 import * as gasMod from '../src/utils/gas';
