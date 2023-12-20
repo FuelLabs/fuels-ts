@@ -1,7 +1,7 @@
 import type { UserConfig } from 'vitest/config';
 import { mergeConfig } from 'vitest/config';
 
-import baseConfig from './vite.base.config';
+import baseConfig from './vite.base.config.mts';
 
 const config: UserConfig = {
   test: {
