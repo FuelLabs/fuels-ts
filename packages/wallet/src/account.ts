@@ -222,8 +222,63 @@ export class Account extends AbstractAccount {
       coinQuantities,
     });
 
-    const resources = await this.getResourcesToSpend(updatedQuantities);
-    request.addResources(resources);
+    const quantitiesDict: Record<string, { required: BN; owned: BN }> = {};
+
+    updatedQuantities.forEach(({ amount, assetId }) => {
+      quantitiesDict[assetId] = {
+        required: amount,
+        owned: bn(0),
+      };
+    });
+
+    const cachedUtxos: BytesLike[] = [];
+    const cachedMessages: BytesLike[] = [];
+
+    const owner = this.address.toB256();
+
+    request.inputs.forEach((input) => {
+      const isResource = 'amount' in input;
+
+      if (isResource) {
+        const isCoin = 'owner' in input;
+
+        if (isCoin) {
+          const assetId = String(input.assetId);
+          if (input.owner === owner && quantitiesDict[assetId]) {
+            const amount = bn(input.amount);
+            quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
+
+            // caching this utxo to avoid fetching it again if requests needs to be funded
+            cachedUtxos.push(input.id);
+          }
+        } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
+          quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
+
+          // caching this message to avoid fetching it again if requests needs to be funded
+          cachedMessages.push(input.nonce);
+        }
+      }
+    });
+
+    const missingQuantities: CoinQuantity[] = [];
+    Object.entries(quantitiesDict).forEach(([assetId, { owned, required }]) => {
+      if (owned.lt(required)) {
+        missingQuantities.push({
+          assetId,
+          amount: required.sub(owned),
+        });
+      }
+    });
+
+    const needsToBeFunded = missingQuantities.length;
+
+    if (needsToBeFunded) {
+      const resources = await this.getResourcesToSpend(missingQuantities, {
+        messages: cachedMessages,
+        utxos: cachedUtxos,
+      });
+      request.addResources(resources);
+    }
   }
 
   /**
@@ -355,8 +410,12 @@ export class Account extends AbstractAccount {
 
     const params = { script, ...txParams };
     const request = new ScriptTransactionRequest(params);
+    const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
 
-    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(request);
+    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(
+      request,
+      forwardingQuantities
+    );
 
     await this.fund(request, requiredQuantities, maxFee);
 
