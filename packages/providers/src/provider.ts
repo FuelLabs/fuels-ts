@@ -920,7 +920,7 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const excludeInput = {
-      messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
+      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 
