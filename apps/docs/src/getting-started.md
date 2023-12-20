@@ -24,15 +24,14 @@ If you are using bun, you'll need to add a `trustedDependencies` field to your `
 
 ```json
 {
-  ...,
-  "trustedDependencies": [
-    "@fuel-ts/fuel-core",
-    "@fuel-ts/forc"
-  ]
+  // ...
+  "trustedDependencies": ["@fuel-ts/fuel-core", "@fuel-ts/forc"]
 }
 ```
 
 This is to ensure that bun includes the `fuel-core` and `forc` binaries in your project.
+
+> IMPORTANT: We don't officially support `bun` yet; use it at your own risk.
 
 ## Creating a React Component to Connect to the Blockchain
 
