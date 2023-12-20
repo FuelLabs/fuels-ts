@@ -23,6 +23,7 @@ export default defineConfig({
       provider: "istanbul",
       reporter: ["json", "html"],
       exclude: [
+        "**/node_modules/**",
         "**/dist/**",
         "**/test/**",
         "**/*.test.ts",
