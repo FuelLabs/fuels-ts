@@ -81,7 +81,7 @@ describe(__filename, () => {
     expect(bn((<CoinTransactionRequestInput>request.inputs[0]).amount).toNumber()).toBe(300);
     expect(maxFee.gt(300)).toBeTruthy();
 
-    const getResourcesToSpendSpy = jest.spyOn(sender, 'getResourcesToSpend');
+    const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
     await sender.fund(request, requiredQuantities, maxFee);
 
@@ -132,7 +132,7 @@ describe(__filename, () => {
     expect(bn((<CoinTransactionRequestInput>request.inputs[0]).amount).toNumber()).toBe(1000);
     expect(maxFee.lt(1000)).toBeTruthy();
 
-    const getResourcesToSpendSpy = jest.spyOn(sender, 'getResourcesToSpend');
+    const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
     await sender.fund(request, requiredQuantities, maxFee);
 
@@ -172,7 +172,7 @@ describe(__filename, () => {
     // TX request does NOT carry any resources, it needs to be funded
     expect(request.inputs.length).toBe(0);
 
-    const getResourcesToSpendSpy = jest.spyOn(sender, 'getResourcesToSpend');
+    const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
     await sender.fund(request, requiredQuantities, maxFee);
 
