@@ -971,7 +971,7 @@ importers:
         specifier: ^16.6.0
         version: 16.6.0
       graphql-request:
-        specifier: ^5.0.0
+        specifier: 5.0.0
         version: 5.0.0(graphql@16.6.0)
       graphql-tag:
         specifier: ^2.12.6
