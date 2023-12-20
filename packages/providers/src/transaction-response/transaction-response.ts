@@ -29,7 +29,6 @@ import type {
   GqlTransaction,
   AbiMap,
 } from '../transaction-summary/types';
-import { sleep } from '../utils';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -72,9 +71,6 @@ export type TransactionResultReceipt =
   | TransactionResultMintReceipt
   | TransactionResultBurnReceipt;
 
-const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
-const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
-
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   gqlTransaction: GqlTransaction;
@@ -90,10 +86,6 @@ export class TransactionResponse {
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
-  /** Number of attempts made to fetch the transaction */
-  fetchAttempts: number = 0;
-  /** Number of attempts made to retrieve a processed transaction. */
-  resultAttempts: number = 0;
   /** The graphql Transaction with receipts object. */
   gqlTransaction?: GqlTransaction;
 
@@ -133,7 +125,16 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      await this.sleepBasedOnAttempts(++this.fetchAttempts);
+      const subscription = this.provider.operations.statusChange({
+        transactionId: this.id,
+      });
+
+      for await (const { statusChange } of subscription) {
+        if (statusChange) {
+          break;
+        }
+      }
+
       return this.fetch();
     }
 
@@ -204,13 +205,17 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.fetch();
+    const subscription = this.provider.operations.statusChange({
+      transactionId: this.id,
+    });
 
-    if (this.gqlTransaction?.status?.type === 'SubmittedStatus') {
-      await this.sleepBasedOnAttempts(++this.resultAttempts);
-
-      return this.waitForResult<TTransactionType>(contractsAbiMap);
+    for await (const { statusChange } of subscription) {
+      if (statusChange.type !== 'SubmittedStatus') {
+        break;
+      }
     }
+
+    await this.fetch();
 
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
@@ -240,19 +245,5 @@ export class TransactionResponse {
     }
 
     return result;
-  }
-
-  /**
-   * Introduces a delay based on the number of previous attempts made.
-   *
-   * @param attempts - The number of attempts.
-   */
-  private async sleepBasedOnAttempts(attempts: number): Promise<void> {
-    // TODO: Consider adding `maxTimeout` or `maxAttempts` parameter.
-    // The aim is to avoid perpetual execution; when the limit
-    // is reached, we can throw accordingly.
-    await sleep(
-      Math.min(STATUS_POLLING_INTERVAL_MIN_MS * attempts, STATUS_POLLING_INTERVAL_MAX_MS)
-    );
   }
 }

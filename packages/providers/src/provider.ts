@@ -13,6 +13,7 @@ import {
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
+import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -26,6 +27,7 @@ import type {
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
@@ -209,7 +211,12 @@ export type FetchRequestOptions = {
  * Provider initialization options
  */
 export type ProviderOptions = {
-  fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
+  fetch?: (
+    url: string,
+    options: FetchRequestOptions,
+    providerOptions: Omit<ProviderOptions, 'fetch'>
+  ) => Promise<Response>;
+  timeout?: number;
   cacheUtxo?: number;
 };
 
@@ -268,6 +275,23 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   private static nodeInfoCache: NodeInfoCache = {};
 
+  options: ProviderOptions = {
+    timeout: undefined,
+    cacheUtxo: undefined,
+    fetch: undefined,
+  };
+
+  private static getFetchFn(options: ProviderOptions) {
+    return options.fetch !== undefined
+      ? options.fetch
+      : (url: string, request: FetchRequestOptions) =>
+          fetch(url, {
+            ...request,
+            signal:
+              options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
+          });
+  }
+
   /**
    * Constructor to initialize a Provider.
    *
@@ -279,9 +303,12 @@ export default class Provider {
   protected constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    public options: ProviderOptions = {}
+    options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url, options);
+    this.options = { ...this.options, ...options };
+    this.url = url;
+
+    this.operations = this.createOperations();
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -346,7 +373,8 @@ export default class Provider {
    */
   async connect(url: string, options?: ProviderOptions) {
     this.url = url;
-    this.operations = this.createOperations(url, options ?? this.options);
+    this.options = options ?? this.options;
+    this.operations = this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
 
@@ -382,14 +410,35 @@ export default class Provider {
   /**
    * Create GraphQL client and set operations.
    *
-   * @param url - The URL of the Fuel node
-   * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(url: string, options: ProviderOptions = {}) {
-    this.url = url;
-    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
-    return getOperationsSdk(gqlClient);
+  private createOperations() {
+    const fetchFn = Provider.getFetchFn(this.options);
+    const gqlClient = new GraphQLClient(this.url, {
+      fetch: (url: string, requestInit: FetchRequestOptions) =>
+        fetchFn(url, requestInit, this.options),
+    });
+
+    const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
+      const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
+        operation: string;
+      };
+      const isSubscription = opDefinition?.operation === 'subscription';
+
+      if (isSubscription) {
+        return fuelGraphQLSubscriber({
+          url: this.url,
+          query,
+          fetchFn: (url, requestInit) =>
+            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+          variables: vars,
+        });
+      }
+      return gqlClient.request(query, vars);
+    };
+
+    // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
+    return getOperationsSdk(executeQuery);
   }
 
   /**
@@ -871,7 +920,7 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const excludeInput = {
-      messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
+      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 
