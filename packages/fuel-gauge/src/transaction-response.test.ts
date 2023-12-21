@@ -12,6 +12,7 @@ import {
   WalletUnlocked,
   ContractFactory,
   bn,
+  ScriptTransactionRequest,
 } from 'fuels';
 
 import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures';
@@ -154,7 +155,7 @@ describe('TransactionSummary', () => {
       async () => {
         await response.waitForResult();
       },
-      { code: ErrorCode.SCRIPT_REVERTED }
+      { code: ErrorCode.TRANSACTION_FAILED }
     );
 
     cleanup();
@@ -162,7 +163,7 @@ describe('TransactionSummary', () => {
 
   it('Throws on SubmittedStatus -> SqueezedOutStatus transaction', async () => {
     const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-instante', 'false', '--tx-pool-ttl', '1ms'],
+      args: ['--poa-instant', 'false', '--tx-pool-ttl', '500ms'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
@@ -171,24 +172,26 @@ describe('TransactionSummary', () => {
       nodeProvider
     );
 
-    const factory = new ContractFactory(binHexlified, abiContents, genesisWallet);
+    const request = new ScriptTransactionRequest();
 
-    const contract = await factory.deployContract({ gasPrice });
+    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
 
-    const { transactionId } = await contract.functions
-      .failed_transfer_revert()
-      .txParams({ gasLimit: 10_000 })
-      .call();
+    request.gasLimit = bn(10_000);
 
-    const response = await TransactionResponse.create(transactionId, nodeProvider);
+    request.addResources(resources);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
 
-    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+    const response = await nodeProvider.sendTransaction(request);
 
-    await response.waitForResult();
-
-    expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
-    expect(response.gqlTransaction?.id).toBe(transactionId);
-
+    await expectToThrowFuelError(
+      async () => {
+        await response.waitForResult();
+      },
+      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+    );
     cleanup();
   });
 });
