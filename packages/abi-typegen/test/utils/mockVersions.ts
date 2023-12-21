@@ -9,10 +9,13 @@ import * as versionsMod from '@fuel-ts/versions';
  *
  * https://stackoverflow.com/a/72885576
  */
-jest.mock('@fuel-ts/versions', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/versions'),
-}));
+vi.mock('@fuel-ts/versions', async () => {
+  const mod = await vi.importActual('@fuel-ts/versions');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 export function mockVersions(
   values: {
@@ -25,12 +28,12 @@ export function mockVersions(
     FUEL_CORE: '33.33.33',
   }
 ) {
-  const mock = jest.replaceProperty(versionsMod, 'versions', values);
+  const mock = vi.spyOn(versionsMod, 'versions', 'get').mockReturnValue(values);
 
   return {
     versions: values,
     restore() {
-      mock.restore();
+      mock.mockRestore();
     },
   };
 }

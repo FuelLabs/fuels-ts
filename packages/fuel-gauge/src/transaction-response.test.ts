@@ -19,6 +19,9 @@ import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures
 
 const { binHexlified, abiContents } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.REVERT_ERROR);
 
+/**
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;

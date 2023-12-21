@@ -6,6 +6,9 @@ import walletManagerSpec from '../wallet-manager-spec';
 
 import { MnemonicVault } from './mnemonic-vault';
 
+/**
+ * @group node
+ */
 describe('MnemonicVault', () => {
   let provider: Provider;
 

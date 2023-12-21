@@ -6,19 +6,22 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleScripts } from './assembleScripts';
 
+/**
+ * @group node
+ */
 describe('assembleScripts.ts', () => {
   function mockAllDeps() {
-    const renderCommonTemplate = jest
+    const renderCommonTemplate = vi
       .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
-      .mockImplementation();
+      .mockResolvedValue('');
 
-    const renderFactoryTemplate = jest
+    const renderFactoryTemplate = vi
       .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
-      .mockImplementation();
+      .mockResolvedValue('');
 
-    const renderIndexTemplate = jest
+    const renderIndexTemplate = vi
       .spyOn(renderIndexTemplateMod, 'renderIndexTemplate')
-      .mockImplementation();
+      .mockResolvedValue('');
 
     return {
       renderCommonTemplate,
@@ -27,8 +30,13 @@ describe('assembleScripts.ts', () => {
     };
   }
 
-  beforeEach(jest.resetAllMocks);
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('should assemble all files from Script ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
@@ -42,7 +50,7 @@ describe('assembleScripts.ts', () => {
       includeBinFiles: true,
     });
 
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
     const files = assembleScripts({ abis, outputDir });
 
@@ -65,7 +73,7 @@ describe('assembleScripts.ts', () => {
       includeBinFiles: true,
     });
 
-    jest.resetAllMocks();
+    vi.resetAllMocks();
 
     const files = assembleScripts({ abis, outputDir });
 

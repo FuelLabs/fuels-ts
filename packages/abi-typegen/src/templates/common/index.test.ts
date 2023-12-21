@@ -9,6 +9,9 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderIndexTemplate } from './index';
 
+/**
+ * @group node
+ */
 describe('templates/index', () => {
   test('should render index template', () => {
     // mocking

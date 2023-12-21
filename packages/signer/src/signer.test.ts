@@ -2,6 +2,9 @@ import { getBytesCopy, sha256 } from 'ethers';
 
 import Signer from './signer';
 
+/**
+ * @group node
+ */
 describe('Signer', () => {
   const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
   const expectedPublicKey =

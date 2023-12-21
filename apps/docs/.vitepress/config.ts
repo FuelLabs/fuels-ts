@@ -390,8 +390,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing with Jest',
-                link: '/guide/testing/testing-with-jest',
+                text: 'Testing in TS',
+                link: '/guide/testing/testing-in-ts',
               },
               {
                 text: 'Setting Up a Custom Chain',

@@ -2,6 +2,9 @@ import { getBytesCopy } from 'ethers';
 
 import { chunkAndPadBytes } from './chunkAndPadBytes';
 
+/**
+ * @group node
+ */
 describe('chunkAndPadBytes', () => {
   it('can chunk and pad bytes to 16 KiB', () => {
     const bytes = getBytesCopy(

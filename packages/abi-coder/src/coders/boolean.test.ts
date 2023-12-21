@@ -3,11 +3,17 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { BooleanCoder } from './boolean';
 
-jest.mock('@fuel-ts/math', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/math'),
-}));
+vi.mock('@fuel-ts/math', async () => {
+  const mod = await vi.importActual('@fuel-ts/math');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('BooleanCoder', () => {
   const TRUE_DECODED = true;
   const TRUE_ENCODED = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]);

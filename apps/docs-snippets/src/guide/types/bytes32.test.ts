@@ -1,6 +1,9 @@
 import type { Bytes } from 'fuels';
 import { arrayify, hexlify, randomBytes } from 'fuels';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully generate and convert byte32 to hexlified string', () => {
     // #region bytes32-1

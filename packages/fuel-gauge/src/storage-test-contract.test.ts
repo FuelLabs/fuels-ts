@@ -29,6 +29,9 @@ const setup = async () => {
   return contract;
 };
 
+/**
+ * @group node
+ */
 describe('StorageTestContract', () => {
   let gasPrice: BN;
   beforeAll(async () => {
