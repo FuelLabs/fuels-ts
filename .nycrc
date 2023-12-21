@@ -1,6 +1,7 @@
 {
   "extends": "@istanbuljs/nyc-config-typescript",
   "reporter": ["json-summary"],
+  "include": ["packages", "internal", "apps"],
   "exclude": [
     "**/node_modules/**",
     "**/dist/**",
@@ -8,7 +9,7 @@
     "**/*.test.ts",
     "**/*.d.ts",
     "packages/fuel-gauge/**",
-    "/apps/demo-*",
+    "apps/demo-*",
     "apps/docs"
   ]
 }
