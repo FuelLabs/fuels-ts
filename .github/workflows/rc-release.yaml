@@ -58,6 +58,7 @@ jobs:
             Install it:
             ```bash
             pnpm add fuels@${{ steps.rc_name.outputs.replaced }}
+            pnpm add fuels@${{ steps.release.outputs.published_version }}
             ```
             Check it out:
             - https://www.npmjs.com/package/fuels/v/${{ steps.rc_name.outputs.replaced }}
