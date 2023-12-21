@@ -21,7 +21,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: "istanbul",
-      reporter: ["json", "html"],
+      reporter: ["json"],
       exclude: [
         "**/node_modules/**",
         "**/dist/**",
@@ -29,7 +29,7 @@ export default defineConfig({
         "**/*.test.ts",
         "**/*.d.ts",
         "packages/fuel-gauge/**",
-        "/apps/demo-*",
+        "apps/demo-*",
         "apps/docs",
       ],
     },

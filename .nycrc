@@ -8,7 +8,7 @@
     "**/*.test.ts",
     "**/*.d.ts",
     "packages/fuel-gauge/**",
-    "/apps/demo-*",
+    "apps/demo-*",
     "apps/docs"
   ]
 }
