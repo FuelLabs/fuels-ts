@@ -6,7 +6,7 @@ import Provider from '../src/provider';
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 function mockFetch(maxAttempts: number, callTimes: number[]) {
-  const fetchSpy = jest.spyOn(global, 'fetch');
+  const fetchSpy = vi.spyOn(global, 'fetch');
 
   fetchSpy.mockImplementation((...args: unknown[]) => {
     callTimes.push(Date.now());
@@ -30,7 +30,7 @@ function mockFetch(maxAttempts: number, callTimes: number[]) {
 
 describe('Retries correctly', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const maxAttempts = 4;
@@ -114,20 +114,14 @@ describe('Retries correctly', () => {
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
 
-    const fetchSpy = jest
-      .spyOn(global, 'fetch')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TS is throwing error when test is run, but not in IDE
-      .mockImplementation(() => {
-        const error = new Error();
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore TS is throwing error when test is run, but not in IDE
-        error.cause = {
-          code: 'ECONNREFUSED',
-        };
+    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementation((...args: unknown[]) => {
+      const error = new Error() as Error & { cause: { code: string } };
+      error.cause = {
+        code: 'ECONNREFUSED',
+      };
 
-        throw error;
-      });
+      throw error;
+    });
 
     const { error } = await safeExec(() => provider.operations.getChain());
 
