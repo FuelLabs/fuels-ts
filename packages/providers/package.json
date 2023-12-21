@@ -39,7 +39,7 @@
     "ethers": "^6.7.1",
     "@fuel-ts/versions": "workspace:*",
     "graphql": "^16.6.0",
-    "graphql-request": "^5.0.0",
+    "graphql-request": "5.0.0",
     "graphql-tag": "^2.12.6",
     "ramda": "^0.29.0",
     "tai64": "^1.0.0"
