@@ -1,7 +1,6 @@
 name: Release to @rc-<name> tag on npm
 
 on:
-  pull_request:
   push:
     branches:
       - "rc/*"
