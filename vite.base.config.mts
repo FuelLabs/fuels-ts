@@ -22,6 +22,9 @@ export default defineConfig({
       enabled: true,
       provider: "istanbul",
       reporter: ["json"],
+      include: [
+        'packages', 'internal', 'apps'
+      ],
       exclude: [
         "**/node_modules/**",
         "**/dist/**",
