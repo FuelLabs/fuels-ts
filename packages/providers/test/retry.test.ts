@@ -114,7 +114,7 @@ describe('Retries correctly', () => {
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
 
-    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementation((...args: unknown[]) => {
+    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
       const error = new Error() as Error & { cause: { code: string } };
       error.cause = {
         code: 'ECONNREFUSED',
