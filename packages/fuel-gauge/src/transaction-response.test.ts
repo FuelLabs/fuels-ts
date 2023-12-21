@@ -1,4 +1,5 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, launchNode } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
@@ -22,11 +23,11 @@ describe('TransactionSummary', () => {
   let adminWallet: WalletUnlocked;
   let gasPrice: BN;
 
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    adminWallet = await generateTestWallet(provider, [[500_000]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
+  // beforeAll(async () => {
+  //   provider = await Provider.create(FUEL_NETWORK_URL);
+  //   adminWallet = await generateTestWallet(provider, [[500_000]]);
+  //   ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  // });
 
   it('should ensure create method waits till a transaction response is given', async () => {
     const destination = Wallet.generate({
@@ -135,27 +136,33 @@ describe('TransactionSummary', () => {
 
     const contract = await factory.deployContract({ gasPrice });
 
-    const { transactionId } = await contract.functions
+    const request = await contract.functions
       .validate_inputs(bn(100), bn(100))
       .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+      .getTransactionRequest();
 
-    const response = await TransactionResponse.create(transactionId, nodeProvider);
+    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+    request.addResources(resources);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
 
-    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+    const response = await nodeProvider.sendTransaction(request);
 
-    const { error } = await safeExec(async () => {
-      await response.waitForResult();
-    });
-
-    expect(error).toBeDefined();
+    await expectToThrowFuelError(
+      async () => {
+        await response.waitForResult();
+      },
+      { code: ErrorCode.SCRIPT_REVERTED }
+    );
 
     cleanup();
   });
 
   it('Throws on SubmittedStatus -> SqueezedOutStatus transaction', async () => {
     const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-interval-period', '750ms'],
+      args: ['--poa-instante', 'false', '--tx-pool-ttl', '1ms'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 

@@ -210,6 +210,18 @@ export class TransactionResponse {
     });
 
     for await (const { statusChange } of subscription) {
+      switch (statusChange.type) {
+        case 'FailureStatus':
+          throw new FuelError(
+            FuelError.CODES.SCRIPT_REVERTED,
+            `Script Reverted. Logs: ${JSON.stringify(statusChange.receipts)}`
+          );
+        case 'SqueezedOutStatus':
+        case 'SuccessStatus':
+        case 'SubmittedStatus':
+        default:
+          break;
+      }
       if (statusChange.type !== 'SubmittedStatus') {
         break;
       }
