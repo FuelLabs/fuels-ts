@@ -93,7 +93,7 @@ jobs:
       - name: Download Master Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
         # TODO: Remove PR != check once #1310 has been merged
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
+        if: ${{ (steps.findPr.outputs.number) && !(contains(fromJSON('["1579", "1495"]'), steps.findPr.outputs.number))}}
         with:
           workflow: test.yaml
           branch: master
@@ -103,7 +103,7 @@ jobs:
       # TODO: Delete once #1310 has been merged
       - name: Download Master Coverage Artifact (temporary)
         uses: dawidd6/action-download-artifact@v2
-        if: ${{ (steps.findPr.outputs.number) && contains('[1495,1579]', steps.findPr.outputs.number)}}
+        if: ${{ (steps.findPr.outputs.number) && contains(fromJSON('["1579", "1495"]'), steps.findPr.outputs.number)}}
         with:
           workflow: test.yaml
           run_id: 6628340271
