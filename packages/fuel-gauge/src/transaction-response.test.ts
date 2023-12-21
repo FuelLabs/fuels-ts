@@ -1,3 +1,4 @@
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, launchNode } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
@@ -8,7 +9,13 @@ import {
   Wallet,
   randomBytes,
   WalletUnlocked,
+  ContractFactory,
+  bn,
 } from 'fuels';
+
+import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures';
+
+const { binHexlified, abiContents } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.REVERT_ERROR);
 
 describe('TransactionSummary', () => {
   let provider: Provider;
@@ -101,6 +108,71 @@ describe('TransactionSummary', () => {
       BaseAssetId,
       { gasPrice, gasLimit: 10_000 }
     );
+    const response = await TransactionResponse.create(transactionId, nodeProvider);
+
+    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+
+    await response.waitForResult();
+
+    expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
+    expect(response.gqlTransaction?.id).toBe(transactionId);
+
+    cleanup();
+  });
+
+  it('Throws on SubmittedStatus -> FailureStatus transaction', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      args: ['--poa-interval-period', '400ms'],
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
+
+    const factory = new ContractFactory(binHexlified, abiContents, genesisWallet);
+
+    const contract = await factory.deployContract({ gasPrice });
+
+    const { transactionId } = await contract.functions
+      .validate_inputs(bn(100), bn(100))
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    const response = await TransactionResponse.create(transactionId, nodeProvider);
+
+    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+
+    const { error } = await safeExec(async () => {
+      await response.waitForResult();
+    });
+
+    expect(error).toBeDefined();
+
+    cleanup();
+  });
+
+  it('Throws on SubmittedStatus -> SqueezedOutStatus transaction', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      args: ['--poa-interval-period', '750ms'],
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
+
+    const factory = new ContractFactory(binHexlified, abiContents, genesisWallet);
+
+    const contract = await factory.deployContract({ gasPrice });
+
+    const { transactionId } = await contract.functions
+      .failed_transfer_revert()
+      .txParams({ gasLimit: 10_000 })
+      .call();
+
     const response = await TransactionResponse.create(transactionId, nodeProvider);
 
     expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
