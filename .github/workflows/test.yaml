@@ -19,11 +19,12 @@ jobs:
 
   environments:
     runs-on: ubuntu-latest
-    name: ${{ matrix.env }}
+    name: ${{ matrix.env }} - v${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
         env: [node]
+        version: [18.18.2]
     timeout-minutes: 25
     steps:
       - name: Checkout
@@ -31,6 +32,8 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
+        with:
+          node-version: ${{ matrix.version }}
 
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
