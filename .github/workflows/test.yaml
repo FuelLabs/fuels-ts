@@ -18,7 +18,7 @@ jobs:
       spellcheck-config-path: "apps/docs/.spellcheck.yml"
 
   environments:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     name: ${{ matrix.env }}
     strategy:
       fail-fast: false
