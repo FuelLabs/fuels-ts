@@ -30,6 +30,9 @@ const setup = async (balance = 500_000) => {
   return wallet;
 };
 
+/**
+ * @group node
+ */
 describe('Bytes Tests', () => {
   let gasPrice: BN;
   beforeAll(async () => {

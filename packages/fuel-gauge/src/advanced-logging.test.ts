@@ -18,6 +18,9 @@ beforeAll(async () => {
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
+/**
+ * @group node
+ */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     const { value, logs } = await contractInstance.functions

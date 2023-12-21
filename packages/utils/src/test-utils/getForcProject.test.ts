@@ -13,24 +13,43 @@ import {
   getProjectTempDir,
 } from './getForcProject';
 
-jest.mock('path', () => ({
-  __esModule: true,
-  ...jest.requireActual('path'),
-}));
+vi.mock('ethers', async () => {
+  const mod = await vi.importActual('ethers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
-jest.mock('fs', () => ({
-  __esModule: true,
-  ...jest.requireActual('fs'),
-}));
+vi.mock('path', async () => {
+  const mod = await vi.importActual('path');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+vi.mock('fs', async () => {
+  const mod = await vi.importActual('fs');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+/**
+ * @group node
+ */
 describe('getForcProject', () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should return the correct temporary directory path on getProjectTempDir', () => {
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
     const expectedPath = '/path/to/project/out/debug/__temp__';
 
-    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+    vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
     const tempDir = getProjectTempDir(params);
 
@@ -41,7 +60,7 @@ describe('getForcProject', () => {
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
     const expectedPath = '/path/to/project/out/debug/myProject-abi.json';
 
-    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+    vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
     const abiPath = getProjectAbiPath(params);
 
@@ -52,7 +71,7 @@ describe('getForcProject', () => {
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
     const expectedPath = '/path/to/project/out/debug/myProject.bin';
 
-    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+    vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
     const binPath = getProjectBinPath(params);
 
@@ -63,7 +82,7 @@ describe('getForcProject', () => {
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
     const expectedPath = '/path/to/project/out/debug/myProject-storage_slots.json';
 
-    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+    vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
     const storageSlotsPath = getProjectStorageSlotsPath(params);
 
@@ -84,9 +103,9 @@ describe('getForcProject', () => {
     const expectedPath = '/path/to/project/out/debug/myProject-storage_slots.json';
     const fakeStorageSlots = [{ key: 'key1', value: 'value1' }];
 
-    jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    vi.spyOn(fs, 'existsSync').mockReturnValue(true);
 
-    const readFileSyncSpy = jest
+    const readFileSyncSpy = vi
       .spyOn(fs, 'readFileSync')
       .mockReturnValue(JSON.stringify(fakeStorageSlots));
 
@@ -97,9 +116,7 @@ describe('getForcProject', () => {
   });
 
   it('should return the correct debug directory path', () => {
-    const joinSpy = jest
-      .spyOn(path, 'join')
-      .mockImplementation((...segments) => segments.join('/'));
+    const joinSpy = vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
 
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
     const expectedPath = '/path/to/project/out/debug';
@@ -113,8 +130,8 @@ describe('getForcProject', () => {
   it('should return an empty array if the storage slots file does not exist', () => {
     const params = { projectDir: '/path/to/project', projectName: 'myProject' };
 
-    jest.spyOn(fs, 'existsSync').mockReturnValue(false);
-    const readFileSyncSpy = jest.spyOn(fs, 'readFileSync');
+    vi.spyOn(fs, 'existsSync').mockReturnValue(false);
+    const readFileSyncSpy = vi.spyOn(fs, 'readFileSync');
 
     const storageSlots = getProjectStorageSlots(params);
 
@@ -127,9 +144,9 @@ describe('getForcProject', () => {
     const fakeAbiContent = { contracts: {} };
     const fakeStorageSlots = [{ key: 'key1', value: 'value1' }];
 
-    jest.spyOn(ethers, 'hexlify').mockImplementation((param) => param as string);
-    jest.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
-    jest.spyOn(fs, 'readFileSync').mockImplementation((pathParam) => {
+    vi.spyOn(ethers, 'hexlify').mockImplementation((param) => param as string);
+    vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
+    vi.spyOn(fs, 'readFileSync').mockImplementation((pathParam) => {
       if ((<string>pathParam).endsWith('.bin')) {
         return fakeBinContent;
       }
@@ -142,9 +159,9 @@ describe('getForcProject', () => {
       throw new Error('File not found');
     });
 
-    jest
-      .spyOn(fs, 'existsSync')
-      .mockImplementation((pathParam) => (<string>pathParam).endsWith('-storage_slots.json'));
+    vi.spyOn(fs, 'existsSync').mockImplementation((pathParam) =>
+      (<string>pathParam).endsWith('-storage_slots.json')
+    );
 
     const forcProject = {
       projectDir: 'fuel_gauge',

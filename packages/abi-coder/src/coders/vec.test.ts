@@ -8,6 +8,9 @@ import { BooleanCoder } from './boolean';
 import { NumberCoder } from './number';
 import { VecCoder } from './vec';
 
+/**
+ * @group node
+ */
 describe('VecCoder', () => {
   const sbOptions: SmallBytesOptions = {
     isSmallBytes: true,

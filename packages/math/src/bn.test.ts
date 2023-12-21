@@ -2,6 +2,9 @@ import type { BN } from './bn';
 import { bn } from './bn';
 import type { BigNumberish } from './types';
 
+/**
+ * @group node
+ */
 describe('Math - BN', () => {
   it('can execute operations without losing our BN reference', () => {
     let test: BN;

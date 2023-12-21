@@ -19,6 +19,9 @@ type Baz = {
   x: number;
 };
 
+/**
+ * @group node
+ */
 describe('Script Coverage', () => {
   let gasPrice: BN;
 

@@ -9,6 +9,9 @@ import { Wallet } from '.';
 import { FUEL_NETWORK_URL } from './configs';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 
+/**
+ * @group node
+ */
 describe('Wallet', () => {
   let provider: Provider;
   let gasPrice: BN;
