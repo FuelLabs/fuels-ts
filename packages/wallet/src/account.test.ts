@@ -238,9 +238,15 @@ describe('Account', () => {
       coinQuantities: quantities,
     });
 
-    const expectedTotalResources = [quantities[0], { amount: bn(fee), assetId: BaseAssetId }];
+    const expectedTotalResources = [
+      { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
+      { amount: bn(fee), assetId: BaseAssetId },
+    ];
     expect(getResourcesToSpendSpy).toBeCalledTimes(1);
-    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources);
+    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
+      messages: [],
+      utxos: [],
+    });
 
     expect(addResourcesSpy).toBeCalledTimes(1);
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
