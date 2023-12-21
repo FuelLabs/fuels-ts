@@ -10,6 +10,9 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderDtsTemplate } from './dts';
 
+/**
+ * @group node
+ */
 describe('templates/dts', () => {
   test('should render dts template', () => {
     // mocking

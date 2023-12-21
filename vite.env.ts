@@ -3,7 +3,7 @@ import { hexlify } from 'ethers';
 import faucets from './.fuel-core/configs/faucets.json';
 
 /**
- * Gets the private key for the current Jest worker.
+ * Gets the private key for the current Vitest worker.
  *
  * The PK is basically the current worker's ID. This allows us to
  * have a unique faucet wallet for each file being tested and prevents
@@ -18,11 +18,11 @@ import faucets from './.fuel-core/configs/faucets.json';
  *   - 0x0101010101010101010101010101010101010101010101010101010101010101
  *   - 0x0202020202020202020202020202020202020202020202020202020202020202
  *
- * See: https://jestjs.io/docs/environment-variables#jest_worker_id
+ * See: https://vitest.dev/config/#setupfiles
  */
 const getPrivateKeyForCurrentWorker = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const workerId = Number.parseInt(process.env.JEST_WORKER_ID!, 10);
+  const workerId = Number.parseInt(process.env.VITEST_POOL_ID!, 10) || 1;
 
   if (workerId > faucets.length) {
     throw new Error(`At most ${faucets.length} workers are supported.`);

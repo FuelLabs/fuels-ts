@@ -3,6 +3,9 @@ import { versions } from '@fuel-ts/versions';
 import { FuelError, ErrorCode } from '.';
 import { expectToThrowFuelError } from './test-utils/expect-to-throw-fuel-error';
 
+/**
+ * @group node
+ */
 it('has properties set as expected on creation', () => {
   const message = 'whatever';
   const error = new FuelError(FuelError.CODES.PARSE_FAILED, message);

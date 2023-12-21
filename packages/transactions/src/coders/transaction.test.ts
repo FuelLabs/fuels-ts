@@ -12,6 +12,9 @@ const U32 = 1000;
 const U16 = 32;
 const U8 = 1;
 
+/**
+ * @group node
+ */
 describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript without inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Script> = {

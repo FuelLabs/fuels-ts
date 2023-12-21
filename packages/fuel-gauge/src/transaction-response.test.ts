@@ -10,6 +10,9 @@ import {
   WalletUnlocked,
 } from 'fuels';
 
+/**
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;

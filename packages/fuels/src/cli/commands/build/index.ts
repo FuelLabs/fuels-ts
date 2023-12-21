@@ -3,7 +3,7 @@ import { type Command } from 'commander';
 import type { FuelsConfig } from '../../types';
 import { log } from '../../utils/logger';
 import { deploy } from '../deploy';
-import { autoStartFuelCore } from '../dev/startFuelCore';
+import { autoStartFuelCore } from '../dev/autoStartFuelCore';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
 import { generateTypes } from './generateTypes';

@@ -12,6 +12,9 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderFactoryTemplate } from './factory';
 
+/**
+ * @group node
+ */
 describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();

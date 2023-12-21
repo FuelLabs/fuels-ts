@@ -17,8 +17,13 @@ jobs:
       doc-folder-path: "apps/docs/src"
       spellcheck-config-path: "apps/docs/.spellcheck.yml"
 
-  test:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+  environments:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.env }}
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [node]
     timeout-minutes: 25
     steps:
       - name: Checkout
@@ -40,40 +45,83 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Validate Tests
+        run: pnpm test:validate
+
+      - name: Run Tests - ${{ matrix.env }}
+        run: pnpm ci:test --${{ matrix.env }}
+
+      - name: Upload Coverage - ${{ matrix.env }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.env }}
+          path: coverage/environments/${{ matrix.env }}
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [environments]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Generate Coverage Directory
+        run: mkdir -p coverage/environments
+
+      - name: Download Coverage Artifact for Node Tests
+        uses: actions/download-artifact@v3
+        with:
+          name: node
+          path: coverage/environments
+
+      - name: Generate Coverage
+        run: pnpm test:coverage-merge
+
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Run tests and collect coverage
-        if: ${{ !steps.findPr.outputs.number }}
-        run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
-
-      - name: Upload coverage to Github artifacts
+      - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
-          name: coverage-reports
-          path: report.master.json
+          name: coverage-master
+          path: coverage/report
 
-      - name: Download coverage artifact
+      - name: Download Master Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
-        if: ${{ steps.findPr.outputs.number }}
+        # TODO: Remove PR != check once #1310 has been merged
+        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
         with:
           workflow: test.yaml
           branch: master
-          name: coverage-reports
-          path: coverage-reports
+          name: coverage-master
+          path: coverage-master
 
-      - name: Run tests and post reports to PR
-        uses: ArtiomTr/jest-coverage-report-action@v2
+      # TODO: Delete once #1310 has been merged
+      - name: Download Master Coverage Artifact (temporary)
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
+        with:
+          workflow: test.yaml
+          run_id: 6628340271
+          name: coverage-master
+          path: coverage-master
+
+      - name: Generate Coverage Diff
+        run: pnpm test:coverage-diff
+
+      - name: Report Coverage
+        uses: thollander/actions-comment-pull-request@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: pnpm
-          annotations: failed-tests
-          test-script: pnpm ci:test
-          prnumber: ${{ steps.findPr.outputs.number }}
-          base-coverage-file: coverage-reports/report.master.json
+          filePath: coverage/report/coverage-diff.txt
+          pr_number: ${{ (steps.findPr.outputs.number) }}
+          comment_tag: diff
+          mode: recreate
+          create_if_not_exists: true
 
   live-tests:
     name: Run Live Tests

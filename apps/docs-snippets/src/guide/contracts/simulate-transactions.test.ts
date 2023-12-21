@@ -8,6 +8,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully simulate contract call with forwarded amount', async () => {
     const contract = await createAndDeployContractFromProject(

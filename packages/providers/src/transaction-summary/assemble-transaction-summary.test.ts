@@ -21,6 +21,9 @@ import type { TransactionResultReceipt } from '../transaction-response';
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import type { GraphqlTransactionStatus, Operation } from './types';
 
+/**
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let gasCosts: GqlGasCosts;

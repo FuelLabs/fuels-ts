@@ -63,7 +63,7 @@ export const rewriteVersions = () => {
 };
 
 /* istanbul ignore next */
-// Do not auto-run script when inside jest runner
-if (!/jest\.js$/m.test(process.argv[1])) {
+// Do not auto-run script when inside vitest
+if (!process.env.VITEST) {
   rewriteVersions();
 }

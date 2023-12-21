@@ -2,6 +2,9 @@ import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { StdStringCoder } from './stdString';
 
+/**
+ * @group node
+ */
 describe('StdStringCoder', () => {
   it('should encode an empty string', () => {
     const coder = new StdStringCoder();

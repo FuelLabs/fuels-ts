@@ -3,12 +3,17 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { collectStorageSlotsFilepaths } from './collectStorageSlotsFilePaths';
 
+/**
+ * @group node
+ */
 describe('collectStorageSlotsFilePaths.ts', () => {
   const script = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
   const predicate = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
   const contract = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
 
   test('should collect storage slot files', () => {
     const contractStorageSlots = collectStorageSlotsFilepaths({

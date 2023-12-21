@@ -14,6 +14,9 @@ import {
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
+/**
+ * @group node
+ */
 describe('Contract Factory', () => {
   let gasPrice: BN;
 

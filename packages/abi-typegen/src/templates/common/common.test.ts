@@ -2,6 +2,9 @@ import { mockVersions } from '../../../test/utils/mockVersions';
 
 import { renderCommonTemplate } from './common';
 
+/**
+ * @group node
+ */
 describe('templates/common', () => {
   test('should render common template', () => {
     // mocking

@@ -6,6 +6,9 @@ import type { Validation } from '../types/predicate';
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: predicateBytesAddress, abiContents: predicateAbiMainArgsAddress } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_ADDRESS);

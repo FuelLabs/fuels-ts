@@ -5,6 +5,9 @@ import type { IType } from '../types/interfaces/IType';
 import { makeFunction } from './makeFunction';
 import { makeType } from './makeType';
 
+/**
+ * @group node
+ */
 describe('functions.ts', () => {
   test('should instantiate a new Function instance', () => {
     const rawU8: IRawAbiTypeRoot = {

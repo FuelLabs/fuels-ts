@@ -1,6 +1,9 @@
 import { GenericType } from './GenericType';
 import { StructType } from './StructType';
 
+/**
+ * @group node
+ */
 describe('GenericType.ts', () => {
   test('should properly parse type attributes', () => {
     const generic = new GenericType({
