@@ -1,5 +1,5 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet, launchNode } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
@@ -22,16 +22,16 @@ const { binHexlified, abiContents } = getFuelGaugeForcProject(FuelGaugeProjectsE
 /**
  * @group node
  */
-describe('TransactionSummary', () => {
+describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
   let gasPrice: BN;
 
-  // beforeAll(async () => {
-  //   provider = await Provider.create(FUEL_NETWORK_URL);
-  //   adminWallet = await generateTestWallet(provider, [[500_000]]);
-  //   ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  // });
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    adminWallet = await generateTestWallet(provider, [[500_000]]);
+    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  });
 
   it('should ensure create method waits till a transaction response is given', async () => {
     const destination = Wallet.generate({

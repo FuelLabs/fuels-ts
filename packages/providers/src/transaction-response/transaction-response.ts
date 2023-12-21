@@ -210,21 +210,19 @@ export class TransactionResponse {
     });
 
     for await (const { statusChange } of subscription) {
-      if (statusChange.type === 'SubmittedStatus') {
-        // eslint-disable-next-line no-continue
-        continue;
+      if (statusChange.type === 'SuccessStatus') {
+        break;
       }
-      switch (statusChange.type) {
-        case 'FailureStatus':
-          throw new FuelError(
-            FuelError.CODES.TRANSACTION_FAILED,
-            `Script Reverted. Logs: ${JSON.stringify(statusChange.receipts)}`
-          );
-        case 'SqueezedOutStatus':
-          throw new FuelError(FuelError.CODES.TRANSACTION_SQUEEZED_OUT, '');
-        case 'SuccessStatus':
-        default:
-          break;
+
+      if (statusChange.type === 'FailureStatus') {
+        throw new FuelError(
+          FuelError.CODES.TRANSACTION_FAILED,
+          `Script Reverted. Logs: ${JSON.stringify(statusChange.receipts)}`
+        );
+      }
+
+      if (statusChange.type === 'SqueezedOutStatus') {
+        throw new FuelError(FuelError.CODES.TRANSACTION_SQUEEZED_OUT, '');
       }
     }
 
