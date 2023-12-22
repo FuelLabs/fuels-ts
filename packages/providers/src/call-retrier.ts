@@ -63,6 +63,7 @@ export function retrier(
       retryAttempt += 1;
 
       await sleep(getWaitDuration(options, retryAttempt));
+
       return retrier(fetchFn, options, retryAttempt)(...args);
     }
   };
