@@ -19,7 +19,7 @@ jobs:
 
   environments:
     runs-on: ubuntu-latest
-    name: ${{ matrix.env }} - v${{ matrix.version }}
+    name: ${{ matrix.env }} / v${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
@@ -125,11 +125,16 @@ jobs:
           mode: recreate
           create_if_not_exists: true
 
-  live-tests:
-    name: Run Live Tests
+  live:
+    name: ${{ matrix.version.name }}
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          [{ name: "beta-4", url: "https://beta-4.fuel.network/graphql" }]
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -145,5 +150,5 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
+          FUEL_NETWORK_URL: ${{ matrix.version.url }}
           FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
