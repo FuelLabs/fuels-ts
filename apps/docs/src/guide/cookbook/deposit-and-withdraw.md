@@ -6,7 +6,7 @@ Consider the following contract:
 
 As the name implies, this contract represents a simplified version of a liquidity pool. The `deposit()` method allows you to supply an arbitrary amount of `BASE_TOKEN`. In response, it mints twice the amount of the liquidity asset to the caller's address. Similarly, the `withdraw()` method transfers half the amount of the `BASE_TOKEN` back to the caller's address.
 
-Now, let's deposit some tokens into the liquidity pool contract. Since this requires forwarding assets to the contract, we need to pass the appropriate values to `callParams` when creating out contract call.
+Now, let's deposit some tokens into the liquidity pool contract. Since this requires forwarding assets to the contract, we need to pass the appropriate values to `callParams` when creating a contract call.
 
 <<< @/../../docs-snippets/src/guide/cookbook/deposit-and-withdraw.test.ts#deposit-and-withdraw-cookbook-2{ts:line-numbers}
 
