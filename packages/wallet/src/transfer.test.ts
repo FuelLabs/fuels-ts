@@ -178,7 +178,7 @@ describe('Wallet', () => {
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
 
-    const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT, {
+    const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT, {
       gasPrice,
       gasLimit: 10_000,
     });

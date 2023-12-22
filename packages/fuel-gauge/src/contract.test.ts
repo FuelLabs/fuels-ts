@@ -969,7 +969,7 @@ describe('Contract', () => {
 
     const amountToContract = 100;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, asset, {
+    const tx = await wallet.transferToContract(contract.id.toB256(), amountToContract, asset, {
       gasPrice,
       gasLimit: 10_000,
     });
