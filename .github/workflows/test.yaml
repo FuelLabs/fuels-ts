@@ -134,7 +134,7 @@ jobs:
       matrix:
         version:
           [{ name: "beta-4", url: "https://beta-4.fuel.network/graphql" }]
-    timeout-minutes: 25
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
