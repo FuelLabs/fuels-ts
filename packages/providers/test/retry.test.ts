@@ -28,6 +28,9 @@ function mockFetch(maxAttempts: number, callTimes: number[]) {
   });
 }
 
+/**
+ * @group node
+ */
 describe('Retries correctly', () => {
   afterEach(() => {
     vi.clearAllMocks();
