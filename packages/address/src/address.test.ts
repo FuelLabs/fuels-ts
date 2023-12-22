@@ -376,4 +376,28 @@ describe('Address class', () => {
     );
     await expectToThrowFuelError(() => Address.fromEvmAddress(address), expectedError);
   });
+
+  describe('fromAddressOrBech32String', () => {
+    it('should handle bech-32 string address', () => {
+      const result = Address.fromAddressOrBech32String(ADDRESS_BECH32);
+      expect(result.toString()).toEqual(ADDRESS_BECH32);
+    });
+
+    it('should handle an address instance', () => {
+      const address = Address.fromB256(ADDRESS_B256);
+      const result = Address.fromAddressOrBech32String(address);
+      expect(result.toString()).toEqual(ADDRESS_BECH32);
+    });
+
+    it('should throw FuelError for a non bech-32 string address', async () => {
+      const address = ADDRESS_B256;
+      await expectToThrowFuelError(
+        () => Address.fromAddressOrBech32String(address),
+        new FuelError(
+          FuelError.CODES.INVALID_BECH32_ADDRESS,
+          `Invalid BECH-32 Address: ${address}.`
+        )
+      );
+    });
+  });
 });
