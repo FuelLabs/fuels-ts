@@ -199,6 +199,26 @@ export default class Address extends AbstractAddress {
   }
 
   /**
+   * Takes an ambiguous BECH-32 string or address and creates an `Address`
+   *
+   * @returns a new `Address` instance
+   */
+  static fromAddressOrBech32String(address: string | AbstractAddress): AbstractAddress {
+    if (typeof address === 'string') {
+      if (isBech32(address)) {
+        return new Address(address as Bech32Address);
+      }
+
+      throw new FuelError(
+        FuelError.CODES.INVALID_BECH32_ADDRESS,
+        `Invalid BECH-32 Address: ${address}.`
+      );
+    } else {
+      return address;
+    }
+  }
+
+  /**
    * Takes a dynamic string or `AbstractAddress` and creates an `Address`
    *
    * @param addressId - A string containing Bech32, B256, or Public Key
