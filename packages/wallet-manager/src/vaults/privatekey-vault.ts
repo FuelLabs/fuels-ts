@@ -66,9 +66,9 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
   }
 
   exportAccount(address: string | AbstractAddress): string {
-    const bech32Address = Address.fromAddressOrBech32String(address);
+    const ownerAddress = Address.fromAddressOrString(address);
     const privateKey = this.#privateKeys.find((pk) =>
-      Wallet.fromPrivateKey(pk, this.provider).address.equals(bech32Address)
+      Wallet.fromPrivateKey(pk, this.provider).address.equals(ownerAddress)
     );
 
     if (!privateKey) {

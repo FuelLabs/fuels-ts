@@ -85,7 +85,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
   exportAccount(address: string | AbstractAddress): string {
     let numberOfAccounts = 0;
-    const bech32Address = Address.fromAddressOrBech32String(address);
+    const ownerAddress = Address.fromAddressOrString(address);
     // Look for the account that has the same address
     do {
       const wallet = Wallet.fromMnemonic(
@@ -93,7 +93,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
         this.provider,
         this.getDerivePath(numberOfAccounts)
       );
-      if (wallet.address.equals(bech32Address)) {
+      if (wallet.address.equals(ownerAddress)) {
         return wallet.privateKey;
       }
       numberOfAccounts += 1;

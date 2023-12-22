@@ -847,7 +847,7 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = []
   ) {
-    const ownerAddress = Address.fromAddressOrBech32String(owner);
+    const ownerAddress = Address.fromAddressOrString(owner);
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const transactionCost = await this.getTransactionCost(transactionRequest, forwardingQuantities);
 
@@ -885,7 +885,7 @@ export default class Provider {
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Coin[]> {
-    const ownerAddress = Address.fromAddressOrBech32String(owner);
+    const ownerAddress = Address.fromAddressOrString(owner);
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
@@ -921,7 +921,7 @@ export default class Provider {
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
-    const ownerAddress = Address.fromAddressOrBech32String(owner);
+    const ownerAddress = Address.fromAddressOrString(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -1116,7 +1116,7 @@ export default class Provider {
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: Address.fromAddressOrBech32String(contractId).toB256(),
+      contract: Address.fromAddressOrString(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1136,7 +1136,7 @@ export default class Provider {
     assetId: BytesLike
   ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
-      owner: Address.fromAddressOrBech32String(owner).toB256(),
+      owner: Address.fromAddressOrString(owner).toB256(),
       assetId: hexlify(assetId),
     });
     return bn(balance.amount, 10);
@@ -1158,7 +1158,7 @@ export default class Provider {
     const result = await this.operations.getBalances({
       first: 10,
       ...paginationArgs,
-      filter: { owner: Address.fromAddressOrBech32String(owner).toB256() },
+      filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
     const balances = result.balances.edges.map((edge) => edge.node);
@@ -1185,7 +1185,7 @@ export default class Provider {
     const result = await this.operations.getMessages({
       first: 10,
       ...paginationArgs,
-      owner: Address.fromAddressOrBech32String(address).toB256(),
+      owner: Address.fromAddressOrString(address).toB256(),
     });
 
     const messages = result.messages.edges.map((edge) => edge.node);

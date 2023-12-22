@@ -112,27 +112,27 @@ export class WalletManager extends EventEmitter {
    * Create a Wallet instance for the specific account
    */
   getWallet(address: string | AbstractAddress): WalletUnlocked {
-    const bech32Address = Address.fromAddressOrBech32String(address);
+    const ownerAddress = Address.fromAddressOrString(address);
     const vaultState = this.#vaults.find((vs) =>
-      vs.vault.getAccounts().find((a) => a.address.equals(bech32Address))
+      vs.vault.getAccounts().find((a) => a.address.equals(ownerAddress))
     );
     assert(vaultState, ERROR_MESSAGES.address_not_found);
 
-    return vaultState.vault.getWallet(bech32Address);
+    return vaultState.vault.getWallet(ownerAddress);
   }
 
   /**
    * Export specific account privateKey
    */
   exportPrivateKey(address: string | AbstractAddress) {
-    const bech32Address = Address.fromAddressOrBech32String(address);
+    const ownerAddress = Address.fromAddressOrString(address);
     assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
     const vaultState = this.#vaults.find((vs) =>
-      vs.vault.getAccounts().find((a) => a.address.equals(bech32Address))
+      vs.vault.getAccounts().find((a) => a.address.equals(ownerAddress))
     );
     assert(vaultState, ERROR_MESSAGES.address_not_found);
 
-    return vaultState.vault.exportAccount(bech32Address);
+    return vaultState.vault.exportAccount(ownerAddress);
   }
 
   /**

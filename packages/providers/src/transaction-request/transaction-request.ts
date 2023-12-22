@@ -227,8 +227,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param signature - The signature to update the witness with.
    */
   updateWitnessByOwner(address: string | AbstractAddress, signature: BytesLike) {
-    const bech32Address = Address.fromAddressOrBech32String(address);
-    const witnessIndex = this.getCoinInputWitnessIndexByOwner(bech32Address);
+    const ownerAddress = Address.fromAddressOrString(address);
+    const witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
     if (typeof witnessIndex === 'number') {
       this.updateWitness(witnessIndex, signature);
     }

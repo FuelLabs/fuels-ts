@@ -303,7 +303,7 @@ export class Account extends AbstractAccount {
     const { minGasPrice } = this.provider.getGasConfig();
     const params = { gasPrice: minGasPrice, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    request.addCoinOutput(Address.fromAddressOrBech32String(destination), amount, assetId);
+    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
     await this.fund(request, requiredQuantities, maxFee);
     return request;
@@ -351,7 +351,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const contractAddress = Address.fromAddressOrBech32String(contractId);
+    const contractAddress = Address.fromAddressOrString(contractId);
     const { minGasPrice } = this.provider.getGasConfig();
     const params = { gasPrice: minGasPrice, ...txParams };
 
@@ -396,7 +396,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const recipientAddress = Address.fromAddressOrBech32String(recipient);
+    const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = getBytesCopy(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))

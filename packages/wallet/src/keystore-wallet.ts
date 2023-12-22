@@ -63,7 +63,7 @@ export async function encryptKeystoreWallet(
 ): Promise<string> {
   // Convert the hexlified private key string to a Buffer.
   const privateKeyBuffer = bufferFromString(removeHexPrefix(privateKey), 'hex');
-  const bech32Address = Address.fromAddressOrBech32String(address);
+  const ownerAddress = Address.fromAddressOrString(address);
   // Generate a random salt.
   const salt = randomBytes(DEFAULT_KEY_SIZE);
 
@@ -92,7 +92,7 @@ export async function encryptKeystoreWallet(
   const keystore: KeystoreWallet = {
     id: uuidv4(),
     version: 3,
-    address: removeHexPrefix(bech32Address.toHexString()),
+    address: removeHexPrefix(ownerAddress.toHexString()),
     crypto: {
       cipher: 'aes-128-ctr',
       mac,
