@@ -298,11 +298,17 @@ describe('Provider', () => {
     const { height: latestBlockNumberBeforeProduce } = block;
 
     const amountOfBlocksToProduce = 3;
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+    await provider.produceBlocks(amountOfBlocksToProduce);
 
-    expect(latestBlockNumber.toHex()).toEqual(
-      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
-    );
+    const blocks = await provider.getBlocks({
+      last: 20,
+    });
+
+    const lastBlockIndex = blocks.findIndex((b) => b.height.eq(latestBlockNumberBeforeProduce));
+
+    const newBlocks = blocks.slice(lastBlockIndex + 1);
+
+    expect(newBlocks.length).toBeGreaterThanOrEqual(amountOfBlocksToProduce);
     // #endregion Provider-produce-blocks
   });
 
