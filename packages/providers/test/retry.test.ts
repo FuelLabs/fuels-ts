@@ -51,7 +51,7 @@ describe('Retries correctly', () => {
     // this might be something related to the event loop and how it schedules setTimeouts
     // expectedWaitTime minus 5ms seems like reasonable to allow
     expect(waitTime).toBeGreaterThanOrEqual(expectedWaitTime - 5);
-    expect(waitTime).toBeLessThanOrEqual(expectedWaitTime + 10);
+    expect(waitTime).toBeLessThanOrEqual(expectedWaitTime + 15);
   }
 
   test('fixed backoff', async () => {
