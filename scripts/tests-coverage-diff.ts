@@ -14,9 +14,11 @@ const getDiff = () => {
   const report = `
   ***Coverage Report:***
   ${resultsSections[1]}
-  <br/>
+
   <details>
+  
   <summary>Changed Files:</summary>
+
   ${resultsSections[0]}
   </details>
   `;
