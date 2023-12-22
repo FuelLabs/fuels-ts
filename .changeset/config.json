@@ -5,7 +5,7 @@
   "fixed": [["@fuel-ts/*", "fuels", "create-fuels"]],
   "linked": [],
   "access": "public",
-  "baseBranch": "master",
+  "baseBranch": "rc/salamander",
   "updateInternalDependencies": "patch",
   "ignore": [
     "fuel-gauge",
