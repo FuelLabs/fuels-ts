@@ -304,9 +304,9 @@ describe('Provider', () => {
       last: 20,
     });
 
-    const oldLatestIdx = blocks.findIndex((b) => b.height.eq(latestBlockNumberBeforeProduce));
+    const lastBlockIndex = blocks.findIndex((b) => b.height.eq(latestBlockNumberBeforeProduce));
 
-    const newBlocks = blocks.slice(oldLatestIdx + 1);
+    const newBlocks = blocks.slice(lastBlockIndex + 1);
 
     expect(newBlocks.length).toBeGreaterThanOrEqual(amountOfBlocksToProduce);
     // #endregion Provider-produce-blocks
