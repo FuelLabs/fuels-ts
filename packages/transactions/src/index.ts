@@ -1,5 +1,6 @@
 export * from './coders/input';
 export * from './coders/output';
+export * from './coders/policy';
 export * from './coders/receipt';
 export * from './coders/storage-slot';
 export * from './coders/transaction';

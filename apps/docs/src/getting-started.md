@@ -12,15 +12,26 @@ To begin, you need to add the `fuels` dependency to your project. You can do thi
 npm install fuels --save
 ```
 
-```sh [yarn]
-yarn add fuels
-```
-
 ```sh [pnpm]
 pnpm add fuels
 ```
 
 :::
+
+### Note
+
+If you are using bun, you'll need to add a `trustedDependencies` field to your `package.json`:
+
+```json
+{
+  // ...
+  "trustedDependencies": ["@fuel-ts/fuel-core", "@fuel-ts/forc"]
+}
+```
+
+This is to ensure that bun includes the `fuel-core` and `forc` binaries in your project.
+
+> IMPORTANT: We don't officially support `bun` yet; use it at your own risk.
 
 ## Creating a React Component to Connect to the Blockchain
 

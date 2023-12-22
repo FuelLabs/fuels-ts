@@ -10,16 +10,20 @@ const deployContract = async (
   provider: Provider,
   useCache: boolean = true
 ) => {
-  if (contractInstance && useCache) return contractInstance;
+  if (contractInstance && useCache) {
+    return contractInstance;
+  }
   const { minGasPrice } = provider.getGasConfig();
   contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
   return contractInstance;
 };
 
 let walletInstance: WalletUnlocked;
-const createWallet = async () => {
-  if (walletInstance) return walletInstance;
-  const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
+export const createWallet = async () => {
+  if (walletInstance) {
+    return walletInstance;
+  }
+  const provider = await Provider.create(FUEL_NETWORK_URL);
   walletInstance = await generateTestWallet(provider, [
     [5_000_000, BaseAssetId],
     [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
@@ -50,7 +54,7 @@ export const createSetupConfig =
     });
 
 const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
-  next(join(__dirname, `../fixtures/forc-projects/${contractName}/out/debug/${contractName}`));
+  next(join(__dirname, `../test/fixtures/forc-projects/${contractName}/out/debug/${contractName}`));
 
 export const getSetupContract = (
   contractName: string

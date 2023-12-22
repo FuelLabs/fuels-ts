@@ -1,4 +1,5 @@
 {
+  "$schema": "https://turborepo.org/schema.json",
   "extends": ["//"],
   "pipeline": {
     "build": {

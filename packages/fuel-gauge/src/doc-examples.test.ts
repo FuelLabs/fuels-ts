@@ -1,5 +1,4 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type {
   BN,
   Bech32Address,
@@ -29,24 +28,43 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
-import liquidityPoolABI from '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
-import predicateTriple from '../fixtures/forc-projects/predicate-triple-sig';
-import testPredicateTrue from '../fixtures/forc-projects/predicate-true';
-import tokenContractABI from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+
+const { abiContents: callTestAbi } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+);
+
+const { binHexlified: liquidityPoolContractBytecode, abiContents: liquidityPoolABI } =
+  getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+
+const { binHexlified: predicateTriple } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRIPLE_SIG
+);
+
+const { binHexlified: testPredicateTrue } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.PREDICATE_TRUE
+);
+
+const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } =
+  getFuelGaugeForcProject(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
+
 const ADDRESS_B256 = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
+
 const ADDRESS_BECH32: Bech32Address =
   'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
+
 const ADDRESS_BYTES = new Uint8Array([
   241, 233, 44, 66, 185, 9, 52, 170, 99, 114, 227, 11, 197, 104, 163, 38, 246, 230, 106, 26, 2, 136,
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,
 ]);
 
+/**
+ * @group node
+ */
 describe('Doc Examples', () => {
   let gasPrice: BN;
 
@@ -126,7 +144,7 @@ describe('Doc Examples', () => {
     const address = Address.fromB256(hexedB256);
     const arrayB256: Uint8Array = arrayify(randomB256Bytes);
     const walletLike: WalletLocked = Wallet.fromAddress(address, provider);
-    const contractLike: Contract = new Contract(address, abiJSON, provider);
+    const contractLike: Contract = new Contract(address, callTestAbi, provider);
 
     expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
     expect(address.equals(contractLike.id as Address)).toBeTruthy();
@@ -202,7 +220,7 @@ describe('Doc Examples', () => {
 
   it('can create wallets', async () => {
     // #region wallet-setup
-    // #context import { Provider, bn } from 'fuels';
+    // #context import { Provider, bn, FUEL_NETWORK_URL } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -238,7 +256,8 @@ describe('Doc Examples', () => {
     // #endregion wallet-setup
   });
 
-  it('can connect to testnet', async () => {
+  // TODO: Stop skipping test after beta 5 url released
+  it.skip('can connect to testnet', async () => {
     // #region provider-testnet
     // #context import { Provider, WalletUnlocked } from 'fuels';
     const provider = await Provider.create('https://beta-4.fuel.network/graphql');
@@ -258,7 +277,7 @@ describe('Doc Examples', () => {
 
   it('can connect to a local provider', async () => {
     // #region provider-local
-    // #context import { Provider, WalletUnlocked } from 'fuels';
+    // #context import { Provider, WalletUnlocked, FUEL_NETWORK_URL } from 'fuels';
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
@@ -274,7 +293,7 @@ describe('Doc Examples', () => {
 
   it('can query address with wallets', async () => {
     // #region wallet-query
-    // #context import { Provider } from 'fuels';
+    // #context import { Provider, FUEL_NETWORK_URL } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -329,7 +348,7 @@ describe('Doc Examples', () => {
 
   it('can create a predicate', async () => {
     // #region predicate-basic
-    // #context import { Predicate, arrayify } from 'fuels';
+    // #context import { Predicate, arrayify, FUEL_NETWORK_URL } from 'fuels';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(testPredicateTrue, provider);
 
@@ -411,6 +430,7 @@ describe('Doc Examples', () => {
 
     const response = await wallet1.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await response.waitForResult();
     const predicateBalance = await predicate.getBalance();
@@ -418,8 +438,9 @@ describe('Doc Examples', () => {
     // assert that predicate address now has the expected amount to predicate
     expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
-    const depositOnPredicate = await wallet1.transfer(predicate.address, 200, BaseAssetId, {
+    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     // Wait for Transaction to succeed
     await depositOnPredicate.waitForResult();
@@ -427,7 +448,7 @@ describe('Doc Examples', () => {
 
     // assert that predicate address now has the updated expected amount to predicate
     expect(bn(updatedPredicateBalance)).toEqual(
-      initialPredicateBalance.add(amountToPredicate).add(200)
+      initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
     const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -439,7 +460,7 @@ describe('Doc Examples', () => {
 
     const tx = await predicate
       .setData(signatures)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // check balances
@@ -461,9 +482,6 @@ describe('Doc Examples', () => {
     // #endregion deposit-and-withdraw-cookbook-wallet-setup
 
     // #region deposit-and-withdraw-cookbook-contract-deployments
-    const tokenContractBytecode = readFileSync(
-      join(__dirname, '../fixtures/forc-projects/token_contract/out/debug/token_contract.bin')
-    );
     const tokenContractFactory = new ContractFactory(
       tokenContractBytecode,
       tokenContractABI,
@@ -472,9 +490,6 @@ describe('Doc Examples', () => {
     const tokenContract = await tokenContractFactory.deployContract({ gasPrice });
     const tokenContractID = tokenContract.id;
 
-    const liquidityPoolContractBytecode = readFileSync(
-      join(__dirname, '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-    );
     const liquidityPoolContractFactory = new ContractFactory(
       liquidityPoolContractBytecode,
       liquidityPoolABI,

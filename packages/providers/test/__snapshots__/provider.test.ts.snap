@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Provider can getMessageProof with all data 1`] = `
+exports[`Provider > can getMessageProof with all data 1`] = `
 {
   "amount": "0xa",
   "blockProof": {
@@ -44,13 +44,13 @@ exports[`Provider can getMessageProof with all data 1`] = `
       "0x34fdfbc73458998a106b02f13bba51bc0fd36513602e312ca1d1893f2075eca5",
     ],
   },
-  "nonce": "0x3e87e0f44613cabecd1aad381ad41a433afb12ec5c54c172de3db25b1b4d1b53",
+  "nonce": "0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895",
   "recipient": "fuel1qqqqqqqqqqqqqqqqqqqy0wnpamywtejjglt30lerdagyeuas5f3s0esvs7",
   "sender": "fuel108z5yxd9eygf08j7fsnj3hck87n9fg07qwzru6h4nk4zc07dgt4q5t8nka",
 }
 `;
 
-exports[`Provider can getMessageStatus 1`] = `
+exports[`Provider > can getMessageStatus 1`] = `
 {
   "state": "SPENT",
 }

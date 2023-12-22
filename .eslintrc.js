@@ -21,6 +21,12 @@ module.exports = {
     },
   },
   rules: {
+    'no-restricted-syntax': [
+      'off',
+      {
+        selector: 'ForOfStatement',
+      },
+    ],
     '@typescript-eslint/no-non-null-assertion': 1,
     // Disable error on devDependencies importing since this isn't a TS library
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
@@ -56,10 +62,10 @@ module.exports = {
       'warn',
       {
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
       },
     ],
     '@typescript-eslint/no-explicit-any': 'error',
+    curly: ['error', 'all'],
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [

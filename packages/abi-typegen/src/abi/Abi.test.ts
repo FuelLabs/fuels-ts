@@ -1,6 +1,9 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseConfigurablesMod from '../utils/parseConfigurables';
@@ -12,18 +15,21 @@ import { EnumType } from './types/EnumType';
 import { OptionType } from './types/OptionType';
 import { VectorType } from './types/VectorType';
 
+/**
+ * @group node
+ */
 describe('Abi.ts', () => {
   /*
     Test helpers
   */
   function mockAllDeps() {
-    const parseTypes = jest.spyOn(parseTypesMod, 'parseTypes').mockImplementation(() => []);
+    const parseTypes = vi.spyOn(parseTypesMod, 'parseTypes').mockImplementation(() => []);
 
-    const parseFunctions = jest
+    const parseFunctions = vi
       .spyOn(parseFunctionsMod, 'parseFunctions')
       .mockImplementation(() => []);
 
-    const parseConfigurables = jest
+    const parseConfigurables = vi
       .spyOn(parseConfigurablesMod, 'parseConfigurables')
       .mockImplementation(() => []);
 
@@ -40,7 +46,7 @@ describe('Abi.ts', () => {
     const inputPath = params.inputPath;
     const outputDir = './out';
 
-    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
     const rawContents = project.abiContents;
 
     const abi = new Abi({

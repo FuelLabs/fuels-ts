@@ -7,28 +7,36 @@ import type {
   CoinQuantity,
   Message,
   Resource,
-  TransactionRequest,
   TransactionRequestLike,
 } from '@fuel-ts/providers';
 import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
+import type { TxParamsType } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
-jest.mock('@fuel-ts/providers', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/providers'),
-}));
+vi.mock('@fuel-ts/providers', async () => {
+  const mod = await vi.importActual('@fuel-ts/providers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 let provider: Provider;
 
-afterEach(jest.restoreAllMocks);
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
 });
 
+/**
+ * @group node
+ */
 describe('Account', () => {
   const assets = [
     '0x0101010101010101010101010101010101010101010101010101010101010101',
@@ -63,9 +71,9 @@ describe('Account', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    const getCoins = async () => Promise.resolve(dummyCoins);
-
-    jest.spyOn(providersMod.Provider.prototype, 'getCoins').mockImplementation(getCoins);
+    vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
+      Promise.resolve(dummyCoins)
+    );
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -113,12 +121,11 @@ describe('Account', () => {
   });
 
   it('should throw if messages length is higher than 9999', async () => {
-    // mocking
-    const messages: Message[] = new Array(10000);
-    const mockedGetMessages = async () => Promise.resolve(messages);
-    jest
-      .spyOn(providersMod.Provider.prototype, 'getMessages')
-      .mockImplementationOnce(mockedGetMessages);
+    const dummyMessages: Message[] = new Array(10000);
+
+    vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
+      Promise.resolve(dummyMessages)
+    );
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
@@ -161,13 +168,11 @@ describe('Account', () => {
   });
 
   it('should throw if balances length is higher than 9999', async () => {
-    const dummyBalace: CoinQuantity[] = new Array(10000);
+    const dummyBalances: CoinQuantity[] = new Array(10000);
 
-    const mockedGetBalances = async () => Promise.resolve(dummyBalace);
-
-    jest
-      .spyOn(providersMod.Provider.prototype, 'getBalances')
-      .mockImplementation(mockedGetBalances);
+    vi.spyOn(Provider.prototype, 'getBalances').mockImplementation(async () =>
+      Promise.resolve(dummyBalances)
+    );
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -216,13 +221,13 @@ describe('Account', () => {
     const request = new ScriptTransactionRequest();
 
     const resourcesToSpend: Resource[] = [];
-    const getResourcesToSpendSpy = jest
+    const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementationOnce(() => Promise.resolve(resourcesToSpend));
 
-    const addResourcesSpy = jest.spyOn(request, 'addResources');
+    const addResourcesSpy = vi.spyOn(request, 'addResources');
 
-    const addAmountToAssetSpy = jest.spyOn(providersMod, 'addAmountToAsset');
+    const addAmountToAssetSpy = vi.spyOn(providersMod, 'addAmountToAsset');
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -233,14 +238,20 @@ describe('Account', () => {
 
     expect(addAmountToAssetSpy).toBeCalledTimes(1);
     expect(addAmountToAssetSpy).toHaveBeenCalledWith({
-      amount: fee,
+      amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: quantities,
     });
 
-    const expectedTotalResources = [quantities[0], { amount: fee, assetId: BaseAssetId }];
+    const expectedTotalResources = [
+      { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
+      { amount: bn(fee), assetId: BaseAssetId },
+    ];
     expect(getResourcesToSpendSpy).toBeCalledTimes(1);
-    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources);
+    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
+      messages: [],
+      utxos: [],
+    });
 
     expect(addResourcesSpy).toBeCalledTimes(1);
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
@@ -249,8 +260,10 @@ describe('Account', () => {
   it('should execute transfer just as fine', async () => {
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const destination = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
-    const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
+    const destination = Address.fromAddressOrString(
+      '0x0202020202020202020202020202020202020202020202020202020202020202'
+    );
+    const txParam: TxParamsType = {
       gasLimit: bn(1),
       gasPrice: bn(1),
       maturity: 1,
@@ -264,24 +277,25 @@ describe('Account', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const request = new ScriptTransactionRequest();
-    jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+    vi.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
     const transactionResponse = new TransactionResponse('transactionId', provider);
 
-    const addCoinOutputSpy = jest.spyOn(request, 'addCoinOutput');
+    const addCoinOutputSpy = vi.spyOn(request, 'addCoinOutput');
 
-    const fundSpy = jest
-      .spyOn(Account.prototype, 'fund')
-      .mockImplementation(() => Promise.resolve());
+    const fundSpy = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
-    const sendTransactionSpy = jest
+    const sendTransactionSpy = vi
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
-    const getTransactionCost = jest
+    const getTransactionCost = vi
       .spyOn(Provider.prototype, 'getTransactionCost')
       .mockImplementation(() => Promise.resolve(transactionCost));
 
@@ -310,37 +324,45 @@ describe('Account', () => {
 
   it('should execute withdrawToBaseLayer just fine', async () => {
     const recipient = Address.fromRandom();
-    const txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {};
+    const txParams: TxParamsType = {};
     const amount = bn(1);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const fee: CoinQuantity = {
-      amount,
-      assetId,
+    const request = new ScriptTransactionRequest();
+
+    const quantities: CoinQuantity[] = [
+      {
+        amount: bn(1),
+        assetId,
+      },
+    ];
+    const cost: providersMod.TransactionCost = {
+      gasPrice: bn(1),
+      gasUsed: bn(1),
+      maxFee: bn(1),
+      maxGas: bn(1),
+      minFee: bn(1),
+      minGas: bn(1),
+      minGasPrice: bn(1),
+      receipts: [],
+      requiredQuantities: quantities,
+      usedFee: bn(1),
     };
-
-    const calculateFee = jest.fn(() => fee);
-    const addResources = jest.fn();
-
-    const request = {
-      calculateFee,
-      addResources,
-    } as unknown as ScriptTransactionRequest;
-
-    const resources: Resource[] = [];
 
     const transactionResponse = {} as unknown as TransactionResponse;
 
-    const scriptTransactionRequest = jest
+    const scriptTransactionRequest = vi
       .spyOn(providersMod, 'ScriptTransactionRequest')
       .mockImplementation(() => request);
 
-    const getResourcesToSpend = jest
-      .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementation(() => Promise.resolve(resources));
+    const getTransactionCost = vi
+      .spyOn(providersMod.Provider.prototype, 'getTransactionCost')
+      .mockImplementation(() => Promise.resolve(cost));
 
-    const sendTransaction = jest
+    const fund = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
+
+    const sendTransaction = vi
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
@@ -353,52 +375,39 @@ describe('Account', () => {
 
     expect(result).toEqual(transactionResponse);
 
-    expect(scriptTransactionRequest.mock.calls.length).toBe(1);
+    expect(scriptTransactionRequest).toHaveBeenCalledTimes(1);
 
-    expect(calculateFee.mock.calls.length).toBe(1);
+    expect(sendTransaction).toHaveBeenCalledTimes(1);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
-
-    expect(getResourcesToSpend.mock.calls.length).toBe(1);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
-
-    expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(getTransactionCost).toHaveBeenCalledTimes(1);
+    expect(fund).toHaveBeenCalledTimes(1);
 
     // without txParams
     result = await account.withdrawToBaseLayer(recipient, amount);
 
     expect(result).toEqual(transactionResponse);
 
-    expect(scriptTransactionRequest.mock.calls.length).toBe(2);
+    expect(scriptTransactionRequest).toHaveBeenCalledTimes(2);
 
-    expect(calculateFee.mock.calls.length).toBe(2);
-
-    expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
-
-    expect(getResourcesToSpend.mock.calls.length).toBe(2);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
-
-    expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction).toHaveBeenCalledTimes(2);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
   });
 
   it('should execute sendTransaction just fine', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
+    const transactionRequestLike: TransactionRequestLike = {
+      type: providersMod.TransactionType.Script,
+    };
+    const transactionRequest = new ScriptTransactionRequest();
     const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
 
-    const transactionRequestify = jest
-      .spyOn(providersMod, 'transactionRequestify')
-      .mockImplementation(() => transactionRequest);
+    const transactionRequestify = vi.spyOn(providersMod, 'transactionRequestify');
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const sendTransaction = jest
+    const sendTransaction = vi
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
@@ -414,7 +423,7 @@ describe('Account', () => {
     expect(transactionRequestify.mock.calls.length).toEqual(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
-    expect(estimateTxDependencies.mock.calls.length).toEqual(1);
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
@@ -422,19 +431,21 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
+    const transactionRequestLike: TransactionRequestLike = {
+      type: providersMod.TransactionType.Script,
+    };
+    const transactionRequest = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
-    const transactionRequestify = jest
+    const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const simulate = jest
+    const simulate = vi
       .spyOn(providersMod.Provider.prototype, 'simulate')
       .mockImplementation(() => Promise.resolve(callResult));
 
@@ -447,11 +458,11 @@ describe('Account', () => {
 
     expect(result).toEqual(callResult);
 
-    expect(transactionRequestify.mock.calls.length).toBe(1);
-    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
-
     expect(estimateTxDependencies.mock.calls.length).toBe(1);
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+
+    expect(transactionRequestify.mock.calls.length).toBe(1);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);

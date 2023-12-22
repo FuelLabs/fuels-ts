@@ -1,13 +1,16 @@
 import type { BN, Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let contract: Contract;
   let gasPrice: BN;
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
     ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
   });
 
@@ -26,7 +29,10 @@ describe(__filename, () => {
 
   it('should successfully execute and validate echoed 8 contract call', async () => {
     // #region string-2
-    const { value } = await contract.functions.echo_str_8('fuel-sdk').simulate();
+    const { value } = await contract.functions
+      .echo_str_8('fuel-sdk')
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual('fuel-sdk');
     // #endregion string-2

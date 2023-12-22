@@ -10,6 +10,9 @@ import type { VaultConfig } from './types';
 import { WalletManager } from './wallet-manager';
 import WalletManagerSpec from './wallet-manager-spec';
 
+/**
+ * @group node
+ */
 describe('Wallet Manager', () => {
   let provider: Provider;
 
@@ -325,16 +328,16 @@ describe('Wallet Manager', () => {
       provider,
     });
     // Create object with methods to be able to
-    // use Jest.spyOn
+    // use vi.spyOn
     const listeners = {
       onLock: () => {},
       onUnlock: () => {},
       onUpdate: () => {},
     };
 
-    const apyLock = jest.spyOn(listeners, 'onLock');
-    const spyUnlock = jest.spyOn(listeners, 'onUnlock');
-    const spyUpdate = jest.spyOn(listeners, 'onUpdate');
+    const apyLock = vi.spyOn(listeners, 'onLock');
+    const spyUnlock = vi.spyOn(listeners, 'onUnlock');
+    const spyUpdate = vi.spyOn(listeners, 'onUpdate');
 
     walletManager.on('update', listeners.onUpdate);
     walletManager.on('lock', listeners.onLock);

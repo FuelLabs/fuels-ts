@@ -5,11 +5,14 @@
   "ignore": [
     "**/__generated__/**",
     "**/*.js",
+    "**/*.test.ts",
     "**/*.mjs",
     "**/dist/**",
     "**/Forc.lock",
     "**/getBuiltinVersions.ts",
     "**/out/debug/**",
-    "apps/demo-typegen/src/generated-types/**"
+    "apps/demo-typegen/src/contract-types/**",
+    "apps/demo-typegen/src/predicate-types/**",
+    "apps/demo-typegen/src/script-types/**"
   ]
 }

@@ -9,14 +9,35 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
+vi.mock('@fuels/vm-asm', async () => {
+  const mod = await vi.importActual('@fuels/vm-asm');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+vi.mock('ethers', async () => {
+  const mod = await vi.importActual('ethers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+/**
+ * @group node
+ */
 describe('util', () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
     const script = await composeScriptForTransferringToContract();
     expect(script).toStrictEqual(
       new Uint8Array([
-        97, 64, 0, 12, 80, 69, 0, 32, 93, 73, 16, 0, 80, 77, 16, 8, 60, 65, 36, 192, 36, 4, 0, 0,
+        97, 64, 0, 10, 80, 69, 0, 32, 93, 73, 16, 0, 80, 77, 16, 8, 60, 65, 36, 192, 36, 4, 0, 0,
       ])
     );
   });
@@ -24,9 +45,9 @@ describe('util', () => {
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
-    const encode = jest.spyOn(U64Coder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
+    const encode = vi.spyOn(U64Coder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
 
-    const arrayify = jest
+    const arrayify = vi
       .spyOn(getBytesCopyMod, 'getBytesCopy')
       .mockReturnValue(Uint8Array.from(byte));
 

@@ -11,7 +11,9 @@ export const concatBytes = (
   arrays: ReadonlyArray<Uint8Array> | ReadonlyArray<number[]>
 ): Uint8Array => {
   const byteArrays = arrays.map((array) => {
-    if (array instanceof Uint8Array) return array;
+    if (array instanceof Uint8Array) {
+      return array;
+    }
     return Uint8Array.from(array);
   });
 

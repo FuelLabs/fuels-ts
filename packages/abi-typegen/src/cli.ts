@@ -7,16 +7,16 @@ import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 export interface ICliParams {
   inputs: string[];
   output: string;
-  silent: boolean;
-  contract: boolean;
-  script: boolean;
-  predicate: boolean;
+  silent?: boolean;
+  contract?: boolean;
+  script?: boolean;
+  predicate?: boolean;
 }
 
 export function resolveProgramType(params: {
-  contract: boolean;
-  script: boolean;
-  predicate: boolean;
+  contract?: boolean;
+  script?: boolean;
+  predicate?: boolean;
 }) {
   const { contract, script, predicate } = params;
 
@@ -40,13 +40,18 @@ export function runCliAction(options: ICliParams) {
 
   const programType = resolveProgramType({ contract, script, predicate });
 
-  runTypegen({
-    cwd,
-    inputs,
-    output,
-    programType,
-    silent: !!silent,
-  });
+  try {
+    runTypegen({
+      cwd,
+      inputs,
+      output,
+      programType,
+      silent: !!silent,
+    });
+  } catch (err) {
+    process.stderr.write(`error: ${(<Error>err).message}\n`);
+    process.exit(1);
+  }
 }
 
 export function configureCliOptions(program: Command) {

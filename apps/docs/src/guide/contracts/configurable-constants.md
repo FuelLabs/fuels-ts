@@ -10,7 +10,7 @@ This feature provides flexibility for dynamic contract environments. It allows a
 
 Below is an example of a contract in which we declare four configurable constants:
 
-<<< @/../../docs-snippets/projects/echo-configurables/src/main.sw#configurable-constants-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/echo-configurables/src/main.sw#configurable-constants-1{rust:line-numbers}
 
 In this contract, we have a function `echo_configurables` that returns the values of the configurable constants.
 

@@ -1,5 +1,8 @@
 import { getSetupContract } from './utils';
 
+/**
+ * @group node
+ */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
     const contract = await getSetupContract('collision_in_fn_names')();
@@ -7,7 +10,9 @@ describe('Edge Cases', () => {
     const { minGasPrice } = contract.provider.getGasConfig();
 
     expect(
-      (await contract.functions.new().txParams({ gasPrice: minGasPrice }).call()).value.toNumber()
+      (
+        await contract.functions.new().txParams({ gasPrice: minGasPrice, gasLimit: 10_000 }).call()
+      ).value.toNumber()
     ).toEqual(12345);
   });
 });

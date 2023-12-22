@@ -111,7 +111,11 @@ export class FunctionFragment<
       shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
     }
 
-    const coders = nonEmptyInputs.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
+    const coders = nonEmptyInputs.map((t) =>
+      AbiCoder.getCoder(this.jsonAbi, t, {
+        isRightPadded: nonEmptyInputs.length > 1,
+      })
+    );
 
     const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
@@ -124,14 +128,20 @@ export class FunctionFragment<
     inputs: readonly JsonAbiArgument[],
     abi: JsonAbi
   ) {
-    if (args.length === inputs.length) return;
+    if (args.length === inputs.length) {
+      return;
+    }
 
     const inputTypes = inputs.map((i) => findOrThrow(abi.types, (t) => t.typeId === i.type));
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
-    if (optionalInputs.length === inputTypes.length) return;
-    if (inputTypes.length - optionalInputs.length === args.length) return;
+    if (optionalInputs.length === inputTypes.length) {
+      return;
+    }
+    if (inputTypes.length - optionalInputs.length === args.length) {
+      return;
+    }
 
     const errorMsg = `Mismatch between provided arguments and expected ABI inputs. Provided ${
       args.length
@@ -150,7 +160,9 @@ export class FunctionFragment<
 
     if (nonEmptyInputs.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
-      if (bytes.length === 0) return undefined;
+      if (bytes.length === 0) {
+        return undefined;
+      }
 
       throw new FuelError(
         ErrorCode.DECODE_ERROR,
@@ -190,7 +202,9 @@ export class FunctionFragment<
       this.jsonAbi.types,
       (t) => t.typeId === this.jsonFn.output.type
     );
-    if (outputAbiType.type === '()') return [undefined, 0];
+    if (outputAbiType.type === '()') {
+      return [undefined, 0];
+    }
 
     const bytes = getBytesCopy(data);
     const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);

@@ -79,6 +79,11 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Quickstart',
+            link: '/guide/quickstart/',
+            collapsed: true,
+          },
+          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,
@@ -90,6 +95,10 @@ export default defineConfig({
               {
                 text: 'Evm Address',
                 link: '/guide/types/evm-address',
+              },
+              {
+                text: 'Asset Id',
+                link: '/guide/types/asset-id',
               },
               {
                 text: 'Arrays',
@@ -147,10 +156,6 @@ export default defineConfig({
                 text: 'Vectors',
                 link: '/guide/types/vectors',
               },
-              {
-                text: 'Conversion',
-                link: '/guide/types/conversion',
-              },
             ],
           },
           {
@@ -200,10 +205,6 @@ export default defineConfig({
               {
                 text: 'Test Wallets',
                 link: '/guide/wallets/test-wallets',
-              },
-              {
-                text: 'Transferring Assets',
-                link: '/guide/wallets/transferring-assets',
               },
             ],
           },
@@ -313,10 +314,25 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Addresses',
+            link: '/guide/addresses',
+            collapsed: true,
+            items: [
+              {
+                text: 'Conversion',
+                link: 'guide/addresses/conversion',
+              },
+            ],
+          },
+          {
             text: 'Cookbook',
             link: '/guide/cookbook/',
             collapsed: true,
             items: [
+              {
+                text: 'Transferring Assets',
+                link: '/guide/cookbook/transferring-assets',
+              },
               {
                 text: 'Custom Transactions',
                 link: '/guide/cookbook/custom-transactions',
@@ -364,6 +380,10 @@ export default defineConfig({
                 link: '/guide/scripts/calling-a-script',
               },
               {
+                text: 'Preparing A Script',
+                link: '/guide/scripts/preparing-a-script',
+              },
+              {
                 text: 'Script With Configurable Constants',
                 link: '/guide/scripts/script-with-configurable-constants',
               },
@@ -375,8 +395,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing with Jest',
-                link: '/guide/testing/testing-with-jest',
+                text: 'Testing in TS',
+                link: '/guide/testing/testing-in-ts',
               },
               {
                 text: 'Setting Up a Custom Chain',

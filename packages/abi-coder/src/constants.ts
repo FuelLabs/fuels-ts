@@ -17,7 +17,7 @@ export const ASSET_ID_LEN = BYTES_32;
 export const CONTRACT_ID_LEN = BYTES_32;
 export const ADDRESS_LEN = BYTES_32;
 export const NONCE_LEN = BYTES_32;
-export const UTXO_LEN = WORD_SIZE * 5;
+export const TX_LEN = WORD_SIZE * 4;
 export const TX_POINTER_LEN = WORD_SIZE * 2;
 export const MAX_BYTES = 2 ** 32 - 1; // Max u32
 
@@ -30,11 +30,10 @@ export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
 // SCRIPT_FIXED_SIZE = 104
 export const SCRIPT_FIXED_SIZE =
   WORD_SIZE + // Identifier
-  WORD_SIZE + // Gas price
   WORD_SIZE + // Gas limit
-  WORD_SIZE + // Maturity
   WORD_SIZE + // Script size
   WORD_SIZE + // Script data size
+  WORD_SIZE + // Policies
   WORD_SIZE + // Inputs size
   WORD_SIZE + // Outputs size
   WORD_SIZE + // Witnesses size
@@ -43,7 +42,8 @@ export const SCRIPT_FIXED_SIZE =
 // INPUT_COIN_FIXED_SIZE = 176
 export const INPUT_COIN_FIXED_SIZE =
   WORD_SIZE + // Identifier
-  UTXO_LEN + // Utxo Length
+  TX_LEN + // Utxo Length
+  WORD_SIZE + // Output Index
   ADDRESS_LEN + // Owner
   WORD_SIZE + // Amount
   ASSET_ID_LEN + // Asset id

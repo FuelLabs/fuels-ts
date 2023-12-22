@@ -16,14 +16,14 @@ This module allows for a simple way to serialize calls to an on-chain predicate 
 
 ## Documentation
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/predicates/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/predicates/)
 
 ## Usage
 
 ### Installation
 
 ```sh
-yarn add @fuel-ts/predicate
+pnpm add @fuel-ts/predicate
 # or
 npm add @fuel-ts/predicate
 ```
@@ -33,7 +33,7 @@ npm add @fuel-ts/predicate
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

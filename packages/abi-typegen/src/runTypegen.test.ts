@@ -1,16 +1,23 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { cpSync, existsSync, renameSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
 
-import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../test/fixtures/forc-projects/index';
 
 import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
+/**
+ * @group node
+ */
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -66,7 +73,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should run typegen, using: filepaths', async () => {
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -112,7 +119,7 @@ describe('runTypegen.js', () => {
 
   test('should run typegen for Scripts, using: filepaths', async () => {
     // setup temp sway project
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -153,10 +160,10 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const stdoutWrite = jest.spyOn(process.stdout, 'write').mockImplementation();
+    const stdoutWrite = vi.spyOn(process.stdout, 'write').mockResolvedValue(true);
 
     // setup temp sway project
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -186,7 +193,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should raise error for non-existent Script BIN file', async () => {
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const tempBinPath = `${project.binPath}--BKP`;
 
     // IMPORTANT: renames bin file to yield error
@@ -223,7 +230,7 @@ describe('runTypegen.js', () => {
 
   test('should warn about minimum parameters', async () => {
     // setup temp sway project
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
@@ -245,6 +252,87 @@ describe('runTypegen.js', () => {
     // validates execution was ok
     expect(error?.message).toEqual(
       `At least one parameter should be supplied: 'input' or 'filepaths'.`
+    );
+  });
+
+  test('should write messages to stdout', async () => {
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+    const normalizedName = project.normalizedName;
+    const programType = ProgramTypeEnum.CONTRACT;
+    const silent = false;
+
+    // duplicates ABI JSON so we can validate if all inputs
+    // are being collected (and not only the first one)
+    const from = project.abiPath;
+    const to = from.replace('-abi.json', '2-abi.json');
+
+    // also duplicates BIN file
+    const fromBin = project.binPath;
+    const toBin = fromBin.replace('.bin', '2.bin');
+
+    cpSync(from, to);
+    cpSync(fromBin, toBin);
+
+    // mocking
+    const write = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
+
+    // executes program
+    const fn = () =>
+      runTypegen({
+        cwd,
+        inputs,
+        output,
+        programType,
+        silent,
+      });
+
+    const { error } = await safeExec(fn);
+
+    // validates execution was ok
+    expect(error).toBeFalsy();
+
+    // check if all files were created
+    const files = [
+      join(output, 'index.ts'),
+      join(output, 'common.d.ts'),
+      join(output, `${normalizedName}Abi.d.ts`),
+      join(output, `${normalizedName}2Abi.d.ts`),
+      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, `${normalizedName}Abi.hex.ts`),
+      join(output, `${normalizedName}2Abi.hex.ts`),
+    ];
+
+    expect(files.length).toEqual(7);
+
+    files.forEach((f) => {
+      expect(existsSync(f)).toEqual(true);
+    });
+
+    expect(write).toHaveBeenCalled();
+  });
+
+  test('should error for no ABI in inputs', async () => {
+    const cwd = process.cwd();
+    const inputs = ['./*-abis.json']; // abi don't exist
+    const output = 'anything';
+    const programType = ProgramTypeEnum.CONTRACT;
+    const silent = true;
+
+    await expectToThrowFuelError(
+      () =>
+        runTypegen({
+          cwd,
+          inputs,
+          output,
+          programType,
+          silent,
+        }),
+      new FuelError(ErrorCode.NO_ABIS_FOUND, `no ABI found at '${inputs[0]}'`)
     );
   });
 });

@@ -8,6 +8,9 @@ import { U8_MAX } from '../../test/utils/constants';
 import { OptionCoder } from './option';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ */
 describe('OptionCoder', () => {
   it('should encode a some u64 option ', () => {
     const coder = new OptionCoder('test option', { Some: new U64Coder() });

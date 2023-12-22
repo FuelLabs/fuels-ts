@@ -1,14 +1,20 @@
 import { execSync } from 'child_process';
+import { error } from 'console';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 /**
  * 1) Emit Declaration Maps
  */
-if (existsSync(join(process.cwd(), 'tsconfig.dts.json'))) {
-  execSync('tsc --emitDeclarationOnly -p tsconfig.dts.json');
-} else if (existsSync(join(process.cwd(), 'tsconfig.json'))) {
-  execSync('tsc --emitDeclarationOnly -p tsconfig.json');
+try {
+  if (existsSync(join(process.cwd(), 'tsconfig.dts.json'))) {
+    execSync('tsc --emitDeclarationOnly -p tsconfig.dts.json');
+  } else if (existsSync(join(process.cwd(), 'tsconfig.json'))) {
+    execSync('tsc --emitDeclarationOnly -p tsconfig.json');
+  }
+} catch (err) {
+  error(err.toString());
+  process.exit(1);
 }
 
 /**

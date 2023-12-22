@@ -17,12 +17,12 @@ See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/
 
 ## Documentation
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/abi-typegen/)
 
 ## Installation
 
 ```sh
-yarn add @fuel-ts/abi-typegen
+pnpm add @fuel-ts/abi-typegen
 # or
 npm add @fuel-ts/abi-typegen
 ```
@@ -31,16 +31,19 @@ npm add @fuel-ts/abi-typegen
 
 ```console
 $ fuels-typegen -h
+
+Generate Typescript from Sway ABI JSON files
+
 Usage: fuels-typegen [options]
 
-generate typescript from contract abi json files
-
 Options:
-  -i, --inputs <path|glob...>  input paths/globals to your ABI JSON files
-  -o, --output <dir>           directory path for generated files
-  -c, --contract               generate types for contracts [default]
-  -s, --script                 generate types for scripts
-  --silent                     omit output messages
+  -V, --version                output the version number
+  -i, --inputs <path|glob...>  Input paths/globals to your ABI JSON files
+  -o, --output <dir>           Directory path for generated files
+  -c, --contract               Generate types for Contracts [default]
+  -s, --script                 Generate types for Scripts
+  -p, --predicate              Generate types for Predicates
+  -S, --silent                 Omit output messages
   -h, --help                   display help for command
 ```
 
@@ -76,7 +79,7 @@ import { ProgramTypeEnum, runTypegen } from "@fuel-ts/abi-typegen";
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

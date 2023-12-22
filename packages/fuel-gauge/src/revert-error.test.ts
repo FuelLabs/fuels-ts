@@ -1,5 +1,4 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
   ScriptResultDecoderError,
@@ -13,22 +12,26 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import path from 'path';
 
-import FactoryAbi from '../fixtures/forc-projects/revert-error/out/debug/revert-error-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
+/**
+ * @group node
+ */
 describe('Revert Error Testing', () => {
   let gasPrice: BN;
+
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
-    const bytecode = fs.readFileSync(
-      path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
+    const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.REVERT_ERROR
     );
+
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
     contractInstance = await factory.deployContract({ gasPrice });
@@ -40,7 +43,7 @@ describe('Revert Error Testing', () => {
 
     const { logs } = await contractInstance.functions
       .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(
@@ -60,7 +63,7 @@ describe('Revert Error Testing', () => {
     await expect(
       contractInstance.functions
         .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call()
     ).rejects.toThrow(RequireRevertError);
   });
@@ -72,7 +75,7 @@ describe('Revert Error Testing', () => {
     await expect(
       contractInstance.functions
         .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call()
     ).rejects.toThrow(RequireRevertError);
   });
@@ -84,7 +87,7 @@ describe('Revert Error Testing', () => {
     await expect(
       contractInstance.functions
         .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
@@ -107,13 +110,16 @@ describe('Revert Error Testing', () => {
    */
   it.skip('can throw TransferToAddressRevertError', async () => {
     await expect(
-      contractInstance.functions.failed_transfer_revert().txParams({ gasPrice }).call()
+      contractInstance.functions
+        .failed_transfer_revert()
+        .txParams({ gasPrice, gasLimit: 10_000 })
+        .call()
     ).rejects.toThrow(TransferToAddressRevertError);
   });
 
   it('can throw ScriptResultDecoderError', async () => {
     await expect(
-      contractInstance.functions.failed_transfer().txParams({ gasPrice }).call()
+      contractInstance.functions.failed_transfer().txParams({ gasPrice, gasLimit: 10_000 }).call()
     ).rejects.toThrow(ScriptResultDecoderError);
   });
 });

@@ -1,6 +1,11 @@
 import { ErrorCode } from '@fuel-ts/errors';
 
-import { concatWithDynamicData } from '../utilities';
+import {
+  concatWithDynamicData,
+  getWordSizePadding,
+  isMultipleOfWordSize,
+  rightPadToWordSize,
+} from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import { Coder } from './abstract-coder';
@@ -34,13 +39,20 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     const encodedFields = Object.keys(this.coders).map((fieldName) => {
       const fieldCoder = this.coders[fieldName];
       const fieldValue = value[fieldName];
+
       if (!(fieldCoder instanceof OptionCoder) && fieldValue == null) {
         this.throwError(
           ErrorCode.ENCODE_ERROR,
           `Invalid ${this.type}. Field "${fieldName}" not present.`
         );
       }
+
       const encoded = fieldCoder.encode(fieldValue);
+
+      if (!isMultipleOfWordSize(encoded.length)) {
+        return rightPadToWordSize(encoded);
+      }
+
       return encoded;
     });
 
@@ -57,6 +69,11 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       const fieldCoder = this.coders[fieldName];
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
+
+      if (!isMultipleOfWordSize(newOffset)) {
+        newOffset += getWordSizePadding(newOffset);
+      }
+
       // eslint-disable-next-line no-param-reassign
       obj[fieldName as keyof DecodedValueOf<TCoders>] = decoded;
       return obj;

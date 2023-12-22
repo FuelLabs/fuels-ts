@@ -6,7 +6,7 @@ import { getPortPromise } from 'portfinder';
 import treeKill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
-import { findPackageRoot } from '../../utils/findPackageRoot';
+import { findBinPath } from '../../utils/findBinPath';
 import { getBinarySource } from '../../utils/getBinarySource';
 import { error, log, loggingConfig } from '../../utils/logger';
 
@@ -69,12 +69,11 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
     ['--chain', chainConfig],
     '--vm-backtrace',
     '--utxo-validation',
-    '--manual_blocks_enabled',
+    '--debug',
   ].flat();
 
   return new Promise((resolve, reject) => {
-    const pkgRootDir = findPackageRoot();
-    const builtInFuelsCorePath = join(pkgRootDir, 'node_modules', '.bin', 'fuels-core');
+    const builtInFuelsCorePath = findBinPath('fuels-core');
 
     const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
     const core = spawn(command, flags, { stdio: 'pipe' });
@@ -114,18 +113,4 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
 
     core.on('error', reject);
   });
-};
-
-export const autoStartFuelCore = async (config: FuelsConfig) => {
-  let fuelCore: FuelCoreNode | undefined;
-
-  if (config.autoStartFuelCore) {
-    fuelCore = await startFuelCore(config);
-    // eslint-disable-next-line no-param-reassign
-    config.providerUrl = fuelCore.providerUrl;
-    // eslint-disable-next-line no-param-reassign
-    config.privateKey = defaultConsensusKey;
-  }
-
-  return fuelCore;
 };

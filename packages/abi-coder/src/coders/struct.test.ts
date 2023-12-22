@@ -9,6 +9,9 @@ import { BooleanCoder } from './boolean';
 import { StructCoder } from './struct';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
   const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });
@@ -34,6 +37,33 @@ describe('StructCoder', () => {
 
   it('should not throw given correctly typed inputs', () => {
     expect(() => coder.encode({ a: true, b: bn(1234) })).not.toThrow();
+  });
+
+  it('pads to word size for encoded data with small bytes', () => {
+    const options = { isSmallBytes: true };
+    const unpaddedCoder = new StructCoder(STRUCT_NAME, {
+      a: new BooleanCoder(options),
+      b: new BooleanCoder(options),
+    });
+    const expected = new Uint8Array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const actual = unpaddedCoder.encode({ a: true, b: false });
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('pads new offset to word size when decoding data with small bytes', () => {
+    const options = { isSmallBytes: true };
+    const unpaddedCoder = new StructCoder(STRUCT_NAME, {
+      a: new BooleanCoder(options),
+      b: new BooleanCoder(options),
+    });
+
+    const expectedValue = { a: true, b: false };
+    const expectedLength = 16;
+    const [actualValue, actualLength] = unpaddedCoder.decode(new Uint8Array([1, 0]), 0);
+
+    expect(JSON.stringify(actualValue)).toStrictEqual(JSON.stringify(expectedValue));
+    expect(actualLength).toBe(expectedLength);
   });
 
   it('should not throw when provided with extra inputs', () => {

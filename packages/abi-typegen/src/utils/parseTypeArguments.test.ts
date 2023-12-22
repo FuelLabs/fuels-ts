@@ -1,4 +1,7 @@
-import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
 
@@ -60,6 +63,9 @@ const defautRawTypes: IRawAbiTypeRoot[] = [
   },
 ];
 
+/**
+ * @group node
+ */
 describe('parseTypeArguments.ts', () => {
   /*
     Test helpers
@@ -100,7 +106,7 @@ describe('parseTypeArguments.ts', () => {
   });
 
   test('should fallback to void for null outputs', () => {
-    const project = getProjectResources(ForcProjectsEnum.FN_VOID);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID);
 
     const types = bundleTypes([]);
     const typeArguments = [project.abiContents.functions[0].output];

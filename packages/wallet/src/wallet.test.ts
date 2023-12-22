@@ -10,6 +10,9 @@ import { generateTestWallet } from './test-utils/generateTestWallet';
 import { Wallet } from './wallet';
 import { WalletUnlocked } from './wallets';
 
+/**
+ * @group node
+ */
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
@@ -114,7 +117,7 @@ describe('Wallet', () => {
       externalWalletReceiver.address,
       bn(1_000_000),
       BaseAssetId,
-      { gasPrice }
+      { gasPrice, gasLimit: 10_000 }
     );
     await response.wait();
 

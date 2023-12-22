@@ -1,22 +1,24 @@
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import scriptAbi from '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
-const scriptBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
-);
-
+/**
+ * @group node
+ */
 describe('Predicate', () => {
+  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
+  );
+
+  const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+
   describe('With script', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
@@ -67,13 +69,16 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 
       const {
         transactionResult: { fee: receiverTxFee },
-      } = await scriptInstance.functions.main(scriptInput).txParams({ gasPrice }).call();
+      } = await scriptInstance.functions
+        .main(scriptInput)
+        .txParams({ gasPrice, gasLimit: 10_000 })
+        .call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
 

@@ -3,6 +3,7 @@ import {
   getABIPath,
   getContractName,
   getContractCamelCase,
+  getStorageSlotsPath,
 } from '../../config/forcUtils';
 import type { FuelsConfig, DeployedContract } from '../../types';
 import { debug, log } from '../../utils/logger';
@@ -25,6 +26,7 @@ export async function deploy(config: FuelsConfig) {
     const contractPath = config.contracts[i];
     const binaryPath = getBinaryPath(contractPath);
     const abiPath = getABIPath(contractPath);
+    const storageSlotsPath = getStorageSlotsPath(contractPath);
     const projectName = getContractName(contractPath);
     const contractName = getContractCamelCase(contractPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {
@@ -33,7 +35,13 @@ export async function deploy(config: FuelsConfig) {
       contractPath,
     });
 
-    const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
+    const contractId = await deployContract(
+      wallet,
+      binaryPath,
+      abiPath,
+      storageSlotsPath,
+      deployConfig
+    );
 
     debug(`Contract deployed: ${projectName} - ${contractId}`);
 

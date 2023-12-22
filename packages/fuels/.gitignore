@@ -1,4 +1,2 @@
 README.md
-test/fixtures/project/.fuels
-test/fixtures/generated
-test/fixtures/fuels.config.ts
+test/__temp__*

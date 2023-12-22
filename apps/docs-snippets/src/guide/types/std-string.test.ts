@@ -1,13 +1,16 @@
 import type { Contract, StdString } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('StdString', () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_STD_STRING);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_STD_STRING);
   });
 
   it('should pass a std string to a contract', async () => {
@@ -16,7 +19,10 @@ describe('StdString', () => {
 
     const stdString: StdString = 'Hello World';
 
-    const { value } = await contract.functions.string_comparison(stdString).simulate();
+    const { value } = await contract.functions
+      .string_comparison(stdString)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toBeTruthy();
     // #endregion std-string-1
@@ -28,7 +34,10 @@ describe('StdString', () => {
 
     const stdString: StdString = 'Hello Fuel';
 
-    const { value } = await contract.functions.echo_string(stdString).simulate();
+    const { value } = await contract.functions
+      .echo_string(stdString)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual(stdString);
     // #endregion std-string-2

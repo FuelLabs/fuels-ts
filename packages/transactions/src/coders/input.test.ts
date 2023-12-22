@@ -9,11 +9,15 @@ import { InputMessageCoder, InputCoder, InputType } from './input';
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const MAX_U32 = 2 ** 32 - 1;
 
+/**
+ * @group node
+ */
 describe('InputCoder', () => {
   it('Can encode Coin', () => {
     const input: Input = {
       type: InputType.Coin,
-      utxoID: { transactionId: B256, outputIndex: 0 },
+      txID: B256,
+      outputIndex: 0,
       owner: B256,
       amount: bn(0),
       assetId: B256,
@@ -45,7 +49,8 @@ describe('InputCoder', () => {
   it('Can encode Coin with max predicate length', () => {
     const input: Input = {
       type: InputType.Coin,
-      utxoID: { transactionId: B256, outputIndex: 0 },
+      txID: B256,
+      outputIndex: 0,
       owner: B256,
       amount: bn(0),
       assetId: B256,
@@ -72,7 +77,8 @@ describe('InputCoder', () => {
   it('will throw encoding a coin with larger than max predicate length', async () => {
     const input: Input = {
       type: InputType.Coin,
-      utxoID: { transactionId: B256, outputIndex: 0 },
+      txID: B256,
+      outputIndex: 0,
       owner: B256,
       amount: bn(0),
       assetId: B256,
@@ -98,7 +104,8 @@ describe('InputCoder', () => {
   it('Can encode Contract', () => {
     const input: Input = {
       type: InputType.Contract,
-      utxoID: { transactionId: B256, outputIndex: 0 },
+      txID: B256,
+      outputIndex: 0,
       balanceRoot: B256,
       stateRoot: B256,
       contractID: B256,

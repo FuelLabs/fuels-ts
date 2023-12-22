@@ -16,7 +16,7 @@ In the SDK, you can visualize a `b512` value by examining a wallet's public key:
 
 Let's consider a contract function that accepts a `b512` parameter and returns the same value:
 
-<<< @/../../docs-snippets/projects/echo-values/src/main.sw#bits512-3{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/echo-values/src/main.sw#bits512-3{rust:line-numbers}
 
 To call this function and validate the returned value, follow these steps:
 

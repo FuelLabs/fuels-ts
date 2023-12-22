@@ -1,14 +1,12 @@
-import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
 import { bn, BaseAssetId } from 'fuels';
-import { join } from 'path';
 
-import abiJSON from '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { createSetupConfig } from './utils';
 
-const contractBytecode = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation.bin')
+const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
 );
 
 const setupContract = createSetupConfig({
@@ -24,6 +22,9 @@ beforeAll(async () => {
   ({ minGasPrice: gasPrice } = contract.provider.getGasConfig());
 });
 
+/**
+ * @group node
+ */
 test('allow sending coins to payable functions', async () => {
   // This should not fail because the function is payable
   await expect(
@@ -35,7 +36,7 @@ test('allow sending coins to payable functions', async () => {
           assetId: BaseAssetId,
         },
       })
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call()
   ).resolves.toBeTruthy();
 });
@@ -51,7 +52,7 @@ test("don't allow sending coins to non-payable functions", async () => {
           assetId: BaseAssetId,
         },
       })
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call()
   ).rejects.toThrowError(
     `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`

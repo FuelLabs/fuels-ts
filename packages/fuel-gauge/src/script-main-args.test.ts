@@ -1,16 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN, BigNumberish } from 'fuels';
 import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import scriptAbi from '../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { getScript } from './utils';
-
-const scriptBin = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
-);
 
 const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -25,8 +19,16 @@ type Baz = {
   x: number;
 };
 
+/**
+ * @group node
+ */
 describe('Script Coverage', () => {
   let gasPrice: BN;
+
+  const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
+  );
+
   beforeAll(async () => {
     const wallet = await setup();
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
@@ -38,7 +40,10 @@ describe('Script Coverage', () => {
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
 
-    const { value, logs } = await scriptInstance.functions.main(foo).txParams({ gasPrice }).call();
+    const { value, logs } = await scriptInstance.functions
+      .main(foo)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     // #endregion script-call-factory
 
     expect(value?.toString()).toEqual(bn(foo).toString());
@@ -55,7 +60,7 @@ describe('Script Coverage', () => {
 
     const { value, logs } = await scriptInstance.functions
       .main(foo, bar)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
@@ -70,7 +75,10 @@ describe('Script Coverage', () => {
       x: 2,
     };
 
-    const { value } = await scriptInstance.functions.main(foo, bar).txParams({ gasPrice }).call();
+    const { value } = await scriptInstance.functions
+      .main(foo, bar)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     expect(value).toEqual({
       x: 3,
@@ -83,11 +91,7 @@ describe('Script Coverage', () => {
     const foo = 42;
 
     await expect(
-      scriptInstance.functions
-        .main(foo)
-        .txParams({ gasLimit: 10, gasPrice: 400 })
-        .txParams({ gasPrice })
-        .call()
+      scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call()
     ).rejects.toThrow(/Gas limit '10' is lower than the required/);
   });
 });

@@ -1,5 +1,16 @@
 # @fuel-ts/errors
 
+## 0.69.1
+
+## 0.69.0
+
+## 0.68.0
+
+### Patch Changes
+
+- Improves inputs validation and adds pretty error messages, by [@arboleya](https://github.com/arboleya) (See [#1433](https://github.com/FuelLabs/fuels-ts/pull/1433))
+- Remove hexlify logic on values that are not hex, by [@camsjams](https://github.com/camsjams) (See [#1454](https://github.com/FuelLabs/fuels-ts/pull/1454))
+
 ## 0.67.0
 
 ## 0.66.1

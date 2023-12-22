@@ -1,10 +1,16 @@
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import type { IType } from '../../types/interfaces/IType';
 import * as findTypeMod from '../../utils/findType';
 
 import { Configurable } from './Configurable';
 
+/**
+ * @group node
+ */
 describe('Configurable.ts', () => {
   function mockAllDeps() {
     const rawAbiType: IRawAbiTypeRoot = {
@@ -22,10 +28,12 @@ describe('Configurable.ts', () => {
       },
       rawAbiType,
       requiredFuelsMembersImports: [],
-      parseComponentsAttributes: jest.fn(),
+      parseComponentsAttributes: vi.fn(),
     };
 
-    const findType = jest.spyOn(findTypeMod, 'findType').mockReturnValue(type);
+    const findType = vi
+      .spyOn(findTypeMod, 'findType')
+      .mockImplementation(vi.fn().mockReturnValue(type));
 
     return {
       type,
@@ -35,7 +43,7 @@ describe('Configurable.ts', () => {
 
   it('should get configurable declaration with type', () => {
     const { type, findType } = mockAllDeps();
-    const project = getProjectResources(ForcProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
 
     const { configurables } = project.abiContents;
 

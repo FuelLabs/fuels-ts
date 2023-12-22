@@ -10,12 +10,20 @@ import {
   FUEL_NETWORK_URL,
 } from 'fuels';
 
-import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateTrueBytecode from '../../fixtures/forc-projects/predicate-true';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
+  const { binHexlified: predicateTrueBytecode } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
+  const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
+
   describe('Estimate predicate gas', () => {
     let provider: Provider;
     let predicateTrue: Predicate<[]>;

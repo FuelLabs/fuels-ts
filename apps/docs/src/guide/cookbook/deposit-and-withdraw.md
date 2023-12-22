@@ -2,9 +2,9 @@
 
 Consider the following contracts:
 
-<<< @/../../../packages/fuel-gauge/fixtures/forc-projects/token_contract/src/main.sw#token-contract{rust:line-numbers}
+<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/token_contract/src/main.sw#token-contract{rust:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/fixtures/forc-projects/liquidity-pool/src/main.sw#liquidity-pool-contract{rust:line-numbers}
+<<< @/../../../packages/fuel-gauge/test/fixtures/forc-projects/liquidity-pool/src/main.sw#liquidity-pool-contract{rust:line-numbers}
 
 The first contract is a contract that represents a simple token.
 

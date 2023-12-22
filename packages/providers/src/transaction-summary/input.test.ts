@@ -17,6 +17,9 @@ import {
   getInputsMessage,
 } from './input';
 
+/**
+ * @group node
+ */
 describe('transaction-summary/input', () => {
   it('should ensure getInputsCoin return correct inputs', () => {
     const coinInputs = getInputsCoin([MOCK_INPUT_COIN, MOCK_INPUT_CONTRACT, MOCK_INPUT_MESSAGE]);

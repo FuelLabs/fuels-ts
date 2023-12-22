@@ -1,6 +1,5 @@
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { BN, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
@@ -11,29 +10,34 @@ import {
   Predicate,
   FUEL_NETWORK_URL,
 } from 'fuels';
-import { join } from 'path';
 
-import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract-abi.json';
-import liquidityPoolAbi from '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
-import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
-import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
-import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
-const contractBytes = readFileSync(
-  join(
-    __dirname,
-    '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-contract.bin'
-  )
-);
-
-const liquidityPoolBytes = readFileSync(
-  join(__dirname, '../../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
-);
-
+/**
+ * @group node
+ */
 describe('Predicate', () => {
+  const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+  );
+  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+
+  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
+  );
+
+  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
+  );
+
+  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_TRUE
+  );
+
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
@@ -71,7 +75,7 @@ describe('Predicate', () => {
         .callParams({
           forward: [500, BaseAssetId],
         })
-        .txParams({ gasPrice })
+        .txParams({ gasPrice, gasLimit: 10_000 })
         .call();
 
       expect(value.toString()).toEqual('500');
@@ -101,6 +105,7 @@ describe('Predicate', () => {
           })
           .txParams({
             gasPrice,
+            gasLimit: 10_000,
           })
           .call()
       ).rejects.toThrow(/not enough coins to fit the target/);
@@ -127,7 +132,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 
@@ -135,7 +140,10 @@ describe('Predicate', () => {
       const contractAmount = 10;
       const {
         transactionResult: { fee: receiverTxFee1 },
-      } = await contract.functions.set_base_token(BaseAssetId).txParams({ gasPrice }).call();
+      } = await contract.functions
+        .set_base_token(BaseAssetId)
+        .txParams({ gasPrice, gasLimit: 10_000 })
+        .call();
       const {
         transactionResult: { fee: receiverTxFee2 },
       } = await contract.functions
@@ -147,6 +155,7 @@ describe('Predicate', () => {
         })
         .txParams({
           gasPrice,
+          gasLimit: 10_000,
         })
         .call();
 
@@ -157,19 +166,22 @@ describe('Predicate', () => {
         initialReceiverBalance +
         amountToReceiver -
         contractAmount -
-        // ajusting margin of error in transaction fee calculation
-        (receiverTxFee1.toNumber() - 1) -
-        (receiverTxFee2.toNumber() - 1);
+        receiverTxFee1.toNumber() -
+        receiverTxFee2.toNumber();
 
-      expect(expectedFinalReceiverBalance).toEqual(finalReceiverBalance);
+      expectToBeInRange({
+        value: finalReceiverBalance,
+        min: expectedFinalReceiverBalance - 20,
+        max: expectedFinalReceiverBalance + 20,
+      });
 
       const expectedFinalPredicateBalance =
         initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
 
       expectToBeInRange({
         value: expectedFinalPredicateBalance,
-        min: remainingPredicateBalance - 1,
-        max: remainingPredicateBalance + 1,
+        min: remainingPredicateBalance - 20,
+        max: remainingPredicateBalance + 20,
       });
     });
   });

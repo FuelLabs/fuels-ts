@@ -2,14 +2,16 @@
 
 import { Coder, ArrayCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BN } from '@fuel-ts/math';
+import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
 import { ByteArrayCoder } from './byte-array';
-import type { Input } from './input';
-import { InputCoder } from './input';
-import type { Output } from './output';
-import { OutputCoder } from './output';
+import type { Input, InputContract } from './input';
+import { InputCoder, InputContractCoder } from './input';
+import type { Output, OutputContract } from './output';
+import { OutputCoder, OutputContractCoder } from './output';
+import type { Policy } from './policy';
+import { PoliciesCoder } from './policy';
 import { StorageSlotCoder } from './storage-slot';
 import type { StorageSlot } from './storage-slot';
 import type { TxPointer } from './tx-pointer';
@@ -26,20 +28,17 @@ export enum TransactionType /* u8 */ {
 export type TransactionScript = {
   type: TransactionType.Script;
 
-  /** Gas price for transaction (u64) */
-  gasPrice: BN;
-
   /** Gas limit for transaction (u64) */
-  gasLimit: BN;
-
-  /** Block until which tx cannot be included (u32) */
-  maturity: number;
+  scriptGasLimit: BN;
 
   /** Script length, in instructions (u16) */
   scriptLength: number;
 
   /** Length of script input data, in bytes (u16) */
   scriptDataLength: number;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
 
   /** Number of inputs (u8) */
   inputsCount: number;
@@ -62,6 +61,9 @@ export type TransactionScript = {
   /** List of inputs (Input[]) */
   inputs: Input[];
 
+  /** List of policies, sorted by PolicyType. */
+  policies: Policy[];
+
   /** List of outputs (Output[]) */
   outputs: Output[];
 
@@ -77,17 +79,17 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   encode(value: TransactionScript): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new U64Coder().encode(value.gasPrice));
-    parts.push(new U64Coder().encode(value.gasLimit));
-    parts.push(new NumberCoder('u32').encode(value.maturity));
+    parts.push(new U64Coder().encode(value.scriptGasLimit));
     parts.push(new NumberCoder('u16').encode(value.scriptLength));
     parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u8').encode(value.inputsCount));
     parts.push(new NumberCoder('u8').encode(value.outputsCount));
     parts.push(new NumberCoder('u8').encode(value.witnessesCount));
     parts.push(new B256Coder().encode(value.receiptsRoot));
     parts.push(new ByteArrayCoder(value.scriptLength).encode(value.script));
     parts.push(new ByteArrayCoder(value.scriptDataLength).encode(value.scriptData));
+    parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
     parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
@@ -98,17 +100,14 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   decode(data: Uint8Array, offset: number): [TransactionScript, number] {
     let decoded;
     let o = offset;
-
     [decoded, o] = new U64Coder().decode(data, o);
-    const gasPrice = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
-    const gasLimit = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
-    const maturity = decoded;
+    const scriptGasLimit = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const scriptLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const scriptDataLength = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const policyTypes = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const inputsCount = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
@@ -121,6 +120,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const script = decoded;
     [decoded, o] = new ByteArrayCoder(scriptDataLength).decode(data, o);
     const scriptData = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
     [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
@@ -131,25 +132,19 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     return [
       {
         type: TransactionType.Script,
-        gasPrice,
-        gasLimit,
-        maturity,
+        scriptGasLimit,
         scriptLength,
         scriptDataLength,
+        policyTypes,
         inputsCount,
         outputsCount,
         witnessesCount,
         receiptsRoot,
         script,
         scriptData,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        policies,
         inputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         outputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         witnesses,
       },
       o,
@@ -160,20 +155,14 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 export type TransactionCreate = {
   type: TransactionType.Create;
 
-  /** Gas price for transaction (u64) */
-  gasPrice: BN;
-
-  /** Gas limit for transaction (u64) */
-  gasLimit: BN;
-
-  /** Block until which tx cannot be included (u32) */
-  maturity: number;
-
   /** Contract bytecode length, in instructions (u16) */
   bytecodeLength: number;
 
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
 
   /** Number of storage slots to initialize (u16) */
   storageSlotsCount: number;
@@ -189,6 +178,9 @@ export type TransactionCreate = {
 
   /** Salt (b256) */
   salt: string;
+
+  /** List of policies. */
+  policies: Policy[];
 
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
@@ -211,16 +203,15 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new U64Coder().encode(value.gasPrice));
-    parts.push(new U64Coder().encode(value.gasLimit));
-    parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
     parts.push(new NumberCoder('u8').encode(value.inputsCount));
     parts.push(new NumberCoder('u8').encode(value.outputsCount));
     parts.push(new NumberCoder('u8').encode(value.witnessesCount));
     parts.push(new B256Coder().encode(value.salt));
+    parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(
       new ArrayCoder(new StorageSlotCoder(), value.storageSlotsCount).encode(value.storageSlots)
     );
@@ -235,16 +226,12 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new U64Coder().decode(data, o);
-    const gasPrice = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
-    const gasLimit = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
-    const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const bytecodeLength = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const bytecodeWitnessIndex = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const policyTypes = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const storageSlotsCount = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
@@ -255,6 +242,8 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const salt = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
     [decoded, o] = new ArrayCoder(new StorageSlotCoder(), storageSlotsCount).decode(data, o);
     const storageSlots = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
@@ -267,27 +256,18 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     return [
       {
         type: TransactionType.Create,
-        gasPrice,
-        gasLimit,
-        maturity,
         bytecodeLength,
         bytecodeWitnessIndex,
+        policyTypes,
         storageSlotsCount,
         inputsCount,
         outputsCount,
         witnessesCount,
         salt,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        policies,
         storageSlots,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         inputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         outputs,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         witnesses,
       },
       o,
@@ -298,14 +278,20 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
 export type TransactionMint = {
   type: TransactionType.Mint;
 
-  /** Number of outputs (u8) */
-  outputsCount: number;
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
   /** The location of the Mint transaction in the block. */
   txPointer: TxPointer;
+
+  /** The contract utxo that assets are minted to. */
+  inputContract: InputContract;
+
+  /** The contract utxo that assets are being minted to. */
+  outputContract: OutputContract;
+
+  /** The amount of funds minted. */
+  mintAmount: BN;
+
+  /** The asset ID corresponding to the minted amount. */
+  mintAssetId: string;
 };
 
 export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint> {
@@ -317,8 +303,10 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     const parts: Uint8Array[] = [];
 
     parts.push(new TxPointerCoder().encode(value.txPointer));
-    parts.push(new NumberCoder('u8').encode(value.outputsCount));
-    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new InputContractCoder().encode(value.inputContract));
+    parts.push(new OutputContractCoder().encode(value.outputContract));
+    parts.push(new U64Coder().encode(value.mintAmount));
+    parts.push(new B256Coder().encode(value.mintAssetId));
 
     return concat(parts);
   }
@@ -329,17 +317,23 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
 
     [decoded, o] = new TxPointerCoder().decode(data, o);
     const txPointer = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
-    const outputsCount = decoded;
-    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
-    const outputs = decoded;
+    [decoded, o] = new InputContractCoder().decode(data, o);
+    const inputContract = decoded;
+    [decoded, o] = new OutputContractCoder().decode(data, o);
+    const outputContract = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const mintAmount = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const mintAssetId = decoded;
 
     return [
       {
         type: TransactionType.Mint,
-        outputsCount,
-        outputs,
         txPointer,
+        inputContract,
+        outputContract,
+        mintAmount,
+        mintAssetId,
       },
       o,
     ];

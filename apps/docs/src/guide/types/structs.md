@@ -6,7 +6,7 @@ In Sway, a `struct` serves a similar purpose as an `Object` in TypeScript. It de
 
 Here is an example of a `struct` in Sway:
 
-<<< @/../../docs-snippets/projects/employee-data/src/lib.sw#struct-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/employee-data/src/lib.sw#struct-1{rust:line-numbers}
 
 And here is the equivalent structure represented in TypeScript:
 

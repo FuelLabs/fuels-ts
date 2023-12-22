@@ -16,14 +16,18 @@ const deployContract = async (
   provider: Provider,
   useCache: boolean = true
 ) => {
-  if (contractInstance && useCache) return contractInstance;
+  if (contractInstance && useCache) {
+    return contractInstance;
+  }
   const { minGasPrice } = provider.getGasConfig();
   contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
   return contractInstance;
 };
 
 const createWallet = async () => {
-  if (walletInstance) return walletInstance;
+  if (walletInstance) {
+    return walletInstance;
+  }
   const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
   walletInstance = await generateTestWallet(provider, [
     [5_000_000, BaseAssetId],

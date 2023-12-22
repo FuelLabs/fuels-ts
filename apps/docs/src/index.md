@@ -1,7 +1,7 @@
 <script setup>
   import { data } from './versions.data'
   const { forc, fuels, fuelCore } = data
-  const url = `https://fuellabs.github.io/sway/v${forc}/book/forc/index.html`
+  const url = `https://docs.fuel.network/docs/forc/`
   const logoSrc = './fuel-logo.png'
 </script>
 
@@ -15,7 +15,7 @@ Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/in
 
 ## Developer Quickstart Guide
 
-We recommend starting with the [Developer Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) for a walk through on building your first DApp on Fuel.
+We recommend starting with the [Developer Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/) for a walk through on building your first DApp on Fuel.
 
 - [Guide](./guide/)
 - [Sample Application](https://github.com/FuelLabs/beta2-quickstart)
@@ -25,7 +25,7 @@ We recommend starting with the [Developer Quickstart](https://fuellabs.github.io
 
 Learn more about the Fuel Ecosystem.
 
-- [🌴 Sway](https://fuellabs.github.io/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
+- [🌴 Sway](https://docs.fuel.network/docs/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
 - <a :href="url" target="_blank" rel="noreferrer">🧰 Forc</a> the Fuel toolbox. Build, deploy and manage your sway projects.
 - [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
@@ -34,21 +34,21 @@ Learn more about the Fuel Ecosystem.
 
 ## Install
 
-#### YARN
+::: code-group
 
-```sh
-yarn add fuels
+```sh [pnpm]
+pnpm add fuels
 ```
 
-#### NPM
-
-```sh
+```sh [npm]
 npm install fuels --save
 ```
 
+:::
+
 ## Import
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Wallet } from "fuels";
@@ -62,7 +62,7 @@ console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 
 ## Calling Contracts
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
@@ -85,7 +85,7 @@ console.log(transactionId, value);
 
 ## Deploying Contracts
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Provider, ContractFactory } from "fuels";

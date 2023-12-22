@@ -9,6 +9,9 @@ import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ */
 describe('EnumCoder', () => {
   const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
 

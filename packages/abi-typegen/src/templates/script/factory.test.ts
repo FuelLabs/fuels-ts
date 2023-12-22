@@ -1,6 +1,9 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
 import factoryTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
@@ -9,11 +12,14 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderFactoryTemplate } from './factory';
 
+/**
+ * @group node
+ */
 describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
 
     const abi = new Abi({
@@ -34,7 +40,7 @@ describe('factory.ts', () => {
   test('should render factory template with configurables', () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
     const rawContents = project.abiContents;
 
     const abi = new Abi({
@@ -55,7 +61,7 @@ describe('factory.ts', () => {
   test('should throw for invalid Script ABI', async () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
 
     // friction here (deletes 'main' function by emptying the functions array)

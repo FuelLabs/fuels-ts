@@ -3,8 +3,13 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import { decryptKeystoreWallet, encryptKeystoreWallet, removeHexPrefix } from './keystore-wallet';
 
+/**
+ * @group node
+ */
 describe('Keystore Wallet', () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   const privateKey = '0xeac85e732b683119e62fb52ce3b04c0d2f60539cd55af34c731fcdcf802e5ef4';
 

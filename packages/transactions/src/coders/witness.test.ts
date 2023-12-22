@@ -3,12 +3,14 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
 
+/**
+ * @group node
+ */
 describe('WitnessCoder', () => {
   it('Can encode empty Witness', () => {
     const witness: Witness = {
       dataLength: 0,
       data: '0x',
-      offset: 0,
     };
 
     const encoded = hexlify(new WitnessCoder().encode(witness));
@@ -25,7 +27,6 @@ describe('WitnessCoder', () => {
     const witness: Witness = {
       dataLength: 4,
       data: '0xdeadbeef',
-      offset: 0,
     };
 
     const encoded = hexlify(new WitnessCoder().encode(witness));

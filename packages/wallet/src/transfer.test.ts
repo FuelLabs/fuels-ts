@@ -7,8 +7,11 @@ import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { Wallet } from '.';
 import { FUEL_NETWORK_URL } from './configs';
-import { seedTestWallet, generateTestWallet } from './test-utils';
+import { generateTestWallet, seedTestWallet } from './test-utils';
 
+/**
+ * @group node
+ */
 describe('Wallet', () => {
   let provider: Provider;
   let gasPrice: BN;
@@ -22,13 +25,35 @@ describe('Wallet', () => {
     const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId, { gasPrice });
+    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await response.wait();
 
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499978) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
+    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+  });
+
+  it('can create transfer request just fine', async () => {
+    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    const request = await sender.createTransfer(receiver.address, 1, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
+
+    const response = await sender.sendTransaction(request);
+    await response.wait();
+
+    const senderBalances = await sender.getBalances();
+    const receiverBalances = await receiver.getBalances();
+
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
@@ -43,15 +68,15 @@ describe('Wallet', () => {
         gasPrice,
       });
       await result.wait();
-    }).rejects.toThrowError(`Gas limit '${bn(0)}' is lower than the required: '${bn(1)}'.`);
+    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
 
     const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasLimit: 10000,
+      gasLimit: 10_000,
       gasPrice,
     });
     await response.wait();
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499978) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499_921) }]);
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
@@ -132,8 +157,8 @@ describe('Wallet', () => {
     );
     const amount = 10;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice });
-    const result = await tx.wait();
+    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice, gasLimit: 10_000 });
+    const result = await tx.waitForResult();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
 
@@ -144,7 +169,7 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499969) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499911) }]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
@@ -153,19 +178,25 @@ describe('Wallet', () => {
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
 
-    const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT, { gasPrice });
+    const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     // #region Message-getMessageProof
-    const result = await tx.wait();
+    const result = await tx.waitForResult();
 
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
-    const resp = await sender.transfer(sender.address, AMOUNT, BaseAssetId, { gasPrice });
-    const nextBlock = await resp.wait();
+    const resp = await sender.transfer(recipient, AMOUNT, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
+    const nextBlock = await resp.waitForResult();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
-      messageOutReceipt.messageId,
+      messageOutReceipt.nonce,
       nextBlock.blockId
     );
     // #endregion Message-getMessageProof
@@ -187,7 +218,10 @@ describe('Wallet', () => {
     await seedTestWallet(sender, [[500_000, BaseAssetId]]);
     await seedTestWallet(sender, [[500_000, BaseAssetId]]);
 
-    const transfer = await sender.transfer(receiver.address, 110, BaseAssetId, { gasPrice });
+    const transfer = await sender.transfer(receiver.address, 110, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await transfer.wait();
 
     const receiverBalances = await receiver.getBalances();
@@ -206,7 +240,7 @@ describe('Wallet', () => {
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 110;
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice, gasLimit: 10_000 });
     const result = await tx.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
@@ -215,6 +249,6 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499869) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
   });
 });

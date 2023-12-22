@@ -18,11 +18,14 @@ beforeAll(async () => {
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
+/**
+ * @group node
+ */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     const { value, logs } = await contractInstance.functions
       .test_function()
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -69,7 +72,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=true]', async () => {
     const { value, logs } = await contractInstance.functions
       .test_function_with_require(1, 1)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -79,7 +82,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=false]', async () => {
     const invocation = contractInstance.functions
       .test_function_with_require(1, 3)
-      .txParams({ gasPrice });
+      .txParams({ gasPrice, gasLimit: 10_000 });
     try {
       await invocation.call();
 
@@ -112,7 +115,7 @@ describe('Advanced Logging', () => {
     const { value, logs } = await contractInstance.functions
       .test_log_from_other_contract(INPUT, otherContractInstance.id.toB256())
       .addContracts([otherContractInstance])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();

@@ -1,20 +1,26 @@
 import type { Contract } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
+    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_ENUM);
   });
 
   it('should successfully echo a simple enum in a contract call', async () => {
     // #region enum-3
     const enumVariant = 'Completed';
 
-    const { value } = await contract.functions.echo_state_error_enum(enumVariant).simulate();
+    const { value } = await contract.functions
+      .echo_state_error_enum(enumVariant)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual(enumVariant);
     // #endregion enum-3
@@ -26,7 +32,10 @@ describe(__filename, () => {
 
     const enumParam = { UserError: userErroVar };
 
-    const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
+    const { value } = await contract.functions
+      .echo_error_enum(enumParam)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual(enumParam);
     // #endregion enum-6
@@ -38,7 +47,10 @@ describe(__filename, () => {
 
     const enumParam = { StateError: stateErrorVar };
 
-    const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
+    const { value } = await contract.functions
+      .echo_error_enum(enumParam)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toEqual(enumParam);
     // #endregion enum-7

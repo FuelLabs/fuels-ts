@@ -2,6 +2,9 @@ import { getBytesCopy, hexlify } from 'ethers';
 
 import { ByteArrayCoder } from './byte-array';
 
+/**
+ * @group node
+ */
 describe('ByteArrayCoder', () => {
   it('Can encode empty byte[]', () => {
     const bytes = getBytesCopy('0x');

@@ -1,17 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { readFileSync } from 'fs';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { join } from 'path';
 
-import abi from '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-abi.json';
-
-const bytecode = readFileSync(
-  join(
-    __dirname,
-    '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable.bin'
-  )
-);
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 const defaultValues = {
   FEE: 5,
@@ -19,8 +10,16 @@ const defaultValues = {
 
 let wallet: WalletUnlocked;
 
+/**
+ * @group node
+ */
 describe('Script With Configurable', () => {
   let gasPrice: BN;
+
+  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.SCRIPT_WITH_CONFIGURABLE
+  );
+
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
@@ -39,7 +38,10 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(defaultValues);
 
-    const { value } = await script.functions.main(defaultValues.FEE).txParams({ gasPrice }).call();
+    const { value } = await script.functions
+      .main(defaultValues.FEE)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // expected to be true
     expect(new BN(value as number).toNumber()).toEqual(1);
@@ -56,7 +58,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions
       .main(configurableConstants.FEE)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // expected to be false
@@ -72,7 +74,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions
       .main(configurableConstants.FEE)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // expected to be true
@@ -90,7 +92,10 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const { value } = await script.functions.main(input.FEE).txParams({ gasPrice }).call();
+    const { value } = await script.functions
+      .main(input.FEE)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // expected to be false
     expect(new BN(value as number).toNumber()).toEqual(0);

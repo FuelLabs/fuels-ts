@@ -18,14 +18,14 @@ This module contains the utilities for encrypting and decrypting data objects us
 
 <!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/)
 
 ## Usage
 
 ### Installation
 
 ```sh
-yarn add @fuel-ts/crypto
+pnpm add @fuel-ts/crypto
 # or
 npm add @fuel-ts/crypto
 ```
@@ -35,7 +35,7 @@ npm add @fuel-ts/crypto
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
 ```sh
-yarn add fuels
+pnpm add fuels
 # or
 npm add fuels
 ```

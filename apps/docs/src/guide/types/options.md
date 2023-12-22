@@ -18,7 +18,7 @@ Let's say we have a contract function that accepts two `Option<u8>` parameters. 
 
 Here's the contract function written in Sway:
 
-<<< @/../../docs-snippets/projects/sum-option-u8/src/main.sw#options-2{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/sum-option-u8/src/main.sw#options-2{rust:line-numbers}
 
 You can interact with the contract function using the SDK as follows:
 

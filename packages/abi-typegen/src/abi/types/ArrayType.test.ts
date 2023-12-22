@@ -1,4 +1,7 @@
-import { ForcProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -7,8 +10,13 @@ import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
 import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
 
+/**
+ * @group node
+ */
 describe('ArrayType.ts', () => {
-  beforeEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('should properly evaluate type suitability', () => {
     const suitableForTuple = ArrayType.isSuitableFor({ type: TupleType.swayType });
@@ -19,9 +27,9 @@ describe('ArrayType.ts', () => {
   });
 
   test('should properly parse type attributes: simple', () => {
-    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(ForcProjectsEnum.STRUCT_WITH_ARRAY);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY);
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
@@ -37,9 +45,9 @@ describe('ArrayType.ts', () => {
   });
 
   test('should properly parse type attributes: nested', () => {
-    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(ForcProjectsEnum.ARRAY_WITH_GENERICS);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS);
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));

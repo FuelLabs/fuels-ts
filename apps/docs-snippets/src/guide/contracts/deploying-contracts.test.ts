@@ -2,9 +2,12 @@ import { readFileSync } from 'fs';
 import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let PRIVATE_KEY: string;
   let projectsPath: string;
@@ -13,8 +16,9 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
     PRIVATE_KEY = wallet.privateKey;
-    projectsPath = join(__dirname, '../../../projects');
-    contractName = SnippetProjectEnum.ECHO_VALUES;
+    projectsPath = join(__dirname, '../../../test/fixtures/forc-projects');
+
+    contractName = DocSnippetProjectsEnum.ECHO_VALUES;
   });
 
   it('should successfully deploy and execute contract function', async () => {
@@ -46,7 +50,10 @@ describe(__filename, () => {
     // #endregion contract-setup-3
 
     // #region contract-setup-4
-    const { value } = await contract.functions.echo_u8(15).simulate();
+    const { value } = await contract.functions
+      .echo_u8(15)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value).toBe(15);
     // #endregion contract-setup-4

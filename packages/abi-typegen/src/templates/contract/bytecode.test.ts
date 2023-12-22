@@ -1,16 +1,22 @@
-import { ForcProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects';
-import bytecodeTemplte from '../../../test/fixtures/templates/contract/bytecode.hbs';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects';
+import bytecodeTemplate from '../../../test/fixtures/templates/contract/bytecode.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 
 import { renderBytecodeTemplate } from './bytecode';
 
+/**
+ * @group node
+ */
 describe('templates/contract/bytecode', () => {
   test('should render bytecode template', () => {
     // mocking
     const { restore } = mockVersions();
 
     // executing
-    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
     const rendered = renderBytecodeTemplate({
       hexlifiedBytecode: project.binHexlified,
@@ -19,6 +25,6 @@ describe('templates/contract/bytecode', () => {
     // validating
     restore();
 
-    expect(rendered).toEqual(bytecodeTemplte);
+    expect(rendered.trim()).toEqual(bytecodeTemplate);
   });
 });

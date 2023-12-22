@@ -1,13 +1,20 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import type { AssetId } from 'fuels';
 import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully simulate contract call with forwarded amount', async () => {
     const contract = await createAndDeployContractFromProject(
-      SnippetProjectEnum.TRANSFER_TO_ADDRESS
+      DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS
     );
 
     const amountToForward = 40;
@@ -19,12 +26,17 @@ describe(__filename, () => {
       provider,
     }).address.toB256();
 
+    const assetId: AssetId = {
+      value: BaseAssetId,
+    };
+
     // #region simulate-transactions-1
     const { gasUsed } = await contract.functions
-      .transfer(amountToTransfer, BaseAssetId, someAddress)
+      .transfer(amountToTransfer, assetId, someAddress)
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
+      .txParams({ gasPrice: 1, gasLimit: 10_000 })
       .simulate();
 
     // #context console.log('The gas used on this call was: ', gasUsed')
@@ -33,18 +45,21 @@ describe(__filename, () => {
   });
 
   it('should successfully execute a simulate call', async () => {
-    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
 
     // #region simulate-transactions-2
-    const { value } = await contract.functions.echo_u8(15).simulate();
+    const { value } = await contract.functions
+      .echo_u8(15)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     // #endregion simulate-transactions-2
     expect(value).toEqual(15);
   });
 
   it('should throw when simulating with an unfunded wallet', async () => {
-    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const unfundedWallet = Wallet.generate({ provider: contract.provider });
-    const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const deployedContract = new Contract(contract.id, abi, unfundedWallet);
 
     const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).simulate());
@@ -53,9 +68,9 @@ describe(__filename, () => {
   });
 
   it('should throw when dry running with an unfunded wallet', async () => {
-    const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
+    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const unfundedWallet = Wallet.generate({ provider: contract.provider });
-    const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
     const deployedContract = new Contract(contract.id, abi, unfundedWallet);
 
     const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).dryRun());

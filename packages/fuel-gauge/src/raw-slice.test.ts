@@ -2,8 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
-import predicateRawSlice from '../fixtures/forc-projects/predicate-raw-slice';
-import predicateRawSliceAbi from '../fixtures/forc-projects/predicate-raw-slice/out/debug/predicate-raw-slice-abi.json';
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { getScript, getSetupContract } from './utils';
 
@@ -34,13 +33,16 @@ beforeAll(async () => {
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
+/**
+ * @group node
+ */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
     const INPUT = 10;
 
     const { value } = await contractInstance.functions
       .return_raw_slice(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[]>();
 
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -51,7 +53,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_raw_slice(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toBeUndefined();
@@ -66,7 +68,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_nested_raw_slice(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toBeUndefined();
@@ -78,6 +80,10 @@ describe('Raw Slice Tests', () => {
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     type MainArgs = [Wrapper];
+
+    const { binHexlified: predicateRawSlice, abiContents: predicateRawSliceAbi } =
+      getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_RAW_SLICE);
+
     const predicate = new Predicate<MainArgs>(
       predicateRawSlice,
       wallet.provider,
@@ -87,6 +93,7 @@ describe('Raw Slice Tests', () => {
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
@@ -99,7 +106,7 @@ describe('Raw Slice Tests', () => {
     };
     const tx = await predicate
       .setData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
     // Check the balance of the receiver
@@ -127,7 +134,7 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await scriptInstance.functions
       .main(1, INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<BN[]>();
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });

@@ -1,14 +1,20 @@
 import type { Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
-describe(__filename, () => {
+/**
+ * @group node
+ */
+describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
 
-  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
-    SnippetProjectEnum.ECHO_CONFIGURABLES
+  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
+    DocSnippetProjectsEnum.ECHO_CONFIGURABLES
   );
 
   const defaultValues = {
@@ -43,16 +49,18 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
     });
     // #endregion configurable-constants-2
 
-    const { value } = await contract.functions.echo_configurables().simulate();
+    const { value } = await contract.functions
+      .echo_configurables(true)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(configurableConstants.tag);
@@ -68,16 +76,18 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
-      gasLimit: maxGasPerTx,
     });
     // #endregion configurable-constants-3
 
-    const { value } = await contract.functions.echo_configurables().simulate();
+    const { value } = await contract.functions
+      .echo_configurables(false)
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(defaultValues.tag);
@@ -95,13 +105,12 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     await expect(
       factory.deployContract({
         configurableConstants,
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4

@@ -107,7 +107,9 @@ const mergeAssets = (op1: Operation, op2: Operation) => {
   return assets1
     .map((coin) => {
       const asset = assets2.find(hasSameAssetId(coin));
-      if (!asset) return coin;
+      if (!asset) {
+        return coin;
+      }
       return { ...coin, amount: bn(coin.amount).add(asset.amount) };
     })
     .concat(filtered);
@@ -129,7 +131,9 @@ export function addOperation(operations: Operation[], toAdd: Operation) {
   const ops = operations
     .map((op) => {
       // if it's not same operation, don't change. we just wanna stack the same operation
-      if (!isSameOperation(op, toAdd)) return null;
+      if (!isSameOperation(op, toAdd)) {
+        return null;
+      }
 
       let newOp = { ...op };
 

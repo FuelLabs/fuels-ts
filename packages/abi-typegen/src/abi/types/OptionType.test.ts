@@ -1,4 +1,7 @@
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -6,12 +9,15 @@ import { makeType } from '../../utils/makeType';
 import { EnumType } from './EnumType';
 import { OptionType } from './OptionType';
 
+/**
+ * @group node
+ */
 describe('OptionType.ts', () => {
   /*
     Test helpers
   */
   function getTypesForContract() {
-    const project = getProjectResources(ForcProjectsEnum.OPTION_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
     const rawTypes = project.abiContents.types;
 
     const types = rawTypes

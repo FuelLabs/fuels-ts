@@ -46,7 +46,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
         f.selector === nameOrSignatureOrSelector
     );
 
-    if (fn !== undefined) return fn;
+    if (fn !== undefined) {
+      return fn;
+    }
 
     throw new FuelError(
       ErrorCode.FUNCTION_NOT_FOUND,
@@ -116,7 +118,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       }
     );
 
-    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value);
+    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
+      isRightPadded: true,
+    });
   }
 
   getTypeById(typeId: number) {

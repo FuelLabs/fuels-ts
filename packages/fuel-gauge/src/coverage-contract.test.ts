@@ -48,51 +48,103 @@ enum ColorEnumOutput {
   Blue = 'Blue',
 }
 
+/**
+ * @group node
+ */
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {
     // Call contract methods
-    expect((await contractInstance.functions.get_id().txParams({ gasPrice }).call()).value).toEqual(
-      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-    );
     expect(
-      (await contractInstance.functions.get_small_string().txParams({ gasPrice }).call()).value
+      (await contractInstance.functions.get_id().txParams({ gasPrice, gasLimit: 10_000 }).call())
+        .value
+    ).toEqual('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+    expect(
+      (
+        await contractInstance.functions
+          .get_small_string()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toEqual('gggggggg');
     expect(
-      (await contractInstance.functions.get_large_string().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_large_string()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toEqual('ggggggggg');
     expect(
-      (await contractInstance.functions.get_u32_struct().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_u32_struct()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toStrictEqual({
       foo: 100,
     });
     expect(
-      (await contractInstance.functions.get_large_struct().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_large_struct()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toStrictEqual({
       foo: 12,
       bar: 42,
     });
     expect(
-      (await contractInstance.functions.get_large_array().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_large_array()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toStrictEqual([1, 2]);
     expect(
-      (await contractInstance.functions.get_empty_enum().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_empty_enum()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toStrictEqual(SmallEnum.Empty);
     expect(
-      (await contractInstance.functions.get_contract_id().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_contract_id()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toStrictEqual({
       value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
     expect(
-      (await contractInstance.functions.get_some_option_u8().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_some_option_u8()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toEqual(113);
     expect(
-      (await contractInstance.functions.get_none_option_u8().txParams({ gasPrice }).call()).value
+      (
+        await contractInstance.functions
+          .get_none_option_u8()
+          .txParams({ gasPrice, gasLimit: 10_000 })
+          .call()
+      ).value
     ).toEqual(undefined);
   });
 
   it('should test u8 variable type', async () => {
     // #region U8
-    const { value } = await contractInstance.functions.echo_u8(3).txParams({ gasPrice }).call();
+    const { value } = await contractInstance.functions
+      .echo_u8(3)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(value).toBe(3);
     // #endregion U8
   });
@@ -100,7 +152,7 @@ describe('Coverage Contract', () => {
   it('should test u8 variable type multiple params', async () => {
     const { value } = await contractInstance.functions
       .echo_u8_addition(3, 4, 3)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(10);
   });
@@ -108,7 +160,7 @@ describe('Coverage Contract', () => {
   it('should test u16 variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_u16(RUST_U8_MAX + 1)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(RUST_U8_MAX + 1);
   });
@@ -116,7 +168,7 @@ describe('Coverage Contract', () => {
   it('should test u32 variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_u32(RUST_U16_MAX + 1)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(RUST_U16_MAX + 1);
   });
@@ -125,7 +177,7 @@ describe('Coverage Contract', () => {
     const INPUT = bn(RUST_U32_MAX).add(1).toHex();
     const { value } = await contractInstance.functions
       .echo_u64(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value.toHex()).toBe(INPUT);
   });
@@ -133,7 +185,7 @@ describe('Coverage Contract', () => {
   it('should test bool variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_bool(false)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(false);
   });
@@ -141,7 +193,7 @@ describe('Coverage Contract', () => {
   it('should test b256 variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_b256(B256)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(B256);
   });
@@ -149,7 +201,7 @@ describe('Coverage Contract', () => {
   it('should test b512 variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_b512(B512)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(B512);
   });
@@ -157,7 +209,7 @@ describe('Coverage Contract', () => {
   it('should test str[1] variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_str_1('f')
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe('f');
   });
@@ -165,7 +217,7 @@ describe('Coverage Contract', () => {
   it('should test str[2] variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_str_2('fu')
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe('fu');
   });
@@ -173,7 +225,7 @@ describe('Coverage Contract', () => {
   it('should test str[3] variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_str_3('fue')
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe('fue');
   });
@@ -181,7 +233,7 @@ describe('Coverage Contract', () => {
   it('should test str[8] variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_str_8('fuel-sdk')
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBe('fuel-sdk');
@@ -190,7 +242,7 @@ describe('Coverage Contract', () => {
   it('should test str[9] variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_str_9('fuel-sdks')
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe('fuel-sdks');
   });
@@ -198,7 +250,7 @@ describe('Coverage Contract', () => {
   it('should test tuple < 8 bytes variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_tuple_u8([21, 22])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual([21, 22]);
   });
@@ -207,7 +259,7 @@ describe('Coverage Contract', () => {
     const INPUT = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
     const { value } = await contractInstance.functions
       .echo_tuple_u64(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
   });
@@ -216,7 +268,7 @@ describe('Coverage Contract', () => {
     const INPUT = [true, bn(RUST_U32_MAX).add(1)];
     const { value } = await contractInstance.functions
       .echo_tuple_mixed(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
   });
@@ -224,7 +276,7 @@ describe('Coverage Contract', () => {
   it('should test array < 8 bytes variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_array_u8([4, 3])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual([4, 3]);
   });
@@ -239,7 +291,7 @@ describe('Coverage Contract', () => {
     ];
     const { value } = await contractInstance.functions
       .echo_array_u64(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const OUTPUT = INPUT.map((v) => toHex(v));
@@ -249,7 +301,7 @@ describe('Coverage Contract', () => {
   it('should test array bool variable type', async () => {
     const { value } = await contractInstance.functions
       .echo_array_bool([true, true])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual([true, true]);
   });
@@ -258,7 +310,7 @@ describe('Coverage Contract', () => {
     const INPUT = { i: 4 };
     const { value } = await contractInstance.functions
       .echo_struct_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -267,7 +319,7 @@ describe('Coverage Contract', () => {
     const INPUT = { i: B256 };
     const { value } = await contractInstance.functions
       .echo_struct_b256(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -276,7 +328,7 @@ describe('Coverage Contract', () => {
     const INPUT = SmallEnum.Empty;
     const { value } = await contractInstance.functions
       .echo_enum_small(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -286,7 +338,7 @@ describe('Coverage Contract', () => {
 
     const { value } = await contractInstance.functions
       .echo_enum_big(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -295,7 +347,7 @@ describe('Coverage Contract', () => {
     const INPUT = 187;
     const { value } = await contractInstance.functions
       .echo_option_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -304,7 +356,7 @@ describe('Coverage Contract', () => {
     const INPUT_SOME = 123;
     const { value: Some } = await contractInstance.functions
       .echo_option_extract_u32(INPUT_SOME)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(Some).toStrictEqual(INPUT_SOME);
   });
@@ -313,13 +365,13 @@ describe('Coverage Contract', () => {
     const INPUT_NONE = undefined;
     const { value: None } = await contractInstance.functions
       .echo_option_extract_u32(INPUT_NONE)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(None).toStrictEqual(500);
 
     const { value: NoneVoid } = await contractInstance.functions
       .echo_option_extract_u32()
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(NoneVoid).toStrictEqual(500);
   });
@@ -332,7 +384,7 @@ describe('Coverage Contract', () => {
     // adds the three values (if Some value given) together
     const { value: Some } = await contractInstance.functions
       .echo_option_three_u8(INPUT_A, INPUT_B, INPUT_C)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // we receive the result of adding whatever was passed
@@ -345,7 +397,7 @@ describe('Coverage Contract', () => {
     // adds the three values together, but only first param value is supplied
     const { value: Some } = await contractInstance.functions
       .echo_option_three_u8(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // we receive the result of adding whatever was passed
@@ -355,7 +407,7 @@ describe('Coverage Contract', () => {
   it('should test u8 empty vector input', async () => {
     const { value } = await contractInstance.functions
       .check_u8_vector([])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBeFalsy();
   });
@@ -363,7 +415,7 @@ describe('Coverage Contract', () => {
   it('should test u8 vector input', async () => {
     const { value, logs } = await contractInstance.functions
       .check_u8_vector([1, 2, 3, 4, 5])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -375,7 +427,7 @@ describe('Coverage Contract', () => {
   it('should echo u8 vector input', async () => {
     const { value } = await contractInstance.functions
       .echo_u8_vector_first([23, 6, 1, 51, 2])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBe(23);
@@ -384,7 +436,7 @@ describe('Coverage Contract', () => {
   it('should echo a vector of optional u8 input', async () => {
     const { value } = await contractInstance.functions
       .echo_u8_option_vector_first([28])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBe(28);
@@ -394,7 +446,7 @@ describe('Coverage Contract', () => {
     const INPUT = bn(54).toHex();
     const { value } = await contractInstance.functions
       .echo_u64_vector_last([200, 100, 24, 51, 23, INPUT])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value.toHex()).toBe(INPUT);
   });
@@ -402,7 +454,7 @@ describe('Coverage Contract', () => {
   it('should echo u32 vector addition of mixed params', async () => {
     const { value } = await contractInstance.functions
       .echo_u32_vector_addition_other_type([100, 2], 47)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(147);
   });
@@ -410,7 +462,7 @@ describe('Coverage Contract', () => {
   it('should echo u32 vector addition', async () => {
     const { value } = await contractInstance.functions
       .echo_u32_vector_addition([100, 2], [24, 54])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(124);
   });
@@ -418,7 +470,7 @@ describe('Coverage Contract', () => {
   it('should echo u32 vector addition [variable lengths]', async () => {
     const { value } = await contractInstance.functions
       .echo_u32_vector_addition([100, 2, 1, 2, 3], [24, 54])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(124);
   });
@@ -440,7 +492,7 @@ describe('Coverage Contract', () => {
           bar: 30,
         },
       ])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(first);
   });
@@ -465,7 +517,7 @@ describe('Coverage Contract', () => {
         },
         last,
       ])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     const unhexed = {
       foo: value.foo,
@@ -549,7 +601,7 @@ describe('Coverage Contract', () => {
   it('can read from produce_logs_variables', async () => {
     const { logs } = await contractInstance.functions
       .produce_logs_variables()
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(logs[0].toHex()).toEqual(bn(64).toHex());
@@ -563,7 +615,7 @@ describe('Coverage Contract', () => {
     const OUTPUT: ColorEnumOutput = ColorEnumOutput.Green;
     const { value } = await contractInstance.functions
       .color_enum(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toStrictEqual(OUTPUT);
@@ -575,7 +627,7 @@ describe('Coverage Contract', () => {
 
     const { value } = await contractInstance.functions
       .color_enum(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(OUTPUT);
   });
@@ -586,7 +638,7 @@ describe('Coverage Contract', () => {
 
     const { value } = await contractInstance.functions
       .color_enum(INPUT)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toStrictEqual(OUTPUT);
   });
@@ -594,7 +646,7 @@ describe('Coverage Contract', () => {
   it('should try vec_as_only_param', async () => {
     const { value } = await contractInstance.functions
       .vec_as_only_param([100, 450, 202, 340])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value.map((v: BN) => v.toHex())).toStrictEqual([
@@ -608,7 +660,7 @@ describe('Coverage Contract', () => {
   it('should try u32_and_vec_params', async () => {
     const { value } = await contractInstance.functions
       .u32_and_vec_params(33, [450, 202, 340])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value.map((v: BN) => v.toHex())).toStrictEqual([
@@ -624,7 +676,10 @@ describe('Coverage Contract', () => {
       [0, 1, 2],
       [0, 1, 2],
     ];
-    await contractInstance.functions.vec_in_vec(INPUT).txParams({ gasPrice }).call();
+    await contractInstance.functions
+      .vec_in_vec(INPUT)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // asserted in Sway file
     expect(1).toEqual(1);
@@ -635,7 +690,10 @@ describe('Coverage Contract', () => {
       [0, 1, 2],
       [0, 1, 2],
     ];
-    await contractInstance.functions.vec_in_array(INPUT).txParams({ gasPrice }).call();
+    await contractInstance.functions
+      .vec_in_array(INPUT)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
 
     // asserted in Sway file
     expect(1).toEqual(1);
@@ -649,7 +707,7 @@ describe('Coverage Contract', () => {
 
     const { value } = await contractInstance.functions
       .echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<string[]>();
 
     expect(value).toStrictEqual(INPUT_B);
@@ -669,7 +727,7 @@ describe('Coverage Contract', () => {
         contractInstance.functions.echo_enum_small(SmallEnum.Empty),
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
   });
@@ -688,7 +746,7 @@ describe('Coverage Contract', () => {
         contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(results).toStrictEqual([1, 2, SmallEnum.Empty, INPUT_B, INPUT_A]);
   });

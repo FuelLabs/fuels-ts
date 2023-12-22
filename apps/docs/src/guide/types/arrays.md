@@ -16,7 +16,7 @@ In Sway, `Arrays` are fixed in size, so the storage size is determined at the ti
 
 Let's say you have a contract that takes an `Array` of type `u64` with a size length of 2 as a parameter and returns it:
 
-<<< @/../../docs-snippets/projects/echo-u64-array/src/main.sw#arrays-2{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/echo-u64-array/src/main.sw#arrays-2{rust:line-numbers}
 
 To execute the contract call using the SDK, you would do something like this:
 

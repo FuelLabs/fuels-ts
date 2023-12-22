@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import type { IRawAbi } from '../../../src/index';
 
-export enum ForcProjectsEnum {
+export enum AbiTypegenProjectsEnum {
   ARRAY_OF_ENUMS = 'array-of-enums',
   ARRAY_WITH_GENERICS = 'array-with-generics',
   BYTES = 'bytes',
@@ -30,5 +30,8 @@ export enum ForcProjectsEnum {
   VECTOR_SIMPLE = 'vector-simple',
 }
 
-export const getProjectResources = (project: ForcProjectsEnum) =>
-  getForcProject<IRawAbi>(join(__dirname, project));
+export const getTypegenForcProject = (project: AbiTypegenProjectsEnum) =>
+  getForcProject<IRawAbi>({
+    projectDir: join(__dirname, project),
+    projectName: project,
+  });

@@ -37,6 +37,9 @@ const ABI: JsonAbi = {
   configurables: [],
 };
 
+/**
+ * @group node
+ */
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

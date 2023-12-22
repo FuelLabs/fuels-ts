@@ -1,6 +1,0 @@
-[project]
-license = "Apache-2.0"
-name = "revert-error"
-
-[dependencies]
-custom_errors = { path = "../custom_errors" }

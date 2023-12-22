@@ -1,8 +1,8 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const introUrl = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
-  const debbugUrl = `https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/predicates.html?#debugging-predicates`
+  const introUrl = `https://docs.fuel.network/docs/sway/introduction/`
+  const debugUrl = `https://docs.fuel.network/docs/sway/sway-program-types/predicates/#debugging-predicates`
 </script>
 
 # Predicates
@@ -21,7 +21,7 @@ This method is not only more efficient but also helps to prevent traffic jams on
 
 A predicate in Sway can be as simple as the following:
 
-<<< @/../../docs-snippets/projects/return-true-predicate/src/main.sw#predicate-index-1{rust:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/return-true-predicate/src/main.sw#predicate-index-1{rust:line-numbers}
 
 In this minimal example, the `main` function does not accept any parameters and simply returns true.
 
@@ -47,4 +47,4 @@ In the next section, we provide a step-by-step guide on how to interact with a p
 
 ## Debugging Predicates
 
-Currently there is no way to <a :href="debbugUrl" target="_blank" rel="noreferrer">debbug a predicate</a> yet. In the meantime, a practical workaround is to initially write, test, and debug your predicate as a script, which has more debugging tools available. Once it's working as expected, you can then convert it back into a predicate.
+Currently there is no way to <a :href="debugUrl" target="_blank" rel="noreferrer">debug a predicate</a> yet. In the meantime, a practical workaround is to initially write, test, and debug your predicate as a script, which has more debugging tools available. Once it's working as expected, you can then convert it back into a predicate.

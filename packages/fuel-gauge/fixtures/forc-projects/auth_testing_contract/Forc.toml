@@ -1,6 +1,0 @@
-[project]
-license = "Apache-2.0"
-name = "auth_testing_contract"
-
-[dependencies]
-auth_testing_abi = { path = "../auth_testing_abi" }

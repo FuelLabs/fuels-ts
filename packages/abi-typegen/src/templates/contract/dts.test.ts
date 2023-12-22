@@ -1,4 +1,7 @@
-import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import {
+  AbiTypegenProjectsEnum,
+  getTypegenForcProject,
+} from '../../../test/fixtures/forc-projects/index';
 import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/dts.hbs';
 import expectedDtsMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/dts.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
@@ -7,13 +10,16 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderDtsTemplate } from './dts';
 
+/**
+ * @group node
+ */
 describe('templates/dts', () => {
   test('should render dts template', () => {
     // mocking
     const { restore } = mockVersions();
 
     // executing
-    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({
@@ -34,7 +40,7 @@ describe('templates/dts', () => {
   test('should render dts template with configurable', () => {
     const { restore } = mockVersions();
 
-    const project = getProjectResources(ForcProjectsEnum.MINIMAL_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL_WITH_CONFIGURABLE);
 
     const rawContents = project.abiContents;
 
@@ -53,7 +59,7 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ custom common types', () => {
-    const project = getProjectResources(ForcProjectsEnum.VECTOR_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({
@@ -68,7 +74,7 @@ describe('templates/dts', () => {
   });
 
   test('should render dts cross-referencing for identical structs', () => {
-    const project = getProjectResources(ForcProjectsEnum.STRUCT_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({
@@ -83,7 +89,7 @@ describe('templates/dts', () => {
   });
 
   test('should render dts cross-referencing for identical enums', () => {
-    const project = getProjectResources(ForcProjectsEnum.ENUM_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE);
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({
@@ -98,7 +104,7 @@ describe('templates/dts', () => {
   });
 
   test('should not render same value for native identical enums', () => {
-    const project = getProjectResources(ForcProjectsEnum.ENUM_SIMPLE_NATIVE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE);
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({

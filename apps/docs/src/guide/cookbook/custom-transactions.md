@@ -4,7 +4,7 @@ There may be scenarios where you need to build out transactions that involve mul
 
 Consider the following script that transfers multiple assets to a contract:
 
-<<< @/../../docs-snippets/projects/script-transfer-to-contract/src/main.sw#custom-transactions-1{ts:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/forc-projects/script-transfer-to-contract/src/main.sw#custom-transactions-1{ts:line-numbers}
 
 This script can be executed by creating a `ScriptTransactionRequest`, appending the resource and contract inputs/outputs and then sending the transaction, as follows:
 

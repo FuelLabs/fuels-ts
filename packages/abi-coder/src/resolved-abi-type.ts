@@ -45,9 +45,12 @@ export class ResolvedAbiType {
     components: readonly JsonAbiArgument[] | null,
     typeParameters: readonly number[] | null
   ) {
-    if (components === null) return null;
-    if (typeParameters === null || typeParameters.length === 0)
+    if (components === null) {
+      return null;
+    }
+    if (typeParameters === null || typeParameters.length === 0) {
       return components.map((c) => new ResolvedAbiType(abi, c));
+    }
 
     const typeParametersAndArgsMap = typeParameters.reduce(
       (obj, typeParameter, typeParameterIndex) => {
@@ -112,7 +115,9 @@ export class ResolvedAbiType {
     args: readonly JsonAbiArgument[] | null,
     implicitGenericParametersParam?: number[]
   ) {
-    if (!Array.isArray(args)) return null;
+    if (!Array.isArray(args)) {
+      return null;
+    }
 
     const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
 
@@ -124,7 +129,9 @@ export class ResolvedAbiType {
         return;
       }
 
-      if (!Array.isArray(a.typeArguments)) return;
+      if (!Array.isArray(a.typeArguments)) {
+        return;
+      }
       this.getImplicitGenericTypeParameters(abi, a.typeArguments, implicitGenericParameters);
     });
 
@@ -140,13 +147,19 @@ export class ResolvedAbiType {
 
   private getArgSignaturePrefix(): string {
     const structMatch = structRegEx.test(this.type);
-    if (structMatch) return 's';
+    if (structMatch) {
+      return 's';
+    }
 
     const arrayMatch = arrayRegEx.test(this.type);
-    if (arrayMatch) return 'a';
+    if (arrayMatch) {
+      return 'a';
+    }
 
     const enumMatch = enumRegEx.test(this.type);
-    if (enumMatch) return 'e';
+    if (enumMatch) {
+      return 'e';
+    }
 
     return '';
   }
@@ -165,7 +178,9 @@ export class ResolvedAbiType {
       return `str[${strMatch.length}]`;
     }
 
-    if (this.components === null) return this.type;
+    if (this.components === null) {
+      return this.type;
+    }
 
     const arrayMatch = arrayRegEx.exec(this.type)?.groups;
 

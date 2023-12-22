@@ -2,6 +2,9 @@ import type { BN } from './bn';
 import { bn } from './bn';
 import type { BigNumberish } from './types';
 
+/**
+ * @group node
+ */
 describe('Math - BN', () => {
   it('can execute operations without losing our BN reference', () => {
     let test: BN;
@@ -475,6 +478,12 @@ describe('Math - BN', () => {
     expect(() => {
       bn.parseUnits('100,100.000002', 5);
     }).toThrow("Decimal can't have more than 5 digits.");
+  });
+
+  it('should normalize zero to one', () => {
+    expect(bn(0).normalizeZeroToOne().eq(1)).toBeTruthy();
+
+    expect(bn(2).normalizeZeroToOne().eq(1)).not.toBeTruthy();
   });
 
   it('should match valueOf to toString with no base arguments', () => {

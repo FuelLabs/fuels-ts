@@ -1,14 +1,19 @@
 import type { Contract } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, WalletUnlocked } from 'fuels';
 
-import { SnippetProjectEnum } from '../../../projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let deployedContract: Contract;
 
   beforeAll(async () => {
-    deployedContract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
+    deployedContract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.RETURN_CONTEXT
+    );
   });
 
   it('should successfully update contract instance wallet', async () => {

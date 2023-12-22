@@ -1,0 +1,7 @@
+[project]
+authors = ["Fuel Labs <contact@fuel.sh>"]
+license = "Apache-2.0"
+name = "revert-error"
+
+[dependencies]
+custom_errors = { path = "../custom_errors" }

@@ -1,6 +1,11 @@
 import { ErrorCode } from '@fuel-ts/errors';
 
-import { concatWithDynamicData } from '../utilities';
+import {
+  concatWithDynamicData,
+  getWordSizePadding,
+  isMultipleOfWordSize,
+  rightPadToWordSize,
+} from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import { Coder } from './abstract-coder';
@@ -29,7 +34,15 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
       this.throwError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
-    return concatWithDynamicData(this.coders.map((coder, i) => coder.encode(value[i])));
+    return concatWithDynamicData(
+      this.coders.map((coder, i) => {
+        const encoded = coder.encode(value[i]);
+        if (!isMultipleOfWordSize(encoded.length)) {
+          return rightPadToWordSize(encoded);
+        }
+        return encoded;
+      })
+    );
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
@@ -41,6 +54,11 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
     const decodedValue = this.coders.map((coder) => {
       let decoded;
       [decoded, newOffset] = coder.decode(data, newOffset);
+
+      if (!isMultipleOfWordSize(newOffset)) {
+        newOffset += getWordSizePadding(newOffset);
+      }
+
       return decoded;
     });
 

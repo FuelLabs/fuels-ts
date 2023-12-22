@@ -1,30 +1,42 @@
-import { Address, addressify, getRandomB256 } from '@fuel-ts/address';
+import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
-import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
+import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
+import {
+  PolicyType,
+  TransactionCoder,
+  InputType,
+  OutputType,
+  TransactionType,
+} from '@fuel-ts/transactions';
 import type { BytesLike } from 'ethers';
-import { getBytesCopy, hexlify } from 'ethers';
+import { concat, getBytesCopy, hexlify } from 'ethers';
 
+import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { MessageCoin } from '../message';
+import type { ChainInfo } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { calculatePriceWithFactor, normalizeJSON } from '../utils';
+import { normalizeJSON } from '../utils';
+import { getMaxGas, getMinGas } from '../utils/gas';
 
-import type { CoinTransactionRequestOutput } from '.';
-import { NoWitnessAtIndexError, ChangeOutputCollisionError } from './errors';
+import { NoWitnessAtIndexError } from './errors';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from './input';
 import { inputify } from './input';
-import type { TransactionRequestOutput, ChangeTransactionRequestOutput } from './output';
+import type {
+  TransactionRequestOutput,
+  ChangeTransactionRequestOutput,
+  CoinTransactionRequestOutput,
+} from './output';
 import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
@@ -44,10 +56,12 @@ export {
 export interface BaseTransactionRequestLike {
   /** Gas price for transaction */
   gasPrice?: BigNumberish;
-  /** Gas limit for transaction */
-  gasLimit?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** The maximum fee payable by this transaction using BASE_ASSET. */
+  maxFee?: BigNumberish;
+  /** The maximum amount of witness data allowed for the transaction */
+  witnessLimit?: BigNumberish;
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -55,6 +69,18 @@ export interface BaseTransactionRequestLike {
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
 }
+
+type ToBaseTransactionResponse = Pick<
+  TransactionScript,
+  | 'inputs'
+  | 'inputsCount'
+  | 'outputs'
+  | 'outputsCount'
+  | 'witnesses'
+  | 'witnessesCount'
+  | 'policies'
+  | 'policyTypes'
+>;
 
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
@@ -64,10 +90,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   abstract type: TransactionType;
   /** Gas price for transaction */
   gasPrice: BN;
-  /** Gas limit for transaction */
-  gasLimit: BN;
   /** Block until which tx cannot be included */
   maturity: number;
+  /** The maximum fee payable by this transaction using BASE_ASSET. */
+  maxFee?: BN;
+  /** The maximum amount of witness data allowed for the transaction */
+  witnessLimit?: BN | undefined;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -82,18 +110,47 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   constructor({
     gasPrice,
-    gasLimit,
     maturity,
+    maxFee,
+    witnessLimit,
     inputs,
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = bn(gasPrice);
-    this.gasLimit = bn(gasLimit);
     this.maturity = maturity ?? 0;
+    this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
+    this.maxFee = maxFee ? bn(maxFee) : undefined;
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
+  }
+
+  static getPolicyMeta(req: BaseTransactionRequest) {
+    let policyTypes = 0;
+    const policies: Policy[] = [];
+
+    if (req.gasPrice) {
+      policyTypes += PolicyType.GasPrice;
+      policies.push({ data: req.gasPrice, type: PolicyType.GasPrice });
+    }
+    if (req.witnessLimit) {
+      policyTypes += PolicyType.WitnessLimit;
+      policies.push({ data: req.witnessLimit, type: PolicyType.WitnessLimit });
+    }
+    if (req.maturity > 0) {
+      policyTypes += PolicyType.Maturity;
+      policies.push({ data: req.maturity, type: PolicyType.Maturity });
+    }
+    if (req.maxFee) {
+      policyTypes += PolicyType.MaxFee;
+      policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
+    }
+
+    return {
+      policyTypes,
+      policies,
+    };
   }
 
   /**
@@ -101,19 +158,19 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @returns The base transaction details.
    */
-  protected getBaseTransaction(): Pick<
-    TransactionScript | TransactionCreate,
-    keyof BaseTransactionRequestLike | 'inputsCount' | 'outputsCount' | 'witnessesCount'
-  > {
+
+  protected getBaseTransaction(): ToBaseTransactionResponse {
     const inputs = this.inputs?.map(inputify) ?? [];
     const outputs = this.outputs?.map(outputify) ?? [];
     const witnesses = this.witnesses?.map(witnessify) ?? [];
+
+    const { policyTypes, policies } = BaseTransactionRequest.getPolicyMeta(this);
+
     return {
-      gasPrice: this.gasPrice,
-      gasLimit: this.gasLimit,
-      maturity: this.maturity,
+      policyTypes,
       inputs,
       outputs,
+      policies,
       witnesses,
       inputsCount: inputs.length,
       outputsCount: outputs.length,
@@ -158,7 +215,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * Creates an empty witness without any side effects and returns the index
    */
   protected createWitness() {
-    this.witnesses.push('0x');
+    // Push a dummy witness with same byte size as a real witness signature
+    this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
   }
 
@@ -442,11 +500,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       (output) => hexlify(output.assetId) === assetId
     );
 
-    // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== addressify(to).toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
-
     // Insert a ChangeOutput if it does not exist
     if (!changeOutput) {
       this.pushOutput({
@@ -465,18 +518,41 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Return the minimum amount in native coins required to create
-   * a transaction. This is required even if the gasPrice is 0.
-   *
-   * @returns The minimum amount in coins required to create a transaction.
+   * @hidden
    */
-  calculateFee(gasPriceFactor: BN): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, gasPriceFactor);
+  metadataGas(_gasCosts: GqlGasCosts): BN {
+    throw new Error('Not implemented');
+  }
 
-    return {
-      assetId: BaseAssetId,
-      amount: gasFee.isZero() ? bn(1) : gasFee,
-    };
+  /**
+   * @hidden
+   */
+  calculateMinGas(chainInfo: ChainInfo): BN {
+    const { gasCosts, consensusParameters } = chainInfo;
+    const { gasPerByte } = consensusParameters;
+    return getMinGas({
+      gasPerByte,
+      gasCosts,
+      inputs: this.inputs,
+      txBytesSize: this.byteSize(),
+      metadataGas: this.metadataGas(gasCosts),
+    });
+  }
+
+  calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
+    const { consensusParameters } = chainInfo;
+    const { gasPerByte } = consensusParameters;
+
+    const witnessesLength = this.toTransaction().witnesses.reduce(
+      (acc, wit) => acc + wit.dataLength,
+      0
+    );
+    return getMaxGas({
+      gasPerByte,
+      minGas,
+      witnessesLength,
+      witnessLimit: this.witnessLimit,
+    });
   }
 
   /**
@@ -486,28 +562,44 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param quantities - CoinQuantity Array.
    */
   fundWithFakeUtxos(quantities: CoinQuantity[]) {
-    const hasBaseAssetId = quantities.some(({ assetId }) => assetId === BaseAssetId);
+    let idCounter = 0;
+    const generateId = (): string => {
+      const counterString = String(idCounter++);
+      const id = ZeroBytes32.slice(0, -counterString.length).concat(counterString);
+      return id;
+    };
 
-    if (!hasBaseAssetId) {
-      quantities.push({ assetId: BaseAssetId, amount: bn(1) });
-    }
+    const findAssetInput = (assetId: string) =>
+      this.inputs.find((input) => {
+        if ('assetId' in input) {
+          return input.assetId === assetId;
+        }
+        return false;
+      });
 
-    const owner = getRandomB256();
+    const updateAssetInput = (assetId: string, quantity: BN) => {
+      const assetInput = findAssetInput(assetId);
 
-    this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
-    this.outputs = this.outputs.filter((output) => output.type !== OutputType.Change);
+      if (assetInput && 'assetId' in assetInput) {
+        assetInput.id = generateId();
+        assetInput.amount = quantity;
+      } else {
+        this.addResources([
+          {
+            id: generateId(),
+            amount: quantity,
+            assetId,
+            owner: Address.fromRandom(),
+            maturity: 0,
+            blockCreated: bn(1),
+            txCreatedIdx: bn(1),
+          },
+        ]);
+      }
+    };
 
-    const fakeResources = quantities.map(({ assetId, amount }, idx) => ({
-      id: `${ZeroBytes32}0${idx}`,
-      amount,
-      assetId,
-      owner: Address.fromB256(owner),
-      maturity: 0,
-      blockCreated: bn(1),
-      txCreatedIdx: bn(1),
-    }));
-
-    this.addResources(fakeResources);
+    updateAssetInput(BaseAssetId, bn(100_000_000_000));
+    quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
   }
 
   /**
@@ -524,6 +616,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     return coinsQuantities;
   }
+
+  /**
+   * Gets the Transaction Request by hashing the transaction.
+   *
+   * @param chainId - The chain ID.
+   *
+   * @returns - A hash of the transaction, which is the transaction ID.
+   */
+  abstract getTransactionId(chainId: number): string;
 
   /**
    * Return the minimum amount in native coins required to create

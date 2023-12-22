@@ -6,6 +6,9 @@ import { U8_MAX, U16_MAX, U32_MAX, U64_MAX } from '../../test/utils/constants';
 
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ */
 describe('U64Coder', () => {
   const coder = new U64Coder();
 

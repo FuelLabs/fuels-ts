@@ -5,6 +5,9 @@ import { U8_MAX } from '../../test/utils/constants';
 
 import { StringCoder } from './string';
 
+/**
+ * @group node
+ */
 describe('StringCoder', () => {
   const STRING_MIN_DECODED = '';
   const STRING_MIN_ENCODED = new Uint8Array();
