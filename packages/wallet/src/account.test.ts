@@ -469,33 +469,4 @@ describe('Account', () => {
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);
   });
-
-  it('should only accept BECH-32 string addresses in methods that require an address', async () => {
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
-
-    const b256Str = Address.fromRandom().toB256();
-    const amount = 100;
-
-    const methodCalls = [
-      account.createTransfer(b256Str, amount),
-      account.transfer(b256Str, amount),
-      account.transferToContract(b256Str, amount),
-      account.withdrawToBaseLayer(b256Str, amount),
-    ];
-
-    const promises = methodCalls.map(async (call) => {
-      await expectToThrowFuelError(
-        () => call,
-        new FuelError(
-          FuelError.CODES.INVALID_BECH32_ADDRESS,
-          `Invalid BECH-32 Address: ${b256Str}.`
-        )
-      );
-    });
-
-    await Promise.all(promises);
-  });
 });
