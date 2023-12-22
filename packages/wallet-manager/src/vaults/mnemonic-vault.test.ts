@@ -25,7 +25,9 @@ describe('MnemonicVault', () => {
 
     vault.addAccount();
 
-    expect(vault.getWallet(wallet.address).publicKey).toBe(walletManagerSpec.account_0.publicKey);
+    expect(vault.getWallet(wallet.address.toString()).publicKey).toBe(
+      walletManagerSpec.account_0.publicKey
+    );
   });
 
   it('Check if accounts are been added correctly', async () => {
