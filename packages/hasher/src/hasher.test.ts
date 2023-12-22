@@ -1,5 +1,8 @@
 import { hashMessage, hash } from './hasher';
 
+/**
+ * @group node
+ */
 describe('Hasher', () => {
   it('Hash message', () => {
     const message = 'my message';

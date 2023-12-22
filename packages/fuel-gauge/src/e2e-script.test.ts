@@ -73,6 +73,10 @@ type MainArgs = [
   VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
+/**
+ * @group node
+ * @group e2e
+ */
 describe('Live Script Test', () => {
   it('can use script against live Fuel Node', async () => {
     if (!process.env.FUEL_NETWORK_GENESIS_KEY) {

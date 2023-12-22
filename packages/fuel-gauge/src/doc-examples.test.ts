@@ -62,6 +62,9 @@ const ADDRESS_BYTES = new Uint8Array([
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,
 ]);
 
+/**
+ * @group node
+ */
 describe('Doc Examples', () => {
   let gasPrice: BN;
 

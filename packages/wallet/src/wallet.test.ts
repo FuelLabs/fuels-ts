@@ -10,6 +10,9 @@ import { generateTestWallet } from './test-utils/generateTestWallet';
 import { Wallet } from './wallet';
 import { WalletUnlocked } from './wallets';
 
+/**
+ * @group node
+ */
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
   let provider: Provider;

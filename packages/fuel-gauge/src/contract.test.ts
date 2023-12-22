@@ -162,6 +162,9 @@ const txPointer = '0x00000000000000000000000000000000';
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
+/**
+ * @group node
+ */
 describe('Contract', () => {
   let gasPrice: BN;
   beforeAll(async () => {
@@ -171,11 +174,11 @@ describe('Contract', () => {
 
   it('generates function methods on a simple contract', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const spy = jest.spyOn(provider, 'sendTransaction');
+    const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
     const fragment = contract.interface.getFunction('entry_one');
-    const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
+    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
     try {
       await contract.functions.entry_one(42);
@@ -189,11 +192,11 @@ describe('Contract', () => {
 
   it('generates function methods on a complex contract', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const spy = jest.spyOn(provider, 'sendTransaction');
+    const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
     const fragment = contract.interface.getFunction('tuple_function');
-    const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
+    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
     try {
       await contract.functions.tuple_function({

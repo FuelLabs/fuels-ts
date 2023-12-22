@@ -9,6 +9,9 @@ import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';
 import { NumberCoder } from './number';
 
+/**
+ * @group node
+ */
 describe('ArrayCoder', () => {
   const sbOptions: SmallBytesOptions = {
     isSmallBytes: true,

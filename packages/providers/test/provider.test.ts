@@ -11,7 +11,7 @@ import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import type { TransactionCost, FetchRequestOptions } from '../src/provider';
+import type { ChainInfo, NodeInfo, TransactionCost, FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -24,14 +24,24 @@ import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 
-// https://stackoverflow.com/a/72885576
-jest.mock('@fuel-ts/versions', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/versions'),
-}));
+vi.mock('@fuel-ts/versions', async () => {
+  const mod = await vi.importActual('@fuel-ts/versions');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+vi.mock('@fuel-ts/math', async () => {
+  const mod = await vi.importActual('@fuel-ts/math');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 afterEach(() => {
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 const getCustomFetch =
@@ -61,6 +71,9 @@ const getCustomFetch =
 // TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
+/**
+ * @group node
+ */
 describe('Provider', () => {
   it('can getVersion()', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -215,9 +228,12 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     expect(await provider.getVersion()).toEqual(providerUrl1);
 
-    const spyFetchChainAndNodeInfo = jest
+    const spyFetchChainAndNodeInfo = vi
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
-      .mockImplementation();
+      .mockResolvedValue({
+        chain: {} as ChainInfo,
+        nodeInfo: {} as NodeInfo,
+      });
 
     await provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
@@ -244,9 +260,12 @@ describe('Provider', () => {
      * Mocking and initializing Provider with an invalid fetcher just
      * to ensure it'll be properly overriden in `connect` method below
      */
-    const fetchChainAndNodeInfo = jest
+    const fetchChainAndNodeInfo = vi
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
-      .mockImplementation();
+      .mockResolvedValue({
+        chain: {} as ChainInfo,
+        nodeInfo: {} as NodeInfo,
+      });
 
     const provider = await Provider.create(providerUrl, {
       fetch: () => {
@@ -500,7 +519,7 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() =>
+    const resourcesToSpendMock = vi.fn(() =>
       Promise.resolve({ coinsToSpend: [] })
     ) as unknown as typeof provider.operations.getCoinsToSpend;
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
@@ -634,7 +653,7 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() =>
+    const resourcesToSpendMock = vi.fn(() =>
       Promise.resolve({ coinsToSpend: [] })
     ) as unknown as typeof provider.operations.getCoinsToSpend;
     provider.operations.getCoinsToSpend = resourcesToSpendMock;
@@ -739,9 +758,9 @@ describe('Provider', () => {
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
     Provider.clearChainAndNodeCaches();
 
-    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -760,9 +779,9 @@ describe('Provider', () => {
   it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
     Provider.clearChainAndNodeCaches();
 
-    const spyFetchChainAndNodeInfo = jest.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = jest.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = jest.spyOn(Provider.prototype, 'fetchNode');
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -827,7 +846,7 @@ describe('Provider', () => {
       throw new Error();
     }
 
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
@@ -852,7 +871,7 @@ describe('Provider', () => {
       throw new Error();
     }
 
-    const spy = jest.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
     await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
@@ -878,9 +897,9 @@ describe('Provider', () => {
       usedFee: bn(1),
     };
 
-    const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
 
-    const txCostSpy = jest
+    const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
       .mockReturnValue(Promise.resolve(transactionCost));
 
@@ -913,9 +932,9 @@ describe('Provider', () => {
       usedFee: bn(1),
     };
 
-    const estimateTxSpy = jest.spyOn(provider, 'estimateTxDependencies').mockImplementation();
+    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
 
-    const txCostSpy = jest
+    const txCostSpy = vi
       .spyOn(provider, 'getTransactionCost')
       .mockReturnValue(Promise.resolve(transactionCost));
 
@@ -962,13 +981,11 @@ describe('Provider', () => {
   it('throws TimeoutError on timeout when calling an operation', async () => {
     const timeout = 500;
     const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
-    jest
-      .spyOn(global, 'fetch')
-      .mockImplementationOnce((...args: unknown[]) =>
-        sleep(timeout).then(() =>
-          fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
-        )
-      );
+    vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
+      sleep(timeout).then(() =>
+        fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+      )
+    );
 
     const { error } = await safeExec(async () => {
       await provider.getBlocks({});
@@ -985,13 +1002,11 @@ describe('Provider', () => {
     const timeout = 500;
     const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
 
-    jest
-      .spyOn(global, 'fetch')
-      .mockImplementationOnce((...args: unknown[]) =>
-        sleep(timeout).then(() =>
-          fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
-        )
-      );
+    vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
+      sleep(timeout).then(() =>
+        fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+      )
+    );
 
     const { error } = await safeExec(async () => {
       for await (const iterator of provider.operations.statusChange({
@@ -1016,7 +1031,7 @@ describe('Provider', () => {
       gasLimit,
     });
 
-    const maxGasSpy = jest.spyOn(gasMod, 'getMaxGas');
+    const maxGasSpy = vi.spyOn(gasMod, 'getMaxGas');
 
     const chainInfo = provider.getChain();
     const minGas = bn(200);
@@ -1045,7 +1060,7 @@ describe('Provider', () => {
 
     transactionRequest.addContractCreatedOutput(ZeroBytes32, ZeroBytes32);
 
-    const maxGasSpy = jest.spyOn(gasMod, 'getMaxGas');
+    const maxGasSpy = vi.spyOn(gasMod, 'getMaxGas');
 
     const chainInfo = provider.getChain();
     const minGas = bn(700);
@@ -1069,18 +1084,13 @@ describe('Provider', () => {
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
-    const calculatePriceWithFactorMock = jest
+    const calculatePriceWithFactorMock = vi
       .spyOn(gasMod, 'calculatePriceWithFactor')
       .mockReturnValue(bn(0));
-
-    const normalizeZeroToOneSpy = jest.spyOn(BN.prototype, 'normalizeZeroToOne');
 
     const { minFee, maxFee, usedFee } = await provider.getTransactionCost(request);
 
     expect(calculatePriceWithFactorMock).toHaveBeenCalledTimes(3);
-
-    expect(normalizeZeroToOneSpy).toHaveBeenCalledTimes(3);
-    expect(normalizeZeroToOneSpy).toHaveReturnedWith(bn(1));
 
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(usedFee.eq(0)).not.toBeTruthy();

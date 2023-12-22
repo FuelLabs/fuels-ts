@@ -7,18 +7,27 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import { collectBinFilepaths } from './collectBinFilePaths';
 import * as validateBinFileMod from './validateBinFile';
 
+/**
+ * @group node
+ */
 describe('collectBinFilePaths.ts', () => {
   const script = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
   const predicate = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
   const contract = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
   function mockDeps() {
-    const validateBinFile = jest.spyOn(validateBinFileMod, 'validateBinFile').mockImplementation();
+    const validateBinFile = vi
+      .spyOn(validateBinFileMod, 'validateBinFile')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .mockResolvedValue({} as any);
+    // const validateBinFile = vi.spyOn(validateBinFileMod, 'validateBinFile').getMockImplementation();
 
     return { validateBinFile };
   }
 
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('should collect bin files for Scripts', () => {
     const { validateBinFile } = mockDeps();

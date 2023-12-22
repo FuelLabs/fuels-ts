@@ -1,5 +1,8 @@
 import { envs } from './envs';
 
+/**
+ * @group node
+ */
 describe('Keystore', () => {
   it.each(envs)('Encrypt and Decrypt', async ({ encrypt, decrypt }) => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';

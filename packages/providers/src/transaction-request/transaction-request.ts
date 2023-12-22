@@ -1,4 +1,4 @@
-import { Address, addressify, getRandomB256 } from '@fuel-ts/address';
+import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
@@ -25,7 +25,6 @@ import { isCoin } from '../resource';
 import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
-import type { CoinTransactionRequestOutput } from '.';
 import { NoWitnessAtIndexError } from './errors';
 import type {
   TransactionRequestInput,
@@ -33,7 +32,11 @@ import type {
   MessageTransactionRequestInput,
 } from './input';
 import { inputify } from './input';
-import type { TransactionRequestOutput, ChangeTransactionRequestOutput } from './output';
+import type {
+  TransactionRequestOutput,
+  ChangeTransactionRequestOutput,
+  CoinTransactionRequestOutput,
+} from './output';
 import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
@@ -559,42 +562,44 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param quantities - CoinQuantity Array.
    */
   fundWithFakeUtxos(quantities: CoinQuantity[]) {
-    const hasBaseAssetId = quantities.some(({ assetId }) => assetId === BaseAssetId);
+    let idCounter = 0;
+    const generateId = (): string => {
+      const counterString = String(idCounter++);
+      const id = ZeroBytes32.slice(0, -counterString.length).concat(counterString);
+      return id;
+    };
 
-    if (!hasBaseAssetId) {
-      quantities.push({ assetId: BaseAssetId, amount: bn(1) });
-    }
-
-    const owner = getRandomB256();
-
-    const witnessToRemove = this.inputs.reduce(
-      (acc, input) => {
-        if (input.type === InputType.Coin || input.type === InputType.Message) {
-          if (!acc[input.witnessIndex]) {
-            acc[input.witnessIndex] = true;
-          }
+    const findAssetInput = (assetId: string) =>
+      this.inputs.find((input) => {
+        if ('assetId' in input) {
+          return input.assetId === assetId;
         }
+        return false;
+      });
 
-        return acc;
-      },
-      {} as Record<number, boolean>
-    );
+    const updateAssetInput = (assetId: string, quantity: BN) => {
+      const assetInput = findAssetInput(assetId);
 
-    this.witnesses = this.witnesses.filter((_, idx) => !witnessToRemove[idx]);
-    this.inputs = this.inputs.filter((input) => input.type === InputType.Contract);
-    this.outputs = this.outputs.filter((output) => output.type !== OutputType.Change);
+      if (assetInput && 'assetId' in assetInput) {
+        assetInput.id = generateId();
+        assetInput.amount = quantity;
+      } else {
+        this.addResources([
+          {
+            id: generateId(),
+            amount: quantity,
+            assetId,
+            owner: Address.fromRandom(),
+            maturity: 0,
+            blockCreated: bn(1),
+            txCreatedIdx: bn(1),
+          },
+        ]);
+      }
+    };
 
-    const fakeResources = quantities.map(({ assetId, amount }, idx) => ({
-      id: `${ZeroBytes32}0${idx}`,
-      amount,
-      assetId,
-      owner: Address.fromB256(owner),
-      maturity: 0,
-      blockCreated: bn(1),
-      txCreatedIdx: bn(1),
-    }));
-
-    this.addResources(fakeResources);
+    updateAssetInput(BaseAssetId, bn(100_000_000_000));
+    quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
   }
 
   /**

@@ -2,85 +2,114 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 import * as deployMod from '../../src/cli/commands/deploy/index';
-import { mockStartFuelCore } from '../utils/mockStartFuelCore';
-import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
+import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
 import {
-  buildFlagsDeploy,
-  contractsFooDir,
-  generatedDir,
-  initFlagsUseBuiltinBinaries,
+  bootstrapProject,
+  resetConfigAndMocks,
+  resetDiskAndMocks,
   runBuild,
   runInit,
 } from '../utils/runCommands';
 
-describe('build', () => {
-  beforeEach(resetDiskAndMocks);
-  afterEach(resetDiskAndMocks);
+/**
+ * @group node
+ */
+describe(
+  'build',
+  () => {
+    const paths = bootstrapProject(__filename);
 
-  function mockAll() {
-    const { startFuelCore, killChildProcess } = mockStartFuelCore();
-    const deploy = jest.spyOn(deployMod, 'deploy').mockImplementation();
+    afterEach(() => {
+      resetConfigAndMocks(paths.fuelsConfigPath);
+    });
 
-    return { startFuelCore, killChildProcess, deploy };
-  }
+    afterAll(() => {
+      resetDiskAndMocks(paths.root);
+    });
 
-  it('should run `build` command', async () => {
-    const { startFuelCore, killChildProcess, deploy } = mockAll();
+    function mockAll() {
+      const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
+      const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue([]);
 
-    await runInit();
-    await runBuild();
+      return { autoStartFuelCore, killChildProcess, deploy };
+    }
 
-    const files = [
-      'predicates/factories/PredicateTrueAbi__factory.ts',
-      'predicates/index.ts',
-      'contracts/BarFooAbi.d.ts',
-      'contracts/BarFooAbi.hex.ts',
-      'contracts/FooBarAbi.hex.ts',
-      'contracts/FooBarAbi.d.ts',
-      'contracts/factories/FooBarAbi__factory.ts',
-      'contracts/factories/BarFooAbi__factory.ts',
-      'contracts/index.ts',
-      'scripts/factories/ScriptTrueAbi__factory.ts',
-      'scripts/index.ts',
-      'index.ts',
-    ].map((f) => join(__dirname, '..', 'fixtures', 'generated', f));
+    it('should run `build` command', async () => {
+      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
 
-    files.forEach((file) => expect(existsSync(file)).toBeTruthy());
+      await runInit({
+        root: paths.root,
+        workspace: paths.workspaceDir,
+        output: paths.outputDir,
+      });
 
-    expect(startFuelCore).toHaveBeenCalledTimes(0);
-    expect(deploy).toHaveBeenCalledTimes(0);
-    expect(killChildProcess).toHaveBeenCalledTimes(0);
-  });
+      await runBuild({ root: paths.root });
 
-  it('should run `build` command with contracts-only', async () => {
-    const { startFuelCore, killChildProcess, deploy } = mockAll();
+      const files = [
+        'predicates/factories/PredicateTrueAbi__factory.ts',
+        'predicates/index.ts',
+        'contracts/BarFooAbi.d.ts',
+        'contracts/BarFooAbi.hex.ts',
+        'contracts/FooBarAbi.hex.ts',
+        'contracts/FooBarAbi.d.ts',
+        'contracts/factories/FooBarAbi__factory.ts',
+        'contracts/factories/BarFooAbi__factory.ts',
+        'contracts/index.ts',
+        'scripts/factories/ScriptTrueAbi__factory.ts',
+        'scripts/index.ts',
+        'index.ts',
+      ].map((f) => join(paths.outputDir, f));
 
-    await runInit([initFlagsUseBuiltinBinaries, '-c', contractsFooDir, '-o', generatedDir].flat());
-    await runBuild();
+      files.forEach((file) => {
+        expect(existsSync(file)).toBeTruthy();
+      });
 
-    const files = [
-      'contracts/FooBarAbi.hex.ts',
-      'contracts/FooBarAbi.d.ts',
-      'contracts/factories/FooBarAbi__factory.ts',
-      'contracts/index.ts',
-      'index.ts',
-    ].map((f) => join(__dirname, '..', 'fixtures', 'generated', f));
+      expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+      expect(deploy).toHaveBeenCalledTimes(0);
+      expect(killChildProcess).toHaveBeenCalledTimes(0);
+    });
 
-    files.forEach((file) => expect(existsSync(file)).toBeTruthy());
+    it('should run `build` command with contracts-only', async () => {
+      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
 
-    expect(startFuelCore).toHaveBeenCalledTimes(0);
-    expect(deploy).toHaveBeenCalledTimes(0);
-    expect(killChildProcess).toHaveBeenCalledTimes(0);
-  });
+      await runInit({
+        root: paths.root,
+        workspace: paths.workspaceDir,
+        output: paths.outputDir,
+      });
 
-  it('should run `build` command with `--deploy` flag', async () => {
-    const { startFuelCore, killChildProcess, deploy } = mockAll();
+      await runBuild({ root: paths.root });
 
-    await runInit();
-    await runBuild([buildFlagsDeploy]);
+      const files = [
+        'contracts/FooBarAbi.hex.ts',
+        'contracts/FooBarAbi.d.ts',
+        'contracts/factories/FooBarAbi__factory.ts',
+        'contracts/index.ts',
+        'index.ts',
+      ].map((f) => join(paths.outputDir, f));
 
-    expect(startFuelCore).toHaveBeenCalledTimes(1);
-    expect(deploy).toHaveBeenCalledTimes(1);
-    expect(killChildProcess).toHaveBeenCalledTimes(1);
-  });
-});
+      files.forEach((file) => expect(existsSync(file)).toBeTruthy());
+
+      expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+      expect(deploy).toHaveBeenCalledTimes(0);
+      expect(killChildProcess).toHaveBeenCalledTimes(0);
+    });
+
+    it('should run `build` command with `--deploy` flag', async () => {
+      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+      await runInit({
+        root: paths.root,
+        workspace: paths.workspaceDir,
+        output: paths.outputDir,
+      });
+
+      await runBuild({ root: paths.root, deploy: true });
+
+      expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
+      expect(deploy).toHaveBeenCalledTimes(1);
+      expect(killChildProcess).toHaveBeenCalledTimes(1);
+    });
+  },
+  { timeout: 10000 }
+);

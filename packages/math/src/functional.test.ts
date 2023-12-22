@@ -6,6 +6,9 @@
 
 import { format, formatUnits, toBytes, toHex, toNumber } from './functional';
 
+/**
+ * @group node
+ */
 describe('Math - Functional shortcuts', () => {
   it('should toNumber return a number', () => {
     expect(toNumber('50000')).toEqual(50000);

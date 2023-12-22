@@ -1,4 +1,4 @@
-// #region Testing-with-jest-ts
+// #region Testing-in-ts-ts
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
@@ -20,6 +20,10 @@ import { PredicateAbi__factory } from './predicate-types';
 import { ScriptAbi__factory } from './script-types';
 
 let gasPrice: BN;
+
+/**
+ * @group node
+ */
 describe('ExampleContract', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -93,7 +97,7 @@ describe('ExampleContract', () => {
     expect(value.toHex()).toEqual(toHex(1337));
   });
 });
-// #endregion Testing-with-jest-ts
+// #endregion Testing-in-ts-ts
 
 it('should throw when simulating via contract factory with wallet with no resources', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
