@@ -9,11 +9,11 @@ export interface RetryOptions {
    */
   maxRetries: number;
   /**
-   * Backoff strategy to use when retrying.
+   * Backoff strategy to use when retrying. Default is exponential.
    */
   backoff?: Backoff;
   /**
-   * Base duration for backoff strategy.
+   * Base duration for backoff strategy. Default is 150ms.
    */
   baseDuration?: number;
 }
