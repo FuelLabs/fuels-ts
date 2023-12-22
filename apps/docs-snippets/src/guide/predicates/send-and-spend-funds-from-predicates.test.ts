@@ -57,7 +57,7 @@ describe(__filename, () => {
     });
 
     const tx2 = await predicate.transfer(
-      receiverWallet.address,
+      receiverWallet.address.toB256(),
       amountToPredicate - 1000,
       BaseAssetId,
       {

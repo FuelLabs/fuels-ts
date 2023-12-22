@@ -292,7 +292,7 @@ export class Account extends AbstractAccount {
    */
   async createTransfer(
     /** Address of the destination */
-    destination: AbstractAddress,
+    destination: string | AbstractAddress,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
@@ -303,7 +303,7 @@ export class Account extends AbstractAccount {
     const { minGasPrice } = this.provider.getGasConfig();
     const params = { gasPrice: minGasPrice, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    request.addCoinOutput(destination, amount, assetId);
+    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
     await this.fund(request, requiredQuantities, maxFee);
     return request;
@@ -320,7 +320,7 @@ export class Account extends AbstractAccount {
    */
   async transfer(
     /** Address of the destination */
-    destination: AbstractAddress,
+    destination: string | AbstractAddress,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
@@ -343,7 +343,7 @@ export class Account extends AbstractAccount {
    */
   async transferToContract(
     /** Contract address */
-    contractId: AbstractAddress,
+    contractId: string | AbstractAddress,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
@@ -351,13 +351,14 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const contractAddress = Address.fromAddressOrString(contractId);
     const { minGasPrice } = this.provider.getGasConfig();
     const params = { gasPrice: minGasPrice, ...txParams };
 
     const script = await composeScriptForTransferringToContract();
 
     const scriptData = formatScriptDataForTransferringToContract(
-      contractId.toB256(),
+      contractAddress.toB256(),
       amount,
       assetId
     );
@@ -368,7 +369,7 @@ export class Account extends AbstractAccount {
       scriptData,
     });
 
-    request.addContractInputAndOutput(contractId);
+    request.addContractInputAndOutput(contractAddress);
 
     const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request, [
       { amount: bn(amount), assetId: String(assetId) },
@@ -389,15 +390,16 @@ export class Account extends AbstractAccount {
    */
   async withdrawToBaseLayer(
     /** Address of the recipient on the base chain */
-    recipient: AbstractAddress,
+    recipient: string | AbstractAddress,
     /** Amount of base asset */
     amount: BigNumberish,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = getBytesCopy(
-      '0x'.concat(recipient.toHexString().substring(2).padStart(64, '0'))
+      '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))
     );
     const amountDataArray = getBytesCopy(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))

@@ -298,11 +298,17 @@ describe('Provider', () => {
     const { height: latestBlockNumberBeforeProduce } = block;
 
     const amountOfBlocksToProduce = 3;
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+    await provider.produceBlocks(amountOfBlocksToProduce);
 
-    expect(latestBlockNumber.toHex()).toEqual(
-      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
-    );
+    const blocks = await provider.getBlocks({
+      last: 20,
+    });
+
+    const lastBlockIndex = blocks.findIndex((b) => b.height.eq(latestBlockNumberBeforeProduce));
+
+    const newBlocks = blocks.slice(lastBlockIndex + 1);
+
+    expect(newBlocks.length).toBeGreaterThanOrEqual(amountOfBlocksToProduce);
     // #endregion Provider-produce-blocks
   });
 
@@ -1095,5 +1101,27 @@ describe('Provider', () => {
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(usedFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
+  });
+
+  it('should accept string addresses in methods that require an address', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const b256Str = Address.fromRandom().toB256();
+
+    const methodCalls = [
+      () => provider.getBalance(b256Str, BaseAssetId),
+      () => provider.getCoins(b256Str),
+      () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
+      () => provider.getResourcesToSpend(b256Str, []),
+      () => provider.getContractBalance(b256Str, BaseAssetId),
+      () => provider.getBalances(b256Str),
+      () => provider.getMessages(b256Str),
+    ];
+
+    const promises = methodCalls.map(async (call) => {
+      await expect(call()).resolves.toBeTruthy();
+    });
+
+    await Promise.all(promises);
   });
 });

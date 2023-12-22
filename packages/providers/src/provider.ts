@@ -851,16 +851,17 @@ export default class Provider {
   }
 
   async getResourcesForTransaction(
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = []
   ) {
+    const ownerAddress = Address.fromAddressOrString(owner);
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const transactionCost = await this.getTransactionCost(transactionRequest, forwardingQuantities);
 
     // Add the required resources to the transaction from the owner
     transactionRequest.addResources(
-      await this.getResourcesToSpend(owner, transactionCost.requiredQuantities)
+      await this.getResourcesToSpend(ownerAddress, transactionCost.requiredQuantities)
     );
     // Refetch transaction costs with the new resources
     // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
@@ -872,7 +873,7 @@ export default class Provider {
       transactionRequest,
       forwardingQuantities
     );
-    const resources = await this.getResourcesToSpend(owner, requiredQuantities);
+    const resources = await this.getResourcesToSpend(ownerAddress, requiredQuantities);
 
     return {
       resources,
@@ -886,16 +887,17 @@ export default class Provider {
    */
   async getCoins(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** The asset ID of coins to get */
     assetId?: BytesLike,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Coin[]> {
+    const ownerAddress = Address.fromAddressOrString(owner);
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
+      filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
     const coins = result.coins.edges.map((edge) => edge.node);
@@ -921,12 +923,13 @@ export default class Provider {
    */
   async getResourcesToSpend(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** The quantities to get */
     quantities: CoinQuantityLike[],
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
+    const ownerAddress = Address.fromAddressOrString(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -939,7 +942,7 @@ export default class Provider {
       excludeInput.utxos = Array.from(uniqueUtxos);
     }
     const coinsQuery = {
-      owner: owner.toB256(),
+      owner: ownerAddress.toB256(),
       queryPerAsset: quantities
         .map(coinQuantityfy)
         .map(({ assetId, amount, max: maxPerAsset }) => ({
@@ -1116,12 +1119,12 @@ export default class Provider {
    */
   async getContractBalance(
     /** The contract ID to get the balance for */
-    contractId: AbstractAddress,
+    contractId: string | AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: contractId.toB256(),
+      contract: Address.fromAddressOrString(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1136,12 +1139,12 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
-      owner: owner.toB256(),
+      owner: Address.fromAddressOrString(owner).toB256(),
       assetId: hexlify(assetId),
     });
     return bn(balance.amount, 10);
@@ -1156,14 +1159,14 @@ export default class Provider {
    */
   async getBalances(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<CoinQuantity[]> {
     const result = await this.operations.getBalances({
       first: 10,
       ...paginationArgs,
-      filter: { owner: owner.toB256() },
+      filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
     const balances = result.balances.edges.map((edge) => edge.node);
@@ -1183,14 +1186,14 @@ export default class Provider {
    */
   async getMessages(
     /** The address to get message from */
-    address: AbstractAddress,
+    address: string | AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Message[]> {
     const result = await this.operations.getMessages({
       first: 10,
       ...paginationArgs,
-      owner: address.toB256(),
+      owner: Address.fromAddressOrString(address).toB256(),
     });
 
     const messages = result.messages.edges.map((edge) => edge.node);
