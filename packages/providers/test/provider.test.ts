@@ -1096,4 +1096,32 @@ describe('Provider', () => {
     expect(usedFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
   });
+
+  it('should only accept BECH-32 string addresses in methods that require an address', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const b256Str = Address.fromRandom().toB256();
+
+    const methodCalls = [
+      provider.getBalance(b256Str, BaseAssetId),
+      provider.getCoins(b256Str),
+      provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
+      provider.getResourcesToSpend(b256Str, []),
+      provider.getContractBalance(b256Str, BaseAssetId),
+      provider.getBalances(b256Str),
+      provider.getMessages(b256Str),
+    ];
+
+    const promises = methodCalls.map(async (call) => {
+      await expectToThrowFuelError(
+        () => call,
+        new FuelError(
+          FuelError.CODES.INVALID_BECH32_ADDRESS,
+          `Invalid BECH-32 Address: ${b256Str}.`
+        )
+      );
+    });
+
+    await Promise.all(promises);
+  });
 });
