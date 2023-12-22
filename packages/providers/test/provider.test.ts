@@ -11,6 +11,7 @@ import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
+import { fromTai64ToDate } from '../src';
 import type { ChainInfo, NodeInfo, TransactionCost, FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
@@ -295,20 +296,19 @@ describe('Provider', () => {
     if (!block) {
       throw new Error('No latest block');
     }
-    const { height: latestBlockNumberBeforeProduce } = block;
+    const { time: timeLastBlockProduced } = block;
 
     const amountOfBlocksToProduce = 3;
-    await provider.produceBlocks(amountOfBlocksToProduce);
+    const producedBlockHeigh = await provider.produceBlocks(amountOfBlocksToProduce);
 
-    const blocks = await provider.getBlocks({
-      last: 20,
-    });
+    const producedBlock = await provider.getBlock(producedBlockHeigh.toNumber());
 
-    const lastBlockIndex = blocks.findIndex((b) => b.height.eq(latestBlockNumberBeforeProduce));
+    expect(producedBlock).toBeDefined();
 
-    const newBlocks = blocks.slice(lastBlockIndex + 1);
+    const oldest = new Date(fromTai64ToDate(timeLastBlockProduced || ''));
+    const newest = new Date(fromTai64ToDate(producedBlock?.time || ''));
 
-    expect(newBlocks.length).toBeGreaterThanOrEqual(amountOfBlocksToProduce);
+    expect(newest >= oldest).toBeTruthy();
     // #endregion Provider-produce-blocks
   });
 
