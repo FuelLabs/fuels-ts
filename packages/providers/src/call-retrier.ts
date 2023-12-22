@@ -41,11 +41,11 @@ export function retrier(
   options: RetryOptions | undefined,
   retryAttempt: number = 0
 ): NonNullable<ProviderOptions['fetch']> {
-  return async (...args) => {
-    if (options === undefined) {
-      return fetchFn(...args);
-    }
+  if (options === undefined) {
+    return fetchFn;
+  }
 
+  return async (...args) => {
     try {
       return await fetchFn(...args);
     } catch (e: unknown) {
