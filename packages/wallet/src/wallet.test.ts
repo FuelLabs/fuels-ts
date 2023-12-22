@@ -105,7 +105,7 @@ describe('Wallet', () => {
         const transactionRequest = transactionRequestify(transactionRequestLike);
         // Simulate a external request of signature
         const signedTransaction = await externalWallet.signTransaction(transactionRequest);
-        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        transactionRequest.updateWitnessByOwner(externalWallet.address.toB256(), signedTransaction);
         return super.sendTransaction(transactionRequestLike);
       }
     }

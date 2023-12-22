@@ -20,7 +20,7 @@ describe('Keystore Wallet', () => {
 
   it('should return a valid keystore when given correct parameters', async () => {
     // Act
-    const keystore = await encryptKeystoreWallet(privateKey, address, password);
+    const keystore = await encryptKeystoreWallet(privateKey, address.toB256(), password);
 
     // Assert
     expect(keystore).toBeTruthy();
