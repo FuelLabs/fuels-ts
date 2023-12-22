@@ -16,13 +16,12 @@ const getDiff = () => {
   ${resultsSections[1]}
 
   <details>
-  
+
   <summary>Changed Files:</summary>
 
   ${resultsSections[0]}
   </details>
   `;
 
-  console.log(report);
   writeFileSync('coverage/report/coverage-diff.txt', report, { flag: 'w' });
 })();
