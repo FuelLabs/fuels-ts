@@ -42,7 +42,7 @@ describe('Wallet', () => {
     const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const request = await sender.createTransfer(receiver.address, 1, BaseAssetId, {
+    const request = await sender.createTransfer(receiver.address.toB256(), 1, BaseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });

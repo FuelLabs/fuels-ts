@@ -79,7 +79,7 @@ describe(__filename, () => {
 
     // #region transferring-assets-2
     const transactionRequest = await sender.createTransfer(
-      destination.address.toB256(),
+      destination.address,
       amountToTransfer,
       assetId,
       txParams
