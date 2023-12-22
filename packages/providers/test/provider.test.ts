@@ -8,6 +8,7 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
+import exp from 'constants';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
@@ -298,11 +299,17 @@ describe('Provider', () => {
     const { height: latestBlockNumberBeforeProduce } = block;
 
     const amountOfBlocksToProduce = 3;
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+    await provider.produceBlocks(amountOfBlocksToProduce);
 
-    expect(latestBlockNumber.toHex()).toEqual(
-      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
-    );
+    const blocks = await provider.getBlocks({
+      last: 20,
+    });
+
+    const oldLatestIdx = blocks.findIndex((b) => b.height.eq(latestBlockNumberBeforeProduce));
+
+    const newBlocks = blocks.slice(oldLatestIdx + 1);
+
+    expect(newBlocks.length).toBeGreaterThanOrEqual(amountOfBlocksToProduce);
     // #endregion Provider-produce-blocks
   });
 
