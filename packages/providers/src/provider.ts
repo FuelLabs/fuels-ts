@@ -285,20 +285,19 @@ export default class Provider {
     retryOptions: undefined,
   };
 
-  private static getFetchFn(options: ProviderOptions) {
-    const fetchFn =
-      options.fetch !== undefined
-        ? options.fetch
-        : (url: string, request: FetchRequestOptions) =>
-            fetch(url, {
-              ...request,
-              signal:
-                options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
-            });
+  private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
+    return retrier((...args) => {
+      if (options.fetch) {
+        return options.fetch(...args);
+      }
 
-    type FetchParams = Parameters<NonNullable<ProviderOptions['fetch']>>;
-
-    return (...args: FetchParams) => retrier(() => fetchFn(...args), options.retryOptions);
+      const url = args[0];
+      const request = args[1];
+      return fetch(url, {
+        ...request,
+        signal: options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
+      });
+    }, options.retryOptions);
   }
 
   /**

@@ -33,7 +33,7 @@ describe('Retries correctly', () => {
     vi.clearAllMocks();
   });
 
-  const maxAttempts = 4;
+  const maxRetries = 4;
   const duration = 150;
 
   function assertBackoff(callTime: number, index: number, arr: number[], expectedWaitTime: number) {
@@ -52,37 +52,40 @@ describe('Retries correctly', () => {
   }
 
   test('fixed backoff', async () => {
-    const retryOptions = { maxAttempts, baseDuration: duration, backoff: 'fixed' as const };
+    const retryOptions = { maxRetries, baseDuration: duration, backoff: 'fixed' as const };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
     const callTimes: number[] = [];
 
-    mockFetch(maxAttempts, callTimes);
+    mockFetch(maxRetries, callTimes);
 
     const expectedChainInfo = await provider.operations.getChain();
 
     const chainInfo = await provider.operations.getChain();
 
     expect(chainInfo).toEqual(expectedChainInfo);
-    expect(callTimes.length - 1).toBe(maxAttempts); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
+    expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) => assertBackoff(callTime, index, callTimes, duration));
   });
 
   test('linear backoff', async () => {
-    const retryOptions = { maxAttempts, baseDuration: duration, backoff: 'linear' as const };
+    const retryOptions = {
+      maxRetries,
+      backoff: 'linear' as const,
+    };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
     const callTimes: number[] = [];
 
-    mockFetch(maxAttempts, callTimes);
+    mockFetch(maxRetries, callTimes);
 
     const expectedChainInfo = await provider.operations.getChain();
 
     const chainInfo = await provider.operations.getChain();
 
     expect(chainInfo).toEqual(expectedChainInfo);
-    expect(callTimes.length - 1).toBe(maxAttempts); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
+    expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
       assertBackoff(callTime, index, callTimes, duration * index)
@@ -90,19 +93,22 @@ describe('Retries correctly', () => {
   });
 
   test('exponential backoff', async () => {
-    const retryOptions = { maxAttempts, baseDuration: duration, backoff: 'exponential' as const };
+    const retryOptions = {
+      maxRetries,
+      backoff: 'exponential' as const,
+    };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
     const callTimes: number[] = [];
 
-    mockFetch(maxAttempts, callTimes);
+    mockFetch(maxRetries, callTimes);
 
     const expectedChainInfo = await provider.operations.getChain();
 
     const chainInfo = await provider.operations.getChain();
 
     expect(chainInfo).toEqual(expectedChainInfo);
-    expect(callTimes.length - 1).toBe(maxAttempts); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
+    expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
       assertBackoff(callTime, index, callTimes, duration * (2 ^ (index - 1)))
@@ -110,7 +116,10 @@ describe('Retries correctly', () => {
   });
 
   test('throws if last attempt fails', async () => {
-    const retryOptions = { maxAttempts, baseDuration: duration, backoff: 'fixed' as const };
+    const retryOptions = {
+      maxRetries,
+      backoff: 'fixed' as const,
+    };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
 
@@ -127,6 +136,6 @@ describe('Retries correctly', () => {
 
     expect(error).toMatchObject({ cause: { code: 'ECONNREFUSED' } });
     // the added one is for the initial call which isn't considered a retry attempt
-    expect(fetchSpy).toHaveBeenCalledTimes(maxAttempts + 1);
+    expect(fetchSpy).toHaveBeenCalledTimes(maxRetries + 1);
   });
 });

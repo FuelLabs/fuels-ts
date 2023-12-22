@@ -1,3 +1,4 @@
+import type { ProviderOptions } from './provider';
 import { sleep } from './utils';
 
 type Backoff = 'linear' | 'exponential' | 'fixed';
@@ -6,60 +7,63 @@ export interface RetryOptions {
   /**
    * Amount of attempts to retry before failing the call.
    */
-  maxAttempts: number;
+  maxRetries: number;
   /**
    * Backoff strategy to use when retrying.
    */
-  backoff: Backoff;
+  backoff?: Backoff;
   /**
    * Base duration for backoff strategy.
    */
-  baseDuration: number;
+  baseDuration?: number;
 }
 
 function getWaitDuration(options: RetryOptions, attempt: number) {
+  const duration = options.baseDuration ?? 150;
+
   if (attempt === 0) {
-    return options.baseDuration;
+    return duration;
   }
 
   switch (options.backoff) {
     case 'linear':
-      return options.baseDuration * attempt;
-    case 'exponential':
-      return options.baseDuration * (2 ^ (attempt - 1));
+      return duration * attempt;
     case 'fixed':
-      return options.baseDuration;
+      return duration;
+    case 'exponential':
     default:
-      throw new Error();
+      return duration * (2 ^ (attempt - 1));
   }
 }
 
-export async function retrier(
-  call: () => Promise<Response>,
+export function retrier(
+  fetchFn: NonNullable<ProviderOptions['fetch']>,
   options: RetryOptions | undefined,
   retryAttempt: number = 0
-) {
-  if (options === undefined) {
-    return call();
-  }
-
-  try {
-    return await call();
-  } catch (e: unknown) {
-    const error = e as Error & { cause?: { code?: string } };
-
-    if (error.cause?.code !== 'ECONNREFUSED') {
-      throw e;
+): NonNullable<ProviderOptions['fetch']> {
+  return async (...args) => {
+    if (options === undefined) {
+      return fetchFn(...args);
     }
 
-    if (retryAttempt === options.maxAttempts) {
-      throw e;
+    try {
+      return await fetchFn(...args);
+    } catch (e: unknown) {
+      const error = e as Error & { cause?: { code?: string } };
+
+      if (error.cause?.code !== 'ECONNREFUSED') {
+        throw e;
+      }
+
+      if (retryAttempt === options.maxRetries) {
+        throw e;
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      retryAttempt += 1;
+
+      await sleep(getWaitDuration(options, retryAttempt));
+      return retrier(fetchFn, options, retryAttempt)(...args);
     }
-
-    // eslint-disable-next-line no-param-reassign
-    retryAttempt += 1;
-
-    await sleep(getWaitDuration(options, retryAttempt));
-    return retrier(call, options, retryAttempt);
-  }
+  };
 }
