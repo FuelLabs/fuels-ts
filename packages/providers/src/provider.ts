@@ -286,6 +286,8 @@ export default class Provider {
   };
 
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
+    const { retryOptions, timeout } = options;
+
     return retrier((...args) => {
       if (options.fetch) {
         return options.fetch(...args);
@@ -293,11 +295,10 @@ export default class Provider {
 
       const url = args[0];
       const request = args[1];
-      return fetch(url, {
-        ...request,
-        signal: options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
-      });
-    }, options.retryOptions);
+      const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
+
+      return fetch(url, { ...request, signal });
+    }, retryOptions);
   }
 
   /**
