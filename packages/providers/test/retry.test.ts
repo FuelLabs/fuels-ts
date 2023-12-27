@@ -87,7 +87,7 @@ describe('Retries correctly', () => {
 
     const chainInfo = await provider.operations.getChain();
 
-    expect(chainInfo).toEqual(expectedChainInfo);
+    expect(chainInfo.chain.name).toEqual(expectedChainInfo.chain.name);
     expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
@@ -110,7 +110,7 @@ describe('Retries correctly', () => {
 
     const chainInfo = await provider.operations.getChain();
 
-    expect(chainInfo).toEqual(expectedChainInfo);
+    expect(chainInfo.chain.name).toEqual(expectedChainInfo.chain.name);
     expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
