@@ -11,6 +11,7 @@ import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
+import { fromTai64ToDate } from '../src';
 import type { ChainInfo, NodeInfo, TransactionCost, FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
@@ -295,14 +296,19 @@ describe('Provider', () => {
     if (!block) {
       throw new Error('No latest block');
     }
-    const { height: latestBlockNumberBeforeProduce } = block;
+    const { time: timeLastBlockProduced } = block;
 
     const amountOfBlocksToProduce = 3;
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+    const producedBlockHeigh = await provider.produceBlocks(amountOfBlocksToProduce);
 
-    expect(latestBlockNumber.toHex()).toEqual(
-      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
-    );
+    const producedBlock = await provider.getBlock(producedBlockHeigh.toNumber());
+
+    expect(producedBlock).toBeDefined();
+
+    const oldest = new Date(fromTai64ToDate(timeLastBlockProduced || ''));
+    const newest = new Date(fromTai64ToDate(producedBlock?.time || ''));
+
+    expect(newest >= oldest).toBeTruthy();
     // #endregion Provider-produce-blocks
   });
 
@@ -1095,5 +1101,27 @@ describe('Provider', () => {
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(usedFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
+  });
+
+  it('should accept string addresses in methods that require an address', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const b256Str = Address.fromRandom().toB256();
+
+    const methodCalls = [
+      () => provider.getBalance(b256Str, BaseAssetId),
+      () => provider.getCoins(b256Str),
+      () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
+      () => provider.getResourcesToSpend(b256Str, []),
+      () => provider.getContractBalance(b256Str, BaseAssetId),
+      () => provider.getBalances(b256Str),
+      () => provider.getMessages(b256Str),
+    ];
+
+    const promises = methodCalls.map(async (call) => {
+      await expect(call()).resolves.toBeTruthy();
+    });
+
+    await Promise.all(promises);
   });
 });

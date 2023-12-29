@@ -19,11 +19,12 @@ jobs:
 
   environments:
     runs-on: ubuntu-latest
-    name: ${{ matrix.env }}
+    name: ${{ matrix.env }} - v${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
         env: [node]
+        version: [18.18.2, 20]
     timeout-minutes: 25
     steps:
       - name: Checkout
@@ -31,6 +32,8 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
+        with:
+          node-version: ${{ matrix.version }}
 
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
@@ -92,18 +95,17 @@ jobs:
 
       - name: Download Master Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
-        # TODO: Remove PR != check once #1310 has been merged
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number != 1310)}}
+        # change to pr number check when rc/salamander has been merged
+        if: false
         with:
           workflow: test.yaml
           branch: master
           name: coverage-master
           path: coverage-master
 
-      # TODO: Delete once #1310 has been merged
       - name: Download Master Coverage Artifact (temporary)
         uses: dawidd6/action-download-artifact@v2
-        if: ${{ (steps.findPr.outputs.number) && (steps.findPr.outputs.number == 1310)}}
+        if: ${{ (steps.findPr.outputs.number) }}
         with:
           workflow: test.yaml
           run_id: 6628340271
