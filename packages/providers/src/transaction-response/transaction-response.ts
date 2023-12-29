@@ -217,7 +217,7 @@ export class TransactionResponse {
       if (statusChange.type === 'FailureStatus') {
         throw new FuelError(
           FuelError.CODES.TRANSACTION_FAILED,
-          `Script Reverted. Logs: ${JSON.stringify(statusChange.receipts)}`
+          `Script Reverted. Receipts: ${JSON.stringify(statusChange.receipts)}`
         );
       }
 
