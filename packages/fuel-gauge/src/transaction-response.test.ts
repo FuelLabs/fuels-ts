@@ -140,6 +140,7 @@ describe('TransactionResponse', () => {
 
     const contract = await factory.deployContract({ gasPrice });
 
+    // Had to get transaction request manually in order to get a `TransactionResponse` on submittal
     const request = await contract.functions
       .validate_inputs(bn(100), bn(100))
       .txParams({ gasPrice, gasLimit: 10_000 })
