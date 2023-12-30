@@ -14,7 +14,6 @@ import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
-import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -27,6 +26,7 @@ import type {
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import { fuelGraphQL } from './fuel-graphql-request';
 import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
@@ -414,11 +414,6 @@ export default class Provider {
    */
   private createOperations() {
     const fetchFn = Provider.getFetchFn(this.options);
-    const gqlClient = new GraphQLClient(this.url, {
-      fetch: (url: string, requestInit: FetchRequestOptions) =>
-        fetchFn(url, requestInit, this.options),
-    });
-
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
@@ -434,7 +429,13 @@ export default class Provider {
           variables: vars,
         });
       }
-      return gqlClient.request(query, vars);
+      return fuelGraphQL(
+        (url, requestInit) =>
+          fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+        this.url,
+        query,
+        vars
+      );
     };
 
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.

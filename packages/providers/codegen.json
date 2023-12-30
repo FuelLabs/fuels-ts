@@ -7,7 +7,11 @@
       "plugins": [
         { "typescript": {} },
         { "typescript-operations": {} },
-        { "typescript-generic-sdk": {} }
+        {
+          "typescript-generic-sdk": {
+            "noGraphQLTag": true
+          }
+        }
       ],
       "config": {
         "scalars": {

@@ -56,7 +56,8 @@ const getCustomFetch =
     }
   ) => {
     const graphqlRequest = JSON.parse(options.body);
-    const { operationName } = graphqlRequest;
+    const { query } = graphqlRequest;
+    const operationName = query.split('{')[0].split(' ')[1].split('(')[0]; // e.g. query getMessageProof(...) {...} -> getMessageProof
 
     if (operationName === expectedOperationName) {
       const responseText = JSON.stringify({
