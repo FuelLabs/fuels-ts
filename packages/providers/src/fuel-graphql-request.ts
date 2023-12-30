@@ -16,24 +16,23 @@ export async function fuelGraphQLRequest(
   operation: DocumentNode,
   variables: Record<string, unknown>
 ) {
-  const query = print(operation);
-
-  if (isSubscription(operation)) {
-    return fuelGraphQLSubscriber({
-      url,
-      query,
-      fetchFn,
-      variables,
-    });
-  }
-
-  const response = await fetchFn(url, {
+  const request = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query, variables }),
-  });
+    body: JSON.stringify({ query: print(operation), variables }),
+  };
+
+  if (isSubscription(operation)) {
+    return fuelGraphQLSubscriber({
+      fetchFn,
+      url,
+      request,
+    });
+  }
+
+  const response = await fetchFn(url, request);
 
   const { data, errors } = await response.json();
 

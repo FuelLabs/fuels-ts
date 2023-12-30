@@ -2,8 +2,7 @@ import { FuelError } from '@fuel-ts/errors';
 
 type FuelGraphQLSubscriberOptions = {
   url: string;
-  query: string;
-  variables?: Record<string, unknown>;
+  request: RequestInit;
   fetchFn: typeof fetch;
   abortController?: AbortController;
 };
@@ -45,18 +44,13 @@ class FuelSubscriptionStream implements TransformStream {
 
 export async function* fuelGraphQLSubscriber({
   url,
-  variables,
-  query,
   fetchFn,
+  request,
 }: FuelGraphQLSubscriberOptions) {
   const response = await fetchFn(`${url}-sub`, {
-    method: 'POST',
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
+    ...request,
     headers: {
-      'Content-Type': 'application/json',
+      ...request.headers,
       Accept: 'text/event-stream',
     },
   });
