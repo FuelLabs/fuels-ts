@@ -1,19 +1,38 @@
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 
-export async function fuelGraphQL(
+import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
+
+function isSubscription(query: DocumentNode) {
+  const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
+    operation: string;
+  };
+  return opDefinition?.operation === 'subscription';
+}
+
+export async function fuelGraphQLRequest(
   fetchFn: typeof fetch,
   url: string,
-  query: DocumentNode,
+  operation: DocumentNode,
   variables: Record<string, unknown>
 ) {
-  console.log(print(query));
+  const query = print(operation);
+
+  if (isSubscription(operation)) {
+    return fuelGraphQLSubscriber({
+      url,
+      query,
+      fetchFn,
+      variables,
+    });
+  }
+
   const response = await fetchFn(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query: print(query), variables }),
+    body: JSON.stringify({ query, variables }),
   });
 
   const { data, errors } = await response.json();

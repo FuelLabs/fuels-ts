@@ -26,7 +26,7 @@ import type {
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import { fuelGraphQL } from './fuel-graphql-request';
+import { fuelGraphQLRequest } from './fuel-graphql-request';
 import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
@@ -414,29 +414,14 @@ export default class Provider {
    */
   private createOperations() {
     const fetchFn = Provider.getFetchFn(this.options);
-    const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
-      const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
-        operation: string;
-      };
-      const isSubscription = opDefinition?.operation === 'subscription';
-
-      if (isSubscription) {
-        return fuelGraphQLSubscriber({
-          url: this.url,
-          query,
-          fetchFn: (url, requestInit) =>
-            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
-          variables: vars,
-        });
-      }
-      return fuelGraphQL(
+    const executeQuery = (operation: DocumentNode, vars: Record<string, unknown>) =>
+      fuelGraphQLRequest(
         (url, requestInit) =>
           fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
         this.url,
-        query,
+        operation,
         vars
       );
-    };
 
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
     return getOperationsSdk(executeQuery);

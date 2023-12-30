@@ -1,10 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
-import type { DocumentNode } from 'graphql';
-import { print } from 'graphql';
 
 type FuelGraphQLSubscriberOptions = {
   url: string;
-  query: DocumentNode;
+  query: string;
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
   abortController?: AbortController;
@@ -54,7 +52,7 @@ export async function* fuelGraphQLSubscriber({
   const response = await fetchFn(`${url}-sub`, {
     method: 'POST',
     body: JSON.stringify({
-      query: print(query),
+      query,
       variables,
     }),
     headers: {
