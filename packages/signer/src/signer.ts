@@ -6,7 +6,7 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import type { BytesLike } from 'ethers';
 import { hexlify, concat, getBytesCopy } from 'ethers';
 
-class Signer {
+export class Signer {
   readonly address: Address;
 
   readonly publicKey: string;
@@ -130,5 +130,3 @@ class Signer {
     return hexlify(point.toRawBytes(false).slice(1));
   }
 }
-
-export default Signer;
