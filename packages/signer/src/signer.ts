@@ -2,9 +2,14 @@ import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
+import { secp256k1 } from '@noble/curves/secp256k1';
+// import { etc, sign, getPublicKey } from '@noble/secp256k1';
 import * as elliptic from 'elliptic';
-import { hexlify, concat, getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
+import { hexlify, concat, getBytesCopy } from 'ethers';
+
+// polyfill
+// etc.hmacSha256Sync = (k, ...m) => hmac(sha256, k, etc.concatBytes(...m));
 
 /* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
  * which may not support all module.exports as named exports' error
@@ -42,17 +47,28 @@ class Signer {
         privateKey = `0x${privateKey}`;
       }
     }
-
     // Convert to byte array, normalize private key input allowing it to be BytesLike
     // like remove 0x prefix and accept array of bytes
-    const privateKeyBytes = getBytesCopy(privateKey);
-    const keyPair = getCurve().keyFromPrivate(privateKeyBytes, 'hex');
+    const privateKeyBytes = toBytes(privateKey, 32);
+    const publicKey = secp256k1.getPublicKey(privateKeyBytes, false);
+    const compressedPublicKey = secp256k1.getPublicKey(privateKeyBytes, true);
 
     // Slice(1) removes the encoding scheme from the public key
-    this.compressedPublicKey = hexlify(Uint8Array.from(keyPair.getPublic(true, 'array')));
-    this.publicKey = hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
+    this.compressedPublicKey = hexlify(compressedPublicKey);
+    //  hexlify(Uint8Array.from(keyPair.getPublic(true, 'array')));
+    this.publicKey = hexlify(publicKey.slice(1));
+    //  hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
     this.privateKey = hexlify(privateKeyBytes);
     this.address = Address.fromPublicKey(this.publicKey);
+  }
+
+  private static bigintToBytes(num: bigint) {
+    return Uint8Array.from(
+      num
+        .toString(2)
+        .split('')
+        .map((x) => parseInt(x, 10))
+    );
   }
 
   /**
@@ -64,15 +80,13 @@ class Signer {
    * @returns hashed signature
    */
   sign(data: BytesLike) {
-    const keyPair = getCurve().keyFromPrivate(getBytesCopy(this.privateKey), 'hex');
-    const signature = keyPair.sign(getBytesCopy(data), {
-      canonical: true,
-    });
-    const r = toBytes(signature.r, 32);
-    const s = toBytes(signature.s, 32);
+    const signature = secp256k1.sign(getBytesCopy(data), getBytesCopy(this.privateKey));
+
+    const r = toBytes(`0x${signature.r.toString(16)}`, 32);
+    const s = toBytes(`0x${signature.s.toString(16)}`, 32);
 
     // add recoveryParam to first s byte
-    s[0] |= (signature.recoveryParam || 0) << 7;
+    s[0] |= (signature.recovery || 0) << 7;
 
     return concat([r, s]);
   }
