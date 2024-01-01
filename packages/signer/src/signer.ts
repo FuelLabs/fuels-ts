@@ -157,7 +157,7 @@ class Signer {
    */
   static extendPublicKey(publicKey: BytesLike) {
     const point = secp256k1.ProjectivePoint.fromHex(getBytesCopy(publicKey));
-    return point.toHex(false);
+    return hexlify(point.toRawBytes(false).slice(1));
   }
 }
 
