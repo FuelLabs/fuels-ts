@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "xprebuild": "fuels build --deploy",
+    "xprebuild": "fuels build",
     "fuels:dev": "fuels dev",
     "dev": "next dev",
     "build": "pnpm run xprebuild && next build",
