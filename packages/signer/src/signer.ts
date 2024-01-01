@@ -98,11 +98,10 @@ class Signer {
    * @returns compressed point on the curve
    */
   addPoint(point: BytesLike) {
-    const p0 = getCurve().keyFromPublic(getBytesCopy(this.compressedPublicKey));
-    const p1 = getCurve().keyFromPublic(getBytesCopy(point));
-    const result = p0.getPublic().add(p1.getPublic());
-
-    return hexlify(Uint8Array.from(result.encode('array', true)));
+    const p0 = secp256k1.ProjectivePoint.fromHex(getBytesCopy(this.compressedPublicKey));
+    const p1 = secp256k1.ProjectivePoint.fromHex(getBytesCopy(point));
+    const result = p0.add(p1);
+    return `0x${result.toHex(true)}`;
   }
 
   /**
@@ -121,12 +120,12 @@ class Signer {
     // remove recoveryParam from s first byte
     s[0] &= 0x7f;
 
-    const publicKey = getCurve()
-      .recoverPubKey(getBytesCopy(data), { r, s }, recoveryParam)
-      .encode('array', false)
-      .slice(1);
+    const sig = new secp256k1.Signature(BigInt(hexlify(r)), BigInt(hexlify(s))).addRecoveryBit(
+      recoveryParam
+    );
 
-    return hexlify(Uint8Array.from(publicKey));
+    const publicKey = sig.recoverPublicKey(getBytesCopy(data)).toRawBytes(false).slice(1);
+    return hexlify(publicKey);
   }
 
   /**
@@ -157,8 +156,8 @@ class Signer {
    * @returns extended publicKey
    */
   static extendPublicKey(publicKey: BytesLike) {
-    const keyPair = getCurve().keyFromPublic(getBytesCopy(publicKey));
-    return hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
+    const point = secp256k1.ProjectivePoint.fromHex(getBytesCopy(publicKey));
+    return point.toHex(false);
   }
 }
 
