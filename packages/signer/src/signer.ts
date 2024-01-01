@@ -32,25 +32,13 @@ class Signer {
     // Convert to byte array, normalize private key input allowing it to be BytesLike
     // like remove 0x prefix and accept array of bytes
     const privateKeyBytes = toBytes(privateKey, 32);
-    const publicKey = secp256k1.getPublicKey(privateKeyBytes, false);
-    const compressedPublicKey = secp256k1.getPublicKey(privateKeyBytes, true);
+
+    this.privateKey = hexlify(privateKeyBytes);
 
     // Slice(1) removes the encoding scheme from the public key
-    this.compressedPublicKey = hexlify(compressedPublicKey);
-    //  hexlify(Uint8Array.from(keyPair.getPublic(true, 'array')));
-    this.publicKey = hexlify(publicKey.slice(1));
-    //  hexlify(Uint8Array.from(keyPair.getPublic(false, 'array').slice(1)));
-    this.privateKey = hexlify(privateKeyBytes);
+    this.publicKey = hexlify(secp256k1.getPublicKey(privateKeyBytes, false).slice(1));
+    this.compressedPublicKey = hexlify(secp256k1.getPublicKey(privateKeyBytes, true));
     this.address = Address.fromPublicKey(this.publicKey);
-  }
-
-  private static bigintToBytes(num: bigint) {
-    return Uint8Array.from(
-      num
-        .toString(2)
-        .split('')
-        .map((x) => parseInt(x, 10))
-    );
   }
 
   /**
