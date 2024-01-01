@@ -31,8 +31,5 @@
     "@fuel-ts/math": "workspace:*",
     "ethers": "^6.7.1",
     "@noble/curves": "^1.3.0"
-  },
-  "devDependencies": {
-    "@types/elliptic": "^6.4.14"
   }
 }

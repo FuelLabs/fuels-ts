@@ -1110,10 +1110,6 @@ importers:
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
-    devDependencies:
-      '@types/elliptic':
-        specifier: ^6.4.14
-        version: 6.4.14
 
   packages/transactions:
     dependencies:
@@ -8798,6 +8794,7 @@ packages:
     resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
     dependencies:
       '@types/node': 16.18.34
+    dev: false
 
   /@types/body-parser@1.19.2:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
@@ -8828,12 +8825,6 @@ packages:
     dependencies:
       '@types/node': 20.10.5
     dev: false
-
-  /@types/elliptic@6.4.14:
-    resolution: {integrity: sha512-z4OBcDAU0GVwDTuwJzQCiL6188QvZMkvoERgcVjq0/mPM8jCfdwZ3x5zQEVoL9WCAru3aG5wl3Z5Ww5wBWn7ZQ==}
-    dependencies:
-      '@types/bn.js': 5.1.1
-    dev: true
 
   /@types/eslint-scope@3.7.4:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
