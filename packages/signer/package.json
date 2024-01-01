@@ -29,7 +29,6 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "elliptic": "^6.5.4",
     "ethers": "^6.7.1",
     "@noble/curves": "^1.3.0"
   },

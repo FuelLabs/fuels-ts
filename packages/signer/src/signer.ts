@@ -3,26 +3,8 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
 import { toBytes } from '@fuel-ts/math';
 import { secp256k1 } from '@noble/curves/secp256k1';
-// import { etc, sign, getPublicKey } from '@noble/secp256k1';
-import * as elliptic from 'elliptic';
 import type { BytesLike } from 'ethers';
 import { hexlify, concat, getBytesCopy } from 'ethers';
-
-// polyfill
-// etc.hmacSha256Sync = (k, ...m) => hmac(sha256, k, etc.concatBytes(...m));
-
-/* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
- * which may not support all module.exports as named exports' error
- * @see https://github.com/FuelLabs/fuels-ts/issues/841
- */
-const { ec: EC } = elliptic;
-
-/**
- * Return elliptic instance with curve secp256k1
- */
-export function getCurve() {
-  return new EC('secp256k1');
-}
 
 class Signer {
   readonly address: Address;
