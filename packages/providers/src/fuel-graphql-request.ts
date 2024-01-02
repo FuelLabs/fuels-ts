@@ -10,7 +10,19 @@ function isSubscription(query: DocumentNode) {
   return opDefinition?.operation === 'subscription';
 }
 
-export async function fuelGraphQLRequest(
+async function handleQueryAndMutation(fetchFn: typeof fetch, url: string, request: RequestInit) {
+  const response = await fetchFn(url, request);
+
+  const { data, errors } = await response.json();
+
+  if (errors) {
+    throw new Error(JSON.stringify(errors));
+  }
+
+  return data;
+}
+
+export function fuelGraphQLRequest(
   fetchFn: typeof fetch,
   url: string,
   operation: DocumentNode,
@@ -32,13 +44,5 @@ export async function fuelGraphQLRequest(
     });
   }
 
-  const response = await fetchFn(url, request);
-
-  const { data, errors } = await response.json();
-
-  if (errors) {
-    throw new Error(JSON.stringify(errors));
-  }
-
-  return data;
+  return handleQueryAndMutation(fetchFn, url, request);
 }
