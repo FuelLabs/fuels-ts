@@ -27,7 +27,6 @@ describe('launchNode', () => {
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
         chainConfigPath,
-        args: ['--poa-instant', 'true'],
       },
     });
 

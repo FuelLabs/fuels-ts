@@ -1033,7 +1033,7 @@ importers:
         version: link:../utils
       '@graphql-codegen/cli':
         specifier: ^2.13.7
-        version: 2.13.7(@babel/core@7.23.6)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.2)(typescript@5.2.2)
+        version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
       '@graphql-codegen/typescript':
         specifier: ^2.8.0
         version: 2.8.0(graphql@16.6.0)
@@ -1214,6 +1214,9 @@ importers:
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
@@ -4630,7 +4633,7 @@ packages:
     resolution: {integrity: sha512-5e0IDHen26hrKc93ejYNDhQFbqi+EQ7xPpFJcUnSrz0+6zPdPhA2dtwh5UqN0fYDM5AcEFd0wpq+r7Pd2XS5AQ==}
     dev: false
 
-  /@graphql-codegen/cli@2.13.7(@babel/core@7.23.6)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.2)(typescript@5.2.2):
+  /@graphql-codegen/cli@2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2):
     resolution: {integrity: sha512-Rpk4WWrDgkDoVELftBr7/74MPiYmCITEF2+AWmyZZ2xzaC9cO2PqzZ+OYDEBNWD6UEk0RrIfVSa+slDKjhY59w==}
     hasBin: true
     peerDependencies:
@@ -4642,9 +4645,9 @@ packages:
       '@graphql-codegen/core': 2.6.2(graphql@16.6.0)
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.6.0)
       '@graphql-tools/apollo-engine-loader': 7.3.26(graphql@16.6.0)
-      '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.23.6)(graphql@16.6.0)
-      '@graphql-tools/git-loader': 7.3.0(@babel/core@7.23.6)(graphql@16.6.0)
-      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.23.6)(@types/node@20.10.5)(graphql@16.6.0)
+      '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.23.3)(graphql@16.6.0)
+      '@graphql-tools/git-loader': 7.3.0(@babel/core@7.23.3)(graphql@16.6.0)
+      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)
       '@graphql-tools/graphql-file-loader': 7.5.17(graphql@16.6.0)
       '@graphql-tools/json-file-loader': 7.4.18(graphql@16.6.0)
       '@graphql-tools/load': 7.8.14(graphql@16.6.0)
@@ -4656,7 +4659,7 @@ packages:
       chalk: 4.1.2
       chokidar: 3.5.3
       cosmiconfig: 7.1.0
-      cosmiconfig-typescript-loader: 4.1.1(@types/node@20.10.5)(cosmiconfig@7.1.0)(ts-node@10.9.2)(typescript@5.2.2)
+      cosmiconfig-typescript-loader: 4.1.1(@types/node@20.10.5)(cosmiconfig@7.1.0)(ts-node@10.9.1)(typescript@5.2.2)
       debounce: 1.2.1
       detect-indent: 6.1.0
       graphql: 16.6.0
@@ -4968,14 +4971,14 @@ packages:
       - supports-color
     dev: true
 
-  /@graphql-tools/github-loader@7.3.28(@babel/core@7.23.6)(@types/node@20.10.5)(graphql@16.6.0):
+  /@graphql-tools/github-loader@7.3.28(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0):
     resolution: {integrity: sha512-OK92Lf9pmxPQvjUNv05b3tnVhw0JRfPqOf15jZjyQ8BfdEUrJoP32b4dRQQem/wyRL24KY4wOfArJNqzpsbwCA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@ardatan/sync-fetch': 0.0.1
       '@graphql-tools/executor-http': 0.1.10(@types/node@20.10.5)(graphql@16.6.0)
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.23.6)(graphql@16.6.0)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.23.3)(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       '@whatwg-node/fetch': 0.8.8
       graphql: 16.6.0
@@ -11701,7 +11704,7 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /cosmiconfig-typescript-loader@4.1.1(@types/node@20.10.5)(cosmiconfig@7.1.0)(ts-node@10.9.2)(typescript@5.2.2):
+  /cosmiconfig-typescript-loader@4.1.1(@types/node@20.10.5)(cosmiconfig@7.1.0)(ts-node@10.9.1)(typescript@5.2.2):
     resolution: {integrity: sha512-9DHpa379Gp0o0Zefii35fcmuuin6q92FnLDffzdZ0l9tVd3nEobG3O+MZ06+kuBvFTSVScvNb/oHA13Nd4iipg==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
@@ -11712,7 +11715,7 @@ packages:
     dependencies:
       '@types/node': 20.10.5
       cosmiconfig: 7.1.0
-      ts-node: 10.9.2(@types/node@20.10.5)(typescript@5.2.2)
+      ts-node: 10.9.1(@types/node@20.10.5)(typescript@5.2.2)
       typescript: 5.2.2
     dev: true
 
@@ -21650,39 +21653,8 @@ packages:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 20.10.5
-      acorn: 8.11.2
-      acorn-walk: 8.3.1
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 5.2.2
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: true
-
-  /ts-node@10.9.2(@types/node@20.10.5)(typescript@5.2.2):
-    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 20.10.5
-      acorn: 8.11.2
-      acorn-walk: 8.3.1
+      acorn: 8.9.0
+      acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1
       diff: 4.0.2

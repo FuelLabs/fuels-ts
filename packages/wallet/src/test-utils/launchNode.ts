@@ -6,7 +6,7 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { hexlify } from 'ethers';
-import fsSync from 'fs';
+import fsSync, { existsSync } from 'fs';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
@@ -18,7 +18,8 @@ import type { WalletUnlocked } from '../wallets';
 import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
 
-const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation'];
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const npmWhich = require('npm-which')(__dirname);
 
 type LaunchNodeOptions = {
   chainConfigPath?: string;
@@ -27,6 +28,10 @@ type LaunchNodeOptions = {
   port?: string;
   args?: string[];
   useSystemFuelCore?: boolean;
+  useInMemoryDb?: boolean;
+  loggingEnabled?: boolean;
+  debugEnabled?: boolean;
+  basePath?: string;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -42,6 +47,17 @@ export type KillNodeParams = {
   state: {
     isDead: boolean;
   };
+};
+
+const findBinPath = (binCommandName: string) => {
+  let binPath = npmWhich.sync(binCommandName);
+
+  if (!existsSync(binPath)) {
+    // The user might be using bun, which has a different structure for binaries inside node_modules
+    binPath = path.join('node_modules', '.bin', binCommandName);
+  }
+
+  return binPath;
 };
 
 export const killNode = (params: KillNodeParams) => {
@@ -72,6 +88,10 @@ export const killNode = (params: KillNodeParams) => {
  * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core.
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
+ * @param useInMemoryDb - whether to use an in-memory database or a file-based one.
+ * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
+ * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
+ * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
  * */
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
@@ -79,15 +99,21 @@ export const launchNode = async ({
   consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   ip,
   port,
-  args = defaultFuelCoreArgs,
+  args = [],
   useSystemFuelCore = false,
+  useInMemoryDb = true,
+  loggingEnabled = false,
+  debugEnabled = false,
+  basePath,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+    const binPath = await findBinPath('fuels-core');
+
+    const command = useSystemFuelCore ? 'fuel-core' : binPath;
 
     const ipToUse = ip || '0.0.0.0';
 
@@ -102,13 +128,13 @@ export const launchNode = async ({
 
     let chainConfigPathToUse = chainConfigPath;
 
-    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    const tempDirPath = path.join(basePath || os.tmpdir(), '.fuels', basePath ? '' : randomUUID());
 
     if (!chainConfigPath) {
       if (!fsSync.existsSync(tempDirPath)) {
         fsSync.mkdirSync(tempDirPath, { recursive: true });
       }
-      const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
+      const tempChainConfigFilePath = path.join(tempDirPath, 'chainConfig.json');
 
       let chainConfig = defaultChainConfig;
 
@@ -140,20 +166,36 @@ export const launchNode = async ({
       chainConfigPathToUse = tempChainConfigFilePath;
     }
 
-    const child = spawn(command, [
-      'run',
-      '--ip',
-      ipToUse,
-      '--port',
-      portToUse,
-      '--db-type',
-      'in-memory',
-      '--consensus-key',
-      consensusKey,
-      '--chain',
-      chainConfigPathToUse as string,
-      ...args,
-    ]);
+    const child = spawn(
+      command,
+      [
+        'run',
+        ['--ip', ipToUse],
+        ['--port', portToUse],
+        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
+        ['--min-gas-price', '0'],
+        ['--poa-instant', 'true'],
+        ['--consensus-key', consensusKey],
+        ['--chain', chainConfigPathToUse as string],
+        '--vm-backtrace',
+        '--utxo-validation',
+        '--debug',
+        ...args,
+      ].flat(),
+      {
+        stdio: 'pipe',
+      }
+    );
+
+    child.stderr.setEncoding('utf8');
+
+    if (loggingEnabled) {
+      child.stderr.pipe(process.stderr);
+    }
+
+    if (debugEnabled) {
+      child.stdout.pipe(process.stdout);
+    }
 
     const cleanupConfig: KillNodeParams = {
       child,
@@ -163,8 +205,6 @@ export const launchNode = async ({
         isDead: false,
       },
     };
-
-    child.stderr.setEncoding('utf8');
 
     // Look for a specific graphql start point in the output.
     child.stderr.on('data', (chunk: string) => {
@@ -183,17 +223,18 @@ export const launchNode = async ({
     });
 
     // Process exit.
-    process.on('exit', killNode);
+    process.on('exit', () => killNode(cleanupConfig));
 
     // Catches ctrl+c event.
-    process.on('SIGINT', killNode);
+    process.on('SIGINT', () => killNode(cleanupConfig));
 
     // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', killNode);
-    process.on('SIGUSR2', killNode);
+    process.on('SIGUSR1', () => killNode(cleanupConfig));
+    process.on('SIGUSR2', () => killNode(cleanupConfig));
 
     // Catches uncaught exceptions.
-    process.on('uncaughtException', killNode);
+    process.on('beforeExit', () => killNode(cleanupConfig));
+    process.on('uncaughtException', () => killNode(cleanupConfig));
 
     child.on('error', reject);
   });

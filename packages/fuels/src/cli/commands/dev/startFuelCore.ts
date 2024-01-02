@@ -1,14 +1,12 @@
+import { launchNode } from '@fuel-ts/wallet/test-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
-import { spawn } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { getPortPromise } from 'portfinder';
-import treeKill from 'tree-kill';
 
 import type { FuelsConfig } from '../../types';
-import { findBinPath } from '../../utils/findBinPath';
 import { getBinarySource } from '../../utils/getBinarySource';
-import { error, log, loggingConfig } from '../../utils/logger';
+import { log, loggingConfig } from '../../utils/logger';
 
 import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
 
@@ -58,59 +56,24 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
 
   const providerUrl = `http://${accessIp}:${port}/graphql`;
 
-  const flags = [
-    'run',
-    ['--ip', bindIp],
-    ['--port', port.toString()],
-    ['--db-path', coreDir],
-    ['--min-gas-price', '0'],
-    ['--poa-instant', 'true'],
-    ['--consensus-key', defaultConsensusKey],
-    ['--chain', chainConfig],
-    '--vm-backtrace',
-    '--utxo-validation',
-    '--debug',
-  ].flat();
-
-  return new Promise((resolve, reject) => {
-    const builtInFuelsCorePath = findBinPath('fuels-core');
-
-    const command = config.useBuiltinFuelCore ? builtInFuelsCorePath : 'fuel-core';
-    const core = spawn(command, flags, { stdio: 'pipe' });
-
-    if (loggingConfig.isLoggingEnabled) {
-      core.stderr.pipe(process.stderr);
-    }
-
-    if (loggingConfig.isDebugEnabled) {
-      core.stdout.pipe(process.stdout);
-    }
-
-    const state = { isDead: false };
-    const killChildProcess = killNode({ core, state, killFn: treeKill });
-
-    process.on('beforeExit', killChildProcess);
-    process.on('uncaughtException', killChildProcess);
-
-    core.stderr?.on('data', (data) => {
-      if (/Binding GraphQL provider to/.test(data)) {
-        resolve({
-          bindIp,
-          accessIp,
-          port,
-          providerUrl,
-          killChildProcess,
-          chainConfig,
-        });
-      }
-      if (/error/i.test(data)) {
-        error(
-          `Some error occurred. Please, check to see if you have another instance running locally.`
-        );
-        reject(data.toString());
-      }
-    });
-
-    core.on('error', reject);
+  const { cleanup } = await launchNode({
+    chainConfigPath: chainConfig,
+    consensusKey: defaultConsensusKey,
+    ip: bindIp,
+    port: port.toString(),
+    loggingEnabled: loggingConfig.isLoggingEnabled,
+    debugEnabled: loggingConfig.isDebugEnabled,
+    useInMemoryDb: false,
+    basePath: config.basePath,
+    useSystemFuelCore: !config.useBuiltinFuelCore,
   });
+
+  return {
+    bindIp,
+    accessIp,
+    port,
+    providerUrl,
+    chainConfig,
+    killChildProcess: cleanup,
+  };
 };
