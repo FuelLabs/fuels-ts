@@ -86,8 +86,8 @@ export const runScaffoldCli = async (
   log(`- Run the frontend: ${packageManager} ${packageManager === 'npm' ? 'run ' : ''}dev`);
   log();
   log();
-  log('-> TS SDK docs: https://fuellabs.github.io/fuels-ts/');
-  log('-> Sway docs: https://fuellabs.github.io/sway/');
+  log('-> TS SDK docs: https://docs.fuel.network/docs/fuels-ts/');
+  log('-> Sway docs: https://docs.fuel.network/docs/sway/');
   log('-> If you have any questions, check the Fuel forum: https://forum.fuel.network/');
   log();
   log();

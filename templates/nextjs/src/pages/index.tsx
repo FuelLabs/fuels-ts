@@ -86,6 +86,16 @@ export default function Home() {
       >
         Increment Counter
       </Button>
+
+      <Link
+        href="https://docs.fuel.network"
+        target="_blank"
+        style={{
+          marginTop: 48,
+        }}
+      >
+        Fuel Docs
+      </Link>
     </VStack>
   );
 }
