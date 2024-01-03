@@ -104,7 +104,6 @@ describe('Account', () => {
   });
 
   it('getResourcesToSpend should work with <1 amount', async () => {
-    // #region Message-getResourcesToSpend
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -116,7 +115,6 @@ describe('Account', () => {
       },
     ]);
     expect(resourcesToSpend[0].amount.gte(1)).toBeTruthy();
-    // #endregion Message-getResourcesToSpend
   });
 
   it('should get messages just fine', async () => {
