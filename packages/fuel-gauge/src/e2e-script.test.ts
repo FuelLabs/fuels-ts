@@ -86,7 +86,8 @@ describe('Live Script Test', () => {
 
     let output: BN = bn(0);
     try {
-      const { value } = await scriptInstance.functions
+      const { minGasPrice } = provider.getGasConfig();
+      const callScope = scriptInstance.functions
         .main(
           U32_VEC,
           VEC_IN_VEC,
@@ -101,7 +102,15 @@ describe('Live Script Test', () => {
           VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
         )
         .txParams({
-          gasPrice: 1,
+          gasLimit: 100_000,
+          gasPrice: minGasPrice,
+        });
+
+      const { gasUsed } = await callScope.dryRun();
+
+      const { value } = await callScope
+        .txParams({
+          gasLimit: gasUsed,
         })
         .call();
 
