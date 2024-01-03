@@ -8,7 +8,7 @@ In the code example, we connected a new provider to the Testnet node and created
 
 > **Note:** New wallets on the Testnet will not have any assets! They can be obtained by providing the wallet address to the faucet at
 >
-> [faucet-beta-4.fuel.network](https://faucet-beta-4.fuel.network/)
+> [faucet-beta-4.fuel.network](https://faucet-beta-5.fuel.network/)
 >
 > Once the assets have been transferred to the wallet, you can reuse it in other tests by providing the private key!
 >
