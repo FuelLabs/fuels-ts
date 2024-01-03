@@ -24,7 +24,7 @@ export class U64Coder extends Coder<BNInput, BN> {
   }
 
   decode(data: Uint8Array, offset: number): [BN, number] {
-    if (data.length < WORD_SIZE) {
+    if (data.length < this.encodedLength) {
       this.throwError(ErrorCode.DECODE_ERROR, 'Invalid u64 data size.');
     }
     const byteData = data.slice(offset, offset + this.encodedLength);

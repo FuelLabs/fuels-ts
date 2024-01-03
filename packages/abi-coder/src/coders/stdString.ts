@@ -51,7 +51,7 @@ export class StdStringCoder extends Coder<string, string> {
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    if (data.length < BASE_VECTOR_OFFSET) {
+    if (data.length < this.encodedLength) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid std string data size.`);
     }
 

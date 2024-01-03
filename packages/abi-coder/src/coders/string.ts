@@ -27,7 +27,7 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    if (data.length < this.length) {
+    if (data.length < this.encodedLength) {
       this.throwError(ErrorCode.DECODE_ERROR, 'Invalid string data size.');
     }
 
