@@ -24,6 +24,8 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
 } from './__generated__/operations';
+import type { RetryOptions } from './call-retrier';
+import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
