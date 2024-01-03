@@ -1,5 +1,6 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
+import type { RetryOptions } from '../src/call-retrier';
 import Provider from '../src/provider';
 
 // TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
@@ -37,7 +38,7 @@ describe('Retries correctly', () => {
   });
 
   const maxRetries = 4;
-  const duration = 150;
+  const baseDuration = 150;
 
   function assertBackoff(callTime: number, index: number, arr: number[], expectedWaitTime: number) {
     if (index === 0) {
@@ -55,9 +56,10 @@ describe('Retries correctly', () => {
   }
 
   test('fixed backoff', async () => {
-    const retryOptions = { maxRetries, baseDuration: duration, backoff: 'fixed' as const };
+    const retryOptions: RetryOptions = { maxRetries, baseDuration, backoff: 'fixed' };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
+
     const callTimes: number[] = [];
 
     mockFetch(maxRetries, callTimes);
@@ -69,7 +71,7 @@ describe('Retries correctly', () => {
     expect(chainInfo.chain.name).toEqual(expectedChainInfo.chain.name);
     expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
-    callTimes.forEach((callTime, index) => assertBackoff(callTime, index, callTimes, duration));
+    callTimes.forEach((callTime, index) => assertBackoff(callTime, index, callTimes, baseDuration));
   });
 
   test('linear backoff', async () => {
@@ -91,17 +93,21 @@ describe('Retries correctly', () => {
     expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
-      assertBackoff(callTime, index, callTimes, duration * index)
+      assertBackoff(callTime, index, callTimes, baseDuration * index)
     );
   });
 
   test('exponential backoff', async () => {
-    const retryOptions = {
+    // #region provider-retry-options
+    const retryOptions: RetryOptions = {
       maxRetries,
-      backoff: 'exponential' as const,
+      baseDuration,
+      backoff: 'exponential',
     };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
+    // #endregion provider-retry-options
+
     const callTimes: number[] = [];
 
     mockFetch(maxRetries, callTimes);
@@ -114,7 +120,7 @@ describe('Retries correctly', () => {
     expect(callTimes.length - 1).toBe(maxRetries); // callTimes.length - 1 is for the initial call that's not a retry so we ignore it
 
     callTimes.forEach((callTime, index) =>
-      assertBackoff(callTime, index, callTimes, duration * (2 ^ (index - 1)))
+      assertBackoff(callTime, index, callTimes, baseDuration * (2 ^ (index - 1)))
     );
   });
 
