@@ -6,11 +6,9 @@ import { WORD_SIZE } from '../constants';
 
 import { Coder } from './abstract-coder';
 
-const encodedLength = WORD_SIZE * 4;
-
 export class B256Coder extends Coder<string, string> {
   constructor() {
-    super('b256', 'b256', encodedLength);
+    super('b256', 'b256', WORD_SIZE * 4);
   }
 
   encode(value: string): Uint8Array {
@@ -20,26 +18,25 @@ export class B256Coder extends Coder<string, string> {
     } catch (error) {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
-    if (encodedValue.length !== encodedLength) {
+    if (encodedValue.length !== this.encodedLength) {
       this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     return encodedValue;
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    if (data.length < encodedLength) {
+    if (data.length < this.encodedLength) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid b256 data size.`);
     }
 
-    const byteDataLength = encodedLength;
-    let bytes = data.slice(offset, offset + byteDataLength);
+    let bytes = data.slice(offset, offset + this.encodedLength);
 
     const decoded = bn(bytes);
     if (decoded.isZero()) {
       bytes = new Uint8Array(32);
     }
 
-    if (bytes.length !== byteDataLength) {
+    if (bytes.length !== this.encodedLength) {
       this.throwError(ErrorCode.DECODE_ERROR, `Invalid b256 byte data size.`);
     }
 

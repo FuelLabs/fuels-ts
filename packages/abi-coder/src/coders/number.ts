@@ -87,11 +87,10 @@ export class NumberCoder extends Coder<number, number> {
       return this.decodeU8(data, offset);
     }
 
-    const byteDataLength = this.paddingLength;
-    let bytes = data.slice(offset, offset + byteDataLength);
+    let bytes = data.slice(offset, offset + this.paddingLength);
     bytes = bytes.slice(8 - this.length, 8);
 
-    if (bytes.length !== byteDataLength - (this.paddingLength - this.length)) {
+    if (bytes.length !== this.paddingLength - (this.paddingLength - this.length)) {
       this.throwError(ErrorCode.DECODE_ERROR, 'Invalid number byte data size.');
     }
 

@@ -59,11 +59,10 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     }
 
     const len = data.slice(16, 24);
-    const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
-    const byteDataLength = length;
-    const byteData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + byteDataLength);
+    const encodedLength = bn(new U64Coder().decode(len, 0)[0]).toNumber();
+    const byteData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + encodedLength);
 
-    if (byteData.length !== byteDataLength) {
+    if (byteData.length !== encodedLength) {
       this.throwError(ErrorCode.DECODE_ERROR, 'Invalid bytes byte data size.');
     }
 

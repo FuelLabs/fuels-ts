@@ -31,10 +31,9 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
       this.throwError(ErrorCode.DECODE_ERROR, 'Invalid string data size.');
     }
 
-    const byteDataLength = this.length;
-    const bytes = data.slice(offset, offset + byteDataLength);
+    const bytes = data.slice(offset, offset + this.length);
 
-    if (bytes.length !== byteDataLength) {
+    if (bytes.length !== this.length) {
       this.throwError(ErrorCode.DECODE_ERROR, 'Invalid string byte data size.');
     }
 

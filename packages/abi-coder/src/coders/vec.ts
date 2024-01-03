@@ -54,8 +54,8 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     }
 
     const len = data.slice(16, 24);
-    const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
-    const vectorRawDataLength = length * this.coder.encodedLength;
+    const encodedLength = bn(new U64Coder().decode(len, 0)[0]).toNumber();
+    const vectorRawDataLength = encodedLength * this.coder.encodedLength;
     const vectorRawData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + vectorRawDataLength);
 
     if (vectorRawData.length !== vectorRawDataLength) {
