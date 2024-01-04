@@ -18,8 +18,6 @@ import { encryptKeystoreWallet } from './keystore-wallet';
 export class BaseWalletUnlocked extends Account {
   /**
    * Default HDWallet path.
-   *
-   * @todo ask what this value means...
    */
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 
