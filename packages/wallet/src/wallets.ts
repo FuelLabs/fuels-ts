@@ -60,11 +60,11 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a seed.
    *
    * @param seed - The seed phrase.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @param path - The derivation path (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static fromSeed(seed: string, provider: Provider, path?: string): WalletUnlocked {
+  static fromSeed(seed: string, provider?: Provider, path?: string): WalletUnlocked {
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
 

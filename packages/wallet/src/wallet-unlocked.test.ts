@@ -160,6 +160,12 @@ describe('WalletUnlocked', () => {
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
       expect(wallet.provider.url).toBe(walletSpec.providerUrl);
     });
+
+    it('Create wallet from seed with default path, without a provider', () => {
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+    });
   });
 
   describe('WalletUnlocked.fromMnemonic', () => {
@@ -184,7 +190,7 @@ describe('WalletUnlocked', () => {
     });
   });
 
-  describe('WalletUnlocked.fromMnemonic', () => {
+  describe('WalletUnlocked.extendedKey', () => {
     it('Create wallet from extendedKey', async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL);
       const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
