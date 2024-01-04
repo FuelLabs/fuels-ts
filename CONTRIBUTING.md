@@ -149,7 +149,7 @@ The CI e2e test utilizes the following wallet details:
 - Adding Assets to the Wallet:
   https://faucet-beta-5.fuel.network/
 
-- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg
+<!-- TODO: add/fix block explorer URL after beta-5 support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
 
 # Commit Convention
 
