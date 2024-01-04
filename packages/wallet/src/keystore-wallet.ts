@@ -11,7 +11,6 @@ import {
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { hexlify } from 'ethers';
-import { v4 as uuidv4 } from 'uuid';
 
 export type KeystoreWallet = {
   id: string;
@@ -90,7 +89,7 @@ export async function encryptKeystoreWallet(
 
   // Construct keystore.
   const keystore: KeystoreWallet = {
-    id: uuidv4(),
+    id: crypto.randomUUID(),
     version: 3,
     address: removeHexPrefix(ownerAddress.toHexString()),
     crypto: {
