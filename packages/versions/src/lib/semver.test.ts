@@ -1,5 +1,8 @@
 import { eq, gt, majorEq, minorEq, patchEq } from './semver';
 
+/**
+ * @group node
+ */
 describe('semver', () => {
   test('majorEq', () => {
     expect(majorEq('1.2.3', '1.2.3')).toBe(true);
