@@ -20,7 +20,7 @@ describe('Wallet', () => {
     gasPrice = provider.getGasConfig().minGasPrice;
   });
 
-  describe('WalletLocked', () => {
+  describe('WalletLocked.constructor', () => {
     it('should instatiate from a constructor', () => {
       const lockedWallet = new WalletLocked(wallet.address, provider);
 
@@ -33,7 +33,9 @@ describe('Wallet', () => {
       expect(lockedWallet.address).toStrictEqual(wallet.address);
       expect(lockedWallet).toBeInstanceOf(WalletLocked);
     });
+  });
 
+  describe('WalletLocked.fromAddress', () => {
     it('should instantiate from an address', () => {
       const lockedWallet = Wallet.fromAddress(wallet.address, provider);
 
@@ -47,7 +49,9 @@ describe('Wallet', () => {
       expect(lockedWallet.address).toStrictEqual(wallet.address);
       expect(lockedWallet).toBeInstanceOf(WalletLocked);
     });
+  });
 
+  describe('WalletLocked.unlock', () => {
     it('should be able to unlock a locked wallet', () => {
       const lockedWallet = Wallet.fromAddress(wallet.address, provider);
       expect(lockedWallet).toBeInstanceOf(WalletLocked);
@@ -60,7 +64,7 @@ describe('Wallet', () => {
     });
   });
 
-  describe('WalletUnlocked', () => {
+  describe('WalletUnlocked.constructor', () => {
     it('Should instatiate from a constructor', () => {
       const unlockedWallet = new WalletUnlocked(wallet.privateKey, provider);
 
@@ -75,7 +79,12 @@ describe('Wallet', () => {
       expect(() => unlockedWallet.provider).toThrowError('Provider not set');
       expect(unlockedWallet).toBeInstanceOf(WalletUnlocked);
     });
+  });
 
+  /**
+   * @see {@link WalletUnlocked.fromPrivateKey}
+   */
+  describe('WalletUnlocked.fromPrivateKey', () => {
     it('Should instantiate fromPrivateKey', () => {
       const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey, provider);
 
@@ -90,7 +99,12 @@ describe('Wallet', () => {
       expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
       expect(() => unlockedWallet.provider).toThrowError('Provider not set');
     });
+  });
 
+  /**
+   * @see {@link WalletUnlocked.generate}
+   */
+  describe('WalletUnlocked.generate', () => {
     it('Should instantiate from generate', () => {
       const unlockedWallet = WalletUnlocked.generate({ provider });
 
