@@ -26,7 +26,7 @@ export class WalletLocked extends Account {
    */
   unlock(privateKey: BytesLike): WalletUnlocked {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return new WalletUnlocked(privateKey, this.provider);
+    return new WalletUnlocked(privateKey, this._provider);
   }
 }
 
@@ -41,7 +41,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    */
   lock(): WalletLocked {
     this.signer = () => new Signer('0x00');
-    return new WalletLocked(this.address, this.provider);
+    return new WalletLocked(this.address, this._provider);
   }
 
   /**
