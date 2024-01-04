@@ -75,14 +75,14 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a mnemonic phrase.
    *
    * @param mnemonic - The mnemonic phrase.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
    * @returns An instance of WalletUnlocked.
    */
   static fromMnemonic(
     mnemonic: string,
-    provider: Provider,
+    provider?: Provider,
     path?: string,
     passphrase?: BytesLike
   ): WalletUnlocked {
