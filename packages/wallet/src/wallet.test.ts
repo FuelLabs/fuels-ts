@@ -72,7 +72,7 @@ describe('Wallet', () => {
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
       expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
-      expect(unlockedWallet).toBeInstanceOf(WalletLocked);
+      expect(unlockedWallet).toBeInstanceOf(WalletUnlocked);
     });
 
     it('Should instantiate fromPrivateKey', () => {
