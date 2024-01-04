@@ -104,6 +104,9 @@ describe('Wallet', () => {
     });
   });
 
+  /**
+   * @see {@link WalletUnlocked.fromEncryptedJson}
+   */
   describe('Wallet.fromEncryptedJson', () => {
     it('should encrypt and decrypt a JSON wallet', async () => {
       wallet = WalletUnlocked.generate({
@@ -117,6 +120,17 @@ describe('Wallet', () => {
       expect(decryptedWallet.address).toStrictEqual(wallet.address);
       expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
       expect(decryptedWallet.address.toB256()).toEqual(wallet.address.toB256());
+    });
+
+    it('should encrypt and decrypt a JSON wallet, without a provider', async () => {
+      wallet = WalletUnlocked.generate();
+      const password = 'password';
+      const jsonWallet = await wallet.encrypt(password);
+
+      const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password);
+
+      expect(decryptedWallet.address).toStrictEqual(wallet.address);
+      expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
     });
 
     it('Should fail to decrypt JSON wallet for a given wrong password', async () => {

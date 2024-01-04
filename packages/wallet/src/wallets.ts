@@ -117,7 +117,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
   static async fromEncryptedJson(
     jsonWallet: string,
     password: string,
-    provider: Provider
+    provider?: Provider
   ): Promise<WalletUnlocked> {
     const privateKey = await decryptKeystoreWallet(jsonWallet, password);
 
