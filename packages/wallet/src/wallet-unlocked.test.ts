@@ -205,7 +205,7 @@ describe('WalletUnlocked', () => {
       expect(wallet.provider.url).toBe(walletSpec.providerUrl);
     });
 
-    it('Create wallet from extendedKey', () => {
+    it('Create wallet from extendedKey, without provider', () => {
       const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv);
 
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
