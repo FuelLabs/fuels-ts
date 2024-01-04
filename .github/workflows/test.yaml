@@ -145,5 +145,5 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
+          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
           FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}

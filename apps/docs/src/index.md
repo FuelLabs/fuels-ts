@@ -68,7 +68,7 @@ console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
 import abi from "./abi.json";
 
-const provider = await Provider.create('https://beta-4.fuel.network/graphql');
+const provider = await Provider.create('https://beta-5.fuel.network/graphql');
 const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider); // private key with coins
 const contractId = "0x...";
 const contract = new Contract(contractId, abi, wallet);
