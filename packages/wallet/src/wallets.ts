@@ -97,10 +97,10 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from an extended key.
    *
    * @param extendedKey - The extended key.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static fromExtendedKey(extendedKey: string, provider: Provider): WalletUnlocked {
+  static fromExtendedKey(extendedKey: string, provider?: Provider): WalletUnlocked {
     const hdWallet = HDWallet.fromExtendedKey(extendedKey);
 
     return new WalletUnlocked(<string>hdWallet.privateKey, provider);
