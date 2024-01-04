@@ -249,11 +249,10 @@ describe('Doc Examples', () => {
     // #endregion wallet-setup
   });
 
-  // TODO: Stop skipping test after beta 5 url released
-  it.skip('can connect to testnet', async () => {
+  it('can connect to testnet', async () => {
     // #region provider-testnet
     // #context import { Provider, WalletUnlocked } from 'fuels';
-    const provider = await Provider.create('https://beta-4.fuel.network/graphql');
+    const provider = await Provider.create('https://beta-5.fuel.network/graphql');
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
