@@ -165,6 +165,7 @@ describe('WalletUnlocked', () => {
       const wallet = WalletUnlocked.fromSeed(walletSpec.seed);
 
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(() => wallet.provider).toThrowError('Provider not set');
     });
   });
 
@@ -193,6 +194,7 @@ describe('WalletUnlocked', () => {
       const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic);
 
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(() => wallet.provider).toThrowError('Provider not set');
     });
   });
 
@@ -209,6 +211,7 @@ describe('WalletUnlocked', () => {
       const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv);
 
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(() => wallet.provider).toThrowError('Provider not set');
     });
   });
 

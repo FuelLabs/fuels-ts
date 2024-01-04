@@ -72,6 +72,7 @@ describe('Wallet', () => {
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
       expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+      expect(() => unlockedWallet.provider).toThrowError('Provider not set');
       expect(unlockedWallet).toBeInstanceOf(WalletUnlocked);
     });
 
@@ -87,6 +88,7 @@ describe('Wallet', () => {
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
       expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+      expect(() => unlockedWallet.provider).toThrowError('Provider not set');
     });
 
     it('Should instantiate from generate', () => {
@@ -101,6 +103,7 @@ describe('Wallet', () => {
 
       expect(unlockedWallet.address).toBeDefined();
       expect(unlockedWallet.privateKey).toBeDefined();
+      expect(() => unlockedWallet.provider).toThrowError('Provider not set');
     });
   });
 
@@ -131,6 +134,7 @@ describe('Wallet', () => {
 
       expect(decryptedWallet.address).toStrictEqual(wallet.address);
       expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
+      expect(() => decryptedWallet.provider).toThrowError('Provider not set');
     });
 
     it('Should fail to decrypt JSON wallet for a given wrong password', async () => {
