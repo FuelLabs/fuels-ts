@@ -144,48 +144,54 @@ describe('WalletUnlocked', () => {
     expect(wallet.address).toEqual(recoveredAddress);
   });
 
-  it('Create wallet from seed', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
+  describe('WalletUnlocked.fromSeed', () => {
+    it('Create wallet from seed', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
 
-    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+      expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
+
+    it('Create wallet from seed with default path', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
   });
 
-  it('Create wallet from seed with default path', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
+  describe('WalletUnlocked.fromMnemonic', () => {
+    it('Create wallet from mnemonic', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromMnemonic(
+        walletSpec.mnemonic,
+        provider,
+        walletSpec.account_1.path,
+        undefined
+      );
 
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+      expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
+
+    it('Create wallet from mnemonic with default path', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, provider);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+    });
   });
 
-  it('Create wallet from mnemonic', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromMnemonic(
-      walletSpec.mnemonic,
-      provider,
-      walletSpec.account_1.path,
-      undefined
-    );
+  describe('WalletUnlocked.fromMnemonic', () => {
+    it('Create wallet from extendedKey', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
 
-    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
-  });
-
-  it('Create wallet from mnemonic with default path', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, provider);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-  });
-
-  it('Create wallet from extendedKey', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
   });
 
   it('Create wallet and lock it', async () => {
