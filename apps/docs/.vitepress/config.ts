@@ -240,6 +240,10 @@ export default defineConfig({
                 text: 'Querying the Chain',
                 link: '/guide/providers/querying-the-chain',
               },
+              {
+                text: 'Retrying calls',
+                link: '/guide/providers/retrying-calls',
+              },
             ],
           },
           {
