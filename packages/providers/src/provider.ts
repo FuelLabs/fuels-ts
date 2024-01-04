@@ -24,6 +24,8 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
 } from './__generated__/operations';
+import type { RetryOptions } from './call-retrier';
+import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -218,6 +220,7 @@ export type ProviderOptions = {
   ) => Promise<Response>;
   timeout?: number;
   cacheUtxo?: number;
+  retryOptions?: RetryOptions;
 };
 
 /**
@@ -279,17 +282,23 @@ export default class Provider {
     timeout: undefined,
     cacheUtxo: undefined,
     fetch: undefined,
+    retryOptions: undefined,
   };
 
-  private static getFetchFn(options: ProviderOptions) {
-    return options.fetch !== undefined
-      ? options.fetch
-      : (url: string, request: FetchRequestOptions) =>
-          fetch(url, {
-            ...request,
-            signal:
-              options.timeout !== undefined ? AbortSignal.timeout(options.timeout) : undefined,
-          });
+  private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
+    const { retryOptions, timeout } = options;
+
+    return retrier((...args) => {
+      if (options.fetch) {
+        return options.fetch(...args);
+      }
+
+      const url = args[0];
+      const request = args[1];
+      const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
+
+      return fetch(url, { ...request, signal });
+    }, retryOptions);
   }
 
   /**
