@@ -119,6 +119,20 @@ describe('Account', () => {
     // #endregion Message-getResourcesToSpend
   });
 
+  it('getResourcesToSpend should work with <1 amount', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+    const resourcesToSpend = await account.getResourcesToSpend([
+      {
+        amount: 0.9,
+        assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+      },
+    ]);
+    expect(resourcesToSpend[0].amount.gte(1)).toBeTruthy();
+  });
+
   it('should get messages just fine', async () => {
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
@@ -269,9 +283,15 @@ describe('Account', () => {
       coinQuantities: quantities,
     });
 
-    const expectedTotalResources = [quantities[0], { amount: bn(fee), assetId: BaseAssetId }];
+    const expectedTotalResources = [
+      { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
+      { amount: bn(fee), assetId: BaseAssetId },
+    ];
     expect(getResourcesToSpendSpy).toBeCalledTimes(1);
-    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources);
+    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
+      messages: [],
+      utxos: [],
+    });
 
     expect(addResourcesSpy).toBeCalledTimes(1);
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);

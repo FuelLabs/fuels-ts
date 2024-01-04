@@ -18,6 +18,21 @@ pnpm add fuels
 
 :::
 
+### Note
+
+If you are using bun, you'll need to add a `trustedDependencies` field to your `package.json`:
+
+```json
+{
+  // ...
+  "trustedDependencies": ["@fuel-ts/fuel-core", "@fuel-ts/forc"]
+}
+```
+
+This is to ensure that bun includes the `fuel-core` and `forc` binaries in your project.
+
+> IMPORTANT: We don't officially support `bun` yet; use it at your own risk.
+
 ## Creating a React Component to Connect to the Blockchain
 
 With the Fuels dependency set up, you can now create a React component that will connect to the Fuel provider and retrieve the base asset balance for a given wallet address. Here's an example of how to do this:
@@ -33,7 +48,7 @@ function App() {
 
   useEffect(() => {
     async () => {
-      const provider = await Provider.create("https://beta-4.fuel.network/graphql");
+      const provider = await Provider.create("https://beta-5.fuel.network/graphql");
       const myWallet = Wallet.fromAddress("0x...", provider);
       myWallet.getBalances().then((data) => {
         setBalance(new BN(data[0].amount).toNumber());

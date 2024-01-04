@@ -70,7 +70,7 @@ jobs:
           pnpm changeset publish --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       # ensure docs are always deployed after merge of changeset PR
       - name: Get the last commit message and set env vars
