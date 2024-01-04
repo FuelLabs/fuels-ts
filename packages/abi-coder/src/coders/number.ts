@@ -1,7 +1,6 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { toNumber, toBytes } from '@fuel-ts/math';
 
-
 import type { SmallBytesOptions } from './abstract-coder';
 import { Coder } from './abstract-coder';
 
