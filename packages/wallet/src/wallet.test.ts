@@ -54,7 +54,7 @@ describe('Wallet', () => {
 
       const unlockedWallet = lockedWallet.unlock(wallet.privateKey);
 
-      expect(lockedWallet).toBeInstanceOf(WalletUnlocked);
+      expect(unlockedWallet).toBeInstanceOf(WalletUnlocked);
       expect(unlockedWallet.address).toStrictEqual(lockedWallet.address);
       expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
     });
