@@ -13,4 +13,5 @@ export const {
   keccak256,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  randomUUID,
 } = cryptoApi;

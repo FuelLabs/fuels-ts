@@ -7,6 +7,7 @@ import {
   stringFromBuffer,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  randomUUID,
 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
@@ -89,7 +90,7 @@ export async function encryptKeystoreWallet(
 
   // Construct keystore.
   const keystore: KeystoreWallet = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     version: 3,
     address: removeHexPrefix(ownerAddress.toHexString()),
     crypto: {

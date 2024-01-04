@@ -18,6 +18,7 @@ const api: CryptoApi = {
   keccak256,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  randomUUID: crypto.randomUUID,
 };
 
 export default api;
