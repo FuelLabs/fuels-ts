@@ -110,7 +110,7 @@ describe('Wallet', () => {
   /**
    * @see {@link WalletUnlocked.fromEncryptedJson}
    */
-  describe('Wallet.fromEncryptedJson', () => {
+  describe('WalletUnlocked.fromEncryptedJson', () => {
     it('should encrypt and decrypt a JSON wallet', async () => {
       wallet = WalletUnlocked.generate({
         provider,
