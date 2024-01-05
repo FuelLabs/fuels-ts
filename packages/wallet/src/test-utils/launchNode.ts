@@ -102,7 +102,7 @@ export const launchNode = async ({
   args = [],
   useSystemFuelCore = false,
   useInMemoryDb = true,
-  loggingEnabled = false,
+  loggingEnabled = true,
   debugEnabled = false,
   basePath,
 }: LaunchNodeOptions): LaunchNodeResult =>
@@ -186,8 +186,6 @@ export const launchNode = async ({
         stdio: 'pipe',
       }
     );
-
-    child.stderr.setEncoding('utf8');
 
     if (loggingEnabled) {
       child.stderr.pipe(process.stderr);
