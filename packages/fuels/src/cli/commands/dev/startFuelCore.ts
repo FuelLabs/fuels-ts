@@ -1,3 +1,4 @@
+import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
 import { launchNode } from '@fuel-ts/wallet/test-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
@@ -7,8 +8,6 @@ import { getPortPromise } from 'portfinder';
 import type { FuelsConfig } from '../../types';
 import { getBinarySource } from '../../utils/getBinarySource';
 import { log, loggingConfig } from '../../utils/logger';
-
-import { defaultChainConfig, defaultConsensusKey } from './defaultChainConfig';
 
 export type FuelCoreNode = {
   bindIp: string;

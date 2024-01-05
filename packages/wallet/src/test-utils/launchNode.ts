@@ -2,6 +2,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
@@ -15,7 +16,6 @@ import treeKill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
-import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -96,7 +96,7 @@ export const killNode = (params: KillNodeParams) => {
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
   chainConfigPath,
-  consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
+  consensusKey = defaultConsensusKey,
   ip,
   port,
   args = [],
