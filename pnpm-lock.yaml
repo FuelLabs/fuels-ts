@@ -1154,16 +1154,10 @@ importers:
       cli-table:
         specifier: ^0.3.11
         version: 0.3.11
-      semver:
-        specifier: ^7.3.8
-        version: 7.3.8
     devDependencies:
       '@types/cli-table':
         specifier: ^0.3.1
         version: 0.3.1
-      '@types/semver':
-        specifier: ^7.3.13
-        version: 7.3.13
 
   packages/wallet:
     dependencies:
