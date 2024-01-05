@@ -1,6 +1,6 @@
 import { getBytesCopy, sha256 } from 'ethers';
 
-import Signer from './signer';
+import { Signer } from './signer';
 
 /**
  * @group node
