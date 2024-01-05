@@ -8,7 +8,7 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 import type { FuelsConfig } from '../../types';
 import { configureLogging, loggingConfig } from '../../utils/logger';
 
-import { killNode, startFuelCore } from './startFuelCore';
+import { startFuelCore } from './startFuelCore';
 
 type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
 
@@ -80,8 +80,7 @@ describe('startFuelCore', () => {
   }
 
   test('should start `fuel-core` node using built-in binary', async () => {
-    mockSpawn();
-    mockLogger();
+    mockLaunchNode();
 
     const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
     copyConfig.useBuiltinFuelCore = true;
@@ -100,17 +99,14 @@ describe('startFuelCore', () => {
   });
 
   test('should start `fuel-core` node using system binary', async () => {
-    mockLogger();
+    mockLaunchNode();
 
-    const { spawn, innerMocks } = mockSpawn();
-
-    await startFuelCore({
+    const { killChildProcess } = await startFuelCore({
       ...structuredClone(fuelsConfig),
       useBuiltinFuelCore: false,
     });
 
-    expect(spawn).toHaveBeenCalledTimes(1);
-    expect(spawn.mock.calls[0][0]).toMatch(/^fuel-core$/m);
+    expect(walletTestUtilsMod.launchNode).toHaveBeenCalledTimes(1);
 
     expect(innerMocks.on).toHaveBeenCalledTimes(1);
     expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
