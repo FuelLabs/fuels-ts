@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
@@ -52,7 +52,7 @@ export class StdStringCoder extends Coder<string, string> {
 
   decode(data: Uint8Array, offset: number): [string, number] {
     if (data.length < this.encodedLength) {
-      this.throwError(ErrorCode.DECODE_ERROR, `Invalid std string data size.`);
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid std string data size.`);
     }
 
     const len = data.slice(16, 24);
@@ -60,7 +60,7 @@ export class StdStringCoder extends Coder<string, string> {
     const byteData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + encodedLength);
 
     if (byteData.length !== encodedLength) {
-      this.throwError(ErrorCode.DECODE_ERROR, `Invalid std string byte data size.`);
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid std string byte data size.`);
     }
 
     const value = toUtf8String(byteData);

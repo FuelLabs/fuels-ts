@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../constants';
@@ -16,7 +16,7 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
 
   encode(value: number[]): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     const parts: Uint8Array[] = [];
@@ -40,7 +40,7 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
 
   decode(data: Uint8Array, offset: number): [BN[], number] {
     if (data.length < BASE_RAW_SLICE_OFFSET || data.length % WORD_SIZE !== 0) {
-      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.');
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice data size.`);
     }
 
     const internalCoder = new ArrayCoder(new U64Coder(), data.length / WORD_SIZE);

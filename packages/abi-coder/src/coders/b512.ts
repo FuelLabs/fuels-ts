@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toHex } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
@@ -16,17 +16,17 @@ export class B512Coder extends Coder<string, string> {
     try {
       encodedValue = getBytesCopy(value);
     } catch (error) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     if (encodedValue.length !== this.encodedLength) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     return encodedValue;
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
     if (data.length < this.encodedLength) {
-      this.throwError(ErrorCode.DECODE_ERROR, `Invalid b512 data size.`);
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid b512 data size.`);
     }
 
     let bytes = data.slice(offset, offset + this.encodedLength);
@@ -37,7 +37,7 @@ export class B512Coder extends Coder<string, string> {
     }
 
     if (bytes.length !== this.encodedLength) {
-      this.throwError(ErrorCode.DECODE_ERROR, `Invalid b512 byte data size.`);
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid b512 byte data size.`);
     }
 
     return [toHex(bytes, this.encodedLength), offset + this.encodedLength];

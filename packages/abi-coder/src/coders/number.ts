@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber, toBytes } from '@fuel-ts/math';
 
 import type { SmallBytesOptions } from './abstract-coder';
@@ -48,11 +48,11 @@ export class NumberCoder extends Coder<number, number> {
     try {
       bytes = toBytes(value);
     } catch (error) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
     }
 
     if (bytes.length > this.length) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
     const output = toBytes(bytes, this.paddingLength);
@@ -78,7 +78,7 @@ export class NumberCoder extends Coder<number, number> {
 
   decode(data: Uint8Array, offset: number): [number, number] {
     if (data.length < this.paddingLength) {
-      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid number data size.');
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid number data size.`);
     }
 
     if (this.baseType === 'u8') {
@@ -89,7 +89,7 @@ export class NumberCoder extends Coder<number, number> {
     bytes = bytes.slice(8 - this.length, 8);
 
     if (bytes.length !== this.paddingLength - (this.paddingLength - this.length)) {
-      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid number byte data size.');
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid number byte data size.`);
     }
 
     return [toNumber(bytes), offset + 8];

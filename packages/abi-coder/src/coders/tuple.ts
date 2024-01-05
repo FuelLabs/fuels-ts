@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import {
   concatWithDynamicData,
@@ -31,7 +31,7 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
     if (this.coders.length !== value.length) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
     return concatWithDynamicData(
@@ -47,7 +47,7 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
     if (data.length < this.encodedLength) {
-      this.throwError(ErrorCode.DECODE_ERROR, 'Invalid tuple data size.');
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid tuple data size.`);
     }
 
     let newOffset = offset;
