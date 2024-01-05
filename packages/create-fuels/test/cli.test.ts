@@ -21,7 +21,7 @@ test('create-fuels extracts the template to the specified directory', async () =
   const originalTemplateFiles = await fs.readdir(join(__dirname, '../templates/nextjs'));
   const testProjectFiles = await fs.readdir('test-project');
 
-  expect(originalTemplateFiles).toEqual(testProjectFiles);
+  expect([...originalTemplateFiles, '.gitignore']).toEqual(testProjectFiles);
 
   // cleanup - delete the test project and the templates folder
   await fs.rm(join(__dirname, '../templates'), { recursive: true });
