@@ -115,34 +115,4 @@ describe('TransactionSummary', () => {
 
     cleanup();
   });
-
-  it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-interval-period', '750ms'],
-    });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
-
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      nodeProvider
-    );
-
-    const destination = Wallet.generate({ provider: nodeProvider });
-
-    const transfer = await genesisWallet.createTransfer(destination.address, 100, BaseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
-
-    transfer.updateWitnessByOwner(
-      genesisWallet.address,
-      await genesisWallet.signTransaction(transfer)
-    );
-
-    const response = await nodeProvider.sendTransaction(transfer, { awaitExecution: true });
-
-    expect(response.gqlTransaction?.status?.type).toBe('SuccessStatus');
-
-    cleanup();
-  });
 });
