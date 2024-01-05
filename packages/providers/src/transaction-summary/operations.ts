@@ -133,43 +133,28 @@ function isSameOperation(a: Operation, b: Operation) {
 
 /** @hidden */
 export function addOperation(operations: Operation[], toAdd: Operation) {
-  const ops = operations
-    .map((op) => {
-      // if it's not same operation, don't change. we just wanna stack the same operation
-      if (!isSameOperation(op, toAdd)) {
-        return null;
-      }
+  const allOperations = [...operations];
 
-      let newOp = { ...op };
+  const index = allOperations.findIndex((op) => isSameOperation(op, toAdd));
+  const existentOperation = allOperations[index];
 
-      // if it's adding new assets
-      if (toAdd.assetsSent?.length) {
-        // if prev op had assets, merge them. Otherwise just add the new assets
-        newOp = {
-          ...newOp,
-          assetsSent: op.assetsSent?.length ? mergeAssets(op, toAdd) : toAdd.assetsSent,
-        };
-      }
+  if (existentOperation) {
+    if (toAdd.assetsSent?.length) {
+      existentOperation.assetsSent = existentOperation.assetsSent?.length
+        ? mergeAssets(existentOperation, toAdd)
+        : toAdd.assetsSent;
+    }
 
-      // if it's adding new calls,
-      if (toAdd.calls?.length) {
-        /*
-[]          for calls we don't stack as grouping is not desired.
-          we wanna show all calls in the same operation
-          with each respective assets, amounts, functions, arguments.
-        */
-        newOp = {
-          ...newOp,
-          calls: [...(op.calls || []), ...(toAdd.calls || [])],
-        };
-      }
+    if (toAdd.calls?.length) {
+      existentOperation.calls = [...(existentOperation.calls || []), ...(toAdd.calls || [])];
+    }
 
-      return newOp;
-    })
-    .filter(Boolean) as Operation[];
+    allOperations[index] = existentOperation;
+  } else {
+    allOperations.push(toAdd);
+  }
 
-  // if this operation didn't exist before just add it to the end
-  return ops.length ? ops : [...operations, toAdd];
+  return allOperations;
 }
 
 /** @hidden */
