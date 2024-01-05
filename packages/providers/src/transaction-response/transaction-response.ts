@@ -197,14 +197,12 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  /**
-   * Waits for transaction to complete and returns the result.
-   *
-   * @returns The completed transaction result
-   */
-  async waitForResult<TTransactionType = void>(
-    contractsAbiMap?: AbiMap
-  ): Promise<TransactionResult<TTransactionType>> {
+  private async waitForStatusChange() {
+    const status = this.gqlTransaction?.status?.type;
+    if (status && status !== 'SubmittedStatus') {
+      return;
+    }
+
     const subscription = this.provider.operations.statusChange({
       transactionId: this.id,
     });
@@ -216,6 +214,17 @@ export class TransactionResponse {
     }
 
     await this.fetch();
+  }
+
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @returns The completed transaction result
+   */
+  async waitForResult<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
+    await this.waitForStatusChange();
 
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
