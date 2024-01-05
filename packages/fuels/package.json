@@ -35,7 +35,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && pnpm vite build",
     "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
@@ -85,7 +85,8 @@
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
-    "@types/rimraf": "^3.0.2"
+    "@types/rimraf": "^3.0.2",
+    "vite": "^4.3.9"
   },
   "keywords": [
     "ethereum",
