@@ -21,6 +21,7 @@ import type {
   GqlChainInfoFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
+  GqlPeerInfo,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -95,7 +96,6 @@ type ConsensusParameters = {
 export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
-  peerCount: number;
   consensusParameters: ConsensusParameters;
   gasCosts: GqlGasCosts;
   latestBlock: {
@@ -116,6 +116,7 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
+  peers: GqlPeerInfo[];
 };
 
 export type NodeInfoAndConsensusParameters = {
@@ -142,7 +143,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
-  const { name, daHeight, peerCount, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const { contractParams, feeParams, predicateParams, scriptParams, txParams, gasCosts } =
     consensusParameters;
@@ -150,7 +151,6 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   return {
     name,
     baseChainHeight: bn(daHeight),
-    peerCount,
     consensusParameters: {
       contractMaxSize: bn(contractParams.contractMaxSize),
       maxInputs: bn(txParams.maxInputs),
@@ -445,6 +445,7 @@ export default class Provider {
       nodeVersion: nodeInfo.nodeVersion,
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
+      peers: nodeInfo.peers,
     };
 
     Provider.nodeInfoCache[this.url] = processedNodeInfo;
@@ -770,6 +771,14 @@ export default class Provider {
       gasUsed = minGas;
     }
 
+    const usedFee = calculatePriceWithFactor(
+      gasUsed,
+      gasPrice,
+      gasPriceFactor
+    ).normalizeZeroToOne();
+    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+
     return {
       requiredQuantities: allQuantities,
       receipts,
@@ -778,9 +787,9 @@ export default class Provider {
       gasPrice,
       minGas,
       maxGas,
-      usedFee: calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor),
-      minFee: calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor),
-      maxFee: calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor),
+      usedFee,
+      minFee,
+      maxFee,
     };
   }
 
@@ -862,7 +871,7 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const excludeInput = {
-      messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
+      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 

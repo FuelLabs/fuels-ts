@@ -15,9 +15,11 @@ jobs:
     uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
     with:
       doc-folder-path: "apps/docs/src"
+      spellcheck-config-path: "apps/docs/.spellcheck.yml"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -72,10 +74,12 @@ jobs:
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
           base-coverage-file: coverage-reports/report.master.json
+
   live-tests:
     name: Run Live Tests
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -91,5 +95,5 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://beta-4.fuel.network/graphql
+          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
           FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}

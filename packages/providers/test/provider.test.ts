@@ -69,7 +69,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.21.0');
+    expect(version).toEqual('0.22.0');
   });
 
   it('can call()', async () => {
@@ -993,5 +993,29 @@ describe('Provider', () => {
       witnessesLength,
       witnessLimit: transactionRequest.witnessLimit,
     });
+  });
+
+  it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const request = new ScriptTransactionRequest();
+
+    // forcing calculatePriceWithFactor to return 0
+    const calculatePriceWithFactorMock = jest
+      .spyOn(gasMod, 'calculatePriceWithFactor')
+      .mockReturnValue(bn(0));
+
+    const normalizeZeroToOneSpy = jest.spyOn(BN.prototype, 'normalizeZeroToOne');
+
+    const { minFee, maxFee, usedFee } = await provider.getTransactionCost(request);
+
+    expect(calculatePriceWithFactorMock).toHaveBeenCalledTimes(3);
+
+    expect(normalizeZeroToOneSpy).toHaveBeenCalledTimes(3);
+    expect(normalizeZeroToOneSpy).toHaveReturnedWith(bn(1));
+
+    expect(maxFee.eq(0)).not.toBeTruthy();
+    expect(usedFee.eq(0)).not.toBeTruthy();
+    expect(minFee.eq(0)).not.toBeTruthy();
   });
 });

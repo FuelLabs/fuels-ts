@@ -1,13 +1,12 @@
 import { randomBytes } from '@fuel-ts/crypto';
-import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/hasher';
 import type { CallResult, TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
-import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
-import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 import type { BytesLike } from 'ethers';
+
+import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
 
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import { FUEL_NETWORK_URL } from './configs';
@@ -23,67 +22,69 @@ jest.mock('@fuel-ts/providers', () => ({
 const { ScriptTransactionRequest } = providersMod;
 
 describe('WalletUnlocked', () => {
+  const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
+  const expectedPublicKey =
+    '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
+  const expectedAddress = 'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
+  const expectedMessage = 'my message';
+  const expectedSignedMessage =
+    '0x8eeb238db1adea4152644f1cd827b552dfa9ab3f4939718bb45ca476d167c6512a656f4d4c7356bfb9561b14448c230c6e7e4bd781df5ee9e5999faa6495163d';
+
   it('Instantiate a new wallet', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signMessageTest.privateKey, provider);
+    const wallet = new WalletUnlocked(expectedPrivateKey, provider);
 
-    expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
-    expect(wallet.address.toAddress()).toEqual(signMessageTest.address);
+    expect(wallet.publicKey).toEqual(expectedPublicKey);
+    expect(wallet.address.toAddress()).toEqual(expectedAddress);
   });
 
   it('Sign a message using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signMessageTest.privateKey, provider);
-    const signedMessage = await wallet.signMessage(signMessageTest.message);
-    const verifiedAddress = Signer.recoverAddress(
-      hashMessage(signMessageTest.message),
-      signedMessage
-    );
+    const wallet = new WalletUnlocked(expectedPrivateKey, provider);
+    const signedMessage = await wallet.signMessage(expectedMessage);
+    const verifiedAddress = Signer.recoverAddress(hashMessage(expectedMessage), signedMessage);
 
     expect(verifiedAddress).toEqual(wallet.address);
-    expect(signedMessage).toEqual(signMessageTest.signedMessage);
+    expect(signedMessage).toEqual(expectedSignedMessage);
   });
 
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
     // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
-    const chainId = (await wallet.provider.getChain()).consensusParameters.chainId.toNumber();
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
+    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
+    const chainId = wallet.provider.getChain().consensusParameters.chainId.toNumber();
     const verifiedAddress = Signer.recoverAddress(
-      hashTransaction(transactionRequest, chainId),
+      SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction
     );
 
-    expect(signedTransaction).toEqual(signTransactionTest.signedTransaction);
+    expect(signedTransaction).toEqual(SIGNED_TX);
     expect(verifiedAddress).toEqual(wallet.address);
     // #endregion wallet-transaction-signing
   });
 
   it('Populate transaction witnesses signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
+    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
     const populatedTransaction =
-      await wallet.populateTransactionWitnessesSignature(transactionRequest);
+      await wallet.populateTransactionWitnessesSignature(SCRIPT_TX_REQUEST);
 
     expect(populatedTransaction.witnesses?.[0]).toBe(signedTransaction);
   });
 
   it('Populate transaction multi-witnesses signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     const privateKey = randomBytes(32);
     const otherWallet = new WalletUnlocked(privateKey, provider);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
-    const otherSignedTransaction = await otherWallet.signTransaction(transactionRequest);
+    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
+    const otherSignedTransaction = await otherWallet.signTransaction(SCRIPT_TX_REQUEST);
     const populatedTransaction = await wallet.populateTransactionWitnessesSignature({
-      ...transactionRequest,
-      witnesses: [...transactionRequest.witnesses, otherSignedTransaction],
+      ...SCRIPT_TX_REQUEST,
+      witnesses: [...SCRIPT_TX_REQUEST.witnesses, otherSignedTransaction],
     });
 
     expect(populatedTransaction.witnesses?.length).toBe(2);
@@ -93,8 +94,7 @@ describe('WalletUnlocked', () => {
 
   it('Check if send transaction adds signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(signTransactionTest.privateKey, provider);
-    const transactionRequest = sendTransactionTest.transaction;
+    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     let signature: BytesLike | undefined;
     // Intercept Provider.sendTransaction to collect signature
     const spy = jest
@@ -105,7 +105,7 @@ describe('WalletUnlocked', () => {
       });
 
     // Call send transaction should populate signature field
-    await wallet.sendTransaction(transactionRequest);
+    await wallet.sendTransaction(SCRIPT_TX_REQUEST);
 
     // Provider sendTransaction should be called
     expect(spy).toBeCalled();
@@ -202,12 +202,12 @@ describe('WalletUnlocked', () => {
     const transactionRequestLike: TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
-    const transactionRequest = new ScriptTransactionRequest();
+    const transactionReq = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = jest
       .spyOn(providersMod, 'transactionRequestify')
-      .mockImplementation(() => transactionRequest);
+      .mockImplementation(() => transactionReq);
 
     const estimateTxDependencies = jest
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
@@ -219,7 +219,7 @@ describe('WalletUnlocked', () => {
 
     const populateTransactionWitnessesSignatureSpy = jest
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
-      .mockImplementationOnce(() => Promise.resolve(transactionRequest));
+      .mockImplementationOnce(() => Promise.resolve(transactionReq));
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -235,10 +235,10 @@ describe('WalletUnlocked', () => {
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
     expect(estimateTxDependencies.mock.calls.length).toBe(1);
-    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionReq);
 
     expect(populateTransactionWitnessesSignatureSpy.mock.calls.length).toBe(1);
-    expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionReq);
 
     expect(call.mock.calls.length).toBe(1);
   });

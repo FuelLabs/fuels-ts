@@ -24,9 +24,10 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
     max = coinQuantityLike.max ?? undefined;
   }
 
+  const bnAmount = bn(amount);
   return {
     assetId: hexlify(assetId),
-    amount: bn(amount),
+    amount: bnAmount.toNumber() < 1 ? bn(1) : bnAmount,
     max: max ? bn(max) : undefined,
   };
 };
@@ -38,7 +39,9 @@ export interface IAddAmountToAssetParams {
 }
 
 export const addAmountToAsset = (params: IAddAmountToAssetParams): CoinQuantity[] => {
-  const { amount, assetId, coinQuantities } = params;
+  const { amount, assetId } = params;
+
+  const coinQuantities = [...params.coinQuantities];
 
   const assetIdx = coinQuantities.findIndex((coinQuantity) => coinQuantity.assetId === assetId);
 

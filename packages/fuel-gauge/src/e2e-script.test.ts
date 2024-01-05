@@ -86,7 +86,8 @@ describe('Live Script Test', () => {
 
     let output: BN = bn(0);
     try {
-      const { value } = await scriptInstance.functions
+      const { minGasPrice } = provider.getGasConfig();
+      const callScope = scriptInstance.functions
         .main(
           U32_VEC,
           VEC_IN_VEC,
@@ -101,7 +102,15 @@ describe('Live Script Test', () => {
           VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
         )
         .txParams({
-          gasPrice: 1,
+          gasLimit: 100_000,
+          gasPrice: minGasPrice,
+        });
+
+      const { gasUsed } = await callScope.dryRun();
+
+      const { value } = await callScope
+        .txParams({
+          gasLimit: gasUsed,
         })
         .call();
 
@@ -110,9 +119,8 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        
-        - add assets: https://faucet-beta-4.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-4/#/address/fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
+        - add assets: https://faucet-beta-5.fuel.network/
+        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
         - bech32 address: fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
         `);
     }

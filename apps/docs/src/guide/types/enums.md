@@ -4,7 +4,7 @@ Sway Enums are a little distinct from TypeScript Enums. In this document, we wil
 
 ## Basic Sway Enum Example
 
-Consider the following basic Sway Enum called StateError:
+Consider the following basic Sway Enum called `StateError`:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/echo-enum/src/main.sw#enum-1{rust:line-numbers}
 
