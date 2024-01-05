@@ -251,7 +251,14 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * If true, the promise will resolve only when the transaction changes status from SubmittedStatus to one of SuccessStatus, FailureStatus or SqueezedOutStatus.
+   *
+   * By default, the promise will resolve immediately after the transaction is submitted.
+   */
+  awaitExecution?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -564,7 +571,7 @@ export default class Provider {
   // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, awaitExecution = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     this.#cacheInputs(transactionRequest.inputs);
@@ -573,7 +580,6 @@ export default class Provider {
     }
     // #endregion Provider-sendTransaction
 
-    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, [], {
       estimateTxDependencies: false,
       estimatePredicates: false,
@@ -595,12 +601,27 @@ export default class Provider {
       );
     }
 
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
+    if (awaitExecution) {
+      const subscription = this.operations.submitAndAwait({ encodedTransaction });
+      for await (const { submitAndAwait } of subscription) {
+        if (submitAndAwait.type === 'SuccessStatus') {
+          break;
+        }
+      }
+
+      const transactionId = transactionRequest.getTransactionId(this.getChainId());
+      const response = new TransactionResponse(transactionId, this);
+      await response.fetch();
+      return response;
+    }
+
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
 
-    const response = new TransactionResponse(transactionId, this);
-    return response;
+    return new TransactionResponse(transactionId, this);
   }
 
   /**
