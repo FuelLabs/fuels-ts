@@ -806,6 +806,9 @@ importers:
       '@types/rimraf':
         specifier: ^3.0.2
         version: 3.0.2
+      vite:
+        specifier: ^4.3.9
+        version: 4.3.9(@types/node@18.15.3)
 
   packages/hasher:
     dependencies:
