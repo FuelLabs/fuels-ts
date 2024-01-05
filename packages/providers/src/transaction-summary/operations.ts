@@ -136,9 +136,10 @@ export function addOperation(operations: Operation[], toAdd: Operation) {
   const allOperations = [...operations];
 
   const index = allOperations.findIndex((op) => isSameOperation(op, toAdd));
-  const existentOperation = allOperations[index];
 
-  if (existentOperation) {
+  if (allOperations[index]) {
+    const existentOperation = { ...allOperations[index] };
+
     if (toAdd.assetsSent?.length) {
       existentOperation.assetsSent = existentOperation.assetsSent?.length
         ? mergeAssets(existentOperation, toAdd)
