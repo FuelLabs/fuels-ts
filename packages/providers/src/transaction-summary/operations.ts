@@ -362,7 +362,8 @@ export function getTransferOperations({
       const input = getInputFromAssetId(inputs, output.assetId);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
-        operations = addOperation(operations, {
+
+        const operationToAdd: Operation = {
           name: OperationName.transfer,
           from: {
             type: AddressType.account,
@@ -378,7 +379,9 @@ export function getTransferOperations({
               amount: output.amount,
             },
           ],
-        });
+        };
+
+        operations = addOperation(operations, operationToAdd);
       }
     });
   }
