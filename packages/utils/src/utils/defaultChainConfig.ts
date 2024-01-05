@@ -1,4 +1,4 @@
-import chainConfigJson from './defaultChainConfig.json';
+import chainConfigJson from './chainConfig.json';
 
 export const defaultChainConfig = chainConfigJson;
 
