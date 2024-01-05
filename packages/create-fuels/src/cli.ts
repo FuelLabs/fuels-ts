@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { execSync } from 'child_process';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import { cp, mkdir } from 'fs/promises';
+import { cp, mkdir, rename } from 'fs/promises';
 import { join } from 'path';
 import prompts from 'prompts';
 
@@ -64,6 +64,7 @@ export const runScaffoldCli = async (
   await mkdir(projectPath);
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
+  await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
 
   if (shouldInstallDeps) {
     process.chdir(projectPath);
