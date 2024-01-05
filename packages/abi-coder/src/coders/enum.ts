@@ -78,6 +78,10 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
+    if (data.length < this.#encodedValueSize) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid enum data size.`);
+    }
+
     let newOffset = offset;
 
     let decoded;

@@ -70,4 +70,13 @@ describe('BooleanCoder', () => {
       new FuelError(ErrorCode.DECODE_ERROR, 'Invalid boolean value.')
     );
   });
+
+  it('throws when decoding empty bytes', async () => {
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid boolean data size.')
+    );
+  });
 });
