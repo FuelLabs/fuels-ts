@@ -103,16 +103,21 @@ export function getReceiptsMessageOut(receipts: TransactionResultReceipt[]) {
 const mergeAssets = (op1: Operation, op2: Operation) => {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
-  const filtered = assets2.filter((c) => !assets1.some(hasSameAssetId(c)));
-  return assets1
-    .map((coin) => {
-      const asset = assets2.find(hasSameAssetId(coin));
-      if (!asset) {
-        return coin;
-      }
-      return { ...coin, amount: bn(coin.amount).add(asset.amount) };
-    })
-    .concat(filtered);
+
+  const filteredAssets = assets2.filter(
+    (asset2) => !assets1.some((asset1) => asset1.assetId === asset2.assetId)
+  );
+
+  const mergedAssets = assets1.map((asset1) => {
+    const matchingAsset = assets2.find((asset2) => asset2.assetId === asset1.assetId);
+    if (!matchingAsset) {
+      return asset1;
+    }
+    const mergedAmount = bn(asset1.amount).add(matchingAsset.amount);
+    return { ...asset1, amount: mergedAmount };
+  });
+
+  return mergedAssets.concat(filteredAssets);
 };
 
 /** @hidden */
