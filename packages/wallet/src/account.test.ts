@@ -319,7 +319,7 @@ describe('Account', () => {
     );
 
     expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
-    expect(sendTransactionSpy).toHaveBeenCalledWith(request);
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, undefined);
   });
 
   it('should execute withdrawToBaseLayer just fine', async () => {
@@ -378,7 +378,7 @@ describe('Account', () => {
     expect(scriptTransactionRequest).toHaveBeenCalledTimes(1);
 
     expect(sendTransaction).toHaveBeenCalledTimes(1);
-    expect(sendTransaction).toHaveBeenCalledWith(request);
+    expect(sendTransaction).toHaveBeenCalledWith(request, undefined);
 
     expect(getTransactionCost).toHaveBeenCalledTimes(1);
     expect(fund).toHaveBeenCalledTimes(1);
@@ -391,7 +391,7 @@ describe('Account', () => {
     expect(scriptTransactionRequest).toHaveBeenCalledTimes(2);
 
     expect(sendTransaction).toHaveBeenCalledTimes(2);
-    expect(sendTransaction).toHaveBeenCalledWith(request);
+    expect(sendTransaction).toHaveBeenCalledWith(request, undefined);
   });
 
   it('should execute sendTransaction just fine', async () => {
