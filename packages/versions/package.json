@@ -42,11 +42,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "4",
-    "cli-table": "^0.3.11",
-    "semver": "^7.3.8"
+    "cli-table": "^0.3.11"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.1",
-    "@types/semver": "^7.3.13"
+    "@types/cli-table": "^0.3.1"
   }
 }
