@@ -253,9 +253,11 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
  */
 export type ProviderSendTxParams = EstimateTransactionParams & {
   /**
-   * If true, the promise will resolve only when the transaction changes status from SubmittedStatus to one of SuccessStatus, FailureStatus or SqueezedOutStatus.
-   *
    * By default, the promise will resolve immediately after the transaction is submitted.
+   *
+   * If set to true, the promise will resolve only when the transaction changes status
+   * from `SubmittedStatus` to one of `SuccessStatus`, `FailureStatus` or `SqueezedOutStatus`.
+   *
    */
   awaitExecution?: boolean;
 };
