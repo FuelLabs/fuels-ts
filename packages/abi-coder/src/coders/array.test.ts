@@ -1,7 +1,7 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import { U8_MAX } from '../../test/utils/constants';
+import { U32_MAX, U8_MAX } from '../../test/utils/constants';
 
 import type { SmallBytesOptions } from './abstract-coder';
 import { ArrayCoder } from './array';
@@ -106,6 +106,36 @@ describe('ArrayCoder', () => {
     await expectToThrowFuelError(
       () => coder.encode([1, 2]),
       new FuelError(ErrorCode.ENCODE_ERROR, 'Types/values length mismatch.')
+    );
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const coder = new ArrayCoder(new NumberCoder('u8'), 1);
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid array data size.')
+    );
+  });
+
+  it('throws when decoding invalid bytes (too small)', async () => {
+    const coder = new ArrayCoder(new NumberCoder('u8'), 8);
+    const input = new Uint8Array([0]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid array data size.')
+    );
+  });
+
+  it('throws when decoding vec larger than max size', async () => {
+    const coder = new ArrayCoder(new NumberCoder('u8'), 8);
+    const input = new Uint8Array(U32_MAX + 1);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid array data size.')
     );
   });
 });

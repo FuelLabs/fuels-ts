@@ -1,3 +1,6 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import { B512Coder } from './b512';
 
 /**
@@ -58,14 +61,6 @@ describe('B512Coder', () => {
     }).toThrow(/Invalid struct B512/);
   });
 
-  it('should throw an error when decoding an encoded 512 bit hash string that is too short', () => {
-    const invalidInput = B512_ENCODED.slice(0, B512_ENCODED.length - 1);
-
-    expect(() => {
-      coder.decode(invalidInput, 0);
-    }).toThrow('Invalid size for b512');
-  });
-
   it('should throw an error when encoding a 512 bit hash string that is too long', () => {
     const invalidInput = `${B512_DECODED}0`;
 
@@ -82,19 +77,38 @@ describe('B512Coder', () => {
     }).toThrow(/Invalid struct B512/);
   });
 
-  it('should throw an error when decoding an encoded 512 bit hash string that is too long', () => {
-    const invalidInput = new Uint8Array(Array.from(Array(32).keys()));
-
-    expect(() => {
-      coder.decode(invalidInput, 1);
-    }).toThrow('Invalid size for b512');
-  });
-
   it('should throw an error when encoding a 512 bit hash string that is not a hex string', () => {
     const invalidInput = 'not a hex string';
 
     expect(() => {
       coder.encode(invalidInput);
     }).toThrow(/Invalid struct B512/);
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid b512 data size.')
+    );
+  });
+
+  it('should throw an error when decoding an encoded 512 bit hash string that is too short', async () => {
+    const invalidInput = B512_ENCODED.slice(0, B512_ENCODED.length - 1);
+
+    await expectToThrowFuelError(
+      () => coder.decode(invalidInput, 8),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid b512 data size.')
+    );
+  });
+
+  it('should throw an error when decoding an encoded 512 bit hash string that is too long', async () => {
+    const invalidInput = new Uint8Array(Array.from(Array(65).keys()));
+
+    await expectToThrowFuelError(
+      () => coder.decode(invalidInput, 8),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid b512 byte data size.')
+    );
   });
 });

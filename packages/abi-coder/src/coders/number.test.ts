@@ -123,13 +123,14 @@ describe('NumberCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw if a negative number is encoded', () => {
+  it('should throw if a negative number is encoded', async () => {
     const coder = new NumberCoder('u8');
     const invalidInput = -1;
 
-    expect(() => {
-      coder.encode(invalidInput);
-    }).toThrow('Invalid u8');
+    await expectToThrowFuelError(
+      () => coder.encode(invalidInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u8.')
+    );
   });
 
   it('should throw if coder is too small for number size', async () => {
@@ -139,6 +140,26 @@ describe('NumberCoder', () => {
     await expectToThrowFuelError(
       () => coder.encode(invalidInput),
       new FuelError(ErrorCode.ENCODE_ERROR, `Invalid u8, too many bytes.`)
+    );
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const coder = new NumberCoder('u32');
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid number data size.')
+    );
+  });
+
+  it('throws when decoding empty byte data', async () => {
+    const coder = new NumberCoder('u32');
+    const input = new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 8),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid number byte data size.')
     );
   });
 });
