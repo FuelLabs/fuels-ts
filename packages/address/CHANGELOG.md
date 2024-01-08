@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.71.0
+
+### Minor Changes
+
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+### Patch Changes
+
+- Add further utility to Address and improve docs around conversions, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
 ## 0.70.1
 
 ## 0.70.0

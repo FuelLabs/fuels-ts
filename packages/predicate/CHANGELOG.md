@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.71.0
+
+### Minor Changes
+
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- add support for TX policies, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
 ## 0.70.1
 
 ## 0.70.0
