@@ -7,12 +7,12 @@ import type {
   CoinQuantity,
   Message,
   Resource,
-  TransactionRequest,
   TransactionRequestLike,
 } from '@fuel-ts/providers';
 import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
+import type { TxParamsType } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
@@ -101,6 +101,20 @@ describe('Account', () => {
     ]);
     expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
     // #endregion Message-getResourcesToSpend
+  });
+
+  it('getResourcesToSpend should work with <1 amount', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+    const resourcesToSpend = await account.getResourcesToSpend([
+      {
+        amount: 0.9,
+        assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+      },
+    ]);
+    expect(resourcesToSpend[0].amount.gte(1)).toBeTruthy();
   });
 
   it('should get messages just fine', async () => {
@@ -233,14 +247,20 @@ describe('Account', () => {
 
     expect(addAmountToAssetSpy).toBeCalledTimes(1);
     expect(addAmountToAssetSpy).toHaveBeenCalledWith({
-      amount: fee,
+      amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: quantities,
     });
 
-    const expectedTotalResources = [quantities[0], { amount: fee, assetId: BaseAssetId }];
+    const expectedTotalResources = [
+      { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
+      { amount: bn(fee), assetId: BaseAssetId },
+    ];
     expect(getResourcesToSpendSpy).toBeCalledTimes(1);
-    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources);
+    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
+      messages: [],
+      utxos: [],
+    });
 
     expect(addResourcesSpy).toBeCalledTimes(1);
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
@@ -250,9 +270,9 @@ describe('Account', () => {
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const destination = Address.fromAddressOrString(
-      '0x0101010101010101010101010101010101010101000000000000000000000000'
+      '0x0202020202020202020202020202020202020202020202020202020202020202'
     );
-    const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
+    const txParam: TxParamsType = {
       gasLimit: bn(1),
       gasPrice: bn(1),
       maturity: 1,
@@ -266,6 +286,9 @@ describe('Account', () => {
       minFee: bn(1),
       receipts: [],
       requiredQuantities: [],
+      maxGas: bn(1),
+      minGas: bn(1),
+      usedFee: bn(1),
     };
 
     const request = new ScriptTransactionRequest();
@@ -312,25 +335,31 @@ describe('Account', () => {
 
   it('should execute withdrawToBaseLayer just fine', async () => {
     const recipient = Address.fromRandom();
-    const txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {};
+    const txParams: TxParamsType = {};
     const amount = bn(1);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const fee: CoinQuantity = {
-      amount,
-      assetId,
+    const request = new ScriptTransactionRequest();
+
+    const quantities: CoinQuantity[] = [
+      {
+        amount: bn(1),
+        assetId,
+      },
+    ];
+    const cost: providersMod.TransactionCost = {
+      gasPrice: bn(1),
+      gasUsed: bn(1),
+      maxFee: bn(1),
+      maxGas: bn(1),
+      minFee: bn(1),
+      minGas: bn(1),
+      minGasPrice: bn(1),
+      receipts: [],
+      requiredQuantities: quantities,
+      usedFee: bn(1),
     };
-
-    const calculateFee = jest.fn(() => fee);
-    const addResources = jest.fn();
-
-    const request = {
-      calculateFee,
-      addResources,
-    } as unknown as ScriptTransactionRequest;
-
-    const resources: Resource[] = [];
 
     const transactionResponse = {} as unknown as TransactionResponse;
 
@@ -338,9 +367,11 @@ describe('Account', () => {
       .spyOn(providersMod, 'ScriptTransactionRequest')
       .mockImplementation(() => request);
 
-    const getResourcesToSpend = jest
-      .spyOn(Account.prototype, 'getResourcesToSpend')
-      .mockImplementation(() => Promise.resolve(resources));
+    const getTransactionCost = jest
+      .spyOn(providersMod.Provider.prototype, 'getTransactionCost')
+      .mockImplementation(() => Promise.resolve(cost));
+
+    const fund = jest.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
     const sendTransaction = jest
       .spyOn(Account.prototype, 'sendTransaction')
@@ -355,46 +386,33 @@ describe('Account', () => {
 
     expect(result).toEqual(transactionResponse);
 
-    expect(scriptTransactionRequest.mock.calls.length).toBe(1);
+    expect(scriptTransactionRequest).toHaveBeenCalledTimes(1);
 
-    expect(calculateFee.mock.calls.length).toBe(1);
+    expect(sendTransaction).toHaveBeenCalledTimes(1);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
-
-    expect(getResourcesToSpend.mock.calls.length).toBe(1);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
-
-    expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(getTransactionCost).toHaveBeenCalledTimes(1);
+    expect(fund).toHaveBeenCalledTimes(1);
 
     // without txParams
     result = await account.withdrawToBaseLayer(recipient, amount);
 
     expect(result).toEqual(transactionResponse);
 
-    expect(scriptTransactionRequest.mock.calls.length).toBe(2);
+    expect(scriptTransactionRequest).toHaveBeenCalledTimes(2);
 
-    expect(calculateFee.mock.calls.length).toBe(2);
-
-    expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
-
-    expect(getResourcesToSpend.mock.calls.length).toBe(2);
-    expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
-
-    expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
+    expect(sendTransaction).toHaveBeenCalledTimes(2);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
   });
 
   it('should execute sendTransaction just fine', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
+    const transactionRequestLike: TransactionRequestLike = {
+      type: providersMod.TransactionType.Script,
+    };
+    const transactionRequest = new ScriptTransactionRequest();
     const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
 
-    const transactionRequestify = jest
-      .spyOn(providersMod, 'transactionRequestify')
-      .mockImplementation(() => transactionRequest);
+    const transactionRequestify = jest.spyOn(providersMod, 'transactionRequestify');
 
     const estimateTxDependencies = jest
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
@@ -416,7 +434,7 @@ describe('Account', () => {
     expect(transactionRequestify.mock.calls.length).toEqual(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
-    expect(estimateTxDependencies.mock.calls.length).toEqual(1);
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
@@ -424,8 +442,10 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
-    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
+    const transactionRequestLike: TransactionRequestLike = {
+      type: providersMod.TransactionType.Script,
+    };
+    const transactionRequest = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = jest
@@ -449,11 +469,11 @@ describe('Account', () => {
 
     expect(result).toEqual(callResult);
 
-    expect(transactionRequestify.mock.calls.length).toBe(1);
-    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
-
     expect(estimateTxDependencies.mock.calls.length).toBe(1);
     expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+
+    expect(transactionRequestify.mock.calls.length).toBe(1);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);

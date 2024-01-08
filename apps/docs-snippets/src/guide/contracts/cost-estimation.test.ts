@@ -14,7 +14,7 @@ describe(__filename, () => {
 
   it('should successfully get transaction cost estimate for a single contract call', async () => {
     // #region cost-estimation-1
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const cost = await contract.functions
       .return_context_amount()
@@ -23,7 +23,6 @@ describe(__filename, () => {
       })
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       })
       .getTransactionCost();
 
@@ -37,7 +36,7 @@ describe(__filename, () => {
 
   it('should get transaction cost estimate for multi contract calls just fine', async () => {
     // #region cost-estimation-2
-    const { minGasPrice, maxGasPerTx } = provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const scope = contract
       .multiCall([
@@ -50,7 +49,6 @@ describe(__filename, () => {
       ])
       .txParams({
         gasPrice: minGasPrice,
-        gasLimit: maxGasPerTx,
       });
 
     const cost = await scope.getTransactionCost();

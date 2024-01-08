@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.70.1
+
+### Patch Changes
+
+- Removing unnecessary await, by [@arboleya](https://github.com/arboleya) (See [#1621](https://github.com/FuelLabs/fuels-ts/pull/1621))
+
+## 0.70.0
+
+### Minor Changes
+
+- Encode and decode u8 and bool as small bytes and right aligned under various conditions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+- add support for TX policies, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+
 ## 0.69.1
 
 ## 0.69.0

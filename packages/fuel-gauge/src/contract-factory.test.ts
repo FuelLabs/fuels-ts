@@ -42,14 +42,20 @@ describe('Contract Factory', () => {
 
     const { value: valueInitial } = await contact.functions
       .initialize_counter(41)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contact.functions.increment_counter(1).txParams({ gasPrice }).call();
+    const { value } = await contact.functions
+      .increment_counter(1)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(value.toHex()).toEqual(toHex(42));
 
-    const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
+    const { value: value2 } = await contact.functions
+      .increment_counter(1)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .dryRun();
     expect(value2.toHex()).toEqual(toHex(43));
   });
 
@@ -60,11 +66,11 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(100).txParams({ gasPrice }).call();
+    await contact.functions.initialize_counter(100).txParams({ gasPrice, gasLimit: 10_000 }).call();
 
     const { transactionResult } = await contact.functions
       .increment_counter(1)
-      .txParams({ gasPrice })
+      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
@@ -92,7 +98,10 @@ describe('Contract Factory', () => {
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
-    const { callResult } = await contact.functions.increment_counter(1).dryRun();
+    const { callResult } = await contact.functions
+      .increment_counter(1)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .dryRun();
     expect(callResult).toEqual({
       receipts: expect.arrayContaining([expect.any(Object)]),
     });
@@ -121,33 +130,40 @@ describe('Contract Factory', () => {
       gasPrice,
     });
 
-    const { value: var1 } = await contract.functions.return_var1().txParams({ gasPrice }).call();
+    const { value: var1 } = await contract.functions
+      .return_var1()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().txParams({ gasPrice }).call();
+    const { value: var2 } = await contract.functions
+      .return_var2()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().txParams({ gasPrice }).call();
+    const { value: var3 } = await contract.functions
+      .return_var3()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().txParams({ gasPrice }).call();
+    const { value: var4 } = await contract.functions
+      .return_var4()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().txParams({ gasPrice }).call();
+    const { value: var5 } = await contract.functions
+      .return_var5()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
         v2: bn(50),
       })
     );
-  });
-
-  it('should ensure transaction request is created with gas limit sets to 0', async () => {
-    const factory = await createContractFactory();
-
-    const { transactionRequest } = factory.createTransactionRequest();
-
-    expect(transactionRequest.gasLimit.toNumber()).toBe(0);
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
@@ -161,7 +177,10 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: vB256 } = await contact.functions.return_b256().simulate();
+    const { value: vB256 } = await contact.functions
+      .return_b256()
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -177,19 +196,34 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: var1 } = await contract.functions.return_var1().txParams({ gasPrice }).call();
+    const { value: var1 } = await contract.functions
+      .return_var1()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().txParams({ gasPrice }).call();
+    const { value: var2 } = await contract.functions
+      .return_var2()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().txParams({ gasPrice }).call();
+    const { value: var3 } = await contract.functions
+      .return_var3()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().txParams({ gasPrice }).call();
+    const { value: var4 } = await contract.functions
+      .return_var4()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().txParams({ gasPrice }).call();
+    const { value: var5 } = await contract.functions
+      .return_var5()
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -197,7 +231,10 @@ describe('Contract Factory', () => {
       })
     );
 
-    const { value: vB256 } = await contract.functions.return_b256().simulate();
+    const { value: vB256 } = await contract.functions
+      .return_b256()
+      .txParams({ gasLimit: 10_000 })
+      .simulate();
     expect(vB256).toEqual(b256);
   });
 

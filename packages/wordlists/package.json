@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wordlists",
-  "version": "0.69.1",
+  "version": "0.70.1",
   "description": "",
   "license": "Apache-2.0",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
@@ -8,7 +8,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.14.1"
+    "node": "^18.17.1"
   },
   "exports": {
     ".": {

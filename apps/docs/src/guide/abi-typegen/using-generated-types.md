@@ -5,12 +5,12 @@
 After generating types via:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts
 import { Wallet } from "fuels";
@@ -59,12 +59,12 @@ const contract = await MyContract__factory.deployContract(bytecode, wallet, {
 After generating types via:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts
 import { Wallet } from "fuels";
@@ -87,12 +87,12 @@ Consider the following predicate:
 Now, after generating types via:
 
 ```console
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 We can use these files like so:
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts
 import { Wallet } from "fuels";

@@ -69,7 +69,7 @@ export const startFuelCore = async (config: FuelsConfig): Promise<FuelCoreNode> 
     ['--chain', chainConfig],
     '--vm-backtrace',
     '--utxo-validation',
-    '--manual_blocks_enabled',
+    '--debug',
   ].flat();
 
   return new Promise((resolve, reject) => {

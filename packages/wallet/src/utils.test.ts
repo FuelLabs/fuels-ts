@@ -16,7 +16,7 @@ describe('util', () => {
     const script = await composeScriptForTransferringToContract();
     expect(script).toStrictEqual(
       new Uint8Array([
-        97, 64, 0, 12, 80, 69, 0, 32, 93, 73, 16, 0, 80, 77, 16, 8, 60, 65, 36, 192, 36, 4, 0, 0,
+        97, 64, 0, 10, 80, 69, 0, 32, 93, 73, 16, 0, 80, 77, 16, 8, 60, 65, 36, 192, 36, 4, 0, 0,
       ])
     );
   });

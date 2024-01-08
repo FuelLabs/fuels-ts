@@ -19,11 +19,11 @@ const deployContract = async (
 };
 
 let walletInstance: WalletUnlocked;
-const createWallet = async () => {
+export const createWallet = async () => {
   if (walletInstance) {
     return walletInstance;
   }
-  const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
+  const provider = await Provider.create(FUEL_NETWORK_URL);
   walletInstance = await generateTestWallet(provider, [
     [5_000_000, BaseAssetId],
     [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],

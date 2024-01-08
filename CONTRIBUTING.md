@@ -128,6 +128,29 @@ This will run `node:run`, `test` and then `node:clean`
 > The tests may break if you are running your tests locally using `node:run` in a separate terminal.
 > To reset your local fuel-core node data and start from scratch, run `node:clean`
 
+### CI Test
+
+During the CI process for the changeset pull request (PR), an automated end-to-end (e2e) test is executed. This test is crucial as it simulates real-world scenarios on the current test-net, ensuring that the changeset maintains the expected functionality and stability.
+
+##### Test Location:
+
+The e2e test can be found at:
+`packages/fuel-gauge/src/e2e-script.test.ts`
+
+These are the wallet informations used in this CI e2e test.
+
+##### Wallet Information for e2e Testing:
+
+The CI e2e test utilizes the following wallet details:
+
+- Bech32 Address:
+  `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`
+
+- Adding Assets to the Wallet:
+  https://faucet-beta-5.fuel.network/
+
+<!-- TODO: add/fix block explorer URL after beta-5 support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
+
 # Commit Convention
 
 Before you create a Pull Request, please check whether your commits comply with

@@ -1,13 +1,13 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.69.1",
+  "version": "0.70.1",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.14.1"
+    "node": "^18.17.1"
   },
   "exports": {
     ".": {
@@ -28,14 +28,11 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.7.1",
     "ramda": "^0.29.0"
   },
   "devDependencies": {
-    "@fuel-ts/testcases": "workspace:*",
     "@types/ramda": "^0.29.3"
   }
 }

@@ -69,13 +69,7 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
-    const { gasPriceFactor } = wallet.provider.getGasConfig();
-
-    const calculatedFee = request.calculateFee(gasPriceFactor);
-
-    const resources = await wallet.getResourcesToSpend([
-      [calculatedFee.amount.add(amountToTransfer), BaseAssetId],
-    ]);
+    const resources = await wallet.getResourcesToSpend([[100_000]]);
 
     request.addResources(resources);
 
@@ -101,7 +95,10 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(sender.address, 500_000, BaseAssetId, { gasPrice });
+    const tx1 = await wallet.transfer(sender.address, 500_000, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     const transactionResponse1 = await tx1.waitForResult();
 
     const amountToTransfer = 100;
@@ -112,6 +109,7 @@ describe('TransactionSummary', () => {
 
     const tx2 = await sender.transfer(destination.address, amountToTransfer, BaseAssetId, {
       gasPrice,
+      gasLimit: 10_000,
     });
     const transactionResponse2 = await tx2.waitForResult();
 
@@ -141,14 +139,7 @@ describe('TransactionSummary', () => {
       gasPrice: 1,
     });
 
-    const { gasPriceFactor } = wallet.provider.getGasConfig();
-
-    const fee = request.calculateFee(gasPriceFactor);
-
-    const amountToTransfer = 100;
-    const resources = await wallet.getResourcesToSpend([
-      [fee.amount.add(amountToTransfer), BaseAssetId],
-    ]);
+    const resources = await wallet.getResourcesToSpend([[100_000, BaseAssetId]]);
 
     request.addResources(resources);
 

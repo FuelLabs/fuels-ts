@@ -1,5 +1,14 @@
 # @fuel-ts/fuel-core
 
+## 0.70.1
+
+## 0.70.0
+
+### Minor Changes
+
+- Upgrading `fuel-core` to `0.22`, by [@arboleya](https://github.com/arboleya) (See [#1511](https://github.com/FuelLabs/fuels-ts/pull/1511))
+- add support for TX policies, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+
 ## 0.69.1
 
 ## 0.69.0

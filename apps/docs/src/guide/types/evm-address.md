@@ -1,4 +1,4 @@
-# EvmAddress
+# `EvmAddress`
 
 An Ethereum Virtual Machine (EVM) Address can be represented using the `EvmAddress` type. It's definition matches the Sway standard library type being a `Struct` wrapper around an inner `Bits256` value.
 

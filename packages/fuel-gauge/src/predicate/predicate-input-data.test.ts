@@ -33,8 +33,9 @@ describe('Predicate', () => {
       await expect(
         predicate.setData(true).transfer(receiver.address, amountToReceiver, BaseAssetId, {
           gasPrice,
+          gasLimit: 10_000,
         })
-      ).rejects.toThrow(/Invalid transaction/i);
+      ).rejects.toThrow(/PredicateVerificationFailed/i);
     });
   });
 });

@@ -36,6 +36,9 @@ export type CallParams = Partial<{
 export type TxParams = Partial<{
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
+  maturity?: number;
+  maxFee?: BigNumberish;
+  witnessLimit?: BigNumberish;
   variableOutputs: number;
 }>;
 // #endregion transaction-params

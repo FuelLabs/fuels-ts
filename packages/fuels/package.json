@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.69.1",
+  "version": "0.70.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,7 +10,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.14.1"
+    "node": "^18.17.1"
   },
   "exports": {
     ".": {
@@ -35,7 +35,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && pnpm vite build",
     "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
@@ -85,7 +85,8 @@
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
-    "@types/rimraf": "^3.0.2"
+    "@types/rimraf": "^3.0.2",
+    "vite": "^4.3.9"
   },
   "keywords": [
     "ethereum",

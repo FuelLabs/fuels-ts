@@ -34,21 +34,21 @@ Learn more about the Fuel Ecosystem.
 
 ## Install
 
-#### YARN
+::: code-group
 
-```sh
-yarn add fuels
+```sh [pnpm]
+pnpm add fuels
 ```
 
-#### NPM
-
-```sh
+```sh [npm]
 npm install fuels --save
 ```
 
+:::
+
 ## Import
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Wallet } from "fuels";
@@ -62,13 +62,13 @@ console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 
 ## Calling Contracts
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
 import abi from "./abi.json";
 
-const provider = await Provider.create('https://beta-4.fuel.network/graphql');
+const provider = await Provider.create('https://beta-5.fuel.network/graphql');
 const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider); // private key with coins
 const contractId = "0x...";
 const contract = new Contract(contractId, abi, wallet);
@@ -85,7 +85,7 @@ console.log(transactionId, value);
 
 ## Deploying Contracts
 
-<!-- TODO: stop using hardcoded snippets -->
+<!-- TODO: stop using hard-coded snippets -->
 
 ```ts:line-numbers
 import { Provider, ContractFactory } from "fuels";
