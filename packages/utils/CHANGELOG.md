@@ -1,5 +1,7 @@
 # @fuel-ts/utils
 
+## 0.70.1
+
 ## 0.70.0
 
 ### Minor Changes
