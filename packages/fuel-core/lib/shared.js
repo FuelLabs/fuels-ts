@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { cpSync, rmSync } from 'fs';
 import fs from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -43,11 +44,11 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
 export const buildFromGitBranch = (branchName) => {
-  execSync('rm -rf fuel-core-repo');
-  execSync('rm -rf fuel-core-binaries');
+  rmSync('fuel-core-repo', { recursive: true, force: true });
+  rmSync('fuel-core-binaries', { recursive: true, force: true });
   execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
   execSync(`cd fuel-core-repo && cargo build`, { silent: true });
-  execSync('mkdir fuel-core-binaries');
-  execSync('cp fuel-core-repo/target/debug/fuel-core fuel-core-binaries/fuel-core');
-  execSync(`rm -rf fuel-core-repo`);
+  fs.mkdirSync('fuel-core-binaries');
+  cpSync('fuel-core-repo/target/debug/fuel-core', 'fuel-core-binaries/fuel-core');
+  rmSync('fuel-core-repo', { recursive: true, force: true });
 };
