@@ -4,7 +4,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { CryptoMock } from './crypto-mock';
 
 /**
- * @group crypto
+ * @group node
  */
 describe('throws when crypto.randomUUID is unavailable', () => {
   test('crypto.randomUUID is undefined', async () => {

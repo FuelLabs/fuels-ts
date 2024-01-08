@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 /**
- * @group crypto
+ * @group node
  */
 describe('throws when btoa is unavailable', () => {
   test('btoa is undefined', async () => {

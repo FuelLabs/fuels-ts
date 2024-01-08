@@ -4,7 +4,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { CryptoMock } from './crypto-mock';
 
 /**
- * @group crypto
+ * @group node
  */
 describe('throws when crypto.subtle is unavailable', () => {
   test('crypto.subtle is undefined', async () => {
