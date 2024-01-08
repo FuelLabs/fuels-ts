@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
 
@@ -18,7 +18,7 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
 
   encode(value: string): Uint8Array {
     if (this.length !== value.length) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Value length mismatch during encode.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Value length mismatch during encode.`);
     }
 
     const encoded = toUtf8Bytes(value);
@@ -27,7 +27,16 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string data size.`);
+    }
+
     const bytes = data.slice(offset, offset + this.length);
+
+    if (bytes.length !== this.length) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string byte data size.`);
+    }
+
     const value = toUtf8String(bytes);
 
     const padding = this.#paddingLength;
