@@ -857,7 +857,7 @@ describe('operations', () => {
         ],
       };
 
-      const operationOTwo: Operation = {
+      const operationTwo: Operation = {
         ...OPERATION_TRANSFER,
         assetsSent: [
           {
@@ -868,7 +868,7 @@ describe('operations', () => {
       };
 
       const baseOperations = addOperation([], operationOne);
-      const stackedOperation = addOperation(baseOperations, operationOTwo);
+      const stackedOperation = addOperation(baseOperations, operationTwo);
 
       expect(stackedOperation.length).toEqual(1);
       expect(stackedOperation[0].assetsSent?.length).toEqual(2);
@@ -879,16 +879,15 @@ describe('operations', () => {
         operationOne.assetsSent?.[0].assetId
       );
       expect(stackedOperation[0].assetsSent?.[1]?.amount.valueOf()).toEqual(
-        operationOTwo.assetsSent?.[0]?.amount.valueOf()
+        operationTwo.assetsSent?.[0]?.amount.valueOf()
       );
       expect(stackedOperation[0].assetsSent?.[1]?.assetId).toEqual(
-        operationOTwo.assetsSent?.[0].assetId
+        operationTwo.assetsSent?.[0].assetId
       );
     });
-    it('ensure operation asset transfer NOT stacks multiple assetSents between different addresses', () => {
+    it('ensure operation asset transfer does not stack multiple assetSents between different addresses', () => {
       const fromOne = getRandomB256();
       const fromTwo = getRandomB256();
-
       const toAddress2 = getRandomB256();
 
       const operationOne: Operation = {
@@ -909,7 +908,7 @@ describe('operations', () => {
         ],
       };
 
-      const operationOTwo: Operation = {
+      const operationTwo: Operation = {
         ...OPERATION_TRANSFER,
         from: {
           address: fromTwo,
@@ -928,7 +927,7 @@ describe('operations', () => {
       };
 
       const baseOperation = addOperation([], operationOne);
-      const multipleOperations = addOperation(baseOperation, operationOTwo);
+      const multipleOperations = addOperation(baseOperation, operationTwo);
 
       expect(multipleOperations.length).toEqual(2);
       expect(multipleOperations[0].assetsSent?.length).toEqual(1);
@@ -940,10 +939,10 @@ describe('operations', () => {
       );
       expect(multipleOperations[1].assetsSent?.length).toEqual(1);
       expect(multipleOperations[1].assetsSent?.[0]?.amount.valueOf()).toEqual(
-        operationOTwo.assetsSent?.[0]?.amount.valueOf()
+        operationTwo.assetsSent?.[0]?.amount.valueOf()
       );
       expect(multipleOperations[1].assetsSent?.[0]?.assetId).toEqual(
-        operationOTwo.assetsSent?.[0].assetId
+        operationTwo.assetsSent?.[0].assetId
       );
     });
     it('should always not stack for contract calls', () => {
