@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.71.0
+
+### Minor Changes
+
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- built new js file specifically for cdnjs integration, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+### Patch Changes
+
+- Updating chain config for `fuels` CLI and `wallet` utils, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- 🐞 fix: replace the outdated `--manual_blocks_enabled` flag with `--debug` (fuel-core), by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
 ## 0.70.1
 
 ## 0.70.0
