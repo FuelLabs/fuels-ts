@@ -1,3 +1,4 @@
+import { getRandomB256 } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
@@ -698,6 +699,9 @@ describe('operations', () => {
 
     const fromAddress = getInputAccountAddress(coinInput[0]);
 
+    const assetA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+
     const OPERATION_CONTRACT_CALL = {
       name: OperationName.contractCall,
       from: {
@@ -721,6 +725,24 @@ describe('operations', () => {
           argumentsProvided: {
             amount: bn(100000),
           },
+        },
+      ],
+    };
+
+    const OPERATION_TRANSFER = {
+      name: OperationName.transfer,
+      from: {
+        type: 1,
+        address: getRandomB256(),
+      },
+      to: {
+        type: 1,
+        address: getRandomB256(),
+      },
+      assetsSent: [
+        {
+          assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+          amount: bn(100),
         },
       ],
     };
@@ -795,7 +817,7 @@ describe('operations', () => {
         OPERATION_CONTRACT_CALL.assetsSent[0].assetId
       );
     });
-    it('should stack when same asset is added together with a different asset', () => {
+    it('should stack when same asset is added together with a different asset [CONTRACT-CALL]', () => {
       const DIF_ASSET_ID = '0x0012300000000000000000000000000000000001';
       const operationTwoAssets: Operation = {
         ...OPERATION_CONTRACT_CALL,
@@ -823,6 +845,106 @@ describe('operations', () => {
         OPERATION_CONTRACT_CALL.assetsSent[0].amount.valueOf()
       );
       expect(operationsAddedSameAsset[0].assetsSent?.[1]?.assetId).toEqual(DIF_ASSET_ID);
+    });
+    it('ensure operation asset transfer stacks multiple assetSents between same addresses', () => {
+      const operationOne: Operation = {
+        ...OPERATION_TRANSFER,
+        assetsSent: [
+          {
+            assetId: assetA,
+            amount: bn(100),
+          },
+        ],
+      };
+
+      const operationOTwo: Operation = {
+        ...OPERATION_TRANSFER,
+        assetsSent: [
+          {
+            assetId: assetB,
+            amount: bn(200),
+          },
+        ],
+      };
+
+      const baseOperations = addOperation([], operationOne);
+      const stackedOperation = addOperation(baseOperations, operationOTwo);
+
+      expect(stackedOperation.length).toEqual(1);
+      expect(stackedOperation[0].assetsSent?.length).toEqual(2);
+      expect(stackedOperation[0].assetsSent?.[0]?.amount.valueOf()).toEqual(
+        operationOne.assetsSent?.[0]?.amount.valueOf()
+      );
+      expect(stackedOperation[0].assetsSent?.[0]?.assetId).toEqual(
+        operationOne.assetsSent?.[0].assetId
+      );
+      expect(stackedOperation[0].assetsSent?.[1]?.amount.valueOf()).toEqual(
+        operationOTwo.assetsSent?.[0]?.amount.valueOf()
+      );
+      expect(stackedOperation[0].assetsSent?.[1]?.assetId).toEqual(
+        operationOTwo.assetsSent?.[0].assetId
+      );
+    });
+    it('ensure operation asset transfer NOT stacks multiple assetSents between different addresses', () => {
+      const fromOne = getRandomB256();
+      const fromTwo = getRandomB256();
+
+      const toAddress2 = getRandomB256();
+
+      const operationOne: Operation = {
+        ...OPERATION_TRANSFER,
+        from: {
+          address: fromOne,
+          type: 1,
+        },
+        to: {
+          address: toAddress2,
+          type: 1,
+        },
+        assetsSent: [
+          {
+            assetId: assetA,
+            amount: bn(100),
+          },
+        ],
+      };
+
+      const operationOTwo: Operation = {
+        ...OPERATION_TRANSFER,
+        from: {
+          address: fromTwo,
+          type: 1,
+        },
+        to: {
+          address: toAddress2,
+          type: 1,
+        },
+        assetsSent: [
+          {
+            assetId: assetB,
+            amount: bn(200),
+          },
+        ],
+      };
+
+      const baseOperation = addOperation([], operationOne);
+      const multipleOperations = addOperation(baseOperation, operationOTwo);
+
+      expect(multipleOperations.length).toEqual(2);
+      expect(multipleOperations[0].assetsSent?.length).toEqual(1);
+      expect(multipleOperations[0].assetsSent?.[0]?.amount.valueOf()).toEqual(
+        operationOne.assetsSent?.[0]?.amount.valueOf()
+      );
+      expect(multipleOperations[0].assetsSent?.[0]?.assetId).toEqual(
+        operationOne.assetsSent?.[0].assetId
+      );
+      expect(multipleOperations[1].assetsSent?.length).toEqual(1);
+      expect(multipleOperations[1].assetsSent?.[0]?.amount.valueOf()).toEqual(
+        operationOTwo.assetsSent?.[0]?.amount.valueOf()
+      );
+      expect(multipleOperations[1].assetsSent?.[0]?.assetId).toEqual(
+        operationOTwo.assetsSent?.[0].assetId
+      );
     });
     it('should always not stack for contract calls', () => {
       const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
