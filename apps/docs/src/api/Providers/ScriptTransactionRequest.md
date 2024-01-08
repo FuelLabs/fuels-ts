@@ -34,7 +34,7 @@ Constructor for `ScriptTransactionRequest`.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:50](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L50)
+[packages/providers/src/transaction-request/script-transaction-request.ts:61](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L61)
 
 ## Properties
 
@@ -44,13 +44,9 @@ Constructor for `ScriptTransactionRequest`.
 
 Gas limit for transaction
 
-#### Inherited from
-
-[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[gasLimit](/api/Providers/BaseTransactionRequest.md#gaslimit)
-
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:68](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L68)
+[packages/providers/src/transaction-request/script-transaction-request.ts:50](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L50)
 
 ___
 
@@ -66,7 +62,7 @@ Gas price for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L66)
+[packages/providers/src/transaction-request/transaction-request.ts:92](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L92)
 
 ___
 
@@ -82,7 +78,7 @@ List of inputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:72](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L72)
+[packages/providers/src/transaction-request/transaction-request.ts:100](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L100)
 
 ___
 
@@ -98,7 +94,23 @@ Block until which tx cannot be included
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:70](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L70)
+[packages/providers/src/transaction-request/transaction-request.ts:94](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L94)
+
+___
+
+### maxFee
+
+• `Optional` **maxFee**: `BN`
+
+The maximum fee payable by this transaction using BASE_ASSET.
+
+#### Inherited from
+
+[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[maxFee](/api/Providers/BaseTransactionRequest.md#maxfee)
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:96](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L96)
 
 ___
 
@@ -114,7 +126,7 @@ List of outputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:74](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L74)
+[packages/providers/src/transaction-request/transaction-request.ts:102](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L102)
 
 ___
 
@@ -126,7 +138,7 @@ Script to execute
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:41](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L41)
+[packages/providers/src/transaction-request/script-transaction-request.ts:52](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L52)
 
 ___
 
@@ -138,7 +150,7 @@ Script input data (parameters)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:43](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L43)
+[packages/providers/src/transaction-request/script-transaction-request.ts:54](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L54)
 
 ___
 
@@ -154,7 +166,23 @@ Type of the transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:39](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L39)
+[packages/providers/src/transaction-request/script-transaction-request.ts:48](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L48)
+
+___
+
+### witnessLimit
+
+• `Optional` **witnessLimit**: `BN`
+
+The maximum amount of witness data allowed for the transaction
+
+#### Inherited from
+
+[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[witnessLimit](/api/Providers/BaseTransactionRequest.md#witnesslimit)
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:98](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L98)
 
 ___
 
@@ -170,7 +198,7 @@ List of witnesses
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:76](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L76)
+[packages/providers/src/transaction-request/transaction-request.ts:104](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L104)
 
 ## Methods
 
@@ -197,7 +225,7 @@ Adds a change output to the transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:439](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L439)
+[packages/providers/src/transaction-request/transaction-request.ts:497](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L497)
 
 ___
 
@@ -225,7 +253,7 @@ assetId, if one it was not added yet.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:257](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L257)
+[packages/providers/src/transaction-request/transaction-request.ts:315](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L315)
 
 ___
 
@@ -253,7 +281,7 @@ Adds a coin output to the transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:403](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L403)
+[packages/providers/src/transaction-request/transaction-request.ts:461](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L461)
 
 ___
 
@@ -280,7 +308,7 @@ Adds multiple coin outputs to the transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:420](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L420)
+[packages/providers/src/transaction-request/transaction-request.ts:478](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L478)
 
 ___
 
@@ -304,7 +332,7 @@ The current instance of the `ScriptTransactionRequest`.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:144](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L144)
+[packages/providers/src/transaction-request/script-transaction-request.ts:175](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L175)
 
 ___
 
@@ -332,7 +360,7 @@ baseAssetId, if one it was not added yet.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:300](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L300)
+[packages/providers/src/transaction-request/transaction-request.ts:358](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L358)
 
 ___
 
@@ -362,7 +390,7 @@ This transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:373](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L373)
+[packages/providers/src/transaction-request/transaction-request.ts:431](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L431)
 
 ___
 
@@ -392,7 +420,7 @@ This transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:390](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L390)
+[packages/providers/src/transaction-request/transaction-request.ts:448](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L448)
 
 ___
 
@@ -421,7 +449,7 @@ This transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:343](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L343)
+[packages/providers/src/transaction-request/transaction-request.ts:401](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L401)
 
 ___
 
@@ -450,7 +478,7 @@ This transaction.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:360](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L360)
+[packages/providers/src/transaction-request/transaction-request.ts:418](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L418)
 
 ___
 
@@ -474,36 +502,32 @@ The new length of the outputs array.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:125](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L125)
+[packages/providers/src/transaction-request/script-transaction-request.ts:138](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L138)
 
 ___
 
-### calculateFee
+### calculateMaxGas
 
-▸ **calculateFee**(`gasPriceFactor`): [`CoinQuantity`](/api/Providers/index.md#coinquantity)
-
-Return the minimum amount in native coins required to create
-a transaction. This is required even if the gasPrice is 0.
+▸ **calculateMaxGas**(`chainInfo`, `minGas`): `BN`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `gasPriceFactor` | `BN` |
+| `chainInfo` | [`ChainInfo`](/api/Providers/index.md#chaininfo) |
+| `minGas` | `BN` |
 
 #### Returns
 
-[`CoinQuantity`](/api/Providers/index.md#coinquantity)
+`BN`
 
-The minimum amount in coins required to create a transaction.
+#### Overrides
 
-#### Inherited from
-
-[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[calculateFee](/api/Providers/BaseTransactionRequest.md#calculatefee)
+[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[calculateMaxGas](/api/Providers/BaseTransactionRequest.md#calculatemaxgas)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:473](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L473)
+[packages/providers/src/transaction-request/script-transaction-request.ts:151](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L151)
 
 ___
 
@@ -530,19 +554,19 @@ quantities array.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:488](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L488)
+[packages/providers/src/transaction-request/transaction-request.ts:564](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L564)
 
 ___
 
 ### getBaseTransaction
 
-▸ **getBaseTransaction**(): `Pick`&lt;`TransactionScript` \| `TransactionCreate`, ``"inputsCount"`` \| ``"outputsCount"`` \| ``"witnessesCount"`` \| keyof `BaseTransactionRequestLike`\>
+▸ **getBaseTransaction**(): `ToBaseTransactionResponse`
 
 Method to obtain the base transaction details.
 
 #### Returns
 
-`Pick`&lt;`TransactionScript` \| `TransactionCreate`, ``"inputsCount"`` \| ``"outputsCount"`` \| ``"witnessesCount"`` \| keyof `BaseTransactionRequestLike`\>
+`ToBaseTransactionResponse`
 
 The base transaction details.
 
@@ -552,7 +576,7 @@ The base transaction details.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:104](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L104)
+[packages/providers/src/transaction-request/transaction-request.ts:162](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L162)
 
 ___
 
@@ -574,7 +598,7 @@ The change outputs.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:219](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L219)
+[packages/providers/src/transaction-request/transaction-request.ts:277](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L277)
 
 ___
 
@@ -596,7 +620,7 @@ The coin inputs.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:197](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L197)
+[packages/providers/src/transaction-request/transaction-request.ts:255](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L255)
 
 ___
 
@@ -618,7 +642,7 @@ The coin outputs.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:208](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L208)
+[packages/providers/src/transaction-request/transaction-request.ts:266](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L266)
 
 ___
 
@@ -641,7 +665,7 @@ CoinQuantity array.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:519](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L519)
+[packages/providers/src/transaction-request/transaction-request.ts:611](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L611)
 
 ___
 
@@ -659,7 +683,7 @@ An array of contract transaction request inputs.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:80](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L80)
+[packages/providers/src/transaction-request/script-transaction-request.ts:93](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L93)
 
 ___
 
@@ -677,7 +701,35 @@ An array of contract transaction request outputs.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:91](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L91)
+[packages/providers/src/transaction-request/script-transaction-request.ts:104](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L104)
+
+___
+
+### getTransactionId
+
+▸ **getTransactionId**(`chainId`): `string`
+
+Gets the Transaction Request by hashing the transaction.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `chainId` | `number` | The chain ID. |
+
+#### Returns
+
+`string`
+
+- A hash of the transaction, which is the transaction ID.
+
+#### Overrides
+
+[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[getTransactionId](/api/Providers/BaseTransactionRequest.md#gettransactionid)
+
+#### Defined in
+
+[packages/providers/src/transaction-request/script-transaction-request.ts:204](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L204)
 
 ___
 
@@ -695,7 +747,31 @@ An array of variable transaction request outputs.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:102](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L102)
+[packages/providers/src/transaction-request/script-transaction-request.ts:115](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L115)
+
+___
+
+### metadataGas
+
+▸ **metadataGas**(`gasCosts`): `BN`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `gasCosts` | `GqlGasCosts` |
+
+#### Returns
+
+`BN`
+
+#### Overrides
+
+BaseTransactionRequest.metadataGas
+
+#### Defined in
+
+[packages/providers/src/transaction-request/script-transaction-request.ts:221](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L221)
 
 ___
 
@@ -720,7 +796,7 @@ The current instance of the `ScriptTransactionRequest`.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:173](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L173)
+[packages/providers/src/transaction-request/script-transaction-request.ts:215](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L215)
 
 ___
 
@@ -749,7 +825,7 @@ Set the script and its data.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:114](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L114)
+[packages/providers/src/transaction-request/script-transaction-request.ts:127](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L127)
 
 ___
 
@@ -772,7 +848,7 @@ The transaction as a JSON object.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:534](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L534)
+[packages/providers/src/transaction-request/transaction-request.ts:635](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L635)
 
 ___
 
@@ -794,7 +870,7 @@ The transaction script object.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:61](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L61)
+[packages/providers/src/transaction-request/script-transaction-request.ts:73](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L73)
 
 ___
 
@@ -816,7 +892,7 @@ The transaction bytes.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:131](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L131)
+[packages/providers/src/transaction-request/transaction-request.ts:188](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L188)
 
 ___
 
@@ -847,7 +923,7 @@ If the witness does not exist.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:185](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L185)
+[packages/providers/src/transaction-request/transaction-request.ts:243](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L243)
 
 ___
 
@@ -874,7 +950,7 @@ Updates the witness for a given owner and signature.
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:171](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/transaction-request.ts#L171)
+[packages/providers/src/transaction-request/transaction-request.ts:229](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L229)
 
 ___
 
@@ -894,4 +970,33 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/script-transaction-request.ts:31](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/providers/src/transaction-request/script-transaction-request.ts#L31)
+[packages/providers/src/transaction-request/script-transaction-request.ts:40](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/script-transaction-request.ts#L40)
+
+___
+
+### getPolicyMeta
+
+▸ **getPolicyMeta**(`req`): `Object`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `req` | [`BaseTransactionRequest`](/api/Providers/BaseTransactionRequest.md) |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `policies` | `Policy`[] |
+| `policyTypes` | `number` |
+
+#### Inherited from
+
+[BaseTransactionRequest](/api/Providers/BaseTransactionRequest.md).[getPolicyMeta](/api/Providers/BaseTransactionRequest.md#getpolicymeta)
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:129](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/providers/src/transaction-request/transaction-request.ts#L129)

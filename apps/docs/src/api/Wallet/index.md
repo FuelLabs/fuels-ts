@@ -12,8 +12,8 @@
 
 ### TxParamsType
 
-Ƭ **TxParamsType**: `Pick`&lt;[`TransactionRequestLike`](/api/Providers/index.md#transactionrequestlike), ``"gasLimit"`` \| ``"gasPrice"`` \| ``"maturity"``\>
+Ƭ **TxParamsType**: `Pick`&lt;`ScriptTransactionRequestLike`, ``"gasLimit"`` \| ``"gasPrice"`` \| ``"maturity"`` \| ``"maxFee"`` \| ``"witnessLimit"``\>
 
 #### Defined in
 
-[account.ts:35](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/wallet/src/account.ts#L35)
+[account.ts:36](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/wallet/src/account.ts#L36)

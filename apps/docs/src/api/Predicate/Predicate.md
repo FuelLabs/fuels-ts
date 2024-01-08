@@ -38,7 +38,7 @@ Creates an instance of the Predicate class.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bytes` | `BytesLike` | The bytes of the predicate. |
+| `bytes` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The bytes of the predicate. |
 | `provider` | [`Provider`](/api/Providers/Provider.md) | The provider used to interact with the blockchain. |
 | `jsonAbi?` | `JsonAbi` | The JSON ABI of the predicate. |
 | `configurableConstants?` | `Object` | Optional configurable constants for the predicate. |
@@ -53,7 +53,7 @@ Creates an instance of the Predicate class.
 
 #### Defined in
 
-[predicate/src/predicate.ts:48](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L48)
+[predicate/src/predicate.ts:46](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L46)
 
 ## Properties
 
@@ -87,7 +87,7 @@ AbstractPredicate.bytes
 
 #### Defined in
 
-[predicate/src/predicate.ts:34](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L34)
+[predicate/src/predicate.ts:33](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L33)
 
 ___
 
@@ -97,7 +97,17 @@ ___
 
 #### Defined in
 
-[predicate/src/predicate.ts:36](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L36)
+[predicate/src/predicate.ts:36](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L36)
+
+___
+
+### predicateArgs
+
+• **predicateArgs**: `ARGS`
+
+#### Defined in
+
+[predicate/src/predicate.ts:35](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L35)
 
 ___
 
@@ -111,7 +121,7 @@ AbstractPredicate.predicateData
 
 #### Defined in
 
-[predicate/src/predicate.ts:35](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L35)
+[predicate/src/predicate.ts:34](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L34)
 
 ___
 
@@ -159,9 +169,40 @@ wallet/dist/account.d.ts:32
 
 ___
 
+### createTransfer
+
+▸ **createTransfer**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`&lt;[`TransactionRequest`](/api/Providers/index.md#transactionrequest)\>
+
+A helper that creates a transfer transaction request and returns it.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
+| `amount` | `BigNumberish` | `undefined` | The amount of coins to transfer. |
+| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `BaseAssetId` | The asset ID of the coins to transfer. |
+| `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | `{}` | The transaction parameters (gasLimit, gasPrice, maturity). |
+
+#### Returns
+
+`Promise`&lt;[`TransactionRequest`](/api/Providers/index.md#transactionrequest)\>
+
+A promise that resolves to the prepared transaction request.
+
+#### Overrides
+
+[Account](/api/Wallet/Account.md).[createTransfer](/api/Wallet/Account.md#createtransfer)
+
+#### Defined in
+
+[predicate/src/predicate.ts:96](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L96)
+
+___
+
 ### fund
 
-▸ **fund**&lt;`T`\>(`request`, `quantities`, `fee`): `Promise`&lt;`void`\>
+▸ **fund**&lt;`T`\>(`request`, `coinQuantities`, `fee`): `Promise`&lt;`void`\>
 
 Adds resources to the transaction enough to fund it.
 
@@ -176,8 +217,8 @@ Adds resources to the transaction enough to fund it.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `request` | `T` | The transaction request. |
-| `quantities` | [`CoinQuantity`](/api/Providers/index.md#coinquantity)[] | - |
-| `fee` | `BN` | - |
+| `coinQuantities` | [`CoinQuantity`](/api/Providers/index.md#coinquantity)[] | The coin quantities required to execute the transaction. |
+| `fee` | `BN` | The estimated transaction fee. |
 
 #### Returns
 
@@ -191,7 +232,7 @@ A promise that resolves when the resources are added to the transaction.
 
 #### Defined in
 
-wallet/dist/account.d.ts:73
+wallet/dist/account.d.ts:75
 
 ___
 
@@ -295,6 +336,26 @@ wallet/dist/account.d.ts:53
 
 ___
 
+### getPredicateData
+
+▸ **getPredicateData**(`policiesLength`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `policiesLength` | `number` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[predicate/src/predicate.ts:144](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L144)
+
+___
+
 ### getResourcesToSpend
 
 ▸ **getResourcesToSpend**(`quantities`, `excludedIds?`): `Promise`&lt;[`Resource`](/api/Providers/index.md#resource)[]\>
@@ -324,33 +385,6 @@ wallet/dist/account.d.ts:40
 
 ___
 
-### getTransferTxId
-
-▸ **getTransferTxId**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`&lt;`string`\>
-
-Returns the transaction ID for a transfer transaction, without sending it.
-
-#### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
-| `amount` | `BigNumberish` | `undefined` | The amount of coins to transfer. |
-| `assetId` | `BytesLike` | `BaseAssetId` | The asset ID of the coins to transfer. |
-| `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | `{}` | The transaction parameters (gasLimit, gasPrice, maturity). |
-
-#### Returns
-
-`Promise`&lt;`string`\>
-
-A promise that resolves to the transaction ID.
-
-#### Defined in
-
-[predicate/src/predicate.ts:108](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L108)
-
-___
-
 ### populateTransactionPredicateData
 
 ▸ **populateTransactionPredicateData**(`transactionRequestLike`): [`TransactionRequest`](/api/Providers/index.md#transactionrequest)
@@ -371,38 +405,7 @@ The transaction request with predicate data.
 
 #### Defined in
 
-[predicate/src/predicate.ts:73](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L73)
-
-___
-
-### prepareTransferTxRequest
-
-▸ **prepareTransferTxRequest**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`&lt;[`TransactionRequest`](/api/Providers/index.md#transactionrequest)\>
-
-A helper that prepares a transaction request for calculating the transaction ID.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the destination. |
-| `amount` | `BigNumberish` | The amount of coins to transfer. |
-| `assetId?` | `BytesLike` | The asset ID of the coins to transfer. |
-| `txParams?` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | The transaction parameters (gasLimit, gasPrice, maturity). |
-
-#### Returns
-
-`Promise`&lt;[`TransactionRequest`](/api/Providers/index.md#transactionrequest)\>
-
-A promise that resolves to the prepared transaction request.
-
-#### Inherited from
-
-[Account](/api/Wallet/Account.md).[prepareTransferTxRequest](/api/Wallet/Account.md#preparetransfertxrequest)
-
-#### Defined in
-
-wallet/dist/account.d.ts:101
+[predicate/src/predicate.ts:70](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L70)
 
 ___
 
@@ -430,7 +433,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[predicate/src/predicate.ts:94](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L94)
+[predicate/src/predicate.ts:116](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L116)
 
 ___
 
@@ -460,7 +463,7 @@ The Predicate instance with updated predicate data.
 
 #### Defined in
 
-[predicate/src/predicate.ts:140](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L140)
+[predicate/src/predicate.ts:138](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L138)
 
 ___
 
@@ -488,7 +491,7 @@ A promise that resolves to the call result.
 
 #### Defined in
 
-[predicate/src/predicate.ts:129](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L129)
+[predicate/src/predicate.ts:127](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L127)
 
 ___
 
@@ -519,7 +522,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-wallet/dist/account.d.ts:83
+wallet/dist/account.d.ts:103
 
 ___
 
@@ -550,7 +553,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-wallet/dist/account.d.ts:119
+wallet/dist/account.d.ts:121
 
 ___
 
@@ -580,7 +583,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-wallet/dist/account.d.ts:136
+wallet/dist/account.d.ts:138
 
 ___
 
@@ -594,7 +597,7 @@ Processes the predicate data and returns the altered bytecode and interface.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bytes` | `BytesLike` | The bytes of the predicate. |
+| `bytes` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The bytes of the predicate. |
 | `jsonAbi?` | `JsonAbi` | The JSON ABI of the predicate. |
 | `configurableConstants?` | `Object` | Optional configurable constants for the predicate. |
 
@@ -611,7 +614,7 @@ An object containing the new predicate bytes and interface.
 
 #### Defined in
 
-[predicate/src/predicate.ts:162](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L162)
+[predicate/src/predicate.ts:174](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L174)
 
 ___
 
@@ -637,4 +640,4 @@ The mutated bytes with the configurable constants set.
 
 #### Defined in
 
-[predicate/src/predicate.ts:202](https://github.com/FuelLabs/fuels-ts/blob/7ea9f4a7/packages/predicate/src/predicate.ts#L202)
+[predicate/src/predicate.ts:214](https://github.com/FuelLabs/fuels-ts/blob/b7073a1e/packages/predicate/src/predicate.ts#L214)

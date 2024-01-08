@@ -10,7 +10,7 @@
 
 #### Defined in
 
-packages/transactions/dist/coders/transaction.d.ts:10
+packages/transactions/dist/coders/transaction.d.ts:11
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-packages/transactions/dist/coders/transaction.d.ts:11
+packages/transactions/dist/coders/transaction.d.ts:12
 
 ___
 
@@ -30,4 +30,4 @@ ___
 
 #### Defined in
 
-packages/transactions/dist/coders/transaction.d.ts:9
+packages/transactions/dist/coders/transaction.d.ts:10
