@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.70.1
+
+### Patch Changes
+
+- Removing unnecessary await, by [@arboleya](https://github.com/arboleya) (See [#1621](https://github.com/FuelLabs/fuels-ts/pull/1621))
+
 ## 0.70.0
 
 ### Minor Changes
