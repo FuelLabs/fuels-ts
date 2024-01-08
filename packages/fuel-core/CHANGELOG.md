@@ -1,5 +1,16 @@
 # @fuel-ts/fuel-core
 
+## 0.71.0
+
+### Minor Changes
+
+- Upgrading `fuel-core` to `0.22`, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- add support for TX policies, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+### Patch Changes
+
+- Removing unnecessary await, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
 ## 0.70.1
 
 ## 0.70.0

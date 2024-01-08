@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.71.0
+
+### Minor Changes
+
+- add method to hash tx on TransactionRequest classes, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- ensure estimated fee values returned by getTransactionCost are never 0, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- re-implement calculateTransactionFee helper, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- 🐞 fix Account fund and Provider fundWithFakeUtxos, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- Upgrading `fuel-core` to `0.22`, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- add support for TX policies, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+### Patch Changes
+
+- bugfix when amount of requested resources to spend is less than 1, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
 ## 0.70.1
 
 ## 0.70.0
