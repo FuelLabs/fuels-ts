@@ -1,77 +1,187 @@
-import { Provider } from '@fuel-ts/providers';
-import path from 'path';
-import { cwd } from 'process';
+import { safeExec } from '@fuel-ts/errors/test-utils';
+import * as childProcessMod from 'child_process';
 
-import { WalletUnlocked } from '../wallets';
+import { killNode, launchNode } from './launchNode';
 
-import { launchNodeAndGetWallets } from './launchNode';
+type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
 
+vi.mock('child_process', () => ({
+  __esModule: true,
+  ...vi.importActual('child_process'),
+}));
+
+/**
+ * This should mimic the stderr.on('data') event, returning both
+ * success and error messages, as strings. These messages are like
+ * the ones from `fuel-core` startup log messages. We filter them
+ * to know fuel-core state.
+ */
+function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const stderrOn = (eventName: string, fn: (data: any) => void) => {
+    if (eventName === 'data') {
+      if (params.shouldError) {
+        // The `IO error` message simulates a possible fuel-core error log message
+        fn('IO error');
+      } else {
+        // The `Binding GraphQL provider to` message simulates a fuel-core
+        // successful startup log message, usually meaning that the node
+        // is up and waiting for connections
+        fn('Binding GraphQL provider to');
+      }
+    }
+  };
+
+  const innerMocks = {
+    on: vi.fn(),
+    stderr: {
+      pipe: vi.fn(),
+      on: vi.fn(stderrOn),
+      removeAllListeners: vi.fn(),
+    },
+    stdout: {
+      pipe: vi.fn(),
+      removeAllListeners: vi.fn(),
+    },
+  };
+
+  const spawn = vi
+    .spyOn(childProcessMod, 'spawn')
+    .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
+
+  return { spawn, innerMocks };
+}
+
+const defaultLaunchNodeConfig = {
+  ip: '0.0.0.0',
+  port: '4000',
+};
+
+/**
+ * @group node
+ */
 describe('launchNode', () => {
-  test('launchNodeAndGetWallets - empty config', async () => {
-    const { stop, provider, wallets } = await launchNodeAndGetWallets();
-    expect(provider).toBeInstanceOf(Provider);
-    expect(wallets.length).toBe(10);
-    wallets.forEach((wallet) => {
-      expect(wallet).toBeInstanceOf(WalletUnlocked);
+  test('should start `fuel-core` node using built-in binary', async () => {
+    mockSpawn();
+
+    const { cleanup, ip, port } = await launchNode({
+      ...defaultLaunchNodeConfig,
+      useSystemFuelCore: false,
     });
-    stop();
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+    cleanup();
   });
 
-  test('launchNodeAndGetWallets - custom config', async () => {
-    // #region launchNode-custom-config
-    const chainConfigPath = path.join(cwd(), '.fuel-core/configs/chainConfig.json');
+  test('should start `fuel-core` node using system binary', async () => {
+    mockSpawn();
 
-    const { stop, provider } = await launchNodeAndGetWallets({
-      launchNodeOptions: {
-        chainConfigPath,
+    const { cleanup, ip, port } = await launchNode({
+      ...defaultLaunchNodeConfig,
+      useSystemFuelCore: true,
+    });
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+
+    cleanup();
+  });
+
+  test('should throw on error', async () => {
+    const { innerMocks } = mockSpawn({ shouldError: true });
+
+    const { error: safeError, result } = await safeExec(async () =>
+      launchNode(defaultLaunchNodeConfig)
+    );
+
+    expect(safeError).toBeTruthy();
+    expect(result).not.toBeTruthy();
+
+    expect(innerMocks.on).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
+  });
+
+  test('should pipe stdout', async () => {
+    vi.spyOn(process.stdout, 'write').mockImplementation(vi.fn());
+
+    const { innerMocks } = mockSpawn();
+
+    const { cleanup } = await launchNode(defaultLaunchNodeConfig);
+
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
+
+    cleanup();
+  });
+
+  test('should pipe stdout and stderr', async () => {
+    vi.spyOn(process.stderr, 'write').mockImplementation(vi.fn());
+    vi.spyOn(process.stdout, 'write').mockImplementation(vi.fn());
+
+    const { innerMocks } = mockSpawn();
+
+    await launchNode({
+      ...defaultLaunchNodeConfig,
+      debugEnabled: true,
+    });
+
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
+  });
+
+  test('should kill process only if PID exists and node is alive', () => {
+    const killFn = vi.fn();
+    const state = { isDead: true };
+
+    // should not kill
+    let child = {
+      pid: undefined,
+      stdout: {
+        removeAllListeners: () => {},
       },
+      stderr: {
+        removeAllListeners: () => {},
+      },
+    } as ChildProcessWithoutNullStreams;
+    killNode({
+      child,
+      configPath: '',
+      killFn,
+      state,
     });
+    expect(killFn).toHaveBeenCalledTimes(0);
+    expect(state.isDead).toEqual(true);
 
-    const {
-      consensusParameters: { gasPerByte },
-    } = provider.getChain();
-
-    expect(gasPerByte.toNumber()).toEqual(4);
-
-    stop();
-    // #endregion launchNode-custom-config
-  });
-
-  test('launchNodeAndGetWallets - custom walletCount', async () => {
-    const { stop, wallets } = await launchNodeAndGetWallets({
-      walletCount: 5,
+    // should not kill
+    child = {
+      pid: 1,
+      stdout: {
+        removeAllListeners: () => {},
+      },
+      stderr: {
+        removeAllListeners: () => {},
+      },
+    } as ChildProcessWithoutNullStreams;
+    killNode({
+      child,
+      configPath: '',
+      killFn,
+      state,
     });
-    expect(wallets.length).toBe(5);
-    wallets.forEach((wallet) => {
-      expect(wallet).toBeInstanceOf(WalletUnlocked);
+    expect(killFn).toHaveBeenCalledTimes(0);
+    expect(state.isDead).toEqual(true);
+
+    // should kill
+    state.isDead = false;
+    killNode({
+      child,
+      configPath: '',
+      killFn,
+      state,
     });
-    stop();
-  });
-
-  describe('without a GENESIS_SECRET', () => {
-    let GENESIS_SECRET: string | undefined;
-
-    beforeAll(() => {
-      GENESIS_SECRET = process.env.GENESIS_SECRET;
-      delete process.env.GENESIS_SECRET;
-    });
-
-    afterAll(() => {
-      process.env.GENESIS_SECRET = GENESIS_SECRET;
-    });
-
-    test('launchNodeAndGetWallets - empty config', async () => {
-      const { stop, provider, wallets } = await launchNodeAndGetWallets();
-      expect(provider).toBeInstanceOf(Provider);
-      expect(wallets.length).toBe(10);
-      wallets.forEach((wallet) => {
-        expect(wallet).toBeInstanceOf(WalletUnlocked);
-      });
-
-      expect(process.env.GENESIS_SECRET).toBeDefined();
-      expect(process.env.GENESIS_SECRET).not.toEqual(GENESIS_SECRET);
-      expect(process.env.GENESIS_SECRET).toHaveLength(66);
-      stop();
-    });
+    expect(killFn).toHaveBeenCalledTimes(1);
+    expect(state.isDead).toEqual(true);
   });
 });

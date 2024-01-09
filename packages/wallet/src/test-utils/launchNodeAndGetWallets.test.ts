@@ -6,6 +6,9 @@ import { WalletUnlocked } from '../wallets';
 
 import { launchNodeAndGetWallets } from './launchNode';
 
+/**
+ * @group node
+ */
 describe('launchNode', () => {
   test('launchNodeAndGetWallets - empty config', async () => {
     const { stop, provider, wallets } = await launchNodeAndGetWallets();
