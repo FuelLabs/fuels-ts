@@ -608,7 +608,7 @@ export default class Provider {
     if (awaitExecution) {
       const subscription = this.operations.submitAndAwait({ encodedTransaction });
       for await (const { submitAndAwait } of subscription) {
-        if (submitAndAwait.type === 'SuccessStatus') {
+        if (submitAndAwait.type !== 'SubmittedStatus') {
           break;
         }
       }
