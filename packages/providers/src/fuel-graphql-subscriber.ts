@@ -10,40 +10,7 @@ type FuelGraphQLSubscriberOptions = {
   abortController?: AbortController;
 };
 
-class FuelSubscriptionStream implements TransformStream {
-  readable: ReadableStream<FuelError | Record<string, unknown>>;
-  writable: WritableStream<Uint8Array>;
-  private readableStreamController!: ReadableStreamController<FuelError | Record<string, unknown>>;
-  private static textDecoder = new TextDecoder();
-
-  constructor() {
-    this.readable = new ReadableStream({
-      start: (controller) => {
-        this.readableStreamController = controller;
-      },
-    });
-
-    this.writable = new WritableStream<Uint8Array>({
-      write: (bytes) => {
-        const text = FuelSubscriptionStream.textDecoder.decode(bytes);
-        // the fuel node sends keep-alive messages that should be ignored
-        if (text.startsWith('data:')) {
-          const { data, errors } = JSON.parse(text.split('data:')[1]);
-          if (Array.isArray(errors)) {
-            this.readableStreamController.enqueue(
-              new FuelError(
-                FuelError.CODES.INVALID_REQUEST,
-                errors.map((err) => err.message).join('\n\n')
-              )
-            );
-          } else {
-            this.readableStreamController.enqueue(data);
-          }
-        }
-      },
-    });
-  }
-}
+const decoder = new TextDecoder();
 
 export async function* fuelGraphQLSubscriber({
   url,
@@ -63,19 +30,21 @@ export async function* fuelGraphQLSubscriber({
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const subscriptionStreamReader = response
-    .body!.pipeThrough(new FuelSubscriptionStream())
-    .getReader();
+  const body = response.body as ReadableStream<Uint8Array> & AsyncIterable<Uint8Array>;
 
-  while (true) {
-    const { value, done } = await subscriptionStreamReader.read();
-    if (value instanceof FuelError) {
-      throw value;
-    }
-    yield value;
-    if (done) {
-      break;
+  for await (const bytes of body) {
+    const text = decoder.decode(bytes);
+
+    if (text.startsWith('data:')) {
+      const { data, errors } = JSON.parse(text.split('data:')[1]);
+      if (Array.isArray(errors)) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_REQUEST,
+          errors.map((err) => err.message).join('\n\n')
+        );
+      } else {
+        yield data;
+      }
     }
   }
 }
