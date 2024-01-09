@@ -104,19 +104,25 @@ const mergeAssets = (op1: Operation, op2: Operation) => {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
 
+  // Getting assets from op2 that don't exist in op1
   const filteredAssets = assets2.filter(
     (asset2) => !assets1.some((asset1) => asset1.assetId === asset2.assetId)
   );
 
+  // Merge assets that already exist in op1
   const mergedAssets = assets1.map((asset1) => {
+    // Find matching asset in op2
     const matchingAsset = assets2.find((asset2) => asset2.assetId === asset1.assetId);
     if (!matchingAsset) {
+      // No matching asset found, return asset1
       return asset1;
     }
+    // Matching asset found, merge amounts
     const mergedAmount = bn(asset1.amount).add(matchingAsset.amount);
     return { ...asset1, amount: mergedAmount };
   });
 
+  // Return merged assets from op1 with filtered assets from op2
   return mergedAssets.concat(filteredAssets);
 };
 
