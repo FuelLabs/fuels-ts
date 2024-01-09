@@ -806,6 +806,7 @@ describe('operations', () => {
         JSON.parse(JSON.stringify(baseOperations[0].assetsSent))
       );
     });
+
     it('should stack when same asset is added', () => {
       const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
       const operationsAddedSameAsset = addOperation(baseOperations, OPERATION_CONTRACT_CALL);
@@ -817,6 +818,7 @@ describe('operations', () => {
         OPERATION_CONTRACT_CALL.assetsSent[0].assetId
       );
     });
+
     it('should stack when same asset is added together with a different asset [CONTRACT-CALL]', () => {
       const DIF_ASSET_ID = '0x0012300000000000000000000000000000000001';
       const operationTwoAssets: Operation = {
@@ -846,6 +848,7 @@ describe('operations', () => {
       );
       expect(operationsAddedSameAsset[0].assetsSent?.[1]?.assetId).toEqual(DIF_ASSET_ID);
     });
+
     it('ensure operation asset transfer stacks multiple assetSents between same addresses', () => {
       const operationOne: Operation = {
         ...OPERATION_TRANSFER,
@@ -885,6 +888,7 @@ describe('operations', () => {
         operationTwo.assetsSent?.[0].assetId
       );
     });
+
     it('ensure operation asset transfer does not stack multiple assetSents between different addresses', () => {
       const fromOne = getRandomB256();
       const fromTwo = getRandomB256();
@@ -945,6 +949,7 @@ describe('operations', () => {
         operationTwo.assetsSent?.[0].assetId
       );
     });
+
     it('should always not stack for contract calls', () => {
       const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
       const operationsAddedSameContractCall = addOperation(baseOperations, OPERATION_CONTRACT_CALL);
