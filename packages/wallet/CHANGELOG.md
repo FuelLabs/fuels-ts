@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.71.0
+
+### Minor Changes
+
+- add method to hash tx on TransactionRequest classes, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- ensure estimated fee values returned by getTransactionCost are never 0, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- 🐞 fix Account fund and Provider fundWithFakeUtxos, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- add support for TX policies, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+## 0.70.1
+
+## 0.70.0
+
+### Minor Changes
+
+- add method to hash tx on TransactionRequest classes, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1485](https://github.com/FuelLabs/fuels-ts/pull/1485))
+- Add `pnpm create fuels` CLI tool, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1565](https://github.com/FuelLabs/fuels-ts/pull/1565))
+- ensure estimated fee values returned by getTransactionCost are never 0, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1523](https://github.com/FuelLabs/fuels-ts/pull/1523))
+- 🐞 fix Account fund and Provider fundWithFakeUtxos, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1531](https://github.com/FuelLabs/fuels-ts/pull/1531))
+- add support for TX policies, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+
 ## 0.69.1
 
 ## 0.69.0
