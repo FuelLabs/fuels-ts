@@ -135,23 +135,31 @@ function isSameOperation(a: Operation, b: Operation) {
 export function addOperation(operations: Operation[], toAdd: Operation) {
   const allOperations = [...operations];
 
+  // Verifying if the operation to add already exists.
   const index = allOperations.findIndex((op) => isSameOperation(op, toAdd));
 
   if (allOperations[index]) {
+    // Existent operation, we want to edit it.
     const existentOperation = { ...allOperations[index] };
 
     if (toAdd.assetsSent?.length) {
+      /**
+       * If the assetSent already exists, we call 'mergeAssets' to merge possible
+       * entries of the same 'assetId', otherwise we just add the new 'assetSent'.
+       */
       existentOperation.assetsSent = existentOperation.assetsSent?.length
         ? mergeAssets(existentOperation, toAdd)
         : toAdd.assetsSent;
     }
 
     if (toAdd.calls?.length) {
-      existentOperation.calls = [...(existentOperation.calls || []), ...(toAdd.calls || [])];
+      // We need to stack the new call(s) with the possible existent ones.
+      existentOperation.calls = [...(existentOperation.calls || []), ...toAdd.calls];
     }
 
     allOperations[index] = existentOperation;
   } else {
+    // New operation, we can simply add it.
     allOperations.push(toAdd);
   }
 
