@@ -1,6 +1,7 @@
+import { defaultConsensusKey } from '@fuel-ts/utils';
+
 import type { FuelsConfig } from '../../types';
 
-import { defaultConsensusKey } from './defaultChainConfig';
 import type { FuelCoreNode } from './startFuelCore';
 import { startFuelCore } from './startFuelCore';
 

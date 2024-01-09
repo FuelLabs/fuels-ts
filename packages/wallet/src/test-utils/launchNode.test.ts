@@ -1,13 +1,11 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
-import type * as childProcessMod from 'child_process';
+import { Provider } from '@fuel-ts/providers';
+import path from 'path';
+import { cwd } from 'process';
 
-import { killNode, launchNode } from './launchNode';
+import { WalletUnlocked } from '../wallets';
 
-type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
+import { launchNodeAndGetWallets } from './launchNode';
 
-/**
- * @group node
- */
 describe('launchNode', () => {
   test('launchNodeAndGetWallets - empty config', async () => {
     const { stop, provider, wallets } = await launchNodeAndGetWallets();
@@ -19,118 +17,61 @@ describe('launchNode', () => {
     stop();
   });
 
-  expect(ip).toBe('0.0.0.0');
-  expect(port).toBe('4000');
-  cleanup();
-});
+  test('launchNodeAndGetWallets - custom config', async () => {
+    // #region launchNode-custom-config
+    const chainConfigPath = path.join(cwd(), '.fuel-core/configs/chainConfig.json');
 
-test('should start `fuel-core` node using system binary', async () => {
-  mockSpawn();
+    const { stop, provider } = await launchNodeAndGetWallets({
+      launchNodeOptions: {
+        chainConfigPath,
+      },
+    });
 
-  const { cleanup, ip, port } = await launchNode({
-    ...defaultLaunchNodeConfig,
-    useSystemFuelCore: true,
+    const {
+      consensusParameters: { gasPerByte },
+    } = provider.getChain();
+
+    expect(gasPerByte.toNumber()).toEqual(4);
+
+    stop();
+    // #endregion launchNode-custom-config
   });
 
-  expect(ip).toBe('0.0.0.0');
-  expect(port).toBe('4000');
-
-  cleanup();
-});
-
-test('should throw on error', async () => {
-  const { innerMocks } = mockSpawn({ shouldError: true });
-
-  const { error: safeError, result } = await safeExec(async () =>
-    launchNode(defaultLaunchNodeConfig)
-  );
-
-  expect(safeError).toBeTruthy();
-  expect(result).not.toBeTruthy();
-
-  expect(innerMocks.on).toHaveBeenCalledTimes(1);
-  expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-  expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
-});
-
-test('should pipe stdout', async () => {
-  jest.spyOn(process.stdout, 'write').mockImplementation();
-
-  const { innerMocks } = mockSpawn();
-
-  const { cleanup } = await launchNode(defaultLaunchNodeConfig);
-
-  expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-  expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
-
-  cleanup();
-});
-
-test('should pipe stdout and stderr', async () => {
-  jest.spyOn(process.stderr, 'write').mockImplementation();
-  jest.spyOn(process.stdout, 'write').mockImplementation();
-
-  const { innerMocks } = mockSpawn();
-
-  await launchNode({
-    ...defaultLaunchNodeConfig,
-    debugEnabled: true,
+  test('launchNodeAndGetWallets - custom walletCount', async () => {
+    const { stop, wallets } = await launchNodeAndGetWallets({
+      walletCount: 5,
+    });
+    expect(wallets.length).toBe(5);
+    wallets.forEach((wallet) => {
+      expect(wallet).toBeInstanceOf(WalletUnlocked);
+    });
+    stop();
   });
 
-  expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-  expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
-});
+  describe('without a GENESIS_SECRET', () => {
+    let GENESIS_SECRET: string | undefined;
 
-test('should kill process only if PID exists and node is alive', () => {
-  const killFn = jest.fn();
-  const state = { isDead: true };
+    beforeAll(() => {
+      GENESIS_SECRET = process.env.GENESIS_SECRET;
+      delete process.env.GENESIS_SECRET;
+    });
 
-  // should not kill
-  let child = {
-    pid: undefined,
-    stdout: {
-      removeAllListeners: () => {},
-    },
-    stderr: {
-      removeAllListeners: () => {},
-    },
-  } as ChildProcessWithoutNullStreams;
-  killNode({
-    child,
-    configPath: '',
-    killFn,
-    state,
+    afterAll(() => {
+      process.env.GENESIS_SECRET = GENESIS_SECRET;
+    });
+
+    test('launchNodeAndGetWallets - empty config', async () => {
+      const { stop, provider, wallets } = await launchNodeAndGetWallets();
+      expect(provider).toBeInstanceOf(Provider);
+      expect(wallets.length).toBe(10);
+      wallets.forEach((wallet) => {
+        expect(wallet).toBeInstanceOf(WalletUnlocked);
+      });
+
+      expect(process.env.GENESIS_SECRET).toBeDefined();
+      expect(process.env.GENESIS_SECRET).not.toEqual(GENESIS_SECRET);
+      expect(process.env.GENESIS_SECRET).toHaveLength(66);
+      stop();
+    });
   });
-  expect(killFn).toHaveBeenCalledTimes(0);
-  expect(state.isDead).toEqual(true);
-
-  // should not kill
-  child = {
-    pid: 1,
-    stdout: {
-      removeAllListeners: () => {},
-    },
-    stderr: {
-      removeAllListeners: () => {},
-    },
-  } as ChildProcessWithoutNullStreams;
-  killNode({
-    child,
-    configPath: '',
-    killFn,
-    state,
-  });
-  expect(killFn).toHaveBeenCalledTimes(0);
-  expect(state.isDead).toEqual(true);
-
-  // should kill
-  state.isDead = false;
-  killNode({
-    child,
-    configPath: '',
-    killFn,
-    state,
-  });
-  expect(killFn).toHaveBeenCalledTimes(1);
-  expect(state.isDead).toEqual(true);
 });
