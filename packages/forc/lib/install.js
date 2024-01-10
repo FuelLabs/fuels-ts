@@ -9,7 +9,6 @@ import tar from 'tar';
 import {
   __dirname,
   buildFromGitBranch,
-  checkPlatform,
   getCurrentVersion,
   getPkgPlatform,
   isGitBranch,
@@ -17,9 +16,7 @@ import {
 } from './shared.js';
 
 (async () => {
-  console.log('inside install.js');
-
-  checkPlatform();
+  const { info } = console;
 
   const pkgPlatform = getPkgPlatform();
   const forcVersion = await getCurrentVersion();
@@ -45,11 +42,11 @@ import {
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === forcVersion;
-    console.info({ expected: forcVersion, received: binVersion });
+    info({ expected: forcVersion, received: binVersion });
   }
 
   if (versionMatches) {
-    console.info(`Forc binary already installed, skipping.`);
+    info(`Forc binary already installed, skipping.`);
   } else {
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());

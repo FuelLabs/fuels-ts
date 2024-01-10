@@ -9,7 +9,6 @@ import tar from 'tar';
 import {
   __dirname,
   buildFromGitBranch,
-  checkPlatform,
   getCurrentVersion,
   getPkgPlatform,
   isGitBranch,
@@ -17,9 +16,7 @@ import {
 } from './shared.js';
 
 (async () => {
-  console.log('inside install.js');
-
-  checkPlatform();
+  const { info } = console;
 
   const pkgPlatform = getPkgPlatform();
   const fuelCoreVersion = await getCurrentVersion();
@@ -47,11 +44,11 @@ import {
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === fuelCoreVersion;
-    console.info({ expected: fuelCoreVersion, received: binVersion });
+    info({ expected: fuelCoreVersion, received: binVersion });
   }
 
   if (versionMatches) {
-    console.info(`fuel-core binary already installed, skipping.`);
+    info(`fuel-core binary already installed, skipping.`);
   } else {
     // Empty the `fuel-core-binaries` directory if it exists
     if (existsSync(binDir)) {
@@ -84,10 +81,4 @@ import {
     });
     rmSync(pkgPath);
   }
-})().catch((e) => {
-  if (process.platfrom === 'win32') {
-    console.error(e);
-  } else {
-    process.stderr.write(e);
-  }
-});
+})().catch(process.stderr.write);

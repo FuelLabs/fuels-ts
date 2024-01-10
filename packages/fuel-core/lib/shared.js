@@ -7,18 +7,6 @@ import { fileURLToPath } from 'url';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const supportedPlatforms = ['darwin', 'linux'];
-
-export const checkPlatform = () => {
-  console.log('inside checkPlatform');
-  if (!supportedPlatforms.includes(process.platform)) {
-    console.error('inside checkPlatform - found windows');
-    throw new Error(
-      `Unsupported platform. If you are on Windows, please use Windows Subsystem for Linux (WSL).`
-    );
-  }
-};
-
 const platforms = {
   darwin: {
     arm64: 'aarch64-apple-darwin',
