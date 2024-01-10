@@ -23,7 +23,10 @@ const binPath = join(__dirname, '../forc-binaries/forc');
 export default binPath;
 
 export const getPkgPlatform = () => {
+  console.log(process.platform);
+
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
+    console.log('Unsupported platform');
     throw new Error(`Unsupported platform ${process.platform}`);
   }
   if (process.arch !== 'arm64' && process.arch !== 'x64') {
