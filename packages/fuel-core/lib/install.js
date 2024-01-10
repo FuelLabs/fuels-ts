@@ -15,7 +15,7 @@ import {
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
-const { info, error } = console;
+const { info } = console;
 
 (async () => {
   const pkgPlatform = getPkgPlatform();
@@ -81,4 +81,4 @@ const { info, error } = console;
     });
     rmSync(pkgPath);
   }
-})().catch(error);
+})().catch((e) => console.error(e));
