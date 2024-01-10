@@ -9,6 +9,7 @@ import tar from 'tar';
 import {
   __dirname,
   buildFromGitBranch,
+  checkPlatform,
   getCurrentVersion,
   getPkgPlatform,
   isGitBranch,
@@ -17,6 +18,8 @@ import {
 
 (async () => {
   const { info } = console;
+
+  checkPlatform();
 
   const pkgPlatform = getPkgPlatform();
   const fuelCoreVersion = await getCurrentVersion();
