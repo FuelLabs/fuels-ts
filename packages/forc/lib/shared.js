@@ -7,6 +7,16 @@ import { fileURLToPath } from 'url';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const supportedPlatforms = ['darwin', 'linux'];
+
+export const checkPlatform = () => {
+  if (!supportedPlatforms.includes(process.platform)) {
+    throw new Error(
+      `Unsupported platform ${process.platform}. If you are on Windows, please use Windows Subsystem for Linux (WSL).`
+    );
+  }
+};
+
 const platforms = {
   darwin: {
     arm64: 'darwin_arm64',
@@ -23,7 +33,6 @@ const binPath = join(__dirname, '../forc-binaries/forc');
 export default binPath;
 
 export const getPkgPlatform = () => {
-  console.log(process.platform, process.arch);
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(`Unsupported platform ${process.platform}`);
   }

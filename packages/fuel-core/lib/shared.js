@@ -19,7 +19,6 @@ const platforms = {
 };
 
 export const getPkgPlatform = () => {
-  console.log(process.platform, process.arch);
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(`Unsupported platform ${process.platform}`);
   }
