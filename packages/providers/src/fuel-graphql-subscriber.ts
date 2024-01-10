@@ -1,8 +1,9 @@
+/* eslint-disable max-classes-per-file */
 import { FuelError } from '@fuel-ts/errors';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 
-type FuelGraphQLSubscriberOptions = {
+export type FuelGraphQLSubscriberOptions = {
   url: string;
   query: DocumentNode;
   variables?: Record<string, unknown>;
@@ -45,37 +46,51 @@ class FuelSubscriptionStream implements TransformStream {
   }
 }
 
-export async function* fuelGraphQLSubscriber({
-  url,
-  variables,
-  query,
-  fetchFn,
-}: FuelGraphQLSubscriberOptions) {
-  const response = await fetchFn(`${url}-sub`, {
-    method: 'POST',
-    body: JSON.stringify({
-      query: print(query),
-      variables,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'text/event-stream',
-    },
-  });
+export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
+  private stream!: ReadableStreamDefaultReader<Record<string, unknown> | FuelError>;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const subscriptionStreamReader = response
-    .body!.pipeThrough(new FuelSubscriptionStream())
-    .getReader();
+  public constructor(private options: FuelGraphQLSubscriberOptions) {}
 
-  while (true) {
-    const { value, done } = await subscriptionStreamReader.read();
+  private async setStream() {
+    const { url, query, variables, fetchFn } = this.options;
+    const response = await fetchFn(`${url}-sub`, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: print(query),
+        variables,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'text/event-stream',
+      },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.stream = response.body!.pipeThrough(new FuelSubscriptionStream()).getReader();
+  }
+
+  async next(): Promise<IteratorResult<unknown, unknown>> {
+    if (!this.stream) {
+      await this.setStream();
+    }
+
+    const { value, done } = await this.stream.read();
+
     if (value instanceof FuelError) {
       throw value;
     }
-    yield value;
-    if (done) {
-      break;
-    }
+
+    return { value, done };
+  }
+
+  /**
+   * Gets called when `break` is called in a `for-await-of` loop.
+   */
+  async return(): Promise<IteratorResult<unknown, undefined>> {
+    await this.stream.cancel();
+    return { done: true, value: undefined };
+  }
+
+  [Symbol.asyncIterator](): AsyncIterator<unknown, unknown, undefined> {
+    return this;
   }
 }
