@@ -14,7 +14,7 @@ export const checkPlatform = () => {
   if (!supportedPlatforms.includes(process.platform)) {
     console.error('inside checkPlatform - found windows');
     throw new Error(
-      `Unsupported platform ${process.platform}. If you are on Windows, please use Windows Subsystem for Linux (WSL).`
+      `Unsupported platform. If you are on Windows, please use Windows Subsystem for Linux (WSL).`
     );
   }
 };
