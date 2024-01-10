@@ -43,21 +43,6 @@ describe('await-execution', () => {
 
     cleanup();
   });
-  test('calling contracts with awaitExecution works', async () => {
-    const contract = await getSetupContract('coverage-contract')();
-    const sendTransactionSpy = vi.spyOn(contract.provider, 'sendTransaction');
-    const gasPrice = contract.provider.getGasConfig().minGasPrice;
-
-    const { value } = await contract.functions
-      .echo_u8(3)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call({ awaitExecution: true });
-    expect(value).toBe(3);
-
-    expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
-    const awaitExecutionArg = sendTransactionSpy.mock.calls[0][1];
-    expect(awaitExecutionArg).toMatchObject({ awaitExecution: true });
-  });
 
   test('transferring funds with awaitExecution works', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

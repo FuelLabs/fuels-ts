@@ -4,7 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity, ProviderSendTxParams } from '@fuel-ts/providers';
+import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
@@ -288,9 +288,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the function invocation.
    */
-  async call<T = TReturn>(
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
-  ): Promise<FunctionInvocationResult<T>> {
+  async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
@@ -301,7 +299,6 @@ export class BaseInvocationScope<TReturn = any> {
 
     const response = await this.program.account.sendTransaction(transactionRequest, {
       awaitExecution: true,
-      ...options,
     });
 
     return FunctionInvocationResult.build<T>(
