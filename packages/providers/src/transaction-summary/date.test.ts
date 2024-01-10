@@ -45,7 +45,7 @@ describe('transaction-summary/date', () => {
   it('should convert unix to Date correctly', () => {
     const date = new Date();
     const unixTimestamp = date.valueOf().toString();
-    const dateSpy = jest.spyOn(global, 'Date').mockImplementation(() => date);
+    const dateSpy = vi.spyOn(global, 'Date').mockImplementation(() => date);
 
     const result = dateMod.fromUnixToDate(unixTimestamp);
 
@@ -88,7 +88,7 @@ describe('FuelDate', () => {
 
   describe('unix', () => {
     test('should be able to instantiate from unix', () => {
-      const fromUnixToDateSpy = jest.spyOn(dateMod, 'fromUnixToDate');
+      const fromUnixToDateSpy = vi.spyOn(dateMod, 'fromUnixToDate');
       const unixTimestamp = '1694450695000';
 
       const result = FuelDate.from.unix(unixTimestamp);
@@ -120,7 +120,7 @@ describe('FuelDate', () => {
 
   describe('tai64', () => {
     test('should be able to instantiate from tai64', () => {
-      const tai64toDateSpy = jest.spyOn(dateMod, 'fromTai64ToDate');
+      const tai64toDateSpy = vi.spyOn(dateMod, 'fromTai64ToDate');
       const tai64Timestamp = '4611686020121838636';
 
       const result = FuelDate.from.tai64(tai64Timestamp);
