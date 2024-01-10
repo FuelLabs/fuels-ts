@@ -15,9 +15,9 @@ import {
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
-(async () => {
-  const { info } = console;
+const { info, error } = console;
 
+(async () => {
   const pkgPlatform = getPkgPlatform();
   const fuelCoreVersion = await getCurrentVersion();
 
@@ -81,4 +81,4 @@ import {
     });
     rmSync(pkgPath);
   }
-})().catch(process.stderr.write);
+})().catch(error);
