@@ -18,6 +18,9 @@ const config: UserConfig = {
       },
     }),
   ],
+  optimizeDeps: {
+    exclude: ["fsevents"],
+  },
   test: {
     coverage: {
       reportsDirectory: "coverage/environments/browser",

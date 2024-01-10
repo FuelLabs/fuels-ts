@@ -11,12 +11,12 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "fuels": "workspace:*"
+    "fuels": "file:../fuels"
   },
   "devDependencies": {
-    "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/forc": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
+    "@fuel-ts/wallet": "file:../wallet",
+    "@fuel-ts/forc": "file:../forc",
+    "@fuel-ts/utils": "file:../utils",
+    "@fuel-ts/errors": "file:../errors"
   }
 }
