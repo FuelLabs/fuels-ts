@@ -12,7 +12,7 @@ const supportedPlatforms = ['darwin', 'linux'];
 export const checkPlatform = () => {
   if (!supportedPlatforms.includes(process.platform)) {
     throw new Error(
-      `Unsupported platform ${process.platform}. If you are on Windows, please use Windows Subsystem for Linux (WSL).`
+      `Unsupported platform. If you are on Windows, please use Windows Subsystem for Linux (WSL).`
     );
   }
 };
