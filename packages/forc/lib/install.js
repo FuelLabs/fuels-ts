@@ -14,7 +14,6 @@ import {
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const { info } = console;
 
@@ -50,12 +49,12 @@ import {
   } else {
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
-    await writeFileSync(pkgPath, buf);
+    writeFileSync(pkgPath, buf);
 
     // Extract
     execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
 
     // Cleanup
-    await rmSync(pkgPath);
+    rmSync(pkgPath);
   }
 })().catch(process.stderr.write);
