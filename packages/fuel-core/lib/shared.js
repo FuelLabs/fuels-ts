@@ -20,7 +20,11 @@ const platforms = {
 
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
-    throw new Error(`Unsupported platform ${process.platform}`);
+    throw new Error(
+      `Unsupported platform ${process.platform}.${
+        process.platform === 'win32' ? ' If you are on Windows, please use WSL.' : ''
+      }`
+    );
   }
   if (process.arch !== 'arm64' && process.arch !== 'x64') {
     throw new Error(`Unsupported arch ${process.arch}`);
