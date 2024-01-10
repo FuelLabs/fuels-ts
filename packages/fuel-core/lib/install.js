@@ -82,4 +82,10 @@ import {
     });
     rmSync(pkgPath);
   }
-})().catch(process.stderr.write);
+})().catch((e) => {
+  if (process.platfrom === 'win32') {
+    console.error(e);
+  } else {
+    process.stderr.write(e);
+  }
+});
