@@ -17,6 +17,8 @@ import {
 } from './shared.js';
 
 (async () => {
+  console.log('inside install.js');
+
   checkPlatform();
 
   const pkgPlatform = getPkgPlatform();
