@@ -17,8 +17,6 @@ import {
 } from './shared.js';
 
 (async () => {
-  const { info } = console;
-
   checkPlatform();
 
   const pkgPlatform = getPkgPlatform();
@@ -47,11 +45,11 @@ import {
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === fuelCoreVersion;
-    info({ expected: fuelCoreVersion, received: binVersion });
+    console.info({ expected: fuelCoreVersion, received: binVersion });
   }
 
   if (versionMatches) {
-    info(`fuel-core binary already installed, skipping.`);
+    console.info(`fuel-core binary already installed, skipping.`);
   } else {
     // Empty the `fuel-core-binaries` directory if it exists
     if (existsSync(binDir)) {

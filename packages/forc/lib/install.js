@@ -17,8 +17,6 @@ import {
 } from './shared.js';
 
 (async () => {
-  const { info } = console;
-
   checkPlatform();
 
   const pkgPlatform = getPkgPlatform();
@@ -45,11 +43,11 @@ import {
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === forcVersion;
-    info({ expected: forcVersion, received: binVersion });
+    console.info({ expected: forcVersion, received: binVersion });
   }
 
   if (versionMatches) {
-    info(`Forc binary already installed, skipping.`);
+    console.info(`Forc binary already installed, skipping.`);
   } else {
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
