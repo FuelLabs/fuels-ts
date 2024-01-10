@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { run } from './cli';
 import { error } from './cli/utils/logger';
+import { run } from './run';
 
 try {
   run(process.argv).catch(process.stderr.write);

@@ -6,6 +6,9 @@ import walletManagerSpec from '../wallet-manager-spec';
 
 import { MnemonicVault } from './mnemonic-vault';
 
+/**
+ * @group node
+ */
 describe('MnemonicVault', () => {
   let provider: Provider;
 
@@ -22,7 +25,9 @@ describe('MnemonicVault', () => {
 
     vault.addAccount();
 
-    expect(vault.getWallet(wallet.address).publicKey).toBe(walletManagerSpec.account_0.publicKey);
+    expect(vault.getWallet(wallet.address.toString()).publicKey).toBe(
+      walletManagerSpec.account_0.publicKey
+    );
   });
 
   it('Check if accounts are been added correctly', async () => {

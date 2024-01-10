@@ -6,6 +6,9 @@ import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { PrivateKeyVault } from './privatekey-vault';
 
+/**
+ * @group node
+ */
 describe('PrivateKeyVault', () => {
   let provider: Provider;
   let walletSpec: WalletUnlocked;

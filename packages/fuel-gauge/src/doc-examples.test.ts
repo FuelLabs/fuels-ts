@@ -23,7 +23,6 @@ import {
   Wallet,
   WalletUnlocked,
   Signer,
-  ContractFactory,
   ZeroBytes32,
   BaseAssetId,
   FUEL_NETWORK_URL,
@@ -35,9 +34,6 @@ const { abiContents: callTestAbi } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
-const { binHexlified: liquidityPoolContractBytecode, abiContents: liquidityPoolABI } =
-  getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
-
 const { binHexlified: predicateTriple } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRIPLE_SIG
 );
@@ -45,9 +41,6 @@ const { binHexlified: predicateTriple } = getFuelGaugeForcProject(
 const { binHexlified: testPredicateTrue } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
-
-const { binHexlified: tokenContractBytecode, abiContents: tokenContractABI } =
-  getFuelGaugeForcProject(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -62,6 +55,9 @@ const ADDRESS_BYTES = new Uint8Array([
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,
 ]);
 
+/**
+ * @group node
+ */
 describe('Doc Examples', () => {
   let gasPrice: BN;
 
@@ -467,92 +463,5 @@ describe('Doc Examples', () => {
     expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
     // assert that predicate funds now belong to the receiver
     expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
-  });
-
-  test.skip('deposit and withdraw cookbook guide', async () => {
-    // #region deposit-and-withdraw-cookbook-wallet-setup
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
-    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
-    await seedTestWallet(wallet, [{ assetId: BaseAssetId, amount: bn(100_000) }]);
-    // #endregion deposit-and-withdraw-cookbook-wallet-setup
-
-    // #region deposit-and-withdraw-cookbook-contract-deployments
-    const tokenContractFactory = new ContractFactory(
-      tokenContractBytecode,
-      tokenContractABI,
-      wallet
-    );
-    const tokenContract = await tokenContractFactory.deployContract({ gasPrice });
-    const tokenContractID = tokenContract.id;
-
-    const liquidityPoolContractFactory = new ContractFactory(
-      liquidityPoolContractBytecode,
-      liquidityPoolABI,
-      wallet
-    );
-    const liquidityPoolContract = await liquidityPoolContractFactory.deployContract({ gasPrice });
-    const liquidityPoolContractID = liquidityPoolContract.id;
-    await liquidityPoolContract.functions.set_base_token(tokenContractID).call();
-    // #endregion deposit-and-withdraw-cookbook-contract-deployments
-
-    // mint some base tokens to the current wallet
-    // #region deposit-and-withdraw-cookbook-mint-and-transfer
-    await tokenContract.functions.mint_coins(500, 1).call();
-    await tokenContract.functions
-      .transfer_coins_to_output(
-        200,
-        {
-          value: tokenContract.id,
-        },
-        {
-          value: wallet.address.toB256(),
-        }
-      )
-      .txParams({
-        variableOutputs: 1,
-        gasPrice,
-      })
-      .call();
-    // #endregion deposit-and-withdraw-cookbook-mint-and-transfer
-
-    // deposit base tokens into the liquidity pool
-    // #region deposit-and-withdraw-cookbook-deposit
-    await liquidityPoolContract.functions
-      .deposit({
-        value: wallet.address.toB256(),
-      })
-      .callParams({
-        forward: {
-          amount: bn(100),
-          assetId: tokenContractID.toB256(),
-        },
-      })
-      .call();
-    // #endregion deposit-and-withdraw-cookbook-deposit
-
-    // verify balances
-    expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(100));
-    expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(200));
-
-    // withdraw base tokens from the liquidity pool
-    // #region deposit-and-withdraw-cookbook-withdraw
-    const lpTokenBalance = await wallet.getBalance(liquidityPoolContractID.toB256());
-    await liquidityPoolContract.functions
-      .withdraw({
-        value: wallet.address.toB256(),
-      })
-      .callParams({
-        forward: {
-          amount: lpTokenBalance,
-          assetId: liquidityPoolContractID.toB256(),
-        },
-      })
-      .call();
-    // #endregion deposit-and-withdraw-cookbook-withdraw
-
-    // verify balances again
-    expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(200));
-    expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(0));
   });
 });

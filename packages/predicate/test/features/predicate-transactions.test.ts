@@ -10,6 +10,9 @@ import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   describe('Transactions', () => {
     let predicate: Predicate<[string]>;
@@ -36,9 +39,9 @@ describe('Predicate', () => {
     });
 
     it('includes predicate as input when sending a transaction', async () => {
-      const sendTransactionMock = jest
+      const sendTransactionMock = vi
         .spyOn(Account.prototype, 'sendTransaction')
-        .mockImplementation();
+        .mockImplementation(() => []);
 
       await predicate.sendTransaction(request);
 
@@ -49,9 +52,9 @@ describe('Predicate', () => {
     });
 
     it('includes predicate as input when simulating a transaction', async () => {
-      const sendTransactionMock = jest
+      const sendTransactionMock = vi
         .spyOn(Account.prototype, 'simulateTransaction')
-        .mockImplementation();
+        .mockImplementation(() => []);
 
       await predicate.simulateTransaction(request);
 

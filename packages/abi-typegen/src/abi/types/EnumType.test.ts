@@ -11,6 +11,9 @@ import type { EnumType } from './EnumType';
 import { StructType } from './StructType';
 import { U16Type } from './U16Type';
 
+/**
+ * @group node
+ */
 describe('EnumType.ts', () => {
   /*
     Test helpers

@@ -5,6 +5,9 @@ import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   describe('Functions', () => {
     const predicateAddress = '0x6b6ef590390f0a7de75f8275ab5d7877c17236caba2514039c6565ec15f79111';

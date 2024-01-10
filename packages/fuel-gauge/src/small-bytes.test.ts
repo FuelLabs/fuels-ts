@@ -5,6 +5,9 @@ import { join } from 'path';
 
 import { getSetupContract, createWallet } from './utils';
 
+/**
+ * @group node
+ */
 describe('small-bytes', () => {
   const smallBytesProjectDir = join(__dirname, '../test/fixtures/forc-projects/small-bytes');
 

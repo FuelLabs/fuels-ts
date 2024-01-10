@@ -3,6 +3,9 @@ import { U8Type } from '../../abi/types/U8Type';
 
 import { formatImports } from './formatImports';
 
+/**
+ * @group node
+ */
 describe('formatImports.ts', () => {
   const baseMembers = ['Contract'];
 

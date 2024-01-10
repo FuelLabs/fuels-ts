@@ -84,6 +84,9 @@ const setup = async (balance = 500_000) => {
   return wallet;
 };
 
+/**
+ * @group node
+ */
 describe('Vector Types Validation', () => {
   let gasPrice: BN;
 

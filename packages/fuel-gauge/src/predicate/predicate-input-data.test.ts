@@ -5,6 +5,9 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtu
 
 import { setupWallets, fundPredicate } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified, abiContents } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_INPUT_DATA

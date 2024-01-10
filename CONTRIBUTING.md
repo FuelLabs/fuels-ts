@@ -107,14 +107,17 @@ And then run the tests in another terminal tab:
 # run all tests
 pnpm test
 
-# run tests while passing other flags to sub-program
-pnpm test -- --coverage --my-other-flag
+# watch all tests
+pnpm test:watch
 
 # run tests for a specific package
-pnpm test packages/my-desired-package
+pnpm test:filter packages/my-desired-package
 
 # run tests for a specific file
-pnpm test packages/my-desired-package/src/my.test.ts
+pnpm test:filter packages/my-desired-package/src/my.test.ts
+
+# run tests while passing other flags to sub-program
+pnpm test -- --coverage --my-other-flag
 ```
 
 Or if you want to start a local Fuel-Core node and run all tests serially you can do:

@@ -40,26 +40,26 @@ export function init(program: Command) {
     // mimicking commander property validation
     process.stdout.write(`error: required option '-w, --workspace <path>' not specified\r`);
     process.exit(1);
+  } else {
+    const fuelsConfigPath = join(path, 'fuels.config.ts');
+
+    if (existsSync(fuelsConfigPath)) {
+      throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
+    }
+
+    const renderedConfig = renderFuelsConfigTemplate({
+      workspace,
+      contracts,
+      scripts,
+      predicates,
+      output,
+      useBuiltinForc,
+      useBuiltinFuelCore,
+      autoStartFuelCore,
+    });
+
+    writeFileSync(fuelsConfigPath, renderedConfig);
+
+    log(`Config file created at:\n\n ${fuelsConfigPath}\n`);
   }
-
-  const fuelsConfigPath = join(path, 'fuels.config.ts');
-
-  if (existsSync(fuelsConfigPath)) {
-    throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
-  }
-
-  const renderedConfig = renderFuelsConfigTemplate({
-    workspace,
-    contracts,
-    scripts,
-    predicates,
-    output,
-    useBuiltinForc,
-    useBuiltinFuelCore,
-    autoStartFuelCore,
-  });
-
-  writeFileSync(fuelsConfigPath, renderedConfig);
-
-  log(`Config file created at:\n\n ${fuelsConfigPath}\n`);
 }
