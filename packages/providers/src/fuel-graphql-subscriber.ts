@@ -21,6 +21,7 @@ function parseBytesStream(
 
   const text = textDecoder.decode(bytes);
   if (!text.startsWith('data:')) {
+    // the text can sometimes be a keep-alive message
     return undefined;
   }
 
@@ -58,20 +59,27 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     this.stream = response.body!.getReader();
   }
 
+  private async readStream(): Promise<IteratorResult<unknown, unknown>> {
+    const { value, done } = await this.stream.read();
+
+    const parsed = parseBytesStream(value);
+
+    if (parsed === undefined && !done) {
+      // this is in the case of e.g. a keep-alive message
+      // we recursively wait for the next message until it's a proper gql response
+      // or the stream is done (e.g. closed by the server)
+      return this.readStream();
+    }
+
+    return { value: parsed, done };
+  }
+
   async next(): Promise<IteratorResult<unknown, unknown>> {
     if (!this.stream) {
       await this.setStream();
     }
 
-    const { value, done } = await this.stream.read();
-
-    const parsed = parseBytesStream(value);
-
-    if (parsed instanceof FuelError) {
-      throw parsed;
-    }
-
-    return { value: parsed, done };
+    return this.readStream();
   }
 
   /**
