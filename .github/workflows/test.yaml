@@ -128,8 +128,8 @@ jobs:
           mode: recreate
           create_if_not_exists: true
 
-  live-tests:
-    name: Run Live Tests
+  test-live:
+    name: live
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
     timeout-minutes: 5
