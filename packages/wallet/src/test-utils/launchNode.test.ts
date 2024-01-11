@@ -50,7 +50,9 @@ function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
 
   const spawn = vi
     .spyOn(childProcessMod, 'spawn')
-    .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
+    .mockImplementation(
+      (..._: unknown[]) => innerMocks as unknown as ChildProcessWithoutNullStreams
+    );
 
   return { spawn, innerMocks };
 }
@@ -107,7 +109,7 @@ describe('launchNode', () => {
   });
 
   test('should pipe stdout', async () => {
-    vi.spyOn(process.stdout, 'write').mockImplementation(vi.fn());
+    vi.spyOn(process.stdout, 'write');
 
     const { innerMocks } = mockSpawn();
 
@@ -120,8 +122,8 @@ describe('launchNode', () => {
   });
 
   test('should pipe stdout and stderr', async () => {
-    vi.spyOn(process.stderr, 'write').mockImplementation(vi.fn());
-    vi.spyOn(process.stdout, 'write').mockImplementation(vi.fn());
+    vi.spyOn(process.stderr, 'write');
+    vi.spyOn(process.stdout, 'write');
 
     const { innerMocks } = mockSpawn();
 
