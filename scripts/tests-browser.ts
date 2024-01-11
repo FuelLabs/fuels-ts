@@ -62,7 +62,7 @@ const executeBrowserTest = () =>
       executeBrowserTest();
       setTimeout(() => {
         symlinkDeps();
-        execSync('pnpm install', { stdio: 'inherit' });
+        execSync('pnpm install ', { stdio: 'inherit' });
       }, 10000);
     } else {
       executeBrowserTest();
