@@ -10,6 +10,9 @@ import { generateTestWallet } from './test-utils/generateTestWallet';
 import { Wallet } from './wallet';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
+/**
+ * @group node
+ */
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
@@ -195,7 +198,7 @@ describe('Wallet', () => {
         const transactionRequest = transactionRequestify(transactionRequestLike);
         // Simulate a external request of signature
         const signedTransaction = await externalWallet.signTransaction(transactionRequest);
-        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        transactionRequest.updateWitnessByOwner(externalWallet.address.toB256(), signedTransaction);
         return super.sendTransaction(transactionRequestLike);
       }
     }

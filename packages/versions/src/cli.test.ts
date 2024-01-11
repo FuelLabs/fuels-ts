@@ -4,10 +4,18 @@ import * as compareSystemVersionsMod from './lib/compareSystemVersions';
 import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
 import * as getSystemVersionsMod from './lib/getSystemVersions';
 
+/**
+ * @group node
+ */
 describe('cli.js', () => {
   // hooks
-  beforeEach(jest.clearAllMocks);
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   /*
     Test (mocking) utility
@@ -29,27 +37,27 @@ describe('cli.js', () => {
       systemForcIsEq,
     } = params;
 
-    const error = jest.spyOn(console, 'error').mockImplementation();
-    const info = jest.spyOn(console, 'info').mockImplementation();
-    const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const error = vi.spyOn(console, 'error').mockImplementation(() => []);
+    const info = vi.spyOn(console, 'info').mockImplementation(() => []);
+    const exit = vi.spyOn(process, 'exit').mockImplementation(vi.fn());
 
-    jest
-      .spyOn(colorizeUserVersionMod, 'colorizeUserVersion')
-      .mockImplementation(({ version }) => version);
+    vi.spyOn(colorizeUserVersionMod, 'colorizeUserVersion').mockImplementation(
+      ({ version }) => version
+    );
 
-    jest.spyOn(compareSystemVersionsMod, 'compareSystemVersions').mockImplementation(() => ({
+    vi.spyOn(compareSystemVersionsMod, 'compareSystemVersions').mockImplementation(() => ({
       systemForcIsGt,
       systemFuelCoreIsGt,
       systemForcIsEq,
       systemFuelCoreIsEq,
     }));
 
-    jest.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
+    vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
       systemForcVersion,
       systemFuelCoreVersion,
     }));
 
-    jest.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
+    vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
       FORC: '1.0.0',
       FUEL_CORE: '1.0.0',
       FUELS: '1.0.0',

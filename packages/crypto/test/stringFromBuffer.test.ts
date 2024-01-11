@@ -1,5 +1,8 @@
 import { envs } from './envs';
 
+/**
+ * @group node
+ */
 describe('stringFromBuffer', () => {
   const buffer = new Uint8Array([104, 101, 108, 108, 111]); // ASCII values for "hello"
 

@@ -10,6 +10,9 @@ const defaultValues = {
 
 let wallet: WalletUnlocked;
 
+/**
+ * @group node
+ */
 describe('Script With Configurable', () => {
   let gasPrice: BN;
 

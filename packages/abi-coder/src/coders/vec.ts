@@ -1,6 +1,7 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
+import { MAX_BYTES } from '../constants';
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../utilities';
 
@@ -24,7 +25,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     const parts: Uint8Array[] = [];
@@ -48,12 +49,19 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    if (data.length < BASE_VECTOR_OFFSET || data.length > MAX_BYTES) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
+    }
+
     const len = data.slice(16, 24);
-    const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
-    const vectorRawData = data.slice(
-      BASE_VECTOR_OFFSET,
-      BASE_VECTOR_OFFSET + length * this.coder.encodedLength
-    );
+    const encodedLength = bn(new U64Coder().decode(len, 0)[0]).toNumber();
+    const vectorRawDataLength = encodedLength * this.coder.encodedLength;
+    const vectorRawData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + vectorRawDataLength);
+
+    if (vectorRawData.length !== vectorRawDataLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec byte data size.`);
+    }
+
     return [
       chunkByLength(vectorRawData, this.coder.encodedLength).map(
         (chunk) => this.coder.decode(chunk, 0)[0]

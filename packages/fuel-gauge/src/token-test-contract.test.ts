@@ -31,6 +31,9 @@ beforeAll(async () => {
   gasPrice = provider.getGasConfig().minGasPrice;
 });
 
+/**
+ * @group node
+ */
 describe('TokenTestContract', () => {
   it('Can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance

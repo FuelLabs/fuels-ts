@@ -1,9 +1,10 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as childProcessMod from 'child_process';
+import { rmSync, existsSync } from 'fs';
+import { join } from 'path';
 
-import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
+import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
-import { resetDiskAndMocks } from '../../../../test/utils/resetDiskAndMocks';
 import type { FuelsConfig } from '../../types';
 import { configureLogging, loggingConfig } from '../../utils/logger';
 
@@ -11,17 +12,31 @@ import { killNode, startFuelCore } from './startFuelCore';
 
 type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
 
-jest.mock('child_process', () => ({
-  __esModule: true,
-  ...jest.requireActual('child_process'),
-}));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('startFuelCore', () => {
   const loggingConfigBkp = loggingConfig;
 
   afterEach(() => {
     configureLogging(loggingConfigBkp);
-    resetDiskAndMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+
+    const chainConfig = join(fuelsConfig.basePath, '.fuels', 'chainConfig.json');
+    if (existsSync(chainConfig)) {
+      rmSync(chainConfig);
+    }
   });
 
   /**
@@ -47,19 +62,19 @@ describe('startFuelCore', () => {
     };
 
     const innerMocks = {
-      on: jest.fn(),
+      on: vi.fn(),
       stderr: {
-        pipe: jest.fn(),
-        on: jest.fn(stderrOn),
+        pipe: vi.fn(),
+        on: vi.fn(stderrOn),
       },
       stdout: {
-        pipe: jest.fn(),
+        pipe: vi.fn(),
       },
     };
 
-    const spawn = jest
+    const spawn = vi
       .spyOn(childProcessMod, 'spawn')
-      .mockImplementation((..._) => innerMocks as unknown as ChildProcessWithoutNullStreams);
+      .mockReturnValue(innerMocks as unknown as ChildProcessWithoutNullStreams);
 
     return { spawn, innerMocks };
   }
@@ -82,8 +97,6 @@ describe('startFuelCore', () => {
     expect(core.port).toBeGreaterThanOrEqual(4000);
     expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/graphql/);
     expect(core.killChildProcess).toBeTruthy();
-
-    core.killChildProcess();
   });
 
   test('should start `fuel-core` node using system binary', async () => {
@@ -123,7 +136,7 @@ describe('startFuelCore', () => {
   test('should pipe stdout', async () => {
     mockLogger();
 
-    jest.spyOn(process.stdout, 'write').mockImplementation();
+    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
 
     configureLogging({ isDebugEnabled: false, isLoggingEnabled: true });
 
@@ -138,8 +151,8 @@ describe('startFuelCore', () => {
   test('should pipe stdout and stderr', async () => {
     mockLogger();
 
-    jest.spyOn(process.stderr, 'write').mockImplementation();
-    jest.spyOn(process.stdout, 'write').mockImplementation();
+    vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
 
     configureLogging({ isDebugEnabled: true, isLoggingEnabled: true });
 
@@ -151,8 +164,21 @@ describe('startFuelCore', () => {
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
   });
 
+  test('should pipe nothing', async () => {
+    mockLogger();
+
+    configureLogging({ isDebugEnabled: false, isLoggingEnabled: false });
+
+    const { innerMocks } = mockSpawn();
+
+    await startFuelCore(fuelsConfig);
+
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
+    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
+  });
+
   test('should kill process only if PID exists and node is alive', () => {
-    const killFn = jest.fn();
+    const killFn = vi.fn();
     const state = { isDead: true };
 
     // should not kill

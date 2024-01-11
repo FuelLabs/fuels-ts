@@ -1,5 +1,7 @@
 node_modules
-src/generated-types
+src/contract-types
+src/predicate-types
+src/script-types
 
 # Forc
 **/out/debug/**

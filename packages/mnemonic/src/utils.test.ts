@@ -1,5 +1,8 @@
 import { getWords } from './utils';
 
+/**
+ * @group node
+ */
 describe('mnemonic utils', () => {
   const words = ['a', 'b', 'c'];
 

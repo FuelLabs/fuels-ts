@@ -13,6 +13,7 @@ import {
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
+import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
 
@@ -23,9 +24,12 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
 } from './__generated__/operations';
+import type { RetryOptions } from './call-retrier';
+import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
@@ -209,8 +213,14 @@ export type FetchRequestOptions = {
  * Provider initialization options
  */
 export type ProviderOptions = {
-  fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
+  fetch?: (
+    url: string,
+    options: FetchRequestOptions,
+    providerOptions: Omit<ProviderOptions, 'fetch'>
+  ) => Promise<Response>;
+  timeout?: number;
   cacheUtxo?: number;
+  retryOptions?: RetryOptions;
 };
 
 /**
@@ -268,6 +278,29 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   private static nodeInfoCache: NodeInfoCache = {};
 
+  options: ProviderOptions = {
+    timeout: undefined,
+    cacheUtxo: undefined,
+    fetch: undefined,
+    retryOptions: undefined,
+  };
+
+  private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
+    const { retryOptions, timeout } = options;
+
+    return retrier((...args) => {
+      if (options.fetch) {
+        return options.fetch(...args);
+      }
+
+      const url = args[0];
+      const request = args[1];
+      const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
+
+      return fetch(url, { ...request, signal });
+    }, retryOptions);
+  }
+
   /**
    * Constructor to initialize a Provider.
    *
@@ -279,9 +312,12 @@ export default class Provider {
   protected constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    public options: ProviderOptions = {}
+    options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url, options);
+    this.options = { ...this.options, ...options };
+    this.url = url;
+
+    this.operations = this.createOperations();
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -346,7 +382,8 @@ export default class Provider {
    */
   async connect(url: string, options?: ProviderOptions) {
     this.url = url;
-    this.operations = this.createOperations(url, options ?? this.options);
+    this.options = options ?? this.options;
+    this.operations = this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
 
@@ -382,14 +419,35 @@ export default class Provider {
   /**
    * Create GraphQL client and set operations.
    *
-   * @param url - The URL of the Fuel node
-   * @param options - Additional options for the provider
    * @returns The operation SDK object
    */
-  private createOperations(url: string, options: ProviderOptions = {}) {
-    this.url = url;
-    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
-    return getOperationsSdk(gqlClient);
+  private createOperations() {
+    const fetchFn = Provider.getFetchFn(this.options);
+    const gqlClient = new GraphQLClient(this.url, {
+      fetch: (url: string, requestInit: FetchRequestOptions) =>
+        fetchFn(url, requestInit, this.options),
+    });
+
+    const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
+      const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
+        operation: string;
+      };
+      const isSubscription = opDefinition?.operation === 'subscription';
+
+      if (isSubscription) {
+        return fuelGraphQLSubscriber({
+          url: this.url,
+          query,
+          fetchFn: (url, requestInit) =>
+            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+          variables: vars,
+        });
+      }
+      return gqlClient.request(query, vars);
+    };
+
+    // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
+    return getOperationsSdk(executeQuery);
   }
 
   /**
@@ -794,16 +852,17 @@ export default class Provider {
   }
 
   async getResourcesForTransaction(
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = []
   ) {
+    const ownerAddress = Address.fromAddressOrString(owner);
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const transactionCost = await this.getTransactionCost(transactionRequest, forwardingQuantities);
 
     // Add the required resources to the transaction from the owner
     transactionRequest.addResources(
-      await this.getResourcesToSpend(owner, transactionCost.requiredQuantities)
+      await this.getResourcesToSpend(ownerAddress, transactionCost.requiredQuantities)
     );
     // Refetch transaction costs with the new resources
     // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
@@ -815,7 +874,7 @@ export default class Provider {
       transactionRequest,
       forwardingQuantities
     );
-    const resources = await this.getResourcesToSpend(owner, requiredQuantities);
+    const resources = await this.getResourcesToSpend(ownerAddress, requiredQuantities);
 
     return {
       resources,
@@ -829,16 +888,17 @@ export default class Provider {
    */
   async getCoins(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** The asset ID of coins to get */
     assetId?: BytesLike,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Coin[]> {
+    const ownerAddress = Address.fromAddressOrString(owner);
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
+      filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
     const coins = result.coins.edges.map((edge) => edge.node);
@@ -864,12 +924,13 @@ export default class Provider {
    */
   async getResourcesToSpend(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** The quantities to get */
     quantities: CoinQuantityLike[],
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
+    const ownerAddress = Address.fromAddressOrString(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -882,7 +943,7 @@ export default class Provider {
       excludeInput.utxos = Array.from(uniqueUtxos);
     }
     const coinsQuery = {
-      owner: owner.toB256(),
+      owner: ownerAddress.toB256(),
       queryPerAsset: quantities
         .map(coinQuantityfy)
         .map(({ assetId, amount, max: maxPerAsset }) => ({
@@ -1059,12 +1120,12 @@ export default class Provider {
    */
   async getContractBalance(
     /** The contract ID to get the balance for */
-    contractId: AbstractAddress,
+    contractId: string | AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: contractId.toB256(),
+      contract: Address.fromAddressOrString(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1079,12 +1140,12 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
-      owner: owner.toB256(),
+      owner: Address.fromAddressOrString(owner).toB256(),
       assetId: hexlify(assetId),
     });
     return bn(balance.amount, 10);
@@ -1099,14 +1160,14 @@ export default class Provider {
    */
   async getBalances(
     /** The address to get coins for */
-    owner: AbstractAddress,
+    owner: string | AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<CoinQuantity[]> {
     const result = await this.operations.getBalances({
       first: 10,
       ...paginationArgs,
-      filter: { owner: owner.toB256() },
+      filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
     const balances = result.balances.edges.map((edge) => edge.node);
@@ -1126,14 +1187,14 @@ export default class Provider {
    */
   async getMessages(
     /** The address to get message from */
-    address: AbstractAddress,
+    address: string | AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Message[]> {
     const result = await this.operations.getMessages({
       first: 10,
       ...paginationArgs,
-      owner: address.toB256(),
+      owner: Address.fromAddressOrString(address).toB256(),
     });
 
     const messages = result.messages.edges.map((edge) => edge.node);

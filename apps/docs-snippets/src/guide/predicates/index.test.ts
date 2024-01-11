@@ -2,6 +2,9 @@ import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
 import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   const { abiContents: jsonAbi, binHexlified: binary } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.RETURN_TRUE_PREDICATE

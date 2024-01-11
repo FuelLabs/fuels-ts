@@ -7,12 +7,17 @@ import {
   rewriteVersions,
 } from './rewriteVersions';
 
-// https://stackoverflow.com/a/72885576
-jest.mock('fs', () => ({
-  __esModule: true,
-  ...jest.requireActual('fs'),
-}));
+vi.mock('fs', async () => {
+  const mod = await vi.importActual('fs');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('rewriteVersions.js', () => {
   function modifyEnv() {
     const envBackup = { ...process.env };
@@ -88,7 +93,7 @@ describe('rewriteVersions.js', () => {
 
   test('should rewrite files', () => {
     // mocking
-    const writeFileSync = jest.spyOn(fsMod, 'writeFileSync').mockImplementation();
+    const writeFileSync = vi.spyOn(fsMod, 'writeFileSync').mockImplementation(() => []);
 
     // executing
     rewriteVersions();

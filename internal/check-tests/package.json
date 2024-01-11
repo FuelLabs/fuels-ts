@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "@internal/check-tests",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "license": "Apache-2.0",
+  "version": null
+}
