@@ -692,7 +692,7 @@ describe('operations', () => {
     it('should getOperations return contract created operations with input type message', () => {
       const expected: Operation = {
         from: {
-          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
           type: 1,
         },
         name: OperationName.contractCreated,
