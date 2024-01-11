@@ -27,5 +27,7 @@ export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLi
   quantities
     .map(coinQuantityfy)
     .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
-  await genesisWallet.sendTransaction(request, { awaitExecution: true });
+  const response = await genesisWallet.sendTransaction(request);
+
+  await response.wait();
 };
