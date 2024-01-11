@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { FuelError } from '@fuel-ts/errors';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
@@ -11,43 +10,34 @@ export type FuelGraphQLSubscriberOptions = {
   abortController?: AbortController;
 };
 
-class FuelSubscriptionStream implements TransformStream {
-  readable: ReadableStream<FuelError | Record<string, unknown>>;
-  writable: WritableStream<Uint8Array>;
-  private readableStreamController!: ReadableStreamController<FuelError | Record<string, unknown>>;
-  private static textDecoder = new TextDecoder();
+const textDecoder = new TextDecoder();
 
-  constructor() {
-    this.readable = new ReadableStream({
-      start: (controller) => {
-        this.readableStreamController = controller;
-      },
-    });
-
-    this.writable = new WritableStream<Uint8Array>({
-      write: (bytes) => {
-        const text = FuelSubscriptionStream.textDecoder.decode(bytes);
-        // the fuel node sends keep-alive messages that should be ignored
-        if (text.startsWith('data:')) {
-          const { data, errors } = JSON.parse(text.split('data:')[1]);
-          if (Array.isArray(errors)) {
-            this.readableStreamController.enqueue(
-              new FuelError(
-                FuelError.CODES.INVALID_REQUEST,
-                errors.map((err) => err.message).join('\n\n')
-              )
-            );
-          } else {
-            this.readableStreamController.enqueue(data);
-          }
-        }
-      },
-    });
+function parseBytesStream(
+  bytes: Uint8Array | undefined
+): Record<string, unknown> | FuelError | undefined {
+  if (bytes === undefined) {
+    return undefined;
   }
+
+  const text = textDecoder.decode(bytes);
+  if (!text.startsWith('data:')) {
+    return undefined;
+  }
+
+  const { data, errors } = JSON.parse(text.split('data:')[1]);
+
+  if (Array.isArray(errors)) {
+    return new FuelError(
+      FuelError.CODES.INVALID_REQUEST,
+      errors.map((err) => err.message).join('\n\n')
+    );
+  }
+
+  return data as Record<string, unknown>;
 }
 
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
-  private stream!: ReadableStreamDefaultReader<Record<string, unknown> | FuelError>;
+  private stream!: ReadableStreamDefaultReader<Uint8Array>;
 
   public constructor(private options: FuelGraphQLSubscriberOptions) {}
 
@@ -65,7 +55,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       },
     });
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.stream = response.body!.pipeThrough(new FuelSubscriptionStream()).getReader();
+    this.stream = response.body!.getReader();
   }
 
   async next(): Promise<IteratorResult<unknown, unknown>> {
@@ -75,11 +65,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
     const { value, done } = await this.stream.read();
 
-    if (value instanceof FuelError) {
-      throw value;
+    const parsed = parseBytesStream(value);
+
+    if (parsed instanceof FuelError) {
+      throw parsed;
     }
 
-    return { value, done };
+    return { value: parsed, done };
   }
 
   /**
