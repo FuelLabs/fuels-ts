@@ -10,7 +10,7 @@ export const fromDateToTai64 = (date: Date): string =>
 
 export const fromUnixToDate = (unix: string): Date => new Date(parseInt(unix, 10));
 
-export const toDateFromUnix = (date: Date): string => date.valueOf().toString();
+export const fromDateToUnix = (date: Date): string => date.valueOf().toString();
 
 export interface IFuelDate extends Date {
   /**
@@ -30,6 +30,6 @@ export class FuelDate extends Date implements IFuelDate {
     tai64: (tai64: string): IFuelDate => new FuelDate(fromTai64ToDate(tai64)),
   };
 
-  toUnix = () => toDateFromUnix(this);
-  toTai64 = () => fromDateToTai64(this);
+  toUnix = (): string => fromDateToUnix(this);
+  toTai64 = (): string => fromDateToTai64(this);
 }
