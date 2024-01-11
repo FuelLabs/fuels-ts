@@ -18,14 +18,16 @@ jobs:
       spellcheck-config-path: "apps/docs/.spellcheck.yml"
 
   environments:
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} / ${{ matrix.env }} / v${{ matrix.version }}
+    runs-on: ubuntu-latest
+    name: ${{ matrix.env}} ${{ matrix.env == 'node' && matrix.version || ''}}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         env: [node, browser]
         version: [18.18.2, 20]
+        exclude:
+          - env: browser
+            version: 18.18.2
     timeout-minutes: 25
     steps:
       - name: Checkout
