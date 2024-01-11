@@ -1,5 +1,7 @@
 # @fuel-ts/errors
 
+## 0.71.1
+
 ## 0.71.0
 
 ### Minor Changes
