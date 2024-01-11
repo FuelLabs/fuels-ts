@@ -45,11 +45,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // funding the transaction with the required quantities
   await genesisWallet.fund(request, requiredQuantities, minFee);
 
-  // execute the transaction, transferring resources to the test wallet
-  const response = await genesisWallet.sendTransaction(request);
-
-  // wait for the transaction to be confirmed
-  await response.wait();
+  await genesisWallet.sendTransaction(request, { awaitExecution: true });
 
   // return the test wallet
   return testWallet;
