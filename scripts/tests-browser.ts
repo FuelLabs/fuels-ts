@@ -7,7 +7,7 @@ const initialDependencies: { file: string; contents: string }[] = [];
 const hardlinkDeps = () => {
   const packagesDirPath = join(__dirname, '../packages/');
   const packages = readdirSync(packagesDirPath).filter((p) => !p.startsWith('.'));
-  const packagesSupportingBrowserTesting = ['fuel-gauge'];
+  const packagesSupportingBrowserTesting = ['fuel-gauge', 'crypto'];
 
   packagesSupportingBrowserTesting.forEach((packageName) => {
     const packageFilePath = join(packagesDirPath, `${packageName}/package.json`);
@@ -36,7 +36,7 @@ const symlinkDeps = () =>
 (() => {
   hardlinkDeps();
   try {
-    execSync('pnpm install', { stdio: 'inherit' });
+    execSync('pnpm install --no-frozen-lockfile', { stdio: 'inherit' });
 
     execSync(
       'vitest --run --coverage --config vite.browser.config.mts $(scripts/tests-find.sh --browser)',
