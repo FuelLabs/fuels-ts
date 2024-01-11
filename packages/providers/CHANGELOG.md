@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.71.1
+
+### Patch Changes
+
+- 🐞 Fix operations contract created with input of type message, by [@luizstacio](https://github.com/luizstacio) (See [#1635](https://github.com/FuelLabs/fuels-ts/pull/1635))
+
 ## 0.71.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/fuel-core",
-  "version": "0.71.0",
+  "version": "0.71.1",
   "description": "NPM bin wrapper around `fuel-core`",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -17,6 +17,10 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "tar": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/tar": "^6.1.8"
   }
 }
