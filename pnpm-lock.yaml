@@ -667,21 +667,21 @@ importers:
   packages/fuel-gauge:
     dependencies:
       fuels:
-        specifier: file:../fuels
-        version: file:packages/fuels
+        specifier: workspace:*
+        version: link:../fuels
     devDependencies:
       '@fuel-ts/errors':
-        specifier: file:../errors
-        version: file:packages/errors
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/forc':
-        specifier: file:../forc
-        version: file:packages/forc
+        specifier: workspace:*
+        version: link:../forc
       '@fuel-ts/utils':
-        specifier: file:../utils
-        version: file:packages/utils
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/wallet':
-        specifier: file:../wallet
-        version: file:packages/wallet
+        specifier: workspace:*
+        version: link:../wallet
 
   packages/fuels:
     dependencies:
@@ -3820,6 +3820,7 @@ packages:
     cpu: [ppc64]
     os: [aix]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/android-arm64@0.17.19:
@@ -3836,6 +3837,7 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/android-arm64@0.19.3:
@@ -3861,6 +3863,7 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/android-arm@0.19.3:
@@ -3886,6 +3889,7 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/android-x64@0.19.3:
@@ -3911,6 +3915,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/darwin-arm64@0.19.3:
@@ -3936,6 +3941,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/darwin-x64@0.19.3:
@@ -3961,6 +3967,7 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/freebsd-arm64@0.19.3:
@@ -3986,6 +3993,7 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/freebsd-x64@0.19.3:
@@ -4011,6 +4019,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-arm64@0.19.3:
@@ -4036,6 +4045,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-arm@0.19.3:
@@ -4061,6 +4071,7 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-ia32@0.19.3:
@@ -4086,6 +4097,7 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-loong64@0.19.3:
@@ -4111,6 +4123,7 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-mips64el@0.19.3:
@@ -4136,6 +4149,7 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-ppc64@0.19.3:
@@ -4161,6 +4175,7 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-riscv64@0.19.3:
@@ -4186,6 +4201,7 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-s390x@0.19.3:
@@ -4211,6 +4227,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/linux-x64@0.19.3:
@@ -4236,6 +4253,7 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/netbsd-x64@0.19.3:
@@ -4261,6 +4279,7 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/openbsd-x64@0.19.3:
@@ -4286,6 +4305,7 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/sunos-x64@0.19.3:
@@ -4311,6 +4331,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/win32-arm64@0.19.3:
@@ -4336,6 +4357,7 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/win32-ia32@0.19.3:
@@ -4361,6 +4383,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@esbuild/win32-x64@0.19.3:
@@ -4614,6 +4637,7 @@ packages:
 
   /@fuels/vm-asm@0.42.1:
     resolution: {integrity: sha512-5e0IDHen26hrKc93ejYNDhQFbqi+EQ7xPpFJcUnSrz0+6zPdPhA2dtwh5UqN0fYDM5AcEFd0wpq+r7Pd2XS5AQ==}
+    dev: false
 
   /@graphql-codegen/cli@2.13.7(@babel/core@7.23.6)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.2)(typescript@5.2.2):
     resolution: {integrity: sha512-Rpk4WWrDgkDoVELftBr7/74MPiYmCITEF2+AWmyZZ2xzaC9cO2PqzZ+OYDEBNWD6UEk0RrIfVSa+slDKjhY59w==}
@@ -10674,6 +10698,7 @@ packages:
     resolution: {integrity: sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==}
     dependencies:
       lodash: 4.17.21
+    dev: false
 
   /async@3.2.4:
     resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
@@ -11304,16 +11329,6 @@ packages:
       esbuild: 0.17.19
       load-tsconfig: 0.2.5
     dev: true
-
-  /bundle-require@4.0.1(esbuild@0.19.10):
-    resolution: {integrity: sha512-9NQkRHlNdNpDBGmLpngF3EFDcwodhMUuLz9PaWYciVcQF9SE4LFjM2DB/xV1Li5JiuDMv7ZUWuC3rGbqR0MAXQ==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    peerDependencies:
-      esbuild: '>=0.17'
-    dependencies:
-      esbuild: 0.19.10
-      load-tsconfig: 0.2.5
-    dev: false
 
   /bundle-require@4.0.1(esbuild@0.19.3):
     resolution: {integrity: sha512-9NQkRHlNdNpDBGmLpngF3EFDcwodhMUuLz9PaWYciVcQF9SE4LFjM2DB/xV1Li5JiuDMv7ZUWuC3rGbqR0MAXQ==}
@@ -13264,6 +13279,7 @@ packages:
       '@esbuild/win32-arm64': 0.19.10
       '@esbuild/win32-ia32': 0.19.10
       '@esbuild/win32-x64': 0.19.10
+    dev: true
 
   /esbuild@0.19.3:
     resolution: {integrity: sha512-UlJ1qUUA2jL2nNib1JTSkifQTcYTroFqRjwCFW4QYEKEsixXD5Tik9xML7zh2gTxkYTBKGHNH9y7txMwVyPbjw==}
@@ -19131,6 +19147,7 @@ packages:
       mkdirp: 0.5.6
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /postcss-attribute-case-insensitive@5.0.2(postcss@8.4.24):
     resolution: {integrity: sha512-XIidXV8fDr0kKt28vqki84fRK8VW8eTuIa4PChv2MqKuT6C9UjmSKzen6KaWhWEoYvwxFCa7n/tC1SZ3tyq4SQ==}
@@ -20257,6 +20274,7 @@ packages:
 
   /ramda@0.29.0:
     resolution: {integrity: sha512-BBea6L67bYLtdbOqfp8f58fPMqEwx0doL+pAi8TZyp2YWz8R9G8z9x75CZI8W+ftqhFHCpEX2cRnUUXK130iKA==}
+    dev: false
 
   /randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
@@ -23284,6 +23302,7 @@ packages:
   /uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
+    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -24462,119 +24481,4 @@ packages:
 
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
-    dev: true
-
-  file:packages/errors:
-    resolution: {directory: packages/errors, type: directory}
-    name: '@fuel-ts/errors'
-    engines: {node: ^18.18.2 || ^20.0.0}
-    dependencies:
-      '@fuel-ts/versions': link:packages/versions
-    dev: true
-
-  file:packages/forc:
-    resolution: {directory: packages/forc, type: directory}
-    name: '@fuel-ts/forc'
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-    dev: true
-
-  file:packages/fuels:
-    resolution: {directory: packages/fuels, type: directory}
-    name: fuels
-    engines: {node: ^18.18.2 || ^20.0.0}
-    hasBin: true
-    dependencies:
-      '@fuel-ts/abi-coder': link:packages/abi-coder
-      '@fuel-ts/abi-typegen': link:packages/abi-typegen
-      '@fuel-ts/address': link:packages/address
-      '@fuel-ts/contract': link:packages/contract
-      '@fuel-ts/crypto': link:packages/crypto
-      '@fuel-ts/errors': link:packages/errors
-      '@fuel-ts/forc': link:packages/forc
-      '@fuel-ts/fuel-core': link:packages/fuel-core
-      '@fuel-ts/hasher': link:packages/hasher
-      '@fuel-ts/hdwallet': link:packages/hdwallet
-      '@fuel-ts/interfaces': link:packages/interfaces
-      '@fuel-ts/math': link:packages/math
-      '@fuel-ts/merkle': link:packages/merkle
-      '@fuel-ts/mnemonic': link:packages/mnemonic
-      '@fuel-ts/predicate': link:packages/predicate
-      '@fuel-ts/program': link:packages/program
-      '@fuel-ts/providers': link:packages/providers
-      '@fuel-ts/script': link:packages/script
-      '@fuel-ts/signer': link:packages/signer
-      '@fuel-ts/transactions': link:packages/transactions
-      '@fuel-ts/utils': link:packages/utils
-      '@fuel-ts/versions': link:packages/versions
-      '@fuel-ts/wallet': link:packages/wallet
-      '@fuel-ts/wallet-manager': link:packages/wallet-manager
-      '@fuel-ts/wordlists': link:packages/wordlists
-      bundle-require: 4.0.1(esbuild@0.19.10)
-      chalk: 4.1.2
-      chokidar: 3.5.3
-      commander: 9.4.1
-      esbuild: 0.19.10
-      ethers: 6.7.1
-      glob: 10.2.6
-      handlebars: 4.7.7
-      joycon: 3.1.1
-      lodash.camelcase: 4.3.0
-      npm-which: 3.0.1
-      portfinder: 1.0.32
-      rimraf: 3.0.2
-      toml: 3.0.0
-      tree-kill: 1.2.2
-      yup: 0.32.11
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
-  file:packages/utils:
-    resolution: {directory: packages/utils, type: directory}
-    name: '@fuel-ts/utils'
-    engines: {node: ^18.18.2 || ^20.0.0}
-    dependencies:
-      ethers: 6.7.1
-      ramda: 0.29.0
-      rimraf: 3.0.2
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: true
-
-  file:packages/wallet:
-    resolution: {directory: packages/wallet, type: directory}
-    name: '@fuel-ts/wallet'
-    engines: {node: ^18.18.2 || ^20.0.0}
-    dependencies:
-      '@fuel-ts/abi-coder': link:packages/abi-coder
-      '@fuel-ts/address': link:packages/address
-      '@fuel-ts/crypto': link:packages/crypto
-      '@fuel-ts/errors': link:packages/errors
-      '@fuel-ts/fuel-core': link:packages/fuel-core
-      '@fuel-ts/hasher': link:packages/hasher
-      '@fuel-ts/hdwallet': link:packages/hdwallet
-      '@fuel-ts/interfaces': link:packages/interfaces
-      '@fuel-ts/math': link:packages/math
-      '@fuel-ts/mnemonic': link:packages/mnemonic
-      '@fuel-ts/providers': link:packages/providers
-      '@fuel-ts/signer': link:packages/signer
-      '@fuel-ts/transactions': link:packages/transactions
-      '@fuel-ts/utils': link:packages/utils
-      '@fuels/vm-asm': 0.42.1
-      ethers: 6.7.1
-      portfinder: 1.0.32
-      tree-kill: 1.2.2
-      uuid: 9.0.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
     dev: true
