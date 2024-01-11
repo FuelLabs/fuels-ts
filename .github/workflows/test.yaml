@@ -19,11 +19,12 @@ jobs:
 
   environments:
     runs-on: ubuntu-latest
-    name: ${{ matrix.env }} - v${{ matrix.version }}
+    name: ${{ matrix.os }} / ${{ matrix.env }} / v${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
-        env: [node]
+        os: [ubuntu-latest]
+        env: [node, browser]
         version: [18.18.2, 20]
     timeout-minutes: 25
     steps:
