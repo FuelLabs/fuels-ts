@@ -19,7 +19,7 @@ jobs:
 
   environments:
     runs-on: ubuntu-latest
-    name: ${{ matrix.env}} ${{ matrix.env == 'node' && matrix.version || ''}}
+    name: ${{ matrix.env}}${{ matrix.env == 'node' && '@' || ''}}${{ matrix.env == 'node' && matrix.version || ''}}
     strategy:
       fail-fast: false
       matrix:
