@@ -10,35 +10,34 @@ export type FuelGraphQLSubscriberOptions = {
   abortController?: AbortController;
 };
 
-const textDecoder = new TextDecoder();
-
-function parseBytesStream(
-  bytes: Uint8Array | undefined
-): Record<string, unknown> | FuelError | undefined {
-  if (bytes === undefined) {
-    return undefined;
-  }
-
-  const text = textDecoder.decode(bytes);
-  if (!text.startsWith('data:')) {
-    // the text can sometimes be a keep-alive message
-    return undefined;
-  }
-
-  const { data, errors } = JSON.parse(text.split('data:')[1]);
-
-  if (Array.isArray(errors)) {
-    return new FuelError(
-      FuelError.CODES.INVALID_REQUEST,
-      errors.map((err) => err.message).join('\n\n')
-    );
-  }
-
-  return data as Record<string, unknown>;
-}
-
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private stream!: ReadableStreamDefaultReader<Uint8Array>;
+  private static textDecoder = new TextDecoder();
+
+  private static parseBytesStream(
+    bytes: Uint8Array | undefined
+  ): Record<string, unknown> | FuelError | undefined {
+    if (bytes === undefined) {
+      return undefined;
+    }
+
+    const text = this.textDecoder.decode(bytes);
+    if (!text.startsWith('data:')) {
+      // the text can sometimes be a keep-alive message
+      return undefined;
+    }
+
+    const { data, errors } = JSON.parse(text.split('data:')[1]);
+
+    if (Array.isArray(errors)) {
+      return new FuelError(
+        FuelError.CODES.INVALID_REQUEST,
+        errors.map((err) => err.message).join('\n\n')
+      );
+    }
+
+    return data as Record<string, unknown>;
+  }
 
   public constructor(private options: FuelGraphQLSubscriberOptions) {}
 
@@ -62,7 +61,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private async readStream(): Promise<IteratorResult<unknown, unknown>> {
     const { value, done } = await this.stream.read();
 
-    const parsed = parseBytesStream(value);
+    const parsed = FuelGraphqlSubscriber.parseBytesStream(value);
 
     if (parsed === undefined && !done) {
       // this is in the case of e.g. a keep-alive message
@@ -79,7 +78,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       await this.setStream();
     }
 
-    return this.readStream();
+    const { value, done } = await this.readStream();
+
+    if (value instanceof FuelError) {
+      throw value;
+    }
+
+    return { value, done };
   }
 
   /**
