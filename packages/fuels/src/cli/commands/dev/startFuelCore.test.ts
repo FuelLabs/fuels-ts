@@ -29,7 +29,7 @@ describe('startFuelCore', () => {
   });
 
   function mockLaunchNode() {
-    vi.spyOn(testUtilsMod, 'launchNode').mockImplementation((..._) =>
+    vi.spyOn(testUtilsMod, 'launchNode').mockImplementation((..._: unknown[]) =>
       Promise.resolve({ cleanup: () => {}, ip: '0.0.0.0', port: '4000' })
     );
   }
