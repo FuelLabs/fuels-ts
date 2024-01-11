@@ -4,6 +4,7 @@ import { concat, concatBytes } from './concat';
 
 /**
  * @group node
+ * @group browser
  */
 describe('concat', () => {
   it('should concatenate multiple BytesLike into a single Uint8Array', () => {

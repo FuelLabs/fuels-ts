@@ -14,6 +14,7 @@ const U8 = 1;
 
 /**
  * @group node
+ * @group browser
  */
 describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript without inputs, outputs and witnesses', () => {

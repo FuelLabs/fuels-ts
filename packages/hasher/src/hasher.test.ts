@@ -2,6 +2,7 @@ import { hashMessage, hash } from './hasher';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Hasher', () => {
   it('Hash message', () => {

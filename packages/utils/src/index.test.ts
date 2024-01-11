@@ -2,6 +2,7 @@ import * as indexMod from '.';
 
 /**
  * @group node
+ * @group browser
  */
 describe('index.js', () => {
   test('should export all utilities', () => {

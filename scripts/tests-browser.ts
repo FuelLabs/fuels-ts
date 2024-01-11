@@ -4,10 +4,25 @@ import { join } from 'path';
 
 const initialDependencies: { file: string; contents: string }[] = [];
 
+const packagesSupportingBrowserTesting = [
+  'abi-coder',
+  'address',
+  'crypto',
+  'errors',
+  'hasher',
+  'hdwallet',
+  'math',
+  'mnemonic',
+  'predicate',
+  'providers',
+  'signer',
+  'transactions',
+  'utils',
+];
+
 const hardlinkDeps = () => {
   const packagesDirPath = join(__dirname, '../packages/');
   const packages = readdirSync(packagesDirPath).filter((p) => !p.startsWith('.'));
-  const packagesSupportingBrowserTesting = ['fuel-gauge', 'crypto'];
 
   packagesSupportingBrowserTesting.forEach((packageName) => {
     const packageFilePath = join(packagesDirPath, `${packageName}/package.json`);
@@ -33,21 +48,25 @@ const hardlinkDeps = () => {
 const symlinkDeps = () =>
   initialDependencies.forEach(({ file, contents }) => writeFileSync(file, contents));
 
+const executeBrowserTest = () =>
+  execSync(
+    'vitest --run --coverage --config vite.browser.config.mts $(scripts/tests-find.sh --browser)',
+    { stdio: 'inherit' }
+  );
+
 (() => {
-  hardlinkDeps();
   try {
-    execSync('pnpm install --no-frozen-lockfile', { stdio: 'inherit' });
-
-    execSync(
-      'vitest --run --coverage --config vite.browser.config.mts $(scripts/tests-find.sh --browser)',
-      { stdio: 'inherit' }
-    );
-
-    setTimeout(() => {
-      symlinkDeps();
-    }, 10000);
-
-    execSync('pnpm install', { stdio: 'inherit' });
+    if (packagesSupportingBrowserTesting.length) {
+      hardlinkDeps();
+      execSync('pnpm install --no-frozen-lockfile', { stdio: 'inherit' });
+      executeBrowserTest();
+      setTimeout(() => {
+        symlinkDeps();
+        execSync('pnpm install', { stdio: 'inherit' });
+      }, 10000);
+    } else {
+      executeBrowserTest();
+    }
   } catch (err) {
     symlinkDeps();
     console.error(err);

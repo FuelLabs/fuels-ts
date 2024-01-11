@@ -8,6 +8,7 @@ import { RawSliceCoder } from './raw-slice';
 
 /**
  * @group node
+ * @group browser
  */
 describe('RawSliceCoder', () => {
   it('should encode a raw-slice', () => {

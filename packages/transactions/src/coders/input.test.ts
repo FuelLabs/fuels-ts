@@ -11,6 +11,7 @@ const MAX_U32 = 2 ** 32 - 1;
 
 /**
  * @group node
+ * @group browser
  */
 describe('InputCoder', () => {
   it('Can encode Coin', () => {

@@ -4,6 +4,7 @@ import { normalizeString } from './normalizeString';
 
 /**
  * @group node
+ * @group browser
  */
 describe('normalize.ts', () => {
   test('should normalize strings', () => {

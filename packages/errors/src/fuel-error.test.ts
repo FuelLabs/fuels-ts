@@ -5,6 +5,7 @@ import { expectToThrowFuelError } from './test-utils/expect-to-throw-fuel-error'
 
 /**
  * @group node
+ * @group browser
  */
 it('has properties set as expected on creation', () => {
   const message = 'whatever';
