@@ -18,7 +18,6 @@ import type {
   TransactionResponse,
   Provider,
   ScriptTransactionRequestLike,
-  ProviderSendTxParams,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -327,11 +326,10 @@ export class Account extends AbstractAccount {
     /** Asset ID of coins */
     assetId: BytesLike = BaseAssetId,
     /** Tx Params */
-    txParams: TxParamsType = {},
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     const request = await this.createTransfer(destination, amount, assetId, txParams);
-    return this.sendTransaction(request, options);
+    return this.sendTransaction(request);
   }
 
   /**
@@ -396,8 +394,7 @@ export class Account extends AbstractAccount {
     /** Amount of base asset */
     amount: BigNumberish,
     /** Tx Params */
-    txParams: TxParamsType = {},
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
@@ -424,7 +421,7 @@ export class Account extends AbstractAccount {
 
     await this.fund(request, requiredQuantities, maxFee);
 
-    return this.sendTransaction(request, options);
+    return this.sendTransaction(request);
   }
 
   /**
@@ -434,15 +431,11 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async sendTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
-    return this.provider.sendTransaction(transactionRequest, {
-      ...options,
-      estimateTxDependencies: false,
-    });
+    return this.provider.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   /**

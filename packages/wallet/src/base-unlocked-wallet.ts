@@ -4,7 +4,6 @@ import type {
   TransactionRequestLike,
   CallResult,
   Provider,
-  ProviderSendTxParams,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
@@ -111,14 +110,13 @@ export class BaseWalletUnlocked extends Account {
    * @returns A promise that resolves to the TransactionResponse object.
    */
   async sendTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { ...options, estimateTxDependencies: false }
+      { estimateTxDependencies: false }
     );
   }
 

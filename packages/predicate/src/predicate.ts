@@ -14,7 +14,6 @@ import type { BigNumberish } from '@fuel-ts/math';
 import type {
   CallResult,
   Provider,
-  ProviderSendTxParams,
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
@@ -114,12 +113,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
-  ): Promise<TransactionResponse> {
+  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.sendTransaction(transactionRequest, options);
+    return super.sendTransaction(transactionRequest);
   }
 
   /**
