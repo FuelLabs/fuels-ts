@@ -32,6 +32,7 @@ type LaunchNodeOptions = {
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
+  poaInstant?: boolean;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -92,6 +93,7 @@ export const killNode = (params: KillNodeParams) => {
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
+ * @param poaInstant - whether to use instant POA. (optional, defaults to true)
  * */
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
@@ -105,6 +107,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
+  poaInstant = true,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -174,7 +177,7 @@ export const launchNode = async ({
         ['--port', portToUse],
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
         ['--min-gas-price', '0'],
-        ['--poa-instant', 'true'],
+        poaInstant ? ['--poa-instant', 'true'] : [],
         ['--consensus-key', consensusKey],
         ['--chain', chainConfigPathToUse as string],
         '--vm-backtrace',

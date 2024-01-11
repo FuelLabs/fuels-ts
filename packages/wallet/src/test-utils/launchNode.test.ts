@@ -5,10 +5,13 @@ import { killNode, launchNode } from './launchNode';
 
 type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
 
-vi.mock('child_process', () => ({
-  __esModule: true,
-  ...vi.importActual('child_process'),
-}));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 /**
  * This should mimic the stderr.on('data') event, returning both

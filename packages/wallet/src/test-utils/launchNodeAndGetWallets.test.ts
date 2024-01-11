@@ -11,7 +11,11 @@ import { launchNodeAndGetWallets } from './launchNode';
  */
 describe('launchNode', () => {
   test('launchNodeAndGetWallets - empty config', async () => {
-    const { stop, provider, wallets } = await launchNodeAndGetWallets();
+    const { stop, provider, wallets } = await launchNodeAndGetWallets({
+      launchNodeOptions: {
+        loggingEnabled: false,
+      },
+    });
     expect(provider).toBeInstanceOf(Provider);
     expect(wallets.length).toBe(10);
     wallets.forEach((wallet) => {
@@ -27,6 +31,7 @@ describe('launchNode', () => {
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
         chainConfigPath,
+        loggingEnabled: false,
       },
     });
 
@@ -43,6 +48,9 @@ describe('launchNode', () => {
   test('launchNodeAndGetWallets - custom walletCount', async () => {
     const { stop, wallets } = await launchNodeAndGetWallets({
       walletCount: 5,
+      launchNodeOptions: {
+        loggingEnabled: false,
+      },
     });
     expect(wallets.length).toBe(5);
     wallets.forEach((wallet) => {
@@ -64,7 +72,11 @@ describe('launchNode', () => {
     });
 
     test('launchNodeAndGetWallets - empty config', async () => {
-      const { stop, provider, wallets } = await launchNodeAndGetWallets();
+      const { stop, provider, wallets } = await launchNodeAndGetWallets({
+        launchNodeOptions: {
+          loggingEnabled: false,
+        },
+      });
       expect(provider).toBeInstanceOf(Provider);
       expect(wallets.length).toBe(10);
       wallets.forEach((wallet) => {

@@ -15,14 +15,6 @@ vi.mock('@fuel-ts/wallet/test-utils', async () => {
   };
 });
 
-vi.mock('child_process', async () => {
-  const mod = await vi.importActual('child_process');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 /**
  * @group node
  */

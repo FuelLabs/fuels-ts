@@ -22,9 +22,7 @@ export default defineConfig({
       enabled: true,
       provider: "istanbul",
       reporter: ["json"],
-      include: [
-        'packages', 'internal', 'apps'
-      ],
+      include: ["packages", "internal", "apps"],
       exclude: [
         "**/node_modules/**",
         "**/dist/**",
@@ -35,6 +33,12 @@ export default defineConfig({
         "apps/demo-*",
         "apps/docs",
       ],
+    },
+    poolOptions: {
+      threads: {
+        minThreads: 1,
+        maxThreads: 16,
+      },
     },
   },
 });
