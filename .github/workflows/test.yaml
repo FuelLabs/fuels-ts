@@ -129,8 +129,8 @@ jobs:
           mode: recreate
           create_if_not_exists: true
 
-  test-live:
-    name: live
+  test-e2e:
+    name: e2e
     if: github.head_ref == 'changeset-release/master'
     runs-on: ubuntu-latest
     timeout-minutes: 5
