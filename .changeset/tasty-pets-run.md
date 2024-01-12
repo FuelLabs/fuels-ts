@@ -1,4 +1,5 @@
 ---
+"@fuel-ts/interfaces": patch
 "@fuel-ts/utils": patch
 ---
 
