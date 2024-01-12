@@ -4,10 +4,9 @@ import { hexlify } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
-import { getGasUsedFromReceipts } from '../utils';
+import { getGasUsedFromReceipts, fromTai64ToDate } from '../utils';
 
 import { calculateTransactionFee } from './calculate-transaction-fee';
-import { fromTai64ToDate } from './date';
 import {
   getOperations,
   getTransactionTypeName,
