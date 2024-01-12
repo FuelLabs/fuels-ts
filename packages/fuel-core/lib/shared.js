@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { cpSync, rmSync } from 'fs';
 import fs from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -19,7 +20,11 @@ const platforms = {
 
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
-    throw new Error(`Unsupported platform ${process.platform}`);
+    throw new Error(
+      `Unsupported platform ${process.platform}.${
+        process.platform === 'win32' ? ' If you are on Windows, please use WSL.' : ''
+      }`
+    );
   }
   if (process.arch !== 'arm64' && process.arch !== 'x64') {
     throw new Error(`Unsupported arch ${process.arch}`);
@@ -43,11 +48,11 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
 export const buildFromGitBranch = (branchName) => {
-  execSync('rm -rf fuel-core-repo');
-  execSync('rm -rf fuel-core-binaries');
+  rmSync('fuel-core-repo', { recursive: true, force: true });
+  rmSync('fuel-core-binaries', { recursive: true, force: true });
   execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
   execSync(`cd fuel-core-repo && cargo build`, { silent: true });
-  execSync('mkdir fuel-core-binaries');
-  execSync('cp fuel-core-repo/target/debug/fuel-core fuel-core-binaries/fuel-core');
-  execSync(`rm -rf fuel-core-repo`);
+  fs.mkdirSync('fuel-core-binaries');
+  cpSync('fuel-core-repo/target/debug/fuel-core', 'fuel-core-binaries/fuel-core');
+  rmSync('fuel-core-repo', { recursive: true, force: true });
 };

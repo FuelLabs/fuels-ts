@@ -691,6 +691,30 @@ describe('operations', () => {
       expect(operations.length).toEqual(1);
       expect(operations[0]).toStrictEqual(expected);
     });
+
+    it('should getOperations return contract created operations with input type message', () => {
+      const expected: Operation = {
+        from: {
+          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
+          type: 1,
+        },
+        name: OperationName.contractCreated,
+        to: {
+          address: '0xef066899413ef8dc7c3073a50868bafb3d039d9bad8006c2635b7f0efa992553',
+          type: 0,
+        },
+      };
+      const operations = getOperations({
+        transactionType: TransactionType.Create,
+        inputs: [MOCK_INPUT_MESSAGE],
+        outputs: [MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE],
+        receipts: [],
+        maxInputs: bn(255),
+      });
+
+      expect(operations.length).toEqual(1);
+      expect(operations[0]).toStrictEqual(expected);
+    });
   });
 
   describe('addOperation', () => {
