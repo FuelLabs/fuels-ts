@@ -11,7 +11,6 @@ import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import { fromTai64ToDate } from '../src';
 import type { ChainInfo, NodeInfo, TransactionCost, FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
@@ -20,7 +19,7 @@ import type {
 } from '../src/transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from '../src/transaction-request';
 import { TransactionResponse } from '../src/transaction-response';
-import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
+import { fromTai64ToDate, fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
 import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
