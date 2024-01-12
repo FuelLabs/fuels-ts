@@ -1,4 +1,4 @@
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify } from '../index';
 
 import { chunkAndPadBytes } from './chunkAndPadBytes';
 

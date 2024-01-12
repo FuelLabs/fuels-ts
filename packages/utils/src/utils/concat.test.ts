@@ -1,5 +1,4 @@
 import { arrayify } from './arrayify';
-
 import { concat, concatBytes } from './concat';
 
 /**
