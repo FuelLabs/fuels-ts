@@ -16,6 +16,7 @@
     "demo-nextjs",
     "demo-node-esm",
     "demo-typegen",
-    "@fuel-ts/docs-snippets"
+    "@fuel-ts/docs-snippets",
+    "template-nextjs"
   ]
 }
