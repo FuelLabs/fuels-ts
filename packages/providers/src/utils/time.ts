@@ -51,11 +51,23 @@ export const fromTai64ToUnix = (tai64Timestamp: string): number =>
 export const fromUnixToTai64 = (unixTimestampSeconds: number): string =>
   (BigInt(unixTimestampSeconds) + BigInt(2 ** 62) + BigInt(10)).toString();
 
+/**
+ * Converts a Tai64 timestamp to a Date object.
+ *
+ * @param tai64Timestamp - The Tai64 timestamp to convert.
+ * @returns - A Date object
+ */
 export const fromTai64ToDate = (tai64Timestamp: string): Date => {
   const timestamp = TAI64.fromString(tai64Timestamp, 10).toUnix();
   return new Date(timestamp * 1000);
 };
 
+/**
+ * Converts a Date object to a Tai64 timestamp.
+ *
+ * @param date - The Date object to convert.
+ * @returns - A Tai64 timestamp as a string.
+ */
 export const fromDateToTai64 = (date: Date): string =>
   TAI64.fromUnix(Math.floor(date.getTime() / 1000)).toString(10);
 
