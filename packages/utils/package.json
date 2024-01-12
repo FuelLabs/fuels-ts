@@ -39,7 +39,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "ethers": "^6.7.1",
+    "@fuel-ts/interfaces": "workspace:*",
     "ramda": "^0.29.0",
     "rimraf": "^3.0.2"
   },
