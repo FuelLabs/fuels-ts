@@ -13,11 +13,14 @@ import { print } from 'graphql';
 
 import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 
-function isSubscription(query: DocumentNode) {
-  const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
-    operation: string;
-  };
-  return opDefinition?.operation === 'subscription';
+function isSubscription({ definitions: defs }: DocumentNode) {
+  const opDef = defs.find((op) => op.kind === 'OperationDefinition');
+
+  if (opDef && 'operation' in opDef) {
+    return opDef?.operation === 'subscription';
+  }
+
+  return false;
 }
 
 async function handleQueryAndMutation(fetchFn: typeof fetch, url: string, request: RequestInit) {
