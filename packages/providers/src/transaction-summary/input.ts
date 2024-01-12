@@ -3,6 +3,11 @@ import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/tra
 import { InputType } from '@fuel-ts/transactions';
 
 /** @hidden */
+export function getInputsByTypes<T = Input>(inputs: Input[], types: Array<InputType>) {
+  return inputs.filter((i) => types.includes(i.type)) as T[];
+}
+
+/** @hidden */
 export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
   return inputs.filter((i) => i.type === type) as T[];
 }
@@ -15,6 +20,11 @@ export function getInputsCoin(inputs: Input[]) {
 /** @hidden */
 export function getInputsMessage(inputs: Input[]) {
   return getInputsByType<InputMessage>(inputs, InputType.Message);
+}
+
+/** @hidden */
+export function getInputsCoinAndMessage(inputs: Input[]) {
+  return getInputsByTypes<InputCoin | InputMessage>(inputs, [InputType.Coin, InputType.Message]);
 }
 
 /** @hidden */

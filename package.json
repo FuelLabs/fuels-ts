@@ -99,7 +99,7 @@
     "vite": "^5.0.8",
     "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-plain-text": "^1.4.2",
-    "vitest": "^1.0.4",
+    "vitest": "1.0.4",
     "webdriverio": "^8.27.0"
   },
   "pnpm": {

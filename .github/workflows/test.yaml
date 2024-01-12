@@ -116,6 +116,7 @@ jobs:
           path: coverage-master
 
       - name: Generate Coverage Diff
+        if: ${{ (steps.findPr.outputs.number) }}
         run: pnpm test:coverage-diff
 
       - name: Report Coverage
