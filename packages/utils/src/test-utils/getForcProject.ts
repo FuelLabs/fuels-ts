@@ -1,4 +1,4 @@
-import { hexlify } from 'ethers';
+import { hexlify } from '../index';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 

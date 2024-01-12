@@ -1,5 +1,5 @@
-import type { BytesLike } from 'ethers';
-import { getBytesCopy } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { arrayify } from './arrayify';
 
 /**
  * Concatenates multiple Uint8Arrays into a single Uint8Array.
@@ -35,7 +35,7 @@ export const concatBytes = (
  * @returns - The concatenated array.
  */
 export const concat = (arrays: ReadonlyArray<BytesLike>): Uint8Array => {
-  const bytes = arrays.map((v) => getBytesCopy(v));
+  const bytes = arrays.map((v) => arrayify(v));
 
   return concatBytes(bytes);
 };
