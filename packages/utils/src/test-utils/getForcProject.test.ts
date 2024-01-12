@@ -1,6 +1,7 @@
-import * as ethers from 'ethers';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import * as utilsMod from '../index';
 
 import {
   getForcProject,
@@ -12,14 +13,6 @@ import {
   getProjectStorageSlotsPath,
   getProjectTempDir,
 } from './getForcProject';
-
-vi.mock('ethers', async () => {
-  const mod = await vi.importActual('ethers');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
 
 vi.mock('path', async () => {
   const mod = await vi.importActual('path');
@@ -144,7 +137,7 @@ describe('getForcProject', () => {
     const fakeAbiContent = { contracts: {} };
     const fakeStorageSlots = [{ key: 'key1', value: 'value1' }];
 
-    vi.spyOn(ethers, 'hexlify').mockImplementation((param) => param as string);
+    vi.spyOn(utilsMod, 'hexlify').mockImplementation((param) => param as string);
     vi.spyOn(path, 'join').mockImplementation((...segments) => segments.join('/'));
     vi.spyOn(fs, 'readFileSync').mockImplementation((pathParam) => {
       if ((<string>pathParam).endsWith('.bin')) {
