@@ -25,6 +25,8 @@ import { TAI64 } from 'tai64';
  * The epoch time difference between TAI64 and Unix is 2 ** 62 + 10.
  */
 
+const fromMsToSeconds = (ms: number): number => Math.floor(ms / 1000);
+
 /**
  * @hidden
  *
@@ -71,28 +73,37 @@ export const fromTai64ToDate = (tai64Timestamp: string): Date => {
 export const fromDateToTai64 = (date: Date): string =>
   TAI64.fromUnix(Math.floor(date.getTime() / 1000)).toString(10);
 
-export const fromUnixToDate = (unix: string): Date => new Date(parseInt(unix, 10));
-
-export const fromDateToUnix = (date: Date): string => date.valueOf().toString();
-
 export interface IFuelDate extends Date {
   /**
-   * @returns Unix timestamp in seconds
+   * @returns a unix timestamp in seconds
    */
-  toUnix: () => string;
+  toUnix: () => number;
 
   /**
-   * @returns Unix timestamp in seconds
+   * @returns a tai64 timestamp in seconds
    */
   toTai64: () => string;
 }
 
 export class FuelDate extends Date implements IFuelDate {
   static from = {
-    unix: (unix: string): IFuelDate => new FuelDate(fromUnixToDate(unix)),
-    tai64: (tai64: string): IFuelDate => new FuelDate(fromTai64ToDate(tai64)),
+    date: (date: Date): IFuelDate => new FuelDate(date),
+    tai64: (tai64: string): IFuelDate => FuelDate.from.unix.seconds(fromTai64ToUnix(tai64)),
+    unix: {
+      seconds: (unixInSeconds: number): IFuelDate =>
+        FuelDate.from.unix.milliseconds(unixInSeconds * 1000),
+      milliseconds: (unixInMilliseconds: number): IFuelDate =>
+        FuelDate.from.date(new Date(unixInMilliseconds)),
+    },
   };
 
-  toUnix = (): string => fromDateToUnix(this);
+  /**
+   * @returns Unix timestamp in seconds
+   */
+  toUnix = (): number => fromMsToSeconds(this.getTime());
+
+  /**
+   * @returns Tai64 timestamp as a string
+   */
   toTai64 = (): string => fromDateToTai64(this);
 }
