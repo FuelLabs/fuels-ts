@@ -16,8 +16,8 @@ import {
   getInputFromAssetId,
   getInputAccountAddress,
   getInputContractFromIndex,
-  getInputsCoin,
   getInputsContract,
+  getInputsCoinAndMessage,
 } from './input';
 import {
   getOutputsChange,
@@ -427,7 +427,7 @@ export function getPayProducerOperations(outputs: Output[]): Operation[] {
 /** @hidden */
 export function getContractCreatedOperations({ inputs, outputs }: InputOutputParam): Operation[] {
   const contractCreatedOutputs = getOutputsContractCreated(outputs);
-  const input = getInputsCoin(inputs)[0];
+  const input = getInputsCoinAndMessage(inputs)[0];
   const fromAddress = getInputAccountAddress(input);
   const contractCreatedOperations = contractCreatedOutputs.reduce((prev, contractCreatedOutput) => {
     const operations = addOperation(prev, {
