@@ -1,6 +1,7 @@
-import { encrypt, decrypt } from '../../src/index.browser';
+import { encrypt, decrypt } from '..';
 
 /**
+ * @group node
  * @group browser
  */
 describe('Keystore', () => {

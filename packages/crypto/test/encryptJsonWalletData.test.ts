@@ -1,6 +1,7 @@
-import { encryptJsonWalletData, decryptJsonWalletData, randomBytes } from '../../src/index';
+import { encryptJsonWalletData, decryptJsonWalletData, randomBytes } from '..';
 /**
  * @group node
+ * @group browser
  */
 describe('encryptJsonWalletData', () => {
   it('should encrypt and decrypt json wallet data correctly in a node environment', async () => {

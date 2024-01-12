@@ -1,6 +1,8 @@
-import { stringFromBuffer } from '../../src/index';
+import { stringFromBuffer } from '..';
+
 /**
  * @group node
+ * @group browser
  */
 describe('stringFromBuffer', () => {
   const buffer = new Uint8Array([104, 101, 108, 108, 111]); // ASCII values for "hello"
