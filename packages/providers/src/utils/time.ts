@@ -1,5 +1,3 @@
-import { TAI64 } from 'tai64';
-
 /**
  * @hidden
  *
@@ -60,7 +58,7 @@ export const fromUnixToTai64 = (unixTimestampSeconds: number): string =>
  * @returns - A Date object
  */
 export const fromTai64ToDate = (tai64Timestamp: string): Date => {
-  const timestamp = TAI64.fromString(tai64Timestamp, 10).toUnix();
+  const timestamp = fromTai64ToUnix(tai64Timestamp);
   return new Date(timestamp * 1000);
 };
 
@@ -71,7 +69,7 @@ export const fromTai64ToDate = (tai64Timestamp: string): Date => {
  * @returns - A Tai64 timestamp as a string.
  */
 export const fromDateToTai64 = (date: Date): string =>
-  TAI64.fromUnix(Math.floor(date.getTime() / 1000)).toString(10);
+  fromUnixToTai64(Math.floor(date.getTime() / 1000));
 
 export interface IFuelDate extends Date {
   /**
@@ -90,10 +88,8 @@ export class FuelDate extends Date implements IFuelDate {
     date: (date: Date): IFuelDate => new FuelDate(date),
     tai64: (tai64: string): IFuelDate => FuelDate.from.unix.seconds(fromTai64ToUnix(tai64)),
     unix: {
-      seconds: (unixInSeconds: number): IFuelDate =>
-        FuelDate.from.unix.milliseconds(unixInSeconds * 1000),
-      milliseconds: (unixInMilliseconds: number): IFuelDate =>
-        FuelDate.from.date(new Date(unixInMilliseconds)),
+      seconds: (seconds: number): IFuelDate => FuelDate.from.unix.milliseconds(seconds * 1000),
+      milliseconds: (milliseconds: number): IFuelDate => FuelDate.from.date(new Date(milliseconds)),
     },
   };
 
