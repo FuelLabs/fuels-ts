@@ -14,8 +14,8 @@
  * and then add the Unix epoch time (00:00:00 UTC, January 1, 1970). The epoch
  * time difference between TAI64 and Unix is 2 ** 62 + 10.
  *
- * @param tai64Timestamp - The TAI64 timestamp to convert ('4611686020108779312').
- * @returns - The Unix timestamp in seconds (1681391398).
+ * @param tai64Timestamp - The TAI64 timestamp to convert.
+ * @returns - The Unix timestamp in seconds.
  */
 export const fromTai64ToUnix = (tai64Timestamp: string): number =>
   Number(BigInt(tai64Timestamp) - BigInt(2 ** 62) - BigInt(10));
