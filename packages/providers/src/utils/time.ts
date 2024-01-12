@@ -3,7 +3,7 @@ import { TAI64 } from 'tai64';
 /**
  * @hidden
  *
- * Converts a TAI64 timestamp to a Unix timestamp in seconds.
+ * Background on Tai64 and Unix timestamps:
  *
  * TAI64 is a 64-bit unsigned integer format that represents a point in time
  * as the number of TAI seconds elapsed since 00:00:00 TAI, January 1, 1970.
@@ -11,10 +11,26 @@ import { TAI64 } from 'tai64';
  * Unix timestamp, on the other hand, represents the number of milliseconds
  * elapsed since 00:00:00 UTC, January 1, 1970.
  *
+ * --
+ * Tai64 to Unix conversion:
  * To convert a TAI64 timestamp to a Unix timestamp, we need to subtract the
  * TAI64 epoch time (00:00:00 TAI, January 1, 1970) from the TAI64 timestamp
  * and then add the Unix epoch time (00:00:00 UTC, January 1, 1970). The epoch
  * time difference between TAI64 and Unix is 2 ** 62 + 10.
+ *
+ * Unix to Tai64 conversion:
+ * To convert a Unix timestamp to a TAI64 timestamp, we need to add the
+ * TAI64 epoch time (00:00:00 TAI, January 1, 1970) to the Unix timestamp
+ * and then subtract the Unix epoch time (00:00:00 UTC, January 1, 1970).
+ * The epoch time difference between TAI64 and Unix is 2 ** 62 + 10.
+ */
+
+/**
+ * @hidden
+ *
+ * Converts a TAI64 timestamp to a Unix timestamp in seconds.
+ *
+ * Unix(seconds) = (TAI64 - (2 ** 62) - 10)
  *
  * @param tai64Timestamp - The TAI64 timestamp to convert.
  * @returns - The Unix timestamp in seconds.
@@ -27,15 +43,7 @@ export const fromTai64ToUnix = (tai64Timestamp: string): number =>
  *
  * Converts a Unix timestamp in seconds to a TAI64 timestamp.
  *
- * Unix timestamp represents the number of milliseconds elapsed since
- * 00:00:00 UTC, January 1, 1970. TAI64 timestamp is a 64-bit unsigned
- * integer format that represents a point in time as the number of TAI
- * seconds elapsed since 00:00:00 TAI, January 1, 1970.
- *
- * To convert a Unix timestamp to a TAI64 timestamp, we need to add the
- * TAI64 epoch time (00:00:00 TAI, January 1, 1970) to the Unix timestamp
- * and then subtract the Unix epoch time (00:00:00 UTC, January 1, 1970).
- * The epoch time difference between TAI64 and Unix is 2 ** 62 + 10.
+ * TAI64 = (Unix(seconds) + (2 ** 62) + 10)
  *
  * @param unixTimestampSeconds - The Unix timestamp in seconds to convert.
  * @returns - The TAI64 timestamp as a string.
