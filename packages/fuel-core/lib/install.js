@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { existsSync, rmSync, writeFileSync, mkdirSync, renameSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
+import tar from 'tar';
 
 import {
   __dirname,
@@ -51,7 +52,10 @@ import {
   } else {
     // Empty the `fuel-core-binaries` directory if it exists
     if (existsSync(binDir)) {
-      execSync(`rm -rf ${binDir}/*`);
+      rmSync(`${binDir}/*`, {
+        recursive: true,
+        force: true,
+      });
     } else {
       // Create the `fuel-core-binaries` directory if it doesn't exist
       mkdirSync(binDir);
@@ -62,13 +66,19 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${rootDir}"`);
+    await tar.x({
+      file: pkgPath,
+      C: rootDir,
+    });
 
     // Take the contents of the directory containing the extracted binaries and move them to the `fuel-core-binaries` directory
     renameSync(`${fileName}`, binDir);
 
     // Cleanup
-    execSync(`rm -rf  ${fileName}`);
+    rmSync(fileName, {
+      recursive: true,
+      force: true,
+    });
     rmSync(pkgPath);
   }
-})().catch(process.stderr.write);
+})().catch((e) => console.error(e));

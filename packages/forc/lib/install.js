@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { existsSync, rmSync, writeFileSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
+import tar from 'tar';
 
 import {
   __dirname,
@@ -52,9 +53,12 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
+    await tar.x({
+      file: pkgPath,
+      C: binDir,
+    });
 
     // Cleanup
     rmSync(pkgPath);
   }
-})().catch(process.stderr.write);
+})().catch((e) => console.error(e));
