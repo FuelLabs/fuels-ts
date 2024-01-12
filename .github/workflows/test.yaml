@@ -85,8 +85,6 @@ jobs:
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v3
