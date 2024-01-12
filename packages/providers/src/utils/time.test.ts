@@ -2,13 +2,7 @@ import * as tai64Mod from 'tai64';
 
 import * as timeMod from './time';
 
-const {
-  fromTai64ToDate: tai64toDate,
-  fromDateToTai64: dateToTai64,
-  fromUnixToDate: unixToDate,
-  fromDateToUnix: dateToUnix,
-  FuelDate,
-} = timeMod;
+const { fromTai64ToDate: tai64toDate, fromDateToTai64: dateToTai64, FuelDate } = timeMod;
 
 /**
  * @group node
@@ -45,27 +39,6 @@ describe('utils/time', () => {
 
     expect(toStringSpy).toHaveBeenCalledTimes(1);
     expect(toStringSpy).toHaveBeenCalledWith(10);
-  });
-
-  it('should convert unix to Date correctly', () => {
-    const date = new Date();
-    const unixTimestamp = date.valueOf().toString();
-    const dateSpy = vi.spyOn(global, 'Date').mockImplementation(() => date);
-
-    const result = unixToDate(unixTimestamp);
-
-    expect(dateSpy).toHaveBeenCalledTimes(1);
-    expect(dateSpy).toHaveBeenCalledWith(parseInt(unixTimestamp, 10));
-    expect(result).toEqual(date);
-  });
-
-  it('should convert Date to unix correctly', () => {
-    const date = new Date();
-    const unixTimestamp = date.valueOf().toString();
-
-    const result = dateToUnix(date);
-
-    expect(result).toEqual(unixTimestamp);
   });
 
   test('fromTai64ToUnix', () => {
@@ -109,38 +82,47 @@ describe('FuelDate', () => {
     expect(date.toTai64).toBeDefined();
   });
 
-  describe('unix', () => {
-    test('should be able to instantiate from unix', () => {
-      const unixTimestamp = '1694450695000';
+  test('should be to format toTai64', () => {
+    const unixTimestampMs = 1694450695000;
+    const tai64Timestamp = '4611686020121838636';
+    const date = FuelDate.from.unix.milliseconds(unixTimestampMs);
 
-      const result = FuelDate.from.unix(unixTimestamp);
+    const result = date.toTai64();
+
+    expect(result).toEqual(tai64Timestamp);
+  });
+
+  test('should be able to format toUnix', () => {
+    const tai64Timestamp = '4611686020121838636';
+    const unixTimestampSeconds = 1694450695;
+    const date = FuelDate.from.tai64(tai64Timestamp);
+
+    const result = date.toUnix();
+
+    expect(result).toEqual(unixTimestampSeconds);
+  });
+
+  describe('from', () => {
+    test('should be able to instantiate from unix in milliseconds', () => {
+      const unixTimestampMs = 1694450695000;
+
+      const result = FuelDate.from.unix.milliseconds(unixTimestampMs);
 
       expect(result).toBeDefined();
       expect(result.toUnix).toEqual(expect.any(Function));
       expect(result.toTai64).toEqual(expect.any(Function));
     });
 
-    test('should be able to output a unix timestamp', () => {
-      const unixTimestamp = '1694450695000';
-      const date = FuelDate.from.unix(unixTimestamp);
+    test('should be able to instantiate from unix in seconds', () => {
+      const unixTimestampSeconds = 1694450695;
 
-      const result = date.toUnix();
+      const result = FuelDate.from.unix.milliseconds(unixTimestampSeconds);
 
-      expect(result).toEqual(unixTimestamp);
+      expect(result).toBeDefined();
+      expect(result.toUnix).toEqual(expect.any(Function));
+      expect(result.toTai64).toEqual(expect.any(Function));
     });
 
-    test('should be able to output a tai64 timestamp', () => {
-      const unixTimestamp = '1694450695000';
-      const tai64Timestamp = '4611686020121838636';
-      const date = FuelDate.from.unix(unixTimestamp);
-
-      const result = date.toTai64();
-
-      expect(result).toEqual(tai64Timestamp);
-    });
-  });
-
-  describe('tai64', () => {
     test('should be able to instantiate from tai64', () => {
       const tai64Timestamp = '4611686020121838636';
 
@@ -151,23 +133,18 @@ describe('FuelDate', () => {
       expect(result.toTai64).toEqual(expect.any(Function));
     });
 
-    test('should be able to output a unix timestamp', () => {
-      const tai64Timestamp = '4611686020121838636';
-      const unixTimestamp = '1694450695000';
-      const date = FuelDate.from.tai64(tai64Timestamp);
+    it('should have equal dates, given equal timestamp formats', () => {
+      const tai64Timestamp = '4611686020108779312';
+      const unixTimestampSeconds = 1681391398;
+      const unixTimestampMs = 1681391398000;
 
-      const result = date.toUnix();
+      const tai64 = FuelDate.from.tai64(tai64Timestamp);
+      const unixMs = FuelDate.from.unix.milliseconds(unixTimestampMs);
+      const unixSeconds = FuelDate.from.unix.seconds(unixTimestampSeconds);
 
-      expect(result).toEqual(unixTimestamp);
-    });
-
-    test('should be able to output a tai64 timestamp', () => {
-      const tai64Timestamp = '4611686020121838636';
-      const date = FuelDate.from.tai64(tai64Timestamp);
-
-      const result = date.toTai64();
-
-      expect(result).toEqual(tai64Timestamp);
+      expect(tai64).toEqual(unixMs);
+      expect(unixMs).toEqual(unixSeconds);
+      expect(unixSeconds).toEqual(tai64);
     });
   });
 });
