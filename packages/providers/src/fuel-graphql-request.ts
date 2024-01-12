@@ -1,3 +1,13 @@
+/* 
+
+  Replaces `graphql-request` and `graphql-tag` dependencies with a simple
+  `fetch` implementation, reducing the final bundle size by 15.68 kB.
+
+  More:
+    https://github.com/FuelLabs/fuels-ts/discussions/1592#discussioncomment-8003515
+
+*/
+
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 
