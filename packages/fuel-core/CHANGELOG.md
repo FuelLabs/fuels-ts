@@ -1,5 +1,11 @@
 # @fuel-ts/fuel-core
 
+## 0.71.1
+
+### Patch Changes
+
+- 🐞 fix: use functions from `fs` instead of plain UNIX commands in install scripts to ensure Windows support, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1618](https://github.com/FuelLabs/fuels-ts/pull/1618))
+
 ## 0.71.0
 
 ### Minor Changes
