@@ -17,7 +17,7 @@
  * @param tai64Timestamp - The TAI64 timestamp to convert.
  * @returns - The Unix timestamp in milliseconds.
  */
-export const fromTai64ToUnix = (tai64Timestamp: string) =>
+export const fromTai64ToUnix = (tai64Timestamp: string): number =>
   Number(BigInt(tai64Timestamp) - BigInt(2 ** 62) - BigInt(10));
 
 /**
@@ -38,5 +38,5 @@ export const fromTai64ToUnix = (tai64Timestamp: string) =>
  * @param unixTimestampMs - The Unix timestamp in milliseconds to convert.
  * @returns - The TAI64 timestamp as a string.
  */
-export const fromUnixToTai64 = (unixTimestampMs: number) =>
+export const fromUnixToTai64 = (unixTimestamp: number): string =>
   (BigInt(unixTimestampMs) + BigInt(2 ** 62) + BigInt(10)).toString();
