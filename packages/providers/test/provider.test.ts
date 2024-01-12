@@ -10,6 +10,7 @@ import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
+import { parse } from 'graphql';
 
 import { fromTai64ToDate } from '../src';
 import type { ChainInfo, NodeInfo, TransactionCost, FetchRequestOptions } from '../src/provider';
@@ -57,7 +58,12 @@ const getCustomFetch =
   ) => {
     const graphqlRequest = JSON.parse(options.body);
     const { query } = graphqlRequest;
-    const operationName = query.split('{')[0].split(' ')[1].split('(')[0]; // e.g. query getMessageProof(...) {...} -> getMessageProof
+    const { definitions } = parse(query);
+    const operationName = (
+      definitions.find((op) => op.kind === 'OperationDefinition') as {
+        name: { value: string };
+      }
+    )?.name.value;
 
     if (operationName === expectedOperationName) {
       const responseText = JSON.stringify({
