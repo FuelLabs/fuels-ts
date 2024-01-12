@@ -3,7 +3,13 @@ import * as tai64Mod from 'tai64';
 import * as dateMod from './date';
 import type { IFuelDate } from './date';
 
-const { fromTai64ToDate: tai64toDate, fromDateToTai64: dateToTai64, FuelDate } = dateMod;
+const {
+  fromTai64ToDate: tai64toDate,
+  fromDateToTai64: dateToTai64,
+  fromUnixToDate: unixToDate,
+  fromDateToUnix: dateToUnix,
+  FuelDate,
+} = dateMod;
 
 /**
  * @group node
@@ -47,7 +53,7 @@ describe('transaction-summary/date', () => {
     const unixTimestamp = date.valueOf().toString();
     const dateSpy = vi.spyOn(global, 'Date').mockImplementation(() => date);
 
-    const result = dateMod.fromUnixToDate(unixTimestamp);
+    const result = unixToDate(unixTimestamp);
 
     expect(dateSpy).toHaveBeenCalledTimes(1);
     expect(dateSpy).toHaveBeenCalledWith(parseInt(unixTimestamp, 10));
@@ -58,7 +64,7 @@ describe('transaction-summary/date', () => {
     const date = new Date();
     const unixTimestamp = date.valueOf().toString();
 
-    const result = dateMod.toDateFromUnix(date);
+    const result = dateToUnix(date);
 
     expect(result).toEqual(unixTimestamp);
   });
@@ -88,14 +94,13 @@ describe('FuelDate', () => {
 
   describe('unix', () => {
     test('should be able to instantiate from unix', () => {
-      const fromUnixToDateSpy = vi.spyOn(dateMod, 'fromUnixToDate');
       const unixTimestamp = '1694450695000';
 
       const result = FuelDate.from.unix(unixTimestamp);
 
       expect(result).toBeDefined();
-      expect(fromUnixToDateSpy).toHaveBeenCalledTimes(1);
-      expect(fromUnixToDateSpy).toHaveBeenCalledWith(unixTimestamp);
+      expect(result.toUnix).toEqual(expect.any(Function));
+      expect(result.toTai64).toEqual(expect.any(Function));
     });
 
     test('should be able to output a unix timestamp', () => {
@@ -120,14 +125,13 @@ describe('FuelDate', () => {
 
   describe('tai64', () => {
     test('should be able to instantiate from tai64', () => {
-      const tai64toDateSpy = vi.spyOn(dateMod, 'fromTai64ToDate');
       const tai64Timestamp = '4611686020121838636';
 
       const result = FuelDate.from.tai64(tai64Timestamp);
 
       expect(result).toBeDefined();
-      expect(tai64toDateSpy).toHaveBeenCalledTimes(1);
-      expect(tai64toDateSpy).toHaveBeenCalledWith(tai64Timestamp);
+      expect(result.toUnix).toEqual(expect.any(Function));
+      expect(result.toTai64).toEqual(expect.any(Function));
     });
 
     test('should be able to output a unix timestamp', () => {
