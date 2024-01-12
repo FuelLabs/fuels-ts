@@ -1,7 +1,7 @@
 /**
  * @hidden
  *
- * Converts a TAI64 timestamp to a Unix timestamp in milliseconds.
+ * Converts a TAI64 timestamp to a Unix timestamp in seconds.
  *
  * TAI64 is a 64-bit unsigned integer format that represents a point in time
  * as the number of TAI seconds elapsed since 00:00:00 TAI, January 1, 1970.
@@ -14,8 +14,8 @@
  * and then add the Unix epoch time (00:00:00 UTC, January 1, 1970). The epoch
  * time difference between TAI64 and Unix is 2 ** 62 + 10.
  *
- * @param tai64Timestamp - The TAI64 timestamp to convert.
- * @returns - The Unix timestamp in milliseconds.
+ * @param tai64Timestamp - The TAI64 timestamp to convert ('4611686020108779312').
+ * @returns - The Unix timestamp in seconds (1681391398).
  */
 export const fromTai64ToUnix = (tai64Timestamp: string): number =>
   Number(BigInt(tai64Timestamp) - BigInt(2 ** 62) - BigInt(10));
@@ -23,7 +23,7 @@ export const fromTai64ToUnix = (tai64Timestamp: string): number =>
 /**
  * @hidden
  *
- * Converts a Unix timestamp in milliseconds to a TAI64 timestamp.
+ * Converts a Unix timestamp in seconds to a TAI64 timestamp.
  *
  * Unix timestamp represents the number of milliseconds elapsed since
  * 00:00:00 UTC, January 1, 1970. TAI64 timestamp is a 64-bit unsigned
@@ -35,8 +35,8 @@ export const fromTai64ToUnix = (tai64Timestamp: string): number =>
  * and then subtract the Unix epoch time (00:00:00 UTC, January 1, 1970).
  * The epoch time difference between TAI64 and Unix is 2 ** 62 + 10.
  *
- * @param unixTimestampMs - The Unix timestamp in milliseconds to convert.
+ * @param unixTimestampSeconds - The Unix timestamp in seconds to convert.
  * @returns - The TAI64 timestamp as a string.
  */
-export const fromUnixToTai64 = (unixTimestamp: number): string =>
-  (BigInt(unixTimestampMs) + BigInt(2 ** 62) + BigInt(10)).toString();
+export const fromUnixToTai64 = (unixTimestampSeconds: number): string =>
+  (BigInt(unixTimestampSeconds) + BigInt(2 ** 62) + BigInt(10)).toString();

@@ -4,9 +4,19 @@ import { fromTai64ToUnix, fromUnixToTai64 } from './time';
  * @group node
  */
 test('fromTai64ToUnix', () => {
-  expect(fromTai64ToUnix('4611686020108779312')).toEqual(1681391398);
+  const unixTimestampInSeconds = 1681391398;
+  const tai64Timestamp = '4611686020108779312';
+
+  const result = fromTai64ToUnix(tai64Timestamp);
+
+  expect(result).toEqual(unixTimestampInSeconds);
 });
 
 test('fromUnixToTai64', () => {
-  expect(fromUnixToTai64(1681391398)).toEqual('4611686020108779312');
+  const unixTimestampInSeconds = 1681391398;
+  const tai64Timestamp = '4611686020108779312';
+
+  const result = fromUnixToTai64(unixTimestampInSeconds);
+
+  expect(result).toEqual(tai64Timestamp);
 });
