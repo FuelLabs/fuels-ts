@@ -10,7 +10,7 @@ import { deploy } from '../deploy';
 import { withConfigErrorHandler } from '../withConfig';
 
 import { autoStartFuelCore } from './autoStartFuelCore';
-import type { FuelCoreNode } from './autoStartFuelCore';
+import type { FuelCoreNode } from './startFuelCore';
 
 export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
   handlers.forEach((h) => h.close());
