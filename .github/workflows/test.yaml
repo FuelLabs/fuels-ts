@@ -20,15 +20,16 @@ jobs:
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env }}${{ matrix.env == 'node' && '@' || ''}}${{ matrix.env == 'node' && matrix.version || ''}}
+    name: ${{ matrix.env.name }}${{ matrix.env.name == 'node' && '@' || ''}}${{ matrix.env.name == 'node' && matrix.env.version || ''}}
     strategy:
       fail-fast: false
       matrix:
-        env: [node, browser]
-        version: [18.18.2, 20]
-        exclude:
-          - env: browser
-            version: 18.18.2
+        env:
+          [
+            { name: node, version: 18.18.2 },
+            { name: node, version: 20 },
+            { name: browser },
+          ]
     timeout-minutes: 25
     steps:
       - name: Checkout
@@ -37,7 +38,7 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
         with:
-          node-version: ${{ matrix.version }}
+          node-version: ${{ matrix.env.version || 20 }}
 
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
@@ -55,14 +56,14 @@ jobs:
       - name: Validate Tests
         run: pnpm test:validate
 
-      - name: Run Tests - ${{ matrix.env }}
-        run: pnpm ci:test --${{ matrix.env }}
+      - name: Run Tests - ${{ matrix.env.name }}
+        run: pnpm ci:test --${{ matrix.env.name }}
 
-      - name: Upload Coverage - ${{ matrix.env }}
+      - name: Upload Coverage - ${{ matrix.env.name }}
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.env }}
-          path: coverage/environments/${{ matrix.env }}
+          name: ${{ matrix.env.name }}
+          path: coverage/environments/${{ matrix.env.name }}
 
   test:
     runs-on: ubuntu-latest
