@@ -20,7 +20,7 @@
     "test:e2e": "jest --no-cache --runInBand packages/fuel-gauge/src/e2e-script.test.ts",
     "test:watch": "jest --no-cache --watchAll",
     "lint": "run-s lint:check prettier:check",
-    "lint:check": "eslint . --ext .ts",
+    "lint:check": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
