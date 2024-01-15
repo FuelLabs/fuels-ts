@@ -39,6 +39,7 @@ export type LaunchNodeResult = Promise<{
   cleanup: () => void;
   ip: string;
   port: string;
+  chainConfigPath: string;
 }>;
 
 export type KillNodeParams = {
@@ -216,6 +217,7 @@ export const launchNode = async ({
           cleanup: () => killNode(cleanupConfig),
           ip: ipToUse,
           port: portToUse,
+          chainConfigPath: chainConfigPathToUse as string,
         });
       }
       if (/error/i.test(chunk)) {

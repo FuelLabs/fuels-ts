@@ -30,9 +30,14 @@ describe('autoStartFuelCore', () => {
   });
 
   function mockLaunchNode() {
-    const launchNode = vi
-      .spyOn(testUtilsMod, 'launchNode')
-      .mockReturnValue(Promise.resolve({ cleanup: () => {}, ip: '0.0.0.0', port: '4000' }));
+    const launchNode = vi.spyOn(testUtilsMod, 'launchNode').mockReturnValue(
+      Promise.resolve({
+        cleanup: () => {},
+        ip: '0.0.0.0',
+        port: '4000',
+        chainConfigPath: '/some/path/chainConfig.json',
+      })
+    );
     return { launchNode };
   }
 

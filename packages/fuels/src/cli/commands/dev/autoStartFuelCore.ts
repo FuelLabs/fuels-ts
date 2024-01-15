@@ -1,8 +1,6 @@
-import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
+import { defaultConsensusKey } from '@fuel-ts/utils';
 import { launchNode } from '@fuel-ts/wallet/test-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
-import { mkdirSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
 import { getPortPromise } from 'portfinder';
 
 import type { FuelsConfig } from '../../types';
@@ -14,7 +12,7 @@ export type FuelCoreNode = {
   accessIp: string;
   port: number;
   providerUrl: string;
-  chainConfig: string;
+  chainConfigPath: string;
   killChildProcess: () => void;
 };
 
@@ -26,32 +24,21 @@ export type KillNodeParams = {
   };
 };
 
-export const createTempChainConfig = (coreDir: string) => {
-  const chainConfigPath = join(coreDir, 'chainConfig.json');
-  const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
-  mkdirSync(dirname(chainConfigPath), { recursive: true });
-  writeFileSync(chainConfigPath, chainConfigJson);
-  return chainConfigPath;
-};
-
 export const autoStartFuelCore = async (config: FuelsConfig) => {
   let fuelCore: FuelCoreNode | undefined;
 
   if (config.autoStartFuelCore) {
     log(`Starting ${getBinarySource(config.useBuiltinFuelCore)} 'fuel-core' node..`);
 
-    const coreDir = join(config.basePath, '.fuels');
-
     const bindIp = '0.0.0.0';
     const accessIp = '127.0.0.1';
 
-    const chainConfig = config.chainConfig ?? createTempChainConfig(coreDir);
     const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
     const providerUrl = `http://${accessIp}:${port}/graphql`;
 
-    const { cleanup } = await launchNode({
-      chainConfigPath: chainConfig,
+    const { cleanup, chainConfigPath } = await launchNode({
+      chainConfigPath: config.chainConfig,
       consensusKey: defaultConsensusKey,
       ip: bindIp,
       port: port.toString(),
@@ -67,7 +54,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       accessIp,
       port,
       providerUrl,
-      chainConfig,
+      chainConfigPath,
       killChildProcess: cleanup,
     };
 
