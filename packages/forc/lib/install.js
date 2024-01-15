@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { existsSync, rmSync, writeFileSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
+import tar from 'tar';
 
 import {
   __dirname,
@@ -14,7 +15,6 @@ import {
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const { info } = console;
 
@@ -50,12 +50,15 @@ import {
   } else {
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
-    await writeFileSync(pkgPath, buf);
+    writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
+    await tar.x({
+      file: pkgPath,
+      C: binDir,
+    });
 
     // Cleanup
-    await rmSync(pkgPath);
+    rmSync(pkgPath);
   }
-})().catch(process.stderr.write);
+})().catch((e) => console.error(e));

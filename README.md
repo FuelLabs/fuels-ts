@@ -31,6 +31,8 @@ The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop 
 npm install fuels --save
 ```
 
+> If you are a Windows user, you will need to be running Windows Subsystem for Linux (WSL) to install and use the Fuel toolchain, including the TypeScript SDK. We don't support Windows natively at this time.
+
 # Import
 
 Simple example usages.

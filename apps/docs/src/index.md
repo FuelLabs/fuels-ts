@@ -46,6 +46,8 @@ npm install fuels --save
 
 :::
 
+> If you are a Windows user, you will need to be running Windows Subsystem for Linux (WSL) to install and use the Fuel toolchain, including the TypeScript SDK. We don't support Windows natively at this time.
+
 ## Import
 
 <!-- TODO: stop using hard-coded snippets -->
@@ -68,7 +70,7 @@ console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
 import abi from "./abi.json";
 
-const provider = await Provider.create('https://beta-4.fuel.network/graphql');
+const provider = await Provider.create('https://beta-5.fuel.network/graphql');
 const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider); // private key with coins
 const contractId = "0x...";
 const contract = new Contract(contractId, abi, wallet);

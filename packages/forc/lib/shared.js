@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { cpSync } from 'fs';
 import fs from 'fs/promises';
 import path, { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -23,7 +24,11 @@ export default binPath;
 
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
-    throw new Error(`Unsupported platform ${process.platform}`);
+    throw new Error(
+      `Unsupported platform ${process.platform}.${
+        process.platform === 'win32' ? ' If you are on Windows, please use WSL.' : ''
+      }}`
+    );
   }
   if (process.arch !== 'arm64' && process.arch !== 'x64') {
     throw new Error(`Unsupported arch ${process.arch}`);
@@ -48,18 +53,18 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
 export const buildFromGitBranch = (branchName) => {
-  execSync('rm -rf sway-repo');
-  execSync('rm -rf forc-binaries');
+  fs.rmSync('sway-repo', { recursive: true, force: true });
+  fs.rmSync('forc-binaries', { recursive: true, force: true });
   execSync(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
   execSync(`cd sway-repo && cargo build`);
-  execSync('mkdir forc-binaries');
-  execSync('cp sway-repo/target/debug/forc forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-deploy forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-doc forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-fmt forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-lsp forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-run forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-submit forc-binaries/');
-  execSync('cp sway-repo/target/debug/forc-tx forc-binaries/');
-  execSync(`rm -rf sway-repo`);
+  fs.mkdirSync('forc-binaries');
+  cpSync('sway-repo/target/debug/forc', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-deploy', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-doc', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-fmt', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-lsp', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-run', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-submit', 'forc-binaries');
+  cpSync('sway-repo/target/debug/forc-tx', 'forc-binaries');
+  fs.rmSync('sway-repo', { recursive: true, force: true });
 };
