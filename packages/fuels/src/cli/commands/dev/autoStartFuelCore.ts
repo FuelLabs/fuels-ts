@@ -26,14 +26,6 @@ export type KillNodeParams = {
   };
 };
 
-export const killNode = (params: KillNodeParams) => () => {
-  const { core, state, killFn } = params;
-  if (core.pid && !state.isDead) {
-    state.isDead = true;
-    killFn(Number(core.pid));
-  }
-};
-
 export const createTempChainConfig = (coreDir: string) => {
   const chainConfigPath = join(coreDir, 'chainConfig.json');
   const chainConfigJson = JSON.stringify(defaultChainConfig, null, 2);
