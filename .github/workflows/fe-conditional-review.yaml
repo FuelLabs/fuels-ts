@@ -6,7 +6,7 @@ on:
       [opened, edited, synchronize, review_requested, review_request_removed]
 
 env:
-  GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PR_NUMBER: ${{ github.event.pull_request.number }}
   PR_TITLE: ${{ github.event.pull_request.title }}
   PATTERN: "^\\w+!:"
@@ -29,9 +29,10 @@ jobs:
 
       - name: Add FE Review Request
         id: reviewers
-        run: |
-          gh pr edit "$PR_NUMBER" --add-reviewer arboleya
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+        run: |
           curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/FuelLabs/teams/frontend/members" > team_members.json
           cat team_members.json
 
