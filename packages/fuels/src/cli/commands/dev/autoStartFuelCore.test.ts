@@ -1,7 +1,7 @@
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 
 import { autoStartFuelCore } from './autoStartFuelCore';
-import * as startFuelCoreMod from './startFuelCore';
+import * as autoStartFuelCoreMod from './autoStartFuelCore';
 
 /**
  * @group node
@@ -9,8 +9,8 @@ import * as startFuelCoreMod from './startFuelCore';
 describe('autoStartFuelCore', () => {
   function mockStartFuelCore() {
     const startFuelCore = vi
-      .spyOn(startFuelCoreMod, 'startFuelCore')
-      .mockResolvedValue({} as unknown as startFuelCoreMod.FuelCoreNode);
+      .spyOn(autoStartFuelCoreMod, 'startFuelCore')
+      .mockResolvedValue({} as unknown as autoStartFuelCoreMod.FuelCoreNode);
 
     return { startFuelCore };
   }
