@@ -5,7 +5,7 @@ import { join } from 'path';
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import type { FuelsConfig } from '../../types';
 
-import { startFuelCore } from './autoStartFuelCore';
+import { startFuelCore } from './startFuelCore';
 
 vi.mock('@fuel-ts/wallet/test-utils', async () => {
   const mod = await vi.importActual('@fuel-ts/wallet/test-utils');
