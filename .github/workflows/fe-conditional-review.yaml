@@ -30,8 +30,8 @@ jobs:
       - name: Add FE Review Request
         id: reviewers
         run: |
-          curl -H "Authorization: token $GITHUB_TOKEN" "https://github.com/FuelLabs/fuels-ts/pull/$PR_NUMBER" > review.json
-          cat review.json
+          curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/FuelLabs/fuels-ts/pulls/$PR_NUMBER" > help.json
+          cat help.json
 
           FE_MEMBERS=$(gh api orgs/FuelLabs/teams/frontend/members --jq '.[].login')
           echo "FE_MEMBERS=$FE_MEMBERS"
