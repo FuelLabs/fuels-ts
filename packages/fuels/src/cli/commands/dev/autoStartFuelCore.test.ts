@@ -30,35 +30,36 @@ describe('autoStartFuelCore', () => {
   });
 
   function mockLaunchNode() {
-    vi.spyOn(testUtilsMod, 'launchNode').mockImplementation((..._: unknown[]) =>
-      Promise.resolve({ cleanup: () => {}, ip: '0.0.0.0', port: '4000' })
-    );
+    const launchNode = vi
+      .spyOn(testUtilsMod, 'launchNode')
+      .mockReturnValue(Promise.resolve({ cleanup: () => {}, ip: '0.0.0.0', port: '4000' }));
+    return { launchNode };
   }
 
   test('should auto start `fuel-core`', async () => {
-    mockLaunchNode();
+    const { launchNode } = mockLaunchNode();
 
     const config = structuredClone(fuelsConfig);
     config.autoStartFuelCore = true;
 
     await autoStartFuelCore(config);
 
-    expect(testUtilsMod.launchNode).toHaveBeenCalledTimes(1);
+    expect(launchNode).toHaveBeenCalledTimes(1);
   });
 
   test('should not start `fuel-core`', async () => {
-    mockLaunchNode();
+    const { launchNode } = mockLaunchNode();
 
     const config = structuredClone(fuelsConfig);
     config.autoStartFuelCore = false;
 
     await autoStartFuelCore(config);
 
-    expect(testUtilsMod.launchNode).toHaveBeenCalledTimes(0);
+    expect(launchNode).toHaveBeenCalledTimes(0);
   });
 
   test('should start `fuel-core` node using built-in binary', async () => {
-    mockLaunchNode();
+    const { launchNode } = mockLaunchNode();
 
     const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
     copyConfig.useBuiltinFuelCore = true;
@@ -69,7 +70,7 @@ describe('autoStartFuelCore', () => {
 
     const core = (await autoStartFuelCore(copyConfig)) as FuelCoreNode;
 
-    expect(testUtilsMod.launchNode).toHaveBeenCalledTimes(1);
+    expect(launchNode).toHaveBeenCalledTimes(1);
 
     expect(core.bindIp).toEqual('0.0.0.0');
     expect(core.accessIp).toEqual('127.0.0.1');
@@ -81,14 +82,14 @@ describe('autoStartFuelCore', () => {
   });
 
   test('should start `fuel-core` node using system binary', async () => {
-    mockLaunchNode();
+    const { launchNode } = mockLaunchNode();
 
     const core = (await autoStartFuelCore({
       ...structuredClone(fuelsConfig),
       useBuiltinFuelCore: false,
     })) as FuelCoreNode;
 
-    expect(testUtilsMod.launchNode).toHaveBeenCalledTimes(1);
+    expect(launchNode).toHaveBeenCalledTimes(1);
 
     expect(core.bindIp).toEqual('0.0.0.0');
     expect(core.accessIp).toEqual('127.0.0.1');
