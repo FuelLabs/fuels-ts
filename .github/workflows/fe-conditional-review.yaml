@@ -6,7 +6,7 @@ on:
       [opened, edited, synchronize, review_requested, review_request_removed]
 
 env:
-  TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PR_NUMBER: ${{ github.event.pull_request.number }}
   PR_TITLE: ${{ github.event.pull_request.title }}
   PATTERN: "^\\w+!:"
@@ -30,7 +30,7 @@ jobs:
       - name: Add FE Review Request
         id: reviewers
         with:
-          repo-token: ${{ secrets.TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
         run: |
           FE_MEMBERS=$(gh api orgs/FuelLabs/teams/frontend/members --jq '.[].login')
