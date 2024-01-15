@@ -30,7 +30,7 @@ jobs:
       - name: Add FE Review Request
         id: reviewers
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
         run: |
           FE_MEMBERS=$(gh api orgs/FuelLabs/teams/frontend/members --jq '.[].login')
