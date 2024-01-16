@@ -37,8 +37,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
-    "ethers": "^6.7.1"
+    "@fuel-ts/errors": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"
