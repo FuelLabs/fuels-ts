@@ -29,7 +29,7 @@ import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
+import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
@@ -444,7 +444,7 @@ export default class Provider {
       const isSubscription = opDefinition?.operation === 'subscription';
 
       if (isSubscription) {
-        return new FuelGraphqlSubscriber({
+        return fuelGraphQLSubscriber({
           url: this.url,
           query,
           fetchFn: (url, requestInit) =>
