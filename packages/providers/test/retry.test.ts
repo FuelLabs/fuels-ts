@@ -62,9 +62,9 @@ describe('Retries correctly', () => {
 
     const callTimes: number[] = [];
 
-    mockFetch(maxRetries, callTimes);
-
     const expectedChainInfo = await provider.operations.getChain();
+
+    mockFetch(maxRetries, callTimes);
 
     const chainInfo = await provider.operations.getChain();
 
@@ -83,9 +83,9 @@ describe('Retries correctly', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
     const callTimes: number[] = [];
 
-    mockFetch(maxRetries, callTimes);
-
     const expectedChainInfo = await provider.operations.getChain();
+
+    mockFetch(maxRetries, callTimes);
 
     const chainInfo = await provider.operations.getChain();
 
@@ -110,9 +110,9 @@ describe('Retries correctly', () => {
 
     const callTimes: number[] = [];
 
-    mockFetch(maxRetries, callTimes);
-
     const expectedChainInfo = await provider.operations.getChain();
+
+    mockFetch(maxRetries, callTimes);
 
     const chainInfo = await provider.operations.getChain();
 
