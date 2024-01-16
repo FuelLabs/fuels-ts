@@ -7,6 +7,7 @@ import {
   calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
@@ -19,7 +20,7 @@ import type {
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { getBytesCopy, type BytesLike } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
@@ -211,7 +212,7 @@ export class ScriptRequest<TData = void, TResult = void> {
     scriptDataEncoder: (data: TData) => EncodedScriptCall,
     scriptResultDecoder: (scriptResult: ScriptResult) => TResult
   ) {
-    this.bytes = getBytesCopy(bytes);
+    this.bytes = arrayify(bytes);
     this.scriptDataEncoder = scriptDataEncoder;
     this.scriptResultDecoder = scriptResultDecoder;
   }
@@ -252,7 +253,7 @@ export class ScriptRequest<TData = void, TResult = void> {
     }
 
     // object
-    this.bytes = getBytesCopy(callScript.script);
+    this.bytes = arrayify(callScript.script);
     return callScript.data;
   }
 
