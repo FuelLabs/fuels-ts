@@ -1,6 +1,9 @@
 name: Release to @rc-<name> tag on npm
 
 on:
+  pull_request:
+    branches:
+      - "master"
   push:
     branches:
       - "rc/*"
@@ -32,7 +35,7 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          string: ${{ github.ref }}
+          string: ${{ github.head_ref || github.ref }}
           pattern: "refs/heads/rc/"
           replace-with: "rc-"
 
@@ -50,10 +53,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: mshick/add-pr-comment@v2
+      - name: Add PR comment
+        if: ${{ github.event_name == 'pull_request' && contains(github.head_ref, 'rc/') }}
+        uses: mshick/add-pr-comment@v2
         with:
           message: |
-            RC published under the `**${{ steps.rc_name.outputs.replaced }}**` tag.
+            RC published under the `${{ steps.rc_name.outputs.replaced }}` tag.
               
             Install it:
             ```bash
