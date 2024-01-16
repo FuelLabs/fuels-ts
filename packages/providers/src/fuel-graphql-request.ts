@@ -22,13 +22,7 @@ function isSubscription({ definitions: defs }: DocumentNode) {
   return false;
 }
 
-export type FuelGraphQLSubscriberOptions = {
-  url: string;
-  request: RequestInit;
-  fetchFn: typeof fetch;
-};
-
-export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
+class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private stream!: ReadableStreamDefaultReader<Uint8Array>;
   private static textDecoder = new TextDecoder();
 
@@ -59,7 +53,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     return data as Record<string, unknown>;
   }
 
-  public constructor(private options: FuelGraphQLSubscriberOptions) {}
+  public constructor(
+    private options: {
+      url: string;
+      request: RequestInit;
+      fetchFn: typeof fetch;
+    }
+  ) {}
 
   private async setStream() {
     const { url, request, fetchFn } = this.options;
