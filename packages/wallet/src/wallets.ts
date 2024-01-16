@@ -7,7 +7,7 @@ import { HDWallet } from '@fuel-ts/hdwallet';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import type { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { Account } from './account';
 import { BaseWalletUnlocked } from './base-unlocked-wallet';

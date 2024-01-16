@@ -4,7 +4,7 @@ import type { CallResult, TransactionResponse, TransactionRequestLike } from '@f
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
 

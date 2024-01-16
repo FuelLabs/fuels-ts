@@ -1,8 +1,8 @@
 import { U64Coder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import * as getBytesCopyMod from 'ethers';
-import type { BytesLike } from 'ethers';
+import * as arrayifyMod from '@fuel-ts/utils';
 
 import {
   composeScriptForTransferringToContract,
@@ -11,14 +11,6 @@ import {
 
 vi.mock('@fuels/vm-asm', async () => {
   const mod = await vi.importActual('@fuels/vm-asm');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
-vi.mock('ethers', async () => {
-  const mod = await vi.importActual('ethers');
   return {
     __esModule: true,
     ...mod,
@@ -47,9 +39,7 @@ describe('util', () => {
 
     const encode = vi.spyOn(U64Coder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
 
-    const arrayify = vi
-      .spyOn(getBytesCopyMod, 'getBytesCopy')
-      .mockReturnValue(Uint8Array.from(byte));
+    const arrayify = vi.spyOn(arrayifyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
 
     const contractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;

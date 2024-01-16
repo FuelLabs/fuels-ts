@@ -5,7 +5,7 @@ import { Signer } from '@fuel-ts/signer';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
-import { hexlify } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 import fsSync from 'fs';
 import fs from 'fs/promises';
 import os from 'os';

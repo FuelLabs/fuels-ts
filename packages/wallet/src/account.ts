@@ -25,8 +25,8 @@ import {
   transactionRequestify,
   addAmountToAsset,
 } from '@fuel-ts/providers';
-import { getBytesCopy } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 import {
   composeScriptForTransferringToContract,
@@ -398,14 +398,14 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionResponse> {
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
-    const recipientDataArray = getBytesCopy(
+    const recipientDataArray = arrayify(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))
     );
-    const amountDataArray = getBytesCopy(
+    const amountDataArray = arrayify(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
     );
     const script = new Uint8Array([
-      ...getBytesCopy(withdrawScript.bytes),
+      ...arrayify(withdrawScript.bytes),
       ...recipientDataArray,
       ...amountDataArray,
     ]);

@@ -1,8 +1,8 @@
 import { U64Coder } from '@fuel-ts/abi-coder';
-import type { B256Address } from '@fuel-ts/interfaces';
+import type { B256Address, BytesLike } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
+import { arrayify } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
-import { getBytesCopy, type BytesLike } from 'ethers';
 
 export const composeScriptForTransferringToContract = async () => {
   // implementation extracted from Rust SDK at:
@@ -48,9 +48,9 @@ export const formatScriptDataForTransferringToContract = (
   const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
 
   const scriptData = Uint8Array.from([
-    ...getBytesCopy(hexelifiedContractId),
+    ...arrayify(hexelifiedContractId),
     ...encoded,
-    ...getBytesCopy(assetId),
+    ...arrayify(assetId),
   ]);
 
   return scriptData;

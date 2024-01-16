@@ -1,4 +1,5 @@
 import { hashMessage } from '@fuel-ts/hasher';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import type {
   TransactionResponse,
   TransactionRequestLike,
@@ -7,7 +8,7 @@ import type {
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import type { BytesLike } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 
 import { Account } from './account';
 import { encryptKeystoreWallet } from './keystore-wallet';
@@ -70,7 +71,7 @@ export class BaseWalletUnlocked extends Account {
    */
   async signMessage(message: string): Promise<string> {
     const signedMessage = await this.signer().sign(hashMessage(message));
-    return signedMessage;
+    return hexlify(signedMessage);
   }
 
   /**
@@ -85,7 +86,7 @@ export class BaseWalletUnlocked extends Account {
     const hashedTransaction = transactionRequest.getTransactionId(chainId);
     const signature = await this.signer().sign(hashedTransaction);
 
-    return signature;
+    return hexlify(signature);
   }
 
   /**
