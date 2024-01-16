@@ -20,9 +20,9 @@ import type {
 } from '@fuel-ts/providers';
 import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import type { TxParamsType } from '@fuel-ts/wallet';
 import { Account } from '@fuel-ts/wallet';
-import { getBytesCopy, hexlify } from 'ethers';
 
 import { getPredicateRoot } from './utils';
 
@@ -176,7 +176,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account implements Abs
     jsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    let predicateBytes = getBytesCopy(bytes);
+    let predicateBytes = arrayify(bytes);
     let abiInterface: Interface | undefined;
 
     if (jsonAbi) {

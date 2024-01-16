@@ -4,7 +4,7 @@ import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
-import { hexlify } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 
 import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
