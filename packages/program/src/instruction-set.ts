@@ -1,6 +1,6 @@
 import { concat } from '@fuel-ts/utils';
 import type * as asm from '@fuels/vm-asm';
-import { hexlify } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 
 /**
  * A wrapper around fuel-asm to make dynamic instructions and convert to different formats
