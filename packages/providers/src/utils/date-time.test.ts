@@ -25,6 +25,9 @@ const { now, nowPlusOneSecond } = {
   },
 };
 
+/**
+ * @group node
+ */
 describe('utils/date-time', () => {
   describe('DateTime', () => {
     test('should be able to create fromUnixMilliseconds', () => {
