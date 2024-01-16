@@ -8,9 +8,9 @@ import { join } from 'path';
  */
 try {
   if (existsSync(join(process.cwd(), 'tsconfig.dts.json'))) {
-    execSync('tsc --emitDeclarationOnly -p tsconfig.dts.json', { stdio: 'inherit' });
+    execSync('tsc --emitDeclarationOnly -p tsconfig.dts.json');
   } else if (existsSync(join(process.cwd(), 'tsconfig.json'))) {
-    execSync('tsc --emitDeclarationOnly -p tsconfig.json', { stdio: 'inherit' });
+    execSync('tsc --emitDeclarationOnly -p tsconfig.json');
   }
 } catch (err) {
   error(err.toString());
