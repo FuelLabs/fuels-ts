@@ -16,7 +16,7 @@ import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
@@ -72,7 +72,11 @@ const callScript = async <TData, TResult>(
 };
 
 // #region script-init
+<<<<<<< HEAD
 // #import { ScriptRequest, getBytesCopy };
+=======
+// #context import { Script, AbiCoder, arrayify } from 'fuels';
+>>>>>>> b5d6d1e34 (feat: replaces ethers usages in script)
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {
@@ -92,7 +96,7 @@ describe('Script', () => {
       (myStruct: MyStruct) => {
         const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
 
-        return getBytesCopy(encoded);
+        return arrayify(encoded);
       },
       (scriptResult) => {
         if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
