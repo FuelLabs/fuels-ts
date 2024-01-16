@@ -4,8 +4,8 @@ import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 export type CoinTransactionRequestInput = {
   type: InputType.Coin;
@@ -92,18 +92,18 @@ export const inputify = (value: TransactionRequestInput): Input => {
 
   switch (value.type) {
     case InputType.Coin: {
-      const predicate = getBytesCopy(value.predicate ?? '0x');
-      const predicateData = getBytesCopy(value.predicateData ?? '0x');
+      const predicate = arrayify(value.predicate ?? '0x');
+      const predicateData = arrayify(value.predicateData ?? '0x');
       return {
         type: InputType.Coin,
-        txID: hexlify(getBytesCopy(value.id).slice(0, 32)),
-        outputIndex: getBytesCopy(value.id)[32],
+        txID: hexlify(arrayify(value.id).slice(0, 32)),
+        outputIndex: arrayify(value.id)[32],
         owner: hexlify(value.owner),
         amount: bn(value.amount),
         assetId: hexlify(value.assetId),
         txPointer: {
-          blockHeight: toNumber(getBytesCopy(value.txPointer).slice(0, 8)),
-          txIndex: toNumber(getBytesCopy(value.txPointer).slice(8, 16)),
+          blockHeight: toNumber(arrayify(value.txPointer).slice(0, 8)),
+          txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         witnessIndex: value.witnessIndex,
         maturity: value.maturity ?? 0,
@@ -122,16 +122,16 @@ export const inputify = (value: TransactionRequestInput): Input => {
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,
         txPointer: {
-          blockHeight: toNumber(getBytesCopy(value.txPointer).slice(0, 8)),
-          txIndex: toNumber(getBytesCopy(value.txPointer).slice(8, 16)),
+          blockHeight: toNumber(arrayify(value.txPointer).slice(0, 8)),
+          txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         contractID: hexlify(value.contractId),
       };
     }
     case InputType.Message: {
-      const predicate = getBytesCopy(value.predicate ?? '0x');
-      const predicateData = getBytesCopy(value.predicateData ?? '0x');
-      const data = getBytesCopy(value.data ?? '0x');
+      const predicate = arrayify(value.predicate ?? '0x');
+      const predicateData = arrayify(value.predicateData ?? '0x');
+      const data = arrayify(value.data ?? '0x');
       return {
         type: InputType.Message,
         sender: hexlify(value.sender),

@@ -7,8 +7,8 @@ import { bn } from '@fuel-ts/math';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { ChainInfo } from '../provider';
@@ -61,8 +61,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   constructor({ script, scriptData, gasLimit, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
     this.gasLimit = bn(gasLimit);
-    this.script = getBytesCopy(script ?? returnZeroScript.bytes);
-    this.scriptData = getBytesCopy(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arrayify(script ?? returnZeroScript.bytes);
+    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   /**
@@ -71,8 +71,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @returns The transaction script object.
    */
   toTransaction(): TransactionScript {
-    const script = getBytesCopy(this.script ?? '0x');
-    const scriptData = getBytesCopy(this.scriptData ?? '0x');
+    const script = arrayify(this.script ?? '0x');
+    const scriptData = arrayify(this.scriptData ?? '0x');
     return {
       type: TransactionType.Script,
       scriptGasLimit: this.gasLimit,

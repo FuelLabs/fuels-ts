@@ -1,7 +1,7 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
@@ -12,8 +12,7 @@ import {
   OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
-import type { BytesLike } from 'ethers';
-import { concat, getBytesCopy, hexlify } from 'ethers';
+import { concat, arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
@@ -649,7 +648,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   hasPredicateInput(): boolean {
     return Boolean(
       this.inputs.find(
-        (input) => 'predicate' in input && input.predicate && input.predicate !== getBytesCopy('0x')
+        (input) => 'predicate' in input && input.predicate && input.predicate !== arrayify('0x')
       )
     );
   }

@@ -1,8 +1,8 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { hexlify } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 export type CoinQuantityLike =
   | [amount: BigNumberish, assetId?: BytesLike, max?: BigNumberish]
