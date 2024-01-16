@@ -1,6 +1,9 @@
 name: Release to @rc-<name> tag on npm
 
 on:
+  pull_request:
+    branches:
+      - "rc/*"
   push:
     branches:
       - "rc/*"
@@ -50,10 +53,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: mshick/add-pr-comment@v2
+      - name: Add PR comment
+        if: github.event_name == 'pull_request'
+        uses: mshick/add-pr-comment@v2
         with:
           message: |
-            RC published under the `**${{ steps.rc_name.outputs.replaced }}**` tag.
+            RC published under the `${{ steps.rc_name.outputs.replaced }}` tag.
               
             Install it:
             ```bash
