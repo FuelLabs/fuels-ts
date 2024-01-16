@@ -27,6 +27,7 @@
   "dependencies": {
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:^",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.7.1",
