@@ -1,10 +1,10 @@
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { toBytes } from '@fuel-ts/math';
+import { hexlify, concat, arrayify } from '@fuel-ts/utils';
 import { secp256k1 } from '@noble/curves/secp256k1';
-import type { BytesLike } from 'ethers';
-import { hexlify, concat, getBytesCopy } from 'ethers';
 
 export class Signer {
   readonly address: Address;
@@ -50,7 +50,7 @@ export class Signer {
    * @returns hashed signature
    */
   sign(data: BytesLike) {
-    const signature = secp256k1.sign(getBytesCopy(data), getBytesCopy(this.privateKey));
+    const signature = secp256k1.sign(arrayify(data), arrayify(this.privateKey));
 
     const r = toBytes(`0x${signature.r.toString(16)}`, 32);
     const s = toBytes(`0x${signature.s.toString(16)}`, 32);
@@ -58,7 +58,7 @@ export class Signer {
     // add recoveryParam to first s byte
     s[0] |= (signature.recovery || 0) << 7;
 
-    return concat([r, s]);
+    return hexlify(concat([r, s]));
   }
 
   /**
@@ -68,8 +68,8 @@ export class Signer {
    * @returns compressed point on the curve
    */
   addPoint(point: BytesLike) {
-    const p0 = secp256k1.ProjectivePoint.fromHex(getBytesCopy(this.compressedPublicKey));
-    const p1 = secp256k1.ProjectivePoint.fromHex(getBytesCopy(point));
+    const p0 = secp256k1.ProjectivePoint.fromHex(arrayify(this.compressedPublicKey));
+    const p1 = secp256k1.ProjectivePoint.fromHex(arrayify(point));
     const result = p0.add(p1);
     return `0x${result.toHex(true)}`;
   }
@@ -82,7 +82,7 @@ export class Signer {
    * @returns public key from signature from the
    */
   static recoverPublicKey(data: BytesLike, signature: BytesLike): string {
-    const signedMessageBytes = getBytesCopy(signature);
+    const signedMessageBytes = arrayify(signature);
     const r = signedMessageBytes.slice(0, 32);
     const s = signedMessageBytes.slice(32, 64);
     const recoveryParam = (s[0] & 0x80) >> 7;
@@ -94,7 +94,7 @@ export class Signer {
       recoveryParam
     );
 
-    const publicKey = sig.recoverPublicKey(getBytesCopy(data)).toRawBytes(false).slice(1);
+    const publicKey = sig.recoverPublicKey(arrayify(data)).toRawBytes(false).slice(1);
     return hexlify(publicKey);
   }
 
@@ -116,7 +116,7 @@ export class Signer {
    * @returns random 32-byte hashed
    */
   static generatePrivateKey(entropy?: BytesLike) {
-    return entropy ? hash(concat([randomBytes(32), getBytesCopy(entropy)])) : randomBytes(32);
+    return entropy ? hash(concat([randomBytes(32), arrayify(entropy)])) : randomBytes(32);
   }
 
   /**
@@ -126,7 +126,7 @@ export class Signer {
    * @returns extended publicKey
    */
   static extendPublicKey(publicKey: BytesLike) {
-    const point = secp256k1.ProjectivePoint.fromHex(getBytesCopy(publicKey));
+    const point = secp256k1.ProjectivePoint.fromHex(arrayify(publicKey));
     return hexlify(point.toRawBytes(false).slice(1));
   }
 }
