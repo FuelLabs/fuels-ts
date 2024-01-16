@@ -11,12 +11,6 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
-
-import { Account } from '../account';
-import type { TxParamsType } from '../account';
-import { transactionRequestify, BaseTransactionRequest } from '../providers';
 import type {
   CallResult,
   Provider,
@@ -24,7 +18,16 @@ import type {
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
-} from '../providers';
+} from '@fuel-ts/providers';
+import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
+import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import { arrayify, hexlify } from '@fuel-ts/utils';
+import type { TxParamsType } from '@fuel-ts/wallet';
+import { Account } from '@fuel-ts/wallet';
+
+import type { TxParamsType } from '../account';
+import { Account } from '../account';
+import { transactionRequestify, BaseTransactionRequest } from '../providers';
 
 import { getPredicateRoot } from './utils';
 
@@ -181,7 +184,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     jsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    let predicateBytes = getBytesCopy(bytes);
+    let predicateBytes = arrayify(bytes);
     let abiInterface: Interface | undefined;
 
     if (jsonAbi) {
