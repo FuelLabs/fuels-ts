@@ -75,16 +75,18 @@ class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   }
 
   private async readStream(): Promise<IteratorResult<unknown, unknown>> {
-    const { value, done } = await this.stream.read();
+    let parsed;
+    let doneStreaming = false;
+    do {
+      const { value, done } = await this.stream.read();
 
-    const parsed = FuelGraphqlSubscriber.parseBytesStream(value);
+      parsed = FuelGraphqlSubscriber.parseBytesStream(value);
+      doneStreaming = done;
 
-    if (parsed === undefined && !done) {
-      // we recursively wait for the next message until it's a proper gql response or the stream is done i.e. {value: undefined, done: true}
-      return this.readStream();
-    }
+      // we do this until it's a proper gql response or the stream is done i.e. {value: undefined, done: true}
+    } while (parsed === undefined && !doneStreaming);
 
-    return { value: parsed, done };
+    return { value: parsed, done: doneStreaming };
   }
 
   async next(): Promise<IteratorResult<unknown, unknown>> {
