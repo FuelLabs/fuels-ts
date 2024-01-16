@@ -37,7 +37,6 @@ class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
     // https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
     if (text === 'keep-alive-text') {
-      // the text can sometimes be a keep-alive message
       return undefined;
     }
 
