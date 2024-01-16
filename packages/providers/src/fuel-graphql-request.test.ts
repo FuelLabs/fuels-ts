@@ -7,6 +7,9 @@ import { fuelGraphQLRequest } from './fuel-graphql-request';
 const SAMPLE_DOCUMENT = GetVersionDocument;
 const SAMPLE_SUBSCRIPTION_DOCUMENT = StatusChangeDocument;
 
+/**
+ * @group node
+ */
 describe('FuelGraphqlRequest', () => {
   beforeEach(() => {
     vi.clearAllMocks();
