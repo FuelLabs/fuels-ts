@@ -1,8 +1,9 @@
 import { bufferFromString } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
-import type { BytesLike } from 'ethers';
-import { sha256, getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
@@ -153,7 +154,7 @@ export class FunctionFragment<
   }
 
   decodeArguments(data: BytesLike) {
-    const bytes = getBytesCopy(data);
+    const bytes = arrayify(data);
     const nonEmptyInputs = this.jsonFn.inputs.filter(
       (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
@@ -206,7 +207,7 @@ export class FunctionFragment<
       return [undefined, 0];
     }
 
-    const bytes = getBytesCopy(data);
+    const bytes = arrayify(data);
     const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
 
     if (outputAbiType.type === 'raw untyped slice') {

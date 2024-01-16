@@ -28,10 +28,11 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "ethers": "^6.7.1",
     "type-fest": "^3.1.0"
   }

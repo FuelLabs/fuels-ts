@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toHex } from '@fuel-ts/math';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import { WORD_SIZE } from '../constants';
 
@@ -14,7 +14,7 @@ export class B256Coder extends Coder<string, string> {
   encode(value: string): Uint8Array {
     let encodedValue;
     try {
-      encodedValue = getBytesCopy(value);
+      encodedValue = arrayify(value);
     } catch (error) {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
