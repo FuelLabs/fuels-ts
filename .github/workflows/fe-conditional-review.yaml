@@ -30,6 +30,7 @@ jobs:
       - name: Add FE Review Request
         id: reviewers
         run: |
+          echo $(gh auth status --show-token)
           FE_MEMBERS=$(gh api orgs/FuelLabs/teams/frontend/members --jq '.[].login')
           echo "FE_MEMBERS=$FE_MEMBERS"
           PR_DATA=$(gh pr view https://github.com/FuelLabs/fuels-ts/pull/$PR_NUMBER --json reviewRequests,reviews)
