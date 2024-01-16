@@ -140,7 +140,7 @@ describe('FuelGraphqlRequest', () => {
     expect(canceled).toEqual(true);
   });
 
-  test('ignores keep-alive-text messages in subscriptions', async () => {
+  test('ignores keep-alive messages in subscriptions', async () => {
     const fetchSpy = vi.spyOn(global, 'fetch');
 
     const readableStream = new ReadableStream({
@@ -150,7 +150,7 @@ describe('FuelGraphqlRequest', () => {
         controller.enqueue(
           encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 0 } } })}`)
         );
-        controller.enqueue(encoder.encode('keep-alive-text'));
+        controller.enqueue(encoder.encode(':keep-alive-text\n\n'));
         controller.enqueue(
           encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 1 } } })}`)
         );

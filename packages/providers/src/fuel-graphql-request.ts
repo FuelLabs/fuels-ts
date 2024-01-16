@@ -36,7 +36,8 @@ class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     const text = this.textDecoder.decode(bytes);
 
     // https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
-    if (text === 'keep-alive-text') {
+    // this is the real keep-alive message sent by the server
+    if (text === ':keep-alive-text\n\n') {
       return undefined;
     }
 
