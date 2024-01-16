@@ -1,18 +1,9 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from 'ethers';
-import {
-  concat,
-  hexlify,
-  dataSlice,
-  pbkdf2,
-  sha256,
-  computeHmac,
-  encodeBase58,
-  getBytesCopy,
-} from 'ethers';
-
-import { english } from '../wordlists';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { arrayify, hexlify, concat } from '@fuel-ts/utils';
+import { english } from '@fuel-ts/wordlists';
+import { dataSlice, pbkdf2, sha256, computeHmac, encodeBase58 } from 'ethers';
 
 import type { MnemonicPhrase } from './utils';
 import {
@@ -113,7 +104,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static entropyToMnemonic(entropy: BytesLike, wordlist: Array<string> = english): string {
-    const entropyBytes = getBytesCopy(entropy);
+    const entropyBytes = arrayify(entropy);
 
     assertWordList(wordlist);
     assertEntropy(entropyBytes);
@@ -200,7 +191,7 @@ class Mnemonic {
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static masterKeysFromSeed(seed: string): Uint8Array {
-    const seedArray = getBytesCopy(seed);
+    const seedArray = arrayify(seed);
 
     if (seedArray.length < 16 || seedArray.length > 64) {
       throw new FuelError(
@@ -209,7 +200,7 @@ class Mnemonic {
       );
     }
 
-    return getBytesCopy(computeHmac('sha512', MasterSecret, seedArray));
+    return arrayify(computeHmac('sha512', MasterSecret, seedArray));
   }
 
   /**
@@ -221,7 +212,7 @@ class Mnemonic {
    */
   static seedToExtendedKey(seed: string, testnet: boolean = false): string {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
-    const prefix = getBytesCopy(testnet ? TestnetPRV : MainnetPRV);
+    const prefix = arrayify(testnet ? TestnetPRV : MainnetPRV);
     const depth = '0x00';
     const fingerprint = '0x00000000';
     const index = '0x00000000';
@@ -256,7 +247,7 @@ class Mnemonic {
    */
   static generate(size: number = 32, extraEntropy: BytesLike = '') {
     const entropy = extraEntropy
-      ? sha256(concat([randomBytes(size), getBytesCopy(extraEntropy)]))
+      ? sha256(concat([randomBytes(size), arrayify(extraEntropy)]))
       : randomBytes(size);
     return Mnemonic.entropyToMnemonic(entropy);
   }
