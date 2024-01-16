@@ -82,9 +82,6 @@ class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
       parsed = FuelGraphqlSubscriber.parseBytesStream(value);
       doneStreaming = done;
-      if (parsed === undefined && !done) {
-        return this.readStream();
-      }
 
       // we do this until it's a proper gql response or the stream is done i.e. {value: undefined, done: true}
     } while (parsed === undefined && !doneStreaming);
