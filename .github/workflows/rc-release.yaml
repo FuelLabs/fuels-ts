@@ -3,8 +3,7 @@ name: Release to @rc-<name> tag on npm
 on:
   pull_request:
     branches:
-      #  CHANGE TO MASTER ONCE FIXED!!!
-      - "rc/*"
+      - "master"
   push:
     branches:
       - "rc/*"
@@ -36,9 +35,7 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          # CHANGE to github.head_ref once fixed!!!
-          # string: ${{ github.head_ref }}
-          string: "refs/heads/rc/salamander"
+          string: ${{ github.head_ref || github.ref }}
           pattern: "refs/heads/rc/"
           replace-with: "rc-"
 
@@ -57,8 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add PR comment
-        # CHANGE TO rc/ WHEN FIXED!!!
-        if: ${{ github.event_name == 'pull_request' &&  startsWith(github.head_ref, 'db/fix/') }}
+        if: ${{ github.event_name == 'pull_request' && contains(github.head_ref, 'rc/') }}
         uses: mshick/add-pr-comment@v2
         with:
           message: |
