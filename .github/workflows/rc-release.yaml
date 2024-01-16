@@ -36,8 +36,9 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          string: ${{ github.head_ref }}
-          # CHANGE TO "refs/heads/rc/" WHEN FIXED!!!
+          # CHANGE to github.head_ref once fixed!!!
+          # string: ${{ github.head_ref }}
+          string: "refs/heads/rc/salamander"
           pattern: "refs/heads/rc/"
           replace-with: "rc-"
 
