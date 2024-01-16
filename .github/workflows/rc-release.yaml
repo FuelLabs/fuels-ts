@@ -37,6 +37,7 @@ jobs:
         id: rc_name
         with:
           string: ${{ github.head_ref }}
+          # CHANGE TO "refs/heads/rc/" WHEN FIXED!!!
           pattern: "refs/heads/rc/"
           replace-with: "rc-"
 
