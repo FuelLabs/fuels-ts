@@ -4,7 +4,8 @@ import { hexlify } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
-import { getGasUsedFromReceipts, fromTai64ToDate } from '../utils';
+import type { IDateTime } from '../utils';
+import { DateTime, getGasUsedFromReceipts } from '../utils';
 
 import { calculateTransactionFee } from './calculate-transaction-fee';
 import {
@@ -82,10 +83,10 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
-  let date: Date | undefined;
+  let date: IDateTime | undefined;
 
   if (time) {
-    date = fromTai64ToDate(time);
+    date = DateTime.fromTai64(time);
   }
 
   const transactionSummary: TransactionSummary<TTransactionType> = {

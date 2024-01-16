@@ -19,7 +19,7 @@ import type {
 } from '../src/transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from '../src/transaction-request';
 import { TransactionResponse } from '../src/transaction-response';
-import { fromTai64ToDate, fromTai64ToUnix, fromUnixToTai64, sleep } from '../src/utils';
+import { DateTime, sleep, tai64ToUnixMilliseconds, unixMillisecondsToTai64 } from '../src/utils';
 import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
@@ -304,8 +304,8 @@ describe('Provider', () => {
 
     expect(producedBlock).toBeDefined();
 
-    const oldest = new Date(fromTai64ToDate(timeLastBlockProduced || ''));
-    const newest = new Date(fromTai64ToDate(producedBlock?.time || ''));
+    const oldest: Date = DateTime.fromTai64(timeLastBlockProduced);
+    const newest: Date = DateTime.fromTai64(producedBlock?.time || DateTime.TAI64_ZERO);
 
     expect(newest >= oldest).toBeTruthy();
     // #endregion Provider-produce-blocks
@@ -323,7 +323,7 @@ describe('Provider', () => {
     }
     const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
       block;
-    const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
+    const latestBlockUnixTimestampBeforeProduce = tai64ToUnixMilliseconds(
       latestBlockTimestampBeforeProduce
     );
 
@@ -351,7 +351,7 @@ describe('Provider', () => {
     }));
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
       height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: fromUnixToTai64(startTime + i * blockTimeInterval),
+      time: unixMillisecondsToTai64(startTime + i * blockTimeInterval),
     }));
     expect(producedBlocks).toEqual(expectedBlocks);
   });

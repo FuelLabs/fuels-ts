@@ -45,9 +45,9 @@ import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculatePriceWithFactor,
-  fromUnixToTai64,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
+  unixMillisecondsToTai64,
 } from './utils';
 import { mergeQuantities } from './utils/merge-quantities';
 
@@ -1343,13 +1343,13 @@ export default class Provider {
    * Lets you produce blocks with custom timestamps and the block number of the last block produced.
    *
    * @param amount - The amount of blocks to produce
-   * @param startTime - The UNIX timestamp to set for the first produced block
+   * @param startTime - The UNIX timestamp (milliseconds) to set for the first produced block
    * @returns A promise that resolves to the block number of the last produced block.
    */
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
+      startTimestamp: startTime ? unixMillisecondsToTai64(startTime) : undefined,
     });
     return bn(latestBlockHeight);
   }
