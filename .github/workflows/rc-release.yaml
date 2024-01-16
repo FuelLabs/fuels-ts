@@ -55,7 +55,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add PR comment
-        if: ${{ github.event_name == 'pull_request' &&  startsWith(github.head_ref, 'rc/') }}
+        # CHANGE TO rc/ WHEN FIXED!!!
+        if: ${{ github.event_name == 'pull_request' &&  startsWith(github.head_ref, 'db/fix/') }}
         uses: mshick/add-pr-comment@v2
         with:
           message: |
