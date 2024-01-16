@@ -2,11 +2,10 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { getBytesCopy } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { FuelConnector } from './connectors';
 import type {
@@ -446,14 +445,14 @@ export class Account extends AbstractAccount {
 
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
-    const recipientDataArray = getBytesCopy(
+    const recipientDataArray = arrayify(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))
     );
-    const amountDataArray = getBytesCopy(
+    const amountDataArray = arrayify(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
     );
     const script = new Uint8Array([
-      ...getBytesCopy(withdrawScript.bytes),
+      ...arrayify(withdrawScript.bytes),
       ...recipientDataArray,
       ...amountDataArray,
     ]);
