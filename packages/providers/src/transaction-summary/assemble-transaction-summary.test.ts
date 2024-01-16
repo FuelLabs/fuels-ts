@@ -1,5 +1,5 @@
 import { BN, bn } from '@fuel-ts/math';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import {
   MOCK_RECEIPT_CALL,
@@ -34,7 +34,7 @@ describe('TransactionSummary', () => {
   const gasPriceFactor = bn(3);
   const maxInputs = bn(255);
   const transaction = MOCK_TRANSACTION;
-  const transactionBytes = getBytesCopy(MOCK_TRANSACTION_RAWPAYLOAD);
+  const transactionBytes = arrayify(MOCK_TRANSACTION_RAWPAYLOAD);
   const receipts: TransactionResultReceipt[] = [
     MOCK_RECEIPT_CALL,
     MOCK_RECEIPT_TRANSFER_OUT,

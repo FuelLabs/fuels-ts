@@ -18,7 +18,7 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -151,7 +151,7 @@ export class TransactionResponse {
    */
   decodeTransaction<TTransactionType = void>(transactionWithReceipts: GqlTransaction) {
     return new TransactionCoder().decode(
-      getBytesCopy(transactionWithReceipts.rawPayload),
+      arrayify(transactionWithReceipts.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
   }
@@ -185,7 +185,7 @@ export class TransactionResponse {
       id: this.id,
       receipts,
       transaction: decodedTransaction,
-      transactionBytes: getBytesCopy(transaction.rawPayload),
+      transactionBytes: arrayify(transaction.rawPayload),
       gqlTransactionStatus: transaction.status,
       gasPerByte,
       gasPriceFactor,

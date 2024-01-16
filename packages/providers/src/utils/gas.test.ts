@@ -1,6 +1,6 @@
 import { BN, bn } from '@fuel-ts/math';
 import { ReceiptType, type InputCoin, type InputMessage } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import { MOCK_CHAIN } from '../../test/fixtures/chain';
 import {
@@ -140,14 +140,14 @@ describe('gas', () => {
 
       const expectedGasFromPredicate1 = vmCost.add(
         resolveGasDependentCosts(
-          getBytesCopy(predicateInput1?.predicate || '0x').length,
+          arrayify(predicateInput1?.predicate || '0x').length,
           gasCosts.contractRoot
         ).add(predicateGasUsed1)
       );
 
       const expectedGasFromPredicate2 = vmCost.add(
         resolveGasDependentCosts(
-          getBytesCopy(predicateInput2?.predicate || '0x').length,
+          arrayify(predicateInput2?.predicate || '0x').length,
           gasCosts.contractRoot
         ).add(predicateGasUsed2)
       );
