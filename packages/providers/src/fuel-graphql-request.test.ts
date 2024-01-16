@@ -125,7 +125,7 @@ describe('FuelGraphqlRequest', () => {
 
     let loopBodyHit = false;
 
-    // eslint-disable-next-line no-unreachable-loop
+    // eslint-disable-next-line no-unreachable-loop, @typescript-eslint/no-unused-vars
     for await (const { submitAndAwait } of fuelGraphQLRequest(
       fetch,
       'url',
