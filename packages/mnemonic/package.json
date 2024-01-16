@@ -26,8 +26,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/utils": "workspace:^",
+    "@fuel-ts/wordlists": "workspace:*",
     "ethers": "^6.7.1"
   }
 }
