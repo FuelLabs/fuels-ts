@@ -5,6 +5,9 @@ import type { FetchRequestOptions } from '../provider';
 import type { RetryOptions } from './auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './auto-retry-fetch';
 
+/**
+ * @group node
+ */
 describe('getWaitDelay', () => {
   const maxRetries = 10;
   const baseDelay = 10;
