@@ -35,8 +35,8 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          string: ${{ github.head_ref || github.ref }}
-          pattern: "refs/heads/rc/"
+          string: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+          pattern: ${{ github.event_name == 'pull_request' && 'rc/' || 'refs/heads/rc/' }}
           replace-with: "rc-"
 
       - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
