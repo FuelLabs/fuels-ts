@@ -38,13 +38,14 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
     const providerUrl = `http://${accessIp}:${port}/graphql`;
 
     const { cleanup, chainConfigPath } = await launchNode({
-      chainConfigPath: config.chainConfig,
-      consensusKey: defaultConsensusKey,
+      args: [
+        ['--chain', config.chainConfig],
+        ['--db-type', 'rocks-db'],
+      ].flat() as string[],
       ip: bindIp,
       port: port.toString(),
       loggingEnabled: loggingConfig.isLoggingEnabled,
       debugEnabled: loggingConfig.isDebugEnabled,
-      useInMemoryDb: false,
       basePath: config.basePath,
       useSystemFuelCore: !config.useBuiltinFuelCore,
     });

@@ -30,7 +30,7 @@ describe('launchNode', () => {
 
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
-        chainConfigPath,
+        args: ['--chain', chainConfigPath],
         loggingEnabled: false,
       },
     });

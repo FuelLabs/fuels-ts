@@ -20,18 +20,33 @@ import { generateTestWallet } from './generateTestWallet';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const npmWhich = require('npm-which')(__dirname);
 
+const getFlagValueFromArgs = (args: string[], flag: string) => {
+  const flagIndex = args.indexOf(flag);
+  if (flagIndex === -1) {
+    return undefined;
+  }
+  return args[flagIndex + 1];
+};
+
+const extractRemainingArgs = (args: string[], flagsToRemove: string[]) => {
+  const newArgs = [...args];
+  flagsToRemove.forEach((flag) => {
+    const flagIndex = newArgs.indexOf(flag);
+    if (flagIndex !== -1) {
+      newArgs.splice(flagIndex, 2);
+    }
+  });
+  return newArgs;
+};
+
 export type LaunchNodeOptions = {
-  chainConfigPath?: string;
-  consensusKey?: string;
   ip?: string;
   port?: string;
   args?: string[];
   useSystemFuelCore?: boolean;
-  useInMemoryDb?: boolean;
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
-  poaInstant?: boolean;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -83,34 +98,43 @@ export const killNode = (params: KillNodeParams) => {
 // #region launchNode-launchNodeOptions
 /**
  * Launches a fuel-core node.
- * @param chainConfigPath - path to the chain configuration file.
- * @param consensusKey - the consensus key to use.
  * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
  * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core.
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
- * @param useInMemoryDb - whether to use an in-memory database or a file-based one.
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
- * @param poaInstant - whether to use instant POA. (optional, defaults to true)
  * */
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
-  chainConfigPath,
-  consensusKey = defaultConsensusKey,
   ip,
   port,
   args = [],
   useSystemFuelCore = false,
-  useInMemoryDb = true,
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
-  poaInstant = true,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
+    // filter out the flags chain, consensus-key, db-type, and poa-instant. we don't want to pass them twice to fuel-core. see line 214.
+    const remainingArgs = extractRemainingArgs(args, [
+      '--chain',
+      '--consensus-key',
+      '--db-type',
+      '--poa-instant',
+    ]);
+
+    const chainConfigPath = getFlagValueFromArgs(args, '--chain');
+    const consensusKey = getFlagValueFromArgs(args, '--consensus-key') || defaultConsensusKey;
+
+    const dbTypeFlagValue = getFlagValueFromArgs(args, '--db-type');
+    const useInMemoryDb = dbTypeFlagValue === 'in-memory' || dbTypeFlagValue === undefined;
+
+    const poaInstantFlagValue = getFlagValueFromArgs(args, '--poa-instant');
+    const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
+
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
@@ -187,7 +211,7 @@ export const launchNode = async ({
         '--vm-backtrace',
         '--utxo-validation',
         '--debug',
-        ...args,
+        ...remainingArgs,
       ].flat(),
       {
         stdio: 'pipe',
@@ -272,16 +296,7 @@ export const launchNodeAndGetWallets = async ({
   launchNodeOptions?: Partial<LaunchNodeOptions>;
   walletCount?: number;
 } = {}): LaunchNodeAndGetWalletsResult => {
-  const defaultNodeOptions: LaunchNodeOptions = {
-    chainConfigPath: launchNodeOptions?.chainConfigPath,
-    consensusKey: launchNodeOptions?.consensusKey,
-  };
-
-  const {
-    cleanup: closeNode,
-    ip,
-    port,
-  } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
+  const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
 
   const provider = await Provider.create(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);

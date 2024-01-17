@@ -87,8 +87,7 @@ describe('TransactionSummary', () => {
 
   it('should ensure waitForResult always waits for the transaction to be processed', async () => {
     const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-interval-period', '750ms'],
-      poaInstant: false,
+      args: ['--poa-interval-period', '750ms', '--poa-instant', 'false'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
