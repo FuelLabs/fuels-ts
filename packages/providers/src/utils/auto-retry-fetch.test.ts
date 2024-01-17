@@ -61,6 +61,8 @@ describe('autoRetryFetch', () => {
   const maxRetries = 5;
   const baseDelay = 1;
   const retryOptions: RetryOptions = { maxRetries, baseDelay, backoff: 'fixed' };
+  const econnRefusedError = new Error();
+  econnRefusedError.cause = { code: 'ECONNREFUSED' };
 
   it('should not wrap function by default', async () => {
     const fn = vi.fn(() => {
@@ -78,7 +80,7 @@ describe('autoRetryFetch', () => {
 
   it('should retry until maxRetries and fail', async () => {
     const fn = vi.fn(() => {
-      throw new Error('anything');
+      throw econnRefusedError;
     });
 
     const autoRetry = autoRetryFetch(fn, retryOptions);
@@ -87,7 +89,9 @@ describe('autoRetryFetch', () => {
 
     expect(fn).toHaveBeenCalledTimes(maxRetries);
     expect(result).toBeFalsy();
-    expect(error).toMatch(/anything/);
+    expect(error).toMatchObject({
+      cause: { code: 'ECONNREFUSED' },
+    });
   });
 
   it('should retry until maxRetries and succeed', async () => {
@@ -97,7 +101,7 @@ describe('autoRetryFetch', () => {
       if (++calls === maxRetries) {
         return Promise.resolve(new Response());
       }
-      throw new Error('anything');
+      throw econnRefusedError;
     });
 
     const autoRetry = autoRetryFetch(fn, retryOptions);
@@ -107,5 +111,19 @@ describe('autoRetryFetch', () => {
     expect(fn).toHaveBeenCalledTimes(maxRetries);
     expect(result).toBeInstanceOf(Response);
     expect(error).toBeFalsy();
+  });
+
+  it('throws if error is not ECONNREFUSED and does not retry', async () => {
+    const fn = vi.fn(() => {
+      throw new Error('anything');
+    });
+
+    const autoRetry = autoRetryFetch(fn, retryOptions);
+
+    const { error, result } = await safeExec(async () => autoRetry(url, fetchOptions, {}));
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(result).toBeFalsy();
+    expect(error?.message).toMatch(/anything/);
   });
 });
