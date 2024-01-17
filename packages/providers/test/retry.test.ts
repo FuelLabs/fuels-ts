@@ -31,6 +31,7 @@ function mockFetch(maxAttempts: number, callTimes: number[]) {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Retries correctly', () => {
   afterEach(() => {

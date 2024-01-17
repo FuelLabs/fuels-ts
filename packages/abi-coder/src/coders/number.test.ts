@@ -7,6 +7,7 @@ import { NumberCoder } from './number';
 
 /**
  * @group node
+ * @group browser
  */
 describe('NumberCoder', () => {
   it('should encode min u8 number as a u8 coder', () => {

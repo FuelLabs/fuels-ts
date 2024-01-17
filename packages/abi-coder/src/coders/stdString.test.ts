@@ -7,6 +7,7 @@ import { StdStringCoder } from './stdString';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StdStringCoder', () => {
   it('should encode an empty string', () => {

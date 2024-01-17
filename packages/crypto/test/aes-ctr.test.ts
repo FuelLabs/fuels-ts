@@ -1,10 +1,11 @@
-import { envs } from './envs';
+import { encrypt, decrypt } from '..';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Keystore', () => {
-  it.each(envs)('Encrypt and Decrypt', async ({ encrypt, decrypt }) => {
+  it('Encrypt and Decrypt', async () => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
       name: 'test',
@@ -20,7 +21,7 @@ describe('Keystore', () => {
     expect(decryptedResult).toEqual(data);
   });
 
-  it.each(envs)('Decrypt with wrong password should throw', async ({ encrypt, decrypt }) => {
+  it('Decrypt with wrong password should throw', async () => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
       name: 'test',
@@ -30,7 +31,7 @@ describe('Keystore', () => {
     await expect(decrypt(`${password}123`, encryptedResult)).rejects.toThrow('Invalid credentials');
   });
 
-  it.each(envs)('Decrypt Loop', async ({ decrypt }) => {
+  it('Decrypt Loop', async () => {
     const INPUTS = [
       {
         data: '07yJczBTonXWyKdJfEcx',
