@@ -77,8 +77,10 @@ describe('launchNode', () => {
           loggingEnabled: false,
         },
       });
+
       expect(provider).toBeInstanceOf(Provider);
       expect(wallets.length).toBe(10);
+
       wallets.forEach((wallet) => {
         expect(wallet).toBeInstanceOf(WalletUnlocked);
       });

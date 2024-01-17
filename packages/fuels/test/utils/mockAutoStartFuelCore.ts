@@ -9,7 +9,7 @@ export const mockStartFuelCore = (): {
 } => {
   const killChildProcess = vi.fn();
 
-  const fuelCore = {
+  const fuelCore: autoStartFuelCoreMod.FuelCoreNode = {
     bindIp: '0.0.0.0',
     accessIp: '127.0.0.1',
     port: 4000,

@@ -1,6 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as childProcessMod from 'child_process';
 
+import type { LaunchNodeOptions } from './launchNode';
 import { killNode, launchNode } from './launchNode';
 
 type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
@@ -46,18 +47,14 @@ function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
       pipe: vi.fn(),
       removeAllListeners: vi.fn(),
     },
-  };
+  } as unknown as ChildProcessWithoutNullStreams;
 
-  const spawn = vi
-    .spyOn(childProcessMod, 'spawn')
-    .mockImplementation(
-      (..._: unknown[]) => innerMocks as unknown as ChildProcessWithoutNullStreams
-    );
+  const spawn = vi.spyOn(childProcessMod, 'spawn').mockReturnValue(innerMocks);
 
   return { spawn, innerMocks };
 }
 
-const defaultLaunchNodeConfig = {
+const defaultLaunchNodeConfig: Partial<LaunchNodeOptions> = {
   ip: '0.0.0.0',
   port: '4000',
 };
@@ -150,12 +147,14 @@ describe('launchNode', () => {
         removeAllListeners: () => {},
       },
     } as ChildProcessWithoutNullStreams;
+
     killNode({
       child,
       configPath: '',
       killFn,
       state,
     });
+
     expect(killFn).toHaveBeenCalledTimes(0);
     expect(state.isDead).toEqual(true);
 
@@ -169,23 +168,27 @@ describe('launchNode', () => {
         removeAllListeners: () => {},
       },
     } as ChildProcessWithoutNullStreams;
+
     killNode({
       child,
       configPath: '',
       killFn,
       state,
     });
+
     expect(killFn).toHaveBeenCalledTimes(0);
     expect(state.isDead).toEqual(true);
 
     // should kill
     state.isDead = false;
+
     killNode({
       child,
       configPath: '',
       killFn,
       state,
     });
+
     expect(killFn).toHaveBeenCalledTimes(1);
     expect(state.isDead).toEqual(true);
   });

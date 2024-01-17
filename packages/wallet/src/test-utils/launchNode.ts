@@ -7,8 +7,7 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { hexlify } from 'ethers';
-import fsSync, { existsSync } from 'fs';
-import fs from 'fs/promises';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
@@ -21,7 +20,7 @@ import { generateTestWallet } from './generateTestWallet';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const npmWhich = require('npm-which')(__dirname);
 
-type LaunchNodeOptions = {
+export type LaunchNodeOptions = {
   chainConfigPath?: string;
   consensusKey?: string;
   ip?: string;
@@ -75,8 +74,8 @@ export const killNode = (params: KillNodeParams) => {
     child.stderr.removeAllListeners();
 
     // Remove the temporary folder and all its contents.
-    if (fsSync.existsSync(configPath)) {
-      fsSync.rmSync(configPath, { recursive: true });
+    if (existsSync(configPath)) {
+      rmSync(configPath, { recursive: true });
     }
   }
 };
@@ -130,13 +129,17 @@ export const launchNode = async ({
         })
       ).toString();
 
-    let chainConfigPathToUse = chainConfigPath;
+    let chainConfigPathToUse: string;
 
-    const tempDirPath = path.join(basePath || os.tmpdir(), '.fuels', basePath ? '' : randomUUID());
+    const prefix = basePath || os.tmpdir();
+    const suffix = basePath ? '' : randomUUID();
+    const tempDirPath = path.join(prefix, '.fuels', suffix);
 
-    if (!chainConfigPath) {
-      if (!fsSync.existsSync(tempDirPath)) {
-        fsSync.mkdirSync(tempDirPath, { recursive: true });
+    if (chainConfigPath) {
+      chainConfigPathToUse = chainConfigPath;
+    } else {
+      if (!existsSync(tempDirPath)) {
+        mkdirSync(tempDirPath, { recursive: true });
       }
       const tempChainConfigFilePath = path.join(tempDirPath, 'chainConfig.json');
 
@@ -165,7 +168,7 @@ export const launchNode = async ({
       }
 
       // Write a temporary chain configuration file.
-      fsSync.writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }
