@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       # CHANGE TO master !!!!!
-      - "db/chore/fix-str-replace-in-pr-rc"
+      - "rc/*"
   push:
     branches:
       - "rc/*"
