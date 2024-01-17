@@ -5,6 +5,7 @@ import { WitnessCoder } from './witness';
 
 /**
  * @group node
+ * @group browser
  */
 describe('WitnessCoder', () => {
   it('Can encode empty Witness', () => {

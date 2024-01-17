@@ -7,6 +7,7 @@ import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Functions', () => {
