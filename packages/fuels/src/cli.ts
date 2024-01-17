@@ -1,6 +1,7 @@
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
+import { findBinPath } from '@fuel-ts/wallet/test-utils';
 import { Command, Option } from 'commander';
 
 import { build } from './cli/commands/build';
@@ -10,7 +11,6 @@ import { init } from './cli/commands/init';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
 import { Commands } from './cli/types';
-import { findBinPath } from './cli/utils/findBinPath';
 import { configureLogging } from './cli/utils/logger';
 
 export const onPreAction = (command: Command) => {

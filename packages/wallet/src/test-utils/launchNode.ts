@@ -65,7 +65,7 @@ export type KillNodeParams = {
   };
 };
 
-const findBinPath = (binCommandName: string) => {
+export const findBinPath = (binCommandName: string) => {
   let binPath = npmWhich.sync(binCommandName);
 
   if (!existsSync(binPath)) {
