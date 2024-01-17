@@ -10,6 +10,7 @@ on:
 
 jobs:
   release-pr:
+    if: ${{ github.event_name == 'push' || contains(github.head_ref, 'rc/') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
