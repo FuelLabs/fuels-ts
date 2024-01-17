@@ -10,7 +10,8 @@ on:
 
 jobs:
   release-pr:
-    if: ${{ github.event_name == 'push' || contains(github.head_ref, 'rc/') }}
+    # CHANGE TO rc/ !!!!!
+    if: ${{ github.event_name == 'push' || contains(github.head_ref, 'db/chore/fix-str-replace-in-pr-rc') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
