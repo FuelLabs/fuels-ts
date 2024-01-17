@@ -7,6 +7,7 @@ import { StringCoder } from './string';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StringCoder', () => {
   const STRING_MIN_DECODED = '';

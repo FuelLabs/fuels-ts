@@ -2,6 +2,7 @@ import { expectToBeInRange } from './expectToBeInRange';
 
 /**
  * @group node
+ * @group browser
  */
 describe('expectValueToBeInRange', () => {
   it('should throw an error when value is less than the minimum', () => {

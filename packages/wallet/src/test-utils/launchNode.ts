@@ -7,7 +7,6 @@ import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { hexlify } from 'ethers';
 import fsSync from 'fs';
-import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
@@ -135,7 +134,7 @@ export const launchNode = async ({
       }
 
       // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      fsSync.writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }

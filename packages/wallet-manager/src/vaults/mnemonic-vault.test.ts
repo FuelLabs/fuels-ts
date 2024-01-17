@@ -8,6 +8,7 @@ import { MnemonicVault } from './mnemonic-vault';
 
 /**
  * @group node
+ * @group browser
  */
 describe('MnemonicVault', () => {
   let provider: Provider;

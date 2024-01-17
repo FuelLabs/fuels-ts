@@ -2,6 +2,7 @@ import { hexlify } from './hexlify';
 
 /**
  * @group node
+ * @group browser
  */
 describe('hexlify', () => {
   it('returns hex from bytes', () => {

@@ -4,6 +4,7 @@ import { chunkAndPadBytes } from './chunkAndPadBytes';
 
 /**
  * @group node
+ * @group browser
  */
 describe('chunkAndPadBytes', () => {
   it('can chunk and pad bytes to 16 KiB', () => {
