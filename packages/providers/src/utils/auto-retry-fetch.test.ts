@@ -112,7 +112,7 @@ describe('autoRetryFetch', () => {
     expect(error).toBeFalsy();
   });
 
-  it('throws if error is not ECONNREFUSED and does not retry', async () => {
+  it('throws if error is not ECONNREFUSED and it does not retry', async () => {
     const fn = vi.fn(() => {
       throw new Error('anything');
     });

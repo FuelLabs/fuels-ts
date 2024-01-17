@@ -62,7 +62,7 @@ export function autoRetryFetch(
     try {
       return await fetchFn(...args);
     } catch (_error: unknown) {
-      const error = _error as Error & { cause: { code: string } };
+      const error = _error as Error & { cause?: { code: string } };
       if (error.cause?.code !== 'ECONNREFUSED') {
         throw error;
       }
