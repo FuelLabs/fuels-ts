@@ -4,6 +4,7 @@ import { ByteArrayCoder } from './byte-array';
 
 /**
  * @group node
+ * @group browser
  */
 describe('ByteArrayCoder', () => {
   it('Can encode empty byte[]', () => {

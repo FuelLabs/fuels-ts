@@ -11,6 +11,7 @@ import { U64Coder } from './u64';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';

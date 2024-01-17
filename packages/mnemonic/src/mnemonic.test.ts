@@ -5,6 +5,7 @@ import MnemonicSpec from './mnemonic-specs';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Mnemonic', () => {
   const mnemonic = new Mnemonic();

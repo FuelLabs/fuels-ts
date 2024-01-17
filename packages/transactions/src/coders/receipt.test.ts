@@ -12,6 +12,7 @@ const B256_ALT4 = '0x2f6d40e3ac1a172fb9445f9843440a0fc383bea238a7a35a77a3c73d369
 
 /**
  * @group node
+ * @group browser
  */
 describe('ReceiptCoder', () => {
   it('Can encode Call', () => {

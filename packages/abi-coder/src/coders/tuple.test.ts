@@ -11,6 +11,7 @@ import { U64Coder } from './u64';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Tuple Coder', () => {
   const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
