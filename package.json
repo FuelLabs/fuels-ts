@@ -21,7 +21,7 @@
     "test:coverage-diff": "tsx ./scripts/tests-coverage-diff.ts",
     "test:watch": "vitest --watch --config vite.node.config.mts $(scripts/tests-find.sh --node)",
     "test:validate": "./scripts/tests-validate.sh",
-    "test:browser": "tsx ./scripts/tests-browser.ts",
+    "test:browser": "vitest --run --coverage --config vite.browser.config.mts $(scripts/tests-find.sh --browser)",
     "test:e2e": "vitest --run --config vite.node.config.mts $(scripts/tests-find.sh --e2e)",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --max-warnings 0",
