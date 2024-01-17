@@ -4,13 +4,11 @@ on:
   pull_request:
     branches:
       - "master"
-  push:
-    branches:
-      - "rc/*"
 
 jobs:
   release-pr:
-    if: ${{ github.event_name == 'push' || contains(github.head_ref, 'rc/') }}
+    # Switch to `true` for release candidates
+    if: ${{ false && startsWith(github.head_ref, 'rc/') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
@@ -36,8 +34,8 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          string: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
-          pattern: ${{ github.event_name == 'pull_request' && 'rc/' || 'refs/heads/rc/' }}
+          string: github.head_ref
+          pattern: "rc/"
           replace-with: "rc-"
 
       - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
@@ -55,7 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add PR comment
-        if: ${{ github.event_name == 'pull_request' && contains(github.head_ref, 'rc/') }}
         uses: mshick/add-pr-comment@v2
         with:
           message: |
