@@ -54,6 +54,7 @@ function mockFetchToGetSubscriptionStream(streamHolder: { stream: ReadableStream
         return r;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const [stream1, stream2] = r.body!.tee();
       // eslint-disable-next-line no-param-reassign
       streamHolder.stream = stream1;
