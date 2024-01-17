@@ -8,7 +8,7 @@ on:
 jobs:
   release-pr:
     # Switch to `true` for release candidates
-    if: ${{ false && startsWith(github.head_ref, 'rc/') }}
+    if: ${{ true && startsWith(github.head_ref, 'rc/') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
@@ -57,7 +57,7 @@ jobs:
         with:
           message: |
             RC published under the `${{ steps.rc_name.outputs.replaced }}` tag.
-              
+
             Install it:
             ```bash
             pnpm add fuels@${{ steps.rc_name.outputs.replaced }}
