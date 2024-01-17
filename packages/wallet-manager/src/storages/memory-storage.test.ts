@@ -2,6 +2,7 @@ import MemoryStorage from './memory-storage';
 
 /**
  * @group node
+ * @group browser
  */
 describe('MemoryStorage', () => {
   it('Test storage operations', async () => {

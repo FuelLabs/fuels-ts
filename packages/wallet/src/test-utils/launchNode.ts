@@ -165,7 +165,7 @@ export const launchNode = async ({
       }
 
       // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      fsSync.writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }

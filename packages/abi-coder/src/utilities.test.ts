@@ -5,6 +5,7 @@ import { unpackDynamicData, concatWithDynamicData } from './utilities';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Abi Coder Utilities', () => {
   it('can concatWithVectorData [no dynamicData, should match original concat]', () => {

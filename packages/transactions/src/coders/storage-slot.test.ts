@@ -6,6 +6,7 @@ import { StorageSlotCoder } from './storage-slot';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StorageSlotCoder', () => {
   it('Can encode and decode', () => {

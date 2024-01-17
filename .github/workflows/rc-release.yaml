@@ -1,12 +1,14 @@
 name: Release to @rc-<name> tag on npm
 
 on:
-  push:
+  pull_request:
     branches:
-      - "rc/*"
+      - "master"
 
 jobs:
   release-pr:
+    # Switch to `true` for release candidates
+    if: ${{ false && startsWith(github.head_ref, 'rc/') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
@@ -32,8 +34,8 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          string: ${{ github.ref }}
-          pattern: "refs/heads/rc/"
+          string: github.head_ref
+          pattern: "rc/"
           replace-with: "rc-"
 
       - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
@@ -50,10 +52,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: mshick/add-pr-comment@v2
+      - name: Add PR comment
+        uses: mshick/add-pr-comment@v2
         with:
           message: |
-            RC published under the `**${{ steps.rc_name.outputs.replaced }}**` tag.
+            RC published under the `${{ steps.rc_name.outputs.replaced }}` tag.
               
             Install it:
             ```bash
