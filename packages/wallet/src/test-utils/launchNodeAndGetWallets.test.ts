@@ -86,6 +86,7 @@ describe('launchNode', () => {
       expect(process.env.GENESIS_SECRET).toBeDefined();
       expect(process.env.GENESIS_SECRET).not.toEqual(GENESIS_SECRET);
       expect(process.env.GENESIS_SECRET).toHaveLength(66);
+
       stop();
     });
   });
