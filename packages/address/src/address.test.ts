@@ -27,6 +27,7 @@ const expectedB256Address = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6
 
 /**
  * @group node
+ * @group browser
  */
 describe('Address utils', () => {
   test('fromBech32 (bech32 to decoded bech32)', () => {

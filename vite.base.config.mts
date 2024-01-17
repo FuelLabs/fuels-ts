@@ -16,12 +16,11 @@ export default defineConfig({
       "/apps/demo-react-vite",
     ],
     globals: true,
-    ui: false,
     setupFiles: ["./vite.env.ts"],
     coverage: {
       enabled: true,
       provider: "istanbul",
-      reporter: ["json"],
+      reporter: ["json", "text", "html"],
       include: ["packages", "internal", "apps"],
       exclude: [
         "**/node_modules/**",

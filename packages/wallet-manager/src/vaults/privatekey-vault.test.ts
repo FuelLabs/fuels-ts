@@ -8,6 +8,7 @@ import { PrivateKeyVault } from './privatekey-vault';
 
 /**
  * @group node
+ * @group browser
  */
 describe('PrivateKeyVault', () => {
   let provider: Provider;
