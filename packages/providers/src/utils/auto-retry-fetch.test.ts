@@ -7,6 +7,7 @@ import { autoRetryFetch, getWaitDelay } from './auto-retry-fetch';
 
 /**
  * @group node
+ * @group browser
  */
 describe('getWaitDelay', () => {
   const maxRetries = 10;
