@@ -89,9 +89,7 @@ describe('autoRetryFetch', () => {
 
     expect(fn).toHaveBeenCalledTimes(maxRetries);
     expect(result).toBeFalsy();
-    expect(error).toMatchObject({
-      cause: { code: 'ECONNREFUSED' },
-    });
+    expect(error).toBe(econnRefusedError);
   });
 
   it('should retry until maxRetries and succeed', async () => {
