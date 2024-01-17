@@ -97,3 +97,18 @@ jobs:
         env:
           FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
           FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
+
+  dan:
+    name: Dan
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Run Dan's tests
+        run: |
+          echo "Did I use cache?"
