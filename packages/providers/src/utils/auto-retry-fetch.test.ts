@@ -88,26 +88,27 @@ describe('autoRetryFetch', () => {
 
     const { error, result } = await safeExec(async () => autoRetry(url, fetchOptions, {}));
 
-    expect(fn).toHaveBeenCalledTimes(maxRetries);
+    expect(fn).toHaveBeenCalledTimes(1 + maxRetries); // the 1 is for the first try that's not counted as a retry
     expect(result).toBeFalsy();
     expect(error).toBe(econnRefusedError);
   });
 
   it('should retry until maxRetries and succeed', async () => {
-    let calls = 0;
+    let retries = 0;
 
     const fn = vi.fn(() => {
-      if (++calls === maxRetries) {
-        return Promise.resolve(new Response());
+      if (retries < maxRetries) {
+        retries += 1;
+        throw econnRefusedError;
       }
-      throw econnRefusedError;
+      return Promise.resolve(new Response());
     });
 
     const autoRetry = autoRetryFetch(fn, retryOptions);
 
     const { error, result } = await safeExec(async () => autoRetry(url, fetchOptions, {}));
 
-    expect(fn).toHaveBeenCalledTimes(maxRetries);
+    expect(fn).toHaveBeenCalledTimes(1 + maxRetries); // the 1 is for the first try that's not counted as a retry
     expect(result).toBeInstanceOf(Response);
     expect(error).toBeFalsy();
   });

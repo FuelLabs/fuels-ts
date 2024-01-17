@@ -68,7 +68,7 @@ export function autoRetryFetch(
       }
       const retryNum = retryAttemptNum + 1;
 
-      if (retryNum === options.maxRetries) {
+      if (retryNum > options.maxRetries) {
         throw error;
       }
 
