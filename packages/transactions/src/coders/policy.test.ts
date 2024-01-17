@@ -7,6 +7,7 @@ import { PoliciesCoder, PolicyType } from './policy';
 
 /**
  * @group node
+ * @group browser
  */
 describe('PoliciesCoder', () => {
   describe('encode', () => {

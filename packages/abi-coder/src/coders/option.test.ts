@@ -10,6 +10,7 @@ import { U64Coder } from './u64';
 
 /**
  * @group node
+ * @group browser
  */
 describe('OptionCoder', () => {
   it('should encode a some u64 option ', () => {

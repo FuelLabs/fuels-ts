@@ -2,6 +2,7 @@ import { arrayify } from './arrayify';
 
 /**
  * @group node
+ * @group browser
  */
 describe('arrayify', () => {
   it('returns Uint8Array from Uint8Array', () => {
