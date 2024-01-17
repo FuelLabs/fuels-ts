@@ -3,7 +3,8 @@ name: Release to @rc-<name> tag on npm
 on:
   pull_request:
     branches:
-      - "master"
+      # CHANGE TO master !!!!!
+      - "db/chore/fix-str-replace-in-pr-rc"
   push:
     branches:
       - "rc/*"
