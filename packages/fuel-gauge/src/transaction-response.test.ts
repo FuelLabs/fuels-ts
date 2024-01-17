@@ -9,6 +9,63 @@ import {
   randomBytes,
   WalletUnlocked,
 } from 'fuels';
+import type { MockInstance } from 'vitest';
+
+async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {
+  const decoder = new TextDecoder();
+  const reader = subscriptionStream.getReader();
+  let hasKeepAliveMessage = false;
+  do {
+    const { value, done } = await reader.read();
+    if (done) {
+      break;
+    }
+    const text = decoder.decode(value);
+    if (text === ':keep-alive-text\n\n') {
+      hasKeepAliveMessage = true;
+    }
+  } while (!hasKeepAliveMessage);
+
+  // The keep-alive message is sent every 15 seconds,
+  // and this assertion verifies that it was indeed sent.
+  // if this fails, check if the duration was changed on the fuel-core side.
+  // As of the time of writing, the latest permalink where this info can be found is:
+  // https://github.com/FuelLabs/fuel-core/blob/bf1b22f47c58a9d078676c5756c942d839f38916/crates/fuel-core/src/graphql_api/service.rs#L247
+  // To get the actual latest info you need to check out the master branch:
+  // https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
+  // This link can fail because master can change.
+  expect(hasKeepAliveMessage).toBe(true);
+}
+
+function mockFetchToGetSubscriptionStream(streamHolder: { stream: ReadableStream<Uint8Array> }) {
+  function getFetchMock(
+    fetchSpy: MockInstance<
+      [input: RequestInfo | URL, init?: RequestInit | undefined],
+      Promise<Response>
+    >
+  ) {
+    return async (...args: Parameters<typeof fetch>) => {
+      fetchSpy.mockRestore();
+      const r = await fetch(...args);
+      fetchSpy.mockImplementation(getFetchMock(fetchSpy));
+
+      const isSubscriptionCall = args[0].toString().endsWith('graphql-sub');
+      if (!isSubscriptionCall) {
+        return r;
+      }
+
+      const [stream1, stream2] = r.body!.tee();
+      // eslint-disable-next-line no-param-reassign
+      streamHolder.stream = stream1;
+      return new Response(stream2);
+    };
+  }
+
+  const fetchSpy = vi.spyOn(global, 'fetch');
+
+  fetchSpy.mockImplementation(getFetchMock(fetchSpy));
+  return streamHolder;
+}
 
 /**
  * @group node
@@ -118,10 +175,18 @@ describe('TransactionSummary', () => {
 
     expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
+    const subscriptionStreamHolder = {
+      stream: new ReadableStream<Uint8Array>(),
+    };
+
+    mockFetchToGetSubscriptionStream(subscriptionStreamHolder);
+
     await response.waitForResult();
 
     expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
     expect(response.gqlTransaction?.id).toBe(transactionId);
+
+    await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
 
     cleanup();
   }, 18500);
