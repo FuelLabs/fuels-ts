@@ -3,16 +3,14 @@ name: Release to @rc-<name> tag on npm
 on:
   pull_request:
     branches:
-      # CHANGE TO master !!!!!
-      - "rc/*"
+      - "master"
   push:
     branches:
       - "rc/*"
 
 jobs:
   release-pr:
-    # CHANGE TO rc/ !!!!!
-    if: ${{ github.event_name == 'push' || contains(github.head_ref, 'db/chore/fix-str-replace-in-pr-rc') }}
+    if: ${{ github.event_name == 'push' || contains(github.head_ref, 'rc/') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
