@@ -1,4 +1,5 @@
 import Provider from '../src/provider';
+import type { RetryOptions } from '../src/utils/auto-retry-fetch';
 import * as autoRetryFetchMod from '../src/utils/auto-retry-fetch';
 
 // TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
@@ -15,8 +16,17 @@ describe('Provider correctly', () => {
   test('Provider should always wrap `fetchFn`', async () => {
     const autoRetryFetchFn = vi.spyOn(autoRetryFetchMod, 'autoRetryFetch');
 
-    await Provider.create(FUEL_NETWORK_URL);
+    // #region provider-retry-options
+    const retryOptions: RetryOptions = {
+      maxRetries: 5,
+      baseDelay: 100,
+      backoff: 'exponential',
+    };
 
+    const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
+    // #endregion provider-retry-options
+
+    expect(provider).toBeTruthy();
     expect(autoRetryFetchFn).toHaveBeenCalledTimes(1);
   });
 });
