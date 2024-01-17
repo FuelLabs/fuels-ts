@@ -8,6 +8,7 @@ import { U64Coder } from './u64';
 
 /**
  * @group node
+ * @group browser
  */
 describe('U64Coder', () => {
   const coder = new U64Coder();

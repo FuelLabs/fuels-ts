@@ -2,6 +2,7 @@ import { capitalizeString } from './capitalizeString';
 
 /**
  * @group node
+ * @group browser
  */
 describe('capitalizeString', () => {
   test('should capitalize string', () => {

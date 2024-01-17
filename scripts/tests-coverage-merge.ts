@@ -5,7 +5,7 @@ import { join } from 'path';
 const restructureCoverageDirectory = () => {
   const coverageDir = join(__dirname, '../coverage/');
   const environmentsDir = join(coverageDir, '/environments/');
-  const validEnvironments = ['node'];
+  const validEnvironments = ['node', 'browser'];
 
   const environments = readdirSync(environmentsDir);
   environments.forEach((environment) => {
@@ -26,10 +26,11 @@ const restructureCoverageDirectory = () => {
   restructureCoverageDirectory();
 
   // Merge all coverage files
-  execSync('nyc merge coverage/environments coverage/merged/coverage.json');
+  execSync('nyc merge coverage/environments coverage/merged/coverage.json', { stdio: 'inherit' });
 
   // Generate coverage report
   execSync(
-    'nyc report --temp-dir=coverage/merged --report-dir=coverage/report --exclude-after-remap=false'
+    'nyc report --temp-dir=coverage/merged --report-dir=coverage/report --exclude-after-remap=false',
+    { stdio: 'inherit' }
   );
 })();

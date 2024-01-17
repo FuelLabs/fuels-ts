@@ -5,6 +5,7 @@ import { B512Coder } from './b512';
 
 /**
  * @group node
+ * @group browser
  */
 describe('B512Coder', () => {
   const B512_DECODED =
