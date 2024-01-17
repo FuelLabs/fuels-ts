@@ -49,7 +49,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       useSystemFuelCore: !config.useBuiltinFuelCore,
     });
 
-    const fuelCoreNode = {
+    fuelCore = {
       bindIp,
       accessIp,
       port,
@@ -57,8 +57,6 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       chainConfigPath,
       killChildProcess: cleanup,
     };
-
-    fuelCore = fuelCoreNode;
 
     // eslint-disable-next-line no-param-reassign
     config.providerUrl = fuelCore.providerUrl;
