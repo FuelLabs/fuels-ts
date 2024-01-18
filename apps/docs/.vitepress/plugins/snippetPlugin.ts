@@ -54,6 +54,77 @@ function findRegion(lines: Array<string>, regionName: string) {
   return null;
 }
 
+export function extractImports(filepath: string, specifiedImports: string[]) {
+  // Read file content
+  const fileContent = fs.readFileSync(filepath, 'utf8');
+  // Split content into lines
+  const lines = fileContent.split(/\r?\n/);
+
+  let importStatements: Record<string, Set<string>> = {};
+  let allImportedItems = new Set();
+  let currentImport = '';
+  let collecting = false;
+
+  lines.forEach((line) => {
+    // Start collecting import line
+    if (line.trim().startsWith('import')) {
+      collecting = true;
+      currentImport = line;
+    }
+    // Continue collecting import line if it spans multiple lines
+    else if (collecting && line.trim()) {
+      currentImport += ' ' + line.trim();
+    }
+
+    // Process the collected import line
+    if (collecting && line.includes('} from')) {
+      collecting = false;
+      const matches = currentImport.match(/import.*\{([^\}]*)\}.*from\s+'([^']+)';/);
+
+      if (matches && matches.length >= 3) {
+        const importedItems = matches[1].split(',').map((item) => item.trim());
+        const importSource = matches[2];
+
+        // Add imported items to the allImportedItems set for later checking
+        importedItems.forEach((item) => allImportedItems.add(item));
+
+        // Filter out only the specified imports
+        const filteredItems = importedItems.filter((item) => specifiedImports.includes(item));
+        if (filteredItems.length > 0) {
+          // Initialize set for the import source if not already done
+          importStatements[importSource] = importStatements[importSource] || new Set();
+          // Add filtered items to the set
+          filteredItems.forEach((item) => importStatements[importSource].add(item));
+        }
+      }
+      currentImport = '';
+    }
+  });
+
+  // Check if all specified imports were found in the file
+  const notFoundImports = specifiedImports.filter(
+    (importItem) => !allImportedItems.has(importItem)
+  );
+
+  if (notFoundImports.length > 0) {
+    throw new FuelError(
+      ErrorCode.VITEPRESS_PLUGIN_ERROR,
+      `The following imports were not found in the file: ${notFoundImports.join(', ')}`
+    );
+  }
+
+  // Combine imports from the same source into single import statements
+  let combinedImports: string[] = [];
+  for (const source in importStatements) {
+    combinedImports.push(
+      `import { ${Array.from(importStatements[source]).join(', ')} } from '${source}';`
+    );
+  }
+
+  // Return the combined import statements as a single string
+  return combinedImports.join('\n');
+}
+
 export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
   const parser: RuleBlock = (state, startLine, endLine, silent) => {
     const CH = '<'.charCodeAt(0);
