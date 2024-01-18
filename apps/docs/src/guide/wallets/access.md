@@ -27,6 +27,12 @@ provides greater access via its private key.
 
 <<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
 
+## Optional Provider
+
+You can choose not to pass through a provider argument on `Wallet` construction:
+
+<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-optional-provider{ts:line-numbers}
+
 ## Transitioning States
 
 A `WalletLocked` instance can be unlocked by providing the private key:

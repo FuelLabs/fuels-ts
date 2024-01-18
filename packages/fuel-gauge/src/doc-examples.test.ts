@@ -193,6 +193,22 @@ describe('Doc Examples', () => {
     expect(balances.length).toEqual(0);
   });
 
+  it('it can be created without a provider', async () => {
+    // #region wallet-optional-provider
+    // #context import { Wallet, WalletUnlocked } from 'fuels';
+
+    // You can create a wallet, without a provider
+    let unlockedWallet: WalletUnlocked = Wallet.generate();
+    unlockedWallet = Wallet.fromPrivateKey(unlockedWallet.privateKey);
+
+    // All non-provider dependent methods are available
+    unlockedWallet.lock();
+
+    // All provider dependent methods will throw
+    await expect(() => unlockedWallet.getCoins()).rejects.toThrow(/Provider not set/);
+    // #endregion wallet-optional-provider
+  });
+
   it('it can work sign messages with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
