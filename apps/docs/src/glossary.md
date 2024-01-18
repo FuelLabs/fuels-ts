@@ -12,4 +12,4 @@ A Provider is a Class that provides an abstraction for a connection to a Fuel no
 
 ## Wallet and signer
 
-A [Wallet](./api/Wallet/Wallet.md) is a Class with direct or indirect access to a private key. You can use a [Wallet](./api/Wallet/Wallet.md) to sign messages and transactions to authorize the network to charge your account to perform operations. The terms wallet and signer in the SDK are often used interchangeably, but, technically, a `Signer` enables the signing of transactions and messages; the [Wallet](./api/Wallet/Wallet.md) implements the `Signer` functionality.
+A [`Wallet`](./api/Wallet/Wallet.md) is a Class with direct or indirect access to a private key. You can use a [`Wallet`](./api/Wallet/Wallet.md) to sign messages and transactions to authorize the network to charge your account to perform operations. The terms wallet and signer in the SDK are often used interchangeably, but, technically, a `Signer` enables the signing of transactions and messages; the [`Wallet`](./api/Wallet/Wallet.md) implements the `Signer` functionality.

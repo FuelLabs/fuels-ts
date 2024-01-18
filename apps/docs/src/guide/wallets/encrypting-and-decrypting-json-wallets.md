@@ -4,13 +4,13 @@ JSON wallets are a standardized way of storing wallets securely. They follow a s
 
 ## Encrypting a Wallet
 
-We will be calling `encrypt` from the [WalletUnlocked](../../api/Wallet/WalletUnlocked.md) instance which will take a password as the argument. It will encrypt the private key using a cipher and returns the JSON keystore wallet. You can then securely store this JSON wallet.
+We will be calling `encrypt` from the [`WalletUnlocked`](../../api/Wallet/WalletUnlocked.md) instance which will take a password as the argument. It will encrypt the private key using a cipher and returns the JSON keystore wallet. You can then securely store this JSON wallet.
 
 Here is an example of how you can accomplish this:
 
 <<< @/../../docs-snippets/src/guide/wallets/encrypting-and-decrypting-json-wallets.test.ts#encrypting-and-decrypting-json-wallets-1{ts:line-numbers}
 
-Please note that `encrypt` must be called within an instance of [WalletUnlocked](../../api/Wallet/WalletUnlocked.md). This instance can only be achieved through passing a private key or mnemonic phrase to a locked wallet.
+Please note that `encrypt` must be called within an instance of [`WalletUnlocked`](../../api/Wallet/WalletUnlocked.md). This instance can only be achieved through passing a private key or mnemonic phrase to a locked wallet.
 
 ## Decrypting a Wallet
 
@@ -20,7 +20,7 @@ Here is an example:
 
 <<< @/../../docs-snippets/src/guide/wallets/encrypting-and-decrypting-json-wallets.test.ts#encrypting-and-decrypting-json-wallets-2{ts:line-numbers}
 
-In this example, `decryptedWallet` is an instance of [WalletUnlocked](../../api/Wallet/WalletUnlocked.md) class, now available for use.
+In this example, `decryptedWallet` is an instance of [`WalletUnlocked`](../../api/Wallet/WalletUnlocked.md) class, now available for use.
 
 ## Important
 

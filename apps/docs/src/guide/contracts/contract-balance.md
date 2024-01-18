@@ -4,7 +4,7 @@ When working with contracts, it's crucial to be aware of the available contract 
 
 ## The `getBalance` Method
 
-The [Contract](../../api/Program/Contract.md) class includes a method called `getBalance` that retrieves the available balance of a specific asset for a contract. This method is particularly useful for determining the remaining balance after sending assets to a contract and executing contract calls.
+The [`Contract`](../../api/Program/Contract.md) class includes a method called `getBalance` that retrieves the available balance of a specific asset for a contract. This method is particularly useful for determining the remaining balance after sending assets to a contract and executing contract calls.
 
 <<< @/../../../packages/program/src/contract.ts#contract-balance-1{ts:line-numbers}
 
