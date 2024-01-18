@@ -18,6 +18,7 @@ import type {
   TransactionResponse,
   Provider,
   ScriptTransactionRequestLike,
+  ProviderSendTxParams,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -455,11 +456,15 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async sendTransaction(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
+    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
-    return this.provider.sendTransaction(transactionRequest, { estimateTxDependencies: false });
+    return this.provider.sendTransaction(transactionRequest, {
+      ...options,
+      estimateTxDependencies: false,
+    });
   }
 
   /**
