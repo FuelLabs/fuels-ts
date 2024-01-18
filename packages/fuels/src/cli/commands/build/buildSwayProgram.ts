@@ -1,7 +1,7 @@
+import { findBinPath } from '@fuel-ts/wallet/test-utils';
 import { spawn } from 'child_process';
 
 import type { FuelsConfig } from '../../types';
-import { findBinPath } from '../../utils/findBinPath';
 import { debug, loggingConfig } from '../../utils/logger';
 
 import { onForcExit, onForcError } from './forcHandlers';

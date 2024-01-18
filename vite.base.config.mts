@@ -33,5 +33,11 @@ export default defineConfig({
         "apps/docs",
       ],
     },
+    poolOptions: {
+      threads: {
+        minThreads: 1,
+        maxThreads: 16,
+      },
+    },
   },
 });
