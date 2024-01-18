@@ -1,5 +1,5 @@
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { extractImports } from './snippetPlugin';
+import { extractImports, findRegion } from './snippetPlugin';
 import fs from 'fs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
@@ -55,6 +55,58 @@ describe('snippetPlugin', () => {
           `The following imports were not found in the file: Y, Z`
         )
       );
+    });
+  });
+
+  describe('findRegion', () => {
+    it('should finds a region with no imports', () => {
+      const lines = ['// #region testRegion', 'const a = 1;', '// #endregion testRegion'];
+      const result = findRegion(lines, 'testRegion');
+      expect(result).toEqual({
+        start: 1,
+        end: 2,
+        regexp: /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/,
+        imports: [],
+      });
+    });
+
+    it('should finds a region with imports', () => {
+      const lines = [
+        '// #region testRegion',
+        '// #addImport: A, B',
+        'const a = 1;',
+        '// #endregion testRegion',
+      ];
+      const result = findRegion(lines, 'testRegion');
+      expect(result).toEqual({
+        start: 1,
+        end: 3,
+        regexp: /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/,
+        imports: ['A', 'B'],
+      });
+    });
+
+    it('should returns null for non-existent region', () => {
+      const lines = ['const a = 1;'];
+      const result = findRegion(lines, 'testRegion');
+      expect(result).toBeNull();
+    });
+
+    it('should handles multiple addImport flags', () => {
+      const lines = [
+        '// #region testRegion',
+        '// #addImport: A',
+        '// #addImport: B',
+        'const a = 1;',
+        '// #endregion testRegion',
+      ];
+      const result = findRegion(lines, 'testRegion');
+      expect(result).toEqual({
+        start: 1,
+        end: 4,
+        regexp: /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/,
+        imports: ['A', 'B'],
+      });
     });
   });
 });
