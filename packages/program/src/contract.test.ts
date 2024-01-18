@@ -67,7 +67,7 @@ describe('Contract', () => {
     // but without reference to the BaseWalletLocked class
     const BaseWalletLockedCustom = Object.assign(Account);
     expect(BaseWalletLockedCustom).not.toBeInstanceOf(Account);
-    const wallet = new BaseWalletLockedCustom(generatedWallet.address);
+    const wallet = new BaseWalletLockedCustom(generatedWallet.address, generatedWallet.provider);
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.account).toBe(wallet);
