@@ -88,7 +88,7 @@ describe('autoRetryFetch', () => {
 
     const { error, result } = await safeExec(async () => autoRetry(url, fetchOptions, {}));
 
-    expect(fn).toHaveBeenCalledTimes(1 + maxRetries); // the 1 is for the first try that's not counted as a retry
+    expect(fn).toHaveBeenCalledTimes(1 + maxRetries); // 1st call is not a retry
     expect(result).toBeFalsy();
     expect(error).toBe(econnRefusedError);
   });
