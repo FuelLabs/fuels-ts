@@ -14,7 +14,7 @@ import {
 describe('await-execution', () => {
   test('awaiting execution of a transaction on the provider works', async () => {
     const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-interval-period', '400ms'],
+      args: ['--poa-instant', 'false', '--poa-interval-period', '400ms'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
