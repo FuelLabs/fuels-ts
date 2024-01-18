@@ -13,47 +13,67 @@ describe('snippetPlugin', () => {
 
     it('should handles single-line imports correctly', () => {
       mockReadFileSync(`import { A, B, C } from 'module';`);
-      const result = extractImports('mockedPath', ['A', 'B']);
+      const result = extractImports('mockedPath', ['A', 'B'], ['const a: A = 1', 'const b: B = 1']);
       expect(result).toBe(`import { A, B } from 'module';`);
     });
 
     it('should handles multi-line imports correctly', () => {
       mockReadFileSync(`import {\n  A,\n  B,\n  C,\n} from 'module';`);
-      const result = extractImports('mockedPath', ['A', 'C']);
+      const result = extractImports('mockedPath', ['A', 'C'], ['const a: A = 1', 'const c: C = 1']);
       expect(result).toBe(`import { A, C } from 'module';`);
     });
 
     it('should combines imports from the same source', () => {
       mockReadFileSync(`import { A } from 'module';\nimport { B } from 'module';`);
-      const result = extractImports('mockedPath', ['A', 'B']);
+      const result = extractImports('mockedPath', ['A', 'B'], ['const a: A = 1', 'const b: B = 1']);
       expect(result).toBe(`import { A, B } from 'module';`);
     });
     it('should combines different types of imports from the same source', () => {
       mockReadFileSync(`import { A } from 'module';\nimport type { B } from 'module';`);
-      const result = extractImports('mockedPath', ['A', 'B']);
+      const result = extractImports('mockedPath', ['A', 'B'], ['const a: A = 1', 'const b: B = 1']);
       expect(result).toBe(`import { A, B } from 'module';`);
     });
 
     it('should excludes unspecified imports', () => {
       mockReadFileSync(`import { A, B, C } from 'module';`);
-      const result = extractImports('mockedPath', ['A']);
+      const result = extractImports('mockedPath', ['A'], ['const a: A = 1']);
       expect(result).toBe(`import { A } from 'module';`);
     });
 
     it('should handles imports from different sources', () => {
       mockReadFileSync(`import { A, B } from 'module1';\nimport { C } from 'module2';`);
-      const result = extractImports('mockedPath', ['A', 'C']);
+      const result = extractImports('mockedPath', ['A', 'C'], ['const a: A = 1', 'const c: C = 1']);
       expect(result).toBe(`import { A } from 'module1';\nimport { C } from 'module2';`);
     });
+
     it('should throw an error when imports are not found in the file', async () => {
       mockReadFileSync(`import { A, B } from 'module1';\nimport { C } from 'module2';`);
 
       await expectToThrowFuelError(
-        () => extractImports('mockedPath', ['A', 'Y', 'Z']),
+        () =>
+          extractImports(
+            'mockedPath',
+            ['A', 'Y', 'Z'],
+            ['const a: A = 1', 'const y: Y = 1', 'const z: Z = 1']
+          ),
         new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
           `The following imports were not found in the file: Y, Z`
         )
+      );
+    });
+
+    it('should throw error when adding imports that are not in use', async () => {
+      mockReadFileSync(`import { A, B } from 'module1';\nimport { C } from 'module2';`);
+      const snippetContent = ['const b: B = 1', 'const c: C = 1'];
+      const formattedSnippet = '\n'.concat(snippetContent.map((line) => `${line}`).join('\n'));
+      const error = new FuelError(
+        ErrorCode.VITEPRESS_PLUGIN_ERROR,
+        `The specified import 'A' is not in use within the code snippet: ${formattedSnippet}`
+      );
+      await expectToThrowFuelError(
+        () => extractImports('mockedPath', ['A', 'B'], ['const b: B = 1', 'const c: C = 1']),
+        error
       );
     });
   });
