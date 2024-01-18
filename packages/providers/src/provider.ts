@@ -23,8 +23,6 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
 } from './__generated__/operations';
-import type { RetryOptions } from './call-retrier';
-import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -48,6 +46,8 @@ import {
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
+import type { RetryOptions } from './utils/auto-retry-fetch';
+import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
@@ -296,7 +296,7 @@ export default class Provider {
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
     const { retryOptions, timeout } = options;
 
-    return retrier((...args) => {
+    return autoRetryFetch((...args) => {
       if (options.fetch) {
         return options.fetch(...args);
       }
