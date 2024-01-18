@@ -26,7 +26,7 @@ export type RetryOptions = {
  * Calculate the delay for the next retry attempt
  * @param options - Retry options configuration
  * @param retryAttemptNum - 1-based, tells which retry attempt is this
- * @returns Next wait duration
+ * @returns Next wait delay
  */
 export function getWaitDelay(options: RetryOptions, retryAttemptNum: number) {
   const duration = options.baseDelay ?? 150;
