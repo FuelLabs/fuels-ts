@@ -63,6 +63,11 @@ export function autoRetryFetch(
       return await fetchFn(...args);
     } catch (_error: unknown) {
       const error = _error as Error & { cause?: { code: string } };
+
+      /**
+       * So far, we are auto-retrying only for `ECONNREFUSED` error.
+       * TODO: Investigate if we should consider more errors.
+       */
       if (error.cause?.code !== 'ECONNREFUSED') {
         throw error;
       }
