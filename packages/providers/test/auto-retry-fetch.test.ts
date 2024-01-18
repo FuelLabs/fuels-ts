@@ -7,7 +7,7 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 /**
  * @group node
- * @group browser
+ * TODO: add browser group as well (https://github.com/FuelLabs/fuels-ts/pull/1654#discussion_r1456501593)
  */
 describe('Provider correctly', () => {
   afterEach(() => {
