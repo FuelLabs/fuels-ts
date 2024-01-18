@@ -37,23 +37,6 @@ function testLine(line: string, regexp: RegExp, regionName: string, end: boolean
   );
 }
 
-function findRegion(lines: Array<string>, regionName: string) {
-  const regexp = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
-
-  let start = -1;
-  for (const [lineId, line] of lines.entries()) {
-    if (start === -1) {
-      if (testLine(line, regexp, regionName)) {
-        start = lineId + 1;
-      }
-    } else if (testLine(line, regexp, regionName, true)) {
-      return { start, end: lineId, regexp };
-    }
-  }
-
-  return null;
-}
-
 export function extractImports(filepath: string, specifiedImports: string[]) {
   // Read file content
   const fileContent = fs.readFileSync(filepath, 'utf8');
@@ -125,6 +108,44 @@ export function extractImports(filepath: string, specifiedImports: string[]) {
   return combinedImports.join('\n');
 }
 
+export function findRegion(lines: string[], regionName: string) {
+  // Regex to match region start/end comments
+  const regionRegexp = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
+  // Regex to match import comments
+  const importRegexp = /\/\/ #addImport: (.+)$/;
+
+  // Track the start line of the region and imports
+  let start = -1;
+  let imports: string[] = [];
+
+  // Iterate over each line
+  for (const [lineId, line] of lines.entries()) {
+    // Looking for the region start
+    if (start === -1) {
+      // Check if the current line marks the start of the region
+      if (testLine(line, regionRegexp, regionName)) {
+        start = lineId + 1; // Set start line (lineId is zero-based)
+      }
+    }
+    // Once the start is found, look for the end of the region
+    else {
+      // Check if the current line marks the end of the region
+      if (testLine(line, regionRegexp, regionName, true)) {
+        return { start, end: lineId, regexp: regionRegexp, imports };
+      }
+
+      // Check for import statements to be included in the region
+      const importMatch = line.match(importRegexp);
+      if (importMatch) {
+        imports = imports.concat(importMatch[1].split(',').map((s) => s.trim()));
+      }
+    }
+  }
+
+  // If no region is found, return null
+  return null;
+}
+
 export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
   const parser: RuleBlock = (state, startLine, endLine, silent) => {
     const CH = '<'.charCodeAt(0);
@@ -187,12 +208,20 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         );
       }
 
-      content = dedent(
-        lines
-          .slice(region.start, region.end)
-          .filter((line: string) => !region.regexp.test(line.trim()))
-          .join('\n')
-      );
+      let importStatements = '';
+      if (region.imports.length > 0) {
+        importStatements = extractImports(filepath, region.imports.flat());
+      }
+
+      content =
+        ''.concat(importStatements.length ? importStatements + '\n' : '') +
+        dedent(
+          lines
+            .slice(region.start, region.end)
+            .filter((line: string) => !region.regexp.test(line.trim()))
+            .map((line) => (line.includes('// #addImport:') ? '' : line))
+            .join('\n')
+        );
 
       const match = filepath.match(/(packages|apps)\/(.*)/);
       const partialPath = match?.[0];
