@@ -259,7 +259,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       // Handle any errors that occur during snippet processing
       throw new FuelError(
         ErrorCode.VITEPRESS_PLUGIN_ERROR,
-        `Error while parsing snippet: ${e.message}`
+        `Error while parsing snippet: ${(<Error>e).message}`
       );
     }
 
