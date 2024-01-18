@@ -62,6 +62,7 @@ describe('autoRetryFetch', () => {
   const maxRetries = 5;
   const baseDelay = 1;
   const retryOptions: RetryOptions = { maxRetries, baseDelay, backoff: 'fixed' };
+
   const econnRefusedError = new Error();
   econnRefusedError.cause = { code: 'ECONNREFUSED' };
 
