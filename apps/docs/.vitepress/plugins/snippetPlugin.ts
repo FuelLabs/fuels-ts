@@ -105,7 +105,7 @@ export function extractImports(filepath: string, specifiedImports: string[]) {
   }
 
   // Return the combined import statements as a single string
-  return combinedImports.join('\n');
+  return combinedImports.join('\n').concat('\n');
 }
 
 export function findRegion(lines: string[], regionName: string) {
@@ -148,59 +148,61 @@ export function findRegion(lines: string[], regionName: string) {
 
 export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
   const parser: RuleBlock = (state, startLine, endLine, silent) => {
+    // Character code for '<' used to identify the start code snippet
     const CH = '<'.charCodeAt(0);
     const pos = state.bMarks[startLine] + state.tShift[startLine];
     const max = state.eMarks[startLine];
 
-    // if it's indented more than 3 spaces, it should be a code block
+    // Skip if it's indented more than 3 spaces, as it should be treated as a code block
     if (state.sCount[startLine] - state.blkIndent >= 4) {
       return false;
     }
 
+    // Check if the custom syntax starts with '<<<'
     for (let i = 0; i < 3; ++i) {
       const ch = state.src.charCodeAt(pos + i);
       if (ch !== CH || pos + i >= max) return false;
     }
 
+    // Skip processing if we're just scanning for the end of the block
     if (silent) {
       return true;
     }
 
     try {
-      // Extracting code details snippet from import signature at markdown file
+      // Extracting the path to the code snippet from the Markdown content
       const start = pos + 3;
       const end = state.skipSpacesBack(max, pos);
-
       const rawPathRegexp =
         /^(.+(?:\.([a-z0-9]+)))(?:(#[\w-]+))?(?: ?(?:{(\d+(?:[,-]\d+)*)? ?(\S+)?}))? ?(?:\[(.+)\])?$/;
-
       const rawPath = state.src.slice(start, end).trim().replace(/^@/, srcDir).trim();
 
+      // Parse the extracted path to get details about the snippet
       const [
-        snippetFilename = '',
-        snippetExtension = '',
-        snippetRegion = '',
-        snippetLines = '',
-        snippetLang = '',
-        snippetRawTitle = '',
+        snippetFilename,
+        snippetExtension,
+        snippetRegion,
+        snippetLines,
+        snippetLang,
+        snippetRawTitle,
       ] = (rawPathRegexp.exec(rawPath) || []).slice(1);
 
-      // Reading actuall code snippet from file
+      // Resolve the path to the actual file containing the code snippet
       const customSrc = path.resolve(snippetFilename) + snippetRegion;
-
       const [filepath, regionName] = customSrc.split('#');
-
       const isAFile = fs.existsSync(filepath) && fs.lstatSync(filepath).isFile();
 
+      // Throw error if the file doesn't exist
       if (!isAFile) {
         throw new FuelError(ErrorCode.VITEPRESS_PLUGIN_ERROR, `File ${filepath} does not exist`);
       }
 
+      // Read the content of the file
       let content = fs.readFileSync(filepath, 'utf8');
-
       const lines = content.split(/\r?\n/);
-      const region = findRegion(lines, regionName);
 
+      // Find the specified region in the file
+      const region = findRegion(lines, regionName);
       if (!region) {
         throw new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
@@ -208,24 +210,26 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         );
       }
 
+      // Extract and add imports specified in the #addImport flag
       let importStatements = '';
       if (region.imports.length > 0) {
         importStatements = extractImports(filepath, region.imports.flat());
       }
 
-      content =
-        ''.concat(importStatements.length ? importStatements + '\n' : '') +
+      // Construct the final content for the code snippet
+      content = importStatements.concat(
         dedent(
           lines
             .slice(region.start, region.end)
-            .filter((line: string) => !region.regexp.test(line.trim()))
+            .filter((line) => !region.regexp.test(line.trim()))
             .map((line) => (line.includes('// #addImport:') ? '' : line))
             .join('\n')
-        );
+        )
+      );
 
+      // Generate a URL to the snippet on GitHub
       const match = filepath.match(/(packages|apps)\/(.*)/);
       const partialPath = match?.[0];
-
       if (!partialPath) {
         throw new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
@@ -237,17 +241,14 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         .concat(`${partialPath}`)
         .concat(`#L${region.start}-L${++region.end}`);
 
-      // Creating markdown token with code snippet content and adding to state
+      // Create a markdown token to insert the snippet into the document
       const title = snippetRawTitle || snippetFilename.split('/').pop() || '';
-
       state.line = startLine + 1;
-
       const token = state.push('fence', 'code', 0);
-
       Object.assign(token, {
-        url, // Adding url to github file with code snippet
+        url,
         content,
-        customSrc: path.resolve(snippetFilename) + snippetRegion,
+        customSrc,
         markup: '```',
         map: [startLine, startLine + 1],
         info: `${snippetLang || snippetExtension}${snippetLines ? `{${snippetLines}}` : ''}${
@@ -255,6 +256,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         }`,
       });
     } catch (e) {
+      // Handle any errors that occur during snippet processing
       throw new FuelError(
         ErrorCode.VITEPRESS_PLUGIN_ERROR,
         `Error while parsing snippet: ${e.message}`
@@ -264,5 +266,6 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
     return true;
   };
 
+  // Register the custom parser with MarkdownIt
   md.block.ruler.before('fence', 'customSnippet', parser);
 };
