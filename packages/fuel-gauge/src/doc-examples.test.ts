@@ -196,7 +196,7 @@ describe('Doc Examples', () => {
   it('it can be created without a provider', async () => {
     // #region wallet-optional-provider
     // You can generate a wallet, without a provider
-    // #context import { Wallet, WalletUnlocked, BigNumberish} from 'fuels';
+    // #context import { Wallet, WalletUnlocked } from 'fuels';
     let unlockedWallet: WalletUnlocked = Wallet.generate();
     unlockedWallet = Wallet.fromPrivateKey(unlockedWallet.privateKey);
 
