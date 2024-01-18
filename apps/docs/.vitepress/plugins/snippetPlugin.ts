@@ -105,7 +105,7 @@ export function extractImports(filepath: string, specifiedImports: string[]) {
   }
 
   // Return the combined import statements as a single string
-  return combinedImports.join('\n').concat('\n');
+  return combinedImports.join('\n');
 }
 
 export function findRegion(lines: string[], regionName: string) {
