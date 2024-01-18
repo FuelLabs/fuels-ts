@@ -3,7 +3,7 @@ import { Address, arrayify, getRandomB256, hexlify } from 'fuels';
 describe(__filename, () => {
   it('should successfully generate and validate bit256 hexed string', () => {
     // #region bits256-1
-    // #context import { getRandomB256 } from 'fuels';
+    // #addImport: getRandomB256
 
     // randomB256 is a hexlified string representing a 256-bit value
     const randomB256: string = getRandomB256();
@@ -20,7 +20,7 @@ describe(__filename, () => {
 
   it('should successfully convert between hexed b256 and Uint8Array', () => {
     // #region bits256-2
-    // #context import { arrayify, hexlify, getRandomB256 } from 'fuels';
+    // #addImport: arrayify, hexlify, getRandomB256
 
     const randomB256: string = getRandomB256();
 
@@ -37,7 +37,7 @@ describe(__filename, () => {
 
   it('should successfully generate an address from a b256 string', () => {
     // #region bits256-3
-    // #context import { Address, getRandomB256 } from 'fuels';
+    // #addImport: Address, getRandomB256
 
     const randomB256: string = getRandomB256();
 

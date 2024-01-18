@@ -26,7 +26,7 @@ describe(__filename, () => {
 
   it('should successfully transfer asset to another account', async () => {
     // #region transferring-assets-1
-    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
+    // #addImport: Wallet, BN, BaseAssetId
 
     // #context const sender = Wallet.fromPrivateKey('...');
     const destination = Wallet.generate({
@@ -135,7 +135,7 @@ describe(__filename, () => {
   it('should successfully prepare transfer transaction request', async () => {
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-4
-    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
+    // #addImport: Wallet, BN, BaseAssetId
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
 

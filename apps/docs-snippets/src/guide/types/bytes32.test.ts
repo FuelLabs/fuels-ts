@@ -5,7 +5,7 @@ describe(__filename, () => {
   it('should successfully generate and convert byte32 to hexlified string', () => {
     // #region bytes32-1
     // #region bytes32-2
-    // #context import { randomBytes } from 'fuels';
+    // #addImport: randomBytes
 
     const bytes32: Bytes = randomBytes(32);
     // #endregion bytes32-1

@@ -4,8 +4,7 @@ describe(__filename, () => {
   it('should successfully encrypt wallet', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region encrypting-and-decrypting-json-wallets-1
-    // #context import fs from 'fs';
-    // #context import { Wallet } from 'fuels';
+    // #addImport: Wallet, fs
 
     const wallet = Wallet.generate({
       provider,
@@ -27,8 +26,7 @@ describe(__filename, () => {
       provider,
     }).encrypt('my-password');
     // #region encrypting-and-decrypting-json-wallets-2
-    // #context import fs from 'fs';
-    // #context import { Wallet } from 'fuels';
+    // #addImport: Wallet, fs
 
     // #context const jsonWallet = fs.readFileSync('secure-path/my-wallet.json', 'utf-8');
 

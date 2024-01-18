@@ -12,7 +12,7 @@ describe('Bytes', () => {
 
   it('should pass bytes to a contract', async () => {
     // #region bytes-1
-    // #context import type { Bytes } from 'fuels';
+    // #addImport: Bytes
 
     const bytes: Bytes = [40, 41, 42];
 
@@ -27,7 +27,7 @@ describe('Bytes', () => {
 
   it('should retrieve bytes from a contract', async () => {
     // #region bytes-2
-    // #context import type { Bytes } from 'fuels';
+    // #addImport: Bytes
 
     const bytes: Bytes = [8, 42, 77];
 

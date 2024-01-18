@@ -21,7 +21,7 @@ describe(__filename, () => {
     const provider = contract.provider;
 
     // #region bits512-2
-    // #context import {  Wallet } from 'fuels';
+    // #addImport: Wallet
 
     const wallet = Wallet.generate({
       provider,
