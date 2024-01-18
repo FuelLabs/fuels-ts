@@ -37,7 +37,11 @@ function testLine(line: string, regexp: RegExp, regionName: string, end: boolean
   );
 }
 
-export function extractImports(filepath: string, specifiedImports: string[]) {
+export function extractImports(
+  filepath: string,
+  specifiedImports: string[],
+  snippetContent: string[]
+) {
   // Read file content
   const fileContent = fs.readFileSync(filepath, 'utf8');
   // Split content into lines
@@ -102,6 +106,22 @@ export function extractImports(filepath: string, specifiedImports: string[]) {
     combinedImports.push(
       `import { ${Array.from(importStatements[source]).join(', ')} } from '${source}';`
     );
+  }
+
+  // Remove #addImport lines and join the content for validation
+  const validatedContent = snippetContent
+    .filter((line) => !line.includes('// #addImport:'))
+    .join('\n');
+
+  // Validate if each specified import is used in the code snippet
+  for (const importItem of specifiedImports) {
+    if (!validatedContent.includes(importItem)) {
+      const formattedSnippet = '\n'.concat(snippetContent.map((line) => `${line}`).join('\n'));
+      throw new FuelError(
+        ErrorCode.VITEPRESS_PLUGIN_ERROR,
+        `The specified import '${importItem}' is not in use within the code snippet: ${formattedSnippet}`
+      );
+    }
   }
 
   // Return the combined import statements as a single string
@@ -210,17 +230,19 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         );
       }
 
+      const snippetContent = lines.slice(region.start, region.end);
+
       // Extract and add imports specified in the #addImport flag
       let importStatements = '';
       if (region.imports.length > 0) {
-        importStatements = extractImports(filepath, region.imports.flat());
+        importStatements = extractImports(filepath, region.imports.flat(), snippetContent);
       }
 
       // Construct the final content for the code snippet
+
       content = importStatements.concat(
         dedent(
-          lines
-            .slice(region.start, region.end)
+          snippetContent
             .filter((line) => !region.regexp.test(line.trim()))
             .map((line) => (line.includes('// #addImport:') ? '' : line))
             .join('\n')
