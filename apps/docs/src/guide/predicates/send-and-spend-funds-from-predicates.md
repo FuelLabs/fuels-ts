@@ -26,7 +26,7 @@ With the predicate instantiated, we can transfer funds to its address. This requ
 
 Now that our predicate holds funds, we can use it to validate a transaction.
 
-First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We achieve this using the `Predicate` class method `setData`.
+First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We achieve this using the [Predicate](../../api/Predicate/Predicate.md) class method `setData`.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 
@@ -40,7 +40,7 @@ Once the predicate resolves with a return value `true` based on its predefined c
 
 ---
 
-In a similar approach, you can use the `createTransfer` method, which returns a `ScriptTransactionRequest`. Then, we can submit this transaction request by calling the `sendTransaction` method.
+In a similar approach, you can use the `createTransfer` method, which returns a [ScriptTransactionRequest](../../api/Providers/ScriptTransactionRequest.md). Then, we can submit this transaction request by calling the `sendTransaction` method.
 
 This can be useful if you need the transaction ID before actually submitting it to the node.
 

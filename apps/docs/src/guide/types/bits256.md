@@ -16,6 +16,6 @@ To convert between a `b256` hexlified string and a `Uint8Array`, you can use the
 
 ## Support from `Address` Class
 
-A `b256` value is also supported as part of the `Address` class, providing seamless integration with other components of your application. To create an `Address` instance from a b256 value, use the `Address.fromB256()` method:
+A `b256` value is also supported as part of the [Address](../../api/Address/Address.md) class, providing seamless integration with other components of your application. To create an [Address](../../api/Address/Address.md) instance from a b256 value, use the `Address.fromB256()` method:
 
 <<< @/../../docs-snippets/src/guide/types/bits256.test.ts#bits256-3{ts:line-numbers}
