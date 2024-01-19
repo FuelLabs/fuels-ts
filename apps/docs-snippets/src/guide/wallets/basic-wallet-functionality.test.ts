@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish, CoinQuantity, WalletLocked, WalletUnlocked } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, BaseAssetId, Wallet, bn } from 'fuels';
+import { Provider, FUEL_NETWORK_URL, BaseAssetId, Wallet, bn, Signer } from 'fuels';
 
 describe(__filename, () => {
   test('it can work with wallets', async () => {
@@ -84,5 +84,23 @@ describe(__filename, () => {
     ]);
     expect(walletCBalances).toEqual([]);
     // #endregion wallet-setup
+  });
+
+  it('can connect to testnet', async () => {
+    // #region provider-testnet
+    // #context import { Provider, WalletUnlocked } from 'fuels';
+    const provider = await Provider.create('https://beta-5.fuel.network/graphql');
+    // Setup a private key
+    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+
+    // Create the wallet, passing provider
+    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+
+    // #region signer-address
+    const signer = new Signer(PRIVATE_KEY);
+    // validate address
+    expect(wallet.address).toEqual(signer.address);
+    // #endregion provider-testnet
+    // #endregion signer-address
   });
 });
