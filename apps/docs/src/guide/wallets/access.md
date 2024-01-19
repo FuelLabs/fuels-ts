@@ -35,7 +35,7 @@ A `WalletLocked` instance can be unlocked by providing the private key:
 
 A `WalletUnlocked` instance can be locked using the `lock` method:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallet-unlocked-to-locked{ts:line-numbers}
 
 Most wallet constructors that create or generate a new wallet are provided on
 the `WalletUnlocked` type. Consider locking the wallet with the `lock` method after the new private
