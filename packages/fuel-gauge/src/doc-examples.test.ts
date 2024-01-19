@@ -183,12 +183,12 @@ describe('Doc Examples', () => {
     // #endregion wallet-unlocked-to-locked
 
     // #region wallet-check-balance
-    // #addImport: Wallet, WalletUnlocked, BigNumberish
+    // #addImport: BigNumberish
     const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
     // #endregion wallet-check-balance
 
     // #region wallet-check-balances
-    // #addImport: Wallet, WalletUnlocked, CoinQuantity
+    // #addImport: CoinQuantity
     const balances: CoinQuantity[] = await myWallet.getBalances();
     // #endregion wallet-check-balances
 

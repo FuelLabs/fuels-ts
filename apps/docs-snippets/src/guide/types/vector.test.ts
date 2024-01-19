@@ -20,7 +20,7 @@ describe(__filename, () => {
     // #endregion vector-1
 
     // #region vector-4
-    // #addImport: BN, getRandomB256
+    // #addImport: getRandomB256
 
     const employees = [
       {

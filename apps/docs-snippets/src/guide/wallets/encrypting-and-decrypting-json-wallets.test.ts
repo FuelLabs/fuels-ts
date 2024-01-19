@@ -26,7 +26,9 @@ describe(__filename, () => {
       provider,
     }).encrypt('my-password');
     // #region encrypting-and-decrypting-json-wallets-2
-    // #addImport: Wallet, fs
+    // #addImport: Wallet
+    // #ignoreImport: fs
+    // #context import { fs } from 'fs';
 
     // #context const jsonWallet = fs.readFileSync('secure-path/my-wallet.json', 'utf-8');
 
