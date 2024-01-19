@@ -2,7 +2,7 @@
 
 We can interact with the `Testnet` node by using the following example.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-testnet{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#provider-testnet{ts:line-numbers}
 
 In the code example, we connected a new provider to the Testnet node and created a new wallet from a private key.
 
