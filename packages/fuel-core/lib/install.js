@@ -67,7 +67,8 @@ import {
     // Extract
     execSync(`tar xzf "${pkgPath}" -C "${rootDir}"`);
 
-    // Take the contents of the directory containing the extracted binaries and move them to the `fuel-core-binaries` directory
+    // Take the contents of the directory containing the extracted
+    // binaries and move them to the `fuel-core-binaries` directory
     renameSync(`${fileName}`, binDir);
 
     // Cleanup
