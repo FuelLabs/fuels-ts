@@ -249,7 +249,7 @@ describe('Doc Examples', () => {
     // #endregion wallet-setup
   });
 
-  it('can connect to testnet', async () => {
+  it.skip('can connect to testnet', async () => {
     // #region provider-testnet
     // #context import { Provider, WalletUnlocked } from 'fuels';
     const provider = await Provider.create('https://beta-5.fuel.network/graphql');
