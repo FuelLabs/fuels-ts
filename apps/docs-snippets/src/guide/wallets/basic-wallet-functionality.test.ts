@@ -86,6 +86,22 @@ describe(__filename, () => {
     // #endregion wallet-setup
   });
 
+  it('can connect to a local provider', async () => {
+    // #region provider-local
+    // #context import { Provider, WalletUnlocked, FUEL_NETWORK_URL } from 'fuels';
+    const localProvider = await Provider.create(FUEL_NETWORK_URL);
+    // Setup a private key
+    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+
+    // Create the wallet, passing provider
+    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
+
+    const signer = new Signer(PRIVATE_KEY);
+    // validate address
+    expect(wallet.address).toEqual(signer.address);
+    // #endregion provider-local
+  });
+
   it('can connect to testnet', async () => {
     // #region provider-testnet
     // #context import { Provider, WalletUnlocked } from 'fuels';
