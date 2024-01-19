@@ -47,12 +47,25 @@ export function extractImports(
   // Split content into lines
   const lines = fileContent.split(/\r?\n/);
 
+  // Initialize variables
   let importStatements: Record<string, Set<string>> = {};
-  let allImportedItems = new Set();
+  let allImportedItems = new Set<string>();
+  let ignoredImports = new Set<string>();
   let currentImport = '';
   let collecting = false;
 
   lines.forEach((line) => {
+    // Parse and process ignore import flag
+    if (line.trim().startsWith('// #ignoreImport')) {
+      const ignoreMatches = line.match(/\/\/ #ignoreImport: (.+)/);
+
+      if (ignoreMatches && ignoreMatches[1]) {
+        const importsToIgnore = ignoreMatches[1].split(',').map((item) => item.trim());
+
+        importsToIgnore.forEach((item) => ignoredImports.add(item));
+      }
+    }
+
     // Start collecting import line
     if (line.trim().startsWith('import')) {
       collecting = true;
@@ -66,17 +79,26 @@ export function extractImports(
     // Process the collected import line
     if (collecting && line.includes('} from')) {
       collecting = false;
+
       const matches = currentImport.match(/import.*\{([^\}]*)\}.*from\s+'([^']+)';/);
 
       if (matches && matches.length >= 3) {
         const importedItems = matches[1].split(',').map((item) => item.trim());
+
         const importSource = matches[2];
 
         // Add imported items to the allImportedItems set for later checking
-        importedItems.forEach((item) => allImportedItems.add(item));
+        importedItems.forEach((item) => {
+          if (!ignoredImports.has(item)) {
+            allImportedItems.add(item);
+          }
+        });
 
-        // Filter out only the specified imports
-        const filteredItems = importedItems.filter((item) => specifiedImports.includes(item));
+        // Filter out only the specified imports and ignore specified ones
+        const filteredItems = importedItems.filter(
+          (item) => specifiedImports.includes(item) && !ignoredImports.has(item)
+        );
+
         if (filteredItems.length > 0) {
           // Initialize set for the import source if not already done
           importStatements[importSource] = importStatements[importSource] || new Set();
@@ -90,7 +112,7 @@ export function extractImports(
 
   // Check if all specified imports were found in the file
   const notFoundImports = specifiedImports.filter(
-    (importItem) => !allImportedItems.has(importItem)
+    (importItem) => !allImportedItems.has(importItem) && !ignoredImports.has(importItem)
   );
 
   if (notFoundImports.length > 0) {
@@ -108,14 +130,14 @@ export function extractImports(
     );
   }
 
-  // Remove #addImport lines and join the content for validation
+  // Remove #addImport and #ignoreImport lines and join the content for validation
   const validatedContent = snippetContent
-    .filter((line) => !line.includes('// #addImport:'))
+    .filter((line) => !/(#addImport:)|(#ignoreImport:)/.test(line))
     .join('\n');
 
   // Validate if each specified import is used in the code snippet
   for (const importItem of specifiedImports) {
-    if (!validatedContent.includes(importItem)) {
+    if (!validatedContent.includes(importItem) && !ignoredImports.has(importItem)) {
       const formattedSnippet = '\n'.concat(snippetContent.map((line) => `${line}`).join('\n'));
       throw new FuelError(
         ErrorCode.VITEPRESS_PLUGIN_ERROR,
@@ -244,7 +266,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         dedent(
           snippetContent
             .filter((line) => !region.regexp.test(line.trim()))
-            .map((line) => (line.includes('// #addImport:') ? '' : line))
+            .map((line) => (/(#addImport:)|(#ignoreImport:)/.test(line) ? '' : line))
             .join('\n')
         )
       );
