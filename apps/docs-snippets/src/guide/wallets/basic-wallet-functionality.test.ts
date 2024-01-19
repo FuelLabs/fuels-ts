@@ -1,5 +1,6 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish, CoinQuantity, WalletLocked, WalletUnlocked } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, BaseAssetId, Wallet } from 'fuels';
+import { Provider, FUEL_NETWORK_URL, BaseAssetId, Wallet, bn } from 'fuels';
 
 describe(__filename, () => {
   test('it can work with wallets', async () => {
@@ -45,5 +46,43 @@ describe(__filename, () => {
     expect(newlyLockedWallet.address).toEqual(someWallet.address);
     expect(balance).toBeTruthy();
     expect(balances.length).toEqual(0);
+  });
+
+  it('can create wallets', async () => {
+    // #region wallet-setup
+    // #context import { Provider, bn, FUEL_NETWORK_URL } from 'fuels';
+    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+
+    // single asset
+    const walletA = await generateTestWallet(provider, [[42, BaseAssetId]]);
+
+    // multiple assets
+    const walletB = await generateTestWallet(provider, [
+      // [Amount, AssetId]
+      [100, assetIdA],
+      [200, assetIdB],
+      [30, BaseAssetId],
+    ]);
+
+    // this wallet has no assets
+    const walletC = await generateTestWallet(provider);
+
+    // retrieve balances of wallets
+    const walletABalances = await walletA.getBalances();
+    const walletBBalances = await walletB.getBalances();
+    const walletCBalances = await walletC.getBalances();
+
+    // validate balances
+    expect(walletABalances).toEqual([{ assetId: BaseAssetId, amount: bn(42) }]);
+    expect(walletBBalances).toEqual([
+      { assetId: BaseAssetId, amount: bn(30) },
+      { assetId: assetIdA, amount: bn(100) },
+      { assetId: assetIdB, amount: bn(200) },
+    ]);
+    expect(walletCBalances).toEqual([]);
+    // #endregion wallet-setup
   });
 });
