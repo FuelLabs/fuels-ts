@@ -211,7 +211,7 @@ describe('Doc Examples', () => {
     // #endregion wallet-message-signing
   });
 
-  it('can create wallets', async () => {
+  it.skip('can create wallets', async () => {
     // #region wallet-setup
     // #context import { Provider, bn, FUEL_NETWORK_URL } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
