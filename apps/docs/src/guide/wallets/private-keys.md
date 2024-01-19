@@ -10,4 +10,4 @@ Alternatively, you can create a wallet from a Private Key:
 
 You can obtain an address to a private key using the `Signer` package
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#signer-address{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#signer-address{ts:line-numbers}
