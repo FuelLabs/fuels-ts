@@ -4,7 +4,6 @@ import { execSync } from 'child_process';
 import { existsSync, rmSync, writeFileSync, mkdirSync, renameSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
-import tar from 'tar';
 
 import {
   __dirname,
@@ -66,10 +65,7 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    await tar.x({
-      file: pkgPath,
-      C: rootDir,
-    });
+    execSync(`tar xzf "${pkgPath}" -C "${rootDir}"`);
 
     // Take the contents of the directory containing the extracted binaries and move them to the `fuel-core-binaries` directory
     renameSync(`${fileName}`, binDir);
