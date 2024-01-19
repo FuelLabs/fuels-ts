@@ -50,7 +50,7 @@ describe('WalletUnlocked', () => {
 
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
-    // #addImport: WalletUnlocked, Signer
+    // #import { WalletUnlocked, Signer }
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);

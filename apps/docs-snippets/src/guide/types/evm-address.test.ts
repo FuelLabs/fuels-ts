@@ -15,7 +15,7 @@ describe('EvMAddress', () => {
 
   it('should demonstrate typed evm address example', () => {
     // #region evm-address-1
-    // #addImport: EvmAddress
+    // #import { EvmAddress }
 
     const evmAddress: EvmAddress = {
       value: Bits256,
@@ -23,7 +23,7 @@ describe('EvMAddress', () => {
     // #endregion evm-address-1
 
     // #region addresses-3
-    // #addImport: EvmAddress
+    // #import { EvmAddress }
 
     const address: EvmAddress = {
       value: '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6',
@@ -38,7 +38,7 @@ describe('EvMAddress', () => {
 
   it('should create an Evm Address from a B256Address', async () => {
     // #region evm-address-2
-    // #addImport: EvmAddress, Address
+    // #import { EvmAddress, Address }
 
     const b256Address = '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6';
 
@@ -57,7 +57,7 @@ describe('EvMAddress', () => {
 
   it('should pass an evm address to a contract', async () => {
     // #region evm-address-3
-    // #addImport: EvmAddress
+    // #import { EvmAddress }
 
     const evmAddress: EvmAddress = {
       value: Bits256,
@@ -74,7 +74,7 @@ describe('EvMAddress', () => {
 
   it('should retrieve an evm address from a contract', async () => {
     // #region evm-address-4
-    // #addImport: EvmAddress
+    // #import { EvmAddress }
 
     const evmAddress: EvmAddress = {
       value: Bits256,

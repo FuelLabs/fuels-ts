@@ -68,7 +68,7 @@ const callScript = async <TData, TResult>(
 };
 
 // #region script-init
-// #addImport: ScriptRequest, getBytesCopy
+// #import { ScriptRequest, getBytesCopy }
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {

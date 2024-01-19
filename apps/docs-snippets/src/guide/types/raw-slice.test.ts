@@ -12,7 +12,7 @@ describe('RawSlice', () => {
 
   it('should pass a raw slice to a contract', async () => {
     // #region raw-slice-1
-    // #addImport: RawSlice
+    // #import { RawSlice }
 
     const rawSlice: RawSlice = [40, 41, 42];
 
@@ -27,7 +27,7 @@ describe('RawSlice', () => {
 
   it('should retrieve a raw slice from a contract', async () => {
     // #region raw-slice-2
-    // #addImport: RawSlice
+    // #import { RawSlice }
 
     const rawSlice: RawSlice = [8, 42, 77];
 
