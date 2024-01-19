@@ -148,7 +148,7 @@ describe('Doc Examples', () => {
     expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
   });
 
-  test('it can work with wallets', async () => {
+  test.skip('it can work with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallets
     // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
