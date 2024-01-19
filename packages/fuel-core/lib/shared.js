@@ -1,6 +1,5 @@
 import { execSync } from 'child_process';
-import { cpSync, rmSync } from 'fs';
-import fs from 'fs/promises';
+import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -34,13 +33,13 @@ export const getPkgPlatform = () => {
 
 const versionFilePath = join(__dirname, '../VERSION');
 
-export const getCurrentVersion = async () => {
-  const fuelCoreVersion = await fs.readFile(versionFilePath, 'utf8');
+export const getCurrentVersion = () => {
+  const fuelCoreVersion = readFileSync(versionFilePath, 'utf8');
   return fuelCoreVersion.trim();
 };
 
-export const setCurrentVersion = async (version) => {
-  await fs.writeFile(versionFilePath, version);
+export const setCurrentVersion = (version) => {
+  writeFileSync(versionFilePath, version);
 };
 
 export const isGitBranch = (versionFileContents) => versionFileContents.indexOf('git:') !== -1;
@@ -52,7 +51,7 @@ export const buildFromGitBranch = (branchName) => {
   rmSync('fuel-core-binaries', { recursive: true, force: true });
   execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
   execSync(`cd fuel-core-repo && cargo build`, { silent: true });
-  fs.mkdirSync('fuel-core-binaries');
+  mkdirSync('fuel-core-binaries');
   cpSync('fuel-core-repo/target/debug/fuel-core', 'fuel-core-binaries/fuel-core');
   rmSync('fuel-core-repo', { recursive: true, force: true });
 };
