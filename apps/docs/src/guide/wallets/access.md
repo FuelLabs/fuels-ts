@@ -25,7 +25,7 @@ provides greater access via its private key.
 
 ## Basic Example
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallets{ts:line-numbers}
 
 ## Transitioning States
 

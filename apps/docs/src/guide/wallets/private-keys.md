@@ -2,7 +2,7 @@
 
 A new wallet with a randomly generated private key can be created by supplying `Wallet.generate`.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallets{ts:line-numbers}
 
 Alternatively, you can create a wallet from a Private Key:
 

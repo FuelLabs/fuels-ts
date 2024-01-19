@@ -4,7 +4,7 @@ You'll often want to create one or more test wallets when testing your contracts
 
 ## Create a single wallet
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallets{ts:line-numbers}
 
 ## Setting up multiple test wallets
 
