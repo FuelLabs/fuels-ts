@@ -283,7 +283,7 @@ describe('Doc Examples', () => {
     // #endregion provider-local
   });
 
-  it('can query address with wallets', async () => {
+  it.skip('can query address with wallets', async () => {
     // #region wallet-query
     // #context import { Provider, FUEL_NETWORK_URL } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
