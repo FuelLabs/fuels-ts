@@ -18,4 +18,4 @@ In the code example, we connected a new provider to the Testnet node and created
 
 If you want to connect to another node just change the URL or IP and port. For example, to connect to a local node that was created with `fuel-core` you can use:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-local{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#provider-local{ts:line-numbers}
