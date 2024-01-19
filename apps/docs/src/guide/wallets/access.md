@@ -31,7 +31,7 @@ provides greater access via its private key.
 
 A `WalletLocked` instance can be unlocked by providing the private key:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallet-locked-to-unlocked{ts:line-numbers}
 
 A `WalletUnlocked` instance can be locked using the `lock` method:
 
