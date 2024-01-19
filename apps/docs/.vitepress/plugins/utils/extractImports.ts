@@ -11,8 +11,8 @@ export const parseIgnoreImportFlags = (lines: string[]): Set<string> => {
 
   lines.forEach((line) => {
     // Parse and process ignore import flag
-    if (line.trim().startsWith('// #ignoreImport')) {
-      const ignoreMatches = line.match(/\/\/ #ignoreImport: (.+)/);
+    if (line.trim().startsWith('// #ignore ')) {
+      const ignoreMatches = line.match(/\/\/ #ignore \{(.+)\}$/);
 
       if (ignoreMatches && ignoreMatches[1]) {
         const importsToIgnore = ignoreMatches[1].split(',').map((item) => item.trim());
@@ -67,9 +67,9 @@ export const validateImports = (
     );
   }
 
-  // Filter out lines with "#addImport:" or "#ignoreImport:" and join the remaining lines
+  // Filter out lines with "#import" or "#ignore:" and join the remaining lines
   const validatedContent = snippetContent
-    .filter((line) => !/(#addImport:)|(#ignoreImport:)/.test(line))
+    .filter((line) => !/(\/\/ #import \{(.+)\}$)|(\/\/ #ignore \{(.+)\}$)/.test(line))
     .join('\n');
 
   for (const importItem of specifiedImports) {

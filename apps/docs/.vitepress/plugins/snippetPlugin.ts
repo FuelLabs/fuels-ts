@@ -42,7 +42,7 @@ export function findRegion(lines: string[], regionName: string) {
   // Regex to match region start/end comments
   const regionRegexp = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
   // Regex to match import comments
-  const importRegexp = /\/\/ #addImport: (.+)$/;
+  const importRegexp = /\/\/ #import \{(.+)\}$/;
 
   // Track the start line of the region and imports
   let start = -1;
@@ -142,19 +142,20 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
 
       const snippetContent = lines.slice(region.start, region.end);
 
-      // Extract and add imports specified in the #addImport flag
+      // Extract and add imports specified in the #import flag
       let importStatements = '';
       if (region.imports.length > 0) {
         importStatements = extractImports(filepath, region.imports.flat(), snippetContent);
       }
 
       // Construct the final content for the code snippet
-
       content = importStatements.concat(
         dedent(
           snippetContent
             .filter((line) => !region.regexp.test(line.trim()))
-            .map((line) => (/(#addImport:)|(#ignoreImport:)/.test(line) ? '' : line))
+            .map((line) =>
+              /(\/\/ #import \{(.+)\}$)|(\/\/ #ignore \{(.+)\}$)/.test(line) ? '' : line
+            )
             .join('\n')
         )
       );

@@ -20,27 +20,27 @@ describe('extractImports', () => {
     });
 
     it('should correctly parse a single ignore flag', () => {
-      const lines = ['// #ignoreImport: testImport'];
+      const lines = ['// #ignore { testImport }'];
       expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['testImport']));
     });
 
     it('should correctly parse multiple ignore flags on separate lines', () => {
-      const lines = ['// #ignoreImport: firstImport', '// #ignoreImport: secondImport'];
+      const lines = ['// #ignore { firstImport }', '// #ignore { secondImport }'];
       expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['firstImport', 'secondImport']));
     });
 
     it('should correctly parse multiple imports on a single ignore flag', () => {
-      const lines = ['// #ignoreImport: firstImport, secondImport'];
+      const lines = ['// #ignore { firstImport , secondImport }'];
       expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['firstImport', 'secondImport']));
     });
 
     it('should ignore malformed ignore flags', () => {
-      const lines = ['// ignoreImport: testImport', '// #ignoreImport testImport'];
+      const lines = ['// ignore: { testImport }', '// #ignore testImport'];
       expect(parseIgnoreImportFlags(lines)).toEqual(new Set());
     });
 
     it('should handle empty lines and whitespace', () => {
-      const lines = ['   ', '', '// #ignoreImport: testImport'];
+      const lines = ['   ', '', '// #ignore { testImport }'];
       expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['testImport']));
     });
   });
@@ -102,7 +102,7 @@ describe('extractImports', () => {
     it('should not throw an error for ignored imports', () => {
       expect(() => {
         validateImports(['ignoredImport'], new Set(['ignoredImport']), allImportedItems, [
-          '// #ignoreImport: ignoredImport',
+          '// #ignore { ignoredImport }',
         ]);
       }).not.toThrow();
     });
@@ -214,7 +214,7 @@ describe('extractImports', () => {
       const filepath = 'mockedPath';
       const specifiedImports = ['AssetId'];
       const snippetContent = [
-        '    // #addImport: AssetId',
+        '    // #import { AssetId }',
         '',
         '    const assetId: AssetId = {',
         '      value: Bits256,',
