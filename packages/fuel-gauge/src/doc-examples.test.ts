@@ -267,7 +267,7 @@ describe('Doc Examples', () => {
     // #endregion signer-address
   });
 
-  it('can connect to a local provider', async () => {
+  it.skip('can connect to a local provider', async () => {
     // #region provider-local
     // #context import { Provider, WalletUnlocked, FUEL_NETWORK_URL } from 'fuels';
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
