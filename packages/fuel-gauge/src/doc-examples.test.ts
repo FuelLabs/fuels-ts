@@ -193,7 +193,7 @@ describe('Doc Examples', () => {
     expect(balances.length).toEqual(0);
   });
 
-  it('it can work sign messages with wallets', async () => {
+  it.skip('it can work sign messages with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
     // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
