@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
+export const binPath = join(__dirname, '../fuel-core-binaries/fuel-core');
+
 const platforms = {
   darwin: {
     arm64: 'aarch64-apple-darwin',

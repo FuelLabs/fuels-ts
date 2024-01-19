@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
+export const binPath = join(__dirname, '../forc-binaries/forc');
+
 const platforms = {
   darwin: {
     arm64: 'darwin_arm64',
@@ -16,10 +18,6 @@ const platforms = {
     x64: 'linux_amd64',
   },
 };
-
-const binPath = join(__dirname, '../forc-binaries/forc');
-
-export default binPath;
 
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
