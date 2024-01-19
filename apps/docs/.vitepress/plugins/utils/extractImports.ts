@@ -6,7 +6,7 @@ import fs from 'fs';
  * @param lines - The lines of code to parse.
  * @returns A set of imports to be ignored.
  */
-export function parseIgnoreImportFlags(lines: string[]): Set<string> {
+export const parseIgnoreImportFlags = (lines: string[]): Set<string> => {
   const ignoredImports = new Set<string>();
 
   lines.forEach((line) => {
@@ -23,7 +23,7 @@ export function parseIgnoreImportFlags(lines: string[]): Set<string> {
   });
 
   return ignoredImports;
-}
+};
 
 /**
  * Combines import statements into a single string.
@@ -31,13 +31,13 @@ export function parseIgnoreImportFlags(lines: string[]): Set<string> {
  * @param importStatements - The import statements to combine.
  * @returns The combined import statements as a string.
  */
-export function combineImportStatements(importStatements: Record<string, Set<string>>) {
+export const combineImportStatements = (importStatements: Record<string, Set<string>>) => {
   return Object.keys(importStatements)
     .map(
       (source) => `import { ${Array.from(importStatements[source]).join(', ')} } from '${source}';`
     )
     .join('\n');
-}
+};
 
 /**
  * Validates the imports in a code snippet.
@@ -48,12 +48,12 @@ export function combineImportStatements(importStatements: Record<string, Set<str
  * @param snippetContent - The content of the code snippet.
  * @throws {FuelError} - If there are imports not found in the file or if a specified import is not used in the code snippet.
  */
-export function validateImports(
+export const validateImports = (
   specifiedImports: string[],
   ignoredImports: Set<string>,
   allImportedItems: Set<string>,
   snippetContent: string[]
-) {
+) => {
   // Filter specified imports that are not found in the file or ignored
   const notFoundImports = specifiedImports.filter(
     (importItem) => !allImportedItems.has(importItem) && !ignoredImports.has(importItem)
@@ -83,7 +83,7 @@ export function validateImports(
       );
     }
   }
-}
+};
 
 /**
  * Collects import statements from the given lines of code and extracts the imported items and their sources.
@@ -92,11 +92,11 @@ export function validateImports(
  * @param ignoredImports - The set of ignored import items.
  * @returns An object containing the import statements grouped by their sources and a set of all imported items.
  */
-export function collectImportStatements(
+export const collectImportStatements = (
   lines: string[],
   specifiedImports: string[],
   ignoredImports: Set<string>
-) {
+) => {
   let importStatements: Record<string, Set<string>> = {};
   let allImportedItems: Set<string> = new Set();
   let currentImport = '';
@@ -139,7 +139,7 @@ export function collectImportStatements(
   });
 
   return { importStatements, allImportedItems };
-}
+};
 
 /**
  * Extracts import statements from a file and combines them into a single string.
@@ -148,11 +148,11 @@ export function collectImportStatements(
  * @param snippetContent - An array of snippet content to validate against.
  * @returns A string containing the combined import statements.
  */
-export function extractImports(
+export const extractImports = (
   filepath: string,
   specifiedImports: string[],
   snippetContent: string[]
-) {
+) => {
   // Read file content
   const fileContent = fs.readFileSync(filepath, 'utf8');
 
@@ -169,4 +169,4 @@ export function extractImports(
   validateImports(specifiedImports, ignoredImports, allImportedItems, snippetContent);
 
   return combineImportStatements(importStatements);
-}
+};
