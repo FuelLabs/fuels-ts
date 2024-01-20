@@ -2,12 +2,12 @@
 
 A new wallet with a randomly generated private key can be created by supplying `Wallet.generate`.
 
-<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.test.ts#wallets{ts:line-numbers}
 
 Alternatively, you can create a wallet from a Private Key:
 
-<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#wallet-from-private-key{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.test.ts#wallet-from-private-key{ts:line-numbers}
 
 You can obtain an address to a private key using the `Signer` package
 
-<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.ts#signer-address{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/basic-wallet-functionality.test.ts#signer-address{ts:line-numbers}
