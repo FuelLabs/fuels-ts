@@ -1,6 +1,15 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BigNumberish, CoinQuantity, WalletLocked, WalletUnlocked } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, BaseAssetId, Wallet, bn, Signer } from 'fuels';
+import type { BigNumberish, CoinQuantity, WalletLocked } from 'fuels';
+import {
+  Provider,
+  FUEL_NETWORK_URL,
+  BaseAssetId,
+  Wallet,
+  bn,
+  Signer,
+  WalletUnlocked,
+  hashMessage,
+} from 'fuels';
 
 describe(__filename, () => {
   test('it can work with wallets', async () => {
@@ -118,6 +127,24 @@ describe(__filename, () => {
     expect(wallet.address).toEqual(signer.address);
     // #endregion provider-testnet
     // #endregion signer-address
+  });
+
+  it('it can work sign messages with wallets', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    // #region wallet-message-signing
+    // #context import { WalletUnlocked, hashMessage, Signer } from 'fuels';
+    const wallet = WalletUnlocked.generate({
+      provider,
+    });
+    const message = 'doc-test-message';
+    const signedMessage = await wallet.signMessage(message);
+    const hashedMessage = hashMessage(message);
+    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
+
+    expect(wallet.privateKey).toBeTruthy();
+    expect(wallet.publicKey).toBeTruthy();
+    expect(wallet.address).toEqual(recoveredAddress);
+    // #endregion wallet-message-signing
   });
 
   it('can query address with wallets', async () => {
