@@ -11,7 +11,7 @@
   "packageManager": "pnpm@8.9.0",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
-    "build": "turbo run build",
+    "build": "turbo run build --cache-dir=.turbo",
     "build:packages": "turbo run build --filter=!docs",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
@@ -23,7 +23,7 @@
     "test:validate": "./scripts/tests-validate.sh",
     "test:e2e": "vitest --run --config vite.node.config.mts $(scripts/tests-find.sh --e2e)",
     "lint": "run-s lint:check prettier:check",
-    "lint:check": "eslint . --ext .ts",
+    "lint:check": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
