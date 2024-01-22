@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 describe(__filename, () => {
@@ -26,9 +27,7 @@ describe(__filename, () => {
       provider,
     }).encrypt('my-password');
     // #region encrypting-and-decrypting-json-wallets-2
-    // #import { Wallet }
-    // #ignore { fs }
-    // #context import { fs } from 'fs';
+    // #import { Wallet, fs }
 
     // #context const jsonWallet = fs.readFileSync('secure-path/my-wallet.json', 'utf-8');
 
@@ -40,5 +39,14 @@ describe(__filename, () => {
     // #endregion encrypting-and-decrypting-json-wallets-2
 
     expect(myBalance).toBeDefined();
+  });
+
+  it('should validate that fs was imported on this file', () => {
+    /**
+     * This test exists only to validate that the fs import is present on this file.
+     * This is required because the fs import is being used in code snippets declared
+     * on within this file therefore its import will be extracted from this same file.
+     */
+    expect(fs).toBeDefined();
   });
 });
