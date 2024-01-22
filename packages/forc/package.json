@@ -17,10 +17,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "node-fetch": "^2.6.7",
-    "tar": "^6.2.0"
-  },
-  "devDependencies": {
-    "@types/tar": "^6.1.8"
+    "node-fetch": "^2.6.7"
   }
 }
