@@ -1,15 +1,4 @@
 /**
- * Time converters.
- *
-
- *
-
- *
- *    To convert from Tai64 (seconds) to Unix (seconds):
- *    Unix = TAI64(seconds) - UNIX_TAI64_OFFSET
- */
-
-/**
  * Tai64 timestamp.
  *
  * @hidden
