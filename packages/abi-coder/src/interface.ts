@@ -99,7 +99,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
 
-    return AbiCoder.decode(this.jsonAbi, loggedType, getBytesCopy(data), 0);
+    return AbiCoder.decode(this.jsonAbi, loggedType, getBytesCopy(data), 0, {
+      version: this.jsonAbi.version,
+    });
   }
 
   updateExternalLoggedTypes(id: string, loggedTypes: Interface) {

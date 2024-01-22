@@ -1,22 +1,23 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { DecodedValue, InputValue, Coder, SmallBytesOptions } from './coders/abstract-coder';
-import { ArrayCoder } from './coders/array';
-import { B256Coder } from './coders/b256';
-import { B512Coder } from './coders/b512';
-import { BooleanCoder } from './coders/boolean';
-import { ByteCoder } from './coders/byte';
-import { EnumCoder } from './coders/enum';
-import { NumberCoder } from './coders/number';
-import { OptionCoder } from './coders/option';
-import { RawSliceCoder } from './coders/raw-slice';
-import { StdStringCoder } from './coders/stdString';
-import { StringCoder } from './coders/string';
-import { StructCoder } from './coders/struct';
-import { TupleCoder } from './coders/tuple';
-import { U64Coder } from './coders/u64';
-import { VecCoder } from './coders/vec';
+import type { DecodedValue, InputValue, Coder, EncodingOptions } from './coders/abstract-coder';
+import { ArrayCoder } from './coders/v0/array';
+import { B256Coder } from './coders/v0/b256';
+import { B512Coder } from './coders/v0/b512';
+import { BooleanCoder } from './coders/v0/boolean';
+import { ByteCoder } from './coders/v0/byte';
+import { EnumCoder } from './coders/v0/enum';
+import { NumberCoder } from './coders/v0/number';
+import { OptionCoder } from './coders/v0/option';
+import { RawSliceCoder } from './coders/v0/raw-slice';
+import { StdStringCoder } from './coders/v0/stdString';
+import { StringCoder } from './coders/v0/string';
+import { StructCoder } from './coders/v0/struct';
+import { TupleCoder } from './coders/v0/tuple';
+import { U64Coder } from './coders/v0/u64';
+import { VecCoder } from './coders/v0/vec';
+import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
 import {
   arrayRegEx,
   enumRegEx,
@@ -36,7 +37,7 @@ export abstract class AbiCoder {
   static getCoder(
     abi: JsonAbi,
     argument: JsonAbiArgument,
-    options: SmallBytesOptions = {
+    options: EncodingOptions = {
       isSmallBytes: false,
     }
   ): Coder {
@@ -49,7 +50,7 @@ export abstract class AbiCoder {
     abi: JsonAbi,
     argument: JsonAbiArgument,
     value: InputValue,
-    options?: SmallBytesOptions
+    options?: EncodingOptions
   ) {
     return this.getCoder(abi, argument, options).encode(value);
   }
@@ -58,17 +59,37 @@ export abstract class AbiCoder {
     abi: JsonAbi,
     argument: JsonAbiArgument,
     data: Uint8Array,
-    offset: number
+    offset: number,
+    options?: EncodingOptions
   ): [DecodedValue | undefined, number] {
-    return this.getCoder(abi, argument).decode(data, offset) as [DecodedValue | undefined, number];
+    return this.getCoder(abi, argument, options).decode(data, offset) as [
+      DecodedValue | undefined,
+      number,
+    ];
   }
 
   private static getCoderImpl(
     resolvedAbiType: ResolvedAbiType,
-    options: SmallBytesOptions = {
+    options: EncodingOptions = {
       isSmallBytes: false,
     }
   ): Coder {
+    if (options.version === 1) {
+      switch (resolvedAbiType.type) {
+        case 'u8':
+        case 'u16':
+        case 'u32':
+          return new NumberCoderV1(resolvedAbiType.type);
+        default:
+          break;
+      }
+
+      throw new FuelError(
+        ErrorCode.CODER_NOT_FOUND,
+        `Coder for ${resolvedAbiType.type} not supported in version ${options.version}`
+      );
+    }
+
     switch (resolvedAbiType.type) {
       case 'u8':
       case 'u16':
@@ -172,7 +193,7 @@ export abstract class AbiCoder {
     );
   }
 
-  private static getCoders(components: readonly ResolvedAbiType[], options: SmallBytesOptions) {
+  private static getCoders(components: readonly ResolvedAbiType[], options: EncodingOptions) {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 

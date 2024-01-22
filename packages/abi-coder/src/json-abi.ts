@@ -8,6 +8,7 @@ export interface JsonAbi {
   readonly loggedTypes: readonly JsonAbiLoggedType[];
   readonly functions: readonly JsonAbiFunction[];
   readonly configurables: readonly JsonAbiConfigurable[];
+  readonly version?: number;
 }
 
 export interface JsonAbiType {
