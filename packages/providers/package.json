@@ -36,6 +36,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.7.1",
     "@fuel-ts/versions": "workspace:*",
     "graphql": "^16.6.0",
@@ -44,7 +45,6 @@
     "ramda": "^0.29.0"
   },
   "devDependencies": {
-    "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "^2.13.7",
     "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-operations": "^2.5.5",

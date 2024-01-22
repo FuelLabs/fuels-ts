@@ -1000,6 +1000,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -1019,9 +1022,6 @@ importers:
         specifier: ^0.29.0
         version: 0.29.0
     devDependencies:
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@graphql-codegen/cli':
         specifier: ^2.13.7
         version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
