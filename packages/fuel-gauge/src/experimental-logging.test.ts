@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
+import { bn } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
@@ -77,6 +78,32 @@ describe('Experimental Logging', () => {
 
     expect(value).toEqual(expected);
     expect(logs).toEqual(expected);
+  });
+
+  it('logs u64', async () => {
+    const expected = U32_MAX + 1;
+
+    const { value, logs } = await contractInstance.functions
+      .log_u64(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(bn(value).toNumber()).toBe(expected);
+    expect(bn(logs[0]).toNumber()).toBe(expected);
+  });
+
+  it('logs u64 u8 multiple params', async () => {
+    const expected = [U32_MAX + 1, U8_MAX];
+
+    const { value, logs } = await contractInstance.functions
+      .log_u64_u8(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(bn(value[0]).toNumber()).toBe(expected[0]);
+    expect(value[1]).toEqual(expected[1]);
+    expect(bn(logs[0]).toNumber()).toBe(expected[0]);
+    expect(logs[1]).toEqual(expected[1]);
   });
 
   it('logs boolean', async () => {
