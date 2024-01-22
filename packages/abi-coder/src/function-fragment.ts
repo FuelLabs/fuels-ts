@@ -6,11 +6,11 @@ import { sha256, getBytesCopy } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
-import type { ArrayCoder } from './coders/array';
-import { ByteCoder } from './coders/byte';
-import { TupleCoder } from './coders/tuple';
-import type { U64Coder } from './coders/u64';
-import { VecCoder } from './coders/vec';
+import type { ArrayCoder } from './coders/v0/array';
+import { ByteCoder } from './coders/v0/byte';
+import { TupleCoder } from './coders/v0/tuple';
+import type { U64Coder } from './coders/v0/u64';
+import { VecCoder } from './coders/v0/vec';
 import { OPTION_CODER_TYPE } from './constants';
 import type {
   JsonAbi,
