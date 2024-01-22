@@ -1,5 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import fs from 'fs';
+import { IGNORE_IMPORT_REGEXP, IMPORT_REGEXP } from '../snippetPlugin';
 
 /**
  * Parses the given lines of code and extracts the imports to be ignored based on the ignore import flag.
@@ -12,7 +13,7 @@ export const parseIgnoreImportFlags = (lines: string[]): Set<string> => {
   lines.forEach((line) => {
     // Parse and process ignore import flag
     if (line.trim().startsWith('// #ignore ')) {
-      const ignoreMatches = line.match(/\/\/ #ignore \{(.+)\}$/);
+      const ignoreMatches = line.match(IGNORE_IMPORT_REGEXP);
 
       if (ignoreMatches && ignoreMatches[1]) {
         const importsToIgnore = ignoreMatches[1].split(',').map((item) => item.trim());
@@ -69,7 +70,7 @@ export const validateImports = (
 
   // Filter out lines with "#import" or "#ignore:" and join the remaining lines
   const validatedContent = snippetContent
-    .filter((line) => !/(\/\/ #import \{(.+)\}$)|(\/\/ #ignore \{(.+)\}$)/.test(line))
+    .filter((line) => !(IMPORT_REGEXP.test(line) || IGNORE_IMPORT_REGEXP.test(line)))
     .join('\n');
 
   for (const importItem of specifiedImports) {

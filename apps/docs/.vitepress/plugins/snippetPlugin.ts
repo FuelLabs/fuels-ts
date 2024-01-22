@@ -5,6 +5,15 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { RuleBlock } from 'markdown-it/lib/parser_block';
 import { extractImports } from './utils/extractImports';
 
+// Regex to match import comments
+export const IMPORT_REGEXP = /\/\/ #import \{(.+)\}$/;
+
+// Regex to match ignored import comments
+export const IGNORE_IMPORT_REGEXP = /\/\/ #ignore \{(.+)\}$/;
+
+// Regex to match region start/end comments
+export const REGION_REGEXP = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
+
 function dedent(text: string): string {
   const lines = text.split('\n');
 
@@ -39,11 +48,6 @@ function testLine(line: string, regexp: RegExp, regionName: string, end: boolean
 }
 
 export function findRegion(lines: string[], regionName: string) {
-  // Regex to match region start/end comments
-  const regionRegexp = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
-  // Regex to match import comments
-  const importRegexp = /\/\/ #import \{(.+)\}$/;
-
   // Track the start line of the region and imports
   let start = -1;
   let imports: string[] = [];
@@ -53,19 +57,19 @@ export function findRegion(lines: string[], regionName: string) {
     // Looking for the region start
     if (start === -1) {
       // Check if the current line marks the start of the region
-      if (testLine(line, regionRegexp, regionName)) {
+      if (testLine(line, REGION_REGEXP, regionName)) {
         start = lineId + 1; // Set start line (lineId is zero-based)
       }
     }
     // Once the start is found, look for the end of the region
     else {
       // Check if the current line marks the end of the region
-      if (testLine(line, regionRegexp, regionName, true)) {
-        return { start, end: lineId, regexp: regionRegexp, imports };
+      if (testLine(line, REGION_REGEXP, regionName, true)) {
+        return { start, end: lineId, regexp: REGION_REGEXP, imports };
       }
 
       // Check for import statements to be included in the region
-      const importMatch = line.match(importRegexp);
+      const importMatch = line.match(IMPORT_REGEXP);
       if (importMatch) {
         imports = imports.concat(importMatch[1].split(',').map((s) => s.trim()));
       }
@@ -154,7 +158,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
           snippetContent
             .filter((line) => !region.regexp.test(line.trim()))
             .map((line) =>
-              /(\/\/ #import \{(.+)\}$)|(\/\/ #ignore \{(.+)\}$)/.test(line) ? '' : line
+              IMPORT_REGEXP.test(line) || IGNORE_IMPORT_REGEXP.test(line) ? '' : line
             )
             .join('\n')
         )
