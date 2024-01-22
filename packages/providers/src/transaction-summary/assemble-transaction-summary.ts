@@ -1,11 +1,11 @@
 import { type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
+import { type IDateTime, DateTime } from '@fuel-ts/utils';
 import { hexlify } from 'ethers';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
-import type { IDateTime } from '../utils';
-import { DateTime, getGasUsedFromReceipts } from '../utils';
+import { getGasUsedFromReceipts } from '../utils';
 
 import { calculateTransactionFee } from './calculate-transaction-fee';
 import {

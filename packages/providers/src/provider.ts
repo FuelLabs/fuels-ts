@@ -10,6 +10,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { unixMillisecondsToTai64 } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
@@ -47,7 +48,6 @@ import {
   calculatePriceWithFactor,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
-  unixMillisecondsToTai64,
 } from './utils';
 import { mergeQuantities } from './utils/merge-quantities';
 
