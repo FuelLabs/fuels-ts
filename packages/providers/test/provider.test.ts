@@ -305,7 +305,7 @@ describe('Provider', () => {
     expect(producedBlock).toBeDefined();
 
     const oldest: Date = DateTime.fromTai64(timeLastBlockProduced);
-    const newest: Date = DateTime.fromTai64(producedBlock?.time || DateTime.TAI64_ZERO);
+    const newest: Date = DateTime.fromTai64(producedBlock?.time || DateTime.TAI64_NULL);
 
     expect(newest >= oldest).toBeTruthy();
     // #endregion Provider-produce-blocks

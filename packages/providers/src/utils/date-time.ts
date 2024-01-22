@@ -75,7 +75,7 @@ export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.
  * ```
  */
 export class DateTime extends Date implements IDateTime {
-  static TAI64_ZERO: Scalars['Tai64Timestamp'] = '';
+  static TAI64_NULL: Scalars['Tai64Timestamp'] = '';
 
   /**
    * Generates a new DateTime instance from a Tai64 timestamp.
