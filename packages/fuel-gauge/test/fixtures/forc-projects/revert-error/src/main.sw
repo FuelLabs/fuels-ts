@@ -7,7 +7,7 @@ use std::{
     message::{
         send_message,
     },
-    token::{
+    asset::{
         transfer_to_address,
     },
 };

@@ -5,7 +5,7 @@ use std::{
     context::balance_of,
     context::msg_amount,
     contract_id::ContractId,
-    token::*,
+    asset::*,
 };
 
 use std::constants::ZERO_B256;
