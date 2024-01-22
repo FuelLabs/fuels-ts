@@ -1,9 +1,5 @@
 import type { Scalars } from '../__generated__/operations';
 
-export interface ITai64Timestamp {
-  readonly tai64: Scalars['Tai64Timestamp'];
-}
-
 export interface IDateTime extends Date {
   getTai64(): Scalars['Tai64Timestamp'];
 }
