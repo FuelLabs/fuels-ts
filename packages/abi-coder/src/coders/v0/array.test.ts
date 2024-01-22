@@ -1,21 +1,21 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import { U8_MAX } from '../../test/utils/constants';
+import { U8_MAX } from '../../../test/utils/constants';
+import type { EncodingOptions } from '../abstract-coder';
 
-import type { SmallBytesOptions } from './abstract-coder';
 import { ArrayCoder } from './array';
 import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';
 import { NumberCoder } from './number';
 
 describe('ArrayCoder', () => {
-  const sbOptions: SmallBytesOptions = {
+  const options: EncodingOptions = {
     isSmallBytes: true,
   };
 
   it('should encode a number array with zero inputs', () => {
-    const coder = new ArrayCoder(new NumberCoder('u8', sbOptions), 0);
+    const coder = new ArrayCoder(new NumberCoder('u8', options), 0);
     const expected = new Uint8Array([]);
     const actual = coder.encode([]);
 
@@ -23,7 +23,7 @@ describe('ArrayCoder', () => {
   });
 
   it('should decode a number array with zero inputs', () => {
-    const coder = new ArrayCoder(new NumberCoder('u8', sbOptions), 0);
+    const coder = new ArrayCoder(new NumberCoder('u8', options), 0);
     const expectedValue: number[] = [];
     const expectedLength = 0;
     const [actualValue, actualLength] = coder.decode(new Uint8Array([]), 0);
@@ -33,7 +33,7 @@ describe('ArrayCoder', () => {
   });
 
   it('should encode a number array with four inputs', () => {
-    const coder = new ArrayCoder(new NumberCoder('u8', sbOptions), 4);
+    const coder = new ArrayCoder(new NumberCoder('u8', options), 4);
     const array = [0, 13, 37, U8_MAX];
     const expected = new Uint8Array(array);
     const actual = coder.encode(array);
@@ -41,7 +41,7 @@ describe('ArrayCoder', () => {
   });
 
   it('should decode a number array with four inputs', () => {
-    const coder = new ArrayCoder(new NumberCoder('u8', sbOptions), 4);
+    const coder = new ArrayCoder(new NumberCoder('u8', options), 4);
     const expectedValue = [0, 13, 37, U8_MAX];
     const expectedLength = expectedValue.length;
     const [actualValue, actualLength] = coder.decode(new Uint8Array(expectedValue), 0);
@@ -53,8 +53,8 @@ describe('ArrayCoder', () => {
   it('should encode an enum array with differently typed inputs', () => {
     const coder = new ArrayCoder(
       new EnumCoder('TestEnum', {
-        a: new NumberCoder('u8', sbOptions),
-        b: new BooleanCoder(sbOptions),
+        a: new NumberCoder('u8', options),
+        b: new BooleanCoder(options),
       }),
       4
     );
@@ -70,8 +70,8 @@ describe('ArrayCoder', () => {
   it('should decode an enum array with differently typed inputs', () => {
     const coder = new ArrayCoder(
       new EnumCoder('TestEnum', {
-        a: new NumberCoder('u8', sbOptions),
-        b: new BooleanCoder(sbOptions),
+        a: new NumberCoder('u8', options),
+        b: new BooleanCoder(options),
       }),
       4
     );
@@ -90,7 +90,7 @@ describe('ArrayCoder', () => {
   });
 
   it('should throw when value to encode is not array', async () => {
-    const coder = new ArrayCoder(new NumberCoder('u8', sbOptions), 1);
+    const coder = new ArrayCoder(new NumberCoder('u8', options), 1);
     const nonArrayInput = { ...[1] };
     await expectToThrowFuelError(
       () => coder.encode(nonArrayInput),
@@ -99,7 +99,7 @@ describe('ArrayCoder', () => {
   });
 
   it('should throw when coder length is not match inputted array length', async () => {
-    const coder = new ArrayCoder(new NumberCoder('u8', sbOptions), 1);
+    const coder = new ArrayCoder(new NumberCoder('u8', options), 1);
     await expectToThrowFuelError(
       () => coder.encode([1, 2]),
       new FuelError(ErrorCode.ENCODE_ERROR, 'Types/values length mismatch.')

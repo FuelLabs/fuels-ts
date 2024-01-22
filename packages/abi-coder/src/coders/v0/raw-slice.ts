@@ -1,11 +1,11 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
-import { WORD_SIZE } from '../constants';
-import type { Uint8ArrayWithDynamicData } from '../utilities';
-import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../utilities';
+import { WORD_SIZE } from '../../constants';
+import type { Uint8ArrayWithDynamicData } from '../../utilities';
+import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../../utilities';
 
-import { Coder } from './abstract-coder';
+import { Coder } from '../abstract-coder';
 import { ArrayCoder } from './array';
 import { U64Coder } from './u64';
 

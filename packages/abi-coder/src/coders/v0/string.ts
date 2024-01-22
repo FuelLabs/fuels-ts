@@ -2,7 +2,7 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
 
-import { Coder } from './abstract-coder';
+import { Coder } from '../abstract-coder';
 
 export class StringCoder<TLength extends number = number> extends Coder<string, string> {
   length: TLength;

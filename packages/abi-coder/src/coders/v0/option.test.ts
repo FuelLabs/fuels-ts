@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { BN } from '@fuel-ts/math';
 
-import { U8_MAX } from '../../test/utils/constants';
+import { U8_MAX } from '../../../test/utils/constants';
 
 import { OptionCoder } from './option';
 import { U64Coder } from './u64';

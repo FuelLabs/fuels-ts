@@ -1,4 +1,4 @@
-import { U8_MAX } from '../../test/utils/constants';
+import { U8_MAX } from '../../../test/utils/constants';
 
 import { StringCoder } from './string';
 

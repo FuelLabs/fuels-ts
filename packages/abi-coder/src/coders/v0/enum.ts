@@ -3,10 +3,10 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { concatWithDynamicData } from '../utilities';
+import { concatWithDynamicData } from '../../utilities';
 
-import type { TypesOfCoder } from './abstract-coder';
-import { Coder } from './abstract-coder';
+import type { TypesOfCoder } from '../abstract-coder';
+import { Coder } from '../abstract-coder';
 import { U64Coder } from './u64';
 
 export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{

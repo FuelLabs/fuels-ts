@@ -1,9 +1,9 @@
 import { ErrorCode } from '@fuel-ts/errors';
 
-import { concatWithDynamicData } from '../utilities';
+import { concatWithDynamicData } from '../../utilities';
 
-import type { TypesOfCoder } from './abstract-coder';
-import { Coder } from './abstract-coder';
+import type { TypesOfCoder } from '../abstract-coder';
+import { Coder } from '../abstract-coder';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;

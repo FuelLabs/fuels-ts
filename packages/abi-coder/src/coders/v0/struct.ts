@@ -5,10 +5,10 @@ import {
   getWordSizePadding,
   isMultipleOfWordSize,
   rightPadToWordSize,
-} from '../utilities';
+} from '../../utilities';
 
-import type { TypesOfCoder } from './abstract-coder';
-import { Coder } from './abstract-coder';
+import type { TypesOfCoder } from '../abstract-coder';
+import { Coder } from '../abstract-coder';
 import { OptionCoder } from './option';
 
 type InputValueOf<TCoders extends Record<string, Coder>> = {

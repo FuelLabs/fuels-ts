@@ -2,7 +2,7 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { bn, toHex } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
-import { Coder } from './abstract-coder';
+import { Coder } from '../abstract-coder';
 
 export class B512Coder extends Coder<string, string> {
   constructor() {

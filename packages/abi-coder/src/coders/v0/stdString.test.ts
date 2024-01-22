@@ -1,4 +1,4 @@
-import type { Uint8ArrayWithDynamicData } from '../utilities';
+import type { Uint8ArrayWithDynamicData } from '../../utilities';
 
 import { StdStringCoder } from './stdString';
 

@@ -2,7 +2,7 @@ import { ErrorCode } from '@fuel-ts/errors';
 import type { BN, BNInput } from '@fuel-ts/math';
 import { bn, toBytes } from '@fuel-ts/math';
 
-import { Coder } from './abstract-coder';
+import { Coder } from '../abstract-coder';
 
 export class U64Coder extends Coder<BNInput, BN> {
   constructor() {

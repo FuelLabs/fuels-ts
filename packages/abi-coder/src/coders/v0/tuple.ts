@@ -5,10 +5,10 @@ import {
   getWordSizePadding,
   isMultipleOfWordSize,
   rightPadToWordSize,
-} from '../utilities';
+} from '../../utilities';
 
-import type { TypesOfCoder } from './abstract-coder';
-import { Coder } from './abstract-coder';
+import type { TypesOfCoder } from '../abstract-coder';
+import { Coder } from '../abstract-coder';
 
 type InputValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];

@@ -2,7 +2,7 @@ import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 
-import type { Uint8ArrayWithDynamicData } from '../utilities';
+import type { Uint8ArrayWithDynamicData } from '../../utilities';
 
 import { RawSliceCoder } from './raw-slice';
 

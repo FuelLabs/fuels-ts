@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { bn } from '@fuel-ts/math';
 
-import { U64_MAX } from '../../test/utils/constants';
+import { U64_MAX } from '../../../test/utils/constants';
 
 import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';

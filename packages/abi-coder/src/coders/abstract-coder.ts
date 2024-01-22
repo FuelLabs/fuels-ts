@@ -2,11 +2,21 @@ import { FuelError, type ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { BytesLike } from 'ethers';
 
-import type { Option } from './option';
+import type { Option } from './v0/option';
 
 type Primitive = string | number | boolean;
 
 /**
+ * These are configurable options to be used when encoding.
+ *
+ * Firstly we should consider the encoding version being used. For more info on this
+ * please refer to the fuel specs (https://github.com/FuelLabs/fuel-specs);
+ *
+ * Version 0:
+ *
+ * This is the currently supported version. It offers the following configurable options
+ * regarding the encoding of small bytes:
+ *
  * These options relates only to:
  *  - NumberCoder (u8, u16, u32)
  *  - BooleanCoder
@@ -46,8 +56,13 @@ type Primitive = string | number | boolean;
  *    • multiple function arguments
  *    • configurable
  *
+ *
+ * Version 1:
+ *
+ * It currently is supported by logs, but has no specific configurable options.
  */
-export type SmallBytesOptions = {
+export type EncodingOptions = {
+  version?: number;
   isSmallBytes?: boolean;
   isRightPadded?: boolean;
 };

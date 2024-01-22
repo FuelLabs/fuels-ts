@@ -1,4 +1,5 @@
-import type { Coder } from './abstract-coder';
+import type { Coder } from '../abstract-coder';
+
 import type { InputValueOf, DecodedValueOf } from './enum';
 import { EnumCoder } from './enum';
 
