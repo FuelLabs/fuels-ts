@@ -1,7 +1,7 @@
 // #region token-contract
 contract;
 
-use std::{context::balance_of, context::msg_amount, asset::*};
+use std::{asset::*, context::balance_of, context::msg_amount};
 use token_abi::Token;
 use std::constants::ZERO_B256;
 

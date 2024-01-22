@@ -36,7 +36,9 @@ impl AbiEncode for str[10] {
 
 impl AbiEncode for raw_ptr {
     fn abi_encode(self, ref mut buffer: Buffer) {
-        let address = asm(ptr: self) { ptr: u64 };
+        let address = asm(ptr: self) {
+            ptr: u64
+        };
         buffer.push(address);
     }
 }

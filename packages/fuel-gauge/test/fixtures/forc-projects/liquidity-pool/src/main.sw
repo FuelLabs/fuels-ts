@@ -4,15 +4,15 @@ contract;
 use std::constants::ZERO_B256;
 
 use std::{
+    asset::{
+        mint_to_address,
+        transfer_to_address,
+    },
     call_frames::{
         contract_id,
         msg_asset_id,
     },
     context::msg_amount,
-    asset::{
-        mint_to_address,
-        transfer_to_address,
-    },
 };
 
 abi LiquidityPool {

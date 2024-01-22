@@ -119,7 +119,6 @@ impl AbiEncode for str[24] {
     }
 }
 
-
 enum GameState {
     Playing: u8,
     GameOver: u8,
