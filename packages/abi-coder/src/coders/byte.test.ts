@@ -7,6 +7,7 @@ import { ByteCoder } from './byte';
 
 /**
  * @group node
+ * @group browser
  */
 describe('ByteCoder', () => {
   it('should encode a byte', () => {

@@ -3,13 +3,12 @@ name: Release to @rc-<name> tag on npm
 on:
   pull_request:
     branches:
-      - "rc/*"
-  push:
-    branches:
-      - "rc/*"
+      - "master"
 
 jobs:
   release-pr:
+    # Switch to `true` for release candidates
+    if: ${{ true && startsWith(github.head_ref, 'rc/') }}
     name: "Release RC to npm"
     runs-on: ubuntu-latest
     permissions: write-all
@@ -35,8 +34,8 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: rc_name
         with:
-          string: ${{ github.ref }}
-          pattern: "refs/heads/rc/"
+          string: ${{ github.head_ref }}
+          pattern: "rc/"
           replace-with: "rc-"
 
       - name: Release to @${{ steps.rc_name.outputs.replaced }} tag on npm
@@ -54,12 +53,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add PR comment
-        if: github.event_name == 'pull_request'
         uses: mshick/add-pr-comment@v2
         with:
           message: |
             RC published under the `${{ steps.rc_name.outputs.replaced }}` tag.
-              
+
             Install it:
             ```bash
             pnpm add fuels@${{ steps.rc_name.outputs.replaced }}

@@ -25,8 +25,6 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
 } from './__generated__/operations';
-import type { RetryOptions } from './call-retrier';
-import { retrier } from './call-retrier';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -49,6 +47,8 @@ import {
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
+import type { RetryOptions } from './utils/auto-retry-fetch';
+import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
@@ -251,7 +251,16 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * By default, the promise will resolve immediately after the transaction is submitted.
+   *
+   * If set to true, the promise will resolve only when the transaction changes status
+   * from `SubmittedStatus` to one of `SuccessStatus`, `FailureStatus` or `SqueezedOutStatus`.
+   *
+   */
+  awaitExecution?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -288,7 +297,7 @@ export default class Provider {
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
     const { retryOptions, timeout } = options;
 
-    return retrier((...args) => {
+    return autoRetryFetch((...args) => {
       if (options.fetch) {
         return options.fetch(...args);
       }
@@ -564,7 +573,7 @@ export default class Provider {
   // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, awaitExecution = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     this.#cacheInputs(transactionRequest.inputs);
@@ -573,7 +582,6 @@ export default class Provider {
     }
     // #endregion Provider-sendTransaction
 
-    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, [], {
       estimateTxDependencies: false,
       estimatePredicates: false,
@@ -595,12 +603,27 @@ export default class Provider {
       );
     }
 
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
+    if (awaitExecution) {
+      const subscription = this.operations.submitAndAwait({ encodedTransaction });
+      for await (const { submitAndAwait } of subscription) {
+        if (submitAndAwait.type !== 'SubmittedStatus') {
+          break;
+        }
+      }
+
+      const transactionId = transactionRequest.getTransactionId(this.getChainId());
+      const response = new TransactionResponse(transactionId, this);
+      await response.fetch();
+      return response;
+    }
+
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
 
-    const response = new TransactionResponse(transactionId, this);
-    return response;
+    return new TransactionResponse(transactionId, this);
   }
 
   /**

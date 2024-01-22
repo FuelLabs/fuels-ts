@@ -2,12 +2,12 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { hexlify } from 'ethers';
-import fsSync from 'fs';
-import fs from 'fs/promises';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
@@ -15,24 +15,45 @@ import treeKill from 'tree-kill';
 
 import type { WalletUnlocked } from '../wallets';
 
-import { defaultChainConfig } from './defaultChainConfig';
 import { generateTestWallet } from './generateTestWallet';
 
-const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation'];
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const npmWhich = require('npm-which')(__dirname);
 
-type LaunchNodeOptions = {
-  chainConfigPath?: string;
-  consensusKey?: string;
+const getFlagValueFromArgs = (args: string[], flag: string) => {
+  const flagIndex = args.indexOf(flag);
+  if (flagIndex === -1) {
+    return undefined;
+  }
+  return args[flagIndex + 1];
+};
+
+const extractRemainingArgs = (args: string[], flagsToRemove: string[]) => {
+  const newArgs = [...args];
+  flagsToRemove.forEach((flag) => {
+    const flagIndex = newArgs.indexOf(flag);
+    if (flagIndex !== -1) {
+      newArgs.splice(flagIndex, 2);
+    }
+  });
+  return newArgs;
+};
+
+export type LaunchNodeOptions = {
   ip?: string;
   port?: string;
   args?: string[];
   useSystemFuelCore?: boolean;
+  loggingEnabled?: boolean;
+  debugEnabled?: boolean;
+  basePath?: string;
 };
 
 export type LaunchNodeResult = Promise<{
   cleanup: () => void;
   ip: string;
   port: string;
+  chainConfigPath: string;
 }>;
 
 export type KillNodeParams = {
@@ -42,6 +63,17 @@ export type KillNodeParams = {
   state: {
     isDead: boolean;
   };
+};
+
+export const findBinPath = (binCommandName: string) => {
+  let binPath = npmWhich.sync(binCommandName);
+
+  if (!existsSync(binPath)) {
+    // The user might be using bun, which has a different structure for binaries inside node_modules
+    binPath = path.join('node_modules', '.bin', binCommandName);
+  }
+
+  return binPath;
 };
 
 export const killNode = (params: KillNodeParams) => {
@@ -57,8 +89,8 @@ export const killNode = (params: KillNodeParams) => {
     child.stderr.removeAllListeners();
 
     // Remove the temporary folder and all its contents.
-    if (fsSync.existsSync(configPath)) {
-      fsSync.rmSync(configPath, { recursive: true });
+    if (existsSync(configPath)) {
+      rmSync(configPath, { recursive: true });
     }
   }
 };
@@ -66,28 +98,49 @@ export const killNode = (params: KillNodeParams) => {
 // #region launchNode-launchNodeOptions
 /**
  * Launches a fuel-core node.
- * @param chainConfigPath - path to the chain configuration file.
- * @param consensusKey - the consensus key to use.
  * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
  * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core.
  * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
+ * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
+ * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
+ * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
  * */
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
-  chainConfigPath,
-  consensusKey = '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
   ip,
   port,
-  args = defaultFuelCoreArgs,
+  args = [],
   useSystemFuelCore = false,
+  loggingEnabled = true,
+  debugEnabled = false,
+  basePath,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
+    // filter out the flags chain, consensus-key, db-type, and poa-instant. we don't want to pass them twice to fuel-core. see line 214.
+    const remainingArgs = extractRemainingArgs(args, [
+      '--chain',
+      '--consensus-key',
+      '--db-type',
+      '--poa-instant',
+    ]);
+
+    const chainConfigPath = getFlagValueFromArgs(args, '--chain');
+    const consensusKey = getFlagValueFromArgs(args, '--consensus-key') || defaultConsensusKey;
+
+    const dbTypeFlagValue = getFlagValueFromArgs(args, '--db-type');
+    const useInMemoryDb = dbTypeFlagValue === 'in-memory' || dbTypeFlagValue === undefined;
+
+    const poaInstantFlagValue = getFlagValueFromArgs(args, '--poa-instant');
+    const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
+
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const command = useSystemFuelCore ? 'fuel-core' : './node_modules/.bin/fuels-core';
+    const binPath = await findBinPath('fuels-core');
+
+    const command = useSystemFuelCore ? 'fuel-core' : binPath;
 
     const ipToUse = ip || '0.0.0.0';
 
@@ -100,15 +153,19 @@ export const launchNode = async ({
         })
       ).toString();
 
-    let chainConfigPathToUse = chainConfigPath;
+    let chainConfigPathToUse: string;
 
-    const tempDirPath = path.join(os.tmpdir(), '.fuels-ts', randomUUID());
+    const prefix = basePath || os.tmpdir();
+    const suffix = basePath ? '' : randomUUID();
+    const tempDirPath = path.join(prefix, '.fuels', suffix);
 
-    if (!chainConfigPath) {
-      if (!fsSync.existsSync(tempDirPath)) {
-        fsSync.mkdirSync(tempDirPath, { recursive: true });
+    if (chainConfigPath) {
+      chainConfigPathToUse = chainConfigPath;
+    } else {
+      if (!existsSync(tempDirPath)) {
+        mkdirSync(tempDirPath, { recursive: true });
       }
-      const tempChainConfigFilePath = path.join(tempDirPath, '.chainConfig.json');
+      const tempChainConfigFilePath = path.join(tempDirPath, 'chainConfig.json');
 
       let chainConfig = defaultChainConfig;
 
@@ -135,25 +192,39 @@ export const launchNode = async ({
       }
 
       // Write a temporary chain configuration file.
-      await fs.writeFile(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }
 
-    const child = spawn(command, [
-      'run',
-      '--ip',
-      ipToUse,
-      '--port',
-      portToUse,
-      '--db-type',
-      'in-memory',
-      '--consensus-key',
-      consensusKey,
-      '--chain',
-      chainConfigPathToUse as string,
-      ...args,
-    ]);
+    const child = spawn(
+      command,
+      [
+        'run',
+        ['--ip', ipToUse],
+        ['--port', portToUse],
+        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
+        ['--min-gas-price', '0'],
+        poaInstant ? ['--poa-instant', 'true'] : [],
+        ['--consensus-key', consensusKey],
+        ['--chain', chainConfigPathToUse as string],
+        '--vm-backtrace',
+        '--utxo-validation',
+        '--debug',
+        ...remainingArgs,
+      ].flat(),
+      {
+        stdio: 'pipe',
+      }
+    );
+
+    if (loggingEnabled) {
+      child.stderr.pipe(process.stderr);
+    }
+
+    if (debugEnabled) {
+      child.stdout.pipe(process.stdout);
+    }
 
     const cleanupConfig: KillNodeParams = {
       child,
@@ -164,8 +235,6 @@ export const launchNode = async ({
       },
     };
 
-    child.stderr.setEncoding('utf8');
-
     // Look for a specific graphql start point in the output.
     child.stderr.on('data', (chunk: string) => {
       // Look for the graphql service start.
@@ -175,6 +244,7 @@ export const launchNode = async ({
           cleanup: () => killNode(cleanupConfig),
           ip: ipToUse,
           port: portToUse,
+          chainConfigPath: chainConfigPathToUse as string,
         });
       }
       if (/error/i.test(chunk)) {
@@ -183,17 +253,18 @@ export const launchNode = async ({
     });
 
     // Process exit.
-    process.on('exit', killNode);
+    process.on('exit', () => killNode(cleanupConfig));
 
     // Catches ctrl+c event.
-    process.on('SIGINT', killNode);
+    process.on('SIGINT', () => killNode(cleanupConfig));
 
     // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', killNode);
-    process.on('SIGUSR2', killNode);
+    process.on('SIGUSR1', () => killNode(cleanupConfig));
+    process.on('SIGUSR2', () => killNode(cleanupConfig));
 
     // Catches uncaught exceptions.
-    process.on('uncaughtException', killNode);
+    process.on('beforeExit', () => killNode(cleanupConfig));
+    process.on('uncaughtException', () => killNode(cleanupConfig));
 
     child.on('error', reject);
   });
@@ -225,16 +296,7 @@ export const launchNodeAndGetWallets = async ({
   launchNodeOptions?: Partial<LaunchNodeOptions>;
   walletCount?: number;
 } = {}): LaunchNodeAndGetWalletsResult => {
-  const defaultNodeOptions: LaunchNodeOptions = {
-    chainConfigPath: launchNodeOptions?.chainConfigPath,
-    consensusKey: launchNodeOptions?.consensusKey,
-  };
-
-  const {
-    cleanup: closeNode,
-    ip,
-    port,
-  } = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
+  const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
 
   const provider = await Provider.create(`http://${ip}:${port}/graphql`);
   const wallets = await generateWallets(walletCount, provider);

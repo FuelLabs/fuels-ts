@@ -44,7 +44,7 @@ describe('Account', () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  it('Create wallet using a address', () => {
+  it('should create account using an address, with a provider', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -52,6 +52,22 @@ describe('Account', () => {
     expect(account.address.toB256()).toEqual(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
+  });
+
+  it('should create account using an address, without a provider', () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    expect(account.address.toB256()).toEqual(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+  });
+
+  it('should throw an error when using a provider dependent method, without a provider', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    await expect(() => account.getBalance()).rejects.toThrow(/Provider not set/);
   });
 
   it('should get coins just fine', async () => {
@@ -218,6 +234,21 @@ describe('Account', () => {
     expect(account.provider).not.toBe(newProviderInstance);
 
     account.connect(newProviderInstance);
+
+    expect(account.provider).toBe(newProviderInstance);
+    expect(account.provider).not.toBe(provider);
+  });
+
+  it('should be able to set a provider', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(account.provider).not.toBe(newProviderInstance);
+
+    account.provider = newProviderInstance;
 
     expect(account.provider).toBe(newProviderInstance);
     expect(account.provider).not.toBe(provider);

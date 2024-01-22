@@ -17,8 +17,7 @@ export const fundPredicate = async <T extends InputValue[]>(
   request.gasLimit = gasUsed;
   await wallet.fund(request, requiredQuantities, minFee);
 
-  const tx = await wallet.sendTransaction(request);
-  await tx.waitForResult();
+  await wallet.sendTransaction(request, { awaitExecution: true });
 
   return predicate.getBalance();
 };
