@@ -10,6 +10,9 @@ let gasPrice: BN;
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
 const U32_MAX = 2 ** 32 - 1;
+const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
+const B512 =
+  '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';
 
 beforeAll(async () => {
   const contractName = 'logging';
@@ -105,6 +108,42 @@ describe('Experimental Logging', () => {
 
     const { value, logs } = await contractInstance.functions
       .log_number_boolean(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual(expected);
+  });
+
+  it('logs b256', async () => {
+    const expected = B256;
+
+    const { value, logs } = await contractInstance.functions
+      .log_b256(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toBe(expected);
+    expect(logs[0]).toBe(expected);
+  });
+
+  it('logs b512', async () => {
+    const expected = B512;
+
+    const { value, logs } = await contractInstance.functions
+      .log_b512(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toBe(expected);
+    expect(logs[0]).toBe(expected);
+  });
+
+  it('logs b256 b512 multiple params', async () => {
+    const expected = [B256, B512];
+
+    const { value, logs } = await contractInstance.functions
+      .log_b256_b512(...expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 

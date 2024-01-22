@@ -86,11 +86,6 @@ export abstract class AbiCoder {
         default:
           break;
       }
-
-      throw new FuelError(
-        ErrorCode.CODER_NOT_FOUND,
-        `Coder for ${resolvedAbiType.type} not supported in version ${options.version}`
-      );
     }
 
     switch (resolvedAbiType.type) {
