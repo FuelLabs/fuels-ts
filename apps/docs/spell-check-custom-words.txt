@@ -289,4 +289,9 @@ Config
 config
 configs
 WSL
+WalletUnlocked
+WalletLocked
+AbstractAddress
+ContractFactory
+ScriptTransactionRequest
 DateTime
