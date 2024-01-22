@@ -6,6 +6,7 @@ import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { DateTime, tai64ToUnixMilliseconds, unixMillisecondsToTai64 } from '@fuel-ts/utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify } from 'ethers';
@@ -19,7 +20,7 @@ import type {
 } from '../src/transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from '../src/transaction-request';
 import { TransactionResponse } from '../src/transaction-response';
-import { DateTime, sleep, tai64ToUnixMilliseconds, unixMillisecondsToTai64 } from '../src/utils';
+import { sleep } from '../src/utils';
 import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
