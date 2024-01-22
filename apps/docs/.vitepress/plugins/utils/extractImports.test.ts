@@ -208,13 +208,13 @@ describe('extractImports', () => {
   });
 
   describe('extractImports', () => {
-    afterAll(jest.restoreAllMocks);
+    afterEach(jest.restoreAllMocks);
 
-    it('should ensure imports are extracted just fine', () => {
+    it('should ensure imports are extracted just fine (IMPORT FLAG W SEMICOLON)', () => {
       const filepath = 'mockedPath';
       const specifiedImports = ['AssetId'];
       const snippetContent = [
-        '    // #import { AssetId }',
+        '    // #import { AssetId };',
         '',
         '    const assetId: AssetId = {',
         '      value: Bits256,',
@@ -222,7 +222,7 @@ describe('extractImports', () => {
       ];
 
       const mockedFileContent = `
-        fileContent:  import { Address } from 'fuels';
+        import { Address } from 'fuels';
         import type { AssetId, Contract, B256Address } from 'fuels';
 
         import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -246,6 +246,38 @@ describe('extractImports', () => {
       expect(validateImportsSpy).toBeCalledTimes(1);
 
       expect(result).toEqual("import { AssetId } from 'fuels';");
+    });
+
+    it('should ensure imports are extracted just fine (IMPORT FLAG W/O SEMICOLON)', () => {
+      const filepath = 'mockedPath';
+      const specifiedImports = ['Wallet'];
+      const snippetContent = [
+        '    // #import { Wallet }',
+        '',
+        '    const wallet = Wallet.generate(provider);',
+      ];
+
+      const mockedFileContent = `
+        import { Address, Wallet } from 'fuels';
+        '',
+        describe('Wallet', () => {
+      `;
+
+      jest.spyOn(fs, 'readFileSync').mockReturnValue(mockedFileContent);
+
+      const collectImportStatementsSpy = jest.spyOn(extractImportsMod, 'collectImportStatements');
+      const combineImportStatementsSpy = jest.spyOn(extractImportsMod, 'combineImportStatements');
+      const parseIgnoreImportFlagsSpy = jest.spyOn(extractImportsMod, 'parseIgnoreImportFlags');
+      const validateImportsSpy = jest.spyOn(extractImportsMod, 'validateImports');
+
+      const result = extractImports(filepath, specifiedImports, snippetContent);
+
+      expect(collectImportStatementsSpy).toBeCalledTimes(1);
+      expect(combineImportStatementsSpy).toBeCalledTimes(1);
+      expect(parseIgnoreImportFlagsSpy).toBeCalledTimes(1);
+      expect(validateImportsSpy).toBeCalledTimes(1);
+
+      expect(result).toEqual("import { Wallet } from 'fuels';");
     });
   });
 });
