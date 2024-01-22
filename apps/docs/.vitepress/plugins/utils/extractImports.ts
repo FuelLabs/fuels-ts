@@ -114,13 +114,15 @@ export const collectImportStatements = (
       currentImport += ' ' + line.trim();
     }
 
-    if (collecting && line.includes('} from')) {
+    if (collecting && line.includes('from')) {
       collecting = false;
-      const matches = currentImport.match(/import.*\{([^\}]*)\}.*from\s+'([^']+)';/);
+      const matches = currentImport.match(
+        /import\s+(type\s+)?(\{.*?\}|[\w-]+)\s+from\s+(['"].+['"]);/
+      );
 
-      if (matches && matches.length >= 3) {
-        const importedItems = matches[1].split(',').map((item) => item.trim());
-        const importSource = matches[2];
+      if (matches && matches.length >= 1) {
+        const importedItems = matches[2].replace(/[\{\}\s]/g, '').split(/\,/);
+        const [, importSource] = matches[3].split("'");
 
         importedItems.forEach((item) => {
           if (!ignoredImports.has(item) && specifiedImports.includes(item)) {
