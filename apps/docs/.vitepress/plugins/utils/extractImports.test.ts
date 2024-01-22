@@ -156,54 +156,53 @@ describe('extractImports', () => {
     });
 
     it('should correctly handle multi-line import statements', () => {
-      const lines = ['import {', '  example1,', '  example2', "} from 'example';"];
-      const specifiedImports: string[] = ['example1', 'example2'];
+      const lines = ['import {', '  A,', '  B', "} from 'example';"];
+      const specifiedImports: string[] = ['A', 'B'];
       const ignoredImports = new Set<string>();
       const result = collectImportStatements(lines, specifiedImports, ignoredImports);
-      expect(result.allImportedItems).toEqual(new Set(['example1', 'example2']));
-      expect(result.importStatements).toEqual({ example: new Set(['example1', 'example2']) });
+      expect(result.allImportedItems).toEqual(new Set(['A', 'B']));
+      expect(result.importStatements).toEqual({ example: new Set(['A', 'B']) });
     });
 
     it('should ignore specified imports', () => {
-      const lines = ["import { example1, example2 } from 'example';"];
-      const specifiedImports: string[] = ['example1', 'example2'];
-      const ignoredImports = new Set(['example2']);
+      const lines = ["import { A, B } from 'example';"];
+      const specifiedImports: string[] = ['A', 'B'];
+      const ignoredImports = new Set(['B']);
       const result = collectImportStatements(lines, specifiedImports, ignoredImports);
-      expect(result.allImportedItems).toEqual(new Set(['example1']));
-      expect(result.importStatements).toEqual({ example: new Set(['example1']) });
+      expect(result.allImportedItems).toEqual(new Set(['A']));
+      expect(result.importStatements).toEqual({ example: new Set(['A']) });
     });
 
     it('should correctly process multiple import statements', () => {
-      const lines = [
-        "import { example1 } from 'example1';",
-        "import { example2, example3 } from 'example2';",
-      ];
-      const specifiedImports: string[] = ['example1', 'example2', 'example3'];
+      const lines = ["import { A } from 'example1';", "import { B, C } from 'example2';"];
+      const specifiedImports: string[] = ['A', 'B', 'C'];
       const ignoredImports = new Set<string>();
       const result = collectImportStatements(lines, specifiedImports, ignoredImports);
-      expect(result.allImportedItems).toEqual(new Set(['example1', 'example2', 'example3']));
+      expect(result.allImportedItems).toEqual(new Set(['A', 'B', 'C']));
       expect(result.importStatements).toEqual({
-        example1: new Set(['example1']),
-        example2: new Set(['example2', 'example3']),
+        example1: new Set(['A']),
+        example2: new Set(['B', 'C']),
       });
     });
 
     it('should handle import statements with the same source', () => {
-      const lines = ["import { example1 } from 'example';", "import { example2 } from 'example';"];
-      const specifiedImports: string[] = ['example1', 'example2'];
+      const lines = ["import { A } from 'example';", "import { B } from 'example';"];
+      const specifiedImports: string[] = ['A', 'B'];
       const ignoredImports = new Set<string>();
       const result = collectImportStatements(lines, specifiedImports, ignoredImports);
-      expect(result.allImportedItems).toEqual(new Set(['example1', 'example2']));
-      expect(result.importStatements).toEqual({ example: new Set(['example1', 'example2']) });
+      expect(result.allImportedItems).toEqual(new Set(['A', 'B']));
+      expect(result.importStatements).toEqual({ example: new Set(['A', 'B']) });
     });
 
-    it('should ignore invalid format import statements', () => {
+    it('should handle import statements with default import format', () => {
       const lines = ["import example from 'example';"];
       const specifiedImports: string[] = ['example'];
       const ignoredImports = new Set<string>();
       const result = collectImportStatements(lines, specifiedImports, ignoredImports);
-      expect(result.allImportedItems).toEqual(new Set());
-      expect(result.importStatements).toEqual({});
+      expect(result.allImportedItems).toEqual(new Set(['example']));
+      expect(result.importStatements).toEqual({
+        example: new Set(['example']),
+      });
     });
   });
 
