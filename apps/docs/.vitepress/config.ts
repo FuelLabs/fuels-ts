@@ -156,6 +156,10 @@ export default defineConfig({
                 text: 'Vectors',
                 link: '/guide/types/vectors',
               },
+              {
+                text: 'Date Time',
+                link: '/guide/types/date-time',
+              },
             ],
           },
           {
