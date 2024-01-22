@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
+import { error } from 'console';
 import { existsSync, rmSync, writeFileSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
-import tar from 'tar';
 
 import {
   __dirname,
@@ -53,12 +53,9 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    await tar.x({
-      file: pkgPath,
-      C: binDir,
-    });
+    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
 
     // Cleanup
     rmSync(pkgPath);
   }
-})().catch((e) => console.error(e));
+})().catch((e) => error(e));

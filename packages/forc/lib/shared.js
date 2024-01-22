@@ -1,11 +1,12 @@
 import { execSync } from 'child_process';
-import { cpSync } from 'fs';
-import fs from 'fs/promises';
-import path, { join, dirname } from 'path';
+import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export const binPath = join(__dirname, '../forc-binaries/forc');
 
 const platforms = {
   darwin: {
@@ -17,10 +18,6 @@ const platforms = {
     x64: 'linux_amd64',
   },
 };
-
-const binPath = join(__dirname, '../forc-binaries/forc');
-
-export default binPath;
 
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
@@ -36,16 +33,16 @@ export const getPkgPlatform = () => {
   return platforms[process.platform][process.arch];
 };
 
-const versionFilePath = path.join(__dirname, '../VERSION');
+const versionFilePath = join(__dirname, '../VERSION');
 
-export const getCurrentVersion = async () => {
-  const versionContents = await fs.readFile(versionFilePath, 'utf8');
+export const getCurrentVersion = () => {
+  const versionContents = readFileSync(versionFilePath, 'utf8');
   const forcVersion = versionContents.match(/^.+$/m)?.[0] || versionContents;
   return forcVersion;
 };
 
-export const setCurrentVersion = async (version) => {
-  await fs.writeFile(versionFilePath, version);
+export const setCurrentVersion = (version) => {
+  writeFileSync(versionFilePath, version);
 };
 
 export const isGitBranch = (versionFileContents) => versionFileContents.indexOf('git:') !== -1;
@@ -53,11 +50,11 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
 export const buildFromGitBranch = (branchName) => {
-  fs.rmSync('sway-repo', { recursive: true, force: true });
-  fs.rmSync('forc-binaries', { recursive: true, force: true });
+  rmSync('sway-repo', { recursive: true, force: true });
+  rmSync('forc-binaries', { recursive: true, force: true });
   execSync(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
   execSync(`cd sway-repo && cargo build`);
-  fs.mkdirSync('forc-binaries');
+  mkdirSync('forc-binaries');
   cpSync('sway-repo/target/debug/forc', 'forc-binaries');
   cpSync('sway-repo/target/debug/forc-deploy', 'forc-binaries');
   cpSync('sway-repo/target/debug/forc-doc', 'forc-binaries');
@@ -66,5 +63,5 @@ export const buildFromGitBranch = (branchName) => {
   cpSync('sway-repo/target/debug/forc-run', 'forc-binaries');
   cpSync('sway-repo/target/debug/forc-submit', 'forc-binaries');
   cpSync('sway-repo/target/debug/forc-tx', 'forc-binaries');
-  fs.rmSync('sway-repo', { recursive: true, force: true });
+  rmSync('sway-repo', { recursive: true, force: true });
 };
