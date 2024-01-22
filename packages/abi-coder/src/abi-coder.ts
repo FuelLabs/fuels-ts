@@ -69,6 +69,9 @@ export abstract class AbiCoder {
     ];
   }
 
+  /**
+   * TODO: Refactor into factory
+   */
   private static getCoderImpl(
     resolvedAbiType: ResolvedAbiType,
     options: EncodingOptions = {
