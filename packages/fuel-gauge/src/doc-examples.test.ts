@@ -341,14 +341,11 @@ describe('Doc Examples', () => {
   });
 
   it('can create a predicate', async () => {
-    // #region predicate-basic
-    // #import { Predicate, arrayify, FUEL_NETWORK_URL }
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(testPredicateTrue, provider);
 
     expect(predicate.address).toBeTruthy();
     expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
-    // #endregion predicate-basic
   });
 
   it('can create a predicate and use', async () => {
