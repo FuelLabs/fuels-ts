@@ -82,7 +82,7 @@ export abstract class AbiCoder {
         case 'u32':
           return new NumberCoderV1(resolvedAbiType.type);
         case 'bool':
-          return new BooleanCoder();
+          return new BooleanCoderV1();
         default:
           break;
       }
