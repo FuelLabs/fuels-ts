@@ -17,6 +17,7 @@ import { StructCoder } from './coders/v0/struct';
 import { TupleCoder } from './coders/v0/tuple';
 import { U64Coder } from './coders/v0/u64';
 import { VecCoder } from './coders/v0/vec';
+import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
 import {
   arrayRegEx,
@@ -80,6 +81,8 @@ export abstract class AbiCoder {
         case 'u16':
         case 'u32':
           return new NumberCoderV1(resolvedAbiType.type);
+        case 'bool':
+          return new BooleanCoder();
         default:
           break;
       }

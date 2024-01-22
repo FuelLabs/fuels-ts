@@ -63,4 +63,52 @@ describe('Experimental Logging', () => {
     expect(value).toBe(expected);
     expect(logs[0]).toBe(expected);
   });
+
+  it('logs u8 u16 u32 multiple params', async () => {
+    const expected = [U8_MAX, U16_MAX, U32_MAX];
+
+    const { value, logs } = await contractInstance.functions
+      .log_u8_u16_u32(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual(expected);
+  });
+
+  it('logs boolean', async () => {
+    const expected = true;
+
+    const { value, logs } = await contractInstance.functions
+      .log_boolean(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toBe(expected);
+    expect(logs[0]).toBe(expected);
+  });
+
+  it('logs boolean boolean multiple params', async () => {
+    const expected = [true, false];
+
+    const { value, logs } = await contractInstance.functions
+      .log_boolean_boolean(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual(expected);
+  });
+
+  it('logs number boolean mixed params', async () => {
+    const expected = [U32_MAX, true];
+
+    const { value, logs } = await contractInstance.functions
+      .log_number_boolean(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual(expected);
+  });
 });
