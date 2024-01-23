@@ -233,7 +233,7 @@ export default defineConfig({
                 link: '/guide/providers/connection',
               },
               {
-                text: 'Connecting to an External Node',
+                text: 'Connecting to Testnet',
                 link: '/guide/providers/connecting-to-an-external-node',
               },
               {
