@@ -1,3 +1,4 @@
+import type { IDateTime } from '@fuel-ts/utils';
 import { DateTime } from '@fuel-ts/utils';
 import { GraphQLObjectType, GraphQLSchema, Kind, graphql } from 'graphql';
 
@@ -7,10 +8,9 @@ import { Tai64Scalar, UnixMillisecondScalar } from './scalars';
  * @group node
  */
 describe('GraphQL Scalars', () => {
-  const tai64: string = '4611686020108779312';
-  const unixMilliseconds: number = 1681391398000;
-
   describe('Tai64', () => {
+    const tai64: string = '4611686020108779312';
+
     it('should be able to serialize a Tai64', () => {
       const date = DateTime.fromTai64(tai64);
       const serialized = Tai64Scalar.serialize(date);
@@ -53,6 +53,8 @@ describe('GraphQL Scalars', () => {
   });
 
   describe('UnixMilliseconds', () => {
+    const unixMilliseconds: number = 1681391398000;
+
     it('should be able to serialize a UnixMilliseconds', () => {
       const date = DateTime.fromUnixMilliseconds(unixMilliseconds);
       const serialized = UnixMillisecondScalar.serialize(date);
@@ -98,7 +100,10 @@ describe('GraphQL Scalars', () => {
   });
 
   describe('Integration', () => {
-    const rootQuery = new GraphQLObjectType({
+    const tai64: string = '4611686020108779312';
+    const unixMilliseconds: number = 1681391398000;
+
+    const QueryRootType = new GraphQLObjectType({
       name: 'Query',
       fields: {
         tai64: { type: Tai64Scalar, resolve: () => DateTime.fromTai64(tai64) },
@@ -108,8 +113,30 @@ describe('GraphQL Scalars', () => {
         },
       },
     });
-    const types = [Tai64Scalar, UnixMillisecondScalar];
-    const schema = new GraphQLSchema({ query: rootQuery, types });
+    const MutationRootType = new GraphQLObjectType<string, IDateTime>({
+      name: 'Mutation',
+      fields: {
+        setTai64: {
+          type: Tai64Scalar,
+          args: {
+            value: { type: Tai64Scalar },
+          },
+          resolve: (_, args: { value: IDateTime }) => args.value,
+        },
+        setUnixMilliseconds: {
+          type: UnixMillisecondScalar,
+          args: {
+            value: { type: UnixMillisecondScalar },
+          },
+          resolve: (_, args: { value: IDateTime }) => args.value,
+        },
+      },
+    });
+    const schema = new GraphQLSchema({
+      query: QueryRootType,
+      mutation: MutationRootType,
+      types: [Tai64Scalar, UnixMillisecondScalar],
+    });
 
     beforeEach(() => vi.resetAllMocks);
 
@@ -145,6 +172,46 @@ describe('GraphQL Scalars', () => {
       expect(result).toBeDefined();
       expect(result.errors).toBeUndefined();
       expect(result.data?.unixMilliseconds).toEqual(unixMilliseconds);
+    });
+
+    it('should be able to mutate a Tai64', async () => {
+      const mutation = `
+        mutation ($tai64: Tai64!) {
+          setTai64(value: $tai64)
+        }
+      `;
+
+      const result = await graphql({
+        schema,
+        source: mutation,
+        variableValues: {
+          tai64,
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(result.errors).toBeUndefined();
+      expect(result.data?.setTai64).toEqual(tai64);
+    });
+
+    it('should abe able to mutate a UnixMilliseconds', async () => {
+      const mutation = `
+        mutation ($unixMilliseconds: UnixMilliseconds!) {
+          setUnixMilliseconds(value: $unixMilliseconds)
+        }
+      `;
+
+      const result = await graphql({
+        schema,
+        source: mutation,
+        variableValues: {
+          unixMilliseconds,
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(result.errors).toBeUndefined();
+      expect(result.data?.setUnixMilliseconds).toEqual(unixMilliseconds);
     });
   });
 });
