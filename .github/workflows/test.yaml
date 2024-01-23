@@ -93,8 +93,7 @@ jobs:
 
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v3
-        # Temp change to generate an artifact
-        # if: ${{ !steps.findPr.outputs.number }}
+        if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
           path: coverage/report
@@ -114,7 +113,7 @@ jobs:
         if: ${{ (steps.findPr.outputs.number) }}
         with:
           workflow: test.yaml
-          run_id: 6628340271
+          run_id: 20770880791
           name: coverage-master
           path: coverage-master
 
