@@ -1,13 +1,13 @@
 # Date Time
 
-To allow for easier manipulation of date and time, the SDK exports the `DateTime` class, which is a wrapper around the `Date` class ([reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)). Below we will go over the methods of instantiations, utility functions, and time formats.
+To allow for easier manipulation of date and time, the SDK exports the `DateTime` class, which is a wrapper around the `Date` class ([reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)). Below we will go over the methods of instantiation, utility functions, and time formats.
 
 Why is this useful?
 Internally the transactions and other time/date assets are encoded using the **TAI64** format. We return a `IDateTime` interface, to allow of easier conversion and formatting between the two formats.
 
 ## API
 
-We have a host of static method for **initialisation** of our `DateTime` class.
+We have a host of static method for **instantiation** of our `DateTime` class.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#create-from-multiple-sources{ts:line-numbers}
 
