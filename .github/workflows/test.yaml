@@ -93,7 +93,8 @@ jobs:
 
       - name: Upload Master Coverage Artifact
         uses: actions/upload-artifact@v3
-        if: ${{ !steps.findPr.outputs.number }}
+        # Temp change to generate an artifact
+        # if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
           path: coverage/report
