@@ -5,52 +5,94 @@ import { DateTime } from 'fuels';
  * @group node
  */
 describe(__filename, () => {
-  /**
-   * Creating a DateTime instance
-   */
-  it('should be able to instantiate from multiple time/date formats', () => {
-    // #region instantiation-methods
+  it('should be able to be created from multiple sources', () => {
+    // #region create-from-multiple-sources
     // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    let date: IDateTime | Date;
+    const tai64: IDateTime = DateTime.fromTai64('4611686020108779312');
+    const unixSeconds: IDateTime = DateTime.fromUnixSeconds(1681391398);
+    const unixMilliseconds: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
+    // #endregion create-from-multiple-sources
 
-    // fromUnixMilliseconds
-    const unixMilliseconds = 1681391398000;
-    date = DateTime.fromUnixMilliseconds(unixMilliseconds);
-    date.toISOString(); // 2023-04-13T13:09:58.000Z
-
-    // fromUnixSeconds
-    const unixSeconds = 1681391398;
-    date = DateTime.fromUnixSeconds(unixSeconds);
-    date.toISOString(); // 2023-04-13T13:09:58.000Z
-
-    // fromTai64
-    const tai64 = '4611686020108779312';
-    date = DateTime.fromTai64(tai64);
-    date.toISOString(); // 2023-04-13T13:09:58.000Z
-    // #endregion instantiation-methods
+    expect(tai64).toBeDefined();
+    expect(tai64.toTai64()).toBe('4611686020108779312');
+    expect(unixSeconds).toBeDefined();
+    expect(unixSeconds.toUnixSeconds()).toBe(1681391398);
+    expect(unixMilliseconds).toBeDefined();
+    expect(unixMilliseconds.toUnixMilliseconds()).toBe(1681391398000);
   });
 
-  /**
-   * Utility methods
-   */
-  it('should be able to convert to multiple time/date formats', () => {
-    // #region utility-functions
+  it('should be able to create fromTai64 and convert toTai64', () => {
+    // #region from-tai-64-and-to-tai-64
+    // #context import type { IDateTime } from 'fuels';
+    // #context import { DateTime } from 'fuels';
+
+    const date: IDateTime = DateTime.fromTai64('4611686020108779312');
+    // #context console.log(date.toIso); // "4611686020108779312"
+
+    const tai64: string = date.toTai64();
+    // #context console.log(tai64); // "4611686020108779312"
+    // #endregion from-tai-64-and-to-tai-64
+
+    expect(date).toBeDefined();
+    expect(date.toISOString()).toEqual('2023-04-13T13:09:58.000Z');
+    expect(tai64).toEqual('4611686020108779312');
+  });
+
+  it('should be able to create fromUnixMilliseconds and convert toUnixMilliseconds', () => {
+    // #region from-unix-milliseconds-and-to-unix-milliseconds
     // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
     const date: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
 
-    // Our utility methods
-    date.toTai64(); // (String) "4611686020108779312"
-    date.toUnixMilliseconds(); // 1681391398000
-    date.toUnixSeconds(); // 1681391398
+    const unixMilliseconds: number = date.toUnixMilliseconds();
+    // #context console.log(unixMilliseconds); // 1681391398000
+    // #endregion from-unix-milliseconds-and-to-unix-milliseconds
+
+    expect(date).toBeDefined();
+    expect(unixMilliseconds).toEqual(1681391398000);
+  });
+
+  it('should be able to create fromUnixSeconds and convert toUnixSeconds', () => {
+    // #region from-unix-seconds-and-to-unix-seconds
+    // #context import type { IDateTime } from 'fuels';
+    // #context import { DateTime } from 'fuels';
+
+    const date: IDateTime = DateTime.fromUnixSeconds(1681391398);
+
+    const unixSeconds: number = date.toUnixSeconds();
+    // #context console.log(unixSeconds); // 1681391398
+    // #endregion from-unix-seconds-and-to-unix-seconds
+
+    expect(date).toBeDefined();
+    expect(unixSeconds).toEqual(1681391398);
+  });
+
+  /**
+   * Utility methods
+   */
+  it('should extends the Date class', () => {
+    // #region date-object-methods
+    // #context import type { IDateTime } from 'fuels';
+    // #context import { DateTime } from 'fuels';
+
+    const dateTime: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
+
+    // Extends the Date object
+    const date: Date = dateTime;
 
     // Date object methods
+    date.getTime(); // 1681391398000
     date.toISOString(); // 2023-04-13T13:09:58.000Z
-    date.toDateString(); // Wed Apr 13 2023
-    // ...
-    // #endregion utility-functions
+    date.toDateString(); // Thu Apr 13 2023
+    // #endregion date-object-methods
+
+    expect(dateTime).toBeDefined();
+    expect(date).toBeInstanceOf(Date);
+    expect(date.getTime()).toEqual(1681391398000);
+    expect(date.toISOString()).toEqual('2023-04-13T13:09:58.000Z');
+    expect(date.toDateString()).toEqual('Thu Apr 13 2023');
   });
 });
