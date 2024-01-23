@@ -323,7 +323,7 @@ export default defineConfig({
           },
           {
             text: 'Addresses',
-            link: '/guide/addresses',
+            link: '/guide/addresses/',
             collapsed: true,
             items: [
               {
