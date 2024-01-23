@@ -15,12 +15,16 @@ export interface IDateTime extends Date {
 }
 
 /**
+ * This constant is used to calculate the offset between the Unix epoch and the TAI64 epoch.
+ * It allows for a **rough** conversion between the two time formats.
+ *
+ * // Value expires on:  28 June 2024
  * {@link https://data.iana.org/time-zones/data/leap-seconds.list}
  * {@link https://github.com/hl2/tai64/blob/master/src/leapSeconds.ts}
  *
  * @hidden
  */
-const TAI64_LEAP_SECONDS: number = 10;
+const TAI64_LEAP_SECONDS: number = 37;
 
 /**
  * Tai64 (Temps Atomique International) is a time format
