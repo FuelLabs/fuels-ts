@@ -41,5 +41,6 @@ describe(
       expect(fuelsContents.barFoo).toMatch(/0x/);
       expect(fuelsContents.fooBar).toMatch(/0x/);
     });
-  }
+  },
+  { timeout: 15000 }
 );

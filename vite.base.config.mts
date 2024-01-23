@@ -38,7 +38,6 @@ export default defineConfig({
         minThreads: 1,
         maxThreads: 16,
       },
-    },
-    testTimeout: 15000,
+    }
   },
 });
