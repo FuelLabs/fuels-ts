@@ -3,9 +3,9 @@ import { bn } from '@fuel-ts/math';
 
 import type { Uint8ArrayWithDynamicData } from '../../utilities';
 import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../../utilities';
-
 import type { TypesOfCoder } from '../abstract-coder';
 import { Coder } from '../abstract-coder';
+
 import { U64Coder } from './u64';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;

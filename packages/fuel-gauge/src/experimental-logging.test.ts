@@ -1,6 +1,7 @@
+import { randomBytes } from 'crypto';
 import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
-import { bn } from 'fuels';
+import { bn, hexlify } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
@@ -176,5 +177,29 @@ describe('Experimental Logging', () => {
 
     expect(value).toEqual(expected);
     expect(logs).toEqual(expected);
+  });
+
+  it('logs u8 vec', async () => {
+    const expected = [U8_MAX, 1, U8_MAX, 5];
+
+    const { value, logs } = await contractInstance.functions
+      .log_vec_u8(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual([expected]);
+  });
+
+  it('logs b256', async () => {
+    const expected = [hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+
+    const { value, logs } = await contractInstance.functions
+      .log_vec_b256(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual([expected]);
   });
 });

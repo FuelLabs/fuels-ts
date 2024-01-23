@@ -19,6 +19,7 @@ import { U64Coder } from './coders/v0/u64';
 import { VecCoder } from './coders/v0/vec';
 import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
+import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
   arrayRegEx,
   enumRegEx,
@@ -78,31 +79,22 @@ export abstract class AbiCoder {
       isSmallBytes: false,
     }
   ): Coder {
-    if (options.version === 1) {
-      switch (resolvedAbiType.type) {
-        case 'u8':
-        case 'u16':
-        case 'u32':
-          return new NumberCoderV1(resolvedAbiType.type);
-        case 'bool':
-          return new BooleanCoderV1();
-        default:
-          break;
-      }
-    }
+    const { version } = options;
 
     switch (resolvedAbiType.type) {
       case 'u8':
       case 'u16':
       case 'u32':
-        return new NumberCoder(resolvedAbiType.type, options);
+        return version
+          ? new NumberCoderV1(resolvedAbiType.type)
+          : new NumberCoder(resolvedAbiType.type, options);
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
       case 'raw untyped slice':
         return new RawSliceCoder();
       case 'bool':
-        return new BooleanCoder(options);
+        return version ? new BooleanCoderV1() : new BooleanCoder(options);
       case 'b256':
         return new B256Coder();
       case 'struct B512':
@@ -153,7 +145,7 @@ export abstract class AbiCoder {
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
       const itemCoder = AbiCoder.getCoderImpl(argType, { isSmallBytes: true });
-      return new VecCoder(itemCoder);
+      return version ? new VecCoderV1(itemCoder) : new VecCoder(itemCoder);
     }
 
     const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;

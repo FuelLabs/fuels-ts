@@ -2,6 +2,7 @@ contract;
 
 use std::logging::log;
 use std::b512::B512;
+use std::vec::Vec;
 
 abi LoggingContract {
     fn log_u8(a: u8) -> u8;
@@ -16,6 +17,8 @@ abi LoggingContract {
     fn log_b256(a: b256) -> b256;
     fn log_b512(a: B512) -> B512;
     fn log_b256_b512(a: b256, b: B512) -> (b256, B512);
+    fn log_vec_u8(a: Vec<u8>) -> Vec<u8>;
+    fn log_vec_b256(a: Vec<b256>) -> Vec<b256>;
 }
 
 impl LoggingContract for Contract {
@@ -83,5 +86,15 @@ impl LoggingContract for Contract {
         log(a);
         log(b);
         (a, b)
+    }
+
+    fn log_vec_u8(a: Vec<u8>) -> Vec<u8> {
+        log(a);
+        a
+    }
+
+    fn log_vec_b256(a: Vec<b256>) -> Vec<b256> {
+        log(a);
+        a
     }
 }
