@@ -2,6 +2,47 @@ script;
 
 use std::logging::log;
 
+impl AbiEncode for str[14] {
+    fn abi_encode(self, ref mut buffer: Buffer) {
+        let s = from_str_array(self);
+
+        let len = s.len();
+        let ptr = s.as_ptr();
+
+        let mut i = 0;
+        while i < len {
+            let byte = ptr.add::<u8>(i).read::<u8>();
+            buffer.push(byte);
+            i += 1;
+        }
+    }
+}
+
+impl AbiEncode for str[10] {
+    fn abi_encode(self, ref mut buffer: Buffer) {
+        let s = from_str_array(self);
+
+        let len = s.len();
+        let ptr = s.as_ptr();
+
+        let mut i = 0;
+        while i < len {
+            let byte = ptr.add::<u8>(i).read::<u8>();
+            buffer.push(byte);
+            i += 1;
+        }
+    }
+}
+
+impl AbiEncode for raw_ptr {
+    fn abi_encode(self, ref mut buffer: Buffer) {
+        let address = asm(ptr: self) {
+            ptr: u64
+        };
+        buffer.push(address);
+    }
+}
+
 fn main(vector: Vec<u64>) {
     log(vector.get(0).unwrap());
 
