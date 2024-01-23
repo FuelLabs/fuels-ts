@@ -295,3 +295,4 @@ AbstractAddress
 ContractFactory
 ScriptTransactionRequest
 DateTime
+Atomique
