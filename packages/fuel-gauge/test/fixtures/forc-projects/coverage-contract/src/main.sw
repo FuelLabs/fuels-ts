@@ -1,14 +1,14 @@
 contract;
 
-use std::*;
 use core::*;
-use std::storage::*;
-use std::contract_id::ContractId;
-use std::vec::Vec;
-use std::option::Option;
+use std::*;
 use std::assert::assert;
-use std::logging::log;
 use std::b512::B512;
+use std::contract_id::ContractId;
+use std::logging::log;
+use std::option::Option;
+use std::storage::*;
+use std::vec::Vec;
 
 impl AbiEncode for str[10] {
     fn abi_encode(self, ref mut buffer: Buffer) {
