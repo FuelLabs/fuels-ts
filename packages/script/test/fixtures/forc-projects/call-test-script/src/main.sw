@@ -2,7 +2,7 @@ script;
 
 fn log<T>(v: T) {
     asm(r1: v) {
-        log  r1 zero zero zero;
+        log r1 zero zero zero;
     }
 }
 
