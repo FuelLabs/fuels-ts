@@ -3,6 +3,7 @@ import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
+import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
@@ -16,9 +17,6 @@ import treeKill from 'tree-kill';
 import type { WalletUnlocked } from '../wallets';
 
 import { generateTestWallet } from './generateTestWallet';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const npmWhich = require('npm-which')(__dirname);
 
 const getFlagValueFromArgs = (args: string[], flag: string) => {
   const flagIndex = args.indexOf(flag);
@@ -63,17 +61,6 @@ export type KillNodeParams = {
   state: {
     isDead: boolean;
   };
-};
-
-export const findBinPath = (binCommandName: string) => {
-  let binPath = npmWhich.sync(binCommandName);
-
-  if (!existsSync(binPath)) {
-    // The user might be using bun, which has a different structure for binaries inside node_modules
-    binPath = path.join('node_modules', '.bin', binCommandName);
-  }
-
-  return binPath;
 };
 
 export const killNode = (params: KillNodeParams) => {
@@ -138,7 +125,7 @@ export const launchNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const binPath = await findBinPath('fuels-core');
+    const binPath = findBinPath('fuels-core', __dirname);
 
     const command = useSystemFuelCore ? 'fuel-core' : binPath;
 
