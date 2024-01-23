@@ -5,8 +5,8 @@ import { concat } from '@fuel-ts/utils';
 import { WORD_SIZE } from '../../constants';
 import type { Uint8ArrayWithDynamicData } from '../../utilities';
 import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../../utilities';
-
 import { Coder } from '../abstract-coder';
+
 import { U64Coder } from './u64';
 
 export class ByteCoder extends Coder<number[], Uint8Array> {

@@ -191,7 +191,7 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([expected]);
   });
 
-  it('logs b256', async () => {
+  it('logs b256 vec', async () => {
     const expected = [hexlify(randomBytes(32)), hexlify(randomBytes(32))];
 
     const { value, logs } = await contractInstance.functions
@@ -200,6 +200,18 @@ describe('Experimental Logging', () => {
       .call();
 
     expect(value).toEqual(expected);
+    expect(logs).toEqual([expected]);
+  });
+
+  it.skip('logs bytes', async () => {
+    const expected = [40, 41, 42];
+
+    const { value, logs } = await contractInstance.functions
+      .log_bytes(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect([...value]).toMatchObject(expected);
     expect(logs).toEqual([expected]);
   });
 });

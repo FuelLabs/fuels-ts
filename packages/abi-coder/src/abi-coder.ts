@@ -18,6 +18,7 @@ import { TupleCoder } from './coders/v0/tuple';
 import { U64Coder } from './coders/v0/u64';
 import { VecCoder } from './coders/v0/vec';
 import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
+import { ByteCoder as ByteCoderV1 } from './coders/v1/byte';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
 import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
@@ -100,7 +101,7 @@ export abstract class AbiCoder {
       case 'struct B512':
         return new B512Coder();
       case BYTES_CODER_TYPE:
-        return new ByteCoder();
+        return version ? new ByteCoderV1() : new ByteCoder();
       case STD_STRING_CODER_TYPE:
         return new StdStringCoder();
       default:
