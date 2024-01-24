@@ -214,4 +214,16 @@ describe('Experimental Logging', () => {
     expect(value).toEqual(Uint8Array.from(expected));
     expect(logs).toEqual([Uint8Array.from(expected)]);
   });
+
+  it('logs StdString', async () => {
+    const expected = 'hello world';
+
+    const { value, logs } = await contractInstance.functions
+      .log_std_string(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(value).toEqual(expected);
+    expect(logs).toEqual([expected]);
+  });
 });

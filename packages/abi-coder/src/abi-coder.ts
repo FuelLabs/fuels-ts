@@ -20,6 +20,7 @@ import { VecCoder } from './coders/v0/vec';
 import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
 import { ByteCoder as ByteCoderV1 } from './coders/v1/byte';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
+import { StdStringCoder as StdStringCoderV1 } from './coders/v1/stdString';
 import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
   arrayRegEx,
@@ -103,7 +104,7 @@ export abstract class AbiCoder {
       case BYTES_CODER_TYPE:
         return version ? new ByteCoderV1() : new ByteCoder();
       case STD_STRING_CODER_TYPE:
-        return new StdStringCoder();
+        return version ? new StdStringCoderV1() : new StdStringCoder();
       default:
         break;
     }
