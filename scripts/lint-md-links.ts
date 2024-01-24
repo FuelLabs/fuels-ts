@@ -6,6 +6,7 @@ import { globSync } from 'glob';
   const mdFiles = globSync('**/*.md', {
     ignore: [
       '**/node_modules/**',
+      'apps/docs/src/api/**', // generated api
       '**/CHANGELOG.md',
       'apps/demo-nextjs/**',
       'apps/demo-react-cra/**',
@@ -13,15 +14,6 @@ import { globSync } from 'glob';
       'templates/**',
     ],
   });
-  const filesWithLintErrors: string[] = [];
-  mdFiles.forEach((file) => {
-    try {
-      execSync(`pnpm textlint ${file}`).toString();
-    } catch (error) {
-      filesWithLintErrors.push(file);
-    }
-  });
-  if (filesWithLintErrors.length > 0) {
-    process.exit(1);
-  }
+
+  execSync(`pnpm textlint ${mdFiles.join(' ')} --parallel --debug`, { stdio: 'inherit' });
 })();
