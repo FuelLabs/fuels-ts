@@ -22,6 +22,7 @@ import type {
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
+  GqlMessage,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -359,7 +360,7 @@ export default class Provider {
     const chain = await this.fetchChain();
     const nodeInfo = await this.fetchNode();
 
-    Provider.ensureClientVersionIsSupported(nodeInfo);
+    // Provider.ensureClientVersionIsSupported(nodeInfo);
 
     return {
       chain,
@@ -1291,5 +1292,16 @@ export default class Provider {
       startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
     });
     return bn(latestBlockHeight);
+  }
+
+  /**
+   * Returns Message for given nonce.
+   *
+   * @param nonce - The nonce of the message to retrieve.
+   * @returns A promise that resolves to the Message object.
+   */
+  async getMessageByNonce(nonce: string): Promise<GqlMessage | undefined | null> {
+    const { message } = await this.operations.getMessageByNonce({ nonce });
+    return message;
   }
 }

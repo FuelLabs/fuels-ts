@@ -675,3 +675,8 @@ mutation produceBlocks(
     startTimestamp: $startTimestamp
   )
 }
+query getMessageByNonce($nonce: Nonce) {
+  message(nonce: $nonce) {
+    ...messageFragment
+  }
+}
