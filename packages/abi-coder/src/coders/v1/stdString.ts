@@ -9,7 +9,7 @@ import { U64Coder } from '../v0/u64';
 export class StdStringCoder extends Coder<string, string> {
   static memorySize = 1;
   constructor() {
-    super('struct', 'struct String', WORD_SIZE);
+    super('struct', 'struct String', 1);
   }
 
   encode(_value: string): Uint8Array {
