@@ -20,7 +20,7 @@ describe('findBinPath', () => {
   };
 
   it('should find bin path in current dir', () => {
-    const base = __dirname;
+    const base = __dirname; // current dir
     const { cmdName, cmdPath, clean } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
@@ -29,7 +29,7 @@ describe('findBinPath', () => {
   });
 
   it('should find bin path one dir up', () => {
-    const base = join(__dirname, '..');
+    const base = join(__dirname, '..'); // one dir up
     const { cmdName, cmdPath, clean } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
@@ -38,7 +38,7 @@ describe('findBinPath', () => {
   });
 
   it('should find bin path two dir up', () => {
-    const base = join(__dirname, '..', '..');
+    const base = join(__dirname, '..', '..'); // two dirs up
     const { cmdName, cmdPath, clean } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
