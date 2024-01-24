@@ -13,13 +13,16 @@ for forc_toml in $forc_tomls; do
     # fix forc formatting
     eval "$forc_fmt"
 
-    # fix TOML `authors` (for projects only)
+    # fix TOML `authors` (for projects only, ignores workspace)
     if [ "$(head -n 1 Forc.toml)" == "[project]" ]; then
+
         authors=$(grep "authors =" Forc.toml)
+
         if [[ "$authors" != "$expected_authors" ]]; then
             sed -i.bkp "s/authors =.*/${expected_authors}/g" Forc.toml
             rm "Forc.toml.bkp"
         fi
+
     fi
 
     # back to main dir

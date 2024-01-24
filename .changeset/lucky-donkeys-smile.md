@@ -3,4 +3,4 @@
 "@fuel-ts/versions": patch
 ---
 
-Upgrading forc to 0.49.1
+Downgrading forc back to `0.48.1`
