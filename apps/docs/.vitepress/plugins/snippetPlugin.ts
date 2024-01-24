@@ -68,7 +68,6 @@ export function findRegion(lines: string[], regionName: string) {
       // Check for import statements to be included in the region
       const importMatch = line.match(IMPORT_REGEXP);
       if (importMatch) {
-        console.log('importMatch: ', importMatch);
         imports = imports.concat(importMatch[1].split(',').map((s) => s.trim()));
       }
     }
