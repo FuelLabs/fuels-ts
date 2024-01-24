@@ -20,7 +20,9 @@ abi LiquidityPool {
     fn withdraw(recipient: Address);
 }
 
-const BASE_TOKEN: AssetId = AssetId::from(0x0000000000000000000000000000000000000000000000000000000000000000);
+const BASE_TOKEN: AssetId = AssetId::from(
+    0x0000000000000000000000000000000000000000000000000000000000000000
+);
 
 impl LiquidityPool for Contract {
     #[payable]
