@@ -14,15 +14,6 @@ import { globSync } from 'glob';
       'templates/**',
     ],
   });
-  const filesWithLintErrors: string[] = [];
-  mdFiles.forEach((file) => {
-    try {
-      execSync(`pnpm textlint ${file}`).toString();
-    } catch (error) {
-      filesWithLintErrors.push(file);
-    }
-  });
-  if (filesWithLintErrors.length > 0) {
-    process.exit(1);
-  }
+
+  execSync(`pnpm textlint ${mdFiles.join(' ')} --parallel --debug`, { stdio: 'inherit' });
 })();
