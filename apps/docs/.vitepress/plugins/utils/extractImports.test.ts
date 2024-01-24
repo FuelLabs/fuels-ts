@@ -4,47 +4,10 @@ import * as extractImportsMod from './extractImports';
 import fs from 'fs';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-const {
-  collectImportStatements,
-  combineImportStatements,
-  parseIgnoreImportFlags,
-  validateImports,
-  extractImports,
-} = extractImportsMod;
+const { collectImportStatements, combineImportStatements, validateImports, extractImports } =
+  extractImportsMod;
 
 describe('extractImports', () => {
-  describe('parseIgnoreImportFlags', () => {
-    it('should return an empty set for no ignore flags', () => {
-      const lines = ['import { something } from "somewhere";', 'const x = 5;'];
-      expect(parseIgnoreImportFlags(lines)).toEqual(new Set());
-    });
-
-    it('should correctly parse a single ignore flag', () => {
-      const lines = ['// #ignore { testImport }'];
-      expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['testImport']));
-    });
-
-    it('should correctly parse multiple ignore flags on separate lines', () => {
-      const lines = ['// #ignore { firstImport }', '// #ignore { secondImport }'];
-      expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['firstImport', 'secondImport']));
-    });
-
-    it('should correctly parse multiple imports on a single ignore flag', () => {
-      const lines = ['// #ignore { firstImport , secondImport }'];
-      expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['firstImport', 'secondImport']));
-    });
-
-    it('should ignore malformed ignore flags', () => {
-      const lines = ['// ignore: { testImport }', '// #ignore testImport'];
-      expect(parseIgnoreImportFlags(lines)).toEqual(new Set());
-    });
-
-    it('should handle empty lines and whitespace', () => {
-      const lines = ['   ', '', '// #ignore { testImport }'];
-      expect(parseIgnoreImportFlags(lines)).toEqual(new Set(['testImport']));
-    });
-  });
-
   describe('combineImportStatements', () => {
     it('should return an empty string for empty import statements', () => {
       const importStatements = {};
@@ -83,7 +46,7 @@ describe('extractImports', () => {
 
     it('should not throw an error for valid imports', () => {
       expect(() => {
-        validateImports(['usedImport'], new Set(), allImportedItems, [
+        validateImports(['usedImport'], allImportedItems, [
           'import { usedImport } from "somewhere";',
         ]);
       }).not.toThrow();
@@ -91,7 +54,7 @@ describe('extractImports', () => {
 
     it('should throw an error if a specified import is not found', async () => {
       await expectToThrowFuelError(
-        () => validateImports(['notFoundImport'], new Set(), allImportedItems, snippetContent),
+        () => validateImports(['notFoundImport'], allImportedItems, snippetContent),
         new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
           `The following imports were not found in the file: notFoundImport`
@@ -99,18 +62,10 @@ describe('extractImports', () => {
       );
     });
 
-    it('should not throw an error for ignored imports', () => {
-      expect(() => {
-        validateImports(['ignoredImport'], new Set(['ignoredImport']), allImportedItems, [
-          '// #ignore { ignoredImport }',
-        ]);
-      }).not.toThrow();
-    });
-
     it('should throw an error if a specified import is not used in the snippet', async () => {
       const formattedSnippet = '\n'.concat(snippetContent.map((line) => `${line}`).join('\n'));
       await expectToThrowFuelError(
-        () => validateImports(['unusedImport'], new Set(), allImportedItems, snippetContent),
+        () => validateImports(['unusedImport'], allImportedItems, snippetContent),
         new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
           `The specified import 'unusedImport' is not in use within the code snippet: ${formattedSnippet}`
@@ -120,13 +75,7 @@ describe('extractImports', () => {
 
     it('should handle multiple error scenarios', async () => {
       await expectToThrowFuelError(
-        () =>
-          validateImports(
-            ['notFoundImport', 'unusedImport'],
-            new Set(),
-            allImportedItems,
-            snippetContent
-          ),
+        () => validateImports(['notFoundImport', 'unusedImport'], allImportedItems, snippetContent),
         new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
           `The following imports were not found in the file: notFoundImport`
@@ -139,8 +88,7 @@ describe('extractImports', () => {
     it('should handle empty lines', () => {
       const lines: string[] = [];
       const specifiedImports: string[] = [];
-      const ignoredImports = new Set<string>();
-      expect(collectImportStatements(lines, specifiedImports, ignoredImports)).toEqual({
+      expect(collectImportStatements(lines, specifiedImports)).toEqual({
         importStatements: {},
         allImportedItems: new Set(),
       });
@@ -149,8 +97,7 @@ describe('extractImports', () => {
     it('should correctly collect single line import statements', () => {
       const lines = ["import { A } from 'example';"];
       const specifiedImports: string[] = ['A'];
-      const ignoredImports = new Set<string>();
-      const result = collectImportStatements(lines, specifiedImports, ignoredImports);
+      const result = collectImportStatements(lines, specifiedImports);
       expect(result.allImportedItems).toStrictEqual(new Set(['A']));
       expect(result.importStatements).toStrictEqual({ example: new Set(['A']) });
     });
@@ -158,26 +105,15 @@ describe('extractImports', () => {
     it('should correctly handle multi-line import statements', () => {
       const lines = ['import {', '  A,', '  B', "} from 'example';"];
       const specifiedImports: string[] = ['A', 'B'];
-      const ignoredImports = new Set<string>();
-      const result = collectImportStatements(lines, specifiedImports, ignoredImports);
+      const result = collectImportStatements(lines, specifiedImports);
       expect(result.allImportedItems).toEqual(new Set(['A', 'B']));
       expect(result.importStatements).toEqual({ example: new Set(['A', 'B']) });
-    });
-
-    it('should ignore specified imports', () => {
-      const lines = ["import { A, B } from 'example';"];
-      const specifiedImports: string[] = ['A', 'B'];
-      const ignoredImports = new Set(['B']);
-      const result = collectImportStatements(lines, specifiedImports, ignoredImports);
-      expect(result.allImportedItems).toEqual(new Set(['A']));
-      expect(result.importStatements).toEqual({ example: new Set(['A']) });
     });
 
     it('should correctly process multiple import statements', () => {
       const lines = ["import { A } from 'example1';", "import { B, C } from 'example2';"];
       const specifiedImports: string[] = ['A', 'B', 'C'];
-      const ignoredImports = new Set<string>();
-      const result = collectImportStatements(lines, specifiedImports, ignoredImports);
+      const result = collectImportStatements(lines, specifiedImports);
       expect(result.allImportedItems).toEqual(new Set(['A', 'B', 'C']));
       expect(result.importStatements).toEqual({
         example1: new Set(['A']),
@@ -188,8 +124,7 @@ describe('extractImports', () => {
     it('should handle import statements with the same source', () => {
       const lines = ["import { A } from 'example';", "import { B } from 'example';"];
       const specifiedImports: string[] = ['A', 'B'];
-      const ignoredImports = new Set<string>();
-      const result = collectImportStatements(lines, specifiedImports, ignoredImports);
+      const result = collectImportStatements(lines, specifiedImports);
       expect(result.allImportedItems).toEqual(new Set(['A', 'B']));
       expect(result.importStatements).toEqual({ example: new Set(['A', 'B']) });
     });
@@ -197,8 +132,7 @@ describe('extractImports', () => {
     it('should handle import statements with default import format', () => {
       const lines = ["import example from 'example';"];
       const specifiedImports: string[] = ['example'];
-      const ignoredImports = new Set<string>();
-      const result = collectImportStatements(lines, specifiedImports, ignoredImports);
+      const result = collectImportStatements(lines, specifiedImports);
       expect(result.allImportedItems).toEqual(new Set(['example']));
       expect(result.importStatements).toEqual({
         example: new Set(['example']),
@@ -234,14 +168,12 @@ describe('extractImports', () => {
 
       const collectImportStatementsSpy = jest.spyOn(extractImportsMod, 'collectImportStatements');
       const combineImportStatementsSpy = jest.spyOn(extractImportsMod, 'combineImportStatements');
-      const parseIgnoreImportFlagsSpy = jest.spyOn(extractImportsMod, 'parseIgnoreImportFlags');
       const validateImportsSpy = jest.spyOn(extractImportsMod, 'validateImports');
 
       const result = extractImports(filepath, specifiedImports, snippetContent);
 
       expect(collectImportStatementsSpy).toBeCalledTimes(1);
       expect(combineImportStatementsSpy).toBeCalledTimes(1);
-      expect(parseIgnoreImportFlagsSpy).toBeCalledTimes(1);
       expect(validateImportsSpy).toBeCalledTimes(1);
 
       expect(result).toEqual("import { AssetId } from 'fuels';");
@@ -266,14 +198,12 @@ describe('extractImports', () => {
 
       const collectImportStatementsSpy = jest.spyOn(extractImportsMod, 'collectImportStatements');
       const combineImportStatementsSpy = jest.spyOn(extractImportsMod, 'combineImportStatements');
-      const parseIgnoreImportFlagsSpy = jest.spyOn(extractImportsMod, 'parseIgnoreImportFlags');
       const validateImportsSpy = jest.spyOn(extractImportsMod, 'validateImports');
 
       const result = extractImports(filepath, specifiedImports, snippetContent);
 
       expect(collectImportStatementsSpy).toBeCalledTimes(1);
       expect(combineImportStatementsSpy).toBeCalledTimes(1);
-      expect(parseIgnoreImportFlagsSpy).toBeCalledTimes(1);
       expect(validateImportsSpy).toBeCalledTimes(1);
 
       expect(result).toEqual("import { Wallet } from 'fuels';");

@@ -1,30 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import fs from 'fs';
-import { IGNORE_IMPORT_REGEXP, IMPORT_REGEXP } from '../snippetPlugin';
-
-/**
- * Parses the given lines of code and extracts the imports to be ignored based on the ignore import flag.
- * @param lines - The lines of code to parse.
- * @returns A set of imports to be ignored.
- */
-export const parseIgnoreImportFlags = (lines: string[]): Set<string> => {
-  const ignoredImports = new Set<string>();
-
-  lines.forEach((line) => {
-    // Parse and process ignore import flag
-    if (line.trim().startsWith('// #ignore ')) {
-      const ignoreMatches = line.match(IGNORE_IMPORT_REGEXP);
-
-      if (ignoreMatches && ignoreMatches[1]) {
-        const importsToIgnore = ignoreMatches[1].split(',').map((item) => item.trim());
-
-        importsToIgnore.forEach((item) => ignoredImports.add(item));
-      }
-    }
-  });
-
-  return ignoredImports;
-};
+import { IMPORT_REGEXP } from '../snippetPlugin';
 
 /**
  * Combines import statements into a single string.
@@ -51,13 +27,12 @@ export const combineImportStatements = (importStatements: Record<string, Set<str
  */
 export const validateImports = (
   specifiedImports: string[],
-  ignoredImports: Set<string>,
   allImportedItems: Set<string>,
   snippetContent: string[]
 ) => {
-  // Filter specified imports that are not found in the file or ignored
+  // Filter specified imports that are not found in the file
   const notFoundImports = specifiedImports.filter(
-    (importItem) => !allImportedItems.has(importItem) && !ignoredImports.has(importItem)
+    (importItem) => !allImportedItems.has(importItem)
   );
 
   if (notFoundImports.length > 0) {
@@ -68,13 +43,11 @@ export const validateImports = (
     );
   }
 
-  // Filter out lines with "#import" or "#ignore:" and join the remaining lines
-  const validatedContent = snippetContent
-    .filter((line) => !(IMPORT_REGEXP.test(line) || IGNORE_IMPORT_REGEXP.test(line)))
-    .join('\n');
+  // Filter out lines with "#import" and join the remaining lines
+  const validatedContent = snippetContent.filter((line) => !IMPORT_REGEXP.test(line)).join('\n');
 
   for (const importItem of specifiedImports) {
-    if (!validatedContent.includes(importItem) && !ignoredImports.has(importItem)) {
+    if (!validatedContent.includes(importItem)) {
       const formattedSnippet = '\n'.concat(snippetContent.map((line) => `${line}`).join('\n'));
 
       // Throw an error if a specified import is not used in the code snippet
@@ -93,11 +66,7 @@ export const validateImports = (
  * @param ignoredImports - The set of ignored import items.
  * @returns An object containing the import statements grouped by their sources and a set of all imported items.
  */
-export const collectImportStatements = (
-  lines: string[],
-  specifiedImports: string[],
-  ignoredImports: Set<string>
-) => {
+export const collectImportStatements = (lines: string[], specifiedImports: string[]) => {
   let importStatements: Record<string, Set<string>> = {};
   let allImportedItems: Set<string> = new Set();
   let currentImport = '';
@@ -125,7 +94,7 @@ export const collectImportStatements = (
         const [, importSource] = matches[3].split("'");
 
         importedItems.forEach((item) => {
-          if (!ignoredImports.has(item) && specifiedImports.includes(item)) {
+          if (specifiedImports.includes(item)) {
             allImportedItems.add(item);
 
             if (!importStatements[importSource]) {
@@ -162,14 +131,9 @@ export const extractImports = (
   // Split content into lines
   const lines = fileContent.split(/\r?\n/);
 
-  const ignoredImports = parseIgnoreImportFlags(lines);
-  const { importStatements, allImportedItems } = collectImportStatements(
-    lines,
-    specifiedImports,
-    ignoredImports
-  );
+  const { importStatements, allImportedItems } = collectImportStatements(lines, specifiedImports);
 
-  validateImports(specifiedImports, ignoredImports, allImportedItems, snippetContent);
+  validateImports(specifiedImports, allImportedItems, snippetContent);
 
   return combineImportStatements(importStatements);
 };

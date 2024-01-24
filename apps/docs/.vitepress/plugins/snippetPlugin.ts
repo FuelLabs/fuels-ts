@@ -8,9 +8,6 @@ import { extractImports } from './utils/extractImports';
 // Regex to match import comments
 export const IMPORT_REGEXP = /\/\/ #import \{(.+)\};$/;
 
-// Regex to match ignored import comments
-export const IGNORE_IMPORT_REGEXP = /\/\/ #ignore \{(.+)\}$/;
-
 // Regex to match region start/end comments
 export const REGION_REGEXP = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
 
@@ -159,9 +156,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
         dedent(
           snippetContent
             .filter((line) => !region.regexp.test(line.trim()))
-            .map((line) =>
-              IMPORT_REGEXP.test(line) || IGNORE_IMPORT_REGEXP.test(line) ? '' : line
-            )
+            .map((line) => (IMPORT_REGEXP.test(line) ? '' : line))
             .join('\n')
         )
       );
