@@ -11,38 +11,38 @@ describe('findBinPath', () => {
     const bin = join(mods, '.bin');
     const cmdPath = join(bin, cmdName);
 
-    const clean = () => rmSync(mods, { recursive: true });
+    const resetDisk = () => rmSync(mods, { recursive: true });
 
     mkdirSync(bin, { recursive: true });
     writeFileSync(cmdPath, '');
 
-    return { clean, mods, cmdName, cmdPath };
+    return { resetDisk, mods, cmdName, cmdPath };
   };
 
   it('should find bin path in current dir', () => {
     const base = __dirname; // current dir
-    const { cmdName, cmdPath, clean } = bootstrap(base);
+    const { cmdName, cmdPath, resetDisk } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
-    clean();
+    resetDisk();
     expect(binPath).toEqual(cmdPath);
   });
 
   it('should find bin path one dir up', () => {
     const base = join(__dirname, '..'); // one dir up
-    const { cmdName, cmdPath, clean } = bootstrap(base);
+    const { cmdName, cmdPath, resetDisk } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
-    clean();
+    resetDisk();
     expect(binPath).toEqual(cmdPath);
   });
 
   it('should find bin path two dir up', () => {
     const base = join(__dirname, '..', '..'); // two dirs up
-    const { cmdName, cmdPath, clean } = bootstrap(base);
+    const { cmdName, cmdPath, resetDisk } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
-    clean();
+    resetDisk();
     expect(binPath).toEqual(cmdPath);
   });
 
