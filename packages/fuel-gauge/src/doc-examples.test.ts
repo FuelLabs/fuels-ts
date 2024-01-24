@@ -155,7 +155,7 @@ describe('Doc Examples', () => {
   test('it can work with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallets
-    // #import { Wallet, WalletLocked, WalletUnlocked }
+    // #import { Wallet, WalletLocked, WalletUnlocked };
 
     // use the `generate` helper to make an Unlocked Wallet
     const myWallet: WalletUnlocked = Wallet.generate({
@@ -183,12 +183,12 @@ describe('Doc Examples', () => {
     // #endregion wallet-unlocked-to-locked
 
     // #region wallet-check-balance
-    // #import { BigNumberish }
+    // #import { BigNumberish };
     const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
     // #endregion wallet-check-balance
 
     // #region wallet-check-balances
-    // #import { CoinQuantity }
+    // #import { CoinQuantity };
     const balances: CoinQuantity[] = await myWallet.getBalances();
     // #endregion wallet-check-balances
 
@@ -200,7 +200,7 @@ describe('Doc Examples', () => {
   it('it can work sign messages with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
-    // #import { WalletUnlocked, hashMessage, Signer }
+    // #import { WalletUnlocked, hashMessage, Signer };
     const wallet = WalletUnlocked.generate({
       provider,
     });
@@ -217,7 +217,7 @@ describe('Doc Examples', () => {
 
   it('can create wallets', async () => {
     // #region wallet-setup
-    // #import { Provider, bn, FUEL_NETWORK_URL, generateTestWallet }
+    // #import { Provider, bn, FUEL_NETWORK_URL, generateTestWallet };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -254,7 +254,7 @@ describe('Doc Examples', () => {
 
   it('can connect to testnet', async () => {
     // #region provider-testnet
-    // #import { Provider, WalletUnlocked }
+    // #import { Provider, WalletUnlocked };
     const provider = await Provider.create('https://beta-5.fuel.network/graphql');
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
@@ -272,7 +272,7 @@ describe('Doc Examples', () => {
 
   it('can connect to a local provider', async () => {
     // #region provider-local
-    // #import { Provider, WalletUnlocked, FUEL_NETWORK_URL }
+    // #import { Provider, WalletUnlocked, FUEL_NETWORK_URL };
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
@@ -288,7 +288,7 @@ describe('Doc Examples', () => {
 
   it('can query address with wallets', async () => {
     // #region wallet-query
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet }
+    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 

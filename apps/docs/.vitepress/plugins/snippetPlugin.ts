@@ -6,7 +6,7 @@ import { RuleBlock } from 'markdown-it/lib/parser_block';
 import { extractImports } from './utils/extractImports';
 
 // Regex to match import comments
-export const IMPORT_REGEXP = /\/\/ #import \{(.+)\}$/;
+export const IMPORT_REGEXP = /\/\/ #import \{(.+)\};$/;
 
 // Regex to match ignored import comments
 export const IGNORE_IMPORT_REGEXP = /\/\/ #ignore \{(.+)\}$/;
@@ -71,6 +71,7 @@ export function findRegion(lines: string[], regionName: string) {
       // Check for import statements to be included in the region
       const importMatch = line.match(IMPORT_REGEXP);
       if (importMatch) {
+        console.log('importMatch: ', importMatch);
         imports = imports.concat(importMatch[1].split(',').map((s) => s.trim()));
       }
     }
@@ -149,6 +150,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       // Extract and add imports specified in the #import flag
       let importStatements = '';
       if (region.imports.length > 0) {
+        console.log('region.imports: ', region.imports);
         importStatements = extractImports(filepath, region.imports.flat(), snippetContent);
       }
 

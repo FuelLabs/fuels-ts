@@ -12,7 +12,7 @@ describe('StdString', () => {
 
   it('should pass a std string to a contract', async () => {
     // #region std-string-1
-    // #import { StdString }
+    // #import { StdString };
 
     const stdString: StdString = 'Hello World';
 
@@ -27,7 +27,7 @@ describe('StdString', () => {
 
   it('should retrieve a std string from a contract', async () => {
     // #region std-string-2
-    // #import { StdString }
+    // #import { StdString };
 
     const stdString: StdString = 'Hello Fuel';
 
