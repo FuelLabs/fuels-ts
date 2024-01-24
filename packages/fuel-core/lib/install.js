@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
+import { error } from 'console';
 import { existsSync, rmSync, writeFileSync, mkdirSync, renameSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
@@ -14,7 +15,6 @@ import {
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const { info } = console;
 
@@ -52,7 +52,10 @@ import {
   } else {
     // Empty the `fuel-core-binaries` directory if it exists
     if (existsSync(binDir)) {
-      execSync(`rm -rf ${binDir}/*`);
+      rmSync(`${binDir}/*`, {
+        recursive: true,
+        force: true,
+      });
     } else {
       // Create the `fuel-core-binaries` directory if it doesn't exist
       mkdirSync(binDir);
@@ -60,16 +63,20 @@ import {
 
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
-    await writeFileSync(pkgPath, buf);
+    writeFileSync(pkgPath, buf);
 
     // Extract
     execSync(`tar xzf "${pkgPath}" -C "${rootDir}"`);
 
-    // Take the contents of the directory containing the extracted binaries and move them to the `fuel-core-binaries` directory
+    // Take the contents of the directory containing the extracted
+    // binaries and move them to the `fuel-core-binaries` directory
     renameSync(`${fileName}`, binDir);
 
     // Cleanup
-    execSync(`rm -rf  ${fileName}`);
-    await rmSync(pkgPath);
+    rmSync(fileName, {
+      recursive: true,
+      force: true,
+    });
+    rmSync(pkgPath);
   }
-})().catch(process.stderr.write);
+})().catch((e) => error(e));

@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@changesets/config@2.0.0/schema.json",
   "changelog": "../scripts/changelog.js",
   "commit": false,
-  "fixed": [["@fuel-ts/*", "fuels"]],
+  "fixed": [["@fuel-ts/*", "fuels", "create-fuels"]],
   "linked": [],
   "access": "public",
   "baseBranch": "master",
@@ -16,6 +16,7 @@
     "demo-nextjs",
     "demo-node-esm",
     "demo-typegen",
-    "@fuel-ts/docs-snippets"
+    "@fuel-ts/docs-snippets",
+    "template-nextjs"
   ]
 }

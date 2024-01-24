@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.71.1
+
+### Patch Changes
+
+- 🐞 fix: use functions from `fs` instead of plain UNIX commands in install scripts to ensure Windows support, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1618](https://github.com/FuelLabs/fuels-ts/pull/1618))
+
+## 0.71.0
+
+### Minor Changes
+
+- Encode and decode u8 and bool as small bytes and right aligned under various conditions, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- add support for TX policies, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+## 0.70.1
+
+### Patch Changes
+
+- Removing unnecessary await, by [@arboleya](https://github.com/arboleya) (See [#1621](https://github.com/FuelLabs/fuels-ts/pull/1621))
+
+## 0.70.0
+
+### Minor Changes
+
+- Encode and decode u8 and bool as small bytes and right aligned under various conditions, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+- add support for TX policies, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+
 ## 0.69.1
 
 ## 0.69.0

@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.71.1
+
+## 0.71.0
+
+### Minor Changes
+
+- remove hacky solution to get right witness offset, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- add support for TX policies, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+- update Mint transaction to conform with fuel-core 0.21, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+## 0.70.1
+
+## 0.70.0
+
+### Minor Changes
+
+- remove hacky solution to get right witness offset, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1494](https://github.com/FuelLabs/fuels-ts/pull/1494))
+- Add `pnpm create fuels` CLI tool, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1565](https://github.com/FuelLabs/fuels-ts/pull/1565))
+- add support for TX policies, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1437](https://github.com/FuelLabs/fuels-ts/pull/1437))
+- update Mint transaction to conform with fuel-core 0.21, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1503](https://github.com/FuelLabs/fuels-ts/pull/1503))
+
 ## 0.69.1
 
 ## 0.69.0

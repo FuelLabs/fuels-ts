@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.71.1
+
+## 0.71.0
+
+### Minor Changes
+
+- Add `pnpm create fuels` CLI tool, by [@arboleya](https://github.com/arboleya) (See [#1624](https://github.com/FuelLabs/fuels-ts/pull/1624))
+
+## 0.70.1
+
+## 0.70.0
+
+### Minor Changes
+
+- Add `pnpm create fuels` CLI tool, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1565](https://github.com/FuelLabs/fuels-ts/pull/1565))
+
 ## 0.69.1
 
 ## 0.69.0

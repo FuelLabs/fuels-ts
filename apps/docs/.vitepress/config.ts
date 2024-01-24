@@ -79,6 +79,11 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Quickstart',
+            link: '/guide/quickstart/',
+            collapsed: true,
+          },
+          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,

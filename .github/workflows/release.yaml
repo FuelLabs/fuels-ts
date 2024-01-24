@@ -57,7 +57,7 @@ jobs:
           githubReleaseName: v${{ env.BUILD_VERSION }}
           githubTagName: v${{ env.BUILD_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Release to @next tag on npm
