@@ -1,4 +1,4 @@
-import { findBinPath } from '@fuel-ts/wallet/test-utils';
+import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import { spawn } from 'child_process';
 
 import type { FuelsConfig } from '../../types';
@@ -10,7 +10,7 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
   debug('Building Sway program', path);
 
   return new Promise<void>((resolve, reject) => {
-    const builtInForcPath = findBinPath('fuels-forc');
+    const builtInForcPath = findBinPath('fuels-forc', __dirname);
 
     const command = config.useBuiltinForc ? builtInForcPath : 'forc';
     const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });

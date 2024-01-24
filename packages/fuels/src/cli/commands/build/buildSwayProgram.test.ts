@@ -1,4 +1,4 @@
-import * as findBinPathMod from '@fuel-ts/wallet/test-utils';
+import * as findBinPathMod from '@fuel-ts/utils/cli-utils';
 import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
