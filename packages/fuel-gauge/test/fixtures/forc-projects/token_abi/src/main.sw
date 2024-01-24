@@ -1,6 +1,6 @@
 library;
 
-use std::{address::Address, asset::*, contract_id::ContractId};
+use std::{address::Address, contract_id::ContractId, token::*};
 
 abi Token {
     fn mint_coins(mint_amount: u64);
