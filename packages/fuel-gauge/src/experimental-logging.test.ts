@@ -254,4 +254,37 @@ describe('Experimental Logging', () => {
 
     expect(logs).toEqual([expected]);
   });
+
+  it('logs u8 array', async () => {
+    const expected = [U8_MAX, 5, U8_MAX];
+
+    const { logs } = await contractInstance.functions
+      .log_u8_array(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
+
+  it('logs u16 array', async () => {
+    const expected = [U16_MAX, 5, U16_MAX];
+
+    const { logs } = await contractInstance.functions
+      .log_u16_array(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
+
+  it('log u16 u8 array multiple params', async () => {
+    const expected = [U16_MAX, [U8_MAX, 5, U8_MAX]];
+
+    const { logs } = await contractInstance.functions
+      .log_u16_u8_array(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual(expected);
+  });
 });

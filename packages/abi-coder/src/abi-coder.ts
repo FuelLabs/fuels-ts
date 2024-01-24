@@ -133,7 +133,7 @@ export abstract class AbiCoder {
         );
       }
 
-      const arrayElementCoder = AbiCoder.getCoderImpl(arg, { isSmallBytes: true });
+      const arrayElementCoder = AbiCoder.getCoderImpl(arg, { version, isSmallBytes: true });
       return new ArrayCoder(arrayElementCoder, length);
     }
 
@@ -147,19 +147,19 @@ export abstract class AbiCoder {
       }
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-      const itemCoder = AbiCoder.getCoderImpl(argType, { isSmallBytes: true });
+      const itemCoder = AbiCoder.getCoderImpl(argType, { version, isSmallBytes: true });
       return version ? new VecCoderV1(itemCoder) : new VecCoder(itemCoder);
     }
 
     const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
     if (structMatch) {
-      const coders = AbiCoder.getCoders(components, { isRightPadded: true });
+      const coders = AbiCoder.getCoders(components, { version, isRightPadded: true });
       return new StructCoder(structMatch.name, coders);
     }
 
     const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
     if (enumMatch) {
-      const coders = AbiCoder.getCoders(components, {});
+      const coders = AbiCoder.getCoders(components, { version });
 
       const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
@@ -171,7 +171,7 @@ export abstract class AbiCoder {
     const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
     if (tupleMatch) {
       const coders = components.map((component) =>
-        AbiCoder.getCoderImpl(component, { isRightPadded: true })
+        AbiCoder.getCoderImpl(component, { version, isRightPadded: true })
       );
       return new TupleCoder(coders);
     }

@@ -27,6 +27,9 @@ abi LoggingContract {
     fn log_std_string(a: String) -> String;
     fn log_u16_std_string(a: u16, b: String) -> (u16, String);
     fn log_raw_slice(a: raw_slice) -> raw_slice;
+    fn log_u8_array(a: [u8; 3]) -> [u8; 3];
+    fn log_u16_array(a: [u16; 3]) -> [u16; 3];
+    fn log_u16_u8_array(a: u16, b: [u8; 3]) -> (u16, [u8; 3]);
 }
 
 impl LoggingContract for Contract {
@@ -137,5 +140,21 @@ impl LoggingContract for Contract {
     fn log_raw_slice(a: raw_slice) -> raw_slice {
         log(a);
         a
+    }
+
+    fn log_u8_array(a: [u8; 3]) -> [u8; 3] {
+        log(a);
+        a
+    }
+
+    fn log_u16_array(a: [u16; 3]) -> [u16; 3] {
+        log(a);
+        a
+    }
+
+    fn log_u16_u8_array(a: u16, b: [u8; 3]) -> (u16, [u8; 3]) {
+        log(a);
+        log(b);
+        (a, b)
     }
 }
