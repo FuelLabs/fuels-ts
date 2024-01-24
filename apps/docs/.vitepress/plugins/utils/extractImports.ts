@@ -11,6 +11,7 @@ import { IMPORT_REGEXP } from '../snippetPlugin';
 export const combineImportStatements = (importStatements: Record<string, Set<string>>) => {
   return Object.keys(importStatements)
     .map(
+      // Transforming collected imports into import statements
       (source) => `import { ${Array.from(importStatements[source]).join(', ')} } from '${source}';`
     )
     .join('\n');
@@ -73,7 +74,13 @@ export const collectImportStatements = (lines: string[], specifiedImports: strin
   let collecting = false;
 
   lines.forEach((line) => {
-    // Start collecting import line
+    /**
+     * This is required because file imports can span multiple lines e.g.
+     * import {
+     *  Provider,
+     *  Wallet,
+     * } from 'fuels';
+     */
     if (line.trim().startsWith('import')) {
       collecting = true;
       currentImport = line;
@@ -83,16 +90,40 @@ export const collectImportStatements = (lines: string[], specifiedImports: strin
       currentImport += ' ' + line.trim();
     }
 
+    /**
+     * Since the 'from' keyword is always on the same line where the import statement ends
+     * we can stop collecting
+     */
     if (collecting && line.includes('from')) {
       collecting = false;
+
       const matches = currentImport.match(
         /import\s+(type\s+)?(\{.*?\}|[\w-]+)\s+from\s+(['"].+['"]);/
       );
+      /**
+       * This regex breaks down the import statement in the following way:
+       *
+       * currentImport: "import { Provider, Wallet } from 'fuels'"";
+
+       * [
+       *   "import { Provider, Wallet } from 'fuels';",
+       *   undefined,
+       *   '{ Provider, Wallet }',
+       *   "'fuels'",
+       *   index: 0,
+       *   input: "import { Provider, Wallet } from 'fuels';",
+       *   groups: undefined
+       * ]
+       */
 
       if (matches && matches.length >= 1) {
+        // importedItems: ['Provider', 'Wallet']
         const importedItems = matches[2].replace(/[\{\}\s]/g, '').split(/\,/);
+
+        // importSource: 'fuels'
         const [, importSource] = matches[3].split("'");
 
+        // Add collected imports 'allImportedItems' only if they were specified
         importedItems.forEach((item) => {
           if (specifiedImports.includes(item)) {
             allImportedItems.add(item);
