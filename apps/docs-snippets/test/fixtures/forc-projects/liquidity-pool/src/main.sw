@@ -2,14 +2,14 @@
 contract;
 
 use std::{
-    asset::{
-        mint_to_address,
-        transfer_to_address,
-    },
     call_frames::{
         msg_asset_id,
     },
     context::msg_amount,
+    token::{
+        mint_to_address,
+        transfer_to_address,
+    },
 };
 use std::constants::ZERO_B256;
 
