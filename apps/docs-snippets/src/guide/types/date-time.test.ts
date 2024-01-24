@@ -10,13 +10,13 @@ describe(__filename, () => {
     // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const tai64: IDateTime = DateTime.fromTai64('4611686020108779312');
+    const tai64: IDateTime = DateTime.fromTai64('4611686020108779339');
     const unixSeconds: IDateTime = DateTime.fromUnixSeconds(1681391398);
     const unixMilliseconds: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
     // #endregion create-from-multiple-sources
 
     expect(tai64).toBeDefined();
-    expect(tai64.toTai64()).toBe('4611686020108779312');
+    expect(tai64.toTai64()).toBe('4611686020108779339');
     expect(unixSeconds).toBeDefined();
     expect(unixSeconds.toUnixSeconds()).toBe(1681391398);
     expect(unixMilliseconds).toBeDefined();
@@ -28,16 +28,16 @@ describe(__filename, () => {
     // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const date: IDateTime = DateTime.fromTai64('4611686020108779312');
-    // #context console.log(date.toIso); // "4611686020108779312"
+    const date: IDateTime = DateTime.fromTai64('4611686020108779339');
+    // #context console.log(date.toIso); // "4611686020108779339"
 
     const tai64: string = date.toTai64();
-    // #context console.log(tai64); // "4611686020108779312"
+    // #context console.log(tai64); // "4611686020108779339"
     // #endregion from-tai-64-and-to-tai-64
 
     expect(date).toBeDefined();
     expect(date.toISOString()).toEqual('2023-04-13T13:09:58.000Z');
-    expect(tai64).toEqual('4611686020108779312');
+    expect(tai64).toEqual('4611686020108779339');
   });
 
   it('should be able to create fromUnixMilliseconds and convert toUnixMilliseconds', () => {

@@ -130,7 +130,7 @@ export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.
  * import { type IDateTime, DateTime } from 'fuels';
  *
  * // Constants
- * const tai64 = '4611686020108779313';
+ * const tai64 = '4611686020108779340';
  * const unixMilliseconds = 1681391398000;
  * const seconds = 1681391398;
  *
@@ -141,7 +141,7 @@ export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.
  * date = DateTime.fromUnixSeconds(seconds);
  *
  * // Utility functions
- * tai64.toTai64() // '4611686020108779313'
+ * tai64.toTai64() // '4611686020108779340'
  * milliseconds.toUnixMilliseconds() // 1681391398000
  * seconds.toUnixSeconds() // 1681391398
  *
