@@ -36,37 +36,34 @@ describe('Experimental Logging', () => {
   it('logs u8', async () => {
     const expected = U8_MAX;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_u8(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toBe(expected);
-    expect(logs[0]).toBe(expected);
+    expect(logs).toStrictEqual([expected]);
   });
 
   it('logs u16', async () => {
     const expected = U16_MAX;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_u16(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toBe(expected);
-    expect(logs[0]).toBe(expected);
+    expect(logs).toStrictEqual([expected]);
   });
 
   it('logs u32', async () => {
     const expected = U32_MAX;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_u32(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toBe(expected);
-    expect(logs[0]).toBe(expected);
+    expect(logs).toStrictEqual([expected]);
   });
 
   it('logs u8 u16 u32 multiple params', async () => {
@@ -84,146 +81,166 @@ describe('Experimental Logging', () => {
   it('logs u64', async () => {
     const expected = U32_MAX + 1;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_u64(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(bn(value).toNumber()).toBe(expected);
-    expect(bn(logs[0]).toNumber()).toBe(expected);
+    expect(bn(logs[0]).toNumber()).toStrictEqual(expected);
   });
 
   it('logs u64 u8 multiple params', async () => {
     const expected = [U32_MAX + 1, U8_MAX];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_u64_u8(...expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(bn(value[0]).toNumber()).toBe(expected[0]);
-    expect(value[1]).toEqual(expected[1]);
-    expect(bn(logs[0]).toNumber()).toBe(expected[0]);
+    expect(bn(logs[0]).toNumber()).toStrictEqual(expected[0]);
     expect(logs[1]).toEqual(expected[1]);
   });
 
   it('logs boolean', async () => {
     const expected = true;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_boolean(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toBe(expected);
-    expect(logs[0]).toBe(expected);
+    expect(logs).toStrictEqual([expected]);
   });
 
   it('logs boolean boolean multiple params', async () => {
     const expected = [true, false];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_boolean_boolean(...expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(expected);
     expect(logs).toEqual(expected);
   });
 
   it('logs number boolean mixed params', async () => {
     const expected = [U32_MAX, true];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_number_boolean(...expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(expected);
     expect(logs).toEqual(expected);
   });
 
   it('logs b256', async () => {
     const expected = B256;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_b256(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toBe(expected);
-    expect(logs[0]).toBe(expected);
+    expect(logs).toStrictEqual([expected]);
   });
 
   it('logs b512', async () => {
     const expected = B512;
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_b512(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toBe(expected);
-    expect(logs[0]).toBe(expected);
+    expect(logs).toStrictEqual([expected]);
   });
 
   it('logs b256 b512 multiple params', async () => {
     const expected = [B256, B512];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_b256_b512(...expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(expected);
     expect(logs).toEqual(expected);
   });
 
   it('logs u8 vec', async () => {
     const expected = [U8_MAX, 1, U8_MAX, 5];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_vec_u8(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(expected);
     expect(logs).toEqual([expected]);
   });
 
   it('logs b256 vec', async () => {
     const expected = [hexlify(randomBytes(32)), hexlify(randomBytes(32))];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_vec_b256(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(expected);
     expect(logs).toEqual([expected]);
   });
 
   it('logs bytes', async () => {
     const expected = [40, 41, 42];
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_bytes(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(Uint8Array.from(expected));
     expect(logs).toEqual([Uint8Array.from(expected)]);
   });
 
   it('logs StdString', async () => {
     const expected = 'hello world';
 
-    const { value, logs } = await contractInstance.functions
+    const { logs } = await contractInstance.functions
       .log_std_string(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect(value).toEqual(expected);
     expect(logs).toEqual([expected]);
+  });
+
+  it('logs u16 u8 vec multiple params', async () => {
+    const expected = [U16_MAX, [U8_MAX, 1, U8_MAX, 5]];
+
+    const { logs } = await contractInstance.functions
+      .log_u16_vec_u8(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual(expected);
+  });
+
+  it('logs u16 bytes multiple params', async () => {
+    const expected = [U16_MAX, [40, 41, 42]];
+
+    const { logs } = await contractInstance.functions
+      .log_u16_bytes(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([U16_MAX, Uint8Array.from([40, 41, 42])]);
+  });
+
+  it('logs u16 StdString multiple params', async () => {
+    const expected = [U16_MAX, 'hello world'];
+
+    const { logs } = await contractInstance.functions
+      .log_u16_std_string(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual(expected);
   });
 });

@@ -21,8 +21,11 @@ abi LoggingContract {
     fn log_b256_b512(a: b256, b: B512) -> (b256, B512);
     fn log_vec_u8(a: Vec<u8>) -> Vec<u8>;
     fn log_vec_b256(a: Vec<b256>) -> Vec<b256>;
+    fn log_u16_vec_u8(a: u16, b: Vec<u8>) -> (u16, Vec<u8>);
     fn log_bytes(a: Bytes) -> Bytes;
+    fn log_u16_bytes(a: u16, b: Bytes) -> (u16, Bytes);
     fn log_std_string(a: String) -> String;
+    fn log_u16_std_string(a: u16, b: String) -> (u16, String);
 }
 
 impl LoggingContract for Contract {
@@ -110,5 +113,23 @@ impl LoggingContract for Contract {
     fn log_std_string(a: String) -> String {
         log(a);
         a
+    }
+
+    fn log_u16_vec_u8(a: u16, b: Vec<u8>) -> (u16, Vec<u8>) {
+        log(a);
+        log(b);
+        (a, b)
+    }
+
+    fn log_u16_bytes(a: u16, b: Bytes) -> (u16, Bytes) {
+        log(a);
+        log(b);
+        (a, b)
+    }
+
+    fn log_u16_std_string(a: u16, b: String) -> (u16, String) {
+        log(a);
+        log(b);
+        (a, b)
     }
 }
