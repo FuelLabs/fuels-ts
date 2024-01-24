@@ -4,6 +4,9 @@ import { join } from 'path';
 
 import { findBinPath } from './findBinPath';
 
+/**
+ * @group node
+ */
 describe('findBinPath', () => {
   const bootstrap = (dir: string) => {
     const cmdName = 'my-cmd';
