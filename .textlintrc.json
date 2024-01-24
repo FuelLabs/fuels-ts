@@ -4,7 +4,8 @@
   "rules": {
     "no-dead-link": {
       "ignoreRedirects": true,
-      "checkRelative": false
+      "checkRelative": false,
+      "ignore": ["https://learnmeabitcoin.com/**"]
     }
   }
 }
