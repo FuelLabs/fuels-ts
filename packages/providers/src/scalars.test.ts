@@ -9,7 +9,7 @@ import { Tai64Scalar, UnixMillisecondScalar } from './scalars';
  */
 describe('GraphQL Scalars', () => {
   describe('Tai64', () => {
-    const tai64: string = '4611686020108779312';
+    const tai64: string = '4611686020108779339';
 
     it('should be able to serialize a Tai64', () => {
       const date = DateTime.fromTai64(tai64);
@@ -100,7 +100,7 @@ describe('GraphQL Scalars', () => {
   });
 
   describe('Integration', () => {
-    const tai64: string = '4611686020108779312';
+    const tai64: string = '4611686020108779339';
     const unixMilliseconds: number = 1681391398000;
 
     const QueryRootType = new GraphQLObjectType({

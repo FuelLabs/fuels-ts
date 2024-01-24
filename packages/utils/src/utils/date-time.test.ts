@@ -12,13 +12,13 @@ import {
 
 const { now, nowPlusOneSecond } = {
   now: {
-    tai64: '4611686020108779312',
+    tai64: '4611686020108779339',
     unixSeconds: 1681391398,
     unixMilliseconds: 1681391398000,
     isoString: '2023-04-13T13:09:58.000Z',
   },
   nowPlusOneSecond: {
-    tai64: '4611686020108779313',
+    tai64: '4611686020108779340',
     unixSeconds: 1681391399,
     unixMilliseconds: 1681391399000,
     isoString: '2023-04-13T13:09:59.000Z',
