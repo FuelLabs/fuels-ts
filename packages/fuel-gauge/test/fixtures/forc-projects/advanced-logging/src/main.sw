@@ -7,118 +7,6 @@ use std::contract_id::ContractId;
 
 use advanced_logging_other_contract_abi::AdvancedLoggingOtherContract;
 
-impl AbiEncode for str[8] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[10] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[11] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[12] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[14] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[18] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[24] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
 enum GameState {
     Playing: u8,
     GameOver: u8,
@@ -157,7 +45,9 @@ impl AdvancedLogging for Contract {
             ammo: 10,
             game_id: 10_11_12u64,
             state: GameState::Playing(1),
-            contract_Id: ContractId::from(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF),
+            contract_Id: ContractId::from(
+                0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+            ),
             difficulty: Difficulty::Medium(true),
         };
 
@@ -205,7 +95,9 @@ impl AdvancedLogging for Contract {
             ammo: 10,
             game_id: 10_11_12u64,
             state: GameState::Playing(1),
-            contract_Id: ContractId::from(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF),
+            contract_Id: ContractId::from(
+                0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+            ),
             difficulty: Difficulty::Medium(true),
         };
         require(a == b, game_ref);
