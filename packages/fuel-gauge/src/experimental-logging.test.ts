@@ -243,4 +243,15 @@ describe('Experimental Logging', () => {
 
     expect(logs).toEqual(expected);
   });
+
+  it.skip('logs raw slice', async () => {
+    const expected = [40, 41, 42];
+
+    const { logs } = await contractInstance.functions
+      .log_raw_slice(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
 });

@@ -20,6 +20,7 @@ import { VecCoder } from './coders/v0/vec';
 import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
 import { ByteCoder as ByteCoderV1 } from './coders/v1/byte';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
+import { RawSliceCoder as RawSliceCoderV1 } from './coders/v1/raw-slice';
 import { StdStringCoder as StdStringCoderV1 } from './coders/v1/stdString';
 import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
@@ -94,7 +95,7 @@ export abstract class AbiCoder {
       case 'raw untyped ptr':
         return new U64Coder();
       case 'raw untyped slice':
-        return new RawSliceCoder();
+        return version ? new RawSliceCoderV1() : new RawSliceCoder();
       case 'bool':
         return version ? new BooleanCoderV1() : new BooleanCoder(options);
       case 'b256':

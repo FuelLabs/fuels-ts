@@ -26,6 +26,7 @@ abi LoggingContract {
     fn log_u16_bytes(a: u16, b: Bytes) -> (u16, Bytes);
     fn log_std_string(a: String) -> String;
     fn log_u16_std_string(a: u16, b: String) -> (u16, String);
+    fn log_raw_slice(a: raw_slice) -> raw_slice;
 }
 
 impl LoggingContract for Contract {
@@ -131,5 +132,10 @@ impl LoggingContract for Contract {
         log(a);
         log(b);
         (a, b)
+    }
+
+    fn log_raw_slice(a: raw_slice) -> raw_slice {
+        log(a);
+        a
     }
 }
