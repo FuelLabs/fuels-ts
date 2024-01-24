@@ -25,7 +25,7 @@ beforeAll(async () => {
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
   // TODO: shouldn't be setting this manually
-  const versionedAbi = { version: 1, ...abi };
+  const versionedAbi = { encoding: 1, ...abi };
 
   contractInstance = await setup({ contractBytecode, abi: versionedAbi });
 
@@ -282,6 +282,28 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u16_u8_array(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual(expected);
+  });
+
+  it('logs string', async () => {
+    const expected = 'fuel';
+
+    const { logs } = await contractInstance.functions
+      .log_str_4(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
+
+  it('logs u8 string multiple params', async () => {
+    const expected = [U8_MAX, 'at'];
+
+    const { logs } = await contractInstance.functions
+      .log_u8_str_2(...expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 

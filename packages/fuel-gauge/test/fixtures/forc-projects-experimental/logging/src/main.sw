@@ -30,6 +30,8 @@ abi LoggingContract {
     fn log_u8_array(a: [u8; 3]) -> [u8; 3];
     fn log_u16_array(a: [u16; 3]) -> [u16; 3];
     fn log_u16_u8_array(a: u16, b: [u8; 3]) -> (u16, [u8; 3]);
+    fn log_str_4(a: str[4]) -> str[4];
+    fn log_u8_str_2(a: u8, b: str[2]) -> (u8, str[2]);
 }
 
 impl LoggingContract for Contract {
@@ -153,6 +155,17 @@ impl LoggingContract for Contract {
     }
 
     fn log_u16_u8_array(a: u16, b: [u8; 3]) -> (u16, [u8; 3]) {
+        log(a);
+        log(b);
+        (a, b)
+    }
+
+    fn log_str_4(a: str[4]) -> str[4] {
+        log(a);
+        a
+    }
+
+    fn log_u8_str_2(a: u8, b: str[2]) -> (u8, str[2]) {
         log(a);
         log(b);
         (a, b)

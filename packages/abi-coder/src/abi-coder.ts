@@ -22,6 +22,7 @@ import { ByteCoder as ByteCoderV1 } from './coders/v1/byte';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
 import { RawSliceCoder as RawSliceCoderV1 } from './coders/v1/raw-slice';
 import { StdStringCoder as StdStringCoderV1 } from './coders/v1/stdString';
+import { StringCoder as StringCoderV1 } from './coders/v1/string';
 import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
   arrayRegEx,
@@ -114,7 +115,7 @@ export abstract class AbiCoder {
     if (stringMatch) {
       const length = parseInt(stringMatch.length, 10);
 
-      return new StringCoder(length);
+      return version ? new StringCoderV1(length) : new StringCoder(length);
     }
 
     // ABI types underneath MUST have components by definition
