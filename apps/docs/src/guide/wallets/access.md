@@ -25,17 +25,17 @@ provides greater access via its private key.
 
 ## Basic Example
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/wallet-examples.test.ts#wallets{ts:line-numbers}
 
 ## Transitioning States
 
 A [`WalletLocked`](../../api/Wallet/WalletLocked.md) instance can be unlocked by providing the private key:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/wallet-examples.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
 
 A [`WalletUnlocked`](../../api/Wallet/WalletUnlocked.md) instance can be locked using the `lock` method:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/wallet-examples.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
 
 Most wallet constructors that create or generate a new wallet are provided on
 the [`WalletUnlocked`](../../api/Wallet/WalletUnlocked.md) type. Consider locking the wallet with the `lock` method after the new private
