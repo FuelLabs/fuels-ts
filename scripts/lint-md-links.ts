@@ -6,6 +6,7 @@ import { globSync } from 'glob';
   const mdFiles = globSync('**/*.md', {
     ignore: [
       '**/node_modules/**',
+      'apps/docs/src/api/**', // generated api
       '**/CHANGELOG.md',
       'apps/demo-nextjs/**',
       'apps/demo-react-cra/**',
