@@ -1,27 +1,26 @@
 #!/bin/bash
 
+forc_projects=$(find . -type f -name "Forc.toml")
 main_dir=$(pwd)
-forc_tomls=$(find . -type f -name "Forc.toml")
 forc_fmt=$(realpath ./packages/forc/forc-binaries/forc-fmt)
-expected_authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
+authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
 
-for forc_toml in $forc_tomls; do
+for i in $forc_projects; do
+    cd "${i/Forc.toml/''}" || exit
 
-     # cd into the respective forc project
-    cd ${forc_toml/Forc.toml/''}
-
-    # fix forc formatting
     eval "$forc_fmt"
 
-    # fix TOML `authors` (for projects only)
-    if [ "$(head -n 1 Forc.toml)" == "[project]" ]; then
-        authors=$(grep "authors =" Forc.toml)
-        if [[ "$authors" != "$expected_authors" ]]; then
-            sed -i.bkp "s/authors =.*/${expected_authors}/g" Forc.toml
-            rm "Forc.toml.bkp"
-        fi
+    # format authors field only on projects, not on workspaces
+    if [ "$(head -n 1 Forc.toml)" != '[project]' ]; then
+        cd "$main_dir" || exit
+        continue
     fi
 
-    # back to main dir
-    cd $main_dir
+    if [ "$(grep "authors =" Forc.toml)" = "" ]; then
+        sed -i "1 a $authors" Forc.toml
+    else
+        sed -i -E "s/authors =.*/${authors}/g" Forc.toml
+    fi
+
+    cd "$main_dir" || exit
 done

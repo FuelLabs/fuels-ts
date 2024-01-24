@@ -1,36 +1,32 @@
 #!/bin/bash
 
+forc_projects=$(find . -type f -name "Forc.toml")
 main_dir=$(pwd)
-forc_tomls=$(find . -type f -name "Forc.toml")
 forc_fmt=$(realpath ./packages/forc/forc-binaries/forc-fmt)
-expected_authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
 
 ERRORED=0
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
 
-for forc_toml in $forc_tomls; do
-
-    # cd into the respective forc project
-    cd ${forc_toml/Forc.toml/''}
-
-    # validate forc formatting
+for i in $forc_projects; do
+    cd "${i/Forc.toml/''}" || exit
     eval "$forc_fmt" --check
     if [ $? = "1" ]; then
         ERRORED=1
     fi
 
-    # validate TOML `authors` (for projects only)
-    if [ "$(head -n 1 Forc.toml)" == "[project]" ]; then
-        authors=$(grep "authors =" Forc.toml)
-        if [[ "$authors" != "$expected_authors" ]]; then
-            ERROR=1
-            echo -e "authors field should be: ${RED}$expected_authors] ${NC} but is ${RED}$authors ${NC}"
-        fi
+    # do authors checks only on projects, not on workspaces
+    if [ "$(head -n 1 Forc.toml)" != '[project]' ]; then
+        cd "$main_dir" || exit
+        continue
     fi
 
-    # back to main dir
-    cd $main_dir
+    if [ "$authors" != "$(grep "authors =" Forc.toml)" ]; then
+        echo -e authors field should be: $RED"authors = [\"Fuel Labs <contact@fuel.sh>\"]"$NC but is $RED"$authors"$NC
+        ERRORED=1
+    fi
+    cd "$main_dir" || exit
 done
 
 exit $ERRORED

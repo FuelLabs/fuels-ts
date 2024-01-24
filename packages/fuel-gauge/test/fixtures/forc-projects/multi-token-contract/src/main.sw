@@ -2,10 +2,10 @@ contract;
 
 use std::{
     address::Address,
-    asset::*,
     context::balance_of,
     context::msg_amount,
     contract_id::ContractId,
+    token::*,
 };
 
 use std::constants::ZERO_B256;
