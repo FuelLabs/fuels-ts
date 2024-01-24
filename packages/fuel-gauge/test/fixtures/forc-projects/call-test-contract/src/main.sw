@@ -78,7 +78,7 @@ impl TestContract for Contract {
         value + 1
     }
     fn call_external_foo(param: u64, contract_id: b256) -> u64 {
-        let external_contract = abi(TestContract, contract_id);
+        let external_contract = abi(TestContract, contract_id().into());
         let response = external_contract.foo(param);
         response + 1
     }
