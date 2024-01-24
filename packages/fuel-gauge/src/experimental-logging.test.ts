@@ -203,7 +203,7 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([expected]);
   });
 
-  it.skip('logs bytes', async () => {
+  it('logs bytes', async () => {
     const expected = [40, 41, 42];
 
     const { value, logs } = await contractInstance.functions
@@ -211,7 +211,7 @@ describe('Experimental Logging', () => {
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
-    expect([...value]).toMatchObject(expected);
-    expect(logs).toEqual([expected]);
+    expect(value).toEqual(Uint8Array.from(expected));
+    expect(logs).toEqual([Uint8Array.from(expected)]);
   });
 });
