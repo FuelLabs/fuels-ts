@@ -53,6 +53,8 @@ abi LoggingContract {
     fn log_native_enum(a: MyNativeEnum) -> MyNativeEnum;
     fn log_boolean_enum(a: bool, b: MyEnum) -> (bool, MyEnum);
     fn log_struct(a: MyStruct) -> MyStruct;
+    fn log_struct_vec(a: Vec<MyStruct>) -> Vec<MyStruct>;
+    fn log_struct_boolean(a: MyStruct, b: bool) -> (MyStruct, bool);
 }
 
 impl LoggingContract for Contract {
@@ -221,5 +223,16 @@ impl LoggingContract for Contract {
     fn log_struct(a: MyStruct) -> MyStruct {
         log(a);
         a
+    }
+
+    fn log_struct_vec(a: Vec<MyStruct>) -> Vec<MyStruct> {
+        log(a);
+        a
+    }
+
+    fn log_struct_boolean(a: MyStruct, b: bool) -> (MyStruct, bool) {
+        log(a);
+        log(b);
+        (a, b)
     }
 }
