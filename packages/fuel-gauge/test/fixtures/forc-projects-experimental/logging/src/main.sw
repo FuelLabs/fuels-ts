@@ -16,6 +16,11 @@ enum MyEnum {
     Bar: bool,
 }
 
+struct MyStruct {
+    a: u8,
+    b: u16,
+}
+
 abi LoggingContract {
     fn log_u8(a: u8) -> u8;
     fn log_u16(a: u16) -> u16;
@@ -47,6 +52,7 @@ abi LoggingContract {
     fn log_enum(a: MyEnum) -> MyEnum;
     fn log_native_enum(a: MyNativeEnum) -> MyNativeEnum;
     fn log_boolean_enum(a: bool, b: MyEnum) -> (bool, MyEnum);
+    fn log_struct(a: MyStruct) -> MyStruct;
 }
 
 impl LoggingContract for Contract {
@@ -210,5 +216,10 @@ impl LoggingContract for Contract {
         log(a);
         log(b);
         (a, b)
+    }
+
+    fn log_struct(a: MyStruct) -> MyStruct {
+        log(a);
+        a
     }
 }

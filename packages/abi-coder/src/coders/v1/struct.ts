@@ -1,15 +1,7 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import {
-  concatWithDynamicData,
-  getWordSizePadding,
-  isMultipleOfWordSize,
-  rightPadToWordSize,
-} from '../../utilities';
 import type { TypesOfCoder } from '../abstract-coder';
 import { Coder } from '../abstract-coder';
-
-import { OptionCoder } from './option';
 
 type InputValueOf<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -35,28 +27,9 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
   }
 
-  encode(value: InputValueOf<TCoders>) {
-    const encodedFields = Object.keys(this.coders).map((fieldName) => {
-      const fieldCoder = this.coders[fieldName];
-      const fieldValue = value[fieldName];
-
-      if (!(fieldCoder instanceof OptionCoder) && fieldValue == null) {
-        this.throwError(
-          ErrorCode.ENCODE_ERROR,
-          `Invalid ${this.type}. Field "${fieldName}" not present.`
-        );
-      }
-
-      const encoded = fieldCoder.encode(fieldValue);
-
-      if (!isMultipleOfWordSize(encoded.length)) {
-        return rightPadToWordSize(encoded);
-      }
-
-      return encoded;
-    });
-
-    return concatWithDynamicData([concatWithDynamicData(encodedFields)]);
+  encode(_value: InputValueOf<TCoders>) {
+    throw new FuelError(ErrorCode.ENCODE_ERROR, `Struct encode unsupported in v1`);
+    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
@@ -65,11 +38,6 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       const fieldCoder = this.coders[fieldName];
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
-
-      if (!isMultipleOfWordSize(newOffset)) {
-        newOffset += getWordSizePadding(newOffset);
-      }
-
       // eslint-disable-next-line no-param-reassign
       obj[fieldName as keyof DecodedValueOf<TCoders>] = decoded;
       return obj;

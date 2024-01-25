@@ -24,6 +24,7 @@ import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
 import { RawSliceCoder as RawSliceCoderV1 } from './coders/v1/raw-slice';
 import { StdStringCoder as StdStringCoderV1 } from './coders/v1/stdString';
 import { StringCoder as StringCoderV1 } from './coders/v1/string';
+import { StructCoder as StructCoderV1 } from './coders/v1/struct';
 import { TupleCoder as TupleCoderV1 } from './coders/v1/tuple';
 import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
@@ -157,7 +158,9 @@ export abstract class AbiCoder {
     const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
     if (structMatch) {
       const coders = AbiCoder.getCoders(components, { version, isRightPadded: true });
-      return new StructCoder(structMatch.name, coders);
+      return version
+        ? new StructCoderV1(structMatch.name, coders)
+        : new StructCoder(structMatch.name, coders);
     }
 
     const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;

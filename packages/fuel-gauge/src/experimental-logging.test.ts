@@ -378,4 +378,18 @@ describe('Experimental Logging', () => {
 
     expect(logs).toEqual(expected);
   });
+
+  it('logs struct', async () => {
+    const expected = {
+      a: U8_MAX,
+      b: U16_MAX,
+    };
+
+    const { logs } = await contractInstance.functions
+      .log_struct(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
 });
