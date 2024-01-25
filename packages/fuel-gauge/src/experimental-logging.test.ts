@@ -429,4 +429,40 @@ describe('Experimental Logging', () => {
 
     expect(logs).toEqual(expected);
   });
+
+  it('logs u8 option', async () => {
+    const expectedSome = U8_MAX;
+    const expectedNone = undefined;
+
+    const { logs: logsSome } = await contractInstance.functions
+      .log_option_u8(expectedSome)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    const { logs: logsNone } = await contractInstance.functions
+      .log_option_u8(expectedNone)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logsSome).toEqual([expectedSome]);
+    expect(logsNone).toEqual([expectedNone]);
+  });
+
+  it('logs u16 vec option', async () => {
+    const expectedSome = [U16_MAX, 1, U16_MAX, 5];
+    const expectedNone = undefined;
+
+    const { logs: logsSome } = await contractInstance.functions
+      .log_option_vec_u16(expectedSome)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    const { logs: logsNone } = await contractInstance.functions
+      .log_option_vec_u16(expectedNone)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logsSome).toEqual([expectedSome]);
+    expect(logsNone).toEqual([expectedNone]);
+  });
 });

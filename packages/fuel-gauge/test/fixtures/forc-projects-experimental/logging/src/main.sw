@@ -5,6 +5,7 @@ use std::b512::B512;
 use std::vec::Vec;
 use std::bytes::Bytes;
 use std::string::String;
+use std::option::Option;
 
 enum MyNativeEnum {
     Foo: (),
@@ -55,6 +56,8 @@ abi LoggingContract {
     fn log_struct(a: MyStruct) -> MyStruct;
     fn log_struct_vec(a: Vec<MyStruct>) -> Vec<MyStruct>;
     fn log_struct_boolean(a: MyStruct, b: bool) -> (MyStruct, bool);
+    fn log_option_u8(a: Option<u8>) -> Option<u8>;
+    fn log_option_vec_u16(a: Option<Vec<u16>>) -> Option<Vec<u16>>;
 }
 
 impl LoggingContract for Contract {
@@ -234,5 +237,15 @@ impl LoggingContract for Contract {
         log(a);
         log(b);
         (a, b)
+    }
+
+    fn log_option_u8(a: Option<u8>) -> Option<u8> {
+        log(a);
+        a
+    }
+
+    fn log_option_vec_u16(a: Option<Vec<u16>>) -> Option<Vec<u16>> {
+        log(a);
+        a
     }
 }

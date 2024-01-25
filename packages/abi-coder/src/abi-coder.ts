@@ -21,6 +21,7 @@ import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
 import { ByteCoder as ByteCoderV1 } from './coders/v1/byte';
 import { EnumCoder as EnumCoderV1 } from './coders/v1/enum';
 import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
+import { OptionCoder as OptionCoderV1 } from './coders/v1/option';
 import { RawSliceCoder as RawSliceCoderV1 } from './coders/v1/raw-slice';
 import { StdStringCoder as StdStringCoderV1 } from './coders/v1/stdString';
 import { StringCoder as StringCoderV1 } from './coders/v1/string';
@@ -169,7 +170,9 @@ export abstract class AbiCoder {
 
       const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
-        return new OptionCoder(enumMatch.name, coders);
+        return version
+          ? new OptionCoderV1(enumMatch.name, coders)
+          : new OptionCoder(enumMatch.name, coders);
       }
       return version
         ? new EnumCoderV1(enumMatch.name, coders)
