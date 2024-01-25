@@ -58,6 +58,7 @@ abi LoggingContract {
     fn log_struct_boolean(a: MyStruct, b: bool) -> (MyStruct, bool);
     fn log_option_u8(a: Option<u8>) -> Option<u8>;
     fn log_option_vec_u16(a: Option<Vec<u16>>) -> Option<Vec<u16>>;
+    fn log_str_slice(a: str) -> str;
 }
 
 impl LoggingContract for Contract {
@@ -245,6 +246,11 @@ impl LoggingContract for Contract {
     }
 
     fn log_option_vec_u16(a: Option<Vec<u16>>) -> Option<Vec<u16>> {
+        log(a);
+        a
+    }
+
+    fn log_str_slice(a: str) -> str {
         log(a);
         a
     }

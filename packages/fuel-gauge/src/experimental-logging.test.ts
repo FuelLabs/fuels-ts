@@ -465,4 +465,16 @@ describe('Experimental Logging', () => {
     expect(logsSome).toEqual([expectedSome]);
     expect(logsNone).toEqual([expectedNone]);
   });
+
+  // Requires v1 encoding to be supported for contract calls
+  it.skip('logs str slice', async () => {
+    const expected = 'fuel';
+
+    const { logs } = await contractInstance.functions
+      .log_str_slice(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
 });
