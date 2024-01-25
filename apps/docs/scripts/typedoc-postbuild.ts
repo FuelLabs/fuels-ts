@@ -1,6 +1,7 @@
 import { readdirSync, mkdirSync, copyFileSync, renameSync, writeFileSync, rmSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import replace from 'replace';
+import { fileURLToPath } from 'url';
 
 type Link = {
   link: string;
@@ -17,7 +18,8 @@ type RegexReplacement = {
 /**
  * Post build script to trim off undesired leftovers from Typedoc, restructure directories and generate json for links.
  */
-const docsDir = join(__dirname, '../src/');
+const filename = fileURLToPath(import.meta.url);
+const docsDir = join(dirname(filename), '../src/');
 const apiDocsDir = join(docsDir, '/api');
 const classesDir = join(apiDocsDir, '/classes');
 const modulesDir = join(apiDocsDir, '/modules');
@@ -45,8 +47,8 @@ const removeUnwantedFiles = () =>
     rmSync(fullDirPath, { recursive: true, force: true });
   });
 
-const renameInterfaces = async () => {
-  await renameSync(join(apiDocsDir, 'interfaces'), join(apiDocsDir, 'interfaces_typedoc'));
+const renameInterfaces = () => {
+  renameSync(join(apiDocsDir, 'interfaces'), join(apiDocsDir, 'interfaces_typedoc'));
 };
 
 /**
@@ -80,7 +82,7 @@ const exportLinksJson = () => {
 /**
  * Alters the typedoc generated file structure to be more semantic.
  */
-const alterFileStructure = async () => {
+const alterFileStructure = () => {
   const modulesFiles = readdirSync(modulesDir);
   const classesFiles = readdirSync(classesDir);
   const interfacesFiles = readdirSync(interfacesDir);
@@ -92,7 +94,7 @@ const alterFileStructure = async () => {
     ...enumsFiles.map((e) => ({ name: e, path: enumsDir })),
   ];
 
-  await modulesFiles.forEach((modulesFile) => {
+  modulesFiles.forEach((modulesFile) => {
     // Create a new directory for each module
     const newDirName = modulesFile.split('.')[0];
     const newDirPath = join(apiDocsDir, newDirName);
@@ -167,7 +169,7 @@ const recreateInternalLinks = () => {
 
 const main = async () => {
   log('Cleaning up API docs.');
-  await renameInterfaces();
+  renameInterfaces();
   await alterFileStructure();
   removeUnwantedFiles();
   exportLinksJson();
