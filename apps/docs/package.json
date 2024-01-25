@@ -30,6 +30,6 @@
     "typedoc-plugin-merge-modules": "^5.0.1",
     "vitepress": "1.0.0-rc.40",
     "vitepress-plugin-search": "1.0.4-alpha.19",
-    "vue": "^3.2.47"
+    "vue": "^3.4.15"
   }
 }
