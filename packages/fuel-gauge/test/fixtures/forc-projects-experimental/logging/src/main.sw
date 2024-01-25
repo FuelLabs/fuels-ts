@@ -6,6 +6,16 @@ use std::vec::Vec;
 use std::bytes::Bytes;
 use std::string::String;
 
+enum MyNativeEnum {
+    Foo: (),
+    Bar: (),
+}
+
+enum MyEnum {
+    Foo: u32,
+    Bar: bool,
+}
+
 abi LoggingContract {
     fn log_u8(a: u8) -> u8;
     fn log_u16(a: u16) -> u16;
@@ -34,6 +44,9 @@ abi LoggingContract {
     fn log_u8_str_2(a: u8, b: str[2]) -> (u8, str[2]);
     fn log_u8_u16_tuple(a: (u8, u16)) -> (u8, u16);
     fn log_boolean_u8_vec_tuple(a: (bool, Vec<u8>)) -> (bool, Vec<u8>);
+    fn log_enum(a: MyEnum) -> MyEnum;
+    fn log_native_enum(a: MyNativeEnum) -> MyNativeEnum;
+    fn log_boolean_enum(a: bool, b: MyEnum) -> (bool, MyEnum);
 }
 
 impl LoggingContract for Contract {
@@ -181,5 +194,21 @@ impl LoggingContract for Contract {
     fn log_boolean_u8_vec_tuple(a: (bool, Vec<u8>)) -> (bool, Vec<u8>) {
         log(a);
         a
+    }
+
+    fn log_enum(a: MyEnum) -> MyEnum {
+        log(a);
+        a
+    }
+
+    fn log_native_enum(a: MyNativeEnum) -> MyNativeEnum {
+        log(a);
+        a
+    }
+
+    fn log_boolean_enum(a: bool, b: MyEnum) -> (bool, MyEnum) {
+        log(a);
+        log(b);
+        (a, b)
     }
 }

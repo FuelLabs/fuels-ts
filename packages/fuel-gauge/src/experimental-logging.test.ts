@@ -331,4 +331,51 @@ describe('Experimental Logging', () => {
 
     expect(logs).toEqual([expected]);
   });
+
+  it('logs enum', async () => {
+    const expectedFoo = { Foo: U32_MAX };
+    const expectedBar = { Bar: true };
+
+    const { logs: logsFoo } = await contractInstance.functions
+      .log_enum(expectedFoo)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    const { logs: logsBar } = await contractInstance.functions
+      .log_enum(expectedBar)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logsFoo).toEqual([expectedFoo]);
+    expect(logsBar).toEqual([expectedBar]);
+  });
+
+  it('logs native enum', async () => {
+    const expectedFoo = 'Foo';
+    const expectedBar = 'Bar';
+
+    const { logs: logsFoo } = await contractInstance.functions
+      .log_native_enum(expectedFoo)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    const { logs: logsBar } = await contractInstance.functions
+      .log_native_enum(expectedBar)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logsFoo).toEqual([expectedFoo]);
+    expect(logsBar).toEqual([expectedBar]);
+  });
+
+  it('logs boolean enum multiple params', async () => {
+    const expected = [true, { Foo: U32_MAX }];
+
+    const { logs } = await contractInstance.functions
+      .log_boolean_enum(...expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual(expected);
+  });
 });
