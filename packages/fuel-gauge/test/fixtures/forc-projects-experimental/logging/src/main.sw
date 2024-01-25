@@ -32,6 +32,8 @@ abi LoggingContract {
     fn log_u16_u8_array(a: u16, b: [u8; 3]) -> (u16, [u8; 3]);
     fn log_str_4(a: str[4]) -> str[4];
     fn log_u8_str_2(a: u8, b: str[2]) -> (u8, str[2]);
+    fn log_u8_u16_tuple(a: (u8, u16)) -> (u8, u16);
+    fn log_boolean_u8_vec_tuple(a: (bool, Vec<u8>)) -> (bool, Vec<u8>);
 }
 
 impl LoggingContract for Contract {
@@ -169,5 +171,15 @@ impl LoggingContract for Contract {
         log(a);
         log(b);
         (a, b)
+    }
+
+    fn log_u8_u16_tuple(a: (u8, u16)) -> (u8, u16) {
+        log(a);
+        a
+    }
+
+    fn log_boolean_u8_vec_tuple(a: (bool, Vec<u8>)) -> (bool, Vec<u8>) {
+        log(a);
+        a
     }
 }

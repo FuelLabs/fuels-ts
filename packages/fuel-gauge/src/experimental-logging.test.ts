@@ -309,4 +309,26 @@ describe('Experimental Logging', () => {
 
     expect(logs).toEqual(expected);
   });
+
+  it('logs u8 u16 tuple', async () => {
+    const expected = [U8_MAX, U16_MAX];
+
+    const { logs } = await contractInstance.functions
+      .log_u8_u16_tuple(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
+
+  it('logs boolean u8 vec tuple', async () => {
+    const expected = [true, [U8_MAX, 1, U8_MAX, 5]];
+
+    const { logs } = await contractInstance.functions
+      .log_boolean_u8_vec_tuple(expected)
+      .txParams({ gasPrice, gasLimit: 10_000 })
+      .call();
+
+    expect(logs).toEqual([expected]);
+  });
 });

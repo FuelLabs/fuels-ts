@@ -23,6 +23,7 @@ import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
 import { RawSliceCoder as RawSliceCoderV1 } from './coders/v1/raw-slice';
 import { StdStringCoder as StdStringCoderV1 } from './coders/v1/stdString';
 import { StringCoder as StringCoderV1 } from './coders/v1/string';
+import { TupleCoder as TupleCoderV1 } from './coders/v1/tuple';
 import { VecCoder as VecCoderV1 } from './coders/v1/vec';
 import {
   arrayRegEx,
@@ -174,7 +175,7 @@ export abstract class AbiCoder {
       const coders = components.map((component) =>
         AbiCoder.getCoderImpl(component, { version, isRightPadded: true })
       );
-      return new TupleCoder(coders);
+      return version ? new TupleCoderV1(coders) : new TupleCoder(coders);
     }
 
     if (resolvedAbiType.type === 'str') {
