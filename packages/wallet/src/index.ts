@@ -7,3 +7,4 @@ export * from './mnemonic';
 export * from './wordlists';
 export * from './signer';
 export * from './wallet-manager';
+export * from './predicate';

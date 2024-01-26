@@ -1,6 +1,6 @@
 import { Provider } from '@fuel-ts/providers';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
+import { FUEL_NETWORK_URL } from '../../src/configs';
 import { Predicate } from '../../src/predicate';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';

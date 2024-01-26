@@ -11,7 +11,6 @@ import { AbstractPredicate } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
-import { Predicate } from '@fuel-ts/predicate';
 import { FunctionInvocationScope } from '@fuel-ts/program';
 import { PANIC_REASONS } from '@fuel-ts/program/configs';
 import { Provider } from '@fuel-ts/providers';
@@ -27,6 +26,7 @@ import {
   Language,
   Signer,
   WalletManager,
+  Predicate,
 } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here

@@ -21,9 +21,10 @@ import type {
 } from '@fuel-ts/providers';
 import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
-import type { TxParamsType } from '@fuel-ts/wallet';
-import { Account } from '@fuel-ts/wallet';
 import { getBytesCopy, hexlify } from 'ethers';
+
+import { Account } from '../account';
+import type { TxParamsType } from '../account';
 
 import { getPredicateRoot } from './utils';
 
