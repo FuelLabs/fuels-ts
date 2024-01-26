@@ -19,8 +19,12 @@ import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
+import * as calculateTransactionFeeMod from './calculate-transaction-fee';
 import type { GraphqlTransactionStatus, Operation } from './types';
 
+/**
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let gasCosts: GqlGasCosts;
@@ -44,7 +48,28 @@ describe('TransactionSummary', () => {
     gasCosts = provider.getChain().gasCosts;
   });
 
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  const mockCalculateTransactionFee = () => {
+    const calculateTransactionFee = vi
+      .spyOn(calculateTransactionFeeMod, 'calculateTransactionFee')
+      .mockReturnValue({
+        fee: bn(0),
+        minFee: bn(0),
+        maxFee: bn(0),
+        feeFromGasUsed: bn(0),
+      });
+
+    return {
+      calculateTransactionFee,
+    };
+  };
+
   const runTest = (status: GraphqlTransactionStatus, expected: Record<string, unknown>) => {
+    const { calculateTransactionFee } = mockCalculateTransactionFee();
+
     const transactionSummary = assembleTransactionSummary({
       id,
       gasPerByte,
@@ -59,6 +84,7 @@ describe('TransactionSummary', () => {
     });
 
     expect(transactionSummary).toMatchObject(expected);
+    expect(calculateTransactionFee).toHaveBeenCalledTimes(1);
   };
 
   it('should assemble transaction summary just fine (SUCCESS)', () => {

@@ -9,6 +9,9 @@ import { makeType } from '../../utils/makeType';
 import { EnumType } from './EnumType';
 import { OptionType } from './OptionType';
 
+/**
+ * @group node
+ */
 describe('OptionType.ts', () => {
   /*
     Test helpers

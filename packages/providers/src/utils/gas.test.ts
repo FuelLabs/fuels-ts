@@ -29,6 +29,9 @@ import {
   resolveGasDependentCosts,
 } from './gas';
 
+/**
+ * @group node
+ */
 describe('gas', () => {
   describe('resolveGasDependentCosts', () => {
     it('calculates cost correctly for LightOperation', () => {

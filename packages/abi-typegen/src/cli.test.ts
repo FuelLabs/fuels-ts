@@ -9,21 +9,30 @@ import { run, runCliAction } from './cli';
 import * as runTypegenMod from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
+/**
+ * @group node
+ */
 describe('cli.ts', () => {
   function mockDeps(params?: { runTypegenError: Error }) {
-    const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation(() => {
+    const runTypegen = vi.spyOn(runTypegenMod, 'runTypegen').mockImplementation(() => {
       if (params?.runTypegenError) {
         throw params?.runTypegenError;
       }
     });
-    const exit = jest.spyOn(process, 'exit').mockImplementation();
-    const err = jest.spyOn(stderr, 'write').mockImplementation();
+
+    const exit = vi.spyOn(process, 'exit').mockImplementation(vi.fn());
+    const err = vi.spyOn(stderr, 'write').mockResolvedValue(true);
 
     return { exit, err, runTypegen };
   }
 
-  beforeEach(jest.resetAllMocks);
-  afterEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('should call runTypegen with proper params: for Contracts', async () => {
     const { runTypegen } = mockDeps();

@@ -1,7 +1,7 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const url = `https://fuellabs.github.io/sway/v${forc}/book/forc/commands/forc_test.html`
+  const url = `https://docs.fuel.network/docs/forc/commands/forc_test/`
 </script>
 
 # Testing
@@ -10,11 +10,11 @@ In order to test your Sway and TS-SDK applications, you can test your code in a 
 
 1. Testing with TS-SDK: Compiling you Sway code and connecting to the methods using TS-SDK and JS testing frameworks
 2. Using `forc test` see <a :href="url" target="_blank" rel="noreferrer">the Sway docs</a> for more info
-3. Using [the Rust SDK](https://fuellabs.github.io/fuels-rs/v0.31.1/testing/index.html)
+3. Using [the Rust SDK](https://docs.fuel.network/docs/fuels-rs/testing/)
 
 ### Testing with TS-SDK
 
-To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [Jest](https://jestjs.io/) for its tests.
+To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [`Vitest`](https://vitest.dev/) for its tests.
 
 ### Wallet Test Utilities
 
@@ -40,4 +40,4 @@ stop();
 See also:
 
 1. [Setting up test wallets](../wallets/test-wallets.md)
-2. [Testing with Jest](./testing-with-jest.md)
+2. [Testing in TS](./testing-in-ts.md)

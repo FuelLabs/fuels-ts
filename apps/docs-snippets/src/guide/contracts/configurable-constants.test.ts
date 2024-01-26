@@ -7,6 +7,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
 

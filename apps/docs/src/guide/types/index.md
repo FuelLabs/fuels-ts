@@ -18,6 +18,6 @@ In this section, you will learn about:
 
 As you progress through the documentation, you may find it helpful to refer back to the following resources:
 
-- [Sway Documentation](https://fuellabs.github.io/sway/): Explore the Sway documentation homepage for an overview of Sway Types, as well as other sections.
+- [Sway Documentation](https://docs.fuel.network/docs/sway/): Explore the Sway documentation homepage for an overview of Sway Types, as well as other sections.
 
 - [The Fuel Book](https://fuelbook.fuel.network/master/index.html): A comprehensive guide to the whole Fuel ecosystem.

@@ -9,6 +9,9 @@ import { getTransactionStatusName, processGraphqlStatus } from './status';
 import type { GqlTransactionStatusesNames, GraphqlTransactionStatus } from './types';
 import { TransactionStatus } from './types';
 
+/**
+ * @group node
+ */
 describe('status', () => {
   it('should ensure getTransactionStatusName return status name just fine', () => {
     let status = getTransactionStatusName('FailureStatus');

@@ -9,6 +9,9 @@ import {
 
 import { calculateTransactionFee } from './calculate-transaction-fee';
 
+/**
+ * @group node
+ */
 describe('calculateTransactionFee', () => {
   it('should properly calculate the transaction fee (SCRIPT TX)', () => {
     const transactionRawPayload = MOCK_TX_SCRIPT_RAW_PAYLOAD;

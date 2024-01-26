@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Provider can getMessageProof with all data 1`] = `
+exports[`Provider > can getMessageProof with all data 1`] = `
 {
   "amount": "0xa",
   "blockProof": {
@@ -50,7 +50,7 @@ exports[`Provider can getMessageProof with all data 1`] = `
 }
 `;
 
-exports[`Provider can getMessageStatus 1`] = `
+exports[`Provider > can getMessageStatus 1`] = `
 {
   "state": "SPENT",
 }

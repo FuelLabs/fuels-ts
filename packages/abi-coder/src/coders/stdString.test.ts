@@ -1,7 +1,14 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { StdStringCoder } from './stdString';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('StdStringCoder', () => {
   it('should encode an empty string', () => {
     const coder = new StdStringCoder();
@@ -88,5 +95,27 @@ describe('StdStringCoder', () => {
 
     expect(actual).toEqual(expected);
     expect(newOffset).toEqual(40);
+  });
+
+  it('throws when decoding a string with empty bytes', async () => {
+    const coder = new StdStringCoder();
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid std string data size.')
+    );
+  });
+
+  it('throws when decoding a string with empty byte data', async () => {
+    const coder = new StdStringCoder();
+    const input = new Uint8Array([
+      0, 0, 0, 0, 3, 255, 255, 225, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 255,
+    ]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid std string byte data size.')
+    );
   });
 });

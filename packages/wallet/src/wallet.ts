@@ -12,10 +12,10 @@ export class Wallet {
    * Creates a locked wallet instance from an address and a provider.
    *
    * @param address - The address of the wallet.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @returns A locked wallet instance.
    */
-  static fromAddress(address: string | AbstractAddress, provider: Provider): WalletLocked {
+  static fromAddress(address: string | AbstractAddress, provider?: Provider): WalletLocked {
     return new WalletLocked(address, provider);
   }
 
@@ -23,10 +23,10 @@ export class Wallet {
    * Creates an unlocked wallet instance from a private key and a provider.
    *
    * @param privateKey - The private key of the wallet.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @returns An unlocked wallet instance.
    */
-  static fromPrivateKey(privateKey: BytesLike, provider: Provider) {
+  static fromPrivateKey(privateKey: BytesLike, provider?: Provider) {
     return new WalletUnlocked(privateKey, provider);
   }
 
@@ -42,8 +42,8 @@ export class Wallet {
    * Create a Wallet Unlocked from a seed.
    *
    * @param seed - The seed phrase.
-   * @param path - The derivation path (optional).
    * @param provider - A Provider instance (optional).
+   * @param path - The derivation path (optional).
    * @returns An unlocked wallet instance.
    */
   static fromSeed = WalletUnlocked.fromSeed;
@@ -52,9 +52,9 @@ export class Wallet {
    * Create a Wallet Unlocked from a mnemonic phrase.
    *
    * @param mnemonic - The mnemonic phrase.
+   * @param provider - A Provider instance (optional).
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
-   * @param provider - A Provider instance (optional).
    * @returns An unlocked wallet instance.
    */
   static fromMnemonic = WalletUnlocked.fromMnemonic;
@@ -67,5 +67,14 @@ export class Wallet {
    * @returns An unlocked wallet instance.
    */
   static fromExtendedKey = WalletUnlocked.fromExtendedKey;
+
+  /**
+   * Create a Wallet Unlocked from an encrypted JSON.
+   *
+   * @param jsonWallet - The encrypted JSON keystore.
+   * @param password - The password to decrypt the JSON.
+   * @param provider - A Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static fromEncryptedJson = WalletUnlocked.fromEncryptedJson;
 }

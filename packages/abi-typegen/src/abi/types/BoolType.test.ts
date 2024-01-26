@@ -1,6 +1,9 @@
 import { BoolType } from './BoolType';
 import { U16Type } from './U16Type';
 
+/**
+ * @group node
+ */
 describe('BoolType.ts', () => {
   test('should properly parse type attributes', () => {
     const bool = new BoolType({

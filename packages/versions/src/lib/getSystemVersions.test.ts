@@ -2,12 +2,17 @@ import * as childProcessMod from 'child_process';
 
 import { getSystemVersions } from './getSystemVersions';
 
-// https://stackoverflow.com/a/72885576
-jest.mock('child_process', () => ({
-  __esModule: true,
-  ...jest.requireActual('child_process'),
-}));
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('getSystemVersions.js', () => {
   /*
     Test (mocking) utility
@@ -19,17 +24,17 @@ describe('getSystemVersions.js', () => {
   }) {
     const { systemForcVersion, systemFuelCoreVersion, shouldThrow } = params;
 
-    const error = jest.spyOn(console, 'error').mockImplementation();
+    const error = vi.spyOn(console, 'error').mockImplementation(() => []);
 
-    const mockedExecOk = jest.fn();
+    const mockedExecOk = vi.fn();
     mockedExecOk.mockReturnValueOnce(systemForcVersion); // first call (forc)
     mockedExecOk.mockReturnValueOnce(systemFuelCoreVersion); // second call (fuel-core)
 
-    const execSyncThrow = jest.fn(() => {
+    const execSyncThrow = vi.fn(() => {
       throw new Error();
     });
 
-    const execSync = jest
+    const execSync = vi
       .spyOn(childProcessMod, 'execSync')
       .mockImplementation(shouldThrow ? execSyncThrow : mockedExecOk);
 
