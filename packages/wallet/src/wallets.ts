@@ -12,7 +12,12 @@ import { HDWallet } from './hdwallet';
 import { decryptKeystoreWallet } from './keystore-wallet';
 import { Mnemonic } from './mnemonic';
 import { Signer } from './signer';
-import type { GenerateOptions } from './types/GenerateOptions';
+
+export interface GenerateOptions {
+  /** Additional entropy for the random bytes */
+  entropy?: BytesLike;
+  provider?: Provider;
+}
 
 /**
  * `WalletLocked` provides the functionalities for a locked  wallet.
