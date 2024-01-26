@@ -349,6 +349,10 @@ export default defineConfig({
                 text: 'Transfer All Assets',
                 link: '/guide/cookbook/transfer-all-assets',
               },
+              {
+                text: 'Wallet SDK & React Hooks',
+                link: '/guide/cookbook/wallet-sdk-react-hooks',
+              },
             ],
           },
           {

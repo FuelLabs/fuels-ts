@@ -1,3 +1,4 @@
+// #region wallet-sdk-react-ui
 import {
   useAccount,
   useBalance,
@@ -53,3 +54,4 @@ export default function Home() {
     </div>
   );
 }
+// #endregion wallet-sdk-react-ui
