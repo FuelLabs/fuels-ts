@@ -681,6 +681,12 @@ mutation produceBlocks(
   )
 }
 
+query getMessageByNonce($nonce: Nonce) {
+  message(nonce: $nonce) {
+    ...messageFragment
+  }
+}
+
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
     ...transactionStatusFragment

@@ -52,7 +52,7 @@ export const buildFromGitBranch = (branchName) => {
   rmSync('fuel-core-repo', { recursive: true, force: true });
   rmSync('fuel-core-binaries', { recursive: true, force: true });
   execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
-  execSync(`cd fuel-core-repo && cargo build`, { silent: true });
+  execSync(`cd fuel-core-repo && cargo build --features "p2p"`, { silent: true });
   mkdirSync('fuel-core-binaries');
   cpSync('fuel-core-repo/target/debug/fuel-core', 'fuel-core-binaries/fuel-core');
   rmSync('fuel-core-repo', { recursive: true, force: true });

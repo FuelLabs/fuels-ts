@@ -893,6 +893,7 @@ type Query {
     commitBlockHeight: U32
   ): MessageProof
   messageStatus(nonce: Nonce!): MessageStatus!
+  message(nonce: Nonce): Message
 }
 
 type Receipt {
