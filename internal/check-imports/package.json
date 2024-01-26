@@ -29,7 +29,6 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*",
     "fuels": "workspace:*"
   },
   "version": null

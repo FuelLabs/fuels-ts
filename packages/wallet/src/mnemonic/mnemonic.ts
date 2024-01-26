@@ -1,6 +1,5 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { english } from '@fuel-ts/wordlists';
 import type { BytesLike } from 'ethers';
 import {
   concat,
@@ -12,6 +11,8 @@ import {
   encodeBase58,
   getBytesCopy,
 } from 'ethers';
+
+import { english } from '../wordlists';
 
 import type { MnemonicPhrase } from './utils';
 import {

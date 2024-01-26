@@ -20,7 +20,6 @@ import * as utils from '@fuel-ts/utils';
 import * as versions from '@fuel-ts/versions';
 import * as wallet from '@fuel-ts/wallet';
 import * as walletManager from '@fuel-ts/wallet-manager';
-import * as wordlists from '@fuel-ts/wordlists';
 import * as fuels from 'fuels';
 
 const { log } = console;
@@ -47,5 +46,4 @@ log([
   versions,
   wallet,
   walletManager,
-  wordlists,
 ]);

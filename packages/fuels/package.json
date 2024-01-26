@@ -63,7 +63,6 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*",
     "bundle-require": "^4.0.1",
     "chalk": "4",
     "chokidar": "^3.5.3",
