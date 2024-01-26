@@ -1,4 +1,4 @@
-import { WalletManager } from '@fuel-ts/wallet-manager';
+import { WalletManager } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 /**

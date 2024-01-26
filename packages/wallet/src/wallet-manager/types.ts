@@ -2,9 +2,10 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
-import type { WalletUnlocked } from '@fuel-ts/wallet';
 
-export type Account = {
+import type { WalletUnlocked } from '../wallets';
+
+export type WalletManagerAccount = {
   address: AbstractAddress;
   publicKey: string;
   vaultId?: number;
@@ -43,11 +44,11 @@ export abstract class Vault<TOptions = { secret?: string }> {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 
-  getAccounts(): Account[] {
+  getAccounts(): WalletManagerAccount[] {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 
-  addAccount(): Account {
+  addAccount(): WalletManagerAccount {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 

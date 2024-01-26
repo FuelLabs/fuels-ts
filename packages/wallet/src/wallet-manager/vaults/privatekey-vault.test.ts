@@ -1,8 +1,9 @@
 import { Address } from '@fuel-ts/address';
 import { Provider } from '@fuel-ts/providers';
-import type { WalletUnlocked } from '@fuel-ts/wallet';
-import { Wallet } from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+
+import { FUEL_NETWORK_URL } from '../../configs';
+import { Wallet } from '../../wallet';
+import type { WalletUnlocked } from '../../wallets';
 
 import { PrivateKeyVault } from './privatekey-vault';
 

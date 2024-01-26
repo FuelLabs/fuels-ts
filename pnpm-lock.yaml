@@ -386,9 +386,6 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../../packages/wallet
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../../packages/wallet-manager
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -449,9 +446,6 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../../packages/wallet
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../../packages/wallet-manager
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -727,9 +721,6 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../wallet-manager
       bundle-require:
         specifier: ^4.0.1
         version: 4.0.1(esbuild@0.19.3)
@@ -1130,6 +1121,9 @@ importers:
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
+      events:
+        specifier: ^3.3.0
+        version: 3.3.0
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
@@ -1143,34 +1137,6 @@ importers:
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.1
-
-  packages/wallet-manager:
-    dependencies:
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
-      events:
-        specifier: ^3.3.0
-        version: 3.3.0
-    devDependencies:
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
 
   templates/nextjs:
     dependencies:

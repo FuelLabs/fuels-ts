@@ -18,7 +18,6 @@ import * as transactions from '@fuel-ts/transactions';
 import * as utils from '@fuel-ts/utils';
 import * as versions from '@fuel-ts/versions';
 import * as wallet from '@fuel-ts/wallet';
-import * as walletManager from '@fuel-ts/wallet-manager';
 import * as fuels from 'fuels';
 
 const { log } = console;
@@ -43,5 +42,4 @@ log([
   utils,
   versions,
   wallet,
-  walletManager,
 ]);

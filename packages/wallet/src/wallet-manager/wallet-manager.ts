@@ -3,13 +3,14 @@ import type { Keystore } from '@fuel-ts/crypto';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
+
+import type { WalletUnlocked } from '../wallets';
 
 import MemoryStorage from './storages/memory-storage';
 import type {
   StorageAbstract,
-  Account,
+  WalletManagerAccount,
   VaultConfig,
   VaultsState,
   WalletManagerOptions,
@@ -101,9 +102,9 @@ export class WalletManager extends EventEmitter {
   /**
    * List all accounts on the Wallet Manager not vault information is revealed
    */
-  getAccounts(): Array<Account> {
-    // Return all accounts from vaults
-    return this.#vaults.flatMap<Account>((vaultState, vaultId) =>
+  getAccounts(): Array<WalletManagerAccount> {
+    // Return all WalletManagerAccounts from vaults
+    return this.#vaults.flatMap<WalletManagerAccount>((vaultState, vaultId) =>
       vaultState.vault.getAccounts().map((account) => ({ ...account, vaultId }))
     );
   }
