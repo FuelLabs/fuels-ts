@@ -9,6 +9,9 @@ import {
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
 
+/**
+ * @group node
+ */
 describe('codeInContextPlugin', () => {
   describe('isCodeSnippetToken', () => {
     it('should returns true for valid code snippet tokens', () => {
