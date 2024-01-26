@@ -5,3 +5,4 @@ export * from './wallets';
 export * from './hdwallet';
 export * from './mnemonic';
 export * from './wordlists';
+export * from './signer';

@@ -7,11 +7,11 @@ import type {
   ProviderSendTxParams,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
-import { Signer } from '@fuel-ts/signer';
 import type { BytesLike } from 'ethers';
 
 import { Account } from './account';
 import { encryptKeystoreWallet } from './keystore-wallet';
+import { Signer } from './signer';
 
 /**
  * `BaseWalletUnlocked` provides the base functionalities for an unlocked wallet.

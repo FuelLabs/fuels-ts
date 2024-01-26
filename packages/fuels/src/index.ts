@@ -14,7 +14,6 @@ export * from '@fuel-ts/predicate';
 export * from '@fuel-ts/program';
 export * from '@fuel-ts/program/configs';
 export * from '@fuel-ts/providers';
-export * from '@fuel-ts/signer';
 export * from '@fuel-ts/transactions';
 export * from '@fuel-ts/utils';
 export * from '@fuel-ts/wallet';

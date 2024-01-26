@@ -44,7 +44,9 @@ export class Signer {
   /**
    * Sign data using the Signer instance
    *
-   * Signature is a 64 byte array of the concatenated r and s values with the compressed recoveryParam byte. [Read more](FuelLabs/fuel-specs/specs/protocol/cryptographic_primitives.md#public-key-cryptography)
+   * Signature is a 64 byte array of the concatenated r and s values with the compressed recoveryParam byte.
+   * @ignore
+   * [Read more](FuelLabs/fuel-specs/specs/protocol/cryptographic_primitives.md#public-key-cryptography)
    *
    * @param data - The data to be sign
    * @returns hashed signature

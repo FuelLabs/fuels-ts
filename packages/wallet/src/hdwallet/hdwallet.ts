@@ -1,6 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
-import { Signer } from '@fuel-ts/signer';
 import type { BytesLike } from 'ethers';
 import {
   toBeHex,
@@ -16,6 +15,7 @@ import {
 } from 'ethers';
 
 import { Mnemonic } from '../mnemonic';
+import { Signer } from '../signer';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;

@@ -4,7 +4,6 @@
 //
 /* eslint-disable max-classes-per-file */
 import type { Provider } from '@fuel-ts/providers';
-import { Signer } from '@fuel-ts/signer';
 import type { BytesLike } from 'ethers';
 
 import { Account } from './account';
@@ -12,6 +11,7 @@ import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import { HDWallet } from './hdwallet';
 import { decryptKeystoreWallet } from './keystore-wallet';
 import { Mnemonic } from './mnemonic';
+import { Signer } from './signer';
 import type { GenerateOptions } from './types/GenerateOptions';
 
 /**

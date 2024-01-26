@@ -34,7 +34,6 @@
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "@fuel-ts/hasher": "workspace:*",
-    "@fuel-ts/signer": "workspace:*"
+    "@fuel-ts/hasher": "workspace:*"
   }
 }

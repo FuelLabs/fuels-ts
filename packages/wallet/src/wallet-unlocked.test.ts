@@ -3,7 +3,6 @@ import { hashMessage } from '@fuel-ts/hasher';
 import type { CallResult, TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
-import { Signer } from '@fuel-ts/signer';
 import type { BytesLike } from 'ethers';
 
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
@@ -11,6 +10,7 @@ import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wall
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import { FUEL_NETWORK_URL } from './configs';
 import * as keystoreWMod from './keystore-wallet';
+import { Signer } from './signer';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
