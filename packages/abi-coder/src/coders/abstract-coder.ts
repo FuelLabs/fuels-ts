@@ -1,4 +1,3 @@
-import { FuelError, type ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { BytesLike } from 'ethers';
 
@@ -86,10 +85,6 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
     this.name = name;
     this.type = type;
     this.encodedLength = encodedLength;
-  }
-
-  throwError(errorCode: ErrorCode, message: string): never {
-    throw new FuelError(errorCode, message);
   }
 
   abstract encode(value: TInput, length?: number): Uint8Array;

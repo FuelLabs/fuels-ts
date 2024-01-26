@@ -2,6 +2,9 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { validateBinFile } from './validateBinFile';
 
+/**
+ * @group node
+ */
 describe('validateBinFile.ts', () => {
   test('should not throw for existent Script BIN file', () => {
     const params = {

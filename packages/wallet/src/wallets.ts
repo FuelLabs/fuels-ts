@@ -26,7 +26,7 @@ export class WalletLocked extends Account {
    */
   unlock(privateKey: BytesLike): WalletUnlocked {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return new WalletUnlocked(privateKey, this.provider);
+    return new WalletUnlocked(privateKey, this._provider);
   }
 }
 
@@ -41,7 +41,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    */
   lock(): WalletLocked {
     this.signer = () => new Signer('0x00');
-    return new WalletLocked(this.address, this.provider);
+    return new WalletLocked(this.address, this._provider);
   }
 
   /**
@@ -50,7 +50,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * @param generateOptions - Options to customize the generation process (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static generate(generateOptions: GenerateOptions): WalletUnlocked {
+  static generate(generateOptions?: GenerateOptions): WalletUnlocked {
     const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
 
     return new WalletUnlocked(privateKey, generateOptions?.provider);
@@ -60,11 +60,11 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a seed.
    *
    * @param seed - The seed phrase.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @param path - The derivation path (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static fromSeed(seed: string, provider: Provider, path?: string): WalletUnlocked {
+  static fromSeed(seed: string, provider?: Provider, path?: string): WalletUnlocked {
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
 
@@ -75,14 +75,14 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from a mnemonic phrase.
    *
    * @param mnemonic - The mnemonic phrase.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
    * @returns An instance of WalletUnlocked.
    */
   static fromMnemonic(
     mnemonic: string,
-    provider: Provider,
+    provider?: Provider,
     path?: string,
     passphrase?: BytesLike
   ): WalletUnlocked {
@@ -97,19 +97,27 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * Create a Wallet Unlocked from an extended key.
    *
    * @param extendedKey - The extended key.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static fromExtendedKey(extendedKey: string, provider: Provider): WalletUnlocked {
+  static fromExtendedKey(extendedKey: string, provider?: Provider): WalletUnlocked {
     const hdWallet = HDWallet.fromExtendedKey(extendedKey);
 
     return new WalletUnlocked(<string>hdWallet.privateKey, provider);
   }
 
+  /**
+   * Create a Wallet Unlocked from an encrypted JSON.
+   *
+   * @param jsonWallet - The encrypted JSON keystore.
+   * @param password - The password to decrypt the JSON.
+   * @param provider - A Provider instance (optional).
+   * @returns An unlocked wallet instance.
+   */
   static async fromEncryptedJson(
     jsonWallet: string,
     password: string,
-    provider: Provider
+    provider?: Provider
   ): Promise<WalletUnlocked> {
     const privateKey = await decryptKeystoreWallet(jsonWallet, password);
 

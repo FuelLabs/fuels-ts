@@ -6,6 +6,9 @@ import { parseTypes } from '../../utils/parseTypes';
 
 import { Function } from './Function';
 
+/**
+ * @group node
+ */
 describe('Function.ts', () => {
   /*
     Method: `getDeclaration`

@@ -2,6 +2,9 @@ import { readVersionsFromFiles } from '../../scripts/rewriteVersions';
 
 import { getBuiltinVersions } from './getBuiltinVersions';
 
+/**
+ * @group node
+ */
 describe('getBuiltinVersions.js', () => {
   test('should return received version of default', () => {
     const versions = getBuiltinVersions();

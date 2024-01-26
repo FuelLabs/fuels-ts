@@ -16,6 +16,9 @@ import {
   getDocsSnippetsForcProject,
 } from '../../../test/fixtures/forc-projects';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
   let provider: Provider;

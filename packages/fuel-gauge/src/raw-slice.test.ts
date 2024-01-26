@@ -33,6 +33,9 @@ beforeAll(async () => {
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
+/**
+ * @group node
+ */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
     const INPUT = 10;
