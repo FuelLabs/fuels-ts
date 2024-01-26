@@ -1,4 +1,4 @@
-export * from './base-unlocked-wallet';
+export * from './base-wallet-unlocked';
 export * from './account';
 export * from './wallet';
 export * from './wallets';

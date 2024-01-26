@@ -7,7 +7,7 @@ import type { BytesLike } from 'ethers';
 
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
 
-import { BaseWalletUnlocked } from './base-unlocked-wallet';
+import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import { FUEL_NETWORK_URL } from './configs';
 import * as keystoreWMod from './keystore-wallet';
 import { Signer } from './signer';

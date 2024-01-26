@@ -7,7 +7,7 @@ import type { Provider } from '@fuel-ts/providers';
 import type { BytesLike } from 'ethers';
 
 import { Account } from './account';
-import { BaseWalletUnlocked } from './base-unlocked-wallet';
+import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import { HDWallet } from './hdwallet';
 import { decryptKeystoreWallet } from './keystore-wallet';
 import { Mnemonic } from './mnemonic';
