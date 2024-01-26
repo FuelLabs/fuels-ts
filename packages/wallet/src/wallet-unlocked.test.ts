@@ -11,7 +11,7 @@ import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import { FUEL_NETWORK_URL } from './configs';
 import * as keystoreWMod from './keystore-wallet';
 import { Signer } from './signer';
-import walletSpec from './wallet-spec';
+import walletSpec from '../test/fixtures/wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 vi.mock('@fuel-ts/providers', async () => {
