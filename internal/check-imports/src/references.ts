@@ -7,7 +7,6 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
-import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractPredicate } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
@@ -22,7 +21,7 @@ import { Signer } from '@fuel-ts/signer';
 import { InputCoinCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
-import { Wallet } from '@fuel-ts/wallet';
+import { Wallet, HDWallet } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
