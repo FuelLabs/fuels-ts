@@ -1112,7 +1112,7 @@ describe('Provider', () => {
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(nonce);
   });
-   
+
   it('should accept string addresses in methods that require an address', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
