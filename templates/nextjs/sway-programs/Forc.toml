@@ -1,0 +1,6 @@
+[workspace]
+members=[
+  "contract",
+  "predicate",
+  "script"
+]

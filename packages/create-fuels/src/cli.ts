@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
+import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
 import { Command } from 'commander';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import { join } from 'path';
 import prompts from 'prompts';
@@ -13,10 +14,41 @@ const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
 
+const processWorkspaceToml = (
+  fileContents: string,
+  programsToInclude: { contract: boolean; predicate: boolean; script: boolean }
+) => {
+  const parsed = toml.parse(fileContents) as {
+    workspace: {
+      members: string[];
+    };
+  };
+
+  parsed.workspace.members = parsed.workspace.members.filter((member) => {
+    if (member === 'predicate' && !programsToInclude.predicate) {
+      return false;
+    }
+    if (member === 'contract' && !programsToInclude.contract) {
+      return false;
+    }
+    if (member === 'script' && !programsToInclude.script) {
+      return false;
+    }
+    return true;
+  });
+
+  return toml.stringify(parsed);
+};
+
 export const runScaffoldCli = async (
   explicitProjectPath?: string,
   explicitPackageManger?: string,
-  shouldInstallDeps = true
+  shouldInstallDeps = true,
+  programsToInclude = {
+    contract: true,
+    predicate: false,
+    script: false,
+  }
 ) => {
   let projectPath = explicitProjectPath || '';
   let packageManager = explicitPackageManger || '';
@@ -65,6 +97,25 @@ export const runScaffoldCli = async (
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
+
+  // Process the programs to include
+
+  // delete the programs that are not to be included
+  if (!programsToInclude.contract) {
+    execSync(`rm -rf ${join(projectPath, 'sway-programs/contract')}`);
+  }
+  if (!programsToInclude.predicate) {
+    execSync(`rm -rf ${join(projectPath, 'sway-programs/predicate')}`);
+  }
+  if (!programsToInclude.script) {
+    execSync(`rm -rf ${join(projectPath, 'sway-programs/script')}`);
+  }
+
+  // remove the programs that are not included from the Forc.toml members field. rewrite the file
+  const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
+  const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
+  const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
+  writeFileSync(forcTomlPath, newForcTomlContents);
 
   if (shouldInstallDeps) {
     process.chdir(projectPath);
