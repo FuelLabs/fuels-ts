@@ -4,7 +4,10 @@ import type { BigNumberish } from '@fuel-ts/math';
 import * as getBytesCopyMod from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import { assembleTransferToContractScript, formatTransferToContractScriptData } from './utils';
+import {
+  assembleTransferToContractScript,
+  formatTransferToContractScriptData,
+} from './formatTransferToContractScriptData';
 
 vi.mock('@fuels/vm-asm', async () => {
   const mod = await vi.importActual('@fuels/vm-asm');

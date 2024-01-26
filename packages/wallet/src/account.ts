@@ -29,7 +29,7 @@ import {
 import { getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import { assembleTransferToContractScript } from './utils';
+import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
