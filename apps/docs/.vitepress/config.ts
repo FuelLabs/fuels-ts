@@ -418,6 +418,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Getting a Message by Nonce',
+                link: '/guide/messages/getting-a-message-by-nonce',
+              },
+              {
                 text: 'Getting a Message Proof',
                 link: '/guide/messages/getting-a-message-proof',
               },
