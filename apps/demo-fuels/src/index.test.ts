@@ -14,6 +14,10 @@ import { SampleAbi__factory } from './sway-programs-api';
 import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
 
 let gasPrice: BN;
+
+/**
+ * @group node
+ */
 describe('ExampleContract', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

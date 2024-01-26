@@ -5,6 +5,9 @@ import type { IType } from '../types/interfaces/IType';
 import { makeType } from './makeType';
 import { parseFunctions } from './parseFunctions';
 
+/**
+ * @group node
+ */
 describe('functions.ts', () => {
   test('should parse an array of raw abi functions', () => {
     const rawU8: IRawAbiTypeRoot = {

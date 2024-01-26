@@ -1,5 +1,6 @@
-import type { BytesLike } from 'ethers';
-import { getBytes } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
+
+import { arrayify } from './arrayify';
 
 const HexCharacters: string = '0123456789abcdef';
 
@@ -7,7 +8,7 @@ const HexCharacters: string = '0123456789abcdef';
  *  Returns a hex representation of the inputted bytes.
  */
 export function hexlify(data: BytesLike): string {
-  const bytes = getBytes(data);
+  const bytes = arrayify(data);
 
   let result = '0x';
   for (let i = 0; i < bytes.length; i++) {

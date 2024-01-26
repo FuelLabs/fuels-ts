@@ -7,7 +7,7 @@
       "plugins": [
         { "typescript": {} },
         { "typescript-operations": {} },
-        { "typescript-graphql-request": {} }
+        { "typescript-generic-sdk": {} }
       ],
       "config": {
         "scalars": {

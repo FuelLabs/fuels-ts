@@ -7,6 +7,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let echoContract: Contract;
   let counterContract: Contract;

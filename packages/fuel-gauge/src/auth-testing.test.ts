@@ -15,6 +15,9 @@ let contractInstance: Contract;
 let wallet: WalletUnlocked;
 let gasPrice: BN;
 
+/**
+ * @group node
+ */
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

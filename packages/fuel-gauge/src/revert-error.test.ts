@@ -18,6 +18,9 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
+/**
+ * @group node
+ */
 describe('Revert Error Testing', () => {
   let gasPrice: BN;
 

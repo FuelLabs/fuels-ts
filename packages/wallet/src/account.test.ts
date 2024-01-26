@@ -16,19 +16,27 @@ import type { TxParamsType } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
-jest.mock('@fuel-ts/providers', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/providers'),
-}));
+vi.mock('@fuel-ts/providers', async () => {
+  const mod = await vi.importActual('@fuel-ts/providers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 let provider: Provider;
 
-afterEach(jest.restoreAllMocks);
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
 });
 
+/**
+ * @group node
+ */
 describe('Account', () => {
   const assets = [
     '0x0101010101010101010101010101010101010101010101010101010101010101',
@@ -36,7 +44,7 @@ describe('Account', () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  it('Create wallet using a address', () => {
+  it('should create account using an address, with a provider', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -44,6 +52,22 @@ describe('Account', () => {
     expect(account.address.toB256()).toEqual(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
+  });
+
+  it('should create account using an address, without a provider', () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    expect(account.address.toB256()).toEqual(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+  });
+
+  it('should throw an error when using a provider dependent method, without a provider', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    await expect(() => account.getBalance()).rejects.toThrow(/Provider not set/);
   });
 
   it('should get coins just fine', async () => {
@@ -63,9 +87,9 @@ describe('Account', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    const getCoins = async () => Promise.resolve(dummyCoins);
-
-    jest.spyOn(providersMod.Provider.prototype, 'getCoins').mockImplementation(getCoins);
+    vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
+      Promise.resolve(dummyCoins)
+    );
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -127,12 +151,11 @@ describe('Account', () => {
   });
 
   it('should throw if messages length is higher than 9999', async () => {
-    // mocking
-    const messages: Message[] = new Array(10000);
-    const mockedGetMessages = async () => Promise.resolve(messages);
-    jest
-      .spyOn(providersMod.Provider.prototype, 'getMessages')
-      .mockImplementationOnce(mockedGetMessages);
+    const dummyMessages: Message[] = new Array(10000);
+
+    vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
+      Promise.resolve(dummyMessages)
+    );
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
@@ -175,13 +198,11 @@ describe('Account', () => {
   });
 
   it('should throw if balances length is higher than 9999', async () => {
-    const dummyBalace: CoinQuantity[] = new Array(10000);
+    const dummyBalances: CoinQuantity[] = new Array(10000);
 
-    const mockedGetBalances = async () => Promise.resolve(dummyBalace);
-
-    jest
-      .spyOn(providersMod.Provider.prototype, 'getBalances')
-      .mockImplementation(mockedGetBalances);
+    vi.spyOn(Provider.prototype, 'getBalances').mockImplementation(async () =>
+      Promise.resolve(dummyBalances)
+    );
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -218,6 +239,21 @@ describe('Account', () => {
     expect(account.provider).not.toBe(provider);
   });
 
+  it('should be able to set a provider', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+    expect(account.provider).not.toBe(newProviderInstance);
+
+    account.provider = newProviderInstance;
+
+    expect(account.provider).toBe(newProviderInstance);
+    expect(account.provider).not.toBe(provider);
+  });
+
   it('should execute fund just as fine', async () => {
     const quantities: CoinQuantity[] = [
       {
@@ -230,13 +266,13 @@ describe('Account', () => {
     const request = new ScriptTransactionRequest();
 
     const resourcesToSpend: Resource[] = [];
-    const getResourcesToSpendSpy = jest
+    const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementationOnce(() => Promise.resolve(resourcesToSpend));
 
-    const addResourcesSpy = jest.spyOn(request, 'addResources');
+    const addResourcesSpy = vi.spyOn(request, 'addResources');
 
-    const addAmountToAssetSpy = jest.spyOn(providersMod, 'addAmountToAsset');
+    const addAmountToAssetSpy = vi.spyOn(providersMod, 'addAmountToAsset');
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -292,21 +328,19 @@ describe('Account', () => {
     };
 
     const request = new ScriptTransactionRequest();
-    jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+    vi.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
     const transactionResponse = new TransactionResponse('transactionId', provider);
 
-    const addCoinOutputSpy = jest.spyOn(request, 'addCoinOutput');
+    const addCoinOutputSpy = vi.spyOn(request, 'addCoinOutput');
 
-    const fundSpy = jest
-      .spyOn(Account.prototype, 'fund')
-      .mockImplementation(() => Promise.resolve());
+    const fundSpy = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
-    const sendTransactionSpy = jest
+    const sendTransactionSpy = vi
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
-    const getTransactionCost = jest
+    const getTransactionCost = vi
       .spyOn(Provider.prototype, 'getTransactionCost')
       .mockImplementation(() => Promise.resolve(transactionCost));
 
@@ -363,17 +397,17 @@ describe('Account', () => {
 
     const transactionResponse = {} as unknown as TransactionResponse;
 
-    const scriptTransactionRequest = jest
+    const scriptTransactionRequest = vi
       .spyOn(providersMod, 'ScriptTransactionRequest')
       .mockImplementation(() => request);
 
-    const getTransactionCost = jest
+    const getTransactionCost = vi
       .spyOn(providersMod.Provider.prototype, 'getTransactionCost')
       .mockImplementation(() => Promise.resolve(cost));
 
-    const fund = jest.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
+    const fund = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
 
-    const sendTransaction = jest
+    const sendTransaction = vi
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
@@ -412,13 +446,13 @@ describe('Account', () => {
     const transactionRequest = new ScriptTransactionRequest();
     const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
 
-    const transactionRequestify = jest.spyOn(providersMod, 'transactionRequestify');
+    const transactionRequestify = vi.spyOn(providersMod, 'transactionRequestify');
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const sendTransaction = jest
+    const sendTransaction = vi
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
@@ -448,15 +482,15 @@ describe('Account', () => {
     const transactionRequest = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
-    const transactionRequestify = jest
+    const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const simulate = jest
+    const simulate = vi
       .spyOn(providersMod.Provider.prototype, 'simulate')
       .mockImplementation(() => Promise.resolve(callResult));
 

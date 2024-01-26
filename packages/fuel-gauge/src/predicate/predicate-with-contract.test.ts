@@ -16,12 +16,16 @@ import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
   );
-  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
-    getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+  const { binHexlified: tokenPoolBytes, abiContents: tokenPoolAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.TOKEN_CONTRACT
+  );
 
   const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
@@ -83,8 +87,8 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       const contract = await new ContractFactory(
-        liquidityPoolBytes,
-        liquidityPoolAbi,
+        tokenPoolBytes,
+        tokenPoolAbi,
         wallet
       ).deployContract({ gasPrice });
 
@@ -94,15 +98,10 @@ describe('Predicate', () => {
       contract.account = receiver;
       await expect(
         contract.functions
-          .deposit({
-            value: receiver.address.toB256(),
-          })
-          .callParams({
-            forward: [100, BaseAssetId],
-          })
+          .mint_coins(200)
           .txParams({
             gasPrice,
-            gasLimit: 10_000,
+            gasLimit: 1_000,
           })
           .call()
       ).rejects.toThrow(/not enough coins to fit the target/);
@@ -136,23 +135,12 @@ describe('Predicate', () => {
       // calling the contract with the receiver account (with resources)
       const contractAmount = 10;
       const {
-        transactionResult: { fee: receiverTxFee1 },
+        transactionResult: { fee: receiverTxFee },
       } = await contract.functions
-        .set_base_token(BaseAssetId)
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call();
-      const {
-        transactionResult: { fee: receiverTxFee2 },
-      } = await contract.functions
-        .deposit({
-          value: receiver.address.toB256(),
-        })
-        .callParams({
-          forward: [contractAmount, BaseAssetId],
-        })
+        .mint_coins(200)
         .txParams({
           gasPrice,
-          gasLimit: 10_000,
+          gasLimit: 1_000,
         })
         .call();
 
@@ -160,11 +148,7 @@ describe('Predicate', () => {
       const remainingPredicateBalance = toNumber(await predicate.getBalance());
 
       const expectedFinalReceiverBalance =
-        initialReceiverBalance +
-        amountToReceiver -
-        contractAmount -
-        receiverTxFee1.toNumber() -
-        receiverTxFee2.toNumber();
+        initialReceiverBalance + amountToReceiver - contractAmount - receiverTxFee.toNumber();
 
       expectToBeInRange({
         value: finalReceiverBalance,

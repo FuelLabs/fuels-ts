@@ -6,6 +6,10 @@ import { MemoryCache } from '../src/memory-cache';
 
 const CACHE_ITEMS = [hexlify(randomBytes(8)), randomBytes(8), randomBytes(8)];
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Memory Cache', () => {
   it('can construct [valid numerical ttl]', () => {
     const memCache = new MemoryCache(1000);

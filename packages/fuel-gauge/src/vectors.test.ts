@@ -17,6 +17,9 @@ enum SmallEnum {
   Empty = 'Empty',
 }
 
+/**
+ * @group node
+ */
 describe('Vector Tests', () => {
   it('should test u8 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];

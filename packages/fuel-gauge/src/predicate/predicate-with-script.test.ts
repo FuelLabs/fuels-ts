@@ -8,6 +8,9 @@ import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS

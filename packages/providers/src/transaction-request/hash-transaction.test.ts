@@ -5,6 +5,9 @@ import { SCRIPT_TX_REQUEST } from '../../test/fixtures/transaction-request';
 
 import { hashTransaction } from './hash-transaction';
 
+/**
+ * @group node
+ */
 describe('hashTransaction', () => {
   it('Hash script transaction request', () => {
     expect(hashTransaction(SCRIPT_TX_REQUEST, 0)).toEqual(
