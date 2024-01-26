@@ -1,15 +1,14 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import type { BN } from '@fuel-ts/math';
 
-import { WORD_SIZE } from '../../constants';
 import type { Uint8ArrayWithDynamicData } from '../../utilities';
 import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../../utilities';
 import { Coder } from '../abstract-coder';
 
 import { ArrayCoder } from './array';
+import { NumberCoder } from './number';
 import { U64Coder } from './u64';
 
-export class RawSliceCoder extends Coder<number[], BN[]> {
+export class RawSliceCoder extends Coder<number[], number[]> {
   constructor() {
     super('raw untyped slice', 'raw untyped slice', BASE_RAW_SLICE_OFFSET);
   }
@@ -20,7 +19,7 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
     }
 
     const parts: Uint8Array[] = [];
-    const coder = new U64Coder();
+    const coder = new NumberCoder('u8', { isSmallBytes: true });
 
     // pointer (ptr)
     const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_RAW_SLICE_OFFSET);
@@ -33,13 +32,16 @@ export class RawSliceCoder extends Coder<number[], BN[]> {
     parts.push(pointer);
 
     // length (len)
-    parts.push(new U64Coder().encode(value.length * WORD_SIZE));
+    parts.push(new U64Coder().encode(value.length));
 
     return concatWithDynamicData(parts);
   }
 
-  decode(data: Uint8Array, offset: number): [BN[], number] {
-    const internalCoder = new ArrayCoder(new U64Coder(), data.length / 8);
+  decode(data: Uint8Array, offset: number): [number[], number] {
+    const internalCoder = new ArrayCoder(
+      new NumberCoder('u8', { isSmallBytes: true }),
+      data.length
+    );
     const decoded = internalCoder.decode(data, offset);
 
     return decoded;

@@ -462,6 +462,7 @@ describe('Experimental Logging', () => {
       .log_raw_slice(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
+
     expect(logs).toEqual([expected]);
   });
 

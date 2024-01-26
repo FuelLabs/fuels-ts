@@ -25,7 +25,7 @@ export class RawSliceCoder extends Coder<number[], number[]> {
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + length);
     const internalCoder = new ArrayCoder(new NumberCoder('u8'), length);
     const [decodedValue] = internalCoder.decode(dataBytes, 0);
-
+    
     return [decodedValue, offsetAndLength + length];
   }
 }
