@@ -31,10 +31,26 @@ describe('util', () => {
   });
 
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
-    const script = await assembleTransferToContractScript();
+    const hexelifiedContractId = '0x1234567890123456789012345678901234567890';
+    const amountToTransfer: BigNumberish = 0;
+    const assetId: BytesLike = BaseAssetId;
+
+    const { script, scriptData } = await assembleTransferToContractScript({
+      hexelifiedContractId,
+      amountToTransfer,
+      assetId,
+    });
+
     expect(script).toStrictEqual(
       new Uint8Array([
         97, 64, 0, 10, 80, 69, 0, 32, 93, 73, 16, 0, 80, 77, 16, 8, 60, 65, 36, 192, 36, 4, 0, 0,
+      ])
+    );
+    expect(scriptData).toStrictEqual(
+      new Uint8Array([
+        18, 52, 86, 120, 144, 18, 52, 86, 120, 144, 18, 52, 86, 120, 144, 18, 52, 86, 120, 144, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
       ])
     );
   });
@@ -48,11 +64,15 @@ describe('util', () => {
       .spyOn(getBytesCopyMod, 'getBytesCopy')
       .mockReturnValue(Uint8Array.from(byte));
 
-    const contractId = '0x1234567890123456789012345678901234567890';
+    const hexelifiedContractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
     const assetId: BytesLike = BaseAssetId;
 
-    const scriptData = formatTransferToContractScriptData(contractId, amountToTransfer, assetId);
+    const scriptData = formatTransferToContractScriptData({
+      hexelifiedContractId,
+      amountToTransfer,
+      assetId,
+    });
 
     expect(scriptData).toStrictEqual(Uint8Array.from([].concat(...Array(3).fill(byte))));
 

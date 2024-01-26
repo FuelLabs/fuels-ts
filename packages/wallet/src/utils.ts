@@ -4,7 +4,35 @@ import { BN, type BigNumberish } from '@fuel-ts/math';
 import * as asm from '@fuels/vm-asm';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
-export const assembleTransferToContractScript = async () => {
+interface IAssembleTransferToContractScriptParams {
+  hexelifiedContractId: B256Address;
+  amountToTransfer: BigNumberish;
+  assetId: BytesLike;
+}
+
+export const formatTransferToContractScriptData = (
+  params: IAssembleTransferToContractScriptParams
+) => {
+  const { assetId, amountToTransfer, hexelifiedContractId } = params;
+
+  const numberCoder = new U64Coder();
+
+  const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
+
+  const scriptData = Uint8Array.from([
+    ...getBytesCopy(hexelifiedContractId),
+    ...encoded,
+    ...getBytesCopy(assetId),
+  ]);
+
+  return scriptData;
+};
+
+export const assembleTransferToContractScript = async (
+  params: IAssembleTransferToContractScriptParams
+) => {
+  const scriptData = formatTransferToContractScriptData(params);
+
   // implementation extracted from Rust SDK at:
   // https://github.com/FuelLabs/fuels-rs/blob/master/packages/fuels-core/src/types/transaction_builders.rs#L240-L272
   // This script loads:
@@ -35,23 +63,5 @@ export const assembleTransferToContractScript = async () => {
     ...ret.to_bytes(),
   ]);
 
-  return script;
-};
-
-export const formatTransferToContractScriptData = (
-  hexelifiedContractId: B256Address,
-  amountToTransfer: BigNumberish,
-  assetId: BytesLike
-) => {
-  const numberCoder = new U64Coder();
-
-  const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
-
-  const scriptData = Uint8Array.from([
-    ...getBytesCopy(hexelifiedContractId),
-    ...encoded,
-    ...getBytesCopy(assetId),
-  ]);
-
-  return scriptData;
+  return { script, scriptData };
 };
