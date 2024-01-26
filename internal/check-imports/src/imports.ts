@@ -10,7 +10,6 @@ import * as hasher from '@fuel-ts/hasher';
 import * as interfaces from '@fuel-ts/interfaces';
 import * as math from '@fuel-ts/math';
 import * as merkle from '@fuel-ts/merkle';
-import * as mnemonic from '@fuel-ts/mnemonic';
 import * as predicate from '@fuel-ts/predicate';
 import * as program from '@fuel-ts/program';
 import * as providers from '@fuel-ts/providers';
@@ -38,7 +37,6 @@ log([
   crypto,
   math,
   merkle,
-  mnemonic,
   predicate,
   program,
   providers,

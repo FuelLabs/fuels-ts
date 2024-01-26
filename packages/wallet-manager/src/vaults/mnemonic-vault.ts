@@ -1,10 +1,9 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { Mnemonic } from '@fuel-ts/mnemonic';
 import type { Provider } from '@fuel-ts/providers';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
-import { Wallet } from '@fuel-ts/wallet';
+import { Mnemonic, Wallet } from '@fuel-ts/wallet';
 
 import type { Vault } from '../types';
 
