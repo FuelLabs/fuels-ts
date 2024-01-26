@@ -29,10 +29,7 @@ import {
 import { getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import {
-  composeScriptForTransferringToContract,
-  formatScriptDataForTransferringToContract,
-} from './utils';
+import { assembleTransferToContractScript, formatTransferToContractScriptData } from './utils';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
@@ -380,9 +377,9 @@ export class Account extends AbstractAccount {
     const { minGasPrice } = this.provider.getGasConfig();
     const params = { gasPrice: minGasPrice, ...txParams };
 
-    const script = await composeScriptForTransferringToContract();
+    const script = await assembleTransferToContractScript();
 
-    const scriptData = formatScriptDataForTransferringToContract(
+    const scriptData = formatTransferToContractScriptData(
       contractAddress.toB256(),
       amount,
       assetId

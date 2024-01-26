@@ -4,10 +4,7 @@ import type { BigNumberish } from '@fuel-ts/math';
 import * as getBytesCopyMod from 'ethers';
 import type { BytesLike } from 'ethers';
 
-import {
-  composeScriptForTransferringToContract,
-  formatScriptDataForTransferringToContract,
-} from './utils';
+import { assembleTransferToContractScript, formatTransferToContractScriptData } from './utils';
 
 vi.mock('@fuels/vm-asm', async () => {
   const mod = await vi.importActual('@fuels/vm-asm');
@@ -34,7 +31,7 @@ describe('util', () => {
   });
 
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
-    const script = await composeScriptForTransferringToContract();
+    const script = await assembleTransferToContractScript();
     expect(script).toStrictEqual(
       new Uint8Array([
         97, 64, 0, 10, 80, 69, 0, 32, 93, 73, 16, 0, 80, 77, 16, 8, 60, 65, 36, 192, 36, 4, 0, 0,
@@ -55,11 +52,7 @@ describe('util', () => {
     const amountToTransfer: BigNumberish = 0;
     const assetId: BytesLike = BaseAssetId;
 
-    const scriptData = formatScriptDataForTransferringToContract(
-      contractId,
-      amountToTransfer,
-      assetId
-    );
+    const scriptData = formatTransferToContractScriptData(contractId, amountToTransfer, assetId);
 
     expect(scriptData).toStrictEqual(Uint8Array.from([].concat(...Array(3).fill(byte))));
 

@@ -4,7 +4,7 @@ import { BN, type BigNumberish } from '@fuel-ts/math';
 import * as asm from '@fuels/vm-asm';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
-export const composeScriptForTransferringToContract = async () => {
+export const assembleTransferToContractScript = async () => {
   // implementation extracted from Rust SDK at:
   // https://github.com/FuelLabs/fuels-rs/blob/master/packages/fuels-core/src/types/transaction_builders.rs#L240-L272
   // This script loads:
@@ -38,7 +38,7 @@ export const composeScriptForTransferringToContract = async () => {
   return script;
 };
 
-export const formatScriptDataForTransferringToContract = (
+export const formatTransferToContractScriptData = (
   hexelifiedContractId: B256Address,
   amountToTransfer: BigNumberish,
   assetId: BytesLike
