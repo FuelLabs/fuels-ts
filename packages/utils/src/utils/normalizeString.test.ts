@@ -2,6 +2,10 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import { normalizeString } from './normalizeString';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('normalize.ts', () => {
   test('should normalize strings', () => {
     expect(normalizeString('DsToken')).toEqual('DsToken');

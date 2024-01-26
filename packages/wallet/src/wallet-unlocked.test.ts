@@ -14,13 +14,19 @@ import * as keystoreWMod from './keystore-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-jest.mock('@fuel-ts/providers', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/providers'),
-}));
+vi.mock('@fuel-ts/providers', async () => {
+  const mod = await vi.importActual('@fuel-ts/providers');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
 const { ScriptTransactionRequest } = providersMod;
 
+/**
+ * @group node
+ */
 describe('WalletUnlocked', () => {
   const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
   const expectedPublicKey =
@@ -97,7 +103,7 @@ describe('WalletUnlocked', () => {
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     let signature: BytesLike | undefined;
     // Intercept Provider.sendTransaction to collect signature
-    const spy = jest
+    const spy = vi
       .spyOn(wallet.provider, 'sendTransaction')
       .mockImplementation(async (transaction: TransactionRequestLike) => {
         signature = transaction.witnesses?.[0];
@@ -144,48 +150,75 @@ describe('WalletUnlocked', () => {
     expect(wallet.address).toEqual(recoveredAddress);
   });
 
-  it('Create wallet from seed', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
+  describe('WalletUnlocked.fromSeed', () => {
+    it('Create wallet from seed', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
 
-    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+      expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
+
+    it('Create wallet from seed with default path', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
+
+    it('Create wallet from seed with default path, without a provider', () => {
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(() => wallet.provider).toThrowError('Provider not set');
+    });
   });
 
-  it('Create wallet from mnemonic', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromMnemonic(
-      walletSpec.mnemonic,
-      provider,
-      walletSpec.account_1.path,
-      undefined
-    );
+  describe('WalletUnlocked.fromMnemonic', () => {
+    it('Create wallet from mnemonic', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromMnemonic(
+        walletSpec.mnemonic,
+        provider,
+        walletSpec.account_1.path,
+        undefined
+      );
 
-    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+      expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
+
+    it('Create wallet from mnemonic with default path', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, provider);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+    });
+
+    it('Create wallet from mnemonic with default path, without a provider', () => {
+      const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic);
+
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(() => wallet.provider).toThrowError('Provider not set');
+    });
   });
 
-  it('Create wallet from mnemonic with default path', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, provider);
+  describe('WalletUnlocked.extendedKey', () => {
+    it('Create wallet from extendedKey', async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
 
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-  });
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+    });
 
-  it('Create wallet from extendedKey', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv, provider);
+    it('Create wallet from extendedKey, without provider', () => {
+      const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv);
 
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
-  });
-
-  it('Create wallet from seed with default path', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
+      expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+      expect(() => wallet.provider).toThrowError('Provider not set');
+    });
   });
 
   it('Create wallet and lock it', async () => {
@@ -205,19 +238,19 @@ describe('WalletUnlocked', () => {
     const transactionReq = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
-    const transactionRequestify = jest
+    const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionReq);
 
-    const estimateTxDependencies = jest
+    const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
-    const call = jest
+    const call = vi
       .spyOn(providersMod.Provider.prototype, 'call')
       .mockImplementation(() => Promise.resolve(callResult));
 
-    const populateTransactionWitnessesSignatureSpy = jest
+    const populateTransactionWitnessesSignatureSpy = vi
       .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
       .mockImplementationOnce(() => Promise.resolve(transactionReq));
 
@@ -250,7 +283,7 @@ describe('WalletUnlocked', () => {
     });
     const password = 'password';
 
-    const encryptKeystoreWalletSpy = jest.spyOn(keystoreWMod, 'encryptKeystoreWallet');
+    const encryptKeystoreWalletSpy = vi.spyOn(keystoreWMod, 'encryptKeystoreWallet');
 
     const keystore = wallet.encrypt(password);
 

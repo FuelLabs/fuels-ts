@@ -15,18 +15,21 @@ import { EnumType } from './types/EnumType';
 import { OptionType } from './types/OptionType';
 import { VectorType } from './types/VectorType';
 
+/**
+ * @group node
+ */
 describe('Abi.ts', () => {
   /*
     Test helpers
   */
   function mockAllDeps() {
-    const parseTypes = jest.spyOn(parseTypesMod, 'parseTypes').mockImplementation(() => []);
+    const parseTypes = vi.spyOn(parseTypesMod, 'parseTypes').mockImplementation(() => []);
 
-    const parseFunctions = jest
+    const parseFunctions = vi
       .spyOn(parseFunctionsMod, 'parseFunctions')
       .mockImplementation(() => []);
 
-    const parseConfigurables = jest
+    const parseConfigurables = vi
       .spyOn(parseConfigurablesMod, 'parseConfigurables')
       .mockImplementation(() => []);
 

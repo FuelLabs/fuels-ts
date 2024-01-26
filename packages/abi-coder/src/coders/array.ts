@@ -1,5 +1,6 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
+import { MAX_BYTES } from '../constants';
 import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -23,17 +24,21 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
     if (this.length !== value.length) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
     return concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    if (data.length < this.encodedLength || data.length > MAX_BYTES) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid array data size.`);
+    }
+
     let newOffset = offset;
     const decodedValue = Array(this.length)
       .fill(0)

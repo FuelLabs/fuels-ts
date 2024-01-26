@@ -1,5 +1,5 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 /**
  * Converts a bytes-like value to a `Uint8Array`.

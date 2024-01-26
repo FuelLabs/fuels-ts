@@ -8,6 +8,9 @@ const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeFor
   FuelGaugeProjectsEnum.GENERIC_TYPES_CONTRACT
 );
 
+/**
+ * @group node
+ */
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     const contract = await setup({

@@ -28,6 +28,9 @@ const testBlockExplorerUrlWithInputs = ({
   expect(url).toEqual(expectedUrl);
 };
 
+/**
+ * @group node
+ */
 describe('BlockExplorer Utils', () => {
   test('buildBlockExplorerUrl - empty/undefined inputs', () => {
     expect(buildBlockExplorerUrl()).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);

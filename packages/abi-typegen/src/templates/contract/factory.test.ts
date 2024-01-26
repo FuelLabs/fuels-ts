@@ -9,6 +9,9 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderFactoryTemplate } from './factory';
 
+/**
+ * @group node
+ */
 describe('templates/factory', () => {
   test('should render factory template', () => {
     // mocking

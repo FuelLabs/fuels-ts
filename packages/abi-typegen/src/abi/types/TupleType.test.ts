@@ -10,9 +10,12 @@ import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
 import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
 
+/**
+ * @group node
+ */
 describe('TupleType.ts', () => {
   test('should properly parse type attributes', () => {
-    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.TUPLE_SIMPLE);
     const rawTypes = project.abiContents.types;

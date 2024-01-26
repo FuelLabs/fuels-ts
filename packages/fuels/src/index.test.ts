@@ -1,5 +1,8 @@
 import * as fuels from './index';
 
+/**
+ * @group node
+ */
 describe('index.js', () => {
   test('should export everything', () => {
     expect(fuels.hexlify).toBeTruthy();

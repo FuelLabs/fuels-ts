@@ -25,6 +25,9 @@ import { GqlReceiptType } from '../__generated__/operations';
 
 import { assembleReceiptByType } from './receipts';
 
+/**
+ * @group node
+ */
 describe('assembleReceiptByType', () => {
   it('should return a ReceiptCall receipt when GqlReceiptType.Call is provided', () => {
     const receipt = assembleReceiptByType({

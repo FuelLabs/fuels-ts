@@ -6,6 +6,10 @@ import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { RawSliceCoder } from './raw-slice';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('RawSliceCoder', () => {
   it('should encode a raw-slice', () => {
     const coder = new RawSliceCoder();
@@ -42,5 +46,35 @@ describe('RawSliceCoder', () => {
 
     expect(actual.map((v: BN) => v.toNumber())).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     expect(newOffset).toEqual(80);
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const coder = new RawSliceCoder();
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.')
+    );
+  });
+
+  it('should throw when decoding invalid data size (too small)', async () => {
+    const coder = new RawSliceCoder();
+    const input = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.')
+    );
+  });
+
+  it('should throw when decoding invalid data size (remainder)', async () => {
+    const coder = new RawSliceCoder();
+    const input = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 1]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.')
+    );
   });
 });

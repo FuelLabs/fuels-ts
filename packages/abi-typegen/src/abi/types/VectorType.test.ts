@@ -1,6 +1,9 @@
 import { StructType } from './StructType';
 import { VectorType } from './VectorType';
 
+/**
+ * @group node
+ */
 describe('VectorType.ts', () => {
   test('should properly parse type attributes', () => {
     const vector = new VectorType({

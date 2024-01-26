@@ -2,6 +2,9 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import { readForcToml } from './forcUtils';
 
+/**
+ * @group node
+ */
 describe('forcUtils', () => {
   test('should throw if Toml file is not found', async () => {
     const tomlPath = '/non/existent/path';

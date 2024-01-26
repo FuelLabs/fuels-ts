@@ -1,17 +1,22 @@
 import { compareSystemVersions } from './compareSystemVersions';
 import * as getBuiltinVersionsMod from './getBuiltinVersions';
 
+/**
+ * @group node
+ */
 describe('compareSystemVersions.js', () => {
   /*
     Hooks
   */
   beforeEach(() => {
     const v = '1.0.0';
-    const spy = jest.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions');
+    const spy = vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions');
     spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
   });
 
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   /*
     Tests

@@ -5,6 +5,10 @@ import { bn } from '@fuel-ts/math';
 import type { Policy } from './policy';
 import { PoliciesCoder, PolicyType } from './policy';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('PoliciesCoder', () => {
   describe('encode', () => {
     it('should encode policy correctly (GasPrice)', () => {

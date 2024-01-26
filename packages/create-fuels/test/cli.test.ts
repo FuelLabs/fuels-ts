@@ -3,6 +3,9 @@ import { join } from 'path';
 
 import { runScaffoldCli } from '../src/cli';
 
+/**
+ * @group node
+ */
 test('create-fuels extracts the template to the specified directory', async () => {
   // move the templates folder from the root of the project to the root of the create-fuels package temporarily.
   // this is needed because of the way the create-fuels package is setup.

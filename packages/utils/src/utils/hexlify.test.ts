@@ -1,5 +1,9 @@
 import { hexlify } from './hexlify';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('hexlify', () => {
   it('returns hex from bytes', () => {
     expect(hexlify(new Uint8Array([0, 1, 2, 3]))).toEqual('0x00010203');
