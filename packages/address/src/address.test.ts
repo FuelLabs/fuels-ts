@@ -25,6 +25,10 @@ const ADDRESS_BYTES = [
 const expectedAddress = 'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
 const expectedB256Address = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Address utils', () => {
   test('fromBech32 (bech32 to decoded bech32)', () => {
     const result = utils.fromBech32(ADDRESS_BECH32);

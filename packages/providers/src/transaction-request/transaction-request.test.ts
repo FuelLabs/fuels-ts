@@ -10,6 +10,9 @@ import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike } from './types';
 import { transactionRequestify } from './utils';
 
+/**
+ * @group node
+ */
 describe('TransactionRequest', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';

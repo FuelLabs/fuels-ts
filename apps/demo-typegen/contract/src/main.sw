@@ -1,4 +1,4 @@
-// #region Testing-with-jest-rust
+// #region Testing-in-ts-rust
 contract;
 
 abi DemoContract {
@@ -10,4 +10,4 @@ impl DemoContract for Contract {
         input
     }
 }
-// #endregion Testing-with-jest-rust
+// #endregion Testing-in-ts-rust

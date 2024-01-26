@@ -16,7 +16,7 @@ This module contains common Provider classes and utility functions for connectin
 
 ## Documentation
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/providers/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/providers/)
 
 ## Usage
 

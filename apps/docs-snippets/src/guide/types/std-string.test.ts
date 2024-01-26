@@ -3,6 +3,9 @@ import type { Contract, StdString } from 'fuels';
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('StdString', () => {
   let contract: Contract;
 

@@ -1,9 +1,15 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 
 import { U8_MAX, U16_MAX, U32_MAX, U64_MAX } from '../../test/utils/constants';
 
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('U64Coder', () => {
   const coder = new U64Coder();
 
@@ -102,9 +108,28 @@ describe('U64Coder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw an error when encoding an invalid u64', () => {
-    expect(() => {
-      coder.encode(bn(U64_MAX).add(1));
-    }).toThrow('Invalid u64');
+  it('should throw an error when encoding an invalid u64', async () => {
+    await expectToThrowFuelError(
+      () => coder.encode(bn(U64_MAX).add(1)),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64.')
+    );
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid u64 data size.')
+    );
+  });
+
+  it('throws when decoding empty byte data', async () => {
+    const input = new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 8),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid u64 byte data size.')
+    );
   });
 });

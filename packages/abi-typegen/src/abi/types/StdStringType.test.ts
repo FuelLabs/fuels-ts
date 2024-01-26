@@ -1,6 +1,9 @@
 import { StdStringType } from './StdStringType';
 import { StructType } from './StructType';
 
+/**
+ * @group node
+ */
 describe('StdStringType.ts', () => {
   test('should properly parse type attributes', () => {
     const stdString = new StdStringType({

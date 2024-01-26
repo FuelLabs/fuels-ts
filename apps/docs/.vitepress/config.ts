@@ -240,6 +240,10 @@ export default defineConfig({
                 text: 'Querying the Chain',
                 link: '/guide/providers/querying-the-chain',
               },
+              {
+                text: 'Retrying calls',
+                link: '/guide/providers/retrying-calls',
+              },
             ],
           },
           {
@@ -395,8 +399,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing with Jest',
-                link: '/guide/testing/testing-with-jest',
+                text: 'Testing in TS',
+                link: '/guide/testing/testing-in-ts',
               },
               {
                 text: 'Setting Up a Custom Chain',

@@ -3,11 +3,17 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { BooleanCoder } from './boolean';
 
-jest.mock('@fuel-ts/math', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/math'),
-}));
+vi.mock('@fuel-ts/math', async () => {
+  const mod = await vi.importActual('@fuel-ts/math');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('BooleanCoder', () => {
   const TRUE_DECODED = true;
   const TRUE_ENCODED = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]);
@@ -62,6 +68,15 @@ describe('BooleanCoder', () => {
     await expectToThrowFuelError(
       () => coder.decode(invalidInput, 0),
       new FuelError(ErrorCode.DECODE_ERROR, 'Invalid boolean value.')
+    );
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid boolean data size.')
     );
   });
 });

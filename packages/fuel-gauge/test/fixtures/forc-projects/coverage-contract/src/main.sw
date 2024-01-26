@@ -1,46 +1,14 @@
 contract;
 
-use std::*;
 use core::*;
-use std::storage::*;
-use std::contract_id::ContractId;
-use std::vec::Vec;
-use std::option::Option;
+use std::*;
 use std::assert::assert;
-use std::logging::log;
 use std::b512::B512;
-
-impl AbiEncode for str[10] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
-
-impl AbiEncode for str[12] {
-    fn abi_encode(self, ref mut buffer: Buffer) {
-        let s = from_str_array(self);
-
-        let len = s.len();
-        let ptr = s.as_ptr();
-
-        let mut i = 0;
-        while i < len {
-            let byte = ptr.add::<u8>(i).read::<u8>();
-            buffer.push(byte);
-            i += 1;
-        }
-    }
-}
+use std::contract_id::ContractId;
+use std::logging::log;
+use std::option::Option;
+use std::storage::*;
+use std::vec::Vec;
 
 pub struct U8Struct {
     i: u8,

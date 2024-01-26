@@ -1,3 +1,4 @@
+import { Address } from '@fuel-ts/address';
 import type { Keystore } from '@fuel-ts/crypto';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -110,26 +111,28 @@ export class WalletManager extends EventEmitter {
   /**
    * Create a Wallet instance for the specific account
    */
-  getWallet(address: AbstractAddress): WalletUnlocked {
+  getWallet(address: string | AbstractAddress): WalletUnlocked {
+    const ownerAddress = Address.fromAddressOrString(address);
     const vaultState = this.#vaults.find((vs) =>
-      vs.vault.getAccounts().find((a) => a.address.equals(address))
+      vs.vault.getAccounts().find((a) => a.address.equals(ownerAddress))
     );
     assert(vaultState, ERROR_MESSAGES.address_not_found);
 
-    return vaultState.vault.getWallet(address);
+    return vaultState.vault.getWallet(ownerAddress);
   }
 
   /**
    * Export specific account privateKey
    */
-  exportPrivateKey(address: AbstractAddress) {
+  exportPrivateKey(address: string | AbstractAddress) {
+    const ownerAddress = Address.fromAddressOrString(address);
     assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
     const vaultState = this.#vaults.find((vs) =>
-      vs.vault.getAccounts().find((a) => a.address.equals(address))
+      vs.vault.getAccounts().find((a) => a.address.equals(ownerAddress))
     );
     assert(vaultState, ERROR_MESSAGES.address_not_found);
 
-    return vaultState.vault.exportAccount(address);
+    return vaultState.vault.exportAccount(ownerAddress);
   }
 
   /**

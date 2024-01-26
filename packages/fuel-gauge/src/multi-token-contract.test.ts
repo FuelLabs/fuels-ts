@@ -26,6 +26,9 @@ const subIds = [
   '0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5',
 ];
 
+/**
+ * @group node
+ */
 describe('MultiTokenContract', () => {
   let gasPrice: BN;
   beforeAll(async () => {
