@@ -1,7 +1,7 @@
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
+import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
-import { findBinPath } from '@fuel-ts/wallet/test-utils';
 import { Command, Option } from 'commander';
 
 import { build } from './cli/commands/build';
@@ -100,11 +100,11 @@ export const configureCli = () => {
    */
 
   program.command('core', 'Wrapper around Fuel Core binary', {
-    executableFile: findBinPath('fuels-core'),
+    executableFile: findBinPath('fuels-core', __dirname),
   });
 
   program.command('forc', 'Wrapper around Forc binary', {
-    executableFile: findBinPath('fuels-forc'),
+    executableFile: findBinPath('fuels-forc', __dirname),
   });
 
   return program;
