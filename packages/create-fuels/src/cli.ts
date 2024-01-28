@@ -14,10 +14,13 @@ const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
 
-const processWorkspaceToml = (
-  fileContents: string,
-  programsToInclude: { contract: boolean; predicate: boolean; script: boolean }
-) => {
+type ProgramsToInclude = {
+  contract: boolean;
+  predicate: boolean;
+  script: boolean;
+};
+
+const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsToInclude) => {
   const parsed = toml.parse(fileContents) as {
     workspace: {
       members: string[];
@@ -44,14 +47,16 @@ export const runScaffoldCli = async (
   explicitProjectPath?: string,
   explicitPackageManger?: string,
   shouldInstallDeps = true,
-  programsToInclude = {
-    contract: true,
-    predicate: false,
-    script: false,
-  }
+  explicitProgramsToInclude?: ProgramsToInclude
 ) => {
   let projectPath = explicitProjectPath || '';
   let packageManager = explicitPackageManger || '';
+  let programsToInclude: ProgramsToInclude = explicitProgramsToInclude || {
+    contract: true,
+    predicate: false,
+    script: false,
+  };
+
   const program = new Command(packageJson.name).version(packageJson.version);
 
   if (!explicitProjectPath) {
@@ -91,6 +96,24 @@ export const runScaffoldCli = async (
       initial: 0,
     });
     packageManager = packageManagerInput.packageManager;
+  }
+
+  if (!explicitProgramsToInclude) {
+    const programsToIncludeInput = await prompts({
+      type: 'multiselect',
+      name: 'programsToInclude',
+      message: 'Which Sway programs do you want?',
+      choices: [
+        { title: 'Contract', value: 'contract' },
+        { title: 'Predicate', value: 'predicate' },
+        { title: 'Script', value: 'script' },
+      ],
+    });
+    programsToInclude = {
+      contract: programsToIncludeInput.programsToInclude.includes('contract'),
+      predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
+      script: programsToIncludeInput.programsToInclude.includes('script'),
+    };
   }
 
   await mkdir(projectPath);
