@@ -10,7 +10,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
@@ -76,7 +76,6 @@
     "handlebars": "^4.7.7",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
-    "npm-which": "^3.0.1",
     "portfinder": "^1.0.32",
     "rimraf": "^3.0.2",
     "toml": "^3.0.0",

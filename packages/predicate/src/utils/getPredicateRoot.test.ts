@@ -2,6 +2,9 @@ import { getBytesCopy } from 'ethers';
 
 import { getPredicateRoot } from './getPredicateRoot';
 
+/**
+ * @group node
+ */
 describe('getPredicateRoot', () => {
   it('should return the correct predicate root', () => {
     const predicateBytes = getBytesCopy(

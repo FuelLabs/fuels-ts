@@ -1,21 +1,28 @@
 import { program } from 'commander';
 
-import { fuelsConfig } from '../../../test/fixtures/config/fuels.config';
+import { fuelsConfig } from '../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../test/utils/mockLogger';
-import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
 import * as loadConfigMod from '../config/loadConfig';
 import type { FuelsConfig } from '../types';
 import { Commands } from '../types';
 
 import { withConfig } from './withConfig';
 
+/**
+ * @group node
+ */
 describe('withConfig', () => {
-  beforeEach(mockLogger);
-  afterEach(resetDiskAndMocks);
+  beforeEach(() => {
+    mockLogger();
+  });
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   function mockAll(params?: { shouldErrorOnDeploy?: boolean; shouldErrorOnLoadConfig?: boolean }) {
-    const onSuccess = jest.fn();
-    const onFailure = jest.fn();
+    const onSuccess = vi.fn();
+    const onFailure = vi.fn();
 
     const copyConfig: FuelsConfig = {
       ...structuredClone(fuelsConfig),
@@ -29,14 +36,14 @@ describe('withConfig', () => {
       .command(Commands.deploy)
       .option('-p, --path <path>', 'Path to project root', configPath);
 
-    const loadConfig = jest.spyOn(loadConfigMod, 'loadConfig').mockImplementation((..._) => {
+    const loadConfig = vi.spyOn(loadConfigMod, 'loadConfig').mockImplementation(() => {
       if (params?.shouldErrorOnLoadConfig) {
         throw new Error('Something happened');
       }
       return Promise.resolve(copyConfig);
     });
 
-    const deploy = jest.fn(() => {
+    const deploy = vi.fn(() => {
       if (params?.shouldErrorOnDeploy) {
         throw new Error('Something happened');
       }

@@ -63,6 +63,9 @@ const defautRawTypes: IRawAbiTypeRoot[] = [
   },
 ];
 
+/**
+ * @group node
+ */
 describe('parseTypeArguments.ts', () => {
   /*
     Test helpers

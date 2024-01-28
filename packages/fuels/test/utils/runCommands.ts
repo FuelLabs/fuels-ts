@@ -1,69 +1,152 @@
-import { join } from 'path';
+import { cpSync, existsSync, mkdirSync, rmSync } from 'fs';
+import { join, basename } from 'path';
 
 import { Commands } from '../../src';
-import { run } from '../../src/cli';
+import { run } from '../../src/run';
 
 /**
- * Paths
+ * Path and Directory utils
  */
-export const fixturesDir = join(__dirname, '..', 'fixtures');
+export const testDir = join(__dirname, '..');
+export const fixturesDir = join(testDir, 'fixtures');
+export const sampleWorkspaceDir = join(fixturesDir, 'workspace');
+export const sampleConfigPath = join(fixturesDir, 'fuels.config.ts');
 
-export const workspaceDir = join(fixturesDir, 'project');
+export type Paths = {
+  root: string;
+  workspaceDir: string;
+  contractsDir: string;
+  contractsFooDir: string;
+  scriptsDir: string;
+  predicateDir: string;
+  fooContractMainPath: string;
+  fuelsConfigPath: string;
+  outputDir: string;
+  contractsJsonPath: string;
+  fooContractFactoryPath: string;
+};
 
-export const contractsDir = join(workspaceDir, 'contracts');
-export const contractsFooDir = join(contractsDir, 'foo');
-export const scriptsDir = join(workspaceDir, 'scripts');
-export const predicateDir = join(workspaceDir, 'predicate');
+export function bootstrapProject(testFilepath: string) {
+  const testFilename = basename(testFilepath.replace(/\./g, '-'));
+  const uniqueName = `__temp__${testFilename}_${new Date().getTime()}`;
 
-export const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
+  const root = join(testDir, uniqueName);
+  const workspaceDir = join(root, 'workspace');
+  const fuelsConfigPath = join(root, 'fuels.config.ts');
 
-export const fuelsConfigPath = join(fixturesDir, 'fuels.config.ts');
-export const generatedDir = join(fixturesDir, 'generated');
-export const contractsJsonPath = join(generatedDir, 'contract-ids.json');
-export const fooContractFactoryPath = join(
-  generatedDir,
-  'contracts',
-  'factories',
-  'FooBarAbi__factory.ts'
-);
+  mkdirSync(workspaceDir, { recursive: true });
 
-/**
- * Helper
- */
-export async function runCommand(commandName: string, params: string[] = []) {
-  // always `--silent` to avoid polluting tests output
-  const argv = ['node', 'fuels', '--silent', commandName, '-p', fixturesDir].concat(params);
-  return { argv, command: await run(argv) };
+  cpSync(sampleWorkspaceDir, workspaceDir, { recursive: true });
+
+  const contractsDir = join(workspaceDir, 'contracts');
+  const contractsFooDir = join(contractsDir, 'foo');
+  const scriptsDir = join(workspaceDir, 'scripts');
+  const predicateDir = join(workspaceDir, 'predicate');
+  const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
+
+  const outputDir = join(root, 'output');
+  const contractsJsonPath = join(outputDir, 'contract-ids.json');
+  const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi__factory.ts');
+
+  return {
+    root,
+    workspaceDir,
+    contractsDir,
+    contractsFooDir,
+    scriptsDir,
+    predicateDir,
+    fooContractMainPath,
+    fuelsConfigPath,
+    outputDir,
+    contractsJsonPath,
+    fooContractFactoryPath,
+  };
 }
-
-/**
- * Bundled flag combos
- */
-export const initFlagsWorkspace = ['-w', workspaceDir, '-o', generatedDir];
-export const initFlagsUseBuiltinBinaries = ['--use-builtin-forc', '--use-builtin-fuel-core'];
-export const initFlagsAutoStartFuelCore = '--auto-start-fuel-core';
-export const initFlagsDefault = [
-  initFlagsWorkspace,
-  initFlagsUseBuiltinBinaries,
-  initFlagsAutoStartFuelCore,
-];
-export const buildFlagsDeploy = '--deploy';
 
 /**
  * Command callers
  */
-export async function runInit(flags: string[] = initFlagsDefault.flat()) {
+export async function runCommand(commandName: string, params: string[] = []) {
+  // always `--silent` to avoid polluting tests output
+  const argv = ['node', 'fuels', '--silent', commandName].concat(params);
+  return { argv, command: await run(argv) };
+}
+
+export type BaseParams = {
+  root: string;
+};
+
+export type InitParams = BaseParams & {
+  workspace?: string;
+  contracts?: string;
+  scripts?: string;
+  predicates?: string;
+  output: string;
+  useBuiltinBinaries?: boolean;
+  autoStartFuelCore?: boolean;
+  build?: boolean;
+};
+
+export type BuildParams = BaseParams & {
+  deploy?: boolean;
+};
+
+export async function runInit(params: InitParams) {
+  const {
+    autoStartFuelCore,
+    contracts,
+    output,
+    predicates,
+    root,
+    scripts,
+    useBuiltinBinaries,
+    workspace,
+  } = params;
+
+  const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
+    value ? (flags as string[]) : [];
+
+  const flags = [
+    flag(['-p', root], root),
+    flag(['-o', output], output),
+    flag(['-w', workspace], workspace),
+    flag(['--contracts', contracts], contracts),
+    flag(['--scripts', scripts], scripts),
+    flag(['--predicates', predicates], predicates),
+    flag(['--use-builtin-forc', '--use-builtin-fuel-core'], useBuiltinBinaries),
+    flag(['--auto-start-fuel-core'], autoStartFuelCore),
+  ].flat();
+
   return runCommand(Commands.init, flags);
 }
 
-export async function runBuild(flags: string[] = []) {
+export async function runBuild(params: BuildParams) {
+  const { root, deploy } = params;
+  const flags = [['-p', root], deploy ? ['--deploy'] : []].flat();
   return runCommand(Commands.build, flags);
 }
 
-export async function runDeploy() {
-  return runCommand(Commands.deploy);
+export async function runDeploy(params: BaseParams) {
+  return runCommand(Commands.deploy, ['-p', params.root]);
 }
 
-export async function runDev() {
-  return runCommand(Commands.dev);
+export async function runDev(params: BaseParams) {
+  return runCommand(Commands.dev, ['-p', params.root]);
+}
+
+/**
+ * Cleanup
+ */
+export function resetConfigAndMocks(configPath: string) {
+  if (existsSync(configPath)) {
+    rmSync(configPath);
+  }
+  vi.restoreAllMocks();
+}
+
+export function resetDiskAndMocks(dirPath: string) {
+  if (existsSync(dirPath)) {
+    rmSync(dirPath, { recursive: true });
+  }
+  vi.restoreAllMocks();
 }

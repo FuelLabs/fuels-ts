@@ -13,6 +13,9 @@ import {
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: predicateTrueBytecode } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_TRUE

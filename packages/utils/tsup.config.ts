@@ -6,6 +6,7 @@ const configs: Options = {
   entry: {
     index: 'src/index.ts',
     'test-utils': 'src/test-utils.ts',
+    'cli-utils': 'src/cli-utils.ts',
   },
 };
 

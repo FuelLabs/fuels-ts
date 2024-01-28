@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U32_MAX } from '../../test/utils/constants';
@@ -7,6 +9,10 @@ import { BooleanCoder } from './boolean';
 import { StructCoder } from './struct';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
   const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });
@@ -127,5 +133,23 @@ describe('StructCoder', () => {
         { nope: 1234, alsoNope: true }
       )
     ).toThrow(`Invalid struct ${STRUCT_NAME}`);
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid struct data size.')
+    );
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid struct data size.')
+    );
   });
 });

@@ -3,6 +3,9 @@ import type { Contract, Bytes } from 'fuels';
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('Bytes', () => {
   let contract: Contract;
 
