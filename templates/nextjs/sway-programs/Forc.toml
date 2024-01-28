@@ -1,6 +1,2 @@
 [workspace]
-members=[
-  "contract",
-  "predicate",
-  "script"
-]
+members = ["contract", "predicate", "script"]
