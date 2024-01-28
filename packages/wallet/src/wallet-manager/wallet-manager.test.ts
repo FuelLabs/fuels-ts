@@ -2,6 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
 import { Provider } from '@fuel-ts/providers';
 
+import WalletManagerSpec from '../../test/fixtures/wallet-manager-spec';
 import { FUEL_NETWORK_URL } from '../configs';
 import { Signer } from '../signer';
 import { Wallet } from '../wallet';
@@ -9,7 +10,6 @@ import { Wallet } from '../wallet';
 import MemoryStorage from './storages/memory-storage';
 import type { VaultConfig } from './types';
 import { WalletManager } from './wallet-manager';
-import WalletManagerSpec from './wallet-manager-spec';
 
 /**
  * @group node

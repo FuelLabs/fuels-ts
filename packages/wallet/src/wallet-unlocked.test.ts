@@ -5,13 +5,13 @@ import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import type { BytesLike } from 'ethers';
 
+import walletSpec from '../test/fixtures/wallet-spec';
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wallet-unlocked';
 
 import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import { FUEL_NETWORK_URL } from './configs';
 import * as keystoreWMod from './keystore-wallet';
 import { Signer } from './signer';
-import walletSpec from '../test/fixtures/wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 vi.mock('@fuel-ts/providers', async () => {
