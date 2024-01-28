@@ -14,7 +14,11 @@ test('create-fuels extracts the template to the specified directory', async () =
     recursive: true,
   });
 
-  await runScaffoldCli('test-project', 'pnpm', false);
+  await runScaffoldCli('test-project', 'pnpm', false, {
+    contract: true,
+    predicate: true,
+    script: false,
+  });
 
   // check if the template was extracted to the test-project directory.
   // compare the templates/nextjs folder with the test-project folder recursively
