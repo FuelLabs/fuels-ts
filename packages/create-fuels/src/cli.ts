@@ -104,10 +104,11 @@ export const runScaffoldCli = async (
       name: 'programsToInclude',
       message: 'Which Sway programs do you want?',
       choices: [
-        { title: 'Contract', value: 'contract' },
+        { title: 'Contract', value: 'contract', selected: true },
         { title: 'Predicate', value: 'predicate' },
         { title: 'Script', value: 'script' },
       ],
+      instructions: false,
     });
     programsToInclude = {
       contract: programsToIncludeInput.programsToInclude.includes('contract'),
