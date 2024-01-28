@@ -6,3 +6,4 @@ export * from './utils/hexlify';
 export * from './utils/normalizeString';
 export * from './utils/date-time';
 export * from './utils/defaultChainConfig';
+export * from './utils/date-time';
