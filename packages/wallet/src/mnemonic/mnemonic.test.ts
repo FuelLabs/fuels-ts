@@ -1,7 +1,8 @@
 import { randomBytes } from '@fuel-ts/crypto';
 
+import MnemonicSpec from '../../test/fixtures/mnemonic-specs';
+
 import Mnemonic from './mnemonic';
-import MnemonicSpec from './mnemonic-specs';
 
 /**
  * @group node
