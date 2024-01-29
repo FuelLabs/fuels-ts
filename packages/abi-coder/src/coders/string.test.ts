@@ -1,7 +1,14 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import { U8_MAX } from '../../test/utils/constants';
 
 import { StringCoder } from './string';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('StringCoder', () => {
   const STRING_MIN_DECODED = '';
   const STRING_MIN_ENCODED = new Uint8Array();
@@ -44,22 +51,28 @@ describe('StringCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw when encoding a string that is too big', () => {
+  it('should throw when encoding a string that is too big', async () => {
     const coder = new StringCoder(0);
     const invalidInput = STRING_MAX_DECODED;
 
-    expect(() => {
-      coder.encode(invalidInput);
-    }).toThrow();
+    await expectToThrowFuelError(
+      () => coder.encode(invalidInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Value length mismatch during encode.')
+    );
   });
 
-  it('should throw when encoding a string that is too small', () => {
+  it('should throw when encoding a string that is too small', async () => {
     const coder = new StringCoder(1);
     const invalidInput = STRING_MIN_DECODED;
 
     expect(() => {
       coder.encode(invalidInput);
     }).toThrow();
+
+    await expectToThrowFuelError(
+      () => coder.encode(invalidInput),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Value length mismatch during encode.')
+    );
   });
 
   it('should not completely decode a string that is too big for the coder', () => {
@@ -69,5 +82,25 @@ describe('StringCoder', () => {
 
     expect(actualValue).not.toBe(STRING_MAX_DECODED);
     expect(actualLength).toBe(8);
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    const coder = new StringCoder(1);
+    const input = new Uint8Array(0);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid string data size.')
+    );
+  });
+
+  it('throws when decoding empty byte data', async () => {
+    const coder = new StringCoder(1);
+    const input = new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7]);
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 8),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid string byte data size.')
+    );
   });
 });

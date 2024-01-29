@@ -4,6 +4,9 @@ import type { CoinQuantity } from '../coin-quantity';
 
 import { mergeQuantities } from './merge-quantities';
 
+/**
+ * @group node
+ */
 describe('mergeQuantities', () => {
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';

@@ -5,6 +5,9 @@ import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { makeType } from './makeType';
 
+/**
+ * @group node
+ */
 describe('makeType.ts', () => {
   test('should create a new Type instance just fine', () => {
     const rawAbiType: IRawAbiTypeRoot = {

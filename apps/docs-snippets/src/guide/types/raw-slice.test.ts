@@ -3,6 +3,9 @@ import type { Contract, BN, RawSlice } from 'fuels';
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('RawSlice', () => {
   let contract: Contract;
 

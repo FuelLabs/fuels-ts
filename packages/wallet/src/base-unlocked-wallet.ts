@@ -4,6 +4,7 @@ import type {
   TransactionRequestLike,
   CallResult,
   Provider,
+  ProviderSendTxParams,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
@@ -22,11 +23,6 @@ export class BaseWalletUnlocked extends Account {
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 
   /**
-   * The provider used to interact with the Fuel network.
-   */
-  provider: Provider;
-
-  /**
    * A function that returns the wallet's signer.
    */
   signer: () => Signer;
@@ -35,13 +31,12 @@ export class BaseWalletUnlocked extends Account {
    * Creates a new BaseWalletUnlocked instance.
    *
    * @param privateKey - The private key of the wallet.
-   * @param provider - A Provider instance.
+   * @param provider - A Provider instance (optional).
    */
-  constructor(privateKey: BytesLike, provider: Provider) {
+  constructor(privateKey: BytesLike, provider?: Provider) {
     const signer = new Signer(privateKey);
     super(signer.address, provider);
     this.signer = () => signer;
-    this.provider = provider;
   }
 
   /**
@@ -110,13 +105,14 @@ export class BaseWalletUnlocked extends Account {
    * @returns A promise that resolves to the TransactionResponse object.
    */
   async sendTransaction(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
+    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { estimateTxDependencies: false }
+      { ...options, estimateTxDependencies: false }
     );
   }
 

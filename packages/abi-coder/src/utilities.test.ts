@@ -3,6 +3,10 @@ import { concat } from '@fuel-ts/utils';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { unpackDynamicData, concatWithDynamicData } from './utilities';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Abi Coder Utilities', () => {
   it('can concatWithVectorData [no dynamicData, should match original concat]', () => {
     const data1 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);

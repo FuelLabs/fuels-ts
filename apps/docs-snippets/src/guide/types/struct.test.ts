@@ -1,3 +1,6 @@
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully validate struct representation', () => {
     // #region struct-2

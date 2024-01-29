@@ -103,16 +103,27 @@ export function getReceiptsMessageOut(receipts: TransactionResultReceipt[]) {
 const mergeAssets = (op1: Operation, op2: Operation) => {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
-  const filtered = assets2.filter((c) => !assets1.some(hasSameAssetId(c)));
-  return assets1
-    .map((coin) => {
-      const asset = assets2.find(hasSameAssetId(coin));
-      if (!asset) {
-        return coin;
-      }
-      return { ...coin, amount: bn(coin.amount).add(asset.amount) };
-    })
-    .concat(filtered);
+
+  // Getting assets from op2 that don't exist in op1
+  const filteredAssets = assets2.filter(
+    (asset2) => !assets1.some((asset1) => asset1.assetId === asset2.assetId)
+  );
+
+  // Merge assets that already exist in op1
+  const mergedAssets = assets1.map((asset1) => {
+    // Find matching asset in op2
+    const matchingAsset = assets2.find((asset2) => asset2.assetId === asset1.assetId);
+    if (!matchingAsset) {
+      // No matching asset found, return asset1
+      return asset1;
+    }
+    // Matching asset found, merge amounts
+    const mergedAmount = bn(asset1.amount).add(matchingAsset.amount);
+    return { ...asset1, amount: mergedAmount };
+  });
+
+  // Return merged assets from op1 with filtered assets from op2
+  return mergedAssets.concat(filteredAssets);
 };
 
 /** @hidden */
@@ -128,43 +139,37 @@ function isSameOperation(a: Operation, b: Operation) {
 
 /** @hidden */
 export function addOperation(operations: Operation[], toAdd: Operation) {
-  const ops = operations
-    .map((op) => {
-      // if it's not same operation, don't change. we just wanna stack the same operation
-      if (!isSameOperation(op, toAdd)) {
-        return null;
-      }
+  const allOperations = [...operations];
 
-      let newOp = { ...op };
+  // Verifying if the operation to add already exists.
+  const index = allOperations.findIndex((op) => isSameOperation(op, toAdd));
 
-      // if it's adding new assets
-      if (toAdd.assetsSent?.length) {
-        // if prev op had assets, merge them. Otherwise just add the new assets
-        newOp = {
-          ...newOp,
-          assetsSent: op.assetsSent?.length ? mergeAssets(op, toAdd) : toAdd.assetsSent,
-        };
-      }
+  if (allOperations[index]) {
+    // Existent operation, we want to edit it.
+    const existentOperation = { ...allOperations[index] };
 
-      // if it's adding new calls,
-      if (toAdd.calls?.length) {
-        /*
-[]          for calls we don't stack as grouping is not desired.
-          we wanna show all calls in the same operation
-          with each respective assets, amounts, functions, arguments.
-        */
-        newOp = {
-          ...newOp,
-          calls: [...(op.calls || []), ...(toAdd.calls || [])],
-        };
-      }
+    if (toAdd.assetsSent?.length) {
+      /**
+       * If the assetSent already exists, we call 'mergeAssets' to merge possible
+       * entries of the same 'assetId', otherwise we just add the new 'assetSent'.
+       */
+      existentOperation.assetsSent = existentOperation.assetsSent?.length
+        ? mergeAssets(existentOperation, toAdd)
+        : toAdd.assetsSent;
+    }
 
-      return newOp;
-    })
-    .filter(Boolean) as Operation[];
+    if (toAdd.calls?.length) {
+      // We need to stack the new call(s) with the possible existent ones.
+      existentOperation.calls = [...(existentOperation.calls || []), ...toAdd.calls];
+    }
 
-  // if this operation didn't exist before just add it to the end
-  return ops.length ? ops : [...operations, toAdd];
+    allOperations[index] = existentOperation;
+  } else {
+    // New operation, we can simply add it.
+    allOperations.push(toAdd);
+  }
+
+  return allOperations;
 }
 
 /** @hidden */
@@ -372,7 +377,8 @@ export function getTransferOperations({
       const input = getInputFromAssetId(inputs, output.assetId);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
-        operations = addOperation(operations, {
+
+        const operationToAdd: Operation = {
           name: OperationName.transfer,
           from: {
             type: AddressType.account,
@@ -388,7 +394,9 @@ export function getTransferOperations({
               amount: output.amount,
             },
           ],
-        });
+        };
+
+        operations = addOperation(operations, operationToAdd);
       }
     });
   }

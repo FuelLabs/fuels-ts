@@ -1,6 +1,9 @@
 import fs from 'fs';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('should successfully encrypt wallet', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);

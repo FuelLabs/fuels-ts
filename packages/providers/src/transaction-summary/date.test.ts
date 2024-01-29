@@ -4,12 +4,17 @@ import * as dateMod from './date';
 
 const { fromTai64ToDate: tai64toDate, fromDateToTai64: dateToTai64 } = dateMod;
 
+/**
+ * @group node
+ */
 describe('transaction-summary/date', () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should convert TAI64 to Date correctly', () => {
-    const fromStringSpy = jest.spyOn(tai64Mod.TAI64, 'fromString');
-    const toUnixSpy = jest.spyOn(tai64Mod.TAI64.prototype, 'toUnix');
+    const fromStringSpy = vi.spyOn(tai64Mod.TAI64, 'fromString');
+    const toUnixSpy = vi.spyOn(tai64Mod.TAI64.prototype, 'toUnix');
 
     const tai64Timestamp = '4611686020121838636';
 
@@ -22,8 +27,8 @@ describe('transaction-summary/date', () => {
   });
 
   it('should convert Date to TAI64 correctly', () => {
-    const fromUnixSpy = jest.spyOn(tai64Mod.TAI64, 'fromUnix');
-    const toStringSpy = jest.spyOn(tai64Mod.TAI64.prototype, 'toString');
+    const fromUnixSpy = vi.spyOn(tai64Mod.TAI64, 'fromUnix');
+    const toStringSpy = vi.spyOn(tai64Mod.TAI64.prototype, 'toString');
 
     const date = new Date();
 
