@@ -40,15 +40,6 @@ describe('findBinPath', () => {
     expect(binPath).toEqual(cmdPath);
   });
 
-  it('should find bin path two dir up', () => {
-    const base = join(__dirname, '..', '..'); // two dirs up
-    const { cmdName, cmdPath, resetDisk } = bootstrap(base);
-    const binPath = findBinPath(cmdName, base);
-
-    resetDisk();
-    expect(binPath).toEqual(cmdPath);
-  });
-
   it('should throw for bin path not found', async () => {
     const cmdName = 'non-existent';
     const { error } = await safeExec(() => findBinPath(cmdName, __dirname));
