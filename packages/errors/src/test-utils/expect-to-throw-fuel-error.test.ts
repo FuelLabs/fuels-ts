@@ -1,4 +1,4 @@
-import { FuelError } from '..';
+import { FuelError } from '../fuel-error';
 
 import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
 
