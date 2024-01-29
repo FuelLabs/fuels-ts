@@ -146,7 +146,6 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       // Extract and add imports specified in the #import flag
       let importStatements = '';
       if (region.imports.length > 0) {
-        console.log('region.imports: ', region.imports);
         importStatements = extractImports(filepath, region.imports.flat(), snippetContent);
       }
 
