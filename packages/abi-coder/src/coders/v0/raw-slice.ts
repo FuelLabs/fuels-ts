@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { bn } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../../constants';
 import type { Uint8ArrayWithDynamicData } from '../../utilities';
@@ -39,17 +40,19 @@ export class RawSliceCoder extends Coder<number[], number[]> {
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {
-    if (data.length < BASE_RAW_SLICE_OFFSET || data.length % WORD_SIZE !== 0) {
+    if (data.length < BASE_RAW_SLICE_OFFSET) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice data size.`);
     }
 
-    const internalCoder = new ArrayCoder(
-      new NumberCoder('u8', { isSmallBytes: true }),
-      data.length
-    );
+    const lengthOffset = offset + WORD_SIZE;
+    const dataOffset = lengthOffset + WORD_SIZE;
+    const lengthBytes = data.slice(lengthOffset, lengthOffset + WORD_SIZE);
+    const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
 
-    const decoded = internalCoder.decode(data, offset);
+    const dataBytes = data.slice(dataOffset, dataOffset + length);
+    const internalCoder = new ArrayCoder(new NumberCoder('u8', { isSmallBytes: true }), length);
+    const [decodedValue] = internalCoder.decode(dataBytes, 0);
 
-    return decoded;
+    return [decodedValue, BASE_RAW_SLICE_OFFSET + length];
   }
 }

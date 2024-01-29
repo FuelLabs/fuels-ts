@@ -320,14 +320,8 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.raw_slice,
           title: '[raw_slice]',
           value: [[1, 2, 3]],
-          encodedValue: new Uint8Array([
-            0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-            0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3,
-          ]),
-          decodedTransformer: (decoded: unknown | undefined) => {
-            const data = (decoded as BN[]).slice(2);
-            return data.map((v: BN) => v.toNumber());
-          },
+          encodedValue: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as number[]).slice(-3),
         },
         {
           fn: exhaustiveExamplesInterface.functions.dynamic_string,
