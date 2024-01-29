@@ -36,30 +36,9 @@ describe('RawSliceCoder', () => {
   it('should decode a raw-slice', () => {
     const coder = new RawSliceCoder();
     const expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const input = [0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const [actual, newOffset] = coder.decode(new Uint8Array(input), 0);
+    const [actual, newOffset] = coder.decode(new Uint8Array(expected), 0);
 
     expect(actual).toStrictEqual(expected);
-    expect(newOffset).toEqual(26);
-  });
-
-  it('throws when decoding empty bytes', async () => {
-    const coder = new RawSliceCoder();
-    const input = new Uint8Array(0);
-
-    await expectToThrowFuelError(
-      () => coder.decode(input, 0),
-      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.')
-    );
-  });
-
-  it('should throw when decoding invalid data size (too small)', async () => {
-    const coder = new RawSliceCoder();
-    const input = new Uint8Array([0, 1]);
-
-    await expectToThrowFuelError(
-      () => coder.decode(input, 0),
-      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.')
-    );
+    expect(newOffset).toEqual(10);
   });
 });

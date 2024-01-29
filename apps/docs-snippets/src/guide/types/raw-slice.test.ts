@@ -39,7 +39,7 @@ describe('RawSlice', () => {
       .txParams({ gasLimit: 10_000 })
       .simulate();
 
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual(rawSlice);
+    expect(value).toStrictEqual(rawSlice);
     // #endregion raw-slice-2
   });
 });

@@ -40,19 +40,13 @@ export class RawSliceCoder extends Coder<number[], number[]> {
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {
-    if (data.length < BASE_RAW_SLICE_OFFSET) {
-      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice data size.`);
-    }
-
-    const lengthOffset = offset + WORD_SIZE;
-    const dataOffset = lengthOffset + WORD_SIZE;
-    const lengthBytes = data.slice(lengthOffset, lengthOffset + WORD_SIZE);
-    const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
-
-    const dataBytes = data.slice(dataOffset, dataOffset + length);
-    const internalCoder = new ArrayCoder(new NumberCoder('u8', { isSmallBytes: true }), length);
+    const dataBytes = data.slice(offset);
+    const internalCoder = new ArrayCoder(
+      new NumberCoder('u8', { isSmallBytes: true }),
+      dataBytes.length
+    );
     const [decodedValue] = internalCoder.decode(dataBytes, 0);
 
-    return [decodedValue, BASE_RAW_SLICE_OFFSET + length];
+    return [decodedValue, offset + dataBytes.length];
   }
 }
