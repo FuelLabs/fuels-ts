@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.72.0
+
+### Patch Changes
+
+- Downgrading forc back to `0.48.1`, by [@arboleya](https://github.com/arboleya) (See [#1680](https://github.com/FuelLabs/fuels-ts/pull/1680))
+
 ## 0.71.1
 
 ## 0.71.0
