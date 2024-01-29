@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.72.0
+
+### Minor Changes
+
+- - Transaction execution can now be await with the `{awaitExecution: true}` option on `Provider.sendTransaction`
+  - Added same functionality to accounts (unlocked wallet, predicate)
+  - `BaseInvocationScope` internally now uses `{awaitExecution: true}` to reduce amount of network calls, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+- Implemented GraphQL subscriptions, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+- accepting string as address instead of only AbstractAddress, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+- Made getOperations to consider multiple assets transfer for a Transfer Asset operation, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
 ## 0.71.1
 
 ### Patch Changes
