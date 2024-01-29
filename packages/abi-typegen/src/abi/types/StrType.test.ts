@@ -1,6 +1,9 @@
 import { BoolType } from './BoolType';
 import { StrType } from './StrType';
 
+/**
+ * @group node
+ */
 describe('StrType.ts', () => {
   test('should properly parse type attributes', () => {
     const str = new StrType({

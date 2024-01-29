@@ -7,18 +7,23 @@ import * as assembleContractsMod from './utils/assembleContracts';
 import * as assemblePredicatesMod from './utils/assemblePredicates';
 import * as assembleScriptsMod from './utils/assembleScripts';
 
+/**
+ * @group node
+ */
 describe('AbiTypegen.ts', () => {
   // Use as e sample of HORRIBLE auto-code-formatting
   function mockAllDeps() {
-    const assembleContracts = jest
+    const assembleContracts = vi
       .spyOn(assembleContractsMod, 'assembleContracts')
-      .mockImplementation();
+      .mockImplementation(() => []);
 
-    const assembleScripts = jest.spyOn(assembleScriptsMod, 'assembleScripts').mockImplementation();
+    const assembleScripts = vi
+      .spyOn(assembleScriptsMod, 'assembleScripts')
+      .mockImplementation(() => []);
 
-    const assemblePredicates = jest
+    const assemblePredicates = vi
       .spyOn(assemblePredicatesMod, 'assemblePredicates')
-      .mockImplementation();
+      .mockImplementation(() => []);
 
     return {
       assembleContracts,
@@ -27,8 +32,13 @@ describe('AbiTypegen.ts', () => {
     };
   }
 
-  beforeEach(jest.resetAllMocks);
-  afterEach(jest.resetAllMocks);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
 
   test('should create multiple ABI instances for: contracts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
@@ -75,7 +85,7 @@ describe('AbiTypegen.ts', () => {
   test('should throw for unknown programType', async () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const programType = 'nope' as ProgramTypeEnum; // forced cast to cause error
+    const programType = 'nope' as ProgramTypeEnum;
 
     const { error } = await safeExec(() => {
       getNewAbiTypegen({ programType, includeBinFiles: true });

@@ -3,16 +3,24 @@ import { Command } from 'commander';
 import * as cliMod from './cli';
 import { Commands } from './cli/types';
 import * as loggingMod from './cli/utils/logger';
+import { run } from './run';
 
+/**
+ * @group node
+ */
 describe('cli.js', () => {
-  const { configureCli, run, onPreAction } = cliMod;
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
-  beforeEach(() => jest.resetAllMocks());
-  afterAll(() => jest.resetAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('shoud configure cli', () => {
-    const program = configureCli();
+    const program = cliMod.configureCli();
 
+    expect(program).toBeTruthy();
     // top level props and opts
     expect(program.name()).toEqual('fuels');
     expect(program.opts()).toEqual({
@@ -50,14 +58,14 @@ describe('cli.js', () => {
   });
 
   it('preAction should configure logging', () => {
-    const spy = jest.spyOn(loggingMod, 'configureLogging');
+    const spy = vi.spyOn(loggingMod, 'configureLogging');
 
     const command = new Command();
     command.option('-D, --debug', 'Enables verbose logging', false);
     command.option('-S, --silent', 'Omit output messages', false);
     command.parse([]);
 
-    onPreAction(command);
+    cliMod.onPreAction(command);
     expect(spy).toBeCalledWith({
       isDebugEnabled: false,
       isLoggingEnabled: true,
@@ -66,12 +74,16 @@ describe('cli.js', () => {
 
   it('should run cli program', async () => {
     const command = new Command();
-    const parseAsync = jest.spyOn(command, 'parseAsync');
-    const $configureCli = jest.spyOn(cliMod, 'configureCli').mockReturnValue(command);
+
+    const parseAsync = vi
+      .spyOn(Command.prototype, 'parseAsync')
+      .mockReturnValue(Promise.resolve(command));
+
+    const configureCli = vi.spyOn(cliMod, 'configureCli').mockImplementation(() => new Command());
 
     await run([]);
 
-    expect($configureCli).toHaveBeenCalledTimes(1);
+    expect(configureCli).toHaveBeenCalledTimes(1);
     expect(parseAsync).toHaveBeenCalledTimes(1);
   });
 });

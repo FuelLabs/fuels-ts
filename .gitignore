@@ -148,3 +148,6 @@ Forc.lock
 
 # dir used by fuel-core for storing db data
 .fuel-core/db
+
+# This chainConfig is copied over from @fuel-ts/utils at runtime, no need to track it
+.fuel-core/configs/chainConfig.json

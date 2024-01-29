@@ -16,6 +16,9 @@ const setupContract = createSetupConfig({
 
 const U64_MAX = bn(2).pow(64).sub(1);
 
+/**
+ * @group node
+ */
 describe('CallTestContract', () => {
   let gasPrice: BN;
   beforeAll(async () => {

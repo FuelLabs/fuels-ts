@@ -18,7 +18,7 @@ This module is responsible for encoding and decoding the Application Binary Inte
 
 <!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
 
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/)
 
 ## Usage
 

@@ -297,7 +297,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     await this.fundWithRequiredCoins(maxFee);
 
-    const response = await this.program.account.sendTransaction(transactionRequest);
+    const response = await this.program.account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+    });
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,

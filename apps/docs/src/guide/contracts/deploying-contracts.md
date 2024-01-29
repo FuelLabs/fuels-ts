@@ -1,8 +1,8 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-const indexUrl = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
-  const jsonAbiUrl = `https://fuellabs.github.io/sway/v${forc}/book/introduction/sway_quickstart.html?highlight=abi#abi`
+  const indexUrl = `https://docs.fuel.network/docs/sway/introduction/`
+  const jsonAbiUrl = `https://docs.fuel.network/docs/sway/introduction/sway_quickstart/`
 </script>
 
 # Deploying Contracts
@@ -27,7 +27,7 @@ Load the contract bytecode and JSON ABI, generated from the Sway source, into th
 
 ## 4. Deploying the Contract
 
-Initialize a `ContractFactory` with the bytecode, ABI, and wallet. Deploy the contract and use its methods.
+Initialize a [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Deploy the contract and use its methods.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-3{ts:line-numbers}
 

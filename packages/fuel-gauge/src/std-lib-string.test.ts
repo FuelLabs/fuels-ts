@@ -24,6 +24,9 @@ const setup = async (balance = 500_000) => {
   return wallet;
 };
 
+/**
+ * @group node
+ */
 describe('std-lib-string Tests', () => {
   const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);

@@ -5,6 +5,9 @@ import { join } from 'path';
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let PRIVATE_KEY: string;
   let projectsPath: string;

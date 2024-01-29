@@ -1,13 +1,13 @@
 {
   "name": "@fuel-ts/signer",
-  "version": "0.71.1",
+  "version": "0.72.0",
   "description": "Secp256k1 signer for the Fuel Network",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
@@ -29,10 +29,7 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "elliptic": "^6.5.4",
-    "ethers": "^6.7.1"
-  },
-  "devDependencies": {
-    "@types/elliptic": "^6.4.14"
+    "ethers": "^6.7.1",
+    "@noble/curves": "^1.3.0"
   }
 }

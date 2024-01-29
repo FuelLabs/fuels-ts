@@ -1,14 +1,11 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { readFileSync } from 'fs';
 
-import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
 import {
   runInit,
-  fixturesDir,
-  fuelsConfigPath,
-  initFlagsUseBuiltinBinaries,
-  generatedDir,
-  initFlagsWorkspace,
+  bootstrapProject,
+  resetConfigAndMocks,
+  resetDiskAndMocks,
 } from '../../../test/utils/runCommands';
 import * as shouldUseBuiltinForcMod from '../commands/init/shouldUseBuiltinForc';
 import * as shouldUseBuiltinFuelCoreMod from '../commands/init/shouldUseBuiltinFuelCore';
@@ -16,8 +13,19 @@ import type { FuelsConfig } from '../types';
 
 import { loadConfig } from './loadConfig';
 
+/**
+ * @group node
+ */
 describe('loadConfig', () => {
-  beforeEach(resetDiskAndMocks);
+  const paths = bootstrapProject(__filename);
+
+  afterEach(() => {
+    resetConfigAndMocks(paths.fuelsConfigPath);
+  });
+
+  afterAll(() => {
+    resetDiskAndMocks(paths.root);
+  });
 
   test('should throw if config path is not found', async () => {
     const cwd = '/non/existent/path';
@@ -28,29 +36,31 @@ describe('loadConfig', () => {
   });
 
   test(`should auto start fuel core explicitly`, async () => {
-    await runInit(
-      [initFlagsWorkspace, initFlagsUseBuiltinBinaries, '--auto-start-fuel-core'].flat()
-    );
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      useBuiltinBinaries: true,
+      autoStartFuelCore: true,
+    });
 
-    const config = await loadConfig(fixturesDir);
-    const fuelsContents = readFileSync(fuelsConfigPath, 'utf-8');
+    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
+    const config = await loadConfig(paths.root);
 
-    expect(fuelsContents).toMatch(`  autoStartFuelCore: true,`); // not comment
+    expect(fuelsContents).toMatch(`  autoStartFuelCore: true,`); // not a comment
     expect(config.autoStartFuelCore).toEqual(true);
   });
 
   test(`should resolve individual paths when not using workspaces`, async () => {
-    await runInit(
-      [
-        initFlagsUseBuiltinBinaries,
-        ['--contracts', 'project/contracts/*'],
-        ['--scripts', 'project/scripts/*'],
-        ['--predicates', 'project/predicates/*'],
-        ['-o', generatedDir],
-      ].flat()
-    );
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      contracts: 'workspace/contracts/*',
+      scripts: 'workspace/scripts/*',
+      predicates: 'workspace/predicates/*',
+    });
 
-    const config = await loadConfig(fixturesDir);
+    const config = await loadConfig(paths.root);
 
     expect(config.contracts.length).toEqual(2);
     expect(config.scripts.length).toEqual(1);
@@ -58,15 +68,13 @@ describe('loadConfig', () => {
   });
 
   test(`should resolve only contracts`, async () => {
-    await runInit(
-      [
-        initFlagsUseBuiltinBinaries,
-        ['--contracts', 'project/contracts/*'],
-        ['-o', generatedDir],
-      ].flat()
-    );
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      contracts: 'workspace/contracts/*',
+    });
 
-    const config = await loadConfig(fixturesDir);
+    const config = await loadConfig(paths.root);
 
     expect(config.contracts.length).toEqual(2);
     expect(config.scripts.length).toEqual(0);
@@ -74,11 +82,13 @@ describe('loadConfig', () => {
   });
 
   test(`should resolve only scripts`, async () => {
-    await runInit(
-      [initFlagsUseBuiltinBinaries, ['--scripts', 'project/scripts/*'], ['-o', generatedDir]].flat()
-    );
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      scripts: 'workspace/scripts/*',
+    });
 
-    const config = await loadConfig(fixturesDir);
+    const config = await loadConfig(paths.root);
 
     expect(config.contracts.length).toEqual(0);
     expect(config.scripts.length).toEqual(1);
@@ -86,15 +96,13 @@ describe('loadConfig', () => {
   });
 
   test(`should resolve only predicates`, async () => {
-    await runInit(
-      [
-        initFlagsUseBuiltinBinaries,
-        ['--predicates', 'project/predicates/*'],
-        ['-o', generatedDir],
-      ].flat()
-    );
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      predicates: 'workspace/predicates/*',
+    });
 
-    const config = await loadConfig(fixturesDir);
+    const config = await loadConfig(paths.root);
 
     expect(config.contracts.length).toEqual(0);
     expect(config.scripts.length).toEqual(0);
@@ -102,16 +110,14 @@ describe('loadConfig', () => {
   });
 
   test(`should warn about misconfigured workspace`, async () => {
-    await runInit(
-      [
-        initFlagsUseBuiltinBinaries,
-        // passing contract path in workspace config option
-        ['--workspace', 'project/contracts/bar'],
-        ['--output', generatedDir],
-      ].flat()
-    );
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      // passing contract path in workspace config option
+      workspace: 'workspace/contracts/bar',
+    });
 
-    const { error, result } = await safeExec<Promise<FuelsConfig>>(() => loadConfig(fixturesDir));
+    const { error, result } = await safeExec<Promise<FuelsConfig>>(() => loadConfig(paths.root));
 
     expect(result).not.toBeTruthy();
     expect(error?.message).toMatch(/forc workspace not detected/i);
@@ -119,17 +125,21 @@ describe('loadConfig', () => {
   });
 
   test(`should smart-set built-in flags`, async () => {
-    await runInit(initFlagsWorkspace);
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+    });
 
-    const shouldUseBuiltinForc = jest
+    const shouldUseBuiltinForc = vi
       .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
       .mockReturnValue(false);
 
-    const shouldUseBuiltinFuelCore = jest
+    const shouldUseBuiltinFuelCore = vi
       .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
       .mockReturnValue(true);
 
-    const config = await loadConfig(fixturesDir);
+    const config = await loadConfig(paths.root);
 
     expect(config.useBuiltinForc).toEqual(false);
     expect(config.useBuiltinFuelCore).toEqual(true);

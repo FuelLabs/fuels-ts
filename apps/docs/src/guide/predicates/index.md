@@ -1,8 +1,8 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const introUrl = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
-  const debugUrl = `https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/predicates.html?#debugging-predicates`
+  const introUrl = `https://docs.fuel.network/docs/sway/introduction/`
+  const debugUrl = `https://docs.fuel.network/docs/sway/sway-program-types/predicates/#debugging-predicates`
 </script>
 
 # Predicates
@@ -31,7 +31,7 @@ After compiling, you will obtain the binary of the predicate and its JSON ABI (A
 
 <<< @/../../docs-snippets/src/guide/predicates/index.test.ts#predicate-index-2{ts:line-numbers}
 
-The created `Predicate` instance, among other things, has three important properties: the predicate `bytes` (byte code), the `chainId`, and the predicate `address`.
+The created [`Predicate`](../../api/Predicate/Predicate.md) instance, among other things, has three important properties: the predicate `bytes` (byte code), the `chainId`, and the predicate `address`.
 
 This address, generated from the byte code, corresponds to the Pay-to-Script-Hash (P2SH) address used in Bitcoin.
 

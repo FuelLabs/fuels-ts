@@ -1,13 +1,13 @@
 {
   "name": "@fuel-ts/abi-coder",
-  "version": "0.71.1",
+  "version": "0.72.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {

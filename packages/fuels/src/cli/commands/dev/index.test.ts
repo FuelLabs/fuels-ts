@@ -1,39 +1,52 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import type { FSWatcher } from 'chokidar';
 
-import { fuelsConfig } from '../../../../test/fixtures/config/fuels.config';
+import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
+import { mockStartFuelCore } from '../../../../test/utils/mockAutoStartFuelCore';
 import { mockLogger } from '../../../../test/utils/mockLogger';
 import * as loadConfigMod from '../../config/loadConfig';
 import type { FuelsConfig } from '../../types';
+import * as buildMod from '../build';
+import * as deployMod from '../deploy';
 import * as withConfigMod from '../withConfig';
 
-import * as indexMod from '.';
-import type { FuelCoreNode } from './startFuelCore';
+// import * as indexMod from './index';
+import {
+  closeAllFileHandlers,
+  configFileChanged,
+  dev,
+  getConfigFilepathsToWatch,
+  workspaceFileChanged,
+} from '.';
 
+/**
+ * @group node
+ */
 describe('dev', () => {
-  beforeEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   function mockAll() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const killChildProcess: any = jest.fn();
-    const closeAllFileHandlers = jest.spyOn(indexMod, 'closeAllFileHandlers').mockImplementation();
-    const fuelCore = { killChildProcess } as FuelCoreNode;
-    const onFailure = jest.fn();
+    const { autoStartFuelCore, fuelCore, killChildProcess } = mockStartFuelCore();
 
-    const withConfigErrorHandler = jest
+    const onFailure = vi.fn();
+
+    const withConfigErrorHandler = vi
       .spyOn(withConfigMod, 'withConfigErrorHandler')
-      .mockImplementation();
+      .mockReturnValue(Promise.resolve());
 
-    const loadConfig = jest
+    const loadConfig = vi
       .spyOn(loadConfigMod, 'loadConfig')
       .mockReturnValue(Promise.resolve(fuelsConfig));
 
-    const dev = jest.spyOn(indexMod, 'dev').mockImplementation(() => {
-      throw new Error('The sky became purple');
-    });
+    const build = vi.spyOn(buildMod, 'build').mockResolvedValue();
+    const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue([]);
 
     return {
-      closeAllFileHandlers,
-      dev,
+      autoStartFuelCore,
+      build,
+      deploy,
       fuelCore,
       killChildProcess,
       loadConfig,
@@ -42,31 +55,28 @@ describe('dev', () => {
     };
   }
 
-  const { workspaceFileChanged } = indexMod;
-
   test('workspaceFileChanged should log change and call `buildAndDeploy`', async () => {
     const { log } = mockLogger();
-
-    const buildAndDeploy = jest.spyOn(indexMod, 'buildAndDeploy').mockImplementation();
+    const { build, deploy } = mockAll();
 
     await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('event', 'some/path');
 
     expect(log).toHaveBeenCalledTimes(1);
-    expect(buildAndDeploy).toHaveBeenCalledTimes(1);
+    expect(build).toHaveBeenCalledTimes(1);
+    expect(deploy).toHaveBeenCalledTimes(1);
   });
 
-  test('dev should handle and log error from `buildAndDeploy`', async () => {
-    const err = new Error('something happened');
-
+  it('dev should handle and log error from `buildAndDeploy`', async () => {
     const { error } = mockLogger();
 
-    jest.spyOn(indexMod, 'buildAndDeploy').mockImplementation(() => {
+    const err = new Error('something happened');
+    vi.spyOn(buildMod, 'build').mockImplementation(() => {
       throw err;
     });
 
     const configCopy: FuelsConfig = { ...fuelsConfig, autoStartFuelCore: false };
 
-    const { result, error: safeError } = await safeExec(() => indexMod.dev(configCopy));
+    const { result, error: safeError } = await safeExec(() => dev(configCopy));
 
     expect(result).not.toBeTruthy();
     expect(safeError).toEqual(err);
@@ -76,35 +86,52 @@ describe('dev', () => {
   });
 
   test('should call `close` on all file handlers', () => {
-    const close = jest.fn();
+    const close = vi.fn();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handlers: any = [{ close }, { close }, { close }];
 
-    indexMod.closeAllFileHandlers(handlers);
+    closeAllFileHandlers(handlers);
 
     expect(close).toHaveBeenCalledTimes(3);
   });
 
   test('should restart everything when config file changes', async () => {
-    const { closeAllFileHandlers, dev, fuelCore, killChildProcess, loadConfig } = mockAll();
     const { log } = mockLogger();
+    const {
+      autoStartFuelCore,
+      build,
+      deploy,
+      fuelCore,
+      killChildProcess,
+      loadConfig,
+      withConfigErrorHandler,
+    } = mockAll();
 
     const config = structuredClone(fuelsConfig);
+    const close = vi.fn();
+    const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await indexMod.configFileChanged({ config, fuelCore, watchHandlers: [] })('event', 'some/path');
+    await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
 
-    expect(closeAllFileHandlers).toHaveBeenCalledTimes(1);
-    expect(killChildProcess).toHaveBeenCalledTimes(1);
-    expect(dev).toHaveBeenCalledTimes(1);
+    // configFileChanged() internals
     expect(log).toHaveBeenCalledTimes(1);
+    expect(close).toHaveBeenCalledTimes(2);
+    expect(killChildProcess).toHaveBeenCalledTimes(1);
     expect(loadConfig).toHaveBeenCalledTimes(1);
+
+    // dev() internals
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
+    expect(build).toHaveBeenCalledTimes(1);
+    expect(deploy).toHaveBeenCalledTimes(1);
+    expect(withConfigErrorHandler).toHaveBeenCalledTimes(0); // never error
   });
 
   test('should restart everything and handle errors', async () => {
+    const { log } = mockLogger();
     const {
-      closeAllFileHandlers,
-      dev,
+      autoStartFuelCore,
+      deploy,
       fuelCore,
       killChildProcess,
       loadConfig,
@@ -112,20 +139,27 @@ describe('dev', () => {
       withConfigErrorHandler,
     } = mockAll();
 
-    const { log } = mockLogger();
+    const err = new Error('something happened');
+    const build = vi.spyOn(buildMod, 'build').mockImplementation(() => {
+      throw err;
+    });
 
     const config = { onFailure, ...structuredClone(fuelsConfig) };
+    const close = vi.fn();
+    const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await indexMod.configFileChanged({ config, fuelCore, watchHandlers: [] })('event', 'some/path');
+    await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
 
+    // configFileChanged() internals
     expect(log).toHaveBeenCalledTimes(1);
-
-    expect(closeAllFileHandlers).toHaveBeenCalledTimes(1);
+    expect(close).toHaveBeenCalledTimes(2);
     expect(killChildProcess).toHaveBeenCalledTimes(1);
-
     expect(loadConfig).toHaveBeenCalledTimes(1);
-    expect(dev).toHaveBeenCalledTimes(1);
 
+    // dev() internals
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
+    expect(build).toHaveBeenCalledTimes(1);
+    expect(deploy).toHaveBeenCalledTimes(0); // never deploy
     expect(withConfigErrorHandler).toHaveBeenCalledTimes(1);
   });
 
@@ -133,9 +167,9 @@ describe('dev', () => {
     const config = structuredClone(fuelsConfig);
 
     config.chainConfig = undefined;
-    expect(indexMod.getConfigFilepathsToWatch(config)).toHaveLength(1);
+    expect(getConfigFilepathsToWatch(config)).toHaveLength(1);
 
     config.chainConfig = '/some/path/to/chainConfig.json';
-    expect(indexMod.getConfigFilepathsToWatch(config)).toHaveLength(2);
+    expect(getConfigFilepathsToWatch(config)).toHaveLength(2);
   });
 });

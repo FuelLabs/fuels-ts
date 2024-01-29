@@ -1,7 +1,7 @@
-import { hexlify } from 'ethers';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
+import { hexlify } from '../index';
 import { normalizeString } from '../utils/normalizeString';
 
 interface IGetForcProjectParams {

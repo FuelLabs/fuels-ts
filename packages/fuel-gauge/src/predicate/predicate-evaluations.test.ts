@@ -5,6 +5,9 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtu
 
 import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_TRUE
