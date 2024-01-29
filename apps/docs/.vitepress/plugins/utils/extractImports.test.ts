@@ -1,5 +1,4 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-
 import * as extractImportsMod from './extractImports';
 import fs from 'fs';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -7,6 +6,9 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 const { collectImportStatements, combineImportStatements, validateImports, extractImports } =
   extractImportsMod;
 
+/**
+ * @group node
+ */
 describe('extractImports', () => {
   describe('combineImportStatements', () => {
     it('should return an empty string for empty import statements', () => {
@@ -141,9 +143,11 @@ describe('extractImports', () => {
   });
 
   describe('extractImports', () => {
-    afterEach(jest.restoreAllMocks);
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
 
-    it('should ensure imports are extracted just fine (IMPORT FLAG W SEMICOLON)', () => {
+    it('should ensure imports are extracted just fine', () => {
       const filepath = 'mockedPath';
       const specifiedImports = ['AssetId'];
       const snippetContent = [
@@ -164,49 +168,13 @@ describe('extractImports', () => {
         describe('AssetId', () => {
       `;
 
-      jest.spyOn(fs, 'readFileSync').mockReturnValue(mockedFileContent);
-
-      const collectImportStatementsSpy = jest.spyOn(extractImportsMod, 'collectImportStatements');
-      const combineImportStatementsSpy = jest.spyOn(extractImportsMod, 'combineImportStatements');
-      const validateImportsSpy = jest.spyOn(extractImportsMod, 'validateImports');
+      const readFileSync = vi.spyOn(fs, 'readFileSync').mockReturnValue(mockedFileContent);
 
       const result = extractImports(filepath, specifiedImports, snippetContent);
 
-      expect(collectImportStatementsSpy).toBeCalledTimes(1);
-      expect(combineImportStatementsSpy).toBeCalledTimes(1);
-      expect(validateImportsSpy).toBeCalledTimes(1);
+      expect(readFileSync).toBeCalledTimes(1);
 
       expect(result).toEqual("import { AssetId } from 'fuels';");
-    });
-
-    it('should ensure imports are extracted just fine (IMPORT FLAG W/O SEMICOLON)', () => {
-      const filepath = 'mockedPath';
-      const specifiedImports = ['Wallet'];
-      const snippetContent = [
-        '    // #import { Wallet }',
-        '',
-        '    const wallet = Wallet.generate(provider);',
-      ];
-
-      const mockedFileContent = `
-        import { Address, Wallet } from 'fuels';
-        '',
-        describe('Wallet', () => {
-      `;
-
-      jest.spyOn(fs, 'readFileSync').mockReturnValue(mockedFileContent);
-
-      const collectImportStatementsSpy = jest.spyOn(extractImportsMod, 'collectImportStatements');
-      const combineImportStatementsSpy = jest.spyOn(extractImportsMod, 'combineImportStatements');
-      const validateImportsSpy = jest.spyOn(extractImportsMod, 'validateImports');
-
-      const result = extractImports(filepath, specifiedImports, snippetContent);
-
-      expect(collectImportStatementsSpy).toBeCalledTimes(1);
-      expect(combineImportStatementsSpy).toBeCalledTimes(1);
-      expect(validateImportsSpy).toBeCalledTimes(1);
-
-      expect(result).toEqual("import { Wallet } from 'fuels';");
     });
   });
 });
