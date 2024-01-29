@@ -14,7 +14,7 @@
 
 ### constructor
 
-• **new WalletUnlocked**(`privateKey`, `provider`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+• **new WalletUnlocked**(`privateKey`, `provider?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Creates a new BaseWalletUnlocked instance.
 
@@ -23,7 +23,7 @@ Creates a new BaseWalletUnlocked instance.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `privateKey` | `BytesLike` | The private key of the wallet. |
-| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
+| `provider?` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 
 #### Returns
 
@@ -35,9 +35,25 @@ Creates a new BaseWalletUnlocked instance.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:40](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L40)
+[base-unlocked-wallet.ts:36](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L36)
 
 ## Properties
+
+### \_provider
+
+• `Protected` `Optional` **\_provider**: [`Provider`](/api/Providers/Provider.md)
+
+The provider used to interact with the network.
+
+#### Inherited from
+
+[BaseWalletUnlocked](/api/Wallet/BaseWalletUnlocked.md).[_provider](/api/Wallet/BaseWalletUnlocked.md#_provider)
+
+#### Defined in
+
+[account.ts:54](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L54)
+
+___
 
 ### address
 
@@ -51,23 +67,7 @@ The address associated with the account.
 
 #### Defined in
 
-[account.ts:48](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L48)
-
-___
-
-### provider
-
-• **provider**: [`Provider`](/api/Providers/Provider.md)
-
-The provider used to interact with the Fuel network.
-
-#### Inherited from
-
-[BaseWalletUnlocked](/api/Wallet/BaseWalletUnlocked.md).[provider](/api/Wallet/BaseWalletUnlocked.md#provider)
-
-#### Defined in
-
-[base-unlocked-wallet.ts:27](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L27)
+[account.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L49)
 
 ___
 
@@ -91,7 +91,7 @@ A function that returns the wallet's signer.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:32](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L32)
+[base-unlocked-wallet.ts:28](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L28)
 
 ___
 
@@ -107,7 +107,7 @@ Default HDWallet path.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:22](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L22)
+[base-unlocked-wallet.ts:23](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L23)
 
 ## Accessors
 
@@ -129,7 +129,55 @@ BaseWalletUnlocked.privateKey
 
 #### Defined in
 
-[base-unlocked-wallet.ts:52](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L52)
+[base-unlocked-wallet.ts:47](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L47)
+
+___
+
+### provider
+
+• `get` **provider**(): [`Provider`](/api/Providers/Provider.md)
+
+The provider used to interact with the network.
+
+**`Throws`**
+
+`FuelError` if the provider is not set.
+
+#### Returns
+
+[`Provider`](/api/Providers/Provider.md)
+
+A Provider instance.
+
+#### Inherited from
+
+BaseWalletUnlocked.provider
+
+#### Defined in
+
+[account.ts:75](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L75)
+
+• `set` **provider**(`provider`): `void`
+
+Sets the provider for the account.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+BaseWalletUnlocked.provider
+
+#### Defined in
+
+[account.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L88)
 
 ___
 
@@ -149,7 +197,7 @@ BaseWalletUnlocked.publicKey
 
 #### Defined in
 
-[base-unlocked-wallet.ts:61](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L61)
+[base-unlocked-wallet.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L56)
 
 ## Methods
 
@@ -177,7 +225,7 @@ The updated Provider instance.
 
 #### Defined in
 
-[account.ts:73](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L73)
+[account.ts:98](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L98)
 
 ___
 
@@ -191,7 +239,7 @@ A helper that creates a transfer transaction request and returns it.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
+| `destination` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
 | `amount` | `BigNumberish` | `undefined` | The amount of coins to transfer. |
 | `assetId` | `BytesLike` | `BaseAssetId` | The asset ID of the coins to transfer. |
 | `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | `{}` | The transaction parameters (gasLimit, gasPrice, maturity). |
@@ -208,7 +256,7 @@ A promise that resolves to the prepared transaction request.
 
 #### Defined in
 
-[account.ts:293](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L293)
+[account.ts:318](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L318)
 
 ___
 
@@ -232,7 +280,7 @@ ___
 
 #### Defined in
 
-[base-unlocked-wallet.ts:141](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L141)
+[base-unlocked-wallet.ts:137](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L137)
 
 ___
 
@@ -268,7 +316,7 @@ A promise that resolves when the resources are added to the transaction.
 
 #### Defined in
 
-[account.ts:214](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L214)
+[account.ts:239](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L239)
 
 ___
 
@@ -296,7 +344,7 @@ A promise that resolves to the balance amount.
 
 #### Defined in
 
-[account.ts:167](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L167)
+[account.ts:192](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L192)
 
 ___
 
@@ -318,7 +366,7 @@ A promise that resolves to an array of Coins and their quantities.
 
 #### Defined in
 
-[account.ts:177](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L177)
+[account.ts:202](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L202)
 
 ___
 
@@ -346,7 +394,7 @@ A promise that resolves to an array of Coins.
 
 #### Defined in
 
-[account.ts:98](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L98)
+[account.ts:123](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L123)
 
 ___
 
@@ -368,7 +416,7 @@ A promise that resolves to an array of Messages.
 
 #### Defined in
 
-[account.ts:132](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L132)
+[account.ts:157](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L157)
 
 ___
 
@@ -397,7 +445,7 @@ A promise that resolves to an array of Resources.
 
 #### Defined in
 
-[account.ts:85](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L85)
+[account.ts:110](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L110)
 
 ___
 
@@ -415,7 +463,7 @@ An instance of WalletLocked.
 
 #### Defined in
 
-[wallets.ts:42](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/wallets.ts#L42)
+[wallets.ts:42](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L42)
 
 ___
 
@@ -443,13 +491,13 @@ The populated transaction request.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:97](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L97)
+[base-unlocked-wallet.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L92)
 
 ___
 
 ### sendTransaction
 
-▸ **sendTransaction**(`transactionRequestLike`): `Promise`&lt;[`TransactionResponse`](/api/Providers/TransactionResponse.md)\>
+▸ **sendTransaction**(`transactionRequestLike`, `options?`): `Promise`&lt;[`TransactionResponse`](/api/Providers/TransactionResponse.md)\>
 
 Populates the witness signature for a transaction and sends it to the network using `provider.sendTransaction`.
 
@@ -458,6 +506,7 @@ Populates the witness signature for a transaction and sends it to the network us
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `transactionRequestLike` | [`TransactionRequestLike`](/api/Providers/index.md#transactionrequestlike) | The transaction request to send. |
+| `options?` | `Pick`&lt;[`ProviderSendTxParams`](/api/Providers/index.md#providersendtxparams), ``"awaitExecution"``\> | - |
 
 #### Returns
 
@@ -471,7 +520,7 @@ A promise that resolves to the TransactionResponse object.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:112](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L112)
+[base-unlocked-wallet.ts:107](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L107)
 
 ___
 
@@ -499,7 +548,7 @@ A promise that resolves to the signature as a ECDSA 64 bytes string.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:71](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L71)
+[base-unlocked-wallet.ts:66](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L66)
 
 ___
 
@@ -527,7 +576,7 @@ A promise that resolves to the signature as a ECDSA 64 bytes string.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:82](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L82)
+[base-unlocked-wallet.ts:77](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L77)
 
 ___
 
@@ -555,7 +604,7 @@ A promise that resolves to the CallResult object.
 
 #### Defined in
 
-[base-unlocked-wallet.ts:129](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/base-unlocked-wallet.ts#L129)
+[base-unlocked-wallet.ts:125](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/base-unlocked-wallet.ts#L125)
 
 ___
 
@@ -569,7 +618,7 @@ Transfers coins to a destination address.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
+| `destination` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the destination. |
 | `amount` | `BigNumberish` | `undefined` | The amount of coins to transfer. |
 | `assetId` | `BytesLike` | `BaseAssetId` | The asset ID of the coins to transfer. |
 | `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | `{}` | The transaction parameters (gasLimit, gasPrice, maturity). |
@@ -586,7 +635,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:321](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L321)
+[account.ts:346](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L346)
 
 ___
 
@@ -600,7 +649,7 @@ Transfers coins to a contract address.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `contractId` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the contract. |
+| `contractId` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | `undefined` | The address of the contract. |
 | `amount` | `BigNumberish` | `undefined` | The amount of coins to transfer. |
 | `assetId` | `BytesLike` | `BaseAssetId` | The asset ID of the coins to transfer. |
 | `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | `{}` | The optional transaction parameters. |
@@ -617,7 +666,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:344](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L344)
+[account.ts:369](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L369)
 
 ___
 
@@ -631,7 +680,7 @@ Withdraws an amount of the base asset to the base chain.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `recipient` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | Address of the recipient on the base chain. |
+| `recipient` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | Address of the recipient on the base chain. |
 | `amount` | `BigNumberish` | Amount of base asset. |
 | `txParams` | [`TxParamsType`](/api/Wallet/index.md#txparamstype) | The optional transaction parameters. |
 
@@ -647,35 +696,39 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:390](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L390)
+[account.ts:416](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L416)
 
 ___
 
 ### fromEncryptedJson
 
-▸ **fromEncryptedJson**(`jsonWallet`, `password`, `provider`): `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\>
+▸ **fromEncryptedJson**(`jsonWallet`, `password`, `provider?`): `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\>
+
+Create a Wallet Unlocked from an encrypted JSON.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `jsonWallet` | `string` |
-| `password` | `string` |
-| `provider` | [`Provider`](/api/Providers/Provider.md) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `jsonWallet` | `string` | The encrypted JSON keystore. |
+| `password` | `string` | The password to decrypt the JSON. |
+| `provider?` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 
 #### Returns
 
 `Promise`&lt;[`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)\>
 
+An unlocked wallet instance.
+
 #### Defined in
 
-[wallets.ts:109](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/wallets.ts#L109)
+[wallets.ts:117](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L117)
 
 ___
 
 ### fromExtendedKey
 
-▸ **fromExtendedKey**(`extendedKey`, `provider`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ **fromExtendedKey**(`extendedKey`, `provider?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Create a Wallet Unlocked from an extended key.
 
@@ -684,7 +737,7 @@ Create a Wallet Unlocked from an extended key.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `extendedKey` | `string` | The extended key. |
-| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
+| `provider?` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 
 #### Returns
 
@@ -694,13 +747,13 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:103](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/wallets.ts#L103)
+[wallets.ts:103](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L103)
 
 ___
 
 ### fromMnemonic
 
-▸ **fromMnemonic**(`mnemonic`, `provider`, `path?`, `passphrase?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ **fromMnemonic**(`mnemonic`, `provider?`, `path?`, `passphrase?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Create a Wallet Unlocked from a mnemonic phrase.
 
@@ -709,7 +762,7 @@ Create a Wallet Unlocked from a mnemonic phrase.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `mnemonic` | `string` | The mnemonic phrase. |
-| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
+| `provider?` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 | `path?` | `string` | The derivation path (optional). |
 | `passphrase?` | `BytesLike` | The passphrase for the mnemonic (optional). |
 
@@ -721,13 +774,13 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:83](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/wallets.ts#L83)
+[wallets.ts:83](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L83)
 
 ___
 
 ### fromSeed
 
-▸ **fromSeed**(`seed`, `provider`, `path?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ **fromSeed**(`seed`, `provider?`, `path?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Create a Wallet Unlocked from a seed.
 
@@ -736,7 +789,7 @@ Create a Wallet Unlocked from a seed.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `seed` | `string` | The seed phrase. |
-| `provider` | [`Provider`](/api/Providers/Provider.md) | A Provider instance. |
+| `provider?` | [`Provider`](/api/Providers/Provider.md) | A Provider instance (optional). |
 | `path?` | `string` | The derivation path (optional). |
 
 #### Returns
@@ -747,13 +800,13 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:67](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/wallets.ts#L67)
+[wallets.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L67)
 
 ___
 
 ### generate
 
-▸ **generate**(`generateOptions`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
+▸ **generate**(`generateOptions?`): [`WalletUnlocked`](/api/Wallet/WalletUnlocked.md)
 
 Generate a new Wallet Unlocked with a random key pair.
 
@@ -761,7 +814,7 @@ Generate a new Wallet Unlocked with a random key pair.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `generateOptions` | `GenerateOptions` | Options to customize the generation process (optional). |
+| `generateOptions?` | `GenerateOptions` | Options to customize the generation process (optional). |
 
 #### Returns
 
@@ -771,4 +824,4 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:53](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/wallets.ts#L53)
+[wallets.ts:53](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L53)

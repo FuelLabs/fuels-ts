@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[account.ts:36](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/wallet/src/account.ts#L36)
+[account.ts:37](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L37)

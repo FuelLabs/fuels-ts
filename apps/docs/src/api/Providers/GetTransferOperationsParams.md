@@ -20,7 +20,7 @@ InputOutputParam.inputs
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:113](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/providers/src/transaction-summary/types.ts#L113)
+[packages/providers/src/transaction-summary/types.ts:113](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/providers/src/transaction-summary/types.ts#L113)
 
 ___
 
@@ -34,7 +34,7 @@ InputOutputParam.outputs
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:117](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/providers/src/transaction-summary/types.ts#L117)
+[packages/providers/src/transaction-summary/types.ts:117](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/providers/src/transaction-summary/types.ts#L117)
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-summary/types.ts:133](https://github.com/FuelLabs/fuels-ts/blob/c441653b/packages/providers/src/transaction-summary/types.ts#L133)
+[packages/providers/src/transaction-summary/types.ts:133](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/providers/src/transaction-summary/types.ts#L133)
