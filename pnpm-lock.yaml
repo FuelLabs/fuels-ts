@@ -623,9 +623,6 @@ importers:
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
-      toml:
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@fuel-ts/versions':
         specifier: workspace:*
