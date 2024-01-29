@@ -3,14 +3,6 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { BooleanCoder } from './boolean';
 
-vi.mock('@fuel-ts/math', async () => {
-  const mod = await vi.importActual('@fuel-ts/math');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 /**
  * @group node
  */

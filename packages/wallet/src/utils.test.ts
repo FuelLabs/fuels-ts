@@ -9,14 +9,6 @@ import {
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-vi.mock('@fuels/vm-asm', async () => {
-  const mod = await vi.importActual('@fuels/vm-asm');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 vi.mock('ethers', async () => {
   const mod = await vi.importActual('ethers');
   return {
