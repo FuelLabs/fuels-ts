@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes } from '@fuel-ts/math';
 
 import type { EncodingOptions } from '../abstract-coder';
@@ -26,7 +26,7 @@ export class BooleanCoder extends Coder<boolean, boolean> {
     const isTrueBool = value === true || value === false;
 
     if (!isTrueBool) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid boolean value.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid boolean value.`);
     }
 
     const output: Uint8Array = toBytes(value ? 1 : 0, this.paddingLength);
@@ -39,20 +39,25 @@ export class BooleanCoder extends Coder<boolean, boolean> {
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {
+    if (data.length < this.paddingLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid boolean data size.`);
+    }
+
     let bytes;
 
     if (this.options.isRightPadded) {
-      bytes = bn(data.slice(offset, offset + 1));
+      bytes = data.slice(offset, offset + 1);
     } else {
-      bytes = bn(data.slice(offset, offset + this.paddingLength));
+      bytes = data.slice(offset, offset + this.paddingLength);
     }
 
-    if (bytes.isZero()) {
+    const decodedValue = bn(bytes);
+    if (decodedValue.isZero()) {
       return [false, offset + this.paddingLength];
     }
 
-    if (!bytes.eq(bn(1))) {
-      this.throwError(ErrorCode.DECODE_ERROR, `Invalid boolean value.`);
+    if (!decodedValue.eq(bn(1))) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid boolean value.`);
     }
 
     return [true, offset + this.paddingLength];

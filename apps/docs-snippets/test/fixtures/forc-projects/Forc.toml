@@ -2,6 +2,7 @@
 members = [
   "counter",
   "echo-enum",
+  "liquidity-pool",
   "log-values",
   "sum-script",
   "echo-values",

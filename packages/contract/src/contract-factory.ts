@@ -152,8 +152,9 @@ export default class ContractFactory {
     transactionRequest.maxFee = this.account.provider.getGasConfig().maxGasPerTx;
 
     await this.account.fund(transactionRequest, requiredQuantities, maxFee);
-    const response = await this.account.sendTransaction(transactionRequest);
-    await response.wait();
+    await this.account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+    });
 
     return new Contract(contractId, this.interface, this.account);
   }

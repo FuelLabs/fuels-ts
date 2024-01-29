@@ -5,6 +5,10 @@ import { UtxoIdCoder } from './utxo-id';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('UtxoIdCoder', () => {
   it('can encode UtxoId', () => {
     const utxoId: UtxoId = {

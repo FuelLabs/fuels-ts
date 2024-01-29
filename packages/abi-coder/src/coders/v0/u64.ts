@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN, BNInput } from '@fuel-ts/math';
 import { bn, toBytes } from '@fuel-ts/math';
 
@@ -16,15 +16,23 @@ export class U64Coder extends Coder<BNInput, BN> {
     try {
       bytes = toBytes(value, WORD_SIZE);
     } catch (error) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
 
     return bytes;
   }
 
   decode(data: Uint8Array, offset: number): [BN, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid ${this.type} data size.`);
+    }
+
     let bytes = data.slice(offset, offset + WORD_SIZE);
     bytes = bytes.slice(0, WORD_SIZE);
+
+    if (bytes.length !== this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid ${this.type} byte data size.`);
+    }
 
     return [bn(bytes), offset + WORD_SIZE];
   }

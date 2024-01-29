@@ -3,6 +3,9 @@ import { toHex } from '@fuel-ts/math';
 import { calcRoot, constructTree, getProof } from './binaryMerkleTree';
 import type Node from './types/node';
 
+/**
+ * @group node
+ */
 describe('Binary Merkle Tree', () => {
   const rootAfterLeaves = '0x9e59abcd7c89011ba919f9141624acb32b4cc31c24e76c6d4f64b25093ef366c';
   const size = 100;

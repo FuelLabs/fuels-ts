@@ -7,6 +7,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   let provider: Provider;

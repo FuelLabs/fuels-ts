@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
@@ -48,6 +48,7 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
@@ -59,7 +60,6 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.42.1",
-    "@fuel-ts/errors": "workspace:*",
     "ethers": "^6.7.1",
     "portfinder": "^1.0.32",
     "tree-kill": "^1.2.2",

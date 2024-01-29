@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
@@ -39,7 +39,7 @@
     "ethers": "^6.7.1",
     "@fuel-ts/versions": "workspace:*",
     "graphql": "^16.6.0",
-    "graphql-request": "^5.0.0",
+    "graphql-request": "5.0.0",
     "graphql-tag": "^2.12.6",
     "ramda": "^0.29.0",
     "tai64": "^1.0.0"
@@ -48,9 +48,9 @@
     "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "^2.13.7",
     "@graphql-codegen/typescript": "^2.8.0",
-    "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
-    "@types/ramda": "^0.29.3",
-    "get-graphql-schema": "^2.1.2"
+    "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
+    "get-graphql-schema": "^2.1.2",
+    "@types/ramda": "^0.29.3"
   }
 }

@@ -1,7 +1,10 @@
-import { getBytesCopy } from 'ethers';
-
+import { arrayify } from './arrayify';
 import { concat, concatBytes } from './concat';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('concat', () => {
   it('should concatenate multiple BytesLike into a single Uint8Array', () => {
     const byteslike1 = '0xff61ba809b36351b';
@@ -14,7 +17,7 @@ describe('concat', () => {
 
     expect(output).toBeInstanceOf(Uint8Array);
     expect(output).toStrictEqual(
-      new Uint8Array([...getBytesCopy(byteslike1), ...byteslike2, ...byteslike3])
+      new Uint8Array([...arrayify(byteslike1), ...byteslike2, ...byteslike3])
     );
   });
 });

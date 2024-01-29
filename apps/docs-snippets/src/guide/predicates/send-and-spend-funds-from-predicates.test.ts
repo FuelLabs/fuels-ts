@@ -8,6 +8,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
   let provider: Provider;
@@ -54,7 +57,7 @@ describe(__filename, () => {
     });
 
     const tx2 = await predicate.transfer(
-      receiverWallet.address,
+      receiverWallet.address.toB256(),
       amountToPredicate - 1000,
       BaseAssetId,
       {

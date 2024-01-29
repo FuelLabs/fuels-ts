@@ -10,6 +10,10 @@ const B256_ALT2 = '0x68b401b682ba0c9018150cca596358a6b98576337ea10b9cfb0d02441b3
 const B256_ALT3 = '0xeb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd';
 const B256_ALT4 = '0x2f6d40e3ac1a172fb9445f9843440a0fc383bea238a7a35a77a3c73d36902992';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('ReceiptCoder', () => {
   it('Can encode Call', () => {
     const receipt: Receipt = {

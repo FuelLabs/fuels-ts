@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../test/utils/constants';
@@ -7,6 +9,10 @@ import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';
 import { U64Coder } from './u64';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('EnumCoder', () => {
   const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
 
@@ -57,9 +63,9 @@ describe('EnumCoder', () => {
   });
 
   it('should throw an error when decoded value accesses an invalid index', () => {
-    const input = new Uint8Array(Array.from(Array(3).keys()));
+    const input = new Uint8Array(Array.from(Array(8).keys()));
     expect(() => {
-      coder.decode(input, 1);
+      coder.decode(input, 0);
     }).toThrow('Invalid caseIndex');
   });
 
@@ -93,5 +99,12 @@ describe('EnumCoder', () => {
         { nope: 42 }
       )
     ).toThrow();
+  });
+
+  it('throws when decoding empty bytes', async () => {
+    await expectToThrowFuelError(
+      () => coder.decode(new Uint8Array(), 0),
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid enum data size.')
+    );
   });
 });

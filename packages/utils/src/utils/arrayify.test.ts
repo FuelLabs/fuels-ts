@@ -1,5 +1,9 @@
 import { arrayify } from './arrayify';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('arrayify', () => {
   it('returns Uint8Array from Uint8Array', () => {
     expect(arrayify(new Uint8Array([0, 1, 2, 3]))).toEqual(new Uint8Array([0, 1, 2, 3]));

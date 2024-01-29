@@ -76,6 +76,9 @@ type MyStruct = {
   arg_two: BigNumberish;
 };
 
+/**
+ * @group node
+ */
 describe('Script', () => {
   let scriptRequest: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(() => {

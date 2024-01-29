@@ -3,6 +3,10 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('WitnessCoder', () => {
   it('Can encode empty Witness', () => {
     const witness: Witness = {

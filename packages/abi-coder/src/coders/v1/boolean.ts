@@ -1,4 +1,4 @@
-import { ErrorCode } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes } from '@fuel-ts/math';
 
 import { Coder } from '../abstract-coder';
@@ -14,7 +14,7 @@ export class BooleanCoder extends Coder<boolean, boolean> {
     const isTrueBool = value === true || value === false;
 
     if (!isTrueBool) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid boolean value.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid boolean value.`);
     }
 
     return toBytes(value ? 1 : 0, this.paddingLength);
@@ -28,7 +28,7 @@ export class BooleanCoder extends Coder<boolean, boolean> {
     }
 
     if (!bytes.eq(bn(1))) {
-      this.throwError(ErrorCode.DECODE_ERROR, `Invalid boolean value.`);
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid boolean value.`);
     }
 
     return [true, offset + this.paddingLength];

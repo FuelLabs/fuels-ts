@@ -37,11 +37,11 @@ export class NumberCoder extends Coder<number, number> {
     try {
       bytes = toBytes(value);
     } catch (error) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
     }
 
     if (bytes.length > this.length) {
-      this.throwError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
     return toBytes(bytes, this.length);
