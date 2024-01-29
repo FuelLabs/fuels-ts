@@ -23,8 +23,7 @@
     "chalk": "4",
     "commander": "^9.4.1",
     "fuels": "workspace:*",
-    "prompts": "^2.4.2",
-    "toml": "^3.0.0"
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@fuel-ts/versions": "workspace:*",
