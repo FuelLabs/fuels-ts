@@ -26,7 +26,7 @@ With the predicate instantiated, we can transfer funds to its address. This requ
 
 Now that our predicate holds funds, we can use it to validate a transaction.
 
-First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We achieve this using the [`Predicate`](../../api/Wallet/Predicate.md) class method `setData`.
+First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We achieve this using the [`Predicate`](../../api/Account/Predicate.md) class method `setData`.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 

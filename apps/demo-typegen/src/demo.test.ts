@@ -1,6 +1,6 @@
 // #region Testing-in-ts-ts
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
   ContractFactory,

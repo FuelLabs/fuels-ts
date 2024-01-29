@@ -1,4 +1,4 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   BN,
   Bech32Address,
@@ -230,7 +230,7 @@ describe('Doc Examples', () => {
   it('can create wallets', async () => {
     // #region wallet-setup
     // #context import { Provider, bn, FUEL_NETWORK_URL } from 'fuels';
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    // #context import { generateTestWallet } from '@fuel-ts/account/test-utils';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -302,7 +302,7 @@ describe('Doc Examples', () => {
   it('can query address with wallets', async () => {
     // #region wallet-query
     // #context import { Provider, FUEL_NETWORK_URL } from 'fuels';
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    // #context import { generateTestWallet } from '@fuel-ts/account/test-utils';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 

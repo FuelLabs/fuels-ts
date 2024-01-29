@@ -1,4 +1,4 @@
-import * as testUtilsMod from '@fuel-ts/wallet/test-utils';
+import * as testUtilsMod from '@fuel-ts/account/test-utils';
 import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
@@ -8,8 +8,8 @@ import type { FuelsConfig } from '../../types';
 import type { FuelCoreNode } from './autoStartFuelCore';
 import { autoStartFuelCore } from './autoStartFuelCore';
 
-vi.mock('@fuel-ts/wallet/test-utils', async () => {
-  const mod = await vi.importActual('@fuel-ts/wallet/test-utils');
+vi.mock('@fuel-ts/account/test-utils', async () => {
+  const mod = await vi.importActual('@fuel-ts/account/test-utils');
   return {
     __esModule: true,
     ...mod,

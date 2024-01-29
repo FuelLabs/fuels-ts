@@ -2,6 +2,18 @@ import { Interface, StringCoder } from '@fuel-ts/abi-coder';
 import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
+import {
+  Wallet,
+  HDWallet,
+  Mnemonic,
+  english,
+  Language,
+  Signer,
+  WalletManager,
+  Predicate,
+} from '@fuel-ts/account';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
@@ -18,19 +30,7 @@ import { Script } from '@fuel-ts/script';
 import { InputCoinCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
-import {
-  Wallet,
-  HDWallet,
-  Mnemonic,
-  english,
-  Language,
-  Signer,
-  WalletManager,
-  Predicate,
-} from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { DeployContractOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
 import {
   ScriptRequest,

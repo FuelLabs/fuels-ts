@@ -1,7 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { Account, Wallet } from '@fuel-ts/account';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { Provider } from '@fuel-ts/providers';
-import { Account, Wallet } from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import Contract from './contract';
 

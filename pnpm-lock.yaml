@@ -167,12 +167,12 @@ importers:
 
   apps/demo-fuels:
     dependencies:
+      '@fuel-ts/account':
+        specifier: workspace:^
+        version: link:../../packages/account
       '@fuel-ts/errors':
         specifier: workspace:^
         version: link:../../packages/errors
-      '@fuel-ts/wallet':
-        specifier: workspace:^
-        version: link:../../packages/wallet
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -313,6 +313,9 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../../packages/account
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
@@ -322,9 +325,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../../packages/wallet
 
   apps/docs:
     dependencies:
@@ -377,15 +377,15 @@ importers:
 
   apps/docs-snippets:
     devDependencies:
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../../packages/account
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../../packages/wallet
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -398,6 +398,9 @@ importers:
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../../packages/abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../../packages/account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../../packages/address
@@ -440,9 +443,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../../packages/wallet
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -521,6 +521,73 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
 
+  packages/account:
+    dependencies:
+      '@fuel-ts/abi-coder':
+        specifier: workspace:*
+        version: link:../abi-coder
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@fuel-ts/fuel-core':
+        specifier: workspace:*
+        version: link:../fuel-core
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
+      '@fuel-ts/merkle':
+        specifier: workspace:*
+        version: link:../merkle
+      '@fuel-ts/providers':
+        specifier: workspace:*
+        version: link:../providers
+      '@fuel-ts/transactions':
+        specifier: workspace:*
+        version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
+      '@fuels/vm-asm':
+        specifier: 0.42.1
+        version: 0.42.1
+      '@noble/curves':
+        specifier: ^1.3.0
+        version: 1.3.0
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
+      events:
+        specifier: ^3.3.0
+        version: 3.3.0
+      portfinder:
+        specifier: ^1.0.32
+        version: 1.0.32
+      tree-kill:
+        specifier: ^1.2.2
+        version: 1.2.2
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@types/uuid':
+        specifier: ^9.0.1
+        version: 9.0.1
+
   packages/address:
     dependencies:
       '@fuel-ts/crypto':
@@ -547,6 +614,9 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -574,9 +644,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -643,6 +710,9 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -652,9 +722,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
 
   packages/fuels:
     dependencies:
@@ -664,6 +731,9 @@ importers:
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -712,9 +782,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       bundle-require:
         specifier: ^4.0.1
         version: 4.0.1(esbuild@0.19.3)
@@ -824,6 +891,9 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -851,9 +921,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       '@fuels/vm-asm':
         specifier: 0.42.1
         version: 0.42.1
@@ -943,6 +1010,9 @@ importers:
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -967,9 +1037,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -1027,73 +1094,6 @@ importers:
       '@types/cli-table':
         specifier: ^0.3.1
         version: 0.3.1
-
-  packages/wallet:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/fuel-core':
-        specifier: workspace:*
-        version: link:../fuel-core
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/merkle':
-        specifier: workspace:*
-        version: link:../merkle
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@fuel-ts/versions':
-        specifier: workspace:*
-        version: link:../versions
-      '@fuels/vm-asm':
-        specifier: 0.42.1
-        version: 0.42.1
-      '@noble/curves':
-        specifier: ^1.3.0
-        version: 1.3.0
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-      events:
-        specifier: ^3.3.0
-        version: 3.3.0
-      portfinder:
-        specifier: ^1.0.32
-        version: 1.0.32
-      tree-kill:
-        specifier: ^1.2.2
-        version: 1.2.2
-      uuid:
-        specifier: ^9.0.0
-        version: 9.0.0
-    devDependencies:
-      '@types/uuid':
-        specifier: ^9.0.1
-        version: 9.0.1
 
   templates/nextjs:
     dependencies:
@@ -4902,7 +4902,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: true
 
   /@graphql-tools/prisma-loader@7.2.72(@types/node@20.10.5)(graphql@16.6.0):
@@ -4945,7 +4945,7 @@ packages:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -5384,7 +5384,7 @@ packages:
       '@jest/schemas': 29.4.3
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: false
@@ -8780,7 +8780,7 @@ packages:
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
     dev: true
 
   /@types/graceful-fs@4.1.6:
@@ -8910,7 +8910,7 @@ packages:
   /@types/mkdirp@0.5.2:
     resolution: {integrity: sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
     dev: true
 
   /@types/mkdirp@1.0.2:
@@ -9002,7 +9002,7 @@ packages:
   /@types/resolve@0.0.8:
     resolution: {integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
     dev: true
 
   /@types/resolve@1.17.1:
@@ -9100,7 +9100,7 @@ packages:
   /@types/ws@8.5.5:
     resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
 
   /@types/yargs-parser@21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -16690,7 +16690,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': 29.5.0
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11

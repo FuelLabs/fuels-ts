@@ -45,7 +45,7 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.42.1",

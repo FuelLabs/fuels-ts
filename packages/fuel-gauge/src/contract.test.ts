@@ -1,6 +1,6 @@
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type {
   TransactionRequestLike,
   TransactionResponse,

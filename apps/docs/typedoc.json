@@ -9,7 +9,7 @@
     "../../packages/address",
     "../../packages/interfaces",
     "../../packages/predicate",
-    "../../packages/wallet",
+    "../../packages/account",
     "../../packages/program",
     "../../packages/contract",
     "../../packages/script",

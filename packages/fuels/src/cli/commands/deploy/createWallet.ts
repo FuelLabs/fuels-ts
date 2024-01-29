@@ -1,5 +1,5 @@
+import { Wallet } from '@fuel-ts/account';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
 
 export async function createWallet(providerUrl: string, privateKey?: string) {
   let pvtKey: string;

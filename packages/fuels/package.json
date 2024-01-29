@@ -59,7 +59,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "bundle-require": "^4.0.1",
     "chalk": "4",
     "chokidar": "^3.5.3",

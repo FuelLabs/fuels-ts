@@ -1,5 +1,6 @@
 import * as abiCoder from '@fuel-ts/abi-coder';
 import * as abiTypegen from '@fuel-ts/abi-typegen';
+import * as wallet from '@fuel-ts/account';
 import * as address from '@fuel-ts/address';
 import * as contract from '@fuel-ts/contract';
 import * as crypto from '@fuel-ts/crypto';
@@ -16,7 +17,6 @@ import * as script from '@fuel-ts/script';
 import * as transactions from '@fuel-ts/transactions';
 import * as utils from '@fuel-ts/utils';
 import * as versions from '@fuel-ts/versions';
-import * as wallet from '@fuel-ts/wallet';
 import * as fuels from 'fuels';
 
 const { log } = console;

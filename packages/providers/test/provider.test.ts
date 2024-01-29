@@ -69,7 +69,7 @@ const getCustomFetch =
     return fetch(url, options);
   };
 
-// TODO: Figure out a way to import this constant from `@fuel-ts/wallet/configs`
+// TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 /**

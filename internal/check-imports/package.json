@@ -25,7 +25,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "fuels": "workspace:*"
   },
   "version": null
