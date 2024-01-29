@@ -20,7 +20,7 @@ jobs:
     name: Add FE Review Request
     permissions: write-all
     runs-on: ubuntu-latest
-    if: "startsWith(github.event.pull_request.title, 'ci(changesets):')"
+    if: "!startsWith(github.event.pull_request.title, 'ci(changesets):')"
     outputs:
       HAS_FE_REVIEW_REQUEST: ${{ steps.reviewers.outputs.HAS_FE_REVIEW_REQUEST }}
 
