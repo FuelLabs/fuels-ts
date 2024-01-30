@@ -1,3 +1,10 @@
+:root {
+  --vp-c-brand-1: var(--vp-c-green-1);
+  --vp-c-brand-2: var(--vp-c-green-2);
+  --vp-c-brand-3: var(--vp-c-green-3);
+  --vp-c-brand-soft: var(--vp-c-green-soft);
+}
+
 .VPNavBarSearch {
   margin-right: auto;
 }
@@ -24,7 +31,9 @@
   left: -0.2rem;
   opacity: 0;
   transform: translateX(-100%);
-  transition: color 0.25s, opacity 0.25s;
+  transition:
+    color 0.25s,
+    opacity 0.25s;
   color: var(--vp-c-brand);
 }
 
