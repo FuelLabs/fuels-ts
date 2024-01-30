@@ -27,6 +27,10 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
+    }
+
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();

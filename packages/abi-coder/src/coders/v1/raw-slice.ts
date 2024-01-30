@@ -10,7 +10,7 @@ import { NumberCoder } from './number';
 
 export class RawSliceCoder extends Coder<number[], number[]> {
   constructor() {
-    super('raw untyped slice', 'raw untyped slice', 1);
+    super('raw untyped slice', 'raw untyped slice', WORD_SIZE);
   }
 
   encode(_value: number[]): Uint8Array {
