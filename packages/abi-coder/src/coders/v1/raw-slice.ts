@@ -10,7 +10,7 @@ import { NumberCoder } from './number';
 
 export class RawSliceCoder extends Coder<number[], number[]> {
   constructor() {
-    super('raw untyped slice', 'raw untyped slice', WORD_SIZE);
+    super('raw untyped slice', 'raw untyped slice', 1);
   }
 
   encode(_value: number[]): Uint8Array {
@@ -19,6 +19,10 @@ export class RawSliceCoder extends Coder<number[], number[]> {
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice data size.`);
+    }
+
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();

@@ -18,6 +18,10 @@ export class StdStringCoder extends Coder<string, string> {
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid std string data size.`);
+    }
+
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
