@@ -10,6 +10,38 @@ use std::option::Option;
 use std::storage::*;
 use std::vec::Vec;
 
+impl AbiEncode for str[10] {
+    fn abi_encode(self, ref mut buffer: Buffer) {
+        let s = from_str_array(self);
+
+        let len = s.len();
+        let ptr = s.as_ptr();
+
+        let mut i = 0;
+        while i < len {
+            let byte = ptr.add::<u8>(i).read::<u8>();
+            buffer.push(byte);
+            i += 1;
+        }
+    }
+}
+
+impl AbiEncode for str[12] {
+    fn abi_encode(self, ref mut buffer: Buffer) {
+        let s = from_str_array(self);
+
+        let len = s.len();
+        let ptr = s.as_ptr();
+
+        let mut i = 0;
+        while i < len {
+            let byte = ptr.add::<u8>(i).read::<u8>();
+            buffer.push(byte);
+            i += 1;
+        }
+    }
+}
+
 pub struct U8Struct {
     i: u8,
 }
