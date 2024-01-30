@@ -52,3 +52,6 @@ members = [
   "vector-types-script",
   "vectors",
 ]
+
+[patch.'https://github.com/fuellabs/sway']
+std = { git = "https://github.com/fuellabs/sway", branch = "hal3e/abiencoder-impls" }
