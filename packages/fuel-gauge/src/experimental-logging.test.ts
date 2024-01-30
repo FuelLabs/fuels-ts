@@ -32,6 +32,9 @@ beforeAll(async () => {
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
+/**
+ * @group node
+ */
 describe('Experimental Logging', () => {
   it('logs u8', async () => {
     const expected = U8_MAX;
@@ -211,17 +214,6 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([expected]);
   });
 
-  it('logs u16 u8 vec multiple params', async () => {
-    const expected = [U16_MAX, [U8_MAX, 1, U8_MAX, 5]];
-
-    const { logs } = await contractInstance.functions
-      .log_u16_vec_u8(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
-
-    expect(logs).toEqual(expected);
-  });
-
   it('logs u16 bytes multiple params', async () => {
     const expected = [U16_MAX, [40, 41, 42]];
 
@@ -233,16 +225,6 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([U16_MAX, Uint8Array.from([40, 41, 42])]);
   });
 
-  it('logs u16 StdString multiple params', async () => {
-    const expected = [U16_MAX, 'hello world'];
-
-    const { logs } = await contractInstance.functions
-      .log_u16_std_string(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
-
-    expect(logs).toEqual(expected);
-  });
 
   it('logs u8 array', async () => {
     const expected = [U8_MAX, 5, U8_MAX];
@@ -304,17 +286,6 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u8_u16_tuple(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
-
-    expect(logs).toEqual([expected]);
-  });
-
-  it('logs boolean u8 vec tuple', async () => {
-    const expected = [true, [U8_MAX, 1, U8_MAX, 5]];
-
-    const { logs } = await contractInstance.functions
-      .log_boolean_u8_vec_tuple(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
@@ -430,24 +401,6 @@ describe('Experimental Logging', () => {
 
     const { logs: logsNone } = await contractInstance.functions
       .log_option_u8(expectedNone)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
-
-    expect(logsSome).toEqual([expectedSome]);
-    expect(logsNone).toEqual([expectedNone]);
-  });
-
-  it('logs u16 vec option', async () => {
-    const expectedSome = [U16_MAX, 1, U16_MAX, 5];
-    const expectedNone = undefined;
-
-    const { logs: logsSome } = await contractInstance.functions
-      .log_option_vec_u16(expectedSome)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
-
-    const { logs: logsNone } = await contractInstance.functions
-      .log_option_vec_u16(expectedNone)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 

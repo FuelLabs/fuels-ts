@@ -1,7 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { bn } from '@fuel-ts/math';
 
-import { WORD_SIZE } from '../../constants';
 import type { Uint8ArrayWithDynamicData } from '../../utilities';
 import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../../utilities';
 import { Coder } from '../abstract-coder';
