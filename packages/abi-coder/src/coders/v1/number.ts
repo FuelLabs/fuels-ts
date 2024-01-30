@@ -48,7 +48,15 @@ export class NumberCoder extends Coder<number, number> {
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid number data size.`);
+    }
+
     const bytes = data.slice(offset, offset + this.length);
+
+    if (bytes.length !== this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid number byte data size.`);
+    }
 
     return [toNumber(bytes), offset + this.length];
   }
