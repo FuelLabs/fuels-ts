@@ -18,8 +18,7 @@ describe(__filename, () => {
 
   it('should successfully get a contract balance', async () => {
     // #region contract-balance-3
-    // #context import type { AssetId } from 'fuels';
-    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
+    // #import { AssetId, Wallet, BN, BaseAssetId };
 
     const amountToForward = 40;
     const amountToTransfer = 10;
