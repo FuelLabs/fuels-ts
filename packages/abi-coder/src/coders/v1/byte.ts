@@ -17,11 +17,20 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
   }
 
   decode(data: Uint8Array, offset: number): [Uint8Array, number] {
+    if (data.length < WORD_SIZE) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid byte data size.`);
+    }
+
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
     const dataLength = length * this.encodedLength;
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
+
+    if (dataBytes.length !== length) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid bytes byte data size.`);
+    }
+
     return [dataBytes, offset + dataLength];
   }
 }
