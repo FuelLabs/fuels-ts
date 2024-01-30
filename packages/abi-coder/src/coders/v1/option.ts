@@ -23,10 +23,6 @@ export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCode
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
-    if (data.length < this.encodedLength) {
-      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid option data size.`);
-    }
-
     const [decoded, newOffset] = super.decode(data, offset);
     return [this.toOption(decoded) as DecodedValueOf<TCoders>, newOffset];
   }

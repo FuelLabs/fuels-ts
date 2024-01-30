@@ -225,7 +225,6 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([U16_MAX, Uint8Array.from([40, 41, 42])]);
   });
 
-
   it('logs u8 array', async () => {
     const expected = [U8_MAX, 5, U8_MAX];
 
