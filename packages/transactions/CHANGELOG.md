@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.72.0
+
+### Minor Changes
+
+- update deposit and withdraw doc page, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
 ## 0.71.1
 
 ## 0.71.0
