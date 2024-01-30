@@ -4,14 +4,12 @@ import { toUtf8Bytes, toUtf8String } from 'ethers';
 import { Coder } from '../abstract-coder';
 
 export class StringCoder<TLength extends number = number> extends Coder<string, string> {
-  length: TLength;
   constructor(length: TLength) {
     super('string', `str[${length}]`, length);
-    this.length = length;
   }
 
   encode(value: string): Uint8Array {
-    if (this.length !== value.length) {
+    if (value.length !== this.encodedLength) {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Value length mismatch during encode.`);
     }
 
@@ -19,9 +17,16 @@ export class StringCoder<TLength extends number = number> extends Coder<string, 
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    const bytes = data.slice(offset, offset + this.length);
-    const value = toUtf8String(bytes);
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string data size.`);
+    }
 
-    return [value, offset + this.length];
+    const bytes = data.slice(offset, offset + this.encodedLength);
+
+    if (bytes.length !== this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string byte data size.`);
+    }
+
+    return [toUtf8String(bytes), offset + this.encodedLength];
   }
 }
