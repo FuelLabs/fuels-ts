@@ -33,6 +33,10 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid struct data size.`);
+    }
+
     let newOffset = offset;
     const decodedValue = Object.keys(this.coders).reduce((obj, fieldName) => {
       const fieldCoder = this.coders[fieldName];
