@@ -23,7 +23,8 @@ export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCode
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
-    if (data.length < this.encodedLength) {
+    // An empty option will be one less than the expected encoded length
+    if (data.length < this.encodedLength - 1) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid option data size.`);
     }
 
