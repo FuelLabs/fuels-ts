@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
-import { WORD_SIZE } from '../../constants';
+import { MAX_BYTES, WORD_SIZE } from '../../constants';
 import { chunkByLength } from '../../utilities';
 import type { TypesOfCoder } from '../abstract-coder';
 import { Coder } from '../abstract-coder';
@@ -26,7 +26,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (data.length < this.encodedLength) {
+    if (data.length < this.encodedLength || data.length > MAX_BYTES) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
     }
 
@@ -36,11 +36,15 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     const dataLength = length * this.coder.encodedLength;
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
 
+    if (dataBytes.length !== length) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec byte data size.`);
+    }
+
     return [
       chunkByLength(dataBytes, this.coder.encodedLength).map(
         (chunk) => this.coder.decode(chunk, 0)[0]
       ),
-      offset + dataLength,
+      offsetAndLength + dataLength,
     ];
   }
 }

@@ -13,8 +13,6 @@ const getLength = (baseType: NumberCoderType): number => {
       return 2;
     case 'u32':
       return 4;
-    case 'u64':
-      return 8;
     default:
       throw new FuelError(ErrorCode.TYPE_NOT_SUPPORTED, `Invalid number type: ${baseType}`);
   }

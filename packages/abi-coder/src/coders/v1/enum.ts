@@ -51,6 +51,10 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
+    if (data.length < this.#encodedValueSize) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid enum data size.`);
+    }
+
     const caseBytes = new U64Coder().decode(data, offset)[0];
     const caseIndex = toNumber(caseBytes);
     const caseKey = Object.keys(this.coders)[caseIndex];

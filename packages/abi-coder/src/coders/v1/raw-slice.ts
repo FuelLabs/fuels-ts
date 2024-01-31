@@ -14,7 +14,7 @@ export class RawSliceCoder extends Coder<number[], number[]> {
   }
 
   encode(_value: number[]): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Raw Slice encode unsupported in v1`);
+    throw new FuelError(ErrorCode.ENCODE_ERROR, `Raw slice encode unsupported in v1`);
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {
@@ -26,6 +26,11 @@ export class RawSliceCoder extends Coder<number[], number[]> {
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + length);
+
+    if (dataBytes.length !== length) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice byte data size.`);
+    }
+
     const internalCoder = new ArrayCoder(new NumberCoder('u8'), length);
     const [decodedValue] = internalCoder.decode(dataBytes, 0);
 

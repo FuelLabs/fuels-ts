@@ -6,23 +6,30 @@ import { WORD_SIZE } from '../../constants';
 import { Coder } from '../abstract-coder';
 import { U64Coder } from '../v0/u64';
 
-export class StrSliceCoder extends Coder<number[], string> {
+export class StrSliceCoder extends Coder<string, string> {
   static memorySize = 1;
   constructor() {
-    super('strSlice', 'str', 1);
+    super('strSlice', 'str', WORD_SIZE);
   }
 
-  encode(_value: number[]): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Bytes encode unsupported in v1`);
+  encode(_value: string): Uint8Array {
+    throw new FuelError(ErrorCode.ENCODE_ERROR, `String slice encode unsupported in v1`);
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
+    if (data.length < this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string slice data size.`);
+    }
+
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
-    const bytes = data.slice(offset, offsetAndLength + length);
-    const value = toUtf8String(bytes);
+    const bytes = data.slice(offsetAndLength, offsetAndLength + length);
 
-    return [value, offsetAndLength + length];
+    if (bytes.length !== length) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string slice byte data size.`);
+    }
+
+    return [toUtf8String(bytes), offsetAndLength + length];
   }
 }

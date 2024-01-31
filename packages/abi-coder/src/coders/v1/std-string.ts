@@ -24,8 +24,12 @@ export class StdStringCoder extends Coder<string, string> {
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
-    const dataLength = length * this.encodedLength;
-    const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
-    return [toUtf8String(dataBytes), offset + dataLength];
+    const dataBytes = data.slice(offsetAndLength, offsetAndLength + length);
+
+    if (dataBytes.length !== length) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid std string byte data size.`);
+    }
+
+    return [toUtf8String(dataBytes), offsetAndLength + length];
   }
 }
