@@ -3,6 +3,7 @@
   "name": "docs",
   "version": "0.43.11",
   "description": "",
+  "type": "module",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm run docs && vitepress dev'",
     "build": "pnpm run docs && vitepress build",
@@ -27,8 +28,8 @@
     "replace": "^1.2.2",
     "typedoc": "^0.25.1",
     "typedoc-plugin-merge-modules": "^5.0.1",
-    "vitepress": "1.0.0-alpha.51",
+    "vitepress": "1.0.0-rc.40",
     "vitepress-plugin-search": "1.0.4-alpha.19",
-    "vue": "^3.2.47"
+    "vue": "^3.4.15"
   }
 }
