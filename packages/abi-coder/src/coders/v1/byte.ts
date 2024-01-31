@@ -13,7 +13,6 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
 
   encode(_value: number[]): Uint8Array {
     throw new FuelError(ErrorCode.ENCODE_ERROR, `Bytes encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [Uint8Array, number] {

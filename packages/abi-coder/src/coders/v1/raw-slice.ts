@@ -15,7 +15,6 @@ export class RawSliceCoder extends Coder<number[], number[]> {
 
   encode(_value: number[]): Uint8Array {
     throw new FuelError(ErrorCode.ENCODE_ERROR, `Raw Slice encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {

@@ -28,7 +28,6 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
     }
 
     throw new FuelError(ErrorCode.ENCODE_ERROR, `Tuple encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

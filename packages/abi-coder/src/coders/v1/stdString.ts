@@ -14,7 +14,6 @@ export class StdStringCoder extends Coder<string, string> {
 
   encode(_value: string): Uint8Array {
     throw new FuelError(ErrorCode.ENCODE_ERROR, `StdString encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {

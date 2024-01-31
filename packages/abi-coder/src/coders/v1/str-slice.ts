@@ -14,7 +14,6 @@ export class StrSliceCoder extends Coder<number[], string> {
 
   encode(_value: number[]): Uint8Array {
     throw new FuelError(ErrorCode.ENCODE_ERROR, `Bytes encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {

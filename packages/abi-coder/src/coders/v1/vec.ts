@@ -23,7 +23,6 @@ export class VecCoder<TCoder extends Coder> extends Coder<
 
   encode(_value: InputValueOf<TCoder>): Uint8Array {
     throw new FuelError(ErrorCode.ENCODE_ERROR, `Vec encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {

@@ -29,7 +29,6 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
 
   encode(_value: InputValueOf<TCoders>) {
     throw new FuelError(ErrorCode.ENCODE_ERROR, `Struct encode unsupported in v1`);
-    return new Uint8Array();
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
