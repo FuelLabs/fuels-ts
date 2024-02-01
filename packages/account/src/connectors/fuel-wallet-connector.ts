@@ -153,7 +153,6 @@ export class FuelWalletConnector extends FuelConnector {
 
   async isConnected(): Promise<boolean> {
     // If the wallet not exists or not connected, return false
-    console.log('isConnected going to run');
     try {
       return await this.client.request('isConnected', {});
     } catch {
