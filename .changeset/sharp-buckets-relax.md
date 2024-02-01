@@ -4,7 +4,6 @@
 "@fuel-ts/errors": minor
 "fuels": minor
 "@fuel-ts/program": minor
-"@fuel-ts/providers": minor
 "@fuel-ts/script": minor
 ---
 
