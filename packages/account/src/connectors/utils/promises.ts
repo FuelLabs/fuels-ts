@@ -19,7 +19,7 @@ export function deferPromise<R = unknown>() {
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function withTimeout<F extends Promise<unknown>, RT = Awaited<F>>(
   promise: F,
-  timeout: number = 10
+  timeout: number = 1050
 ): Promise<RT> {
   const timeoutPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
