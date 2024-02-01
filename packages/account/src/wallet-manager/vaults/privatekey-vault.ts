@@ -1,8 +1,8 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Provider } from '@fuel-ts/providers';
 
+import type { Provider } from '../../providers';
 import { Wallet } from '../../wallet';
 import type { WalletUnlocked } from '../../wallets';
 import type { WalletManagerAccount, Vault } from '../types';

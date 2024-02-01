@@ -11,6 +11,7 @@ import {
   Signer,
   WalletManager,
   Predicate,
+  Provider,
 } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
@@ -25,7 +26,6 @@ import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs'
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
 import { FunctionInvocationScope } from '@fuel-ts/program';
 import { PANIC_REASONS } from '@fuel-ts/program/configs';
-import { Provider } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
 import { InputCoinCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';

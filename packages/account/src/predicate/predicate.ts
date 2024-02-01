@@ -11,6 +11,12 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, AbstractPredicate, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
+import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import { getBytesCopy, hexlify } from 'ethers';
+
+import { Account } from '../account';
+import type { TxParamsType } from '../account';
+import { transactionRequestify, BaseTransactionRequest } from '../providers';
 import type {
   CallResult,
   Provider,
@@ -18,13 +24,7 @@ import type {
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
-} from '@fuel-ts/providers';
-import { transactionRequestify, BaseTransactionRequest } from '@fuel-ts/providers';
-import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
-
-import { Account } from '../account';
-import type { TxParamsType } from '../account';
+} from '../providers';
 
 import { getPredicateRoot } from './utils';
 

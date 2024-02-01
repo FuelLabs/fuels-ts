@@ -1,5 +1,4 @@
-import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
-
+import type { Provider, CoinQuantityLike } from '../providers';
 import { Wallet } from '../wallet';
 import type { WalletUnlocked } from '../wallets';
 

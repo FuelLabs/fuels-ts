@@ -1,7 +1,6 @@
-import { Provider } from '@fuel-ts/providers';
-
 import walletManagerSpec from '../../../test/fixtures/wallet-manager-spec';
 import { FUEL_NETWORK_URL } from '../../configs';
+import { Provider } from '../../providers';
 import { Wallet } from '../../wallet';
 
 import { MnemonicVault } from './mnemonic-vault';

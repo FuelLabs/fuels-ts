@@ -1,8 +1,5 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
-import type { CallResult, TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
-import { Provider } from '@fuel-ts/providers';
-import * as providersMod from '@fuel-ts/providers';
 import type { BytesLike } from 'ethers';
 
 import walletSpec from '../test/fixtures/wallet-spec';
@@ -11,6 +8,9 @@ import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../test/fixtures/wall
 import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import { FUEL_NETWORK_URL } from './configs';
 import * as keystoreWMod from './keystore-wallet';
+import * as providersMod from './providers';
+import { Provider } from './providers';
+import type { CallResult, TransactionResponse, TransactionRequestLike } from './providers';
 import { Signer } from './signer';
 import { WalletLocked, WalletUnlocked } from './wallets';
 

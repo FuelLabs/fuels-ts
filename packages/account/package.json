@@ -41,6 +41,9 @@
   ],
   "scripts": {
     "build": "tsup",
+    "prebuild": "pnpm build:operations",
+    "build:schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
+    "build:operations": "pnpm graphql-codegen",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
@@ -53,12 +56,16 @@
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuels/vm-asm": "0.42.1",
+    "graphql": "^16.6.0",
+    "graphql-request": "5.0.0",
+    "graphql-tag": "^2.12.6",
+    "ramda": "^0.29.0",
+    "tai64": "^1.0.0",
     "events": "^3.3.0",
     "@noble/curves": "^1.3.0",
     "ethers": "^6.7.1",
@@ -69,6 +76,13 @@
   "devDependencies": {
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "@graphql-codegen/cli": "^2.13.7",
+    "@graphql-codegen/typescript": "^2.8.0",
+    "@graphql-codegen/typescript-operations": "^2.5.5",
+    "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
+    "get-graphql-schema": "^2.1.2",
+    "@types/ramda": "^0.29.3",
     "@types/uuid": "^9.0.1"
   }
 }

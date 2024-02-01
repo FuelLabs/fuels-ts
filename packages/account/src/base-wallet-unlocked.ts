@@ -1,16 +1,16 @@
 import { hashMessage } from '@fuel-ts/hasher';
+import type { BytesLike } from 'ethers';
+
+import { Account } from './account';
+import { encryptKeystoreWallet } from './keystore-wallet';
+import { transactionRequestify } from './providers';
 import type {
   TransactionResponse,
   TransactionRequestLike,
   CallResult,
   Provider,
   ProviderSendTxParams,
-} from '@fuel-ts/providers';
-import { transactionRequestify } from '@fuel-ts/providers';
-import type { BytesLike } from 'ethers';
-
-import { Account } from './account';
-import { encryptKeystoreWallet } from './keystore-wallet';
+} from './providers';
 import { Signer } from './signer';
 
 /**

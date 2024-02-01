@@ -3,7 +3,6 @@
 // it's not possible to split the two classes in different files
 //
 /* eslint-disable max-classes-per-file */
-import type { Provider } from '@fuel-ts/providers';
 import type { BytesLike } from 'ethers';
 
 import { Account } from './account';
@@ -11,6 +10,7 @@ import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import { HDWallet } from './hdwallet';
 import { decryptKeystoreWallet } from './keystore-wallet';
 import { Mnemonic } from './mnemonic';
+import type { Provider } from './providers';
 import { Signer } from './signer';
 
 export interface GenerateOptions {

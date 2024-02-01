@@ -1,9 +1,9 @@
 import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
-import { Provider } from '@fuel-ts/providers';
 
 import WalletManagerSpec from '../../test/fixtures/wallet-manager-spec';
 import { FUEL_NETWORK_URL } from '../configs';
+import { Provider } from '../providers';
 import { Signer } from '../signer';
 import { Wallet } from '../wallet';
 

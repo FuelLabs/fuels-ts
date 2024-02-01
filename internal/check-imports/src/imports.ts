@@ -12,7 +12,6 @@ import * as interfaces from '@fuel-ts/interfaces';
 import * as math from '@fuel-ts/math';
 import * as merkle from '@fuel-ts/merkle';
 import * as program from '@fuel-ts/program';
-import * as providers from '@fuel-ts/providers';
 import * as script from '@fuel-ts/script';
 import * as transactions from '@fuel-ts/transactions';
 import * as utils from '@fuel-ts/utils';
@@ -34,7 +33,6 @@ log([
   math,
   merkle,
   program,
-  providers,
   script,
   transactions,
   utils,

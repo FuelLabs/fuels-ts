@@ -428,9 +428,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../../packages/program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../../packages/providers
       '@fuel-ts/script':
         specifier: workspace:*
         version: link:../../packages/script
@@ -550,9 +547,6 @@ importers:
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -574,9 +568,24 @@ importers:
       events:
         specifier: ^3.3.0
         version: 3.3.0
+      graphql:
+        specifier: ^16.6.0
+        version: 16.6.0
+      graphql-request:
+        specifier: 5.0.0
+        version: 5.0.0(graphql@16.6.0)
+      graphql-tag:
+        specifier: ^2.12.6
+        version: 2.12.6(graphql@16.6.0)
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
+      tai64:
+        specifier: ^1.0.0
+        version: 1.0.0
       tree-kill:
         specifier: ^1.2.2
         version: 1.2.2
@@ -584,9 +593,27 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
     devDependencies:
+      '@graphql-codegen/cli':
+        specifier: ^2.13.7
+        version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
+      '@graphql-codegen/typescript':
+        specifier: ^2.8.0
+        version: 2.8.0(graphql@16.6.0)
+      '@graphql-codegen/typescript-generic-sdk':
+        specifier: ^3.1.0
+        version: 3.1.0(graphql-tag@2.12.6)(graphql@16.6.0)
+      '@graphql-codegen/typescript-operations':
+        specifier: ^2.5.5
+        version: 2.5.5(graphql@16.6.0)
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.1
+      get-graphql-schema:
+        specifier: ^2.1.2
+        version: 2.1.2
 
   packages/address:
     dependencies:
@@ -632,9 +659,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -767,9 +791,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/script':
         specifier: workspace:*
         version: link:../script
@@ -909,9 +930,6 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -931,73 +949,6 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../forc
-
-  packages/providers:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/versions':
-        specifier: workspace:*
-        version: link:../versions
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-      graphql:
-        specifier: ^16.6.0
-        version: 16.6.0
-      graphql-request:
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.6.0)
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@16.6.0)
-      ramda:
-        specifier: ^0.29.0
-        version: 0.29.0
-      tai64:
-        specifier: ^1.0.0
-        version: 1.0.0
-    devDependencies:
-      '@graphql-codegen/cli':
-        specifier: ^2.13.7
-        version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
-      '@graphql-codegen/typescript':
-        specifier: ^2.8.0
-        version: 2.8.0(graphql@16.6.0)
-      '@graphql-codegen/typescript-generic-sdk':
-        specifier: ^3.1.0
-        version: 3.1.0(graphql-tag@2.12.6)(graphql@16.6.0)
-      '@graphql-codegen/typescript-operations':
-        specifier: ^2.5.5
-        version: 2.5.5(graphql@16.6.0)
-      '@types/ramda':
-        specifier: ^0.29.3
-        version: 0.29.3
-      get-graphql-schema:
-        specifier: ^2.1.2
-        version: 2.1.2
 
   packages/script:
     dependencies:
@@ -1025,9 +976,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -1318,11 +1266,11 @@ packages:
       graphql: '*'
     dependencies:
       '@babel/core': 7.22.5
-      '@babel/generator': 7.22.5
-      '@babel/parser': 7.22.5
+      '@babel/generator': 7.23.4
+      '@babel/parser': 7.23.9
       '@babel/runtime': 7.22.5
       '@babel/traverse': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/types': 7.23.9
       babel-preset-fbjs: 3.4.0(@babel/core@7.22.5)
       chalk: 4.1.2
       fb-watchman: 2.0.2
@@ -1451,7 +1399,7 @@ packages:
     resolution: {integrity: sha512-esuS49Cga3HcThFNebGhlgsrVLkvhqvYDTzgjfFFlHJcIfLe5jFmRRfCQ1KuBfc4Jrtn3ndLgKWAKjBE+IraYQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.23.4
+      '@babel/types': 7.23.9
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.20
       jsesc: 2.5.2
@@ -1767,7 +1715,6 @@ packages:
     hasBin: true
     dependencies:
       '@babel/types': 7.23.4
-    dev: true
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.22.5(@babel/core@7.22.5):
     resolution: {integrity: sha512-NP1M5Rf+u2Gw9qfSO4ihjcTGW5zXTi36ITLd4/EoAcEhIZ0yjMqmftDNl3QC19CX7olhrjpyU454g/2W7X0jvQ==}
@@ -3111,8 +3058,8 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.4
-      '@babel/parser': 7.23.4
-      '@babel/types': 7.23.4
+      '@babel/parser': 7.23.9
+      '@babel/types': 7.23.9
 
   /@babel/template@7.22.5:
     resolution: {integrity: sha512-X7yV7eiwAxdj9k94NEylvbVHLiVG1nvzCV2EAowhxLTwODV1jl9UzZ48leOC0sH7OnuHrIkllaBgneUykIcZaw==}
@@ -4427,9 +4374,9 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
-      '@babel/generator': 7.22.5
-      '@babel/template': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/generator': 7.23.4
+      '@babel/template': 7.22.15
+      '@babel/types': 7.23.9
       '@graphql-codegen/core': 2.6.2(graphql@16.6.0)
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.6.0)
       '@graphql-tools/apollo-engine-loader': 7.3.26(graphql@16.6.0)
@@ -5099,7 +5046,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       jest-message-util: 28.1.3
       jest-util: 28.1.3
@@ -5120,7 +5067,7 @@ packages:
       '@jest/test-result': 27.5.1
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.8.1
@@ -5318,7 +5265,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       '@types/yargs': 16.0.5
       chalk: 4.1.2
     dev: false
@@ -5330,7 +5277,7 @@ packages:
       '@jest/schemas': 28.1.3
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: false
@@ -16402,7 +16349,7 @@ packages:
     dependencies:
       '@jest/types': 27.5.1
       '@types/graceful-fs': 4.1.6
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -16473,7 +16420,7 @@ packages:
     resolution: {integrity: sha512-rMyFe1+jnyAAf+NHwTclDz0eAaLkVDdKVHHBFWsBWHnnh5YeJMNWWsv7AbFYXfK3oTqvL7VTWkhNLu1jX24D+g==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      '@babel/code-frame': 7.22.5
+      '@babel/code-frame': 7.23.4
       '@jest/types': 27.5.1
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
@@ -16488,7 +16435,7 @@ packages:
     resolution: {integrity: sha512-PFdn9Iewbt575zKPf1286Ht9EPoJmYT7P0kY+RibeYZ2XtOr53pDLEFoTWXbd1h4JiGiWpTBC84fc8xMXQMb7g==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
-      '@babel/code-frame': 7.22.5
+      '@babel/code-frame': 7.23.4
       '@jest/types': 28.1.3
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
@@ -16646,10 +16593,10 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@babel/core': 7.23.3
-      '@babel/generator': 7.22.5
+      '@babel/generator': 7.23.4
       '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.23.3)
       '@babel/traverse': 7.22.5
-      '@babel/types': 7.23.4
+      '@babel/types': 7.23.9
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
       '@types/babel__traverse': 7.20.1
@@ -16676,7 +16623,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -16688,7 +16635,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -16754,7 +16701,7 @@ packages:
     dependencies:
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.10.2
@@ -16784,7 +16731,7 @@ packages:
     resolution: {integrity: sha512-CqRA220YV/6jCo8VWvAt1KKx6eek1VIHMPeLEbpcfSfkEeWyBNppynM/o6q+Wmw+sOhos2ml34wZbSX3G13//g==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: false

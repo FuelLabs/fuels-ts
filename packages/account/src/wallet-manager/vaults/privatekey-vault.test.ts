@@ -1,7 +1,7 @@
 import { Address } from '@fuel-ts/address';
-import { Provider } from '@fuel-ts/providers';
 
 import { FUEL_NETWORK_URL } from '../../configs';
+import { Provider } from '../../providers';
 import { Wallet } from '../../wallet';
 import type { WalletUnlocked } from '../../wallets';
 

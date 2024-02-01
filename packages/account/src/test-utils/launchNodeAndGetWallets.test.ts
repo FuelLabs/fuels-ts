@@ -1,7 +1,7 @@
-import { Provider } from '@fuel-ts/providers';
 import path from 'path';
 import { cwd } from 'process';
 
+import { Provider } from '../providers';
 import { WalletUnlocked } from '../wallets';
 
 import { launchNodeAndGetWallets } from './launchNode';

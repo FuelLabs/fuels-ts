@@ -5,6 +5,9 @@ import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { getBytesCopy } from 'ethers';
+import type { BytesLike } from 'ethers';
+
 import type {
   TransactionRequestLike,
   CallResult,
@@ -19,16 +22,13 @@ import type {
   Provider,
   ScriptTransactionRequestLike,
   ProviderSendTxParams,
-} from '@fuel-ts/providers';
+} from './providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToAsset,
-} from '@fuel-ts/providers';
-import { getBytesCopy } from 'ethers';
-import type { BytesLike } from 'ethers';
-
+} from './providers';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<

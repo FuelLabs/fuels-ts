@@ -2,6 +2,12 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+
+import type { TxParamsType } from './account';
+import { Account } from './account';
+import { FUEL_NETWORK_URL } from './configs';
+import { TransactionResponse, ScriptTransactionRequest, Provider } from './providers';
+import * as providersMod from './providers';
 import type {
   CallResult,
   Coin,
@@ -9,13 +15,7 @@ import type {
   Message,
   Resource,
   TransactionRequestLike,
-} from '@fuel-ts/providers';
-import { TransactionResponse, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
-import * as providersMod from '@fuel-ts/providers';
-
-import type { TxParamsType } from './account';
-import { Account } from './account';
-import { FUEL_NETWORK_URL } from './configs';
+} from './providers';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 

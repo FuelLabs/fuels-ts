@@ -1,0 +1,694 @@
+# This file contains the queries used by Provider.
+#
+# Running `pnpm --filter @fuel-ts/account build-operations` will
+# generate `operations.ts` from this file.
+
+# Fragments
+
+fragment transactionStatusFragment on TransactionStatus {
+  type: __typename
+  ... on SubmittedStatus {
+    time
+  }
+  ... on SuccessStatus {
+    block {
+      id
+    }
+    time
+    programState {
+      returnType
+      data
+    }
+  }
+  ... on FailureStatus {
+    block {
+      id
+    }
+    time
+    reason
+  }
+}
+
+fragment transactionFragment on Transaction {
+  id
+  rawPayload
+  gasPrice
+  receipts {
+    ...receiptFragment
+  }
+  status {
+    ...transactionStatusFragment
+  }
+}
+
+fragment receiptFragment on Receipt {
+  contract {
+    id
+    bytecode
+    salt
+  }
+  pc
+  is
+  to {
+    id
+    bytecode
+    salt
+  }
+  toAddress
+  amount
+  assetId
+  gas
+  param1
+  param2
+  val
+  ptr
+  digest
+  reason
+  ra
+  rb
+  rc
+  rd
+  len
+  receiptType
+  result
+  gasUsed
+  data
+  sender
+  recipient
+  nonce
+  contractId
+  subId
+}
+
+fragment blockFragment on Block {
+  id
+  header {
+    height
+    time
+  }
+  transactions {
+    id
+  }
+}
+
+fragment coinFragment on Coin {
+  __typename
+  utxoId
+  owner
+  amount
+  assetId
+  maturity
+  blockCreated
+  txCreatedIdx
+}
+
+fragment messageCoinFragment on MessageCoin {
+  __typename
+  sender
+  recipient
+  nonce
+  amount
+  assetId
+  daHeight
+}
+
+fragment messageFragment on Message {
+  amount
+  sender
+  recipient
+  data
+  nonce
+  daHeight
+}
+
+fragment messageProofFragment on MessageProof {
+  messageProof {
+    proofSet
+    proofIndex
+  }
+  blockProof {
+    proofSet
+    proofIndex
+  }
+  messageBlockHeader {
+    id
+    daHeight
+    transactionsCount
+    transactionsRoot
+    height
+    prevRoot
+    time
+    applicationHash
+    messageReceiptRoot
+    messageReceiptCount
+  }
+  commitBlockHeader {
+    id
+    daHeight
+    transactionsCount
+    transactionsRoot
+    height
+    prevRoot
+    time
+    applicationHash
+    messageReceiptRoot
+    messageReceiptCount
+  }
+  sender
+  recipient
+  nonce
+  amount
+  data
+}
+
+fragment balanceFragment on Balance {
+  owner
+  amount
+  assetId
+}
+
+fragment TxParametersFragment on TxParameters {
+  maxInputs
+  maxOutputs
+  maxWitnesses
+  maxGasPerTx
+  maxSize
+}
+
+fragment PredicateParametersFragment on PredicateParameters {
+  maxPredicateLength
+  maxPredicateDataLength
+  maxGasPerPredicate
+  maxMessageDataLength
+}
+
+fragment ScriptParametersFragment on ScriptParameters {
+  maxScriptLength
+  maxScriptDataLength
+}
+
+fragment ContractParametersFragment on ContractParameters {
+  contractMaxSize
+  maxStorageSlots
+}
+
+fragment FeeParametersFragment on FeeParameters {
+  gasPriceFactor
+  gasPerByte
+}
+
+fragment DependentCostFragment on DependentCost {
+  __typename
+  ... on LightOperation {
+    base
+    unitsPerGas
+  }
+  ... on HeavyOperation {
+    base
+    gasPerUnit
+  }
+}
+
+fragment GasCostsFragment on GasCosts {
+  add
+  addi
+  aloc
+  and
+  andi
+  bal
+  bhei
+  bhsh
+  burn
+  cb
+  cfei
+  cfsi
+  croo
+  div
+  divi
+  ecr1
+  eck1
+  ed19
+  eq
+  exp
+  expi
+  flag
+  gm
+  gt
+  gtf
+  ji
+  jmp
+  jne
+  jnei
+  jnzi
+  jmpf
+  jmpb
+  jnzf
+  jnzb
+  jnef
+  jneb
+  lb
+  log
+  lt
+  lw
+  mint
+  mlog
+  modOp
+  modi
+  moveOp
+  movi
+  mroo
+  mul
+  muli
+  mldv
+  noop
+  not
+  or
+  ori
+  poph
+  popl
+  pshh
+  pshl
+  ret
+  rvrt
+  sb
+  sll
+  slli
+  srl
+  srli
+  srw
+  sub
+  subi
+  sw
+  sww
+  time
+  tr
+  tro
+  wdcm
+  wqcm
+  wdop
+  wqop
+  wdml
+  wqml
+  wddv
+  wqdv
+  wdmd
+  wqmd
+  wdam
+  wqam
+  wdmm
+  wqmm
+  xor
+  xori
+  call {
+    ...DependentCostFragment
+  }
+  ccp {
+    ...DependentCostFragment
+  }
+  csiz {
+    ...DependentCostFragment
+  }
+  k256 {
+    ...DependentCostFragment
+  }
+  ldc {
+    ...DependentCostFragment
+  }
+  logd {
+    ...DependentCostFragment
+  }
+  mcl {
+    ...DependentCostFragment
+  }
+  mcli {
+    ...DependentCostFragment
+  }
+  mcp {
+    ...DependentCostFragment
+  }
+  mcpi {
+    ...DependentCostFragment
+  }
+  meq {
+    ...DependentCostFragment
+  }
+  retd {
+    ...DependentCostFragment
+  }
+  s256 {
+    ...DependentCostFragment
+  }
+  scwq {
+    ...DependentCostFragment
+  }
+  smo {
+    ...DependentCostFragment
+  }
+  srwq {
+    ...DependentCostFragment
+  }
+  swwq {
+    ...DependentCostFragment
+  }
+  contractRoot {
+    ...DependentCostFragment
+  }
+  stateRoot {
+    ...DependentCostFragment
+  }
+  vmInitialization {
+    ...DependentCostFragment
+  }
+  newStoragePerByte
+}
+
+fragment consensusParametersFragment on ConsensusParameters {
+  txParams {
+    ...TxParametersFragment
+  }
+  predicateParams {
+    ...PredicateParametersFragment
+  }
+  scriptParams {
+    ...ScriptParametersFragment
+  }
+  contractParams {
+    ...ContractParametersFragment
+  }
+  feeParams {
+    ...FeeParametersFragment
+  }
+  gasCosts {
+    ...GasCostsFragment
+  }
+  baseAssetId
+  chainId
+}
+
+fragment chainInfoFragment on ChainInfo {
+  name
+  latestBlock {
+    ...blockFragment
+  }
+  daHeight
+  consensusParameters {
+    ...consensusParametersFragment
+  }
+}
+
+fragment contractBalanceFragment on ContractBalance {
+  contract
+  amount
+  assetId
+}
+
+fragment pageInfoFragment on PageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+
+# Queries and Mutations
+query getVersion {
+  nodeInfo {
+    nodeVersion
+  }
+}
+
+fragment nodeInfoFragment on NodeInfo {
+  utxoValidation
+  vmBacktrace
+  minGasPrice
+  maxTx
+  maxDepth
+  nodeVersion
+  peers {
+    id
+    addresses
+    clientVersion
+    blockHeight
+    lastHeartbeatMs
+    appScore
+  }
+}
+
+query getNodeInfo {
+  nodeInfo {
+    ...nodeInfoFragment
+  }
+}
+
+query getChain {
+  chain {
+    ...chainInfoFragment
+  }
+}
+
+query getTransaction($transactionId: TransactionId!) {
+  transaction(id: $transactionId) {
+    ...transactionFragment
+  }
+}
+
+query getTransactionWithReceipts($transactionId: TransactionId!) {
+  transaction(id: $transactionId) {
+    ...transactionFragment
+    receipts {
+      ...receiptFragment
+    }
+  }
+}
+
+query getTransactions(
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  transactions(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...transactionFragment
+      }
+    }
+  }
+}
+
+query getTransactionsByOwner(
+  $owner: Address!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  transactionsByOwner(
+    owner: $owner
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
+    edges {
+      node {
+        ...transactionFragment
+      }
+    }
+  }
+}
+
+query estimatePredicates($encodedTransaction: HexString!) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionFragment
+  }
+}
+
+query getBlock($blockId: BlockId, $height: U32) {
+  block(id: $blockId, height: $height) {
+    ...blockFragment
+  }
+}
+
+query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
+  block(id: $blockId, height: $blockHeight) {
+    ...blockFragment
+    transactions {
+      ...transactionFragment
+    }
+  }
+}
+
+query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
+  blocks(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...blockFragment
+      }
+    }
+  }
+}
+
+query getCoin($coinId: UtxoId!) {
+  coin(utxoId: $coinId) {
+    ...coinFragment
+  }
+}
+
+query getCoins(
+  $filter: CoinFilterInput!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  coins(
+    filter: $filter
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...coinFragment
+      }
+    }
+  }
+}
+
+query getCoinsToSpend(
+  $owner: Address!
+  $queryPerAsset: [SpendQueryElementInput!]!
+  $excludedIds: ExcludeInput
+) {
+  coinsToSpend(
+    owner: $owner
+    queryPerAsset: $queryPerAsset
+    excludedIds: $excludedIds
+  ) {
+    ...coinFragment
+    ...messageCoinFragment
+  }
+}
+
+query getContract($contractId: ContractId!) {
+  contract(id: $contractId) {
+    bytecode
+    id
+  }
+}
+
+query getContractBalance($contract: ContractId!, $asset: AssetId!) {
+  contractBalance(contract: $contract, asset: $asset) {
+    ...contractBalanceFragment
+  }
+}
+
+query getBalance($owner: Address!, $assetId: AssetId!) {
+  balance(owner: $owner, assetId: $assetId) {
+    ...balanceFragment
+  }
+}
+
+query getBalances(
+  $filter: BalanceFilterInput!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  balances(
+    filter: $filter
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...balanceFragment
+      }
+    }
+  }
+}
+
+query getMessages(
+  $owner: Address!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  messages(
+    owner: $owner
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...messageFragment
+      }
+    }
+  }
+}
+
+query getMessageProof(
+  $transactionId: TransactionId!
+  $nonce: Nonce!
+  $commitBlockId: BlockId
+  $commitBlockHeight: U32
+) {
+  messageProof(
+    transactionId: $transactionId
+    nonce: $nonce
+    commitBlockId: $commitBlockId
+    commitBlockHeight: $commitBlockHeight
+  ) {
+    ...messageProofFragment
+  }
+}
+
+query getMessageStatus($nonce: Nonce!) {
+  messageStatus(nonce: $nonce) {
+    state
+  }
+}
+
+mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
+  dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
+    ...receiptFragment
+  }
+}
+
+mutation submit($encodedTransaction: HexString!) {
+  submit(tx: $encodedTransaction) {
+    id
+  }
+}
+
+mutation produceBlocks(
+  $startTimestamp: Tai64Timestamp
+  $blocksToProduce: U32!
+) {
+  produceBlocks(
+    blocksToProduce: $blocksToProduce
+    startTimestamp: $startTimestamp
+  )
+}
+
+subscription submitAndAwait($encodedTransaction: HexString!) {
+  submitAndAwait(tx: $encodedTransaction) {
+    ...transactionStatusFragment
+  }
+}
+
+subscription statusChange($transactionId: TransactionId!) {
+  statusChange(id: $transactionId) {
+    ...transactionStatusFragment
+  }
+}

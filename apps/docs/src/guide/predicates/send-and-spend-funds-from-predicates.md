@@ -40,7 +40,7 @@ Once the predicate resolves with a return value `true` based on its predefined c
 
 ---
 
-In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](../../api/Providers/ScriptTransactionRequest.md). Then, we can submit this transaction request by calling the `sendTransaction` method.
+In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](../../api/Account/ScriptTransactionRequest.md). Then, we can submit this transaction request by calling the `sendTransaction` method.
 
 This can be useful if you need the transaction ID before actually submitting it to the node.
 

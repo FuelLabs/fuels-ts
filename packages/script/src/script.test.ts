@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { Account } from '@fuel-ts/account';
+import type {
+  Account,
+  CoinQuantityLike,
+  TransactionResponse,
+  TransactionResult,
+} from '@fuel-ts/account';
+import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { BaseAssetId } from '@fuel-ts/address/configs';
@@ -9,8 +15,6 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
-import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 

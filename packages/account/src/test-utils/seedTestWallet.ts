@@ -1,8 +1,8 @@
 import { randomBytes } from '@fuel-ts/crypto';
-import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
-import type { CoinQuantityLike } from '@fuel-ts/providers';
 
 import type { Account } from '../account';
+import { coinQuantityfy, ScriptTransactionRequest } from '../providers';
+import type { CoinQuantityLike } from '../providers';
 import { WalletUnlocked } from '../wallets';
 
 export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLike[]) => {

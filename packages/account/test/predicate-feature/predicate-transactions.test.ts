@@ -1,12 +1,12 @@
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';
 import { hexlify } from 'ethers';
 
 import { Account } from '../../src/account';
 import { FUEL_NETWORK_URL } from '../../src/configs';
 import { Predicate } from '../../src/predicate';
+import { Provider, ScriptTransactionRequest } from '../../src/providers';
 import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 

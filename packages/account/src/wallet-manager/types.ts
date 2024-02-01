@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Provider } from '@fuel-ts/providers';
 
+import type { Provider } from '../providers';
 import type { WalletUnlocked } from '../wallets';
 
 export type WalletManagerAccount = {

@@ -1,6 +1,5 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
-import { Provider } from '@fuel-ts/providers';
 import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
@@ -13,6 +12,7 @@ import path from 'path';
 import { getPortPromise } from 'portfinder';
 import treeKill from 'tree-kill';
 
+import { Provider } from '../providers';
 import { Signer } from '../signer';
 import type { WalletUnlocked } from '../wallets';
 
