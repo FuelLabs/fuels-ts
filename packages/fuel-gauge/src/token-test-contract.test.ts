@@ -76,7 +76,7 @@ describe('TokenTestContract', () => {
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
 
-  it.only('Automatically add variableOuputs', async () => {
+  it('Automatically add variableOuputs', async () => {
     const [wallet1, wallet2, wallet3] = Array.from({ length: 3 }, () =>
       Wallet.generate({ provider })
     );
