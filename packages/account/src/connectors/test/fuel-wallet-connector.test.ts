@@ -38,7 +38,7 @@ export function promiseCallback() {
  * @group browser
  */
 describe('Fuel Connector', () => {
-  it.only('should ensure is instantiated using default connectors', async () => {
+  it('should ensure is instantiated using default connectors', async () => {
     const fuel = new Fuel();
     const connectors = await fuel.connectors();
     expect(connectors.length).toBe(2);
