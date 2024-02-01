@@ -17,7 +17,7 @@ export function cacheFor<F extends (...args: unknown[]) => Promise<unknown>>(
 ): F {
   return (async (...args: unknown[]) => {
     if (cache[key] && cache[key]?.value) {
-      return cache[key]!.value as ReturnType<F>;
+      return cache[key]?.value as ReturnType<F>;
     }
     clearTimeout(cache[key]?.timeout);
     const result = await fn(...args);

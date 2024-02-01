@@ -368,8 +368,10 @@ describe('Fuel Connector', () => {
       ],
     });
     const account = await fuel.currentAccount();
-    expect(account).toBeDefined();
-    const wallet = await fuel.getWallet(account!);
+    if (!account) {
+      throw new Error('Account not found');
+    }
+    const wallet = await fuel.getWallet(account);
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
     const response = await wallet.transfer(receiver.address, bn(1000), BaseAssetId, {
@@ -551,8 +553,12 @@ describe('Fuel Connector', () => {
     }
 
     const currentAccount = await fuel.currentAccount();
+    if (!currentAccount) {
+      throw new Error('Account not found');
+    }
+
     const provider = await CustomProvider.create(FUEL_NETWORK_URL);
-    const wallet = await fuel.getWallet(currentAccount!, provider);
+    const wallet = await fuel.getWallet(currentAccount, provider);
     expect(wallet.provider).toBeInstanceOf(CustomProvider);
     expect(await wallet.getBalance()).toEqual(bn(1234));
   });
