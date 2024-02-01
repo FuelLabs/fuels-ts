@@ -24,6 +24,11 @@
       "require": "./dist/cli-utils.js",
       "import": "./dist/cli-utils.mjs",
       "types": "./dist/cli-utils.d.ts"
+    },
+    "./assets-utils": {
+      "require": "./dist/assets-utils.js",
+      "import": "./dist/assets-utils.mjs",
+      "types": "./dist/assets-utils.d.ts"
     }
   },
   "typesVersions": {
@@ -33,11 +38,15 @@
       ],
       "cli-utils": [
         "./dist/cli-utils.d.ts"
+      ],
+      "assets-utils": [
+        "./dist/assets-utils.d.ts"
       ]
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "images"
   ],
   "scripts": {
     "pretest": "pnpm build:forc",
