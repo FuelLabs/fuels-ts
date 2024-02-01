@@ -19,14 +19,6 @@ import { FUEL_NETWORK_URL } from './configs';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
-vi.mock('@fuel-ts/providers', async () => {
-  const mod = await vi.importActual('@fuel-ts/providers');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 let provider: Provider;
 let gasPrice: BN;
 

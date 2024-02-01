@@ -14,14 +14,6 @@ import * as keystoreWMod from './keystore-wallet';
 import { Signer } from './signer';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-vi.mock('@fuel-ts/providers', async () => {
-  const mod = await vi.importActual('@fuel-ts/providers');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 const { ScriptTransactionRequest } = providersMod;
 
 /**

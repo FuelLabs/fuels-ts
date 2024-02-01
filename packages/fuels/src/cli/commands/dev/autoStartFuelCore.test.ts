@@ -8,14 +8,6 @@ import type { FuelsConfig } from '../../types';
 import type { FuelCoreNode } from './autoStartFuelCore';
 import { autoStartFuelCore } from './autoStartFuelCore';
 
-vi.mock('@fuel-ts/account/test-utils', async () => {
-  const mod = await vi.importActual('@fuel-ts/account/test-utils');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 /**
  * @group node
  */
