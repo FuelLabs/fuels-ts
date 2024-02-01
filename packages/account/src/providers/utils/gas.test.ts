@@ -2,6 +2,7 @@ import { BN, bn } from '@fuel-ts/math';
 import { ReceiptType, type InputCoin, type InputMessage } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 
+import type { GqlDependentCost } from '../__generated__/operations';
 import { MOCK_CHAIN } from '../test/fixtures/chain';
 import {
   MOCK_COIN_INPUT,
@@ -10,7 +11,6 @@ import {
   MOCK_REQUEST_MESSAGE_INPUT,
   MOCK_REQUEST_PREDICATE_INPUT,
 } from '../test/fixtures/inputs-and-outputs';
-import type { GqlDependentCost } from '../__generated__/operations';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,

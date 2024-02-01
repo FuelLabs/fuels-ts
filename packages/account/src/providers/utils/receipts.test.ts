@@ -17,11 +17,11 @@ import type {
 import { ReceiptBurnCoder, ReceiptMessageOutCoder, ReceiptType } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 
+import { GqlReceiptType } from '../__generated__/operations';
 import {
   MOCK_GQL_RECEIPT_FRAGMENT,
   MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS,
 } from '../test/fixtures/receipts';
-import { GqlReceiptType } from '../__generated__/operations';
 
 import { assembleReceiptByType } from './receipts';
 

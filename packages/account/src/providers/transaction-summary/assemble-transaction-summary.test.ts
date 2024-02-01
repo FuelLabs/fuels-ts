@@ -1,6 +1,8 @@
 import { BN, bn } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 
+import type { GqlGasCosts } from '../__generated__/operations';
+import Provider from '../provider';
 import {
   MOCK_RECEIPT_CALL,
   MOCK_RECEIPT_TRANSFER_OUT,
@@ -14,8 +16,6 @@ import {
   MOCK_SUBMITTED_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
 } from '../test/fixtures/transaction-summary';
-import type { GqlGasCosts } from '../__generated__/operations';
-import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
