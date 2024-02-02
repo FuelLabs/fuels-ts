@@ -293,7 +293,8 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
+    const { minGasPrice } = this.getProvider().getGasConfig();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
 
     const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const specifiedGasPrice = this.txParameters?.gasPrice;
@@ -304,7 +305,7 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     if (!specifiedGasPrice) {
-      transactionRequest.gasPrice = minGas;
+      transactionRequest.gasPrice = minGasPrice;
     }
 
     await this.fundWithRequiredCoins(maxFee);
@@ -343,7 +344,8 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
+    const { minGasPrice } = this.getProvider().getGasConfig();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
 
     const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const specifiedGasPrice = this.txParameters?.gasPrice;
@@ -354,7 +356,7 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     if (!specifiedGasPrice) {
-      transactionRequest.gasPrice = minGas;
+      transactionRequest.gasPrice = minGasPrice;
     }
 
     await this.fundWithRequiredCoins(maxFee);
@@ -375,7 +377,8 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
+    const { minGasPrice } = this.getProvider().getGasConfig();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
 
     const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const specifiedGasPrice = this.txParameters?.gasPrice;
@@ -386,7 +389,7 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     if (!specifiedGasPrice) {
-      transactionRequest.gasPrice = minGas;
+      transactionRequest.gasPrice = minGasPrice;
     }
 
     await this.fundWithRequiredCoins(maxFee);
