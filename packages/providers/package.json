@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.71.1",
+  "version": "0.72.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -36,14 +36,13 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "ethers": "^6.7.1",
     "@fuel-ts/versions": "workspace:*",
+    "ethers": "^6.7.1",
     "graphql": "^16.6.0",
     "ramda": "^0.29.0",
     "tai64": "^1.0.0"
   },
   "devDependencies": {
-    "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "^2.13.7",
     "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-operations": "^2.5.5",

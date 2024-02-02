@@ -26,22 +26,6 @@ import * as gasMod from '../src/utils/gas';
 
 import { messageProofResponse, messageStatusResponse } from './fixtures';
 
-vi.mock('@fuel-ts/versions', async () => {
-  const mod = await vi.importActual('@fuel-ts/versions');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
-vi.mock('@fuel-ts/math', async () => {
-  const mod = await vi.importActual('@fuel-ts/math');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 afterEach(() => {
   vi.restoreAllMocks();
 });

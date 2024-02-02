@@ -14,14 +14,6 @@ import * as keystoreWMod from './keystore-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-vi.mock('@fuel-ts/providers', async () => {
-  const mod = await vi.importActual('@fuel-ts/providers');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 const { ScriptTransactionRequest } = providersMod;
 
 /**
@@ -56,7 +48,7 @@ describe('WalletUnlocked', () => {
 
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
-    // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
+    // #import { WalletUnlocked, Signer };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);

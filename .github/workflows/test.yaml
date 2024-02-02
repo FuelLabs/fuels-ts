@@ -108,15 +108,6 @@ jobs:
           name: coverage-master
           path: coverage-master
 
-      - name: Download Master Coverage Artifact (temporary)
-        uses: dawidd6/action-download-artifact@v2
-        if: ${{ (steps.findPr.outputs.number) }}
-        with:
-          workflow: test.yaml
-          run_id: 6628340271
-          name: coverage-master
-          path: coverage-master
-
       - name: Generate Coverage Diff
         if: ${{ (steps.findPr.outputs.number) }}
         run: pnpm test:coverage-diff

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.71.1",
+  "version": "0.72.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -48,6 +48,7 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
@@ -59,7 +60,6 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.42.1",
-    "@fuel-ts/errors": "workspace:*",
     "ethers": "^6.7.1",
     "portfinder": "^1.0.32",
     "tree-kill": "^1.2.2",

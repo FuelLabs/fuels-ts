@@ -3,6 +3,6 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": ["./src", "./.vitepress", "./types"],
+  "include": ["./src", "./.vitepress/**/*.ts", "./types"],
   "exclude": ["./.vitepress/cache"]
 }

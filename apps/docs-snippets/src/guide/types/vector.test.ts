@@ -23,7 +23,7 @@ describe(__filename, () => {
     // #endregion vector-1
 
     // #region vector-4
-    // #context import { BN, getRandomB256 } from 'fuels';
+    // #import { getRandomB256 };
 
     const employees = [
       {

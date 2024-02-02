@@ -1,4 +1,5 @@
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
+import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -10,7 +11,6 @@ import { init } from './cli/commands/init';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
 import { Commands } from './cli/types';
-import { findBinPath } from './cli/utils/findBinPath';
 import { configureLogging } from './cli/utils/logger';
 
 export const onPreAction = (command: Command) => {
@@ -100,11 +100,11 @@ export const configureCli = () => {
    */
 
   program.command('core', 'Wrapper around Fuel Core binary', {
-    executableFile: findBinPath('fuels-core'),
+    executableFile: findBinPath('fuels-core', __dirname),
   });
 
   program.command('forc', 'Wrapper around Forc binary', {
-    executableFile: findBinPath('fuels-forc'),
+    executableFile: findBinPath('fuels-forc', __dirname),
   });
 
   return program;

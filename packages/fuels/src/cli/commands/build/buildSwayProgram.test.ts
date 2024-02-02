@@ -1,8 +1,8 @@
+import * as findBinPathMod from '@fuel-ts/utils/cli-utils';
 import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
-import * as findBinPathMod from '../../utils/findBinPath';
 import { configureLogging } from '../../utils/logger';
 
 import { buildSwayProgram } from './buildSwayProgram';
