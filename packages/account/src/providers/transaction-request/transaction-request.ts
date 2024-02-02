@@ -1,6 +1,7 @@
+import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AddressLike, AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
+import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
@@ -14,6 +15,7 @@ import {
 import type { BytesLike } from 'ethers';
 import { concat, getBytesCopy, hexlify } from 'ethers';
 
+import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
@@ -313,7 +315,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addCoinInput(coin: Coin, predicate?: AbstractPredicate) {
+  addCoinInput(coin: Coin, predicate?: Predicate<InputValue[]>) {
     const { assetId, owner, amount } = coin;
 
     let witnessIndex;
@@ -356,7 +358,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addMessageInput(message: MessageCoin, predicate?: AbstractPredicate) {
+  addMessageInput(message: MessageCoin, predicate?: Predicate<InputValue[]>) {
     const { recipient, sender, amount } = message;
 
     const assetId = BaseAssetId;
@@ -429,7 +431,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addPredicateResource(resource: Resource, predicate: AbstractPredicate) {
+  addPredicateResource(resource: Resource, predicate: Predicate<InputValue[]>) {
     if (isCoin(resource)) {
       this.addCoinInput(resource, predicate);
     } else {
@@ -446,7 +448,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param resources - The resources to add.
    * @returns This transaction.
    */
-  addPredicateResources(resources: Resource[], predicate: AbstractPredicate) {
+  addPredicateResources(resources: Resource[], predicate: Predicate<InputValue[]>) {
     resources.forEach((resource) => this.addPredicateResource(resource, predicate));
 
     return this;

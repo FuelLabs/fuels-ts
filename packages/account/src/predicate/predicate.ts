@@ -9,7 +9,7 @@ import {
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress, AbstractPredicate, BytesLike } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { getBytesCopy, hexlify } from 'ethers';
@@ -31,7 +31,7 @@ import { getPredicateRoot } from './utils';
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<ARGS extends InputValue[]> extends Account implements AbstractPredicate {
+export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
   predicateData: Uint8Array = Uint8Array.from([]);
   predicateArgs: ARGS = [] as unknown as ARGS;
