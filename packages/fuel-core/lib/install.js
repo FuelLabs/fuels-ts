@@ -59,6 +59,11 @@ import {
 
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
+
+    if (/not found/i.test(buf.toString())) {
+      throw new Error(`Version '${fuelCoreVersion}' not found\n    at ${pkgUrl}`);
+    }
+
     writeFileSync(pkgPath, buf);
 
     // Extract

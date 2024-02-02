@@ -28,6 +28,7 @@ import {
   const binDir = join(__dirname, '../');
 
   const binPath = join(binDir, 'forc-binaries', 'forc');
+
   let versionMatches = false;
 
   if (existsSync(binPath)) {
@@ -54,6 +55,11 @@ import {
 
     // Otherwise, download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
+
+    if (/not found/i.test(buf.toString())) {
+      throw new Error(`Version '${forcVersion}' not found\n    at ${pkgUrl}`);
+    }
+
     writeFileSync(pkgPath, buf);
 
     // Extract
