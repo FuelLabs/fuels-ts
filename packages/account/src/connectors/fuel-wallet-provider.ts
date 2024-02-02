@@ -1,5 +1,5 @@
-import type { ProviderOptions } from '@fuel-ts/providers';
-import { Provider, TransactionResponse } from '@fuel-ts/providers';
+import type { ProviderOptions } from '../providers';
+import { Provider, TransactionResponse } from '../providers';
 
 /**
  * TODO: We should add getTransactionResponse to TS-SDK in this way

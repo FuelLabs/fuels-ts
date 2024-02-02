@@ -3,12 +3,12 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { ProviderOptions } from '@fuel-ts/providers';
-import { Provider, TransactionStatus } from '@fuel-ts/providers';
 import { EventEmitter } from 'events';
 import type { Mock } from 'vitest';
 
 import { FUEL_NETWORK_URL } from '../../configs';
+import type { ProviderOptions } from '../../providers';
+import { Provider, TransactionStatus } from '../../providers';
 import { Wallet } from '../../wallet';
 import { MockConnector } from '../fixtures/mocked-connector';
 import { Fuel } from '../fuel';

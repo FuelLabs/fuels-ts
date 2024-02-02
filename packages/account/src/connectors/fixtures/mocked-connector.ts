@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/require-await */
 
-import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { setTimeout } from 'timers/promises';
 
 import { FUEL_NETWORK_URL } from '../../configs';
+import type { TransactionRequestLike } from '../../providers';
 import type { WalletUnlocked } from '../../wallets';
 import { FuelConnector } from '../fuel-connector';
 import { FuelConnectorEventTypes } from '../types';

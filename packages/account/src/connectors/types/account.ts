@@ -1,6 +1,7 @@
 import type { BN } from '@fuel-ts/math';
-import type { Coin } from '@fuel-ts/providers';
 import type { BigNumberish } from 'ethers';
+
+import type { Coin } from '../../providers';
 
 export type Vault = {
   key: string;

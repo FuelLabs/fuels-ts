@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
-import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { EventEmitter } from 'events';
+
+import type { TransactionRequestLike } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {

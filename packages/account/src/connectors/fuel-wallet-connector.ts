@@ -1,6 +1,7 @@
-import { Provider, transactionRequestify, type TransactionRequestLike } from '@fuel-ts/providers';
 import type { JSONRPCRequest } from 'json-rpc-2.0';
 import { JSONRPCClient } from 'json-rpc-2.0';
+
+import { Provider, transactionRequestify, type TransactionRequestLike } from '../providers';
 
 import { FuelConnector } from './fuel-connector';
 import type {
