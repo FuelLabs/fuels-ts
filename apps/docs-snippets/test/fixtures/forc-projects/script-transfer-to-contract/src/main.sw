@@ -1,7 +1,7 @@
 // #region custom-transactions-1
 script;
 
-use std::token::force_transfer_to_contract;
+use std::asset::force_transfer_to_contract;
 
 fn main(
     contract_address: b256,
