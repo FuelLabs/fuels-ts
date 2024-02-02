@@ -21,13 +21,6 @@ import {
   const pkgPlatform = getPkgPlatform();
   const fuelCoreVersion = await getCurrentVersion();
 
-  // If a git branch is specified in the VERSION file, build from that branch
-  if (isGitBranch(fuelCoreVersion)) {
-    const branchName = fuelCoreVersion.split(':')[1];
-    buildFromGitBranch(branchName);
-    return;
-  }
-
   const fileName = `fuel-core-${fuelCoreVersion}-${pkgPlatform}`;
   const pkgName = `${fileName}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/fuel-core/releases/download/v${fuelCoreVersion}/${pkgName}`;
@@ -44,22 +37,25 @@ import {
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === fuelCoreVersion;
-    info({ expected: fuelCoreVersion, received: binVersion });
+    info({
+      expected: fuelCoreVersion,
+      received: binVersion,
+      isGitBranch: isGitBranch(fuelCoreVersion),
+    });
   }
 
   if (versionMatches) {
     info(`fuel-core binary already installed, skipping.`);
   } else {
-    // Empty the `fuel-core-binaries` directory if it exists
-    if (existsSync(binDir)) {
-      rmSync(`${binDir}/*`, {
-        recursive: true,
-        force: true,
-      });
-    } else {
-      // Create the `fuel-core-binaries` directory if it doesn't exist
-      mkdirSync(binDir);
+    // If a git branch is specified in the VERSION file, build from that branch
+    if (isGitBranch(fuelCoreVersion)) {
+      const branchName = fuelCoreVersion.split(':')[1];
+      buildFromGitBranch(branchName);
+      return;
     }
+
+    // Empty the `fuel-core-binaries` directory if it exists
+    rmSync(binDir, { recursive: true, force: true });
 
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
