@@ -53,6 +53,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
+  protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -294,16 +295,15 @@ export class BaseInvocationScope<TReturn = any> {
     const transactionRequest = await this.getTransactionRequest();
     const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
 
-    const specifiedGasLimit = this.txParameters?.gasLimit;
+    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const specifiedGasPrice = this.txParameters?.gasPrice;
 
+    // set defaults for gasLimit and gasPrice if not specified
     if (!specifiedGasLimit) {
-      // set a smart default
       transactionRequest.gasLimit = gasUsed;
     }
 
     if (!specifiedGasPrice) {
-      // set a smart default
       transactionRequest.gasPrice = minGas;
     }
 
