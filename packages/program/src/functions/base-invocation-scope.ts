@@ -292,8 +292,20 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
 
-    const { maxFee } = await this.getTransactionCost();
+    const specifiedGasLimit = this.txParameters?.gasLimit;
+    const specifiedGasPrice = this.txParameters?.gasPrice;
+
+    if (!specifiedGasLimit) {
+      // set a smart default
+      transactionRequest.gasLimit = gasUsed;
+    }
+
+    if (!specifiedGasPrice) {
+      // set a smart default
+      transactionRequest.gasPrice = minGas;
+    }
 
     await this.fundWithRequiredCoins(maxFee);
 
