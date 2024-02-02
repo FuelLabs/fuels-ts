@@ -4,34 +4,16 @@ import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { EventEmitter } from 'events';
-import type { Mock } from 'vitest';
 
 import { FUEL_NETWORK_URL } from '../../configs';
 import type { ProviderOptions } from '../../providers';
 import { Provider, TransactionStatus } from '../../providers';
 import { Wallet } from '../../wallet';
 import { MockConnector } from '../fixtures/mocked-connector';
+import { promiseCallback } from '../fixtures/promise-callback';
 import { Fuel } from '../fuel';
 import { FuelWalletProvider } from '../fuel-wallet-provider';
 import { FuelConnectorEventType } from '../types';
-import { deferPromise, type DeferPromise } from '../utils';
-
-export type PromiseCallback = Mock & {
-  promise: DeferPromise;
-};
-
-export function promiseCallback() {
-  const defer = deferPromise();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mockFn: any = vi.fn();
-
-  mockFn.mockImplementation((...args: unknown[]) => {
-    defer.resolve(args);
-  });
-  mockFn.promise = defer.promise;
-
-  return mockFn as PromiseCallback;
-}
 
 /**
  * @group node

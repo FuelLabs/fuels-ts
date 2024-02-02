@@ -1,8 +1,7 @@
 import { MockConnector } from '../fixtures/mocked-connector';
+import { promiseCallback } from '../fixtures/promise-callback';
 import { Fuel } from '../fuel';
 import { dispatchFuelConnectorEvent } from '../utils';
-
-import { promiseCallback } from './fuel-wallet-connector.test';
 
 /**
  * @group browser
