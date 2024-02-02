@@ -293,20 +293,9 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
-    const { minGasPrice } = this.getProvider().getGasConfig();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { maxFee } = await this.getTransactionCost();
 
-    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
-    const specifiedGasPrice = this.txParameters?.gasPrice;
-
-    // set defaults for gasLimit and gasPrice if not specified
-    if (!specifiedGasLimit) {
-      transactionRequest.gasLimit = gasUsed;
-    }
-
-    if (!specifiedGasPrice) {
-      transactionRequest.gasPrice = minGasPrice;
-    }
+    await this.setDefaultTxParams();
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -344,20 +333,9 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
-    const { minGasPrice } = this.getProvider().getGasConfig();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { maxFee } = await this.getTransactionCost();
 
-    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
-    const specifiedGasPrice = this.txParameters?.gasPrice;
-
-    // set defaults for gasLimit and gasPrice if not specified
-    if (!specifiedGasLimit) {
-      transactionRequest.gasLimit = gasUsed;
-    }
-
-    if (!specifiedGasPrice) {
-      transactionRequest.gasPrice = minGasPrice;
-    }
+    await this.setDefaultTxParams();
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -377,20 +355,9 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
-    const { minGasPrice } = this.getProvider().getGasConfig();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { maxFee } = await this.getTransactionCost();
 
-    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
-    const specifiedGasPrice = this.txParameters?.gasPrice;
-
-    // set defaults for gasLimit and gasPrice if not specified
-    if (!specifiedGasLimit) {
-      transactionRequest.gasLimit = gasUsed;
-    }
-
-    if (!specifiedGasPrice) {
-      transactionRequest.gasPrice = minGasPrice;
-    }
+    await this.setDefaultTxParams();
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -424,5 +391,26 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
     return transactionRequest.getTransactionId(chainIdToHash);
+  }
+
+  /**
+   * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   */
+  async setDefaultTxParams() {
+    const transactionRequest = await this.getTransactionRequest();
+    const { minGasPrice } = this.getProvider().getGasConfig();
+    const { gasUsed } = await this.getTransactionCost();
+
+    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const specifiedGasPrice = this.txParameters?.gasPrice;
+
+    // set defaults for gasLimit and gasPrice if not specified
+    if (!specifiedGasLimit) {
+      transactionRequest.gasLimit = gasUsed;
+    }
+
+    if (!specifiedGasPrice) {
+      transactionRequest.gasPrice = minGasPrice;
+    }
   }
 }
