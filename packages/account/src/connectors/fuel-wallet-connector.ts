@@ -1,5 +1,6 @@
 import type { JSONRPCRequest } from 'json-rpc-2.0';
 import { JSONRPCClient } from 'json-rpc-2.0';
+import { v4 as randomUUID } from 'uuid';
 
 import { Provider, transactionRequestify, type TransactionRequestLike } from '../providers';
 
@@ -87,7 +88,7 @@ export class FuelWalletConnector extends FuelConnector {
   }
 
   private createRequestId(): string {
-    return crypto.randomUUID();
+    return randomUUID();
   }
 
   private postMessage(message: CommunicationMessage, origin?: string) {
