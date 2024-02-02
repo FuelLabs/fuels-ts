@@ -6,7 +6,7 @@ import {
   MOCK_INPUT_CONTRACT,
   MOCK_INPUT_MESSAGE,
   MOCK_OUTPUT_CONTRACT,
-} from '../test/fixtures/transaction-summary';
+} from '../../../test/fixtures/transaction-summary';
 
 import {
   getInputAccountAddress,

@@ -1,11 +1,11 @@
 import { bn } from '@fuel-ts/math';
 
-import { MOCK_CHAIN } from '../test/fixtures/chain';
+import { MOCK_CHAIN } from '../../../test/fixtures/chain';
 import {
   MOCK_TX_CREATE_RAW_PAYLOAD,
   MOCK_TX_MINT_RAW_PAYLOAD,
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
-} from '../test/fixtures/transaction-summary';
+} from '../../../test/fixtures/transaction-summary';
 
 import { calculateTransactionFee } from './calculate-transaction-fee';
 

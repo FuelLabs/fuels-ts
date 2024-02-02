@@ -3,7 +3,7 @@ import {
   MOCK_SQUEEZEDOUT_STATUS,
   MOCK_SUBMITTED_STATUS,
   MOCK_SUCCESS_STATUS,
-} from '../test/fixtures/transaction-summary';
+} from '../../../test/fixtures/transaction-summary';
 
 import { getTransactionStatusName, processGraphqlStatus } from './status';
 import type { GqlTransactionStatusesNames, GraphqlTransactionStatus } from './types';

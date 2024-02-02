@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Provider > can getMessageProof with all data 1`] = `
+{
+  "amount": "0xa",
+  "blockProof": {
+    "proofIndex": "0x1b0",
+    "proofSet": [
+      "0x3480098c927d3a8a86745ba6c91419f04901baf5d25bbd0e6ba56fcb3b3e35bd",
+      "0xa8795e5d15b88c2383f5673a4658edae93dcdb7986ccfacbe916e656ec11ce70",
+      "0x97ea3aee8cb9ccc6593c21879979eeab0f748066b9e22e2294cb973ee5d95e3c",
+      "0x50a33f4fe58e35955df499092515fe2f77d7bfaed35f80194b338d7091c363ab",
+      "0xa07fc684d351ab1970efe9ffd04eb67b6544dd4443169ecf6dd0bfc546216211",
+    ],
+  },
+  "commitBlockHeader": {
+    "applicationHash": "0x441dece8e41d111f3a875ed89d716e48abf450ad385b111cf7c55e06e0b57d6b",
+    "daHeight": "0x0",
+    "height": "0x1b1",
+    "id": "0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b",
+    "messageReceiptCount": "0x0",
+    "messageReceiptRoot": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prevRoot": "0xcc024475c2ccd175082bc233f5ebb3736e47a648a666d82567b001ab46cf0a83",
+    "time": "4611686020115956241",
+    "transactionsCount": "0x2",
+    "transactionsRoot": "0x471d68713ae2fef6bb3eede37a976b38390f2ab8916e463b22942e7130456a8a",
+  },
+  "data": "0x",
+  "messageBlockHeader": {
+    "applicationHash": "0x76b6838a38a3049fa1dd42f923a0f287594a390493003af0f1c3da94f3d2b8c7",
+    "daHeight": "0x0",
+    "height": "0x1b0",
+    "id": "0x864b55089878bf7009d2ff64cbeeeeb75fcd73768785dcb75d54180e7fbaab7b",
+    "messageReceiptCount": "0x1",
+    "messageReceiptRoot": "0x34fdfbc73458998a106b02f13bba51bc0fd36513602e312ca1d1893f2075eca5",
+    "prevRoot": "0x26e49e4af2253e0bca68d2a8b38fa7406a546ebc476b6ca51569cb325ad55ea6",
+    "time": "4611686020115956241",
+    "transactionsCount": "0x2",
+    "transactionsRoot": "0xbf760e126159b72f59bde2d59a972620f826e5a5134deb2a775a21c37644e1a1",
+  },
+  "messageProof": {
+    "proofIndex": "0x0",
+    "proofSet": [
+      "0x34fdfbc73458998a106b02f13bba51bc0fd36513602e312ca1d1893f2075eca5",
+    ],
+  },
+  "nonce": "0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895",
+  "recipient": "fuel1qqqqqqqqqqqqqqqqqqqy0wnpamywtejjglt30lerdagyeuas5f3s0esvs7",
+  "sender": "fuel108z5yxd9eygf08j7fsnj3hck87n9fg07qwzru6h4nk4zc07dgt4q5t8nka",
+}
+`;
+
+exports[`Provider > can getMessageStatus 1`] = `
+{
+  "state": "SPENT",
+}
+`;

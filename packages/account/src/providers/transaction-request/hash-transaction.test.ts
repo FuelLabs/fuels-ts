@@ -1,7 +1,7 @@
 import { bn } from '@fuel-ts/math';
 import { clone } from 'ramda';
 
-import { SCRIPT_TX_REQUEST } from '../test/fixtures/transaction-request';
+import { SCRIPT_TX_REQUEST } from '../../../test/fixtures/transaction-request';
 
 import { hashTransaction } from './hash-transaction';
 

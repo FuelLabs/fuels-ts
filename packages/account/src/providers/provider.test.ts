@@ -10,19 +10,19 @@ import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify, type BytesLike } from 'ethers';
 
-import type { FetchRequestOptions, ChainInfo, NodeInfo, TransactionCost } from '../provider';
-import Provider from '../provider';
+import { messageStatusResponse, messageProofResponse } from '../../test/fixtures';
+
+import type { ChainInfo, FetchRequestOptions, NodeInfo, TransactionCost } from './provider';
+import Provider from './provider';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
-} from '../transaction-request';
-import { ScriptTransactionRequest, CreateTransactionRequest } from '../transaction-request';
-import { TransactionResponse } from '../transaction-response';
-import { fromTai64ToDate } from '../transaction-summary';
-import { fromTai64ToUnix, fromUnixToTai64, sleep } from '../utils';
-import * as gasMod from '../utils/gas';
-
-import { messageProofResponse, messageStatusResponse } from './fixtures';
+} from './transaction-request';
+import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
+import { TransactionResponse } from './transaction-response';
+import { fromTai64ToDate } from './transaction-summary';
+import { fromTai64ToUnix, fromUnixToTai64, sleep } from './utils';
+import * as gasMod from './utils/gas';
 
 afterEach(() => {
   vi.restoreAllMocks();

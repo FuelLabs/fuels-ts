@@ -21,7 +21,7 @@ import {
   MOCK_RECEIPT_TRANSFER,
   MOCK_RECEIPT_TRANSFER_OUT,
   MOCK_TRANSACTION_RAWPAYLOAD,
-} from '../test/fixtures/transaction-summary';
+} from '../../../test/fixtures/transaction-summary';
 import type {
   TransactionResultMessageOutReceipt,
   TransactionResultReceipt,

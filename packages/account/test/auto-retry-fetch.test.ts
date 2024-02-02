@@ -1,6 +1,6 @@
-import Provider from '../provider';
-import type { RetryOptions } from '../utils/auto-retry-fetch';
-import * as autoRetryFetchMod from '../utils/auto-retry-fetch';
+import Provider from '../src/providers/provider';
+import * as autoRetryFetchMod from '../src/providers/utils/auto-retry-fetch';
+import type { RetryOptions } from '../src/providers/utils/auto-retry-fetch';
 
 // TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
