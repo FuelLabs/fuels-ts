@@ -1,6 +1,10 @@
-import type { GqlGetMessageProofQuery } from '../../src/providers/__generated__/operations';
+import { Address } from '@fuel-ts/address';
+import { bn } from '@fuel-ts/math';
 
-export const messageProofResponse: GqlGetMessageProofQuery['messageProof'] = {
+import type { GqlGetMessageProofQuery } from '../../src/providers/__generated__/operations';
+import type { MessageProof } from '../../src/providers/message';
+
+export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof'] = {
   __typename: 'MessageProof',
   messageProof: {
     __typename: 'MerkleProof',
@@ -49,4 +53,44 @@ export const messageProofResponse: GqlGetMessageProofQuery['messageProof'] = {
   nonce: '0x3e87e0f44613cabecd1aad381ad41a433afb12ec5c54c172de3db25b1b4d1b53',
   amount: '10',
   data: '0x',
+};
+
+export const MESSAGE_PROOF: MessageProof = {
+  messageProof: {
+    proofIndex: bn(MESSAGE_PROOF_RAW_RESPONSE.messageProof.proofIndex),
+    proofSet: MESSAGE_PROOF_RAW_RESPONSE.messageProof.proofSet,
+  },
+  blockProof: {
+    proofIndex: bn(MESSAGE_PROOF_RAW_RESPONSE.blockProof.proofIndex),
+    proofSet: MESSAGE_PROOF_RAW_RESPONSE.blockProof.proofSet,
+  },
+  messageBlockHeader: {
+    id: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.id,
+    daHeight: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.daHeight),
+    transactionsCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsCount),
+    transactionsRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsRoot,
+    height: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.height),
+    prevRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.prevRoot,
+    time: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.time,
+    applicationHash: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.applicationHash,
+    messageReceiptRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptRoot,
+    messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
+  },
+  commitBlockHeader: {
+    id: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.id,
+    daHeight: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.daHeight),
+    transactionsCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsCount),
+    transactionsRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsRoot,
+    height: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.height),
+    prevRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.prevRoot,
+    time: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.time,
+    applicationHash: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.applicationHash,
+    messageReceiptRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptRoot,
+    messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
+  },
+  sender: Address.fromAddressOrString(MESSAGE_PROOF_RAW_RESPONSE.sender),
+  recipient: Address.fromAddressOrString(MESSAGE_PROOF_RAW_RESPONSE.recipient),
+  nonce: MESSAGE_PROOF_RAW_RESPONSE.nonce,
+  amount: bn(MESSAGE_PROOF_RAW_RESPONSE.amount),
+  data: MESSAGE_PROOF_RAW_RESPONSE.data,
 };
