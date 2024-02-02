@@ -9,13 +9,13 @@ pnpm node:run > /dev/null 2>&1 &
 echo "Started Fuel-Core node in background."
 
 if [[ "$*" == *"--browser"* ]]; then
-    FORC_IMPLICIT_STD_GIT_BRANCH=xunilrj/v0.49.2 pnpm test:browser
+    pnpm test:browser
     TEST_RESULT=$?
 elif [[ "$*" == *"--node"* ]]; then
-    FORC_IMPLICIT_STD_GIT_BRANCH=xunilrj/v0.49.2 pnpm test
+    pnpm test
     TEST_RESULT=$?
 else
-    FORC_IMPLICIT_STD_GIT_BRANCH=xunilrj/v0.49.2 pnpm test
+    pnpm test
     TEST_RESULT=$?
 fi
 

@@ -15,7 +15,7 @@ for forc_toml in $forc_tomls; do
     cd ${forc_toml/Forc.toml/''}
 
     # validate forc formatting
-    eval "FORC_IMPLICIT_STD_GIT_BRANCH=xunilrj/v0.49.2 $forc_fmt" --check
+    eval "$forc_fmt" --check
     if [ $? = "1" ]; then
         ERRORED=1
     fi
