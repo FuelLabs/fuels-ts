@@ -1,7 +1,7 @@
 #!/bin/bash
 
 main_dir=$(pwd)
-forc_tomls=$(find . -type f -name "Forc.toml")
+forc_tomls=$(find . -type f -name "Forc.toml -path './packages/forc/sway-repo' -prune")
 forc_fmt=$(realpath ./packages/forc/forc-binaries/forc-fmt)
 expected_authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
 
