@@ -101,6 +101,7 @@ fragment receiptDryRunFragment on Receipt {
   val
   len
   receiptType
+  result
   gasUsed
   data
   recipient
