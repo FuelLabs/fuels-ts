@@ -100,8 +100,7 @@ jobs:
 
       - name: Download Master Coverage Artifact
         uses: dawidd6/action-download-artifact@v2
-        # change to pr number check when rc/salamander has been merged
-        if: false
+        if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml
           branch: master
