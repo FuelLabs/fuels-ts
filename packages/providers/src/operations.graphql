@@ -44,15 +44,11 @@ fragment transactionFragment on Transaction {
 fragment receiptFragment on Receipt {
   contract {
     id
-    bytecode
-    salt
   }
   pc
   is
   to {
     id
-    bytecode
-    salt
   }
   toAddress
   amount
@@ -66,8 +62,6 @@ fragment receiptFragment on Receipt {
   reason
   ra
   rb
-  rc
-  rd
   len
   receiptType
   result
