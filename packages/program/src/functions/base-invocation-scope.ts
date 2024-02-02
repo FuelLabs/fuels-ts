@@ -343,8 +343,19 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
 
-    const { maxFee } = await this.getTransactionCost();
+    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const specifiedGasPrice = this.txParameters?.gasPrice;
+
+    // set defaults for gasLimit and gasPrice if not specified
+    if (!specifiedGasLimit) {
+      transactionRequest.gasLimit = gasUsed;
+    }
+
+    if (!specifiedGasPrice) {
+      transactionRequest.gasPrice = minGas;
+    }
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -364,8 +375,19 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed, minGas } = await this.getTransactionCost();
 
-    const { maxFee } = await this.getTransactionCost();
+    const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const specifiedGasPrice = this.txParameters?.gasPrice;
+
+    // set defaults for gasLimit and gasPrice if not specified
+    if (!specifiedGasLimit) {
+      transactionRequest.gasLimit = gasUsed;
+    }
+
+    if (!specifiedGasPrice) {
+      transactionRequest.gasPrice = minGas;
+    }
 
     await this.fundWithRequiredCoins(maxFee);
 

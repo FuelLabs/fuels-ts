@@ -41,6 +41,18 @@ describe(__filename, () => {
     expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(minGasPrice.toNumber());
   });
 
+  it('should succesfully execute contract call without txParams', async () => {
+    const { gasUsed } = await contract.functions.increment_count(15).dryRun();
+
+    // #region transaction-parameters-4
+    const { transactionResult } = await contract.functions.increment_count(15).call();
+    // #endregion transaction-parameters-4
+
+    const { transaction } = transactionResult;
+
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(gasUsed.toNumber());
+  });
+
   it('should fail to execute call if gasLimit is too low', async () => {
     // #region transaction-parameters-3
     const { minGasPrice } = provider.getGasConfig();
