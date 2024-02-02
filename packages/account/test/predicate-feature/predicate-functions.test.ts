@@ -1,8 +1,8 @@
 import { FUEL_NETWORK_URL } from '../../src/configs';
 import { Predicate } from '../../src/predicate';
 import { Provider } from '../../src/providers';
-import { defaultPredicateAbi } from '../fixtures/abi/default';
-import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
+import { predicateAbi } from '../fixtures/predicate-abi';
+import { predicateBytecode } from '../fixtures/predicate-bytecode';
 
 /**
  * @group node
@@ -18,12 +18,12 @@ describe('Predicate', () => {
     });
 
     it('sets predicate address for given byte code', () => {
-      const predicate = new Predicate(defaultPredicateBytecode, provider);
+      const predicate = new Predicate(predicateBytecode, provider);
       expect(predicate.address.toB256()).toEqual(predicateAddress);
     });
 
     it('sets predicate data for given ABI', () => {
-      const predicate = new Predicate(defaultPredicateBytecode, provider, defaultPredicateAbi);
+      const predicate = new Predicate(predicateBytecode, provider, predicateAbi);
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
       expect(predicate.predicateArgs).toEqual([]);
@@ -35,17 +35,17 @@ describe('Predicate', () => {
 
     it('throws when predicate ABI has no main function', () => {
       const abiWithNoMain = {
-        ...defaultPredicateAbi,
+        ...predicateAbi,
         functions: [
           {
-            ...defaultPredicateAbi.functions[0],
+            ...predicateAbi.functions[0],
             name: 'notMain',
           },
         ],
       };
 
       expect(() => {
-        const predicate = new Predicate(defaultPredicateBytecode, provider, abiWithNoMain, {
+        const predicate = new Predicate(predicateBytecode, provider, abiWithNoMain, {
           value: 1,
         });
 
