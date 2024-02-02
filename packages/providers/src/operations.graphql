@@ -80,6 +80,33 @@ fragment receiptFragment on Receipt {
   subId
 }
 
+fragment receiptDryRunFragment on Receipt {
+  contract {
+    id
+  }
+  pc
+  is
+  to {
+    id
+  }
+  toAddress
+  ptr
+  digest
+  ra
+  rb
+  amount
+  assetId
+  param1
+  param2
+  val
+  len
+  receiptType
+  gasUsed
+  data
+  recipient
+  contractId
+}
+
 fragment blockFragment on Block {
   id
   header {
@@ -661,7 +688,7 @@ query getMessageStatus($nonce: Nonce!) {
 
 mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
   dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
-    ...receiptFragment
+    ...receiptDryRunFragment
   }
 }
 
