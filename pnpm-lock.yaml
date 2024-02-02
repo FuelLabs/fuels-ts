@@ -1028,9 +1028,6 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
     devDependencies:
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@graphql-codegen/cli':
         specifier: ^2.13.7
         version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
@@ -1137,6 +1134,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
@@ -1146,10 +1146,6 @@ importers:
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
-    devDependencies:
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
 
   packages/versions:
     dependencies:
