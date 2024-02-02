@@ -1,4 +1,4 @@
-import type { GqlGetMessageProofQuery } from '../../__generated__/operations';
+import type { GqlGetMessageProofQuery } from '../../src/providers/__generated__/operations';
 
 export const messageProofResponse: GqlGetMessageProofQuery['messageProof'] = {
   __typename: 'MessageProof',

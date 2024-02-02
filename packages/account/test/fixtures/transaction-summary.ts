@@ -14,20 +14,18 @@ import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/tr
 
 import type {
   TransactionResultCallReceipt,
-  TransactionResultMessageOutReceipt,
-  TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
-  TransactionResultScriptResultReceipt,
-  TransactionResultTransferOutReceipt,
   TransactionResultTransferReceipt,
-} from '../../transaction-response';
-import type {
+  TransactionResultTransferOutReceipt,
+  TransactionResultReturnDataReceipt,
+  TransactionResultMessageOutReceipt,
+  TransactionResultScriptResultReceipt,
   AbiMap,
-  FailureStatus,
-  SqueezedOutStatus,
-  SubmittedStatus,
   SuccessStatus,
-} from '../../transaction-summary/types';
+  FailureStatus,
+  SubmittedStatus,
+  SqueezedOutStatus,
+} from '../../src';
 
 export const MOCK_INPUT_COIN: InputCoin = {
   amount: bn(4999989993),

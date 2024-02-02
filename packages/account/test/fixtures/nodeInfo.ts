@@ -1,4 +1,4 @@
-import type { GqlNodeInfoFragmentFragment } from '../../__generated__/operations';
+import type { GqlNodeInfoFragmentFragment } from '../../src/providers/__generated__/operations';
 
 export const MOCK_NODE_INFO: GqlNodeInfoFragmentFragment = {
   __typename: 'NodeInfo',

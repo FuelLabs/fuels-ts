@@ -6,14 +6,12 @@ import { InputType, OutputType } from '@fuel-ts/transactions';
 
 import type {
   CoinTransactionRequestInput,
-  ContractTransactionRequestInput,
   MessageTransactionRequestInput,
-} from '../../transaction-request/input';
-import type {
-  ChangeTransactionRequestOutput,
+  ContractTransactionRequestInput,
   CoinTransactionRequestOutput,
   ContractTransactionRequestOutput,
-} from '../../transaction-request/output';
+  ChangeTransactionRequestOutput,
+} from '../../src';
 
 export const MOCK_COIN_INPUT: InputCoin = {
   type: InputType.Coin,
