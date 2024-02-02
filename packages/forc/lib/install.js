@@ -53,6 +53,8 @@ import {
       return;
     }
 
+    const stdioOpts = { stdio: 'inherit' };
+
     // Otherwise, download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
 
@@ -63,7 +65,7 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
+    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`, stdioOpts);
 
     // Cleanup
     rmSync(pkgPath);
