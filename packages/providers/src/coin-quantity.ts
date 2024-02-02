@@ -27,7 +27,7 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
   const bnAmount = bn(amount);
   return {
     assetId: hexlify(assetId),
-    amount: bnAmount.toNumber() < 1 ? bn(1) : bnAmount,
+    amount: bnAmount.isZero() ? bn(1) : bnAmount,
     max: max ? bn(max) : undefined,
   };
 };
