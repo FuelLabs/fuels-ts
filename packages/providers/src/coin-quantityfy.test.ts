@@ -11,7 +11,7 @@ describe('coinQuantityfy', () => {
     expect(coinQuantityfy([0]).amount.toNumber()).toEqual(1);
     expect(coinQuantityfy([1 - Number.EPSILON]).amount.toNumber()).toEqual(1);
   });
-  test('amount of return is set properly', () => {
+  test('amount of return value is set properly', () => {
     expect(coinQuantityfy([2]).amount.toNumber()).toEqual(2);
     const maxPlusOne = new BN(Number.MAX_SAFE_INTEGER).add(new BN(1));
     expect(coinQuantityfy([maxPlusOne]).amount.toString()).toEqual(maxPlusOne.toString());
