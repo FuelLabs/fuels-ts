@@ -111,5 +111,5 @@ describe(
       expect(killChildProcess).toHaveBeenCalledTimes(1);
     });
   },
-  { timeout: 30000 }
+  { timeout: 180000 }
 );

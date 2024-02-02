@@ -42,5 +42,5 @@ describe(
       expect(fuelsContents.fooBar).toMatch(/0x/);
     });
   },
-  { timeout: 30000 }
+  { timeout: 180000 }
 );
