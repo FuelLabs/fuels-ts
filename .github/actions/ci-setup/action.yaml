@@ -22,6 +22,7 @@ runs:
           apps/docs/.typedoc
           apps/docs/src/api
           packages/providers/src/__generated__
+          templates/src/sway-api
         key: ${{ runner.os }}-generated-${{ github.sha }}
 
     - name: Cache Build
@@ -37,6 +38,7 @@ runs:
           apps/docs/.typedoc
           apps/docs/src/api
           packages/providers/src/__generated__
+          templates/src/sway-api
         key: ${{ runner.os }}-generated-${{ github.sha }}
 
     - name: Setup Node.js
