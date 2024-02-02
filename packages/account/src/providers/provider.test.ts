@@ -10,7 +10,11 @@ import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 import { getBytesCopy, hexlify, type BytesLike } from 'ethers';
 
-import { messageStatusResponse, messageProofResponse } from '../../test/fixtures';
+import {
+  messageStatusResponse,
+  MESSAGE_PROOF_RAW_RESPONSE,
+  MESSAGE_PROOF,
+} from '../../test/fixtures';
 
 import type { ChainInfo, FetchRequestOptions, NodeInfo, TransactionCost } from './provider';
 import Provider from './provider';
@@ -700,16 +704,19 @@ describe('Provider', () => {
     // It test mainly types and converstions
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       fetch: async (url, options) =>
-        getCustomFetch('getMessageProof', { messageProof: messageProofResponse })(url, options),
+        getCustomFetch('getMessageProof', { messageProof: MESSAGE_PROOF_RAW_RESPONSE })(
+          url,
+          options
+        ),
     });
 
-    const messageProof = await provider.getMessageProof(
-      '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
-      '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
-      '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
-    );
+    const transactionId = '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea';
+    const nonce = '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895';
+    const commitBlockId = '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b';
 
-    expect(messageProof).toMatchSnapshot();
+    const messageProof = await provider.getMessageProof(transactionId, nonce, commitBlockId);
+
+    expect(messageProof).toStrictEqual({ ...MESSAGE_PROOF, nonce });
   });
 
   it('can getMessageStatus', async () => {
@@ -722,7 +729,8 @@ describe('Provider', () => {
     const messageStatus = await provider.getMessageStatus(
       '0x0000000000000000000000000000000000000000000000000000000000000008'
     );
-    expect(messageStatus).toMatchSnapshot();
+
+    expect(messageStatus).toStrictEqual(messageStatusResponse);
   });
 
   it('can connect', async () => {
