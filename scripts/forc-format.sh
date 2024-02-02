@@ -11,7 +11,7 @@ for forc_toml in $forc_tomls; do
     cd ${forc_toml/Forc.toml/''}
 
     # fix forc formatting
-    eval "$forc_fmt"
+    eval "FORC_IMPLICIT_STD_GIT_BRANCH=xunilrj/v0.49.2 $forc_fmt"
 
     # fix TOML `authors` (for projects only, ignores workspace)
     if [ "$(head -n 1 Forc.toml)" == "[project]" ]; then
