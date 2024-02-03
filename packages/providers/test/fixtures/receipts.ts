@@ -1,7 +1,7 @@
 import { GqlReceiptType } from '../../src/__generated__/operations';
-import type { GqlReceipt } from '../../src/__generated__/operations';
+import type { GqlReceiptFragmentFragment } from '../../src/__generated__/operations';
 
-export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceipt = {
+export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
   receiptType: GqlReceiptType.Call,
   pc: '15488',
   is: '15488',
@@ -9,8 +9,6 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceipt = {
   to: {
     __typename: 'Contract',
     id: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
-    bytecode: '0x74000003',
-    salt: '0x0000000000',
   },
   amount: '100',
   assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -20,8 +18,6 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceipt = {
   contract: {
     __typename: 'Contract',
     id: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
-    bytecode: '0x74000003',
-    salt: '0x0000000000',
   },
   val: '1',
   ptr: '13296',
@@ -42,7 +38,7 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceipt = {
   contractId: '0x45f7524a92f661c0f2e4d7b8def42e46b8e2f478a3c51916540e32d8f60a2f53',
 };
 
-export const MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS: GqlReceipt = {
+export const MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS: GqlReceiptFragmentFragment = {
   ...MOCK_GQL_RECEIPT_FRAGMENT,
   to: null,
   toAddress: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',

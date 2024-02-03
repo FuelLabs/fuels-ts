@@ -62,6 +62,8 @@ fragment receiptFragment on Receipt {
   reason
   ra
   rb
+  rc
+  rd
   len
   receiptType
   result

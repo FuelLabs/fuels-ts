@@ -23,7 +23,6 @@ import type {
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
-  GqlReceipt,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -650,7 +649,7 @@ export default class Provider {
       encodedTransaction,
       utxoValidation: utxoValidation || false,
     });
-    const receipts = (<GqlReceipt[]>gqlReceipts).map(processGqlReceipt);
+    const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
     };
@@ -719,7 +718,7 @@ export default class Provider {
         encodedTransaction: hexlify(txRequest.toTransactionBytes()),
         utxoValidation: false,
       });
-      const receipts = (<GqlReceipt[]>gqlReceipts).map(processGqlReceipt);
+      const receipts = gqlReceipts.map(processGqlReceipt);
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
 
@@ -765,7 +764,7 @@ export default class Provider {
       encodedTransaction,
       utxoValidation: true,
     });
-    const receipts = (<GqlReceipt[]>gqlReceipts).map(processGqlReceipt);
+    const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
     };
