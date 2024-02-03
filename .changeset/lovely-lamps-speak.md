@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/providers": minor
+"@fuel-ts/providers": patch
 ---
 
 filter out unneeded receipts properties on dryRun
