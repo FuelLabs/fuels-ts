@@ -6,7 +6,6 @@ import { getBytesCopy } from 'ethers';
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
   GqlPageInfo,
-  GqlReceipt,
 } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
@@ -43,7 +42,7 @@ export async function getTransactionSummary<TTransactionType = void>(
 
   const [decodedTransaction] = new TransactionCoder().decode(getBytesCopy(rawPayload), 0);
 
-  const receipts = (<GqlReceipt[]>gqlReceipts)?.map(processGqlReceipt) || [];
+  const receipts = gqlReceipts?.map(processGqlReceipt) || [];
 
   const {
     consensusParameters: { gasPerByte, gasPriceFactor, maxInputs, gasCosts },
@@ -134,7 +133,7 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(getBytesCopy(rawPayload), 0);
 
-    const receipts = (<GqlReceipt[]>gqlReceipts)?.map(processGqlReceipt) || [];
+    const receipts = gqlReceipts?.map(processGqlReceipt) || [];
 
     const transactionSummary = assembleTransactionSummary({
       id,
