@@ -667,22 +667,20 @@ export default class Provider {
       encodedTransaction,
     });
 
-    const estimatedTransaction = transactionRequest;
-    const [decodedTransaction] = new TransactionCoder().decode(
-      getBytesCopy(response.estimatePredicates.rawPayload),
-      0
-    );
+    const {
+      estimatePredicates: { inputs },
+    } = response;
 
-    if (decodedTransaction.inputs) {
-      decodedTransaction.inputs.forEach((input, index) => {
-        if ('predicate' in input && input.predicateGasUsed.gt(0)) {
-          (<CoinTransactionRequestInput>estimatedTransaction.inputs[index]).predicateGasUsed =
+    if (inputs) {
+      inputs.forEach((input, index) => {
+        if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }
       });
     }
 
-    return estimatedTransaction;
+    return transactionRequest;
   }
 
   /**
