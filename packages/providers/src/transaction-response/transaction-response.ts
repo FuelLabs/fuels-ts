@@ -20,7 +20,6 @@ import type {
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 
-import type { GqlReceipt } from '../__generated__/operations';
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
@@ -179,7 +178,7 @@ export class TransactionResponse {
 
     const { receipts: gqlReceipts } = transaction;
 
-    const receipts = (<GqlReceipt[]>gqlReceipts).map(processGqlReceipt) || [];
+    const receipts = gqlReceipts?.map(processGqlReceipt) || [];
 
     const { gasPerByte, gasPriceFactor, gasCosts } = this.provider.getGasConfig();
     const maxInputs = this.provider.getChain().consensusParameters.maxInputs;
