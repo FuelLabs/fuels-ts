@@ -2,27 +2,15 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { DecodedValue, InputValue, Coder, EncodingOptions } from './coders/abstract-coder';
+import { createCoder } from './coders/create-coder';
 import { ArrayCoder } from './coders/v0/array';
-import { B256Coder } from './coders/v0/b256';
-import { B512Coder } from './coders/v0/b512';
-import { BooleanCoder } from './coders/v0/boolean';
-import { ByteCoder } from './coders/v0/byte';
 import { EnumCoder } from './coders/v0/enum';
-import { NumberCoder } from './coders/v0/number';
 import { OptionCoder } from './coders/v0/option';
-import { RawSliceCoder } from './coders/v0/raw-slice';
-import { StdStringCoder } from './coders/v0/stdString';
 import { StringCoder } from './coders/v0/string';
 import { StructCoder } from './coders/v0/struct';
 import { TupleCoder } from './coders/v0/tuple';
-import { U64Coder } from './coders/v0/u64';
 import { VecCoder } from './coders/v0/vec';
-import { BooleanCoder as BooleanCoderV1 } from './coders/v1/boolean';
-import { ByteCoder as ByteCoderV1 } from './coders/v1/byte';
 import { EnumCoder as EnumCoderV1 } from './coders/v1/enum';
-import { NumberCoder as NumberCoderV1 } from './coders/v1/number';
-import { RawSliceCoder as RawSliceCoderV1 } from './coders/v1/raw-slice';
-import { StdStringCoder as StdStringCoderV1 } from './coders/v1/std-string';
 import { StringCoder as StringCoderV1 } from './coders/v1/string';
 import { StructCoder as StructCoderV1 } from './coders/v1/struct';
 import { TupleCoder as TupleCoderV1 } from './coders/v1/tuple';
@@ -35,8 +23,6 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
-  BYTES_CODER_TYPE,
-  STD_STRING_CODER_TYPE,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
@@ -88,30 +74,13 @@ export abstract class AbiCoder {
   ): Coder {
     const { version } = options;
 
-    switch (resolvedAbiType.type) {
-      case 'u8':
-      case 'u16':
-      case 'u32':
-        return version
-          ? new NumberCoderV1(resolvedAbiType.type)
-          : new NumberCoder(resolvedAbiType.type, options);
-      case 'u64':
-      case 'raw untyped ptr':
-        return new U64Coder();
-      case 'raw untyped slice':
-        return version ? new RawSliceCoderV1() : new RawSliceCoder();
-      case 'bool':
-        return version ? new BooleanCoderV1() : new BooleanCoder(options);
-      case 'b256':
-        return new B256Coder();
-      case 'struct B512':
-        return new B512Coder();
-      case BYTES_CODER_TYPE:
-        return version ? new ByteCoderV1() : new ByteCoder();
-      case STD_STRING_CODER_TYPE:
-        return version ? new StdStringCoderV1() : new StdStringCoder();
-      default:
-        break;
+    // TODO: refactor out getCoderIpm;
+    try {
+      return createCoder(resolvedAbiType, options);
+    } catch (error) {
+      if (error instanceof FuelError) {
+        console.log('FuelError', error);
+      }
     }
 
     const stringMatch = stringRegEx.exec(resolvedAbiType.type)?.groups;
