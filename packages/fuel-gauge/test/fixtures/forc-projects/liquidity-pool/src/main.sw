@@ -13,6 +13,10 @@ use std::{
         msg_asset_id,
     },
     context::msg_amount,
+    asset::{
+        mint_to_address,
+        transfer_to_address,
+    },
 };
 
 abi LiquidityPool {
