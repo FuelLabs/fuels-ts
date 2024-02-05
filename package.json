@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build --cache-dir=.turbo",
-    "build:packages": "turbo run build --filter=!docs",
+    "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
     "test": "vitest --run --coverage --config vite.node.config.mts $(scripts/tests-find.sh --node)",

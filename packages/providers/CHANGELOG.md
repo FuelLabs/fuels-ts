@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.73.0
+
+### Minor Changes
+
+- remove problematic validation on estimateTxDependencies, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1702](https://github.com/FuelLabs/fuels-ts/pull/1702))
+
+### Patch Changes
+
+- filter out tx properties for estimatePredicates query, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1713](https://github.com/FuelLabs/fuels-ts/pull/1713))
+- stop comparing bn with integer in coinQuantityfy helper, by [@nedsalk](https://github.com/nedsalk) (See [#1704](https://github.com/FuelLabs/fuels-ts/pull/1704))
+- Removing properties `bytecode` and `salt` from GraphQL `ReceiptFragment`, by [@arboleya](https://github.com/arboleya) (See [#1715](https://github.com/FuelLabs/fuels-ts/pull/1715))
+
 ## 0.72.0
 
 ### Minor Changes

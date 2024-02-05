@@ -59,9 +59,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       killChildProcess: cleanup,
     };
 
-    // eslint-disable-next-line no-param-reassign
     config.providerUrl = fuelCore.providerUrl;
-    // eslint-disable-next-line no-param-reassign
     config.privateKey = defaultConsensusKey;
   }
 
