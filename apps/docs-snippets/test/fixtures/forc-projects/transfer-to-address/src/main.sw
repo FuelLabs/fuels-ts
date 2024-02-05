@@ -1,7 +1,7 @@
 // #region contract-balance-2
 contract;
 
-use std::token::transfer_to_address;
+use std::asset::transfer_to_address;
 
 abi TransferToAddress {
     #[payable]
