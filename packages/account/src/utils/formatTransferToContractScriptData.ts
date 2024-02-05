@@ -5,7 +5,7 @@ import * as asm from '@fuels/vm-asm';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
 interface IAssembleTransferToContractScriptParams {
-  hexelifiedContractId: B256Address;
+  hexlifiedContractId: B256Address;
   amountToTransfer: BigNumberish;
   assetId: BytesLike;
 }
@@ -13,14 +13,14 @@ interface IAssembleTransferToContractScriptParams {
 export const formatTransferToContractScriptData = (
   params: IAssembleTransferToContractScriptParams
 ) => {
-  const { assetId, amountToTransfer, hexelifiedContractId } = params;
+  const { assetId, amountToTransfer, hexlifiedContractId } = params;
 
   const numberCoder = new U64Coder();
 
   const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
 
   const scriptData = Uint8Array.from([
-    ...getBytesCopy(hexelifiedContractId),
+    ...getBytesCopy(hexlifiedContractId),
     ...encoded,
     ...getBytesCopy(assetId),
   ]);

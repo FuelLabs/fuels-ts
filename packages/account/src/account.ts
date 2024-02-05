@@ -378,7 +378,7 @@ export class Account extends AbstractAccount {
     const params = { gasPrice: minGasPrice, ...txParams };
 
     const { script, scriptData } = await assembleTransferToContractScript({
-      hexelifiedContractId: contractAddress.toB256(),
+      hexlifiedContractId: contractAddress.toB256(),
       amountToTransfer: bn(amount),
       assetId,
     });

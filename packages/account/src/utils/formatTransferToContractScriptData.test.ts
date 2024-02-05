@@ -31,7 +31,7 @@ describe('util', () => {
     const assetId: BytesLike = BaseAssetId;
 
     const { script, scriptData } = await assembleTransferToContractScript({
-      hexelifiedContractId,
+      hexlifiedContractId: hexelifiedContractId,
       amountToTransfer,
       assetId,
     });
@@ -64,7 +64,7 @@ describe('util', () => {
     const assetId: BytesLike = BaseAssetId;
 
     const scriptData = formatTransferToContractScriptData({
-      hexelifiedContractId,
+      hexlifiedContractId: hexelifiedContractId,
       amountToTransfer,
       assetId,
     });
