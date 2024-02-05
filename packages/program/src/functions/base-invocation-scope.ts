@@ -292,10 +292,13 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
+    const provider = this.getProvider();
+
     const transactionRequest = await this.getTransactionRequest();
     const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { minGasPrice } = provider.getGasConfig();
 
-    await this.setDefaultTxParams(gasUsed);
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -332,10 +335,13 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
+    const provider = this.getProvider();
+
     const transactionRequest = await this.getTransactionRequest();
     const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { minGasPrice } = provider.getGasConfig();
 
-    await this.setDefaultTxParams(gasUsed);
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -356,8 +362,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
     const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { minGasPrice } = provider.getGasConfig();
 
-    await this.setDefaultTxParams(gasUsed);
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -396,18 +403,21 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
    */
-  private async setDefaultTxParams(gasUsed: BN) {
-    const transactionRequest = await this.getTransactionRequest();
-    const { minGasPrice } = this.getProvider().getGasConfig();
-
+  private setDefaultTxParams(
+    transactionRequest: ScriptTransactionRequest,
+    minGasPrice: BN,
+    gasUsed: BN
+  ) {
     const specifiedGasLimit = this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const specifiedGasPrice = this.txParameters?.gasPrice;
 
     if (!specifiedGasLimit) {
+      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasLimit = gasUsed;
     }
 
     if (!specifiedGasPrice) {
+      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasPrice = minGasPrice;
     }
   }
