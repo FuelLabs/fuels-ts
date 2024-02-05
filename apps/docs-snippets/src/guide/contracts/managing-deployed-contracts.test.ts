@@ -31,10 +31,7 @@ describe(__filename, () => {
     // #region managing-deployed-contracts-1
     const deployedContract = new Contract(contractId, abi, wallet);
 
-    const { value } = await deployedContract.functions
-      .echo_u8(10)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await deployedContract.functions.echo_u8(10).simulate();
 
     expect(value).toEqual(10);
     // #endregion managing-deployed-contracts-1
@@ -48,10 +45,7 @@ describe(__filename, () => {
 
     const deployedContract = new Contract(b256, abi, wallet);
 
-    const { value } = await deployedContract.functions
-      .echo_u8(50)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await deployedContract.functions.echo_u8(50).simulate();
 
     expect(value).toEqual(50);
     // #endregion managing-deployed-contracts-2

@@ -23,7 +23,6 @@ describe(__filename, () => {
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
-        gasPrice: minGasPrice,
         gasLimit: 10_000,
         variableOutputs: 1,
       })
@@ -37,7 +36,7 @@ describe(__filename, () => {
       (policy) => policy.type === PolicyType.GasPrice
     );
 
-    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10000);
+    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10_000);
     expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(minGasPrice.toNumber());
   });
 
@@ -55,13 +54,11 @@ describe(__filename, () => {
 
   it('should fail to execute call if gasLimit is too low', async () => {
     // #region transaction-parameters-3
-    const { minGasPrice } = provider.getGasConfig();
 
     await expect(
       contract.functions
         .increment_count(10)
         .txParams({
-          gasPrice: minGasPrice,
           gasLimit: 1,
         })
         .call()

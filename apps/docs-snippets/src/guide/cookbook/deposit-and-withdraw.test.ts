@@ -41,7 +41,7 @@ describe(__filename, () => {
     await liquidityPoolContract.functions
       .deposit({ value: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, BaseAssetId] })
-      .txParams({ gasLimit: 1_000, variableOutputs: 1, gasPrice: 1 })
+      .txParams({ variableOutputs: 1 })
       .call();
 
     const liquidityAmount = await liquidityOwner.getBalance(assetId);
@@ -53,7 +53,7 @@ describe(__filename, () => {
     await liquidityPoolContract.functions
       .withdraw({ value: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, BaseAssetId] })
-      .txParams({ gasLimit: 1_000, variableOutputs: 1, gasPrice: 1 })
+      .txParams({ variableOutputs: 1 })
       .call();
 
     const baseAssetAfterWithdraw = await liquidityOwner.getBalance(BaseAssetId);

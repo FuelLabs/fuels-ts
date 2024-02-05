@@ -43,9 +43,9 @@ describe('Predicate', () => {
       // calling the script with the receiver account (no resources)
       const scriptInput = 1;
       scriptInstance.account = receiver;
-      await expect(
-        scriptInstance.functions.main(scriptInput).txParams({ gasPrice }).call()
-      ).rejects.toThrow(/not enough coins to fit the target/);
+      await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
+        /not enough coins to fit the target/
+      );
 
       // setup predicate
       const amountToPredicate = 500_000;
@@ -75,10 +75,7 @@ describe('Predicate', () => {
 
       const {
         transactionResult: { fee: receiverTxFee },
-      } = await scriptInstance.functions
-        .main(scriptInput)
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call();
+      } = await scriptInstance.functions.main(scriptInput).call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
 
