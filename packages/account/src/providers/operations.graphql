@@ -41,6 +41,21 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment inputEstimatePredicatesFragment on Input {
+  ... on InputCoin {
+    predicateGasUsed
+  }
+  ... on InputMessage {
+    predicateGasUsed
+  }
+}
+
+fragment transactionEstimatePredicatesFragment on Transaction {
+  inputs {
+    ...inputEstimatePredicatesFragment
+  }
+}
+
 fragment receiptFragment on Receipt {
   contract {
     id
@@ -514,7 +529,7 @@ query getTransactionsByOwner(
 
 query estimatePredicates($encodedTransaction: HexString!) {
   estimatePredicates(tx: $encodedTransaction) {
-    ...transactionFragment
+    ...transactionEstimatePredicatesFragment
   }
 }
 

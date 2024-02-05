@@ -76,9 +76,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     request.inputs?.forEach((input) => {
       if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
-        // eslint-disable-next-line no-param-reassign
         input.predicate = this.bytes;
-        // eslint-disable-next-line no-param-reassign
         input.predicateData = this.getPredicateData(policies.length);
       }
     });
