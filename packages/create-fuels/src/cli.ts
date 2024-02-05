@@ -146,7 +146,7 @@ export const runScaffoldCli = async (
 
   log();
   log();
-  log(chalk.green(`⚡️ Success! Created a a fullstack Fuel dapp at ${projectPath}`));
+  log(chalk.green(`⚡️ Success! Created a fullstack Fuel dapp at ${projectPath}`));
   log();
   log();
   log('To get started:');
