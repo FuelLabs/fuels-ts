@@ -327,21 +327,14 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionRequest> {
     const { minGasPrice } = this.provider.getGasConfig();
     const params = { gasPrice: minGasPrice, ...txParams };
-
     const request = new ScriptTransactionRequest(params);
-
+    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
-
     const gasPriceToUse = bn(txParams.gasPrice ?? minGasPrice);
     const gasLimitToUse = bn(txParams.gasLimit ?? gasUsed);
-
     request.gasPrice = gasPriceToUse;
     request.gasLimit = gasLimitToUse;
-
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-
     await this.fund(request, requiredQuantities, maxFee);
-
     return request;
   }
 
