@@ -26,12 +26,12 @@ describe('util', () => {
   });
 
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
-    const hexelifiedContractId = '0x1234567890123456789012345678901234567890';
+    const hexlifiedContractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
     const assetId: BytesLike = BaseAssetId;
 
     const { script, scriptData } = await assembleTransferToContractScript({
-      hexlifiedContractId: hexelifiedContractId,
+      hexlifiedContractId,
       amountToTransfer,
       assetId,
     });
@@ -59,12 +59,12 @@ describe('util', () => {
       .spyOn(getBytesCopyMod, 'getBytesCopy')
       .mockReturnValue(Uint8Array.from(byte));
 
-    const hexelifiedContractId = '0x1234567890123456789012345678901234567890';
+    const hexlifiedContractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
     const assetId: BytesLike = BaseAssetId;
 
     const scriptData = formatTransferToContractScriptData({
-      hexlifiedContractId: hexelifiedContractId,
+      hexlifiedContractId,
       amountToTransfer,
       assetId,
     });
