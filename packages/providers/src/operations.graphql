@@ -59,15 +59,27 @@ fragment transactionEstimatePredicatesFragment on Transaction {
 fragment receiptFragment on Receipt {
   contract {
     id
-    bytecode
-    salt
+    #
+    # NOTE:
+    #     Props removed due to excessive bandwidth usage:
+    #     https://github.com/FuelLabs/fuels-ts/issues/1706
+    #
+    # bytecode
+    # salt
+    #
   }
   pc
   is
   to {
     id
-    bytecode
-    salt
+    #
+    # NOTE:
+    #     Props removed due to excessive bandwidth usage:
+    #     https://github.com/FuelLabs/fuels-ts/issues/1706
+    #
+    # bytecode
+    # salt
+    #
   }
   toAddress
   amount
