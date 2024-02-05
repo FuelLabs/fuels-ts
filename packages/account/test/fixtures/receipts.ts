@@ -9,8 +9,6 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
   to: {
     __typename: 'Contract',
     id: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
-    bytecode: '0x74000003',
-    salt: '0x0000000000',
   },
   amount: '100',
   assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -20,8 +18,6 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
   contract: {
     __typename: 'Contract',
     id: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
-    bytecode: '0x74000003',
-    salt: '0x0000000000',
   },
   val: '1',
   ptr: '13296',
