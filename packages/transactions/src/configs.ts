@@ -32,7 +32,7 @@ export const MAX_PREDICATE_DATA_LENGTH = 1024 * 1024;
 // Revert with this value for a failing call to `std::revert::require`.
 export const FAILED_REQUIRE_SIGNAL = '0xffffffffffff0000';
 
-// Revert with this value for a failing call to `std::token::transfer_to_address`.
+// Revert with this value for a failing call to `std::asset::transfer_to_address`.
 export const FAILED_TRANSFER_TO_ADDRESS_SIGNAL = '0xffffffffffff0001';
 
 // Revert with this value for a failing call to `std::message::send_message`.
