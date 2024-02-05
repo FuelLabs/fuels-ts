@@ -4,8 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build", "prebuild"],
-      "outputs": ["dist/**"],
-      "inputs": ["src/**", ".vitepress/**", "types/**"]
+      "outputs": ["dist/**"]
     }
   }
 }
