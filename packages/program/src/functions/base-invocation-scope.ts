@@ -412,12 +412,10 @@ export class BaseInvocationScope<TReturn = any> {
     const gasPriceSpecified = !!this.txParameters?.gasPrice;
 
     if (!gasLimitSpecified) {
-      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasLimit = gasUsed;
     }
 
     if (!gasPriceSpecified) {
-      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasPrice = minGasPrice;
     }
   }
