@@ -41,7 +41,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[packages/program/src/types.ts:51](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L51)
+[packages/program/src/types.ts:51](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L51)
 
 ___
 
@@ -53,7 +53,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L27)
+[packages/program/src/types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L27)
 
 ___
 
@@ -79,7 +79,7 @@ Represents a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L12)
+[packages/program/src/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L12)
 
 ___
 
@@ -103,7 +103,7 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[packages/program/src/types.ts:82](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L82)
+[packages/program/src/types.ts:82](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L82)
 
 ___
 
@@ -136,7 +136,7 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[packages/program/src/types.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L67)
+[packages/program/src/types.ts:67](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L67)
 
 ___
 
@@ -148,7 +148,7 @@ Represents the possible reasons for a revert.
 
 #### Defined in
 
-[packages/program/src/revert/revert-error.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/revert/revert-error.ts#L15)
+[packages/program/src/revert/revert-error.ts:15](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/revert/revert-error.ts#L15)
 
 ___
 
@@ -160,7 +160,7 @@ Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[packages/program/src/types.ts:93](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L93)
+[packages/program/src/types.ts:93](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L93)
 
 ___
 
@@ -172,4 +172,4 @@ Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/program/src/types.ts#L36)
+[packages/program/src/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/types.ts#L36)

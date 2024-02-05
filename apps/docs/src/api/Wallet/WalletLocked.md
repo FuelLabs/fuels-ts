@@ -35,7 +35,7 @@ Creates a new Account instance.
 
 #### Defined in
 
-[account.ts:62](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L62)
+[account.ts:62](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L62)
 
 ## Properties
 
@@ -51,7 +51,7 @@ The provider used to interact with the network.
 
 #### Defined in
 
-[account.ts:54](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L54)
+[account.ts:54](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L54)
 
 ___
 
@@ -67,7 +67,7 @@ The address associated with the account.
 
 #### Defined in
 
-[account.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L49)
+[account.ts:49](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L49)
 
 ## Accessors
 
@@ -93,7 +93,7 @@ Account.provider
 
 #### Defined in
 
-[account.ts:75](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L75)
+[account.ts:75](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L75)
 
 • `set` **provider**(`provider`): `void`
 
@@ -115,7 +115,7 @@ Account.provider
 
 #### Defined in
 
-[account.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L88)
+[account.ts:88](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L88)
 
 ## Methods
 
@@ -143,7 +143,7 @@ The updated Provider instance.
 
 #### Defined in
 
-[account.ts:98](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L98)
+[account.ts:98](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L98)
 
 ___
 
@@ -174,7 +174,7 @@ A promise that resolves to the prepared transaction request.
 
 #### Defined in
 
-[account.ts:318](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L318)
+[account.ts:318](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L318)
 
 ___
 
@@ -210,7 +210,7 @@ A promise that resolves when the resources are added to the transaction.
 
 #### Defined in
 
-[account.ts:239](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L239)
+[account.ts:239](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L239)
 
 ___
 
@@ -238,7 +238,7 @@ A promise that resolves to the balance amount.
 
 #### Defined in
 
-[account.ts:192](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L192)
+[account.ts:192](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L192)
 
 ___
 
@@ -260,7 +260,7 @@ A promise that resolves to an array of Coins and their quantities.
 
 #### Defined in
 
-[account.ts:202](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L202)
+[account.ts:202](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L202)
 
 ___
 
@@ -288,7 +288,7 @@ A promise that resolves to an array of Coins.
 
 #### Defined in
 
-[account.ts:123](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L123)
+[account.ts:123](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L123)
 
 ___
 
@@ -310,7 +310,7 @@ A promise that resolves to an array of Messages.
 
 #### Defined in
 
-[account.ts:157](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L157)
+[account.ts:157](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L157)
 
 ___
 
@@ -339,7 +339,7 @@ A promise that resolves to an array of Resources.
 
 #### Defined in
 
-[account.ts:110](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L110)
+[account.ts:110](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L110)
 
 ___
 
@@ -368,7 +368,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:458](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L458)
+[account.ts:458](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L458)
 
 ___
 
@@ -396,7 +396,7 @@ A promise that resolves to the call result.
 
 #### Defined in
 
-[account.ts:476](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L476)
+[account.ts:476](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L476)
 
 ___
 
@@ -427,7 +427,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:346](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L346)
+[account.ts:346](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L346)
 
 ___
 
@@ -458,7 +458,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:369](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L369)
+[account.ts:369](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L369)
 
 ___
 
@@ -482,7 +482,7 @@ An instance of WalletUnlocked.
 
 #### Defined in
 
-[wallets.ts:27](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/wallets.ts#L27)
+[wallets.ts:27](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/wallets.ts#L27)
 
 ___
 
@@ -512,4 +512,4 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[account.ts:416](https://github.com/FuelLabs/fuels-ts/blob/8425f9ae/packages/wallet/src/account.ts#L416)
+[account.ts:416](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/wallet/src/account.ts#L416)
