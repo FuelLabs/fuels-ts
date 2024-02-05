@@ -36,8 +36,9 @@ import type {
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
+  ScriptTransactionRequest,
 } from './transaction-request';
-import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
+import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
@@ -729,13 +730,11 @@ export default class Provider {
         return;
       }
 
-      if (txRequest instanceof ScriptTransactionRequest) {
-        txRequest.addVariableOutputs(missingOutputVariableCount);
+      txRequest.addVariableOutputs(missingOutputVariableCount);
 
-        missingOutputContractIds.forEach(({ contractId }) =>
-          txRequest.addContractInputAndOutput(Address.fromString(contractId))
-        );
-      }
+      missingOutputContractIds.forEach(({ contractId }) =>
+        txRequest.addContractInputAndOutput(Address.fromString(contractId))
+      );
 
       tries += 1;
     } while (tries < MAX_RETRIES);
