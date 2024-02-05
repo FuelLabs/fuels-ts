@@ -21,13 +21,6 @@ import {
   const pkgPlatform = getPkgPlatform();
   const forcVersion = await getCurrentVersion();
 
-  // If a git branch is specified in the VERSION file, build from that branch
-  if (isGitBranch(forcVersion)) {
-    const branchName = forcVersion.split(':')[1];
-    buildFromGitBranch(branchName);
-    return;
-  }
-
   const pkgName = `forc-binaries-${pkgPlatform}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
 
@@ -35,6 +28,7 @@ import {
   const binDir = join(__dirname, '../');
 
   const binPath = join(binDir, 'forc-binaries', 'forc');
+
   let versionMatches = false;
 
   if (existsSync(binPath)) {
@@ -42,18 +36,36 @@ import {
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === forcVersion;
-    info({ expected: forcVersion, received: binVersion });
+    info({
+      expected: forcVersion,
+      received: binVersion,
+      isGitBranch: isGitBranch(forcVersion),
+    });
   }
 
   if (versionMatches) {
     info(`Forc binary already installed, skipping.`);
   } else {
-    // Download
+    // If a git branch is specified in the VERSION file, build from that branch
+    if (isGitBranch(forcVersion)) {
+      const branchName = forcVersion.split(':')[1];
+      buildFromGitBranch(branchName);
+      return;
+    }
+
+    const stdioOpts = { stdio: 'inherit' };
+
+    // Otherwise, download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
+
+    if (/not found/i.test(buf.toString())) {
+      throw new Error(`Version '${forcVersion}' not found\n    at ${pkgUrl}`);
+    }
+
     writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`);
+    execSync(`tar xzf "${pkgPath}" -C "${binDir}"`, stdioOpts);
 
     // Cleanup
     rmSync(pkgPath);
