@@ -332,8 +332,8 @@ export class Account extends AbstractAccount {
 
     const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
 
-    const gasPriceToUse = txParams.gasPrice ? bn(txParams.gasPrice) : minGasPrice;
-    const gasLimitToUse = txParams.gasLimit ? bn(txParams.gasLimit) : gasUsed;
+    const gasPriceToUse = bn(txParams.gasPrice ?? minGasPrice);
+    const gasLimitToUse = bn(txParams.gasLimit ?? gasUsed);
 
     request.gasPrice = gasPriceToUse;
     request.gasLimit = gasLimitToUse;
@@ -412,7 +412,7 @@ export class Account extends AbstractAccount {
       [{ amount: bn(amount), assetId: String(assetId) }]
     );
 
-    request.gasLimit = params.gasLimit ? bn(params.gasLimit) : gasUsed;
+    request.gasLimit = bn(params.gasLimit || gasUsed);
 
     await this.fund(request, requiredQuantities, maxFee);
 
