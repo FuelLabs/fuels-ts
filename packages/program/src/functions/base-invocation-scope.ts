@@ -396,7 +396,7 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
    */
-  async setDefaultTxParams(gasUsed: BN) {
+  private async setDefaultTxParams(gasUsed: BN) {
     const transactionRequest = await this.getTransactionRequest();
     const { minGasPrice } = this.getProvider().getGasConfig();
 
