@@ -1,12 +1,13 @@
 import { execSync } from 'child_process';
-import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync } from 'fs';
+import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export const binPath = join(__dirname, '../fuel-core-binaries/fuel-core');
+export const fuelCoreBinDirPath = join(__dirname, '..', 'fuel-core-binaries');
+export const binPath = join(fuelCoreBinDirPath, 'fuel-core');
 
 const platforms = {
   darwin: {
@@ -49,11 +50,23 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
 export const buildFromGitBranch = (branchName) => {
-  rmSync('fuel-core-repo', { recursive: true, force: true });
-  rmSync('fuel-core-binaries', { recursive: true, force: true });
-  execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
-  execSync(`cd fuel-core-repo && cargo build`, { silent: true });
-  mkdirSync('fuel-core-binaries');
-  cpSync('fuel-core-repo/target/debug/fuel-core', 'fuel-core-binaries/fuel-core');
-  rmSync('fuel-core-repo', { recursive: true, force: true });
+  const fuelCoreRepoDir = join(__dirname, '..', 'fuel-core-repo');
+  const fuelCoreRepoDebugDir = join(fuelCoreRepoDir, 'target', 'debug');
+  const stdioOpts = { stdio: 'inherit' };
+
+  if (existsSync(fuelCoreRepoDir)) {
+    execSync(`cd ${fuelCoreRepoDir} && git pull && git checkout ${branchName}`, stdioOpts);
+    execSync(`cd ${fuelCoreRepoDir} && cargo build`, stdioOpts);
+  } else {
+    execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} ${fuelCoreRepoDir}`, stdioOpts);
+    execSync(`cd ${fuelCoreRepoDir} && cargo build`, stdioOpts);
+  }
+
+  const [from, to] = [fuelCoreRepoDebugDir, fuelCoreBinDirPath];
+
+  rmSync(to, { recursive: true, force: true });
+  mkdirSync(to, { recursive: true });
+
+  mkdirSync(join(from, 'fuel-core'), join(to, 'fuel-core'));
+  cpSync(join(from, 'fuel-core'), join(to, 'fuel-core'));
 };
