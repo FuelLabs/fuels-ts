@@ -16,14 +16,6 @@ import type { TxParamsType } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
-vi.mock('@fuel-ts/providers', async () => {
-  const mod = await vi.importActual('@fuel-ts/providers');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 let provider: Provider;
 
 afterEach(() => {

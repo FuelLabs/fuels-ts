@@ -36,8 +36,9 @@ import type {
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
+  ScriptTransactionRequest,
 } from './transaction-request';
-import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
+import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
@@ -667,22 +668,20 @@ export default class Provider {
       encodedTransaction,
     });
 
-    const estimatedTransaction = transactionRequest;
-    const [decodedTransaction] = new TransactionCoder().decode(
-      getBytesCopy(response.estimatePredicates.rawPayload),
-      0
-    );
+    const {
+      estimatePredicates: { inputs },
+    } = response;
 
-    if (decodedTransaction.inputs) {
-      decodedTransaction.inputs.forEach((input, index) => {
-        if ('predicate' in input && input.predicateGasUsed.gt(0)) {
-          (<CoinTransactionRequestInput>estimatedTransaction.inputs[index]).predicateGasUsed =
+    if (inputs) {
+      inputs.forEach((input, index) => {
+        if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }
       });
     }
 
-    return estimatedTransaction;
+    return transactionRequest;
   }
 
   /**
@@ -729,13 +728,11 @@ export default class Provider {
         return;
       }
 
-      if (txRequest instanceof ScriptTransactionRequest) {
-        txRequest.addVariableOutputs(missingOutputVariableCount);
+      txRequest.addVariableOutputs(missingOutputVariableCount);
 
-        missingOutputContractIds.forEach(({ contractId }) =>
-          txRequest.addContractInputAndOutput(Address.fromString(contractId))
-        );
-      }
+      missingOutputContractIds.forEach(({ contractId }) =>
+        txRequest.addContractInputAndOutput(Address.fromString(contractId))
+      );
 
       tries += 1;
     } while (tries < MAX_RETRIES);

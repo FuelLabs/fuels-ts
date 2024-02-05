@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.73.0
+
+### Patch Changes
+
+- filter out tx properties for estimatePredicates query, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1713](https://github.com/FuelLabs/fuels-ts/pull/1713))
+
 ## 0.72.0
 
 ### Minor Changes
