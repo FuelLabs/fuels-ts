@@ -8,7 +8,7 @@ import { Wallet } from '../../wallet';
 import type { WalletUnlocked } from '../../wallets';
 import type { Vault } from '../types';
 
-interface MnemonicVaultOptions {
+export interface MnemonicVaultOptions {
   secret?: string;
   rootPath?: string;
   numberOfAccounts?: number | null;

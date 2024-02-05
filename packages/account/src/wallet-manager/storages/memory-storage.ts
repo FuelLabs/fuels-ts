@@ -1,6 +1,6 @@
 import type { StorageAbstract } from '../types';
 
-class MemoryStorage implements StorageAbstract {
+export class MemoryStorage implements StorageAbstract {
   storage = new Map<string, unknown>();
 
   async getItem<T>(key: string): Promise<T | null> {

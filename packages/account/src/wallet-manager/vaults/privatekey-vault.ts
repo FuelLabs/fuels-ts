@@ -7,7 +7,7 @@ import { Wallet } from '../../wallet';
 import type { WalletUnlocked } from '../../wallets';
 import type { WalletManagerAccount, Vault } from '../types';
 
-interface PkVaultOptions {
+export interface PkVaultOptions {
   secret?: string;
   accounts?: Array<string>;
   provider: Provider;
