@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.73.0
+
+### Patch Changes
+
+- filter out tx properties for estimatePredicates query, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1713](https://github.com/FuelLabs/fuels-ts/pull/1713))
+- Upgrading `forc` to `0.49.2`, by [@arboleya](https://github.com/arboleya) (See [#1707](https://github.com/FuelLabs/fuels-ts/pull/1707))
+
 ## 0.72.0
 
 ### Minor Changes
