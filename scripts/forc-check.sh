@@ -29,6 +29,7 @@ for forc_toml in $forc_tomls; do
             ERROR=1
             echo -e "authors field should be: ${RED}$expected_authors] ${NC} but is ${RED}$authors ${NC}"
         fi
+        
     fi
 
     # back to main dir

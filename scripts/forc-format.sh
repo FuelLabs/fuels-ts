@@ -22,6 +22,7 @@ for forc_toml in $forc_tomls; do
             sed -i.bkp "s/authors =.*/${expected_authors}/g" Forc.toml
             rm "Forc.toml.bkp"
         fi
+        
     fi
 
     # back to main dir
