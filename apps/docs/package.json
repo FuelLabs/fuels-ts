@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm run docs && vitepress dev'",
-    "prebuild": "pnpm run docs",
-    "build": "vitepress build",
+    "build": "pnpm run docs && vitepress build",
     "preview": "pnpm run docs && vitepress preview",
     "docs": "typedoc && tsx ./scripts/typedoc-postbuild.ts"
   },
