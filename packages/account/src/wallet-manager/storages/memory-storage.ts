@@ -20,5 +20,3 @@ export class MemoryStorage implements StorageAbstract {
     await this.storage.clear();
   }
 }
-
-export default MemoryStorage;
