@@ -5,7 +5,7 @@
     "build": {
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**"],
-      "inputs": ["src/**", ".vitepress/**", "types/**"]
+      "inputs": ["src/**", "!src/api", ".vitepress/**", "types/**"]
     }
   }
 }
