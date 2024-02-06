@@ -16,7 +16,7 @@ runs:
         key: ${{ runner.os }}-node-${{ inputs.node-version }}-pnpm-${{ inputs.pnpm-version }}-lock-${{ hashFiles('**/pnpm-lock.yaml') }}
 
     - name: Restore Generated Files
-      uses: actions/cache/save@v3
+      uses: actions/cache/restore@v3
       with:
         path: |
           apps/docs/.typedoc
@@ -32,7 +32,7 @@ runs:
         key: ${{ runner.os }}-turbo-${{ github.sha }}
 
     - name: Save Generated Files
-      uses: actions/cache/restore@v3
+      uses: actions/cache/save@v3
       with:
         path: |
           apps/docs/.typedoc
