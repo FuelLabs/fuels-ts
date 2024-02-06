@@ -209,10 +209,6 @@ export class FunctionFragment<
     const bytes = getBytesCopy(data);
     const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
 
-    if (outputAbiType.type === 'raw untyped slice') {
-      (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
-    }
-
     return coder.decode(bytes, 0) as [DecodedValue | undefined, number];
   }
 }
