@@ -32,33 +32,59 @@ const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsT
   return toml.stringify(parsed);
 };
 
+async function promptForProjectPath() {
+  const res = await prompts({
+    type: 'text',
+    name: 'projectName',
+    message: 'What is the name of your project?',
+    initial: 'my-fuel-project',
+  });
+
+  return res.projectName as string;
+}
+
+async function promptForPackageManager() {
+  const packageManagerInput = await prompts({
+    type: 'select',
+    name: 'packageManager',
+    message: 'Select a package manager',
+    choices: [
+      { title: 'pnpm', value: 'pnpm' },
+      { title: 'npm', value: 'npm' },
+    ],
+    initial: 0,
+  });
+  return packageManagerInput.packageManager as string;
+}
+
+async function promptForProgramsToInclude() {
+  const programsToIncludeInput = await prompts({
+    type: 'multiselect',
+    name: 'programsToInclude',
+    message: 'Which Sway programs do you want?',
+    choices: [
+      { title: 'Contract', value: 'contract', selected: true },
+      { title: 'Predicate', value: 'predicate' },
+      { title: 'Script', value: 'script' },
+    ],
+    instructions: false,
+  });
+  return {
+    contract: programsToIncludeInput.programsToInclude.includes('contract'),
+    predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
+    script: programsToIncludeInput.programsToInclude.includes('script'),
+  };
+}
+
 export const runScaffoldCli = async (
   explicitProjectPath?: string,
   explicitPackageManger?: string,
   shouldInstallDeps = true,
   explicitProgramsToInclude?: ProgramsToInclude
 ) => {
-  let projectPath = explicitProjectPath || '';
-  let packageManager = explicitPackageManger || '';
-  let programsToInclude: ProgramsToInclude = explicitProgramsToInclude || {
-    contract: true,
-    predicate: false,
-    script: false,
-  };
-
   const program = new Command(packageJson.name).version(packageJson.version);
 
-  if (!explicitProjectPath) {
-    const res = await prompts({
-      type: 'text',
-      name: 'projectName',
-      message: 'What is the name of your project?',
-      initial: 'my-fuel-project',
-    });
-
-    projectPath = res.projectName;
-  }
-
+  const projectPath = explicitProjectPath || (await promptForProjectPath());
   if (existsSync(projectPath)) {
     // throw and exit
     chalk.red(`A folder already exists at ${projectPath}. Please choose a different project name.`);
@@ -72,39 +98,10 @@ export const runScaffoldCli = async (
     );
     process.exit(1);
   }
+  const packageManager = explicitPackageManger || (await promptForPackageManager());
 
-  if (!explicitPackageManger) {
-    const packageManagerInput = await prompts({
-      type: 'select',
-      name: 'packageManager',
-      message: 'Select a package manager',
-      choices: [
-        { title: 'pnpm', value: 'pnpm' },
-        { title: 'npm', value: 'npm' },
-      ],
-      initial: 0,
-    });
-    packageManager = packageManagerInput.packageManager;
-  }
-
-  if (!explicitProgramsToInclude) {
-    const programsToIncludeInput = await prompts({
-      type: 'multiselect',
-      name: 'programsToInclude',
-      message: 'Which Sway programs do you want?',
-      choices: [
-        { title: 'Contract', value: 'contract', selected: true },
-        { title: 'Predicate', value: 'predicate' },
-        { title: 'Script', value: 'script' },
-      ],
-      instructions: false,
-    });
-    programsToInclude = {
-      contract: programsToIncludeInput.programsToInclude.includes('contract'),
-      predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
-      script: programsToIncludeInput.programsToInclude.includes('script'),
-    };
-  }
+  const programsToInclude: ProgramsToInclude =
+    explicitProgramsToInclude || (await promptForProgramsToInclude());
 
   await mkdir(projectPath);
 
