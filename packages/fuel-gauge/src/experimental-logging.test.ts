@@ -24,7 +24,6 @@ beforeAll(async () => {
   );
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
-  // TODO: shouldn't be setting this manually
   const versionedAbi = { encoding: 1, ...abi };
 
   contractInstance = await setup({ contractBytecode, abi: versionedAbi });
