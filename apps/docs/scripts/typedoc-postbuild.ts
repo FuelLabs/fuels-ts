@@ -169,17 +169,11 @@ const recreateInternalLinks = () => {
 
 const main = async () => {
   log('Cleaning up API docs.');
-  console.log('>>>>>>>>>>>>> 1');
   renameInterfaces();
-  console.log('>>>>>>>>>>>>> 2');
   await alterFileStructure();
-  console.log('>>>>>>>>>>>>> 3');
   removeUnwantedFiles();
-  console.log('>>>>>>>>>>>>> 4');
   exportLinksJson();
-  console.log('>>>>>>>>>>>>> 5');
   recreateInternalLinks();
-  console.log('>>>>>>>>>>>>> 6');
 };
 
 main().catch(process.stderr.write);
