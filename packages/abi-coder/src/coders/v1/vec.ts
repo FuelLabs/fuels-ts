@@ -36,7 +36,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     const dataLength = length * this.coder.encodedLength;
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
 
-    if (dataBytes.length !== length) {
+    if (dataBytes.length !== dataLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec byte data size.`);
     }
 
