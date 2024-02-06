@@ -1,17 +1,7 @@
-// Type matching constants
-export const NUMBER_U8_CODER_TYPE = 'u8';
-export const NUMBER_U16_CODER_TYPE = 'u16';
-export const NUMBER_U32_CODER_TYPE = 'u32';
-export const NUMBER_U64_CODER_TYPE = 'u64';
-export const POINTER_CODER_TYPE = 'raw untyped ptr';
-export const RAW_SLICE_CODER_TYPE = 'raw untyped slice';
 export const OPTION_CODER_TYPE = 'enum Option';
 export const VEC_CODER_TYPE = 'struct Vec';
 export const BYTES_CODER_TYPE = 'struct Bytes';
 export const STD_STRING_CODER_TYPE = 'struct String';
-export const BOOL_CODER_TYPE = 'bool';
-export const B256_CODER_TYPE = 'b256';
-export const B512_CODER_TYPE = 'struct B512';
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
 export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 export const structRegEx = /^struct (?<name>\w+)$/;
@@ -19,11 +9,6 @@ export const enumRegEx = /^enum (?<name>\w+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic (?<name>\w+)$/;
 
-// Encoding version constants
-export const ENCODING_VERSION_0 = 0;
-export const ENCODING_VERSION_1 = 1;
-
-// Property space constants
 export const WORD_SIZE = 8;
 export const BYTES_32 = 32;
 export const MAX_INPUTS = 255;
