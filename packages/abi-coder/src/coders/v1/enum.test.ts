@@ -25,7 +25,10 @@ describe('EnumCoder', () => {
   it('decodes an enum containing a boolean', () => {
     const expectedValue = { a: true };
     const expectedLength = 9;
-    const [actualValue, actualLength] = coder.decode(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 1]), 0);
+    const [actualValue, actualLength] = coder.decode(
+      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 1]),
+      0
+    );
 
     expect(actualValue).toStrictEqual(expectedValue);
     expect(actualLength).toBe(expectedLength);

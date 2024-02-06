@@ -55,7 +55,7 @@ describe('BooleanCoder', () => {
       }).toThrow('Invalid bool');
     }
   );
-  
+
   it('throws an error when decoding an invalid boolean value', async () => {
     const invalidInput = new Uint8Array([2]);
     await expectToThrowFuelError(

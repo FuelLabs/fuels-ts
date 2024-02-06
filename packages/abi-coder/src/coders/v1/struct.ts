@@ -41,7 +41,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       const fieldCoder = this.coders[fieldName];
       let decoded;
       [decoded, newOffset] = fieldCoder.decode(data, newOffset);
-       
+
       obj[fieldName as keyof DecodedValueOf<TCoders>] = decoded;
       return obj;
     }, {} as DecodedValueOf<TCoders>);
