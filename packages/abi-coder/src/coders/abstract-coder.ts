@@ -58,7 +58,9 @@ type Primitive = string | number | boolean;
  *
  * Version 1:
  *
- * It currently is supported by logs, but has no specific configurable options.
+ * It currently is supported only by logs, but has no specific configurable options.
+ * More information on the improvements made in this version can be found in the
+ * fuel specs (https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/argument-encoding.md#version-1
  */
 export type EncodingOptions = {
   version?: number;
