@@ -23,22 +23,11 @@ type ProgramsToInclude = {
 const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsToInclude) => {
   const parsed = toml.parse(fileContents) as {
     workspace: {
-      members: string[];
+      members: ('predicate' | 'contract' | 'script')[];
     };
   };
 
-  parsed.workspace.members = parsed.workspace.members.filter((member) => {
-    if (member === 'predicate' && !programsToInclude.predicate) {
-      return false;
-    }
-    if (member === 'contract' && !programsToInclude.contract) {
-      return false;
-    }
-    if (member === 'script' && !programsToInclude.script) {
-      return false;
-    }
-    return true;
-  });
+  parsed.workspace.members = parsed.workspace.members.filter((m) => programsToInclude[m]);
 
   return toml.stringify(parsed);
 };
