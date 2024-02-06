@@ -7,7 +7,7 @@ import { EventEmitter } from 'events';
 
 import type { WalletUnlocked } from '../wallets';
 
-import MemoryStorage from './storages/memory-storage';
+import { MemoryStorage } from './storages/memory-storage';
 import type {
   StorageAbstract,
   WalletManagerAccount,

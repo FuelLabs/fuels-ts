@@ -1,4 +1,4 @@
-import MemoryStorage from './memory-storage';
+import { MemoryStorage } from './memory-storage';
 
 /**
  * @group node

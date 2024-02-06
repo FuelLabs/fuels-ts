@@ -7,7 +7,7 @@ import { Provider } from '../providers';
 import { Signer } from '../signer';
 import { Wallet } from '../wallet';
 
-import MemoryStorage from './storages/memory-storage';
+import { MemoryStorage } from './storages/memory-storage';
 import type { VaultConfig } from './types';
 import { WalletManager } from './wallet-manager';
 
