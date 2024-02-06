@@ -1,5 +1,11 @@
 # @fuel-ts/fuel-core
 
+## 0.73.0
+
+### Patch Changes
+
+- Upgrading `forc` to `0.49.2`, by [@arboleya](https://github.com/arboleya) (See [#1707](https://github.com/FuelLabs/fuels-ts/pull/1707))
+
 ## 0.72.0
 
 ### Patch Changes

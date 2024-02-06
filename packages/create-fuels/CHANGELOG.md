@@ -1,5 +1,7 @@
 # create-fuels
 
+## 0.73.0
+
 ## 0.72.0
 
 ### Minor Changes
