@@ -69,7 +69,7 @@ export default App;
 
 ## Browser
 
-For a quick tests or just playing around, you can load it in your Web Apps straight from our CDN.
+For a quick test or just playing around, you can load it in your Web Apps straight from our CDN.
 
 ```html-vue
 <script type="module">
