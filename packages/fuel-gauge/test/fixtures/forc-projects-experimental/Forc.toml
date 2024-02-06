@@ -1,7 +1,5 @@
 [workspace]
-members = [
-  "logging"
-]
+members = ["logging"]
 
 [patch.'https://github.com/fuellabs/sway']
 std = { git = "https://github.com/fuellabs/sway", branch = "hal3e/abiencoder-impls" }
