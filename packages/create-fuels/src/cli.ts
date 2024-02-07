@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
@@ -95,21 +94,17 @@ export const runScaffoldCli = async (
   shouldInstallDeps = true,
   explicitProgramsToInclude?: ProgramsToInclude
 ) => {
-  const program = new Command(packageJson.name).version(packageJson.version);
+  new Command(packageJson.name).version(packageJson.version);
 
   const projectPath = explicitProjectPath || (await promptForProjectPath());
   if (existsSync(projectPath)) {
-    // throw and exit
-    chalk.red(`A folder already exists at ${projectPath}. Please choose a different project name.`);
-    throw new Error();
+    throw new Error(
+      `A folder already exists at ${projectPath}. Please choose a different project name.`
+    );
   }
 
   if (!projectPath) {
-    console.log(
-      '\nPlease specify the project directory:\n' +
-        `  ${chalk.cyan(program.name())} ${chalk.green('<project-directory>')}\n`
-    );
-    throw new Error();
+    throw new Error('Please specify a project directory.');
   }
   const packageManager = explicitPackageManger || (await promptForPackageManager());
 
@@ -117,8 +112,7 @@ export const runScaffoldCli = async (
     explicitProgramsToInclude || (await promptForProgramsToInclude());
 
   if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    log(chalk.red('You must include at least one Sway program.'));
-    throw new Error();
+    throw new Error('You must include at least one Sway program.');
   }
 
   await mkdir(projectPath);

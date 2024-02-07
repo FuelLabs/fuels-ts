@@ -6,6 +6,7 @@ import { runScaffoldCli } from './cli';
 
 runScaffoldCli()
   .then(() => process.exit(0))
-  .catch(() => {
-    log(chalk.red('An error occurred while scaffolding the project. Exiting...'));
+  .catch((e) => {
+    log(chalk.red(e));
+    process.exit(1);
   });
