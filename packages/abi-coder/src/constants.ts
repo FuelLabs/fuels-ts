@@ -1,10 +1,20 @@
-// ***** //
-// Types //
-// ***** //
+// ******************** //
+// Types and Type Regex //
+// ******************** //
+export const U8_CODER_TYPE = 'u8';
+export const U16_CODER_TYPE = 'u16';
+export const U32_CODER_TYPE = 'u32';
+export const U64_CODER_TYPE = 'u64';
+export const RAW_PTR_CODER_TYPE = 'raw untyped ptr';
+export const RAW_SLICE_CODER_TYPE = 'raw untyped slice';
+export const BOOL_CODER_TYPE = 'bool';
+export const B256_CODER_TYPE = 'b256';
+export const B512_CODER_TYPE = 'struct B512';
 export const OPTION_CODER_TYPE = 'enum Option';
 export const VEC_CODER_TYPE = 'struct Vec';
 export const BYTES_CODER_TYPE = 'struct Bytes';
 export const STD_STRING_CODER_TYPE = 'struct String';
+export const STR_CODER_TYPE = 'str';
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
 export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 export const structRegEx = /^struct (?<name>\w+)$/;
