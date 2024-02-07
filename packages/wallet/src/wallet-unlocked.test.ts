@@ -145,18 +145,16 @@ describe('WalletUnlocked', () => {
   describe('WalletUnlocked.fromSeed', () => {
     it('Create wallet from seed', async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL);
-      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider, walletSpec.account_1.path);
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, walletSpec.account_1.path, provider);
 
       expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
       expect(wallet.provider.url).toBe(walletSpec.providerUrl);
     });
 
-    it('Create wallet from seed with default path', async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL);
-      const wallet = WalletUnlocked.fromSeed(walletSpec.seed, provider);
+    it('Create wallet from seed with default path', () => {
+      const wallet = WalletUnlocked.fromSeed(walletSpec.seed);
 
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
     });
 
     it('Create wallet from seed with default path, without a provider', () => {
@@ -168,22 +166,14 @@ describe('WalletUnlocked', () => {
   });
 
   describe('WalletUnlocked.fromMnemonic', () => {
-    it('Create wallet from mnemonic', async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL);
-      const wallet = WalletUnlocked.fromMnemonic(
-        walletSpec.mnemonic,
-        provider,
-        walletSpec.account_1.path,
-        undefined
-      );
+    it('Create wallet from mnemonic', () => {
+      const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, walletSpec.account_1.path);
 
       expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-      expect(wallet.provider.url).toBe(walletSpec.providerUrl);
     });
 
-    it('Create wallet from mnemonic with default path', async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL);
-      const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, provider);
+    it('Create wallet from mnemonic with default path', () => {
+      const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic);
 
       expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
     });

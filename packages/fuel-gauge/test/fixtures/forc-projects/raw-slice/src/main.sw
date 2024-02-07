@@ -12,13 +12,13 @@ struct Wrapper<T> {
 }
 
 abi RawSliceContract {
-    fn return_raw_slice(length: u64) -> raw_slice;
+    fn return_raw_slice(length: u8) -> raw_slice;
     fn accept_raw_slice(slice: raw_slice);
     fn accept_nested_raw_slice(wrapper: Wrapper<Vec<raw_slice>>);
 }
 
 fn validate_raw_slice(input: raw_slice) {
-    let vec: Vec<u64> = Vec::from(input);
+    let vec: Vec<u8> = Vec::from(input);
     require(vec.len() == 3, "raw slice len is not 3");
     require(
         vec
@@ -47,9 +47,9 @@ fn validate_vec(vec: Vec<raw_slice>) {
 }
 
 impl RawSliceContract for Contract {
-    fn return_raw_slice(length: u64) -> raw_slice {
-        let mut vec = Vec::new();
-        let mut counter = 0;
+    fn return_raw_slice(length: u8) -> raw_slice {
+        let mut vec: Vec<u8> = Vec::new();
+        let mut counter: u8 = 0;
         while counter < length {
             vec.push(counter);
             counter = counter + 1;

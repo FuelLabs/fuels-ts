@@ -40,9 +40,9 @@ describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
     const INPUT = 10;
 
-    const { value } = await contractInstance.functions.return_raw_slice(INPUT).call<BN[]>();
+    const { value } = await contractInstance.functions.return_raw_slice(INPUT).call();
 
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(value).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it('should test raw slice input', async () => {
@@ -126,6 +126,6 @@ describe('Raw Slice Tests', () => {
     };
 
     const { value } = await scriptInstance.functions.main(1, INPUT).call<BN[]>();
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
+    expect(value).toStrictEqual([1, 2, 3]);
   });
 });
