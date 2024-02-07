@@ -1,7 +1,5 @@
 import { Address } from '@fuel-ts/address';
 
-import { FUEL_NETWORK_URL } from '../../configs';
-import { Provider } from '../../providers';
 import { Wallet } from '../../wallet';
 import type { WalletUnlocked } from '../../wallets';
 
@@ -12,20 +10,15 @@ import { PrivateKeyVault } from './privatekey-vault';
  * @group browser
  */
 describe('PrivateKeyVault', () => {
-  let provider: Provider;
   let walletSpec: WalletUnlocked;
 
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    walletSpec = Wallet.generate({
-      provider,
-    });
+  beforeAll(() => {
+    walletSpec = Wallet.generate();
   });
 
   it('should get wallet instance', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
-      provider,
     });
 
     vault.addAccount();
@@ -37,7 +30,6 @@ describe('PrivateKeyVault', () => {
   it('should check if accounts have been added correctly', async () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
-      provider,
     });
 
     await vault.addAccount();
@@ -47,13 +39,10 @@ describe('PrivateKeyVault', () => {
   });
 
   it('should serialize and recreate vault state', () => {
-    const walletSpec2 = Wallet.generate({
-      provider,
-    });
+    const walletSpec2 = Wallet.generate({});
     // Initialize with privateKeys to check if it will create correctly
     const vault = new PrivateKeyVault({
       accounts: [walletSpec.privateKey, walletSpec2.privateKey],
-      provider,
     });
 
     const state = vault.serialize();
@@ -67,7 +56,6 @@ describe('PrivateKeyVault', () => {
   it('should return new account on add account', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
-      provider,
     });
 
     const account = vault.addAccount();
@@ -77,9 +65,7 @@ describe('PrivateKeyVault', () => {
   });
 
   it('should throw an error when trying to add an account with an invalid private key', () => {
-    const vault = new PrivateKeyVault({
-      provider,
-    });
+    const vault = new PrivateKeyVault();
     const address = Address.fromRandom();
 
     expect(() => vault.getWallet(address)).toThrow(

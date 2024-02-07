@@ -2,8 +2,6 @@ import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
 
 import WalletManagerSpec from '../../test/fixtures/wallet-manager-spec';
-import { FUEL_NETWORK_URL } from '../configs';
-import { Provider } from '../providers';
 import { Signer } from '../signer';
 import { Wallet } from '../wallet';
 
@@ -15,12 +13,6 @@ import { WalletManager } from './wallet-manager';
  * @group node
  */
 describe('Wallet Manager', () => {
-  let provider: Provider;
-
-  beforeEach(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
-
   const setupWallet = async (config: VaultConfig) => {
     // #region wallet-manager-mnemonic
     const walletManager = new WalletManager();
@@ -43,7 +35,6 @@ describe('Wallet Manager', () => {
     const { walletManager, password } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
 
     await walletManager.lock();
@@ -67,7 +58,6 @@ describe('Wallet Manager', () => {
     const { walletManager, password } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
 
     // Add account m/44'/1179993420'/0'/0/1
@@ -97,13 +87,10 @@ describe('Wallet Manager', () => {
   });
 
   it('Create account with privateKey', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
+    const wallet = Wallet.generate();
     const { walletManager } = await setupWallet({
       type: 'privateKey',
       secret: wallet.privateKey,
-      provider,
     });
 
     const accounts = walletManager.getAccounts();
@@ -125,7 +112,6 @@ describe('Wallet Manager', () => {
     await walletManager.addVault({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
 
     const accounts = walletManager.getAccounts();
@@ -141,9 +127,7 @@ describe('Wallet Manager', () => {
     // #region wallet-manager-create
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
-    const wallet = Wallet.generate({
-      provider,
-    });
+    const wallet = Wallet.generate();
 
     await walletManager.unlock(password);
     // #endregion wallet-manager-create
@@ -152,7 +136,6 @@ describe('Wallet Manager', () => {
     await walletManager.addVault({
       type: 'privateKey',
       secret: wallet.privateKey,
-      provider,
     });
 
     const privateKeyReturned = walletManager.exportPrivateKey(wallet.address);
@@ -169,7 +152,6 @@ describe('Wallet Manager', () => {
     await walletManager.addVault({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     const account = await walletManager.addAccount();
     const accounts = await walletManager.getAccounts();
@@ -181,7 +163,6 @@ describe('Wallet Manager', () => {
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     const accounts = walletManager.getAccounts();
 
@@ -194,7 +175,6 @@ describe('Wallet Manager', () => {
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
 
     await walletManager.removeVault(0);
@@ -206,20 +186,16 @@ describe('Wallet Manager', () => {
   });
 
   it('Test wallet multiple vaults', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
+    const wallet = Wallet.generate();
     // Setup wallet with MnemonicVault
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     // Add PrivateKeyVault to the Wallet
     await walletManager.addVault({
       type: 'privateKey',
       secret: wallet.privateKey,
-      provider,
     });
     // Accounts
     const accounts = walletManager.getAccounts();
@@ -245,7 +221,6 @@ describe('Wallet Manager', () => {
       await walletManager.addVault({
         type: 'mnemonic',
         secret: WalletManagerSpec.mnemonic,
-        provider,
       });
     };
 
@@ -267,7 +242,6 @@ describe('Wallet Manager', () => {
     await expect(
       walletManager.addVault({
         type: 'foobar',
-        provider,
       })
     ).rejects.toThrow('The provided Vault type is invalid.');
     await expect(
@@ -281,7 +255,6 @@ describe('Wallet Manager', () => {
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
 
     expect(JSON.stringify(walletManager)).not.toContain(WalletManagerSpec.mnemonic);
@@ -293,7 +266,6 @@ describe('Wallet Manager', () => {
       type: 'mnemonic',
       title: 'My Custom Vault Name',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
 
     const vaults = walletManager.getVaults();
@@ -310,7 +282,6 @@ describe('Wallet Manager', () => {
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     const accounts = walletManager.getAccounts();
     // Get Wallet instance
@@ -326,7 +297,6 @@ describe('Wallet Manager', () => {
     const { walletManager, password } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     // Create object with methods to be able to
     // use vi.spyOn
@@ -358,7 +328,6 @@ describe('Wallet Manager', () => {
     const { walletManager, password } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     await walletManager.unlock(password);
 
@@ -374,7 +343,6 @@ describe('Wallet Manager', () => {
     const { walletManager, password } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     const newPassword = 'newpass';
 
@@ -391,7 +359,6 @@ describe('Wallet Manager', () => {
     const { walletManager, password } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     const newPassword = 'newpass';
 
@@ -407,7 +374,6 @@ describe('Wallet Manager', () => {
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
-      provider,
     });
     await walletManager.lock();
     await expect(walletManager.unlock('wrongpass')).rejects.toThrowError('Invalid credentials');

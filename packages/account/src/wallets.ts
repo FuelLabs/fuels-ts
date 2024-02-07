@@ -69,7 +69,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    * @param path - The derivation path (optional).
    * @returns An instance of WalletUnlocked.
    */
-  static fromSeed(seed: string, provider?: Provider, path?: string): WalletUnlocked {
+  static fromSeed(seed: string, path?: string, provider?: Provider): WalletUnlocked {
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
 
@@ -87,9 +87,9 @@ export class WalletUnlocked extends BaseWalletUnlocked {
    */
   static fromMnemonic(
     mnemonic: string,
-    provider?: Provider,
     path?: string,
-    passphrase?: BytesLike
+    passphrase?: BytesLike,
+    provider?: Provider
   ): WalletUnlocked {
     const seed = Mnemonic.mnemonicToSeed(mnemonic, passphrase);
     const hdWallet = HDWallet.fromSeed(seed);

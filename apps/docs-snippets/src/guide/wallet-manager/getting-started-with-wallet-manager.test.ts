@@ -28,7 +28,6 @@ describe(__filename, () => {
       type: 'privateKey',
       secret: privateKey,
       title: 'My first private key vault',
-      provider,
     });
     // #endregion getting-started-with-wallet-manager-3
 
@@ -37,7 +36,6 @@ describe(__filename, () => {
       type: 'privateKey',
       secret: privateKey,
       title: 'My second private key vault',
-      provider,
     });
     // #endregion getting-started-with-wallet-manager-4
 

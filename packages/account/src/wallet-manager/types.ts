@@ -2,7 +2,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
-import type { Provider } from '../providers';
 import type { WalletUnlocked } from '../wallets';
 
 export type WalletManagerAccount = {
@@ -19,7 +18,6 @@ export type VaultConfig = {
   type: string;
   title?: string;
   secret?: string;
-  provider: Provider;
 };
 
 export type VaultsState = Array<{

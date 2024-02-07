@@ -3,7 +3,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import { Mnemonic } from '../../mnemonic';
-import type { Provider } from '../../providers';
 import { Wallet } from '../../wallet';
 import type { WalletUnlocked } from '../../wallets';
 import type { Vault } from '../types';
@@ -12,7 +11,6 @@ export interface MnemonicVaultOptions {
   secret?: string;
   rootPath?: string;
   numberOfAccounts?: number | null;
-  provider: Provider;
 }
 
 export class MnemonicVault implements Vault<MnemonicVaultOptions> {
@@ -22,14 +20,12 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   pathKey = '{}';
   rootPath: string = `m/44'/1179993420'/${this.pathKey}'/0/0`;
   numberOfAccounts: number = 0;
-  provider: Provider;
 
   constructor(options: MnemonicVaultOptions) {
     this.#secret = options.secret || Mnemonic.generate();
     this.rootPath = options.rootPath || this.rootPath;
     // On creating the vault also adds one account
     this.numberOfAccounts = options.numberOfAccounts || 1;
-    this.provider = options.provider;
   }
 
   getDerivePath(index: number) {
@@ -44,7 +40,6 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
       secret: this.#secret,
       rootPath: this.rootPath,
       numberOfAccounts: this.numberOfAccounts,
-      provider: this.provider,
     };
   }
 
@@ -54,11 +49,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
     // Create all accounts to current vault
     do {
-      const wallet = Wallet.fromMnemonic(
-        this.#secret,
-        this.provider,
-        this.getDerivePath(numberOfAccounts)
-      );
+      const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(numberOfAccounts));
       accounts.push({
         publicKey: wallet.publicKey,
         address: wallet.address,
@@ -71,11 +62,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
   addAccount() {
     this.numberOfAccounts += 1;
-    const wallet = Wallet.fromMnemonic(
-      this.#secret,
-      this.provider,
-      this.getDerivePath(this.numberOfAccounts - 1)
-    );
+    const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(this.numberOfAccounts - 1));
 
     return {
       publicKey: wallet.publicKey,
@@ -88,11 +75,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     const ownerAddress = Address.fromAddressOrString(address);
     // Look for the account that has the same address
     do {
-      const wallet = Wallet.fromMnemonic(
-        this.#secret,
-        this.provider,
-        this.getDerivePath(numberOfAccounts)
-      );
+      const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(numberOfAccounts));
       if (wallet.address.equals(ownerAddress)) {
         return wallet.privateKey;
       }
@@ -107,6 +90,6 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
   getWallet(address: string | AbstractAddress): WalletUnlocked {
     const privateKey = this.exportAccount(address);
-    return Wallet.fromPrivateKey(privateKey, this.provider);
+    return Wallet.fromPrivateKey(privateKey);
   }
 }

@@ -1,6 +1,4 @@
 import walletManagerSpec from '../../../test/fixtures/wallet-manager-spec';
-import { FUEL_NETWORK_URL } from '../../configs';
-import { Provider } from '../../providers';
 import { Wallet } from '../../wallet';
 
 import { MnemonicVault } from './mnemonic-vault';
@@ -10,18 +8,11 @@ import { MnemonicVault } from './mnemonic-vault';
  * @group browser
  */
 describe('MnemonicVault', () => {
-  let provider: Provider;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
-
   it('Get wallet instance', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
-      provider,
     });
-    const wallet = Wallet.fromPrivateKey(walletManagerSpec.account_0.privateKey, provider);
+    const wallet = Wallet.fromPrivateKey(walletManagerSpec.account_0.privateKey);
 
     vault.addAccount();
 
@@ -33,7 +24,6 @@ describe('MnemonicVault', () => {
   it('Check if accounts are been added correctly', async () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
-      provider,
     });
 
     await vault.addAccount();
@@ -46,7 +36,6 @@ describe('MnemonicVault', () => {
   it('Serialize and recreate vault state', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
-      provider,
     });
     // Add one account to check if it will reload correctly
     vault.addAccount();
@@ -63,7 +52,6 @@ describe('MnemonicVault', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
       rootPath: `m/44'/1179993420'/2'/{}/0`,
-      provider,
     });
 
     // Add one account to check if it will reload correctly
@@ -83,7 +71,6 @@ describe('MnemonicVault', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
       rootPath: `m/44'/1179993420'/2'/0`,
-      provider,
     });
 
     // Add one account to check if it will reload correctly
