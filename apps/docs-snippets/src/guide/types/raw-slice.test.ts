@@ -1,4 +1,4 @@
-import type { Contract, BN, RawSlice } from 'fuels';
+import type { Contract, RawSlice } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -39,7 +39,7 @@ describe('RawSlice', () => {
       .txParams({ gasLimit: 10_000 })
       .simulate();
 
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual(rawSlice);
+    expect(value).toStrictEqual(rawSlice);
     // #endregion raw-slice-2
   });
 });

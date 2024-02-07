@@ -12,7 +12,7 @@ struct Wrapper<T> {
 }
 
 fn valid_raw_slice(slice: raw_slice) -> bool {
-    let vec: Vec<u64> = Vec::from(slice);
+    let vec: Vec<u8> = Vec::from(slice);
     vec.len() == 3 && vec.get(0).unwrap() == 40 && vec.get(1).unwrap() == 41 && vec.get(2).unwrap() == 42
 }
 
