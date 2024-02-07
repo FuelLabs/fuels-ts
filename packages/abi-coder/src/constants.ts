@@ -1,3 +1,6 @@
+// ***** //
+// Types //
+// ***** //
 export const OPTION_CODER_TYPE = 'enum Option';
 export const VEC_CODER_TYPE = 'struct Vec';
 export const BYTES_CODER_TYPE = 'struct Bytes';
@@ -9,10 +12,19 @@ export const enumRegEx = /^enum (?<name>\w+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic (?<name>\w+)$/;
 
+// ***************** //
+// Encoding versions //
+// ***************** //
+export const ENCODING_V0 = 0;
+export const ENCODING_V1 = 1;
+export const ENCODING_VERSIONS_SUPPORTED = [ENCODING_V0, ENCODING_V1];
+
+// *********************************** //
+// Property space and config constants //
+// *********************************** //
 export const WORD_SIZE = 8;
 export const BYTES_32 = 32;
 export const MAX_INPUTS = 255;
-
 export const ASSET_ID_LEN = BYTES_32;
 export const CONTRACT_ID_LEN = BYTES_32;
 export const ADDRESS_LEN = BYTES_32;

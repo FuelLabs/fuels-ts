@@ -11,7 +11,7 @@ type Primitive = string | number | boolean;
  * Firstly we should consider the encoding version being used. For more info on this
  * please refer to the fuel specs (https://github.com/FuelLabs/fuel-specs);
  *
- * Version 0:
+ * Encoding Version 0:
  *
  * This is the currently supported version. It offers the following configurable options
  * regarding the encoding of small bytes:
@@ -56,14 +56,14 @@ type Primitive = string | number | boolean;
  *    • configurable
  *
  *
- * Version 1:
+ * Encoding Version 1:
  *
  * It currently is supported only by logs, but has no specific configurable options.
  * More information on the improvements made in this version can be found in the
  * fuel specs (https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/argument-encoding.md#version-1
  */
 export type EncodingOptions = {
-  version?: number;
+  encoding?: number;
   isSmallBytes?: boolean;
   isRightPadded?: boolean;
 };
