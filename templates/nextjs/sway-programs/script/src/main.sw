@@ -1,5 +1,5 @@
 script;
 
-fn main() -> bool {
-    return true;
+fn main(input: u64) -> u64 {
+    return input;
 }

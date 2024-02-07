@@ -15,25 +15,35 @@ import { useEffect, useState } from "react";
 
 const contractId = contractIds.testContract;
 
+const hasContract = process.env.NEXT_PUBLIC_HAS_CONTRACT === "true";
+const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
+const hasScript = process.env.NEXT_PUBLIC_HAS_SCRIPT === "true";
+
 export default function Home() {
   const [contract, setContract] = useState<TestContractAbi>();
   const [counter, setCounter] = useState<number>();
 
   useEffect(() => {
     (async () => {
-      const provider = await Provider.create("http://127.0.0.1:4000/graphql");
-      // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
-      const wallet = Wallet.fromPrivateKey("0x01", provider);
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
-      setContract(testContract);
-      const { value } = await testContract.functions
-        .get_count()
-        .txParams({
-          gasPrice: 1,
-          gasLimit: 10_000,
-        })
-        .simulate();
-      setCounter(value.toNumber());
+      if (hasContract) {
+        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+        // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
+        const wallet = Wallet.fromPrivateKey("0x01", provider);
+        const testContract = TestContractAbi__factory.connect(
+          contractId,
+          wallet,
+        );
+        setContract(testContract);
+        const { value } = await testContract.functions
+          .get_count()
+          .txParams({
+            gasPrice: 1,
+            gasLimit: 10_000,
+          })
+          .simulate();
+        setCounter(value.toNumber());
+      }
+
       // eslint-disable-next-line no-console
     })().catch(console.error);
   }, []);
@@ -61,31 +71,49 @@ export default function Home() {
         <Heading>Welcome to Fuel</Heading>
       </HStack>
 
-      <Text>
-        Get started by editing <i>sway-contracts/main.sw</i> or{" "}
-        <i>src/pages/index.tsx</i>.
-      </Text>
+      {hasContract && (
+        <Text>
+          Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
+          <i>src/pages/index.tsx</i>.
+        </Text>
+      )}
 
       <Text>
-        This boilerplate uses the new{" "}
+        This template uses the new{" "}
         <Link href="https://fuellabs.github.io/fuels-ts/guide/cli/">
           Fuels CLI
         </Link>{" "}
-        enable type-safe hot-reloading for your Sway smart contracts.
+        enable type-safe hot-reloading for your Sway programs.
       </Text>
 
-      <Heading as="h3">Counter</Heading>
+      {hasContract && (
+        <>
+          <Heading as="h3">Counter</Heading>
 
-      <Text fontSize="5xl">{counter}</Text>
+          <Text fontSize="5xl">{counter}</Text>
 
-      <Button
-        onPress={onIncrementPressed}
-        style={{
-          marginTop: 24,
-        }}
-      >
-        Increment Counter
-      </Button>
+          <Button
+            onPress={onIncrementPressed}
+            style={{
+              marginTop: 24,
+            }}
+          >
+            Increment Counter
+          </Button>
+        </>
+      )}
+
+      {hasPredicate && (
+        <Link href="/predicate" style={{ marginTop: 16 }}>
+          Predicate Example
+        </Link>
+      )}
+
+      {hasScript && (
+        <Link href="/script" style={{ marginTop: 16 }}>
+          Script Example
+        </Link>
+      )}
 
       <Link
         href="https://docs.fuel.network"

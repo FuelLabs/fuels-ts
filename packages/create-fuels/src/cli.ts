@@ -76,6 +76,19 @@ async function promptForProgramsToInclude() {
   };
 }
 
+function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude) {
+  /*
+   * Should be like:
+   * NEXT_PUBLIC_HAS_CONTRACT=true
+   * NEXT_PUBLIC_HAS_PREDICATE=false
+   * NEXT_PUBLIC_HAS_SCRIPT=true
+   */
+  const newFileContents = Object.entries(programsToInclude)
+    .map(([program, include]) => `NEXT_PUBLIC_HAS_${program.toUpperCase()}=${include}`)
+    .join('\n');
+  writeFileSync(envFilePath, newFileContents);
+}
+
 export const runScaffoldCli = async (
   explicitProjectPath?: string,
   explicitPackageManger?: string,
@@ -103,10 +116,17 @@ export const runScaffoldCli = async (
   const programsToInclude: ProgramsToInclude =
     explicitProgramsToInclude || (await promptForProgramsToInclude());
 
+  if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
+    log(chalk.red('You must include at least one Sway program.'));
+    process.exit(1);
+  }
+
   await mkdir(projectPath);
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
+  await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
+  writeEnvFile(join(projectPath, '.env.local'), programsToInclude);
 
   // delete the programs that are not to be included
   if (!programsToInclude.contract) {
@@ -114,9 +134,11 @@ export const runScaffoldCli = async (
   }
   if (!programsToInclude.predicate) {
     rmSync(join(projectPath, 'sway-programs/predicate'), { recursive: true });
+    rmSync(join(projectPath, 'src/pages/predicate.tsx'), { recursive: true });
   }
   if (!programsToInclude.script) {
     rmSync(join(projectPath, 'sway-programs/script'), { recursive: true });
+    rmSync(join(projectPath, 'src/pages/script.tsx'), { recursive: true });
   }
 
   // remove the programs that are not included from the Forc.toml members field and rewrite the file
