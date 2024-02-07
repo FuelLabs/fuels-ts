@@ -13,7 +13,7 @@ const possibleProgramsToInclude = [
   { contract: true, predicate: true, script: true },
 ];
 
-beforeAll(async () => {
+beforeEach(async () => {
   // move the templates folder from the root of the project to the root of the create-fuels package temporarily.
   // this is needed because of the way the create-fuels package is setup.
   // it expects the templates folder to be in the root of the create-fuels package. we move it there in the prepublishOnly script
@@ -22,7 +22,7 @@ beforeAll(async () => {
   });
 });
 
-afterAll(async () => {
+afterEach(async () => {
   // cleanup - delete the test project and the templates folder
   await fs.rm(join(__dirname, '../templates'), { recursive: true });
 });

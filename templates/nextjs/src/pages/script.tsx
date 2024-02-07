@@ -67,7 +67,7 @@ export default function ScriptExample() {
       {result && (
         <div className="flex gap-4 align-baseline">
           <h5 className="font-semibold text-xl">Result:</h5>
-          <p>{result}</p>
+          <p className="text-gray-400">{result}</p>
         </div>
       )}
 
