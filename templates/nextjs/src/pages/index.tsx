@@ -1,17 +1,11 @@
 import type { TestContractAbi } from "@/sway-api";
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
-import {
-  Button,
-  FuelLogo,
-  HStack,
-  Heading,
-  Link,
-  Text,
-  VStack,
-} from "@fuel-ui/react";
+import { FuelLogo } from "@/components/FuelLogo";
 import { Provider, Wallet, bn } from "fuels";
 import { useEffect, useState } from "react";
+import { Link } from "@/components/Link";
+import { Button } from "@/components/Button";
 
 const contractId = contractIds.testContract;
 
@@ -65,65 +59,54 @@ export default function Home() {
   };
 
   return (
-    <VStack className={`min-h-screen items-center p-24`}>
-      <HStack>
+    <div className={`min-h-screen items-center p-24 flex flex-col gap-6`}>
+      <div className="flex gap-4 items-">
         <FuelLogo />
-        <Heading>Welcome to Fuel</Heading>
-      </HStack>
+        <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
+      </div>
 
       {hasContract && (
-        <Text>
+        <span className="text-gray-400">
           Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
           <i>src/pages/index.tsx</i>.
-        </Text>
+        </span>
       )}
 
-      <Text>
+      <span className="text-gray-400">
         This template uses the new{" "}
         <Link href="https://fuellabs.github.io/fuels-ts/guide/cli/">
           Fuels CLI
         </Link>{" "}
-        enable type-safe hot-reloading for your Sway programs.
-      </Text>
+        to enable type-safe hot-reloading for your Sway programs.
+      </span>
 
       {hasContract && (
         <>
-          <Heading as="h3">Counter</Heading>
+          <h3 className="text-xl font-semibold">Counter</h3>
 
-          <Text fontSize="5xl">{counter}</Text>
+          <span className="text-gray-400 text-6xl">{counter}</span>
 
-          <Button
-            onPress={onIncrementPressed}
-            style={{
-              marginTop: 24,
-            }}
-          >
+          <Button onClick={onIncrementPressed} className="mt-6">
             Increment Counter
           </Button>
         </>
       )}
 
       {hasPredicate && (
-        <Link href="/predicate" style={{ marginTop: 16 }}>
+        <Link href="/predicate" className="mt-4">
           Predicate Example
         </Link>
       )}
 
       {hasScript && (
-        <Link href="/script" style={{ marginTop: 16 }}>
+        <Link href="/script" className="mt-4">
           Script Example
         </Link>
       )}
 
-      <Link
-        href="https://docs.fuel.network"
-        target="_blank"
-        style={{
-          marginTop: 48,
-        }}
-      >
+      <Link href="https://docs.fuel.network" target="_blank" className="mt-12">
         Fuel Docs
       </Link>
-    </VStack>
+    </div>
   );
 }
