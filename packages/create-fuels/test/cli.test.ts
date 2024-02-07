@@ -23,10 +23,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  // copy the templates folder back to the root of the project
-  await cp(join(__dirname, '../templates'), join(__dirname, '../../../templates'), {
-    recursive: true,
-  });
+  await fs.rm(join(__dirname, '../templates'), { recursive: true });
 });
 
 /**
@@ -39,7 +36,9 @@ test.each(possibleProgramsToInclude)(
 
     // check if the template was extracted to the test-project directory.
     // compare the templates/nextjs folder with the test-project folder recursively
-    let originalTemplateFiles = await fs.readdir(join(__dirname, '../templates/nextjs'));
+    let originalTemplateFiles = (await fs.readdir(join(__dirname, '../templates/nextjs'))).concat(
+      '.env.local'
+    );
 
     // Remove the gitignore and env files from the originalTemplateFiles array
     const filesToRemove = ['gitignore', 'env'];
@@ -47,29 +46,29 @@ test.each(possibleProgramsToInclude)(
 
     const testProjectFiles = await fs.readdir('test-project');
 
-    expect(originalTemplateFiles).toEqual(testProjectFiles);
+    expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
 
     await fs.rm('test-project', { recursive: true });
   }
 );
 
 test('create-fuels throws if the project directory already exists', async () => {
-  await fs.mkdir('test-project');
+  await fs.mkdir('test-project-2');
 
   await expect(
-    runScaffoldCli('test-project', 'pnpm', false, {
+    runScaffoldCli('test-project-2', 'pnpm', false, {
       contract: true,
       predicate: true,
       script: true,
     })
   ).rejects.toThrow();
 
-  await fs.rm('test-project', { recursive: true });
+  await fs.rm('test-project-2', { recursive: true });
 });
 
 test('create-fuels throws if no programs are chosen to be included', async () => {
   await expect(
-    runScaffoldCli('test-project', 'pnpm', false, {
+    runScaffoldCli('test-project-3', 'pnpm', false, {
       contract: false,
       predicate: false,
       script: false,
