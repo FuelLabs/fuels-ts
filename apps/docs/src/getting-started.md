@@ -67,7 +67,7 @@ function App() {
 export default App;
 ```
 
-## Browser
+## CDN Usage (browser only)
 
 For a quick test or just playing around, you can load it in your Web Apps straight from our CDN.
 
