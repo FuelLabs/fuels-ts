@@ -23,8 +23,10 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  // cleanup - delete the test project and the templates folder
-  await fs.rm(join(__dirname, '../templates'), { recursive: true });
+  // copy the templates folder back to the root of the project
+  await cp(join(__dirname, '../templates'), join(__dirname, '../../../templates'), {
+    recursive: true,
+  });
 });
 
 /**
