@@ -101,7 +101,7 @@ export const runScaffoldCli = async (
   if (existsSync(projectPath)) {
     // throw and exit
     chalk.red(`A folder already exists at ${projectPath}. Please choose a different project name.`);
-    process.exit(1);
+    throw new Error();
   }
 
   if (!projectPath) {
@@ -109,7 +109,7 @@ export const runScaffoldCli = async (
       '\nPlease specify the project directory:\n' +
         `  ${chalk.cyan(program.name())} ${chalk.green('<project-directory>')}\n`
     );
-    process.exit(1);
+    throw new Error();
   }
   const packageManager = explicitPackageManger || (await promptForPackageManager());
 
@@ -118,7 +118,7 @@ export const runScaffoldCli = async (
 
   if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
     log(chalk.red('You must include at least one Sway program.'));
-    process.exit(1);
+    throw new Error();
   }
 
   await mkdir(projectPath);
