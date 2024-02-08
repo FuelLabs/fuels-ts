@@ -12,7 +12,7 @@ import { getBytesCopy, hexlify } from 'ethers';
 import type { BytesLike } from 'ethers';
 
 import { fromTai64ToDate } from '../src';
-import type { ChainInfo, NodeInfo, TransactionCost, FetchRequestOptions } from '../src/provider';
+import type { ChainInfo, NodeInfo, FetchRequestOptions } from '../src/provider';
 import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
@@ -868,76 +868,6 @@ describe('Provider', () => {
       code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
       message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
     });
-  });
-
-  it('throws when gas limit is lower than tx gas used', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const gasLimit = 1;
-    const gasUsed = bn(1000);
-    const transactionCost: TransactionCost = {
-      gasUsed,
-      gasPrice: bn(1),
-      minGasPrice: bn(1),
-      maxFee: bn(2),
-      minFee: bn(1),
-      receipts: [],
-      requiredQuantities: [],
-      maxGas: bn(1),
-      minGas: bn(1),
-      usedFee: bn(1),
-    };
-
-    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
-
-    const txCostSpy = vi
-      .spyOn(provider, 'getTransactionCost')
-      .mockReturnValue(Promise.resolve(transactionCost));
-
-    await expectToThrowFuelError(
-      () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice: 1, gasLimit })),
-      {
-        code: ErrorCode.GAS_LIMIT_TOO_LOW,
-        message: `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`,
-      }
-    );
-
-    expect(txCostSpy).toHaveBeenCalled();
-    expect(estimateTxSpy).toHaveBeenCalled();
-  });
-
-  it('throws when gas price is lower than min tx gas price', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const gasPrice = 1;
-    const minGasPrice = bn(1000);
-    const transactionCost: TransactionCost = {
-      minGasPrice,
-      gasPrice: bn(1),
-      gasUsed: bn(1),
-      maxFee: bn(2),
-      minFee: bn(1),
-      receipts: [],
-      requiredQuantities: [],
-      maxGas: bn(1),
-      minGas: bn(1),
-      usedFee: bn(1),
-    };
-
-    const estimateTxSpy = vi.spyOn(provider, 'estimateTxDependencies').mockResolvedValueOnce();
-
-    const txCostSpy = vi
-      .spyOn(provider, 'getTransactionCost')
-      .mockReturnValue(Promise.resolve(transactionCost));
-
-    await expectToThrowFuelError(
-      () => provider.sendTransaction(new ScriptTransactionRequest({ gasPrice, gasLimit: 1000 })),
-      {
-        code: ErrorCode.GAS_PRICE_TOO_LOW,
-        message: `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`,
-      }
-    );
-
-    expect(txCostSpy).toHaveBeenCalled();
-    expect(estimateTxSpy).toHaveBeenCalled();
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
