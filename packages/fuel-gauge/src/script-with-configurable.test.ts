@@ -14,15 +14,12 @@ let wallet: WalletUnlocked;
  * @group node
  */
 describe('Script With Configurable', () => {
-  let gasPrice: BN;
-
   const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.SCRIPT_WITH_CONFIGURABLE
   );
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
     const quantities: CoinQuantityLike[] = [
       {
         amount: 1_000_000,
@@ -38,10 +35,7 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(defaultValues);
 
-    const { value } = await script.functions
-      .main(defaultValues.FEE)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await script.functions.main(defaultValues.FEE).call();
 
     // expected to be true
     expect(new BN(value as number).toNumber()).toEqual(1);
@@ -56,10 +50,7 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(defaultValues);
 
-    const { value } = await script.functions
-      .main(configurableConstants.FEE)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await script.functions.main(configurableConstants.FEE).call();
 
     // expected to be false
     expect(new BN(value as number).toNumber()).toEqual(0);
@@ -72,10 +63,7 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const { value } = await script.functions
-      .main(configurableConstants.FEE)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await script.functions.main(configurableConstants.FEE).call();
 
     // expected to be true
     expect(new BN(value as number).toNumber()).toEqual(1);
@@ -92,10 +80,7 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const { value } = await script.functions
-      .main(input.FEE)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await script.functions.main(input.FEE).call();
 
     // expected to be false
     expect(new BN(value as number).toNumber()).toEqual(0);

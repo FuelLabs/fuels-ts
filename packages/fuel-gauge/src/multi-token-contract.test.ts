@@ -30,11 +30,6 @@ const subIds = [
  * @group node
  */
 describe('MultiTokenContract', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    gasPrice = provider.getGasConfig().minGasPrice;
-  });
   it('can mint and transfer coins', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // New wallet to transfer coins and check balance
@@ -64,7 +59,6 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // update assetId on helperDict object
@@ -76,7 +70,7 @@ describe('MultiTokenContract', () => {
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
         .get_balance(address, { value: assetId })
-        .txParams({ gasPrice, gasLimit: 10_000 })
+
         .simulate<BN>();
       return value;
     };
@@ -101,7 +95,6 @@ describe('MultiTokenContract', () => {
           )
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const validateTransferPromises = subIds.map(async (subId) => {
@@ -151,7 +144,6 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // update assetId on helperDict object
@@ -163,7 +155,7 @@ describe('MultiTokenContract', () => {
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
         .get_balance(address, { value: assetId })
-        .txParams({ gasPrice, gasLimit: 10_000 })
+
         .simulate<BN>();
       return value;
     };
@@ -184,7 +176,6 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.burn_coins(subId, helperDict[subId].amountToBurn)
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const validateBurnPromises = subIds.map(async (subId) => {

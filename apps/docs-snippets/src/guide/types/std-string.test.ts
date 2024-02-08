@@ -19,10 +19,7 @@ describe('StdString', () => {
 
     const stdString: StdString = 'Hello World';
 
-    const { value } = await contract.functions
-      .string_comparison(stdString)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.string_comparison(stdString).simulate();
 
     expect(value).toBeTruthy();
     // #endregion std-string-1
@@ -34,10 +31,7 @@ describe('StdString', () => {
 
     const stdString: StdString = 'Hello Fuel';
 
-    const { value } = await contract.functions
-      .echo_string(stdString)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_string(stdString).simulate();
 
     expect(value).toEqual(stdString);
     // #endregion std-string-2
