@@ -428,6 +428,8 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const { minGasPrice } = this.provider.getGasConfig();
+
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = getBytesCopy(
@@ -442,7 +444,8 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    const params = { script, ...txParams };
+    const params: ScriptTransactionRequestLike = { script, gasPrice: minGasPrice, ...txParams };
+
     const request = new ScriptTransactionRequest(params);
     const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
 
