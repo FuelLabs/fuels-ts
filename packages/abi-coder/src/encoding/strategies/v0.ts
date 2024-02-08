@@ -1,21 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { Coder, EncodingOptions } from '../coders/abstract-coder';
-import { ArrayCoder } from '../coders/v0/array';
-import { B256Coder } from '../coders/v0/b256';
-import { B512Coder } from '../coders/v0/b512';
-import { BooleanCoder } from '../coders/v0/boolean';
-import { ByteCoder } from '../coders/v0/byte';
-import { EnumCoder } from '../coders/v0/enum';
-import { NumberCoder } from '../coders/v0/number';
-import { OptionCoder } from '../coders/v0/option';
-import { RawSliceCoder } from '../coders/v0/raw-slice';
-import { StdStringCoder } from '../coders/v0/stdString';
-import { StringCoder } from '../coders/v0/string';
-import { StructCoder } from '../coders/v0/struct';
-import { TupleCoder } from '../coders/v0/tuple';
-import { U64Coder } from '../coders/v0/u64';
-import { VecCoder } from '../coders/v0/vec';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
@@ -39,6 +23,22 @@ import {
 } from '../../constants';
 import { ResolvedAbiType } from '../../resolved-abi-type';
 import { findOrThrow } from '../../utilities';
+import type { Coder, EncodingOptions } from '../coders/abstract-coder';
+import { ArrayCoder } from '../coders/v0/array';
+import { B256Coder } from '../coders/v0/b256';
+import { B512Coder } from '../coders/v0/b512';
+import { BooleanCoder } from '../coders/v0/boolean';
+import { ByteCoder } from '../coders/v0/byte';
+import { EnumCoder } from '../coders/v0/enum';
+import { NumberCoder } from '../coders/v0/number';
+import { OptionCoder } from '../coders/v0/option';
+import { RawSliceCoder } from '../coders/v0/raw-slice';
+import { StdStringCoder } from '../coders/v0/stdString';
+import { StringCoder } from '../coders/v0/string';
+import { StructCoder } from '../coders/v0/struct';
+import { TupleCoder } from '../coders/v0/tuple';
+import { U64Coder } from '../coders/v0/u64';
+import { VecCoder } from '../coders/v0/vec';
 import type { EncodingStrategy } from '../types';
 
 /**
