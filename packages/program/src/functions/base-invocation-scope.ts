@@ -292,11 +292,8 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const provider = this.getProvider();
-
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-    const { minGasPrice } = provider.getGasConfig();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
@@ -335,11 +332,8 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
-    const provider = this.getProvider();
-
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-    const { minGasPrice } = provider.getGasConfig();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
@@ -361,8 +355,7 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-    const { minGasPrice } = provider.getGasConfig();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
