@@ -11,7 +11,7 @@ const configs: Options = {
   entry: {
     index: 'src/index.ts',
     configs: 'src/configs.ts',
-    'test-utils': 'src/test-utils.ts',
+    'test-utils': 'src/test-utils/index.ts',
   },
   env: {
     BASE_URL: process.env.ASSETS_BASE_URL || '',

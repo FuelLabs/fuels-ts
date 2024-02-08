@@ -5,7 +5,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { EventEmitter } from 'events';
 
-import type { WalletUnlocked } from '../wallets';
+import type { WalletUnlocked } from '../wallet';
 
 import { MemoryStorage } from './storages/memory-storage';
 import type {

@@ -14,7 +14,7 @@ import treeKill from 'tree-kill';
 
 import { Provider } from '../providers';
 import { Signer } from '../signer';
-import type { WalletUnlocked } from '../wallets';
+import type { WalletUnlocked } from '../wallet';
 
 import { generateTestWallet } from './generateTestWallet';
 

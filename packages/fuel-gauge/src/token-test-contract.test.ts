@@ -24,11 +24,8 @@ const setup = async () => {
   return contract;
 };
 
-let gasPrice: BN;
-
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
-  gasPrice = provider.getGasConfig().minGasPrice;
 });
 
 /**
@@ -43,32 +40,23 @@ describe('TokenTestContract', () => {
     const addressId = { value: userWallet.address.toB256() };
 
     // Mint some coins
-    const { transactionResult } = await token.functions
-      .mint_coins(100)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { transactionResult } = await token.functions.mint_coins(100).call();
 
     const { mintedAssets } = transactionResult;
 
     const assetId: AssetId = { value: mintedAssets?.[0].assetId };
 
     const getBalance = async () => {
-      const { value } = await token.functions
-        .get_balance(tokenContractId, assetId)
-        .txParams({ gasLimit: 10_000 })
-        .simulate<BN>();
+      const { value } = await token.functions.get_balance(tokenContractId, assetId).simulate<BN>();
       return value;
     };
     // Check balance is correct
-    await token.functions.mint_coins(100).txParams({ gasPrice, gasLimit: 10_000 }).call();
+    await token.functions.mint_coins(100).call();
 
     expect((await getBalance()).toHex()).toEqual(toHex(200));
 
     // Transfer some coins
-    await token.functions
-      .transfer_coins_to_output(addressId, assetId, 50)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    await token.functions.transfer_coins_to_output(addressId, assetId, 50).call();
 
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
@@ -88,10 +76,8 @@ describe('TokenTestContract', () => {
     const token = await setup();
 
     const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
-    await functionCallOne.txParams({ gasLimit: 10_000 }).dryRun();
-    const { transactionResult } = await functionCallOne
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    await functionCallOne.dryRun();
+    const { transactionResult } = await functionCallOne.call();
 
     const { mintedAssets } = transactionResult;
     const assetId = mintedAssets?.[0].assetId;
@@ -109,8 +95,8 @@ describe('TokenTestContract', () => {
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     const functionCallTwo = token.functions.mint_to_addresses(addresses, 10);
-    await functionCallTwo.txParams({ gasLimit: 10_000 }).simulate();
-    await functionCallTwo.txParams({ gasPrice, gasLimit: 10_000 }).call();
+    await functionCallTwo.simulate();
+    await functionCallTwo.call();
 
     balances = await wallet1.getBalances();
     tokenBalance = balances.find((b) => b.assetId === assetId);
@@ -124,10 +110,7 @@ describe('TokenTestContract', () => {
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
-    await token.functions
-      .mint_to_addresses(addresses, 10)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    await token.functions.mint_to_addresses(addresses, 10).call();
     balances = await wallet1.getBalances();
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
@@ -149,10 +132,7 @@ describe('TokenTestContract', () => {
     };
 
     // mint 100 coins
-    const { transactionResult } = await token.functions
-      .mint_coins(100)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { transactionResult } = await token.functions.mint_coins(100).call();
     const { mintedAssets } = transactionResult;
     const assetId: AssetId = { value: mintedAssets?.[0].assetId || '' };
 
@@ -162,10 +142,7 @@ describe('TokenTestContract', () => {
     expect((await getBalance()).toHex()).toEqual(bn(100).toHex());
 
     // transfer 50 coins to user wallet
-    await token.functions
-      .transfer_coins_to_output(addressId, assetId, 50)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    await token.functions.transfer_coins_to_output(addressId, assetId, 50).call();
 
     // the contract should now have only 50 coins
     expect((await getBalance()).toHex()).toEqual(bn(50).toHex());

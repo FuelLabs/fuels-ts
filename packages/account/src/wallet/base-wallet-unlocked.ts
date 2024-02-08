@@ -1,17 +1,18 @@
 import { hashMessage } from '@fuel-ts/hasher';
 import type { BytesLike } from 'ethers';
 
-import { Account } from './account';
-import { encryptKeystoreWallet } from './keystore-wallet';
-import { transactionRequestify } from './providers';
+import { Account } from '../account';
+import { transactionRequestify } from '../providers';
 import type {
   TransactionResponse,
   TransactionRequestLike,
   CallResult,
   Provider,
   ProviderSendTxParams,
-} from './providers';
-import { Signer } from './signer';
+} from '../providers';
+import { Signer } from '../signer';
+
+import { encryptKeystoreWallet } from './keystore-wallet';
 
 /**
  * `BaseWalletUnlocked` provides the base functionalities for an unlocked wallet.

@@ -5,13 +5,14 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from 'ethers';
 
-import { Account } from './account';
+import { Account } from '../account';
+import { HDWallet } from '../hdwallet';
+import { Mnemonic } from '../mnemonic';
+import type { Provider } from '../providers';
+import { Signer } from '../signer';
+
 import { BaseWalletUnlocked } from './base-wallet-unlocked';
-import { HDWallet } from './hdwallet';
 import { decryptKeystoreWallet } from './keystore-wallet';
-import { Mnemonic } from './mnemonic';
-import type { Provider } from './providers';
-import { Signer } from './signer';
 
 export interface GenerateOptions {
   /** Additional entropy for the random bytes */

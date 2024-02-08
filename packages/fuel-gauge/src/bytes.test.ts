@@ -43,10 +43,7 @@ describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     const INPUT = 10;
 
-    const { value } = await contractInstance.functions
-      .return_bytes(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<number[]>();
+    const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
 
     expect(value).toStrictEqual(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
   });
@@ -54,10 +51,7 @@ describe('Bytes Tests', () => {
   it('should test bytes output [100 items]', async () => {
     const INPUT = 100;
 
-    const { value } = await contractInstance.functions
-      .return_bytes(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<number[]>();
+    const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
 
     expect(value).toStrictEqual(new Uint8Array(Array.from({ length: 100 }, (e, i) => i)));
   });
@@ -65,10 +59,7 @@ describe('Bytes Tests', () => {
   it('should test bytes input', async () => {
     const INPUT = [40, 41, 42];
 
-    const { value } = await contractInstance.functions
-      .accept_bytes(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<number[]>();
+    const { value } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
     expect(value).toBeUndefined();
   });
 
@@ -80,10 +71,7 @@ describe('Bytes Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    const { value } = await contractInstance.functions
-      .accept_nested_bytes(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<number[]>();
+    const { value } = await contractInstance.functions.accept_nested_bytes(INPUT).call<number[]>();
     expect(value).toBeUndefined();
   });
 
@@ -141,10 +129,7 @@ describe('Bytes Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    const { value } = await scriptInstance.functions
-      .main(1, INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<BN>();
+    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN>();
     expect(value.toNumber()).toStrictEqual(0);
   });
 });

@@ -76,7 +76,6 @@ describe('Predicate', () => {
         .callParams({
           forward: [500, BaseAssetId],
         })
-        .txParams({ gasPrice, gasLimit: 10_000 })
         .call();
 
       expect(value.toString()).toEqual('500');
@@ -96,15 +95,9 @@ describe('Predicate', () => {
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
-      await expect(
-        contract.functions
-          .mint_coins(200)
-          .txParams({
-            gasPrice,
-            gasLimit: 1_000,
-          })
-          .call()
-      ).rejects.toThrow(/not enough coins to fit the target/);
+      await expect(contract.functions.mint_coins(200).call()).rejects.toThrow(
+        /not enough coins to fit the target/
+      );
 
       // setup predicate
       const amountToPredicate = 700_000;
@@ -136,13 +129,7 @@ describe('Predicate', () => {
       const contractAmount = 10;
       const {
         transactionResult: { fee: receiverTxFee },
-      } = await contract.functions
-        .mint_coins(200)
-        .txParams({
-          gasPrice,
-          gasLimit: 1_000,
-        })
-        .call();
+      } = await contract.functions.mint_coins(200).call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
       const remainingPredicateBalance = toNumber(await predicate.getBalance());
