@@ -404,12 +404,24 @@ export class BaseInvocationScope<TReturn = any> {
     const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const gasPriceSpecified = !!this.txParameters?.gasPrice;
 
+    const { gasLimit, gasPrice } = transactionRequest;
+
     if (!gasLimitSpecified) {
       transactionRequest.gasLimit = gasUsed;
+    } else if (gasLimit.lt(gasUsed)) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
     }
 
     if (!gasPriceSpecified) {
       transactionRequest.gasPrice = minGasPrice;
+    } else if (gasPrice.lt(minGasPrice)) {
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
     }
   }
 }
