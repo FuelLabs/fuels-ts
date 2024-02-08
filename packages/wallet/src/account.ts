@@ -330,11 +330,19 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
-    const gasPriceToUse = bn(txParams.gasPrice ?? minGasPrice);
-    const gasLimitToUse = bn(txParams.gasLimit ?? gasUsed);
-    request.gasPrice = gasPriceToUse;
-    request.gasLimit = gasLimitToUse;
+
+    request.gasPrice = bn(txParams.gasPrice ?? minGasPrice);
+    request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
+
+    this.validateGas({
+      gasUsed,
+      gasPrice: request.gasPrice,
+      gasLimit: request.gasLimit,
+      minGasPrice,
+    });
+
     await this.fund(request, requiredQuantities, maxFee);
+
     return request;
   }
 
@@ -407,6 +415,13 @@ export class Account extends AbstractAccount {
 
     request.gasLimit = bn(params.gasLimit || gasUsed);
 
+    this.validateGas({
+      gasUsed,
+      gasPrice: request.gasPrice,
+      gasLimit: request.gasLimit,
+      minGasPrice,
+    });
+
     await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
@@ -456,6 +471,13 @@ export class Account extends AbstractAccount {
 
     request.gasLimit = params.gasLimit ? bn(params.gasLimit) : gasUsed;
 
+    this.validateGas({
+      gasUsed,
+      gasPrice: request.gasPrice,
+      gasLimit: request.gasLimit,
+      minGasPrice,
+    });
+
     await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
@@ -489,5 +511,31 @@ export class Account extends AbstractAccount {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
+  }
+
+  private validateGas({
+    gasUsed,
+    gasPrice,
+    gasLimit,
+    minGasPrice,
+  }: {
+    gasUsed: BN;
+    gasPrice: BN;
+    gasLimit: BN;
+    minGasPrice: BN;
+  }) {
+    if (minGasPrice.gt(gasPrice)) {
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
+    }
+
+    if (gasUsed.gt(gasLimit)) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
   }
 }
