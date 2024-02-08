@@ -18,8 +18,6 @@ describe('GenericTypesContract', () => {
       contractBytecode,
     });
 
-    const { minGasPrice: gasPrice } = contract.provider.getGasConfig();
-
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
     const bimArg1 = 'Yes';
     const { value } = await contract.functions
@@ -77,7 +75,6 @@ describe('GenericTypesContract', () => {
           },
         }
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const arg1 = {
@@ -109,7 +106,6 @@ describe('GenericTypesContract', () => {
 
     const { value: call2 } = await contract.functions
       .generic_complex_type_function(arg1, arg2)
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toEqual(bimArg1);

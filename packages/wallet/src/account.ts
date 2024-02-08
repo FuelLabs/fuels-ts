@@ -329,7 +329,11 @@ export class Account extends AbstractAccount {
     const params = { gasPrice: minGasPrice, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
+    const gasPriceToUse = bn(txParams.gasPrice ?? minGasPrice);
+    const gasLimitToUse = bn(txParams.gasLimit ?? gasUsed);
+    request.gasPrice = gasPriceToUse;
+    request.gasLimit = gasLimitToUse;
     await this.fund(request, requiredQuantities, maxFee);
     return request;
   }
@@ -396,9 +400,12 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractAddress);
 
-    const { maxFee, requiredQuantities } = await this.provider.getTransactionCost(request, [
-      { amount: bn(amount), assetId: String(assetId) },
-    ]);
+    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(
+      request,
+      [{ amount: bn(amount), assetId: String(assetId) }]
+    );
+
+    request.gasLimit = bn(params.gasLimit || gasUsed);
 
     await this.fund(request, requiredQuantities, maxFee);
 
@@ -439,10 +446,12 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
 
-    const { requiredQuantities, maxFee } = await this.provider.getTransactionCost(
+    const { requiredQuantities, maxFee, gasUsed } = await this.provider.getTransactionCost(
       request,
       forwardingQuantities
     );
+
+    request.gasLimit = params.gasLimit ? bn(params.gasLimit) : gasUsed;
 
     await this.fund(request, requiredQuantities, maxFee);
 

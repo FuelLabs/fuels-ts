@@ -27,8 +27,6 @@ describe(__filename, () => {
       provider,
     });
 
-    const { minGasPrice } = provider.getGasConfig();
-
     const asset: AssetId = {
       value: BaseAssetId,
     };
@@ -37,10 +35,6 @@ describe(__filename, () => {
       .transfer(amountToTransfer, asset, recipient.address.toB256())
       .callParams({
         forward: [amountToForward, BaseAssetId],
-      })
-      .txParams({
-        gasPrice: minGasPrice,
-        gasLimit: 10_000,
       })
       .call();
 
