@@ -14,7 +14,7 @@ apps/demo-typegen/src/predicate-types
 apps/docs/.vitepress/cache/
 
 packages/fuels/test/fixtures/project
-packages/account/src/providrs/assets
+packages/account/src/providers/assets
 
 __generated__
 out

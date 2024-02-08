@@ -13,7 +13,7 @@ apps/demo-react-vite
 
 packages/fuels/test/fixtures/project
 packages/account/src/providers/__generated__
-packages/account/src/providrs/assets
+packages/account/src/providers/assets
 
 out
 CHANGELOG.md
