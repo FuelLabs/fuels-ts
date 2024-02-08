@@ -1,7 +1,7 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import type { TransactionRequestLike, TransactionResponse } from '../providers';
-import { WalletLocked } from '../wallets';
+import { WalletLocked } from '../wallet';
 
 import type { FuelConnector } from './fuel-connector';
 import type { FuelWalletProvider } from './fuel-wallet-provider';

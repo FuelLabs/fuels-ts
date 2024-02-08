@@ -4,7 +4,7 @@ import { setTimeout } from 'timers/promises';
 
 import { FUEL_NETWORK_URL } from '../../configs';
 import type { TransactionRequestLike } from '../../providers';
-import type { WalletUnlocked } from '../../wallets';
+import type { WalletUnlocked } from '../../wallet';
 import { FuelConnector } from '../fuel-connector';
 import { FuelConnectorEventTypes } from '../types';
 import type { Asset, FuelABI, ConnectorMetadata, Network } from '../types';
