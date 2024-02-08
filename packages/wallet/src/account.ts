@@ -413,7 +413,7 @@ export class Account extends AbstractAccount {
       [{ amount: bn(amount), assetId: String(assetId) }]
     );
 
-    request.gasLimit = bn(params.gasLimit || gasUsed);
+    request.gasLimit = bn(params.gasLimit ?? gasUsed);
 
     this.validateGas({
       gasUsed,
@@ -469,7 +469,7 @@ export class Account extends AbstractAccount {
       forwardingQuantities
     );
 
-    request.gasLimit = params.gasLimit ? bn(params.gasLimit) : gasUsed;
+    request.gasLimit = bn(params.gasLimit ?? gasUsed);
 
     this.validateGas({
       gasUsed,
