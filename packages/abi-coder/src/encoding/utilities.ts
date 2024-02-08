@@ -2,8 +2,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ENCODING_V0, ENCODING_V1 } from '../constants';
 
-import { EncodingStrategyV0 } from './strategies/encoding-strategy-v0';
-import { EncodingStrategyV1 } from './strategies/encoding-strategy-v1';
+import { EncodingStrategyV0 } from './strategies/v0';
+import { EncodingStrategyV1 } from './strategies/v1';
 import type { EncodingStrategy } from './types';
 
 /**

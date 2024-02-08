@@ -1,5 +1,6 @@
-import type { Coder, EncodingOptions } from '../coders/abstract-coder';
 import type { ResolvedAbiType } from '../resolved-abi-type';
+
+import type { Coder, EncodingOptions } from './coders/abstract-coder';
 
 /**
  * An implementing encoding strategy class should enforce the specifications of a

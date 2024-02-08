@@ -5,10 +5,10 @@ import type { BytesLike } from 'ethers';
 import { sha256, getBytesCopy } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
-import type { DecodedValue, InputValue } from './coders/abstract-coder';
-import { ByteCoder } from './coders/v0/byte';
-import { TupleCoder } from './coders/v0/tuple';
-import { VecCoder } from './coders/v0/vec';
+import type { DecodedValue, InputValue } from './encoding/coders/abstract-coder';
+import { ByteCoder } from './encoding/coders/v0/byte';
+import { TupleCoder } from './encoding/coders/v0/tuple';
+import { VecCoder } from './encoding/coders/v0/vec';
 import { OPTION_CODER_TYPE } from './constants';
 import type {
   JsonAbi,

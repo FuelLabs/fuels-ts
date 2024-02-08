@@ -1,7 +1,12 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
-import type { DecodedValue, InputValue, Coder, EncodingOptions } from './coders/abstract-coder';
 import { getEncodingStrategy } from './encoding';
 import type { EncodingStrategy } from './encoding';
+import type {
+  DecodedValue,
+  InputValue,
+  Coder,
+  EncodingOptions,
+} from './encoding/coders/abstract-coder';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 

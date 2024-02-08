@@ -3,7 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
 import { AbiCoder } from './abi-coder';
-import type { InputValue } from './coders/abstract-coder';
+import type { InputValue } from './encoding/coders/abstract-coder';
 import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
 import { findOrThrow } from './utilities';

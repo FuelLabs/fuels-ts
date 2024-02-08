@@ -2,8 +2,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat, concatBytes } from '@fuel-ts/utils';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
-import { U64Coder } from './coders/v0/u64';
 import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STD_STRING_CODER_TYPE, WORD_SIZE } from './constants';
+import { U64Coder } from './encoding/coders/v0/u64';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;
