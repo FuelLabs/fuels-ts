@@ -157,7 +157,7 @@ describe('Wallet', () => {
     );
     const amount = 10;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice, gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, 10);
     const result = await tx.waitForResult();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
@@ -178,10 +178,7 @@ describe('Wallet', () => {
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
 
-    const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT);
     // #region Message-getMessageProof
     const result = await tx.waitForResult();
 
@@ -240,7 +237,7 @@ describe('Wallet', () => {
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 110;
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice, gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount);
     const result = await tx.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
