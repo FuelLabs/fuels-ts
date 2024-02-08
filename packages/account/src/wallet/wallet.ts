@@ -1,7 +1,8 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BytesLike } from 'ethers';
 
-import type { Provider } from './providers';
+import type { Provider } from '../providers';
+
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 /**

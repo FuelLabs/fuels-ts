@@ -2,7 +2,7 @@ import path from 'path';
 import { cwd } from 'process';
 
 import { Provider } from '../providers';
-import { WalletUnlocked } from '../wallets';
+import { WalletUnlocked } from '../wallet';
 
 import { launchNodeAndGetWallets } from './launchNode';
 

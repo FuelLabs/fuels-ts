@@ -1,7 +1,7 @@
 import { Address } from '@fuel-ts/address';
 
+import type { WalletUnlocked } from '../../wallet';
 import { Wallet } from '../../wallet';
-import type { WalletUnlocked } from '../../wallets';
 
 import { PrivateKeyVault } from './privatekey-vault';
 

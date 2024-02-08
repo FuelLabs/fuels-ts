@@ -3,10 +3,11 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 
-import { FUEL_NETWORK_URL } from './configs';
-import type { TransactionRequestLike, TransactionResponse } from './providers';
-import { transactionRequestify, Provider } from './providers';
-import { generateTestWallet } from './test-utils/generateTestWallet';
+import { FUEL_NETWORK_URL } from '../configs';
+import { transactionRequestify, Provider } from '../providers';
+import type { TransactionRequestLike, TransactionResponse } from '../providers';
+import { generateTestWallet } from '../test-utils/generateTestWallet';
+
 import { Wallet } from './wallet';
 import { WalletLocked, WalletUnlocked } from './wallets';
 

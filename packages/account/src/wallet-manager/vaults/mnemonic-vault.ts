@@ -3,8 +3,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import { Mnemonic } from '../../mnemonic';
+import type { WalletUnlocked } from '../../wallet';
 import { Wallet } from '../../wallet';
-import type { WalletUnlocked } from '../../wallets';
 import type { Vault } from '../types';
 
 export interface MnemonicVaultOptions {

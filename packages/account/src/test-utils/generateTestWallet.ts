@@ -1,6 +1,6 @@
 import type { Provider, CoinQuantityLike } from '../providers';
+import type { WalletUnlocked } from '../wallet';
 import { Wallet } from '../wallet';
-import type { WalletUnlocked } from '../wallets';
 
 import { seedTestWallet } from './seedTestWallet';
 
