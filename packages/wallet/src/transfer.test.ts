@@ -58,27 +58,38 @@ describe('Wallet', () => {
   });
 
   it('can transfer with custom TX Params', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
-    const receiver = await generateTestWallet(provider);
+    const sender = await generateTestWallet(provider, [[1000, BaseAssetId]]);
+    const receiver = Wallet.generate({ provider });
 
-    /* Error out because gas is to low */
+    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
+      gasLimit: 600,
+      gasPrice,
+    });
+
+    await response.wait();
+    const senderBalances = await sender.getBalances();
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(921) }]);
+    const receiverBalances = await receiver.getBalances();
+    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+  });
+
+  it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
+    const sender = await generateTestWallet(provider);
+    const receiver = Wallet.generate({ provider });
+
     await expect(async () => {
       const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
         gasLimit: 0,
-        gasPrice,
       });
       await result.wait();
     }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasLimit: 10_000,
-      gasPrice,
-    });
-    await response.wait();
-    const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499_921) }]);
-    const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+    await expect(async () => {
+      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
+        gasPrice: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
@@ -170,6 +181,27 @@ describe('Wallet', () => {
 
     const senderBalances = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499911) }]);
+  });
+
+  it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
+    const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    const recipient = Address.fromB256(
+      '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
+    );
+
+    await expect(async () => {
+      const result = await sender.withdrawToBaseLayer(recipient, 10, {
+        gasPrice: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
+
+    await expect(async () => {
+      const result = await sender.withdrawToBaseLayer(recipient, 10, {
+        gasLimit: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
   });
 
   it('can retrieve a valid MessageProof', async () => {
