@@ -50,10 +50,7 @@ describe('EvMAddress', () => {
     const evmAddress: EvmAddress = address.toEvmAddress();
     // #endregion evm-address-2
 
-    const { value } = await contract.functions
-      .echo_address_comparison(evmAddress)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_address_comparison(evmAddress).simulate();
 
     expect(value).toBeTruthy();
   });
@@ -66,10 +63,7 @@ describe('EvMAddress', () => {
       value: Bits256,
     };
 
-    const { value } = await contract.functions
-      .echo_address_comparison(evmAddress)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_address_comparison(evmAddress).simulate();
 
     expect(value).toBeTruthy();
     // #endregion evm-address-3
@@ -83,10 +77,7 @@ describe('EvMAddress', () => {
       value: Bits256,
     };
 
-    const { value } = await contract.functions
-      .echo_address()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_address().simulate();
 
     expect(value).toEqual(evmAddress);
     // #endregion evm-address-4

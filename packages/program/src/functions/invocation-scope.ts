@@ -74,6 +74,9 @@ export class FunctionInvocationScope<
    * @throws If the function is not payable and forward is set.
    */
   callParams(callParams: CallParams) {
+    if (!this.hasCallParamsGasLimit && callParams?.gasLimit !== undefined) {
+      this.hasCallParamsGasLimit = true;
+    }
     this.callParameters = callParams;
 
     if (callParams?.forward) {
