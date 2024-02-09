@@ -33,20 +33,14 @@ describe('ExampleContract', () => {
     const contract = await factory.deployContract({ gasPrice });
 
     // Call
-    const { value } = await contract.functions
-      .return_input(1337)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contract.functions.return_input(1337).call();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
 
     // You can also make a call using the factory
     const contractInstance = SampleAbi__factory.connect(contract.id, wallet);
-    const { value: v2 } = await contractInstance.functions
-      .return_input(1337)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
@@ -58,10 +52,7 @@ describe('ExampleContract', () => {
     const contract = await SampleAbi__factory.deployContract(bytecode, wallet, { gasPrice });
 
     // Call
-    const { value } = await contract.functions
-      .return_input(1337)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contract.functions.return_input(1337).call();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -117,10 +108,7 @@ describe('ExampleContract', () => {
     // #context const wallet = new Wallet.fromPrivateKey(process.env.PRIVATE_KEY);
     const contract = SampleAbi__factory.connect(contractsIds.sample, wallet);
 
-    const { value } = await contract.functions
-      .return_input(1337)
-      .txParams({ gasLimit: 10_000 })
-      .dryRun();
+    const { value } = await contract.functions.return_input(1337).dryRun();
 
     expect(value.toHex()).toEqual(toHex(1337));
     // #endregion using-generated-files

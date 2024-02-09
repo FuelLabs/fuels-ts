@@ -33,10 +33,7 @@ describe('Auth Testing', () => {
   });
 
   it('can get is_caller_external', async () => {
-    const { value } = await contractInstance.functions
-      .is_caller_external()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contractInstance.functions.is_caller_external().call();
 
     expect(value).toBeTruthy();
   });
@@ -44,7 +41,7 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 500 })
       .call();
 
     expect(value).toBeTruthy();
@@ -52,10 +49,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
-      contractInstance.functions
-        .check_msg_sender({ value: getRandomB256() })
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call()
+      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
 });

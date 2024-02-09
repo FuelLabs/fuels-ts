@@ -53,6 +53,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
+  protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -291,9 +292,13 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.getTransactionRequest();
+    const provider = this.getProvider();
 
-    const { maxFee } = await this.getTransactionCost();
+    const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { minGasPrice } = provider.getGasConfig();
+
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -330,9 +335,13 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
-    const transactionRequest = await this.getTransactionRequest();
+    const provider = this.getProvider();
 
-    const { maxFee } = await this.getTransactionCost();
+    const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { minGasPrice } = provider.getGasConfig();
+
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -352,8 +361,10 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed } = await this.getTransactionCost();
+    const { minGasPrice } = provider.getGasConfig();
 
-    const { maxFee } = await this.getTransactionCost();
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -387,5 +398,25 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
     return transactionRequest.getTransactionId(chainIdToHash);
+  }
+
+  /**
+   * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   */
+  private setDefaultTxParams(
+    transactionRequest: ScriptTransactionRequest,
+    minGasPrice: BN,
+    gasUsed: BN
+  ) {
+    const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const gasPriceSpecified = !!this.txParameters?.gasPrice;
+
+    if (!gasLimitSpecified) {
+      transactionRequest.gasLimit = gasUsed;
+    }
+
+    if (!gasPriceSpecified) {
+      transactionRequest.gasPrice = minGasPrice;
+    }
   }
 }

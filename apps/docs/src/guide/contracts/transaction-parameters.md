@@ -14,6 +14,8 @@ Transaction parameters allow you to configure various aspects of your blockchain
 
 <<< @/../../../packages/program/src/types.ts#transaction-params{ts:line-numbers}
 
+> Note: Setting transaction parameters is optional. If you don't specify them, the SDK will fetch some sensible defaults from the chain.
+
 ## Setting Transaction Parameters
 
 <!-- This section should explain how to set tx params -->
