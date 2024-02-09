@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BaseAssetId, encrypt, decrypt } from "fuels";
+import { BaseAssetId, encrypt, decrypt, bn } from "fuels";
 import * as asm from "@fuels/vm-asm";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
 
   log("Hello Fuels", BaseAssetId, encrypt, decrypt);
   log("Hello ASM", asm);
+  log("Hello BN", bn(1000));
 
   return (
     <div className="App">
