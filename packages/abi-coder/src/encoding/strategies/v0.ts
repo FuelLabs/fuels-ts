@@ -157,10 +157,9 @@ export class EncodingStrategyV0 implements EncodingStrategy {
   }
 
   /**
-   *
-   * @param components
-   * @param options
-   * @returns
+   * @param components - components to generate coders for.
+   * @param options - options to be utilized during the encoding process.
+   * @returns the coders for a given set of components.
    */
   private getCoders(components: readonly ResolvedAbiType[], options?: EncodingOptions) {
     return components.reduce((obj, component) => {
