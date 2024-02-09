@@ -71,10 +71,7 @@ export default function PredicateExample() {
 
       const tx = await predicate
         .setData(bn(pin))
-        .transfer(wallet.address, amount, BaseAssetId, {
-          gasPrice: 1,
-          gasLimit: 10_000,
-        });
+        .transfer(wallet.address, amount, BaseAssetId);
       const { isStatusSuccess } = await tx.wait();
 
       if (!isStatusSuccess) {

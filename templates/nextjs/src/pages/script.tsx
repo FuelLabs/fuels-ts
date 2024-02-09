@@ -32,13 +32,7 @@ export default function ScriptExample() {
         return alert("Script not loaded");
       }
 
-      const { value } = await script.functions
-        .main(bn(input))
-        .txParams({
-          gasPrice: 1,
-          gasLimit: 10_000,
-        })
-        .call();
+      const { value } = await script.functions.main(bn(input)).call();
 
       setResult(value.toString());
     } catch (error) {

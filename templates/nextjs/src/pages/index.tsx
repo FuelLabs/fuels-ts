@@ -28,13 +28,7 @@ export default function Home() {
           wallet,
         );
         setContract(testContract);
-        const { value } = await testContract.functions
-          .get_count()
-          .txParams({
-            gasPrice: 1,
-            gasLimit: 10_000,
-          })
-          .simulate();
+        const { value } = await testContract.functions.get_count().simulate();
         setCounter(value.toNumber());
       }
 
@@ -48,13 +42,7 @@ export default function Home() {
       // eslint-disable-next-line no-alert
       return alert("Contract not loaded");
     }
-    const { value } = await contract.functions
-      .increment_counter(bn(1))
-      .txParams({
-        gasPrice: 1,
-        gasLimit: 10_000,
-      })
-      .call();
+    const { value } = await contract.functions.increment_counter(bn(1)).call();
     setCounter(value.toNumber());
   };
 
