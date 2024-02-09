@@ -25,8 +25,6 @@ import {
   MessageTypes,
 } from './types';
 
-const { warn } = console;
-
 export class FuelWalletConnector extends FuelConnector {
   name: string = '';
   connected: boolean = false;
@@ -49,7 +47,7 @@ export class FuelWalletConnector extends FuelConnector {
     this.setMaxListeners(100);
     this.client = new JSONRPCClient(this.sendRequest.bind(this), this.createRequestId);
     this.setupListener();
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     this.setupConnector();
   }
 
@@ -58,15 +56,13 @@ export class FuelWalletConnector extends FuelConnector {
    * Application communication methods
    * ============================================================
    */
-  private async setupConnector() {
+  private setupConnector() {
     if (typeof window !== 'undefined') {
-      try {
-        await this.ping();
-
-        window.dispatchEvent(new CustomEvent('FuelConnector', { detail: this }));
-      } catch (e) {
-        warn(e);
-      }
+      this.ping()
+        .then(() => {
+          window.dispatchEvent(new CustomEvent('FuelConnector', { detail: this }));
+        })
+        .catch(() => {});
     }
   }
 
@@ -115,7 +111,6 @@ export class FuelWalletConnector extends FuelConnector {
   private onEvent(message: EventMessage): void {
     message.events.forEach((eventData) => {
       if (eventData.event === 'start') {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.setupConnector();
       } else {
         this.emit(eventData.event, ...eventData.params);
@@ -224,7 +219,7 @@ export class FuelWalletConnector extends FuelConnector {
      * TODO: Remove this once Fuel Wallet supports assets with multiple networks
      */
     const assetsData: Array<AssetData> = assets.map((asset) => {
-      const fuelNetworkAsset = asset.networks.find((n) => n.type === 'fuel') as AssetFuel;
+      const fuelNetworkAsset = asset.networks.find((n) => n.type === 'fuel');
       if (!fuelNetworkAsset) {
         throw new Error('Asset for Fuel Network not found!');
       }
@@ -232,7 +227,7 @@ export class FuelWalletConnector extends FuelConnector {
         ...asset,
         imageUrl: asset.icon,
         decimals: fuelNetworkAsset.decimals,
-        assetId: fuelNetworkAsset.assetId,
+        assetId: (<AssetFuel>fuelNetworkAsset).assetId,
       };
     });
     return this.client.request('addAssets', {
