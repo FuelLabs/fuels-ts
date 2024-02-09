@@ -1,12 +1,12 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
-import { WORD_SIZE } from '../../../constants';
+import { U8_CODER_TYPE, WORD_SIZE } from '../../../constants';
 import { Coder } from '../abstract-coder';
 import { ArrayCoder } from '../v0/array';
 import { U64Coder } from '../v0/u64';
 
-import { NumberCoder } from './number';
+import { LiteralCoder } from './literal';
 
 export class RawSliceCoder extends Coder<number[], number[]> {
   constructor() {
@@ -31,9 +31,9 @@ export class RawSliceCoder extends Coder<number[], number[]> {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice byte data size.`);
     }
 
-    const internalCoder = new ArrayCoder(new NumberCoder('u8'), length);
+    const internalCoder = new ArrayCoder(new LiteralCoder(U8_CODER_TYPE), length);
     const [decodedValue] = internalCoder.decode(dataBytes, 0);
 
-    return [decodedValue, offsetAndLength + length];
+    return [decodedValue as number[], offsetAndLength + length];
   }
 }

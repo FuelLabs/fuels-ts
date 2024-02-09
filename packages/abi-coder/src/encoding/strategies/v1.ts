@@ -29,10 +29,9 @@ import { B256Coder } from '../coders/v0/b256';
 import { B512Coder } from '../coders/v0/b512';
 import { OptionCoder } from '../coders/v0/option';
 import { U64Coder } from '../coders/v0/u64';
-import { BooleanCoder } from '../coders/v1/boolean';
 import { ByteCoder } from '../coders/v1/byte';
 import { EnumCoder } from '../coders/v1/enum';
-import { NumberCoder } from '../coders/v1/number';
+import { LiteralCoder } from '../coders/v1/literal';
 import { RawSliceCoder } from '../coders/v1/raw-slice';
 import { StdStringCoder } from '../coders/v1/std-string';
 import { StringCoder } from '../coders/v1/string';
@@ -57,14 +56,13 @@ export class EncodingStrategyV1 implements EncodingStrategy {
       case U8_CODER_TYPE:
       case U16_CODER_TYPE:
       case U32_CODER_TYPE:
-        return new NumberCoder(resolvedAbiType.type);
+      case BOOL_CODER_TYPE:
       case U64_CODER_TYPE:
+        return new LiteralCoder(resolvedAbiType.type);
       case RAW_PTR_CODER_TYPE:
         return new U64Coder();
       case RAW_SLICE_CODER_TYPE:
         return new RawSliceCoder();
-      case BOOL_CODER_TYPE:
-        return new BooleanCoder();
       case B256_CODER_TYPE:
         return new B256Coder();
       case B512_CODER_TYPE:

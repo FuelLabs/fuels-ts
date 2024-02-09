@@ -3,7 +3,7 @@ import type { BytesLike } from 'ethers';
 
 import type { Option } from './v0/option';
 
-type Primitive = string | number | boolean;
+export type Primitive = string | number | boolean;
 
 /**
  * These are configurable options to be used when encoding.
@@ -85,6 +85,7 @@ export type InputValue<T = void> =
  */
 export type DecodedValue =
   | Primitive
+  | BN
   | DecodedValue[]
   | { [key: string]: DecodedValue }
   | Record<string, Primitive>;

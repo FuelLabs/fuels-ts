@@ -3,9 +3,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U32_MAX } from '../../../../test/utils/constants';
+import { BOOL_CODER_TYPE } from '../../../constants';
 import { U64Coder } from '../v0/u64';
 
-import { BooleanCoder } from './boolean';
+import { LiteralCoder } from './literal';
 import { StructCoder } from './struct';
 
 /**
@@ -14,7 +15,10 @@ import { StructCoder } from './struct';
  */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
-  const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });
+  const coder = new StructCoder(STRUCT_NAME, {
+    a: new LiteralCoder(BOOL_CODER_TYPE),
+    b: new U64Coder(),
+  });
 
   it('throws when encoding a struct', async () => {
     await expectToThrowFuelError(

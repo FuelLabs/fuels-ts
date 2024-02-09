@@ -3,17 +3,21 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../../test/utils/constants';
+import { BOOL_CODER_TYPE } from '../../../constants';
 import { U64Coder } from '../v0/u64';
 
-import { BooleanCoder } from './boolean';
 import { EnumCoder } from './enum';
+import { LiteralCoder } from './literal';
 
 /**
  * @group node
  * @group browser
  */
 describe('EnumCoder', () => {
-  const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
+  const coder = new EnumCoder('TestEnum', {
+    a: new LiteralCoder(BOOL_CODER_TYPE),
+    b: new U64Coder(),
+  });
 
   it('throws when encoding an enum', async () => {
     await expectToThrowFuelError(

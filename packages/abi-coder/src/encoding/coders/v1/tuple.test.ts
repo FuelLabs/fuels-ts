@@ -3,9 +3,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../../test/utils/constants';
+import { BOOL_CODER_TYPE } from '../../../constants';
 import { U64Coder } from '../v0/u64';
 
-import { BooleanCoder } from './boolean';
+import { LiteralCoder } from './literal';
 import { TupleCoder } from './tuple';
 
 /**
@@ -13,7 +14,10 @@ import { TupleCoder } from './tuple';
  * @group browser
  */
 describe('Tuple Coder', () => {
-  const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
+  const coder = new TupleCoder<[LiteralCoder, U64Coder]>([
+    new LiteralCoder(BOOL_CODER_TYPE),
+    new U64Coder(),
+  ]);
 
   it('throws when encoding', async () => {
     await expectToThrowFuelError(
