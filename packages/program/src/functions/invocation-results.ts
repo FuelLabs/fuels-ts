@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 import type { Interface } from '@fuel-ts/abi-coder';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
+import { getDecodedLogs } from '@fuel-ts/account';
 import type {
   CallResult,
   TransactionResponse,
   TransactionResult,
   TransactionResultReceipt,
-} from '@fuel-ts/providers';
-import { getDecodedLogs } from '@fuel-ts/providers';
+} from '@fuel-ts/account';
+import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 

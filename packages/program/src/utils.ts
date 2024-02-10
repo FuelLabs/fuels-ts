@@ -1,5 +1,5 @@
+import type { TransactionResult } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { TransactionResult } from '@fuel-ts/providers';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
 

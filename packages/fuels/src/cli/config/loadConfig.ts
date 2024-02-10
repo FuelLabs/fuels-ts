@@ -1,5 +1,5 @@
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';

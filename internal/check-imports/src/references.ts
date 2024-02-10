@@ -2,32 +2,34 @@ import { Interface, StringCoder } from '@fuel-ts/abi-coder';
 import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
+import {
+  Wallet,
+  HDWallet,
+  Mnemonic,
+  english,
+  Language,
+  Signer,
+  WalletManager,
+  Predicate,
+  Provider,
+} from '@fuel-ts/account';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
-import { HDWallet } from '@fuel-ts/hdwallet';
-import { AbstractPredicate } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
-import { Mnemonic } from '@fuel-ts/mnemonic';
-import { Predicate } from '@fuel-ts/predicate';
 import { FunctionInvocationScope } from '@fuel-ts/program';
 import { PANIC_REASONS } from '@fuel-ts/program/configs';
-import { Provider } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
-import { Signer } from '@fuel-ts/signer';
 import { InputCoinCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
-import { Wallet } from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import { WalletManager } from '@fuel-ts/wallet-manager';
-import { english, Language } from '@fuel-ts/wordlists';
 import type { DeployContractOptions, FuelsConfig, UserFuelsConfig } from 'fuels';
 import {
   ScriptRequest,
@@ -90,11 +92,6 @@ log(hashMessage);
  * hdwallet
  */
 log(HDWallet);
-
-/**
- * interfaces
- */
-log(AbstractPredicate);
 
 /**
  * keystore

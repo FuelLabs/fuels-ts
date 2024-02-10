@@ -1,5 +1,5 @@
+import { launchNode } from '@fuel-ts/account/test-utils';
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import { launchNode } from '@fuel-ts/wallet/test-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { getPortPromise } from 'portfinder';
 
