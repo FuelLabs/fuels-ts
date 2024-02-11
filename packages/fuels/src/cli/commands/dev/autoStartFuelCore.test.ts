@@ -1,4 +1,4 @@
-import * as testUtilsMod from '@fuel-ts/wallet/test-utils';
+import * as testUtilsMod from '@fuel-ts/account/test-utils';
 import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 

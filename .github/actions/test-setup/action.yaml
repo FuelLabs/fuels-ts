@@ -21,7 +21,7 @@ runs:
         path: |
           apps/docs/.typedoc
           apps/docs/src/api
-          packages/providers/src/__generated__
+          packages/account/src/providers/__generated__
         key: ${{ runner.os }}-generated-${{ github.sha }}
 
     - name: Cache Build
@@ -36,7 +36,7 @@ runs:
         path: |
           apps/docs/.typedoc
           apps/docs/src/api
-          packages/providers/src/__generated__
+          packages/account/src/providers/__generated__
         key: ${{ runner.os }}-generated-${{ github.sha }}
 
     - name: Setup Node.js

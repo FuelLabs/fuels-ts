@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish } from 'fuels';
 import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 

@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
-import { bn, toNumber } from '@fuel-ts/math';
 import type {
   CallResult,
   TransactionResultCallReceipt,
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
-} from '@fuel-ts/providers';
+} from '@fuel-ts/account';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';

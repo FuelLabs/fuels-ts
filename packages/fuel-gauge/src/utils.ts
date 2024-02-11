@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
 import { Script, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';

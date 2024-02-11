@@ -21,7 +21,7 @@ runs:
         path: |
           apps/docs/.typedoc
           apps/docs/src/api
-          packages/providers/src/__generated__
+          packages/account/src/providers/__generated__
           templates/src/sway-api
         key: ${{ runner.os }}-generated-${{ github.sha }}
 
@@ -37,7 +37,7 @@ runs:
         path: |
           apps/docs/.typedoc
           apps/docs/src/api
-          packages/providers/src/__generated__
+          packages/account/src/providers/__generated__
           templates/src/sway-api
         key: ${{ runner.os }}-generated-${{ github.sha }}
 

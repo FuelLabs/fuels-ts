@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { join } from 'path';
 
 import type { FuelsConfig } from '../../src';
