@@ -37,8 +37,8 @@ import {
   stringRegEx,
   structRegEx,
   tupleRegEx,
-} from '../utils/constants';
-import { findOrThrow } from '../utils/utilities';
+} from '../../utils/constants';
+import { findOrThrow } from '../../utils/utilities';
 
 import type { IEncodingStrategy } from './types/IEncodingStrategy';
 

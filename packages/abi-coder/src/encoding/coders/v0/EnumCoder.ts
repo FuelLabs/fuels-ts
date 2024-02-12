@@ -3,7 +3,7 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { concatWithDynamicData } from '../../utils/utilities';
+import { concatWithDynamicData } from '../../../utils/utilities';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
 

@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { U32_MAX } from '../../../../test/utils/constants';
-import type { Uint8ArrayWithDynamicData } from '../../utils/utilities';
+import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
 import type { EncodingOptions } from '../AbstractCoder';
 
 import { BooleanCoder } from './BooleanCoder';

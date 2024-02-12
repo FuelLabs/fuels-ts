@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { U32_MAX } from '../../../../test/utils/constants';
-import { BOOL_CODER_TYPE, U8_CODER_TYPE } from '../../utils/constants';
+import { BOOL_CODER_TYPE, U8_CODER_TYPE } from '../../../utils/constants';
 
 import { LiteralCoder } from './LiteralCoder';
 import { VecCoder } from './VecCoder';

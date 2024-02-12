@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber } from '@fuel-ts/math';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { WORD_SIZE } from '../../utils/constants';
+import { WORD_SIZE } from '../../../utils/constants';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
 import { U64Coder } from '../v0/U64Coder';

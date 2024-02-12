@@ -8,7 +8,7 @@ import {
   U64_CODER_TYPE,
   U8_CODER_TYPE,
   WORD_SIZE,
-} from '../../utils/constants';
+} from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
 import type { DecodedValue, InputValue } from '../AbstractCoder';
 

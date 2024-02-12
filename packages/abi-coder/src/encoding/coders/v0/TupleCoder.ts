@@ -5,7 +5,7 @@ import {
   getWordSizePadding,
   isMultipleOfWordSize,
   rightPadToWordSize,
-} from '../../utils/utilities';
+} from '../../../utils/utilities';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
 

@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
-import { WORD_SIZE } from '../../utils/constants';
+import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
 import { U64Coder } from '../v0/U64Coder';
 

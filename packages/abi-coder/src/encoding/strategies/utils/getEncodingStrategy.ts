@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { ENCODING_V0, ENCODING_V1 } from '../../utils/constants';
+import { ENCODING_V0, ENCODING_V1 } from '../../../utils/constants';
 import { EncodingStrategyV0 } from '../EncodingStrategyV0';
 import { EncodingStrategyV1 } from '../EncodingStrategyV1';
 import type { IEncodingStrategy } from '../types/IEncodingStrategy';

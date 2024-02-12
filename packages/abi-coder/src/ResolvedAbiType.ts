@@ -1,14 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { JsonAbi, JsonAbiArgument } from './encoding/types/JsonAbi';
-import {
-  arrayRegEx,
-  enumRegEx,
-  genericRegEx,
-  stringRegEx,
-  structRegEx,
-} from './encoding/utils/constants';
-import { findOrThrow } from './encoding/utils/utilities';
+import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
+import { arrayRegEx, enumRegEx, genericRegEx, stringRegEx, structRegEx } from './utils/constants';
+import { findOrThrow } from './utils/utilities';
 
 export class ResolvedAbiType {
   readonly abi: JsonAbi;

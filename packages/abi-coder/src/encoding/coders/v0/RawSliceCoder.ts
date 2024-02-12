@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { Uint8ArrayWithDynamicData } from '../../utils/utilities';
-import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../../utils/utilities';
+import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
+import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../../../utils/utilities';
 import { Coder } from '../AbstractCoder';
 
 import { ArrayCoder } from './ArrayCoder';

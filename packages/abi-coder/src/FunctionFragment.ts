@@ -4,6 +4,10 @@ import { bn } from '@fuel-ts/math';
 import type { BytesLike } from 'ethers';
 import { sha256, getBytesCopy } from 'ethers';
 
+import { OPTION_CODER_TYPE } from './utils/constants';
+import type { Uint8ArrayWithDynamicData } from './utils/utilities';
+import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utils/utilities';
+
 import { AbiCoder } from './AbiCoder';
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
@@ -15,15 +19,7 @@ import type {
   JsonAbiArgument,
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
-} from './encoding/types/JsonAbi';
-import { OPTION_CODER_TYPE } from './encoding/utils/constants';
-import type { Uint8ArrayWithDynamicData } from './encoding/utils/utilities';
-import {
-  isPointerType,
-  unpackDynamicData,
-  findOrThrow,
-  isHeapType,
-} from './encoding/utils/utilities';
+} from './types/JsonAbi';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,

@@ -1,9 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
-import { MAX_BYTES } from '../../utils/constants';
-import type { Uint8ArrayWithDynamicData } from '../../utils/utilities';
-import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../../utils/utilities';
+import { MAX_BYTES } from '../../../utils/constants';
+import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
+import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../../../utils/utilities';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
 

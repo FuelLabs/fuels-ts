@@ -12,7 +12,7 @@ export { U64Coder } from './encoding/coders/v0/U64Coder';
 export { VecCoder } from './encoding/coders/v0/VecCoder';
 export type { FunctionFragment } from './FunctionFragment';
 export { Interface } from './Interface';
-export { JsonAbi } from './encoding/types/JsonAbi';
+export { JsonAbi } from './types/JsonAbi';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
@@ -20,4 +20,4 @@ export {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   calculateVmTxMemory,
-} from './encoding/utils/constants';
+} from './utils/constants';

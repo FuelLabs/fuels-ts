@@ -1,4 +1,5 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
+
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type {
   DecodedValue,
@@ -7,7 +8,7 @@ import type {
   EncodingOptions,
 } from './encoding/coders/AbstractCoder';
 import { getEncodingStrategy } from './encoding/strategies/utils/getEncodingStrategy';
-import type { JsonAbi, JsonAbiArgument } from './encoding/types/JsonAbi';
+import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
 
 export abstract class AbiCoder {
   /**
