@@ -1,6 +1,21 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ResolvedAbiType } from '../../ResolvedAbiType';
+import type { EncodingOptions, Coder } from '../coders/AbstractCoder';
+import { ArrayCoder } from '../coders/v0/ArrayCoder';
+import { B256Coder } from '../coders/v0/B256Coder';
+import { B512Coder } from '../coders/v0/B512Coder';
+import { OptionCoder } from '../coders/v0/OptionCoder';
+import { U64Coder } from '../coders/v0/U64Coder';
+import { ByteCoder } from '../coders/v1/ByteCoder';
+import { EnumCoder } from '../coders/v1/EnumCoder';
+import { LiteralCoder } from '../coders/v1/LiteralCoder';
+import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
+import { StdStringCoder } from '../coders/v1/StdStringCoder';
+import { StringCoder } from '../coders/v1/StringCoder';
+import { StructCoder } from '../coders/v1/StructCoder';
+import { TupleCoder } from '../coders/v1/TupleCoder';
+import { VecCoder } from '../coders/v1/VecCoder';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
@@ -23,21 +38,6 @@ import {
   tupleRegEx,
 } from '../utils/constants';
 import { findOrThrow } from '../utils/utilities';
-import type { EncodingOptions, Coder } from '../coders/AbstractCoder';
-import { ArrayCoder } from '../coders/v0/ArrayCoder';
-import { B256Coder } from '../coders/v0/B256Coder';
-import { B512Coder } from '../coders/v0/B512Coder';
-import { OptionCoder } from '../coders/v0/OptionCoder';
-import { U64Coder } from '../coders/v0/U64Coder';
-import { ByteCoder } from '../coders/v1/ByteCoder';
-import { EnumCoder } from '../coders/v1/EnumCoder';
-import { LiteralCoder } from '../coders/v1/LiteralCoder';
-import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
-import { StdStringCoder } from '../coders/v1/StdStringCoder';
-import { StringCoder } from '../coders/v1/StringCoder';
-import { StructCoder } from '../coders/v1/StructCoder';
-import { TupleCoder } from '../coders/v1/TupleCoder';
-import { VecCoder } from '../coders/v1/VecCoder';
 
 import type { IEncodingStrategy } from './types/IEncodingStrategy';
 
