@@ -10,7 +10,7 @@ import {
   RAW_PTR_CODER_TYPE,
   RAW_SLICE_CODER_TYPE,
   STD_STRING_CODER_TYPE,
-  STR_CODER_TYPE,
+  STR_SLICE_CODER_TYPE,
   U16_CODER_TYPE,
   U32_CODER_TYPE,
   U64_CODER_TYPE,
@@ -143,7 +143,7 @@ export const getCoder: TGetCoderFn = (
     return new TupleCoder(coders);
   }
 
-  if (resolvedAbiType.type === STR_CODER_TYPE) {
+  if (resolvedAbiType.type === STR_SLICE_CODER_TYPE) {
     throw new FuelError(
       ErrorCode.INVALID_DATA,
       'String slices can not be decoded from logs. Convert the slice to `str[N]` with `__to_str_array`'

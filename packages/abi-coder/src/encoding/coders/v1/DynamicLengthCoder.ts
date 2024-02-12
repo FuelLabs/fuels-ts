@@ -5,6 +5,7 @@ import {
   BYTES_CODER_TYPE,
   DYNAMIC_LEN,
   STD_STRING_CODER_TYPE,
+  STR_SLICE_CODER_TYPE,
   U64_CODER_TYPE,
   WORD_SIZE,
 } from '../../../utils/constants';
@@ -34,6 +35,13 @@ const config: DynamicConfig[] = [
     type: BYTES_CODER_TYPE,
     encodedTransformer: (value: InputValue): Uint8Array => toBytes(value as Uint8Array),
     decodedTransformer: (data: Uint8Array): Uint8Array => data,
+  },
+  {
+    matcher: STR_SLICE_CODER_TYPE,
+    name: STR_SLICE_CODER_TYPE,
+    type: STR_SLICE_CODER_TYPE,
+    encodedTransformer: (value: InputValue): Uint8Array => toUtf8Bytes(value as string),
+    decodedTransformer: (data: Uint8Array): string => toUtf8String(data),
   },
 ];
 
