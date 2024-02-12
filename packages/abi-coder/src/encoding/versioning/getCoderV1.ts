@@ -27,7 +27,7 @@ import type { Coder } from '../coders/v0/AbstractCoder';
 import { ArrayCoder } from '../coders/v0/ArrayCoder';
 import { OptionCoder } from '../coders/v0/OptionCoder';
 import { ByteCoder } from '../coders/v1/ByteCoder';
-import { DynamicCoder } from '../coders/v1/DynamicCoder';
+import { DynamicLengthCoder } from '../coders/v1/DynamicLengthCoder';
 import { EnumCoder } from '../coders/v1/EnumCoder';
 import { LiteralCoder } from '../coders/v1/LiteralCoder';
 import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
@@ -66,7 +66,7 @@ export const getCoder: TGetCoderFn = (
     case BYTES_CODER_TYPE:
       return new ByteCoder();
     case STD_STRING_CODER_TYPE:
-      return new DynamicCoder(resolvedAbiType.type);
+      return new DynamicLengthCoder(resolvedAbiType.type);
     default:
       break;
   }

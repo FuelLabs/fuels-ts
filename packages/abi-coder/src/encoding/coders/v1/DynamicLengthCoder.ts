@@ -37,7 +37,7 @@ const findConfigOrThrow = (name: string) => {
   return found;
 };
 
-export class DynamicCoder implements ICoder<InputValue, DecodedValue> {
+export class DynamicLengthCoder implements ICoder<InputValue, DecodedValue> {
   name: string;
   type: string;
   encodedLength: number;
