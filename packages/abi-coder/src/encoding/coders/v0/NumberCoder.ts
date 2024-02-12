@@ -1,8 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber, toBytes } from '@fuel-ts/math';
 
-import type { EncodingOptions } from '../AbstractCoder';
-import { Coder } from '../AbstractCoder';
+import type { TEncodingOptions } from '../../types/TEncodingOptions';
+
+import { Coder } from './AbstractCoder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32';
 
@@ -12,11 +13,11 @@ export class NumberCoder extends Coder<number, number> {
   length: number;
   paddingLength: number;
   baseType: NumberCoderType;
-  options: EncodingOptions;
+  options: TEncodingOptions;
 
   constructor(
     baseType: NumberCoderType,
-    options: EncodingOptions = {
+    options: TEncodingOptions = {
       isSmallBytes: false,
       isRightPadded: false,
     }

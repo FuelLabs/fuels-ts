@@ -3,7 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { U32_MAX } from '../../../../test/utils/constants';
 import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
-import type { EncodingOptions } from '../AbstractCoder';
+import type { TEncodingOptions } from '../../types/TEncodingOptions';
 
 import { BooleanCoder } from './BooleanCoder';
 import { NumberCoder } from './NumberCoder';
@@ -13,7 +13,7 @@ import { VecCoder } from './VecCoder';
  * @group node
  */
 describe('VecCoder', () => {
-  const options: EncodingOptions = {
+  const options: TEncodingOptions = {
     isSmallBytes: true,
   };
 

@@ -1,12 +1,10 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { Coder } from '../AbstractCoder';
+import type { Option, SwayOption } from '../../types/ICoder';
 
+import type { Coder } from './AbstractCoder';
 import type { InputValueOf, DecodedValueOf } from './EnumCoder';
 import { EnumCoder } from './EnumCoder';
-
-type SwayOption<T> = { None: [] } | { Some: T };
-export type Option<T> = T | undefined;
 
 export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCoder<TCoders> {
   encode(value: InputValueOf<TCoders>): Uint8Array {

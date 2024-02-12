@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
 import { U8_CODER_TYPE, WORD_SIZE } from '../../../utils/constants';
-import { Coder } from '../AbstractCoder';
+import { Coder } from '../v0/AbstractCoder';
 import { ArrayCoder } from '../v0/ArrayCoder';
 import { U64Coder } from '../v0/U64Coder';
 

@@ -9,8 +9,7 @@ import {
   U8_CODER_TYPE,
   WORD_SIZE,
 } from '../../../utils/constants';
-import { Coder } from '../AbstractCoder';
-import type { DecodedValue, InputValue } from '../AbstractCoder';
+import type { InputValue, ICoder, DecodedValue } from '../../types/ICoder';
 
 type LiteralConfig = {
   matcher: string;
@@ -27,7 +26,6 @@ const config: LiteralConfig[] = [
     name: 'boolean',
     type: 'boolean',
     encodedLength: 1,
-    // Fix encode input type
     encodedTransformer: (value: InputValue): Uint8Array => toBytes(value ? 1 : 0, 1) as Uint8Array,
     decodedTransformer: (data: Uint8Array): boolean => Boolean(bn(data).toNumber()).valueOf(),
   },
@@ -36,7 +34,6 @@ const config: LiteralConfig[] = [
     name: U8_CODER_TYPE,
     type: U8_CODER_TYPE,
     encodedLength: 1,
-    // Fix encode input type
     encodedTransformer: (value: InputValue): Uint8Array =>
       toBytes(value as number, 1) as Uint8Array,
     decodedTransformer: (data: Uint8Array): number => toNumber(data),
@@ -46,7 +43,6 @@ const config: LiteralConfig[] = [
     name: U16_CODER_TYPE,
     type: U16_CODER_TYPE,
     encodedLength: 2,
-    // Fix encode input type
     encodedTransformer: (value: InputValue): Uint8Array =>
       toBytes(value as number, 2) as Uint8Array,
     decodedTransformer: (data: Uint8Array): number => toNumber(data),
@@ -56,7 +52,6 @@ const config: LiteralConfig[] = [
     name: U32_CODER_TYPE,
     type: U32_CODER_TYPE,
     encodedLength: 4,
-    // Fix encode input type
     encodedTransformer: (value: InputValue): Uint8Array =>
       toBytes(value as number, 4) as Uint8Array,
     decodedTransformer: (data: Uint8Array): number => toNumber(data),
@@ -66,9 +61,8 @@ const config: LiteralConfig[] = [
     name: U64_CODER_TYPE,
     type: U64_CODER_TYPE,
     encodedLength: WORD_SIZE,
-    // Fix encode input type
     encodedTransformer: (value: InputValue): Uint8Array =>
-      toBytes(value as number, WORD_SIZE) as Uint8Array,
+      toBytes(value as BN, WORD_SIZE) as Uint8Array,
     decodedTransformer: (data: Uint8Array): BN => bn(data),
   },
 ];
@@ -81,7 +75,11 @@ const findConfigOrThrow = (name: string) => {
   return found;
 };
 
-export class LiteralCoder extends Coder implements LiteralConfig {
+export class LiteralCoder implements ICoder<InputValue, DecodedValue>, LiteralConfig {
+  name: string;
+  type: string;
+  encodedLength: number;
+
   matcher: string;
 
   encodedTransformer: (value: InputValue) => Uint8Array;
@@ -91,7 +89,10 @@ export class LiteralCoder extends Coder implements LiteralConfig {
     const { name, type, encodedLength, encodedTransformer, decodedTransformer } =
       findConfigOrThrow(resolvedTypeName);
 
-    super(name, type, encodedLength);
+    this.name = name;
+    this.type = type;
+    this.encodedLength = encodedLength;
+
     this.matcher = resolvedTypeName;
     this.encodedTransformer = encodedTransformer;
     this.decodedTransformer = decodedTransformer;

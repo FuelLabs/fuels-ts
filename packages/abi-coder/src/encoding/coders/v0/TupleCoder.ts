@@ -6,8 +6,9 @@ import {
   isMultipleOfWordSize,
   rightPadToWordSize,
 } from '../../../utils/utilities';
-import type { TypesOfCoder } from '../AbstractCoder';
-import { Coder } from '../AbstractCoder';
+
+import type { TypesOfCoder } from './AbstractCoder';
+import { Coder } from './AbstractCoder';
 
 type InputValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];

@@ -4,9 +4,9 @@ import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import { concatWithDynamicData } from '../../../utils/utilities';
-import type { TypesOfCoder } from '../AbstractCoder';
-import { Coder } from '../AbstractCoder';
 
+import type { TypesOfCoder } from './AbstractCoder';
+import { Coder } from './AbstractCoder';
 import { U64Coder } from './U64Coder';
 
 export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{

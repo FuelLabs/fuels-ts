@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { TypesOfCoder } from '../AbstractCoder';
-import { Coder } from '../AbstractCoder';
+import type { TypesOfCoder } from '../v0/AbstractCoder';
+import { Coder } from '../v0/AbstractCoder';
 
 type InputValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];

@@ -6,9 +6,9 @@ import {
   isMultipleOfWordSize,
   rightPadToWordSize,
 } from '../../../utils/utilities';
-import type { TypesOfCoder } from '../AbstractCoder';
-import { Coder } from '../AbstractCoder';
 
+import type { TypesOfCoder } from './AbstractCoder';
+import { Coder } from './AbstractCoder';
 import { OptionCoder } from './OptionCoder';
 
 type InputValueOf<TCoders extends Record<string, Coder>> = {

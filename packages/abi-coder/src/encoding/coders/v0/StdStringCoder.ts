@@ -6,8 +6,8 @@ import { toUtf8Bytes, toUtf8String } from 'ethers';
 import { WORD_SIZE } from '../../../utils/constants';
 import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
 import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../../../utils/utilities';
-import { Coder } from '../AbstractCoder';
 
+import { Coder } from './AbstractCoder';
 import { U64Coder } from './U64Coder';
 
 export class StdStringCoder extends Coder<string, string> {

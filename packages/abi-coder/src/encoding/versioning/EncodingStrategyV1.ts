@@ -1,21 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ResolvedAbiType } from '../../ResolvedAbiType';
-import type { EncodingOptions, Coder } from '../coders/AbstractCoder';
-import { ArrayCoder } from '../coders/v0/ArrayCoder';
-import { B256Coder } from '../coders/v0/B256Coder';
-import { B512Coder } from '../coders/v0/B512Coder';
-import { OptionCoder } from '../coders/v0/OptionCoder';
-import { U64Coder } from '../coders/v0/U64Coder';
-import { ByteCoder } from '../coders/v1/ByteCoder';
-import { EnumCoder } from '../coders/v1/EnumCoder';
-import { LiteralCoder } from '../coders/v1/LiteralCoder';
-import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
-import { StdStringCoder } from '../coders/v1/StdStringCoder';
-import { StringCoder } from '../coders/v1/StringCoder';
-import { StructCoder } from '../coders/v1/StructCoder';
-import { TupleCoder } from '../coders/v1/TupleCoder';
-import { VecCoder } from '../coders/v1/VecCoder';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
@@ -38,8 +23,23 @@ import {
   tupleRegEx,
 } from '../../utils/constants';
 import { findOrThrow } from '../../utils/utilities';
-
-import type { IEncodingStrategy } from './types/IEncodingStrategy';
+import type { Coder } from '../coders/v0/AbstractCoder';
+import { ArrayCoder } from '../coders/v0/ArrayCoder';
+import { B256Coder } from '../coders/v0/B256Coder';
+import { B512Coder } from '../coders/v0/B512Coder';
+import { OptionCoder } from '../coders/v0/OptionCoder';
+import { U64Coder } from '../coders/v0/U64Coder';
+import { ByteCoder } from '../coders/v1/ByteCoder';
+import { EnumCoder } from '../coders/v1/EnumCoder';
+import { LiteralCoder } from '../coders/v1/LiteralCoder';
+import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
+import { StdStringCoder } from '../coders/v1/StdStringCoder';
+import { StringCoder } from '../coders/v1/StringCoder';
+import { StructCoder } from '../coders/v1/StructCoder';
+import { TupleCoder } from '../coders/v1/TupleCoder';
+import { VecCoder } from '../coders/v1/VecCoder';
+import type { TEncodingOptions } from '../types/TEncodingOptions';
+import type { IEncodingStrategy } from '../types/TGetCoder';
 
 /**
  * Encoding strategy based on the v1 spec:
@@ -52,7 +52,10 @@ export class EncodingStrategyV1 implements IEncodingStrategy {
    * @param options - options to be utilized during the encoding process.
    * @returns the coder for a given type.
    */
-  getCoder(resolvedAbiType: ResolvedAbiType, _options?: EncodingOptions): Coder {
+  getCoder(
+    resolvedAbiType: ResolvedAbiType,
+    _options?: TEncodingOptions
+  ): Coder /** SHOULD BE ICoder */ {
     switch (resolvedAbiType.type) {
       case U8_CODER_TYPE:
       case U16_CODER_TYPE:
@@ -160,7 +163,7 @@ export class EncodingStrategyV1 implements IEncodingStrategy {
    * @param options - options to be utilized during the encoding process.
    * @returns the coders for a given set of components.
    */
-  private getCoders(components: readonly ResolvedAbiType[], options?: EncodingOptions) {
+  private getCoders(components: readonly ResolvedAbiType[], options?: TEncodingOptions) {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 

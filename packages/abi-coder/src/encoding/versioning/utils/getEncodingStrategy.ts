@@ -1,9 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ENCODING_V0, ENCODING_V1 } from '../../../utils/constants';
-import { EncodingStrategyV0 } from '../EncodingStrategyV0';
+import type { TGetCoder } from '../../types/TGetCoder';
 import { EncodingStrategyV1 } from '../EncodingStrategyV1';
-import type { IEncodingStrategy } from '../types/IEncodingStrategy';
+import { EncodingStrategyV0 } from '../getCoderV0';
 
 /**
  * Retrieves the appropriate encoding strategy for a given encoding version.
@@ -12,7 +12,7 @@ import type { IEncodingStrategy } from '../types/IEncodingStrategy';
  * @throws for an unsupported encoding version.
  * @returns the appropriate encoding strategy.
  */
-export function getEncodingStrategy(encoding: string = ENCODING_V0): IEncodingStrategy {
+export function getEncodingStrategy(encoding: string = ENCODING_V0): TGetCoder {
   switch (encoding) {
     case ENCODING_V1:
       return new EncodingStrategyV1();

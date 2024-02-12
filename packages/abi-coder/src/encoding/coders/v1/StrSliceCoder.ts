@@ -3,7 +3,7 @@ import { bn } from '@fuel-ts/math';
 import { toUtf8String } from 'ethers';
 
 import { WORD_SIZE } from '../../../utils/constants';
-import { Coder } from '../AbstractCoder';
+import { Coder } from '../v0/AbstractCoder';
 import { U64Coder } from '../v0/U64Coder';
 
 export class StrSliceCoder extends Coder<string, string> {

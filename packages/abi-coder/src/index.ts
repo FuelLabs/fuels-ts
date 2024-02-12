@@ -1,4 +1,5 @@
-export { Coder, InputValue, DecodedValue } from './encoding/coders/AbstractCoder';
+export { Coder } from './encoding/coders/v0/AbstractCoder';
+export { InputValue, DecodedValue } from './encoding/types/ICoder';
 export { ArrayCoder } from './encoding/coders/v0/ArrayCoder';
 export { B256Coder } from './encoding/coders/v0/B256Coder';
 export { B512Coder } from './encoding/coders/v0/B512Coder';

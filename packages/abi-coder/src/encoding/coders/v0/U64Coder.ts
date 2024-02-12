@@ -3,7 +3,8 @@ import type { BN, BNInput } from '@fuel-ts/math';
 import { bn, toBytes } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../../../utils/constants';
-import { Coder } from '../AbstractCoder';
+
+import { Coder } from './AbstractCoder';
 
 export class U64Coder extends Coder<BNInput, BN> {
   constructor() {

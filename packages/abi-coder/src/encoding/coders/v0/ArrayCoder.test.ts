@@ -2,7 +2,7 @@ import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { U32_MAX, U8_MAX } from '../../../../test/utils/constants';
-import type { EncodingOptions } from '../AbstractCoder';
+import type { TEncodingOptions } from '../../types/TEncodingOptions';
 
 import { ArrayCoder } from './ArrayCoder';
 import { BooleanCoder } from './BooleanCoder';
@@ -13,7 +13,7 @@ import { NumberCoder } from './NumberCoder';
  * @group node
  */
 describe('ArrayCoder', () => {
-  const options: EncodingOptions = {
+  const options: TEncodingOptions = {
     isSmallBytes: true,
   };
 
