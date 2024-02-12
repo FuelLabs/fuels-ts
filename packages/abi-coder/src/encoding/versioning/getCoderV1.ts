@@ -64,7 +64,6 @@ export const getCoder: TGetCoderFn = (
     case RAW_SLICE_CODER_TYPE:
       return new RawSliceCoder();
     case BYTES_CODER_TYPE:
-      return new ByteCoder();
     case STD_STRING_CODER_TYPE:
       return new DynamicLengthCoder(resolvedAbiType.type);
     default:

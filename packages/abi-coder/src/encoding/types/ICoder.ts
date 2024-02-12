@@ -20,7 +20,8 @@ export type DecodedValue =
   | BN
   | DecodedValue[]
   | { [key: string]: DecodedValue }
-  | Record<string, Primitive>;
+  | Record<string, Primitive>
+  | Uint8Array;
 
 export interface ICoder<TInput = unknown, TDecoded = unknown> {
   name: string;

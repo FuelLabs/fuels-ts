@@ -1,7 +1,8 @@
-import { bn } from '@fuel-ts/math';
+import { bn, toBytes } from '@fuel-ts/math';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import {
+  BYTES_CODER_TYPE,
   DYNAMIC_LEN,
   STD_STRING_CODER_TYPE,
   U64_CODER_TYPE,
@@ -26,6 +27,13 @@ const config: DynamicConfig[] = [
     type: STD_STRING_CODER_TYPE,
     encodedTransformer: (value: InputValue): Uint8Array => toUtf8Bytes(value as string),
     decodedTransformer: (data: Uint8Array): string => toUtf8String(data),
+  },
+  {
+    matcher: BYTES_CODER_TYPE,
+    name: BYTES_CODER_TYPE,
+    type: BYTES_CODER_TYPE,
+    encodedTransformer: (value: InputValue): Uint8Array => toBytes(value as Uint8Array),
+    decodedTransformer: (data: Uint8Array): Uint8Array => data,
   },
 ];
 
