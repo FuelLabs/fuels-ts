@@ -1,5 +1,5 @@
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { createWallet } from './createWallet';
 

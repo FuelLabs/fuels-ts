@@ -6,4 +6,4 @@ Once you've instantiated your wallet in an unlocked state using one of the previ
 
 You can also sign a _transaction_ by using `wallet.sign_transaction`. Below is a full example of how to sign and recover a transaction.
 
-<<< @/../../../packages/wallet/src/wallet-unlocked.test.ts#wallet-transaction-signing{ts:line-numbers}
+<<< @/../../../packages/account/src/wallet/wallet-unlocked.test.ts#wallet-transaction-signing{ts:line-numbers}
