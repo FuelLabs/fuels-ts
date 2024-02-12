@@ -27,25 +27,24 @@ import type { Coder } from '../coders/v0/AbstractCoder';
 import { ArrayCoder } from '../coders/v0/ArrayCoder';
 import { B256Coder } from '../coders/v0/B256Coder';
 import { B512Coder } from '../coders/v0/B512Coder';
-import { BooleanCoder } from '../coders/v0/BooleanCoder';
-import { ByteCoder } from '../coders/v0/ByteCoder';
-import { EnumCoder } from '../coders/v0/EnumCoder';
-import { NumberCoder } from '../coders/v0/NumberCoder';
 import { OptionCoder } from '../coders/v0/OptionCoder';
-import { RawSliceCoder } from '../coders/v0/RawSliceCoder';
-import { StdStringCoder } from '../coders/v0/StdStringCoder';
-import { StringCoder } from '../coders/v0/StringCoder';
-import { StructCoder } from '../coders/v0/StructCoder';
-import { TupleCoder } from '../coders/v0/TupleCoder';
 import { U64Coder } from '../coders/v0/U64Coder';
-import { VecCoder } from '../coders/v0/VecCoder';
+import { ByteCoder } from '../coders/v1/ByteCoder';
+import { EnumCoder } from '../coders/v1/EnumCoder';
+import { LiteralCoder } from '../coders/v1/LiteralCoder';
+import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
+import { StdStringCoder } from '../coders/v1/StdStringCoder';
+import { StringCoder } from '../coders/v1/StringCoder';
+import { StructCoder } from '../coders/v1/StructCoder';
+import { TupleCoder } from '../coders/v1/TupleCoder';
+import { VecCoder } from '../coders/v1/VecCoder';
 import type { TGetCoderFn } from '../types/IGetCoder';
 import type { TEncodingOptions } from '../types/TEncodingOptions';
 
 import { getCoders } from './utils/getCoders';
 
 /**
- * Retrieves coders that adhere to the v0 spec.
+ * Retrieves coders that adhere to the v1 spec.
  *
  * @param resolvedAbiType - the resolved type to return a coder for.
  * @param options - options to be utilized during the encoding process.
@@ -53,20 +52,19 @@ import { getCoders } from './utils/getCoders';
  */
 export const getCoder: TGetCoderFn = (
   resolvedAbiType: ResolvedAbiType,
-  options?: TEncodingOptions
+  _options?: TEncodingOptions
 ): Coder => {
   switch (resolvedAbiType.type) {
     case U8_CODER_TYPE:
     case U16_CODER_TYPE:
     case U32_CODER_TYPE:
-      return new NumberCoder(resolvedAbiType.type, options);
+    case BOOL_CODER_TYPE:
     case U64_CODER_TYPE:
+      return new LiteralCoder(resolvedAbiType.type);
     case RAW_PTR_CODER_TYPE:
       return new U64Coder();
     case RAW_SLICE_CODER_TYPE:
       return new RawSliceCoder();
-    case BOOL_CODER_TYPE:
-      return new BooleanCoder(options);
     case B256_CODER_TYPE:
       return new B256Coder();
     case B512_CODER_TYPE:
