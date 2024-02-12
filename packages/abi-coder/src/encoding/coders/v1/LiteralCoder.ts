@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn, toBytes, toNumber } from '@fuel-ts/math';
 
@@ -104,6 +105,11 @@ export class LiteralCoder implements ICoder<InputValue, DecodedValue>, LiteralCo
 
   decode(data: Uint8Array, offset: number): [DecodedValue, number] {
     const byteData = data.slice(offset, offset + this.encodedLength);
+
+    if (byteData.length !== this.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid ${this.name} byte data size.`);
+    }
+
     return [this.decodedTransformer(byteData), offset + this.encodedLength];
   }
 }
