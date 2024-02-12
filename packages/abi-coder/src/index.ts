@@ -1,18 +1,18 @@
-export { Coder, InputValue, DecodedValue } from './encoding/coders/abstract-coder';
-export { ArrayCoder } from './encoding/coders/v0/array';
-export { B256Coder } from './encoding/coders/v0/b256';
-export { B512Coder } from './encoding/coders/v0/b512';
-export { BooleanCoder } from './encoding/coders/v0/boolean';
-export { EnumCoder } from './encoding/coders/v0/enum';
-export { NumberCoder } from './encoding/coders/v0/number';
-export { StringCoder } from './encoding/coders/v0/string';
-export { StructCoder } from './encoding/coders/v0/struct';
-export { TupleCoder } from './encoding/coders/v0/tuple';
-export { U64Coder } from './encoding/coders/v0/u64';
-export { VecCoder } from './encoding/coders/v0/vec';
-export type { FunctionFragment } from './function-fragment';
-export { Interface } from './interface';
-export { JsonAbi } from './json-abi';
+export { Coder, InputValue, DecodedValue } from './encoding/coders/AbstractCoder';
+export { ArrayCoder } from './encoding/coders/v0/ArrayCoder';
+export { B256Coder } from './encoding/coders/v0/B256Coder';
+export { B512Coder } from './encoding/coders/v0/B512Coder';
+export { BooleanCoder } from './encoding/coders/v0/BooleanCoder';
+export { EnumCoder } from './encoding/coders/v0/EnumCoder';
+export { NumberCoder } from './encoding/coders/v0/NumberCoder';
+export { StringCoder } from './encoding/coders/v0/StringCoder';
+export { StructCoder } from './encoding/coders/v0/StructCoder';
+export { TupleCoder } from './encoding/coders/v0/TupleCoder';
+export { U64Coder } from './encoding/coders/v0/U64Coder';
+export { VecCoder } from './encoding/coders/v0/VecCoder';
+export type { FunctionFragment } from './FunctionFragment';
+export { Interface } from './Interface';
+export { JsonAbi } from './encoding/types/JsonAbi';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
@@ -20,4 +20,4 @@ export {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   calculateVmTxMemory,
-} from './constants';
+} from './encoding/utils/constants';
