@@ -136,12 +136,8 @@ export class LiteralCoder implements ICoder<InputValue, DecodedValue>, LiteralCo
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValue, number] {
-    const byteData = data.slice(offset, offset + this.encodedLength);
+    const dataBytes = data.slice(offset, offset + this.encodedLength);
 
-    if (byteData.length !== this.encodedLength) {
-      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid ${this.name} byte data size.`);
-    }
-
-    return [this.decodedTransformer(byteData), offset + this.encodedLength];
+    return [this.decodedTransformer(dataBytes), offset + this.encodedLength];
   }
 }

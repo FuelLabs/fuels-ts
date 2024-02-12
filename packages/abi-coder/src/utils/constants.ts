@@ -42,6 +42,7 @@ export const NONCE_LEN = BYTES_32;
 export const TX_LEN = WORD_SIZE * 4;
 export const TX_POINTER_LEN = WORD_SIZE * 2;
 export const MAX_BYTES = 2 ** 32 - 1; // Max u32
+export const DYNAMIC_LEN = WORD_SIZE;
 
 export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
   BYTES_32 + // Tx ID
