@@ -25,10 +25,7 @@ import {
 import { findOrThrow } from '../../utils/utilities';
 import type { Coder } from '../coders/v0/AbstractCoder';
 import { ArrayCoder } from '../coders/v0/ArrayCoder';
-import { B256Coder } from '../coders/v0/B256Coder';
-import { B512Coder } from '../coders/v0/B512Coder';
 import { OptionCoder } from '../coders/v0/OptionCoder';
-import { U64Coder } from '../coders/v0/U64Coder';
 import { ByteCoder } from '../coders/v1/ByteCoder';
 import { EnumCoder } from '../coders/v1/EnumCoder';
 import { LiteralCoder } from '../coders/v1/LiteralCoder';
@@ -60,15 +57,12 @@ export const getCoder: TGetCoderFn = (
     case U32_CODER_TYPE:
     case BOOL_CODER_TYPE:
     case U64_CODER_TYPE:
-      return new LiteralCoder(resolvedAbiType.type);
     case RAW_PTR_CODER_TYPE:
-      return new U64Coder();
+    case B256_CODER_TYPE:
+    case B512_CODER_TYPE:
+      return new LiteralCoder(resolvedAbiType.type);
     case RAW_SLICE_CODER_TYPE:
       return new RawSliceCoder();
-    case B256_CODER_TYPE:
-      return new B256Coder();
-    case B512_CODER_TYPE:
-      return new B512Coder();
     case BYTES_CODER_TYPE:
       return new ByteCoder();
     case STD_STRING_CODER_TYPE:

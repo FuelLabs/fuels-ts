@@ -1,9 +1,16 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn, toBytes, toNumber } from '@fuel-ts/math';
+import type { BytesLike } from 'ethers';
+import { getBytesCopy } from 'ethers';
 
 import {
+  B256_CODER_TYPE,
+  B512_CODER_TYPE,
   BOOL_CODER_TYPE,
+  BYTES_32,
+  BYTES_64,
+  RAW_PTR_CODER_TYPE,
   U16_CODER_TYPE,
   U32_CODER_TYPE,
   U64_CODER_TYPE,
@@ -65,6 +72,31 @@ const config: LiteralConfig[] = [
     encodedTransformer: (value: InputValue): Uint8Array =>
       toBytes(value as BN, WORD_SIZE) as Uint8Array,
     decodedTransformer: (data: Uint8Array): BN => bn(data),
+  },
+  {
+    matcher: RAW_PTR_CODER_TYPE,
+    name: RAW_PTR_CODER_TYPE,
+    type: RAW_PTR_CODER_TYPE,
+    encodedLength: WORD_SIZE,
+    encodedTransformer: (value: InputValue): Uint8Array =>
+      toBytes(value as BN, WORD_SIZE) as Uint8Array,
+    decodedTransformer: (data: Uint8Array): BN => bn(data),
+  },
+  {
+    matcher: B256_CODER_TYPE,
+    name: B256_CODER_TYPE,
+    type: B256_CODER_TYPE,
+    encodedLength: BYTES_32,
+    encodedTransformer: (value: InputValue): Uint8Array => getBytesCopy(value as BytesLike),
+    decodedTransformer: (data: Uint8Array): string => bn(data).toHex(BYTES_32),
+  },
+  {
+    matcher: B512_CODER_TYPE,
+    name: 'b512',
+    type: B512_CODER_TYPE,
+    encodedLength: BYTES_64,
+    encodedTransformer: (value: InputValue): Uint8Array => getBytesCopy(value as BytesLike),
+    decodedTransformer: (data: Uint8Array): string => bn(data).toHex(BYTES_64),
   },
 ];
 
