@@ -12,7 +12,6 @@ import { Wallet } from '../../wallet';
 import { MockConnector } from '../fixtures/mocked-connector';
 import { promiseCallback } from '../fixtures/promise-callback';
 import { Fuel } from '../fuel';
-import { FuelWalletProvider } from '../fuel-wallet-provider';
 import { FuelConnectorEventType } from '../types';
 
 /**
@@ -524,7 +523,7 @@ describe('Fuel Connector', () => {
       connectors: [connector],
     });
 
-    class CustomProvider extends FuelWalletProvider {
+    class CustomProvider extends Provider {
       static async create(_url: string, opts?: ProviderOptions) {
         const provider = new CustomProvider(FUEL_NETWORK_URL, opts);
         await provider.fetchChainAndNodeInfo();
