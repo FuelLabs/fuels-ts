@@ -29,7 +29,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-non-null-assertion': 1,
     // Disable error on devDependencies importing since this isn't a TS library
-    'no-param-reassign': ['error', { props: false }],
     'require-await': 'off',
     '@typescript-eslint/require-await': 'error',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
@@ -39,7 +38,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'class-methods-use-this': 'off',
     'no-plusplus': 'off',
-    'no-param-reassign': ['error', { props: false }],
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/lines-between-class-members': [
       'error',
