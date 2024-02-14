@@ -1,0 +1,33 @@
+{
+  "$schema": "https://www.graphql-code-generator.com/config.schema.json",
+  "schema": "./src/providers/fuel-core-schema.graphql",
+  "documents": "./src/providers/operations.graphql",
+  "generates": {
+    "./src/providers/__generated__/operations.ts": {
+      "plugins": [
+        { "typescript": {} },
+        { "typescript-operations": {} },
+        { "typescript-generic-sdk": {} }
+      ],
+      "config": {
+        "scalars": {
+          "DateTime": "string",
+          "HexString": "string",
+          "Bytes32": "string",
+          "UtxoId": "string",
+          "U64": "string",
+          "Address": "string",
+          "BlockId": "string",
+          "TransactionId": "string",
+          "AssetId": "string",
+          "ContractId": "string",
+          "Salt": "string",
+          "Nonce": "string"
+        },
+        "useTypeImports": true,
+        "nonOptionalTypename": true,
+        "typesPrefix": "Gql"
+      }
+    }
+  }
+}

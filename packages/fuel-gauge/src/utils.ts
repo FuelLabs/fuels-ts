@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
 import { Script, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
@@ -54,7 +54,9 @@ export const createSetupConfig =
     });
 
 const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
-  next(join(__dirname, `../test/fixtures/forc-projects/${contractName}/out/debug/${contractName}`));
+  next(
+    join(__dirname, `../test/fixtures/forc-projects/${contractName}/out/release/${contractName}`)
+  );
 
 export const getSetupContract = (
   contractName: string

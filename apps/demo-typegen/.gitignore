@@ -3,3 +3,5 @@ src/*-types
 
 # Forc
 **/out/debug/**
+**/out/release/**,
+

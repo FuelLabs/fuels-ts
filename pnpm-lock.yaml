@@ -167,12 +167,12 @@ importers:
 
   apps/demo-fuels:
     dependencies:
+      '@fuel-ts/account':
+        specifier: workspace:^
+        version: link:../../packages/account
       '@fuel-ts/errors':
         specifier: workspace:^
         version: link:../../packages/errors
-      '@fuel-ts/wallet':
-        specifier: workspace:^
-        version: link:../../packages/wallet
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -313,6 +313,9 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../../packages/account
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
@@ -322,9 +325,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../../packages/wallet
 
   apps/docs:
     dependencies:
@@ -377,18 +377,15 @@ importers:
 
   apps/docs-snippets:
     devDependencies:
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../../packages/account
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../../packages/wallet
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../../packages/wallet-manager
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -401,6 +398,9 @@ importers:
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../../packages/abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../../packages/account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../../packages/address
@@ -416,9 +416,6 @@ importers:
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../../packages/hasher
-      '@fuel-ts/hdwallet':
-        specifier: workspace:*
-        version: link:../../packages/hdwallet
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../../packages/interfaces
@@ -428,24 +425,12 @@ importers:
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../../packages/merkle
-      '@fuel-ts/mnemonic':
-        specifier: workspace:*
-        version: link:../../packages/mnemonic
-      '@fuel-ts/predicate':
-        specifier: workspace:*
-        version: link:../../packages/predicate
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../../packages/program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../../packages/providers
       '@fuel-ts/script':
         specifier: workspace:*
         version: link:../../packages/script
-      '@fuel-ts/signer':
-        specifier: workspace:*
-        version: link:../../packages/signer
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../../packages/transactions
@@ -455,15 +440,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../../packages/wallet
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../../packages/wallet-manager
-      '@fuel-ts/wordlists':
-        specifier: workspace:*
-        version: link:../../packages/wordlists
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -542,6 +518,103 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
 
+  packages/account:
+    dependencies:
+      '@fuel-ts/abi-coder':
+        specifier: workspace:*
+        version: link:../abi-coder
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@fuel-ts/fuel-core':
+        specifier: workspace:*
+        version: link:../fuel-core
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
+      '@fuel-ts/merkle':
+        specifier: workspace:*
+        version: link:../merkle
+      '@fuel-ts/transactions':
+        specifier: workspace:*
+        version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
+      '@fuels/vm-asm':
+        specifier: 0.42.1
+        version: 0.42.1
+      '@noble/curves':
+        specifier: ^1.3.0
+        version: 1.3.0
+      ethers:
+        specifier: ^6.7.1
+        version: 6.7.1
+      events:
+        specifier: ^3.3.0
+        version: 3.3.0
+      graphql:
+        specifier: ^16.6.0
+        version: 16.6.0
+      graphql-request:
+        specifier: 5.0.0
+        version: 5.0.0(graphql@16.6.0)
+      graphql-tag:
+        specifier: ^2.12.6
+        version: 2.12.6(graphql@16.6.0)
+      portfinder:
+        specifier: ^1.0.32
+        version: 1.0.32
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
+      tai64:
+        specifier: ^1.0.0
+        version: 1.0.0
+      tree-kill:
+        specifier: ^1.2.2
+        version: 1.2.2
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@graphql-codegen/cli':
+        specifier: ^2.13.7
+        version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
+      '@graphql-codegen/typescript':
+        specifier: ^2.8.0
+        version: 2.8.0(graphql@16.6.0)
+      '@graphql-codegen/typescript-generic-sdk':
+        specifier: ^3.1.0
+        version: 3.1.0(graphql-tag@2.12.6)(graphql@16.6.0)
+      '@graphql-codegen/typescript-operations':
+        specifier: ^2.5.5
+        version: 2.5.5(graphql@16.6.0)
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
+      '@types/uuid':
+        specifier: ^9.0.1
+        version: 9.0.1
+      get-graphql-schema:
+        specifier: ^2.1.2
+        version: 2.1.2
+
   packages/address:
     dependencies:
       '@fuel-ts/crypto':
@@ -568,6 +641,9 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -583,9 +659,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -595,9 +668,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -667,6 +737,9 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
@@ -676,9 +749,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
 
   packages/fuels:
     dependencies:
@@ -688,6 +758,9 @@ importers:
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -709,9 +782,6 @@ importers:
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
-      '@fuel-ts/hdwallet':
-        specifier: workspace:*
-        version: link:../hdwallet
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
@@ -721,24 +791,12 @@ importers:
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
-      '@fuel-ts/mnemonic':
-        specifier: workspace:*
-        version: link:../mnemonic
-      '@fuel-ts/predicate':
-        specifier: workspace:*
-        version: link:../predicate
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/script':
         specifier: workspace:*
         version: link:../script
-      '@fuel-ts/signer':
-        specifier: workspace:*
-        version: link:../signer
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -748,15 +806,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../wallet-manager
-      '@fuel-ts/wordlists':
-        specifier: workspace:*
-        version: link:../wordlists
       bundle-require:
         specifier: ^4.0.1
         version: 4.0.1(esbuild@0.19.3)
@@ -838,24 +887,6 @@ importers:
         specifier: ^0.29.3
         version: 0.29.3
 
-  packages/hdwallet:
-    dependencies:
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/mnemonic':
-        specifier: workspace:*
-        version: link:../mnemonic
-      '@fuel-ts/signer':
-        specifier: workspace:*
-        version: link:../signer
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-
   packages/interfaces: {}
 
   packages/math:
@@ -879,69 +910,14 @@ importers:
         specifier: ^6.7.1
         version: 6.7.1
 
-  packages/mnemonic:
-    dependencies:
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/wordlists':
-        specifier: workspace:*
-        version: link:../wordlists
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-
-  packages/predicate:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/merkle':
-        specifier: workspace:*
-        version: link:../merkle
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@fuel-ts/versions':
-        specifier: workspace:*
-        version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-    devDependencies:
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-
   packages/program:
     dependencies:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -957,9 +933,6 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -969,9 +942,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       '@fuels/vm-asm':
         specifier: 0.42.1
         version: 0.42.1
@@ -983,73 +953,6 @@ importers:
         specifier: workspace:*
         version: link:../forc
 
-  packages/providers:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/versions':
-        specifier: workspace:*
-        version: link:../versions
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-      graphql:
-        specifier: ^16.6.0
-        version: 16.6.0
-      graphql-request:
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.6.0)
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@16.6.0)
-      ramda:
-        specifier: ^0.29.0
-        version: 0.29.0
-      tai64:
-        specifier: ^1.0.0
-        version: 1.0.0
-    devDependencies:
-      '@graphql-codegen/cli':
-        specifier: ^2.13.7
-        version: 2.13.7(@babel/core@7.23.3)(@types/node@20.10.5)(graphql@16.6.0)(ts-node@10.9.1)(typescript@5.2.2)
-      '@graphql-codegen/typescript':
-        specifier: ^2.8.0
-        version: 2.8.0(graphql@16.6.0)
-      '@graphql-codegen/typescript-generic-sdk':
-        specifier: ^3.1.0
-        version: 3.1.0(graphql-tag@2.12.6)(graphql@16.6.0)
-      '@graphql-codegen/typescript-operations':
-        specifier: ^2.5.5
-        version: 2.5.5(graphql@16.6.0)
-      '@types/ramda':
-        specifier: ^0.29.3
-        version: 0.29.3
-      get-graphql-schema:
-        specifier: ^2.1.2
-        version: 2.1.2
-
   packages/script:
     dependencies:
       '@fuel-ts/abi-coder':
@@ -1058,6 +961,9 @@ importers:
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -1073,18 +979,12 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -1092,27 +992,6 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../forc
-
-  packages/signer:
-    dependencies:
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@noble/curves':
-        specifier: ^1.3.0
-        version: 1.3.0
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
 
   packages/transactions:
     dependencies:
@@ -1162,106 +1041,6 @@ importers:
       '@types/cli-table':
         specifier: ^0.3.1
         version: 0.3.1
-
-  packages/wallet:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/fuel-core':
-        specifier: workspace:*
-        version: link:../fuel-core
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/hdwallet':
-        specifier: workspace:*
-        version: link:../hdwallet
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/mnemonic':
-        specifier: workspace:*
-        version: link:../mnemonic
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/signer':
-        specifier: workspace:*
-        version: link:../signer
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@fuels/vm-asm':
-        specifier: 0.42.1
-        version: 0.42.1
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
-      portfinder:
-        specifier: ^1.0.32
-        version: 1.0.32
-      tree-kill:
-        specifier: ^1.2.2
-        version: 1.2.2
-      uuid:
-        specifier: ^9.0.0
-        version: 9.0.0
-    devDependencies:
-      '@types/uuid':
-        specifier: ^9.0.1
-        version: 9.0.1
-
-  packages/wallet-manager:
-    dependencies:
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
-      '@fuel-ts/mnemonic':
-        specifier: workspace:*
-        version: link:../mnemonic
-      '@fuel-ts/providers':
-        specifier: workspace:*
-        version: link:../providers
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
-      events:
-        specifier: ^3.3.0
-        version: 3.3.0
-    devDependencies:
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/signer':
-        specifier: workspace:*
-        version: link:../signer
-
-  packages/wordlists: {}
 
   templates/nextjs:
     dependencies:
@@ -1484,11 +1263,11 @@ packages:
       graphql: '*'
     dependencies:
       '@babel/core': 7.22.5
-      '@babel/generator': 7.22.5
-      '@babel/parser': 7.22.5
+      '@babel/generator': 7.23.4
+      '@babel/parser': 7.23.9
       '@babel/runtime': 7.22.5
       '@babel/traverse': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/types': 7.23.9
       babel-preset-fbjs: 3.4.0(@babel/core@7.22.5)
       chalk: 4.1.2
       fb-watchman: 2.0.2
@@ -1617,7 +1396,7 @@ packages:
     resolution: {integrity: sha512-esuS49Cga3HcThFNebGhlgsrVLkvhqvYDTzgjfFFlHJcIfLe5jFmRRfCQ1KuBfc4Jrtn3ndLgKWAKjBE+IraYQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.23.4
+      '@babel/types': 7.23.9
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.20
       jsesc: 2.5.2
@@ -1933,7 +1712,6 @@ packages:
     hasBin: true
     dependencies:
       '@babel/types': 7.23.4
-    dev: true
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.22.5(@babel/core@7.22.5):
     resolution: {integrity: sha512-NP1M5Rf+u2Gw9qfSO4ihjcTGW5zXTi36ITLd4/EoAcEhIZ0yjMqmftDNl3QC19CX7olhrjpyU454g/2W7X0jvQ==}
@@ -3277,8 +3055,8 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.4
-      '@babel/parser': 7.23.4
-      '@babel/types': 7.23.4
+      '@babel/parser': 7.23.9
+      '@babel/types': 7.23.9
 
   /@babel/template@7.22.5:
     resolution: {integrity: sha512-X7yV7eiwAxdj9k94NEylvbVHLiVG1nvzCV2EAowhxLTwODV1jl9UzZ48leOC0sH7OnuHrIkllaBgneUykIcZaw==}
@@ -4440,9 +4218,9 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
-      '@babel/generator': 7.22.5
-      '@babel/template': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/generator': 7.23.4
+      '@babel/template': 7.22.15
+      '@babel/types': 7.23.9
       '@graphql-codegen/core': 2.6.2(graphql@16.6.0)
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.6.0)
       '@graphql-tools/apollo-engine-loader': 7.3.26(graphql@16.6.0)
@@ -4873,7 +4651,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: true
 
   /@graphql-tools/prisma-loader@7.2.72(@types/node@20.10.5)(graphql@16.6.0):
@@ -4916,7 +4694,7 @@ packages:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -5086,7 +4864,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       jest-message-util: 28.1.3
       jest-util: 28.1.3
@@ -5107,7 +4885,7 @@ packages:
       '@jest/test-result': 27.5.1
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.8.1
@@ -5305,7 +5083,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       '@types/yargs': 16.0.5
       chalk: 4.1.2
     dev: false
@@ -5317,7 +5095,7 @@ packages:
       '@jest/schemas': 28.1.3
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: false
@@ -5329,7 +5107,7 @@ packages:
       '@jest/schemas': 29.4.3
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: false
@@ -6121,14 +5899,14 @@ packages:
     resolution: {integrity: sha512-osvveYtyzdEVbt3OfwwXFr4P2iVBL5u1Q3q4ONBfDY/UpOuXmOlbgwc1xECEboY8wIays8Yt6onaWMUdUbfl0A==}
     dependencies:
       '@noble/curves': 1.1.0
-      '@noble/hashes': 1.3.1
+      '@noble/hashes': 1.3.3
       '@scure/base': 1.1.1
     dev: false
 
   /@scure/bip39@1.2.1:
     resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
     dependencies:
-      '@noble/hashes': 1.3.1
+      '@noble/hashes': 1.3.3
       '@scure/base': 1.1.1
     dev: false
 
@@ -6672,7 +6450,7 @@ packages:
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
     dev: true
 
   /@types/graceful-fs@4.1.6:
@@ -6809,7 +6587,7 @@ packages:
   /@types/mkdirp@0.5.2:
     resolution: {integrity: sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
     dev: true
 
   /@types/mkdirp@1.0.2:
@@ -6901,7 +6679,7 @@ packages:
   /@types/resolve@0.0.8:
     resolution: {integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
     dev: true
 
   /@types/resolve@1.17.1:
@@ -6999,7 +6777,7 @@ packages:
   /@types/ws@8.5.5:
     resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
 
   /@types/yargs-parser@21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -14188,7 +13966,7 @@ packages:
     dependencies:
       '@jest/types': 27.5.1
       '@types/graceful-fs': 4.1.6
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -14259,7 +14037,7 @@ packages:
     resolution: {integrity: sha512-rMyFe1+jnyAAf+NHwTclDz0eAaLkVDdKVHHBFWsBWHnnh5YeJMNWWsv7AbFYXfK3oTqvL7VTWkhNLu1jX24D+g==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      '@babel/code-frame': 7.22.5
+      '@babel/code-frame': 7.23.4
       '@jest/types': 27.5.1
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
@@ -14274,7 +14052,7 @@ packages:
     resolution: {integrity: sha512-PFdn9Iewbt575zKPf1286Ht9EPoJmYT7P0kY+RibeYZ2XtOr53pDLEFoTWXbd1h4JiGiWpTBC84fc8xMXQMb7g==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
-      '@babel/code-frame': 7.22.5
+      '@babel/code-frame': 7.23.4
       '@jest/types': 28.1.3
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
@@ -14432,10 +14210,10 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@babel/core': 7.23.3
-      '@babel/generator': 7.22.5
+      '@babel/generator': 7.23.4
       '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.23.3)
       '@babel/traverse': 7.22.5
-      '@babel/types': 7.23.4
+      '@babel/types': 7.23.9
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
       '@types/babel__traverse': 7.20.1
@@ -14462,7 +14240,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -14474,7 +14252,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -14486,7 +14264,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': 29.5.0
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -14540,7 +14318,7 @@ packages:
     dependencies:
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.10.2
@@ -14570,7 +14348,7 @@ packages:
     resolution: {integrity: sha512-CqRA220YV/6jCo8VWvAt1KKx6eek1VIHMPeLEbpcfSfkEeWyBNppynM/o6q+Wmw+sOhos2ml34wZbSX3G13//g==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
-      '@types/node': 16.18.34
+      '@types/node': 20.10.5
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: false

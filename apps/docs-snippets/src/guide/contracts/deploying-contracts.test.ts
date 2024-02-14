@@ -34,10 +34,10 @@ describe(__filename, () => {
     // #context const contractsDir = join(__dirname, '../path/to/contracts/dir')
     // #context const contractName = "contract-name"
 
-    const byteCodePath = join(projectsPath, `${contractName}/out/debug/${contractName}.bin`);
+    const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
     const byteCode = readFileSync(byteCodePath);
 
-    const abiJsonPath = join(projectsPath, `${contractName}/out/debug/${contractName}-abi.json`);
+    const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
     const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
     // #endregion contract-setup-2
 

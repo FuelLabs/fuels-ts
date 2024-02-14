@@ -1,5 +1,5 @@
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
 import {
   BaseAssetId,
