@@ -34,4 +34,5 @@ export const getTypegenForcProject = (project: AbiTypegenProjectsEnum) =>
   getForcProject<IRawAbi>({
     projectDir: join(__dirname, project),
     projectName: project,
+    build: 'release',
   });

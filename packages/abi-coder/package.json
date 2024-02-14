@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "pretest": "pnpm build:forc",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects",
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },

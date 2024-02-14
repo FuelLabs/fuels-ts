@@ -12,7 +12,7 @@ import {
   Address,
 } from 'fuels';
 
-import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
+import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
 import { DemoContractAbi__factory } from './contract-types';
 import bytecode from './contract-types/DemoContractAbi.hex';
