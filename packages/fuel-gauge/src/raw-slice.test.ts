@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
@@ -40,21 +40,15 @@ describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
     const INPUT = 10;
 
-    const { value } = await contractInstance.functions
-      .return_raw_slice(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<BN[]>();
+    const { value } = await contractInstance.functions.return_raw_slice(INPUT).call();
 
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(value).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it('should test raw slice input', async () => {
     const INPUT = [40, 41, 42];
 
-    const { value } = await contractInstance.functions
-      .accept_raw_slice(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<number[]>();
+    const { value } = await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
 
     expect(value).toBeUndefined();
   });
@@ -68,7 +62,6 @@ describe('Raw Slice Tests', () => {
 
     const { value } = await contractInstance.functions
       .accept_nested_raw_slice(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call<number[]>();
 
     expect(value).toBeUndefined();
@@ -132,10 +125,7 @@ describe('Raw Slice Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    const { value } = await scriptInstance.functions
-      .main(1, INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<BN[]>();
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
+    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN[]>();
+    expect(value).toStrictEqual([1, 2, 3]);
   });
 });

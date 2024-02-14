@@ -1,4 +1,4 @@
-import type { TransactionResultReceipt, TransactionResultRevertReceipt } from '@fuel-ts/providers';
+import type { TransactionResultReceipt, TransactionResultRevertReceipt } from '@fuel-ts/account';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { RevertError } from './revert-error';

@@ -1,4 +1,4 @@
-import { launchNode } from '@fuel-ts/wallet/test-utils';
+import { launchNode } from '@fuel-ts/account/test-utils';
 import {
   Provider,
   WalletUnlocked,

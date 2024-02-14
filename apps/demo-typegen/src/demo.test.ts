@@ -1,6 +1,6 @@
 // #region Testing-in-ts-ts
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
   ContractFactory,
@@ -54,10 +54,7 @@ describe('ExampleContract', () => {
     const contractId = contract.id;
 
     // Call
-    const { value } = await contract.functions
-      .return_input(1337)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contract.functions.return_input(1337).call();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -67,10 +64,7 @@ describe('ExampleContract', () => {
     // #context import { DemoContractAbi__factory } from './types';
 
     const contractInstance = DemoContractAbi__factory.connect(contractId, wallet);
-    const { value: v2 } = await contractInstance.functions
-      .return_input(1337)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
     // #endregion typegen-demo-contract-factory-connect
     expect(v2.toHex()).toBe(toHex(1337));
   });
@@ -88,10 +82,7 @@ describe('ExampleContract', () => {
     // #endregion typegen-demo-contract-factory-deploy
 
     // Call
-    const { value } = await contract.functions
-      .return_input(1337)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contract.functions.return_input(1337).call();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -108,9 +99,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   const contract = await factory.deployContract({ gasPrice });
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  const { error } = await safeExec(() =>
-    contractInstance.functions.return_input(1337).txParams({ gasLimit: 10_000 }).simulate()
-  );
+  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
 
   expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });
@@ -124,9 +113,7 @@ it('should throw when dry running via contract factory with wallet with no resou
   const contract = await factory.deployContract({ gasPrice });
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  const { error } = await safeExec(() =>
-    contractInstance.functions.return_input(1337).txParams({ gasLimit: 10_000 }).dryRun()
-  );
+  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).dryRun());
 
   expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });
@@ -141,13 +128,7 @@ test('Example script', async () => {
   // #context import { ScriptAbi__factory } from './types';
 
   const script = ScriptAbi__factory.createInstance(wallet);
-  const { value } = await script.functions
-    .main()
-    .txParams({
-      gasPrice: provider.getGasConfig().minGasPrice,
-      gasLimit: 10_000,
-    })
-    .call();
+  const { value } = await script.functions.main().call();
   // #endregion typegen-demo-script
   // @ts-expect-error TODO: investitage - typegen is expecting value to be a number but the value being returned is the string '0xa'
   expect(value.toNumber()).toBe(10);
@@ -164,10 +145,7 @@ test('Example predicate', async () => {
 
   const predicate = PredicateAbi__factory.createInstance(provider);
 
-  const tx = await wallet.transfer(predicate.address, 100_000, BaseAssetId, {
-    gasPrice: provider.getGasConfig().minGasPrice,
-    gasLimit: 50,
-  });
+  const tx = await wallet.transfer(predicate.address, 100_000, BaseAssetId);
   await tx.wait();
 
   const initialPredicateBalance = await predicate.getBalance();

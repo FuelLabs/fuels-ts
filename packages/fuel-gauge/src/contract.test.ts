@@ -1,6 +1,6 @@
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import type {
   TransactionRequestLike,
   TransactionResponse,
@@ -243,9 +243,7 @@ describe('Contract', () => {
       cache: false,
     });
 
-    const scope = contract.functions
-      .call_external_foo(1336, otherContract.id.toB256())
-      .txParams({ gasPrice, gasLimit: 20_000 });
+    const scope = contract.functions.call_external_foo(1336, otherContract.id.toB256());
 
     const { value: results } = await scope.call();
 
@@ -262,10 +260,7 @@ describe('Contract', () => {
       contract.functions.call_external_foo(1336, otherContract.id.toB256()),
     ];
 
-    const scope = contract
-      .multiCall(calls)
-      .addContracts([otherContract])
-      .txParams({ gasPrice: 1, gasLimit: 10_000 });
+    const scope = contract.multiCall(calls).addContracts([otherContract]);
 
     const transactionRequest = await scope.getTransactionRequest();
 
@@ -287,7 +282,6 @@ describe('Contract', () => {
     const contract = await setupContract();
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
@@ -305,7 +299,6 @@ describe('Contract', () => {
         contract.functions.foo(1336),
         contract.functions.foo(1336),
       ])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([bn(1337), bn(1337), bn(1337), bn(1337), bn(1337), bn(1337)])
@@ -326,7 +319,6 @@ describe('Contract', () => {
         contract.functions.foo(1336),
         contract.functions.foo(1336),
       ])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([
@@ -365,10 +357,7 @@ describe('Contract', () => {
     const contract = await setupContract();
     const otherContract = await setupContract({ cache: false });
 
-    const scope = contract
-      .multiCall([contract.functions.foo(1336)])
-      .txParams({ gasPrice, gasLimit: 20_000 })
-      .addContracts([otherContract]);
+    const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
     const transactionRequest = await scope.getTransactionRequest();
 
@@ -391,7 +380,6 @@ describe('Contract', () => {
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .dryRun();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
@@ -401,7 +389,6 @@ describe('Contract', () => {
 
     const { value, callResult, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .simulate();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
     expect(toNumber(gasUsed)).toBeGreaterThan(0);
@@ -413,7 +400,6 @@ describe('Contract', () => {
 
     const { transactionId, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
     expect(transactionId).toBeTruthy();
     expect(toNumber(gasUsed)).toBeGreaterThan(0);
@@ -515,16 +501,14 @@ describe('Contract', () => {
   it('Get transaction cost', async () => {
     const contract = await setupContract();
 
-    const invocationScope = contract
-      .multiCall([
-        contract.functions.return_context_amount().callParams({
-          forward: [100, BaseAssetId],
-        }),
-        contract.functions.return_context_amount().callParams({
-          forward: [200, AltToken],
-        }),
-      ])
-      .txParams({ gasPrice, gasLimit: 20_000 });
+    const invocationScope = contract.multiCall([
+      contract.functions.return_context_amount().callParams({
+        forward: [100, BaseAssetId],
+      }),
+      contract.functions.return_context_amount().callParams({
+        forward: [200, AltToken],
+      }),
+    ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
     expect(toNumber(transactionCost.gasPrice)).toBe(gasPrice.toNumber());
@@ -600,35 +584,28 @@ describe('Contract', () => {
 
     const { value: arrayBoolean } = await contract.functions
       .take_array_boolean([true, false, false])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(arrayBoolean).toEqual(true);
 
-    const { value: arrayNumber } = await contract.functions
-      .take_array_number([1, 2, 3])
-      .txParams({ gasPrice, gasLimit: 20_000 })
-      .call();
+    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
 
     expect(arrayNumber.toHex()).toEqual(toHex(1));
 
     const { value: arrayReturnShuffle } = await contract.functions
       .take_array_string_shuffle(['abc', 'efg', 'hij'])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(arrayReturnShuffle).toEqual(['hij', 'abc', 'efg']);
 
     const { value: arrayReturnSingle } = await contract.functions
       .take_array_string_return_single(['abc', 'efg', 'hij'])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(arrayReturnSingle).toEqual(['abc']);
 
     const { value: arrayReturnSingleElement } = await contract.functions
       .take_array_string_return_single_element(['abc', 'efg', 'hij'])
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(arrayReturnSingleElement).toEqual('abc');
@@ -641,7 +618,6 @@ describe('Contract', () => {
       .take_b256_enum({
         Value: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
       })
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(enumB256ReturnValue).toEqual(
@@ -652,7 +628,6 @@ describe('Contract', () => {
       .take_b256_enum({
         Data: '0x1111111111111111111111111111111111111111111111111111111111111111',
       })
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(enumB256ReturnData).toEqual(
@@ -663,7 +638,6 @@ describe('Contract', () => {
       .take_bool_enum({
         Value: true,
       })
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(enumBoolReturnValue).toEqual(true);
@@ -672,7 +646,6 @@ describe('Contract', () => {
       .take_bool_enum({
         Data: false,
       })
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(enumBoolReturnData).toEqual(false);
@@ -681,7 +654,6 @@ describe('Contract', () => {
       .take_string_enum({
         Value: 'abc',
       })
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(enumStrReturnValue).toEqual('abc');
@@ -690,7 +662,6 @@ describe('Contract', () => {
       .take_string_enum({
         Data: 'efg',
       })
-      .txParams({ gasPrice, gasLimit: 20_000 })
       .call();
 
     expect(enumStrReturnData).toEqual('efg');
@@ -718,9 +689,10 @@ describe('Contract', () => {
     const num = 1337;
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract
-      .multiCall(invocationScopes)
-      .txParams({ gasPrice, gasLimit: 20_000 });
+    const multiCallScope = contract.multiCall(invocationScopes).txParams({
+      gasPrice,
+      gasLimit: 20_000,
+    });
     const { maxFee } = await multiCallScope.getTransactionCost();
     await multiCallScope.fundWithRequiredCoins(maxFee);
 
@@ -880,7 +852,7 @@ describe('Contract', () => {
     ];
 
     await expectToThrowFuelError(
-      () => contract.multiCall(calls).txParams({ gasPrice, gasLimit: 20_000 }).call(),
+      () => contract.multiCall(calls).call(),
       new FuelError(
         ErrorCode.INVALID_MULTICALL,
         'A multicall can have only one call that returns a heap type.'
@@ -909,7 +881,7 @@ describe('Contract', () => {
     ];
 
     await expectToThrowFuelError(
-      () => contract.multiCall(calls).txParams({ gasPrice, gasLimit: 20_000 }).call(),
+      () => contract.multiCall(calls).call(),
       new FuelError(
         ErrorCode.INVALID_MULTICALL,
         'In a multicall, the contract call returning a heap type must be the last call.'
@@ -919,10 +891,7 @@ describe('Contract', () => {
 
   it('Read only call', async () => {
     const contract = await setupContract();
-    const { value } = await contract.functions
-      .echo_b256(contract.id.toB256())
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
     expect(value).toEqual(contract.id.toB256());
   });
 

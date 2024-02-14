@@ -4,4 +4,4 @@ A message is an object that contains some data that when broadcast to the networ
 
 This is the general structure of a `Message` object:
 
-<<< @/../../../packages/providers/src/message.ts#Message-shape{ts:line-numbers}
+<<< @/../../../packages/account/src/providers/message.ts#Message-shape{ts:line-numbers}

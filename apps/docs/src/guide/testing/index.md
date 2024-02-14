@@ -20,14 +20,14 @@ To test your Sway applications using the TS-SDK, you can pick whatever testing l
 
 You'll often want to create one or more test wallets when testing your contracts.
 
-For this, you can find two simple utilities on the wallet package:
+For this, you can find two simple utilities on the account package:
 
-- [`@fuel-ts/wallet`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/wallet#test-utilities)
+- [`@fuel-ts/account`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/account#test-utilities)
 
-On top of these two utilities, if you want to quickly get up and running with a local node, you can use the `launchNodeAndGetWallets` from the `@fuel-ts/wallet/test-utils` package.
+On top of these two utilities, if you want to quickly get up and running with a local node, you can use the `launchNodeAndGetWallets` from the `@fuel-ts/account/test-utils` package.
 
 ```ts
-import { launchNodeAndGetWallets } from "@fuel-ts/wallet/test-utils";
+import { launchNodeAndGetWallets } from "@fuel-ts/account/test-utils";
 
 const { stop, wallets, provider } = await launchNodeAndGetWallets();
 
