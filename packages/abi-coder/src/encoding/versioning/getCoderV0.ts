@@ -6,6 +6,7 @@ import {
   B512_CODER_TYPE,
   BOOL_CODER_TYPE,
   BYTES_CODER_TYPE,
+  ENCODING_V0,
   OPTION_CODER_TYPE,
   RAW_PTR_CODER_TYPE,
   RAW_SLICE_CODER_TYPE,
@@ -41,8 +42,7 @@ import { U64Coder } from '../coders/v0/U64Coder';
 import { VecCoder } from '../coders/v0/VecCoder';
 import type { TGetCoderFn } from '../types/IGetCoder';
 import type { TEncodingOptions } from '../types/TEncodingOptions';
-
-import { getCoders } from './utils/getCoders';
+import { getCoders } from '../utils/getCoders';
 
 /**
  * Retrieves coders that adhere to the v0 spec.
@@ -103,7 +103,7 @@ export const getCoder: TGetCoderFn = (
     }
 
     const arrayElementCoder = getCoder(arg, { isSmallBytes: true });
-    return new ArrayCoder(arrayElementCoder, length);
+    return new ArrayCoder(arrayElementCoder as Coder, length);
   }
 
   if (resolvedAbiType.type === VEC_CODER_TYPE) {
@@ -116,8 +116,8 @@ export const getCoder: TGetCoderFn = (
     }
     const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-    const itemCoder = getCoder(argType, { isSmallBytes: true });
-    return new VecCoder(itemCoder);
+    const itemCoder = getCoder(argType, { isSmallBytes: true, encoding: ENCODING_V0 });
+    return new VecCoder(itemCoder as Coder);
   }
 
   const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
@@ -139,8 +139,10 @@ export const getCoder: TGetCoderFn = (
 
   const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
   if (tupleMatch) {
-    const coders = components.map((component) => getCoder(component, { isRightPadded: true }));
-    return new TupleCoder(coders);
+    const coders = components.map((component) =>
+      getCoder(component, { isRightPadded: true, encoding: ENCODING_V0 })
+    );
+    return new TupleCoder(coders as Coder[]);
   }
 
   if (resolvedAbiType.type === STR_SLICE_CODER_TYPE) {

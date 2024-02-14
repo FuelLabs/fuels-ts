@@ -2,8 +2,9 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn, toBytes, toNumber } from '@fuel-ts/math';
 import type { BytesLike } from 'ethers';
-import { getBytesCopy } from 'ethers';
+import { getBytesCopy, toUtf8Bytes, toUtf8String } from 'ethers';
 
+import type { ResolvedAbiType } from '../../../ResolvedAbiType';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
@@ -16,14 +17,24 @@ import {
   U64_CODER_TYPE,
   U8_CODER_TYPE,
   WORD_SIZE,
+  stringRegEx,
 } from '../../../utils/constants';
-import type { InputValue, ICoder, DecodedValue } from '../../types/ICoder';
+import type {
+  TGetEncodedLengthFn,
+  InputValue,
+  ICoder,
+  DecodedValue,
+  TGetTypeFn,
+} from '../../types/ICoder';
+import type { TEncodingOptions } from '../../types/TEncodingOptions';
+import { getGroupsFromTypeByRegex } from '../../utils/getGroupsFromTypeByRegex';
+import { isTypeByRegex } from '../../utils/isTypeByRegex';
 
 type LiteralConfig = {
-  matcher: string;
+  matcher: string | RegExp;
   name: string;
-  type: string;
-  encodedLength: number;
+  type: string | TGetTypeFn;
+  encodedLength: number | TGetEncodedLengthFn;
   encodedTransformer: (value: InputValue) => Uint8Array;
   decodedTransformer: (data: Uint8Array) => DecodedValue;
 };
@@ -98,35 +109,61 @@ const config: LiteralConfig[] = [
     encodedTransformer: (value: InputValue): Uint8Array => getBytesCopy(value as BytesLike),
     decodedTransformer: (data: Uint8Array): string => bn(data).toHex(BYTES_64),
   },
+  {
+    matcher: stringRegEx,
+    name: 'string',
+    type: (type: ResolvedAbiType): string =>
+      `str[${getGroupsFromTypeByRegex(type.type, stringRegEx).length}]`,
+    encodedLength: (type: ResolvedAbiType): number =>
+      Number(getGroupsFromTypeByRegex(type.type, stringRegEx).length),
+    encodedTransformer: (value: InputValue): Uint8Array => toUtf8Bytes(value as string),
+    decodedTransformer: (data: Uint8Array): string => toUtf8String(data),
+  },
 ];
 
 const findConfigOrThrow = (name: string) => {
-  const found = config.find((c) => c.matcher === name);
+  const found = config.find(({ matcher }) =>
+    matcher instanceof RegExp ? isTypeByRegex(name, matcher) : matcher === name
+  );
+
   if (!found) {
     throw new Error(`Config not found for ${name}`);
   }
+
   return found;
 };
 
-export class LiteralCoder implements ICoder<InputValue, DecodedValue>, LiteralConfig {
+export class LiteralCoder implements ICoder<InputValue, DecodedValue> {
   name: string;
   type: string;
   encodedLength: number;
 
-  matcher: string;
-
   encodedTransformer: (value: InputValue) => Uint8Array;
   decodedTransformer: (data: Uint8Array) => DecodedValue;
 
-  constructor(resolvedTypeName: string) {
+  constructor(resolvedTypeName: string, options?: TEncodingOptions) {
     const { name, type, encodedLength, encodedTransformer, decodedTransformer } =
       findConfigOrThrow(resolvedTypeName);
 
     this.name = name;
-    this.type = type;
-    this.encodedLength = encodedLength;
 
-    this.matcher = resolvedTypeName;
+    const { resolvedAbiType } = options || {};
+
+    if (typeof encodedLength === 'function' || typeof type === 'function') {
+      if (!resolvedAbiType) {
+        throw new FuelError(
+          ErrorCode.MISSING_REQUIRED_PARAMETER,
+          `A resolved type is required for a ${name} coder.`
+        );
+      }
+      this.type = typeof type === 'function' ? type(resolvedAbiType) : type;
+      this.encodedLength =
+        typeof encodedLength === 'function' ? encodedLength(resolvedAbiType) : encodedLength;
+    } else {
+      this.type = type;
+      this.encodedLength = encodedLength;
+    }
+
     this.encodedTransformer = encodedTransformer;
     this.decodedTransformer = decodedTransformer;
   }

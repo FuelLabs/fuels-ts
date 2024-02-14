@@ -1,11 +1,12 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { ResolvedAbiType } from '../../ResolvedAbiType';
+import type { ResolvedAbiType } from '../../ResolvedAbiType';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
   BOOL_CODER_TYPE,
   BYTES_CODER_TYPE,
+  ENCODING_V1,
   OPTION_CODER_TYPE,
   RAW_PTR_CODER_TYPE,
   RAW_SLICE_CODER_TYPE,
@@ -34,10 +35,11 @@ import { StringCoder } from '../coders/v1/StringCoder';
 import { StructCoder } from '../coders/v1/StructCoder';
 import { TupleCoder } from '../coders/v1/TupleCoder';
 import { VecCoder } from '../coders/v1/VecCoder';
+import type { ICoder } from '../types/ICoder';
 import type { TGetCoderFn } from '../types/IGetCoder';
 import type { TEncodingOptions } from '../types/TEncodingOptions';
-
-import { getCoders } from './utils/getCoders';
+import { getCoders } from '../utils/getCoders';
+import { isTypeByRegex } from '../utils/isTypeByRegex';
 
 /**
  * Retrieves coders that adhere to the v1 spec.
@@ -48,32 +50,28 @@ import { getCoders } from './utils/getCoders';
  */
 export const getCoder: TGetCoderFn = (
   resolvedAbiType: ResolvedAbiType,
-  _options?: TEncodingOptions
-): Coder => {
-  switch (resolvedAbiType.type) {
-    case U8_CODER_TYPE:
-    case U16_CODER_TYPE:
-    case U32_CODER_TYPE:
-    case BOOL_CODER_TYPE:
-    case U64_CODER_TYPE:
-    case RAW_PTR_CODER_TYPE:
-    case B256_CODER_TYPE:
-    case B512_CODER_TYPE:
-      return new LiteralCoder(resolvedAbiType.type);
-    case RAW_SLICE_CODER_TYPE:
-      return new RawSliceCoder();
-    case BYTES_CODER_TYPE:
-    case STD_STRING_CODER_TYPE:
-      return new DynamicLengthCoder(resolvedAbiType.type);
+  options?: TEncodingOptions
+): ICoder => {
+  const { type } = resolvedAbiType;
+  const optionsWithResolvedType = { ...options, resolvedAbiType };
+
+  switch (true) {
+    case type === U8_CODER_TYPE:
+    case type === U16_CODER_TYPE:
+    case type === U32_CODER_TYPE:
+    case type === BOOL_CODER_TYPE:
+    case type === U64_CODER_TYPE:
+    case type === RAW_PTR_CODER_TYPE:
+    case type === B256_CODER_TYPE:
+    case type === B512_CODER_TYPE:
+    case isTypeByRegex(type, stringRegEx):
+      return new LiteralCoder(type, optionsWithResolvedType) as ICoder;
+    //   return new RawSliceCoder();
+    case type === BYTES_CODER_TYPE:
+    case type === STD_STRING_CODER_TYPE:
+      return new DynamicLengthCoder(type) as ICoder;
     default:
       break;
-  }
-
-  const stringMatch = stringRegEx.exec(resolvedAbiType.type)?.groups;
-  if (stringMatch) {
-    const length = parseInt(stringMatch.length, 10);
-
-    return new StringCoder(length);
   }
 
   // ABI types underneath MUST have components by definition
@@ -81,57 +79,57 @@ export const getCoder: TGetCoderFn = (
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const components = resolvedAbiType.components!;
 
-  const arrayMatch = arrayRegEx.exec(resolvedAbiType.type)?.groups;
-  if (arrayMatch) {
-    const length = parseInt(arrayMatch.length, 10);
-    const arg = components[0];
-    if (!arg) {
-      throw new FuelError(
-        ErrorCode.INVALID_COMPONENT,
-        `The provided Array type is missing an item of 'component'.`
-      );
-    }
+  // const arrayMatch = arrayRegEx.exec(resolvedAbiType.type)?.groups;
+  // if (arrayMatch) {
+  //   const length = parseInt(arrayMatch.length, 10);
+  //   const arg = components[0];
+  //   if (!arg) {
+  //     throw new FuelError(
+  //       ErrorCode.INVALID_COMPONENT,
+  //       `The provided Array type is missing an item of 'component'.`
+  //     );
+  //   }
 
-    const arrayElementCoder = getCoder(arg, { isSmallBytes: true });
-    return new ArrayCoder(arrayElementCoder, length);
-  }
+  //   const arrayElementCoder = getCoder(arg, { isSmallBytes: true, encoding: ENCODING_V1 });
+  //   return new ArrayCoder(arrayElementCoder, length);
+  // }
 
-  if (resolvedAbiType.type === VEC_CODER_TYPE) {
-    const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments?.[0];
-    if (!arg) {
-      throw new FuelError(
-        ErrorCode.INVALID_COMPONENT,
-        `The provided Vec type is missing the 'type argument'.`
-      );
-    }
-    const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
+  // if (resolvedAbiType.type === VEC_CODER_TYPE) {
+  //   const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments?.[0];
+  //   if (!arg) {
+  //     throw new FuelError(
+  //       ErrorCode.INVALID_COMPONENT,
+  //       `The provided Vec type is missing the 'type argument'.`
+  //     );
+  //   }
+  //   const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-    const itemCoder = getCoder(argType, { isSmallBytes: true });
-    return new VecCoder(itemCoder);
-  }
+  //   const itemCoder = getCoder(argType, { isSmallBytes: true });
+  //   return new VecCoder(itemCoder);
+  // }
 
-  const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
-  if (structMatch) {
-    const coders = getCoders(components, { isRightPadded: true, getCoder });
-    return new StructCoder(structMatch.name, coders);
-  }
+  // const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
+  // if (structMatch) {
+  //   const coders = getCoders(components, { isRightPadded: true, getCoder });
+  //   return new StructCoder(structMatch.name, coders);
+  // }
 
-  const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
-  if (enumMatch) {
-    const coders = getCoders(components, { getCoder });
+  // const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
+  // if (enumMatch) {
+  //   const coders = getCoders(components, { getCoder });
 
-    const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
-    if (isOptionEnum) {
-      return new OptionCoder(enumMatch.name, coders);
-    }
-    return new EnumCoder(enumMatch.name, coders);
-  }
+  //   const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
+  //   if (isOptionEnum) {
+  //     return new OptionCoder(enumMatch.name, coders);
+  //   }
+  //   return new EnumCoder(enumMatch.name, coders);
+  // }
 
-  const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
-  if (tupleMatch) {
-    const coders = components.map((component) => getCoder(component, { isRightPadded: true }));
-    return new TupleCoder(coders);
-  }
+  // const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
+  // if (tupleMatch) {
+  //   const coders = components.map((component) => getCoder(component, { isRightPadded: true }));
+  //   return new TupleCoder(coders);
+  // }
 
   if (resolvedAbiType.type === STR_SLICE_CODER_TYPE) {
     throw new FuelError(

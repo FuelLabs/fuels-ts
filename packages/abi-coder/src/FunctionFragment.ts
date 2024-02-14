@@ -6,6 +6,7 @@ import { sha256, getBytesCopy } from 'ethers';
 
 import { AbiCoder } from './AbiCoder';
 import { ResolvedAbiType } from './ResolvedAbiType';
+import type { Coder } from './encoding/coders/v0/AbstractCoder';
 import { ByteCoder } from './encoding/coders/v0/ByteCoder';
 import { TupleCoder } from './encoding/coders/v0/TupleCoder';
 import { VecCoder } from './encoding/coders/v0/VecCoder';
@@ -16,7 +17,7 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
-import { OPTION_CODER_TYPE } from './utils/constants';
+import { ENCODING_V0, OPTION_CODER_TYPE } from './utils/constants';
 import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utils/utilities';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
 
@@ -81,7 +82,10 @@ export class FunctionFragment<
 
   #getOutputEncodedLength(): number {
     try {
-      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output, {
+        encoding: ENCODING_V0,
+      }) as Coder;
+
       if (heapCoder instanceof VecCoder) {
         return heapCoder.coder.encodedLength;
       }
@@ -112,8 +116,9 @@ export class FunctionFragment<
     const coders = nonEmptyInputs.map((t) =>
       AbiCoder.getCoder(this.jsonAbi, t, {
         isRightPadded: nonEmptyInputs.length > 1,
+        encoding: ENCODING_V0,
       })
-    );
+    ) as Coder[];
 
     const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);

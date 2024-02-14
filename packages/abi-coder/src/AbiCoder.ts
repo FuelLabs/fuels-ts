@@ -3,7 +3,7 @@
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type { InputValue, DecodedValue, ICoder } from './encoding/types/ICoder';
 import type { TEncodingOptions } from './encoding/types/TEncodingOptions';
-import { getEncodingStrategy } from './encoding/versioning/utils/getEncodingStrategy';
+import { getEncodingStrategy } from './encoding/utils/getEncodingStrategy';
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
 
 export abstract class AbiCoder {

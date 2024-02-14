@@ -1,9 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { ENCODING_V0, ENCODING_V1 } from '../../../utils/constants';
-import type { IGetCoder } from '../../types/IGetCoder';
-import { getCoder as getCoderV0 } from '../getCoderV0';
-import { getCoder as getCoderV1 } from '../getCoderV1';
+import { ENCODING_V0, ENCODING_V1 } from '../../utils/constants';
+import type { IGetCoder } from '../types/IGetCoder';
+import { getCoder as getCoderV0 } from '../versioning/getCoderV0';
+import { getCoder as getCoderV1 } from '../versioning/getCoderV1';
 
 /**
  * Retrieves the appropriate encoding function for a given encoding version.

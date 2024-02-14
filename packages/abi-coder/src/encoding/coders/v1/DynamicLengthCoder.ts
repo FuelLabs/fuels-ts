@@ -58,8 +58,6 @@ export class DynamicLengthCoder implements ICoder<InputValue, DecodedValue> {
   type: string;
   encodedLength: number;
 
-  matcher: string;
-
   encodedTransformer: (value: InputValue) => Uint8Array;
   decodedTransformer: (data: Uint8Array) => DecodedValue;
 
@@ -70,8 +68,6 @@ export class DynamicLengthCoder implements ICoder<InputValue, DecodedValue> {
     this.name = name;
     this.type = type;
     this.encodedLength = WORD_SIZE;
-
-    this.matcher = resolvedTypeName;
 
     this.encodedTransformer = encodedTransformer;
     this.decodedTransformer = decodedTransformer;

@@ -1,3 +1,5 @@
+import type { ResolvedAbiType } from '../../ResolvedAbiType';
+
 /**
  * These are configurable options to be used when encoding.
  *
@@ -59,4 +61,5 @@ export type TEncodingOptions = {
   encoding?: string;
   isSmallBytes?: boolean;
   isRightPadded?: boolean;
+  resolvedAbiType?: ResolvedAbiType;
 };

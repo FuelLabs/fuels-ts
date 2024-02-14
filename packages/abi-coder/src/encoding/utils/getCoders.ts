@@ -1,7 +1,7 @@
-import type { ResolvedAbiType } from '../../../ResolvedAbiType';
-import type { ICoder } from '../../types/ICoder';
-import type { TGetCoderFn } from '../../types/IGetCoder';
-import type { TEncodingOptions } from '../../types/TEncodingOptions';
+import type { ResolvedAbiType } from '../../ResolvedAbiType';
+import type { ICoder } from '../types/ICoder';
+import type { TGetCoderFn } from '../types/IGetCoder';
+import type { TEncodingOptions } from '../types/TEncodingOptions';
 
 /**
  * @param components - types array to create coders for.
