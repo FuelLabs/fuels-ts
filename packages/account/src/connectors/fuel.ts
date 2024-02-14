@@ -1,6 +1,5 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
-import { defaultConnectors } from './default-connector';
 import { FuelConnector } from './fuel-connector';
 import { FuelWalletLocked } from './fuel-wallet-locked';
 import { FuelWalletProvider } from './fuel-wallet-provider';
@@ -45,11 +44,7 @@ export class Fuel extends FuelConnector {
     // Increase the limit of listeners
     this.setMaxListeners(1_000);
     // Set all connectors
-    this._connectors =
-      config.connectors ??
-      defaultConnectors({
-        devMode: config.devMode,
-      });
+    this._connectors = config.connectors ?? [];
     // Set the target object to listen for global events
     this._targetObject = this.getTargetObject(config.targetObject);
     // Set default storage
