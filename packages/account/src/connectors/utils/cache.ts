@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 export type CacheFor = {
   [key: string]: {
     timeout: number;
@@ -23,6 +25,7 @@ export function cacheFor<F extends (...args: unknown[]) => Promise<unknown>>(
     const result = await fn(...args);
 
     // Create cache auto clean
+
     cache[key] = {
       timeout: Number(
         setTimeout(() => {

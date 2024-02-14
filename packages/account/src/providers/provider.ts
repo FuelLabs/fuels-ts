@@ -654,6 +654,7 @@ export default class Provider {
     if (inputs) {
       inputs.forEach((input, index) => {
         if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
           (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }

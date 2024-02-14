@@ -176,8 +176,11 @@ export class Fuel extends FuelConnector {
     // we can ignore the response as is treated as stale.
     const isStale = requestTimestamp < (connector._latestUpdate || 0);
     if (!isStale) {
+      // eslint-disable-next-line no-param-reassign
       connector._latestUpdate = Date.now();
+      // eslint-disable-next-line no-param-reassign
       connector.installed = ping.status === 'fulfilled' && ping.value;
+      // eslint-disable-next-line no-param-reassign
       connector.connected = isConnected.status === 'fulfilled' && isConnected.value;
     }
     return {
