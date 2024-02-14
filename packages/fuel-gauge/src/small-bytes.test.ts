@@ -129,6 +129,7 @@ describe('small-bytes', () => {
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
       projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
+      build: 'release',
     });
 
     const wallet = await createWallet();
@@ -153,6 +154,7 @@ describe('small-bytes', () => {
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
       projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
+      build: 'release',
     });
 
     const wallet = await createWallet();

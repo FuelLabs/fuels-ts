@@ -16,7 +16,7 @@ impl TokenDepositor for Contract {
         let sender = msg_sender().unwrap();
 
         let address: b256 = match sender {
-            Identity::Address(sender_param) => sender_param.into(),
+            Identity::Address(sender_param) => sender_param.value,
             _ => revert(0),
         };
 

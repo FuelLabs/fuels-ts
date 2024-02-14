@@ -6,8 +6,8 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
     "pretest": "run-s build:forc build:forc-experimental build:process-predicates",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects",
-    "build:forc-experimental": "pnpm fuels-forc build -p test/fixtures/forc-projects-experimental --experimental-new-encoding",
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
+    "build:forc-experimental": "pnpm fuels-forc build -p test/fixtures/forc-projects-experimental --experimental-new-encoding --release",
     "build:process-predicates": "tsx ./scripts/process-predicates.ts"
   },
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
-    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*"

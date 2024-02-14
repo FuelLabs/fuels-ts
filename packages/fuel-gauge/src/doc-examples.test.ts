@@ -1,4 +1,4 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   BN,
   Bech32Address,

@@ -1,6 +1,6 @@
 // #region Testing-in-ts-ts
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN } from 'fuels';
 import {
   ContractFactory,
@@ -12,7 +12,7 @@ import {
   Address,
 } from 'fuels';
 
-import storageSlots from '../contract/out/debug/demo-contract-storage_slots.json';
+import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
 import { DemoContractAbi__factory } from './contract-types';
 import bytecode from './contract-types/DemoContractAbi.hex';
