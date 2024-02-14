@@ -583,27 +583,6 @@ export default class Provider {
     }
     // #endregion Provider-sendTransaction
 
-    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, [], {
-      estimateTxDependencies: false,
-      estimatePredicates: false,
-    });
-
-    if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
-      throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
-        `Gas price '${transactionRequest.gasPrice}' is lower than the required: '${minGasPrice}'.`
-      );
-    }
-
-    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
-
-    if (isScriptTransaction && bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
     if (awaitExecution) {

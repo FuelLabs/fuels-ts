@@ -3,19 +3,11 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 
-import type { TxParamsType } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
-import { TransactionResponse, ScriptTransactionRequest, Provider } from './providers';
+import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
-import type {
-  CallResult,
-  Coin,
-  CoinQuantity,
-  Message,
-  Resource,
-  TransactionRequestLike,
-} from './providers';
+import type { Coin, CoinQuantity, Message, Resource } from './providers';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
@@ -299,149 +291,13 @@ describe('Account', () => {
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
   });
 
-  it('should execute transfer just as fine', async () => {
-    const amount = bn(1);
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const destination = Address.fromAddressOrString(
-      '0x0202020202020202020202020202020202020202020202020202020202020202'
-    );
-    const txParam: TxParamsType = {
-      gasLimit: bn(1),
-      gasPrice: bn(1),
-      maturity: 1,
-    };
-
-    const transactionCost: providersMod.TransactionCost = {
-      gasUsed: bn(234),
-      gasPrice: bn(1),
-      minGasPrice: bn(1),
-      maxFee: bn(2),
-      minFee: bn(1),
-      receipts: [],
-      requiredQuantities: [],
-      maxGas: bn(1),
-      minGas: bn(1),
-      usedFee: bn(1),
-    };
-
-    const request = new ScriptTransactionRequest();
-    vi.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
-
-    const transactionResponse = new TransactionResponse('transactionId', provider);
-
-    const addCoinOutputSpy = vi.spyOn(request, 'addCoinOutput');
-
-    const fundSpy = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
-
-    const sendTransactionSpy = vi
-      .spyOn(Account.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve(transactionResponse));
-
-    const getTransactionCost = vi
-      .spyOn(Provider.prototype, 'getTransactionCost')
-      .mockImplementation(() => Promise.resolve(transactionCost));
-
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
-
-    await account.transfer(destination, amount, assetId, txParam);
-
-    expect(addCoinOutputSpy).toHaveBeenCalledTimes(1);
-    expect(addCoinOutputSpy).toHaveBeenCalledWith(destination, amount, assetId);
-
-    expect(getTransactionCost).toHaveBeenCalledTimes(1);
-
-    expect(fundSpy).toHaveBeenCalledTimes(1);
-    expect(fundSpy).toHaveBeenCalledWith(
-      request,
-      transactionCost.requiredQuantities,
-      transactionCost.maxFee
-    );
-
-    expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
-    expect(sendTransactionSpy).toHaveBeenCalledWith(request);
-  });
-
-  it('should execute withdrawToBaseLayer just fine', async () => {
-    const recipient = Address.fromRandom();
-    const txParams: TxParamsType = {};
-    const amount = bn(1);
-
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-
-    const request = new ScriptTransactionRequest();
-
-    const quantities: CoinQuantity[] = [
-      {
-        amount: bn(1),
-        assetId,
-      },
-    ];
-    const cost: providersMod.TransactionCost = {
-      gasPrice: bn(1),
-      gasUsed: bn(1),
-      maxFee: bn(1),
-      maxGas: bn(1),
-      minFee: bn(1),
-      minGas: bn(1),
-      minGasPrice: bn(1),
-      receipts: [],
-      requiredQuantities: quantities,
-      usedFee: bn(1),
-    };
-
-    const transactionResponse = {} as unknown as TransactionResponse;
-
-    const scriptTransactionRequest = vi
-      .spyOn(providersMod, 'ScriptTransactionRequest')
-      .mockImplementation(() => request);
-
-    const getTransactionCost = vi
-      .spyOn(providersMod.Provider.prototype, 'getTransactionCost')
-      .mockImplementation(() => Promise.resolve(cost));
-
-    const fund = vi.spyOn(Account.prototype, 'fund').mockImplementation(() => Promise.resolve());
-
-    const sendTransaction = vi
-      .spyOn(Account.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve(transactionResponse));
-
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
-
-    let result = await account.withdrawToBaseLayer(recipient, amount, txParams);
-
-    expect(result).toEqual(transactionResponse);
-
-    expect(scriptTransactionRequest).toHaveBeenCalledTimes(1);
-
-    expect(sendTransaction).toHaveBeenCalledTimes(1);
-    expect(sendTransaction).toHaveBeenCalledWith(request);
-
-    expect(getTransactionCost).toHaveBeenCalledTimes(1);
-    expect(fund).toHaveBeenCalledTimes(1);
-
-    // without txParams
-    result = await account.withdrawToBaseLayer(recipient, amount);
-
-    expect(result).toEqual(transactionResponse);
-
-    expect(scriptTransactionRequest).toHaveBeenCalledTimes(2);
-
-    expect(sendTransaction).toHaveBeenCalledTimes(2);
-    expect(sendTransaction).toHaveBeenCalledWith(request);
-  });
-
   it('should execute sendTransaction just fine', async () => {
-    const transactionRequestLike: TransactionRequestLike = {
+    const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
     const transactionRequest = new ScriptTransactionRequest();
-    const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
+    const transactionResponse =
+      'transactionResponse' as unknown as providersMod.TransactionResponse;
 
     const transactionRequestify = vi.spyOn(providersMod, 'transactionRequestify');
 
@@ -473,11 +329,11 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    const transactionRequestLike: TransactionRequestLike = {
+    const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
     const transactionRequest = new ScriptTransactionRequest();
-    const callResult = 'callResult' as unknown as CallResult;
+    const callResult = 'callResult' as unknown as providersMod.CallResult;
 
     const transactionRequestify = vi
       .spyOn(providersMod, 'transactionRequestify')
@@ -547,25 +403,17 @@ describe('Account', () => {
   });
 
   it('can transfer with custom TX Params', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
-    const receiver = await generateTestWallet(provider);
-
-    /* Error out because gas is to low */
-    await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
-        gasLimit: 0,
-        gasPrice,
-      });
-      await result.wait();
-    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
+    const sender = await generateTestWallet(provider, [[1000, BaseAssetId]]);
+    const receiver = Wallet.generate({ provider });
 
     const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasLimit: 10_000,
+      gasLimit: 600,
       gasPrice,
     });
+
     await response.wait();
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499_921) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(921) }]);
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
@@ -667,10 +515,7 @@ describe('Account', () => {
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
 
-    const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT);
     // #region Message-getMessageProof
     const result = await tx.waitForResult();
 
@@ -739,5 +584,45 @@ describe('Account', () => {
 
     const senderBalances = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
+  });
+
+  it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
+    const sender = await generateTestWallet(provider);
+    const receiver = Wallet.generate({ provider });
+
+    await expect(async () => {
+      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
+        gasLimit: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
+
+    await expect(async () => {
+      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
+        gasPrice: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
+  });
+
+  it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
+    const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    const recipient = Address.fromB256(
+      '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
+    );
+
+    await expect(async () => {
+      const result = await sender.withdrawToBaseLayer(recipient, 10, {
+        gasPrice: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
+
+    await expect(async () => {
+      const result = await sender.withdrawToBaseLayer(recipient, 10, {
+        gasLimit: 0,
+      });
+      await result.wait();
+    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
   });
 });
