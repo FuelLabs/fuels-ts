@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { BaseAssetId, FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
 import { getSetupContract } from './utils';
