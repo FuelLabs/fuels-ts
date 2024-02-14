@@ -4,9 +4,11 @@ import { toUtf8Bytes, toUtf8String } from 'ethers';
 import {
   BYTES_CODER_TYPE,
   DYNAMIC_LEN,
+  RAW_SLICE_CODER_TYPE,
   STD_STRING_CODER_TYPE,
   STR_SLICE_CODER_TYPE,
   U64_CODER_TYPE,
+  U8_CODER_TYPE,
   WORD_SIZE,
 } from '../../../utils/constants';
 import type { DecodedValue, ICoder, InputValue } from '../../types/ICoder';
@@ -42,6 +44,20 @@ const config: DynamicConfig[] = [
     type: STR_SLICE_CODER_TYPE,
     encodedTransformer: (value: InputValue): Uint8Array => toUtf8Bytes(value as string),
     decodedTransformer: (data: Uint8Array): string => toUtf8String(data),
+  },
+  {
+    matcher: RAW_SLICE_CODER_TYPE,
+    name: RAW_SLICE_CODER_TYPE,
+    type: RAW_SLICE_CODER_TYPE,
+    encodedTransformer: (value: InputValue): Uint8Array => toBytes(value as Uint8Array),
+    decodedTransformer: (data: Uint8Array): number[] => {
+      const u8Coder = new LiteralCoder(U8_CODER_TYPE);
+      const bytes: number[] = [];
+      data.forEach((byte) => {
+        bytes.push(u8Coder.decode(Uint8Array.from([byte]), 0)[0] as number);
+      });
+      return bytes;
+    },
   },
 ];
 

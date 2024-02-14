@@ -30,8 +30,6 @@ import { OptionCoder } from '../coders/v0/OptionCoder';
 import { DynamicLengthCoder } from '../coders/v1/DynamicLengthCoder';
 import { EnumCoder } from '../coders/v1/EnumCoder';
 import { LiteralCoder } from '../coders/v1/LiteralCoder';
-import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
-import { StringCoder } from '../coders/v1/StringCoder';
 import { StructCoder } from '../coders/v1/StructCoder';
 import { TupleCoder } from '../coders/v1/TupleCoder';
 import { VecCoder } from '../coders/v1/VecCoder';
@@ -66,7 +64,7 @@ export const getCoder: TGetCoderFn = (
     case type === B512_CODER_TYPE:
     case isTypeByRegex(type, stringRegEx):
       return new LiteralCoder(type, optionsWithResolvedType) as ICoder;
-    //   return new RawSliceCoder();
+    case type === RAW_SLICE_CODER_TYPE:
     case type === BYTES_CODER_TYPE:
     case type === STD_STRING_CODER_TYPE:
       return new DynamicLengthCoder(type) as ICoder;
