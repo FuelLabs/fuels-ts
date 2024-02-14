@@ -35,6 +35,11 @@ export type FuelConnectorSelectOptions = {
   emitEvents?: boolean;
 };
 
+export type Status = {
+  installed: boolean;
+  connected: boolean;
+};
+
 export class Fuel extends FuelConnector {
   static STORAGE_KEY = 'fuel-current-connector';
   static defaultConfig: FuelConfig = {};
@@ -68,7 +73,7 @@ export class Fuel extends FuelConnector {
   /**
    * Return the target object to listen for global events.
    */
-  private getTargetObject(targetObject?: TargetObject) {
+  private getTargetObject(targetObject?: TargetObject): TargetObject | null {
     if (targetObject) {
       return targetObject;
     }
@@ -84,7 +89,7 @@ export class Fuel extends FuelConnector {
   /**
    * Return the storage used.
    */
-  private getStorage() {
+  private getStorage(): StorageAbstract | undefined {
     if (typeof window !== 'undefined') {
       return new LocalStorage(window.localStorage);
     }
@@ -94,7 +99,7 @@ export class Fuel extends FuelConnector {
   /**
    * Setup the default connector from the storage.
    */
-  private async setDefaultConnector() {
+  private async setDefaultConnector(): Promise<boolean | undefined> {
     const connectorName =
       (await this._storage?.getItem(Fuel.STORAGE_KEY)) || this._connectors[0]?.name;
     if (connectorName) {
@@ -111,7 +116,7 @@ export class Fuel extends FuelConnector {
    * Start listener for all the events of the current
    * connector and emit them to the Fuel instance
    */
-  private setupConnectorEvents(events: string[]) {
+  private setupConnectorEvents(events: string[]): void {
     if (!this._currentConnector) {
       return;
     }
@@ -146,7 +151,7 @@ export class Fuel extends FuelConnector {
    * Create a method for each method proxy that is available on the Common interface
    * and call the method from the current connector.
    */
-  private setupMethods() {
+  private setupMethods(): void {
     Object.values(FuelConnectorMethods).forEach((method) => {
       this[method] = async (...args: unknown[]) => this.callMethod(method, ...args);
     });
@@ -156,7 +161,9 @@ export class Fuel extends FuelConnector {
    * Fetch the status of a connector and set the installed and connected
    * status.
    */
-  private async fetchConnectorStatus(connector: FuelConnector & { _latestUpdate?: number }) {
+  private async fetchConnectorStatus(
+    connector: FuelConnector & { _latestUpdate?: number }
+  ): Promise<Status> {
     // Control fetch status to avoid rewriting the status
     // on late responses in this way even if a response is
     // late we can avoid rewriting the status of the connector
@@ -183,7 +190,7 @@ export class Fuel extends FuelConnector {
    * Fetch the status of all connectors and set the installed and connected
    * status.
    */
-  private async fetchConnectorsStatus() {
+  private async fetchConnectorsStatus(): Promise<Status[]> {
     return Promise.all(
       this._connectors.map(async (connector) => this.fetchConnectorStatus(connector))
     );
@@ -240,7 +247,7 @@ export class Fuel extends FuelConnector {
   /**
    * Add a new connector to the list of connectors.
    */
-  private addConnector = async (connector: FuelConnector) => {
+  private addConnector = async (connector: FuelConnector): Promise<void> => {
     if (!this.getConnector(connector)) {
       this._connectors.push(connector);
     }
@@ -330,7 +337,7 @@ export class Fuel extends FuelConnector {
   /**
    * Return the current selected connector.
    */
-  currentConnector() {
+  currentConnector(): FuelConnector | null | undefined {
     return this._currentConnector;
   }
 
@@ -420,7 +427,7 @@ export class Fuel extends FuelConnector {
    * Remove all open listeners this is useful when you want to
    * remove the Fuel instance and avoid memory leaks.
    */
-  unsubscribe() {
+  unsubscribe(): void {
     // Unsubscribe from all events
     this._unsubscribes.map((unSub) => unSub());
     this._targetUnsubscribe();
@@ -431,14 +438,14 @@ export class Fuel extends FuelConnector {
   /**
    * Clean all the data from the storage.
    */
-  async clean() {
+  async clean(): Promise<void> {
     await this._storage?.removeItem(Fuel.STORAGE_KEY);
   }
 
   /**
    * Removes all listeners and cleans the storage.
    */
-  async destroy() {
+  async destroy(): Promise<void> {
     this.unsubscribe();
     await this.clean();
   }
