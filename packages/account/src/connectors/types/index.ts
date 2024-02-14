@@ -3,7 +3,7 @@ export * from './connector-types';
 export * from './constants';
 export * from './data-type';
 export * from './events';
-export * from './fuel-storage';
+export * from './local-storage';
 export * from './nertwork-data';
 export * from './target-object';
 export * from './message';
