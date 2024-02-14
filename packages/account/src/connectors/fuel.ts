@@ -1,10 +1,17 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
+import type { StorageAbstract } from '../wallet-manager';
+
 import { FuelConnector } from './fuel-connector';
 import { FuelWalletLocked } from './fuel-wallet-locked';
 import { FuelWalletProvider } from './fuel-wallet-provider';
-import { FuelConnectorMethods, FuelConnectorEventTypes, FuelConnectorEventType } from './types';
-import type { Network, FuelConnectorEventsType, FuelStorage, TargetObject } from './types';
+import {
+  FuelConnectorMethods,
+  FuelConnectorEventTypes,
+  FuelConnectorEventType,
+  LocalStorage,
+} from './types';
+import type { Network, FuelConnectorEventsType, TargetObject } from './types';
 import type { CacheFor } from './utils';
 import { cacheFor, deferPromise, withTimeout } from './utils';
 
@@ -19,7 +26,7 @@ const PING_CACHE_TIME = 5_000;
 
 export type FuelConfig = {
   connectors?: Array<FuelConnector>;
-  storage?: FuelStorage | null;
+  storage?: StorageAbstract | null;
   targetObject?: TargetObject;
   devMode?: boolean;
 };
@@ -31,7 +38,7 @@ export type FuelConnectorSelectOptions = {
 export class Fuel extends FuelConnector {
   static STORAGE_KEY = 'fuel-current-connector';
   static defaultConfig: FuelConfig = {};
-  private _storage?: FuelStorage | null = null;
+  private _storage?: StorageAbstract | null = null;
   private _connectors: Array<FuelConnector> = [];
   private _targetObject: TargetObject | null = null;
   private _unsubscribes: Array<() => void> = [];
@@ -79,7 +86,7 @@ export class Fuel extends FuelConnector {
    */
   private getStorage() {
     if (typeof window !== 'undefined') {
-      return window.localStorage;
+      return new LocalStorage(window.localStorage);
     }
     return undefined;
   }
@@ -87,8 +94,9 @@ export class Fuel extends FuelConnector {
   /**
    * Setup the default connector from the storage.
    */
-  private setDefaultConnector() {
-    const connectorName = this._storage?.getItem(Fuel.STORAGE_KEY) || this._connectors[0]?.name;
+  private async setDefaultConnector() {
+    const connectorName =
+      (await this._storage?.getItem(Fuel.STORAGE_KEY)) || this._connectors[0]?.name;
     if (connectorName) {
       // Setup all events for the current connector
       return this.selectConnector(connectorName, {
@@ -306,7 +314,7 @@ export class Fuel extends FuelConnector {
       this._currentConnector = connector;
       this.emit(this.events.currentConnector, connector);
       this.setupConnectorEvents(Object.values(FuelConnectorEventTypes));
-      this._storage?.setItem(Fuel.STORAGE_KEY, connector.name);
+      await this._storage?.setItem(Fuel.STORAGE_KEY, connector.name);
       // If emitEvents is true we query all the data from the connector
       // and emit the events to the Fuel instance allowing the application to
       // react to changes in the connector state.
@@ -423,15 +431,15 @@ export class Fuel extends FuelConnector {
   /**
    * Clean all the data from the storage.
    */
-  clean() {
-    this._storage?.removeItem(Fuel.STORAGE_KEY);
+  async clean() {
+    await this._storage?.removeItem(Fuel.STORAGE_KEY);
   }
 
   /**
    * Removes all listeners and cleans the storage.
    */
-  destroy() {
+  async destroy() {
     this.unsubscribe();
-    this.clean();
+    await this.clean();
   }
 }
