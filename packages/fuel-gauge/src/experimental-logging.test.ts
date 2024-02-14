@@ -20,7 +20,7 @@ beforeAll(async () => {
   const contractName = 'logging';
   const path = join(
     __dirname,
-    `../test/fixtures/forc-projects-experimental/${contractName}/out/debug/${contractName}`
+    `../test/fixtures/forc-projects-experimental/${contractName}/out/release/${contractName}`
   );
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
