@@ -5,14 +5,15 @@ import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { EventEmitter } from 'events';
 
-import { FUEL_NETWORK_URL } from '../../configs';
-import type { ProviderOptions } from '../../providers';
-import { Provider, TransactionStatus } from '../../providers';
-import { Wallet } from '../../wallet';
-import { MockConnector } from '../fixtures/mocked-connector';
-import { promiseCallback } from '../fixtures/promise-callback';
-import { Fuel } from '../fuel';
-import { FuelConnectorEventType } from '../types';
+import type { ProviderOptions } from '../src';
+import { FUEL_NETWORK_URL } from '../src/configs';
+import { Fuel } from '../src/connectors/fuel';
+import { FuelConnectorEventType } from '../src/connectors/types';
+import { Provider, TransactionStatus } from '../src/providers';
+import { Wallet } from '../src/wallet';
+
+import { MockConnector } from './fixtures/mocked-connector';
+import { promiseCallback } from './fixtures/promise-callback';
 
 /**
  * @group node

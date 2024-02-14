@@ -1,6 +1,6 @@
 import type { Mock } from 'vitest';
 
-import { deferPromise, type DeferPromise } from '../utils';
+import { deferPromise, type DeferPromise } from '../../src/connectors/utils';
 
 export type PromiseCallback = Mock & {
   promise: DeferPromise;

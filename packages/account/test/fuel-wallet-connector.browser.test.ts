@@ -1,9 +1,10 @@
-import type { StorageAbstract } from '../../wallet-manager';
-import { MockConnector } from '../fixtures/mocked-connector';
-import { promiseCallback } from '../fixtures/promise-callback';
-import { Fuel } from '../fuel';
-import { LocalStorage } from '../types';
-import { dispatchFuelConnectorEvent } from '../utils';
+import type { StorageAbstract } from '../src';
+import { Fuel } from '../src/connectors/fuel';
+import { LocalStorage } from '../src/connectors/types';
+import { dispatchFuelConnectorEvent } from '../src/connectors/utils';
+
+import { MockConnector } from './fixtures/mocked-connector';
+import { promiseCallback } from './fixtures/promise-callback';
 
 /**
  * @group browser

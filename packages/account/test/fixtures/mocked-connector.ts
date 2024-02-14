@@ -2,12 +2,17 @@
 
 import { setTimeout } from 'timers/promises';
 
-import { FUEL_NETWORK_URL } from '../../configs';
-import type { TransactionRequestLike } from '../../providers';
-import type { WalletUnlocked } from '../../wallet';
-import { FuelConnector } from '../fuel-connector';
-import { FuelConnectorEventTypes } from '../types';
-import type { Asset, FuelABI, ConnectorMetadata, Network } from '../types';
+import type {
+  TransactionRequestLike,
+  WalletUnlocked,
+  Asset,
+  FuelABI,
+  ConnectorMetadata,
+  Network,
+} from '../../src';
+import { FUEL_NETWORK_URL } from '../../src/configs';
+import { FuelConnector } from '../../src/connectors/fuel-connector';
+import { FuelConnectorEventTypes } from '../../src/connectors/types';
 
 import { generateAccounts } from './generate-accounts';
 
