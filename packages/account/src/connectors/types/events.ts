@@ -1,5 +1,4 @@
 import type { Asset } from '@fuels/assets';
-import type { ICreateChange, IUpdateChange, IDeleteChange } from 'dexie-observable/api';
 import type { JSONRPCRequest, JSONRPCResponse } from 'json-rpc-2.0';
 
 import type { FuelConnector } from '../fuel-connector';
@@ -60,30 +59,6 @@ export type EventMessage<T = EventMessageEvents> = BaseEvent<{
   readonly type: MessageTypes.event;
   readonly events: T;
 }>;
-
-export type CommunicationEventArg<T> = T extends MessageTypes.request
-  ? RequestMessage
-  : T extends MessageTypes.response
-  ? ResponseMessage
-  : T extends MessageTypes.uiEvent
-  ? UIEventMessage
-  : T extends MessageTypes.event
-  ? EventMessage
-  : T extends MessageTypes.removeConnection
-  ? string
-  : unknown;
-
-export type DatabaseEvents = ['delete', 'create', 'update'];
-export type DatabaseObservableEvent<T extends Array<string>> =
-  `${T[number]}:${DatabaseEvents[number]}`;
-
-export type DatabaseEventArg<T extends string> = T extends `${string}:create`
-  ? ICreateChange
-  : T extends `${string}:update`
-  ? IUpdateChange
-  : T extends `${string}:delete`
-  ? IDeleteChange
-  : unknown;
 
 /**
  * Event trigger when the accounts available to the

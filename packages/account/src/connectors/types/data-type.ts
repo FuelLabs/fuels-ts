@@ -35,11 +35,6 @@ export type Network = {
  */
 export type FuelABI = JsonAbi;
 
-export type FuelProviderConfig = {
-  id?: string;
-  url: string;
-};
-
 export enum MessageTypes {
   ping = 'ping',
   uiEvent = 'uiEvent',
