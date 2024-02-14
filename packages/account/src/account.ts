@@ -484,7 +484,7 @@ export class Account extends AbstractAccount {
 
   async signMessage(message: string): Promise<string> {
     if (!this._connector) {
-      throw new Error('Sign message only supported with connector!');
+      throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
     }
     return this._connector.signMessage(this.address.toString(), message);
   }
