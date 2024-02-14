@@ -386,9 +386,12 @@ describe('Fuel Connector', () => {
     expect(connectors.length).toEqual(2);
     expect(connectors[0].name).toEqual(walletConnectorName);
     expect(connectors[1].name).toEqual(thirdPartyConnectorName);
+
     // Switch between connectors
+    await fuel.selectConnector(walletConnectorName);
     expect(fuel.currentConnector()?.name).toBe(walletConnectorName);
     expect(await fuel.accounts()).toHaveLength(2);
+
     await fuel.selectConnector(thirdPartyConnectorName);
     expect(fuel.currentConnector()?.name).toBe(thirdPartyConnectorName);
     expect(await fuel.accounts()).toHaveLength(0);
