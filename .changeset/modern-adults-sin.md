@@ -1,7 +1,6 @@
 ---
 "@fuel-ts/program": patch
-"@fuel-ts/providers": patch
-"@fuel-ts/wallet": patch
+"@fuel-ts/account": patch
 ---
 
 remove additional dryrun call
