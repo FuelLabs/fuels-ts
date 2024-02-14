@@ -12,7 +12,7 @@ files.forEach((filePath) => {
   log('Process predicate: ', filePath);
 
   const basePath = join(projectsDir, filePath);
-  const binaryPath = join(basePath, '/out/debug/', `${filePath}.bin`);
+  const binaryPath = join(basePath, '/out/release/', `${filePath}.bin`);
   const binaryTSPath = join(basePath, 'index.ts');
   const bytes = readFileSync(binaryPath);
 

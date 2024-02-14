@@ -2,5 +2,5 @@
   "verbose": true,
   "ext": "ts",
   "watch": ["../../packages", "../docs-snippets"],
-  "ignore": ["**/*.d.ts", "**/*.map", "**/*.js", "**/out/debug/**"]
+  "ignore": ["**/*.d.ts", "**/*.map", "**/*.js", "**/out/release/**"]
 }
