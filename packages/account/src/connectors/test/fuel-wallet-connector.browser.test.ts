@@ -1,6 +1,8 @@
+import type { StorageAbstract } from '../../wallet-manager';
 import { MockConnector } from '../fixtures/mocked-connector';
 import { promiseCallback } from '../fixtures/promise-callback';
 import { Fuel } from '../fuel';
+import { LocalStorage } from '../types';
 import { dispatchFuelConnectorEvent } from '../utils';
 
 /**
@@ -38,6 +40,8 @@ describe('Fuel Connector on browser', () => {
   });
 
   it('should retrieve default connector from storage', async () => {
+    const storage = new LocalStorage(window.localStorage);
+
     const walletConnector = new MockConnector({
       name: 'Fuel Wallet',
     });
@@ -46,7 +50,7 @@ describe('Fuel Connector on browser', () => {
     });
     const fuel = new Fuel({
       connectors: [walletConnector, thirdPartyConnector],
-      storage: window.localStorage,
+      storage,
     });
 
     // Select third party connector
@@ -54,7 +58,7 @@ describe('Fuel Connector on browser', () => {
 
     const fuelNewInstance = new Fuel({
       connectors: [walletConnector, thirdPartyConnector],
-      storage: window.localStorage,
+      storage,
     });
     await fuelNewInstance.hasConnector();
     expect(fuelNewInstance.currentConnector()?.name).toBe(thirdPartyConnector.name);
@@ -65,7 +69,8 @@ describe('Fuel Connector on browser', () => {
       setItem: vi.fn(),
       getItem: vi.fn(),
       removeItem: vi.fn(),
-    };
+    } as unknown as StorageAbstract;
+
     const connector = new MockConnector();
     const fuel = new Fuel({
       connectors: [connector],
@@ -95,7 +100,7 @@ describe('Fuel Connector on browser', () => {
     const value = window.localStorage.getItem(Fuel.STORAGE_KEY);
     expect(value).toBeTruthy();
     expect(value).toEqual(connector.name);
-    fuel.clean();
+    await fuel.clean();
     const value2 = window.localStorage.getItem(Fuel.STORAGE_KEY);
     expect(value2).toBeFalsy();
   });
@@ -134,7 +139,7 @@ describe('Fuel Connector on browser', () => {
     expect(window.localStorage.getItem(Fuel.STORAGE_KEY)).toBeTruthy();
 
     // Expect to not be called after cleaning
-    fuel.destroy();
+    await fuel.destroy();
     fuel.emit(fuel.events.connection, true);
     connector.emit(fuel.events.connection, true);
     expect(onConnection).toBeCalledTimes(0);
