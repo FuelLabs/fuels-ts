@@ -11,6 +11,7 @@
     "**/Forc.lock",
     "**/getBuiltinVersions.ts",
     "**/out/debug/**",
+    "**/out/release/**",
     "apps/demo-typegen/src/contract-types/**",
     "apps/demo-typegen/src/predicate-types/**",
     "apps/demo-typegen/src/script-types/**"

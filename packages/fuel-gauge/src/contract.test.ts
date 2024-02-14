@@ -7,6 +7,7 @@ import type {
   TransactionType,
   JsonAbi,
   ScriptTransactionRequest,
+  ReceiptScriptResult,
 } from 'fuels';
 import {
   BN,
@@ -25,6 +26,7 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
   Predicate,
+  ReceiptType,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -924,6 +926,39 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
+  it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [[1000, BaseAssetId]]);
+
+    const contract = await setupContract();
+
+    const amountToContract = 100;
+
+    await expect(async () => {
+      const result = await wallet.transferToContract(
+        contract.id.toB256(),
+        amountToContract,
+        BaseAssetId,
+        {
+          gasLimit: 1,
+        }
+      );
+      await result.wait();
+    }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
+
+    await expect(async () => {
+      const result = await wallet.transferToContract(
+        contract.id.toB256(),
+        amountToContract,
+        BaseAssetId,
+        {
+          gasPrice: 0,
+        }
+      );
+      await result.wait();
+    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
+  });
+
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -988,25 +1023,29 @@ describe('Contract', () => {
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, BaseAssetId],
     });
-    const { gasUsed } = await invocationScope.getTransactionCost();
 
-    const gasLimit = multiply(gasUsed, 0.5);
-    await expect(
-      invocationScope
-        .txParams({
-          gasPrice,
-          gasLimit,
-        })
-        .dryRun<BN>()
-    ).rejects.toThrowError(`The script call result does not contain a 'returnReceipt'.`);
+    vi.spyOn(contract.provider, 'call').mockImplementation(async () =>
+      Promise.resolve({ receipts: [] })
+    );
 
-    await expect(
-      invocationScope
-        .txParams({
-          gasPrice,
-          gasLimit,
-        })
-        .simulate<BN>()
-    ).rejects.toThrowError(`The script call result does not contain a 'returnReceipt'.`);
+    await expect(invocationScope.dryRun<BN>()).rejects.toThrowError(
+      `The script call result does not contain a 'scriptResultReceipt'.`
+    );
+
+    const scriptResultReceipt: ReceiptScriptResult = {
+      type: ReceiptType.ScriptResult,
+      result: bn(1),
+      gasUsed: bn(2),
+    };
+
+    vi.spyOn(contract.provider, 'call').mockImplementation(async () =>
+      Promise.resolve({ receipts: [scriptResultReceipt] })
+    );
+
+    await expect(invocationScope.simulate<BN>()).rejects.toThrowError(
+      `The script call result does not contain a 'returnReceipt'.`
+    );
+
+    vi.restoreAllMocks();
   });
 });
