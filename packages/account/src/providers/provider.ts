@@ -1352,4 +1352,9 @@ export default class Provider {
     });
     return bn(latestBlockHeight);
   }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
+    return new TransactionResponse(transactionId, this);
+  }
 }
