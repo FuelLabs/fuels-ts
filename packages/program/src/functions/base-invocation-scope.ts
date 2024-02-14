@@ -291,11 +291,8 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const provider = this.getProvider();
-
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-    const { minGasPrice } = provider.getGasConfig();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
@@ -334,11 +331,8 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
-    const provider = this.getProvider();
-
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-    const { minGasPrice } = provider.getGasConfig();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
@@ -360,8 +354,7 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed } = await this.getTransactionCost();
-    const { minGasPrice } = provider.getGasConfig();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
@@ -410,12 +403,24 @@ export class BaseInvocationScope<TReturn = any> {
     const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
     const gasPriceSpecified = !!this.txParameters?.gasPrice;
 
+    const { gasLimit, gasPrice } = transactionRequest;
+
     if (!gasLimitSpecified) {
       transactionRequest.gasLimit = gasUsed;
+    } else if (gasLimit.lt(gasUsed)) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
     }
 
     if (!gasPriceSpecified) {
       transactionRequest.gasPrice = minGasPrice;
+    } else if (gasPrice.lt(minGasPrice)) {
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
     }
   }
 }
