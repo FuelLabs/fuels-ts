@@ -11,11 +11,19 @@ import { VecCoder } from './VecCoder';
  * @group node
  */
 describe('VecCoder', () => {
-  it('throws when encoding a struct', async () => {
+  it('should encode a Vec of Booleans', () => {
+    const coder = new VecCoder(new BooleanCoder());
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 6, 1, 0, 1, 0, 1, 1]);
+    const actual = coder.encode([true, false, true, false, true, true]);
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should throw when encoding non array input', async () => {
     const coder = new VecCoder(new BooleanCoder());
     await expectToThrowFuelError(
-      () => coder.encode([true]),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Vec encode unsupported in v1')
+      () => coder.encode('Nope' as never),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
     );
   });
 

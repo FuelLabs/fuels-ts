@@ -1,5 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
+import { concatBytes } from '@fuel-ts/utils';
 
 import { MAX_BYTES, WORD_SIZE } from '../../../utils/constants';
 import { chunkByLength } from '../../../utils/utilities';
@@ -21,8 +22,15 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     this.coder = coder;
   }
 
-  encode(_value: InputValueOf<TCoder>): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Vec encode unsupported in v1`);
+  encode(value: InputValueOf<TCoder>): Uint8Array {
+    if (!Array.isArray(value)) {
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+    }
+
+    const bytes = value.map((v) => this.coder.encode(v));
+    const lengthBytes = new U64Coder().encode(value.length);
+
+    return new Uint8Array([...lengthBytes, ...concatBytes(bytes)]);
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
