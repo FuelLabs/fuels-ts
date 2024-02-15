@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { concatBytes } from '@fuel-ts/utils';
 
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
@@ -27,7 +28,7 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Tuple encode unsupported in v1`);
+    return concatBytes(this.coders.map((coder, i) => coder.encode(value[i])));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

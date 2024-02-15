@@ -15,11 +15,13 @@ import { TupleCoder } from './TupleCoder';
 describe('Tuple Coder', () => {
   const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
 
-  it('throws when encoding', async () => {
-    await expectToThrowFuelError(
-      () => coder.encode([true, 82]),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Tuple encode unsupported in v1')
-    );
+  it('should encode a tuple containing a boolean and u64', () => {
+    const expected = new Uint8Array([
+      1, 255, 255, 255, 255, 255, 255, 255, 255,
+    ]);
+    const actual = coder.encode([true, U64_MAX]);
+
+    expect(actual).toStrictEqual(expected);
   });
 
   it('throws with mismatched inputs', async () => {
