@@ -7,14 +7,31 @@ import { StrSliceCoder } from './StrSliceCoder';
  * @group node
  * @group browser
  */
-describe('StdStringCoder', () => {
+describe('StrSliceCoder', () => {
   const coder = new StrSliceCoder();
 
-  it('throws when encoding a std string', async () => {
-    await expectToThrowFuelError(
-      () => coder.encode('fuel'),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'String slice encode unsupported in v1')
-    );
+  it('should encode an empty string', () => {
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
+    const actual = coder.encode('');
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('should encode [hello world]', () => {
+    const expected = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 11, 104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100,
+    ]);
+
+    const actual = coder.encode('hello world');
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('should encode [H3llo W0rld]', () => {
+    const expected = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 11, 72, 51, 108, 108, 111, 32, 87, 48, 114, 108, 100,
+    ]);
+
+    const actual = coder.encode('H3llo W0rld');
+    expect(actual).toStrictEqual(expected);
   });
 
   it('decodes a string slice', () => {
