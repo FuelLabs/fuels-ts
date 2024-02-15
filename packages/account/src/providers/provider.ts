@@ -24,7 +24,6 @@ import type {
   GqlDryRunSuccessStatusFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
-  GqlPeerInfo,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -129,7 +128,6 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
-  peers: GqlPeerInfo[];
 };
 
 export type NodeInfoAndConsensusParameters = {
@@ -524,7 +522,6 @@ export default class Provider {
       nodeVersion: nodeInfo.nodeVersion,
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
-      peers: nodeInfo.peers,
     };
 
     Provider.nodeInfoCache[this.url] = processedNodeInfo;

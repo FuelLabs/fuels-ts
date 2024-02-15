@@ -483,14 +483,6 @@ fragment nodeInfoFragment on NodeInfo {
   maxTx
   maxDepth
   nodeVersion
-  peers {
-    id
-    addresses
-    clientVersion
-    blockHeight
-    lastHeartbeatMs
-    appScore
-  }
 }
 
 query getNodeInfo {

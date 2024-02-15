@@ -8,5 +8,4 @@ export const MOCK_NODE_INFO: GqlNodeInfoFragmentFragment = {
   maxTx: '4064',
   maxDepth: '10',
   nodeVersion: '0.22.0',
-  peers: [],
 };
