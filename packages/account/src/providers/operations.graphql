@@ -39,9 +39,6 @@ fragment transactionFragment on Transaction {
   id
   rawPayload
   gasPrice
-  receipts {
-    ...receiptFragment
-  }
   status {
     ...transactionStatusFragment
   }
@@ -517,9 +514,6 @@ query getTransaction($transactionId: TransactionId!) {
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
-    receipts {
-      ...receiptFragment
-    }
   }
 }
 
