@@ -2,7 +2,7 @@
 
 import { execSync } from 'child_process';
 import { error } from 'console';
-import { existsSync, rmSync, writeFileSync, mkdirSync, renameSync } from 'fs';
+import { existsSync, rmSync, writeFileSync, renameSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
