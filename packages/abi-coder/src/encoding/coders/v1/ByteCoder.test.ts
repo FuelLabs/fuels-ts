@@ -10,11 +10,18 @@ import { ByteCoder } from './ByteCoder';
 describe('ByteCoder', () => {
   const coder = new ByteCoder();
 
-  it('throws when encoding a byte', async () => {
-    await expectToThrowFuelError(
-      () => coder.encode([1, 2, 3, 4, 5, 6, 7, 8]),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Bytes encode unsupported in v1')
-    );
+  it('should encode a byte', () => {
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
+    const actual = coder.encode([1, 2, 3]);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('should encode a byte [full word]', () => {
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 8, 1, 2, 3, 4, 5, 6, 7, 8]);
+    const actual = coder.encode([1, 2, 3, 4, 5, 6, 7, 8]);
+
+    expect(actual).toStrictEqual(expected);
   });
 
   it('decodes a byte', () => {
@@ -24,7 +31,7 @@ describe('ByteCoder', () => {
     const [actual, newOffset] = coder.decode(input, 0);
 
     expect(actual).toEqual(expected);
-    expect(newOffset).toEqual(10);
+    expect(newOffset).toEqual(18);
   });
 
   it('throws when decoding empty bytes', async () => {
