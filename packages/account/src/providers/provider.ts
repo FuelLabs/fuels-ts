@@ -427,12 +427,12 @@ export default class Provider {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
-    if (!isMajorSupported || !isMinorSupported) {
-      throw new FuelError(
-        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
-      );
-    }
+    // if (!isMajorSupported || !isMinorSupported) {
+    //   throw new FuelError(
+    //     FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+    //     `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+    //   );
+    // }
   }
 
   /**
