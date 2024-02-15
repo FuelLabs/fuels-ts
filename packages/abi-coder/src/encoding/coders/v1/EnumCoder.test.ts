@@ -15,11 +15,11 @@ import { EnumCoder } from './EnumCoder';
 describe('EnumCoder', () => {
   const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
 
-  it('throws when encoding an enum', async () => {
-    await expectToThrowFuelError(
-      () => coder.encode({ a: true }),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Enum encode unsupported in v1')
-    );
+  it('should encode an enum containing a boolean', () => {
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 1]);
+    const actual = coder.encode({ a: true });
+
+    expect(actual).toStrictEqual(expected);
   });
 
   it('decodes an enum containing a boolean', () => {
@@ -34,6 +34,15 @@ describe('EnumCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
+  it('should encode an enum containing a u64', () => {
+    const expected = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255, 255, 255, 255, 255,
+    ]);
+    const actual = coder.encode({ b: bn(U64_MAX) });
+
+    expect(actual).toStrictEqual(expected);
+  });
+
   it('decodes an enum containing a u64', () => {
     const expectedValue = { b: bn(U64_MAX) };
     const expectedLength = 16;
@@ -44,6 +53,12 @@ describe('EnumCoder', () => {
 
     expect(actualValue).toStrictEqual(expectedValue);
     expect(actualLength).toBe(expectedLength);
+  });
+
+  it('should throw an error when encoding if no enum key is provided', () => {
+    const invalidCoder = new EnumCoder('TestEnum', {});
+
+    expect(() => invalidCoder.encode({} as never)).toThrow('A field for the case must be provided');
   });
 
   it('throws an error when decoded value accesses an invalid index', () => {

@@ -1,5 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber } from '@fuel-ts/math';
+import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import { WORD_SIZE } from '../../../utils/constants';
@@ -42,8 +43,32 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.#encodedValueSize = encodedValueSize;
   }
 
-  encode(_value: InputValueOf<TCoders>): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Enum encode unsupported in v1`);
+  #encodeNativeEnum(value: string): Uint8Array {
+    const valueCoder = this.coders[value];
+    const encodedValue = valueCoder.encode([]);
+    const caseIndex = Object.keys(this.coders).indexOf(value);
+
+    const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
+    return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
+  }
+
+  encode(value: InputValueOf<TCoders>): Uint8Array {
+    if (typeof value === 'string' && this.coders[value]) {
+      return this.#encodeNativeEnum(value);
+    }
+
+    const [caseKey, ...empty] = Object.keys(value);
+    if (!caseKey) {
+      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided.');
+    }
+    if (empty.length !== 0) {
+      throw new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'Only one field must be provided.');
+    }
+    const valueCoder = this.coders[caseKey];
+    const caseIndex = Object.keys(this.coders).indexOf(caseKey);
+    const encodedValue = valueCoder.encode(value[caseKey]);
+
+    return new Uint8Array([...this.#caseIndexCoder.encode(caseIndex), ...encodedValue]);
   }
 
   #decodeNativeEnum(caseKey: string, newOffset: number): [DecodedValueOf<TCoders>, number] {
