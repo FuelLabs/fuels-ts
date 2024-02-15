@@ -20,6 +20,8 @@ import { clone } from 'ramda';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
+  GqlDryRunFailureStatusFragmentFragment,
+  GqlDryRunSuccessStatusFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
   GqlPeerInfo,
@@ -57,6 +59,12 @@ const MAX_RETRIES = 10;
 export type CallResult = {
   receipts: TransactionResultReceipt[];
 };
+
+export type NewCallResult = {
+  receipts: TransactionResultReceipt[];
+  id?: string;
+  status?: GqlDryRunFailureStatusFragmentFragment | GqlDryRunSuccessStatusFragmentFragment;
+}[];
 
 /**
  * A Fuel block
@@ -628,14 +636,20 @@ export default class Provider {
       await this.estimateTxDependencies(transactionRequest);
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({
-      encodedTransaction,
+    const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+      encodedTransactions: [encodedTransaction],
       utxoValidation: utxoValidation || false,
     });
-    const receipts = gqlReceipts.map(processGqlReceipt);
-    return {
-      receipts,
-    };
+
+    const callResult: NewCallResult = dryRunStatuses.map((dryRunStatus) => {
+      const { id, receipts, status } = dryRunStatus;
+
+      const processedReceipts = receipts.map(processGqlReceipt);
+
+      return { id, receipts: processedReceipts, status };
+    });
+
+    return { receipts: callResult[0].receipts };
   }
 
   /**
@@ -695,13 +709,22 @@ export default class Provider {
     }
 
     while (tries < MAX_RETRIES) {
-      const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
+      const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+        encodedTransactions: [hexlify(txRequest.toTransactionBytes())],
         utxoValidation: false,
       });
-      const receipts = gqlReceipts.map(processGqlReceipt);
-      const { missingOutputVariables, missingOutputContractIds } =
-        getReceiptsWithMissingData(receipts);
+
+      const callResult = dryRunStatuses.map((dryRunStatus) => {
+        const { id, receipts, status } = dryRunStatus;
+
+        const processedReceipts = receipts.map(processGqlReceipt);
+
+        return { id, receipts: processedReceipts, status };
+      });
+
+      const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
+        callResult[0].receipts
+      );
 
       missingOutputVariableCount = missingOutputVariables.length;
       missingOutputContractIdsCount = missingOutputContractIds.length;
@@ -738,15 +761,22 @@ export default class Provider {
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
-    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({
-      encodedTransaction,
+    const encodedTransactions = [hexlify(transactionRequest.toTransactionBytes())];
+
+    const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+      encodedTransactions,
       utxoValidation: true,
     });
-    const receipts = gqlReceipts.map(processGqlReceipt);
-    return {
-      receipts,
-    };
+
+    const callResult = dryRunStatuses.map((dryRunStatus) => {
+      const { id, receipts, status } = dryRunStatus;
+
+      const processedReceipts = receipts.map(processGqlReceipt);
+
+      return { id, receipts: processedReceipts, status };
+    });
+
+    return { receipts: callResult[0].receipts };
   }
 
   /**

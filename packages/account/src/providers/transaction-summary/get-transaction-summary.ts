@@ -6,6 +6,7 @@ import { getBytesCopy } from 'ethers';
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
   GqlPageInfo,
+  GqlReceiptFragmentFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
@@ -43,7 +44,13 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
+  let txReceipts: GqlReceiptFragmentFragment[] = [];
+
+  if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
+    txReceipts = gqlTransaction.status.receipts;
+  }
+
+  const receipts = txReceipts.map(processGqlReceipt);
 
   const {
     consensusParameters: { gasPerByte, gasPriceFactor, maxInputs, gasCosts },
@@ -130,11 +137,17 @@ export async function getTransactionsSummaries(
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
 
-    const { id, rawPayload, receipts: gqlReceipts, status } = gqlTransaction;
+    const { id, rawPayload, status } = gqlTransaction;
 
     const [decodedTransaction] = new TransactionCoder().decode(getBytesCopy(rawPayload), 0);
 
-    const receipts = gqlReceipts?.map(processGqlReceipt) || [];
+    let txReceipts: GqlReceiptFragmentFragment[] = [];
+
+    if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
+      txReceipts = gqlTransaction.status.receipts;
+    }
+
+    const receipts = txReceipts.map(processGqlReceipt);
 
     const transactionSummary = assembleTransactionSummary({
       id,

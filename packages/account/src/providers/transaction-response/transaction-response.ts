@@ -20,6 +20,7 @@ import type {
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { getBytesCopy } from 'ethers';
 
+import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
@@ -176,7 +177,13 @@ export class TransactionResponse {
       transaction
     ) as Transaction<TTransactionType>;
 
-    const receipts = transaction.receipts?.map(processGqlReceipt) || [];
+    let txReceipts: GqlReceiptFragmentFragment[] = [];
+
+    if (transaction?.status && 'receipts' in transaction.status) {
+      txReceipts = transaction.status.receipts;
+    }
+
+    const receipts = txReceipts.map(processGqlReceipt) || [];
 
     const { gasPerByte, gasPriceFactor, gasCosts } = this.provider.getGasConfig();
     const maxInputs = this.provider.getChain().consensusParameters.maxInputs;

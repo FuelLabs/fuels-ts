@@ -290,6 +290,7 @@ export const MOCK_SUCCESS_STATUS: SuccessStatus = {
     __typename: 'Block',
     id: '0x123',
   },
+  receipts: [],
 };
 
 export const MOCK_FAILURE_STATUS: FailureStatus = {
@@ -301,6 +302,7 @@ export const MOCK_FAILURE_STATUS: FailureStatus = {
   },
   reason: 'reason',
   time: '4611686020122012535',
+  receipts: [],
 };
 
 export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {
