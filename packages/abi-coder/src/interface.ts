@@ -4,7 +4,7 @@ import { getBytesCopy, type BytesLike } from 'ethers';
 
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
-import type { InputValue } from './coders/AbstractCoder';
+import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
 import { findOrThrow } from './utils/utilities';
 
