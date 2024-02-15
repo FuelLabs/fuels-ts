@@ -1,7 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { concatBytes } from '@fuel-ts/utils';
 
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
+import { OptionCoder } from '../v0/OptionCoder';
 
 type InputValueOf<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -27,8 +29,22 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
   }
 
-  encode(_value: InputValueOf<TCoders>): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Struct encode unsupported in v1`);
+  encode(value: InputValueOf<TCoders>): Uint8Array {
+    return concatBytes(
+      Object.keys(this.coders).map((fieldName) => {
+        const fieldCoder = this.coders[fieldName];
+        const fieldValue = value[fieldName];
+
+        if (!(fieldCoder instanceof OptionCoder) && fieldValue == null) {
+          throw new FuelError(
+            ErrorCode.ENCODE_ERROR,
+            `Invalid ${this.type}. Field "${fieldName}" not present.`
+          );
+        }
+
+        return fieldCoder.encode(fieldValue);
+      })
+    );
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

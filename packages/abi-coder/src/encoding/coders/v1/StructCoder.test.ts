@@ -16,11 +16,11 @@ describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
   const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });
 
-  it('throws when encoding a struct', async () => {
-    await expectToThrowFuelError(
-      () => coder.encode({ a: false, b: 1 }),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Struct encode unsupported in v1')
-    );
+  it('should encode a struct containing a boolean and number', () => {
+    const expected = new Uint8Array([1, 0, 0, 0, 0, 255, 255, 255, 255]);
+    const actual = coder.encode({ a: true, b: U32_MAX });
+
+    expect(actual).toStrictEqual(expected);
   });
 
   it('should decode a struct containing a boolean and number', () => {
