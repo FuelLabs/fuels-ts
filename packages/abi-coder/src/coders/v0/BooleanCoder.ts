@@ -1,15 +1,15 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes } from '@fuel-ts/math';
 
-import type { EncodingOptions } from '../AbstractCoder';
+import type { TEncodingOptions } from '../../types/TEncodingOptions';
 import { Coder } from '../AbstractCoder';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
   paddingLength: number;
-  options: EncodingOptions;
+  options: TEncodingOptions;
 
   constructor(
-    options: EncodingOptions = {
+    options: TEncodingOptions = {
       isSmallBytes: false,
       isRightPadded: false,
     }

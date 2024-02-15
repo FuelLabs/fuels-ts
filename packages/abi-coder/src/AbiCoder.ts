@@ -2,7 +2,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ResolvedAbiType } from './ResolvedAbiType';
-import type { DecodedValue, InputValue, Coder, EncodingOptions } from './coders/AbstractCoder';
+import type { DecodedValue, InputValue, Coder } from './coders/AbstractCoder';
 import { ArrayCoder } from './coders/v0/ArrayCoder';
 import { B256Coder } from './coders/v0/B256Coder';
 import { B512Coder } from './coders/v0/B512Coder';
@@ -29,6 +29,7 @@ import { StructCoder as StructCoderV1 } from './coders/v1/StructCoder';
 import { TupleCoder as TupleCoderV1 } from './coders/v1/TupleCoder';
 import { VecCoder as VecCoderV1 } from './coders/v1/VecCoder';
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
+import type { TEncodingOptions } from './types/TEncodingOptions';
 import {
   arrayRegEx,
   enumRegEx,
@@ -46,7 +47,7 @@ export abstract class AbiCoder {
   static getCoder(
     abi: JsonAbi,
     argument: JsonAbiArgument,
-    options: EncodingOptions = {
+    options: TEncodingOptions = {
       isSmallBytes: false,
     }
   ): Coder {
@@ -59,7 +60,7 @@ export abstract class AbiCoder {
     abi: JsonAbi,
     argument: JsonAbiArgument,
     value: InputValue,
-    options?: EncodingOptions
+    options?: TEncodingOptions
   ) {
     return this.getCoder(abi, argument, options).encode(value);
   }
@@ -69,7 +70,7 @@ export abstract class AbiCoder {
     argument: JsonAbiArgument,
     data: Uint8Array,
     offset: number,
-    options?: EncodingOptions
+    options?: TEncodingOptions
   ): [DecodedValue | undefined, number] {
     return this.getCoder(abi, argument, options).decode(data, offset) as [
       DecodedValue | undefined,
@@ -79,34 +80,34 @@ export abstract class AbiCoder {
 
   private static getCoderImpl(
     resolvedAbiType: ResolvedAbiType,
-    options: EncodingOptions = {
+    options: TEncodingOptions = {
       isSmallBytes: false,
     }
   ): Coder {
-    const { version } = options;
+    const { encoding } = options;
 
     switch (resolvedAbiType.type) {
       case 'u8':
       case 'u16':
       case 'u32':
-        return version
+        return encoding
           ? new NumberCoderV1(resolvedAbiType.type)
           : new NumberCoder(resolvedAbiType.type, options);
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
       case 'raw untyped slice':
-        return version ? new RawSliceCoderV1() : new RawSliceCoder();
+        return encoding ? new RawSliceCoderV1() : new RawSliceCoder();
       case 'bool':
-        return version ? new BooleanCoderV1() : new BooleanCoder(options);
+        return encoding ? new BooleanCoderV1() : new BooleanCoder(options);
       case 'b256':
         return new B256Coder();
       case 'struct B512':
         return new B512Coder();
       case BYTES_CODER_TYPE:
-        return version ? new ByteCoderV1() : new ByteCoder();
+        return encoding ? new ByteCoderV1() : new ByteCoder();
       case STD_STRING_CODER_TYPE:
-        return version ? new StdStringCoderV1() : new StdStringCoder();
+        return encoding ? new StdStringCoderV1() : new StdStringCoder();
       default:
         break;
     }
@@ -115,7 +116,7 @@ export abstract class AbiCoder {
     if (stringMatch) {
       const length = parseInt(stringMatch.length, 10);
 
-      return version ? new StringCoderV1(length) : new StringCoder(length);
+      return encoding ? new StringCoderV1(length) : new StringCoder(length);
     }
 
     // ABI types underneath MUST have components by definition
@@ -134,7 +135,7 @@ export abstract class AbiCoder {
         );
       }
 
-      const arrayElementCoder = AbiCoder.getCoderImpl(arg, { version, isSmallBytes: true });
+      const arrayElementCoder = AbiCoder.getCoderImpl(arg, { encoding, isSmallBytes: true });
       return new ArrayCoder(arrayElementCoder, length);
     }
 
@@ -148,27 +149,27 @@ export abstract class AbiCoder {
       }
       const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-      const itemCoder = AbiCoder.getCoderImpl(argType, { version, isSmallBytes: true });
-      return version ? new VecCoderV1(itemCoder) : new VecCoder(itemCoder);
+      const itemCoder = AbiCoder.getCoderImpl(argType, { encoding, isSmallBytes: true });
+      return encoding ? new VecCoderV1(itemCoder) : new VecCoder(itemCoder);
     }
 
     const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
     if (structMatch) {
-      const coders = AbiCoder.getCoders(components, { version, isRightPadded: true });
-      return version
+      const coders = AbiCoder.getCoders(components, { encoding, isRightPadded: true });
+      return encoding
         ? new StructCoderV1(structMatch.name, coders)
         : new StructCoder(structMatch.name, coders);
     }
 
     const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
     if (enumMatch) {
-      const coders = AbiCoder.getCoders(components, { version });
+      const coders = AbiCoder.getCoders(components, { encoding });
 
       const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
         return new OptionCoder(enumMatch.name, coders);
       }
-      return version
+      return encoding
         ? new EnumCoderV1(enumMatch.name, coders)
         : new EnumCoder(enumMatch.name, coders);
     }
@@ -176,9 +177,9 @@ export abstract class AbiCoder {
     const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
     if (tupleMatch) {
       const coders = components.map((component) =>
-        AbiCoder.getCoderImpl(component, { version, isRightPadded: true })
+        AbiCoder.getCoderImpl(component, { encoding, isRightPadded: true })
       );
-      return version ? new TupleCoderV1(coders) : new TupleCoder(coders);
+      return encoding ? new TupleCoderV1(coders) : new TupleCoder(coders);
     }
 
     if (resolvedAbiType.type === 'str') {
@@ -194,7 +195,7 @@ export abstract class AbiCoder {
     );
   }
 
-  private static getCoders(components: readonly ResolvedAbiType[], options: EncodingOptions) {
+  private static getCoders(components: readonly ResolvedAbiType[], options: TEncodingOptions) {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 
