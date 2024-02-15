@@ -2,11 +2,11 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { getBytesCopy, type BytesLike } from 'ethers';
 
-import { AbiCoder } from './abi-coder';
-import type { InputValue } from './coders/abstract-coder';
-import { FunctionFragment } from './function-fragment';
-import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
-import { findOrThrow } from './utilities';
+import { AbiCoder } from './AbiCoder';
+import { FunctionFragment } from './FunctionFragment';
+import type { InputValue } from './coders/AbstractCoder';
+import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
+import { findOrThrow } from './utils/utilities';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
