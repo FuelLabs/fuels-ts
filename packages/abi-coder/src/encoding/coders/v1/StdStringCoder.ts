@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { toUtf8String } from 'ethers';
+import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
@@ -12,8 +12,11 @@ export class StdStringCoder extends Coder<string, string> {
     super('struct', 'struct String', WORD_SIZE);
   }
 
-  encode(_value: string): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `StdString encode unsupported in v1`);
+  encode(value: string): Uint8Array {
+    const bytes = toUtf8Bytes(value);
+    const lengthBytes = new U64Coder().encode(value.length);
+
+    return new Uint8Array([...lengthBytes, ...bytes]);
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
