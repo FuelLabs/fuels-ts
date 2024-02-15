@@ -42,7 +42,7 @@
   "scripts": {
     "build": "tsup",
     "prebuild": "pnpm build:operations",
-    "build:schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
+    "build:schema": "get-graphql-schema http://localhost:4000/graphql > src/providers/fuel-core-schema.graphql && prettier --write src/providers/fuel-core-schema.graphql",
     "build:operations": "pnpm graphql-codegen",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
