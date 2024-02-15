@@ -10,11 +10,18 @@ import { RawSliceCoder } from './RawSliceCoder';
 describe('RawSliceCoder', () => {
   const coder = new RawSliceCoder();
 
-  it('throws when encoding a raw slice', async () => {
-    await expectToThrowFuelError(
-      () => coder.encode([1, 2, 3, 4, 5, 6, 7, 8]),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Raw slice encode unsupported in v1')
-    );
+  it('should encode a raw-slice', () => {
+    const expected: Uint8Array = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
+    const actual = coder.encode([1, 2, 3]);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('should encode a raw-slice [full word]', () => {
+    const expected: Uint8Array = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 8, 1, 2, 3, 4, 5, 6, 7, 8]);
+    const actual = coder.encode([1, 2, 3, 4, 5, 6, 7, 8]);
+
+    expect(actual).toStrictEqual(expected);
   });
 
   it('decodes a raw-slice', () => {

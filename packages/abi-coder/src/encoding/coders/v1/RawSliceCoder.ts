@@ -13,8 +13,16 @@ export class RawSliceCoder extends Coder<number[], number[]> {
     super('raw untyped slice', 'raw untyped slice', WORD_SIZE);
   }
 
-  encode(_value: number[]): Uint8Array {
-    throw new FuelError(ErrorCode.ENCODE_ERROR, `Raw slice encode unsupported in v1`);
+  encode(value: number[]): Uint8Array {
+    if (!Array.isArray(value)) {
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+    }
+
+    const internalCoder = new ArrayCoder(new NumberCoder('u8'), value.length);
+    const bytes = internalCoder.encode(value);
+    const lengthBytes = new U64Coder().encode(bytes.length);
+
+    return new Uint8Array([...lengthBytes, ...bytes]);
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {
