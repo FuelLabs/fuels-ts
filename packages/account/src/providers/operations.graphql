@@ -19,6 +19,9 @@ fragment transactionStatusFragment on TransactionStatus {
       returnType
       data
     }
+    receipts {
+      ...receiptFragment
+    }
   }
   ... on FailureStatus {
     block {
@@ -26,6 +29,9 @@ fragment transactionStatusFragment on TransactionStatus {
     }
     time
     reason
+    receipts {
+      ...receiptFragment
+    }
   }
 }
 
@@ -53,6 +59,21 @@ fragment inputEstimatePredicatesFragment on Input {
 fragment transactionEstimatePredicatesFragment on Transaction {
   inputs {
     ...inputEstimatePredicatesFragment
+  }
+}
+
+fragment dryRunFailureStatusFragment on DryRunFailureStatus {
+  reason
+  programState {
+    returnType
+    data
+  }
+}
+
+fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
+  programState {
+    returnType
+    data
   }
 }
 
@@ -105,6 +126,21 @@ fragment receiptFragment on Receipt {
   nonce
   contractId
   subId
+}
+
+fragment dryRunTransactionExecutionStatusFragment on DryRunTransactionExecutionStatus {
+  id
+  status {
+    ... on DryRunFailureStatus {
+      ...dryRunFailureStatusFragment
+    }
+    ... on DryRunSuccessStatus {
+      ...dryRunSuccessStatusFragment
+    }
+  }
+  receipts {
+    ...receiptFragment
+  }
 }
 
 fragment blockFragment on Block {
@@ -686,9 +722,9 @@ query getMessageStatus($nonce: Nonce!) {
   }
 }
 
-mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
-  dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
-    ...receiptFragment
+mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
+  dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
+    ...dryRunTransactionExecutionStatusFragment
   }
 }
 
