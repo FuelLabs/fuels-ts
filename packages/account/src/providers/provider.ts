@@ -242,7 +242,10 @@ export type EstimatePredicateParams = {
   estimatePredicates?: boolean;
 };
 
-export type TransactionCostParams = EstimateTransactionParams & EstimatePredicateParams;
+export type TransactionCostParams = EstimateTransactionParams &
+  EstimatePredicateParams & {
+    resourcesOwner?: AbstractAddress;
+  };
 
 /**
  * Provider Call transaction params
@@ -765,7 +768,11 @@ export default class Provider {
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = [],
-    { estimateTxDependencies = true, estimatePredicates = true }: TransactionCostParams = {}
+    {
+      estimateTxDependencies = true,
+      estimatePredicates = true,
+      resourcesOwner,
+    }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const chainInfo = this.getChain();
@@ -798,7 +805,7 @@ export default class Provider {
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
     // Funding transaction with fake utxos
-    transactionRequest.fundWithFakeUtxos(allQuantities);
+    transactionRequest.fundWithFakeUtxos(allQuantities, resourcesOwner);
 
     /**
      * Estimate gasUsed for script transactions
