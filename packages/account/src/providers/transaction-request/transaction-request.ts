@@ -564,7 +564,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param quantities - CoinQuantity Array.
    */
-  fundWithFakeUtxos(quantities: CoinQuantity[]) {
+  fundWithFakeUtxos(quantities: CoinQuantity[], resourcesOwner?: AbstractAddress) {
     let idCounter = 0;
     const generateId = (): string => {
       const counterString = String(idCounter++);
@@ -592,7 +592,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
             id: generateId(),
             amount: quantity,
             assetId,
-            owner: Address.fromRandom(),
+            owner: resourcesOwner || Address.fromRandom(),
             maturity: 0,
             blockCreated: bn(1),
             txCreatedIdx: bn(1),
