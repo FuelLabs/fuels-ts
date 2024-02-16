@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import { Account } from '../account';
@@ -407,7 +408,7 @@ export class Fuel extends FuelConnector {
       // If a provider or network was informed but is not valid
       // throw an error
     } else {
-      throw new Error('Provider is not valid.');
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.');
     }
     return provider;
   }
