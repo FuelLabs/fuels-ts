@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
 import { hexlify } from 'ethers';
 import { clone } from 'ramda';
 
