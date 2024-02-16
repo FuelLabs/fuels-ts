@@ -26,14 +26,6 @@ describe('Fuel Connector', () => {
     expect(connectors.length).toBe(0);
   });
 
-  it('should be instantiaded using devMode connectors when flag is informed', async () => {
-    const fuel = new Fuel({
-      devMode: true,
-    });
-    const connectors = await fuel.connectors();
-    expect(connectors.length).toBe(0);
-  });
-
   it('should add connector using event of a custom EventBus', async () => {
     const eventBus = new EventEmitter();
     const fuel = new Fuel({

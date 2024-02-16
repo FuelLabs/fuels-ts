@@ -29,7 +29,6 @@ export type FuelConfig = {
   connectors?: Array<FuelConnector>;
   storage?: StorageAbstract | null;
   targetObject?: TargetObject;
-  devMode?: boolean;
 };
 
 export type FuelConnectorSelectOptions = {
