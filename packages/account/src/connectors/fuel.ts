@@ -376,15 +376,9 @@ export class Fuel extends FuelConnector {
    * Return a Fuel Provider instance with extends features to work with
    * connectors.
    *
-   * @deprecated Provider is going to be deprecated in the future.
+   * @deprecated getProvider is deprecated and is going to be removed in the future, use getWallet instead.
    */
   async getProvider(providerOrNetwork?: Provider | Network): Promise<Provider> {
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'Get provider is deprecated, use getWallet instead. Provider is going to be removed in the future.'
-      );
-    }
     return this._getProvider(providerOrNetwork);
   }
 
