@@ -645,7 +645,7 @@ export default class Provider {
    * @returns A promise that resolves to the estimated transaction request object.
    */
   async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
-    if (!transactionRequest.hasPredicateInput()) {
+    if (!transactionRequest.shouldEstimatePredicates()) {
       return transactionRequest;
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
@@ -799,7 +799,7 @@ export default class Provider {
     /**
      * Estimate predicates gasUsed
      */
-    if (transactionRequest.hasPredicateInput() && estimatePredicates) {
+    if (transactionRequest.shouldEstimatePredicates() && estimatePredicates) {
       // Remove gasLimit to avoid gasLimit when estimating predicates
       if (isScriptTransaction) {
         transactionRequest.gasLimit = bn(0);

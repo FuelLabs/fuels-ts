@@ -127,5 +127,19 @@ describe('Predicate', () => {
         Number(predicateMessageInput.predicateGasUsed)
       );
     });
+
+    test('predicate does not get estimated again if it has already been estimated', async () => {
+      const tx = new ScriptTransactionRequest();
+      await seedTestWallet(predicateTrue, [[100]]);
+      const resources = await predicateTrue.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(resources, predicateTrue);
+
+      const spy = vi.spyOn(provider.operations, 'estimatePredicates');
+
+      await provider.estimatePredicates(tx);
+      await provider.estimatePredicates(tx);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 });
