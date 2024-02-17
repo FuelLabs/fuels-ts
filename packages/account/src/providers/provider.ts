@@ -625,7 +625,7 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
-      await this.estimateTxDependencies(transactionRequest);
+      return this.estimateTxDependencies(transactionRequest);
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
@@ -657,7 +657,6 @@ export default class Provider {
     if (inputs) {
       inputs.forEach((input, index) => {
         if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
-          // eslint-disable-next-line no-param-reassign
           (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }
@@ -665,6 +664,43 @@ export default class Provider {
     }
 
     return transactionRequest;
+  }
+
+  private async estimateInputsAndOutputs(txRequest: ScriptTransactionRequest) {
+    const txRequestClone = clone(txRequest);
+
+    let tries = 0;
+
+    let receipts: TransactionResultReceipt[] = [];
+    while (tries < MAX_RETRIES) {
+      const { dryRun: gqlReceipts } = await this.operations.dryRun({
+        encodedTransaction: hexlify(txRequestClone.toTransactionBytes()),
+        utxoValidation: false,
+      });
+      receipts = gqlReceipts.map(processGqlReceipt);
+      const { missingOutputVariables, missingOutputContractIds } =
+        getReceiptsWithMissingData(receipts);
+
+      const hasMissingOutputs =
+        missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
+
+      if (!hasMissingOutputs) {
+        break;
+      }
+
+      txRequestClone.addVariableOutputs(missingOutputVariables.length);
+      missingOutputContractIds.forEach(({ contractId }) => {
+        txRequestClone.addContractInputAndOutput(Address.fromString(contractId));
+      });
+
+      tries += 1;
+    }
+
+    return {
+      receipts,
+      inputs: txRequestClone.inputs,
+      outputs: txRequestClone.outputs,
+    };
   }
 
   /**
@@ -680,45 +716,27 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
-    let missingOutputVariableCount = 0;
-    let missingOutputContractIdsCount = 0;
-    let tries = 0;
-
+  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<CallResult> {
     if (transactionRequest.type === TransactionType.Create) {
-      return;
+      return { receipts: [] };
     }
 
-    let txRequest = transactionRequest;
+    let txRequest: ScriptTransactionRequest = transactionRequest;
 
     if (txRequest.hasPredicateInput()) {
       txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
     }
 
-    while (tries < MAX_RETRIES) {
-      const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
-        utxoValidation: false,
-      });
-      const receipts = gqlReceipts.map(processGqlReceipt);
-      const { missingOutputVariables, missingOutputContractIds } =
-        getReceiptsWithMissingData(receipts);
+    const {
+      outputs: estimatedOutputs,
+      receipts,
+      inputs: estimatedInputs,
+    } = await this.estimateInputsAndOutputs(txRequest);
 
-      missingOutputVariableCount = missingOutputVariables.length;
-      missingOutputContractIdsCount = missingOutputContractIds.length;
+    txRequest.inputs = estimatedInputs;
+    txRequest.outputs = estimatedOutputs;
 
-      if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
-        return;
-      }
-
-      txRequest.addVariableOutputs(missingOutputVariableCount);
-
-      missingOutputContractIds.forEach(({ contractId }) =>
-        txRequest.addContractInputAndOutput(Address.fromString(contractId))
-      );
-
-      tries += 1;
-    }
+    return { receipts };
   }
 
   /**
@@ -737,7 +755,7 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
-      await this.estimateTxDependencies(transactionRequest);
+      return this.estimateTxDependencies(transactionRequest);
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
