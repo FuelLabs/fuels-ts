@@ -670,7 +670,7 @@ export default class Provider {
     return transactionRequest;
   }
 
-  private async estimateInputsAndOutputs(txRequest: ScriptTransactionRequest) {
+  private async estimateMissingInputsAndOutputs(txRequest: ScriptTransactionRequest) {
     let tries = 0;
 
     let receipts: TransactionResultReceipt[] = [];
@@ -727,7 +727,7 @@ export default class Provider {
 
     await this.estimatePredicates(txRequest);
 
-    const { receipts } = await this.estimateInputsAndOutputs(txRequest);
+    const { receipts } = await this.estimateMissingInputsAndOutputs(txRequest);
 
     // eslint-disable-next-line no-param-reassign
     transactionRequest.inputs = txRequest.inputs;
