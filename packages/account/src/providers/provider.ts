@@ -723,9 +723,9 @@ export default class Provider {
       return { receipts: [] };
     }
 
-    let txRequest: ScriptTransactionRequest = clone(transactionRequest);
+    const txRequest: ScriptTransactionRequest = clone(transactionRequest);
 
-    txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
+    await this.estimatePredicates(txRequest);
 
     const { receipts } = await this.estimateInputsAndOutputs(txRequest);
 
