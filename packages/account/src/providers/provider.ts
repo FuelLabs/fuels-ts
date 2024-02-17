@@ -645,6 +645,9 @@ export default class Provider {
    * @returns A promise that resolves to the estimated transaction request object.
    */
   async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
+    if (!transactionRequest.hasPredicateInput()) {
+      return transactionRequest;
+    }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const response = await this.operations.estimatePredicates({
       encodedTransaction,
@@ -722,9 +725,7 @@ export default class Provider {
 
     let txRequest: ScriptTransactionRequest = clone(transactionRequest);
 
-    if (txRequest.hasPredicateInput()) {
-      txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
-    }
+    txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
 
     const { receipts } = await this.estimateInputsAndOutputs(txRequest);
 
