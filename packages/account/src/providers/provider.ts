@@ -657,6 +657,7 @@ export default class Provider {
     if (inputs) {
       inputs.forEach((input, index) => {
         if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
           (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }
@@ -667,14 +668,12 @@ export default class Provider {
   }
 
   private async estimateInputsAndOutputs(txRequest: ScriptTransactionRequest) {
-    const txRequestClone = clone(txRequest);
-
     let tries = 0;
 
     let receipts: TransactionResultReceipt[] = [];
     while (tries < MAX_RETRIES) {
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction: hexlify(txRequestClone.toTransactionBytes()),
+        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
         utxoValidation: false,
       });
       receipts = gqlReceipts.map(processGqlReceipt);
@@ -688,9 +687,9 @@ export default class Provider {
         break;
       }
 
-      txRequestClone.addVariableOutputs(missingOutputVariables.length);
+      txRequest.addVariableOutputs(missingOutputVariables.length);
       missingOutputContractIds.forEach(({ contractId }) => {
-        txRequestClone.addContractInputAndOutput(Address.fromString(contractId));
+        txRequest.addContractInputAndOutput(Address.fromString(contractId));
       });
 
       tries += 1;
@@ -698,8 +697,8 @@ export default class Provider {
 
     return {
       receipts,
-      inputs: txRequestClone.inputs,
-      outputs: txRequestClone.outputs,
+      inputs: txRequest.inputs,
+      outputs: txRequest.outputs,
     };
   }
 
@@ -721,20 +720,18 @@ export default class Provider {
       return { receipts: [] };
     }
 
-    let txRequest: ScriptTransactionRequest = transactionRequest;
+    let txRequest: ScriptTransactionRequest = clone(transactionRequest);
 
     if (txRequest.hasPredicateInput()) {
       txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
     }
 
-    const {
-      outputs: estimatedOutputs,
-      receipts,
-      inputs: estimatedInputs,
-    } = await this.estimateInputsAndOutputs(txRequest);
+    const { receipts } = await this.estimateInputsAndOutputs(txRequest);
 
-    txRequest.inputs = estimatedInputs;
-    txRequest.outputs = estimatedOutputs;
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest.inputs = txRequest.inputs;
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest.outputs = txRequest.outputs;
 
     return { receipts };
   }
