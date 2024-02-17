@@ -3,6 +3,9 @@ import { getAssetEth, getAssetFuel, getAssetNetwork, getAssetWithNetwork, getDef
 import { assets } from '../index'
 import { CHAIN_IDS } from '../../chains'
 
+/**
+ * @group node
+*/
 describe('Network Utils', () => {
   test('getDefaultChainId', async () => {
     expect(getDefaultChainId('ethereum')).toBe(11155111);
