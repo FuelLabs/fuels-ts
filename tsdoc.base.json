@@ -104,6 +104,18 @@
     {
       "tagName": "@hideGroups",
       "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@name",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@emits",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@type",
+      "syntaxKind": "modifier"
     }
   ]
 }
