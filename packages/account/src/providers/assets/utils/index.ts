@@ -1,3 +1,3 @@
 export * from './network';
-export * from './resolveIconPath';
+export * from './resolveIconPaths';
 export * from './url';
