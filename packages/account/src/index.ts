@@ -7,3 +7,4 @@ export * from './signer';
 export * from './wallet-manager';
 export * from './predicate';
 export * from './providers';
+export * from './connectors';

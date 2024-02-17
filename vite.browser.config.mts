@@ -12,7 +12,7 @@ const config: UserConfig = {
         Buffer: true,
         global: true,
       },
-      include: ["fs", "crypto", "buffer", "fs"],
+      include: ["fs", "crypto", "buffer", "fs", "events", "timers/promises"],
       overrides: {
         fs: "memfs",
       },
@@ -20,6 +20,7 @@ const config: UserConfig = {
   ],
   optimizeDeps: {
     exclude: ["fsevents"],
+    include: ["events", "timers/promises"],
   },
   test: {
     coverage: {
