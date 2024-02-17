@@ -4,7 +4,7 @@ import { join } from 'path';
 import type { Options } from 'tsup';
 
 import { assets } from './src/providers/assets';
-import { resolveIconPath } from './src/providers/assets/utils';
+import { resolveIconPaths } from './src/providers/assets/utils';
 
 const configs: Options = {
   ...tsupDefaults,
@@ -22,7 +22,7 @@ const configs: Options = {
     mkdirSync(outputDir, {
       recursive: true,
     });
-    const assetsData = resolveIconPath(process.env.ASSETS_BASE_URL as string, assets);
+    const assetsData = resolveIconPaths(assets, process.env.ASSETS_BASE_URL as string);
     writeFileSync(join(outputDir, './assets.json'), JSON.stringify(assetsData));
   },
 };
