@@ -799,7 +799,7 @@ export default class Provider {
     /**
      * Estimate predicates gasUsed
      */
-    if (transactionRequest.shouldEstimatePredicates() && estimatePredicates) {
+    if (estimatePredicates) {
       // Remove gasLimit to avoid gasLimit when estimating predicates
       if (isScriptTransaction) {
         transactionRequest.gasLimit = bn(0);
