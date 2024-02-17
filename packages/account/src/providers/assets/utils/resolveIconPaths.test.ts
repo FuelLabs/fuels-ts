@@ -3,7 +3,7 @@ import { assets } from '..';
 
 /**
  * @group node
-*/
+ */
 describe('resolveIconPaths', () => {
   test('without basePath', () => {
     const result = resolveIconPaths(assets);

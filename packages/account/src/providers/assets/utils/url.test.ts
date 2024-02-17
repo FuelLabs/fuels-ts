@@ -2,7 +2,7 @@ import { urlJoin } from './url';
 
 /**
  * @group node
-*/
+ */
 describe('urlJoin', () => {
   it('should join paths correctly when baseUrl is provided', () => {
     const baseUrl = 'https://example.com';
