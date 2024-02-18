@@ -13,6 +13,8 @@ abi EchoValues {
     fn echo_tuple(tuple: (u8, bool, u64)) -> (u8, bool, u64);
 
     fn echo_b512(input: B512) -> B512;
+
+    fn echo_u64(value: u64) -> u64;
 }
 
 impl EchoValues for Contract {
@@ -44,5 +46,9 @@ impl EchoValues for Contract {
         input
     }
     // #endregion bits512-3
+
+    fn echo_u64(value: u64) -> u64 {
+        value
+    }
 }
 // #endregion understanding-fuel-binary-file
