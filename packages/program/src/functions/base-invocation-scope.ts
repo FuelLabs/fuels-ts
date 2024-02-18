@@ -3,7 +3,7 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
@@ -215,7 +215,7 @@ export class BaseInvocationScope<TReturn = any> {
     const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
-      resourcesOwner: this.program.account?.address,
+      resourcesOwner: this.program.account as AbstractAccount,
     });
 
     return txCost;

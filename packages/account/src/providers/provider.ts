@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAccount, AbstractAddress } from '@fuel-ts/interfaces';
 import { BN, bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -15,6 +15,8 @@ import { getBytesCopy, hexlify, Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
+
+import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -243,7 +245,7 @@ export type EstimatePredicateParams = {
 
 export type TransactionCostParams = EstimateTransactionParams &
   EstimatePredicateParams & {
-    resourcesOwner?: AbstractAddress;
+    resourcesOwner?: AbstractAccount;
   };
 
 /**
@@ -829,12 +831,26 @@ export default class Provider {
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     /**
+     * Fund with fake UTXOs to avoid not enough funds error
+     */
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
+    // Funding transaction with fake utxos
+    txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
+
+    /**
      * Estimate predicates gasUsed
      */
     if (estimatePredicates) {
       // Remove gasLimit to avoid gasLimit when estimating predicates
       if (isScriptTransaction) {
         txRequestClone.gasLimit = bn(0);
+      }
+
+      if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
+        (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
       }
       await this.estimatePredicates(txRequestClone);
     }
@@ -844,16 +860,6 @@ export default class Provider {
      */
     const minGas = txRequestClone.calculateMinGas(chainInfo);
     const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
-
-    /**
-     * Fund with fake UTXOs to avoid not enough funds error
-     */
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
-    // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner);
 
     /**
      * Estimate gasUsed for script transactions
