@@ -839,6 +839,7 @@ export default class Provider {
      * Estimate gasUsed for script transactions
      */
 
+    // For CreateTransaction the gasUsed is going to be the minGas
     let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
     // Transactions of type Create does not consume any gas so we can the dryRun
@@ -863,9 +864,6 @@ export default class Provider {
 
       receipts = result.receipts;
       gasUsed = getGasUsedFromReceipts(receipts);
-    } else {
-      // For CreateTransaction the gasUsed is going to be the minGas
-      gasUsed = minGas;
     }
 
     const usedFee = calculatePriceWithFactor(
