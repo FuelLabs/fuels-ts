@@ -13,7 +13,7 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import type { BytesLike } from 'ethers';
-import { concat, getBytesCopy, hexlify } from 'ethers';
+import { concat, hexlify } from 'ethers';
 
 import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
