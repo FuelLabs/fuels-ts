@@ -23,6 +23,7 @@ import type {
   ScriptTransactionRequestLike,
   ProviderSendTxParams,
   TransactionResponse,
+  EstimateTransactionParams,
 } from './providers';
 import {
   withdrawScript,
@@ -497,7 +498,7 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    options?: ProviderSendTxParams
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
@@ -505,7 +506,9 @@ export class Account extends AbstractAccount {
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.sendTransaction(transactionRequest, {
       ...options,
       estimateTxDependencies: false,
@@ -518,9 +521,14 @@ export class Account extends AbstractAccount {
    * @param transactionRequestLike - The transaction request to be simulated.
    * @returns A promise that resolves to the call result.
    */
-  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async simulateTransaction(
+    transactionRequestLike: TransactionRequestLike,
+    options?: EstimateTransactionParams
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 

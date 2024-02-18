@@ -9,6 +9,7 @@ import type {
   CallResult,
   Provider,
   ProviderSendTxParams,
+  EstimateTransactionParams,
 } from '../providers';
 import { Signer } from '../signer';
 
@@ -107,10 +108,12 @@ export class BaseWalletUnlocked extends Account {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    options?: ProviderSendTxParams
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       { ...options, estimateTxDependencies: false }
@@ -123,9 +126,14 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - The transaction request to simulate.
    * @returns A promise that resolves to the CallResult object.
    */
-  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async simulateTransaction(
+    transactionRequestLike: TransactionRequestLike,
+    options?: EstimateTransactionParams
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.call(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {

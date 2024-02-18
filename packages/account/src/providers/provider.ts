@@ -245,6 +245,7 @@ export type EstimatePredicateParams = {
 export type TransactionCostParams = EstimateTransactionParams &
   EstimatePredicateParams & {
     resourcesOwner?: AbstractAddress;
+    modifyTransactionInputsAndOutputs?: boolean;
   };
 
 /**
@@ -718,9 +719,17 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<CallResult> {
+  async estimateTxDependencies(
+    transactionRequest: TransactionRequest
+  ): Promise<
+    CallResult & { inputs: TransactionRequest['inputs']; outputs: TransactionRequest['outputs'] }
+  > {
     if (transactionRequest.type === TransactionType.Create) {
-      return { receipts: [] };
+      return {
+        receipts: [],
+        inputs: transactionRequest.inputs,
+        outputs: transactionRequest.outputs,
+      };
     }
 
     const txRequest: ScriptTransactionRequest = clone(transactionRequest);
@@ -734,7 +743,7 @@ export default class Provider {
     // eslint-disable-next-line no-param-reassign
     transactionRequest.outputs = txRequest.outputs;
 
-    return { receipts };
+    return { receipts, inputs: txRequest.inputs, outputs: txRequest.outputs };
   }
 
   /**
@@ -788,13 +797,16 @@ export default class Provider {
       estimateTxDependencies = true,
       estimatePredicates = true,
       resourcesOwner,
+      modifyTransactionInputsAndOutputs = false,
     }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
+    const originalTxRequest = transactionRequestify(transactionRequestLike);
+
+    const txRequestClone = clone(originalTxRequest);
     const chainInfo = this.getChain();
     const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
+    const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
+    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     /**
      * Estimate predicates gasUsed
@@ -802,26 +814,26 @@ export default class Provider {
     if (estimatePredicates) {
       // Remove gasLimit to avoid gasLimit when estimating predicates
       if (isScriptTransaction) {
-        transactionRequest.gasLimit = bn(0);
+        txRequestClone.gasLimit = bn(0);
       }
-      await this.estimatePredicates(transactionRequest);
+      await this.estimatePredicates(txRequestClone);
     }
 
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    const minGas = transactionRequest.calculateMinGas(chainInfo);
-    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
+    const minGas = txRequestClone.calculateMinGas(chainInfo);
+    const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
 
     /**
      * Fund with fake UTXOs to avoid not enough funds error
      */
     // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = transactionRequest.getCoinOutputsQuantities();
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
     // Funding transaction with fake utxos
-    transactionRequest.fundWithFakeUtxos(allQuantities, resourcesOwner);
+    txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner);
 
     /**
      * Estimate gasUsed for script transactions
@@ -839,12 +851,16 @@ export default class Provider {
        */
       // Calculate the gasLimit again as we insert a fake UTXO and signer
 
-      transactionRequest.gasPrice = bn(0);
-      transactionRequest.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
+      txRequestClone.gasPrice = bn(0);
+      txRequestClone.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
+
       // Executing dryRun with fake utxos to get gasUsed
-      const result = await this.call(transactionRequest, {
-        estimateTxDependencies,
-      });
+      const result = await this.estimateTxDependencies(txRequestClone);
+      if (modifyTransactionInputsAndOutputs) {
+        originalTxRequest.inputs = result.inputs;
+        originalTxRequest.outputs = result.outputs;
+      }
+
       receipts = result.receipts;
       gasUsed = getGasUsedFromReceipts(receipts);
     } else {

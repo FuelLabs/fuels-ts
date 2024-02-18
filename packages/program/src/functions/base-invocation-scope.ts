@@ -6,7 +6,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
@@ -216,6 +216,7 @@ export class BaseInvocationScope<TReturn = any> {
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
       resourcesOwner: this.program.account?.address,
+      modifyTransactionInputsAndOutputs: options?.modifyTransactionInputsAndOutputs,
     });
 
     return txCost;
@@ -233,6 +234,17 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     await this.program.account?.fund(this.transactionRequest, this.requiredCoins, fee);
+
+    this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
+      (x) => x.type !== OutputType.Contract
+    );
+
+    this.transactionRequest.inputs.forEach((input, inputIndex) => {
+      if (input.type !== InputType.Contract) {
+        return;
+      }
+      this.transactionRequest.outputs.push({ type: OutputType.Contract, inputIndex });
+    });
 
     return this;
   }
@@ -294,14 +306,16 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
-
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost({
+      modifyTransactionInputsAndOutputs: true,
+    });
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
     const response = await this.program.account.sendTransaction(transactionRequest, {
       awaitExecution: true,
+      estimateTxDependencies: false,
     });
 
     return FunctionInvocationResult.build<T>(
@@ -334,13 +348,17 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost({
+      modifyTransactionInputsAndOutputs: true,
+    });
 
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
-    const result = await this.program.account.simulateTransaction(transactionRequest);
+    const result = await this.program.account.simulateTransaction(transactionRequest, {
+      estimateTxDependencies: false,
+    });
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -356,8 +374,9 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
-
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost({
+      modifyTransactionInputsAndOutputs: false,
+    });
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
@@ -366,13 +385,11 @@ export class BaseInvocationScope<TReturn = any> {
       utxoValidation: false,
     });
 
-    const result = await InvocationCallResult.build<T>(
+    return InvocationCallResult.build<T>(
       this.functionInvocationScopes,
-      response,
+      { receipts: response.receipts },
       this.isMultiCall
     );
-
-    return result;
   }
 
   getProvider(): Provider {

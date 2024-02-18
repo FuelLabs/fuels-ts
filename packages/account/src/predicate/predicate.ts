@@ -115,11 +115,12 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(
+  async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
     options?: Pick<ProviderSendTxParams, 'awaitExecution'>
   ): Promise<TransactionResponse> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
+    await this.provider.estimatePredicates(transactionRequest);
     return super.sendTransaction(transactionRequest, options);
   }
 
@@ -129,8 +130,10 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the call result.
    */
-  simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
+    await this.provider.estimatePredicates(transactionRequest);
+
     return super.simulateTransaction(transactionRequest);
   }
 
