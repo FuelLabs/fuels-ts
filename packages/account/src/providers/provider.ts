@@ -811,11 +811,7 @@ export default class Provider {
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = [],
-    {
-      estimateTxDependencies = true,
-      estimatePredicates = true,
-      resourcesOwner,
-    }: TransactionCostParams = {}
+    { estimatePredicates = true, resourcesOwner }: TransactionCostParams = {}
   ): Promise<
     TransactionCost & {
       estimatedInputs: TransactionRequest['inputs'];
