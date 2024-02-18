@@ -385,11 +385,7 @@ export class BaseInvocationScope<TReturn = any> {
       utxoValidation: false,
     });
 
-    return InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
-      { receipts: response.receipts },
-      this.isMultiCall
-    );
+    return InvocationCallResult.build<T>(this.functionInvocationScopes, response, this.isMultiCall);
   }
 
   getProvider(): Provider {
