@@ -244,7 +244,6 @@ export type EstimatePredicateParams = {
 export type TransactionCostParams = EstimateTransactionParams &
   EstimatePredicateParams & {
     resourcesOwner?: AbstractAddress;
-    modifyTransactionInputsAndOutputs?: boolean;
   };
 
 /**
@@ -727,16 +726,10 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(
-    transactionRequest: TransactionRequest
-  ): Promise<
-    CallResult & { inputs: TransactionRequest['inputs']; outputs: TransactionRequest['outputs'] }
-  > {
+  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<CallResult> {
     if (transactionRequest.type === TransactionType.Create) {
       return {
         receipts: [],
-        inputs: transactionRequest.inputs,
-        outputs: transactionRequest.outputs,
       };
     }
 
@@ -751,7 +744,7 @@ export default class Provider {
     // eslint-disable-next-line no-param-reassign
     transactionRequest.outputs = txRequest.outputs;
 
-    return { receipts, inputs: txRequest.inputs, outputs: txRequest.outputs };
+    return { receipts };
   }
 
   /**
@@ -805,9 +798,13 @@ export default class Provider {
       estimateTxDependencies = true,
       estimatePredicates = true,
       resourcesOwner,
-      modifyTransactionInputsAndOutputs = false,
     }: TransactionCostParams = {}
-  ): Promise<TransactionCost> {
+  ): Promise<
+    TransactionCost & {
+      estimatedInputs: TransactionRequest['inputs'];
+      estimatedOutputs: TransactionRequest['outputs'];
+    }
+  > {
     const originalTxRequest = transactionRequestify(transactionRequestLike);
 
     const txRequestClone = clone(originalTxRequest);
@@ -865,10 +862,6 @@ export default class Provider {
 
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.estimateTxDependencies(txRequestClone);
-      if (modifyTransactionInputsAndOutputs) {
-        originalTxRequest.inputs = result.inputs;
-        originalTxRequest.outputs = result.outputs;
-      }
 
       receipts = result.receipts;
       gasUsed = getGasUsedFromReceipts(receipts);
@@ -893,6 +886,8 @@ export default class Provider {
       usedFee,
       minFee,
       maxFee,
+      estimatedInputs: txRequestClone.inputs,
+      estimatedOutputs: txRequestClone.outputs,
     };
   }
 

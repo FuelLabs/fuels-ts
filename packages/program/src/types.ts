@@ -93,5 +93,4 @@ export type InvocationScopeLike<T = unknown> = {
 export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
   gasPrice: BigNumberish;
-  modifyTransactionInputsAndOutputs: boolean;
 }>;

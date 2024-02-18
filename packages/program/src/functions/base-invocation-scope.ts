@@ -216,7 +216,6 @@ export class BaseInvocationScope<TReturn = any> {
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
       resourcesOwner: this.program.account?.address,
-      modifyTransactionInputsAndOutputs: options?.modifyTransactionInputsAndOutputs,
     });
 
     return txCost;
@@ -306,9 +305,11 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost({
-      modifyTransactionInputsAndOutputs: true,
-    });
+    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
+      await this.getTransactionCost();
+
+    transactionRequest.inputs = estimatedInputs;
+    transactionRequest.outputs = estimatedOutputs;
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
@@ -348,10 +349,11 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost({
-      modifyTransactionInputsAndOutputs: true,
-    });
+    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
+      await this.getTransactionCost();
 
+    transactionRequest.inputs = estimatedInputs;
+    transactionRequest.outputs = estimatedOutputs;
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
@@ -374,9 +376,7 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost({
-      modifyTransactionInputsAndOutputs: false,
-    });
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
