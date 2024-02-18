@@ -733,7 +733,33 @@ export default class Provider {
 
     await this.estimatePredicates(transactionRequest);
 
-    return this.estimateMissingOutputs(transactionRequest);
+    let receipts: TransactionResultReceipt[] = [];
+
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      const { dryRun: gqlReceipts } = await this.operations.dryRun({
+        encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
+        utxoValidation: false,
+      });
+      receipts = gqlReceipts.map(processGqlReceipt);
+      const { missingOutputVariables, missingOutputContractIds } =
+        getReceiptsWithMissingData(receipts);
+
+      const hasMissingOutputs =
+        missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
+
+      if (!hasMissingOutputs) {
+        break;
+      }
+
+      transactionRequest.addVariableOutputs(missingOutputVariables.length);
+      missingOutputContractIds.forEach(({ contractId }) => {
+        transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+      });
+    }
+
+    return {
+      receipts,
+    };
   }
 
   /**
