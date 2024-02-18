@@ -1,8 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
-import { bn, max } from '@fuel-ts/math';
+import { BN, bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -646,7 +645,16 @@ export default class Provider {
    * @returns A promise that resolves to the estimated transaction request object.
    */
   async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
-    if (!transactionRequest.shouldEstimatePredicates()) {
+    const shouldEstimatePredicates = Boolean(
+      transactionRequest.inputs.find(
+        (input) =>
+          'predicate' in input &&
+          input.predicate &&
+          input.predicate !== getBytesCopy('0x') &&
+          new BN(input.predicateGasUsed).isZero()
+      )
+    );
+    if (!shouldEstimatePredicates) {
       return transactionRequest;
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());

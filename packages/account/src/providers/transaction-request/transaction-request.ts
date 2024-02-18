@@ -2,8 +2,8 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
-import { bn, BN } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
 import {
   PolicyType,
@@ -637,17 +637,5 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   toJSON() {
     return normalizeJSON(this);
-  }
-
-  shouldEstimatePredicates(): boolean {
-    return Boolean(
-      this.inputs.find(
-        (input) =>
-          'predicate' in input &&
-          input.predicate &&
-          input.predicate !== getBytesCopy('0x') &&
-          new BN(input.predicateGasUsed).isZero()
-      )
-    );
   }
 }
