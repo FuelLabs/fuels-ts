@@ -639,13 +639,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return normalizeJSON(this);
   }
 
-  /**
-   * @hidden
-   *
-   * Determines whether the transaction has a predicate input.
-   *
-   * @returns Whether the transaction has a predicate input.
-   */
   shouldEstimatePredicates(): boolean {
     return Boolean(
       this.inputs.find(
