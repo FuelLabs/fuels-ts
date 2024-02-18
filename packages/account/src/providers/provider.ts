@@ -733,16 +733,9 @@ export default class Provider {
       };
     }
 
-    const txRequest: ScriptTransactionRequest = clone(transactionRequest);
+    await this.estimatePredicates(transactionRequest);
 
-    await this.estimatePredicates(txRequest);
-
-    const { receipts } = await this.estimateMissingInputsAndOutputs(txRequest);
-
-    // eslint-disable-next-line no-param-reassign
-    transactionRequest.inputs = txRequest.inputs;
-    // eslint-disable-next-line no-param-reassign
-    transactionRequest.outputs = txRequest.outputs;
+    const { receipts } = await this.estimateMissingInputsAndOutputs(transactionRequest);
 
     return { receipts };
   }
