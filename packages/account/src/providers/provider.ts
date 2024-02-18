@@ -678,7 +678,7 @@ export default class Provider {
     return transactionRequest;
   }
 
-  private async estimateMissingInputsAndOutputs(txRequest: ScriptTransactionRequest) {
+  private async estimateMissingOutputs(txRequest: ScriptTransactionRequest) {
     let tries = 0;
 
     let receipts: TransactionResultReceipt[] = [];
@@ -708,8 +708,6 @@ export default class Provider {
 
     return {
       receipts,
-      inputs: txRequest.inputs,
-      outputs: txRequest.outputs,
     };
   }
 
@@ -735,9 +733,7 @@ export default class Provider {
 
     await this.estimatePredicates(transactionRequest);
 
-    const { receipts } = await this.estimateMissingInputsAndOutputs(transactionRequest);
-
-    return { receipts };
+    return this.estimateMissingOutputs(transactionRequest);
   }
 
   /**
