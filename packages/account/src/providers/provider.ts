@@ -242,9 +242,10 @@ export type EstimatePredicateParams = {
   estimatePredicates?: boolean;
 };
 
-export type TransactionCostParams = EstimatePredicateParams & {
-  resourcesOwner?: AbstractAccount;
-};
+export type TransactionCostParams = EstimateTransactionParams &
+  EstimatePredicateParams & {
+    resourcesOwner?: AbstractAccount;
+  };
 
 /**
  * Provider Call transaction params
@@ -776,7 +777,11 @@ export default class Provider {
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = [],
-    { estimatePredicates = true, resourcesOwner }: TransactionCostParams = {}
+    {
+      estimateTxDependencies = true,
+      estimatePredicates = true,
+      resourcesOwner,
+    }: TransactionCostParams = {}
   ): Promise<
     TransactionCost & {
       estimatedInputs: TransactionRequest['inputs'];
@@ -826,7 +831,7 @@ export default class Provider {
 
     let receipts: TransactionResultReceipt[] = [];
     // Transactions of type Create does not consume any gas so we can the dryRun
-    if (isScriptTransaction) {
+    if (isScriptTransaction && estimateTxDependencies) {
       /**
        * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
        * This simplifies the funding with fake utxos, since the coin quantities required
