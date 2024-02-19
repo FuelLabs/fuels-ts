@@ -783,9 +783,7 @@ export default class Provider {
       estimatedOutputs: TransactionRequest['outputs'];
     }
   > {
-    const originalTxRequest = transactionRequestify(transactionRequestLike);
-
-    const txRequestClone = clone(originalTxRequest);
+    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const chainInfo = this.getChain();
     const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
     const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
