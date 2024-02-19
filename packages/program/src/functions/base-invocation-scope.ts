@@ -1,6 +1,12 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
+import type {
+  BaseWalletUnlocked,
+  Provider,
+  CoinQuantity,
+  TransactionRequestInput,
+} from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
@@ -227,21 +233,45 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   async fundWithRequiredCoins() {
+    const transactionRequest = await this.getTransactionRequest();
+
     const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
       await this.getTransactionCost();
 
-    const transactionRequest = await this.getTransactionRequest();
-
-    transactionRequest.inputs = estimatedInputs;
-    transactionRequest.outputs = estimatedOutputs;
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
+    transactionRequest.outputs = estimatedOutputs;
+
     // Clean coin inputs before add new coins to the request
-    this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
-      (i) => i.type !== InputType.Coin
-    );
+    this.transactionRequest.inputs = estimatedInputs.filter((i) => i.type !== InputType.Coin);
 
     await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
+
+    // update predicate inputs with predicate-related info from estimations
+    this.transactionRequest.inputs.forEach((input) => {
+      let estimatedInput: TransactionRequestInput | undefined;
+      switch (input.type) {
+        case InputType.Contract:
+          return;
+        case InputType.Coin:
+          estimatedInput = estimatedInputs.find(
+            (x) => x.type === InputType.Coin && x.owner === input.owner
+          );
+          break;
+        case InputType.Message:
+          estimatedInput = estimatedInputs.find(
+            (x) => x.type === InputType.Message && x.sender === input.sender
+          );
+          break;
+        default:
+          break;
+      }
+      if (estimatedInput && 'predicate' in estimatedInput) {
+        input.predicate = estimatedInput.predicate;
+        input.predicateData = estimatedInput.predicateData;
+        input.predicateGasUsed = estimatedInput.predicateGasUsed;
+      }
+    });
 
     // Update output coin idexes after funding because the funding reordered them via filtering
     this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
@@ -416,7 +446,6 @@ export class BaseInvocationScope<TReturn = any> {
     const { gasLimit, gasPrice } = transactionRequest;
 
     if (!gasLimitSpecified) {
-      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasLimit = gasUsed;
     } else if (gasLimit.lt(gasUsed)) {
       throw new FuelError(
@@ -426,7 +455,6 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     if (!gasPriceSpecified) {
-      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasPrice = minGasPrice;
     } else if (gasPrice.lt(minGasPrice)) {
       throw new FuelError(
