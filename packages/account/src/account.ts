@@ -331,16 +331,7 @@ export class Account extends AbstractAccount {
     const params = { gasPrice: minGasPrice, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
-      await this.provider.getTransactionCost(request, undefined, {
-        /**
-         * Transfers from wallets are failing without estimateTxDependencies,
-         * whereas transfers from predicates are working without it.
-         * There is probably room for improvement here.
-         */
-        estimateTxDependencies: 'populateTransactionWitnessesSignature' in this,
-        resourcesOwner: this,
-      });
+    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
 
     request.gasPrice = bn(txParams.gasPrice ?? minGasPrice);
     request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
@@ -353,8 +344,6 @@ export class Account extends AbstractAccount {
     });
 
     await this.fund(request, requiredQuantities, maxFee);
-
-    request.updatePredicateInputs(estimatedInputs);
 
     return request;
   }
@@ -379,7 +368,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     const request = await this.createTransfer(destination, amount, assetId, txParams);
-    return this.sendTransaction(request, { estimateTxDependencies: false });
+    return this.sendTransaction(request);
   }
 
   /**

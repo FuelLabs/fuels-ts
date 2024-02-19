@@ -13,7 +13,6 @@ import {
   InputType,
   FUEL_NETWORK_URL,
   getRandomB256,
-  WalletUnlocked,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -162,33 +161,6 @@ describe('Predicate', () => {
       await provider.estimatePredicates(tx);
 
       expect(spy).toHaveBeenCalledTimes(2);
-    });
-
-    test('transferring funds from a predicate estimates the predicate and does no dry runs', async () => {
-      const amountToPredicate = 10_000;
-
-      await seedTestWallet(predicateTrue, [[amountToPredicate]]);
-
-      const initialPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
-
-      const receiverWallet = WalletUnlocked.generate({
-        provider,
-      });
-
-      const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
-      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
-
-      const response = await predicateTrue.transfer(
-        receiverWallet.address.toB256(),
-        1,
-        BaseAssetId
-      );
-      await response.waitForResult();
-      const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
-      expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
-
-      expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
-      expect(dryRunSpy).not.toHaveBeenCalled();
     });
   });
 });
