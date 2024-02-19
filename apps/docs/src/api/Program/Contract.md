@@ -22,7 +22,7 @@ Creates an instance of the Contract class.
 | :------ | :------ | :------ |
 | `id` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The contract's address. |
 | `abi` | `JsonAbi` \| `Interface`&lt;`JsonAbi`\> | The contract's ABI (JSON ABI or Interface instance). |
-| `accountOrProvider` | [`Provider`](/api/Providers/Provider.md) \| [`Account`](/api/Wallet/Account.md) | The account or provider for interaction. |
+| `accountOrProvider` | [`Provider`](/api/Account/Provider.md) \| [`Account`](/api/Account/Account.md) | The account or provider for interaction. |
 
 #### Returns
 
@@ -30,13 +30,13 @@ Creates an instance of the Contract class.
 
 #### Defined in
 
-[packages/program/src/contract.ts:49](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L49)
+[packages/program/src/contract.ts:48](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L48)
 
 ## Properties
 
 ### account
 
-• **account**: ``null`` \| [`Account`](/api/Wallet/Account.md)
+• **account**: ``null`` \| [`Account`](/api/Account/Account.md)
 
 The account associated with the contract, if available.
 
@@ -46,7 +46,7 @@ The account associated with the contract, if available.
 
 #### Defined in
 
-[packages/program/src/contract.ts:35](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L35)
+[packages/program/src/contract.ts:34](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L34)
 
 ___
 
@@ -58,7 +58,7 @@ A collection of functions available on the contract.
 
 #### Defined in
 
-[packages/program/src/contract.ts:40](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L40)
+[packages/program/src/contract.ts:39](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L39)
 
 ___
 
@@ -74,7 +74,7 @@ The unique contract identifier.
 
 #### Defined in
 
-[packages/program/src/contract.ts:20](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L20)
+[packages/program/src/contract.ts:19](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L19)
 
 ___
 
@@ -90,13 +90,13 @@ The contract's ABI interface.
 
 #### Defined in
 
-[packages/program/src/contract.ts:30](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L30)
+[packages/program/src/contract.ts:29](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L29)
 
 ___
 
 ### provider
 
-• **provider**: [`Provider`](/api/Providers/Provider.md)
+• **provider**: [`Provider`](/api/Account/Provider.md)
 
 The provider for interacting with the contract.
 
@@ -106,7 +106,7 @@ The provider for interacting with the contract.
 
 #### Defined in
 
-[packages/program/src/contract.ts:25](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L25)
+[packages/program/src/contract.ts:24](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L24)
 
 ## Methods
 
@@ -142,7 +142,7 @@ A function that creates a FunctionInvocationScope.
 
 #### Defined in
 
-[packages/program/src/contract.ts:93](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L93)
+[packages/program/src/contract.ts:92](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L92)
 
 ___
 
@@ -166,7 +166,7 @@ The balance of the contract for the specified asset.
 
 #### Defined in
 
-[packages/program/src/contract.ts:114](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L114)
+[packages/program/src/contract.ts:113](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L113)
 
 ___
 
@@ -190,4 +190,4 @@ A MultiCallInvocationScope instance.
 
 #### Defined in
 
-[packages/program/src/contract.ts:103](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/program/src/contract.ts#L103)
+[packages/program/src/contract.ts:102](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/program/src/contract.ts#L102)

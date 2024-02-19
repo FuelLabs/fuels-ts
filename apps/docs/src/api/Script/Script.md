@@ -38,7 +38,7 @@ Create a new instance of the Script class.
 | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | The compiled bytecode of the script. |
 | `abi` | `JsonAbi` | The ABI interface for the script. |
-| `account` | [`Account`](/api/Wallet/Account.md) | The account associated with the script. |
+| `account` | [`Account`](/api/Account/Account.md) | The account associated with the script. |
 
 #### Returns
 
@@ -50,13 +50,13 @@ AbstractScript.constructor
 
 #### Defined in
 
-[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L70)
+[script.ts:69](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L69)
 
 ## Properties
 
 ### account
 
-• **account**: [`Account`](/api/Wallet/Account.md)
+• **account**: [`Account`](/api/Account/Account.md)
 
 The account associated with the script.
 
@@ -66,7 +66,7 @@ AbstractScript.account
 
 #### Defined in
 
-[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L46)
+[script.ts:45](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L45)
 
 ___
 
@@ -82,7 +82,7 @@ AbstractScript.bytes
 
 #### Defined in
 
-[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L36)
+[script.ts:35](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L35)
 
 ___
 
@@ -100,7 +100,7 @@ Functions that can be invoked within the script.
 
 #### Defined in
 
-[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L61)
+[script.ts:60](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L60)
 
 ___
 
@@ -116,13 +116,13 @@ AbstractScript.interface
 
 #### Defined in
 
-[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L41)
+[script.ts:40](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L40)
 
 ___
 
 ### provider
 
-• **provider**: [`Provider`](/api/Providers/Provider.md)
+• **provider**: [`Provider`](/api/Account/Provider.md)
 
 The provider used for interacting with the network.
 
@@ -132,7 +132,7 @@ AbstractScript.provider
 
 #### Defined in
 
-[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L56)
+[script.ts:55](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L55)
 
 ___
 
@@ -144,7 +144,7 @@ The script request object.
 
 #### Defined in
 
-[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L51)
+[script.ts:50](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L50)
 
 ## Methods
 
@@ -172,4 +172,4 @@ This instance of the `Script`.
 
 #### Defined in
 
-[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/script/src/script.ts#L91)
+[script.ts:90](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L90)

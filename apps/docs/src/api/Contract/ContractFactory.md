@@ -18,7 +18,7 @@ Create a ContractFactory instance.
 | :------ | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | `undefined` | The bytecode of the contract. |
 | `abi` | `JsonAbi` \| `Interface`&lt;`JsonAbi`\> | `undefined` | The contract's ABI (Application Binary Interface). |
-| `accountOrProvider` | ``null`` \| [`Provider`](/api/Providers/Provider.md) \| [`Account`](/api/Wallet/Account.md) | `null` | An account or provider to be associated with the factory. |
+| `accountOrProvider` | ``null`` \| [`Provider`](/api/Account/Provider.md) \| [`Account`](/api/Account/Account.md) | `null` | An account or provider to be associated with the factory. |
 
 #### Returns
 
@@ -26,17 +26,17 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:40](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L40)
+[contract-factory.ts:39](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L39)
 
 ## Properties
 
 ### account
 
-• **account**: ``null`` \| [`Account`](/api/Wallet/Account.md)
+• **account**: ``null`` \| [`Account`](/api/Account/Account.md)
 
 #### Defined in
 
-[contract-factory.ts:31](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L31)
+[contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L30)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L28)
+[contract-factory.ts:27](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L27)
 
 ___
 
@@ -56,17 +56,17 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L29)
+[contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L28)
 
 ___
 
 ### provider
 
-• **provider**: ``null`` \| [`Provider`](/api/Providers/Provider.md)
+• **provider**: ``null`` \| [`Provider`](/api/Account/Provider.md)
 
 #### Defined in
 
-[contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L30)
+[contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L29)
 
 ## Methods
 
@@ -80,7 +80,7 @@ Connect the factory to a provider.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `provider` | [`Provider`](/api/Providers/Provider.md) | The provider to be associated with the factory. |
+| `provider` | [`Provider`](/api/Account/Provider.md) | The provider to be associated with the factory. |
 
 #### Returns
 
@@ -90,7 +90,7 @@ A new ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:82](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L82)
+[contract-factory.ts:81](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L81)
 
 ___
 
@@ -115,11 +115,11 @@ The CreateTransactionRequest object for deploying the contract.
 | Name | Type |
 | :------ | :------ |
 | `contractId` | `string` |
-| `transactionRequest` | [`CreateTransactionRequest`](/api/Providers/CreateTransactionRequest.md) |
+| `transactionRequest` | [`CreateTransactionRequest`](/api/Account/CreateTransactionRequest.md) |
 
 #### Defined in
 
-[contract-factory.ts:92](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L92)
+[contract-factory.ts:91](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L91)
 
 ___
 
@@ -143,7 +143,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[contract-factory.ts:135](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L135)
+[contract-factory.ts:134](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L134)
 
 ___
 
@@ -165,4 +165,4 @@ Set configurable constants of the contract with the specified values.
 
 #### Defined in
 
-[contract-factory.ts:167](https://github.com/FuelLabs/fuels-ts/blob/884f602f/packages/contract/src/contract-factory.ts#L167)
+[contract-factory.ts:166](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/contract/src/contract-factory.ts#L166)
