@@ -248,7 +248,7 @@ export class BaseInvocationScope<TReturn = any> {
     await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
 
     // update predicate inputs with estimated predicate-related info because the funding removes it
-    this.transactionRequest.updatePredicateGasUsed(estimatedInputs);
+    this.transactionRequest.updatePredicateInputs(estimatedInputs);
 
     // Update output coin idexes after funding because the funding reordered the inputs
     this.transactionRequest.outputs = this.transactionRequest.outputs.filter(

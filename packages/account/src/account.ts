@@ -354,7 +354,7 @@ export class Account extends AbstractAccount {
 
     await this.fund(request, requiredQuantities, maxFee);
 
-    request.updatePredicateGasUsed(estimatedInputs);
+    request.updatePredicateInputs(estimatedInputs);
 
     return request;
   }
