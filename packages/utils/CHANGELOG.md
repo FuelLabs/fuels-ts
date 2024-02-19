@@ -1,5 +1,12 @@
 # @fuel-ts/utils
 
+## 0.74.0
+
+### Minor Changes
+
+- - Updated to support`forc v0.50.0`
+  - `getForcProject` now supports both `debug` and `release` builds, by [@nedsalk](https://github.com/nedsalk) (See [#1744](https://github.com/FuelLabs/fuels-ts/pull/1744))
+
 ## 0.73.0
 
 ## 0.72.0
