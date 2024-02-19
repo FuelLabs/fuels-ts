@@ -5,6 +5,7 @@ import { Provider, fromTai64ToUnix } from 'fuels';
  * @group node
  */
 test('produceBlocks with custom timestamp docs snippet', async () => {
+  // TODO: reevaluate/replace after #1356
   const { cleanup, ip, port } = await launchNode({});
   const url = `http://${ip}:${port}/graphql`;
   const provider = await Provider.create(url);
