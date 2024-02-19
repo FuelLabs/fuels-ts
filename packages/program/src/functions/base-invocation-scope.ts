@@ -1,12 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type {
-  BaseWalletUnlocked,
-  Provider,
-  CoinQuantity,
-  TransactionRequestInput,
-} from '@fuel-ts/account';
+import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
