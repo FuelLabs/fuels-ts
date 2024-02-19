@@ -8,7 +8,6 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
-import type { Account } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 

@@ -1,18 +1,11 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
-import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
+import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
-<<<<<<< HEAD:packages/account/src/test-utils/launchNode.ts
-import { hexlify } from 'ethers';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
-=======
-import { hexlify } from '@fuel-ts/utils';
-import fsSync from 'fs';
-import fs from 'fs/promises';
->>>>>>> 0a45df987 (feat: replaces ethers usages in wallet):packages/wallet/src/test-utils/launchNode.ts
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';

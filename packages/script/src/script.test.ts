@@ -72,11 +72,7 @@ const callScript = async <TData, TResult>(
 };
 
 // #region script-init
-<<<<<<< HEAD
-// #import { ScriptRequest, getBytesCopy };
-=======
-// #context import { Script, AbiCoder, arrayify } from 'fuels';
->>>>>>> b5d6d1e34 (feat: replaces ethers usages in script)
+// #import { ScriptRequest, arrayify };
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {

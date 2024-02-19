@@ -1,8 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
-import { Mnemonic } from '@fuel-ts/mnemonic';
-import { Signer } from '@fuel-ts/signer';
 import { arrayify, hexlify, concat } from '@fuel-ts/utils';
 import {
   toBeHex,
