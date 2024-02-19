@@ -1,6 +1,6 @@
+import type { WalletUnlocked } from '@fuel-ts/account';
 import { ContractFactory } from '@fuel-ts/contract';
 import type { DeployContractOptions } from '@fuel-ts/contract';
-import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { existsSync, readFileSync } from 'fs';
 
 import { debug } from '../../utils/logger';
@@ -18,6 +18,7 @@ export async function deployContract(
 
   if (existsSync(storageSlotsPath)) {
     const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
+    // eslint-disable-next-line no-param-reassign
     deployConfig.storageSlots = storageSlots;
   }
 
@@ -26,6 +27,7 @@ export async function deployContract(
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const contractFactory = new ContractFactory(bytecode, abi, wallet);
 
+  // eslint-disable-next-line no-param-reassign
   deployConfig.gasPrice = deployConfig.gasPrice ?? gasPrice;
 
   const contract = await contractFactory.deployContract(deployConfig);

@@ -15,30 +15,6 @@ runs:
         path: ~/.local/share/pnpm/store/v4
         key: ${{ runner.os }}-node-${{ inputs.node-version }}-pnpm-${{ inputs.pnpm-version }}-lock-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-    - name: Restore Generated Files
-      uses: actions/cache/restore@v3
-      with:
-        path: |
-          apps/docs/.typedoc
-          apps/docs/src/api
-          packages/providers/src/__generated__
-        key: ${{ runner.os }}-generated-${{ github.sha }}
-
-    - name: Cache Build
-      uses: actions/cache@v3
-      with:
-        path: .turbo
-        key: ${{ runner.os }}-turbo-${{ github.sha }}
-
-    - name: Save Generated Files
-      uses: actions/cache/save@v3
-      with:
-        path: |
-          apps/docs/.typedoc
-          apps/docs/src/api
-          packages/providers/src/__generated__
-        key: ${{ runner.os }}-generated-${{ github.sha }}
-
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:

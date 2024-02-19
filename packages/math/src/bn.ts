@@ -46,17 +46,19 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   MAX_U64 = '0xFFFFFFFFFFFFFFFF';
 
   constructor(value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) {
+    let bnValue = value;
+    let bnBase = base;
+
     if (BN.isBN(value)) {
-      super(value.toArray(), base, endian);
-      return;
+      bnValue = value.toArray();
     }
     // trim '0x' from hex strings as BN doesn't support it - https://github.com/ChainSafe/web3.js/issues/3847
-    if (typeof value === 'string' && value.slice(0, 2) === '0x') {
-      super(value.substring(2), base || 'hex', endian);
-      return;
+    else if (typeof value === 'string' && value.slice(0, 2) === '0x') {
+      bnValue = value.substring(2);
+      bnBase = base || 'hex';
     }
-    const defaultValue = value == null ? 0 : value;
-    super(defaultValue, base, endian);
+
+    super(bnValue == null ? 0 : bnValue, bnBase, endian);
   }
 
   // ANCHOR: HELPERS

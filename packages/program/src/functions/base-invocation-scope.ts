@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
+import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
-import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
@@ -53,6 +52,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
+  protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -214,7 +214,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins());
+    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
+      resourcesOwner: this.program.account?.address,
+    });
 
     return txCost;
   }
@@ -292,8 +294,9 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
-    const { maxFee } = await this.getTransactionCost();
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -331,8 +334,9 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
-    const { maxFee } = await this.getTransactionCost();
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -352,8 +356,9 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const transactionRequest = await this.getTransactionRequest();
+    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
 
-    const { maxFee } = await this.getTransactionCost();
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
     await this.fundWithRequiredCoins(maxFee);
 
@@ -387,5 +392,39 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
     return transactionRequest.getTransactionId(chainIdToHash);
+  }
+
+  /**
+   * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   */
+  private setDefaultTxParams(
+    transactionRequest: ScriptTransactionRequest,
+    minGasPrice: BN,
+    gasUsed: BN
+  ) {
+    const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const gasPriceSpecified = !!this.txParameters?.gasPrice;
+
+    const { gasLimit, gasPrice } = transactionRequest;
+
+    if (!gasLimitSpecified) {
+      // eslint-disable-next-line no-param-reassign
+      transactionRequest.gasLimit = gasUsed;
+    } else if (gasLimit.lt(gasUsed)) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
+
+    if (!gasPriceSpecified) {
+      // eslint-disable-next-line no-param-reassign
+      transactionRequest.gasPrice = minGasPrice;
+    } else if (gasPrice.lt(minGasPrice)) {
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
+    }
   }
 }

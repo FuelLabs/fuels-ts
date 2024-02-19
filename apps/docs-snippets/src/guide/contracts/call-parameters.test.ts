@@ -18,14 +18,12 @@ describe(__filename, () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     // #region call-params-1
     const amountToForward = 10;
-    const { minGasPrice } = provider.getGasConfig();
 
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [amountToForward, BaseAssetId],
       })
-      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);

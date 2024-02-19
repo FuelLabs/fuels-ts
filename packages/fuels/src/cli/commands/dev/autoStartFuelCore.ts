@@ -1,5 +1,5 @@
+import { launchNode } from '@fuel-ts/account/test-utils';
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import { launchNode } from '@fuel-ts/wallet/test-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { getPortPromise } from 'portfinder';
 
@@ -59,7 +59,9 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       killChildProcess: cleanup,
     };
 
+    // eslint-disable-next-line no-param-reassign
     config.providerUrl = fuelCore.providerUrl;
+    // eslint-disable-next-line no-param-reassign
     config.privateKey = defaultConsensusKey;
   }
 

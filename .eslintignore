@@ -12,7 +12,7 @@ apps/demo-react-cra
 apps/demo-react-vite
 
 packages/fuels/test/fixtures/project
-packages/providers/src/__generated__
+packages/account/src/providers/__generated__
 
 out
 CHANGELOG.md

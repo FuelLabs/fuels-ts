@@ -1,4 +1,4 @@
-import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import {
   FUEL_NETWORK_URL,

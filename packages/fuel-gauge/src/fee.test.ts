@@ -1,5 +1,5 @@
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
 import {
   BaseAssetId,
@@ -74,10 +74,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions
-      .mint_coins(subId, 1_000)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -92,10 +89,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions
-      .mint_coins(subId, 1_000)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
 
     balanceAfter = await wallet.getBalance();
 
@@ -213,7 +207,6 @@ describe('Fee', () => {
       .sum_multparams(1, 2, 3, 4, 5)
       .txParams({
         gasPrice,
-        gasLimit: 10000,
       })
       .call();
 
