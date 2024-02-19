@@ -338,7 +338,7 @@ export class Account extends AbstractAccount {
          * whereas transfers from predicates are working without it.
          * There is probably room for improvement here.
          */
-        estimateTxDependencies: 'populateTransactionWitnessesSignature' in this,
+        estimateTxDependencies: true,
         resourcesOwner: this,
       });
 

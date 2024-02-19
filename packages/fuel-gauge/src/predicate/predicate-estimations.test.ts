@@ -164,7 +164,7 @@ describe('Predicate', () => {
       expect(spy).toHaveBeenCalledTimes(2);
     });
 
-    test('transferring funds from a predicate estimates the predicate and does no dry runs', async () => {
+    test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
       const amountToPredicate = 10_000;
 
       await seedTestWallet(predicateTrue, [[amountToPredicate]]);
@@ -188,7 +188,7 @@ describe('Predicate', () => {
       expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
 
       expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
-      expect(dryRunSpy).not.toHaveBeenCalled();
+      expect(dryRunSpy).toHaveBeenCalledOnce();
     });
   });
 });

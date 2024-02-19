@@ -1,4 +1,3 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BN, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
@@ -49,16 +48,11 @@ describe('Predicate', () => {
 
     it('throws if the passed gas limit is too low', async () => {
       // fuel-client we should change with the proper error message
-      const { error } = await safeExec(async () => {
-        const response = await predicate
-          .setData(validation)
-          .transfer(receiver.address, 1000, BaseAssetId, {
-            gasLimit: 0,
-          });
-
-        await response.wait();
-      });
-      expect(error?.message).toContain('OutOfGas');
+      await expect(
+        predicate.setData(validation).transfer(receiver.address, 1000, BaseAssetId, {
+          gasLimit: 0,
+        })
+      ).rejects.toThrow(/Gas limit '0' is lower than the required:./i);
     });
   });
 });
