@@ -8,6 +8,7 @@ import { bn } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
+import type { FuelConnector } from './connectors';
 import type {
   TransactionRequestLike,
   CallResult,
@@ -18,10 +19,10 @@ import type {
   Message,
   Resource,
   ExcludeResourcesOption,
-  TransactionResponse,
   Provider,
   ScriptTransactionRequestLike,
   ProviderSendTxParams,
+  TransactionResponse,
 } from './providers';
 import {
   withdrawScript,
@@ -50,15 +51,18 @@ export class Account extends AbstractAccount {
    */
   protected _provider?: Provider;
 
+  protected _connector?: FuelConnector;
+
   /**
    * Creates a new Account instance.
    *
    * @param address - The address of the account.
    * @param provider - A Provider instance  (optional).
    */
-  constructor(address: string | AbstractAddress, provider?: Provider) {
+  constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
+    this._connector = connector;
     this.address = Address.fromDynamicInput(address);
   }
 
@@ -327,11 +331,19 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
-    const gasPriceToUse = bn(txParams.gasPrice ?? minGasPrice);
-    const gasLimitToUse = bn(txParams.gasLimit ?? gasUsed);
-    request.gasPrice = gasPriceToUse;
-    request.gasLimit = gasLimitToUse;
+
+    request.gasPrice = bn(txParams.gasPrice ?? minGasPrice);
+    request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
+
+    this.validateGas({
+      gasUsed,
+      gasPrice: request.gasPrice,
+      gasLimit: request.gasLimit,
+      minGasPrice,
+    });
+
     await this.fund(request, requiredQuantities, maxFee);
+
     return request;
   }
 
@@ -400,7 +412,14 @@ export class Account extends AbstractAccount {
       [{ amount: bn(amount), assetId: String(assetId) }]
     );
 
-    request.gasLimit = bn(params.gasLimit || gasUsed);
+    request.gasLimit = bn(params.gasLimit ?? gasUsed);
+
+    this.validateGas({
+      gasUsed,
+      gasPrice: request.gasPrice,
+      gasLimit: request.gasLimit,
+      minGasPrice,
+    });
 
     await this.fund(request, requiredQuantities, maxFee);
 
@@ -423,6 +442,8 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    const { minGasPrice } = this.provider.getGasConfig();
+
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = getBytesCopy(
@@ -437,7 +458,8 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    const params = { script, ...txParams };
+    const params: ScriptTransactionRequestLike = { script, gasPrice: minGasPrice, ...txParams };
+
     const request = new ScriptTransactionRequest(params);
     const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
 
@@ -446,11 +468,25 @@ export class Account extends AbstractAccount {
       forwardingQuantities
     );
 
-    request.gasLimit = params.gasLimit ? bn(params.gasLimit) : gasUsed;
+    request.gasLimit = bn(params.gasLimit ?? gasUsed);
+
+    this.validateGas({
+      gasUsed,
+      gasPrice: request.gasPrice,
+      gasLimit: request.gasLimit,
+      minGasPrice,
+    });
 
     await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
+  }
+
+  async signMessage(message: string): Promise<string> {
+    if (!this._connector) {
+      throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
+    }
+    return this._connector.signMessage(this.address.toString(), message);
   }
 
   /**
@@ -463,6 +499,11 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike,
     options?: Pick<ProviderSendTxParams, 'awaitExecution'>
   ): Promise<TransactionResponse> {
+    if (this._connector) {
+      return this.provider.getTransactionResponse(
+        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike)
+      );
+    }
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(transactionRequest, {
@@ -481,5 +522,31 @@ export class Account extends AbstractAccount {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
+  }
+
+  private validateGas({
+    gasUsed,
+    gasPrice,
+    gasLimit,
+    minGasPrice,
+  }: {
+    gasUsed: BN;
+    gasPrice: BN;
+    gasLimit: BN;
+    minGasPrice: BN;
+  }) {
+    if (minGasPrice.gt(gasPrice)) {
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
+    }
+
+    if (gasUsed.gt(gasLimit)) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
   }
 }

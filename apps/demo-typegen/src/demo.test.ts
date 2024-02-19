@@ -122,8 +122,6 @@ test('Example script', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
   const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
 
-  // TODO: investigate why do we need to specify the gasLimit here. If we don't specify it, the call fails saying `FuelError: Gas limit '0' is lower than the required: '19'.`
-
   // #region typegen-demo-script
   // #context import { ScriptAbi__factory } from './types';
 

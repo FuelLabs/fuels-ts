@@ -241,7 +241,10 @@ export type EstimatePredicateParams = {
   estimatePredicates?: boolean;
 };
 
-export type TransactionCostParams = EstimateTransactionParams & EstimatePredicateParams;
+export type TransactionCostParams = EstimateTransactionParams &
+  EstimatePredicateParams & {
+    resourcesOwner?: AbstractAddress;
+  };
 
 /**
  * Provider Call transaction params
@@ -568,27 +571,6 @@ export default class Provider {
     }
     // #endregion Provider-sendTransaction
 
-    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, [], {
-      estimateTxDependencies: false,
-      estimatePredicates: false,
-    });
-
-    if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
-      throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
-        `Gas price '${transactionRequest.gasPrice}' is lower than the required: '${minGasPrice}'.`
-      );
-    }
-
-    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
-
-    if (isScriptTransaction && bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${transactionRequest.gasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
     if (awaitExecution) {
@@ -660,6 +642,7 @@ export default class Provider {
     if (inputs) {
       inputs.forEach((input, index) => {
         if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
           (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }
@@ -770,7 +753,11 @@ export default class Provider {
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = [],
-    { estimateTxDependencies = true, estimatePredicates = true }: TransactionCostParams = {}
+    {
+      estimateTxDependencies = true,
+      estimatePredicates = true,
+      resourcesOwner,
+    }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
     const chainInfo = this.getChain();
@@ -803,7 +790,7 @@ export default class Provider {
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
     // Funding transaction with fake utxos
-    transactionRequest.fundWithFakeUtxos(allQuantities);
+    transactionRequest.fundWithFakeUtxos(allQuantities, resourcesOwner);
 
     /**
      * Estimate gasUsed for script transactions
@@ -1357,5 +1344,10 @@ export default class Provider {
       startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
     });
     return bn(latestBlockHeight);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
+    return new TransactionResponse(transactionId, this);
   }
 }

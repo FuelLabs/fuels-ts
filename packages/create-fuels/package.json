@@ -19,6 +19,7 @@
     "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "chalk": "4",
     "commander": "^9.4.1",
     "fuels": "workspace:*",
