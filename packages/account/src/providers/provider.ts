@@ -824,8 +824,6 @@ export default class Provider {
      * Estimate gasUsed for script transactions
      */
 
-    // For CreateTransaction the gasUsed is going to be the minGas
-    let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
     // Transactions of type Create does not consume any gas so we can the dryRun
     if (isScriptTransaction) {
@@ -844,8 +842,10 @@ export default class Provider {
       const result = await this.estimateTxDependencies(txRequestClone);
 
       receipts = result.receipts;
-      gasUsed = getGasUsedFromReceipts(receipts);
     }
+
+    // For CreateTransaction the gasUsed is going to be the minGas
+    const gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : minGas;
 
     const usedFee = calculatePriceWithFactor(
       gasUsed,
