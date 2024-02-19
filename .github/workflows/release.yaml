@@ -2,9 +2,9 @@ name: "Release"
 
 on:
   workflow_run:
-    workflows: ["Test"]
-    types: [completed]
-    branches: [master]
+    workflows: "Test"
+    types: completed
+    branches: master
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
