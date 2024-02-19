@@ -247,7 +247,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
 
-    // update predicate inputs with predicate-related info from estimations
+    // update predicate inputs with estimated predicate-related info because the funding removes it
     this.transactionRequest.inputs.forEach((input) => {
       let estimatedInput: TransactionRequestInput | undefined;
       switch (input.type) {
@@ -273,7 +273,7 @@ export class BaseInvocationScope<TReturn = any> {
       }
     });
 
-    // Update output coin idexes after funding because the funding reordered them via filtering
+    // Update output coin idexes after funding because the funding reordered the inputs
     this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
       (x) => x.type !== OutputType.Contract
     );
