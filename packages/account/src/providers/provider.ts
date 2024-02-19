@@ -243,10 +243,9 @@ export type EstimatePredicateParams = {
   estimatePredicates?: boolean;
 };
 
-export type TransactionCostParams = EstimateTransactionParams &
-  EstimatePredicateParams & {
-    resourcesOwner?: AbstractAccount;
-  };
+export type TransactionCostParams = EstimatePredicateParams & {
+  resourcesOwner?: AbstractAccount;
+};
 
 /**
  * Provider Call transaction params
