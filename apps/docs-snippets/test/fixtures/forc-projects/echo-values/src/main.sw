@@ -46,7 +46,6 @@ impl EchoValues for Contract {
         input
     }
     // #endregion bits512-3
-
     fn echo_u64(value: u64) -> u64 {
         value
     }
