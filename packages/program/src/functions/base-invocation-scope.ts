@@ -266,7 +266,11 @@ export class BaseInvocationScope<TReturn = any> {
         default:
           break;
       }
-      if (estimatedInput && 'predicate' in estimatedInput) {
+      if (
+        estimatedInput &&
+        'predicateGasUsed' in estimatedInput &&
+        bn(estimatedInput.predicateGasUsed).gt(0)
+      ) {
         input.predicate = estimatedInput.predicate;
         input.predicateData = estimatedInput.predicateData;
         input.predicateGasUsed = estimatedInput.predicateGasUsed;
