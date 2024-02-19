@@ -680,39 +680,6 @@ export default class Provider {
     return transactionRequest;
   }
 
-  private async estimateMissingOutputs(txRequest: ScriptTransactionRequest) {
-    let tries = 0;
-
-    let receipts: TransactionResultReceipt[] = [];
-    while (tries < MAX_RETRIES) {
-      const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
-        utxoValidation: false,
-      });
-      receipts = gqlReceipts.map(processGqlReceipt);
-      const { missingOutputVariables, missingOutputContractIds } =
-        getReceiptsWithMissingData(receipts);
-
-      const hasMissingOutputs =
-        missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
-
-      if (!hasMissingOutputs) {
-        break;
-      }
-
-      txRequest.addVariableOutputs(missingOutputVariables.length);
-      missingOutputContractIds.forEach(({ contractId }) => {
-        txRequest.addContractInputAndOutput(Address.fromString(contractId));
-      });
-
-      tries += 1;
-    }
-
-    return {
-      receipts,
-    };
-  }
-
   /**
    * Will dryRun a transaction and check for missing dependencies.
    *
