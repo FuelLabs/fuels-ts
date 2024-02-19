@@ -638,4 +638,36 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   toJSON() {
     return normalizeJSON(this);
   }
+
+  updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
+    this.inputs.forEach((i) => {
+      let correspondingInput: TransactionRequestInput | undefined;
+      switch (i.type) {
+        case InputType.Contract:
+          return;
+        case InputType.Coin:
+          correspondingInput = inputs.find((x) => x.type === InputType.Coin && x.owner === i.owner);
+          break;
+        case InputType.Message:
+          correspondingInput = inputs.find(
+            (x) => x.type === InputType.Message && x.sender === i.sender
+          );
+          break;
+        default:
+          break;
+      }
+      if (
+        correspondingInput &&
+        'predicateGasUsed' in correspondingInput &&
+        bn(correspondingInput.predicateGasUsed).gt(0)
+      ) {
+        // eslint-disable-next-line no-param-reassign
+        i.predicate = correspondingInput.predicate;
+        // eslint-disable-next-line no-param-reassign
+        i.predicateData = correspondingInput.predicateData;
+        // eslint-disable-next-line no-param-reassign
+        i.predicateGasUsed = correspondingInput.predicateGasUsed;
+      }
+    });
+  }
 }

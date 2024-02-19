@@ -248,34 +248,7 @@ export class BaseInvocationScope<TReturn = any> {
     await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
 
     // update predicate inputs with estimated predicate-related info because the funding removes it
-    this.transactionRequest.inputs.forEach((input) => {
-      let estimatedInput: TransactionRequestInput | undefined;
-      switch (input.type) {
-        case InputType.Contract:
-          return;
-        case InputType.Coin:
-          estimatedInput = estimatedInputs.find(
-            (x) => x.type === InputType.Coin && x.owner === input.owner
-          );
-          break;
-        case InputType.Message:
-          estimatedInput = estimatedInputs.find(
-            (x) => x.type === InputType.Message && x.sender === input.sender
-          );
-          break;
-        default:
-          break;
-      }
-      if (
-        estimatedInput &&
-        'predicateGasUsed' in estimatedInput &&
-        bn(estimatedInput.predicateGasUsed).gt(0)
-      ) {
-        input.predicate = estimatedInput.predicate;
-        input.predicateData = estimatedInput.predicateData;
-        input.predicateGasUsed = estimatedInput.predicateGasUsed;
-      }
-    });
+    this.transactionRequest.updatePredicateGasUsed(estimatedInputs);
 
     // Update output coin idexes after funding because the funding reordered the inputs
     this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
