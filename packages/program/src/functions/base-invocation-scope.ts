@@ -226,14 +226,24 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The current instance of the class.
    */
-  async fundWithRequiredCoins(fee: BN) {
+  async fundWithRequiredCoins() {
+    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
+      await this.getTransactionCost();
+
+    const transactionRequest = await this.getTransactionRequest();
+
+    transactionRequest.inputs = estimatedInputs;
+    transactionRequest.outputs = estimatedOutputs;
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
+
     // Clean coin inputs before add new coins to the request
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
 
-    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, fee);
+    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
 
+    // Update output coin idexes after funding because the funding reordered them via filtering
     this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
       (x) => x.type !== OutputType.Contract
     );
@@ -304,20 +314,15 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
-      await this.getTransactionCost();
+    await this.fundWithRequiredCoins();
 
-    transactionRequest.inputs = estimatedInputs;
-    transactionRequest.outputs = estimatedOutputs;
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
-      estimateTxDependencies: false,
-    });
+    const response = await this.program.account.sendTransaction(
+      await this.getTransactionRequest(),
+      {
+        awaitExecution: true,
+        estimateTxDependencies: false,
+      }
+    );
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -348,19 +353,14 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
-    const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
-      await this.getTransactionCost();
+    await this.fundWithRequiredCoins();
 
-    transactionRequest.inputs = estimatedInputs;
-    transactionRequest.outputs = estimatedOutputs;
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const result = await this.program.account.simulateTransaction(transactionRequest, {
-      estimateTxDependencies: false,
-    });
+    const result = await this.program.account.simulateTransaction(
+      await this.getTransactionRequest(),
+      {
+        estimateTxDependencies: false,
+      }
+    );
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -374,14 +374,9 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const provider = this.getProvider();
+    await this.fundWithRequiredCoins();
 
-    const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const response = await provider.call(transactionRequest, {
+    const response = await provider.call(await this.getTransactionRequest(), {
       utxoValidation: false,
     });
 
