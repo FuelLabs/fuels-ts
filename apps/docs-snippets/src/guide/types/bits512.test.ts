@@ -24,7 +24,7 @@ describe(__filename, () => {
     const provider = contract.provider;
 
     // #region bits512-2
-    // #context import {  Wallet } from 'fuels';
+    // #import { Wallet };
 
     const wallet = Wallet.generate({
       provider,
@@ -37,10 +37,7 @@ describe(__filename, () => {
     // #region bits512-4
     const b512 = wallet.publicKey;
 
-    const { value } = await contract.functions
-      .echo_b512(b512)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_b512(b512).simulate();
 
     expect(value).toEqual(b512);
     // #endregion bits512-4

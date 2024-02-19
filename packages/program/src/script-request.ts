@@ -6,8 +6,6 @@ import {
   WORD_SIZE,
   calculateVmTxMemory,
 } from '@fuel-ts/abi-coder';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
   TransactionResultRevertReceipt,
@@ -16,7 +14,9 @@ import type {
   TransactionResultReturnReceipt,
   TransactionResultScriptResultReceipt,
   TransactionResult,
-} from '@fuel-ts/providers';
+} from '@fuel-ts/account';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BN } from '@fuel-ts/math';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { getBytesCopy, type BytesLike } from 'ethers';

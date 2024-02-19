@@ -1,4 +1,4 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   BN,
   Bech32Address,
@@ -151,7 +151,7 @@ describe('Doc Examples', () => {
   test('it can work with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallets
-    // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
+    // #import { Wallet, WalletLocked, WalletUnlocked };
 
     // use the `generate` helper to make an Unlocked Wallet
     const myWallet: WalletUnlocked = Wallet.generate({
@@ -179,12 +179,12 @@ describe('Doc Examples', () => {
     // #endregion wallet-unlocked-to-locked
 
     // #region wallet-check-balance
-    // #context import { Wallet, WalletUnlocked, BigNumberish} from 'fuels';
+    // #import { BigNumberish };
     const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
     // #endregion wallet-check-balance
 
     // #region wallet-check-balances
-    // #context import { Wallet, WalletUnlocked, CoinQuantity} from 'fuels';
+    // #import { CoinQuantity };
     const balances: CoinQuantity[] = await myWallet.getBalances();
     // #endregion wallet-check-balances
 
@@ -212,7 +212,7 @@ describe('Doc Examples', () => {
   it('it can work sign messages with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
-    // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
+    // #import { WalletUnlocked, hashMessage, Signer };
     const wallet = WalletUnlocked.generate({
       provider,
     });
@@ -229,8 +229,7 @@ describe('Doc Examples', () => {
 
   it('can create wallets', async () => {
     // #region wallet-setup
-    // #context import { Provider, bn, FUEL_NETWORK_URL } from 'fuels';
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    // #import { Provider, bn, FUEL_NETWORK_URL, generateTestWallet };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -267,7 +266,7 @@ describe('Doc Examples', () => {
 
   it('can connect to testnet', async () => {
     // #region provider-testnet
-    // #context import { Provider, WalletUnlocked } from 'fuels';
+    // #import { Provider, WalletUnlocked };
     const provider = await Provider.create('https://beta-5.fuel.network/graphql');
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
@@ -285,7 +284,7 @@ describe('Doc Examples', () => {
 
   it('can connect to a local provider', async () => {
     // #region provider-local
-    // #context import { Provider, WalletUnlocked, FUEL_NETWORK_URL } from 'fuels';
+    // #import { Provider, WalletUnlocked, FUEL_NETWORK_URL };
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
     // Setup a private key
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
@@ -301,8 +300,7 @@ describe('Doc Examples', () => {
 
   it('can query address with wallets', async () => {
     // #region wallet-query
-    // #context import { Provider, FUEL_NETWORK_URL } from 'fuels';
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
@@ -355,14 +353,11 @@ describe('Doc Examples', () => {
   });
 
   it('can create a predicate', async () => {
-    // #region predicate-basic
-    // #context import { Predicate, arrayify, FUEL_NETWORK_URL } from 'fuels';
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(testPredicateTrue, provider);
 
     expect(predicate.address).toBeTruthy();
     expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
-    // #endregion predicate-basic
   });
 
   it('can create a predicate and use', async () => {

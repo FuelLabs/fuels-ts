@@ -4,14 +4,6 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
 
-vi.mock('@fuel-ts/versions/cli', async () => {
-  const mod = await vi.importActual('@fuel-ts/versions/cli');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 vi.mock('prompts', async () => {
   const mod = await vi.importActual('prompts');
   return {

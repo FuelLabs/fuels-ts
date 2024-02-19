@@ -1,5 +1,17 @@
 # create-fuels
 
+## 0.73.0
+
+## 0.72.0
+
+### Minor Changes
+
+- Update supported node version in create fuels, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
+### Patch Changes
+
+- 🐞 Fixing and internalizing `findBinPath` utility, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
 ## 0.71.1
 
 ### Patch Changes

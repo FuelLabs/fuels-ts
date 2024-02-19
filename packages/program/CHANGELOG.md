@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.73.0
+
+## 0.72.0
+
+### Minor Changes
+
+- - Transaction execution can now be await with the `{awaitExecution: true}` option on `Provider.sendTransaction`
+  - Added same functionality to accounts (unlocked wallet, predicate)
+  - `BaseInvocationScope` internally now uses `{awaitExecution: true}` to reduce amount of network calls, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
 ## 0.71.1
 
 ## 0.71.0

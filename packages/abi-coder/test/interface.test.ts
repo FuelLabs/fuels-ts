@@ -5,7 +5,7 @@ import { concat } from '@fuel-ts/utils';
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
-import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/debug/exhaustive-examples-abi.json';
+import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -320,14 +320,8 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.raw_slice,
           title: '[raw_slice]',
           value: [[1, 2, 3]],
-          encodedValue: new Uint8Array([
-            0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-            0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3,
-          ]),
-          decodedTransformer: (decoded: unknown | undefined) => {
-            const data = (decoded as BN[]).slice(2);
-            return data.map((v: BN) => v.toNumber());
-          },
+          encodedValue: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as number[]).slice(-3),
         },
         {
           fn: exhaustiveExamplesInterface.functions.dynamic_string,

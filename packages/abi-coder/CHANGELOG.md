@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.73.0
+
+### Patch Changes
+
+- filter out tx properties for estimatePredicates query, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1713](https://github.com/FuelLabs/fuels-ts/pull/1713))
+
+## 0.72.0
+
+### Minor Changes
+
+- Improve decode validation of ABI Coders, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
 ## 0.71.1
 
 ## 0.71.0

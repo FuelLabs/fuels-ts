@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN } from 'fuels';
 import { toHex, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 
@@ -42,15 +42,9 @@ describe('StorageTestContract', () => {
     const contract = await setup();
 
     // Call contract
-    const { value: initializeResult } = await contract.functions
-      .initialize_counter(1300)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions
-      .increment_counter(37)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions
@@ -91,15 +85,9 @@ describe('StorageTestContract', () => {
       ],
     });
     // #endregion contract-deployment-storage-slots-inline
-    const { value: initializeResult } = await contract.functions
-      .initialize_counter(1300)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions
-      .increment_counter(37)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions

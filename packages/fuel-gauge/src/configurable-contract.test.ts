@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
@@ -54,10 +54,7 @@ describe('Configurable Contract', () => {
   it('should assert default values', async () => {
     const contract = await factory.deployContract({ gasPrice });
 
-    const { value } = await contract.functions
-      .echo_configurables()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_configurables().simulate();
 
     expect(value[0]).toEqual(defaultValues.U8);
     expect(value[1]).toEqual(defaultValues.U16);
@@ -81,7 +78,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions.echo_u8().txParams({ gasLimit: 10_000 }).simulate();
+    const { value } = await contract.functions.echo_u8().simulate();
 
     expect(value).toBe(configurableConstants.U8);
   });
@@ -95,7 +92,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions.echo_u16().txParams({ gasLimit: 10_000 }).simulate();
+    const { value } = await contract.functions.echo_u16().simulate();
 
     expect(value).toBe(configurableConstants.U16);
   });
@@ -109,7 +106,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions.echo_u32().txParams({ gasLimit: 10_000 }).simulate();
+    const { value } = await contract.functions.echo_u32().simulate();
 
     expect(value).toBe(configurableConstants.U32);
   });
@@ -123,7 +120,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions.echo_u64().txParams({ gasLimit: 10_000 }).simulate();
+    const { value } = await contract.functions.echo_u64().simulate();
 
     expect(new BN(value).toNumber()).toBe(configurableConstants.U64);
   });
@@ -137,10 +134,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_bool()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_bool().simulate();
 
     expect(value).toBe(configurableConstants.BOOL);
   });
@@ -154,10 +148,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_b256()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_b256().simulate();
 
     expect(value).toBe(configurableConstants.B256);
   });
@@ -171,10 +162,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_enum()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_enum().simulate();
 
     expect(value).toBe(configurableConstants.ENUM);
   });
@@ -191,10 +179,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_array()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_array().simulate();
 
     expect(value).toStrictEqual(configurableConstants.ARRAY);
   });
@@ -208,10 +193,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_str4()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_str4().simulate();
 
     expect(value).toBe(configurableConstants.STR_4);
   });
@@ -225,10 +207,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_tuple()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_tuple().simulate();
 
     expect(value).toStrictEqual(configurableConstants.TUPLE);
   });
@@ -246,10 +225,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants, gasPrice });
 
-    const { value } = await contract.functions
-      .echo_struct()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_struct().simulate();
 
     expect(value).toStrictEqual(configurableConstants.STRUCT_1);
   });

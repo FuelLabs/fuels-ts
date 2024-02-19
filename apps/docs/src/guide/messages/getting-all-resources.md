@@ -2,4 +2,4 @@
 
 You can use the `getResourcesToSpend` method to retrieve a list of all the resources (coins + assets) that can be spent by a given address.
 
-<<< @/../../../packages/wallet/src/account.test.ts#Message-getResourcesToSpend{ts:line-numbers}
+<<< @/../../../packages/account/src/account.test.ts#Message-getResourcesToSpend{ts:line-numbers}

@@ -1,5 +1,5 @@
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
@@ -43,9 +43,9 @@ describe('Predicate', () => {
       // calling the script with the receiver account (no resources)
       const scriptInput = 1;
       scriptInstance.account = receiver;
-      await expect(
-        scriptInstance.functions.main(scriptInput).txParams({ gasPrice }).call()
-      ).rejects.toThrow(/not enough coins to fit the target/);
+      await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
+        /not enough coins to fit the target/
+      );
 
       // setup predicate
       const amountToPredicate = 500_000;
@@ -75,10 +75,7 @@ describe('Predicate', () => {
 
       const {
         transactionResult: { fee: receiverTxFee },
-      } = await scriptInstance.functions
-        .main(scriptInput)
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call();
+      } = await scriptInstance.functions.main(scriptInput).call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
 

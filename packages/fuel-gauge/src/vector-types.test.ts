@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN, BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
@@ -116,7 +116,6 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(true);
   });
@@ -139,7 +138,6 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value.toString()).toBe('1');

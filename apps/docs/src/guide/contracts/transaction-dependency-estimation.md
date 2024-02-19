@@ -6,6 +6,6 @@ However, the SDK always automatically estimates these dependencies and double-ch
 
 The SDK uses the `estimateTxDependencies` helper function to set any missing dependencies identified during the estimation process. This requires simulating the transaction a few times in the background.
 
-<<< @/../../../packages/providers/src/provider.ts#Provider-sendTransaction{ts:line-numbers}
+<<< @/../../../packages/account/src/providers/provider.ts#Provider-sendTransaction{ts:line-numbers}
 
 While relying on the SDK's automatic estimation is a decent default behavior, we recommend manually specifying the dependencies if they are known in advance to avoid the performance impact of the estimation process.

@@ -1,4 +1,4 @@
-import type { Contract, Provider, TxParams, WalletUnlocked } from 'fuels';
+import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
 import {
@@ -29,7 +29,7 @@ describe(__filename, () => {
 
   it('should successfully transfer asset to another account', async () => {
     // #region transferring-assets-1
-    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
+    // #import { Wallet, BN, BaseAssetId };
 
     // #context const sender = Wallet.fromPrivateKey('...');
     const destination = Wallet.generate({
@@ -38,19 +38,7 @@ describe(__filename, () => {
     const amountToTransfer = 500;
     const assetId = BaseAssetId;
 
-    const { minGasPrice } = provider.getGasConfig();
-
-    const txParams: TxParams = {
-      gasPrice: minGasPrice,
-      gasLimit: 1_000,
-    };
-
-    const response = await sender.transfer(
-      destination.address,
-      amountToTransfer,
-      assetId,
-      txParams
-    );
+    const response = await sender.transfer(destination.address, amountToTransfer, assetId);
 
     await response.wait();
 
@@ -70,19 +58,11 @@ describe(__filename, () => {
     const amountToTransfer = 200;
     const assetId = BaseAssetId;
 
-    const { minGasPrice } = provider.getGasConfig();
-
-    const txParams: TxParams = {
-      gasPrice: minGasPrice,
-      gasLimit: 1_000,
-    };
-
     // #region transferring-assets-2
     const transactionRequest = await sender.createTransfer(
       destination.address,
       amountToTransfer,
-      assetId,
-      txParams
+      assetId
     );
 
     const chainId = provider.getChainId();
@@ -106,19 +86,11 @@ describe(__filename, () => {
     const amountToTransfer = 200;
     const assetId = BaseAssetId;
 
-    const { minGasPrice } = provider.getGasConfig();
-
-    const txParams: TxParams = {
-      gasPrice: minGasPrice,
-      gasLimit: 1_000,
-    };
-
     // #region transferring-assets-3
     const transactionRequest = await sender.createTransfer(
       destination.address,
       amountToTransfer,
-      assetId,
-      txParams
+      assetId
     );
 
     const chainId = provider.getChainId();
@@ -138,7 +110,7 @@ describe(__filename, () => {
   it('should successfully prepare transfer transaction request', async () => {
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-4
-    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
+    // #import { Wallet, BN, BaseAssetId };
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
 
@@ -148,14 +120,7 @@ describe(__filename, () => {
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
-    const { minGasPrice } = provider.getGasConfig();
-
-    const txParams: TxParams = {
-      gasPrice: minGasPrice,
-      gasLimit: 1_000,
-    };
-
-    const tx = await sender.transferToContract(contractId, amountToTransfer, assetId, txParams);
+    const tx = await sender.transferToContract(contractId, amountToTransfer, assetId);
     expect(new BN(contractBalance).toNumber()).toBe(0);
 
     await tx.waitForResult();

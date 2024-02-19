@@ -10,4 +10,5 @@ export const getScriptForcProject = (project: ScriptProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, 'forc-projects', project),
     projectName: project,
+    build: 'release',
   });

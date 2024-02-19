@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.71.1",
+  "version": "0.73.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -19,6 +19,7 @@
     "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "chalk": "4",
     "commander": "^9.4.1",
     "fuels": "workspace:*",
