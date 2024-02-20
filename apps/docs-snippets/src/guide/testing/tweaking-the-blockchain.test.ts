@@ -1,5 +1,5 @@
-import { Provider, DateTime } from 'fuels';
 import { launchNode } from '@fuel-ts/account/test-utils';
+import { Provider, DateTime } from 'fuels';
 
 /**
  * @group node
