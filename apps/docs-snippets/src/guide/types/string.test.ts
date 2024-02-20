@@ -37,15 +37,15 @@ describe(__filename, () => {
     // #region string-3
     const longString = 'fuel-sdk-WILL-THROW-ERROR';
 
-    await expect(() => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
+    await expect(async () => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
       'Value length mismatch during encode'
     );
 
     const shortString = 'THROWS';
 
-    await expect(() => contract.functions.echo_str_8(shortString).call()).rejects.toThrowError(
-      'Value length mismatch during encode'
-    );
+    await expect(async () =>
+      contract.functions.echo_str_8(shortString).call()
+    ).rejects.toThrowError('Value length mismatch during encode');
     // #endregion string-3
   });
 });
