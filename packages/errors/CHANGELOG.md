@@ -1,5 +1,11 @@
 # @fuel-ts/errors
 
+## 0.74.0
+
+### Minor Changes
+
+- restructure Account related packages, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1675](https://github.com/FuelLabs/fuels-ts/pull/1675))
+
 ## 0.73.0
 
 ## 0.72.0
