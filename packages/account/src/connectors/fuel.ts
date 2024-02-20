@@ -25,6 +25,8 @@ const HAS_CONNECTOR_TIMEOUT = 2_000;
 // at minimum.
 const PING_CACHE_TIME = 5_000;
 
+const { warn } = console;
+
 export type FuelConfig = {
   connectors?: Array<FuelConnector>;
   storage?: StorageAbstract | null;
@@ -378,7 +380,7 @@ export class Fuel extends FuelConnector {
    * @deprecated getProvider is deprecated and is going to be removed in the future, use getWallet instead.
    */
   async getProvider(providerOrNetwork?: Provider | Network): Promise<Provider> {
-    console.warn(
+    warn(
       'getProvider is deprecated and is going to be removed in the future, use getWallet instead.'
     );
     return this._getProvider(providerOrNetwork);
