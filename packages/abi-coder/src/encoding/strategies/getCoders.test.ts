@@ -21,6 +21,10 @@ class MockCoder extends Coder {
   }
 }
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('getCoders', () => {
   const components = [{ name: coderName }] as ResolvedAbiType[];
   const options = {} as TEncodingOptions;

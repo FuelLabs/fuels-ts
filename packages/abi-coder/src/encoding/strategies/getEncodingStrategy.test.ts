@@ -4,6 +4,10 @@ import { getCoder as getCoderV0 } from './getCoderV0';
 import { getCoder as getCoderV1 } from './getCoderV1';
 import { getEncodingStrategy } from './getEncodingStrategy';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('getEncodingStrategy', () => {
   it('defaults to encoding version 0', () => {
     const result = getEncodingStrategy();
