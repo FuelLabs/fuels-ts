@@ -332,7 +332,7 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
-      await this.provider.getTransactionCost(request, undefined, {
+      await this.provider.getTransactionCost(request, [], {
         estimateTxDependencies: true,
         resourcesOwner: this,
       });
