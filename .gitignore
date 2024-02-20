@@ -59,7 +59,7 @@ typings/
 *.tsbuildinfo
 
 # Tsup config bundles
-tsup.config.bundled_*.mjs
+tsup.config.bundled_*
 
 # Optional npm cache directory
 .npm
