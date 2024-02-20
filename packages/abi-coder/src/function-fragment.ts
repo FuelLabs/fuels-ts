@@ -121,6 +121,10 @@ export class FunctionFragment<
     return unpackDynamicData(results, offset, results.byteLength);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH}
+   * When the arguments supplied to the function do not match the minimum required input length.
+   */
   private static verifyArgsAndInputsAlign(
     args: InputValue[],
     inputs: readonly JsonAbiArgument[],
