@@ -813,6 +813,12 @@ export default class Provider {
         txRequestClone.gasLimit = bn(0);
       }
 
+      /**
+       * The fake utxos added above can be from a predicate
+       * If the resources owner is a predicate,
+       * we need to populate the resources with the predicate's data
+       * so that predicate estimation can happen.
+       */
       if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
         (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
       }
