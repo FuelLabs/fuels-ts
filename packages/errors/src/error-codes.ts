@@ -29,6 +29,7 @@ export enum ErrorCode {
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
   MISSING_PROVIDER = 'missing-provider',
+  INVALID_PROVIDER = 'invalid-provider',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',

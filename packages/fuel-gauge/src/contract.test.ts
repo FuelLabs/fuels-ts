@@ -695,8 +695,7 @@ describe('Contract', () => {
       gasPrice,
       gasLimit: 20_000,
     });
-    const { maxFee } = await multiCallScope.getTransactionCost();
-    await multiCallScope.fundWithRequiredCoins(maxFee);
+    await multiCallScope.fundWithRequiredCoins();
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
 
