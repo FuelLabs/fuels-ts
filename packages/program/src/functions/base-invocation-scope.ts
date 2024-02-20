@@ -245,7 +245,7 @@ export class BaseInvocationScope<TReturn = any> {
     // update predicate inputs with estimated predicate-related info because the funding removes it
     this.transactionRequest.updatePredicateInputs(estimatedInputs);
 
-    // Update output coin idexes after funding because the funding reordered the inputs
+    // Update output coin indexes after funding because the funding reordered the inputs
     this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
       (x) => x.type !== OutputType.Contract
     );
