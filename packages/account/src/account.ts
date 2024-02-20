@@ -333,11 +333,6 @@ export class Account extends AbstractAccount {
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
       await this.provider.getTransactionCost(request, undefined, {
-        /**
-         * Transfers from wallets are failing without estimateTxDependencies,
-         * whereas transfers from predicates are working without it.
-         * There is probably room for improvement here.
-         */
         estimateTxDependencies: true,
         resourcesOwner: this,
       });
