@@ -73,6 +73,10 @@ export const configureCli = () => {
       '-d, --deploy',
       'Deploy contracts after build (auto-starts a `fuel-core` node if needed)'
     )
+    .option(
+      '-r, --release',
+      'Build programs in release mode (otherwise, will default to `debug` mode)'
+    )
     .action(withConfig(command, Commands.build, build));
 
   (command = program.command(Commands.deploy))

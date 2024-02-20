@@ -11,12 +11,14 @@ import { generateTypes } from './generateTypes';
 export async function build(config: FuelsConfig, program?: Command) {
   log('Building..');
 
-  await buildSwayPrograms(config);
+  const options = program?.opts();
+  const shouldDeploy = options?.deploy;
+  const releaseMode = options?.release || shouldDeploy;
+
+  await buildSwayPrograms(config, releaseMode);
   await generateTypes(config);
 
-  const options = program?.opts();
-
-  if (options?.deploy) {
+  if (shouldDeploy) {
     const fuelCore = await autoStartFuelCore(config);
     await deploy(config);
     fuelCore?.killChildProcess();
