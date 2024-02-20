@@ -1,12 +1,13 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
 import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
@@ -215,7 +216,7 @@ export class BaseInvocationScope<TReturn = any> {
     const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
-      resourcesOwner: this.program.account?.address,
+      resourcesOwner: this.program.account as AbstractAccount,
     });
 
     return txCost;
@@ -226,13 +227,35 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The current instance of the class.
    */
-  async fundWithRequiredCoins(fee: BN) {
+  async fundWithRequiredCoins() {
+    const transactionRequest = await this.getTransactionRequest();
+
+    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
+      await this.getTransactionCost();
+
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
+
+    transactionRequest.outputs = estimatedOutputs;
+
     // Clean coin inputs before add new coins to the request
-    this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
-      (i) => i.type !== InputType.Coin
+    this.transactionRequest.inputs = estimatedInputs.filter((i) => i.type !== InputType.Coin);
+
+    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
+
+    // update predicate inputs with estimated predicate-related info because the funding removes it
+    this.transactionRequest.updatePredicateInputs(estimatedInputs);
+
+    // Update output coin indexes after funding because the funding reordered the inputs
+    this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
+      (x) => x.type !== OutputType.Contract
     );
 
-    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, fee);
+    this.transactionRequest.inputs.forEach((input, inputIndex) => {
+      if (input.type !== InputType.Contract) {
+        return;
+      }
+      this.transactionRequest.outputs.push({ type: OutputType.Contract, inputIndex });
+    });
 
     return this;
   }
@@ -293,16 +316,15 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
+    await this.fundWithRequiredCoins();
 
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
-    });
+    const response = await this.program.account.sendTransaction(
+      await this.getTransactionRequest(),
+      {
+        awaitExecution: true,
+        estimateTxDependencies: false,
+      }
+    );
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -333,14 +355,14 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
-    const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
+    await this.fundWithRequiredCoins();
 
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const result = await this.program.account.simulateTransaction(transactionRequest);
+    const result = await this.program.account.simulateTransaction(
+      await this.getTransactionRequest(),
+      {
+        estimateTxDependencies: false,
+      }
+    );
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -354,25 +376,13 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const provider = this.getProvider();
+    await this.fundWithRequiredCoins();
 
-    const transactionRequest = await this.getTransactionRequest();
-    const { maxFee, gasUsed, minGasPrice } = await this.getTransactionCost();
-
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const response = await provider.call(transactionRequest, {
+    const response = await provider.call(await this.getTransactionRequest(), {
       utxoValidation: false,
     });
 
-    const result = await InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
-      response,
-      this.isMultiCall
-    );
-
-    return result;
+    return InvocationCallResult.build<T>(this.functionInvocationScopes, response, this.isMultiCall);
   }
 
   getProvider(): Provider {
@@ -408,7 +418,6 @@ export class BaseInvocationScope<TReturn = any> {
     const { gasLimit, gasPrice } = transactionRequest;
 
     if (!gasLimitSpecified) {
-      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasLimit = gasUsed;
     } else if (gasLimit.lt(gasUsed)) {
       throw new FuelError(
@@ -418,7 +427,6 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     if (!gasPriceSpecified) {
-      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasPrice = minGasPrice;
     } else if (gasPrice.lt(minGasPrice)) {
       throw new FuelError(
