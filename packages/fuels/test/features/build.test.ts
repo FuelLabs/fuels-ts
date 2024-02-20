@@ -98,6 +98,20 @@ describe(
       expect(buildSwayPrograms.mock.calls[0][1]).toEqual(undefined); // releaseMode=falsy
     });
 
+    it('should run `build` command with `--release` flag', async () => {
+      const { buildSwayPrograms } = mockAll();
+
+      await runInit({
+        root: paths.root,
+        workspace: paths.workspaceDir,
+        output: paths.outputDir,
+      });
+
+      await runBuild({ root: paths.root, release: true });
+
+      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(true); // releaseMode=true
+    });
+
     it('should run `build` command with `--deploy` flag', async () => {
       const { autoStartFuelCore, killChildProcess, deploy, buildSwayPrograms } = mockAll();
 
