@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.74.0
+
+### Minor Changes
+
+- New encoding scheme implemented for logs, by [@danielbate](https://github.com/danielbate) (See [#1673](https://github.com/FuelLabs/fuels-ts/pull/1673))
+
 ## 0.73.0
 
 ### Patch Changes
