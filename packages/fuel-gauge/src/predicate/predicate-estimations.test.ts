@@ -13,6 +13,7 @@ import {
   InputType,
   FUEL_NETWORK_URL,
   getRandomB256,
+  WalletUnlocked,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -126,6 +127,68 @@ describe('Predicate', () => {
       expect(Number(predicateCoinInput.predicateGasUsed)).toBeGreaterThan(
         Number(predicateMessageInput.predicateGasUsed)
       );
+    });
+
+    test('predicate does not get estimated again if it has already been estimated', async () => {
+      const tx = new ScriptTransactionRequest();
+      await seedTestWallet(predicateTrue, [[100]]);
+      const resources = await predicateTrue.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(resources, predicateTrue);
+
+      const spy = vi.spyOn(provider.operations, 'estimatePredicates');
+
+      await provider.estimatePredicates(tx);
+      await provider.estimatePredicates(tx);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('Predicates get estimated if one of them is not estimated', async () => {
+      const tx = new ScriptTransactionRequest();
+      await seedTestWallet(predicateTrue, [[100]]);
+      const trueResources = await predicateTrue.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(trueResources, predicateTrue);
+
+      const spy = vi.spyOn(provider.operations, 'estimatePredicates');
+      await provider.estimatePredicates(tx);
+
+      await seedTestWallet(predicateStruct, [[100]]);
+      const structResources = await predicateStruct.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(structResources, predicateStruct);
+
+      await provider.estimatePredicates(tx);
+
+      // this call shouldn't call provider.operations.estimatePredicates because all predicates have been estimated
+      await provider.estimatePredicates(tx);
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
+      const amountToPredicate = 10_000;
+
+      await seedTestWallet(predicateTrue, [[amountToPredicate]]);
+
+      const initialPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
+
+      const receiverWallet = WalletUnlocked.generate({
+        provider,
+      });
+
+      const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
+      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
+
+      const response = await predicateTrue.transfer(
+        receiverWallet.address.toB256(),
+        1,
+        BaseAssetId
+      );
+      await response.waitForResult();
+      const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
+      expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
+
+      expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
+      expect(dryRunSpy).toHaveBeenCalledOnce();
     });
   });
 });
