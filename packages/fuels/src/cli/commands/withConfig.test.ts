@@ -1,3 +1,4 @@
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import { program } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/fuels.config';
@@ -84,7 +85,12 @@ describe('withConfig', () => {
       shouldErrorOnDeploy: true,
     });
 
-    await withConfig(command, Commands.deploy, deploy)();
+    const { error: cmdError, result: cmdResult } = await safeExec(async () => {
+      await withConfig(command, Commands.deploy, deploy)();
+    });
+
+    expect(cmdError).toBeTruthy();
+    expect(cmdResult).toBeFalsy();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
@@ -101,7 +107,12 @@ describe('withConfig', () => {
       shouldErrorOnLoadConfig: true,
     });
 
-    await withConfig(command, Commands.deploy, deploy)();
+    const { error: cmdError, result: cmdResult } = await safeExec(async () => {
+      await withConfig(command, Commands.deploy, deploy)();
+    });
+
+    expect(cmdError).toBeTruthy();
+    expect(cmdResult).toBeFalsy();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);

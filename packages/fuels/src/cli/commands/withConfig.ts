@@ -10,6 +10,7 @@ export const withConfigErrorHandler = async (err: Error, config?: FuelsConfig) =
   if (config) {
     await config.onFailure?.(<Error>err, config);
   }
+  throw new Error(err.toString());
 };
 
 export function withConfig<CType extends Commands>(
@@ -27,24 +28,24 @@ export function withConfig<CType extends Commands>(
 
     try {
       config = await loadConfig(options.path);
+
+      try {
+        const eventData = await fn(config, program);
+        config.onSuccess?.(
+          {
+            type: command,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: eventData as any,
+          },
+          config
+        );
+
+        log(`🎉  ${capitalizeString(command)} completed successfully!`);
+      } catch (err: unknown) {
+        await withConfigErrorHandler(<Error>err, config);
+      }
     } catch (err) {
       await withConfigErrorHandler(<Error>err);
-      return;
-    }
-
-    try {
-      const eventData = await fn(config, program);
-      config.onSuccess?.(
-        {
-          type: command,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data: eventData as any,
-        },
-        config
-      );
-      log(`🎉  ${capitalizeString(command)} completed successfully!`);
-    } catch (err: unknown) {
-      await withConfigErrorHandler(<Error>err, config);
     }
   };
 }
