@@ -134,6 +134,9 @@ export default class ContractFactory {
    *
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
+   * 
+   * @throws {FuelError} {@link ErrorCode.ACCOUNT_REQUIRED}
+   * When the account has not been set for the contract.
    */
   async deployContract(deployContractOptions: DeployContractOptions = {}) {
     if (!this.account) {
