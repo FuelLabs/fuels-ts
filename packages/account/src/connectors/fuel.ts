@@ -378,6 +378,9 @@ export class Fuel extends FuelConnector {
    * @deprecated getProvider is deprecated and is going to be removed in the future, use getWallet instead.
    */
   async getProvider(providerOrNetwork?: Provider | Network): Promise<Provider> {
+    console.warn(
+      'getProvider is deprecated and is going to be removed in the future, use getWallet instead.'
+    );
     return this._getProvider(providerOrNetwork);
   }
 
