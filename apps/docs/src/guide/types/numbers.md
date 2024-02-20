@@ -12,7 +12,7 @@ Conveniently, all of these types are handled the same way in the TS SDK. This gu
 
 ## Creating Numbers
 
-Just like Ethereum, when you pass in a number to a Sway program from JavaScript, you must first convert it to a `BigNumber` object. Here's how you can do that:
+Just like Ethereum, when you pass in a number to a Sway program from JavaScript, you must first convert it to a `BigNum` object. Here's how you can do that:
 
 <<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-1{ts:line-numbers}
 
