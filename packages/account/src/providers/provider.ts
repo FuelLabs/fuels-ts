@@ -9,7 +9,9 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
+import { equalBytes } from '@noble/curves/abstract/utils';
 import type { BytesLike } from 'ethers';
 import { getBytesCopy, hexlify, Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
@@ -650,7 +652,7 @@ export default class Provider {
         (input) =>
           'predicate' in input &&
           input.predicate &&
-          input.predicate !== getBytesCopy('0x') &&
+          !equalBytes(arrayify(input.predicate), arrayify('0x')) &&
           new BN(input.predicateGasUsed).isZero()
       )
     );
