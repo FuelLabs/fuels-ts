@@ -58,6 +58,9 @@ typings/
 # TypeScript cache
 *.tsbuildinfo
 
+# Tsup config bundles
+tsup.config.bundled_*.mjs
+
 # Optional npm cache directory
 .npm
 
