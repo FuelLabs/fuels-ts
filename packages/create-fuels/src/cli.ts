@@ -94,9 +94,23 @@ export const runScaffoldCli = async (
   shouldInstallDeps = true,
   explicitProgramsToInclude?: ProgramsToInclude
 ) => {
-  new Command(packageJson.name).version(packageJson.version);
+  const program = new Command(packageJson.name)
+    .version(packageJson.version)
+    .arguments('[projectDirectory]')
+    .option('-C, --contract', 'Include contract program')
+    .option('-P, --predicate', 'Include predicate program')
+    .option('-S, --script', 'Include script program')
+    .option('--pnpm', 'Use pnpm as the package manager')
+    .option('--npm', 'Use npm as the package manager')
+    .option('--cs', 'Include contract and script programs')
+    .option('--cp', 'Include contract and predicate programs')
+    .option('--ps', 'Include predicate and script programs')
+    .option('--cps', 'Include all programs')
+    .addHelpCommand()
+    .showHelpAfterError(true);
+  program.parse(process.argv);
 
-  const projectPath = explicitProjectPath || (await promptForProjectPath());
+  const projectPath = (explicitProjectPath || program.args[0]) ?? (await promptForProjectPath());
   if (existsSync(projectPath)) {
     throw new Error(
       `A folder already exists at ${projectPath}. Please choose a different project name.`
@@ -106,10 +120,67 @@ export const runScaffoldCli = async (
   if (!projectPath) {
     throw new Error('Please specify a project directory.');
   }
-  const packageManager = explicitPackageManger || (await promptForPackageManager());
 
-  const programsToInclude: ProgramsToInclude =
-    explicitProgramsToInclude || (await promptForProgramsToInclude());
+  const cliPackageManagerChoices = {
+    pnpm: program.opts().pnpm,
+    npm: program.opts().npm,
+  };
+  if (Object.values(cliPackageManagerChoices).filter(Boolean).length > 1) {
+    throw new Error('You can only specify one package manager.');
+  }
+  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
+
+  const packageManager =
+    (explicitPackageManger || cliChosenPackageManager) ?? (await promptForPackageManager());
+
+  // Shortcut flags are --cs, --cp, --ps, --cps
+  const cliShortcutProgramsToInclude = {
+    cs: program.opts().cs,
+    cp: program.opts().cp,
+    ps: program.opts().ps,
+    cps: program.opts().cps,
+  };
+  const hasAnyShortcutProgramsToInclude = Object.values(cliShortcutProgramsToInclude).some(
+    (v) => v
+  );
+  const shortcutProgramsToInclude: ProgramsToInclude = {
+    contract:
+      cliShortcutProgramsToInclude.cs ||
+      cliShortcutProgramsToInclude.cp ||
+      cliShortcutProgramsToInclude.cps,
+    predicate:
+      cliShortcutProgramsToInclude.cp ||
+      cliShortcutProgramsToInclude.ps ||
+      cliShortcutProgramsToInclude.cps,
+    script:
+      cliShortcutProgramsToInclude.cs ||
+      cliShortcutProgramsToInclude.ps ||
+      cliShortcutProgramsToInclude.cps,
+  };
+
+  const cliProgramsToInclude = {
+    contract: program.opts().contract,
+    predicate: program.opts().predicate,
+    script: program.opts().script,
+  };
+  const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
+
+  if (hasAnyShortcutProgramsToInclude && hasAnyCliProgramsToInclude) {
+    throw new Error(
+      'You can specify your choice of Sway programs using either the shortcuts or the individual flags, not both.'
+    );
+  }
+
+  let programsToInclude: ProgramsToInclude;
+  if (explicitProgramsToInclude) {
+    programsToInclude = explicitProgramsToInclude;
+  } else if (hasAnyShortcutProgramsToInclude) {
+    programsToInclude = shortcutProgramsToInclude;
+  } else if (hasAnyCliProgramsToInclude) {
+    programsToInclude = cliProgramsToInclude;
+  } else {
+    programsToInclude = await promptForProgramsToInclude();
+  }
 
   if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
     throw new Error('You must include at least one Sway program.');

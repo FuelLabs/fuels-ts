@@ -6,10 +6,46 @@ You can quickly bootstrap a full-stack Fuel project locally with the following c
 
 ```sh [pnpm]
 pnpm create fuels
+
+# or, if you want to pass in your preferences directly from the command line:
+pnpm create fuels [project-name] [options]
+
+# eg. pnpm create fuels my-fuel-project --pnpm --contract --predicate
+# Note: project-name and all other options are optional
+Options:
+  -V, --version    output the version number
+  -C, --contract   Include contract program
+  -P, --predicate  Include predicate program
+  -S, --script     Include script program
+  --pnpm           Use pnpm as the package manager
+  --npm            Use npm as the package manager
+  --cs             Include contract and script programs
+  --cp             Include contract and predicate programs
+  --ps             Include predicate and script programs
+  --cps            Include all programs
+  -h, --help       display help for command
 ```
 
 ```sh [npm]
 npm create fuels
+
+# or, if you want to pass in your preferences directly from the command line:
+npm create fuels [project-name] [options]
+
+# eg. npm create fuels my-fuel-project --pnpm --contract --predicate
+# Note: project-name and all other options are optional
+Options:
+  -V, --version    output the version number
+  -C, --contract   Include contract program
+  -P, --predicate  Include predicate program
+  -S, --script     Include script program
+  --pnpm           Use pnpm as the package manager
+  --npm            Use npm as the package manager
+  --cs             Include contract and script programs
+  --cp             Include contract and predicate programs
+  --ps             Include predicate and script programs
+  --cps            Include all programs
+  -h, --help       display help for command
 ```
 
 :::
@@ -19,17 +55,11 @@ This will setup a new full-stack Fuel project. To get things running, you'll nee
 ::: code-group
 
 ```sh [pnpm]
-# (Make sure you cd into your new project directory first!)
-pnpm install
-
 # Start a local Fuel node and hot-reload for your Sway smart contracts
 pnpm fuels:dev
 ```
 
 ```sh [npm]
-# (Make sure you cd into your new project directory first!)
-npm install
-
 # Start a local Fuel node and hot-reload for your Sway smart contracts
 npm run fuels:dev
 ```
