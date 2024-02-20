@@ -214,7 +214,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins());
+    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
+      resourcesOwner: this.program.account?.address,
+    });
 
     return txCost;
   }
@@ -406,6 +408,7 @@ export class BaseInvocationScope<TReturn = any> {
     const { gasLimit, gasPrice } = transactionRequest;
 
     if (!gasLimitSpecified) {
+      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasLimit = gasUsed;
     } else if (gasLimit.lt(gasUsed)) {
       throw new FuelError(
@@ -415,6 +418,7 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     if (!gasPriceSpecified) {
+      // eslint-disable-next-line no-param-reassign
       transactionRequest.gasPrice = minGasPrice;
     } else if (gasPrice.lt(minGasPrice)) {
       throw new FuelError(

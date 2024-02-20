@@ -1,5 +1,11 @@
 # create-fuels
 
+## 0.74.0
+
+### Minor Changes
+
+- Add more program options to the `create-fuels` CLI. Users can now get a multiselect choice to choose out of contract, script & predicate, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1691](https://github.com/FuelLabs/fuels-ts/pull/1691))
+
 ## 0.73.0
 
 ## 0.72.0

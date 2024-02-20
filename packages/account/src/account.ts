@@ -8,6 +8,7 @@ import { bn } from '@fuel-ts/math';
 import { getBytesCopy } from 'ethers';
 import type { BytesLike } from 'ethers';
 
+import type { FuelConnector } from './connectors';
 import type {
   TransactionRequestLike,
   CallResult,
@@ -18,10 +19,10 @@ import type {
   Message,
   Resource,
   ExcludeResourcesOption,
-  TransactionResponse,
   Provider,
   ScriptTransactionRequestLike,
   ProviderSendTxParams,
+  TransactionResponse,
 } from './providers';
 import {
   withdrawScript,
@@ -50,15 +51,18 @@ export class Account extends AbstractAccount {
    */
   protected _provider?: Provider;
 
+  protected _connector?: FuelConnector;
+
   /**
    * Creates a new Account instance.
    *
    * @param address - The address of the account.
    * @param provider - A Provider instance  (optional).
    */
-  constructor(address: string | AbstractAddress, provider?: Provider) {
+  constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
+    this._connector = connector;
     this.address = Address.fromDynamicInput(address);
   }
 
@@ -478,6 +482,13 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  async signMessage(message: string): Promise<string> {
+    if (!this._connector) {
+      throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
+    }
+    return this._connector.signMessage(this.address.toString(), message);
+  }
+
   /**
    * Sends a transaction to the network.
    *
@@ -488,6 +499,11 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike,
     options?: Pick<ProviderSendTxParams, 'awaitExecution'>
   ): Promise<TransactionResponse> {
+    if (this._connector) {
+      return this.provider.getTransactionResponse(
+        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike)
+      );
+    }
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(transactionRequest, {
