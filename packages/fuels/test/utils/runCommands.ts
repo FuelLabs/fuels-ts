@@ -89,6 +89,7 @@ export type InitParams = BaseParams & {
 
 export type BuildParams = BaseParams & {
   deploy?: boolean;
+  release?: boolean;
 };
 
 export async function runInit(params: InitParams) {
@@ -121,8 +122,17 @@ export async function runInit(params: InitParams) {
 }
 
 export async function runBuild(params: BuildParams) {
-  const { root, deploy } = params;
-  const flags = [['-p', root], deploy ? ['--deploy'] : []].flat();
+  const { root, deploy, release } = params;
+  const flags = ['-p', root];
+
+  if (deploy) {
+    flags.push('--deploy');
+  }
+
+  if (release) {
+    flags.push('--release');
+  }
+
   return runCommand(Commands.build, flags);
 }
 
