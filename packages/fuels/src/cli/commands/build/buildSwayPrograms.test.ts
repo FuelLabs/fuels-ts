@@ -34,7 +34,7 @@ describe('buildSwayPrograms', () => {
     await buildSwayPrograms(config);
 
     expect(buildSwayProgram).toHaveBeenCalledTimes(1);
-    expect(buildSwayProgram).toHaveBeenCalledWith(config, config.workspace);
+    expect(buildSwayProgram).toHaveBeenCalledWith(config, config.workspace, undefined);
   });
 
   test('building Sway programs using individual configs', async () => {
@@ -43,9 +43,13 @@ describe('buildSwayPrograms', () => {
     await buildSwayPrograms(fuelsConfig);
 
     expect(buildSwayProgram).toHaveBeenCalledTimes(4);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[0]);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[1]);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.scripts[0]);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.predicates[0]);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[0], undefined);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[1], undefined);
+    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.scripts[0], undefined);
+    expect(buildSwayProgram).toHaveBeenCalledWith(
+      fuelsConfig,
+      fuelsConfig.predicates[0],
+      undefined
+    );
   });
 });

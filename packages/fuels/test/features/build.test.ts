@@ -1,6 +1,7 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
 
+import * as buildSwayProgramsMod from '../../src/cli/commands/build/buildSwayPrograms';
 import * as deployMod from '../../src/cli/commands/deploy/index';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
 import {
@@ -30,8 +31,9 @@ describe(
     function mockAll() {
       const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
       const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue([]);
+      const buildSwayPrograms = vi.spyOn(buildSwayProgramsMod, 'buildSwayPrograms');
 
-      return { autoStartFuelCore, killChildProcess, deploy };
+      return { autoStartFuelCore, killChildProcess, deploy, buildSwayPrograms };
     }
 
     it('should run `build` command', async () => {
@@ -70,7 +72,7 @@ describe(
     });
 
     it('should run `build` command with contracts-only', async () => {
-      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+      const { autoStartFuelCore, killChildProcess, buildSwayPrograms, deploy } = mockAll();
 
       await runInit({
         root: paths.root,
@@ -93,10 +95,11 @@ describe(
       expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
       expect(deploy).toHaveBeenCalledTimes(0);
       expect(killChildProcess).toHaveBeenCalledTimes(0);
+      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(undefined); // releaseMode=falsy
     });
 
     it('should run `build` command with `--deploy` flag', async () => {
-      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+      const { autoStartFuelCore, killChildProcess, deploy, buildSwayPrograms } = mockAll();
 
       await runInit({
         root: paths.root,
@@ -109,6 +112,7 @@ describe(
       expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
       expect(deploy).toHaveBeenCalledTimes(1);
       expect(killChildProcess).toHaveBeenCalledTimes(1);
+      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(true); // releaseMode=true
     });
   },
   { timeout: 180000 }
