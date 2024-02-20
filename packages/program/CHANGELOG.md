@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.74.0
+
+### Minor Changes
+
+- restructure Account related packages, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1675](https://github.com/FuelLabs/fuels-ts/pull/1675))
+
+### Patch Changes
+
+- ✨ feat: automatically set defaults for txParams if not specified, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1708](https://github.com/FuelLabs/fuels-ts/pull/1708))
+- remove additional dryrun call, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1731](https://github.com/FuelLabs/fuels-ts/pull/1731))
+- made fundWithFakeUtxos accepts resources owner address, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1750](https://github.com/FuelLabs/fuels-ts/pull/1750))
+
 ## 0.73.0
 
 ## 0.72.0
