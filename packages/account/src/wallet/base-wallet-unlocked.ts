@@ -108,15 +108,15 @@ export class BaseWalletUnlocked extends Account {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: ProviderSendTxParams
+    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+    if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { ...options, estimateTxDependencies: false }
+      { awaitExecution, estimateTxDependencies: false }
     );
   }
 
@@ -128,10 +128,10 @@ export class BaseWalletUnlocked extends Account {
    */
   async simulateTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: EstimateTransactionParams
+    { estimateTxDependencies = true }: EstimateTransactionParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+    if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.call(

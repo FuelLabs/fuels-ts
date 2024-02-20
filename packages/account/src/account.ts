@@ -509,7 +509,7 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: ProviderSendTxParams
+    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
@@ -517,11 +517,11 @@ export class Account extends AbstractAccount {
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+    if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.sendTransaction(transactionRequest, {
-      ...options,
+      awaitExecution,
       estimateTxDependencies: false,
     });
   }
@@ -534,10 +534,10 @@ export class Account extends AbstractAccount {
    */
   async simulateTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: EstimateTransactionParams
+    { estimateTxDependencies = true }: EstimateTransactionParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (options?.estimateTxDependencies === undefined || options.estimateTxDependencies === true) {
+    if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
