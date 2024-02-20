@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import { Account } from '../account';
@@ -24,11 +25,12 @@ const HAS_CONNECTOR_TIMEOUT = 2_000;
 // at minimum.
 const PING_CACHE_TIME = 5_000;
 
+const { warn } = console;
+
 export type FuelConfig = {
   connectors?: Array<FuelConnector>;
   storage?: StorageAbstract | null;
   targetObject?: TargetObject;
-  devMode?: boolean;
 };
 
 export type FuelConnectorSelectOptions = {
@@ -375,15 +377,12 @@ export class Fuel extends FuelConnector {
    * Return a Fuel Provider instance with extends features to work with
    * connectors.
    *
-   * @deprecated Provider is going to be deprecated in the future.
+   * @deprecated getProvider is deprecated and is going to be removed in the future, use getWallet instead.
    */
   async getProvider(providerOrNetwork?: Provider | Network): Promise<Provider> {
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'Get provider is deprecated, use getWallet instead. Provider is going to be removed in the future.'
-      );
-    }
+    warn(
+      'getProvider is deprecated and is going to be removed in the future, use getWallet instead.'
+    );
     return this._getProvider(providerOrNetwork);
   }
 
@@ -407,7 +406,7 @@ export class Fuel extends FuelConnector {
       // If a provider or network was informed but is not valid
       // throw an error
     } else {
-      throw new Error('Provider is not valid.');
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.');
     }
     return provider;
   }
