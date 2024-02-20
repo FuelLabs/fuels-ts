@@ -175,6 +175,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param jsonAbi - The JSON ABI of the predicate.
    * @param configurableConstants - Optional configurable constants for the predicate.
    * @returns An object containing the new predicate bytes and interface.
+   * 
+   * @throws {FuelError} {@link ErrorCode.ABI_MAIN_METHOD_MISSING}
+   * When the ABI doesn't have a 'main()' method.
    */
   private static processPredicateData(
     bytes: BytesLike,

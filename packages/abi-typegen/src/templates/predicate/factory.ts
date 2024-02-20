@@ -9,6 +9,10 @@ import { formatStructs } from '../utils/formatStructs';
 
 import factoryTemplate from './factory.hbs';
 
+/**
+ * @throws {FuelError} {@link ErrorCode.ABI_MAIN_METHOD_MISSING}
+ * When the ABI doesn't have a 'main()' method.
+ */
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { abi } = params;
 
