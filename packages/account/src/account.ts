@@ -71,7 +71,9 @@ export class Account extends AbstractAccount {
    *
    * @returns A Provider instance.
    *
-   * @throws `FuelError` if the provider is not set.
+   * @throws {FuelError} {@link ErrorCodeMISSING_PROVIDER}
+   * The provider has not been set for the account.
+   * Use the `connect` method to set the provider.
    */
   get provider(): Provider {
     if (!this._provider) {

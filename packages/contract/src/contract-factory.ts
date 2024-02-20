@@ -87,6 +87,10 @@ export default class ContractFactory {
    *
    * @param deployContractOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
+   * 
+   * @throws {FuelError} {@link ErrorCode.MISSING_PROVIDER}
+   * When the provider has not been set for the contract.
+   * Use the `connect` method to set the provider.
    */
   createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
