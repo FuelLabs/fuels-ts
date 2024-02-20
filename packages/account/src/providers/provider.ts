@@ -794,9 +794,7 @@ export default class Provider {
     const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
-    /**
-     * Fund with fake UTXOs to avoid not enough funds error
-     */
+     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
