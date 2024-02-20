@@ -118,3 +118,25 @@ jobs:
           git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
           git push
           git restore apps/docs/.gitignore
+
+      # Upload assets to S3
+      - uses: unfor19/install-aws-cli-action@v1.0.3
+        if: steps.changesets.outputs.published != 'true'
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+          rootdir: ""
+          workdir: ""
+      - uses: aws-actions/configure-aws-credentials@v1
+        if: steps.changesets.outputs.published != 'true'
+        with:
+          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
+          aws-region: us-east-1
+      - name: Upload assets to s3
+        if: steps.changesets.outputs.published != 'true'
+        run: |
+          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
+        env:
+          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}

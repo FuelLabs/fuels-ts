@@ -10,3 +10,5 @@ export * from './transaction-request';
 export * from './transaction-response';
 export * from './transaction-summary';
 export * from './utils';
+export * from './assets';
+export * from './chains';
