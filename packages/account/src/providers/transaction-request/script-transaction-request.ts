@@ -2,13 +2,12 @@ import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
+import type { AbstractScriptRequest, ContractIdLike, BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
-import type { BytesLike } from '@fuel-ts/interfaces';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { ChainInfo } from '../provider';

@@ -1,6 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
-import { hexlify } from '@fuel-ts/utils';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import { hexlify } from '@fuel-ts/utils';
 
 import { MemoryCache } from './memory-cache';
 

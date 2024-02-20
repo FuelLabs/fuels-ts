@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { hexlify } from '@fuel-ts/utils';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import { hexlify } from '@fuel-ts/utils';
 
 type Cache = {
   [key: string]: {

@@ -1,9 +1,9 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, type BN } from '@fuel-ts/math';
 import type { TransactionCreate } from '@fuel-ts/transactions';
 import { TransactionType, OutputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
-import type { BytesLike } from '@fuel-ts/interfaces';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import { calculateMetadataGasForTxCreate } from '../utils/gas';
