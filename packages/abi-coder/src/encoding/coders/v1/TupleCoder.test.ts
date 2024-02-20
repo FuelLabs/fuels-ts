@@ -16,9 +16,7 @@ describe('Tuple Coder', () => {
   const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
 
   it('should encode a tuple containing a boolean and u64', () => {
-    const expected = new Uint8Array([
-      1, 255, 255, 255, 255, 255, 255, 255, 255,
-    ]);
+    const expected = new Uint8Array([1, 255, 255, 255, 255, 255, 255, 255, 255]);
     const actual = coder.encode([true, U64_MAX]);
 
     expect(actual).toStrictEqual(expected);

@@ -5,18 +5,18 @@ import type { BytesLike } from 'ethers';
 import { sha256, getBytesCopy } from 'ethers';
 
 import { AbiCoder } from './AbiCoder';
+import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import { ByteCoder } from './encoding/coders/v0/ByteCoder';
 import { TupleCoder } from './encoding/coders/v0/TupleCoder';
 import { VecCoder } from './encoding/coders/v0/VecCoder';
-import { OPTION_CODER_TYPE } from './utils/constants';
 import type {
   JsonAbi,
   JsonAbiArgument,
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
-import { ResolvedAbiType } from './ResolvedAbiType';
+import { OPTION_CODER_TYPE } from './utils/constants';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
 import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utils/utilities';
 

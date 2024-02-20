@@ -11,7 +11,7 @@ export { TupleCoder } from './encoding/coders/v0/TupleCoder';
 export { U64Coder } from './encoding/coders/v0/U64Coder';
 export { VecCoder } from './encoding/coders/v0/VecCoder';
 export type { FunctionFragment } from './FunctionFragment';
-export { Interface } from './Interface';
+export { Interface } from './interface';
 export { JsonAbi } from './types/JsonAbi';
 export {
   SCRIPT_FIXED_SIZE,
