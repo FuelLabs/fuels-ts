@@ -189,7 +189,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       if (abiInterface.functions.main === undefined) {
         throw new FuelError(
           ErrorCode.ABI_MAIN_METHOD_MISSING,
-          'Cannot use ABI without "main" function.'
+          "ABI doesn't have a 'main()' method."
         );
       }
     }
