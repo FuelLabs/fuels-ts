@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.74.0
+
+### Minor Changes
+
+- remove provider from WalletManager specific types, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1723](https://github.com/FuelLabs/fuels-ts/pull/1723))
+- restructure Account related packages, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1675](https://github.com/FuelLabs/fuels-ts/pull/1675))
+
+### Patch Changes
+
+- remove additional dryrun call, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1731](https://github.com/FuelLabs/fuels-ts/pull/1731))
+- made fundWithFakeUtxos accepts resources owner address, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1750](https://github.com/FuelLabs/fuels-ts/pull/1750))
+- implement wallet connectors, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1699](https://github.com/FuelLabs/fuels-ts/pull/1699))
+- Upgrading `fuel-core` to `0.22.1`, by [@arboleya](https://github.com/arboleya) (See [#1756](https://github.com/FuelLabs/fuels-ts/pull/1756))
+
 ## 0.73.0
 
 ## 0.72.0
