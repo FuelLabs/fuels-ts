@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.74.0
+
+### Patch Changes
+
+- Resolve BN transpilation issue by restructuring constructor, by [@danielbate](https://github.com/danielbate) (See [#1737](https://github.com/FuelLabs/fuels-ts/pull/1737))
+
 ## 0.73.0
 
 ## 0.72.0
