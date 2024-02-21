@@ -18,7 +18,7 @@ export function withConfig<CType extends Commands>(
   command: CType,
   fn: (
     config: FuelsConfig,
-    options?: Command
+    options: Command
   ) => Promise<Extract<CommandEvent, { type: CType }>['data']>
 ) {
   return async () => {
