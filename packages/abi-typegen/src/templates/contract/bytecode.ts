@@ -1,4 +1,4 @@
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { renderHbsTemplate } from '../renderHbsTemplate';
 

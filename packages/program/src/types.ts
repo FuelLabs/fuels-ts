@@ -1,8 +1,7 @@
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
-import type { AbstractProgram, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import type { BytesLike } from 'ethers';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
 

@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
-import { concat } from '@fuel-ts/utils';
-import type { BytesLike } from 'ethers';
-import { getBytesCopy, sha256 } from 'ethers';
+import { concat, arrayify } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 
 import { ByteArrayCoder } from './byte-array';
 import type { TxPointer } from './tx-pointer';
@@ -263,13 +263,13 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(getBytesCopy(value.data || '0x'));
+    parts.push(arrayify(value.data || '0x'));
 
     return sha256(concat(parts));
   }
 
   static encodeData(messageData?: BytesLike): Uint8Array {
-    const bytes = getBytesCopy(messageData || '0x');
+    const bytes = arrayify(messageData || '0x');
     const dataLength = bytes.length;
     return new ByteArrayCoder(dataLength).encode(bytes);
   }
@@ -295,11 +295,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   }
 
   static decodeData(messageData: BytesLike): Uint8Array {
-    const bytes = getBytesCopy(messageData);
+    const bytes = arrayify(messageData);
     const dataLength = bytes.length;
     const [data] = new ByteArrayCoder(dataLength).decode(bytes, 0);
 
-    return getBytesCopy(data);
+    return arrayify(data);
   }
 
   decode(data: Uint8Array, offset: number): [InputMessage, number] {
