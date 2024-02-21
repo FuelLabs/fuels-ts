@@ -209,4 +209,19 @@ describe('CallTestContract', () => {
     // tx execution context
     await expectContractCall();
   });
+
+  it('Calling a simple contract function does only one dry run', async () => {
+    const contract = await setupContract();
+    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+    await contract.functions.foobar_no_params().call();
+    expect(dryRunSpy).toHaveBeenCalledOnce();
+  });
+
+  it('Simulating a simple contract function does two dry runs', async () => {
+    const contract = await setupContract();
+    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+
+    await contract.functions.foobar_no_params().simulate();
+    expect(dryRunSpy).toHaveBeenCalledTimes(2);
+  });
 });

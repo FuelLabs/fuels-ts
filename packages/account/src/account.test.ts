@@ -303,7 +303,7 @@ describe('Account', () => {
 
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve({ receipts: [] }));
 
     const sendTransaction = vi
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
@@ -341,7 +341,7 @@ describe('Account', () => {
 
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve({ receipts: [] }));
 
     const simulate = vi
       .spyOn(providersMod.Provider.prototype, 'simulate')
