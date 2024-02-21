@@ -1,3 +1,4 @@
+import { toBigInt } from 'ethers';
 import { bn } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -41,5 +42,32 @@ describe(__filename, () => {
 
     expect(value.toNumber()).toEqual(originalNumber);
     // #endregion numbers-docs-3
+  });
+
+  test('should succcesfully pass in and read a number to/from a contract - small numbers', async () => {
+    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+
+    // #region numbers-docs-4
+    const originalNumber = 20;
+
+    const { value } = await contract.functions.echo_u8(originalNumber).call();
+
+    expect(value).toEqual(originalNumber);
+    // #endregion numbers-docs-4
+  });
+
+  test('ethers -> fuels BigNum conversion', () => {
+    // #region numbers-docs-5
+    // #context import { toBigInt } from 'ethers';
+    // #context import { bn } from 'fuels';
+
+    const originalNumber = 20;
+
+    const ethersBigNum = toBigInt(originalNumber);
+
+    const fuelsBigNum = bn(ethersBigNum.toString());
+
+    expect(fuelsBigNum.toNumber()).toEqual(originalNumber);
+    // #endregion numbers-docs-5
   });
 });
