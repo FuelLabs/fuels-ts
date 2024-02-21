@@ -1,5 +1,6 @@
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
+import { BuildMode } from '../../config/forcUtils';
 
 import * as buildSwayProgramMod from './buildSwayProgram';
 import { buildSwayPrograms } from './buildSwayPrograms';
@@ -31,25 +32,41 @@ describe('buildSwayPrograms', () => {
       workspace: '/any/workspace/path',
     };
 
-    await buildSwayPrograms(config);
+    await buildSwayPrograms(config, BuildMode.DEBUG);
 
     expect(buildSwayProgram).toHaveBeenCalledTimes(1);
-    expect(buildSwayProgram).toHaveBeenCalledWith(config, config.workspace, undefined);
+    expect(buildSwayProgram).toHaveBeenCalledWith(config, config.workspace, BuildMode.DEBUG);
   });
 
   test('building Sway programs using individual configs', async () => {
     const { buildSwayProgram } = mockBuildSwayProgram();
 
-    await buildSwayPrograms(fuelsConfig);
+    await buildSwayPrograms(fuelsConfig, BuildMode.RELEASE);
 
     expect(buildSwayProgram).toHaveBeenCalledTimes(4);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[0], undefined);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[1], undefined);
-    expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.scripts[0], undefined);
+
+    expect(buildSwayProgram).toHaveBeenCalledWith(
+      fuelsConfig,
+      fuelsConfig.contracts[0],
+      BuildMode.RELEASE
+    );
+
+    expect(buildSwayProgram).toHaveBeenCalledWith(
+      fuelsConfig,
+      fuelsConfig.contracts[1],
+      BuildMode.RELEASE
+    );
+
+    expect(buildSwayProgram).toHaveBeenCalledWith(
+      fuelsConfig,
+      fuelsConfig.scripts[0],
+      BuildMode.RELEASE
+    );
+
     expect(buildSwayProgram).toHaveBeenCalledWith(
       fuelsConfig,
       fuelsConfig.predicates[0],
-      undefined
+      BuildMode.RELEASE
     );
   });
 });

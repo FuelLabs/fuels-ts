@@ -1,5 +1,6 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { FSWatcher } from 'chokidar';
+import { Command } from 'commander';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockStartFuelCore } from '../../../../test/utils/mockAutoStartFuelCore';
@@ -11,6 +12,7 @@ import * as deployMod from '../deploy';
 import * as withConfigMod from '../withConfig';
 
 // import * as indexMod from './index';
+import type { DevState } from '.';
 import {
   closeAllFileHandlers,
   configFileChanged,
@@ -59,7 +61,10 @@ describe('dev', () => {
     const { log } = mockLogger();
     const { build, deploy } = mockAll();
 
-    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('event', 'some/path');
+    const state: DevState = { config: fuelsConfig, watchHandlers: [] };
+    const program = new Command();
+
+    await workspaceFileChanged(state, program)('event', 'some/path');
 
     expect(log).toHaveBeenCalledTimes(1);
     expect(build).toHaveBeenCalledTimes(1);
@@ -75,8 +80,9 @@ describe('dev', () => {
     });
 
     const configCopy: FuelsConfig = { ...fuelsConfig, autoStartFuelCore: false };
+    const program = new Command();
 
-    const { result, error: safeError } = await safeExec(() => dev(configCopy));
+    const { result, error: safeError } = await safeExec(() => dev(configCopy, program));
 
     expect(result).not.toBeTruthy();
     expect(safeError).toEqual(err);
@@ -112,7 +118,10 @@ describe('dev', () => {
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
+    const state: DevState = { config, fuelCore, watchHandlers };
+    const program = new Command();
+
+    await configFileChanged(state, program)('event', 'some/path');
 
     // configFileChanged() internals
     expect(log).toHaveBeenCalledTimes(1);
@@ -148,7 +157,10 @@ describe('dev', () => {
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
+    const state: DevState = { config, fuelCore, watchHandlers };
+    const program = new Command();
+
+    await configFileChanged(state, program)('event', 'some/path');
 
     // configFileChanged() internals
     expect(log).toHaveBeenCalledTimes(1);

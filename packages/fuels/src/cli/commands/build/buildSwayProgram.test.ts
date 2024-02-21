@@ -3,6 +3,7 @@ import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
+import { BuildMode } from '../../config/forcUtils';
 import { configureLogging } from '../../utils/logger';
 
 import { buildSwayProgram } from './buildSwayProgram';
@@ -58,7 +59,7 @@ describe('buildSwayPrograms', () => {
     vi.spyOn(process.stdout, 'write').mockReturnValue(true);
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
 
-    await buildSwayProgram(fuelsConfig, '/any/workspace/path');
+    await buildSwayProgram(fuelsConfig, '/any/workspace/path', BuildMode.RELEASE);
 
     expect(spawn).toHaveBeenCalledTimes(1);
     expect(spawnMocks.stderr.pipe).toHaveBeenCalledTimes(1);
@@ -72,7 +73,7 @@ describe('buildSwayPrograms', () => {
     vi.spyOn(process.stdout, 'write').mockReturnValue(true);
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
 
-    await buildSwayProgram(fuelsConfig, '/any/workspace/path');
+    await buildSwayProgram(fuelsConfig, '/any/workspace/path', BuildMode.RELEASE);
 
     expect(spawn).toHaveBeenCalledTimes(1);
     expect(spawnMocks.stderr.pipe).toHaveBeenCalledTimes(1);
