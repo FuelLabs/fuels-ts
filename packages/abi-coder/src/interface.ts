@@ -35,8 +35,13 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   /**
-   * Returns function fragment for a dynamic input.
+   * Attempts to find a function fragment by name, signature or selector.
+   * 
    * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
+   * @returns the function fragment
+   * 
+   * @throws {FuelError} {@link ErrorCode.FUNCTION_NOT_FOUND}
+   * When the function with the given name, signature or selector is not found in the ABI.
    */
   getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
     const fn = Object.values<FunctionFragment>(this.functions).find(
