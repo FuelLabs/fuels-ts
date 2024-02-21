@@ -1,7 +1,8 @@
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import type { Output } from '@fuel-ts/transactions';
+import type { InputContract, Output, OutputChange } from '@fuel-ts/transactions';
 
 import type {
   TransactionResultReceipt,
@@ -326,6 +327,48 @@ export function getContractCallOperations({
   }, [] as Operation[]);
 
   return contractCallOperations;
+}
+
+/** @hidden */
+function extractTransferOperationFromReceipt(
+  receipt: TransactionResultTransferReceipt | TransactionResultTransferOutReceipt,
+  contractInputs: InputContract[],
+  changeOutputs: OutputChange[]
+) {
+  const { to: toAddress, assetId, amount } = receipt;
+  let { from: fromAddress } = receipt;
+
+  const toType = contractInputs.some((input) => input.contractID === toAddress)
+    ? AddressType.contract
+    : AddressType.account;
+
+  if (ZeroBytes32 === fromAddress) {
+    const change = changeOutputs.find((output) => output.assetId === assetId);
+
+    fromAddress = change?.to || fromAddress;
+  }
+
+  const fromType = contractInputs.some((input) => input.contractID === fromAddress)
+    ? AddressType.contract
+    : AddressType.account;
+
+  return {
+    name: OperationName.transfer,
+    from: {
+      type: fromType,
+      address: fromAddress,
+    },
+    to: {
+      type: toType,
+      address: toAddress,
+    },
+    assetsSent: [
+      {
+        assetId: assetId.toString(),
+        amount,
+      },
+    ],
+  };
 }
 
 /** @hidden */
