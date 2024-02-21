@@ -77,6 +77,16 @@ export abstract class AbiCoder {
     ];
   }
 
+  /**
+   * Initialises the concrete coder for the given ABI type.
+   * 
+   * @param resolvedAbiType - the resolved ABI type
+   * @param options - the encoding options
+   * @returns a concrete coder
+   * 
+   * @throws {FuelError} {@link ErrorCode.CODER_NOT_FOUND}
+   * When we are unable to determine the coder for the given ABI type.
+   */
   private static getCoderImpl(
     resolvedAbiType: ResolvedAbiType,
     options: EncodingOptions = {
