@@ -40,6 +40,7 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/utils": "workspace:^",
     "@fuel-ts/versions": "workspace:*",
     "bech32": "^2.0.0",
     "ethers": "^6.7.1"

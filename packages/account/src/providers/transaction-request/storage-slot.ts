@@ -1,6 +1,6 @@
+import type { BytesLike } from '@fuel-ts/interfaces';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 export type TransactionRequestStorageSlot =
   | {
@@ -14,7 +14,7 @@ export type TransactionRequestStorageSlot =
 // Make sure all values have 32 bytes
 const getStorageValue = (value: BytesLike): Uint8Array => {
   const v = new Uint8Array(32);
-  v.set(getBytesCopy(value));
+  v.set(arrayify(value));
   return v;
 };
 

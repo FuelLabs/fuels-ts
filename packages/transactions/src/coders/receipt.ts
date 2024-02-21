@@ -2,8 +2,8 @@
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
-import { concat } from '@fuel-ts/utils';
-import { getBytesCopy, sha256 } from 'ethers';
+import { arrayify, concat } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 
 import { ByteArrayCoder } from './byte-array';
 
@@ -697,7 +697,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(getBytesCopy(value.data || '0x'));
+    parts.push(arrayify(value.data || '0x'));
 
     return sha256(concat(parts));
   }
@@ -733,7 +733,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
     [decoded, o] = new ByteArrayCoder(len).decode(data, o);
-    const messageData = getBytesCopy(decoded);
+    const messageData = arrayify(decoded);
 
     const receiptMessageOut: ReceiptMessageOut = {
       type: ReceiptType.MessageOut,
@@ -768,8 +768,8 @@ export type ReceiptMint = {
 };
 
 export const getAssetId = (contractId: string, subId: string): string => {
-  const contractIdBytes = getBytesCopy(contractId);
-  const subIdBytes = getBytesCopy(subId);
+  const contractIdBytes = arrayify(contractId);
+  const subIdBytes = arrayify(subId);
 
   return sha256(concat([contractIdBytes, subIdBytes]));
 };

@@ -4,9 +4,10 @@ import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractScript } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
-import { getBytesCopy, type BytesLike } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
 
@@ -68,7 +69,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
    */
   constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
     super();
-    this.bytes = getBytesCopy(bytecode);
+    this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);
 
     this.provider = account.provider;
