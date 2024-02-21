@@ -68,6 +68,10 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
    *
    * @throws {FuelError} {@link ErrorCode.DUPLICATED_POLICY}
    * When there are policies with the same type.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_POLICY_TYPE}
+   * @see {@link PolicyType} for valid policy types.
+   * When the policy type is invalid.
    */
   encode(policies: Policy[]): Uint8Array {
     assertNoDuplicatePolicies(policies);
