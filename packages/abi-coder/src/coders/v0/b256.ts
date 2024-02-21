@@ -15,7 +15,7 @@ export class B256Coder extends Coder<string, string> {
     try {
       encodedValue = getBytesCopy(value);
     } catch (error) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `The value "${value}" is not a valid "${this.type}" value.`);
     }
     if (encodedValue.length !== this.encodedLength) {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);

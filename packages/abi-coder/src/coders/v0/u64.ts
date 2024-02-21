@@ -16,7 +16,7 @@ export class U64Coder extends Coder<BNInput, BN> {
     try {
       bytes = toBytes(value, WORD_SIZE);
     } catch (error) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `The value "${value}" is not a valid "${this.type}" value.`);
     }
 
     return bytes;
