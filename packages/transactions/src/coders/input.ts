@@ -319,9 +319,9 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     [decoded, o] = new U64Coder().decode(data, o);
     const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
-    const predicateLength = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const dataLength = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
