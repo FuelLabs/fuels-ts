@@ -56,7 +56,8 @@ npx fuels help build
 
 ```console
 Options:
-  -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
+  -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts")
+  -r, --release      Build programs in release mode (otherwise, will default to `debug` mode)
   -d, --deploy       Deploy contracts after build (auto-starts a `fuel-core` node if needed)
   -h, --help         Display help
 ```
@@ -76,8 +77,9 @@ npx fuels build --deploy
 
 Using the `--deploy` flag will additionally:
 
+1. Always compile contracts in `--release` mode
 1. Auto-start a short-lived `fuel-core` node if _needed_ ([docs](./config-file.md#autostartfuelcore))
-2. Run `deploy` on that node
+1. Run `deploy` on that node
 
 > _This is useful when working with contracts because a contract's ID is generated only on deployment._
 
