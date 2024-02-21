@@ -125,7 +125,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       () => {
         throw new FuelError(
           ErrorCode.CONFIGURABLE_NOT_FOUND,
-          `A configurable with the '${name}' was not found in the ABI.`
+          `A configurable with the "${name}" was not found in the ABI.`
         );
       }
     );
