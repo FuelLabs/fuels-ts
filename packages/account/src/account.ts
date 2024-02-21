@@ -71,7 +71,7 @@ export class Account extends AbstractAccount {
    *
    * @returns A Provider instance.
    *
-   * @throws {FuelError} {@link ErrorCodeMISSING_PROVIDER}
+   * @throws {FuelError} {@link ErrorCode.MISSING_PROVIDER}
    * The provider has not been set for the account.
    * Use the `connect` method to set the provider.
    */
