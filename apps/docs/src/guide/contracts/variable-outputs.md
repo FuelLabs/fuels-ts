@@ -9,14 +9,14 @@ You may need to send funds to the transaction output in certain scenarios. Sway 
 Here's an example of a contract function that utilizes the `transfer_to_address` method:
 
 ```rust:line-numbers
-    fn transfer_coins_to_output(coins: u64, asset_id: ContractId, recipient: Address) {
+    fn transfer_to_address(coins: u64, asset_id: ContractId, recipient: Address) {
         transfer_to_address(coins, asset_id, recipient);
     }
 ```
 
-## Using the SDK to Call the `transfer_coins_to_output` Function
+## Using the SDK to Call the `transfer_to_address` Function
 
-With the SDK, you can call `transfer_coins_to_output` by chaining the `txParams` and adding the property `variableOutputs: amount` to your contract call. Like this:
+With the SDK, you can call `transfer_to_address` by chaining the `txParams` and adding the property `variableOutputs: amount` to your contract call. Like this:
 
 <<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
 
