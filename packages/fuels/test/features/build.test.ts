@@ -3,6 +3,7 @@ import { join } from 'path';
 
 import * as buildSwayProgramsMod from '../../src/cli/commands/build/buildSwayPrograms';
 import * as deployMod from '../../src/cli/commands/deploy/index';
+import { BuildMode } from '../../src/cli/config/forcUtils';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
 import {
   bootstrapProject,
@@ -95,7 +96,7 @@ describe(
       expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
       expect(deploy).toHaveBeenCalledTimes(0);
       expect(killChildProcess).toHaveBeenCalledTimes(0);
-      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(undefined); // releaseMode=falsy
+      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(BuildMode.DEBUG);
     });
 
     it('should run `build` command with `--release` flag', async () => {
@@ -109,7 +110,7 @@ describe(
 
       await runBuild({ root: paths.root, release: true });
 
-      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(true); // releaseMode=true
+      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(BuildMode.RELEASE);
     });
 
     it('should run `build` command with `--deploy` flag', async () => {
@@ -126,7 +127,7 @@ describe(
       expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
       expect(deploy).toHaveBeenCalledTimes(1);
       expect(killChildProcess).toHaveBeenCalledTimes(1);
-      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(true); // releaseMode=true
+      expect(buildSwayPrograms.mock.calls[0][1]).toEqual(BuildMode.RELEASE);
     });
   },
   { timeout: 180000 }
