@@ -1,10 +1,16 @@
-import { hashMessage, hash, uint64ToBytesBE } from './hasher';
+import { hashMessage, hash, uint64ToBytesBE, sha256 } from './hasher';
 
 /**
  * @group node
  * @group browser
  */
 describe('Hasher', () => {
+  it('Hash "hello world"', () => {
+    expect(sha256('hello world')).toEqual(
+      '0xb94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9'
+    );
+  });
+
   it('Hash message', () => {
     const message = 'my message';
     const hashedMessage = '0xea38e30f75767d7e6c21eba85b14016646a3b60ade426ca966dac940a5db1bab';
