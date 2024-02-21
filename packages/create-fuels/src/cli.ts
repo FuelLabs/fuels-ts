@@ -63,8 +63,8 @@ async function promptForProgramsToInclude() {
     message: 'Which Sway programs do you want?',
     choices: [
       { title: 'Contract', value: 'contract', selected: true },
-      { title: 'Predicate', value: 'predicate' },
-      { title: 'Script', value: 'script' },
+      { title: 'Predicate', value: 'predicate', selected: true },
+      { title: 'Script', value: 'script', selected: true },
     ],
     instructions: false,
   });
@@ -97,15 +97,11 @@ export const runScaffoldCli = async (
   const program = new Command(packageJson.name)
     .version(packageJson.version)
     .arguments('[projectDirectory]')
-    .option('-C, --contract', 'Include contract program')
-    .option('-P, --predicate', 'Include predicate program')
-    .option('-S, --script', 'Include script program')
+    .option('-c, --contract', 'Include contract program')
+    .option('-p, --predicate', 'Include predicate program')
+    .option('-s, --script', 'Include script program')
     .option('--pnpm', 'Use pnpm as the package manager')
     .option('--npm', 'Use npm as the package manager')
-    .option('--cs', 'Include contract and script programs')
-    .option('--cp', 'Include contract and predicate programs')
-    .option('--ps', 'Include predicate and script programs')
-    .option('--cps', 'Include all programs')
     .addHelpCommand()
     .showHelpAfterError(true);
   program.parse(process.argv);
@@ -133,31 +129,6 @@ export const runScaffoldCli = async (
   const packageManager =
     (explicitPackageManger || cliChosenPackageManager) ?? (await promptForPackageManager());
 
-  // Shortcut flags are --cs, --cp, --ps, --cps
-  const cliShortcutProgramsToInclude = {
-    cs: program.opts().cs,
-    cp: program.opts().cp,
-    ps: program.opts().ps,
-    cps: program.opts().cps,
-  };
-  const hasAnyShortcutProgramsToInclude = Object.values(cliShortcutProgramsToInclude).some(
-    (v) => v
-  );
-  const shortcutProgramsToInclude: ProgramsToInclude = {
-    contract:
-      cliShortcutProgramsToInclude.cs ||
-      cliShortcutProgramsToInclude.cp ||
-      cliShortcutProgramsToInclude.cps,
-    predicate:
-      cliShortcutProgramsToInclude.cp ||
-      cliShortcutProgramsToInclude.ps ||
-      cliShortcutProgramsToInclude.cps,
-    script:
-      cliShortcutProgramsToInclude.cs ||
-      cliShortcutProgramsToInclude.ps ||
-      cliShortcutProgramsToInclude.cps,
-  };
-
   const cliProgramsToInclude = {
     contract: program.opts().contract,
     predicate: program.opts().predicate,
@@ -165,17 +136,9 @@ export const runScaffoldCli = async (
   };
   const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
 
-  if (hasAnyShortcutProgramsToInclude && hasAnyCliProgramsToInclude) {
-    throw new Error(
-      'You can specify your choice of Sway programs using either the shortcuts or the individual flags, not both.'
-    );
-  }
-
   let programsToInclude: ProgramsToInclude;
   if (explicitProgramsToInclude) {
     programsToInclude = explicitProgramsToInclude;
-  } else if (hasAnyShortcutProgramsToInclude) {
-    programsToInclude = shortcutProgramsToInclude;
   } else if (hasAnyCliProgramsToInclude) {
     programsToInclude = cliProgramsToInclude;
   } else {

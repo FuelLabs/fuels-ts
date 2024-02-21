@@ -14,9 +14,9 @@ pnpm create fuels [project-name] [options]
 # Note: project-name and all other options are optional
 Options:
   -V, --version    output the version number
-  -C, --contract   Include contract program
-  -P, --predicate  Include predicate program
-  -S, --script     Include script program
+  -c, --contract   Include contract program
+  -p, --predicate  Include predicate program
+  -s, --script     Include script program
   --pnpm           Use pnpm as the package manager
   --npm            Use npm as the package manager
   --cs             Include contract and script programs
@@ -36,9 +36,9 @@ npm create fuels [project-name] [options]
 # Note: project-name and all other options are optional
 Options:
   -V, --version    output the version number
-  -C, --contract   Include contract program
-  -P, --predicate  Include predicate program
-  -S, --script     Include script program
+  -c, --contract   Include contract program
+  -p, --predicate  Include predicate program
+  -s, --script     Include script program
   --pnpm           Use pnpm as the package manager
   --npm            Use npm as the package manager
   --cs             Include contract and script programs
