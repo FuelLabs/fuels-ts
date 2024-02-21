@@ -12,7 +12,7 @@ import {
   OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { concat, arrayify, hexlify } from '@fuel-ts/utils';
+import { concat, hexlify } from '@fuel-ts/utils';
 
 import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';

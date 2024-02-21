@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -12,7 +12,6 @@ import {
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
