@@ -13,17 +13,14 @@ pnpm create fuels [project-name] [options]
 # eg. pnpm create fuels my-fuel-project --pnpm --contract --predicate
 # Note: project-name and all other options are optional
 Options:
-  -V, --version    output the version number
-  -c, --contract   Include contract program
-  -p, --predicate  Include predicate program
-  -s, --script     Include script program
-  --pnpm           Use pnpm as the package manager
-  --npm            Use npm as the package manager
-  -cs             Include contract and script programs
-  -cp             Include contract and predicate programs
-  -ps             Include predicate and script programs
-  -cps            Include all programs
-  -h, --help       display help for command
+  -V, --version         output the version number
+  -c, --contract        Include contract program
+  -p, --predicate       Include predicate program
+  -s, --script          Include script program
+  --pnpm                Use pnpm as the package manager
+  --npm                 Use npm as the package manager
+  -cs, -cp, -sp, -cps   Shorthand to include combination of contract, script and predicate programs
+  -h, --help            Display help for command
 ```
 
 ```sh [npm]
@@ -35,17 +32,14 @@ npm create fuels [project-name] [options]
 # eg. npm create fuels my-fuel-project --pnpm --contract --predicate
 # Note: project-name and all other options are optional
 Options:
-  -V, --version    output the version number
-  -c, --contract   Include contract program
-  -p, --predicate  Include predicate program
-  -s, --script     Include script program
-  --pnpm           Use pnpm as the package manager
-  --npm            Use npm as the package manager
-  -cs             Include contract and script programs
-  -cp             Include contract and predicate programs
-  -ps             Include predicate and script programs
-  -cps            Include all programs
-  -h, --help       display help for command
+  -V, --version         output the version number
+  -c, --contract        Include contract program
+  -p, --predicate       Include predicate program
+  -s, --script          Include script program
+  --pnpm                Use pnpm as the package manager
+  --npm                 Use npm as the package manager
+  -cs, -cp, -sp, -cps   Shorthand to include combination of contract, script and predicate programs
+  -h, --help            Display help for command
 ```
 
 :::
