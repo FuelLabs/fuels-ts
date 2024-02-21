@@ -70,12 +70,12 @@ export const configureCli = () => {
     .description('Build Sway programs and generate Typescript for them')
     .addOption(pathOption)
     .option(
-      '-d, --deploy',
-      'Deploy contracts after build (auto-starts a `fuel-core` node if needed)'
-    )
-    .option(
       '-r, --release',
       'Build programs in release mode (otherwise, will default to `debug` mode)'
+    )
+    .option(
+      '-d, --deploy',
+      'Deploy contracts after build (auto-starts a `fuel-core` node if needed)'
     )
     .action(withConfig(command, Commands.build, build));
 
