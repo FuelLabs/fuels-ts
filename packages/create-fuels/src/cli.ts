@@ -88,12 +88,7 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   writeFileSync(envFilePath, newFileContents);
 }
 
-export const runScaffoldCli = async (
-  explicitProjectPath?: string,
-  explicitPackageManger?: string,
-  shouldInstallDeps = true,
-  explicitProgramsToInclude?: ProgramsToInclude
-) => {
+export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
     .arguments('[projectDirectory]')
@@ -104,6 +99,16 @@ export const runScaffoldCli = async (
     .option('--npm', 'Use npm as the package manager')
     .addHelpCommand()
     .showHelpAfterError(true);
+  return program;
+};
+
+export const runScaffoldCli = async (
+  explicitProjectPath?: string,
+  explicitPackageManger?: string,
+  shouldInstallDeps = true,
+  explicitProgramsToInclude?: ProgramsToInclude
+) => {
+  const program = setupProgram();
   program.parse(process.argv);
 
   const projectPath = (explicitProjectPath || program.args[0]) ?? (await promptForProjectPath());
