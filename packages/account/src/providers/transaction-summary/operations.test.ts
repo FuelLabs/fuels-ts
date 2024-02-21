@@ -299,15 +299,14 @@ describe('operations', () => {
     it('should getOperations return contract call and contract transfer operations', () => {
       const expected: Operation[] = [
         {
-          name: OperationName.contractCall,
-          calls: [],
+          name: OperationName.transfer,
           from: {
-            type: AddressType.account,
-            address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-          },
-          to: {
             type: AddressType.contract,
             address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+          },
+          to: {
+            type: AddressType.account,
+            address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
           },
           assetsSent: [
             {
@@ -317,14 +316,15 @@ describe('operations', () => {
           ],
         },
         {
-          name: OperationName.transfer,
+          name: OperationName.contractCall,
+          calls: [],
           from: {
-            type: AddressType.contract,
-            address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-          },
-          to: {
             type: AddressType.account,
             address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          },
+          to: {
+            type: AddressType.contract,
+            address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
           },
           assetsSent: [
             {
@@ -398,8 +398,9 @@ describe('operations', () => {
         receipts: receiptsCallNoAmount,
         maxInputs: bn(255),
       });
+
       expect(operations.length).toEqual(2);
-      expect(operations[0]).toStrictEqual(operationsCallNoAmount); // contract call
+      expect(operations[1]).toStrictEqual(operationsCallNoAmount); // contract call
     });
 
     it('should getOperations return transfer operations from coin input', () => {
@@ -434,6 +435,8 @@ describe('operations', () => {
     });
 
     it('should getOperations return transfer operations from message input', () => {
+      const sender = '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b';
+
       const expected: Operation = {
         assetsSent: [
           {
@@ -442,7 +445,7 @@ describe('operations', () => {
           },
         ],
         from: {
-          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
+          address: sender,
           type: 1,
         },
         name: OperationName.transfer,
@@ -455,7 +458,7 @@ describe('operations', () => {
       const operations = getOperations({
         transactionType: TransactionType.Script,
         inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
-        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+        outputs: [MOCK_OUTPUT_COIN, { ...MOCK_OUTPUT_CHANGE, to: sender }],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
         maxInputs: bn(255),
       });
