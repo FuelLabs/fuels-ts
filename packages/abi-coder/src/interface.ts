@@ -108,6 +108,16 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     this.externalLoggedTypes[id] = loggedTypes;
   }
 
+  /**
+   * Encode a configurable value.
+   * 
+   * @param name - the name of the configurable
+   * @param value - the value to encode
+   * @returns {Uint8Array}
+   * 
+   * @throws {FuelError} {@link ErrorCode.CONFIGURABLE_NOT_FOUND}
+   * When the configurable with the given name is not found in the ABI.
+   */
   encodeConfigurable(name: string, value: InputValue) {
     const configurable = findOrThrow(
       this.jsonAbi.configurables,
