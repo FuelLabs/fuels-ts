@@ -2,7 +2,7 @@ import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { PolicyType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { GqlConsensusParameters, GqlFeeParameters } from '../__generated__/operations';
 import { calculatePriceWithFactor } from '../utils';
@@ -36,7 +36,7 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
   const gasPerByte = bn(feeParams.gasPerByte);
   const gasPriceFactor = bn(feeParams.gasPriceFactor);
 
-  const transactionBytes = getBytesCopy(rawPayload);
+  const transactionBytes = arrayify(rawPayload);
 
   const [transaction] = new TransactionCoder().decode(transactionBytes, 0);
 
@@ -59,7 +59,7 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
   if (type === TransactionType.Create) {
     const { bytecodeWitnessIndex, storageSlots } = transaction as TransactionCreate;
 
-    const contractBytesSize = bn(getBytesCopy(witnesses[bytecodeWitnessIndex].data).length);
+    const contractBytesSize = bn(arrayify(witnesses[bytecodeWitnessIndex].data).length);
 
     metadataGas = calculateMetadataGasForTxCreate({
       contractBytesSize,

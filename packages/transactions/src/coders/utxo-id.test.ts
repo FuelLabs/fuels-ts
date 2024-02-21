@@ -1,4 +1,4 @@
-import { getBytesCopy, hexlify } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { UtxoId } from './utxo-id';
 import { UtxoIdCoder } from './utxo-id';
@@ -22,7 +22,7 @@ describe('UtxoIdCoder', () => {
       '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000'
     );
 
-    const [decoded, offset] = new UtxoIdCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new UtxoIdCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual(40);
     expect(decoded).toEqual(utxoId);
