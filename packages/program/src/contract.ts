@@ -2,8 +2,7 @@ import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
-import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
-import type { BytesLike } from 'ethers';
+import type { AbstractAddress, AbstractContract, BytesLike } from '@fuel-ts/interfaces';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';

@@ -1,8 +1,8 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
-import type { BigNumberish, BN } from '@fuel-ts/math';
+import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
 import {
@@ -12,8 +12,7 @@ import {
   OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
-import type { BytesLike } from 'ethers';
-import { concat, hexlify } from 'ethers';
+import { concat, hexlify } from '@fuel-ts/utils';
 
 import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
