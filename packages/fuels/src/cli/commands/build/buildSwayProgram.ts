@@ -1,16 +1,13 @@
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import { spawn } from 'child_process';
 
+import { BuildMode } from '../../config/forcUtils';
 import type { FuelsConfig } from '../../types';
 import { debug, loggingConfig } from '../../utils/logger';
 
 import { onForcExit, onForcError } from './forcHandlers';
 
-export const buildSwayProgram = async (
-  config: FuelsConfig,
-  path: string,
-  releaseMode?: boolean
-) => {
+export const buildSwayProgram = async (config: FuelsConfig, path: string, mode: BuildMode) => {
   debug('Building Sway program', path);
 
   return new Promise<void>((resolve, reject) => {
@@ -18,7 +15,7 @@ export const buildSwayProgram = async (
 
     const commandArgs = ['build', '-p', path];
 
-    if (releaseMode) {
+    if (mode === BuildMode.RELEASE) {
       commandArgs.push('--release');
     }
 

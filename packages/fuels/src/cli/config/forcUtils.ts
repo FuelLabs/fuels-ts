@@ -24,6 +24,11 @@ export enum SwayType {
   predicate = 'predicate',
 }
 
+export enum BuildMode {
+  RELEASE = 'release',
+  DEBUG = 'debug',
+}
+
 export const forcFiles = new Map<string, ForcToml>();
 
 export const swayFiles = new Map<string, SwayType>();
@@ -70,21 +75,21 @@ export function getContractCamelCase(contractPath: string) {
   return camelCase(projectName);
 }
 
-export function getBinaryPath(contractPath: string) {
+export function getBinaryPath(contractPath: string, mode: BuildMode) {
   const projectName = getContractName(contractPath);
-  return join(contractPath, `/out/debug/${projectName}.bin`);
+  return join(contractPath, `/out/${mode}/${projectName}.bin`);
 }
 
-export function getABIPath(contractPath: string) {
+export function getABIPath(contractPath: string, mode: BuildMode) {
   const projectName = getContractName(contractPath);
-  return join(contractPath, `/out/debug/${projectName}-abi.json`);
+  return join(contractPath, `/out/${mode}/${projectName}-abi.json`);
 }
 
-export function getABIPaths(paths: string[]) {
-  return Promise.all(paths.map((path) => getABIPath(path)));
+export function getABIPaths(paths: string[], mode: BuildMode) {
+  return Promise.all(paths.map((path) => getABIPath(path, mode)));
 }
 
-export const getStorageSlotsPath = (contractPath: string) => {
+export const getStorageSlotsPath = (contractPath: string, mode: BuildMode) => {
   const projectName = getContractName(contractPath);
-  return join(contractPath, `/out/debug/${projectName}-storage_slots.json`);
+  return join(contractPath, `/out/${mode}/${projectName}-storage_slots.json`);
 };

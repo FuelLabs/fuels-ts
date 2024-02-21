@@ -1,5 +1,6 @@
 import type { FSWatcher } from 'chokidar';
 import { watch } from 'chokidar';
+import type { Command } from 'commander';
 import { globSync } from 'glob';
 
 import { loadConfig } from '../../config/loadConfig';
@@ -16,9 +17,9 @@ export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
   handlers.forEach((h) => h.close());
 };
 
-export const buildAndDeploy = async (config: FuelsConfig) => {
-  await build(config);
-  return deploy(config);
+export const buildAndDeploy = async (config: FuelsConfig, program: Command) => {
+  await build(config, program);
+  return deploy(config, program);
 };
 
 export const getConfigFilepathsToWatch = (config: FuelsConfig) => {
@@ -35,26 +36,28 @@ export type DevState = {
   fuelCore?: FuelCoreNode;
 };
 
-export const workspaceFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  log(`\nFile changed: ${path}`);
-  await buildAndDeploy(state.config);
-};
+export const workspaceFileChanged =
+  (state: DevState, program: Command) => async (_event: string, path: string) => {
+    log(`\nFile changed: ${path}`);
+    await buildAndDeploy(state.config, program);
+  };
 
-export const configFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  log(`\nFile changed: ${path}`);
+export const configFileChanged =
+  (state: DevState, program: Command) => async (_event: string, path: string) => {
+    log(`\nFile changed: ${path}`);
 
-  closeAllFileHandlers(state.watchHandlers);
-  state.fuelCore?.killChildProcess();
+    closeAllFileHandlers(state.watchHandlers);
+    state.fuelCore?.killChildProcess();
 
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    await dev(await loadConfig(state.config.basePath));
-  } catch (err: unknown) {
-    await withConfigErrorHandler(<Error>err, state.config);
-  }
-};
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      await dev(await loadConfig(state.config.basePath), program);
+    } catch (err: unknown) {
+      await withConfigErrorHandler(<Error>err, state.config);
+    }
+  };
 
-export const dev = async (config: FuelsConfig) => {
+export const dev = async (config: FuelsConfig, program: Command) => {
   const fuelCore = await autoStartFuelCore(config);
 
   const configFilePaths = getConfigFilepathsToWatch(config);
@@ -72,17 +75,21 @@ export const dev = async (config: FuelsConfig) => {
 
   try {
     // Run once
-    await buildAndDeploy(config);
+    await buildAndDeploy(config, program);
 
     const watchHandlers: FSWatcher[] = [];
     const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
     const state = { config, watchHandlers, fuelCore };
 
     // watch: fuels.config.ts and chainConfig.json
-    watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));
+    watchHandlers.push(
+      watch(configFilePaths, options).on('all', configFileChanged(state, program))
+    );
 
     // watch: Forc's workspace members
-    watchHandlers.push(watch(workspaceFilePaths, options).on('all', workspaceFileChanged(state)));
+    watchHandlers.push(
+      watch(workspaceFilePaths, options).on('all', workspaceFileChanged(state, program))
+    );
   } catch (err: unknown) {
     error(err);
     throw err;

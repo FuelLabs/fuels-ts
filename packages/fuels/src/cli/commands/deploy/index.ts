@@ -1,4 +1,7 @@
+import type { Command } from 'commander';
+
 import {
+  BuildMode,
   getBinaryPath,
   getABIPath,
   getContractName,
@@ -13,8 +16,11 @@ import { deployContract } from './deployContract';
 import { getDeployConfig } from './getDeployConfig';
 import { saveContractIds } from './saveContractIds';
 
-export async function deploy(config: FuelsConfig) {
+export async function deploy(config: FuelsConfig, _program: Command) {
   const contracts: DeployedContract[] = [];
+
+  // always release for deployments
+  const mode: BuildMode = BuildMode.RELEASE;
 
   const wallet = await createWallet(config.providerUrl, config.privateKey);
 
@@ -24,9 +30,9 @@ export async function deploy(config: FuelsConfig) {
 
   for (let i = 0; i < contractsLen; i++) {
     const contractPath = config.contracts[i];
-    const binaryPath = getBinaryPath(contractPath);
-    const abiPath = getABIPath(contractPath);
-    const storageSlotsPath = getStorageSlotsPath(contractPath);
+    const binaryPath = getBinaryPath(contractPath, mode);
+    const abiPath = getABIPath(contractPath, mode);
+    const storageSlotsPath = getStorageSlotsPath(contractPath, mode);
     const projectName = getContractName(contractPath);
     const contractName = getContractCamelCase(contractPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {
