@@ -80,7 +80,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const parts: Uint8Array[] = [];
 
     parts.push(new U64Coder().encode(value.scriptGasLimit));
-    parts.push(new NumberCoder('u16').encode(value.scriptLength));
+    parts.push(new NumberCoder('u32').encode(value.scriptLength));
     parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u8').encode(value.inputsCount));
@@ -102,7 +102,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     let o = offset;
     [decoded, o] = new U64Coder().decode(data, o);
     const scriptGasLimit = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const scriptLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const scriptDataLength = decoded;
