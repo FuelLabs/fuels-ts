@@ -56,7 +56,7 @@ npx fuels help build
 
 ```console
 Options:
-  -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts")
+  -p, --path <path>  Path to project root (default: <CWD>)
   -r, --release      Build programs in release mode (otherwise, will default to `debug` mode)
   -d, --deploy       Deploy contracts after build (auto-starts a `fuel-core` node if needed)
   -h, --help         Display help
