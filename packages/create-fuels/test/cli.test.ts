@@ -84,11 +84,6 @@ afterEach(async () => {
 test.each(possibleProgramsToInclude)(
   'create-fuels extracts the template to the specified directory',
   async (programsToInclude) => {
-    // const programsToInclude: ProgramsToInclude = {
-    //   contract: true,
-    //   predicate: false,
-    //   script: false,
-    // };
     const args = generateArgs(programsToInclude, 'test-project');
     const program = setupProgram();
     program.parse(args);
@@ -99,8 +94,6 @@ test.each(possibleProgramsToInclude)(
       shouldInstallDeps: false,
     });
 
-    // check if the template was extracted to the test-project directory.
-    // compare the templates/nextjs folder with the test-project folder recursively
     let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
     originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
 
