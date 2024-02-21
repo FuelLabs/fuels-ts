@@ -1,4 +1,4 @@
-import { hexlify } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 
 import { AbiTypegenProjectsEnum, getTypegenForcProject } from '../../test/fixtures/forc-projects';
