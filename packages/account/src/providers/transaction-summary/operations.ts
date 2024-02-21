@@ -377,72 +377,65 @@ export function getTransferOperations({
   outputs,
   receipts,
 }: GetTransferOperationsParams): Operation[] {
-  const coinOutputs = getOutputsCoin(outputs);
+  let operations: Operation[] = [];
 
-  const [transferReceipt] = getReceiptsByType<TransactionResultTransferReceipt>(
+  const coinOutputs = getOutputsCoin(outputs);
+  const contractInputs = getInputsContract(inputs);
+  const changeOutputs = getOutputsChange(outputs);
+
+  /**
+   * Extracting transfer operations between wallets, as they do not produce receipts
+   */
+  coinOutputs.forEach((output) => {
+    const { amount, assetId, to } = output;
+
+    const changeOutput = changeOutputs.find((change) => change.assetId === assetId);
+
+    if (changeOutput) {
+      operations = addOperation(operations, {
+        name: OperationName.transfer,
+        from: {
+          type: AddressType.account,
+          address: changeOutput.to,
+        },
+        to: {
+          type: AddressType.account,
+          address: to,
+        },
+        assetsSent: [
+          {
+            assetId,
+            amount,
+          },
+        ],
+      });
+    }
+  });
+
+  /**
+   * `Transfer` receipts are produced from transfers:
+   * - Wallet to Contract
+   * - Contract to Contract
+   */
+  const transferReceipts = getReceiptsByType<TransactionResultTransferReceipt>(
     receipts,
     ReceiptType.Transfer
   );
 
-  let operations: Operation[] = [];
+  /**
+   * `TransferOut` receipts are produced from transfer:
+   * - Contract to Wallet
+   */
+  const transferOutReceipts = getReceiptsByType<TransactionResultTransferOutReceipt>(
+    receipts,
+    ReceiptType.TransferOut
+  );
 
-  // Possible transfer to contract
-  if (transferReceipt) {
-    const changeOutputs = getOutputsChange(outputs);
-    changeOutputs.forEach((output) => {
-      const { assetId } = output;
-      const [contractInput] = getInputsContract(inputs);
-      const utxo = getInputFromAssetId(inputs, assetId);
+  [...transferReceipts, ...transferOutReceipts].forEach((receipt) => {
+    const operation = extractTransferOperationFromReceipt(receipt, contractInputs, changeOutputs);
 
-      if (utxo && contractInput) {
-        const inputAddress = getInputAccountAddress(utxo);
-        operations = addOperation(operations, {
-          name: OperationName.transfer,
-          from: {
-            type: AddressType.account,
-            address: inputAddress,
-          },
-          to: {
-            type: AddressType.contract,
-            address: contractInput.contractID,
-          },
-          assetsSent: [
-            {
-              assetId: assetId.toString(),
-              amount: transferReceipt.amount,
-            },
-          ],
-        });
-      }
-    });
-  } else {
-    coinOutputs.forEach((output) => {
-      const input = getInputFromAssetId(inputs, output.assetId);
-      if (input) {
-        const inputAddress = getInputAccountAddress(input);
-
-        const operationToAdd: Operation = {
-          name: OperationName.transfer,
-          from: {
-            type: AddressType.account,
-            address: inputAddress,
-          },
-          to: {
-            type: AddressType.account,
-            address: output.to.toString(),
-          },
-          assetsSent: [
-            {
-              assetId: output.assetId.toString(),
-              amount: output.amount,
-            },
-          ],
-        };
-
-        operations = addOperation(operations, operationToAdd);
-      }
-    });
-  }
+    operations = addOperation(operations, operation);
+  });
 
   return operations;
 }
