@@ -24,12 +24,12 @@ impl Token for Contract {
         burn(BASE_TOKEN, burn_amount);
     }
 
-    fn transfer_to_contract(target: ContractId, asset_id: AssetId, coins: u64) {
-        force_transfer_to_contract(target, asset_id, coins);
+    fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
+        force_transfer_to_contract(target, asset_id, amount);
     }
 
-    fn transfer_to_address(recipient: Address, asset_id: AssetId, coins: u64) {
-        transfer_to_address(recipient, asset_id, coins);
+    fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
+        transfer_to_address(recipient, asset_id, amount);
     }
 
     fn get_balance(target: ContractId, asset_id: AssetId) -> u64 {
