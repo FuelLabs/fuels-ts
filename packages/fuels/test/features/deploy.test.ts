@@ -32,7 +32,7 @@ describe(
         output: paths.outputDir,
       });
 
-      await runBuild({ root: paths.root });
+      await runBuild({ root: paths.root, release: true });
       await runDeploy({ root: paths.root });
 
       expect(existsSync(paths.contractsJsonPath)).toBeTruthy();
