@@ -71,6 +71,10 @@ export class BaseInvocationScope<TReturn = any> {
    * Getter for the contract calls.
    *
    * @returns An array of contract calls.
+   * 
+   * @throws {FuelError} {@link ErrorCode.CHAIN_INFO_CACHE_EMPTY}
+   * When the chain info cache is empty.
+   * This will occur when the user has not called `Provider.create` to initialize the provider.
    */
   protected get calls() {
     const provider = this.getProvider();

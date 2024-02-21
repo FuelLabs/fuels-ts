@@ -19,6 +19,11 @@ export class ScriptInvocationScope<
     this.transactionRequest.setScript(this.scriptRequest, this.args);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.CHAIN_INFO_CACHE_EMPTY}
+   * When the chain info cache is empty.
+   * This will occur when the user has not called `Provider.create` to initialize the provider.
+   */
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
     const chainInfoCache = (this.program.provider as Provider).getChain();
