@@ -33,7 +33,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const dataLength = decoded;
     [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
     const witnessData = decoded;
