@@ -226,7 +226,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const bytecodeLength = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const bytecodeWitnessIndex = decoded;
