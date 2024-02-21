@@ -1,6 +1,5 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
-import type { BytesLike } from 'ethers';
 
 import type { GqlMessageState } from './__generated__/operations';
 

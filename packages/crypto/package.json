@@ -28,8 +28,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/utils": "workspace:^",
     "ethereum-cryptography": "^2.1.2",
-    "ethers": "^6.7.1",
-    "@fuel-ts/errors": "workspace:*"
+    "ethers": "^6.7.1"
   }
 }
