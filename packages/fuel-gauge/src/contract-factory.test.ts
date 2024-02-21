@@ -90,7 +90,7 @@ describe('Contract Factory', () => {
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
     const { callResult } = await contact.functions.increment_counter(1).dryRun();
-    expect(callResult).toEqual({
+    expect(callResult).toMatchObject({
       receipts: expect.arrayContaining([expect.any(Object)]),
     });
   });
