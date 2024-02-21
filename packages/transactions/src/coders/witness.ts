@@ -23,7 +23,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
   encode(value: Witness): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u16').encode(value.dataLength));
+    parts.push(new NumberCoder('u32').encode(value.dataLength));
     parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
 
     return concat(parts);
