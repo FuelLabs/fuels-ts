@@ -63,6 +63,16 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     );
   }
 
+  /**
+   * Decodes the input data for a FunctionFragment.
+   * 
+   * @param functionFragment - the function fragment to decode or a string (name, signature or selector)
+   * @param data - the input data to decode
+   * @returns an array of decoded values or undefined if the data is empty
+   * 
+   * @throws {FuelError} {@link ErrorCode.FRAGMENT_NOT_FOUND}
+   * When the function fragment is not found in the ABI.
+   */
   decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -74,6 +84,17 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     return fragment.decodeArguments(data);
   }
 
+  /**
+   * Encodes the input arguments with a FunctionFragment.
+   * 
+   * @param functionFragment - the function fragment to encode or a string (name, signature or selector)
+   * @param values - the input values to encode
+   * @param offset - the offset to start encoding from
+   * @returns the encoded input data
+   * 
+   * @throws {FuelError} {@link ErrorCode.FRAGMENT_NOT_FOUND}
+   * When the function fragment is not found in the ABI.
+   */
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
     values: Array<InputValue>,
