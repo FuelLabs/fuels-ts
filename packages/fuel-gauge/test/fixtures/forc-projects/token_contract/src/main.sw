@@ -33,9 +33,12 @@ impl Token for Contract {
 
         while counter < 5 {
             force_transfer_to_contract(
-                recipients[counter].recipient,
-                recipients[counter].asset_id,
-                recipients[counter].amount,
+                recipients[counter]
+                    .recipient,
+                recipients[counter]
+                    .asset_id,
+                recipients[counter]
+                    .amount,
             );
 
             counter = counter + 1;
@@ -51,9 +54,12 @@ impl Token for Contract {
 
         while counter < 5 {
             transfer_to_address(
-                recipients[counter].recipient,
-                recipients[counter].asset_id,
-                recipients[counter].amount,
+                recipients[counter]
+                    .recipient,
+                recipients[counter]
+                    .asset_id,
+                recipients[counter]
+                    .amount,
             );
 
             counter = counter + 1;
