@@ -179,38 +179,6 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
 }
 
 /** @hidden */
-export function getContractTransferOperations({ receipts }: ReceiptParam): Operation[] {
-  const transferOutReceipts = getReceiptsTransferOut(receipts);
-
-  const contractTransferOperations = transferOutReceipts.reduce(
-    (prevContractTransferOps, receipt) => {
-      const newContractTransferOps = addOperation(prevContractTransferOps, {
-        name: OperationName.contractTransfer,
-        from: {
-          type: AddressType.contract,
-          address: receipt.from,
-        },
-        to: {
-          type: AddressType.account,
-          address: receipt.to,
-        },
-        assetsSent: [
-          {
-            amount: receipt.amount,
-            assetId: receipt.assetId,
-          },
-        ],
-      });
-
-      return newContractTransferOps;
-    },
-    [] as Operation[]
-  );
-
-  return contractTransferOperations;
-}
-
-/** @hidden */
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
@@ -520,7 +488,6 @@ export function getOperations({
         rawPayload,
         maxInputs,
       }),
-      ...getContractTransferOperations({ receipts }),
       ...getWithdrawFromFuelOperations({ inputs, receipts }),
     ];
   }
