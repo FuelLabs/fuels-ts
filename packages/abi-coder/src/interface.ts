@@ -50,9 +50,11 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       return fn;
     }
 
+    const validFunctionNames = Object.values(this.functions).map(({ name }) => `"${name}"`).join(', ');
     throw new FuelError(
       ErrorCode.FUNCTION_NOT_FOUND,
-      `function ${nameOrSignatureOrSelector} not found: ${JSON.stringify(fn)}.`
+      `The function "${nameOrSignatureOrSelector}" not found within the ABI.
+      The ABI has the following functions defined: ${validFunctionNames}`
     );
   }
 
