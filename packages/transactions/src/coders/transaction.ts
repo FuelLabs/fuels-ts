@@ -203,7 +203,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
+    parts.push(new NumberCoder('u32').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
