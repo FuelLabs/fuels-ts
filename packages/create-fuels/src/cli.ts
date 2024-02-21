@@ -13,7 +13,7 @@ const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
 
-type ProgramsToInclude = {
+export type ProgramsToInclude = {
   contract: boolean;
   predicate: boolean;
   script: boolean;
@@ -56,7 +56,18 @@ async function promptForPackageManager() {
   return packageManagerInput.packageManager as string;
 }
 
-async function promptForProgramsToInclude() {
+async function promptForProgramsToInclude({
+  forceDisablePrompts = false,
+}: {
+  forceDisablePrompts?: boolean;
+}) {
+  if (forceDisablePrompts) {
+    return {
+      contract: false,
+      predicate: false,
+      script: false,
+    };
+  }
   const programsToIncludeInput = await prompts({
     type: 'multiselect',
     name: 'programsToInclude',
@@ -102,16 +113,19 @@ export const setupProgram = () => {
   return program;
 };
 
-export const runScaffoldCli = async (
-  explicitProjectPath?: string,
-  explicitPackageManger?: string,
-  shouldInstallDeps = true,
-  explicitProgramsToInclude?: ProgramsToInclude
-) => {
-  const program = setupProgram();
-  program.parse(process.argv);
-
-  const projectPath = (explicitProjectPath || program.args[0]) ?? (await promptForProjectPath());
+export const runScaffoldCli = async ({
+  program,
+  args = process.argv,
+  shouldInstallDeps = false,
+  forceDisablePrompts = false,
+}: {
+  program: Command;
+  args: string[];
+  shouldInstallDeps?: boolean;
+  forceDisablePrompts?: boolean;
+}) => {
+  program.parse(args);
+  const projectPath = program.args[0] ?? (await promptForProjectPath());
   if (existsSync(projectPath)) {
     throw new Error(
       `A folder already exists at ${projectPath}. Please choose a different project name.`
@@ -131,8 +145,11 @@ export const runScaffoldCli = async (
   }
   const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
 
-  const packageManager =
-    (explicitPackageManger || cliChosenPackageManager) ?? (await promptForPackageManager());
+  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
+
+  if (!packageManager) {
+    packageManager = 'pnpm';
+  }
 
   const cliProgramsToInclude = {
     contract: program.opts().contract,
@@ -142,12 +159,12 @@ export const runScaffoldCli = async (
   const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
 
   let programsToInclude: ProgramsToInclude;
-  if (explicitProgramsToInclude) {
-    programsToInclude = explicitProgramsToInclude;
-  } else if (hasAnyCliProgramsToInclude) {
+  if (hasAnyCliProgramsToInclude) {
     programsToInclude = cliProgramsToInclude;
   } else {
-    programsToInclude = await promptForProgramsToInclude();
+    programsToInclude = await promptForProgramsToInclude({
+      forceDisablePrompts,
+    });
   }
 
   if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
