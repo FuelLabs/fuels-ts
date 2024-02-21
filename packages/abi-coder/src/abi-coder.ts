@@ -200,7 +200,7 @@ export abstract class AbiCoder {
 
     throw new FuelError(
       ErrorCode.CODER_NOT_FOUND,
-      `Coder not found: ${JSON.stringify(resolvedAbiType)}.`
+      `Coder not found for the following type "${resolvedAbiType.type}".`
     );
   }
 
