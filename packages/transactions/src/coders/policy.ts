@@ -36,14 +36,22 @@ export type PolicyMaxFee = {
 export const sortPolicies = (policies: Policy[]): Policy[] =>
   policies.sort((a, b) => a.type - b.type);
 
-function validateDuplicatedPolicies(policies: Policy[]): void {
+/**
+ * Asserts that there are no policies with the same type.
+ * 
+ * @param policies - The policies to check.
+ * 
+ * @throws {FuelError} {@link ErrorCode.DUPLICATED_POLICY}
+ * When there are policies with the same type.
+ */
+function assertNoDuplicatePolicies(policies: Policy[]): void {
   const seenTypes = new Set<PolicyType>();
 
   policies.forEach((policy) => {
     if (seenTypes.has(policy.type)) {
       throw new FuelError(
         ErrorCode.DUPLICATED_POLICY,
-        `Duplicate policy type found: ${PolicyType.MaxFee}`
+        `Duplicate policy type found: ${policy.type}`
       );
     }
     seenTypes.add(policy.type);
@@ -55,8 +63,14 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     super('Policies', 'array Policy', 0);
   }
 
+  /**
+   * @inheritdoc
+   *
+   * @throws {FuelError} {@link ErrorCode.DUPLICATED_POLICY}
+   * When there are policies with the same type.
+   */
   encode(policies: Policy[]): Uint8Array {
-    validateDuplicatedPolicies(policies);
+    assertNoDuplicatePolicies(policies);
     const sortedPolicies = sortPolicies(policies);
 
     const parts: Uint8Array[] = [];
