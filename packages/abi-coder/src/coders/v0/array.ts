@@ -22,10 +22,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   /**
-   * Encodes an array of values into an array of 8-bit unsigned integer values, with dynamic data.
-   * 
-   * @param value - an array of values.
-   * @returns an array of 8-bit unsigned integer values, with dynamic data.
+   * @inheritdoc
    * 
    * @throws {FuelError} {@link ErrorCode.ENCODE_ERROR}
    * When the value is not an array.
@@ -46,11 +43,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   /**
-   * Decode an array of 8-bit unsigned integer values.
-   * 
-   * @param data - an array of 8-bit unsigned integer values.
-   * @param offset - the offset to start decoding from.
-   * @returns a tuple containing the decoded value and the new offset.
+   * @inheritdoc
    * 
    * @throws {FuelError} {@link ErrorCode.DECODE_ERROR}
    * When the data size is less than the encoded length or greater than the maximum bytes.

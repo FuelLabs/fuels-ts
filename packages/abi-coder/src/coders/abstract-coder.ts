@@ -104,7 +104,21 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
     this.encodedLength = encodedLength;
   }
 
+  /**
+   * Encodes a value.
+   * 
+   * @param value - A value to encode.
+   * @param length - The length of the encoded value.
+   * @returns the encoded value as a Uint8Array.
+   */
   abstract encode(value: TInput, length?: number): Uint8Array;
 
+  /**
+   * Decodes a Uint8Array.
+   * 
+   * @param value - A value to encode.
+   * @param length - The length of the encoded value.
+   * @returns a tuple containing the decoded value and the new offset.
+   */
   abstract decode(data: Uint8Array, offset: number, length?: number): [TDecoded, number];
 }
