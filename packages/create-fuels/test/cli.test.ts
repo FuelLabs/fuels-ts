@@ -9,9 +9,7 @@ const getAllFiles = async (pathToDir: string) => {
   const files = await glob(`${pathToDir}/**/*`, {
     ignore: ['**/node_modules/**', '**/.next/**', '**/sway-api/**'],
   });
-
   const filesWithoutPrefix = files.map((file) => file.replace(pathToDir, ''));
-
   return filesWithoutPrefix;
 };
 
@@ -48,20 +46,21 @@ const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string
 const filterOriginalTemplateFiles = (files: string[], programsToInclude: ProgramsToInclude) => {
   let newFiles = [...files];
 
-  if (!programsToInclude.contract) {
-    newFiles = newFiles.filter((file) => !file.includes('contract'));
-  }
-
-  if (!programsToInclude.predicate) {
-    newFiles = newFiles.filter((file) => !file.includes('predicate'));
-  }
-
-  if (!programsToInclude.script) {
-    newFiles = newFiles.filter((file) => !file.includes('script'));
-  }
-
-  // remove the 'gitignore' and 'env' files. look for the exact file names
-  newFiles = newFiles.filter((file) => !['/gitignore', '/env'].includes(file));
+  newFiles = newFiles.filter((file) => {
+    if (!programsToInclude.contract && file.includes('contract')) {
+      return false;
+    }
+    if (!programsToInclude.predicate && file.includes('predicate')) {
+      return false;
+    }
+    if (!programsToInclude.script && file.includes('script')) {
+      return false;
+    }
+    if (['/gitignore', '/env'].includes(file)) {
+      return false;
+    }
+    return true;
+  });
 
   return newFiles;
 };
