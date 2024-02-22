@@ -74,7 +74,7 @@ describe(
 
       await runInit({
         root: paths.root,
-        workspace: paths.workspaceDir,
+        contracts: paths.contractsDir,
         output: paths.outputDir,
       });
 
