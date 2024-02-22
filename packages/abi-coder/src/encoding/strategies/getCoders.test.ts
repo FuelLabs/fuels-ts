@@ -1,6 +1,6 @@
 import type { ResolvedAbiType } from '../../ResolvedAbiType';
-import type { TGetCoderFn } from '../../types/IGetCoder';
-import type { TEncodingOptions } from '../../types/TEncodingOptions';
+import type { GetCoderFn } from '../../types/GetCoder';
+import type { EncodingOptions } from '../../types/EncodingOptions';
 import { Coder } from '../coders/AbstractCoder';
 
 import { getCoders } from './getCoders';
@@ -27,11 +27,11 @@ class MockCoder extends Coder {
  */
 describe('getCoders', () => {
   const components = [{ name: coderName }] as ResolvedAbiType[];
-  const options = {} as TEncodingOptions;
+  const options = {} as EncodingOptions;
 
   const getCoderMock = vi.fn(
-    (_resolvedAbiType: ResolvedAbiType, _options?: TEncodingOptions) => new MockCoder()
-  ) as TGetCoderFn;
+    (_resolvedAbiType: ResolvedAbiType, _options?: EncodingOptions) => new MockCoder()
+  ) as GetCoderFn;
 
   it('gets coders', () => {
     const result = getCoders(components, { ...options, getCoder: getCoderMock });

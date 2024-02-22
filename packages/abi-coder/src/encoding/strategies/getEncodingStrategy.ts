@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { IGetCoder } from '../../types/IGetCoder';
+import type { GetCoder } from '../../types/GetCoder';
 import { ENCODING_V0, ENCODING_V1 } from '../../utils/constants';
 
 import { getCoder as getCoderV0 } from './getCoderV0';
@@ -13,7 +13,7 @@ import { getCoder as getCoderV1 } from './getCoderV1';
  * @throws for an unsupported encoding version.
  * @returns the appropriate encoding strategy.
  */
-export function getEncodingStrategy(encoding: string = ENCODING_V0): IGetCoder {
+export function getEncodingStrategy(encoding: string = ENCODING_V0): GetCoder {
   switch (encoding) {
     case ENCODING_V1:
       return { getCoder: getCoderV1 };

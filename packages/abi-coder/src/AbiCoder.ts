@@ -2,14 +2,14 @@
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue, Coder } from './encoding/coders/AbstractCoder';
 import { getEncodingStrategy } from './encoding/strategies/getEncodingStrategy';
+import type { EncodingOptions } from './types/EncodingOptions';
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
-import type { TEncodingOptions } from './types/TEncodingOptions';
 
 export abstract class AbiCoder {
   static getCoder(
     abi: JsonAbi,
     argument: JsonAbiArgument,
-    options: TEncodingOptions = {
+    options: EncodingOptions = {
       isSmallBytes: false,
     }
   ): Coder {
@@ -21,7 +21,7 @@ export abstract class AbiCoder {
     abi: JsonAbi,
     argument: JsonAbiArgument,
     value: InputValue,
-    options?: TEncodingOptions
+    options?: EncodingOptions
   ) {
     return this.getCoder(abi, argument, options).encode(value);
   }
@@ -31,7 +31,7 @@ export abstract class AbiCoder {
     argument: JsonAbiArgument,
     data: Uint8Array,
     offset: number,
-    options?: TEncodingOptions
+    options?: EncodingOptions
   ): [DecodedValue | undefined, number] {
     return this.getCoder(abi, argument, options).decode(data, offset) as [
       DecodedValue | undefined,

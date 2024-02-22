@@ -1,8 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ResolvedAbiType } from '../../ResolvedAbiType';
-import type { TGetCoderFn } from '../../types/IGetCoder';
-import type { TEncodingOptions } from '../../types/TEncodingOptions';
+import type { EncodingOptions } from '../../types/EncodingOptions';
+import type { GetCoderFn } from '../../types/GetCoder';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
@@ -52,9 +52,9 @@ import { getCoders } from './getCoders';
  * @param options - options to be utilized during the encoding process.
  * @returns the coder for a given type.
  */
-export const getCoder: TGetCoderFn = (
+export const getCoder: GetCoderFn = (
   resolvedAbiType: ResolvedAbiType,
-  options?: TEncodingOptions
+  options?: EncodingOptions
 ): Coder => {
   switch (resolvedAbiType.type) {
     case U8_CODER_TYPE:
