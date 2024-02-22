@@ -7,7 +7,13 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { DateTime, tai64ToUnixMilliseconds, unixMillisecondsToTai64, arrayify, hexlify } from '@fuel-ts/utils';
+import {
+  DateTime,
+  tai64ToUnixMilliseconds,
+  unixMillisecondsToTai64,
+  arrayify,
+  hexlify,
+} from '@fuel-ts/utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
