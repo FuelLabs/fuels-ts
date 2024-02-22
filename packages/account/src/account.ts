@@ -529,6 +529,9 @@ export class Account extends AbstractAccount {
   /**
    * @throws {FuelError} {@link ErrorCode.GAS_LIMIT_TOO_LOW}
    * When the gas limit is lower than the minimum gas limit.
+   * 
+   * @throws {FuelError} {@link ErrorCode.GAS_PRICE_TOO_LOW}
+   * When the gas price is lower than the minimum gas price.
    */
   private validateGas({
     gasUsed,
