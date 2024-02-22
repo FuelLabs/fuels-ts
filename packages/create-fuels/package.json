@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@fuel-ts/versions": "workspace:*",
-    "@types/prompts": "^2.4.8"
+    "@types/prompts": "^2.4.8",
+    "glob": "^10.2.6"
   }
 }
