@@ -40,7 +40,7 @@ The `DateTime` class extends the functionality of the `Date` object, so all meth
 
 ## Formats
 
-Here we will go over the different date/time formats that we use in the SDK. Internally the blockchain uses the `TAI64` format, but we also support the **UNIX** format for ease of use.
+Here we will go over the different date/time formats that we use in the SDK. Internally the blockchain uses the `TAI64` format, but we also support the `UNIX` format for ease of use.
 
 ### UNIX Format
 
