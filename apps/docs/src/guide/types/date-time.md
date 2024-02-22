@@ -2,7 +2,7 @@
 
 To allow for easier manipulation of date and time, the SDK exports the `DateTime` class which is a wrapper around the [built-in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) `Date` class. Below we will go over the methods of instantiation, utility functions and time formats.
 
-Internally the transactions and other time/date assets are encoded using the `TAI64` format. We return a `DateTime` class, to allow of easier conversion and formatting between the two formats.
+Internally the transactions and other time/date assets are encoded using the [`TAI64`](#tai-format) format. We return a `DateTime` class, to allow of easier conversion and formatting between the two formats.
 
 ## Instantiating a `DateTime`
 
