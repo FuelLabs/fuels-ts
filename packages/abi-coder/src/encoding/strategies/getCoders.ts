@@ -1,6 +1,6 @@
 import type { ResolvedAbiType } from '../../ResolvedAbiType';
-import type { GetCoder } from '../../types/GetCoder';
 import type { EncodingOptions } from '../../types/EncodingOptions';
+import type { GetCoderFn } from '../../types/GetCoder';
 import type { Coder } from '../coders/AbstractCoder';
 
 /**
@@ -10,7 +10,7 @@ import type { Coder } from '../coders/AbstractCoder';
  */
 export function getCoders(
   components: readonly ResolvedAbiType[],
-  options: EncodingOptions & GetCoder
+  options: EncodingOptions & { getCoder: GetCoderFn }
 ) {
   const { getCoder } = options;
   return components.reduce((obj, component) => {

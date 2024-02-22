@@ -10,18 +10,15 @@ import { getCoder as getCoderV1 } from './getCoderV1';
  */
 describe('getEncodingStrategy', () => {
   it('defaults to encoding version 0', () => {
-    const result = getCoderForEncoding();
-    expect(result.getCoder).toBe(getCoderV0);
+    expect(getCoderForEncoding()).toBe(getCoderV0);
   });
 
   it('returns getCoderV1 for encoding version 1', () => {
-    const result = getCoderForEncoding(ENCODING_V1);
-    expect(result.getCoder).toBe(getCoderV1);
+    expect(getCoderForEncoding(ENCODING_V1)).toBe(getCoderV1);
   });
 
   it('returns getCoderV0 for encoding version 0', () => {
-    const result = getCoderForEncoding(ENCODING_V0);
-    expect(result.getCoder).toBe(getCoderV0);
+    expect(getCoderForEncoding(ENCODING_V0)).toBe(getCoderV0);
   });
 
   it('throws for an unsupported encoding version', () => {
