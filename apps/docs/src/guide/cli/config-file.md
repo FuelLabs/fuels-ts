@@ -96,7 +96,7 @@ Port to use when starting a local `fuel-core` node.
 
 Sway programs are compiled in `debug` mode by default.
 
-Here you can customize all build `flags`, e.g. to build programs in `release` mode.
+Here you can customize all build flags, e.g. to build programs in `release` mode.
 
 <<< @../../../demo-fuels/fuels.config.full.ts#forcBuildFlags{ts:line-numbers}
 
