@@ -284,9 +284,9 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new U64Coder().encode(value.predicateGasUsed));
-    parts.push(new NumberCoder('u16').encode(data.length));
-    parts.push(new NumberCoder('u16').encode(value.predicateLength));
-    parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
+    parts.push(new NumberCoder('u32').encode(data.length));
+    parts.push(new NumberCoder('u32').encode(value.predicateLength));
+    parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(data.length).encode(data));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
@@ -318,11 +318,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new U64Coder().decode(data, o);
     const predicateGasUsed = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const predicateLength = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const predicateLength = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
     const messageData = decoded;
