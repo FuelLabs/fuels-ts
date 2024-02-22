@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { concat, concatBytes } from '@fuel-ts/utils';
-import { getBytesCopy, type BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { concat, concatBytes, arrayify } from '@fuel-ts/utils';
 
 import { U64Coder } from '../encoding/coders/v0/U64Coder';
 
@@ -34,7 +34,7 @@ export function concatWithDynamicData(items: ReadonlyArray<BytesLike>): Uint8Arr
       });
     }
 
-    const byteArray = getBytesCopy(item);
+    const byteArray = arrayify(item);
     totalIndex += byteArray.byteLength / WORD_SIZE;
 
     return byteArray;

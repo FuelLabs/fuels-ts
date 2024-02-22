@@ -1,7 +1,7 @@
 import type { BN, BNInput } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { GqlDependentCost, GqlGasCosts } from '../__generated__/operations';
 import type { TransactionRequestInput } from '../transaction-request';
@@ -47,9 +47,7 @@ export function gasUsedByInputs(
     if ('predicate' in input && input.predicate && input.predicate !== '0x') {
       return total.add(
         resolveGasDependentCosts(txBytesSize, gasCosts.vmInitialization)
-          .add(
-            resolveGasDependentCosts(getBytesCopy(input.predicate).length, gasCosts.contractRoot)
-          )
+          .add(resolveGasDependentCosts(arrayify(input.predicate).length, gasCosts.contractRoot))
           .add(bn(input.predicateGasUsed))
       );
     }

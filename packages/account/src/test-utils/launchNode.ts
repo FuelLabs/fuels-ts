@@ -1,11 +1,10 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
-import { defaultChainConfig, defaultConsensusKey } from '@fuel-ts/utils';
+import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
-import { hexlify } from 'ethers';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';

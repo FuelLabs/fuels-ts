@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
@@ -39,7 +39,7 @@ export async function getTransactionSummary<TTransactionType = void>(
   }
 
   const [decodedTransaction] = new TransactionCoder().decode(
-    getBytesCopy(gqlTransaction.rawPayload),
+    arrayify(gqlTransaction.rawPayload),
     0
   );
 
@@ -53,7 +53,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     id: gqlTransaction.id,
     receipts,
     transaction: decodedTransaction,
-    transactionBytes: getBytesCopy(gqlTransaction.rawPayload),
+    transactionBytes: arrayify(gqlTransaction.rawPayload),
     gqlTransactionStatus: gqlTransaction.status,
     gasPerByte: bn(gasPerByte),
     gasPriceFactor: bn(gasPriceFactor),
@@ -132,7 +132,7 @@ export async function getTransactionsSummaries(
 
     const { id, rawPayload, receipts: gqlReceipts, status } = gqlTransaction;
 
-    const [decodedTransaction] = new TransactionCoder().decode(getBytesCopy(rawPayload), 0);
+    const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
     const receipts = gqlReceipts?.map(processGqlReceipt) || [];
 
@@ -140,7 +140,7 @@ export async function getTransactionsSummaries(
       id,
       receipts,
       transaction: decodedTransaction,
-      transactionBytes: getBytesCopy(rawPayload),
+      transactionBytes: arrayify(rawPayload),
       gqlTransactionStatus: status,
       abiMap,
       gasPerByte,
