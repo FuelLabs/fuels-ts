@@ -6,6 +6,7 @@ import { Tai64Scalar, UnixMillisecondScalar } from './scalars';
 
 /**
  * @group node
+ * @group browser
  */
 describe('GraphQL Scalars', () => {
   describe('Tai64', () => {

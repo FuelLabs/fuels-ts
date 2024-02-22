@@ -3,6 +3,7 @@ import { DateTime } from 'fuels';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   it('should be able to be created from multiple sources', () => {
@@ -73,7 +74,7 @@ describe(__filename, () => {
   /**
    * Utility methods
    */
-  it('should extends the Date class', () => {
+  it('should extend the Date class', () => {
     // #region date-object-methods
     // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
@@ -94,5 +95,6 @@ describe(__filename, () => {
     expect(date.getTime()).toEqual(1681391398000);
     expect(date.toISOString()).toEqual('2023-04-13T13:09:58.000Z');
     expect(date.toDateString()).toEqual('Thu Apr 13 2023');
+    expect(date.toISOString()).toEqual(dateTime.toISOString());
   });
 });

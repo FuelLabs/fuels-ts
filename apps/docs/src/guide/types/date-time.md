@@ -1,21 +1,20 @@
 # DateTime
 
-To allow for easier manipulation of date and time, the SDK exports the `DateTime` class, which is a wrapper around the `Date` class ([reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)). Below we will go over the methods of instantiation, utility functions, and time formats.
+To allow for easier manipulation of date and time, the SDK exports the `DateTime` class which is a wrapper around the [built-in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) `Date` class. Below we will go over the methods of instantiation, utility functions and time formats.
 
-Why is this useful?
 Internally the transactions and other time/date assets are encoded using the **TAI64** format. We return a `IDateTime` interface, to allow of easier conversion and formatting between the two formats.
 
-## API
+## Instantiating a `DateTime`
 
-We have a host of static method for **instantiation** of our `DateTime` class.
+We have a host of static methods for **instantiation** of our `DateTime` class.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#create-from-multiple-sources{ts:line-numbers}
 
 ### TAI64
 
-`fromTai64` is a _static_ method, that allows the creation of `DateTime` class from a TAI64 string.
+`fromTai64` is a _static_ method, that allows the creation of `DateTime` class from a `TAI64` string.
 
-`toTai64` is a _instance_ method, that allows the conversion of a `DateTime` class to a `TAI64` string.
+`toTai64` is an _instance_ method, that allows the conversion of a `DateTime` class to a `TAI64` string.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#from-tai-64-and-to-tai-64{ts:line-numbers}
 
@@ -23,19 +22,19 @@ We have a host of static method for **instantiation** of our `DateTime` class.
 
 `fromUnixMilliseconds` is a _static_ method, that allows the creation of `DateTime` class from a UNIX Milliseconds number.
 
-`toUnixMilliseconds` is a _instance_ method, that allows the conversion of a `DateTime` class to a `UNIX` number in milliseconds.
+`toUnixMilliseconds` is an _instance_ method, that allows the conversion of a `DateTime` class to a `UNIX` number in milliseconds.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#from-unix-milliseconds-and-to-unix-milliseconds{ts:line-numbers}
 
 `fromUnixSeconds` is a _static_ method, that allows the creation of `DateTime` class from a UNIX Seconds number.
 
-`toUnixSeconds` is a _instance_ method, that allows the conversion of a `DateTime` class to a `UNIX` number in seconds.
+`toUnixSeconds` is an _instance_ method, that allows the conversion of a `DateTime` class to a `UNIX` number in seconds.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#from-unix-seconds-and-to-unix-seconds{ts:line-numbers}
 
 ### Date
 
-The `DateTime` class extends the functionality of the `Date` object (see here), so all method are available for your usages.
+The `DateTime` class extends the functionality of the `Date` object, so all method are available for your usages.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#date-object-methods{ts:line-numbers}
 

@@ -27,6 +27,7 @@ const { now, nowPlusOneSecond } = {
 
 /**
  * @group node
+ * @group browser
  */
 describe('utils/date-time', () => {
   describe('DateTime', () => {
