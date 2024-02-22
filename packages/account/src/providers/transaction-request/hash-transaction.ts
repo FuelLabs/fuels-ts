@@ -2,7 +2,8 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { uint64ToBytesBE } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import { TransactionType, InputType, OutputType, TransactionCoder } from '@fuel-ts/transactions';
-import { concat, sha256 } from 'ethers';
+import { concat } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 import { clone } from 'ramda';
 
 import type { TransactionRequest } from './types';

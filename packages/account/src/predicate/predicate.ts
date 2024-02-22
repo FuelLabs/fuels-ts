@@ -12,7 +12,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
-import { getBytesCopy, hexlify } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
 import type { TxParamsType } from '../account';
@@ -181,7 +181,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     jsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    let predicateBytes = getBytesCopy(bytes);
+    let predicateBytes = arrayify(bytes);
     let abiInterface: Interface | undefined;
 
     if (jsonAbi) {

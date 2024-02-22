@@ -1,7 +1,6 @@
 import { type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
-import { DateTime } from '@fuel-ts/utils';
-import { hexlify } from 'ethers';
+import { DateTime, hexlify } from '@fuel-ts/utils';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';

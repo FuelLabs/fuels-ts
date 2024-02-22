@@ -1,5 +1,6 @@
 import { hashMessage } from '@fuel-ts/hasher';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
 import { transactionRequestify } from '../providers';
@@ -9,6 +10,7 @@ import type {
   CallResult,
   Provider,
   ProviderSendTxParams,
+  EstimateTransactionParams,
 } from '../providers';
 import { Signer } from '../signer';
 
@@ -66,7 +68,7 @@ export class BaseWalletUnlocked extends Account {
    */
   async signMessage(message: string): Promise<string> {
     const signedMessage = await this.signer().sign(hashMessage(message));
-    return signedMessage;
+    return hexlify(signedMessage);
   }
 
   /**
@@ -81,7 +83,7 @@ export class BaseWalletUnlocked extends Account {
     const hashedTransaction = transactionRequest.getTransactionId(chainId);
     const signature = await this.signer().sign(hashedTransaction);
 
-    return signature;
+    return hexlify(signature);
   }
 
   /**
@@ -107,13 +109,15 @@ export class BaseWalletUnlocked extends Account {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { ...options, estimateTxDependencies: false }
+      { awaitExecution, estimateTxDependencies: false }
     );
   }
 
@@ -123,9 +127,14 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - The transaction request to simulate.
    * @returns A promise that resolves to the CallResult object.
    */
-  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async simulateTransaction(
+    transactionRequestLike: TransactionRequestLike,
+    { estimateTxDependencies = true }: EstimateTransactionParams = {}
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.call(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {

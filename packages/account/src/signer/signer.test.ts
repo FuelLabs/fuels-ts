@@ -1,4 +1,5 @@
-import { getBytesCopy, sha256 } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 
 import { Signer } from './signer';
 
@@ -26,7 +27,7 @@ describe('Signer', () => {
   });
 
   it('Initialize publicKey and address for new signer instance with byte array', () => {
-    const signer = new Signer(getBytesCopy(expectedPrivateKey));
+    const signer = new Signer(arrayify(expectedPrivateKey));
 
     expect(signer.privateKey).toEqual(expectedPrivateKey);
     expect(signer.publicKey).toEqual(expectedPublicKey);

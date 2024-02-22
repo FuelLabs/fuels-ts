@@ -80,8 +80,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const parts: Uint8Array[] = [];
 
     parts.push(new U64Coder().encode(value.scriptGasLimit));
-    parts.push(new NumberCoder('u16').encode(value.scriptLength));
-    parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
+    parts.push(new NumberCoder('u32').encode(value.scriptLength));
+    parts.push(new NumberCoder('u32').encode(value.scriptDataLength));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u8').encode(value.inputsCount));
     parts.push(new NumberCoder('u8').encode(value.outputsCount));
@@ -102,9 +102,9 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     let o = offset;
     [decoded, o] = new U64Coder().decode(data, o);
     const scriptGasLimit = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const scriptLength = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const scriptDataLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const policyTypes = decoded;
@@ -203,7 +203,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
+    parts.push(new NumberCoder('u32').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
@@ -226,7 +226,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const bytecodeLength = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const bytecodeWitnessIndex = decoded;
