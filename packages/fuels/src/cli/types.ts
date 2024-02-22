@@ -86,6 +86,14 @@ export type UserFuelsConfig = {
   fuelCorePort?: number;
 
   /**
+   * Aditional forc build flags to be used when compiling contractrs.
+   * Default: []
+   * Example:
+   *  forcBuildFlags: ['--release'];
+   */
+  forcBuildFlags?: string[];
+
+  /**
    * Function callback, will be called after a successful run
    * @param event - The event that triggered this execution
    * @param config - The loaded `fuels.config.ts`
@@ -112,8 +120,10 @@ export type FuelsConfig = UserFuelsConfig &
       | 'useBuiltinFuelCore'
       | 'autoStartFuelCore'
       | 'providerUrl'
+      | 'forcBuildFlags'
     >
   > & {
     basePath: string;
     configPath: string;
+    buildMode: 'debug' | 'release';
   };
