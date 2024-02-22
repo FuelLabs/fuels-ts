@@ -164,6 +164,15 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     });
   }
 
+  /**
+   * Get the type by its type ID.
+   * 
+   * @param typeId - the type ID
+   * @returns the type from the abi
+   * 
+   * @throws {FuelError} {@link ErrorCode.TYPE_NOT_FOUND}
+   * When the type with the given type ID is not found in the ABI.
+   */
   getTypeById(typeId: number) {
     return findOrThrow(
       this.jsonAbi.types,
