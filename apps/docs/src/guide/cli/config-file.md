@@ -102,7 +102,7 @@ Here you can customize all build `flags`, e.g. to build programs in `release` mo
 
 Check also:
 
-- [Forc docs](https://fuellabs.github.io/sway/v0.50.0/book/forc/commands/forc_build.html?highlight=build#options)
+- [Forc docs](https://docs.fuel.network/docs/forc/commands/forc_build/#forc-build)
 
 ## `deployConfig`
 
