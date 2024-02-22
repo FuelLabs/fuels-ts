@@ -2,7 +2,7 @@
 
 To allow for easier manipulation of date and time, the SDK exports the `DateTime` class which is a wrapper around the [built-in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) `Date` class. Below we will go over the methods of instantiation, utility functions and time formats.
 
-Internally the transactions and other time/date assets are encoded using the **TAI64** format. We return a `DateTime` class, to allow of easier conversion and formatting between the two formats.
+Internally the transactions and other time/date assets are encoded using the `TAI64` format. We return a `DateTime` class, to allow of easier conversion and formatting between the two formats.
 
 ## Instantiating a `DateTime`
 
@@ -40,7 +40,7 @@ The `DateTime` class extends the functionality of the `Date` object, so all meth
 
 ## Formats
 
-Here we will go over the different date/time formats that we use in the SDK. Internally the blockchain uses the **TAI64** format, but we also support the **UNIX** format for ease of use.
+Here we will go over the different date/time formats that we use in the SDK. Internally the blockchain uses the `TAI64` format, but we also support the **UNIX** format for ease of use.
 
 ### UNIX Format
 
@@ -50,7 +50,7 @@ UNIX time is the number of seconds that have elapsed since **00:00:00 Coordinate
 
 TAI stands for _Temps Atomique International_ and is the current international real-time standard [Source](https://cr.yp.to/libtai/tai64.html).
 
-We use **TAI64** is a 64-bit integer representing the number of nanoseconds since the epoch.
+We use `TAI64` is a 64-bit integer representing the number of nanoseconds since the epoch.
 
 - the TAI second beginning exactly _(2^62 - s) seconds_ before the beginning of 1970 TAI, if s is between 0 inclusive and 2^62 exclusive; or
 
