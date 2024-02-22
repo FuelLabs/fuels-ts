@@ -1,4 +1,4 @@
-# Date Time
+# DateTime
 
 To allow for easier manipulation of date and time, the SDK exports the `DateTime` class, which is a wrapper around the `Date` class ([reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)). Below we will go over the methods of instantiation, utility functions, and time formats.
 
