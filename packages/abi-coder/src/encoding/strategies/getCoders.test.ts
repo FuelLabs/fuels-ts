@@ -1,6 +1,6 @@
 import type { ResolvedAbiType } from '../../ResolvedAbiType';
-import type { GetCoderFn } from '../../types/GetCoder';
 import type { EncodingOptions } from '../../types/EncodingOptions';
+import type { GetCoderFn } from '../../types/GetCoder';
 import { Coder } from '../coders/AbstractCoder';
 
 import { getCoders } from './getCoders';

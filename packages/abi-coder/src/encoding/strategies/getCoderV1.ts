@@ -1,8 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { ResolvedAbiType } from '../../ResolvedAbiType';
-import type { GetCoderFn } from '../../types/GetCoder';
 import type { EncodingOptions } from '../../types/EncodingOptions';
+import type { GetCoderFn } from '../../types/GetCoder';
 import {
   B256_CODER_TYPE,
   B512_CODER_TYPE,
