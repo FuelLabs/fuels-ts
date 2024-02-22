@@ -1,5 +1,4 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BytesLike } from 'ethers';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 
 import type { Provider } from '../providers';
 

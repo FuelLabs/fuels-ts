@@ -1,4 +1,4 @@
-import { hexlify } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 import { existsSync, readFileSync } from 'fs';
 
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';

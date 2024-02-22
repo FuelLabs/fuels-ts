@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -9,11 +9,10 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
-import type { BytesLike } from 'ethers';
-import { getBytesCopy, hexlify, Network } from 'ethers';
+import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
@@ -1124,7 +1123,7 @@ export default class Provider {
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder().decode(getBytesCopy(tx.rawPayload), 0)?.[0]
+        (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
       ),
     };
   }
@@ -1143,7 +1142,7 @@ export default class Provider {
       return null;
     }
     return new TransactionCoder().decode(
-      getBytesCopy(transaction.rawPayload),
+      arrayify(transaction.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
   }

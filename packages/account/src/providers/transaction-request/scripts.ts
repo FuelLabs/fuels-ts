@@ -1,5 +1,5 @@
 import type { AbstractScriptRequest } from '@fuel-ts/interfaces';
-import { getBytesCopy } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 // We can't import this from `@fuel-ts/script` because it causes
 // cyclic dependency errors so we duplicate it here.
@@ -10,7 +10,7 @@ export const returnZeroScript: AbstractScriptRequest<void> = {
       Opcode::NOOP
     */
   // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
-  bytes: getBytesCopy('0x24000000'),
+  bytes: arrayify('0x24000000'),
   encodeScriptData: () => new Uint8Array(0),
 };
 
@@ -26,6 +26,6 @@ export const withdrawScript: AbstractScriptRequest<void> = {
           00000000 00000000 [amount value]
       */
   // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
-  bytes: getBytesCopy('0x5040C0105D44C0064C40001124000000'),
+  bytes: arrayify('0x5040C0105D44C0064C40001124000000'),
   encodeScriptData: () => new Uint8Array(0),
 };

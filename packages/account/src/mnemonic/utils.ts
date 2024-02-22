@@ -1,6 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { getBytesCopy, sha256 } from 'ethers';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { arrayify } from '@fuel-ts/utils';
+import { sha256 } from 'ethers';
 
 /* Mnemonic phrase composed by words from the provided wordlist it can be a text or a array of words */
 export type MnemonicPhrase = string | Array<string>;
@@ -92,7 +93,7 @@ export function entropyToMnemonicIndices(entropy: Uint8Array): Array<number> {
 
   // Compute the checksum bits
   const checksumBits = entropy.length / 4;
-  const checksum = getBytesCopy(sha256(entropy))[0] & getUpperMask(checksumBits);
+  const checksum = arrayify(sha256(entropy))[0] & getUpperMask(checksumBits);
 
   // Shift the checksum into the word indices
   indices[indices.length - 1] <<= checksumBits;
@@ -103,7 +104,7 @@ export function entropyToMnemonicIndices(entropy: Uint8Array): Array<number> {
 
 export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<string>): BytesLike {
   const size = Math.ceil((11 * words.length) / 8);
-  const entropy = getBytesCopy(new Uint8Array(size));
+  const entropy = arrayify(new Uint8Array(size));
 
   let offset = 0;
   for (let i = 0; i < words.length; i += 1) {
@@ -125,7 +126,7 @@ export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<str
   const entropyBits = (32 * words.length) / 3;
   const checksumBits = words.length / 3;
   const checksumMask = getUpperMask(checksumBits);
-  const checksum = getBytesCopy(sha256(entropy.slice(0, entropyBits / 8)))[0] & checksumMask;
+  const checksum = arrayify(sha256(entropy.slice(0, entropyBits / 8)))[0] & checksumMask;
 
   if (checksum !== (entropy[entropy.length - 1] & checksumMask)) {
     throw new FuelError(
