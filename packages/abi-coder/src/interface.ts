@@ -126,7 +126,16 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       return externalInterface.decodeLog(data, logId, receiptId);
     }
 
-    const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
+    const { loggedType } = findOrThrow(
+      this.jsonAbi.loggedTypes,
+      (type) => type.logId === logId,
+      () => {
+        throw new FuelError(
+          ErrorCode.LOG_TYPE_NOT_FOUND,
+          `Log type with logId '${logId}' doesn't exist in the ABI.`
+        );
+      }
+    );
 
     return AbiCoder.decode(this.jsonAbi, loggedType, getBytesCopy(data), 0, {
       version: this.jsonAbi.encoding,

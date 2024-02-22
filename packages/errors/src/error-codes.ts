@@ -18,6 +18,7 @@ export enum ErrorCode {
   CODER_NOT_FOUND = 'coder-not-found',
   INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
+  LOG_TYPE_NOT_FOUND = 'log-type-not-found',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
