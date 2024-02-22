@@ -10,10 +10,3 @@ import type { EncodingOptions } from './EncodingOptions';
  * @param options - options to be utilized during the encoding process.
  */
 export type GetCoderFn = (resolvedAbiType: ResolvedAbiType, options?: EncodingOptions) => Coder;
-
-/**
- * An interface that contains a function that obtains coders
- */
-export interface GetCoder {
-  getCoder: GetCoderFn;
-}

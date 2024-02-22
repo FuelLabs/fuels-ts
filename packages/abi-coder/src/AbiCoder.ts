@@ -1,7 +1,7 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue, Coder } from './encoding/coders/AbstractCoder';
-import { getEncodingStrategy } from './encoding/strategies/getEncodingStrategy';
+import { getCoderForEncoding } from './encoding/strategies/getCoderForEncoding';
 import type { EncodingOptions } from './types/EncodingOptions';
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
 
@@ -14,7 +14,7 @@ export abstract class AbiCoder {
     }
   ): Coder {
     const resolvedAbiType = new ResolvedAbiType(abi, argument);
-    return getEncodingStrategy(options.encoding).getCoder(resolvedAbiType, options);
+    return getCoderForEncoding(options.encoding)(resolvedAbiType, options);
   }
 
   static encode(
