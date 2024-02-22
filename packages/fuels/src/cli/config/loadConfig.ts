@@ -48,7 +48,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');
   const buildMode = releaseFlag ? 'release' : 'debug';
 
-  // Start clone-object while initializiung optional props
+  // Start clone-object while initializing optional props
   const config: FuelsConfig = {
     contracts: [],
     scripts: [],
