@@ -400,6 +400,9 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   * 
+   * @throws {FuelError} {@link ErrorCode.GAS_LIMIT_TOO_LOW}
+   * When the gas limit is lower than the minimum gas limit.
    */
   private setDefaultTxParams(
     transactionRequest: ScriptTransactionRequest,

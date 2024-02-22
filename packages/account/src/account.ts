@@ -526,6 +526,10 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.GAS_LIMIT_TOO_LOW}
+   * When the gas limit is lower than the minimum gas limit.
+   */
   private validateGas({
     gasUsed,
     gasPrice,
