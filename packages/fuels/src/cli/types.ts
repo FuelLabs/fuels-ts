@@ -86,7 +86,7 @@ export type UserFuelsConfig = {
   fuelCorePort?: number;
 
   /**
-   * Aditional forc build flags to be used when compiling contractrs.
+   * Aditional forc build flags to be used when compiling contracts.
    * Default: []
    * Example:
    *  forcBuildFlags: ['--release'];
