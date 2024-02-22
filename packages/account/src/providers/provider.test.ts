@@ -7,13 +7,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import {
-  DateTime,
-  tai64ToUnixMilliseconds,
-  unixMillisecondsToTai64,
-  arrayify,
-  hexlify,
-} from '@fuel-ts/utils';
+import { DateTime, arrayify, hexlify } from '@fuel-ts/utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -317,9 +311,9 @@ describe('Provider', () => {
     }
     const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
       block;
-    const latestBlockUnixTimestampBeforeProduce = tai64ToUnixMilliseconds(
+    const latestBlockUnixTimestampBeforeProduce = DateTime.fromTai64(
       latestBlockTimestampBeforeProduce
-    );
+    ).toUnixMilliseconds();
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
@@ -345,7 +339,7 @@ describe('Provider', () => {
     }));
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
       height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: unixMillisecondsToTai64(startTime + i * blockTimeInterval),
+      time: DateTime.fromUnixMilliseconds(startTime + i * blockTimeInterval).toTai64(),
     }));
     expect(producedBlocks).toEqual(expectedBlocks);
   });

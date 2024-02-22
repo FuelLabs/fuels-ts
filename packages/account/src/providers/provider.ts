@@ -9,7 +9,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { unixMillisecondsToTai64, arrayify, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import { Network } from 'ethers';
@@ -1378,7 +1378,9 @@ export default class Provider {
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      startTimestamp: startTime ? unixMillisecondsToTai64(startTime) : undefined,
+      startTimestamp: startTime
+        ? DateTime.fromUnixMilliseconds(startTime).toUnixMilliseconds()
+        : undefined,
     });
     return bn(latestBlockHeight);
   }
