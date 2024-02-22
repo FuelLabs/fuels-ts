@@ -1,7 +1,7 @@
-import { type IDateTime, DateTime } from '@fuel-ts/utils';
+import { DateTime } from '@fuel-ts/utils';
 import { GraphQLScalarType, Kind } from 'graphql';
 
-export const UnixMillisecondScalar = new GraphQLScalarType<IDateTime, number>({
+export const UnixMillisecondScalar = new GraphQLScalarType<DateTime, number>({
   name: 'UnixMilliseconds',
   description: 'DateTime custom scalar type',
   serialize(value: unknown): number {
@@ -11,13 +11,13 @@ export const UnixMillisecondScalar = new GraphQLScalarType<IDateTime, number>({
 
     throw new Error('Unable to serialize value');
   },
-  parseValue(value: unknown): IDateTime {
+  parseValue(value: unknown): DateTime {
     if (typeof value === 'number') {
       return DateTime.fromUnixMilliseconds(value);
     }
     throw new Error('Unable to parse value');
   },
-  parseLiteral(ast): IDateTime {
+  parseLiteral(ast): DateTime {
     if (ast.kind === Kind.INT) {
       return DateTime.fromUnixMilliseconds(Number(ast.value));
     }
@@ -25,7 +25,7 @@ export const UnixMillisecondScalar = new GraphQLScalarType<IDateTime, number>({
   },
 });
 
-export const Tai64Scalar = new GraphQLScalarType<IDateTime, string>({
+export const Tai64Scalar = new GraphQLScalarType<DateTime, string>({
   name: 'Tai64',
   description: 'Tai64 custom scalar type',
   serialize(value: unknown): string {
@@ -35,13 +35,13 @@ export const Tai64Scalar = new GraphQLScalarType<IDateTime, string>({
 
     throw new Error('Unable to serialize value');
   },
-  parseValue(value: unknown): IDateTime {
+  parseValue(value: unknown): DateTime {
     if (typeof value === 'string') {
       return DateTime.fromTai64(value);
     }
     throw new Error('Unable to parse value');
   },
-  parseLiteral(ast): IDateTime {
+  parseLiteral(ast): DateTime {
     if (ast.kind === Kind.STRING) {
       return DateTime.fromTai64(ast.value);
     }

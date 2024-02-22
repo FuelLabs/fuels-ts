@@ -6,15 +6,6 @@
 export type Tai64Timestamp = string;
 
 /**
- * Interface for the DateTime class.
- */
-export interface IDateTime extends Date {
-  toTai64(): Tai64Timestamp;
-  toUnixMilliseconds(): number;
-  toUnixSeconds(): number;
-}
-
-/**
  * This constant is used to calculate the offset between the Unix epoch and the TAI64 epoch.
  * It allows for a **rough** conversion between the two time formats.
  *
@@ -127,7 +118,7 @@ export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.
  * This class is used to represent a date and time in the Tai64 format.
  *
  * ```typescript
- * import { type IDateTime, DateTime } from 'fuels';
+ * import { DateTime } from 'fuels';
  *
  * // Constants
  * const tai64 = '4611686020108779340';
@@ -135,7 +126,7 @@ export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.
  * const seconds = 1681391398;
  *
  * // Instantiation
- * let date: IDateTime = DateTime.now();
+ * let date: DateTime = DateTime.now();
  * date = DateTime.fromTai64(tai64);
  * date = DateTime.fromUnixMilliseconds(unixMilliseconds);
  * date = DateTime.fromUnixSeconds(seconds);
@@ -151,7 +142,7 @@ export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.
  * now.getTime(); // 1681391398000
  * ```
  */
-export class DateTime extends Date implements IDateTime {
+export class DateTime extends Date implements Date {
   static TAI64_NULL: Tai64Timestamp = '';
 
   /**
@@ -160,7 +151,7 @@ export class DateTime extends Date implements IDateTime {
    * @param tai64 - Tai64 timestamp
    * @returns a new DateTime instance
    */
-  static fromTai64(tai64: Tai64Timestamp): IDateTime {
+  static fromTai64(tai64: Tai64Timestamp): DateTime {
     return new DateTime(tai64ToUnixMilliseconds(tai64));
   }
 
@@ -168,7 +159,7 @@ export class DateTime extends Date implements IDateTime {
    * @param unixMilliseconds - unix milliseconds timestamp
    * @returns a new DateTime instance
    */
-  static fromUnixMilliseconds(unixMilliseconds: number): IDateTime {
+  static fromUnixMilliseconds(unixMilliseconds: number): DateTime {
     return new DateTime(unixMilliseconds);
   }
 
@@ -176,7 +167,7 @@ export class DateTime extends Date implements IDateTime {
    * @param unixSeconds - unix seconds timestamp
    * @returns a new DateTime instance
    */
-  static fromUnixSeconds(unixSeconds: number): IDateTime {
+  static fromUnixSeconds(unixSeconds: number): DateTime {
     return new DateTime(secondsToMs(unixSeconds));
   }
 

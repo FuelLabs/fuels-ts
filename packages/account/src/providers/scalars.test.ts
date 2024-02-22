@@ -1,4 +1,3 @@
-import type { IDateTime } from '@fuel-ts/utils';
 import { DateTime } from '@fuel-ts/utils';
 import { GraphQLObjectType, GraphQLSchema, Kind, graphql } from 'graphql';
 
@@ -114,7 +113,7 @@ describe('GraphQL Scalars', () => {
         },
       },
     });
-    const MutationRootType = new GraphQLObjectType<string, IDateTime>({
+    const MutationRootType = new GraphQLObjectType<string, DateTime>({
       name: 'Mutation',
       fields: {
         setTai64: {
@@ -122,14 +121,14 @@ describe('GraphQL Scalars', () => {
           args: {
             value: { type: Tai64Scalar },
           },
-          resolve: (_, args: { value: IDateTime }) => args.value,
+          resolve: (_, args: { value: DateTime }) => args.value,
         },
         setUnixMilliseconds: {
           type: UnixMillisecondScalar,
           args: {
             value: { type: UnixMillisecondScalar },
           },
-          resolve: (_, args: { value: IDateTime }) => args.value,
+          resolve: (_, args: { value: DateTime }) => args.value,
         },
       },
     });

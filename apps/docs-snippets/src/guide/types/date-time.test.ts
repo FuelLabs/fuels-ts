@@ -1,4 +1,3 @@
-import type { IDateTime } from 'fuels';
 import { DateTime } from 'fuels';
 
 /**
@@ -8,12 +7,11 @@ import { DateTime } from 'fuels';
 describe(__filename, () => {
   it('should be able to be created from multiple sources', () => {
     // #region create-from-multiple-sources
-    // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const tai64: IDateTime = DateTime.fromTai64('4611686020108779339');
-    const unixSeconds: IDateTime = DateTime.fromUnixSeconds(1681391398);
-    const unixMilliseconds: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
+    const tai64: DateTime = DateTime.fromTai64('4611686020108779339');
+    const unixSeconds: DateTime = DateTime.fromUnixSeconds(1681391398);
+    const unixMilliseconds: DateTime = DateTime.fromUnixMilliseconds(1681391398000);
     // #endregion create-from-multiple-sources
 
     expect(tai64).toBeDefined();
@@ -26,10 +24,9 @@ describe(__filename, () => {
 
   it('should be able to create fromTai64 and convert toTai64', () => {
     // #region from-tai-64-and-to-tai-64
-    // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const date: IDateTime = DateTime.fromTai64('4611686020108779339');
+    const date: DateTime = DateTime.fromTai64('4611686020108779339');
     // #context console.log(date.toIso); // "4611686020108779339"
 
     const tai64: string = date.toTai64();
@@ -43,10 +40,9 @@ describe(__filename, () => {
 
   it('should be able to create fromUnixMilliseconds and convert toUnixMilliseconds', () => {
     // #region from-unix-milliseconds-and-to-unix-milliseconds
-    // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const date: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
+    const date: DateTime = DateTime.fromUnixMilliseconds(1681391398000);
 
     const unixMilliseconds: number = date.toUnixMilliseconds();
     // #context console.log(unixMilliseconds); // 1681391398000
@@ -58,10 +54,9 @@ describe(__filename, () => {
 
   it('should be able to create fromUnixSeconds and convert toUnixSeconds', () => {
     // #region from-unix-seconds-and-to-unix-seconds
-    // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const date: IDateTime = DateTime.fromUnixSeconds(1681391398);
+    const date: DateTime = DateTime.fromUnixSeconds(1681391398);
 
     const unixSeconds: number = date.toUnixSeconds();
     // #context console.log(unixSeconds); // 1681391398
@@ -76,10 +71,9 @@ describe(__filename, () => {
    */
   it('should extend the Date class', () => {
     // #region date-object-methods
-    // #context import type { IDateTime } from 'fuels';
     // #context import { DateTime } from 'fuels';
 
-    const dateTime: IDateTime = DateTime.fromUnixMilliseconds(1681391398000);
+    const dateTime: DateTime = DateTime.fromUnixMilliseconds(1681391398000);
 
     // Extends the Date object
     const date: Date = dateTime;
