@@ -5,7 +5,6 @@ import { setTimeout } from 'timers/promises';
 import type {
   TransactionRequestLike,
   WalletUnlocked,
-  Asset,
   FuelABI,
   ConnectorMetadata,
   Network,
@@ -13,6 +12,7 @@ import type {
 import { FUEL_NETWORK_URL } from '../../src/configs';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
+import type { Asset } from '../../src/providers/assets/types';
 
 import { generateAccounts } from './generate-accounts';
 
