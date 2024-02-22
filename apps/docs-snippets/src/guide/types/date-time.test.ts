@@ -7,7 +7,7 @@ import { DateTime } from 'fuels';
 describe(__filename, () => {
   it('should be able to be created from multiple sources', () => {
     // #region create-from-multiple-sources
-    // #context import { DateTime } from 'fuels';
+    // #import { DateTime };
 
     const tai64: DateTime = DateTime.fromTai64('4611686020108779339');
     const unixSeconds: DateTime = DateTime.fromUnixSeconds(1681391398);
@@ -24,7 +24,7 @@ describe(__filename, () => {
 
   it('should be able to create fromTai64 and convert toTai64', () => {
     // #region from-tai-64-and-to-tai-64
-    // #context import { DateTime } from 'fuels';
+    // #import { DateTime };
 
     const date: DateTime = DateTime.fromTai64('4611686020108779339');
     // #context console.log(date.toIso); // "4611686020108779339"
@@ -40,7 +40,7 @@ describe(__filename, () => {
 
   it('should be able to create fromUnixMilliseconds and convert toUnixMilliseconds', () => {
     // #region from-unix-milliseconds-and-to-unix-milliseconds
-    // #context import { DateTime } from 'fuels';
+    // #import { DateTime };
 
     const date: DateTime = DateTime.fromUnixMilliseconds(1681391398000);
 
@@ -54,7 +54,7 @@ describe(__filename, () => {
 
   it('should be able to create fromUnixSeconds and convert toUnixSeconds', () => {
     // #region from-unix-seconds-and-to-unix-seconds
-    // #context import { DateTime } from 'fuels';
+    // #import { DateTime };
 
     const date: DateTime = DateTime.fromUnixSeconds(1681391398);
 
@@ -71,7 +71,7 @@ describe(__filename, () => {
    */
   it('should extend the Date class', () => {
     // #region date-object-methods
-    // #context import { DateTime } from 'fuels';
+    // #import { DateTime };
 
     const dateTime: DateTime = DateTime.fromUnixMilliseconds(1681391398000);
 
