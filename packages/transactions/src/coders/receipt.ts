@@ -979,7 +979,10 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
         break;
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${type}`);
+        throw new FuelError(
+          ErrorCode.INVALID_RECEIPT_TYPE,
+          `Invalid receipt type "${type}", type must be one of the following: ${Object.values(ReceiptType).join(', ')}.`
+        );
       }
     }
 
@@ -1050,7 +1053,10 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
         return [decoded, o];
       }
       default: {
-        throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${type}`);
+        throw new FuelError(
+          ErrorCode.INVALID_RECEIPT_TYPE,
+          `Invalid receipt type "${type}", type must be one of the following: ${Object.values(ReceiptType).join(', ')}.`
+        );
       }
     }
   }
