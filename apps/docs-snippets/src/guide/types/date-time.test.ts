@@ -2,7 +2,6 @@ import { DateTime } from 'fuels';
 
 /**
  * @group node
- * @group browser
  */
 describe(__filename, () => {
   it('should be able to be created from multiple sources', () => {
