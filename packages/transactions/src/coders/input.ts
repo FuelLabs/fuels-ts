@@ -386,7 +386,7 @@ export class InputCoder extends Coder<Input, Input> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_INPUT,
-          `Invalid transaction input type: ${type}.`
+          `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(InputType).join(', ')}.`
         );
       }
     }
@@ -420,7 +420,7 @@ export class InputCoder extends Coder<Input, Input> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_INPUT,
-          `Invalid transaction input type: ${type}.`
+          `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(InputType).join(', ')}.`
         );
       }
     }
