@@ -365,6 +365,9 @@ export default class Provider {
 
   /**
    * Returns the cached nodeInfo for the current URL.
+   * 
+   * @throws {FuelError} {@link ErrorCode.NODE_INFO_CACHE_EMPTY}
+   * When the node info cache is empty for the current {@link url}.
    */
   getNode() {
     const node = Provider.nodeInfoCache[this.url];
