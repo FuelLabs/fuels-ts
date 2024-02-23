@@ -42,6 +42,10 @@ function assertWordList(wordlist: Array<string>) {
   }
 }
 
+/**
+ * @throws {FuelError} {@link ErrorCode.INVALID_ENTROPY}
+ * When the entropy is not: between 16 and 32 bytes; a multiple of 4.
+ */
 function assertEntropy(entropy: BytesLike) {
   if (entropy.length % 4 !== 0 || entropy.length < 16 || entropy.length > 32) {
     throw new FuelError(
