@@ -41,6 +41,30 @@ describe('utils/date-time', () => {
       expect(date).toBeDefined();
       expect(date.toUnixSeconds()).toEqual(now.unixSeconds);
     });
+
+    test('should be able to convert to Tai64', () => {
+      const date = DateTime.fromUnixMilliseconds(now.unixMilliseconds);
+
+      const tai64 = date.toTai64();
+
+      expect(tai64).toEqual(now.tai64);
+    })
+
+    test('should be able to convert to toUnixMilliseconds', () => {
+      const date = DateTime.fromUnixMilliseconds(now.unixMilliseconds);
+
+      const unixMilliseconds = date.toUnixMilliseconds();
+
+      expect(unixMilliseconds).toEqual(now.unixMilliseconds);
+    })
+
+    test('should be able to convert to toUnixSeconds', () => {
+      const date = DateTime.fromUnixMilliseconds(now.unixMilliseconds);
+
+      const unixSeconds = date.toUnixSeconds();
+
+      expect(unixSeconds).toEqual(now.unixSeconds);
+    })
   });
 
   describe('Extend Date', () => {
