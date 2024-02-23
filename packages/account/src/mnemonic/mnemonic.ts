@@ -33,6 +33,10 @@ const MainnetPRV = '0x0488ade4';
 const TestnetPRV = '0x04358394';
 export const MNEMONIC_SIZES = [12, 15, 18, 21, 24];
 
+/**
+ * @throws {FuelError} {@link ErrorCode.INVALID_WORD_LIST}
+ * When the wordlist length is not equal 2048
+ */
 function assertWordList(wordlist: Array<string>) {
   if (wordlist.length !== 2048) {
     throw new FuelError(
