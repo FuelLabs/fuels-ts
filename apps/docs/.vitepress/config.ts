@@ -125,6 +125,10 @@ export default defineConfig({
                 link: '/guide/types/bytes32',
               },
               {
+                text: 'Numbers',
+                link: '/guide/types/numbers',
+              },
+              {
                 text: 'String',
                 link: '/guide/types/string',
               },
