@@ -8,6 +8,13 @@ import type { TransactionRequestLike, TransactionRequest } from './types';
 /**
  * @hidden
  * 
+ * All the valid transaction types for the `transactionRequestify function.
+ */
+const VALID_TRANSACTION_TYPES = [TransactionType.Script, TransactionType.Create];
+
+/**
+ * @hidden
+ * 
  * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
  * When the transaction type is not one of: {@link TransactionType.Script} or {@link TransactionType.Create}.
  */
@@ -26,7 +33,10 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
       return CreateTransactionRequest.from(obj);
     }
     default: {
-      throw new FuelError(ErrorCode.INVALID_TRANSACTION_TYPE, `Invalid transaction type: ${type}.`);
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSACTION_TYPE,
+        `Invalid transaction type "${type}". Must be one of the following: ${VALID_TRANSACTION_TYPES.join(', ')}`
+      );
     }
   }
 };

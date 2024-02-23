@@ -62,7 +62,7 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
     default:
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_TYPE,
-        `Invalid transaction type: ${transactionType}.`
+        `Invalid transaction type "${transactionType}". Must be one of the following: ${Object.values(TransactionType).join(', ')}`
       );
   }
 }

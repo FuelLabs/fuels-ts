@@ -384,7 +384,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
-          `Invalid transaction type: ${type}`
+          `Invalid transaction type "${type}". Must be one of the following: ${Object.values(TransactionType).join(', ')}`
         );
       }
     }
@@ -419,7 +419,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
-          `Invalid transaction type: ${type}`
+          `Invalid transaction type: "${type}". Must be one of the following: ${Object.values(TransactionType).join(', ')}`
         );
       }
     }
