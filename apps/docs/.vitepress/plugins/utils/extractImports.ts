@@ -24,7 +24,12 @@ export const combineImportStatements = (importStatements: Record<string, Set<str
  * @param ignoredImports - The set of ignored imports.
  * @param allImportedItems - The set of all imported items in the file.
  * @param snippetContent - The content of the code snippet.
- * @throws {FuelError} - If there are imports not found in the file or if a specified import is not used in the code snippet.
+ * 
+ * @throws {FuelError} {ErrorCode.VITEPRESS_PLUGIN_ERROR}
+ * When there are imports not found in the file
+ * 
+ * @throws {FuelError} {ErrorCode.VITEPRESS_PLUGIN_ERROR}
+ * When a specified import is not used in the code snippet.
  */
 export const validateImports = (
   specifiedImports: string[],
