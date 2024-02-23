@@ -28,6 +28,9 @@ export default class Address extends AbstractAddress {
 
   /**
    * @param address - A Bech32 address
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_BECH32_ADDRESS}
+   * When the provided Bech32 address is invalid
    */
   constructor(address: Bech32Address) {
     super();

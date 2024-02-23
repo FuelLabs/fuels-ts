@@ -95,6 +95,9 @@ export function getBytesFromBech32(address: Bech32Address): Uint8Array {
  * Converts a Bech32 address string into B256
  *
  * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_BECH32_ADDRESS}
+ * When the provided Bech32 address is invalid 
  */
 export function toB256(address: Bech32Address): B256Address {
   if (!isBech32(address)) {
