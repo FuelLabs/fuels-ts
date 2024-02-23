@@ -14,7 +14,6 @@ import {
   RAW_SLICE_CODER_TYPE,
   STD_STRING_CODER_TYPE,
   STR_SLICE_CODER_TYPE,
-  U128_CODER_TYPE,
   U16_CODER_TYPE,
   U256_CODER_TYPE,
   U32_CODER_TYPE,
@@ -33,7 +32,6 @@ import { ArrayCoder } from '../coders/v0/ArrayCoder';
 import { B256Coder } from '../coders/v0/B256Coder';
 import { B512Coder } from '../coders/v0/B512Coder';
 import { OptionCoder } from '../coders/v0/OptionCoder';
-import { U128Coder } from '../coders/v0/U128Coder';
 import { U256Coder } from '../coders/v0/U256Coder';
 import { U64Coder } from '../coders/v0/U64Coder';
 import { BooleanCoder } from '../coders/v1/BooleanCoder';
@@ -68,8 +66,6 @@ export const getCoder: GetCoderFn = (
     case U64_CODER_TYPE:
     case RAW_PTR_CODER_TYPE:
       return new U64Coder();
-    case U128_CODER_TYPE:
-      return new U128Coder();
     case U256_CODER_TYPE:
       return new U256Coder();
     case RAW_SLICE_CODER_TYPE:
