@@ -45,7 +45,12 @@ export function getInputFromAssetId(inputs: Input[], assetId: string) {
   return coinInput || messageInput;
 }
 
-/** @hidden */
+/**
+ * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_INPUT}
+ * When the input type is invalid (valid types: {@link InputType}).
+ */
 export function getInputContractFromIndex(
   inputs: Input[],
   inputIndex: number

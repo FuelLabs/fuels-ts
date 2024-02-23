@@ -45,7 +45,12 @@ export type TransactionRequestOutput =
   | VariableTransactionRequestOutput
   | ContractCreatedTransactionRequestOutput;
 
-/** @hidden */
+/**
+ * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_INPUT}
+ * When the input type is invalid (valid types: {@link InputType}).
+ */
 export const outputify = (value: TransactionRequestOutput): Output => {
   const { type } = value;
 

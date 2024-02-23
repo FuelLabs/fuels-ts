@@ -86,7 +86,12 @@ export type TransactionRequestInput =
   | ContractTransactionRequestInput
   | MessageTransactionRequestInput;
 
-/** @hidden */
+/**
+ * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_INPUT}
+ * When the input type is invalid (valid types: {@link InputType}).
+ */
 export const inputify = (value: TransactionRequestInput): Input => {
   const { type } = value;
 
