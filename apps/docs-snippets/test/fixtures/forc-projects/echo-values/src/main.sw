@@ -15,6 +15,8 @@ abi EchoValues {
     fn echo_b512(input: B512) -> B512;
 
     fn echo_u64(value: u64) -> u64;
+
+    fn echo_u256(value: u256) -> u256;
 }
 
 impl EchoValues for Contract {
@@ -47,6 +49,10 @@ impl EchoValues for Contract {
     }
     // #endregion bits512-3
     fn echo_u64(value: u64) -> u64 {
+        value
+    }
+
+    fn echo_u256(value: u256) -> u256 {
         value
     }
 }

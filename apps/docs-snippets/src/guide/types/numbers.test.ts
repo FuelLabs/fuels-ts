@@ -70,4 +70,14 @@ describe(__filename, () => {
     expect(fuelsBigNum.toNumber()).toEqual(originalNumber);
     // #endregion numbers-docs-5
   });
+
+  test('u256', async () => {
+    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+
+    const originalNumber = 20;
+
+    const { value } = await contract.functions.echo_u256(bn(originalNumber)).call();
+
+    expect(value.toNumber()).toEqual(originalNumber);
+  });
 });
