@@ -353,6 +353,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
     super('Transaction', 'struct Transaction', 0);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+   * When the transaction type is not recognized (valid types: {@link TransactionType}).
+   */
   encode(value: Transaction): Uint8Array {
     const parts: Uint8Array[] = [];
 
@@ -388,6 +392,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
     return concat(parts);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+   * When the transaction type is not recognized (valid types: {@link TransactionType}).
+   */
   decode(data: Uint8Array, offset: number): [Transaction, number] {
     let decoded;
     let o = offset;

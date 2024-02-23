@@ -5,7 +5,12 @@ import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './types';
 
-/** @hidden */
+/**
+ * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+ * When the transaction type is not one of: {@link TransactionType.Script} or {@link TransactionType.Create}.
+ */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
   if (obj instanceof ScriptTransactionRequest || obj instanceof CreateTransactionRequest) {
     return obj;

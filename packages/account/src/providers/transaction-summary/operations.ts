@@ -45,7 +45,12 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
   return (receipts ?? []).filter((r) => r.type === type) as T[];
 }
 
-/** @hidden */
+/**
+ * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+ * When the transaction type is not recognized (valid types: {@link TransactionType}).
+ */
 export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeName {
   switch (transactionType) {
     case TransactionType.Mint:
