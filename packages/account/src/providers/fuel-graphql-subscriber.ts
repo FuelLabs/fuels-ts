@@ -7,75 +7,98 @@ type FuelGraphQLSubscriberOptions = {
   query: DocumentNode;
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
-  abortController?: AbortController;
 };
 
-class FuelSubscriptionStream implements TransformStream {
-  readable: ReadableStream<FuelError | Record<string, unknown>>;
-  writable: WritableStream<Uint8Array>;
-  private readableStreamController!: ReadableStreamController<FuelError | Record<string, unknown>>;
+export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
+  private stream!: ReadableStreamDefaultReader<Uint8Array>;
   private static textDecoder = new TextDecoder();
 
-  constructor() {
-    this.readable = new ReadableStream({
-      start: (controller) => {
-        this.readableStreamController = controller;
-      },
-    });
+  private static parseBytesStream(
+    bytes: Uint8Array | undefined
+  ): Record<string, unknown> | FuelError | undefined {
+    if (bytes === undefined) {
+      return undefined;
+    }
 
-    this.writable = new WritableStream<Uint8Array>({
-      write: (bytes) => {
-        const text = FuelSubscriptionStream.textDecoder.decode(bytes);
-        // the fuel node sends keep-alive messages that should be ignored
-        if (text.startsWith('data:')) {
-          const { data, errors } = JSON.parse(text.split('data:')[1]);
-          if (Array.isArray(errors)) {
-            this.readableStreamController.enqueue(
-              new FuelError(
-                FuelError.CODES.INVALID_REQUEST,
-                errors.map((err) => err.message).join('\n\n')
-              )
-            );
-          } else {
-            this.readableStreamController.enqueue(data);
-          }
-        }
-      },
-    });
+    const text = this.textDecoder.decode(bytes);
+
+    // https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
+    // this is the real keep-alive message sent by the server
+    if (text === ':keep-alive-text\n\n') {
+      return undefined;
+    }
+
+    const { data, errors } = JSON.parse(text.split('data:')[1]);
+
+    if (Array.isArray(errors)) {
+      return new FuelError(
+        FuelError.CODES.INVALID_REQUEST,
+        errors.map((err) => err.message).join('\n\n')
+      );
+    }
+
+    return data as Record<string, unknown>;
   }
-}
 
-export async function* fuelGraphQLSubscriber({
-  url,
-  variables,
-  query,
-  fetchFn,
-}: FuelGraphQLSubscriberOptions) {
-  const response = await fetchFn(`${url}-sub`, {
-    method: 'POST',
-    body: JSON.stringify({
-      query: print(query),
-      variables,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'text/event-stream',
-    },
-  });
+  public constructor(private options: FuelGraphQLSubscriberOptions) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const subscriptionStreamReader = response
-    .body!.pipeThrough(new FuelSubscriptionStream())
-    .getReader();
+  private async setStream() {
+    const { url, query, variables, fetchFn } = this.options;
 
-  while (true) {
-    const { value, done } = await subscriptionStreamReader.read();
+    const response = await fetchFn(`${url}-sub`, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: print(query),
+        variables,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'text/event-stream',
+      },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.stream = response.body!.getReader();
+  }
+
+  private async readStream(): Promise<IteratorResult<unknown, unknown>> {
+    let parsed;
+    let doneStreaming = false;
+    do {
+      const { value, done } = await this.stream.read();
+
+      parsed = FuelGraphqlSubscriber.parseBytesStream(value);
+      doneStreaming = done;
+
+      // we do this until it's a proper gql response or the stream is done i.e. {value: undefined, done: true}
+    } while (parsed === undefined && !doneStreaming);
+
+    return { value: parsed, done: doneStreaming };
+  }
+
+  async next(): Promise<IteratorResult<unknown, unknown>> {
+    if (!this.stream) {
+      await this.setStream();
+    }
+
+    const { value, done } = await this.readStream();
     if (value instanceof FuelError) {
       throw value;
     }
-    yield value;
-    if (done) {
-      break;
-    }
+
+    return { value, done };
+  }
+
+  /**
+   * Gets called when `break` is called in a `for-await-of` loop.
+   */
+  async return(): Promise<IteratorResult<unknown, undefined>> {
+    await this.stream.cancel();
+    this.stream.releaseLock();
+    return { done: true, value: undefined };
+  }
+
+  [Symbol.asyncIterator](): AsyncIterator<unknown, unknown, undefined> {
+    return this;
   }
 }
