@@ -29,6 +29,7 @@ abi MyContract {
     fn types_u16(x: u16) -> u16;
     fn types_u32(x: u32) -> u32;
     fn types_u64(x: u64) -> u64;
+    fn types_u128(x: u128) -> u128;
     fn types_u256(x: u256) -> u256;
     fn types_str(x: str[5]) -> str[5];
     fn types_asset_id(x: AssetId) -> AssetId;
@@ -61,6 +62,9 @@ impl MyContract for Contract {
         4294967295
     }
     fn types_u64(x: u64) -> u64 {
+        4294967295000
+    }
+    fn types_u128(x: u128) -> u128 {
         4294967295000
     }
     fn types_u256(x: u256) -> u256 {

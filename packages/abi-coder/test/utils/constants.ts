@@ -8,6 +8,8 @@ export const U32_MAX = 2 ** 32 - 1;
 export const U32_MAX_ENCODED = new Uint8Array([0, 0, 0, 0, 255, 255, 255, 255]);
 export const U64_MAX = bn(2).pow(64).sub(1);
 export const U64_MAX_ENCODED = new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255]);
+export const U128_MAX = bn(2).pow(128).sub(1);
+export const U128_MAX_ENCODED = new Uint8Array(16).fill(255);
 export const U256_MAX = bn(2).pow(256).sub(1);
 export const U256_MAX_ENCODED = new Uint8Array(32).fill(255);
 
