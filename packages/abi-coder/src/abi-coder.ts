@@ -92,6 +92,9 @@ export abstract class AbiCoder {
    * 
    * @throws {INVALID_COMPONENT} {@link ErrorCode.INVALID_COMPONENT}
    * When the provided Vec type is missing the 'type argument'.
+   * 
+   * @throws {INVALID_DATA} {@link ErrorCode.INVALID_DATA}
+   * When the provided type is a string slice (str). Convert the slice to `str[N]` with `__to_str_array`.
    */
   private static getCoderImpl(
     resolvedAbiType: ResolvedAbiType,
