@@ -484,6 +484,15 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  /**
+   * Sign a message with the account.
+   * 
+   * @param message - The message to sign.
+   * @returns A promise that resolves to the signature.
+   * 
+   * @throws {FuelError} {@link ErrorCode.MISSING_CONNECTOR}
+   * A connector is required to sign messages.
+   */
   async signMessage(message: string): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
