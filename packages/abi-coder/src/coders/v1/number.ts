@@ -5,6 +5,10 @@ import { Coder } from '../abstract-coder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
 
+/**
+ * @throws {FuelError} {@link ErrorCode.TYPE_NOT_SUPPORTED}
+ * When the base type is not supported. (valid types: 'u8', 'u16', 'u32')
+ */
 const getLength = (baseType: NumberCoderType): number => {
   switch (baseType) {
     case 'u8':

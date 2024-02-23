@@ -4,6 +4,10 @@ import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { supportedTypes } from './supportedTypes';
 
+/**
+ * @throws {FuelError} {@link ErrorCode.TYPE_NOT_SUPPORTED}
+ * When the type is not supported. Supported types: {@link supportedTypes}.
+ */
 export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
   const { rawAbiType } = params;
   const { type } = rawAbiType;
