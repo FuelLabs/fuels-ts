@@ -1,4 +1,3 @@
-// See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue, Coder } from './encoding/coders/AbstractCoder';
 import { getCoderForEncoding } from './encoding/strategies/getCoderForEncoding';
