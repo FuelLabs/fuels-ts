@@ -45,6 +45,10 @@ class FuelSubscriptionStream implements TransformStream {
   }
 }
 
+/**
+ * @throws {FuelError} {@link ErrorCode.INVALID_REQUEST}
+ * When the request to the Fuel node fails, error messages are propagated from the Fuel node.
+ */
 export async function* fuelGraphQLSubscriber({
   url,
   variables,
