@@ -1,6 +1,6 @@
-// ******************** //
-// Types and Type Regex //
-// ******************** //
+/**
+ * Types and Type Regex
+ */
 export const U8_CODER_TYPE = 'u8';
 export const U16_CODER_TYPE = 'u16';
 export const U32_CODER_TYPE = 'u32';
@@ -21,14 +21,14 @@ export const structRegEx = /^struct (?<name>\w+)$/;
 export const enumRegEx = /^enum (?<name>\w+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic (?<name>\w+)$/;
-// ***************** //
-// Encoding versions //
-// ***************** //
+/**
+ * Encoding versions
+ */
 export const ENCODING_V0 = '0';
 export const ENCODING_V1 = '1';
-// *********************************** //
-// Property space and config constants //
-// *********************************** //
+/**
+ * Property space and config constants
+ */
 export const WORD_SIZE = 8;
 export const BYTES_32 = 32;
 export const MAX_INPUTS = 255;
