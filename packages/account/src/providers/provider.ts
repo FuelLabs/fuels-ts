@@ -423,6 +423,10 @@ export default class Provider {
     };
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION}
+   * When the client version is not supported by the Fuel node.
+   */
   private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
