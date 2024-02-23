@@ -137,7 +137,7 @@ export class DateTime extends Date implements Date {
    * @returns the Tai64 timestamp
    */
   toTai64(): Tai64Timestamp {
-    return unixSecondsToTai64(this.toUnixSeconds())
+    return unixSecondsToTai64(this.toUnixSeconds());
   }
 
   /**
@@ -154,4 +154,3 @@ export class DateTime extends Date implements Date {
     return msToSeconds(this.getTime());
   }
 }
-
