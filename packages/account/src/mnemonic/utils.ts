@@ -106,6 +106,9 @@ export function entropyToMnemonicIndices(entropy: Uint8Array): Array<number> {
 }
 
 /**
+ * @throws {FuelError} {@link ErrorCode.INVALID_MNEMONIC}
+ * When the provided mnemonic is invalid.
+ * 
  * @throws {FuelError} {@link ErrorCode.INVALID_CHECKSUM}
  * Checksum validation failed for the provided mnemonic.
  */

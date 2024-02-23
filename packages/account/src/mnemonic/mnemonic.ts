@@ -59,6 +59,10 @@ function assertEntropy(entropy: BytesLike) {
   }
 }
 
+/**
+ * @throws {FuelError} {@link ErrorCode.INVALID_MNEMONIC}
+ * When the mnemonic phrase is not: 12, 15, 18, 21, or 24 words in length.
+ */
 function assertMnemonic(words: Array<string>) {
   if (!MNEMONIC_SIZES.includes(words.length)) {
     const errorMsg = `Invalid mnemonic size. Expected one of [${MNEMONIC_SIZES.join(
