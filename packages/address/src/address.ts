@@ -146,6 +146,9 @@ export default class Address extends AbstractAddress {
    *
    * @param publicKey - A wallets public key
    * @returns A new `Address` instance
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_PUBLIC_KEY}
+   * When the provided public key is invalid
    */
   static fromPublicKey(publicKey: string): Address {
     if (!isPublicKey(publicKey)) {
