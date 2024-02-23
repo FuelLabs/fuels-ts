@@ -14,6 +14,14 @@ const DEFAULT_TTL_IN_MS = 30 * 1000; // 30seconds
 
 export class MemoryCache {
   ttl: number;
+
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_TTL}
+   * When the TTL is not a number
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_TTL}
+   * When the TTL is less than or equal to zero
+   */
   constructor(ttlInMs: number = DEFAULT_TTL_IN_MS) {
     this.ttl = ttlInMs;
 
