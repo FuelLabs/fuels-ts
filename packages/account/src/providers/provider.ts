@@ -1235,6 +1235,9 @@ export default class Provider {
    * @param commitBlockId - The commit block id.
    * @param commitBlockHeight - The commit block height.
    * @returns A promise that resolves to the message proof.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_INPUT_PARAMETERS}
+   * When commitBlockId and commitBlockHeight are used together.
    */
   async getMessageProof(
     /** The transaction to get message from */

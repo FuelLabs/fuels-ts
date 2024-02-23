@@ -5,6 +5,10 @@ import type { BytesLike } from 'ethers';
 /* Mnemonic phrase composed by words from the provided wordlist it can be a text or a array of words */
 export type MnemonicPhrase = string | Array<string>;
 
+/**
+ * @throws {FuelError} {@link ErrorCode.INVALID_INPUT_PARAMETERS}
+ * When the provided string is not a valid UTF-8 string.
+ */
 export function toUtf8Bytes(stri: string): Uint8Array {
   const str = stri.normalize('NFKD');
 

@@ -70,6 +70,10 @@ export class AbiTypeGen {
     this.files = this.getAssembledFiles({ programType });
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_INPUT_PARAMETERS}
+   * When the provided programType is not one of the valid types {@link ProgramTypeEnum}.
+   */
   private getAssembledFiles(params: { programType: ProgramTypeEnum }): IFile[] {
     const { abis, outputDir } = this;
     const { programType } = params;
