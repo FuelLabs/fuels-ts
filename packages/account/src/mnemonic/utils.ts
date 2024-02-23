@@ -106,7 +106,7 @@ export function entropyToMnemonicIndices(entropy: Uint8Array): Array<number> {
 }
 
 /**
- * @throws {FuelError} INVALID_CHECKSUM
+ * @throws {FuelError} {@link ErrorCode.INVALID_CHECKSUM}
  * Checksum validation failed for the provided mnemonic.
  */
 export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<string>): BytesLike {
