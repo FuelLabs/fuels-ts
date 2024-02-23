@@ -101,6 +101,10 @@ export function entropyToMnemonicIndices(entropy: Uint8Array): Array<number> {
   return indices;
 }
 
+/**
+ * @throws {FuelError} INVALID_CHECKSUM
+ * Checksum validation failed for the provided mnemonic.
+ */
 export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<string>): BytesLike {
   const size = Math.ceil((11 * words.length) / 8);
   const entropy = getBytesCopy(new Uint8Array(size));
