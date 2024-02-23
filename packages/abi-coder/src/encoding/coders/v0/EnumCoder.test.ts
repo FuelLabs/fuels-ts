@@ -56,17 +56,23 @@ describe('EnumCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw an error when encoding if no enum key is provided', () => {
-    const invalidCoder = new EnumCoder('TestEnum', {});
-
-    expect(() => invalidCoder.encode({} as never)).toThrow('A field for the case must be provided');
+  it('should throw an error when encoding if no enum key is provided', async () => {
+    await expectToThrowFuelError(
+      () => coder.encode({} as never),
+      new FuelError(ErrorCode.DECODE_ERROR, 'A field for the case must be provided.')
+    );
   });
 
-  it('should throw an error when decoded value accesses an invalid index', () => {
+  it('should throw an error when decoded value accesses an invalid index', async () => {
     const input = new Uint8Array(Array.from(Array(8).keys()));
-    expect(() => {
-      coder.decode(input, 0);
-    }).toThrow('Invalid caseIndex');
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(
+        ErrorCode.DECODE_ERROR,
+        'Invalid caseIndex "283686952306183". Valid cases: a,b.'
+      )
+    );
   });
 
   it('should not throw given correctly typed inputs', () => {
@@ -74,22 +80,26 @@ describe('EnumCoder', () => {
     expect(() => coder.encode({ b: bn(1234) })).not.toThrow();
   });
 
-  it('should throw when provided with extra inputs', () => {
-    expect(() =>
-      coder.encode(
-        // @ts-expect-error
-        { a: true, b: bn(1234), c: false }
-      )
-    ).toThrow('Only one field must be provided');
+  it('should throw when provided with extra inputs', async () => {
+    await expectToThrowFuelError(
+      () =>
+        coder.encode(
+          // @ts-expect-error
+          { a: true, b: bn(1234), c: false }
+        ),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Only one field must be provided.')
+    );
   });
 
-  it('should throw type error with invalid input for coder', () => {
-    expect(() =>
-      coder.encode(
-        // @ts-expect-error
-        { b: true }
-      )
-    ).toThrow('Invalid u64');
+  it('should throw type error with invalid input for coder', async () => {
+    await expectToThrowFuelError(
+      () =>
+        coder.encode(
+          // @ts-expect-error
+          { b: true }
+        ),
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64.')
+    );
   });
 
   it('should throw type error with invalid input key', () => {

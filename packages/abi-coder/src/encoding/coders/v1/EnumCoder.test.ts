@@ -55,17 +55,23 @@ describe('EnumCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw an error when encoding if no enum key is provided', () => {
-    const invalidCoder = new EnumCoder('TestEnum', {});
-
-    expect(() => invalidCoder.encode({} as never)).toThrow('A field for the case must be provided');
+  it('should throw an error when encoding if no enum key is provided', async () => {
+    await expectToThrowFuelError(
+      () => coder.encode({} as never),
+      new FuelError(ErrorCode.DECODE_ERROR, 'A field for the case must be provided.')
+    );
   });
 
-  it('throws an error when decoded value accesses an invalid index', () => {
+  it('should throw an error when decoded value accesses an invalid index', async () => {
     const input = new Uint8Array(Array.from(Array(8).keys()));
-    expect(() => {
-      coder.decode(input, 0);
-    }).toThrow('Invalid caseIndex');
+
+    await expectToThrowFuelError(
+      () => coder.decode(input, 0),
+      new FuelError(
+        ErrorCode.DECODE_ERROR,
+        'Invalid caseIndex "283686952306183". Valid cases: a,b.'
+      )
+    );
   });
 
   it('throws when decoding empty bytes', async () => {
