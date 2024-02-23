@@ -1378,9 +1378,7 @@ export default class Provider {
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      startTimestamp: startTime
-        ? DateTime.fromUnixMilliseconds(startTime).toTai64()
-        : undefined,
+      startTimestamp: startTime ? DateTime.fromUnixMilliseconds(startTime).toTai64() : undefined,
     });
     return bn(latestBlockHeight);
   }

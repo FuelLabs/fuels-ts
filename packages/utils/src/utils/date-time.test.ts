@@ -48,7 +48,7 @@ describe('utils/date-time', () => {
       const tai64 = date.toTai64();
 
       expect(tai64).toEqual(now.tai64);
-    })
+    });
 
     test('should be able to convert to toUnixMilliseconds', () => {
       const date = DateTime.fromUnixMilliseconds(now.unixMilliseconds);
@@ -56,7 +56,7 @@ describe('utils/date-time', () => {
       const unixMilliseconds = date.toUnixMilliseconds();
 
       expect(unixMilliseconds).toEqual(now.unixMilliseconds);
-    })
+    });
 
     test('should be able to convert to toUnixSeconds', () => {
       const date = DateTime.fromUnixMilliseconds(now.unixMilliseconds);
@@ -64,7 +64,7 @@ describe('utils/date-time', () => {
       const unixSeconds = date.toUnixSeconds();
 
       expect(unixSeconds).toEqual(now.unixSeconds);
-    })
+    });
   });
 
   describe('Extend Date', () => {
