@@ -1,9 +1,7 @@
 /**
  * Tai64 timestamp.
- *
- * @hidden
  */
-export type Tai64Timestamp = string;
+type Tai64Timestamp = string;
 
 /**
  * This constant is used to calculate the offset between the Unix epoch and the TAI64 epoch.
@@ -12,8 +10,6 @@ export type Tai64Timestamp = string;
  * // Value expires on:  28 June 2024
  * {@link https://data.iana.org/time-zones/data/leap-seconds.list}
  * {@link https://github.com/hl2/tai64/blob/master/src/leapSeconds.ts}
- *
- * @hidden
  */
 const TAI64_LEAP_SECONDS: number = 37;
 
@@ -25,8 +21,6 @@ const TAI64_LEAP_SECONDS: number = 37;
  *
  * {@link https://cr.yp.to/libtai/tai64.html}
  * {@link https://cr.yp.to/proto/tai64.txt}
- *
- * @hidden
  */
 const TAI64_UNIX_OFFSET: bigint = BigInt(2 ** 62) + BigInt(TAI64_LEAP_SECONDS);
 
@@ -35,30 +29,24 @@ const TAI64_UNIX_OFFSET: bigint = BigInt(2 ** 62) + BigInt(TAI64_LEAP_SECONDS);
  *
  * @param ms - milliseconds to convert
  * @returns seconds
- *
- * @hidden
  */
-export const msToSeconds = (ms: number): number => Math.floor(ms / 1000);
+const msToSeconds = (ms: number): number => Math.floor(ms / 1000);
 
 /**
  * Converts seconds to milliseconds and vice versa.
  *
  * @param seconds - seconds to convert
  * @returns milliseconds
- *
- * @hidden
  */
-export const secondsToMs = (seconds: number): number => seconds * 1000;
+const secondsToMs = (seconds: number): number => seconds * 1000;
 
 /**
  * Converts Tai64 (seconds) time units to UNIX (seconds) time units.
  *
  * @param tai64 - Tai64 timestamp
  * @returns Unix seconds timestamp
- *
- * @hidden
  */
-export const tai64ToUnixSeconds = (tai64: Tai64Timestamp): number =>
+const tai64ToUnixSeconds = (tai64: Tai64Timestamp): number =>
   Number(BigInt(tai64) - TAI64_UNIX_OFFSET);
 
 /**
@@ -66,10 +54,8 @@ export const tai64ToUnixSeconds = (tai64: Tai64Timestamp): number =>
  *
  * @param unixSeconds - unix seconds timestamp
  * @returns Tai64 timestamp
- *
- * @hidden
  */
-export const unixSecondsToTai64 = (unixSeconds: number): string =>
+const unixSecondsToTai64 = (unixSeconds: number): string =>
   String(BigInt(unixSeconds) + TAI64_UNIX_OFFSET);
 
 /**
@@ -77,42 +63,9 @@ export const unixSecondsToTai64 = (unixSeconds: number): string =>
  *
  * @param tai64 - Tai64 timestamp
  * @returns Unix milliseconds timestamp
- *
- * @hidden
  */
-export const tai64ToUnixMilliseconds = (tai64: Tai64Timestamp): number =>
+const tai64ToUnixMilliseconds = (tai64: Tai64Timestamp): number =>
   secondsToMs(tai64ToUnixSeconds(tai64));
-
-/**
- * Converts Unix (milliseconds) to Tai64 (seconds).
- *
- * @param unixMilliseconds - unix milliseconds timestamp
- * @returns Tai64 timestamp
- *
- * @hidden
- */
-export const unixMillisecondsToTai64 = (unixMilliseconds: number): Tai64Timestamp =>
-  unixSecondsToTai64(msToSeconds(unixMilliseconds));
-
-/**
- * Converts Unix (seconds) to a Date instance.
- *
- * @param unixSeconds - unix seconds timestamp
- * @returns a new Date instance
- *
- * @hidden
- */
-export const unixSecondsToDate = (unixSeconds: number): Date => new Date(secondsToMs(unixSeconds));
-
-/**
- * Converts a Date to Tai64.
- *
- * @param date - Date to convert
- * @returns Tai64 timestamp
- *
- * @hidden
- */
-export const dateToTai64 = (date: Date): string => unixMillisecondsToTai64(date.getTime());
 
 /**
  * This class is used to represent a date and time in the Tai64 format.
@@ -184,7 +137,7 @@ export class DateTime extends Date implements Date {
    * @returns the Tai64 timestamp
    */
   toTai64(): Tai64Timestamp {
-    return dateToTai64(this);
+    return unixSecondsToTai64(this.toUnixSeconds())
   }
 
   /**
@@ -201,3 +154,4 @@ export class DateTime extends Date implements Date {
     return msToSeconds(this.getTime());
   }
 }
+

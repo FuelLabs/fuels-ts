@@ -1,14 +1,4 @@
-import {
-  DateTime,
-  dateToTai64,
-  msToSeconds,
-  secondsToMs,
-  tai64ToUnixMilliseconds,
-  tai64ToUnixSeconds,
-  unixMillisecondsToTai64,
-  unixSecondsToDate,
-  unixSecondsToTai64,
-} from './date-time';
+import { DateTime } from './date-time';
 
 const { now, nowPlusOneSecond } = {
   now: {
@@ -76,56 +66,6 @@ describe('utils/date-time', () => {
       expect(date.toTai64()).toEqual(nowPlusOneSecond.tai64);
       expect(date.toUnixSeconds()).toEqual(nowPlusOneSecond.unixSeconds);
       expect(date.toUnixMilliseconds()).toEqual(nowPlusOneSecond.unixMilliseconds);
-    });
-  });
-
-  describe('Helper functions', () => {
-    test('should convert msToSeconds', () => {
-      const result = msToSeconds(now.unixMilliseconds);
-
-      expect(result).toEqual(now.unixSeconds);
-    });
-
-    test('should convert secondsToMs', () => {
-      const result = secondsToMs(now.unixSeconds);
-
-      expect(result).toEqual(now.unixMilliseconds);
-    });
-
-    test('should convert tai64ToUnixSeconds', () => {
-      const result = tai64ToUnixSeconds(now.tai64);
-
-      expect(result).toEqual(now.unixSeconds);
-    });
-
-    test('should convert unixSecondsToTai64', () => {
-      const result = unixSecondsToTai64(now.unixSeconds);
-
-      expect(result).toEqual(now.tai64);
-    });
-
-    test('should convert tai64ToUnixMilliseconds', () => {
-      const result = tai64ToUnixMilliseconds(now.tai64);
-
-      expect(result).toEqual(now.unixMilliseconds);
-    });
-
-    test('should convert unixMillisecondsToTai64', () => {
-      const result = unixMillisecondsToTai64(now.unixMilliseconds);
-
-      expect(result).toEqual(now.tai64);
-    });
-
-    test('should convert unixSecondsToDate', () => {
-      const result = unixSecondsToDate(now.unixSeconds);
-
-      expect(result.getTime()).toEqual(now.unixMilliseconds);
-    });
-
-    test('should convert dateToTai64', () => {
-      const result = dateToTai64(new Date(now.unixMilliseconds));
-
-      expect(result).toEqual(now.tai64);
     });
   });
 });
