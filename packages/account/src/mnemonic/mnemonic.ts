@@ -210,6 +210,9 @@ class Mnemonic {
    * @param seed - BIP39 seed
    * @param testnet - Inform if should use testnet or mainnet prefix, the default value is true (`mainnet`).
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_SEED}
+   * When the seed length is not between 16 and 64 bytes.
    */
   static masterKeysFromSeed(seed: string): Uint8Array {
     const seedArray = getBytesCopy(seed);
