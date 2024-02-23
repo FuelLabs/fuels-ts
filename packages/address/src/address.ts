@@ -244,6 +244,9 @@ export default class Address extends AbstractAddress {
    * Takes an Evm Address and returns back an `Address`
    *
    * @returns A new `Address` instance
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_EVM_ADDRESS}
+   * When the provided Evm address is invalid
    */
   static fromEvmAddress(evmAddress: string): Address {
     if (!isEvmAddress(evmAddress)) {

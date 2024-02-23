@@ -187,6 +187,9 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
  * @returns Evm address padded to a b256 address
  *
  * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_EVM_ADDRESS}
+ * When the provided Evm address is invalid
  */
 export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => {
   if (!isEvmAddress(address)) {
