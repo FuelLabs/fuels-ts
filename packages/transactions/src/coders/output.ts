@@ -296,7 +296,7 @@ export class OutputCoder extends Coder<Output, Output> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_OUTPUT,
-          `Invalid transaction output type: ${type}.`
+          `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(OutputType).join(', ')}.`
         );
       }
     }
@@ -338,7 +338,7 @@ export class OutputCoder extends Coder<Output, Output> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_OUTPUT,
-          `Invalid transaction output type: ${type}.`
+          `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(OutputType).join(', ')}.`
         );
       }
     }
