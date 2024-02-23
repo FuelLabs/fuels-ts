@@ -158,6 +158,9 @@ export default class Address extends AbstractAddress {
    *
    * @param b256Address - A b256 hash
    * @returns A new `Address` instance
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_B256_ADDRESS}
+   * When the provided B256 address is invalid
    */
   static fromB256(b256Address: string): Address {
     if (!isB256(b256Address)) {
