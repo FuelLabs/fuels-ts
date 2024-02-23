@@ -61,32 +61,37 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     this.stream = response.body!.getReader();
   }
 
-  private async readStream(): Promise<IteratorResult<unknown, unknown>> {
-    let parsed;
-    let doneStreaming = false;
-    do {
-      const { value, done } = await this.stream.read();
-
-      parsed = FuelGraphqlSubscriber.parseBytesStream(value);
-      doneStreaming = done;
-
-      // we do this until it's a proper gql response or the stream is done i.e. {value: undefined, done: true}
-    } while (parsed === undefined && !doneStreaming);
-
-    return { value: parsed, done: doneStreaming };
-  }
-
   async next(): Promise<IteratorResult<unknown, unknown>> {
     if (!this.stream) {
       await this.setStream();
     }
 
-    const { value, done } = await this.readStream();
-    if (value instanceof FuelError) {
-      throw value;
-    }
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const { value, done } = await this.stream.read();
+      if (done) {
+        return { value, done };
+      }
 
-    return { value, done };
+      const text = FuelGraphqlSubscriber.textDecoder.decode(value);
+
+      // We don't care about responses that don't start with 'data:' like keep-alive messages
+      if (!text.startsWith('data:')) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const { data, errors } = JSON.parse(text.split('data:')[1]);
+
+      if (Array.isArray(errors)) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_REQUEST,
+          errors.map((err) => err.message).join('\n\n')
+        );
+      }
+
+      return { value: data, done: false };
+    }
   }
 
   /**
