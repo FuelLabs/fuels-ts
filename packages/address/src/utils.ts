@@ -152,6 +152,9 @@ export const getRandomB256 = () => hexlify(randomBytes(32));
  * @returns b256 with first 12 bytes cleared
  *
  * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_B256_ADDRESS}
+ * When the provided B256 address is invalid
  */
 export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => {
   let bytes;
@@ -159,8 +162,8 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
   try {
     if (!isB256(b256)) {
       throw new FuelError(
-        FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${b256}.`
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${b256}.`
       );
     }
 
