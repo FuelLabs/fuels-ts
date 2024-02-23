@@ -44,7 +44,11 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
   const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? shouldUseBuiltinFuelCore();
 
-  // Start clone-object while initializiung optional props
+  const { forcBuildFlags = [] } = userConfig;
+  const releaseFlag = forcBuildFlags.find((f) => f === '--release');
+  const buildMode = releaseFlag ? 'release' : 'debug';
+
+  // Start clone-object while initializing optional props
   const config: FuelsConfig = {
     contracts: [],
     scripts: [],
@@ -59,6 +63,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     useBuiltinForc,
     useBuiltinFuelCore,
     configPath,
+    forcBuildFlags,
+    buildMode,
   };
 
   // Resolve the output path on loaded config
