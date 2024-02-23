@@ -86,6 +86,12 @@ export abstract class AbiCoder {
    * 
    * @throws {FuelError} {@link ErrorCode.CODER_NOT_FOUND}
    * When we are unable to determine the coder for the given ABI type.
+   * 
+   * @throws {INVALID_COMPONENT} {@link ErrorCode.INVALID_COMPONENT}
+   * When the provided Array type is missing an item of 'component'.
+   * 
+   * @throws {INVALID_COMPONENT} {@link ErrorCode.INVALID_COMPONENT}
+   * When the provided Vec type is missing the 'type argument'.
    */
   private static getCoderImpl(
     resolvedAbiType: ResolvedAbiType,
