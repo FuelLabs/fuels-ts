@@ -37,7 +37,7 @@ async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<
   expect(hasKeepAliveMessage).toBe(true);
 }
 
-function mockFetchToGetSubscriptionStream(streamHolder: { stream: ReadableStream<Uint8Array> }) {
+function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<Uint8Array> }) {
   function getFetchMock(
     fetchSpy: MockInstance<
       [input: RequestInfo | URL, init?: RequestInit | undefined],
@@ -191,7 +191,7 @@ describe('TransactionSummary', () => {
       stream: new ReadableStream<Uint8Array>(),
     };
 
-    mockFetchToGetSubscriptionStream(subscriptionStreamHolder);
+    getSubscriptionStreamFromFetch(subscriptionStreamHolder);
 
     await response.waitForResult();
 
