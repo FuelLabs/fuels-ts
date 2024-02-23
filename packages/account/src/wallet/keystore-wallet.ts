@@ -112,6 +112,10 @@ export async function encryptKeystoreWallet(
   return JSON.stringify(keystore);
 }
 
+/**
+ * @throws {FuelError} {@link ErrorCode.INVALID_PASSWORD}
+ * When the provided password is incorrect.
+ */
 export async function decryptKeystoreWallet(jsonWallet: string, password: string): Promise<string> {
   const keystoreWallet = JSON.parse(jsonWallet) as KeystoreWallet;
 
