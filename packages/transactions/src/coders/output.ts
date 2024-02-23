@@ -261,6 +261,10 @@ export class OutputCoder extends Coder<Output, Output> {
     super('Output', ' struct Output', 0);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_OUTPUT}
+   * When the output type is invalid (valid types: {@link OutputType}).
+   */
   encode(value: Output): Uint8Array {
     const parts: Uint8Array[] = [];
 
@@ -300,6 +304,10 @@ export class OutputCoder extends Coder<Output, Output> {
     return concat(parts);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_OUTPUT}
+   * When the output type is invalid (valid types: {@link OutputType}).
+   */
   decode(data: Uint8Array, offset: number): [Output, number] {
     let decoded;
     let o = offset;
