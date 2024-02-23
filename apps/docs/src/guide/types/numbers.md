@@ -10,11 +10,13 @@ In Sway, there are multiple types of numbers:
 
 This guide explains how to create and interact with Sway numbers while using the SDK.
 
+> Note: The TS SDK does not have support for the `u256` type yet.
+
 ## Creating Numbers
 
-### For `u64` and `u256`
+### For `u64`
 
-When you pass in a `u64` or `u256` to a Sway program from JavaScript, you must first convert it to a `BigNum` object. Here's how you can do that:
+When you pass in a `u64` to a Sway program from JavaScript, you must first convert it to a `BigNum` object. Here's how you can do that:
 
 <<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-1{ts:line-numbers}
 
@@ -28,7 +30,7 @@ You don't need to do anything special to create these numbers. You can pass in a
 
 ## Examples: Interacting with Numbers in Contract Methods
 
-### For `u64` and `u256`
+### For `u64`
 
 <<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-3{ts:line-numbers}
 
