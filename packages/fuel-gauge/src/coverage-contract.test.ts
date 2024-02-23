@@ -19,6 +19,7 @@ import { getSetupContract } from './utils';
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
 const RUST_U32_MAX = 4294967295;
+const U256_MAX = bn(2).pow(256).sub(1);
 const B256 = '0x000000000000000000000000000000000000000000000000000000000000002a';
 const B512 =
   '0x059bc9c43ea1112f3eb2bd30415de72ed24c1c4416a1316f0f48cc6f958073f42a6d8c12e4829826316d8dcf444498717b5a2fbf27defac367271065f6a1d4a5';
@@ -164,6 +165,12 @@ describe('Coverage Contract', () => {
     const INPUT = bn(RUST_U32_MAX).add(1).toHex();
     const { value } = await contractInstance.functions.echo_u64(INPUT).call();
     expect(value.toHex()).toBe(INPUT);
+  });
+
+  it('should test u256 variable type', async () => {
+    const INPUT = U256_MAX;
+    const { value } = await contractInstance.functions.echo_u256(INPUT).call();
+    expect(JSON.stringify(value)).toEqual(JSON.stringify(INPUT));
   });
 
   it('should test bool variable type', async () => {
