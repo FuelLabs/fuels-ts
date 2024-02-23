@@ -914,6 +914,10 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
     super('Receipt', 'struct Receipt', 0);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_RECEIPT_TYPE}
+   * When the receipt type is invalid (valid types: {@link GqlReceiptType})
+   */
   encode(value: Receipt): Uint8Array {
     const parts: Uint8Array[] = [];
 
@@ -982,6 +986,10 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
     return concat(parts);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_RECEIPT_TYPE}
+   * When the receipt type is invalid (valid types: {@link GqlReceiptType})
+   */
   decode(data: Uint8Array, offset: number): [Receipt, number] {
     let decoded;
     let o = offset;
