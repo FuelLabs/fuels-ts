@@ -169,6 +169,12 @@ export default class ContractFactory {
    * Set configurable constants of the contract with the specified values.
    *
    * @param configurableConstants - An object containing configurable names and their values.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   * When the contract does not have configurables to be set.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   * When the contract does not have a configurable with the specified name.
    */
   setConfigurableConstants(configurableConstants: { [name: string]: unknown }) {
     try {

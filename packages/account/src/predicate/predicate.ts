@@ -218,6 +218,15 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param configurableConstants - Configurable constants to be set.
    * @param abiInterface - The ABI interface of the predicate.
    * @returns The mutated bytes with the configurable constants set.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   * When the ABI interface provided is `undefined`.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   * When the ABI interface has no configurables to be set.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   * When the provided configurable constant is not found in the ABI interface.
    */
   private static setConfigurableConstants(
     bytes: Uint8Array,
