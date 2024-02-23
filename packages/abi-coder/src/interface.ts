@@ -119,6 +119,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     return fragment.decodeOutput(data);
   }
 
+  /**
+   * @throws {FuelError} {@link ErrorCode.LOG_TYPE_NOT_FOUND}
+   * When the log type with the given log ID is not found in the ABI logged types {@link JsonAbi#loggedTypes}.
+   */
   decodeLog(data: BytesLike, logId: number, receiptId: string): any {
     const isExternalLoggedType = this.externalLoggedTypes[receiptId];
     if (isExternalLoggedType) {
