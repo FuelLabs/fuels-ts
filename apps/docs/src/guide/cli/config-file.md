@@ -90,6 +90,20 @@ Port to use when starting a local `fuel-core` node.
 
 <<< @../../../demo-fuels/fuels.config.full.ts#fuelCorePort{ts:line-numbers}
 
+## `forcBuildFlags`
+
+> - _Used by [`fuels build`](./commands.md#fuels-build) and [`fuels deploy`](./commands.md#fuels-deploy)_.
+
+Sway programs are compiled in `debug` mode by default.
+
+Here you can customize all build flags, e.g. to build programs in `release` mode.
+
+<<< @../../../demo-fuels/fuels.config.full.ts#forcBuildFlags{ts:line-numbers}
+
+Check also:
+
+- [Forc docs](https://docs.fuel.network/docs/forc/commands/forc_build/#forc-build)
+
 ## `deployConfig`
 
 You can supply a ready-to-go deploy configuration object:
