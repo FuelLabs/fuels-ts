@@ -43,6 +43,15 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
     return super.addCalls(funcScopes);
   }
 
+  /**
+   * Validates the heap type return calls.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_MULTICALL}
+   * When the multi-call has more than one call that returns a heap type.
+   * 
+   * @throws {FuelError} {@link ErrorCode.INVALID_MULTICALL}
+   * When the multi-call has a call that returns a heap type that is not the last call.
+   */
   private validateHeapTypeReturnCalls() {
     let heapOutputIndex = -1;
     let numberOfHeaps = 0;
