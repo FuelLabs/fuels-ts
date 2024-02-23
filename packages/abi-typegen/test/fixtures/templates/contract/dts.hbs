@@ -58,6 +58,7 @@ interface MyContractAbiInterface extends Interface {
     types_u16: FunctionFragment;
     types_u32: FunctionFragment;
     types_u64: FunctionFragment;
+    types_u256: FunctionFragment;
     types_u8: FunctionFragment;
     types_vector_geo: FunctionFragment;
     types_vector_option: FunctionFragment;
@@ -82,6 +83,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_u16', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u32', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u64', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_u256', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u8', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_vector_geo', values: [Vec<MyStructInput>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_vector_option', values: [Vec<StructWithMultiOptionInput>]): Uint8Array;
@@ -105,6 +107,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_u16', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u32', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u64', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_u256', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u8', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_vector_geo', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_vector_option', data: BytesLike): DecodedValue;
@@ -132,6 +135,7 @@ export class MyContractAbi extends Contract {
     types_u16: InvokeFunction<[x: BigNumberish], number>;
     types_u32: InvokeFunction<[x: BigNumberish], number>;
     types_u64: InvokeFunction<[x: BigNumberish], BN>;
+    types_u256: InvokeFunction<[x: BigNumberish], BN>;
     types_u8: InvokeFunction<[x: BigNumberish], number>;
     types_vector_geo: InvokeFunction<[x: Vec<MyStructInput>], Vec<MyStructOutput>>;
     types_vector_option: InvokeFunction<[x: Vec<StructWithMultiOptionInput>], Vec<StructWithMultiOptionOutput>>;

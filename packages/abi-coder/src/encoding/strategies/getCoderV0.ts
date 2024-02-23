@@ -15,6 +15,7 @@ import {
   STD_STRING_CODER_TYPE,
   STR_SLICE_CODER_TYPE,
   U16_CODER_TYPE,
+  U256_CODER_TYPE,
   U32_CODER_TYPE,
   U64_CODER_TYPE,
   U8_CODER_TYPE,
@@ -40,6 +41,7 @@ import { StdStringCoder } from '../coders/v0/StdStringCoder';
 import { StringCoder } from '../coders/v0/StringCoder';
 import { StructCoder } from '../coders/v0/StructCoder';
 import { TupleCoder } from '../coders/v0/TupleCoder';
+import { U256Coder } from '../coders/v0/U256Coder';
 import { U64Coder } from '../coders/v0/U64Coder';
 import { VecCoder } from '../coders/v0/VecCoder';
 
@@ -64,6 +66,8 @@ export const getCoder: GetCoderFn = (
     case U64_CODER_TYPE:
     case RAW_PTR_CODER_TYPE:
       return new U64Coder();
+    case U256_CODER_TYPE:
+      return new U256Coder();
     case RAW_SLICE_CODER_TYPE:
       return new RawSliceCoder();
     case BOOL_CODER_TYPE:
