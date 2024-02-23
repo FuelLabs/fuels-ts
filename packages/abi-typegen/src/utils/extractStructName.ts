@@ -2,6 +2,15 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
+/**
+ * Extracts the struct name from the JSON ABI.
+ * 
+ * @param params.rawAbiType - The raw JSON ABI type.
+ * @returns The struct name.
+ * 
+ * @throws {FuelError} {@link ErrorCode.JSON_ABI_ERROR}
+ * When the struct name cannot be extracted from the JSON ABI.
+ */
 export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: RegExp }) {
   const { rawAbiType, regex } = params;
 
