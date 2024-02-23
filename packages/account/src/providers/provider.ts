@@ -349,8 +349,7 @@ export default class Provider {
    * Returns the cached chainInfo for the current URL.
    * 
    * @throws {FuelError} {@link ErrorCode.CHAIN_INFO_CACHE_EMPTY}
-   * When the chain info cache is empty.
-   * This will occur when the user has not called `Provider.create` to initialize the provider.
+   * When the chain info cache is empty for the current {@link url}.
    */
   getChain() {
     const chain = Provider.chainInfoCache[this.url];
