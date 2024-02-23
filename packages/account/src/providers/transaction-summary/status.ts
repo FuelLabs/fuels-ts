@@ -9,7 +9,12 @@ import type {
 } from './types';
 import { TransactionStatus } from './types';
 
-/** @hidden */
+/**
+ * @hidden
+ * 
+ * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_STATUS}
+ * When the transaction status is not recognized (valid statuses: {@link TransactionStatus}).
+ */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
   switch (gqlStatus) {
     case 'FailureStatus':
