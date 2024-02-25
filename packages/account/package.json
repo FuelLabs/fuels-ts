@@ -77,6 +77,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "type-fest": "^4.6.0",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",

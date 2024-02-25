@@ -1,31 +1,20 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, WalletUnlocked } from 'fuels';
-import {
-  BaseAssetId,
-  ContractFactory,
-  toNumber,
-  Contract,
-  Provider,
-  Predicate,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { WalletUnlocked, BaseAssetId, toNumber, Contract, Predicate } from 'fuels';
+import { TestNodeLauncher } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
+import { getProgramDir } from '../utils';
 
-import { fundPredicate, setupContractWithConfig } from './utils/predicate';
+import { fundPredicate } from './utils/predicate';
 
 /**
  * @group node
  */
 describe('Predicate', () => {
-  const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-  );
-  const { binHexlified: tokenPoolBytes, abiContents: tokenPoolAbi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.TOKEN_CONTRACT
-  );
+  const callTestContractDir = getProgramDir(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+
+  const tokenPoolContractDir = getProgramDir(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
   const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
@@ -40,27 +29,16 @@ describe('Predicate', () => {
   );
 
   describe('With Contract', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
-    let provider: Provider;
-    let gasPrice: BN;
-    beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
-    });
-
-    beforeEach(async () => {
-      wallet = await generateTestWallet(provider, [[2_000_000, BaseAssetId]]);
-      receiver = await generateTestWallet(provider);
-    });
-
     it('calls a predicate from a contract function', async () => {
-      const setupContract = setupContractWithConfig({
-        contractBytecode: contractBytes,
-        abi: contractAbi,
-        cache: true,
+      using launcher = await TestNodeLauncher.launch({
+        deployContracts: [callTestContractDir],
       });
-      const contract = await setupContract();
+      const {
+        wallets: [wallet],
+        contracts: [contract],
+        provider,
+      } = launcher;
+
       const amountToPredicate = 500_000;
       const predicate = new Predicate<[Validation]>(
         predicateBytesTrue,
@@ -85,11 +63,15 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
-      const contract = await new ContractFactory(
-        tokenPoolBytes,
-        tokenPoolAbi,
-        wallet
-      ).deployContract({ gasPrice });
+      using launcher = await TestNodeLauncher.launch({
+        deployContracts: [tokenPoolContractDir],
+      });
+      const {
+        wallets: [wallet],
+        contracts: [contract],
+        provider,
+      } = launcher;
+      const receiver = WalletUnlocked.generate({ provider });
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
 

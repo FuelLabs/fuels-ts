@@ -1,23 +1,10 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN } from 'fuels';
-import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { Wallet, bn } from 'fuels';
+import { TestNodeLauncher } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
-
-  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-  );
-
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-  const contract = await factory.deployContract({ gasPrice });
-  return contract;
-};
+import { getProgramDir } from './utils';
 
 // hardcoded subIds on MultiTokenContract
 const subIds = [
@@ -26,15 +13,23 @@ const subIds = [
   '0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5',
 ];
 
+const multiTokenContractDir = getProgramDir(FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT);
+
 /**
  * @group node
  */
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launcher = await TestNodeLauncher.launch({
+      deployContracts: [multiTokenContractDir],
+    });
+    const {
+      provider,
+      contracts: [multiTokenContract],
+    } = launcher;
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
-    const multiTokenContract = await setup();
+
     const contractId = { value: multiTokenContract.id.toB256() };
 
     const helperDict: { [key: string]: { assetId: string; amount: number } } = {
@@ -110,7 +105,12 @@ describe('MultiTokenContract', () => {
   });
 
   it('can burn coins', async () => {
-    const multiTokenContract = await setup();
+    using launcher = await TestNodeLauncher.launch({
+      deployContracts: [multiTokenContractDir],
+    });
+    const {
+      contracts: [multiTokenContract],
+    } = launcher;
     const contractId = { value: multiTokenContract.id.toB256() };
 
     const helperDict: {

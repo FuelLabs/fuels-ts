@@ -2,6 +2,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
+import type { ChainConfig } from '@fuel-ts/utils/src/utils/fuel-node-interfaces';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
@@ -44,12 +45,14 @@ export type LaunchNodeOptions = {
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
+  chainConfig?: ChainConfig;
 };
 
 export type LaunchNodeResult = Promise<{
   cleanup: () => void;
   ip: string;
   port: string;
+  url: string;
   chainConfigPath: string;
 }>;
 
@@ -101,6 +104,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
+  chainConfig = defaultChainConfig,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -153,7 +157,7 @@ export const launchNode = async ({
       }
       const tempChainConfigFilePath = path.join(tempDirPath, 'chainConfig.json');
 
-      let chainConfig = defaultChainConfig;
+      let generatedChainConfig = chainConfig;
 
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
@@ -161,12 +165,12 @@ export const launchNode = async ({
         const signer = new Signer(pk);
         process.env.GENESIS_SECRET = hexlify(pk);
 
-        chainConfig = {
-          ...defaultChainConfig,
+        generatedChainConfig = {
+          ...generatedChainConfig,
           initial_state: {
-            ...defaultChainConfig.initial_state,
+            ...generatedChainConfig.initial_state,
             coins: [
-              ...defaultChainConfig.initial_state.coins,
+              ...generatedChainConfig.initial_state.coins,
               {
                 owner: signer.address.toHexString(),
                 amount: toHex(1_000_000_000),
@@ -178,7 +182,7 @@ export const launchNode = async ({
       }
 
       // Write a temporary chain configuration file.
-      writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      writeFileSync(tempChainConfigFilePath, JSON.stringify(generatedChainConfig), 'utf8');
 
       chainConfigPathToUse = tempChainConfigFilePath;
     }
@@ -222,19 +226,27 @@ export const launchNode = async ({
     };
 
     // Look for a specific graphql start point in the output.
-    child.stderr.on('data', (chunk: string) => {
+    child.stderr.on('data', (chunk: string | Buffer) => {
+      const text = typeof chunk === 'string' ? chunk : chunk.toString(); // chunk is sometimes Buffer and sometimes string...
       // Look for the graphql service start.
-      if (chunk.indexOf(graphQLStartSubstring) !== -1) {
+      if (text.indexOf(graphQLStartSubstring) !== -1) {
+        const rows = text.split('\n');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const rowWithUrl = rows.find((row) => row.indexOf(graphQLStartSubstring) !== -1)!;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
+
         // Resolve with the cleanup method.
         resolve({
           cleanup: () => killNode(cleanupConfig),
-          ip: ipToUse,
-          port: portToUse,
+          ip: realIp,
+          port: realPort,
+          url: `http://${realIp}:${realPort}/graphql`,
           chainConfigPath: chainConfigPathToUse as string,
         });
       }
-      if (/error/i.test(chunk)) {
-        reject(chunk.toString());
+      if (/error/i.test(text)) {
+        reject(text.toString());
       }
     });
 

@@ -629,6 +629,9 @@ importers:
       get-graphql-schema:
         specifier: ^2.1.2
         version: 2.1.2
+      type-fest:
+        specifier: ^4.6.0
+        version: 4.10.3
 
   packages/address:
     dependencies:
@@ -692,10 +695,16 @@ importers:
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../forc
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
 
   packages/create-fuels:
     dependencies:
@@ -6478,7 +6487,7 @@ packages:
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.10.5
+      '@types/node': 20.11.13
     dev: true
 
   /@types/graceful-fs@4.1.6:
@@ -6615,7 +6624,7 @@ packages:
   /@types/mkdirp@0.5.2:
     resolution: {integrity: sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==}
     dependencies:
-      '@types/node': 20.10.5
+      '@types/node': 20.11.13
     dev: true
 
   /@types/mkdirp@1.0.2:
@@ -6712,7 +6721,7 @@ packages:
   /@types/resolve@0.0.8:
     resolution: {integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==}
     dependencies:
-      '@types/node': 20.10.5
+      '@types/node': 20.11.13
     dev: true
 
   /@types/resolve@1.17.1:
@@ -6810,7 +6819,7 @@ packages:
   /@types/ws@8.5.5:
     resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
-      '@types/node': 20.10.5
+      '@types/node': 20.11.13
 
   /@types/yargs-parser@21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -20096,6 +20105,11 @@ packages:
     resolution: {integrity: sha512-StmrZmK3eD9mDF9Vt7UhqthrDSk66O9iYl5t5a0TSoVkHjl0XZx/xuc/BRz4urAXXGHOY5OLsE0RdJFIApSFmw==}
     engines: {node: '>=14.16'}
     dev: false
+
+  /type-fest@4.10.3:
+    resolution: {integrity: sha512-JLXyjizi072smKGGcZiAJDCNweT8J+AuRxmPZ1aG7TERg4ijx9REl8CNhbr36RV4qXqL1gO1FF9HL8OkVmmrsA==}
+    engines: {node: '>=16'}
+    dev: true
 
   /type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}

@@ -206,10 +206,6 @@ export default defineConfig({
                 text: 'Signing',
                 link: '/guide/wallets/signing',
               },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
             ],
           },
           {
@@ -405,10 +401,6 @@ export default defineConfig({
               {
                 text: 'Testing in TS',
                 link: '/guide/testing/testing-in-ts',
-              },
-              {
-                text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
               },
               {
                 text: 'Tweaking the Blockchain',
