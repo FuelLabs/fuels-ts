@@ -13,7 +13,8 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
     const builtInForcPath = findBinPath('fuels-forc', __dirname);
 
     const command = config.useBuiltinForc ? builtInForcPath : 'forc';
-    const forc = spawn(command, ['build', '-p', path], { stdio: 'pipe' });
+    const args = ['build', '-p', path].concat(config.forcBuildFlags);
+    const forc = spawn(command, args, { stdio: 'pipe' });
 
     if (loggingConfig.isLoggingEnabled) {
       forc.stderr?.pipe(process.stderr);

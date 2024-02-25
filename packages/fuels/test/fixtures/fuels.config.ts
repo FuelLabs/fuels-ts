@@ -25,4 +25,6 @@ export const fuelsConfig: FuelsConfig = {
   fuelCorePort: 4000,
   providerUrl: FUEL_NETWORK_URL,
   configPath: __filename,
+  forcBuildFlags: [],
+  buildMode: 'debug',
 };
