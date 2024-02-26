@@ -60,7 +60,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
       }
 
       /**
-       * Tee duplicates a stream and all writes happen to both streams.
+       * This duplicates a stream and all writes happen to both streams.
        * We can thus use one stream to verify the keep-alive message was sent
        * and pass the other forward in place of the original stream,
        * thereby not affecting the response at all.
