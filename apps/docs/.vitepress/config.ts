@@ -346,12 +346,12 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions',
               },
               {
-                text: 'Deposit And Withdraw',
-                link: '/guide/cookbook/deposit-and-withdraw',
+                text: 'Custom Transactions from Contract Calls',
+                link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
-                text: 'Transfer All Assets',
-                link: '/guide/cookbook/transfer-all-assets',
+                text: 'Deposit And Withdraw',
+                link: '/guide/cookbook/deposit-and-withdraw',
               },
             ],
           },
