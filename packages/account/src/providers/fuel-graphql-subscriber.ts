@@ -48,7 +48,12 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
       const text = FuelGraphqlSubscriber.textDecoder.decode(value);
 
-      // We don't care about responses that don't start with 'data:' like keep-alive messages
+      /**
+       * We don't care about responses that don't start with 'data:' like keep-alive messages.
+       * The only responses that I came across from the node are either 200 responses with data or keep-alive messages.
+       * You can find the keep-alive message in the fuel-core codebase:
+       * https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
+       * */
       if (!text.startsWith('data:')) {
         // eslint-disable-next-line no-continue
         continue;
