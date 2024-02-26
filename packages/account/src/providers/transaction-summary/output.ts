@@ -1,5 +1,6 @@
 import type {
   Output,
+  OutputChange,
   OutputCoin,
   OutputContract,
   OutputContractCreated,
@@ -24,7 +25,7 @@ export function getOutputsCoin(outputs: Output[]) {
 
 /** @hidden */
 export function getOutputsChange(outputs: Output[]) {
-  return getOutputsByType<OutputCoin>(outputs, OutputType.Change);
+  return getOutputsByType<OutputChange>(outputs, OutputType.Change);
 }
 
 /** @hidden */

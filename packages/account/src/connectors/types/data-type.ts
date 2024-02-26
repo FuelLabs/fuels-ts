@@ -34,12 +34,3 @@ export type Network = {
  * Read more at: https://docs.fuel.network/docs/specs/abi/json-abi-format/
  */
 export type FuelABI = JsonAbi;
-
-export enum MessageTypes {
-  ping = 'ping',
-  uiEvent = 'uiEvent',
-  event = 'event',
-  request = 'request',
-  response = 'response',
-  removeConnection = 'removeConnection',
-}

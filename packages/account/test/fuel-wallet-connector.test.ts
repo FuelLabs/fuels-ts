@@ -1,5 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -22,14 +24,6 @@ import { promiseCallback } from './fixtures/promise-callback';
 describe('Fuel Connector', () => {
   it('should ensure is instantiated using default connectors', async () => {
     const fuel = new Fuel();
-    const connectors = await fuel.connectors();
-    expect(connectors.length).toBe(0);
-  });
-
-  it('should be instantiaded using devMode connectors when flag is informed', async () => {
-    const fuel = new Fuel({
-      devMode: true,
-    });
     const connectors = await fuel.connectors();
     expect(connectors.length).toBe(0);
   });
@@ -546,5 +540,61 @@ describe('Fuel Connector', () => {
     const wallet = await fuel.getWallet(currentAccount, provider);
     expect(wallet.provider).toBeInstanceOf(CustomProvider);
     expect(await wallet.getBalance()).toEqual(bn(1234));
+  });
+
+  it('should ensure hasWallet works just fine', async () => {
+    const defaultProvider = await Provider.create(FUEL_NETWORK_URL);
+
+    const defaultWallet = Wallet.generate({
+      provider: defaultProvider,
+    });
+
+    const connector = new MockConnector({
+      wallets: [defaultWallet],
+    });
+
+    let hasWallet = await new Fuel().hasWallet();
+
+    expect(hasWallet).toBeFalsy();
+
+    hasWallet = await new Fuel({
+      connectors: [connector],
+    }).hasWallet();
+
+    expect(hasWallet).toBeTruthy();
+  });
+
+  it('should ensure getProvider works just fine', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const defaultWallet = Wallet.generate({
+      provider,
+    });
+
+    const connector = new MockConnector({
+      wallets: [defaultWallet],
+    });
+
+    const fuel = new Fuel({
+      connectors: [connector],
+    });
+
+    let sameProvider = await fuel.getProvider(provider);
+
+    expect(sameProvider).toStrictEqual(provider);
+
+    const customProvider: unknown = {
+      chainId: 1,
+      url: provider.url,
+    };
+
+    sameProvider = await fuel.getProvider(customProvider as Provider);
+
+    expect(sameProvider instanceof Provider).toBeTruthy();
+
+    await expectToThrowFuelError(
+      () => fuel.getProvider([] as unknown as Provider),
+      new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.')
+    );
   });
 });

@@ -1,0 +1,18 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30Z" fill="black"/>
+    <path d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30Z" fill="#627EEA"/>
+    <path style="mix-blend-mode:soft-light" d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30Z" fill="url(#paint0_linear_0_1)"/>
+    <path d="M15 29.5C23.0081 29.5 29.5 23.0081 29.5 15C29.5 6.99187 23.0081 0.5 15 0.5C6.99187 0.5 0.5 6.99187 0.5 15C0.5 23.0081 6.99187 29.5 15 29.5Z" stroke="black" stroke-opacity="0.097"/>
+    <path d="M15.2496 5V12.3932L21.4984 15.1855L15.2496 5Z" fill="white" fill-opacity="0.602"/>
+    <path d="M15.2496 5L9 15.1855L15.2496 12.3932V5Z" fill="white"/>
+    <path d="M15.2496 19.9765V25L21.5026 16.349L15.2496 19.9765Z" fill="white" fill-opacity="0.602"/>
+    <path d="M15.2496 25V19.9756L9 16.349L15.2496 25Z" fill="white"/>
+    <path d="M15.2496 18.8137L21.4984 15.1854L15.2496 12.3949V18.8137Z" fill="white" fill-opacity="0.2"/>
+    <path d="M9 15.1854L15.2496 18.8137V12.3949L9 15.1854Z" fill="white" fill-opacity="0.602"/>
+    <defs>
+        <linearGradient id="paint0_linear_0_1" x1="15" y1="0" x2="15" y2="30" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white" stop-opacity="0.5"/>
+            <stop offset="1" stop-opacity="0.5"/>
+        </linearGradient>
+    </defs>
+</svg>
