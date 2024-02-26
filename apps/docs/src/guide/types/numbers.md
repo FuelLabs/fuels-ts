@@ -14,7 +14,7 @@ This guide explains how to create and interact with Sway numbers while using the
 
 ### For `u64` and `u256`
 
-When you pass in a `u64` or a `u256` to a Sway program from JavaScript, you must first convert it to a `BigNum` object. Here's how you can do that:
+When you pass in a `u64` or a `u256` to a Sway program from JavaScript, you must first convert it to a `BigNum` object. This is because these types can have extremely large maximum values (`2^64` and `2^256` respectively), and JavaScript's `Number` type can only hold up to 53 bits of precision (`2^53`).
 
 <<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-1{ts:line-numbers}
 
