@@ -1,5 +1,5 @@
 import chainConfigJson from './chainConfig.json';
-import type { ChainConfig } from './fuel-node-interfaces';
+import type { ChainConfig } from './types';
 
 export const defaultChainConfig = chainConfigJson as ChainConfig;
 
