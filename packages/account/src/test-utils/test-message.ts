@@ -2,8 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
-import type { ChainConfig } from '@fuel-ts/utils';
-import { hexlify } from 'ethers';
+import { hexlify, type ChainConfig } from '@fuel-ts/utils';
 
 interface TestMessageSpecs {
   sender: AbstractAddress;

@@ -1,7 +1,7 @@
+import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { toHex } from '@fuel-ts/math';
 import type { ChainConfig } from '@fuel-ts/utils';
-import { randomBytes } from 'crypto';
 import type { PartialDeep } from 'type-fest';
 
 import { WalletUnlocked } from '../wallet';
