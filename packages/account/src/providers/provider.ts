@@ -59,6 +59,11 @@ export type CallResult = {
   receipts: TransactionResultReceipt[];
 };
 
+export type EstimateTxDependenciesReturns = CallResult & {
+  outputVariables: number;
+  missingContractIds: string[];
+};
+
 /**
  * A Fuel block
  */
@@ -693,16 +698,22 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<CallResult> {
+  async estimateTxDependencies(
+    transactionRequest: TransactionRequest
+  ): Promise<EstimateTxDependenciesReturns> {
     if (transactionRequest.type === TransactionType.Create) {
       return {
         receipts: [],
+        outputVariables: 0,
+        missingContractIds: [],
       };
     }
 
     await this.estimatePredicates(transactionRequest);
 
     let receipts: TransactionResultReceipt[] = [];
+    const missingContractIds: string[] = [];
+    let outputVariables = 0;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
@@ -717,9 +728,11 @@ export default class Provider {
         missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
       if (hasMissingOutputs) {
+        outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
           transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          missingContractIds.push(contractId);
         });
       } else {
         break;
@@ -728,6 +741,8 @@ export default class Provider {
 
     return {
       receipts,
+      outputVariables,
+      missingContractIds,
     };
   }
 
