@@ -801,7 +801,8 @@ export default class Provider {
   ): Promise<
     TransactionCost & {
       estimatedInputs: TransactionRequest['inputs'];
-      estimatedOutputs: TransactionRequest['outputs'];
+      outputVariables: number;
+      missingContractIds: string[];
     }
   > {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
@@ -850,6 +851,8 @@ export default class Provider {
      */
 
     let receipts: TransactionResultReceipt[] = [];
+    let missingContractIds: string[] = [];
+    let outputVariables = 0;
     // Transactions of type Create does not consume any gas so we can the dryRun
     if (isScriptTransaction && estimateTxDependencies) {
       /**
@@ -867,6 +870,8 @@ export default class Provider {
       const result = await this.estimateTxDependencies(txRequestClone);
 
       receipts = result.receipts;
+      outputVariables = result.outputVariables;
+      missingContractIds = result.missingContractIds;
     }
 
     // For CreateTransaction the gasUsed is going to be the minGas
@@ -892,7 +897,8 @@ export default class Provider {
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,
-      estimatedOutputs: txRequestClone.outputs,
+      outputVariables,
+      missingContractIds,
     };
   }
 
