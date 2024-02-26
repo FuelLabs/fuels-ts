@@ -83,7 +83,7 @@ describe('MultiTokenContract', () => {
     await multiTokenContract
       .multiCall(
         subIds.map((subId) =>
-          multiTokenContract.functions.transfer_coins_to_output(
+          multiTokenContract.functions.transfer_to_address(
             { value: userWallet.address.toB256() },
             { value: helperDict[subId].assetId },
             helperDict[subId].amount
