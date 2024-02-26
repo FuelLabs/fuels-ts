@@ -226,7 +226,9 @@ describe('WalletUnlocked', () => {
 
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve({ receipts: [] }));
+      .mockImplementation(() =>
+        Promise.resolve({ receipts: [], missingContractIds: [], outputVariables: 0 })
+      );
 
     const call = vi
       .spyOn(providersMod.Provider.prototype, 'call')
