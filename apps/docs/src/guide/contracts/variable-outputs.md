@@ -14,7 +14,7 @@ For instance, if a contract function calls a Sway transfer function 3 times, it 
 
 ## Adding Variable Outputs to the contract call
 
-When your contract invokes any of theses functions, or if it calls a function that leads to another contract invoking theses functions, you need to add the appropriate number of Output Variables.
+When your contract invokes any of these functions, or if it calls a function that leads to another contract invoking these functions, you need to add the appropriate number of Output Variables.
 
 This can be done as shown in the following example:
 
