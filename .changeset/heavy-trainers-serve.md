@@ -3,4 +3,7 @@
 "@fuel-ts/program": minor
 ---
 
-avoid reassigning inputs and outpus at BaseInvocationScope
+- Add `outputVariables` and `missingContractIds` to the return of `estimateTxDependencies`
+- Removed `estimatedOutputs` from return of `getTransactionCost`
+- Add `outputVariables` and `missingContractIds` to the return of `getTransactionCost`
+- Avoid reassigning `inputs` and `outputs` from the estimated TX at `BaseInvocationScope`
