@@ -1,7 +1,8 @@
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import type { Output } from '@fuel-ts/transactions';
+import type { InputContract, Output, OutputChange } from '@fuel-ts/transactions';
 
 import type {
   TransactionResultReceipt,
@@ -178,38 +179,6 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
 }
 
 /** @hidden */
-export function getContractTransferOperations({ receipts }: ReceiptParam): Operation[] {
-  const transferOutReceipts = getReceiptsTransferOut(receipts);
-
-  const contractTransferOperations = transferOutReceipts.reduce(
-    (prevContractTransferOps, receipt) => {
-      const newContractTransferOps = addOperation(prevContractTransferOps, {
-        name: OperationName.contractTransfer,
-        from: {
-          type: AddressType.contract,
-          address: receipt.from,
-        },
-        to: {
-          type: AddressType.account,
-          address: receipt.to,
-        },
-        assetsSent: [
-          {
-            amount: receipt.amount,
-            assetId: receipt.assetId,
-          },
-        ],
-      });
-
-      return newContractTransferOps;
-    },
-    [] as Operation[]
-  );
-
-  return contractTransferOperations;
-}
-
-/** @hidden */
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
@@ -329,77 +298,112 @@ export function getContractCallOperations({
 }
 
 /** @hidden */
+function extractTransferOperationFromReceipt(
+  receipt: TransactionResultTransferReceipt | TransactionResultTransferOutReceipt,
+  contractInputs: InputContract[],
+  changeOutputs: OutputChange[]
+) {
+  const { to: toAddress, assetId, amount } = receipt;
+  let { from: fromAddress } = receipt;
+
+  const toType = contractInputs.some((input) => input.contractID === toAddress)
+    ? AddressType.contract
+    : AddressType.account;
+
+  if (ZeroBytes32 === fromAddress) {
+    const change = changeOutputs.find((output) => output.assetId === assetId);
+
+    fromAddress = change?.to || fromAddress;
+  }
+
+  const fromType = contractInputs.some((input) => input.contractID === fromAddress)
+    ? AddressType.contract
+    : AddressType.account;
+
+  return {
+    name: OperationName.transfer,
+    from: {
+      type: fromType,
+      address: fromAddress,
+    },
+    to: {
+      type: toType,
+      address: toAddress,
+    },
+    assetsSent: [
+      {
+        assetId: assetId.toString(),
+        amount,
+      },
+    ],
+  };
+}
+
+/** @hidden */
 export function getTransferOperations({
   inputs,
   outputs,
   receipts,
 }: GetTransferOperationsParams): Operation[] {
-  const coinOutputs = getOutputsCoin(outputs);
+  let operations: Operation[] = [];
 
-  const [transferReceipt] = getReceiptsByType<TransactionResultTransferReceipt>(
+  const coinOutputs = getOutputsCoin(outputs);
+  const contractInputs = getInputsContract(inputs);
+  const changeOutputs = getOutputsChange(outputs);
+
+  /**
+   * Extracting transfer operations between wallets, as they do not produce receipts
+   */
+  coinOutputs.forEach((output) => {
+    const { amount, assetId, to } = output;
+
+    const changeOutput = changeOutputs.find((change) => change.assetId === assetId);
+
+    if (changeOutput) {
+      operations = addOperation(operations, {
+        name: OperationName.transfer,
+        from: {
+          type: AddressType.account,
+          address: changeOutput.to,
+        },
+        to: {
+          type: AddressType.account,
+          address: to,
+        },
+        assetsSent: [
+          {
+            assetId,
+            amount,
+          },
+        ],
+      });
+    }
+  });
+
+  /**
+   * `Transfer` receipts are produced from transfers:
+   * - Wallet to Contract
+   * - Contract to Contract
+   */
+  const transferReceipts = getReceiptsByType<TransactionResultTransferReceipt>(
     receipts,
     ReceiptType.Transfer
   );
 
-  let operations: Operation[] = [];
+  /**
+   * `TransferOut` receipts are produced from transfer:
+   * - Contract to Wallet
+   */
+  const transferOutReceipts = getReceiptsByType<TransactionResultTransferOutReceipt>(
+    receipts,
+    ReceiptType.TransferOut
+  );
 
-  // Possible transfer to contract
-  if (transferReceipt) {
-    const changeOutputs = getOutputsChange(outputs);
-    changeOutputs.forEach((output) => {
-      const { assetId } = output;
-      const [contractInput] = getInputsContract(inputs);
-      const utxo = getInputFromAssetId(inputs, assetId);
+  [...transferReceipts, ...transferOutReceipts].forEach((receipt) => {
+    const operation = extractTransferOperationFromReceipt(receipt, contractInputs, changeOutputs);
 
-      if (utxo && contractInput) {
-        const inputAddress = getInputAccountAddress(utxo);
-        operations = addOperation(operations, {
-          name: OperationName.transfer,
-          from: {
-            type: AddressType.account,
-            address: inputAddress,
-          },
-          to: {
-            type: AddressType.contract,
-            address: contractInput.contractID,
-          },
-          assetsSent: [
-            {
-              assetId: assetId.toString(),
-              amount: transferReceipt.amount,
-            },
-          ],
-        });
-      }
-    });
-  } else {
-    coinOutputs.forEach((output) => {
-      const input = getInputFromAssetId(inputs, output.assetId);
-      if (input) {
-        const inputAddress = getInputAccountAddress(input);
-
-        const operationToAdd: Operation = {
-          name: OperationName.transfer,
-          from: {
-            type: AddressType.account,
-            address: inputAddress,
-          },
-          to: {
-            type: AddressType.account,
-            address: output.to.toString(),
-          },
-          assetsSent: [
-            {
-              assetId: output.assetId.toString(),
-              amount: output.amount,
-            },
-          ],
-        };
-
-        operations = addOperation(operations, operationToAdd);
-      }
-    });
-  }
+    operations = addOperation(operations, operation);
+  });
 
   return operations;
 }
@@ -484,7 +488,6 @@ export function getOperations({
         rawPayload,
         maxInputs,
       }),
-      ...getContractTransferOperations({ receipts }),
       ...getWithdrawFromFuelOperations({ inputs, receipts }),
     ];
   }
