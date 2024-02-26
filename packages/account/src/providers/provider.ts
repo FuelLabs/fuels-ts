@@ -9,7 +9,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { arrayify, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import { Network } from 'ethers';
@@ -45,7 +45,6 @@ import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculatePriceWithFactor,
-  fromUnixToTai64,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
@@ -1394,13 +1393,13 @@ export default class Provider {
    * Lets you produce blocks with custom timestamps and the block number of the last block produced.
    *
    * @param amount - The amount of blocks to produce
-   * @param startTime - The UNIX timestamp to set for the first produced block
+   * @param startTime - The UNIX timestamp (milliseconds) to set for the first produced block
    * @returns A promise that resolves to the block number of the last produced block.
    */
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
+      startTimestamp: startTime ? DateTime.fromUnixMilliseconds(startTime).toTai64() : undefined,
     });
     return bn(latestBlockHeight);
   }
