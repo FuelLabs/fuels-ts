@@ -24,4 +24,4 @@ In the TypeScript SDK, the Output Variables are automatically added to the trans
 
 This process is done by a brute-force strategy, performing sequential dry runs until no errors are returned. This method identifies the number of Output Variables required to process the transaction.
 
-However, this can significantly delay the transaction processing. Therefore it is **highly recommended** to manually add the correct number of Output Variables before submitting the transaction.
+However, this can significantly delay the transaction processing. Therefore, it is **highly recommended** to manually add the correct number of Output Variables before submitting the transaction.
