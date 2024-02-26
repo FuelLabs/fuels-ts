@@ -56,7 +56,7 @@ describe('TokenTestContract', () => {
     expect((await getBalance()).toHex()).toEqual(toHex(200));
 
     // Transfer some coins
-    await token.functions.transfer_coins_to_output(addressId, assetId, 50).call();
+    await token.functions.transfer_to_address(addressId, assetId, 50).call();
 
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
@@ -142,7 +142,7 @@ describe('TokenTestContract', () => {
     expect((await getBalance()).toHex()).toEqual(bn(100).toHex());
 
     // transfer 50 coins to user wallet
-    await token.functions.transfer_coins_to_output(addressId, assetId, 50).call();
+    await token.functions.transfer_to_address(addressId, assetId, 50).call();
 
     // the contract should now have only 50 coins
     expect((await getBalance()).toHex()).toEqual(bn(50).toHex());
@@ -157,7 +157,7 @@ describe('TokenTestContract', () => {
     const assetId: AssetId = { value: BaseAssetId };
 
     await expectToThrowFuelError(
-      () => token.functions.transfer_coins_to_output(addressParameter, assetId, 50).call(),
+      () => token.functions.transfer_to_address(addressParameter, assetId, 50).call(),
       new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid b256.')
     );
   });
