@@ -14,6 +14,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe('Custom Transactions from Contract Calls', () => {
   let senderWallet: WalletUnlocked;
   let receiverWallet: WalletUnlocked;
