@@ -5,8 +5,13 @@ import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/accoun
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
+import type {
+  AbstractAccount,
+  AbstractAddress,
+  AbstractContract,
+  AbstractProgram,
+} from '@fuel-ts/interfaces';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
@@ -297,6 +302,24 @@ export class BaseInvocationScope<TReturn = any> {
       this.transactionRequest.addContractInputAndOutput(contract.id);
       this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), contract.interface);
     });
+    return this;
+  }
+
+  /**
+   * Adds an asset transfer to an Account on the contract call transaction request.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @returns The current instance of the class.
+   */
+  addTransfer(destination: string | AbstractAddress, amount: BigNumberish, assetId: string) {
+    this.transactionRequest = this.transactionRequest.addCoinOutput(
+      Address.fromAddressOrString(destination),
+      amount,
+      assetId
+    );
+
     return this;
   }
 
