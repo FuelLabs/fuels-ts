@@ -61,8 +61,6 @@ describe('Custom Transactions from Contract Calls', () => {
     // <BN: 0x2710>
     // #endregion custom-transactions-contract-calls
 
-    console.log('Value:', value);
-
     const receiverBalance = await receiverWallet.getBalance(BaseAssetId);
     expect(receiverBalance.toNumber()).toBeGreaterThan(initialBalance.toNumber());
     expect((value as BN).toNumber()).toBe(amountToRecipient.toNumber());
