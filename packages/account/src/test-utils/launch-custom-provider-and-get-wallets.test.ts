@@ -1,6 +1,7 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { toHex, toNumber } from '@fuel-ts/math';
+import { urlIsLive } from '@fuel-ts/utils/test-utils';
 
 import { Provider, sleepUntilTrue } from '../providers';
 import { Signer } from '../signer';
@@ -9,7 +10,6 @@ import { WalletUnlocked } from '../wallet';
 import { AssetId } from './asset-id';
 import { launchCustomProviderAndGetWallets } from './launch-custom-provider-and-get-wallets';
 import { TestMessage } from './test-message';
-import { urlIsLive } from './utils';
 import { WalletConfig } from './wallet-config';
 
 /**

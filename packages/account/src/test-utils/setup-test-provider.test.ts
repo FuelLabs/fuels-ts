@@ -1,13 +1,13 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
+import { urlIsLive } from '@fuel-ts/utils/test-utils';
 
 import { Provider, sleepUntilTrue } from '../providers';
 
 import * as launchNodeMod from './launchNode';
 import type { LaunchNodeResult } from './launchNode';
 import { setupTestProvider } from './setup-test-provider';
-import { urlIsLive } from './utils';
 
 /**
  * @group node
