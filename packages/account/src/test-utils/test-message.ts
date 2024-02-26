@@ -23,7 +23,10 @@ export class TestMessage {
   private da_height: string;
 
   /**
+   * A helper class to create messages for testing purposes.
    *
+   * Used in tandem with `WalletConfig`.
+   * It can also be used standalone and passed into the initial state of a chain via the `.toChainMessage` method.
    */
   constructor({
     sender = Address.fromRandom(),
