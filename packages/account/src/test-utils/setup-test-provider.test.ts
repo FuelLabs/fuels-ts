@@ -1,9 +1,9 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { urlIsLive } from '@fuel-ts/utils/test-utils';
+import { sleepUntilTrue, urlIsLive } from '@fuel-ts/utils/test-utils';
 
-import { Provider, sleepUntilTrue } from '../providers';
+import { Provider } from '../providers';
 
 import * as launchNodeMod from './launchNode';
 import type { LaunchNodeResult } from './launchNode';

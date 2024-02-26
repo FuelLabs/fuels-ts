@@ -1,11 +1,4 @@
-/** @hidden */
-export function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-}
+import { sleep } from '../utils/sleep';
 
 export async function sleepUntilTrue(
   fn: () => Promise<boolean>,

@@ -1,9 +1,9 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { toHex, toNumber } from '@fuel-ts/math';
-import { urlIsLive } from '@fuel-ts/utils/test-utils';
+import { sleepUntilTrue, urlIsLive } from '@fuel-ts/utils/test-utils';
 
-import { Provider, sleepUntilTrue } from '../providers';
+import { Provider } from '../providers';
 import { Signer } from '../signer';
 import { WalletUnlocked } from '../wallet';
 

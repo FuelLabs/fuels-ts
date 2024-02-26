@@ -6,3 +6,4 @@ export * from './utils/hexlify';
 export * from './utils/normalizeString';
 export * from './utils/defaultChainConfig';
 export * from './utils/fuel-node-interfaces';
+export * from './utils/sleep';

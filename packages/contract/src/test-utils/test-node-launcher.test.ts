@@ -1,17 +1,15 @@
-import { Provider, sleepUntilTrue } from '@fuel-ts/account';
+import { Provider } from '@fuel-ts/account';
 import { WalletConfig } from '@fuel-ts/account/test-utils';
 import * as launchCustomProviderAndGetWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { ChainConfig } from '@fuel-ts/utils';
-import { urlIsLive } from '@fuel-ts/utils/test-utils';
+import { urlIsLive, sleepUntilTrue } from '@fuel-ts/utils/test-utils';
 import { randomInt, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { writeFile } from 'fs/promises';
-import http from 'http';
 import os from 'os';
 import { join } from 'path';
-import { parse } from 'url';
 
 import { TestNodeLauncher } from './test-node-launcher';
 

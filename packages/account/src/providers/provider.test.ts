@@ -7,7 +7,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { arrayify, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify, sleep } from '@fuel-ts/utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -28,7 +28,7 @@ import type {
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import { fromTai64ToDate } from './transaction-summary';
-import { fromTai64ToUnix, fromUnixToTai64, sleep } from './utils';
+import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
 import * as gasMod from './utils/gas';
 
 afterEach(() => {
@@ -218,7 +218,7 @@ describe('Provider', () => {
     expect(provider.url).toBe(url);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    await cleanup();
+    cleanup();
   });
 
   it('can accept a custom fetch function', async () => {

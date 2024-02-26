@@ -1,8 +1,6 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { urlIsLive } from '@fuel-ts/utils/test-utils';
+import { sleepUntilTrue, urlIsLive } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
-
-import { sleepUntilTrue } from '../providers';
 
 import type { LaunchNodeOptions } from './launchNode';
 import { killNode, launchNode } from './launchNode';
