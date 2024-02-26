@@ -16,7 +16,7 @@ For instance, if a contract function calls a Sway transfer function 3 times, it 
 
 When your contract invokes any of theses functions, or if it calls a function that leads to another contract invoking theses functions, you need to add the appropriate number of Output Variables.
 
-This is can be done as shows the following example:
+This can be done as shown in the following example:
 
 <<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
 
