@@ -1,8 +1,8 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
+import type { ChainConfig } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
-import type { ChainConfig } from '@fuel-ts/utils/src/utils/fuel-node-interfaces';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';

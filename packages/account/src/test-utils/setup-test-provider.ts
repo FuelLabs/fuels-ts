@@ -1,5 +1,5 @@
+import type { ChainConfig } from '@fuel-ts/utils';
 import { defaultChainConfig } from '@fuel-ts/utils';
-import type { ChainConfig } from '@fuel-ts/utils/src/utils/fuel-node-interfaces';
 import { mergeDeepRight } from 'ramda';
 import type { PartialDeep } from 'type-fest';
 
