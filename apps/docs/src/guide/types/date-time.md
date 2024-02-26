@@ -6,7 +6,7 @@ Internally the transactions and other time/date assets are encoded using the [`T
 
 ## Instantiating a `DateTime`
 
-We have a host of static methods for **instantiation** of our `DateTime` class.
+We have a host of static method for **instantiation** of our `DateTime` class.
 
 <<< @/../../docs-snippets/src/guide/types/date-time.test.ts#create-from-multiple-sources{ts:line-numbers}
 
