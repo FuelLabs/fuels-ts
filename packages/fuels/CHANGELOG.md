@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.75.0
+
+### Patch Changes
+
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+- Adding new `forcBuildFlags` property to `fuels` config, by [@arboleya](https://github.com/arboleya) (See [#1788](https://github.com/FuelLabs/fuels-ts/pull/1788))
+
 ## 0.74.0
 
 ### Minor Changes
