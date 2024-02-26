@@ -31,6 +31,7 @@ import type { Coder } from '../coders/AbstractCoder';
 import { ArrayCoder } from '../coders/v0/ArrayCoder';
 import { B256Coder } from '../coders/v0/B256Coder';
 import { B512Coder } from '../coders/v0/B512Coder';
+import { BigNumberCoder } from '../coders/v0/BigNumberCoder';
 import { BooleanCoder } from '../coders/v0/BooleanCoder';
 import { ByteCoder } from '../coders/v0/ByteCoder';
 import { EnumCoder } from '../coders/v0/EnumCoder';
@@ -41,8 +42,6 @@ import { StdStringCoder } from '../coders/v0/StdStringCoder';
 import { StringCoder } from '../coders/v0/StringCoder';
 import { StructCoder } from '../coders/v0/StructCoder';
 import { TupleCoder } from '../coders/v0/TupleCoder';
-import { U256Coder } from '../coders/v0/U256Coder';
-import { U64Coder } from '../coders/v0/U64Coder';
 import { VecCoder } from '../coders/v0/VecCoder';
 
 import { getCoders } from './getCoders';
@@ -65,9 +64,9 @@ export const getCoder: GetCoderFn = (
       return new NumberCoder(resolvedAbiType.type, options);
     case U64_CODER_TYPE:
     case RAW_PTR_CODER_TYPE:
-      return new U64Coder();
+      return new BigNumberCoder('u64');
     case U256_CODER_TYPE:
-      return new U256Coder();
+      return new BigNumberCoder('u256');
     case RAW_SLICE_CODER_TYPE:
       return new RawSliceCoder();
     case BOOL_CODER_TYPE:
