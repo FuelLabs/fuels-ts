@@ -2,7 +2,7 @@
 contract;
 
 use std::{asset::*, context::balance_of, context::msg_amount};
-use token_abi::Token;
+use token_abi::{Token, TransferParams};
 use std::constants::ZERO_B256;
 
 const BASE_TOKEN: b256 = ZERO_B256;
@@ -24,12 +24,46 @@ impl Token for Contract {
         burn(BASE_TOKEN, burn_amount);
     }
 
-    fn force_transfer_coins(target: ContractId, asset_id: AssetId, coins: u64) {
-        force_transfer_to_contract(target, asset_id, coins);
+    fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
+        force_transfer_to_contract(target, asset_id, amount);
     }
 
-    fn transfer_coins_to_output(recipient: Address, asset_id: AssetId, coins: u64) {
-        transfer_to_address(recipient, asset_id, coins);
+    fn multi_contract_transfer(recipients: [TransferParams<ContractId>; 5]) {
+        let mut counter = 0;
+
+        while counter < 5 {
+            force_transfer_to_contract(
+                recipients[counter]
+                    .recipient,
+                recipients[counter]
+                    .asset_id,
+                recipients[counter]
+                    .amount,
+            );
+
+            counter = counter + 1;
+        }
+    }
+
+    fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
+        transfer_to_address(recipient, asset_id, amount);
+    }
+
+    fn multi_address_transfer(recipients: [TransferParams<Address>; 5]) {
+        let mut counter = 0;
+
+        while counter < 5 {
+            transfer_to_address(
+                recipients[counter]
+                    .recipient,
+                recipients[counter]
+                    .asset_id,
+                recipients[counter]
+                    .amount,
+            );
+
+            counter = counter + 1;
+        }
     }
 
     fn get_balance(target: ContractId, asset_id: AssetId) -> u64 {

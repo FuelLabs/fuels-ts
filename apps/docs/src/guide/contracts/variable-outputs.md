@@ -1,23 +1,27 @@
-<!-- NOTE: Review the relevance of this documentation page. The TypeScript SDK manages Output variables automatically, which may make the current content lack sufficient context. Consider providing a detailed explanation of how transactions work in a UTXO-based blockchain before discussing Output variables. This approach will ensure users have a better understanding of the topic and its importance. -->
-
 # Variable Outputs
 
-You may need to send funds to the transaction output in certain scenarios. Sway provides a method called `transfer_to_address(coins, asset_id, recipient)` that we can use for this purpose, which allows you to transfer a specific number of coins for a given asset to a recipient address.
+Sway includes robust functions for transferring assets to wallets and contracts.
 
-## Example: Using `transfer_to_address` in a Contract
+When using these transfer functions within your Sway projects, it is important to be aware that each call will require an [Output Variable](https://specs.fuel.network/master/tx-format/output.html#outputvariable) within the [Outputs](https://specs.fuel.network/master/tx-format/output.html) of the transaction.
 
-Here's an example of a contract function that utilizes the `transfer_to_address` method:
+For instance, if a contract function calls a Sway transfer function 3 times, it will require 3 Output Variables present within the list of outputs in your transaction.
 
-```rust:line-numbers
-    fn transfer_coins_to_output(coins: u64, asset_id: ContractId, recipient: Address) {
-        transfer_to_address(coins, asset_id, recipient);
-    }
-```
+## Example: Sway's built-in functions that requires `Output Variable`
 
-## Using the SDK to Call the `transfer_coins_to_output` Function
+<<< @/../../docs-snippets/test/fixtures/forc-projects/token/src/main.sw#variable-outputs-1{ts:line-numbers}
 
-With the SDK, you can call `transfer_coins_to_output` by chaining the `txParams` and adding the property `variableOutputs: amount` to your contract call. Like this:
+> **Note:** Functions like `mint` and `burn` also requires an Output Variable for each call, as they internally execute the transfer function.
+
+## Adding Variable Outputs to the contract call
+
+When your contract invokes any of these functions, or if it calls a function that leads to another contract invoking these functions, you need to add the appropriate number of Output Variables.
+
+This can be done as shown in the following example:
 
 <<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
 
-In the TypeScript SDK, the output variables are automatically added to the transaction's list of outputs. The output's amount and owner may vary based on the transaction execution.
+In the TypeScript SDK, the Output Variables are automatically added to the transaction's list of outputs.
+
+This process is done by a brute-force strategy, performing sequential dry runs until no errors are returned. This method identifies the number of Output Variables required to process the transaction.
+
+However, this can significantly delay the transaction processing. Therefore, it is **highly recommended** to manually add the correct number of Output Variables before submitting the transaction.
