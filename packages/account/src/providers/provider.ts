@@ -59,6 +59,11 @@ export type CallResult = {
   receipts: TransactionResultReceipt[];
 };
 
+export type EstimateTxDependenciesReturns = CallResult & {
+  outputVariables: number;
+  missingContractIds: string[];
+};
+
 /**
  * A Fuel block
  */
@@ -693,16 +698,22 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<CallResult> {
+  async estimateTxDependencies(
+    transactionRequest: TransactionRequest
+  ): Promise<EstimateTxDependenciesReturns> {
     if (transactionRequest.type === TransactionType.Create) {
       return {
         receipts: [],
+        outputVariables: 0,
+        missingContractIds: [],
       };
     }
 
     await this.estimatePredicates(transactionRequest);
 
     let receipts: TransactionResultReceipt[] = [];
+    const missingContractIds: string[] = [];
+    let outputVariables = 0;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
@@ -717,9 +728,11 @@ export default class Provider {
         missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
       if (hasMissingOutputs) {
+        outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
           transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          missingContractIds.push(contractId);
         });
       } else {
         break;
@@ -728,6 +741,8 @@ export default class Provider {
 
     return {
       receipts,
+      outputVariables,
+      missingContractIds,
     };
   }
 
@@ -786,7 +801,8 @@ export default class Provider {
   ): Promise<
     TransactionCost & {
       estimatedInputs: TransactionRequest['inputs'];
-      estimatedOutputs: TransactionRequest['outputs'];
+      outputVariables: number;
+      missingContractIds: string[];
     }
   > {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
@@ -835,6 +851,8 @@ export default class Provider {
      */
 
     let receipts: TransactionResultReceipt[] = [];
+    let missingContractIds: string[] = [];
+    let outputVariables = 0;
     // Transactions of type Create does not consume any gas so we can the dryRun
     if (isScriptTransaction && estimateTxDependencies) {
       /**
@@ -852,6 +870,8 @@ export default class Provider {
       const result = await this.estimateTxDependencies(txRequestClone);
 
       receipts = result.receipts;
+      outputVariables = result.outputVariables;
+      missingContractIds = result.missingContractIds;
     }
 
     // For CreateTransaction the gasUsed is going to be the minGas
@@ -877,7 +897,8 @@ export default class Provider {
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,
-      estimatedOutputs: txRequestClone.outputs,
+      outputVariables,
+      missingContractIds,
     };
   }
 
