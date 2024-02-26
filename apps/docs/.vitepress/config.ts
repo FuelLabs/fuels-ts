@@ -276,6 +276,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Add Transfer',
+                link: '/guide/contracts/add-transfer',
+              },
+              {
                 text: 'Contract Balance',
                 link: '/guide/contracts/contract-balance',
               },
