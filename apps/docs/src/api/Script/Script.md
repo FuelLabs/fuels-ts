@@ -36,7 +36,7 @@ Create a new instance of the Script class.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `bytecode` | `BytesLike` | The compiled bytecode of the script. |
+| `bytecode` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The compiled bytecode of the script. |
 | `abi` | `JsonAbi` | The ABI interface for the script. |
 | `account` | [`Account`](/api/Account/Account.md) | The account associated with the script. |
 
@@ -50,7 +50,7 @@ AbstractScript.constructor
 
 #### Defined in
 
-[script.ts:69](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L69)
+[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L70)
 
 ## Properties
 
@@ -66,7 +66,7 @@ AbstractScript.account
 
 #### Defined in
 
-[script.ts:45](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L45)
+[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L46)
 
 ___
 
@@ -82,7 +82,7 @@ AbstractScript.bytes
 
 #### Defined in
 
-[script.ts:35](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L35)
+[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L36)
 
 ___
 
@@ -100,7 +100,7 @@ Functions that can be invoked within the script.
 
 #### Defined in
 
-[script.ts:60](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L60)
+[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L61)
 
 ___
 
@@ -116,7 +116,7 @@ AbstractScript.interface
 
 #### Defined in
 
-[script.ts:40](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L40)
+[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L41)
 
 ___
 
@@ -132,7 +132,7 @@ AbstractScript.provider
 
 #### Defined in
 
-[script.ts:55](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L55)
+[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L56)
 
 ___
 
@@ -144,7 +144,7 @@ The script request object.
 
 #### Defined in
 
-[script.ts:50](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L50)
+[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L51)
 
 ## Methods
 
@@ -172,4 +172,4 @@ This instance of the `Script`.
 
 #### Defined in
 
-[script.ts:90](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/script/src/script.ts#L90)
+[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/script/src/script.ts#L91)

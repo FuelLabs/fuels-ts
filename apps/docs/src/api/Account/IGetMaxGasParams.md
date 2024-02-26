@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:91](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/providers/utils/gas.ts#L91)
+[packages/account/src/providers/utils/gas.ts:89](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/providers/utils/gas.ts#L89)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:89](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/providers/utils/gas.ts#L89)
+[packages/account/src/providers/utils/gas.ts:87](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/providers/utils/gas.ts#L87)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:90](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/providers/utils/gas.ts#L90)
+[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/providers/utils/gas.ts#L88)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/providers/utils/gas.ts#L88)
+[packages/account/src/providers/utils/gas.ts:86](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/providers/utils/gas.ts#L86)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:87](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/providers/utils/gas.ts#L87)
+[packages/account/src/providers/utils/gas.ts:85](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/providers/utils/gas.ts#L85)

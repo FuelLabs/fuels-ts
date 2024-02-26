@@ -42,7 +42,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L80)
+[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L79)
 
 ___
 
@@ -71,13 +71,13 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L70)
+[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L69)
 
 ___
 
 ### fromMnemonic
 
-▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: `BytesLike`, `provider?`: [`Provider`](/api/Account/Provider.md)) => [`WalletUnlocked`](/api/Account/WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
+▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: [`BytesLike`](/api/Interfaces/index.md#byteslike), `provider?`: [`Provider`](/api/Account/Provider.md)) => [`WalletUnlocked`](/api/Account/WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
 
 #### Type declaration
 
@@ -91,7 +91,7 @@ Create a Wallet Unlocked from a mnemonic phrase.
 | :------ | :------ | :------ |
 | `mnemonic` | `string` | The mnemonic phrase. |
 | `path?` | `string` | The derivation path (optional). |
-| `passphrase?` | `BytesLike` | The passphrase for the mnemonic (optional). |
+| `passphrase?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The passphrase for the mnemonic (optional). |
 | `provider?` | [`Provider`](/api/Account/Provider.md) | A Provider instance (optional). |
 
 ##### Returns
@@ -102,7 +102,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:61](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L61)
+[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L60)
 
 ___
 
@@ -132,7 +132,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:50](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L50)
+[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L49)
 
 ___
 
@@ -160,7 +160,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:40](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L40)
+[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L39)
 
 ## Methods
 
@@ -185,7 +185,7 @@ A locked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:19](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L19)
+[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L18)
 
 ___
 
@@ -199,7 +199,7 @@ Creates an unlocked wallet instance from a private key and a provider.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `privateKey` | `BytesLike` | The private key of the wallet. |
+| `privateKey` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The private key of the wallet. |
 | `provider?` | [`Provider`](/api/Account/Provider.md) | A Provider instance (optional). |
 
 #### Returns
@@ -210,4 +210,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:30](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallet.ts#L30)
+[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallet.ts#L29)

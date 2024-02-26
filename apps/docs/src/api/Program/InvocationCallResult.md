@@ -1,50 +1,46 @@
-# Class: FunctionInvocationResult&lt;T, TTransactionType\>
+# Class: InvocationCallResult&lt;T\>
 
-[@fuel-ts/program](/api/Program/index.md).FunctionInvocationResult
+[@fuel-ts/program](/api/Program/index.md).InvocationCallResult
 
-Represents the result of a function invocation with transaction details.
+Represents the result of an invocation call.
 
 ## Type parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `T` | `any` | The type of the returned value. |
-| `TTransactionType` | `void` | The type of the transaction. |
 
 ## Hierarchy
 
 - [`InvocationResult`](/api/Program/InvocationResult.md)&lt;`T`\>
 
-  ↳ **`FunctionInvocationResult`**
+  ↳ **`InvocationCallResult`**
 
 ## Constructors
 
 ### constructor
 
-• **new FunctionInvocationResult**&lt;`T`, `TTransactionType`\>(`funcScopes`, `transactionResponse`, `transactionResult`, `program`, `isMultiCall`): [`FunctionInvocationResult`](/api/Program/FunctionInvocationResult.md)&lt;`T`, `TTransactionType`\>
+• **new InvocationCallResult**&lt;`T`\>(`funcScopes`, `callResult`, `isMultiCall`): [`InvocationCallResult`](/api/Program/InvocationCallResult.md)&lt;`T`\>
 
-Constructs an instance of FunctionInvocationResult.
+Constructs an instance of InvocationCallResult.
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | `any` |
-| `TTransactionType` | `void` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `funcScopes` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike) \| [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] | The function scopes. |
-| `transactionResponse` | [`TransactionResponse`](/api/Account/TransactionResponse.md) | The transaction response. |
-| `transactionResult` | `TransactionResult`&lt;`TTransactionType`\> | The transaction result. |
-| `program` | `AbstractProgram` | The program. |
+| `callResult` | [`CallResult`](/api/Account/index.md#callresult) | The call result. |
 | `isMultiCall` | `boolean` | Whether it's a multi-call. |
 
 #### Returns
 
-[`FunctionInvocationResult`](/api/Program/FunctionInvocationResult.md)&lt;`T`, `TTransactionType`\>
+[`InvocationCallResult`](/api/Program/InvocationCallResult.md)&lt;`T`\>
 
 #### Overrides
 
@@ -52,9 +48,19 @@ Constructs an instance of FunctionInvocationResult.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:144](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L144)
+[packages/program/src/functions/invocation-results.ts:201](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L201)
 
 ## Properties
+
+### callResult
+
+• `Readonly` **callResult**: [`CallResult`](/api/Account/index.md#callresult)
+
+#### Defined in
+
+[packages/program/src/functions/invocation-results.ts:192](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L192)
+
+___
 
 ### functionScopes
 
@@ -95,56 +101,6 @@ ___
 #### Defined in
 
 [packages/program/src/functions/invocation-results.ts:41](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L41)
-
-___
-
-### logs
-
-• `Readonly` **logs**: `any`[]
-
-#### Defined in
-
-[packages/program/src/functions/invocation-results.ts:133](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L133)
-
-___
-
-### program
-
-• `Readonly` **program**: `AbstractProgram`
-
-#### Defined in
-
-[packages/program/src/functions/invocation-results.ts:132](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L132)
-
-___
-
-### transactionId
-
-• `Readonly` **transactionId**: `string`
-
-#### Defined in
-
-[packages/program/src/functions/invocation-results.ts:129](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L129)
-
-___
-
-### transactionResponse
-
-• `Readonly` **transactionResponse**: [`TransactionResponse`](/api/Account/TransactionResponse.md)
-
-#### Defined in
-
-[packages/program/src/functions/invocation-results.ts:130](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L130)
-
-___
-
-### transactionResult
-
-• `Readonly` **transactionResult**: `TransactionResult`&lt;`TTransactionType`\>
-
-#### Defined in
-
-[packages/program/src/functions/invocation-results.ts:131](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L131)
 
 ___
 
@@ -220,32 +176,30 @@ ___
 
 ### build
 
-▸ **build**&lt;`T`, `TTransactionType`\>(`funcScope`, `transactionResponse`, `isMultiCall`, `program`): `Promise`&lt;[`FunctionInvocationResult`](/api/Program/FunctionInvocationResult.md)&lt;`T`, `TTransactionType`\>\>
+▸ **build**&lt;`T`\>(`funcScopes`, `callResult`, `isMultiCall`): `Promise`&lt;[`InvocationCallResult`](/api/Program/InvocationCallResult.md)&lt;`T`\>\>
 
-Builds an instance of FunctionInvocationResult.
+Builds an instance of InvocationCallResult.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `T` |
-| `TTransactionType` | `void` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `funcScope` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike) \| [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] | The function scope. |
-| `transactionResponse` | [`TransactionResponse`](/api/Account/TransactionResponse.md) | The transaction response. |
+| `funcScopes` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike) \| [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] | The function scopes. |
+| `callResult` | [`CallResult`](/api/Account/index.md#callresult) | The call result. |
 | `isMultiCall` | `boolean` | Whether it's a multi-call. |
-| `program` | `AbstractProgram` | The program. |
 
 #### Returns
 
-`Promise`&lt;[`FunctionInvocationResult`](/api/Program/FunctionInvocationResult.md)&lt;`T`, `TTransactionType`\>\>
+`Promise`&lt;[`InvocationCallResult`](/api/Program/InvocationCallResult.md)&lt;`T`\>\>
 
-The function invocation result.
+The invocation call result.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:168](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L168)
+[packages/program/src/functions/invocation-results.ts:218](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/program/src/functions/invocation-results.ts#L218)

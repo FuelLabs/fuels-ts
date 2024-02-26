@@ -22,7 +22,7 @@ Mnemonic instance
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:72](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L72)
+[packages/account/src/mnemonic/mnemonic.ts:64](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L64)
 
 ## Properties
 
@@ -32,7 +32,7 @@ Mnemonic instance
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:65](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L65)
+[packages/account/src/mnemonic/mnemonic.ts:57](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L57)
 
 ## Methods
 
@@ -44,7 +44,7 @@ Mnemonic instance
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `entropy` | `BytesLike` | Entropy source to the mnemonic phrase. |
+| `entropy` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Entropy source to the mnemonic phrase. |
 
 #### Returns
 
@@ -54,7 +54,7 @@ Mnemonic phrase
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:92](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L92)
+[packages/account/src/mnemonic/mnemonic.ts:84](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L84)
 
 ___
 
@@ -76,7 +76,7 @@ Entropy hash
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:83](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L83)
+[packages/account/src/mnemonic/mnemonic.ts:75](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L75)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:176](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L176)
+[packages/account/src/mnemonic/mnemonic.ts:168](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L168)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `entropy` | `BytesLike` | `undefined` | Entropy source to the mnemonic phrase. |
+| `entropy` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `undefined` | Entropy source to the mnemonic phrase. |
 | `wordlist` | `string`[] | `english` | - |
 
 #### Returns
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:115](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L115)
+[packages/account/src/mnemonic/mnemonic.ts:107](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L107)
 
 ___
 
@@ -138,7 +138,7 @@ Create a new mnemonic using a randomly generated number as entropy.
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `size` | `number` | `32` | Number of bytes used as an entropy |
-| `extraEntropy` | `BytesLike` | `''` | Optional extra entropy to increase randomness |
+| `extraEntropy` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `''` | Optional extra entropy to increase randomness |
 
 #### Returns
 
@@ -148,7 +148,7 @@ A randomly generated mnemonic
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:257](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L257)
+[packages/account/src/mnemonic/mnemonic.ts:249](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L249)
 
 ___
 
@@ -172,7 +172,7 @@ true if phrase is a valid mnemonic
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:155](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L155)
+[packages/account/src/mnemonic/mnemonic.ts:147](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L147)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:202](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L202)
+[packages/account/src/mnemonic/mnemonic.ts:194](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L194)
 
 ___
 
@@ -217,7 +217,7 @@ Mnemonic phrase
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:102](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L102)
+[packages/account/src/mnemonic/mnemonic.ts:94](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L94)
 
 ___
 
@@ -230,7 +230,7 @@ ___
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `phrase` | [`MnemonicPhrase`](/api/Account/index.md#mnemonicphrase) | `undefined` | Mnemonic phrase composed by words from the provided wordlist |
-| `passphrase` | `BytesLike` | `''` | Add additional security to protect the generated seed with a memorized passphrase. `Note: if the owner forgot the passphrase, all wallets and accounts derive from the phrase will be lost.` |
+| `passphrase` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `''` | Add additional security to protect the generated seed with a memorized passphrase. `Note: if the owner forgot the passphrase, all wallets and accounts derive from the phrase will be lost.` |
 
 #### Returns
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:145](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L145)
+[packages/account/src/mnemonic/mnemonic.ts:137](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L137)
 
 ___
 
@@ -253,7 +253,7 @@ ___
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `phrase` | [`MnemonicPhrase`](/api/Account/index.md#mnemonicphrase) | `undefined` | Mnemonic phrase composed by words from the provided wordlist |
-| `passphrase` | `BytesLike` | `''` | Add additional security to protect the generated seed with a memorized passphrase. `Note: if the owner forgot the passphrase, all wallets and accounts derive from the phrase will be lost.` |
+| `passphrase` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `''` | Add additional security to protect the generated seed with a memorized passphrase. `Note: if the owner forgot the passphrase, all wallets and accounts derive from the phrase will be lost.` |
 
 #### Returns
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:131](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L131)
+[packages/account/src/mnemonic/mnemonic.ts:123](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L123)
 
 ___
 
@@ -288,4 +288,4 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:222](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/mnemonic/mnemonic.ts#L222)
+[packages/account/src/mnemonic/mnemonic.ts:214](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/mnemonic/mnemonic.ts#L214)

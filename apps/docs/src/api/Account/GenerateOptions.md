@@ -6,13 +6,13 @@
 
 ### entropy
 
-• `Optional` **entropy**: `BytesLike`
+• `Optional` **entropy**: [`BytesLike`](/api/Interfaces/index.md#byteslike)
 
 Additional entropy for the random bytes
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallets.ts#L19)
+[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallets.ts#L19)
 
 ___
 
@@ -22,4 +22,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/e8cdc9bd/packages/account/src/wallet/wallets.ts#L20)
+[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packages/account/src/wallet/wallets.ts#L20)
