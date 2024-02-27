@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen items-center p-24 flex flex-col gap-6`}>
-      <div className="flex gap-4 items-">
+      <div className="flex gap-4 items-center">
         <FuelLogo />
         <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
       </div>
