@@ -42,6 +42,7 @@ import type {
 import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 export {
   /**
@@ -524,7 +525,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @hidden
    */
   metadataGas(_gasCosts: GqlGasCosts): BN {
-    throw new Error('Not implemented');
+    throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented');
   }
 
   /**
