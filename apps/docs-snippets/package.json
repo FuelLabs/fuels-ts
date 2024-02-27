@@ -8,10 +8,11 @@
     "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release"
   },
   "devDependencies": {
-    "fuels": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/account": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "ethers": "^6.7.1",
+    "fuels": "workspace:*"
   },
   "keywords": [],
   "author": "",

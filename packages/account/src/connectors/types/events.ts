@@ -1,11 +1,8 @@
-import type { Asset } from '@fuels/assets';
-import type { JSONRPCRequest, JSONRPCResponse } from 'json-rpc-2.0';
-
+import type { Asset } from '../../providers/assets/types';
 import type { FuelConnector } from '../fuel-connector';
 
 import type { FuelConnectorEventTypes } from './connector-types';
-import type { MessageTypes, Network } from './data-type';
-import type { MessageSender } from './message';
+import type { Network } from './data-type';
 
 /** **
  * ========================================================================================
@@ -20,45 +17,6 @@ export type FuelEventArg<T extends FuelConnectorEvents['type']> = Extract<
   FuelConnectorEventTypes,
   { type: T }
 >['data'];
-
-/** **
- * ========================================================================================
- * Events
- * ========================================================================================
- */
-
-export type BaseEvent<T> = {
-  readonly target: string;
-  readonly connectorName?: string;
-  readonly id?: string;
-  readonly sender?: MessageSender;
-} & T;
-
-export type UIEventMessage = BaseEvent<{
-  readonly type: MessageTypes.uiEvent;
-  readonly ready: boolean;
-  readonly session: string;
-}>;
-
-export type RequestMessage = BaseEvent<{
-  readonly type: MessageTypes.request;
-  readonly request: JSONRPCRequest;
-}>;
-
-export type ResponseMessage = BaseEvent<{
-  readonly type: MessageTypes.response;
-  readonly response: JSONRPCResponse;
-}>;
-
-export type EventMessageEvents = Array<{
-  event: string;
-  params: Array<unknown>;
-}>;
-
-export type EventMessage<T = EventMessageEvents> = BaseEvent<{
-  readonly type: MessageTypes.event;
-  readonly events: T;
-}>;
 
 /**
  * Event trigger when the accounts available to the

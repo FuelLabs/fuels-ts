@@ -9,7 +9,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { arrayify, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import { Network } from 'ethers';
@@ -30,7 +30,7 @@ import type {
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
+import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
@@ -46,7 +46,6 @@ import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculatePriceWithFactor,
-  fromUnixToTai64,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
@@ -65,6 +64,11 @@ export type NewCallResult = {
   id?: string;
   status?: GqlDryRunFailureStatusFragmentFragment | GqlDryRunSuccessStatusFragmentFragment;
 }[];
+
+export type EstimateTxDependenciesReturns = CallResult & {
+  outputVariables: number;
+  missingContractIds: string[];
+};
 
 /**
  * A Fuel block
@@ -455,7 +459,7 @@ export default class Provider {
       const isSubscription = opDefinition?.operation === 'subscription';
 
       if (isSubscription) {
-        return fuelGraphQLSubscriber({
+        return new FuelGraphqlSubscriber({
           url: this.url,
           query,
           fetchFn: (url, requestInit) =>
@@ -704,16 +708,22 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<CallResult> {
+  async estimateTxDependencies(
+    transactionRequest: TransactionRequest
+  ): Promise<EstimateTxDependenciesReturns> {
     if (transactionRequest.type === TransactionType.Create) {
       return {
         receipts: [],
+        outputVariables: 0,
+        missingContractIds: [],
       };
     }
 
     await this.estimatePredicates(transactionRequest);
 
     let receipts: TransactionResultReceipt[] = [];
+    const missingContractIds: string[] = [];
+    let outputVariables = 0;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const { dryRun: dryRunStatuses } = await this.operations.dryRun({
@@ -730,9 +740,11 @@ export default class Provider {
         missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
       if (hasMissingOutputs) {
+        outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
           transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          missingContractIds.push(contractId);
         });
       } else {
         break;
@@ -741,6 +753,8 @@ export default class Provider {
 
     return {
       receipts,
+      outputVariables,
+      missingContractIds,
     };
   }
 
@@ -806,7 +820,8 @@ export default class Provider {
   ): Promise<
     TransactionCost & {
       estimatedInputs: TransactionRequest['inputs'];
-      estimatedOutputs: TransactionRequest['outputs'];
+      outputVariables: number;
+      missingContractIds: string[];
     }
   > {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
@@ -855,6 +870,8 @@ export default class Provider {
      */
 
     let receipts: TransactionResultReceipt[] = [];
+    let missingContractIds: string[] = [];
+    let outputVariables = 0;
     // Transactions of type Create does not consume any gas so we can the dryRun
     if (isScriptTransaction && estimateTxDependencies) {
       /**
@@ -872,6 +889,8 @@ export default class Provider {
       const result = await this.estimateTxDependencies(txRequestClone);
 
       receipts = result.receipts;
+      outputVariables = result.outputVariables;
+      missingContractIds = result.missingContractIds;
     }
 
     // For CreateTransaction the gasUsed is going to be the minGas
@@ -897,7 +916,8 @@ export default class Provider {
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,
-      estimatedOutputs: txRequestClone.outputs,
+      outputVariables,
+      missingContractIds,
     };
   }
 
@@ -1393,13 +1413,13 @@ export default class Provider {
    * Lets you produce blocks with custom timestamps and the block number of the last block produced.
    *
    * @param amount - The amount of blocks to produce
-   * @param startTime - The UNIX timestamp to set for the first produced block
+   * @param startTime - The UNIX timestamp (milliseconds) to set for the first produced block
    * @returns A promise that resolves to the block number of the last produced block.
    */
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
+      startTimestamp: startTime ? DateTime.fromUnixMilliseconds(startTime).toTai64() : undefined,
     });
     return bn(latestBlockHeight);
   }

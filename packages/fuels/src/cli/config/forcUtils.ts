@@ -3,6 +3,8 @@ import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
 
+import type { FuelsConfig } from '../types';
+
 export type ForcToml = {
   project: {
     authors?: string[];
@@ -70,21 +72,21 @@ export function getContractCamelCase(contractPath: string) {
   return camelCase(projectName);
 }
 
-export function getBinaryPath(contractPath: string) {
+export function getBinaryPath(contractPath: string, { buildMode }: FuelsConfig) {
   const projectName = getContractName(contractPath);
-  return join(contractPath, `/out/debug/${projectName}.bin`);
+  return join(contractPath, `/out/${buildMode}/${projectName}.bin`);
 }
 
-export function getABIPath(contractPath: string) {
+export function getABIPath(contractPath: string, { buildMode }: FuelsConfig) {
   const projectName = getContractName(contractPath);
-  return join(contractPath, `/out/debug/${projectName}-abi.json`);
+  return join(contractPath, `/out/${buildMode}/${projectName}-abi.json`);
 }
 
-export function getABIPaths(paths: string[]) {
-  return Promise.all(paths.map((path) => getABIPath(path)));
+export function getABIPaths(paths: string[], config: FuelsConfig) {
+  return Promise.all(paths.map((path) => getABIPath(path, config)));
 }
 
-export const getStorageSlotsPath = (contractPath: string) => {
+export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsConfig) => {
   const projectName = getContractName(contractPath);
-  return join(contractPath, `/out/debug/${projectName}-storage_slots.json`);
+  return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
 };
