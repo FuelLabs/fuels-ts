@@ -26,4 +26,5 @@ members = [
   "token",
   "echo-raw-slice",
   "echo-std-string",
+  "predicate-signing",
 ]
