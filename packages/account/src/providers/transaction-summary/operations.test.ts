@@ -1,6 +1,8 @@
 import { getRandomB256 } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import {
   CONTRACT_CALL_ABI,
@@ -18,7 +20,6 @@ import {
   MOCK_RECEIPT_RETURN_DATA_1,
   MOCK_RECEIPT_RETURN_DATA_2,
   MOCK_RECEIPT_SCRIPT_RESULT,
-  MOCK_RECEIPT_TRANSFER,
   MOCK_RECEIPT_TRANSFER_OUT,
   MOCK_TRANSACTION_RAWPAYLOAD,
 } from '../../../test/fixtures/transaction-summary';
@@ -33,14 +34,12 @@ import {
   addOperation,
   getContractCallOperations,
   getContractCreatedOperations,
-  getContractTransferOperations,
   getOperations,
   getPayProducerOperations,
   getReceiptsCall,
   getReceiptsMessageOut,
   getReceiptsTransferOut,
   getTransactionTypeName,
-  getTransferOperations,
   getWithdrawFromFuelOperations,
   isType,
   isTypeCreate,
@@ -70,7 +69,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
       };
@@ -110,7 +109,7 @@ describe('operations', () => {
               amount2: '0x64',
             },
             amount: bn('0x5f5e100'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -124,7 +123,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
       };
@@ -176,7 +175,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -243,141 +242,13 @@ describe('operations', () => {
     });
   });
 
-  describe('getTransferOperations', () => {
-    it('should ensure getTransferOperations return transfer operations from coin inputs', () => {
-      const expected: Operation = {
-        assetsSent: [
-          {
-            amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          },
-        ],
-        from: {
-          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-          type: 1,
-        },
-        name: OperationName.transfer,
-        to: {
-          address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
-          type: 1,
-        },
-      };
-
-      const operations = getTransferOperations({
-        inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
-        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
-        receipts: [],
-      });
-      expect(operations.length).toEqual(1);
-
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    it('should ensure getTransferOperations return transfer operations from coin inputs (CONTRACT_TRANSFER)', () => {
-      const expected: Operation = {
-        assetsSent: [
-          {
-            amount: bn('0x3dc'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          },
-        ],
-        from: {
-          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-          type: AddressType.account,
-        },
-        name: OperationName.transfer,
-        to: {
-          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-          type: AddressType.contract,
-        },
-      };
-
-      const operations = getTransferOperations({
-        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN, MOCK_INPUT_COIN],
-        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_CHANGE],
-        receipts: [MOCK_RECEIPT_TRANSFER],
-      });
-      expect(operations.length).toEqual(1);
-
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    it('should ensure getTransferOperations return transfer operations from message inputs', () => {
-      const expected: Operation = {
-        assetsSent: [
-          {
-            amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          },
-        ],
-        from: {
-          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
-          type: 1,
-        },
-        name: OperationName.transfer,
-        to: {
-          address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
-          type: 1,
-        },
-      };
-
-      const operations = getTransferOperations({
-        inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
-        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
-        receipts: [],
-      });
-
-      expect(operations.length).toEqual(1);
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    it('should ensure getTransferOperations return transfer operations from message inputs (CONTRACT_TRANSFER)', () => {
-      const expected: Operation = {
-        assetsSent: [
-          {
-            amount: bn('0x3dc'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          },
-        ],
-        from: {
-          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
-          type: AddressType.account,
-        },
-        name: OperationName.transfer,
-        to: {
-          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-          type: AddressType.contract,
-        },
-      };
-
-      const operations = getTransferOperations({
-        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
-        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_CHANGE],
-        receipts: [MOCK_RECEIPT_TRANSFER],
-      });
-      expect(operations.length).toEqual(1);
-
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    it('should ensure getTransferOperations return empty', () => {
-      const operations = getTransferOperations({
-        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
-        receipts: [],
-      });
-
-      expect(operations.length).toEqual(0);
-    });
-  });
-
   describe('getWithdrawFromFuelOperations', () => {
     it('should ensure getWithdrawFromFuelOperations return withdraw from fuel operations', () => {
       const expected: Operation = {
         assetsSent: [
           {
             amount: bn('0xf4240'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -426,53 +297,26 @@ describe('operations', () => {
     });
   });
 
-  describe('getContractTransferOperations', () => {
-    it('should ensure getContractTransferOperations return contract transfer operations', () => {
-      const expected: Operation = {
-        assetsSent: [
-          {
-            amount: bn('0x5f5e100'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          },
-        ],
-        from: {
-          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-          type: 0,
-        },
-        name: OperationName.contractTransfer,
-        to: {
-          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-          type: 1,
-        },
-      };
-
-      const operations = getContractTransferOperations({
-        receipts: [
-          MOCK_RECEIPT_CALL,
-          MOCK_RECEIPT_TRANSFER_OUT,
-          MOCK_RECEIPT_RETURN_DATA_1,
-          MOCK_RECEIPT_RETURN_DATA_2,
-          MOCK_RECEIPT_SCRIPT_RESULT,
-        ],
-      });
-
-      expect(operations.length).toEqual(1);
-
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    it('should ensure getContractTransferOperations return empty', () => {
-      const operations = getContractTransferOperations({
-        receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
-      });
-
-      expect(operations.length).toEqual(0);
-    });
-  });
-
   describe('getOperation', () => {
     it('should getOperations return contract call and contract transfer operations', () => {
       const expected: Operation[] = [
+        {
+          name: OperationName.transfer,
+          from: {
+            type: AddressType.contract,
+            address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+          },
+          to: {
+            type: AddressType.account,
+            address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          },
+          assetsSent: [
+            {
+              amount: bn(100000000),
+              assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            },
+          ],
+        },
         {
           name: OperationName.contractCall,
           calls: [],
@@ -487,24 +331,7 @@ describe('operations', () => {
           assetsSent: [
             {
               amount: bn(100000000),
-              assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            },
-          ],
-        },
-        {
-          name: OperationName.contractTransfer,
-          from: {
-            type: AddressType.contract,
-            address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-          },
-          to: {
-            type: AddressType.account,
-            address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-          },
-          assetsSent: [
-            {
-              amount: bn(100000000),
-              assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+              assetId: BaseAssetId,
             },
           ],
         },
@@ -542,7 +369,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
       };
@@ -573,8 +400,9 @@ describe('operations', () => {
         receipts: receiptsCallNoAmount,
         maxInputs: bn(255),
       });
+
       expect(operations.length).toEqual(2);
-      expect(operations[0]).toStrictEqual(operationsCallNoAmount); // contract call
+      expect(operations[1]).toStrictEqual(operationsCallNoAmount); // contract call
     });
 
     it('should getOperations return transfer operations from coin input', () => {
@@ -582,7 +410,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -609,15 +437,17 @@ describe('operations', () => {
     });
 
     it('should getOperations return transfer operations from message input', () => {
+      const sender = '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b';
+
       const expected: Operation = {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
-          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
+          address: sender,
           type: 1,
         },
         name: OperationName.transfer,
@@ -630,7 +460,7 @@ describe('operations', () => {
       const operations = getOperations({
         transactionType: TransactionType.Script,
         inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
-        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+        outputs: [MOCK_OUTPUT_COIN, { ...MOCK_OUTPUT_CHANGE, to: sender }],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
         maxInputs: bn(255),
       });
@@ -644,7 +474,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -723,9 +553,6 @@ describe('operations', () => {
 
     const fromAddress = getInputAccountAddress(coinInput[0]);
 
-    const assetA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const assetB = '0x0202020202020202020202020202020202020202020202020202020202020202';
-
     const OPERATION_CONTRACT_CALL = {
       name: OperationName.contractCall,
       from: {
@@ -765,7 +592,7 @@ describe('operations', () => {
       },
       assetsSent: [
         {
-          assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+          assetId: ASSET_A,
           amount: bn(100),
         },
       ],
@@ -878,7 +705,7 @@ describe('operations', () => {
         ...OPERATION_TRANSFER,
         assetsSent: [
           {
-            assetId: assetA,
+            assetId: ASSET_A,
             amount: bn(100),
           },
         ],
@@ -888,7 +715,7 @@ describe('operations', () => {
         ...OPERATION_TRANSFER,
         assetsSent: [
           {
-            assetId: assetB,
+            assetId: ASSET_B,
             amount: bn(200),
           },
         ],
@@ -930,7 +757,7 @@ describe('operations', () => {
         },
         assetsSent: [
           {
-            assetId: assetA,
+            assetId: ASSET_A,
             amount: bn(100),
           },
         ],
@@ -948,7 +775,7 @@ describe('operations', () => {
         },
         assetsSent: [
           {
-            assetId: assetB,
+            assetId: ASSET_B,
             amount: bn(200),
           },
         ],

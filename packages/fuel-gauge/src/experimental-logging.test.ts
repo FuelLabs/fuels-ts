@@ -24,9 +24,8 @@ beforeAll(async () => {
   );
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
-  const versionedAbi = { encoding: 1, ...abi };
 
-  contractInstance = await setup({ contractBytecode, abi: versionedAbi });
+  contractInstance = await setup({ contractBytecode, abi });
 
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });

@@ -3,11 +3,17 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
+import type {
+  AbstractAccount,
+  AbstractAddress,
+  AbstractContract,
+  AbstractProgram,
+} from '@fuel-ts/interfaces';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import { InputType, OutputType } from '@fuel-ts/transactions';
+import { InputType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
@@ -230,32 +236,33 @@ export class BaseInvocationScope<TReturn = any> {
   async fundWithRequiredCoins() {
     const transactionRequest = await this.getTransactionRequest();
 
-    const { maxFee, gasUsed, minGasPrice, estimatedInputs, estimatedOutputs } =
-      await this.getTransactionCost();
-
+    const {
+      maxFee,
+      gasUsed,
+      minGasPrice,
+      estimatedInputs,
+      outputVariables,
+      missingContractIds,
+      requiredQuantities,
+    } = await this.getTransactionCost();
     this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
 
-    transactionRequest.outputs = estimatedOutputs;
-
     // Clean coin inputs before add new coins to the request
-    this.transactionRequest.inputs = estimatedInputs.filter((i) => i.type !== InputType.Coin);
-
-    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, maxFee);
-
-    // update predicate inputs with estimated predicate-related info because the funding removes it
-    this.transactionRequest.updatePredicateInputs(estimatedInputs);
-
-    // Update output coin indexes after funding because the funding reordered the inputs
-    this.transactionRequest.outputs = this.transactionRequest.outputs.filter(
-      (x) => x.type !== OutputType.Contract
+    this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
+      (i) => i.type !== InputType.Coin
     );
 
-    this.transactionRequest.inputs.forEach((input, inputIndex) => {
-      if (input.type !== InputType.Contract) {
-        return;
-      }
-      this.transactionRequest.outputs.push({ type: OutputType.Contract, inputIndex });
+    await this.program.account?.fund(this.transactionRequest, requiredQuantities, maxFee);
+
+    this.transactionRequest.updatePredicateInputs(estimatedInputs);
+
+    // Adding missing contract ids
+    missingContractIds.forEach((contractId) => {
+      this.transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
     });
+
+    // Adding required number of OutputVariables
+    this.transactionRequest.addVariableOutputs(outputVariables);
 
     return this;
   }
@@ -295,6 +302,24 @@ export class BaseInvocationScope<TReturn = any> {
       this.transactionRequest.addContractInputAndOutput(contract.id);
       this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), contract.interface);
     });
+    return this;
+  }
+
+  /**
+   * Adds an asset transfer to an Account on the contract call transaction request.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @returns The current instance of the class.
+   */
+  addTransfer(destination: string | AbstractAddress, amount: BigNumberish, assetId: string) {
+    this.transactionRequest = this.transactionRequest.addCoinOutput(
+      Address.fromAddressOrString(destination),
+      amount,
+      assetId
+    );
+
     return this;
   }
 
