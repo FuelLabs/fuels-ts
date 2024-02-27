@@ -160,6 +160,10 @@ export default defineConfig({
                 text: 'Vectors',
                 link: '/guide/types/vectors',
               },
+              {
+                text: 'Date Time',
+                link: '/guide/types/date-time',
+              },
             ],
           },
           {
@@ -327,7 +331,7 @@ export default defineConfig({
           },
           {
             text: 'Addresses',
-            link: '/guide/addresses',
+            link: '/guide/addresses/',
             collapsed: true,
             items: [
               {
