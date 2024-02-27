@@ -14,5 +14,4 @@ pnpm fuels-core run \
     --poa-instant true \
     --min-gas-price 1 \
     --vm-backtrace \
-    --utxo-validation \
     --debug
