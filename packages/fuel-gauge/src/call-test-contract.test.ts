@@ -1,3 +1,4 @@
+import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { BN, bn, toHex, BaseAssetId } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -152,7 +153,7 @@ describe('CallTestContract', () => {
   it('Forward asset_id on contract call', async () => {
     const contract = await setupContract();
 
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetId = ASSET_A;
     const { value } = await contract.functions
       .return_context_asset()
       .callParams({
@@ -165,7 +166,7 @@ describe('CallTestContract', () => {
   it('Forward asset_id on contract simulate call', async () => {
     const contract = await setupContract();
 
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetId = ASSET_A;
     const { value } = await contract.functions
       .return_context_asset()
       .callParams({
@@ -208,5 +209,20 @@ describe('CallTestContract', () => {
     // It should be possible to re-execute the
     // tx execution context
     await expectContractCall();
+  });
+
+  it('Calling a simple contract function does only one dry run', async () => {
+    const contract = await setupContract();
+    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+    await contract.functions.foobar_no_params().call();
+    expect(dryRunSpy).toHaveBeenCalledOnce();
+  });
+
+  it('Simulating a simple contract function does two dry runs', async () => {
+    const contract = await setupContract();
+    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+
+    await contract.functions.foobar_no_params().simulate();
+    expect(dryRunSpy).toHaveBeenCalledTimes(2);
   });
 });

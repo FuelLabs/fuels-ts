@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { getBytesCopy, type BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { arrayify } from '@fuel-ts/utils';
 
-import { AbiCoder } from './abi-coder';
-import type { InputValue } from './coders/abstract-coder';
-import { FunctionFragment } from './function-fragment';
-import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
-import { findOrThrow } from './utilities';
+import { AbiCoder } from './AbiCoder';
+import { FunctionFragment } from './FunctionFragment';
+import type { InputValue } from './encoding/coders/AbstractCoder';
+import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
+import { findOrThrow } from './utils/utilities';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
@@ -141,8 +142,8 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       }
     );
 
-    return AbiCoder.decode(this.jsonAbi, loggedType, getBytesCopy(data), 0, {
-      version: this.jsonAbi.encoding,
+    return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0, {
+      encoding: this.jsonAbi.encoding,
     });
   }
 

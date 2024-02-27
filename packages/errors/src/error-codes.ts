@@ -19,6 +19,7 @@ export enum ErrorCode {
   INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
   LOG_TYPE_NOT_FOUND = 'log-type-not-found',
+  UNSUPPORTED_ENCODING_VERSION = 'unsupported-encoding-version',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -30,6 +31,7 @@ export enum ErrorCode {
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
   MISSING_PROVIDER = 'missing-provider',
+  INVALID_PROVIDER = 'invalid-provider',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',

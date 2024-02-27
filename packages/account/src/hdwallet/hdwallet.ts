@@ -1,17 +1,15 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
-import type { BytesLike } from 'ethers';
+import { arrayify, hexlify, concat } from '@fuel-ts/utils';
 import {
   toBeHex,
   dataSlice,
-  hexlify,
   encodeBase58,
   decodeBase58,
   sha256,
   computeHmac,
   ripemd160,
-  getBytesCopy,
-  concat,
 } from 'ethers';
 
 import { Mnemonic } from '../mnemonic';
@@ -132,9 +130,9 @@ class HDWallet {
    * When trying to derive the index without a private key set.
    */
   deriveIndex(index: number) {
-    const privateKey = this.privateKey && getBytesCopy(this.privateKey);
-    const publicKey = getBytesCopy(this.publicKey);
-    const chainCode = getBytesCopy(this.chainCode);
+    const privateKey = this.privateKey && arrayify(this.privateKey);
+    const publicKey = arrayify(this.publicKey);
+    const chainCode = arrayify(this.chainCode);
     const data = new Uint8Array(37);
 
     if (index & HARDENED_INDEX) {
@@ -148,13 +146,13 @@ class HDWallet {
       // 33 bytes: 0x00 || private key
       data.set(privateKey, 1);
     } else {
-      data.set(getBytesCopy(this.publicKey));
+      data.set(arrayify(this.publicKey));
     }
 
     // child number: ser32(i)
     data.set(toBytes(index, 4), 33);
 
-    const bytes = getBytesCopy(computeHmac('sha512', chainCode, data));
+    const bytes = arrayify(computeHmac('sha512', chainCode, data));
     const IL = bytes.slice(0, 32);
     const IR = bytes.slice(32);
 
@@ -222,9 +220,7 @@ class HDWallet {
     // first 32 bites from the key
     const key =
       this.privateKey != null && !isPublic ? concat(['0x00', this.privateKey]) : this.publicKey;
-    const extendedKey = getBytesCopy(
-      concat([prefix, depth, parentFingerprint, index, chainCode, key])
-    );
+    const extendedKey = arrayify(concat([prefix, depth, parentFingerprint, index, chainCode, key]));
 
     return base58check(extendedKey);
   }
@@ -239,8 +235,8 @@ class HDWallet {
     const masterKey = Mnemonic.masterKeysFromSeed(seed);
 
     return new HDWallet({
-      chainCode: getBytesCopy(masterKey.slice(32)),
-      privateKey: getBytesCopy(masterKey.slice(0, 32)),
+      chainCode: arrayify(masterKey.slice(32)),
+      privateKey: arrayify(masterKey.slice(0, 32)),
     });
   }
 
@@ -267,7 +263,7 @@ class HDWallet {
    */
   static fromExtendedKey(extendedKey: string) {
     const decoded = toBeHex(decodeBase58(extendedKey));
-    const bytes = getBytesCopy(decoded);
+    const bytes = arrayify(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
     if (bytes.length !== 82 || !isValidExtendedKey(bytes)) {

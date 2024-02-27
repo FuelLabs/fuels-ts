@@ -2,11 +2,10 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { getBytesCopy } from 'ethers';
-import type { BytesLike } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { FuelConnector } from './connectors';
 import type {
@@ -23,6 +22,7 @@ import type {
   ScriptTransactionRequestLike,
   ProviderSendTxParams,
   TransactionResponse,
+  EstimateTransactionParams,
 } from './providers';
 import {
   withdrawScript,
@@ -332,7 +332,11 @@ export class Account extends AbstractAccount {
     const params = { gasPrice: minGasPrice, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
+      await this.provider.getTransactionCost(request, [], {
+        estimateTxDependencies: true,
+        resourcesOwner: this,
+      });
 
     request.gasPrice = bn(txParams.gasPrice ?? minGasPrice);
     request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
@@ -345,6 +349,8 @@ export class Account extends AbstractAccount {
     });
 
     await this.fund(request, requiredQuantities, maxFee);
+
+    request.updatePredicateInputs(estimatedInputs);
 
     return request;
   }
@@ -369,7 +375,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     const request = await this.createTransfer(destination, amount, assetId, txParams);
-    return this.sendTransaction(request);
+    return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
   /**
@@ -448,14 +454,14 @@ export class Account extends AbstractAccount {
 
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
-    const recipientDataArray = getBytesCopy(
+    const recipientDataArray = arrayify(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))
     );
-    const amountDataArray = getBytesCopy(
+    const amountDataArray = arrayify(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
     );
     const script = new Uint8Array([
-      ...getBytesCopy(withdrawScript.bytes),
+      ...arrayify(withdrawScript.bytes),
       ...recipientDataArray,
       ...amountDataArray,
     ]);
@@ -508,7 +514,7 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
+    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
@@ -516,9 +522,11 @@ export class Account extends AbstractAccount {
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.sendTransaction(transactionRequest, {
-      ...options,
+      awaitExecution,
       estimateTxDependencies: false,
     });
   }
@@ -529,9 +537,14 @@ export class Account extends AbstractAccount {
    * @param transactionRequestLike - The transaction request to be simulated.
    * @returns A promise that resolves to the call result.
    */
-  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async simulateTransaction(
+    transactionRequestLike: TransactionRequestLike,
+    { estimateTxDependencies = true }: EstimateTransactionParams = {}
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.estimateTxDependencies(transactionRequest);
+    if (estimateTxDependencies) {
+      await this.provider.estimateTxDependencies(transactionRequest);
+    }
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 

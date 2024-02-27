@@ -47,6 +47,11 @@ export default createConfig({
   fuelCorePort: 4000,
   // #endregion fuelCorePort
 
+  // #region forcBuildFlags
+  // Default: []
+  forcBuildFlags: ['--release'],
+  // #endregion forcBuildFlags
+
   // #region deployConfig-fn
   deployConfig: async (options: ContractDeployOptions) => {
     // ability to fetch data remotely

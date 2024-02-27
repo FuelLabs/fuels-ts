@@ -10,7 +10,7 @@ import {
 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { hexlify } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 import { v4 as uuidv4 } from 'uuid';
 
 export type KeystoreWallet = {

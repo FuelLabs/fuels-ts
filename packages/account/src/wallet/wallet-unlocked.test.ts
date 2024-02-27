@@ -1,6 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
 
 import walletSpec from '../../test/fixtures/wallet-spec';
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../../test/fixtures/wallet-unlocked';
@@ -226,7 +226,9 @@ describe('WalletUnlocked', () => {
 
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() =>
+        Promise.resolve({ receipts: [], missingContractIds: [], outputVariables: 0 })
+      );
 
     const call = vi
       .spyOn(providersMod.Provider.prototype, 'call')

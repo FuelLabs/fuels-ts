@@ -7,79 +7,87 @@ type FuelGraphQLSubscriberOptions = {
   query: DocumentNode;
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
-  abortController?: AbortController;
 };
 
-class FuelSubscriptionStream implements TransformStream {
-  readable: ReadableStream<FuelError | Record<string, unknown>>;
-  writable: WritableStream<Uint8Array>;
-  private readableStreamController!: ReadableStreamController<FuelError | Record<string, unknown>>;
+export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
+  private stream!: ReadableStreamDefaultReader<Uint8Array>;
   private static textDecoder = new TextDecoder();
 
-  constructor() {
-    this.readable = new ReadableStream({
-      start: (controller) => {
-        this.readableStreamController = controller;
+  public constructor(private options: FuelGraphQLSubscriberOptions) {}
+
+  private async setStream() {
+    const { url, query, variables, fetchFn } = this.options;
+
+    const response = await fetchFn(`${url}-sub`, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: print(query),
+        variables,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'text/event-stream',
       },
     });
 
-    this.writable = new WritableStream<Uint8Array>({
-      write: (bytes) => {
-        const text = FuelSubscriptionStream.textDecoder.decode(bytes);
-        // the fuel node sends keep-alive messages that should be ignored
-        if (text.startsWith('data:')) {
-          const { data, errors } = JSON.parse(text.split('data:')[1]);
-          if (Array.isArray(errors)) {
-            this.readableStreamController.enqueue(
-              new FuelError(
-                FuelError.CODES.INVALID_REQUEST,
-                errors.map((err) => err.message).join('\n\n')
-              )
-            );
-          } else {
-            this.readableStreamController.enqueue(data);
-          }
-        }
-      },
-    });
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.stream = response.body!.getReader();
   }
-}
 
-/**
- * @throws {FuelError} {@link ErrorCode.INVALID_REQUEST}
- * When the request to the Fuel node fails, error messages are propagated from the Fuel node.
- */
-export async function* fuelGraphQLSubscriber({
-  url,
-  variables,
-  query,
-  fetchFn,
-}: FuelGraphQLSubscriberOptions) {
-  const response = await fetchFn(`${url}-sub`, {
-    method: 'POST',
-    body: JSON.stringify({
-      query: print(query),
-      variables,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'text/event-stream',
-    },
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const subscriptionStreamReader = response
-    .body!.pipeThrough(new FuelSubscriptionStream())
-    .getReader();
-
-  while (true) {
-    const { value, done } = await subscriptionStreamReader.read();
-    if (value instanceof FuelError) {
-      throw value;
+  /**
+   * @throws {FuelError} {@link ErrorCode.INVALID_REQUEST}
+   * When the request to the Fuel node fails, error messages are propagated from the Fuel node.
+   */
+  async next(): Promise<IteratorResult<unknown, unknown>> {
+    if (!this.stream) {
+      await this.setStream();
     }
-    yield value;
-    if (done) {
-      break;
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const { value, done } = await this.stream.read();
+      if (done) {
+        return { value, done };
+      }
+
+      const text = FuelGraphqlSubscriber.textDecoder.decode(value);
+
+      /**
+       * We don't care about responses that don't start with 'data:' like keep-alive messages.
+       * The only responses that I came across from the node are either 200 responses with data or keep-alive messages.
+       * You can find the keep-alive message in the fuel-core codebase (latest permalink as of writing):
+       * https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
+       * To get the actual latest info you need to check out the master branch (might change):
+       * https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
+       * */
+      if (!text.startsWith('data:')) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const { data, errors } = JSON.parse(text.split('data:')[1]);
+
+      if (Array.isArray(errors)) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_REQUEST,
+          errors.map((err) => err.message).join('\n\n')
+        );
+      }
+
+      return { value: data, done: false };
     }
+  }
+
+  /**
+   * Gets called when `break` is called in a `for-await-of` loop.
+   */
+  async return(): Promise<IteratorResult<unknown, undefined>> {
+    await this.stream.cancel();
+    this.stream.releaseLock();
+    return { done: true, value: undefined };
+  }
+
+  [Symbol.asyncIterator](): AsyncIterator<unknown, unknown, undefined> {
+    return this;
   }
 }

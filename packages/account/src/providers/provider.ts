@@ -1,8 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
-import { bn, max } from '@fuel-ts/math';
+import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import { BN, bn, max } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -10,12 +9,15 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
-import type { BytesLike } from 'ethers';
-import { getBytesCopy, hexlify, Network } from 'ethers';
+import { equalBytes } from '@noble/curves/abstract/utils';
+import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
+
+import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -27,7 +29,7 @@ import type {
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import { fuelGraphQLSubscriber } from './fuel-graphql-subscriber';
+import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
@@ -36,7 +38,6 @@ import type {
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
-  ScriptTransactionRequest,
 } from './transaction-request';
 import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
@@ -44,7 +45,6 @@ import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculatePriceWithFactor,
-  fromUnixToTai64,
   getGasUsedFromReceipts,
   getReceiptsWithMissingData,
 } from './utils';
@@ -56,6 +56,11 @@ const MAX_RETRIES = 10;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
+};
+
+export type EstimateTxDependenciesReturns = CallResult & {
+  outputVariables: number;
+  missingContractIds: string[];
 };
 
 /**
@@ -244,7 +249,7 @@ export type EstimatePredicateParams = {
 
 export type TransactionCostParams = EstimateTransactionParams &
   EstimatePredicateParams & {
-    resourcesOwner?: AbstractAddress;
+    resourcesOwner?: AbstractAccount;
   };
 
 /**
@@ -458,7 +463,7 @@ export default class Provider {
       const isSubscription = opDefinition?.operation === 'subscription';
 
       if (isSubscription) {
-        return fuelGraphQLSubscriber({
+        return new FuelGraphqlSubscriber({
           url: this.url,
           query,
           fetchFn: (url, requestInit) =>
@@ -635,7 +640,7 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
-      await this.estimateTxDependencies(transactionRequest);
+      return this.estimateTxDependencies(transactionRequest);
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
@@ -655,6 +660,18 @@ export default class Provider {
    * @returns A promise that resolves to the estimated transaction request object.
    */
   async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
+    const shouldEstimatePredicates = Boolean(
+      transactionRequest.inputs.find(
+        (input) =>
+          'predicate' in input &&
+          input.predicate &&
+          !equalBytes(arrayify(input.predicate), arrayify('0x')) &&
+          new BN(input.predicateGasUsed).isZero()
+      )
+    );
+    if (!shouldEstimatePredicates) {
+      return transactionRequest;
+    }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const response = await this.operations.estimatePredicates({
       encodedTransaction,
@@ -690,45 +707,52 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
    */
-  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
-    let missingOutputVariableCount = 0;
-    let missingOutputContractIdsCount = 0;
-    let tries = 0;
-
+  async estimateTxDependencies(
+    transactionRequest: TransactionRequest
+  ): Promise<EstimateTxDependenciesReturns> {
     if (transactionRequest.type === TransactionType.Create) {
-      return;
+      return {
+        receipts: [],
+        outputVariables: 0,
+        missingContractIds: [],
+      };
     }
 
-    let txRequest = transactionRequest;
+    await this.estimatePredicates(transactionRequest);
 
-    if (txRequest.hasPredicateInput()) {
-      txRequest = (await this.estimatePredicates(txRequest)) as ScriptTransactionRequest;
-    }
+    let receipts: TransactionResultReceipt[] = [];
+    const missingContractIds: string[] = [];
+    let outputVariables = 0;
 
-    while (tries < MAX_RETRIES) {
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction: hexlify(txRequest.toTransactionBytes()),
+        encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
         utxoValidation: false,
       });
-      const receipts = gqlReceipts.map(processGqlReceipt);
+      receipts = gqlReceipts.map(processGqlReceipt);
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
 
-      missingOutputVariableCount = missingOutputVariables.length;
-      missingOutputContractIdsCount = missingOutputContractIds.length;
+      const hasMissingOutputs =
+        missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
-      if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
-        return;
+      if (hasMissingOutputs) {
+        outputVariables += missingOutputVariables.length;
+        transactionRequest.addVariableOutputs(missingOutputVariables.length);
+        missingOutputContractIds.forEach(({ contractId }) => {
+          transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          missingContractIds.push(contractId);
+        });
+      } else {
+        break;
       }
-
-      txRequest.addVariableOutputs(missingOutputVariableCount);
-
-      missingOutputContractIds.forEach(({ contractId }) =>
-        txRequest.addContractInputAndOutput(Address.fromString(contractId))
-      );
-
-      tries += 1;
     }
+
+    return {
+      receipts,
+      outputVariables,
+      missingContractIds,
+    };
   }
 
   /**
@@ -747,7 +771,7 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
-      await this.estimateTxDependencies(transactionRequest);
+      return this.estimateTxDependencies(transactionRequest);
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
@@ -783,48 +807,63 @@ export default class Provider {
       estimatePredicates = true,
       resourcesOwner,
     }: TransactionCostParams = {}
-  ): Promise<TransactionCost> {
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
+  ): Promise<
+    TransactionCost & {
+      estimatedInputs: TransactionRequest['inputs'];
+      outputVariables: number;
+      missingContractIds: string[];
+    }
+  > {
+    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const chainInfo = this.getChain();
     const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const isScriptTransaction = transactionRequest.type === TransactionType.Script;
+    const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
+    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
+
+    // Fund with fake UTXOs to avoid not enough funds error
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
+    // Funding transaction with fake utxos
+    txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
 
     /**
      * Estimate predicates gasUsed
      */
-    if (transactionRequest.hasPredicateInput() && estimatePredicates) {
+    if (estimatePredicates) {
       // Remove gasLimit to avoid gasLimit when estimating predicates
       if (isScriptTransaction) {
-        transactionRequest.gasLimit = bn(0);
+        txRequestClone.gasLimit = bn(0);
       }
-      await this.estimatePredicates(transactionRequest);
+
+      /**
+       * The fake utxos added above can be from a predicate
+       * If the resources owner is a predicate,
+       * we need to populate the resources with the predicate's data
+       * so that predicate estimation can happen.
+       */
+      if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
+        (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
+      }
+      await this.estimatePredicates(txRequestClone);
     }
 
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    const minGas = transactionRequest.calculateMinGas(chainInfo);
-    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
-
-    /**
-     * Fund with fake UTXOs to avoid not enough funds error
-     */
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = transactionRequest.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
-    // Funding transaction with fake utxos
-    transactionRequest.fundWithFakeUtxos(allQuantities, resourcesOwner);
+    const minGas = txRequestClone.calculateMinGas(chainInfo);
+    const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
 
     /**
      * Estimate gasUsed for script transactions
      */
 
-    let gasUsed = minGas;
     let receipts: TransactionResultReceipt[] = [];
+    let missingContractIds: string[] = [];
+    let outputVariables = 0;
     // Transactions of type Create does not consume any gas so we can the dryRun
-    if (isScriptTransaction) {
+    if (isScriptTransaction && estimateTxDependencies) {
       /**
        * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
        * This simplifies the funding with fake utxos, since the coin quantities required
@@ -833,18 +872,19 @@ export default class Provider {
        */
       // Calculate the gasLimit again as we insert a fake UTXO and signer
 
-      transactionRequest.gasPrice = bn(0);
-      transactionRequest.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
+      txRequestClone.gasPrice = bn(0);
+      txRequestClone.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
+
       // Executing dryRun with fake utxos to get gasUsed
-      const result = await this.call(transactionRequest, {
-        estimateTxDependencies,
-      });
+      const result = await this.estimateTxDependencies(txRequestClone);
+
       receipts = result.receipts;
-      gasUsed = getGasUsedFromReceipts(receipts);
-    } else {
-      // For CreateTransaction the gasUsed is going to be the minGas
-      gasUsed = minGas;
+      outputVariables = result.outputVariables;
+      missingContractIds = result.missingContractIds;
     }
+
+    // For CreateTransaction the gasUsed is going to be the minGas
+    const gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : minGas;
 
     const usedFee = calculatePriceWithFactor(
       gasUsed,
@@ -865,6 +905,9 @@ export default class Provider {
       usedFee,
       minFee,
       maxFee,
+      estimatedInputs: txRequestClone.inputs,
+      outputVariables,
+      missingContractIds,
     };
   }
 
@@ -1090,7 +1133,7 @@ export default class Provider {
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder().decode(getBytesCopy(tx.rawPayload), 0)?.[0]
+        (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
       ),
     };
   }
@@ -1109,7 +1152,7 @@ export default class Provider {
       return null;
     }
     return new TransactionCoder().decode(
-      getBytesCopy(transaction.rawPayload),
+      arrayify(transaction.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
   }
@@ -1363,13 +1406,13 @@ export default class Provider {
    * Lets you produce blocks with custom timestamps and the block number of the last block produced.
    *
    * @param amount - The amount of blocks to produce
-   * @param startTime - The UNIX timestamp to set for the first produced block
+   * @param startTime - The UNIX timestamp (milliseconds) to set for the first produced block
    * @returns A promise that resolves to the block number of the last produced block.
    */
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
+      startTimestamp: startTime ? DateTime.fromUnixMilliseconds(startTime).toTai64() : undefined,
     });
     return bn(latestBlockHeight);
   }
