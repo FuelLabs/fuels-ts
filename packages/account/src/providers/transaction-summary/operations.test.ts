@@ -1,6 +1,8 @@
 import { getRandomB256 } from '@fuel-ts/address';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import {
   CONTRACT_CALL_ABI,
@@ -67,7 +69,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
       };
@@ -107,7 +109,7 @@ describe('operations', () => {
               amount2: '0x64',
             },
             amount: bn('0x5f5e100'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -121,7 +123,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
       };
@@ -173,7 +175,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -246,7 +248,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0xf4240'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -329,7 +331,7 @@ describe('operations', () => {
           assetsSent: [
             {
               amount: bn(100000000),
-              assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+              assetId: BaseAssetId,
             },
           ],
         },
@@ -367,7 +369,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
       };
@@ -408,7 +410,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -441,7 +443,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -472,7 +474,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            assetId: BaseAssetId,
           },
         ],
         from: {
@@ -551,9 +553,6 @@ describe('operations', () => {
 
     const fromAddress = getInputAccountAddress(coinInput[0]);
 
-    const assetA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const assetB = '0x0202020202020202020202020202020202020202020202020202020202020202';
-
     const OPERATION_CONTRACT_CALL = {
       name: OperationName.contractCall,
       from: {
@@ -593,7 +592,7 @@ describe('operations', () => {
       },
       assetsSent: [
         {
-          assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
+          assetId: ASSET_A,
           amount: bn(100),
         },
       ],
@@ -706,7 +705,7 @@ describe('operations', () => {
         ...OPERATION_TRANSFER,
         assetsSent: [
           {
-            assetId: assetA,
+            assetId: ASSET_A,
             amount: bn(100),
           },
         ],
@@ -716,7 +715,7 @@ describe('operations', () => {
         ...OPERATION_TRANSFER,
         assetsSent: [
           {
-            assetId: assetB,
+            assetId: ASSET_B,
             amount: bn(200),
           },
         ],
@@ -758,7 +757,7 @@ describe('operations', () => {
         },
         assetsSent: [
           {
-            assetId: assetA,
+            assetId: ASSET_A,
             amount: bn(100),
           },
         ],
@@ -776,7 +775,7 @@ describe('operations', () => {
         },
         assetsSent: [
           {
-            assetId: assetB,
+            assetId: ASSET_B,
             amount: bn(200),
           },
         ],

@@ -1,6 +1,7 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type {
   TransactionRequestLike,
   TransactionResponse,
@@ -1046,5 +1047,72 @@ describe('Contract', () => {
     );
 
     vi.restoreAllMocks();
+  });
+
+  it('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    );
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
+    const contract = await factory.deployContract();
+
+    const receiver = Wallet.generate({ provider });
+    const amountToTransfer = 300;
+
+    await contract.functions
+      .sum(40, 50)
+      .addTransfer(receiver.address, amountToTransfer, BaseAssetId)
+      .call();
+
+    const finalBalance = await receiver.getBalance();
+
+    expect(finalBalance.toNumber()).toBe(amountToTransfer);
+  });
+
+  it('should ensure assets can be transfered to wallets (MULTI TRANSFER)', async () => {
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    );
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const wallet = await generateTestWallet(provider, [
+      [5_000, BaseAssetId],
+      [5_000, ASSET_A],
+      [5_000, ASSET_B],
+    ]);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
+    const contract = await factory.deployContract();
+
+    const receiver1 = Wallet.generate({ provider });
+    const receiver2 = Wallet.generate({ provider });
+    const receiver3 = Wallet.generate({ provider });
+
+    const amountToTransfer1 = 989;
+    const amountToTransfer2 = 699;
+    const amountToTransfer3 = 122;
+
+    await contract.functions
+      .sum(40, 50)
+      .addTransfer(receiver1.address, amountToTransfer1, BaseAssetId)
+      .addTransfer(receiver2.address, amountToTransfer2, ASSET_A)
+      .addTransfer(receiver3.address, amountToTransfer3, ASSET_B)
+      .call();
+
+    const finalBalance1 = await receiver1.getBalance(BaseAssetId);
+    const finalBalance2 = await receiver2.getBalance(ASSET_A);
+    const finalBalance3 = await receiver3.getBalance(ASSET_B);
+
+    expect(finalBalance1.toNumber()).toBe(amountToTransfer1);
+    expect(finalBalance2.toNumber()).toBe(amountToTransfer2);
+    expect(finalBalance3.toNumber()).toBe(amountToTransfer3);
   });
 });
