@@ -26,4 +26,5 @@ export interface CryptoApi {
   keccak256(data: Uint8Array): Uint8Array;
   encryptJsonWalletData(data: Uint8Array, key: Uint8Array, iv: Uint8Array): Promise<Uint8Array>;
   decryptJsonWalletData(data: Uint8Array, key: Uint8Array, iv: Uint8Array): Promise<Uint8Array>;
+  randomUUID(): string;
 }

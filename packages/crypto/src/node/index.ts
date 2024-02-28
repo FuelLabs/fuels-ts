@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import { scrypt, keccak256 } from '../shared';
 import type { CryptoApi } from '../types';
 
@@ -18,6 +20,7 @@ const api: CryptoApi = {
   keccak256,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  randomUUID,
 };
 
 export default api;
