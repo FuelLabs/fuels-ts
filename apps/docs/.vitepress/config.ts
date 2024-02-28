@@ -160,6 +160,10 @@ export default defineConfig({
                 text: 'Vectors',
                 link: '/guide/types/vectors',
               },
+              {
+                text: 'Date Time',
+                link: '/guide/types/date-time',
+              },
             ],
           },
           {
@@ -276,6 +280,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Add Transfer',
+                link: '/guide/contracts/add-transfer',
+              },
+              {
                 text: 'Contract Balance',
                 link: '/guide/contracts/contract-balance',
               },
@@ -323,7 +331,7 @@ export default defineConfig({
           },
           {
             text: 'Addresses',
-            link: '/guide/addresses',
+            link: '/guide/addresses/',
             collapsed: true,
             items: [
               {
@@ -346,12 +354,12 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions',
               },
               {
-                text: 'Deposit And Withdraw',
-                link: '/guide/cookbook/deposit-and-withdraw',
+                text: 'Custom Transactions from Contract Calls',
+                link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
-                text: 'Transfer All Assets',
-                link: '/guide/cookbook/transfer-all-assets',
+                text: 'Deposit And Withdraw',
+                link: '/guide/cookbook/deposit-and-withdraw',
               },
             ],
           },
