@@ -1,4 +1,4 @@
-import { U64Coder } from '@fuel-ts/abi-coder';
+import { BigNumberCoder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -45,7 +45,9 @@ describe('util', () => {
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
-    const encode = vi.spyOn(U64Coder.prototype, 'encode').mockReturnValue(Uint8Array.from(byte));
+    const encode = vi
+      .spyOn(BigNumberCoder.prototype, 'encode')
+      .mockReturnValue(Uint8Array.from(byte));
 
     const arrayify = vi.spyOn(arrayifyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
 

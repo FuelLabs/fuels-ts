@@ -1,7 +1,7 @@
 export function getBuiltinVersions() {
   return {
-    FORC: '0.50.0',
     FUEL_CORE: 'git:master',
+    FORC: '0.51.1',
     FUELS: '0.75.0',
   };
 }
