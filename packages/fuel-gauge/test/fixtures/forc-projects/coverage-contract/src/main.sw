@@ -237,8 +237,8 @@ impl CoverageContract for Contract {
                 log(vector.get(2));
                 log(vector.get(3));
                 log(vector.get(4));
-                log(__to_str_array("vector.len"));
-                log(vector.len);
+                log(__to_str_array("vector.len()"));
+                log(vector.len());
                 true
             },
         }
