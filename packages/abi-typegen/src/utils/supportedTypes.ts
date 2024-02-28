@@ -15,6 +15,7 @@ import { StrType } from '../abi/types/StrType';
 import { StructType } from '../abi/types/StructType';
 import { TupleType } from '../abi/types/TupleType';
 import { U16Type } from '../abi/types/U16Type';
+import { U256Type } from '../abi/types/U256Type';
 import { U32Type } from '../abi/types/U32Type';
 import { U64Type } from '../abi/types/U64Type';
 import { U8Type } from '../abi/types/U8Type';
@@ -39,6 +40,7 @@ export const supportedTypes = [
   U16Type,
   U32Type,
   U64Type,
+  U256Type,
   U8Type,
   VectorType,
   EvmAddressType,

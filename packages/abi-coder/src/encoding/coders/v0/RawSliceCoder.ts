@@ -5,8 +5,8 @@ import { BASE_RAW_SLICE_OFFSET, concatWithDynamicData } from '../../../utils/uti
 import { Coder } from '../AbstractCoder';
 
 import { ArrayCoder } from './ArrayCoder';
+import { BigNumberCoder } from './BigNumberCoder';
 import { NumberCoder } from './NumberCoder';
-import { U64Coder } from './U64Coder';
 
 export class RawSliceCoder extends Coder<number[], number[]> {
   constructor() {
@@ -22,7 +22,9 @@ export class RawSliceCoder extends Coder<number[], number[]> {
     const coder = new NumberCoder('u8', { isSmallBytes: true });
 
     // pointer (ptr)
-    const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_RAW_SLICE_OFFSET);
+    const pointer: Uint8ArrayWithDynamicData = new BigNumberCoder('u64').encode(
+      BASE_RAW_SLICE_OFFSET
+    );
 
     // pointer dynamicData, encode the vector now and attach to its pointer
     pointer.dynamicData = {
@@ -32,7 +34,7 @@ export class RawSliceCoder extends Coder<number[], number[]> {
     parts.push(pointer);
 
     // length (len)
-    parts.push(new U64Coder().encode(value.length));
+    parts.push(new BigNumberCoder('u64').encode(value.length));
 
     return concatWithDynamicData(parts);
   }

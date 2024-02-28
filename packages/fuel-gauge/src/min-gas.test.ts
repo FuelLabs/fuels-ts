@@ -10,9 +10,9 @@ import {
   ScriptTransactionRequest,
   Address,
   Predicate,
-  U64Coder,
   hexlify,
   getGasUsedFromReceipts,
+  BigNumberCoder,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -79,7 +79,7 @@ describe(__filename, () => {
 
     const request = new ScriptTransactionRequest({
       script: binHexlified,
-      scriptData: hexlify(new U64Coder().encode(bn(2000))),
+      scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
 
@@ -176,7 +176,7 @@ describe(__filename, () => {
     );
     const request = new ScriptTransactionRequest({
       script: scriptBin,
-      scriptData: hexlify(new U64Coder().encode(bn(2000))),
+      scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     // add predicate transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
