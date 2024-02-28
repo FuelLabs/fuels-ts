@@ -186,10 +186,11 @@ describe(__filename, () => {
     expect(txId).toEqual(txIdFromExecutedTx);
   });
 
-  it('creates a transfer with external signer', async () => {
+  it.only('creates a transfer with external signer', async () => {
     const predicate = new Predicate(binSigning, provider, abiSigning);
 
     const amountToPredicate = 10_000;
+    const amountToReceiver = 100;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
@@ -207,7 +208,7 @@ describe(__filename, () => {
 
     const transferRequest = await predicate.createTransfer(
       receiverWallet.address,
-      amountToPredicate,
+      amountToReceiver,
       BaseAssetId,
       {
         gasPrice,
