@@ -295,3 +295,5 @@ AbstractAddress
 ContractFactory
 ScriptTransactionRequest
 CDN
+DateTime
+Atomique
