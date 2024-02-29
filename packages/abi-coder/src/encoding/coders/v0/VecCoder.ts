@@ -7,7 +7,7 @@ import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../../
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
 
-import { U64Coder } from './U64Coder';
+import { BigNumberCoder } from './BigNumberCoder';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -31,7 +31,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     const parts: Uint8Array[] = [];
 
     // pointer (ptr)
-    const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_VECTOR_OFFSET);
+    const pointer: Uint8ArrayWithDynamicData = new BigNumberCoder('u64').encode(BASE_VECTOR_OFFSET);
     // pointer dynamicData, encode the vector now and attach to its pointer
     pointer.dynamicData = {
       0: concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v))),
@@ -40,10 +40,10 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     parts.push(pointer);
 
     // capacity (cap)
-    parts.push(new U64Coder().encode(value.length));
+    parts.push(new BigNumberCoder('u64').encode(value.length));
 
     // length (len)
-    parts.push(new U64Coder().encode(value.length));
+    parts.push(new BigNumberCoder('u64').encode(value.length));
 
     return concatWithDynamicData(parts);
   }
@@ -54,7 +54,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     }
 
     const len = data.slice(16, 24);
-    const encodedLength = bn(new U64Coder().decode(len, 0)[0]).toNumber();
+    const encodedLength = bn(new BigNumberCoder('u64').decode(len, 0)[0]).toNumber();
     const vectorRawDataLength = encodedLength * this.coder.encodedLength;
     const vectorRawData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + vectorRawDataLength);
 

@@ -28,6 +28,7 @@ abi LoggingContract {
     fn log_u32(a: u32) -> u32;
     fn log_u8_u16_u32(a: u8, b: u16, c: u32) -> (u8, u16, u32);
     fn log_u64(a: u64) -> u64;
+    fn log_u256(a: u256) -> u256;
     fn log_u64_u8(a: u64, b: u8) -> (u64, u8);
     fn log_boolean(a: bool) -> bool;
     fn log_boolean_boolean(a: bool, b: bool) -> (bool, bool);
@@ -85,6 +86,11 @@ impl LoggingContract for Contract {
     }
 
     fn log_u64(a: u64) -> u64 {
+        log(a);
+        a
+    }
+
+    fn log_u256(a: u256) -> u256 {
         log(a);
         a
     }
