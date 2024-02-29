@@ -209,24 +209,19 @@ export type CursorPaginationArgs = {
   before?: string | null;
 };
 
-export type FetchRequestOptions = {
-  method: 'POST';
-  headers: { [key: string]: string };
-  body: string;
-};
-
 /*
  * Provider initialization options
  */
 export type ProviderOptions = {
   fetch?: (
     url: string,
-    options: FetchRequestOptions,
-    providerOptions: Omit<ProviderOptions, 'fetch'>
+    requestInit?: RequestInit,
+    providerOptions?: Omit<ProviderOptions, 'fetch'>
   ) => Promise<Response>;
   timeout?: number;
   cacheUtxo?: number;
   retryOptions?: RetryOptions;
+  requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
 };
 
 /**
@@ -306,7 +301,7 @@ export default class Provider {
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
     const { retryOptions, timeout } = options;
 
-    return autoRetryFetch((...args) => {
+    return autoRetryFetch(async (...args) => {
       if (options.fetch) {
         return options.fetch(...args);
       }
@@ -315,11 +310,18 @@ export default class Provider {
       const request = args[1];
       const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
 
-      return fetch(url, { ...request, signal });
+      let fullRequest: RequestInit = { ...request, signal };
+
+      if (options.requestMiddleware) {
+        fullRequest = await options.requestMiddleware(fullRequest);
+      }
+
+      return fetch(url, fullRequest);
     }, retryOptions);
   }
 
   /**
+
    * Constructor to initialize a Provider.
    *
    * @param url - GraphQL endpoint of the Fuel node
@@ -442,8 +444,7 @@ export default class Provider {
   private createOperations() {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
-      fetch: (url: string, requestInit: FetchRequestOptions) =>
-        fetchFn(url, requestInit, this.options),
+      fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
     });
 
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
@@ -456,8 +457,7 @@ export default class Provider {
         return new FuelGraphqlSubscriber({
           url: this.url,
           query,
-          fetchFn: (url, requestInit) =>
-            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+          fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
         });
       }

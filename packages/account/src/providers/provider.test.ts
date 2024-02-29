@@ -17,7 +17,7 @@ import {
   MESSAGE_PROOF,
 } from '../../test/fixtures';
 
-import type { ChainInfo, FetchRequestOptions, NodeInfo } from './provider';
+import type { ChainInfo, NodeInfo } from './provider';
 import Provider from './provider';
 import type {
   CoinTransactionRequestInput,
@@ -34,15 +34,8 @@ afterEach(() => {
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
-  async (
-    url: string,
-    options: {
-      body: string;
-      headers: { [key: string]: string };
-      [key: string]: unknown;
-    }
-  ) => {
-    const graphqlRequest = JSON.parse(options.body);
+  async (url: string, options: RequestInit | undefined) => {
+    const graphqlRequest = JSON.parse(options?.body as string);
     const { operationName } = graphqlRequest;
 
     if (operationName === expectedOperationName) {
@@ -209,7 +202,7 @@ describe('Provider', () => {
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
     const provider = await Provider.create(providerUrl1, {
-      fetch: (url: string, options: FetchRequestOptions) =>
+      fetch: (url, options) =>
         getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
     });
 
@@ -1044,5 +1037,39 @@ describe('Provider', () => {
     });
 
     await Promise.all(promises);
+  });
+
+  test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    const requestObject = fetchSpy.mock.calls[0][1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return Promise.resolve(request);
+      },
+    });
+
+    const requestObject = fetchSpy.mock.calls[0][1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
   });
 });
