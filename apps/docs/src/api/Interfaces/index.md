@@ -16,7 +16,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:93](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L93)
+[index.ts:93](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L93)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[index.ts:33](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L33)
+[index.ts:33](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L33)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L13)
+[index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L13)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L15)
+[index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L15)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L11)
+[index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L11)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L17)
+[index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L17)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L21)
+[index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L21)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[index.ts:95](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L95)
+[index.ts:95](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L95)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[index.ts:26](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L26)
+[index.ts:26](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L26)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L19)
+[index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L19)
 
 ___
 
@@ -128,4 +128,4 @@ ___
 
 #### Defined in
 
-[index.ts:37](https://github.com/FuelLabs/fuels-ts/blob/d858fa1d/packag/api/src/index.ts#L37)
+[index.ts:37](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packag/api/src/index.ts#L37)
