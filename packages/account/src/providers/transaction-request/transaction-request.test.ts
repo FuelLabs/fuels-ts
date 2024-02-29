@@ -6,8 +6,10 @@ import { TransactionType } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
+import { WalletUnlocked } from '../../wallet';
 import type { Coin } from '../coin';
 import type { CoinQuantity } from '../coin-quantity';
+import Provider from '../provider';
 
 import type { CoinTransactionRequestInput } from './input';
 import { ScriptTransactionRequest } from './script-transaction-request';
@@ -112,6 +114,40 @@ describe('TransactionRequest', () => {
 
     expect(transactionRequest.witnesses.length).toEqual(2);
     expect(transactionRequest.witnesses).toStrictEqual([mockSignedTx, mockSignedTx]);
+  });
+
+  it('adds signers', async () => {
+    class ProviderCustom extends Provider {
+      // eslint-disable-next-line @typescript-eslint/require-await
+      static async connect(url: string) {
+        return new ProviderCustom(url, {});
+      }
+
+      getChainId(): number {
+        return 1;
+      }
+    }
+
+    const provider = await ProviderCustom.connect('nope');
+    const signer = WalletUnlocked.generate({ provider });
+    const txRequest = new ScriptTransactionRequest();
+
+    const createWitnessSpy = vi.spyOn(txRequest, 'createWitness');
+    const signTxSpy = vi.spyOn(signer, 'signTransaction');
+
+    expect(txRequest.witnesses.length).toEqual(0);
+
+    await txRequest.addSigner(signer);
+
+    expect(txRequest.witnesses.length).toEqual(1);
+    expect(signTxSpy).toHaveBeenCalledTimes(1);
+    expect(createWitnessSpy).toHaveBeenCalledTimes(1);
+
+    await txRequest.addSigners([signer, signer, signer, signer, signer, signer]);
+
+    expect(txRequest.witnesses.length).toEqual(7);
+    expect(signTxSpy).toHaveBeenCalledTimes(7);
+    expect(createWitnessSpy).toHaveBeenCalledTimes(7);
   });
 });
 

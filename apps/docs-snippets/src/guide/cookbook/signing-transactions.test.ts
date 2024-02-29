@@ -83,10 +83,9 @@ describe('Signing transactions', () => {
 
     // Create the transaction request and sign
     const transferRequest = await scope.getTransactionRequest();
-    transferRequest.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
-    const hashedTransaction = transferRequest.getTransactionId(provider.getChainId());
-    const signedTransaction = await signer.signTransaction(hashedTransaction);
-    transferRequest.witnesses.push(signedTransaction);
+    transferRequest
+      .addCoinOutput(receiver.address, amountToReceiver, BaseAssetId)
+      .addSigner(signer);
 
     // Send the transaction
     const response = await sender.sendTransaction(transferRequest);

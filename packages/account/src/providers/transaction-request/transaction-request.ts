@@ -13,7 +13,7 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
-import { AccessList } from 'ethers';
+import { Transaction } from 'ethers';
 
 import type { Account } from '../../account';
 import type { Predicate } from '../../predicate';
@@ -41,6 +41,7 @@ import type {
   CoinTransactionRequestOutput,
 } from './output';
 import { outputify } from './output';
+import type { TransactionRequestLike } from './types';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
@@ -264,6 +265,32 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       throw new NoWitnessAtIndexError(index);
     }
     this.witnesses[index] = witness;
+  }
+
+  /**
+   * Helper function to add an external signer to the transaction.
+   *
+   * @param signer - The signer to add to the transaction.
+   * @returns The transaction with the signature witness added.
+   */
+  async addSigner(signer: Account) {
+    const hashedTransaction = this.getTransactionId(signer.provider.getChainId());
+    const signature = await signer.signTransaction(hashedTransaction);
+    this.createWitness(signature);
+
+    return this;
+  }
+
+  /**
+   * Adds multiple external signers to the transaction.
+   * 
+   * @param signers - The signers to add to the transaction.
+   * @returns The transaction with multiple signature witnesses added.
+   */
+  async addSigners(signers: Account[]) {
+    await Promise.all(signers.map((signer) => this.addSigner(signer)));
+
+    return this;
   }
 
   /**
