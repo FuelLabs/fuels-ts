@@ -67,6 +67,7 @@ abi CoverageContract {
     fn echo_u16(input: u16) -> u16;
     fn echo_u32(input: u32) -> u32;
     fn echo_u64(input: u64) -> u64;
+    fn echo_u256(input: u256) -> u256;
     fn echo_bool(input: bool) -> bool;
     fn echo_b256(input: b256) -> b256;
     fn echo_b512(input: B512) -> B512;
@@ -236,8 +237,8 @@ impl CoverageContract for Contract {
                 log(vector.get(2));
                 log(vector.get(3));
                 log(vector.get(4));
-                log(__to_str_array("vector.len"));
-                log(vector.len);
+                log(__to_str_array("vector.len()"));
+                log(vector.len());
                 true
             },
         }
@@ -258,6 +259,9 @@ impl CoverageContract for Contract {
         input
     }
     fn echo_u64(input: u64) -> u64 {
+        input
+    }
+    fn echo_u256(input: u256) -> u256 {
         input
     }
     fn echo_bool(input: bool) -> bool {

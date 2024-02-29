@@ -3,7 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../../test/utils/constants';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 import { BooleanCoder } from './BooleanCoder';
 import { EnumCoder } from './EnumCoder';
@@ -13,7 +13,7 @@ import { EnumCoder } from './EnumCoder';
  * @group browser
  */
 describe('EnumCoder', () => {
-  const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
+  const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new BigNumberCoder('u64') });
 
   it('should encode an enum containing a boolean', () => {
     const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 1]);
