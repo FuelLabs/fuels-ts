@@ -13,7 +13,9 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
+import { AccessList } from 'ethers';
 
+import type { Account } from '../../account';
 import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
@@ -213,11 +215,26 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * @hidden
    *
-   * Creates an empty witness without any side effects and returns the index
+   * Pushes a witness to the list and returns the index
+   *
+   * @param signature - The signature to add to the witness.
+   * @returns The index of the created witness.
    */
-  protected createEmptyWitness() {
+  createWitness(signature: BytesLike) {
+    this.witnesses.push(signature);
+    return this.witnesses.length - 1;
+  }
+
+  /**
+   * @hidden
+   *
+   * Creates an empty witness without any side effects and returns the index
+   *
+   * @returns The index of the created witness.
+   */
+  protected createEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
+    this.createWitness(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
   }
 

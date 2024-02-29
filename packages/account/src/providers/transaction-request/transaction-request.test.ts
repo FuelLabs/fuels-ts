@@ -100,7 +100,7 @@ describe('TransactionRequest', () => {
     expect(transactionRequest.witnesses.length).toEqual(1);
     expect(transactionRequest.witnesses).toStrictEqual([concat([ZeroBytes32, ZeroBytes32])]);
 
-    transactionRequest.witnesses.push(mockSignedTx);
+    transactionRequest.createWitness(mockSignedTx);
 
     expect(transactionRequest.witnesses.length).toEqual(2);
     expect(transactionRequest.witnesses).toStrictEqual([
