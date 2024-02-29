@@ -213,6 +213,7 @@ describe('Doc Examples', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
     // #import { WalletUnlocked, hashMessage, Signer };
+
     const wallet = WalletUnlocked.generate({
       provider,
     });
@@ -220,11 +221,10 @@ describe('Doc Examples', () => {
     const signedMessage = await wallet.signMessage(message);
     const hashedMessage = hashMessage(message);
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
-
+    // #endregion wallet-message-signing
     expect(wallet.privateKey).toBeTruthy();
     expect(wallet.publicKey).toBeTruthy();
     expect(wallet.address).toEqual(recoveredAddress);
-    // #endregion wallet-message-signing
   });
 
   it('can create wallets', async () => {

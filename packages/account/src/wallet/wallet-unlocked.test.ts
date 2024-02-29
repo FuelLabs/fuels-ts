@@ -49,19 +49,19 @@ describe('WalletUnlocked', () => {
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
     // #import { WalletUnlocked, Signer };
+
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     const hashedTransaction = SCRIPT_TX_REQUEST.getTransactionId(provider.getChainId());
     const signedTransaction = await wallet.signTransaction(hashedTransaction);
-    const chainId = wallet.provider.getChain().consensusParameters.chainId.toNumber();
+    const chainId = wallet.provider.getChainId();
     const verifiedAddress = Signer.recoverAddress(
       SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction
     );
-
+    // #endregion wallet-transaction-signing
     expect(signedTransaction).toEqual(SIGNED_TX);
     expect(verifiedAddress).toEqual(wallet.address);
-    // #endregion wallet-transaction-signing
   });
 
   it('Populate transaction witnesses signature using wallet instance', async () => {
