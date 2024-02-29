@@ -1072,4 +1072,32 @@ describe('Provider', () => {
       'x-custom-header': 'custom-value',
     });
   });
+
+  test('requestMiddleware works for subscriptions', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    await safeExec(async () => {
+      for await (const iterator of provider.operations.statusChange({
+        transactionId: 'doesnt matter, will be aborted',
+      })) {
+        // Just running a subscription to trigger the middleware
+        // shouldn't be reached and should fail if reached
+        expect(iterator).toBeFalsy();
+      }
+    });
+
+    const subscriptionCall = fetchSpy.mock.calls.find((call) => call[0] === `${provider.url}-sub`);
+    const requestObject = subscriptionCall?.[1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
 });
