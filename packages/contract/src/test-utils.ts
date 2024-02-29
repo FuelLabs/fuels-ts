@@ -1,1 +1,1 @@
-export * from './test-utils/test-node-launcher';
+export * from './test-utils/launch-test-node';

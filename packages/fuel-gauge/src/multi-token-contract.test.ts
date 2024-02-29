@@ -1,6 +1,6 @@
 import type { BN } from 'fuels';
 import { Wallet, bn } from 'fuels';
-import { TestNodeLauncher } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
@@ -20,7 +20,7 @@ const multiTokenContractDir = getProgramDir(FuelGaugeProjectsEnum.MULTI_TOKEN_CO
  */
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {
-    using launcher = await TestNodeLauncher.launch({
+    using launcher = await launchTestNode({
       deployContracts: [multiTokenContractDir],
     });
     const {
@@ -105,7 +105,7 @@ describe('MultiTokenContract', () => {
   });
 
   it('can burn coins', async () => {
-    using launcher = await TestNodeLauncher.launch({
+    using launcher = await launchTestNode({
       deployContracts: [multiTokenContractDir],
     });
     const {

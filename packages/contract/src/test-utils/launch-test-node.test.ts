@@ -11,7 +11,7 @@ import { writeFile } from 'fs/promises';
 import os from 'os';
 import { join } from 'path';
 
-import { TestNodeLauncher } from './test-node-launcher';
+import { launchTestNode } from './launch-test-node';
 
 const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
 
@@ -41,12 +41,12 @@ async function generateChainConfigFile(chainName: string): Promise<[string, () =
 /**
  * @group node
  */
-describe('TestNodeLauncher', () => {
+describe('launchTestNode', () => {
   test('kills the node after going out of scope', async () => {
     let url = '';
 
     {
-      using launched = await TestNodeLauncher.launch();
+      using launched = await launchTestNode();
 
       const { provider } = launched;
 
@@ -72,7 +72,7 @@ describe('TestNodeLauncher', () => {
     );
 
     const { error } = await safeExec(() =>
-      TestNodeLauncher.launch({ deployContracts: ['invalid location'] })
+      launchTestNode({ deployContracts: ['invalid location'] })
     );
     expect(error).toBeDefined();
     expect(launchNodeSpy).toHaveBeenCalled();
@@ -86,7 +86,7 @@ describe('TestNodeLauncher', () => {
   });
 
   test('a contract can be deployed', async () => {
-    using launched = await TestNodeLauncher.launch({
+    using launched = await launchTestNode({
       deployContracts: [{ contractDir: pathToContractRootDir }],
     });
 
@@ -108,7 +108,7 @@ describe('TestNodeLauncher', () => {
 
   test('a contract can be deployed by providing just the path', async () => {
     // #region deploy-contract
-    using launched = await TestNodeLauncher.launch({
+    using launched = await launchTestNode({
       deployContracts: [pathToContractRootDir],
     });
 
@@ -130,7 +130,7 @@ describe('TestNodeLauncher', () => {
 
   test('multiple contracts can be deployed with different wallets', async () => {
     // #region multiple-contracts-and-wallets
-    using launched = await TestNodeLauncher.launch({
+    using launched = await launchTestNode({
       walletConfig: new WalletConfig({ wallets: 2 }),
       deployContracts: [
         { contractDir: pathToContractRootDir },
@@ -163,7 +163,7 @@ describe('TestNodeLauncher', () => {
   test('throws on invalid walletIndex', async () => {
     await expectToThrowFuelError(
       async () => {
-        await TestNodeLauncher.launch({
+        await launchTestNode({
           deployContracts: [{ contractDir: pathToContractRootDir, walletIndex: 2 }],
         });
       },
@@ -178,7 +178,7 @@ describe('TestNodeLauncher', () => {
     // #region custom-fuel-core-args
     process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
 
-    using launched = await TestNodeLauncher.launch();
+    using launched = await launchTestNode();
     // #endregion custom-fuel-core-args
 
     const { provider } = launched;
@@ -194,7 +194,7 @@ describe('TestNodeLauncher', () => {
     // #region custom-chain-config
     process.env.DEFAULT_CHAIN_CONFIG_PATH = chainConfigPath;
 
-    using launched = await TestNodeLauncher.launch();
+    using launched = await launchTestNode();
     // #endregion custom-chain-config
     cleanup();
     process.env.DEFAULT_CHAIN_CONFIG_PATH = '';
@@ -214,7 +214,7 @@ describe('TestNodeLauncher', () => {
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const max_inputs = randomInt(200);
-    using launched = await TestNodeLauncher.launch({
+    using launched = await launchTestNode({
       nodeOptions: {
         chainConfig: {
           consensus_parameters: {

@@ -1,6 +1,6 @@
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import { WalletUnlocked, BaseAssetId, toNumber, Contract, Predicate } from 'fuels';
-import { TestNodeLauncher } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -30,7 +30,7 @@ describe('Predicate', () => {
 
   describe('With Contract', () => {
     it('calls a predicate from a contract function', async () => {
-      using launcher = await TestNodeLauncher.launch({
+      using launcher = await launchTestNode({
         deployContracts: [callTestContractDir],
       });
       const {
@@ -63,7 +63,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
-      using launcher = await TestNodeLauncher.launch({
+      using launcher = await launchTestNode({
         deployContracts: [tokenPoolContractDir],
       });
       const {
