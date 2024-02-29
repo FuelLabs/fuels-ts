@@ -3,7 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../../test/utils/constants';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 import { BooleanCoder } from './BooleanCoder';
 import { TupleCoder } from './TupleCoder';
@@ -13,7 +13,10 @@ import { TupleCoder } from './TupleCoder';
  * @group browser
  */
 describe('Tuple Coder', () => {
-  const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
+  const coder = new TupleCoder<[BooleanCoder, BigNumberCoder]>([
+    new BooleanCoder(),
+    new BigNumberCoder('u64'),
+  ]);
 
   it('should encode a tuple containing a boolean and u64', () => {
     const expected = new Uint8Array([1, 255, 255, 255, 255, 255, 255, 255, 255]);

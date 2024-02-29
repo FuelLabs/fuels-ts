@@ -495,7 +495,7 @@ describe('Contract', () => {
     const minThreshold = 0.019;
 
     expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * minThreshold);
-    expect(value[0].toNumber()).toBeLessThanOrEqual(3999799);
+    expect(value[0].toNumber()).toBeLessThanOrEqual(3999800);
 
     expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * minThreshold);
     expect(value[1].toNumber()).toBeLessThanOrEqual(4_000_000);

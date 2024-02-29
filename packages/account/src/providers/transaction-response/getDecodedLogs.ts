@@ -1,5 +1,5 @@
 import type { Interface } from '@fuel-ts/abi-coder';
-import { U64Coder } from '@fuel-ts/abi-coder';
+import { BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
@@ -15,7 +15,9 @@ export function getDecodedLogs<T = unknown>(
     }
 
     if (r.type === ReceiptType.Log) {
-      logs.push(abiInterface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber(), r.id)[0]);
+      logs.push(
+        abiInterface.decodeLog(new BigNumberCoder('u64').encode(r.val0), r.val1.toNumber(), r.id)[0]
+      );
     }
 
     return logs;

@@ -5,16 +5,16 @@ import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../../test/utils/constants';
 
+import { BigNumberCoder } from './BigNumberCoder';
 import { BooleanCoder } from './BooleanCoder';
 import { EnumCoder } from './EnumCoder';
-import { U64Coder } from './U64Coder';
 
 /**
  * @group node
  * @group browser
  */
 describe('EnumCoder', () => {
-  const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
+  const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new BigNumberCoder('u64') });
 
   it('should encode an enum containing a boolean', () => {
     const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
