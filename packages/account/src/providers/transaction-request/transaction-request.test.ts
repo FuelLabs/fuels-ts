@@ -45,7 +45,6 @@ describe('TransactionRequest', () => {
   });
 
   it('should return an empty array if there are no coin outputs', () => {
-    // Mock the getCoinOutputs method
     const transactionRequest = new ScriptTransactionRequest();
 
     const result = transactionRequest.getCoinOutputsQuantities();
