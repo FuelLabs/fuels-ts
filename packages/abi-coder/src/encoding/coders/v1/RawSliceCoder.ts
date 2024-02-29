@@ -4,7 +4,7 @@ import { bn } from '@fuel-ts/math';
 import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
 import { ArrayCoder } from '../v0/ArrayCoder';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 import { NumberCoder } from './NumberCoder';
 
@@ -20,7 +20,7 @@ export class RawSliceCoder extends Coder<number[], number[]> {
 
     const internalCoder = new ArrayCoder(new NumberCoder('u8'), value.length);
     const bytes = internalCoder.encode(value);
-    const lengthBytes = new U64Coder().encode(bytes.length);
+    const lengthBytes = new BigNumberCoder('u64').encode(bytes.length);
 
     return new Uint8Array([...lengthBytes, ...bytes]);
   }
@@ -32,7 +32,7 @@ export class RawSliceCoder extends Coder<number[], number[]> {
 
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
-    const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
+    const length = bn(new BigNumberCoder('u64').decode(lengthBytes, 0)[0]).toNumber();
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + length);
 
     if (dataBytes.length !== length) {

@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { concat, concatBytes, arrayify } from '@fuel-ts/utils';
 
-import { U64Coder } from '../encoding/coders/v0/U64Coder';
+import { BigNumberCoder } from '../encoding/coders/v0/BigNumberCoder';
 
 import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STD_STRING_CODER_TYPE, WORD_SIZE } from './constants';
 
@@ -70,7 +70,7 @@ export function unpackDynamicData(
   Object.entries(results.dynamicData).forEach(([pointerIndex, vData]) => {
     // update value of pointer
     const pointerOffset = parseInt(pointerIndex, 10) * WORD_SIZE;
-    const adjustedValue = new U64Coder().encode(
+    const adjustedValue = new BigNumberCoder('u64').encode(
       dataOffset + baseOffset + cumulativeDynamicByteLength
     );
     updatedResults.set(adjustedValue, pointerOffset);
