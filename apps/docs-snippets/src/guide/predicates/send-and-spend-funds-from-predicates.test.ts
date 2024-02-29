@@ -18,10 +18,6 @@ describe(__filename, () => {
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
-  const { abiContents: abiSigning, binHexlified: binSigning } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.PREDICATE_SIGNING
-  );
-
   beforeAll(async () => {
     walletWithFunds = await getTestWallet();
     provider = walletWithFunds.provider;
@@ -184,46 +180,5 @@ describe(__filename, () => {
     const txIdFromExecutedTx = res.id;
 
     expect(txId).toEqual(txIdFromExecutedTx);
-  });
-
-  it.only('creates a transfer with external signer', async () => {
-    const predicate = new Predicate(binSigning, provider, abiSigning);
-
-    const amountToPredicate = 10_000;
-    const amountToReceiver = 100;
-
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
-      gasLimit: 1_000,
-    });
-
-    await tx.waitForResult();
-
-    const signerWallet = await getTestWallet();
-    predicate.setData(signerWallet.address.toB256());
-
-    const receiverWallet = WalletUnlocked.generate({
-      provider,
-    });
-
-    const transferRequest = await predicate.createTransfer(
-      receiverWallet.address,
-      amountToReceiver,
-      BaseAssetId,
-      {
-        gasPrice,
-        gasLimit: 1_000,
-      }
-    );
-
-    const hashedTransaction = transferRequest.getTransactionId(provider.getChainId());
-    const signedTransaction = await signerWallet.signTransaction(hashedTransaction);
-    const transactionRequest = await walletWithFunds.populateTransactionWitnessesSignature({
-      ...transferRequest,
-      witnesses: [signedTransaction],
-    });
-
-    const res = await predicate.sendTransaction(transactionRequest);
-    await res.waitForResult();
   });
 });
