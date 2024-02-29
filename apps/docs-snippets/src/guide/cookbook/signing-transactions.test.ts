@@ -1,3 +1,4 @@
+import { sign } from 'crypto';
 import type { Provider, BN } from 'fuels';
 import { WalletUnlocked, Predicate, BaseAssetId, Script, FunctionInvocationResult } from 'fuels';
 
@@ -39,17 +40,21 @@ describe('Signing transactions', () => {
   it('creates a transfer with external signer [predicate]', async () => {
     const amountToReceiver = 100;
 
+    // #region multiple-signers-2
     // Create and fund predicate
-    const predicate = new Predicate(binPredicate, provider, abiPredicate);
+    // #import { Predicate, BaseAssetId };
+
+    const predicate = new Predicate(binPredicate, provider, abiPredicate).setData(
+      signer.address.toB256()
+    );
     const tx = await sender.transfer(predicate.address, 50_000, BaseAssetId, {
       gasPrice,
       gasLimit: 100_000,
     });
     await tx.waitForResult();
-    console.log(1);
 
-    // Create the transaction request and sign
-    const transferRequest = await predicate.createTransfer(
+    // Create the transaction request
+    const transactionRequest = await predicate.createTransfer(
       receiver.address,
       amountToReceiver,
       BaseAssetId,
@@ -58,21 +63,22 @@ describe('Signing transactions', () => {
         gasLimit: 100_000,
       }
     );
-    predicate.setData(signer.address.toB256());
-    const hashedTransaction = transferRequest.getTransactionId(provider.getChainId());
-    const signedTransaction = await signer.signTransaction(hashedTransaction);
-    transferRequest.witnesses.push(signedTransaction);
-    console.log(2);
+
+    // Sign the transaction
+    transactionRequest.addSigner(signer);
 
     // Send the transaction
-    const res = await sender.sendTransaction(transferRequest);
+    const res = await sender.sendTransaction(transactionRequest);
     await res.waitForResult();
-
+    // #endregion multiple-signers-2
     expect(await receiver.getBalance()).toEqual(amountToReceiver);
   });
 
   it('creates a transfer with external signer [script]', async () => {
     const amountToReceiver = 100;
+
+    // #region multiple-signers-4
+    // #import { Script, BaseAssetId };
 
     // Create invocation scope
     const script = new Script(binScript, abiScript, sender);
@@ -81,15 +87,18 @@ describe('Signing transactions', () => {
       .txParams({ gasPrice, gasLimit: 1_000_000 });
     await scope.fundWithRequiredCoins();
 
-    // Create the transaction request and sign
-    const transferRequest = await scope.getTransactionRequest();
-    transferRequest
-      .addCoinOutput(receiver.address, amountToReceiver, BaseAssetId)
-      .addSigner(signer);
+    // Create the transaction request
+    const transactionRequest = await scope.getTransactionRequest();
+    transactionRequest.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
+
+    // Sign the transaction
+    transactionRequest.addSigner(signer);
 
     // Send the transaction
-    const response = await sender.sendTransaction(transferRequest);
+    const response = await sender.sendTransaction(transactionRequest);
     await response.waitForResult();
+    // #endregion multiple-signers-4
+
     const { value } = await FunctionInvocationResult.build<BN>([scope], response, false, script);
 
     expect(value.toNumber()).toEqual(1);
