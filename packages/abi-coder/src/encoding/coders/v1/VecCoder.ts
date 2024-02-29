@@ -6,7 +6,7 @@ import { MAX_BYTES, WORD_SIZE } from '../../../utils/constants';
 import { chunkByLength } from '../../../utils/utilities';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -28,7 +28,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     }
 
     const bytes = value.map((v) => this.coder.encode(v));
-    const lengthBytes = new U64Coder().encode(value.length);
+    const lengthBytes = new BigNumberCoder('u64').encode(value.length);
 
     return new Uint8Array([...lengthBytes, ...concatBytes(bytes)]);
   }
@@ -40,7 +40,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
 
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
-    const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
+    const length = bn(new BigNumberCoder('u64').decode(lengthBytes, 0)[0]).toNumber();
     const dataLength = length * this.coder.encodedLength;
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
 

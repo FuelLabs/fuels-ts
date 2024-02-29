@@ -6,7 +6,7 @@ import type { RequireExactlyOne } from 'type-fest';
 import { WORD_SIZE } from '../../../utils/constants';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -27,11 +27,11 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
 > {
   name: string;
   coders: TCoders;
-  #caseIndexCoder: U64Coder;
+  #caseIndexCoder: BigNumberCoder;
   #encodedValueSize: number;
 
   constructor(name: string, coders: TCoders) {
-    const caseIndexCoder = new U64Coder();
+    const caseIndexCoder = new BigNumberCoder('u64');
     const encodedValueSize = Object.values(coders).reduce(
       (max, coder) => Math.max(max, coder.encodedLength),
       0
@@ -80,7 +80,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid enum data size.`);
     }
 
-    const caseBytes = new U64Coder().decode(data, offset)[0];
+    const caseBytes = new BigNumberCoder('u64').decode(data, offset)[0];
     const caseIndex = toNumber(caseBytes);
     const caseKey = Object.keys(this.coders)[caseIndex];
     if (!caseKey) {

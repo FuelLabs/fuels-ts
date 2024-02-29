@@ -3,7 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U32_MAX } from '../../../../test/utils/constants';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 import { BooleanCoder } from './BooleanCoder';
 import { StructCoder } from './StructCoder';
@@ -14,7 +14,10 @@ import { StructCoder } from './StructCoder';
  */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
-  const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });
+  const coder = new StructCoder(STRUCT_NAME, {
+    a: new BooleanCoder(),
+    b: new BigNumberCoder('u64'),
+  });
 
   it('should encode a struct containing a boolean and number', () => {
     const expected = new Uint8Array([1, 0, 0, 0, 0, 255, 255, 255, 255]);
