@@ -56,6 +56,7 @@ interface MyContractAbiInterface extends Interface {
     types_struct: FunctionFragment;
     types_tuple: FunctionFragment;
     types_u16: FunctionFragment;
+    types_u256: FunctionFragment;
     types_u32: FunctionFragment;
     types_u64: FunctionFragment;
     types_u8: FunctionFragment;
@@ -80,6 +81,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_struct', values: [MyStructInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_tuple', values: [[BigNumberish, BigNumberish, BigNumberish]]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u16', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_u256', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u32', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u64', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u8', values: [BigNumberish]): Uint8Array;
@@ -103,6 +105,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_struct', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_tuple', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u16', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_u256', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u32', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u64', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u8', data: BytesLike): DecodedValue;
@@ -130,6 +133,7 @@ export class MyContractAbi extends Contract {
     types_struct: InvokeFunction<[x: MyStructInput], MyStructOutput>;
     types_tuple: InvokeFunction<[x: [BigNumberish, BigNumberish, BigNumberish]], [number, number, number]>;
     types_u16: InvokeFunction<[x: BigNumberish], number>;
+    types_u256: InvokeFunction<[x: BigNumberish], BN>;
     types_u32: InvokeFunction<[x: BigNumberish], number>;
     types_u64: InvokeFunction<[x: BigNumberish], BN>;
     types_u8: InvokeFunction<[x: BigNumberish], number>;

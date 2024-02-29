@@ -1,13 +1,12 @@
 import { type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
-import { hexlify } from '@fuel-ts/utils';
+import { DateTime, hexlify } from '@fuel-ts/utils';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { getGasUsedFromReceipts } from '../utils';
 
 import { calculateTransactionFee } from './calculate-transaction-fee';
-import { fromTai64ToDate } from './date';
 import {
   getOperations,
   getTransactionTypeName,
@@ -83,10 +82,10 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
-  let date: Date | undefined;
+  let date: DateTime | undefined;
 
   if (time) {
-    date = fromTai64ToDate(time);
+    date = DateTime.fromTai64(time);
   }
 
   const transactionSummary: TransactionSummary<TTransactionType> = {

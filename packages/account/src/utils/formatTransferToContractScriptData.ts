@@ -1,4 +1,4 @@
-import { U64Coder } from '@fuel-ts/abi-coder';
+import { BigNumberCoder } from '@fuel-ts/abi-coder';
 import type { B256Address, BytesLike } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
@@ -15,7 +15,7 @@ export const formatTransferToContractScriptData = (
 ) => {
   const { assetId, amountToTransfer, hexlifiedContractId } = params;
 
-  const numberCoder = new U64Coder();
+  const numberCoder = new BigNumberCoder('u64');
 
   const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
 
