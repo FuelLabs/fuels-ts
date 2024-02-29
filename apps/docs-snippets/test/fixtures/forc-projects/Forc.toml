@@ -27,4 +27,5 @@ members = [
   "echo-raw-slice",
   "echo-std-string",
   "predicate-signing",
+  "script-signing",
 ]
