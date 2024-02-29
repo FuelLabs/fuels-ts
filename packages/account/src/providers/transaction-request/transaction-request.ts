@@ -215,7 +215,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * Creates an empty witness without any side effects and returns the index
    */
-  protected createWitness() {
+  protected createEmptyWitness() {
     // Push a dummy witness with same byte size as a real witness signature
     this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
@@ -326,7 +326,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       // Insert a dummy witness if no witness exists
       if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createWitness();
+        witnessIndex = this.createEmptyWitness();
       }
     }
 
@@ -371,7 +371,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       // Insert a dummy witness if no witness exists
       if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createWitness();
+        witnessIndex = this.createEmptyWitness();
       }
     }
 
