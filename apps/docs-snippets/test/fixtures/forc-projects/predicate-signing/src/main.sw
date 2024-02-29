@@ -1,13 +1,6 @@
 predicate;
 
-use std::{
-    tx::{
-        tx_witness_data,
-        tx_id
-    },
-    ecr::ec_recover_address,
-    b512::B512
-};
++use std::{b512::B512, ecr::ec_recover_address, tx::{tx_id, tx_witness_data}};
 
 fn main(signer: b256) -> bool {
     let witness_data: B512 = tx_witness_data(1);
