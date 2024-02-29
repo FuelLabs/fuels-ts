@@ -7,6 +7,7 @@ import { runScaffoldCli, setupProgram } from './cli';
 runScaffoldCli({
   program: setupProgram(),
   args: process.argv,
+  shouldInstallDeps: true,
 })
   .then(() => process.exit(0))
   .catch((e) => {
