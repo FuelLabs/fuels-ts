@@ -51,7 +51,8 @@ describe('WalletUnlocked', () => {
     // #import { WalletUnlocked, Signer };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
-    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
+    const hashedTransaction = SCRIPT_TX_REQUEST.getTransactionId(provider.getChainId());
+    const signedTransaction = await wallet.signTransaction(hashedTransaction);
     const chainId = wallet.provider.getChain().consensusParameters.chainId.toNumber();
     const verifiedAddress = Signer.recoverAddress(
       SCRIPT_TX_REQUEST.getTransactionId(chainId),
@@ -66,7 +67,8 @@ describe('WalletUnlocked', () => {
   it('Populate transaction witnesses signature using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
-    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
+    const hashedTransaction = SCRIPT_TX_REQUEST.getTransactionId(provider.getChainId());
+    const signedTransaction = await wallet.signTransaction(hashedTransaction);
     const populatedTransaction =
       await wallet.populateTransactionWitnessesSignature(SCRIPT_TX_REQUEST);
 
@@ -78,8 +80,9 @@ describe('WalletUnlocked', () => {
     const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
     const privateKey = randomBytes(32);
     const otherWallet = new WalletUnlocked(privateKey, provider);
-    const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
-    const otherSignedTransaction = await otherWallet.signTransaction(SCRIPT_TX_REQUEST);
+    const hashedTransaction = SCRIPT_TX_REQUEST.getTransactionId(provider.getChainId());
+    const signedTransaction = await wallet.signTransaction(hashedTransaction);
+    const otherSignedTransaction = await otherWallet.signTransaction(hashedTransaction);
     const populatedTransaction = await wallet.populateTransactionWitnessesSignature({
       ...SCRIPT_TX_REQUEST,
       witnesses: [...SCRIPT_TX_REQUEST.witnesses, otherSignedTransaction],

@@ -496,6 +496,19 @@ export class Account extends AbstractAccount {
   }
 
   /**
+   * Signs a transaction with the wallet's private key.
+   *
+   * @param transactionRequestLike - The transaction request to sign.
+   * @returns A promise that resolves to the signature of the transaction.
+   */
+  async signTransaction(hashedTransaction: string): Promise<string> {
+    if (!this._connector) {
+      throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
+    }
+    return this._connector.signTransaction(this.address.toString(), hashedTransaction);
+  }
+
+  /**
    * Sends a transaction to the network.
    *
    * @param transactionRequestLike - The transaction request to be sent.

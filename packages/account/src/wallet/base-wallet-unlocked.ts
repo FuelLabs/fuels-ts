@@ -77,12 +77,8 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
-  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
-    const transactionRequest = transactionRequestify(transactionRequestLike);
-    const chainId = this.provider.getChain().consensusParameters.chainId.toNumber();
-    const hashedTransaction = transactionRequest.getTransactionId(chainId);
+  async signTransaction(hashedTransaction: string): Promise<string> {
     const signature = await this.signer().sign(hashedTransaction);
-
     return hexlify(signature);
   }
 
@@ -94,7 +90,8 @@ export class BaseWalletUnlocked extends Account {
    */
   async populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const signedTransaction = await this.signTransaction(transactionRequest);
+    const hashedTransaction = transactionRequest.getTransactionId(this.provider.getChainId());
+    const signedTransaction = await this.signTransaction(hashedTransaction);
 
     transactionRequest.updateWitnessByOwner(this.address, signedTransaction);
 

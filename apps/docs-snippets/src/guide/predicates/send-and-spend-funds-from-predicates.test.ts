@@ -216,7 +216,8 @@ describe(__filename, () => {
       }
     );
 
-    const signedTransaction = await signerWallet.signTransaction(transferRequest);
+    const hashedTransaction = transferRequest.getTransactionId(provider.getChainId());
+    const signedTransaction = await signerWallet.signTransaction(hashedTransaction);
     const transactionRequest = await walletWithFunds.populateTransactionWitnessesSignature({
       ...transferRequest,
       witnesses: [signedTransaction],

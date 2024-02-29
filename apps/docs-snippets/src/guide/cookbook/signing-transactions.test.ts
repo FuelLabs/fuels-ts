@@ -36,7 +36,7 @@ describe('Signing transactions', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
-  it('creates a transfer with external signer', async () => {
+  it('creates a transfer with external signer [predicate]', async () => {
     const amountToReceiver = 100;
 
     // Create and fund predicate
@@ -59,7 +59,8 @@ describe('Signing transactions', () => {
       }
     );
     predicate.setData(signer.address.toB256());
-    const signedTransaction = await signer.signTransaction(transferRequest);
+    const hashedTransaction = transferRequest.getTransactionId(provider.getChainId());
+    const signedTransaction = await signer.signTransaction(hashedTransaction);
     transferRequest.witnesses.push(signedTransaction);
     console.log(2);
 
@@ -83,7 +84,8 @@ describe('Signing transactions', () => {
     // Create the transaction request and sign
     const transferRequest = await scope.getTransactionRequest();
     transferRequest.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
-    const signedTransaction = await signer.signTransaction(transferRequest);
+    const hashedTransaction = transferRequest.getTransactionId(provider.getChainId());
+    const signedTransaction = await signer.signTransaction(hashedTransaction);
     transferRequest.witnesses.push(signedTransaction);
 
     // Send the transaction

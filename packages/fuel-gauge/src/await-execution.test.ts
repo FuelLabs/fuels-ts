@@ -30,9 +30,10 @@ describe('await-execution', () => {
       gasLimit: 10_000,
     });
 
+    const hashedTransaction = transfer.getTransactionId(nodeProvider.getChainId());
     transfer.updateWitnessByOwner(
       genesisWallet.address,
-      await genesisWallet.signTransaction(transfer)
+      await genesisWallet.signTransaction(hashedTransaction)
     );
 
     const response = await nodeProvider.sendTransaction(transfer, { awaitExecution: true });

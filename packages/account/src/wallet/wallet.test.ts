@@ -198,7 +198,8 @@ describe('Wallet', () => {
       ): Promise<TransactionResponse> {
         const transactionRequest = transactionRequestify(transactionRequestLike);
         // Simulate a external request of signature
-        const signedTransaction = await externalWallet.signTransaction(transactionRequest);
+        const hashedTransaction = transactionRequest.getTransactionId(this.getChainId());
+        const signedTransaction = await externalWallet.signTransaction(hashedTransaction);
         transactionRequest.updateWitnessByOwner(externalWallet.address.toB256(), signedTransaction);
         return super.sendTransaction(transactionRequestLike);
       }

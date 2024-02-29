@@ -105,6 +105,20 @@ export abstract class FuelConnector extends EventEmitter {
   }
 
   /**
+   * Should start the sign transaction process and return
+   * the signed transaction.
+   *
+   * Why do we need address, is it not the address of the account?
+   * @param address - The address to sign the transaction
+   * @param message - The transaction to sign
+   *
+   * @returns Transaction signature
+   */
+  async signTransaction(_address: string, _transaction: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
    * Should start the send transaction process and return
    * the transaction id submitted to the network.
    *
