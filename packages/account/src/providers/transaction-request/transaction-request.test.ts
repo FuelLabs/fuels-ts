@@ -102,7 +102,7 @@ describe('TransactionRequest', () => {
     expect(transactionRequest.witnesses.length).toEqual(1);
     expect(transactionRequest.witnesses).toStrictEqual([concat([ZeroBytes32, ZeroBytes32])]);
 
-    transactionRequest.createWitness(mockSignedTx);
+    transactionRequest.addWitness(mockSignedTx);
 
     expect(transactionRequest.witnesses.length).toEqual(2);
     expect(transactionRequest.witnesses).toStrictEqual([
@@ -132,7 +132,7 @@ describe('TransactionRequest', () => {
     const signer = WalletUnlocked.generate({ provider });
     const txRequest = new ScriptTransactionRequest();
 
-    const createWitnessSpy = vi.spyOn(txRequest, 'createWitness');
+    const createWitnessSpy = vi.spyOn(txRequest, 'addWitness');
     const signTxSpy = vi.spyOn(signer, 'signTransaction');
 
     expect(txRequest.witnesses.length).toEqual(0);

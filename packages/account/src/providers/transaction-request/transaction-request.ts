@@ -13,7 +13,6 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
-import { Transaction } from 'ethers';
 
 import type { Account } from '../../account';
 import type { Predicate } from '../../predicate';
@@ -41,7 +40,7 @@ import type {
   CoinTransactionRequestOutput,
 } from './output';
 import { outputify } from './output';
-import type { TransactionRequestLike } from './types';
+import type { TransactionRequest, TransactionRequestLike } from './types';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
@@ -221,7 +220,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param signature - The signature to add to the witness.
    * @returns The index of the created witness.
    */
-  createWitness(signature: BytesLike) {
+  addWitness(signature: BytesLike) {
     this.witnesses.push(signature);
     return this.witnesses.length - 1;
   }
@@ -233,9 +232,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @returns The index of the created witness.
    */
-  protected createEmptyWitness(): number {
+  protected addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.createWitness(concat([ZeroBytes32, ZeroBytes32]));
+    this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
   }
 
@@ -276,14 +275,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   async addSigner(signer: Account) {
     const hashedTransaction = this.getTransactionId(signer.provider.getChainId());
     const signature = await signer.signTransaction(hashedTransaction);
-    this.createWitness(signature);
+    this.addWitness(signature);
 
     return this;
   }
 
   /**
    * Adds multiple external signers to the transaction.
-   * 
+   *
    * @param signers - The signers to add to the transaction.
    * @returns The transaction with multiple signature witnesses added.
    */
@@ -370,7 +369,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       // Insert a dummy witness if no witness exists
       if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createEmptyWitness();
+        witnessIndex = this.addEmptyWitness();
       }
     }
 
@@ -415,7 +414,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       // Insert a dummy witness if no witness exists
       if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createEmptyWitness();
+        witnessIndex = this.addEmptyWitness();
       }
     }
 
