@@ -2,9 +2,13 @@
 import chalk from 'chalk';
 import { log } from 'console';
 
-import { runScaffoldCli } from './cli';
+import { runScaffoldCli, setupProgram } from './cli';
 
-runScaffoldCli()
+runScaffoldCli({
+  program: setupProgram(),
+  args: process.argv,
+  shouldInstallDeps: true,
+})
   .then(() => process.exit(0))
   .catch((e) => {
     log(chalk.red(e));
