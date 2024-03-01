@@ -1,6 +1,13 @@
 import { sign } from 'crypto';
 import type { Provider, BN } from 'fuels';
-import { WalletUnlocked, Predicate, BaseAssetId, Script, FunctionInvocationResult } from 'fuels';
+import {
+  WalletUnlocked,
+  Predicate,
+  BaseAssetId,
+  Script,
+  FunctionInvocationResult,
+  ScriptTransactionRequest,
+} from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -26,9 +33,6 @@ describe('Signing transactions', () => {
 
   beforeAll(async () => {
     sender = await getTestWallet();
-    receiver = WalletUnlocked.generate({
-      provider: sender.provider,
-    });
     signer = WalletUnlocked.generate({
       provider: sender.provider,
     });
@@ -37,47 +41,16 @@ describe('Signing transactions', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
-  it.only('creates a transfer with external signer [predicate]', async () => {
-    const amountToReceiver = 100;
-
-    // #region multiple-signers-2
-    // Create and fund predicate
-    // #import { Predicate, BaseAssetId };
-
-    const predicate = new Predicate(binPredicate, provider, abiPredicate);
-    const tx = await sender.transfer(predicate.address, 100_000, BaseAssetId);
-    await tx.waitForResult();
-
-    predicate.setData(signer.address.toB256());
-
-    // Create the transaction request
-    const transactionRequest = await predicate.createTransfer(
-      receiver.address,
-      amountToReceiver,
-      BaseAssetId
-    );
-
-    // Sign the transaction
-    await transactionRequest.addSigner(signer);
-
-    console.log('txRequest', transactionRequest);
-
-    console.log(2);
-
-    // Send the transaction
-    const res = await sender.sendTransaction(transactionRequest);
-    await res.waitForResult();
-
-    console.log('res', res);
-
-    // #endregion multiple-signers-2
-    expect(await receiver.getBalance()).toEqual(amountToReceiver);
+  beforeEach(() => {
+    receiver = WalletUnlocked.generate({
+      provider: sender.provider,
+    });
   });
 
   it('creates a transfer with external signer [script]', async () => {
     const amountToReceiver = 100;
 
-    // #region multiple-signers-4
+    // #region multiple-signers-2
     // #import { Script, BaseAssetId };
 
     // Create invocation scope
@@ -92,16 +65,58 @@ describe('Signing transactions', () => {
     transactionRequest.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
 
     // Sign the transaction
-    transactionRequest.addSigner(signer);
+    await transactionRequest.addSigner(signer);
 
     // Send the transaction
     const response = await sender.sendTransaction(transactionRequest);
     await response.waitForResult();
-    // #endregion multiple-signers-4
+    // #endregion multiple-signers-2
 
     const { value } = await FunctionInvocationResult.build<BN>([scope], response, false, script);
 
     expect(value.toNumber()).toEqual(1);
+    expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
+  });
+
+  it('creates a transfer with external signer [predicate]', async () => {
+    const amountToReceiver = 100;
+
+    // #region multiple-signers-4
+    // Create and fund predicate
+    // #import { Predicate, BaseAssetId };
+
+    // Create the predicate
+    const predicate = new Predicate(binPredicate, provider, abiPredicate).setData(
+      signer.address.toB256()
+    );
+
+    // Create the transaction request
+    const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_000 });
+    request.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
+
+    // Get the predicate resources and add them and predicate data to the request
+    const resources = await predicate.getResourcesToSpend([
+      {
+        assetId: BaseAssetId,
+        amount: amountToReceiver,
+      },
+    ]);
+    request.addPredicateResources(resources, predicate);
+    const parsedRequest = predicate.populateTransactionPredicateData(request);
+
+    // Add witnesses including the signer
+    parsedRequest.addWitness('0x');
+    await parsedRequest.addSigner(signer);
+
+    // Estimate the predicate inputs
+    const { estimatedInputs } = await provider.getTransactionCost(parsedRequest);
+    parsedRequest.updatePredicateInputs(estimatedInputs);
+
+    // Send the transaction
+    const res = await provider.sendTransaction(parsedRequest);
+    await res.waitForResult();
+
+    // #endregion multiple-signers-4
     expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
   });
 });
