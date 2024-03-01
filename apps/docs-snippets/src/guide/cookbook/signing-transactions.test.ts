@@ -37,39 +37,39 @@ describe('Signing transactions', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
-  it('creates a transfer with external signer [predicate]', async () => {
+  it.only('creates a transfer with external signer [predicate]', async () => {
     const amountToReceiver = 100;
 
     // #region multiple-signers-2
     // Create and fund predicate
     // #import { Predicate, BaseAssetId };
 
-    const predicate = new Predicate(binPredicate, provider, abiPredicate).setData(
-      signer.address.toB256()
-    );
-    const tx = await sender.transfer(predicate.address, 50_000, BaseAssetId, {
-      gasPrice,
-      gasLimit: 100_000,
-    });
+    const predicate = new Predicate(binPredicate, provider, abiPredicate);
+    const tx = await sender.transfer(predicate.address, 100_000, BaseAssetId);
     await tx.waitForResult();
+
+    predicate.setData(signer.address.toB256());
 
     // Create the transaction request
     const transactionRequest = await predicate.createTransfer(
       receiver.address,
       amountToReceiver,
-      BaseAssetId,
-      {
-        gasPrice,
-        gasLimit: 100_000,
-      }
+      BaseAssetId
     );
 
     // Sign the transaction
-    transactionRequest.addSigner(signer);
+    await transactionRequest.addSigner(signer);
+
+    console.log('txRequest', transactionRequest);
+
+    console.log(2);
 
     // Send the transaction
     const res = await sender.sendTransaction(transactionRequest);
     await res.waitForResult();
+
+    console.log('res', res);
+
     // #endregion multiple-signers-2
     expect(await receiver.getBalance()).toEqual(amountToReceiver);
   });
