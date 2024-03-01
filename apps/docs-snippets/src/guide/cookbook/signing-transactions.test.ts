@@ -1,4 +1,3 @@
-import { sign } from 'crypto';
 import type { Provider, BN } from 'fuels';
 import {
   WalletUnlocked,

@@ -40,7 +40,6 @@ import type {
   CoinTransactionRequestOutput,
 } from './output';
 import { outputify } from './output';
-import type { TransactionRequest, TransactionRequestLike } from './types';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
