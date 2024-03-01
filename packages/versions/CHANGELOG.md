@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.76.0
+
+### Minor Changes
+
+- Updated `forc` to verson `0.51.1`, by [@nedsalk](https://github.com/nedsalk) (See [#1804](https://github.com/FuelLabs/fuels-ts/pull/1804))
+
 ## 0.75.0
 
 ### Patch Changes
