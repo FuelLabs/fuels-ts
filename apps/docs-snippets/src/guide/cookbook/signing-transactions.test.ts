@@ -56,7 +56,7 @@ describe('Signing transactions', () => {
     const script = new Script(binScript, abiScript, sender);
     const scope = script.functions
       .main(signer.address.toB256())
-      .txParams({ gasPrice, gasLimit: 1_000_000 });
+      .txParams({ gasPrice, gasLimit: 10_000 });
     await scope.fundWithRequiredCoins();
 
     // Create the transaction request
@@ -88,6 +88,7 @@ describe('Signing transactions', () => {
     const predicate = new Predicate(binPredicate, provider, abiPredicate).setData(
       signer.address.toB256()
     );
+    await sender.transfer(predicate.address, 10_000, BaseAssetId);
 
     // Create the transaction request
     const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_000 });
