@@ -1,6 +1,5 @@
 ---
-"@fuel-ts/account": minor
-"fuels": minor
+"@fuel-ts/account": patch
 ---
 
 - Implemented transaction signing through an Account
