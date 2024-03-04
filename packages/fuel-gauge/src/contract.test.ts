@@ -229,7 +229,6 @@ describe('Contract', () => {
       await contract.functions
         .foo(1336)
         .txParams({
-          gasPrice,
           gasLimit: 1,
         })
         .call();
@@ -346,7 +345,6 @@ describe('Contract', () => {
         .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
         .txParams({
           gasLimit: 1,
-          gasPrice,
         })
         .call();
     } catch (e) {
@@ -417,7 +415,6 @@ describe('Contract', () => {
         gasLimit: 1000000,
       })
       .txParams({
-        gasPrice: 1,
         gasLimit: 3000000,
       })
       .call<BN>();
@@ -440,7 +437,6 @@ describe('Contract', () => {
         }),
       ])
       .txParams({
-        gasPrice: 1,
         gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
@@ -463,7 +459,6 @@ describe('Contract', () => {
           }),
         ])
         .txParams({
-          gasPrice: 1,
           gasLimit: 100,
         })
         .call<[BN, BN, BN]>()
@@ -487,7 +482,6 @@ describe('Contract', () => {
         }),
       ])
       .txParams({
-        gasPrice: 1,
         gasLimit: 4_000_000,
       })
       .call<[BN, BN]>();
@@ -520,7 +514,6 @@ describe('Contract', () => {
 
     const { value } = await invocationScope
       .txParams({
-        gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
       .call<[string, string]>();
@@ -531,18 +524,15 @@ describe('Contract', () => {
   it('Get transaction cost with minGasPrice ', async () => {
     const contract = await setupContract();
     const { minGasPrice } = contract.provider.getGasConfig();
-    const invocationScope = contract
-      .multiCall([
-        contract.functions.return_context_amount().callParams({
-          forward: [100, BaseAssetId],
-        }),
-        contract.functions.return_context_amount().callParams({
-          forward: [200, AltToken],
-        }),
-      ])
-      .txParams({
-        gasPrice: minGasPrice,
-      });
+    const invocationScope = contract.multiCall([
+      contract.functions.return_context_amount().callParams({
+        forward: [100, BaseAssetId],
+      }),
+      contract.functions.return_context_amount().callParams({
+        forward: [200, AltToken],
+      }),
+    ]);
+
     // Get transaction cost using gasPrice from
     // invocation scope
     const transactionCost = await invocationScope.getTransactionCost();
@@ -555,7 +545,6 @@ describe('Contract', () => {
     // and can be used as gasLimit
     const { value } = await invocationScope
       .txParams({
-        gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
       .call<[string, string]>();
@@ -575,7 +564,6 @@ describe('Contract', () => {
     await expect(
       invocationScope
         .txParams({
-          gasPrice,
           gasLimit,
         })
         .call<BN>()
@@ -693,7 +681,6 @@ describe('Contract', () => {
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
     const multiCallScope = contract.multiCall(invocationScopes).txParams({
-      gasPrice,
       gasLimit: 20_000,
     });
     await multiCallScope.fundWithRequiredCoins();
@@ -729,7 +716,7 @@ describe('Contract', () => {
       },
     ]);
     const contract = new ContractFactory(contractBytecode, abi, wallet);
-    const { transactionRequest } = contract.createTransactionRequest({ gasPrice });
+    const { transactionRequest } = contract.createTransactionRequest();
 
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);
@@ -790,9 +777,7 @@ describe('Contract', () => {
     const num = 1337;
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract
-      .multiCall(invocationScopes)
-      .txParams({ gasPrice, gasLimit: 20_000 });
+    const multiCallScope = contract.multiCall(invocationScopes).txParams({ gasLimit: 20_000 });
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
 
@@ -843,7 +828,7 @@ describe('Contract', () => {
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract();
 
     const vector = [5, 4, 3, 2, 1];
 
@@ -875,7 +860,7 @@ describe('Contract', () => {
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract();
 
     const calls = [
       contract.functions.return_bytes(), // returns heap type Bytes
@@ -915,7 +900,6 @@ describe('Contract', () => {
     const amountToContract = u64Amount;
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
@@ -950,10 +934,7 @@ describe('Contract', () => {
       const result = await wallet.transferToContract(
         contract.id.toB256(),
         amountToContract,
-        BaseAssetId,
-        {
-          gasPrice: 0,
-        }
+        BaseAssetId
       );
       await result.wait();
     }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
@@ -974,7 +955,6 @@ describe('Contract', () => {
     const amountToContract = 100;
 
     const tx = await wallet.transferToContract(contract.id.toB256(), amountToContract, asset, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
@@ -999,14 +979,12 @@ describe('Contract', () => {
     const predicate = new Predicate(predicateBytecode, provider);
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
     await tx1.waitForResult();
 
     const tx2 = await predicate.transferToContract(contract.id, amountToContract, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 

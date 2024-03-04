@@ -88,7 +88,7 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: 0,
+      tip: 0,
       gasLimit: 1000000,
       script:
         /*
@@ -141,7 +141,7 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: 0,
+      tip: 0,
       gasLimit: 1000000,
       script:
         /*

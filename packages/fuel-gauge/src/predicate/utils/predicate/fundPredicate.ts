@@ -6,11 +6,7 @@ export const fundPredicate = async <T extends InputValue[]>(
   predicate: Predicate<T>,
   amountToPredicate: BigNumberish
 ): Promise<BN> => {
-  const { minGasPrice } = wallet.provider.getGasConfig();
-
-  const request = new ScriptTransactionRequest({
-    gasPrice: minGasPrice,
-  });
+  const request = new ScriptTransactionRequest();
 
   request.addCoinOutput(predicate.address, amountToPredicate, BaseAssetId);
   const { minFee, requiredQuantities, gasUsed } = await wallet.provider.getTransactionCost(request);

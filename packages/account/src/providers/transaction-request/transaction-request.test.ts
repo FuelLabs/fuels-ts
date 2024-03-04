@@ -122,7 +122,7 @@ describe('transactionRequestify', () => {
       type: TransactionType.Script,
       script,
       scriptData,
-      gasPrice: 1,
+      tip: 1,
       gasLimit: 10000,
       maturity: 1,
       inputs: [],
@@ -137,7 +137,7 @@ describe('transactionRequestify', () => {
     }
 
     expect(txRequest.type).toEqual(txRequestLike.type);
-    expect(toNumber(txRequest.gasPrice)).toEqual(txRequestLike.gasPrice);
+    expect(toNumber(txRequest.tip)).toEqual(txRequestLike.tip);
     expect(toNumber((<ScriptTransactionRequest>txRequest).gasLimit)).toEqual(
       txRequestLike.gasLimit
     );
@@ -150,7 +150,6 @@ describe('transactionRequestify', () => {
   it('should throw error if invalid transaction type', () => {
     const txRequestLike = {
       type: 5,
-      gasPrice: 1,
     };
 
     expect(() => transactionRequestify(txRequestLike)).toThrow('Invalid transaction type: 5');

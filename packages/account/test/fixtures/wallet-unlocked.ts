@@ -4,7 +4,7 @@ export const SCRIPT_TX_REQUEST = new ScriptTransactionRequest({
   gasLimit: 5_000,
   script: '0x',
   scriptData: Uint8Array.from([]),
-  gasPrice: 5,
+  tip: 5,
   maxFee: 20_000,
   maturity: 0,
   witnessLimit: 5000,

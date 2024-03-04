@@ -70,7 +70,6 @@ export default createConfig({
     }
 
     return {
-      gasPrice: 1,
       storageSlots: [
         {
           key: '0x..',
@@ -112,8 +111,6 @@ export const simpleDeployConfig = createConfig({
   workspace: './sway-programs',
   output: './src/sway-programs-api',
   // #region deployConfig-obj
-  deployConfig: {
-    gasPrice: 1,
-  },
+  deployConfig: {},
   // #endregion deployConfig-obj
 });

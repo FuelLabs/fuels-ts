@@ -1,4 +1,4 @@
-import type { WalletLocked, WalletUnlocked, BigNumberish, BN } from 'fuels';
+import type { WalletLocked, WalletUnlocked, BigNumberish } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate, BaseAssetId } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -29,13 +29,11 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
-    let gasPrice: BN;
     const amountToReceiver = 50;
     const amountToPredicate = 400_000;
 
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
     });
 
     beforeEach(async () => {
@@ -55,7 +53,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a')
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -85,7 +83,7 @@ describe('Predicate', () => {
       predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
       await expect(
-        predicate.transfer(receiver.address, 50, BaseAssetId, { gasPrice: 1, gasLimit: 1000 })
+        predicate.transfer(receiver.address, 50, BaseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -101,7 +99,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData(1078)
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -130,7 +128,6 @@ describe('Predicate', () => {
 
       await expect(
         predicate.setData(100).transfer(receiver.address, amountToPredicate, BaseAssetId, {
-          gasPrice,
           gasLimit: 10_000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/);
@@ -153,7 +150,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
       await tx.waitForResult();
       // #endregion predicate-struct-arg
 
@@ -185,7 +182,7 @@ describe('Predicate', () => {
             has_account: false,
             total_complete: 0,
           })
-          .transfer(receiver.address, 50, BaseAssetId, { gasPrice, gasLimit: 10_000 })
+          .transfer(receiver.address, 50, BaseAssetId, { gasLimit: 10_000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -201,7 +198,7 @@ describe('Predicate', () => {
 
       const tx = await predicate
         .setData([42])
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
       await tx.waitForResult();
 
       await assertBalances(
@@ -224,7 +221,6 @@ describe('Predicate', () => {
       // #context const predicate = new Predicate(bytecode, chainId, abi);
       predicate.setData(20, 30);
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasPrice,
         gasLimit: 10_000,
       });
       await tx.waitForResult();
@@ -249,9 +245,7 @@ describe('Predicate', () => {
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
       await expect(
-        predicate
-          .setData(20, 20)
-          .transfer(receiver.address, 50, BaseAssetId, { gasPrice, gasLimit: 10_000 })
+        predicate.setData(20, 20).transfer(receiver.address, 50, BaseAssetId, { gasLimit: 10_000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });
