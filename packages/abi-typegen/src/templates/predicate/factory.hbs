@@ -57,11 +57,11 @@ export class {{capitalizedName}}__factory {
   static readonly abi = _abi
   static readonly bin = _bin;
 
-  static createInstance(provider: Provider, configurables?: {{capitalizedName}}Configurables) {
+  static createInstance(provider: Provider, predicateData?: InputValue[],configurables?: {{capitalizedName}}Configurables) {
 
     const { abi, bin } = {{capitalizedName}}__factory
 
-    const predicate = new Predicate(bin, provider, abi, configurables);
+    const predicate = new Predicate(bin, provider, abi, predicateData, configurables);
 
     return predicate;
 
