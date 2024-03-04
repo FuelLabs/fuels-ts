@@ -1,4 +1,4 @@
-# Wallet SDK & React Hooks
+# Wallet SDK and React Hooks
 
 This guide will show you how you can use the Fuel Wallet SDK and its React Hooks to build a simple React application that lets users connect their wallet to your application and see their balance.
 

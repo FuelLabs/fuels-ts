@@ -363,7 +363,7 @@ export default defineConfig({
               },
               {
                 text: 'Wallet SDK & React Hooks',
-                link: '/guide/cookbook/wallet-sdk-react-hooks',
+                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
               },
             ],
           },
