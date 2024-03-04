@@ -12,7 +12,7 @@ We would interact with this script in the SDK by creating a transaction request 
 
 <<< @/../../docs-snippets/src/guide/cookbook/signing-transactions.test.ts#multiple-signers-2{ts:line-numbers}
 
-The same approach can be used for a predicate. Instead we instantiate a predicate and add it to a transaction request. Consider the following predicate:
+The same approach can be used for a predicate by instantiating it and adding it to a transaction request. Consider the following predicate:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/predicate-signing/src/main.sw#multiple-signers-3{rust:line-numbers}
 
