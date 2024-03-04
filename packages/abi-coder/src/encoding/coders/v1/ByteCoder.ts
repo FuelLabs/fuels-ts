@@ -3,7 +3,7 @@ import { bn } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
-import { U64Coder } from '../v0/U64Coder';
+import { BigNumberCoder } from '../v0/BigNumberCoder';
 
 export class ByteCoder extends Coder<number[], Uint8Array> {
   static memorySize = 1;
@@ -17,7 +17,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     }
 
     const bytes = new Uint8Array(value);
-    const lengthBytes = new U64Coder().encode(value.length);
+    const lengthBytes = new BigNumberCoder('u64').encode(value.length);
 
     return new Uint8Array([...lengthBytes, ...bytes]);
   }
@@ -29,7 +29,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
 
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
-    const length = bn(new U64Coder().decode(lengthBytes, 0)[0]).toNumber();
+    const length = bn(new BigNumberCoder('u64').decode(lengthBytes, 0)[0]).toNumber();
 
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + length);
 
