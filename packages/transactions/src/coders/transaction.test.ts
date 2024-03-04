@@ -31,7 +31,7 @@ describe('TransactionCoder', () => {
       script: B256,
       scriptData: B256,
       policies: [
-        { type: PolicyType.GasPrice, data: bn(U32) },
+        { type: PolicyType.Tip, data: bn(U32) },
         { type: PolicyType.Maturity, data: U32 },
       ],
       inputs: [],
@@ -65,7 +65,7 @@ describe('TransactionCoder', () => {
       script: B256,
       scriptData: B256,
       policies: [
-        { type: PolicyType.GasPrice, data: bn(U32) },
+        { type: PolicyType.Tip, data: bn(U32) },
         { type: PolicyType.WitnessLimit, data: bn(U32) },
         { type: PolicyType.Maturity, data: U32 },
       ],
@@ -132,7 +132,7 @@ describe('TransactionCoder', () => {
       outputsCount: 0,
       witnessesCount: 0,
       salt: B256,
-      policies: [{ type: PolicyType.GasPrice, data: bn(U32) }],
+      policies: [{ type: PolicyType.Tip, data: bn(U32) }],
       storageSlots: [],
       inputs: [],
       outputs: [],
@@ -163,7 +163,7 @@ describe('TransactionCoder', () => {
       witnessesCount: 1,
       salt: B256,
       policies: [
-        { type: PolicyType.GasPrice, data: bn(U32) },
+        { type: PolicyType.Tip, data: bn(U32) },
         { type: PolicyType.WitnessLimit, data: bn(U32) },
         { type: PolicyType.Maturity, data: U32 },
         { type: PolicyType.MaxFee, data: bn(U32) },
