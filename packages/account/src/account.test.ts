@@ -1,5 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
@@ -628,12 +630,18 @@ describe('Account', () => {
     const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
-    await expect(async () => {
-      await sender.transfer(receiver.address, 0, BaseAssetId);
-    }).rejects.toThrowError(/Transfer amount must be a positive number./);
+    await expectToThrowFuelError(
+      async () => {
+        await sender.transfer(receiver.address, 0, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
 
-    await expect(async () => {
-      await sender.transfer(receiver.address, -1, BaseAssetId);
-    }).rejects.toThrowError(/Transfer amount must be a positive number./);
+    await expectToThrowFuelError(
+      async () => {
+        await sender.transfer(receiver.address, -1, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
   });
 });

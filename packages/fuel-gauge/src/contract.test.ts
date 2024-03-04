@@ -1133,12 +1133,18 @@ describe('Contract', () => {
 
     const contract = await factory.deployContract();
 
-    await expect(async () => {
-      await wallet.transferToContract(contract.id, 0, BaseAssetId);
-    }).rejects.toThrowError(/Transfer amount must be a positive number./);
+    await expectToThrowFuelError(
+      async () => {
+        await wallet.transferToContract(contract.id, 0, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
 
-    await expect(async () => {
-      await wallet.transferToContract(contract.id, -1, BaseAssetId);
-    }).rejects.toThrowError(/Transfer amount must be a positive number./);
+    await expectToThrowFuelError(
+      async () => {
+        await wallet.transferToContract(contract.id, -1, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
   });
 });
