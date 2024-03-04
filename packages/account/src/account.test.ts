@@ -623,4 +623,17 @@ describe('Account', () => {
       await result.wait();
     }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
   });
+
+  it('should throw when trying to transfer a zero or negative amount', async () => {
+    const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    const receiver = Wallet.generate({ provider });
+
+    await expect(async () => {
+      await sender.transfer(receiver.address, 0, BaseAssetId);
+    }).rejects.toThrowError(/Transfer amount must be a positive number./);
+
+    await expect(async () => {
+      await sender.transfer(receiver.address, -1, BaseAssetId);
+    }).rejects.toThrowError(/Transfer amount must be a positive number./);
+  });
 });

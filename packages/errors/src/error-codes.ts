@@ -54,6 +54,7 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
+  INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
