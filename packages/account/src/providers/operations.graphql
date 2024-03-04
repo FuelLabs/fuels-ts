@@ -139,7 +139,6 @@ fragment coinFragment on Coin {
   owner
   amount
   assetId
-  maturity
   blockCreated
   txCreatedIdx
 }
