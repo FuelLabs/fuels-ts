@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { join } from 'path';
 
 import type { FuelsConfig } from '../../src';
@@ -25,4 +25,6 @@ export const fuelsConfig: FuelsConfig = {
   fuelCorePort: 4000,
   providerUrl: FUEL_NETWORK_URL,
   configPath: __filename,
+  forcBuildFlags: [],
+  buildMode: 'debug',
 };

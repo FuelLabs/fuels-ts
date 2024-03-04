@@ -24,9 +24,9 @@ export async function deploy(config: FuelsConfig) {
 
   for (let i = 0; i < contractsLen; i++) {
     const contractPath = config.contracts[i];
-    const binaryPath = getBinaryPath(contractPath);
-    const abiPath = getABIPath(contractPath);
-    const storageSlotsPath = getStorageSlotsPath(contractPath);
+    const binaryPath = getBinaryPath(contractPath, config);
+    const abiPath = getABIPath(contractPath, config);
+    const storageSlotsPath = getStorageSlotsPath(contractPath, config);
     const projectName = getContractName(contractPath);
     const contractName = getContractCamelCase(contractPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {

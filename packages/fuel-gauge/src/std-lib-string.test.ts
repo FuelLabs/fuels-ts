@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
@@ -32,20 +32,14 @@ describe('std-lib-string Tests', () => {
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
 
   it('should test std-lib-string return', async () => {
-    const { value } = await contractInstance.functions
-      .return_dynamic_string()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<string>();
+    const { value } = await contractInstance.functions.return_dynamic_string().call<string>();
     expect(value).toBe('Hello World');
   });
 
   it('should test std-lib-string input', async () => {
     const INPUT = 'Hello World';
 
-    const { value } = await contractInstance.functions
-      .accepts_dynamic_string(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contractInstance.functions.accepts_dynamic_string(INPUT).call();
 
     expect(value).toBeUndefined();
   });
@@ -93,10 +87,7 @@ describe('std-lib-string Tests', () => {
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
 
-    const { value } = await scriptInstance.functions
-      .main(INPUT)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<BN>();
+    const { value } = await scriptInstance.functions.main(INPUT).call<BN>();
 
     expect(value.toNumber()).toStrictEqual(0);
   });

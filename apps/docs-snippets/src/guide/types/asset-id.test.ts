@@ -1,5 +1,5 @@
-import type { AssetId, Contract, B256Address } from 'fuels';
 import { Address } from 'fuels';
+import type { AssetId, Contract, B256Address } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -17,7 +17,7 @@ describe('AssetId', () => {
 
   it('should demonstrate typed asset id example', () => {
     // #region asset-id-1
-    // #context import type { AssetId } from 'fuels';
+    // #import { AssetId };
 
     const assetId: AssetId = {
       value: Bits256,
@@ -29,8 +29,7 @@ describe('AssetId', () => {
 
   it('should create an AssetId from a B256Address', async () => {
     // #region asset-id-2
-    // #context import type { AssetId } from 'fuels';
-    // #context import { AssetId } from 'fuels';
+    // #import { AssetId };
 
     const b256Address = '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
 
@@ -39,32 +38,20 @@ describe('AssetId', () => {
     const assetId: AssetId = address.toAssetId();
     // #endregion asset-id-2
 
-    const { value } = await contract.functions
-      .echo_asset_id_comparison(assetId)
-      .txParams({
-        gasLimit: 10_000,
-        gasPrice: 1,
-      })
-      .simulate();
+    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
 
     expect(value).toBeTruthy();
   });
 
   it('should pass an asset id to a contract', async () => {
     // #region asset-id-3
-    // #context import type { AssetId } from 'fuels';
+    // #import { AssetId };
 
     const assetId: AssetId = {
       value: Bits256,
     };
 
-    const { value } = await contract.functions
-      .echo_asset_id_comparison(assetId)
-      .txParams({
-        gasLimit: 10_000,
-        gasPrice: 1,
-      })
-      .simulate();
+    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
 
     expect(value).toBeTruthy();
     // #endregion asset-id-3
@@ -72,19 +59,13 @@ describe('AssetId', () => {
 
   it('should retrieve an asset id from a contract', async () => {
     // #region asset-id-4
-    // #context import type { AssetId } from 'fuels';
+    // #import { AssetId };
 
     const assetId: AssetId = {
       value: Bits256,
     };
 
-    const { value } = await contract.functions
-      .echo_asset_id()
-      .txParams({
-        gasLimit: 10_000,
-        gasPrice: 1,
-      })
-      .simulate();
+    const { value } = await contract.functions.echo_asset_id().simulate();
 
     expect(value).toEqual(assetId);
     // #endregion asset-id-4

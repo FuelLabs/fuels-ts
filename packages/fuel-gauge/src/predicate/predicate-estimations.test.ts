@@ -1,5 +1,9 @@
-import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
+import type {
+  CoinTransactionRequestInput,
+  MessageTransactionRequestInput,
+  ContractTransactionRequestInput,
+} from 'fuels';
 import {
   BaseAssetId,
   Provider,
@@ -8,6 +12,8 @@ import {
   ScriptTransactionRequest,
   InputType,
   FUEL_NETWORK_URL,
+  getRandomB256,
+  WalletUnlocked,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -60,7 +66,7 @@ describe('Predicate', () => {
       (<CoinTransactionRequestInput>tx.inputs[0]).predicate = predicateStruct.bytes;
 
       // Create a message input with a predicate that returns true
-      const inputMessage: MessageTransactionRequestInput = {
+      const predicateMessage: MessageTransactionRequestInput = {
         type: InputType.Message,
         amount: bn(0),
         sender: '0x00000000000000000000000059f2f1fcfe2474fd5f0b9ba1e73ca90b143eb8d0',
@@ -74,7 +80,35 @@ describe('Predicate', () => {
         predicateGasUsed: bn(0),
         predicateData: '0x',
       };
-      tx.inputs.push(inputMessage);
+
+      const nonPredicateMessage: MessageTransactionRequestInput = {
+        type: InputType.Message,
+        amount: bn(100),
+        sender: getRandomB256(),
+        recipient: getRandomB256(),
+        witnessIndex: 0,
+        data: '0x',
+        nonce: getRandomB256(),
+      };
+
+      const contract: ContractTransactionRequestInput = {
+        type: 1,
+        contractId: '0xb64fa600c9a940529020fd47a18f9c1395946fbf636aad13fe029db4820ed354',
+        txPointer: '0x00000000000000000000000000000000',
+      };
+
+      const nonPredicateUtxo: CoinTransactionRequestInput = {
+        id: '0x5b2f4599a29aea28e325c89249c9e397f8b86bbd2405cf3b0face56c8e0e4dbe01',
+        amount: bn(100),
+        assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        owner: '0xd8813d1f9ca165ce2e8710382c3d65d64e7bd43c0f7a3d51689bcdf9513411cd',
+        maturity: 0,
+        type: 0,
+        txPointer: '0x00000000000000000000000000000000',
+        witnessIndex: 0,
+      };
+
+      tx.inputs.push(predicateMessage, nonPredicateMessage, contract, nonPredicateUtxo);
 
       const txEstimated = await provider.estimatePredicates(tx);
 
@@ -82,11 +116,79 @@ describe('Predicate', () => {
       expect(Number(predicateCoinInput.predicateGasUsed)).toBeGreaterThan(1);
       const predicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[1];
       expect(Number(predicateMessageInput.predicateGasUsed)).toBeGreaterThan(1);
+      const nonPredicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[2];
+      expect(nonPredicateMessageInput.predicateGasUsed).toBeUndefined();
+      const contractInput = <ContractTransactionRequestInput>txEstimated.inputs[3];
+      expect(contractInput.contractId).toBe(contract.contractId);
+      const nonPredicateInput = <CoinTransactionRequestInput>txEstimated.inputs[4];
+      expect(nonPredicateInput.predicateGasUsed).toBeUndefined();
       // Because the predicate that owns the coin is more complex
       // it should have a bigger gas cost
       expect(Number(predicateCoinInput.predicateGasUsed)).toBeGreaterThan(
         Number(predicateMessageInput.predicateGasUsed)
       );
+    });
+
+    test('predicate does not get estimated again if it has already been estimated', async () => {
+      const tx = new ScriptTransactionRequest();
+      await seedTestWallet(predicateTrue, [[100]]);
+      const resources = await predicateTrue.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(resources, predicateTrue);
+
+      const spy = vi.spyOn(provider.operations, 'estimatePredicates');
+
+      await provider.estimatePredicates(tx);
+      await provider.estimatePredicates(tx);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('Predicates get estimated if one of them is not estimated', async () => {
+      const tx = new ScriptTransactionRequest();
+      await seedTestWallet(predicateTrue, [[100]]);
+      const trueResources = await predicateTrue.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(trueResources, predicateTrue);
+
+      const spy = vi.spyOn(provider.operations, 'estimatePredicates');
+      await provider.estimatePredicates(tx);
+
+      await seedTestWallet(predicateStruct, [[100]]);
+      const structResources = await predicateStruct.getResourcesToSpend([[1]]);
+      tx.addPredicateResources(structResources, predicateStruct);
+
+      await provider.estimatePredicates(tx);
+
+      // this call shouldn't call provider.operations.estimatePredicates because all predicates have been estimated
+      await provider.estimatePredicates(tx);
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
+      const amountToPredicate = 10_000;
+
+      await seedTestWallet(predicateTrue, [[amountToPredicate]]);
+
+      const initialPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
+
+      const receiverWallet = WalletUnlocked.generate({
+        provider,
+      });
+
+      const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
+      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
+
+      const response = await predicateTrue.transfer(
+        receiverWallet.address.toB256(),
+        1,
+        BaseAssetId
+      );
+      await response.waitForResult();
+      const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
+      expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
+
+      expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
+      expect(dryRunSpy).toHaveBeenCalledOnce();
     });
   });
 });

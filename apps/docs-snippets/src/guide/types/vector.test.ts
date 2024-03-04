@@ -23,7 +23,7 @@ describe(__filename, () => {
     // #endregion vector-1
 
     // #region vector-4
-    // #context import { BN, getRandomB256 } from 'fuels';
+    // #import { getRandomB256 };
 
     const employees = [
       {
@@ -43,10 +43,7 @@ describe(__filename, () => {
         isActive: true,
       },
     ];
-    const { value } = await contract.functions
-      .echo_last_employee_data(employees)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_last_employee_data(employees).simulate();
     // #endregion vector-4
     expect(value.name).toEqual(employees[1].name);
     expect(value.age).toEqual(employees[1].age);

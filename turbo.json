@@ -24,7 +24,7 @@
         "**/test/fixtures/forc-projects/**/src/*.sw",
         "**/test/fixtures/forc-projects/**/Forc.toml"
       ],
-      "outputs": ["**/test/fixtures/forc-projects/**/out/debug/**"]
+      "outputs": ["**/test/fixtures/forc-projects/**/out/release/**"]
     },
     "test": {
       "dependsOn": ["^test", "pretest"],

@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import type { TransactionResultRevertReceipt } from '@fuel-ts/providers';
+import type { TransactionResultRevertReceipt } from '@fuel-ts/account';
 import {
   FAILED_ASSERT_EQ_SIGNAL,
   FAILED_ASSERT_SIGNAL,

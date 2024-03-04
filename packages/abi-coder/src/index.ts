@@ -1,18 +1,21 @@
-export { Coder, InputValue, DecodedValue } from './coders/abstract-coder';
-export { ArrayCoder } from './coders/array';
-export { B256Coder } from './coders/b256';
-export { B512Coder } from './coders/b512';
-export { BooleanCoder } from './coders/boolean';
-export { EnumCoder } from './coders/enum';
-export { NumberCoder } from './coders/number';
-export { StringCoder } from './coders/string';
-export { StructCoder } from './coders/struct';
-export { TupleCoder } from './coders/tuple';
-export { U64Coder } from './coders/u64';
-export { VecCoder } from './coders/vec';
-export type { FunctionFragment } from './function-fragment';
-export { Interface } from './interface';
-export { JsonAbi } from './json-abi';
+export { Coder, InputValue, DecodedValue } from './encoding/coders/AbstractCoder';
+export { ArrayCoder } from './encoding/coders/v0/ArrayCoder';
+export { B256Coder } from './encoding/coders/v0/B256Coder';
+export { B512Coder } from './encoding/coders/v0/B512Coder';
+export { BooleanCoder } from './encoding/coders/v0/BooleanCoder';
+export { ByteCoder } from './encoding/coders/v0/ByteCoder';
+export { EnumCoder } from './encoding/coders/v0/EnumCoder';
+export { OptionCoder } from './encoding/coders/v0/OptionCoder';
+export { NumberCoder } from './encoding/coders/v0/NumberCoder';
+export { RawSliceCoder } from './encoding/coders/v0/RawSliceCoder';
+export { StdStringCoder } from './encoding/coders/v0/StdStringCoder';
+export { StringCoder } from './encoding/coders/v0/StringCoder';
+export { StructCoder } from './encoding/coders/v0/StructCoder';
+export { TupleCoder } from './encoding/coders/v0/TupleCoder';
+export { VecCoder } from './encoding/coders/v0/VecCoder';
+export type { FunctionFragment } from './FunctionFragment';
+export { Interface } from './Interface';
+export { JsonAbi } from './types/JsonAbi';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
@@ -20,4 +23,5 @@ export {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   calculateVmTxMemory,
-} from './constants';
+} from './utils/constants';
+export { BigNumberCoder } from './encoding/coders/v0/BigNumberCoder';

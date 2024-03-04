@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
 import type { AbstractScript } from '@fuel-ts/interfaces';
 import { ScriptRequest, FunctionInvocationScope } from '@fuel-ts/program';
-import type { Provider } from '@fuel-ts/providers';
 import { ByteArrayCoder } from '@fuel-ts/transactions';
 
 export class ScriptInvocationScope<

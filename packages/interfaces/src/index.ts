@@ -61,7 +61,7 @@ export abstract class AbstractAccount {
   abstract provider: unknown;
   abstract getResourcesToSpend(quantities: any[], options?: any): any;
   abstract sendTransaction(transactionRequest: any, options?: any): any;
-  abstract simulateTransaction(transactionRequest: any): any;
+  abstract simulateTransaction(transactionRequest: any, options?: any): any;
   abstract fund(transactionRequest: any, quantities: any, fee: any): Promise<void>;
 }
 /**
@@ -93,14 +93,3 @@ export abstract class AbstractScript extends AbstractProgram {
 export type AddressLike = AbstractAddress | AbstractAccount;
 
 export type ContractIdLike = AbstractAddress | AbstractContract;
-
-/**
- * @hidden
- */
-export abstract class AbstractPredicate {
-  abstract bytes: Uint8Array;
-  abstract address: AbstractAddress;
-  abstract predicateData: Uint8Array;
-
-  abstract types?: ReadonlyArray<any>;
-}

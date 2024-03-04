@@ -1,5 +1,5 @@
 import { bufferFromString } from '@fuel-ts/crypto';
-import type { BytesLike } from 'ethers';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { sha256 } from 'ethers';
 
 /**

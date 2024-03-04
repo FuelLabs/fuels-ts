@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import type { CoinQuantity } from '@fuel-ts/account';
+import { coinQuantityfy } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractProgram } from '@fuel-ts/interfaces';
-import type { CoinQuantity } from '@fuel-ts/providers';
-import { coinQuantityfy } from '@fuel-ts/providers';
 
 import type { CallConfig, CallParams } from '../types';
 
@@ -74,6 +74,9 @@ export class FunctionInvocationScope<
    * @throws If the function is not payable and forward is set.
    */
   callParams(callParams: CallParams) {
+    if (!this.hasCallParamsGasLimit && callParams?.gasLimit !== undefined) {
+      this.hasCallParamsGasLimit = true;
+    }
     this.callParameters = callParams;
 
     if (callParams?.forward) {

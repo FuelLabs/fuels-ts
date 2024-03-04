@@ -58,6 +58,9 @@ typings/
 # TypeScript cache
 *.tsbuildinfo
 
+# Tsup config bundles
+tsup.config.bundled_*
+
 # Optional npm cache directory
 .npm
 
@@ -138,6 +141,7 @@ Forc.lock
 
 # Ignore forc builds
 **/out/debug
+**/out/release
 **/test-predicate-*/index.ts
 
 # Ignore [local] history directory (VsCode extension)

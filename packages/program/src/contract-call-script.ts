@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
-import { bn, toNumber } from '@fuel-ts/math';
+import { WORD_SIZE, B256Coder, ASSET_ID_LEN, BigNumberCoder } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
   TransactionResultCallReceipt,
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
-} from '@fuel-ts/providers';
+} from '@fuel-ts/account';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { concat } from '@fuel-ts/utils';
+import { concat, arrayify } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
-import { getBytesCopy } from 'ethers';
 
 import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
@@ -152,15 +151,17 @@ const scriptResultDecoder =
           return [];
         }
         if (receipt.type === ReceiptType.Return) {
-          return [new U64Coder().encode((receipt as TransactionResultReturnReceipt).val)];
+          return [
+            new BigNumberCoder('u64').encode((receipt as TransactionResultReturnReceipt).val),
+          ];
         }
         if (receipt.type === ReceiptType.ReturnData) {
-          const encodedScriptReturn = getBytesCopy(receipt.data);
+          const encodedScriptReturn = arrayify(receipt.data);
           if (isOutputDataHeap && isReturnType(filtered[index + 1]?.type)) {
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
-            return concat([encodedScriptReturn, getBytesCopy(nextReturnData.data)]);
+            return concat([encodedScriptReturn, arrayify(nextReturnData.data)]);
           }
 
           return [encodedScriptReturn];
@@ -258,16 +259,16 @@ export const getContractCallScript = (
 
         /// script data, consisting of the following items in the given order:
         /// 1. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new U64Coder().encode(call.amount || 0));
+        scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
         /// 2. Asset ID to be forwarded ([`AssetId::LEN`])
         scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
         /// 3. Contract ID ([`ContractId::LEN`]);
         scriptData.push(call.contractId.toBytes());
         /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new U64Coder().encode(call.fnSelector));
+        scriptData.push(new BigNumberCoder('u64').encode(call.fnSelector));
         /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
         if (call.gas) {
-          scriptData.push(new U64Coder().encode(call.gas));
+          scriptData.push(new BigNumberCoder('u64').encode(call.gas));
 
           gasForwardedSize = WORD_SIZE;
         }
@@ -279,11 +280,11 @@ export const getContractCallScript = (
         // transaction. If it doesn't take any custom inputs, this isn't necessary.
         if (call.isInputDataPointer) {
           const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize;
-          scriptData.push(new U64Coder().encode(pointerInputOffset));
+          scriptData.push(new BigNumberCoder('u64').encode(pointerInputOffset));
         }
 
         /// 7. Encoded arguments (optional) (variable length)
-        const args = getBytesCopy(call.data);
+        const args = arrayify(call.data);
         scriptData.push(args);
 
         // move offset for next call

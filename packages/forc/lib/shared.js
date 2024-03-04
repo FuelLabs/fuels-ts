@@ -1,12 +1,13 @@
 import { execSync } from 'child_process';
-import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync } from 'fs';
+import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export const binPath = join(__dirname, '../forc-binaries/forc');
+export const forcBinDirPath = join(__dirname, '..', 'forc-binaries');
+export const binPath = join(forcBinDirPath, 'forc');
 
 const platforms = {
   darwin: {
@@ -50,18 +51,29 @@ export const isGitBranch = (versionFileContents) => versionFileContents.indexOf(
 const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
 export const buildFromGitBranch = (branchName) => {
-  rmSync('sway-repo', { recursive: true, force: true });
-  rmSync('forc-binaries', { recursive: true, force: true });
-  execSync(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
-  execSync(`cd sway-repo && cargo build`);
-  mkdirSync('forc-binaries');
-  cpSync('sway-repo/target/debug/forc', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-deploy', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-doc', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-fmt', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-lsp', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-run', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-submit', 'forc-binaries');
-  cpSync('sway-repo/target/debug/forc-tx', 'forc-binaries');
-  rmSync('sway-repo', { recursive: true, force: true });
+  const swayRepoDir = join(__dirname, '..', 'sway-repo');
+  const swayRepoDebugDir = join(swayRepoDir, 'target', 'debug');
+  const stdioOpts = { stdio: 'inherit' };
+
+  if (existsSync(swayRepoDir)) {
+    execSync(`cd ${swayRepoDir} && git fetch origin && git checkout ${branchName}`, stdioOpts);
+    execSync(`cd ${swayRepoDir} && cargo build`, stdioOpts);
+  } else {
+    execSync(`git clone --branch ${branchName} ${swayRepoUrl} ${swayRepoDir}`, stdioOpts);
+    execSync(`cd ${swayRepoDir} && cargo build`, stdioOpts);
+  }
+
+  const [from, to] = [swayRepoDebugDir, forcBinDirPath];
+
+  rmSync(to, { recursive: true, force: true });
+  mkdirSync(to, { recursive: true });
+
+  cpSync(join(from, 'forc'), join(to, 'forc'));
+  cpSync(join(from, 'forc-deploy'), join(to, 'forc-deploy'));
+  cpSync(join(from, 'forc-doc'), join(to, 'forc-doc'));
+  cpSync(join(from, 'forc-fmt'), join(to, 'forc-fmt'));
+  cpSync(join(from, 'forc-lsp'), join(to, 'forc-lsp'));
+  cpSync(join(from, 'forc-run'), join(to, 'forc-run'));
+  cpSync(join(from, 'forc-submit'), join(to, 'forc-submit'));
+  cpSync(join(from, 'forc-tx'), join(to, 'forc-tx'));
 };

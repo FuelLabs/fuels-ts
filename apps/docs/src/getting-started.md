@@ -1,3 +1,8 @@
+<script setup>
+  import { data } from './versions.data'
+  const { fuels } = data
+</script>
+
 # Getting Started with Fuels-ts
 
 This guide will walk you through the process of setting up and using the Fuels-ts library in your front-end project.
@@ -60,6 +65,28 @@ function App() {
 }
 
 export default App;
+```
+
+## CDN Usage (browser only)
+
+For a quick test or just playing around, you can load it in your Web Apps straight from our CDN.
+
+```html-vue
+<script type="module">
+  import {
+    Wallet,
+    Provider,
+  } from "https://cdnjs.cloudflare.com/ajax/libs/fuels/{{fuels}}/browser.mjs";
+
+  const exec = async () => {
+    const provider = await Provider.create(
+      "https://beta-5.fuel.network/graphql",
+    );
+    const { name } = provider.getChain();
+    console.log(name);
+  };
+  exec();
+</script>
 ```
 
 ## Further Resources and Next Steps

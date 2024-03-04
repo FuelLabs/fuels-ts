@@ -4,14 +4,6 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
 
-vi.mock('@fuel-ts/versions/cli', async () => {
-  const mod = await vi.importActual('@fuel-ts/versions/cli');
-  return {
-    __esModule: true,
-    ...mod,
-  };
-});
-
 /**
  * @group node
  */

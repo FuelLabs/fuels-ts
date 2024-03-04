@@ -2,10 +2,10 @@ contract;
 
 use std::{
     address::Address,
+    asset::*,
     context::balance_of,
     context::msg_amount,
     contract_id::ContractId,
-    token::*,
 };
 
 use std::constants::ZERO_B256;
@@ -14,8 +14,8 @@ abi MultiToken {
     fn mint_coins(sub_id: b256, mint_amount: u64);
     fn mint_to_addresses(addresses: [Address; 3], sub_id: b256, mint_amount: u64);
     fn burn_coins(sub_id: b256, burn_amount: u64);
-    fn force_transfer_coins(target: ContractId, asset_id: AssetId, coins: u64);
-    fn transfer_coins_to_output(recipient: Address, asset_id: AssetId, coins: u64);
+    fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64);
+    fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64);
     fn get_balance(target: ContractId, asset_id: AssetId) -> u64;
 }
 
@@ -47,12 +47,12 @@ impl MultiToken for Contract {
         burn(sub_id, burn_amount);
     }
 
-    fn force_transfer_coins(target: ContractId, asset_id: AssetId, coins: u64) {
-        force_transfer_to_contract(target, asset_id, coins);
+    fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
+        force_transfer_to_contract(target, asset_id, amount);
     }
 
-    fn transfer_coins_to_output(recipient: Address, asset_id: AssetId, coins: u64) {
-        transfer_to_address(recipient, asset_id, coins);
+    fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
+        transfer_to_address(recipient, asset_id, amount);
     }
 
     fn get_balance(target: ContractId, asset_id: AssetId) -> u64 {

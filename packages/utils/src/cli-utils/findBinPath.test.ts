@@ -14,7 +14,13 @@ describe('findBinPath', () => {
     const bin = join(mods, '.bin');
     const cmdPath = join(bin, cmdName);
 
-    const resetDisk = () => rmSync(mods, { recursive: true });
+    const resetDisk = (params?: { cmdOnly: boolean }) => {
+      if (params?.cmdOnly) {
+        rmSync(cmdPath);
+      } else {
+        rmSync(mods, { recursive: true });
+      }
+    };
 
     mkdirSync(bin, { recursive: true });
     writeFileSync(cmdPath, '');
@@ -45,7 +51,7 @@ describe('findBinPath', () => {
     const { cmdName, cmdPath, resetDisk } = bootstrap(base);
     const binPath = findBinPath(cmdName, base);
 
-    resetDisk();
+    resetDisk({ cmdOnly: true });
     expect(binPath).toEqual(cmdPath);
   });
 

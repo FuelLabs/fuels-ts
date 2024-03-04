@@ -1,13 +1,19 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
+import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
+import type {
+  AbstractAccount,
+  AbstractAddress,
+  AbstractContract,
+  AbstractProgram,
+} from '@fuel-ts/interfaces';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
-import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
@@ -53,6 +59,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
+  protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -214,7 +221,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     const request = await this.getTransactionRequest();
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins());
+    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
+      resourcesOwner: this.program.account as AbstractAccount,
+    });
 
     return txCost;
   }
@@ -224,13 +233,36 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The current instance of the class.
    */
-  async fundWithRequiredCoins(fee: BN) {
+  async fundWithRequiredCoins() {
+    const transactionRequest = await this.getTransactionRequest();
+
+    const {
+      maxFee,
+      gasUsed,
+      minGasPrice,
+      estimatedInputs,
+      outputVariables,
+      missingContractIds,
+      requiredQuantities,
+    } = await this.getTransactionCost();
+    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
+
     // Clean coin inputs before add new coins to the request
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
 
-    await this.program.account?.fund(this.transactionRequest, this.requiredCoins, fee);
+    await this.program.account?.fund(this.transactionRequest, requiredQuantities, maxFee);
+
+    this.transactionRequest.updatePredicateInputs(estimatedInputs);
+
+    // Adding missing contract ids
+    missingContractIds.forEach((contractId) => {
+      this.transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+    });
+
+    // Adding required number of OutputVariables
+    this.transactionRequest.addVariableOutputs(outputVariables);
 
     return this;
   }
@@ -274,6 +306,24 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Adds an asset transfer to an Account on the contract call transaction request.
+   *
+   * @param destination - The address of the destination.
+   * @param amount - The amount of coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer.
+   * @returns The current instance of the class.
+   */
+  addTransfer(destination: string | AbstractAddress, amount: BigNumberish, assetId: string) {
+    this.transactionRequest = this.transactionRequest.addCoinOutput(
+      Address.fromAddressOrString(destination),
+      amount,
+      assetId
+    );
+
+    return this;
+  }
+
+  /**
    * Prepares and returns the transaction request object.
    *
    * @returns The prepared transaction request.
@@ -291,15 +341,15 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.getTransactionRequest();
+    await this.fundWithRequiredCoins();
 
-    const { maxFee } = await this.getTransactionCost();
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
-    });
+    const response = await this.program.account.sendTransaction(
+      await this.getTransactionRequest(),
+      {
+        awaitExecution: true,
+        estimateTxDependencies: false,
+      }
+    );
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -330,13 +380,14 @@ export class BaseInvocationScope<TReturn = any> {
       return this.dryRun<T>();
     }
 
-    const transactionRequest = await this.getTransactionRequest();
+    await this.fundWithRequiredCoins();
 
-    const { maxFee } = await this.getTransactionCost();
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const result = await this.program.account.simulateTransaction(transactionRequest);
+    const result = await this.program.account.simulateTransaction(
+      await this.getTransactionRequest(),
+      {
+        estimateTxDependencies: false,
+      }
+    );
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -350,24 +401,13 @@ export class BaseInvocationScope<TReturn = any> {
     assert(this.program.account, 'Wallet is required!');
 
     const provider = this.getProvider();
+    await this.fundWithRequiredCoins();
 
-    const transactionRequest = await this.getTransactionRequest();
-
-    const { maxFee } = await this.getTransactionCost();
-
-    await this.fundWithRequiredCoins(maxFee);
-
-    const response = await provider.call(transactionRequest, {
+    const response = await provider.call(await this.getTransactionRequest(), {
       utxoValidation: false,
     });
 
-    const result = await InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
-      response,
-      this.isMultiCall
-    );
-
-    return result;
+    return InvocationCallResult.build<T>(this.functionInvocationScopes, response, this.isMultiCall);
   }
 
   getProvider(): Provider {
@@ -387,5 +427,37 @@ export class BaseInvocationScope<TReturn = any> {
 
     const transactionRequest = await this.getTransactionRequest();
     return transactionRequest.getTransactionId(chainIdToHash);
+  }
+
+  /**
+   * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   */
+  private setDefaultTxParams(
+    transactionRequest: ScriptTransactionRequest,
+    minGasPrice: BN,
+    gasUsed: BN
+  ) {
+    const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const gasPriceSpecified = !!this.txParameters?.gasPrice;
+
+    const { gasLimit, gasPrice } = transactionRequest;
+
+    if (!gasLimitSpecified) {
+      transactionRequest.gasLimit = gasUsed;
+    } else if (gasLimit.lt(gasUsed)) {
+      throw new FuelError(
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
+
+    if (!gasPriceSpecified) {
+      transactionRequest.gasPrice = minGasPrice;
+    } else if (gasPrice.lt(minGasPrice)) {
+      throw new FuelError(
+        ErrorCode.GAS_PRICE_TOO_LOW,
+        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+      );
+    }
   }
 }

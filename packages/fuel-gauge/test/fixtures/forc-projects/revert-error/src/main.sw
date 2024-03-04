@@ -1,14 +1,14 @@
 contract;
 
 use std::{
+    asset::{
+        transfer_to_address,
+    },
     bytes::Bytes,
     constants::BASE_ASSET_ID,
     logging::log,
     message::{
         send_message,
-    },
-    token::{
-        transfer_to_address,
     },
 };
 use custom_errors::{AccessError, InputError};

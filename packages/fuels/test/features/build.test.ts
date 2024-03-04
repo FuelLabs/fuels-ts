@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import * as deployMod from '../../src/cli/commands/deploy/index';
@@ -74,7 +74,7 @@ describe(
 
       await runInit({
         root: paths.root,
-        workspace: paths.workspaceDir,
+        contracts: paths.contractsDir,
         output: paths.outputDir,
       });
 
@@ -110,6 +110,44 @@ describe(
       expect(deploy).toHaveBeenCalledTimes(1);
       expect(killChildProcess).toHaveBeenCalledTimes(1);
     });
+
+    it("should run `build` with `forcBuildFlags: ['--release']`", async () => {
+      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+      await runInit({
+        root: paths.root,
+        workspace: paths.workspaceDir,
+        output: paths.outputDir,
+      });
+
+      // inject `forcBuildFlags: ['--release']` in config file
+      const configFilepath = join(paths.root, 'fuels.config.ts');
+      const configContents = readFileSync(configFilepath, 'utf-8');
+
+      const search = "  output: './output',";
+      const replace = [search, "  forcBuildFlags: ['--release'],"].join('\n');
+      const configContentsNew = configContents.replace(search, replace);
+
+      writeFileSync(configFilepath, configContentsNew);
+
+      // moving on
+      await runBuild({ root: paths.root });
+
+      const files = [
+        'contracts/FooBarAbi.hex.ts',
+        'contracts/FooBarAbi.d.ts',
+        'contracts/factories/FooBarAbi__factory.ts',
+        'contracts/index.ts',
+        'index.ts',
+      ].map((f) => join(paths.outputDir, f));
+
+      files.forEach((file) => expect(existsSync(file)).toBeTruthy());
+
+      expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+      expect(deploy).toHaveBeenCalledTimes(0);
+      expect(killChildProcess).toHaveBeenCalledTimes(0);
+    });
   },
-  { timeout: 10000 }
+
+  { timeout: 180000 }
 );

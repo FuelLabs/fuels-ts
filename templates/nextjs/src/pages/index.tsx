@@ -1,19 +1,17 @@
 import type { TestContractAbi } from "@/sway-api";
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
-import {
-  Button,
-  FuelLogo,
-  HStack,
-  Heading,
-  Link,
-  Text,
-  VStack,
-} from "@fuel-ui/react";
+import { FuelLogo } from "@/components/FuelLogo";
 import { Provider, Wallet, bn } from "fuels";
 import { useEffect, useState } from "react";
+import { Link } from "@/components/Link";
+import { Button } from "@/components/Button";
 
 const contractId = contractIds.testContract;
+
+const hasContract = process.env.NEXT_PUBLIC_HAS_CONTRACT === "true";
+const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
+const hasScript = process.env.NEXT_PUBLIC_HAS_SCRIPT === "true";
 
 export default function Home() {
   const [contract, setContract] = useState<TestContractAbi>();
@@ -21,19 +19,19 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const provider = await Provider.create("http://127.0.0.1:4000/graphql");
-      // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
-      const wallet = Wallet.fromPrivateKey("0x01", provider);
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
-      setContract(testContract);
-      const { value } = await testContract.functions
-        .get_count()
-        .txParams({
-          gasPrice: 1,
-          gasLimit: 10_000,
-        })
-        .simulate();
-      setCounter(value.toNumber());
+      if (hasContract) {
+        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+        // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
+        const wallet = Wallet.fromPrivateKey("0x01", provider);
+        const testContract = TestContractAbi__factory.connect(
+          contractId,
+          wallet,
+        );
+        setContract(testContract);
+        const { value } = await testContract.functions.get_count().simulate();
+        setCounter(value.toNumber());
+      }
+
       // eslint-disable-next-line no-console
     })().catch(console.error);
   }, []);
@@ -44,58 +42,59 @@ export default function Home() {
       // eslint-disable-next-line no-alert
       return alert("Contract not loaded");
     }
-    const { value } = await contract.functions
-      .increment_counter(bn(1))
-      .txParams({
-        gasPrice: 1,
-        gasLimit: 10_000,
-      })
-      .call();
+    const { value } = await contract.functions.increment_counter(bn(1)).call();
     setCounter(value.toNumber());
   };
 
   return (
-    <VStack className={`min-h-screen items-center p-24`}>
-      <HStack>
+    <div className={`min-h-screen items-center p-24 flex flex-col gap-6`}>
+      <div className="flex gap-4 items-center">
         <FuelLogo />
-        <Heading>Welcome to Fuel</Heading>
-      </HStack>
+        <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
+      </div>
 
-      <Text>
-        Get started by editing <i>sway-contracts/main.sw</i> or{" "}
-        <i>src/pages/index.tsx</i>.
-      </Text>
+      {hasContract && (
+        <span className="text-gray-400">
+          Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
+          <i>src/pages/index.tsx</i>.
+        </span>
+      )}
 
-      <Text>
-        This boilerplate uses the new{" "}
+      <span className="text-gray-400">
+        This template uses the new{" "}
         <Link href="https://fuellabs.github.io/fuels-ts/guide/cli/">
           Fuels CLI
         </Link>{" "}
-        enable type-safe hot-reloading for your Sway smart contracts.
-      </Text>
+        to enable type-safe hot-reloading for your Sway programs.
+      </span>
 
-      <Heading as="h3">Counter</Heading>
+      {hasContract && (
+        <>
+          <h3 className="text-xl font-semibold">Counter</h3>
 
-      <Text fontSize="5xl">{counter}</Text>
+          <span className="text-gray-400 text-6xl">{counter}</span>
 
-      <Button
-        onPress={onIncrementPressed}
-        style={{
-          marginTop: 24,
-        }}
-      >
-        Increment Counter
-      </Button>
+          <Button onClick={onIncrementPressed} className="mt-6">
+            Increment Counter
+          </Button>
+        </>
+      )}
 
-      <Link
-        href="https://docs.fuel.network"
-        target="_blank"
-        style={{
-          marginTop: 48,
-        }}
-      >
+      {hasPredicate && (
+        <Link href="/predicate" className="mt-4">
+          Predicate Example
+        </Link>
+      )}
+
+      {hasScript && (
+        <Link href="/script" className="mt-4">
+          Script Example
+        </Link>
+      )}
+
+      <Link href="https://docs.fuel.network" target="_blank" className="mt-12">
         Fuel Docs
       </Link>
-    </VStack>
+    </div>
   );
 }

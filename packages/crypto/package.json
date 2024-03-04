@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/crypto",
-  "version": "0.71.1",
+  "version": "0.76.0",
   "description": "Utilities for encrypting and decrypting data",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -28,8 +28,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/utils": "workspace:^",
     "ethereum-cryptography": "^2.1.2",
-    "ethers": "^6.7.1",
-    "@fuel-ts/errors": "workspace:*"
+    "ethers": "^6.7.1"
   }
 }
