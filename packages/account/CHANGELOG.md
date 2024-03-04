@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.76.0
+
+### Minor Changes
+
+- Add the DateTime class, which allows for the conversion between common date time formats, by [@petertonysmith94](https://github.com/petertonysmith94) (See [#1627](https://github.com/FuelLabs/fuels-ts/pull/1627))
+
+### Patch Changes
+
+- Add method `addTransfer` to `BaseInvocationScope`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1810](https://github.com/FuelLabs/fuels-ts/pull/1810))
+
 ## 0.75.0
 
 ### Minor Changes
