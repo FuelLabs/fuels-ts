@@ -23,11 +23,11 @@ Next, we will install the Fuel Wallet React SDK and the Fuel TypeScript SDK.
 ::: code-group
 
 ```sh [npm]
-npm install @fuel-wallet/react fuels@0.67.0
+npm install @fuel-wallet/react fuels@0.73.0
 ```
 
 ```sh [pnpm]
-pnpm add @fuel-wallet/react fuels@0.67.0
+pnpm add @fuel-wallet/react fuels@0.73.0
 ```
 
 :::
@@ -53,7 +53,7 @@ Once a connector has been selected by the user, the `useConnect` hook will retur
 
 The `useAccount` hook returns information about the user's account, if they are connected.
 
-The `useBalance` hook returns the user's ETH balance on the [`beta-4` network](https://beta-4.fuel.network), if they are connected.
+The `useBalance` hook returns the user's ETH balance on the [`beta-5` network](https://beta-5.fuel.network), if they are connected.
 
 ## Further Reading
 
