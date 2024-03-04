@@ -1,4 +1,5 @@
-import { BN, bn, toHex, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import { BN, bn, toHex, BaseAssetId } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -16,18 +17,13 @@ const setupContract = createSetupConfig({
 
 const U64_MAX = bn(2).pow(64).sub(1);
 
+/**
+ * @group node
+ */
 describe('CallTestContract', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setupContract();
-    const { value } = await contract.functions
-      .foo(num)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call<BN>();
+    const { value } = await contract.functions.foo(num).call<BN>();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
@@ -40,10 +36,7 @@ describe('CallTestContract', () => {
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
     const contract = await setupContract();
-    const { value } = await contract.functions
-      .boo(struct)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contract.functions.boo(struct).call();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
@@ -51,16 +44,10 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     const contract = await setupContract();
 
-    const { value: value0 } = await contract.functions
-      .barfoo(0)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: value0 } = await contract.functions.barfoo(0).call();
     expect(value0.toHex()).toEqual(toHex(63));
 
-    const { value: value1 } = await contract.functions
-      .foobar()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: value1 } = await contract.functions.foobar().call();
     expect(value1.toHex()).toEqual(toHex(63));
   });
 
@@ -68,10 +55,7 @@ describe('CallTestContract', () => {
     const contract = await setupContract();
 
     // Call method with no params but with no result and no value on config
-    const { value } = await contract.functions
-      .return_void()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contract.functions.return_void().call();
     expect(value).toEqual(undefined);
   });
 
@@ -145,9 +129,7 @@ describe('CallTestContract', () => {
     async (method, { values, expected }) => {
       const contract = await setupContract();
 
-      const { value } = await contract.functions[method](...values)
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call();
+      const { value } = await contract.functions[method](...values).call();
 
       if (BN.isBN(value)) {
         expect(toHex(value)).toBe(toHex(expected));
@@ -164,7 +146,6 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [1_000_000, BaseAssetId],
       })
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
@@ -172,13 +153,12 @@ describe('CallTestContract', () => {
   it('Forward asset_id on contract call', async () => {
     const contract = await setupContract();
 
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetId = ASSET_A;
     const { value } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(assetId);
   });
@@ -186,13 +166,12 @@ describe('CallTestContract', () => {
   it('Forward asset_id on contract simulate call', async () => {
     const contract = await setupContract();
 
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetId = ASSET_A;
     const { value } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
     expect(value).toBe(assetId);
   });
@@ -204,9 +183,7 @@ describe('CallTestContract', () => {
     const numC = 10;
     const struct = { a: true, b: 1337 };
     const invocationA = contract.functions.foo(0);
-    const multiCallScope = contract
-      .multiCall([invocationA, contract.functions.boo(struct)])
-      .txParams({ gasPrice, gasLimit: 10_000 });
+    const multiCallScope = contract.multiCall([invocationA, contract.functions.boo(struct)]);
 
     // Set arguments of the invocation
     invocationA.setArguments(num);
@@ -232,5 +209,20 @@ describe('CallTestContract', () => {
     // It should be possible to re-execute the
     // tx execution context
     await expectContractCall();
+  });
+
+  it('Calling a simple contract function does only one dry run', async () => {
+    const contract = await setupContract();
+    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+    await contract.functions.foobar_no_params().call();
+    expect(dryRunSpy).toHaveBeenCalledOnce();
+  });
+
+  it('Simulating a simple contract function does two dry runs', async () => {
+    const contract = await setupContract();
+    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+
+    await contract.functions.foobar_no_params().simulate();
+    expect(dryRunSpy).toHaveBeenCalledTimes(2);
   });
 });

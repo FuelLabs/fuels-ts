@@ -1,7 +1,13 @@
 import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
-import { DocSnippetProjectsEnum, getDocsSnippetsForcProject } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   const { abiContents: jsonAbi, binHexlified: binary } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.RETURN_TRUE_PREDICATE
@@ -9,7 +15,7 @@ describe(__filename, () => {
 
   it('should successfully instantiate a predicate', async () => {
     // #region predicate-index-2
-    // #context import { Predicate, Provider, FUEL_NETWORK_URL } from 'fuels';
+    // #import { Predicate, Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate(binary, provider, jsonAbi);

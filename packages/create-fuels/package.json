@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.71.1",
+  "version": "0.75.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -11,7 +11,7 @@
     "templates"
   ],
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "license": "Apache-2.0",
   "scripts": {
@@ -19,6 +19,7 @@
     "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "chalk": "4",
     "commander": "^9.4.1",
     "fuels": "workspace:*",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@fuel-ts/versions": "workspace:*",
-    "@types/prompts": "^2.4.8"
+    "@types/prompts": "^2.4.8",
+    "glob": "^10.2.6"
   }
 }

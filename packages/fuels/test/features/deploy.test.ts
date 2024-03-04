@@ -1,21 +1,46 @@
 import { existsSync, readFileSync } from 'fs';
 
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
-import { contractsJsonPath, runBuild, runDeploy, runInit } from '../utils/runCommands';
+import {
+  bootstrapProject,
+  resetConfigAndMocks,
+  runBuild,
+  runDeploy,
+  runInit,
+} from '../utils/runCommands';
 
-describe('deploy', () => {
-  beforeEach(resetDiskAndMocks);
-  afterEach(resetDiskAndMocks);
+/**
+ * @group node
+ */
+describe(
+  'deploy',
+  () => {
+    const paths = bootstrapProject(__filename);
 
-  it('should run `deploy` command', async () => {
-    await runInit();
-    await runBuild();
-    await runDeploy();
+    afterEach(() => {
+      resetConfigAndMocks(paths.fuelsConfigPath);
+    });
 
-    expect(existsSync(contractsJsonPath)).toBeTruthy();
+    afterAll(() => {
+      resetDiskAndMocks(paths.root);
+    });
 
-    const fuelsContents = JSON.parse(readFileSync(contractsJsonPath, 'utf-8'));
-    expect(fuelsContents.barFoo).toMatch(/0x/);
-    expect(fuelsContents.fooBar).toMatch(/0x/);
-  });
-});
+    it('should run `deploy` command', async () => {
+      await runInit({
+        root: paths.root,
+        workspace: paths.workspaceDir,
+        output: paths.outputDir,
+      });
+
+      await runBuild({ root: paths.root });
+      await runDeploy({ root: paths.root });
+
+      expect(existsSync(paths.contractsJsonPath)).toBeTruthy();
+
+      const fuelsContents = JSON.parse(readFileSync(paths.contractsJsonPath, 'utf-8'));
+      expect(fuelsContents.barFoo).toMatch(/0x/);
+      expect(fuelsContents.fooBar).toMatch(/0x/);
+    });
+  },
+  { timeout: 180000 }
+);

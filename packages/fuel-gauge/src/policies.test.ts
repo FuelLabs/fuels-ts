@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish, Transaction } from 'fuels';
 import {
   BaseAssetId,
@@ -16,6 +16,9 @@ import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures
 
 import { createSetupConfig } from './utils';
 
+/**
+ * @group node
+ */
 describe('Policies', () => {
   let provider: Provider;
   beforeAll(async () => {

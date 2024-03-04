@@ -5,14 +5,14 @@
   "private": true,
   "scripts": {
     "pretest": "pnpm build:forc",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects"
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release"
   },
   "devDependencies": {
-    "fuels": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/wallet-manager": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "ethers": "^6.7.1",
+    "fuels": "workspace:*"
   },
   "keywords": [],
   "author": "",

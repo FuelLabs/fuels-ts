@@ -1,5 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, BigNumberish } from 'fuels';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import type { BigNumberish } from 'fuels';
 import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -19,17 +19,13 @@ type Baz = {
   x: number;
 };
 
+/**
+ * @group node
+ */
 describe('Script Coverage', () => {
-  let gasPrice: BN;
-
   const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
   );
-
-  beforeAll(async () => {
-    const wallet = await setup();
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
-  });
 
   it('can call script and use main arguments', async () => {
     const wallet = await setup();
@@ -37,10 +33,7 @@ describe('Script Coverage', () => {
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
 
-    const { value, logs } = await scriptInstance.functions
-      .main(foo)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value, logs } = await scriptInstance.functions.main(foo).call();
     // #endregion script-call-factory
 
     expect(value?.toString()).toEqual(bn(foo).toString());
@@ -55,10 +48,7 @@ describe('Script Coverage', () => {
       x: 12,
     };
 
-    const { value, logs } = await scriptInstance.functions
-      .main(foo, bar)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value, logs } = await scriptInstance.functions.main(foo, bar).call();
 
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
     expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
@@ -72,10 +62,7 @@ describe('Script Coverage', () => {
       x: 2,
     };
 
-    const { value } = await scriptInstance.functions
-      .main(foo, bar)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await scriptInstance.functions.main(foo, bar).call();
 
     expect(value).toEqual({
       x: 3,
@@ -88,7 +75,13 @@ describe('Script Coverage', () => {
     const foo = 42;
 
     await expect(
-      scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call()
+      scriptInstance.functions
+        .main(foo)
+        .txParams({
+          gasLimit: 10,
+          gasPrice: 400,
+        })
+        .call()
     ).rejects.toThrow(/Gas limit '10' is lower than the required/);
   });
 });

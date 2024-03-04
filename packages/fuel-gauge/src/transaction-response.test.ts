@@ -1,7 +1,87 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import type { BN, WalletUnlocked } from 'fuels';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
+import type { BN } from 'fuels';
+import {
+  BaseAssetId,
+  FUEL_NETWORK_URL,
+  Provider,
+  TransactionResponse,
+  Wallet,
+  randomBytes,
+  WalletUnlocked,
+} from 'fuels';
+import type { MockInstance } from 'vitest';
 
+async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {
+  const decoder = new TextDecoder();
+  const reader = subscriptionStream.getReader();
+  let hasKeepAliveMessage = false;
+  do {
+    const { value, done } = await reader.read();
+    if (done) {
+      break;
+    }
+    const text = decoder.decode(value);
+    if (text === ':keep-alive-text\n\n') {
+      hasKeepAliveMessage = true;
+    }
+  } while (!hasKeepAliveMessage);
+
+  // The keep-alive message is sent every 15 seconds,
+  // and this assertion verifies that it was indeed sent.
+  // if this fails, check if the duration was changed on the fuel-core side.
+  // As of the time of writing, the latest permalink where this info can be found is:
+  // https://github.com/FuelLabs/fuel-core/blob/bf1b22f47c58a9d078676c5756c942d839f38916/crates/fuel-core/src/graphql_api/service.rs#L247
+  // To get the actual latest info you need to check out the master branch:
+  // https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
+  // This link can fail because master can change.
+  expect(hasKeepAliveMessage).toBe(true);
+}
+
+function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<Uint8Array> }) {
+  function getFetchMock(
+    fetchSpy: MockInstance<
+      [input: RequestInfo | URL, init?: RequestInit | undefined],
+      Promise<Response>
+    >
+  ) {
+    return async (...args: Parameters<typeof fetch>) => {
+      /**
+       * We need to restore the original fetch implementation so that fetching is possible
+       * We then get the response and mock the fetch implementation again
+       * So that the mock can be used for the next fetch call
+       */
+      fetchSpy.mockRestore();
+      const r = await fetch(...args);
+      fetchSpy.mockImplementation(getFetchMock(fetchSpy));
+
+      const isSubscriptionCall = args[0].toString().endsWith('graphql-sub');
+      if (!isSubscriptionCall) {
+        return r;
+      }
+
+      /**
+       * This duplicates a stream and all writes happen to both streams.
+       * We can thus use one stream to verify the keep-alive message was sent
+       * and pass the other forward in place of the original stream,
+       * thereby not affecting the response at all.
+       * */
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const [stream1, stream2] = r.body!.tee();
+      // eslint-disable-next-line no-param-reassign
+      streamHolder.stream = stream1;
+      return new Response(stream2);
+    };
+  }
+
+  const fetchSpy = vi.spyOn(global, 'fetch');
+
+  fetchSpy.mockImplementation(getFetchMock(fetchSpy));
+  return streamHolder;
+}
+
+/**
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
@@ -75,25 +155,51 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    const destination = Wallet.generate({
-      provider,
+    const { cleanup, ip, port } = await launchNode({
+      /**
+       * This is set to so long in order to test keep-alive message handling as well.
+       * Keep-alive messages are sent every 15s.
+       * It is very important to test this because the keep-alive messages are not sent in the same format as the other messages
+       * and it is reasonable to expect subscriptions lasting more than 15 seconds.
+       * We need a proper integration test for this
+       * because if the keep-alive message changed in any way between fuel-core versions and we missed it,
+       * all our subscriptions would break.
+       * We need at least one long test to ensure that the keep-alive messages are handled correctly.
+       * */
+      args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
     });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
-    const { id: transactionId } = await adminWallet.transfer(
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
+
+    const destination = Wallet.generate({ provider: nodeProvider });
+
+    const { id: transactionId } = await genesisWallet.transfer(
       destination.address,
       100,
       BaseAssetId,
       { gasPrice, gasLimit: 10_000 }
     );
+    const response = await TransactionResponse.create(transactionId, nodeProvider);
 
-    const response = new TransactionResponse(transactionId, provider);
+    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
-    expect(response.gqlTransaction).toBeUndefined();
+    const subscriptionStreamHolder = {
+      stream: new ReadableStream<Uint8Array>(),
+    };
+
+    getSubscriptionStreamFromFetch(subscriptionStreamHolder);
 
     await response.waitForResult();
 
-    expect(response.gqlTransaction?.status?.type).toBeDefined();
-    expect(response.gqlTransaction?.status?.type).not.toEqual('SubmittedStatus');
+    expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
     expect(response.gqlTransaction?.id).toBe(transactionId);
-  });
+
+    await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
+
+    cleanup();
+  }, 18500);
 });

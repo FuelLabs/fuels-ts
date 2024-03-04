@@ -2,6 +2,7 @@
 members = [
   "counter",
   "echo-enum",
+  "liquidity-pool",
   "log-values",
   "sum-script",
   "echo-values",
@@ -22,6 +23,7 @@ members = [
   "echo-asset-id",
   "script-transfer-to-contract",
   "echo-bytes",
+  "token",
   "echo-raw-slice",
   "echo-std-string",
 ]

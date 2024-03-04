@@ -4,16 +4,16 @@ import { mockLogger } from '../../../../test/utils/mockLogger';
 
 import { shouldUseBuiltinForc } from './shouldUseBuiltinForc';
 
-jest.mock('@fuel-ts/versions/cli', () => ({
-  __esModule: true,
-  ...jest.requireActual('@fuel-ts/versions/cli'),
-}));
-
+/**
+ * @group node
+ */
 describe('shouldUseBuiltinForc', () => {
-  beforeEach(jest.restoreAllMocks);
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
 
   function mockAll(returns: { getSystemForc: string | null }) {
-    const getSystemForc = jest
+    const getSystemForc = vi
       .spyOn(getSystemForcMod, 'getSystemForc')
       .mockReturnValue({ error: null, systemForcVersion: returns.getSystemForc });
 

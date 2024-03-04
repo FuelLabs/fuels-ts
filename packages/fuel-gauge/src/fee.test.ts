@@ -1,5 +1,5 @@
-import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
 import {
   BaseAssetId,
@@ -14,10 +14,10 @@ import {
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
+/**
+ * @group node
+ */
 describe('Fee', () => {
-  const assetA: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const assetB: string = '0x0202020202020202020202020202020202020202020202020202020202020202';
-
   let wallet: BaseWalletUnlocked;
   let provider: Provider;
   let minGasPrice: number;
@@ -27,8 +27,8 @@ describe('Fee', () => {
     minGasPrice = provider.getGasConfig().minGasPrice.toNumber();
     wallet = await generateTestWallet(provider, [
       [1_000_000_000],
-      [1_000_000_000, assetA],
-      [1_000_000_000, assetB],
+      [1_000_000_000, ASSET_A],
+      [1_000_000_000, ASSET_B],
     ]);
   });
 
@@ -71,10 +71,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions
-      .mint_coins(subId, 1_000)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -89,10 +86,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions
-      .mint_coins(subId, 1_000)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
 
     balanceAfter = await wallet.getBalance();
 
@@ -140,13 +134,13 @@ describe('Fee', () => {
     });
 
     request.addCoinOutput(destination1.address, amountToTransfer, BaseAssetId);
-    request.addCoinOutput(destination2.address, amountToTransfer, assetA);
-    request.addCoinOutput(destination3.address, amountToTransfer, assetB);
+    request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
+    request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
     const quantities: CoinQuantityLike[] = [
       [20_000 + amountToTransfer, BaseAssetId],
-      [amountToTransfer, assetA],
-      [amountToTransfer, assetB],
+      [amountToTransfer, ASSET_A],
+      [amountToTransfer, ASSET_B],
     ];
 
     const resources = await wallet.getResourcesToSpend(quantities);
@@ -210,7 +204,6 @@ describe('Fee', () => {
       .sum_multparams(1, 2, 3, 4, 5)
       .txParams({
         gasPrice,
-        gasLimit: 10000,
       })
       .call();
 

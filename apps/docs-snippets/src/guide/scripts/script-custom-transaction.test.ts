@@ -1,3 +1,4 @@
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
 import type { CoinQuantityLike, Contract, WalletUnlocked, Provider } from 'fuels';
 
@@ -7,13 +8,13 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
   let contract: Contract;
-
-  const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
   const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
@@ -25,8 +26,8 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     const seedQuantities: CoinQuantityLike[] = [
-      [1000, assetIdA],
-      [500, assetIdB],
+      [1000, ASSET_A],
+      [500, ASSET_B],
       [300_000, BaseAssetId],
     ];
 
@@ -38,14 +39,14 @@ describe(__filename, () => {
   });
 
   it('transfer multiple assets to a contract', async () => {
-    const contractInitialBalanceAssetA = await contract.getBalance(assetIdA);
-    const contractInitialBalanceAssetB = await contract.getBalance(assetIdB);
+    const contractInitialBalanceAssetA = await contract.getBalance(ASSET_A);
+    const contractInitialBalanceAssetB = await contract.getBalance(ASSET_B);
 
     expect(contractInitialBalanceAssetA).toStrictEqual(new BN(0));
     expect(contractInitialBalanceAssetB).toStrictEqual(new BN(0));
 
     // #region custom-transactions-2
-    // #context import type { BN, CoinQuantityLike, ScriptTransactionRequest } from 'fuels';
+    // #import { BN, CoinQuantityLike, ScriptTransactionRequest }
 
     // 1. Create a script transaction using the script binary
     const { minGasPrice } = contract.provider.getGasConfig();
@@ -60,9 +61,9 @@ describe(__filename, () => {
     // 2. Instantiate the script main arguments
     const scriptArguments = [
       contract.id.toB256(),
-      { value: assetIdA },
+      { value: ASSET_A },
       new BN(1000),
-      { value: assetIdB },
+      { value: ASSET_B },
       new BN(500),
     ];
 
@@ -74,8 +75,8 @@ describe(__filename, () => {
 
     // 5. Get the transaction resources
     const quantities: CoinQuantityLike[] = [
-      [1000, assetIdA],
-      [500, assetIdB],
+      [1000, ASSET_A],
+      [500, ASSET_B],
       [maxFee, BaseAssetId],
     ];
 
@@ -88,8 +89,8 @@ describe(__filename, () => {
     await tx.waitForResult();
 
     // #endregion custom-transactions-2
-    const contractFinalBalanceAssetA = await contract.getBalance(assetIdA);
-    const contractFinalBalanceAssetB = await contract.getBalance(assetIdB);
+    const contractFinalBalanceAssetA = await contract.getBalance(ASSET_A);
+    const contractFinalBalanceAssetB = await contract.getBalance(ASSET_B);
 
     expect(contractFinalBalanceAssetA).toStrictEqual(new BN(1000));
     expect(contractFinalBalanceAssetB).toStrictEqual(new BN(500));

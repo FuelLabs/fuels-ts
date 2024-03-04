@@ -18,6 +18,7 @@ export enum ErrorCode {
   CODER_NOT_FOUND = 'coder-not-found',
   INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
+  UNSUPPORTED_ENCODING_VERSION = 'unsupported-encoding-version',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -29,12 +30,14 @@ export enum ErrorCode {
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
   MISSING_PROVIDER = 'missing-provider',
+  INVALID_PROVIDER = 'invalid-provider',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
   INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
+  MISSING_CONNECTOR = 'missing-connector',
 
   // errors
   PARSE_FAILED = 'parse-failed',
@@ -49,6 +52,7 @@ export enum ErrorCode {
   CONVERTING_FAILED = 'converting-error',
   ELEMENT_NOT_FOUND = 'element-not-found',
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
+  INVALID_REQUEST = 'invalid-request',
   UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
 
   // transaction

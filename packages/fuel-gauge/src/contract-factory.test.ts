@@ -1,6 +1,6 @@
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import {
   BN,
   bn,
@@ -14,6 +14,9 @@ import {
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
+/**
+ * @group node
+ */
 describe('Contract Factory', () => {
   let gasPrice: BN;
 
@@ -40,22 +43,13 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    const { value: valueInitial } = await contact.functions
-      .initialize_counter(41)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: valueInitial } = await contact.functions.initialize_counter(41).call();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contact.functions
-      .increment_counter(1)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contact.functions.increment_counter(1).call();
     expect(value.toHex()).toEqual(toHex(42));
 
-    const { value: value2 } = await contact.functions
-      .increment_counter(1)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .dryRun();
+    const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
     expect(value2.toHex()).toEqual(toHex(43));
   });
 
@@ -66,12 +60,9 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(100).txParams({ gasPrice, gasLimit: 10_000 }).call();
+    await contact.functions.initialize_counter(100).call();
 
-    const { transactionResult } = await contact.functions
-      .increment_counter(1)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { transactionResult } = await contact.functions.increment_counter(1).call();
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
@@ -98,11 +89,8 @@ describe('Contract Factory', () => {
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
-    const { callResult } = await contact.functions
-      .increment_counter(1)
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .dryRun();
-    expect(callResult).toEqual({
+    const { callResult } = await contact.functions.increment_counter(1).dryRun();
+    expect(callResult).toMatchObject({
       receipts: expect.arrayContaining([expect.any(Object)]),
     });
   });
@@ -130,34 +118,19 @@ describe('Contract Factory', () => {
       gasPrice,
     });
 
-    const { value: var1 } = await contract.functions
-      .return_var1()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var1 } = await contract.functions.return_var1().call();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions
-      .return_var2()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions
-      .return_var3()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var3 } = await contract.functions.return_var3().call();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions
-      .return_var4()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var4 } = await contract.functions.return_var4().call();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions
-      .return_var5()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var5 } = await contract.functions.return_var5().call();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -177,10 +150,7 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: vB256 } = await contact.functions
-      .return_b256()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value: vB256 } = await contact.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -196,34 +166,19 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: var1 } = await contract.functions
-      .return_var1()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var1 } = await contract.functions.return_var1().call();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions
-      .return_var2()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions
-      .return_var3()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var3 } = await contract.functions.return_var3().call();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions
-      .return_var4()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var4 } = await contract.functions.return_var4().call();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions
-      .return_var5()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value: var5 } = await contract.functions.return_var5().call();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -231,10 +186,7 @@ describe('Contract Factory', () => {
       })
     );
 
-    const { value: vB256 } = await contract.functions
-      .return_b256()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 

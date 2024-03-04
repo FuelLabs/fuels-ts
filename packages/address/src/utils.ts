@@ -8,11 +8,11 @@ import type {
   ContractIdLike,
   AbstractAddress,
   B256AddressEvm,
+  BytesLike,
 } from '@fuel-ts/interfaces';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
-import { getBytesCopy, hexlify } from 'ethers';
-import type { BytesLike } from 'ethers';
 
 /**
  * Fuel Network HRP (human-readable part) for bech32 encoding
@@ -38,7 +38,7 @@ export function fromBech32(address: Bech32Address): Decoded {
 export function toBech32(address: B256Address): Bech32Address {
   return bech32m.encode(
     FUEL_BECH32_HRP_PREFIX,
-    bech32m.toWords(getBytesCopy(hexlify(address)))
+    bech32m.toWords(arrayify(hexlify(address)))
   ) as Bech32Address;
 }
 

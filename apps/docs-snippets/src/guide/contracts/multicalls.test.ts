@@ -7,6 +7,9 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let echoContract: Contract;
   let counterContract: Contract;
@@ -48,7 +51,6 @@ describe(__filename, () => {
 
   it('should successfully submit multiple calls from the same contract function', async () => {
     // #region multicall-1
-    const { minGasPrice } = provider.getGasConfig();
 
     const { value: results } = await counterContract
       .multiCall([
@@ -56,7 +58,6 @@ describe(__filename, () => {
         counterContract.functions.increment_count(2),
         counterContract.functions.increment_count(4),
       ])
-      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     const initialValue = new BN(results[0]).toNumber();
@@ -70,15 +71,12 @@ describe(__filename, () => {
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-2
-    const { minGasPrice } = provider.getGasConfig();
 
-    const chain = echoContract
-      .multiCall([
-        echoContract.functions.echo_u8(17),
-        counterContract.functions.get_count(),
-        counterContract.functions.increment_count(5),
-      ])
-      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 });
+    const chain = echoContract.multiCall([
+      echoContract.functions.echo_u8(17),
+      counterContract.functions.get_count(),
+      counterContract.functions.increment_count(5),
+    ]);
 
     const { value: results } = await chain.call();
 
@@ -93,7 +91,6 @@ describe(__filename, () => {
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-3
-    const { minGasPrice } = provider.getGasConfig();
 
     const { value: results } = await contextContract
       .multiCall([
@@ -102,7 +99,6 @@ describe(__filename, () => {
           forward: [100, BaseAssetId],
         }),
       ])
-      .txParams({ gasPrice: minGasPrice, gasLimit: 10_000 })
       .call();
 
     const echoedValue = results[0];

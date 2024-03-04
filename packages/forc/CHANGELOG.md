@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.75.0
+
+## 0.74.0
+
+### Minor Changes
+
+- - Updated to support`forc v0.50.0`
+  - `getForcProject` now supports both `debug` and `release` builds, by [@nedsalk](https://github.com/nedsalk) (See [#1744](https://github.com/FuelLabs/fuels-ts/pull/1744))
+
+## 0.73.0
+
+### Patch Changes
+
+- Upgrading `forc` to `0.49.2`, by [@arboleya](https://github.com/arboleya) (See [#1707](https://github.com/FuelLabs/fuels-ts/pull/1707))
+
+## 0.72.0
+
+### Patch Changes
+
+- 🐞 Fixing installation from git branches, by [@arboleya](https://github.com/arboleya) (See [#1667](https://github.com/FuelLabs/fuels-ts/pull/1667))
+- Downgrading forc back to `0.48.1`, by [@arboleya](https://github.com/arboleya) (See [#1680](https://github.com/FuelLabs/fuels-ts/pull/1680))
+
 ## 0.71.1
 
 ### Patch Changes

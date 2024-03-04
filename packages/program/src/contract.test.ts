@@ -1,7 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Provider } from '@fuel-ts/providers';
-import { Account, Wallet } from '@fuel-ts/wallet';
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import { Account, Wallet, Provider } from '@fuel-ts/account';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 
 import Contract from './contract';
 
@@ -37,6 +36,9 @@ const ABI: JsonAbi = {
   configurables: [],
 };
 
+/**
+ * @group node
+ */
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -64,7 +66,7 @@ describe('Contract', () => {
     // but without reference to the BaseWalletLocked class
     const BaseWalletLockedCustom = Object.assign(Account);
     expect(BaseWalletLockedCustom).not.toBeInstanceOf(Account);
-    const wallet = new BaseWalletLockedCustom(generatedWallet.address);
+    const wallet = new BaseWalletLockedCustom(generatedWallet.address, generatedWallet.provider);
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.account).toBe(wallet);

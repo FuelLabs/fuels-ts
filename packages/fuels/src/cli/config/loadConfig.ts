@@ -1,10 +1,10 @@
-import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { defaultConsensusKey } from '@fuel-ts/utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
-import { defaultConsensusKey } from '../commands/dev/defaultChainConfig';
 import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
 import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
@@ -44,7 +44,11 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
   const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? shouldUseBuiltinFuelCore();
 
-  // Start clone-object while initializiung optional props
+  const { forcBuildFlags = [] } = userConfig;
+  const releaseFlag = forcBuildFlags.find((f) => f === '--release');
+  const buildMode = releaseFlag ? 'release' : 'debug';
+
+  // Start clone-object while initializing optional props
   const config: FuelsConfig = {
     contracts: [],
     scripts: [],
@@ -59,6 +63,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     useBuiltinForc,
     useBuiltinFuelCore,
     configPath,
+    forcBuildFlags,
+    buildMode,
   };
 
   // Resolve the output path on loaded config

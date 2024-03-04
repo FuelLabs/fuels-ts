@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
-import { bn, toNumber } from '@fuel-ts/math';
 import type {
   CallResult,
   TransactionResultCallReceipt,
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
-} from '@fuel-ts/providers';
+} from '@fuel-ts/account';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
-import { concat } from '@fuel-ts/utils';
+import { concat, arrayify } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
-import { getBytesCopy } from 'ethers';
 
 import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
@@ -155,12 +154,12 @@ const scriptResultDecoder =
           return [new U64Coder().encode((receipt as TransactionResultReturnReceipt).val)];
         }
         if (receipt.type === ReceiptType.ReturnData) {
-          const encodedScriptReturn = getBytesCopy(receipt.data);
+          const encodedScriptReturn = arrayify(receipt.data);
           if (isOutputDataHeap && isReturnType(filtered[index + 1]?.type)) {
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
-            return concat([encodedScriptReturn, getBytesCopy(nextReturnData.data)]);
+            return concat([encodedScriptReturn, arrayify(nextReturnData.data)]);
           }
 
           return [encodedScriptReturn];
@@ -283,7 +282,7 @@ export const getContractCallScript = (
         }
 
         /// 7. Encoded arguments (optional) (variable length)
-        const args = getBytesCopy(call.data);
+        const args = arrayify(call.data);
         scriptData.push(args);
 
         // move offset for next call

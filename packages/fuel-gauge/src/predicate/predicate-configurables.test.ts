@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN, CoinQuantityLike } from 'fuels';
 import {
   getRandomB256,
@@ -13,6 +13,9 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtu
 
 import { fundPredicate, assertBalance } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_TRUE);

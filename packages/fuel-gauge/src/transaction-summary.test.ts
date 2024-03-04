@@ -1,10 +1,12 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type {
   WalletUnlocked,
   TransactionResultReceipt,
   Operation,
   TransactionSummary,
   TransactionResult,
+  AbstractAddress,
 } from 'fuels';
 import {
   BN,
@@ -17,16 +19,25 @@ import {
   ScriptTransactionRequest,
   TransactionTypeName,
   Wallet,
+  AddressType,
+  OperationName,
 } from 'fuels';
 
+import { FuelGaugeProjectsEnum } from '../test/fixtures';
+
+import { getSetupContract } from './utils';
+
+/**
+ * @group node
+ */
 describe('TransactionSummary', () => {
   let provider: Provider;
-  let wallet: WalletUnlocked;
+  let adminWallet: WalletUnlocked;
   let gasPrice: BN;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[100_000_000, BaseAssetId]]);
+    adminWallet = await generateTestWallet(provider, [[100_000_000, BaseAssetId]]);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
@@ -69,11 +80,11 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
-    const resources = await wallet.getResourcesToSpend([[100_000]]);
+    const resources = await adminWallet.getResourcesToSpend([[100_000]]);
 
     request.addResources(resources);
 
-    const tx = await wallet.sendTransaction(request);
+    const tx = await adminWallet.sendTransaction(request);
 
     const transactionResponse = await tx.waitForResult();
 
@@ -95,7 +106,7 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(sender.address, 500_000, BaseAssetId, {
+    const tx1 = await adminWallet.transfer(sender.address, 500_000, BaseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -139,11 +150,11 @@ describe('TransactionSummary', () => {
       gasPrice: 1,
     });
 
-    const resources = await wallet.getResourcesToSpend([[100_000, BaseAssetId]]);
+    const resources = await adminWallet.getResourcesToSpend([[100_000, BaseAssetId]]);
 
     request.addResources(resources);
 
-    const transactionRequest = await wallet.populateTransactionWitnessesSignature(request);
+    const transactionRequest = await adminWallet.populateTransactionWitnessesSignature(request);
 
     const transactionSummary = await getTransactionSummaryFromRequest({
       provider,
@@ -155,5 +166,333 @@ describe('TransactionSummary', () => {
     });
 
     expect(transactionSummary.transaction).toStrictEqual(transactionRequest.toTransaction());
+  });
+
+  describe('Transfer Operations', () => {
+    const setupContract = getSetupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+
+    beforeAll(async () => {
+      provider = await Provider.create(FUEL_NETWORK_URL);
+    });
+
+    const validateTransferOperation = (params: {
+      operations: Operation[];
+      sender: AbstractAddress;
+      recipients: { address: AbstractAddress; quantities: { amount: number; assetId: string }[] }[];
+      fromType: AddressType;
+      toType: AddressType;
+    }) => {
+      const { operations, recipients, sender, fromType, toType } = params;
+
+      recipients.forEach(({ address, quantities }, index) => {
+        expect(operations[index].name).toBe(OperationName.transfer);
+        expect(operations[index].from?.type).toBe(fromType);
+        expect(operations[index].from?.address).toBe(sender.toB256());
+        expect(operations[index].to?.type).toBe(toType);
+        expect(operations[index].to?.address).toBe(address.toB256());
+        expect(operations[index].assetsSent).toHaveLength(quantities.length);
+
+        quantities.forEach(({ amount, assetId }, qunatitiesIndex) => {
+          expect(Number(operations[index].assetsSent?.[qunatitiesIndex].amount)).toBe(amount);
+          expect(operations[index].assetsSent?.[qunatitiesIndex].assetId).toBe(assetId);
+        });
+      });
+    };
+
+    it('should ensure transfer operation is assembled (ACCOUNT TRANSFER)', async () => {
+      const wallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+
+      const recipient = Wallet.generate({ provider });
+
+      const amount = 1233;
+
+      const tx1 = await wallet.transfer(recipient.address, amount, BaseAssetId);
+
+      const { operations } = await tx1.waitForResult();
+
+      expect(operations).toHaveLength(1);
+
+      validateTransferOperation({
+        operations,
+        sender: wallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.account,
+        recipients: [
+          { address: recipient.address, quantities: [{ amount, assetId: BaseAssetId }] },
+        ],
+      });
+    });
+
+    it('should ensure transfer operation is assembled (ACCOUNT TRANSFER TO CONTRACT)', async () => {
+      const wallet = await generateTestWallet(provider, [
+        [10_000, BaseAssetId],
+        [10_000, ASSET_A],
+      ]);
+
+      const contract1 = await setupContract({ cache: false });
+
+      const amount = 234;
+
+      const tx1 = await wallet.transferToContract(contract1.id, amount, ASSET_A);
+
+      const { operations } = await tx1.waitForResult();
+
+      expect(operations).toHaveLength(1);
+
+      validateTransferOperation({
+        operations,
+        sender: wallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.contract,
+        recipients: [{ address: contract1.id, quantities: [{ amount, assetId: ASSET_A }] }],
+      });
+    });
+
+    it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO ACCOUNT)', async () => {
+      const wallet = await generateTestWallet(provider, [[10_000]]);
+
+      const contract = await setupContract();
+      contract.account = wallet;
+
+      const recipient = Wallet.generate({ provider });
+      const amount = 1055;
+
+      const {
+        transactionResult: { mintedAssets },
+      } = await contract.functions.mint_coins(100000).call();
+
+      const { assetId } = mintedAssets[0];
+
+      const {
+        transactionResult: { operations },
+      } = await contract.functions
+        .transfer_to_address({ value: recipient.address.toB256() }, { value: assetId }, amount)
+        .call();
+
+      validateTransferOperation({
+        operations,
+        sender: contract.id,
+        fromType: AddressType.contract,
+        toType: AddressType.account,
+        recipients: [{ address: recipient.address, quantities: [{ amount, assetId }] }],
+      });
+    });
+
+    it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO ACCOUNTS)', async () => {
+      const wallet = await generateTestWallet(provider, [
+        [10_000, BaseAssetId],
+        [10_000, ASSET_A],
+        [10_000, ASSET_B],
+      ]);
+
+      const senderContract = await setupContract({ cache: false });
+      senderContract.account = wallet;
+      const fundAmount = 5_000;
+
+      const assets = [BaseAssetId, ASSET_A, ASSET_B];
+      for await (const asset of assets) {
+        const tx = await wallet.transferToContract(senderContract.id, fundAmount, asset);
+        await tx.waitForResult();
+      }
+
+      const transferData1 = {
+        address: Wallet.generate({ provider }).address,
+        quantities: [
+          { amount: 543, assetId: ASSET_A },
+          { amount: 400, assetId: ASSET_B },
+          { amount: 123, assetId: BaseAssetId },
+        ],
+      };
+      const transferData2 = {
+        address: Wallet.generate({ provider }).address,
+        quantities: [
+          { amount: 12, assetId: BaseAssetId },
+          { amount: 612, assetId: ASSET_B },
+        ],
+      };
+
+      const {
+        transactionResult: { operations },
+      } = await senderContract.functions
+        .multi_address_transfer([
+          // 3 Transfers for recipient contract 1
+          ...transferData1.quantities.map(({ amount, assetId }) => ({
+            recipient: { value: transferData1.address.toB256() },
+            asset_id: { value: assetId },
+            amount,
+          })),
+          // 2 Transfers for recipient contract 2
+          ...transferData2.quantities.map(({ amount, assetId }) => ({
+            recipient: { value: transferData2.address.toB256() },
+            asset_id: { value: assetId },
+            amount,
+          })),
+        ])
+        .call();
+
+      validateTransferOperation({
+        operations,
+        sender: senderContract.id,
+        fromType: AddressType.contract,
+        toType: AddressType.account,
+        recipients: [transferData1, transferData2],
+      });
+    });
+
+    it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO CONTRACT)', async () => {
+      const wallet = await generateTestWallet(provider, [[10_000]]);
+
+      const contractSender = await setupContract({ cache: false });
+      contractSender.account = wallet;
+
+      const contractRecipient = await setupContract({ cache: false });
+
+      const {
+        transactionResult: { mintedAssets },
+      } = await contractSender.functions.mint_coins(100000).call();
+
+      const amount = 2345;
+      const { assetId } = mintedAssets[0];
+      const {
+        transactionResult: { operations },
+      } = await contractSender.functions
+        .transfer_to_contract(
+          { value: contractRecipient.id.toB256() },
+          { value: mintedAssets[0].assetId },
+          amount
+        )
+        .call();
+
+      validateTransferOperation({
+        operations,
+        sender: contractSender.id,
+        fromType: AddressType.contract,
+        toType: AddressType.contract,
+        recipients: [{ address: contractRecipient.id, quantities: [{ amount, assetId }] }],
+      });
+    });
+
+    it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO CONTRACTS)', async () => {
+      const wallet = await generateTestWallet(provider, [
+        [10_000, BaseAssetId],
+        [10_000, ASSET_A],
+        [10_000, ASSET_B],
+      ]);
+
+      const senderContract = await setupContract({ cache: false });
+      senderContract.account = wallet;
+      const fundAmount = 5_000;
+
+      const assets = [BaseAssetId, ASSET_A, ASSET_B];
+      for await (const asset of assets) {
+        const tx = await wallet.transferToContract(senderContract.id, fundAmount, asset);
+        await tx.waitForResult();
+      }
+
+      const contractRecipient1 = await setupContract({ cache: false });
+      const contractRecipient2 = await setupContract({ cache: false });
+
+      const transferData1 = {
+        address: contractRecipient1.id,
+        quantities: [
+          { amount: 300, assetId: ASSET_A },
+          { amount: 400, assetId: ASSET_B },
+        ],
+      };
+      const transferData2 = {
+        address: contractRecipient2.id,
+        quantities: [
+          { amount: 500, assetId: ASSET_A },
+          { amount: 700, assetId: ASSET_B },
+          { amount: 100, assetId: BaseAssetId },
+        ],
+      };
+
+      const {
+        transactionResult: { operations },
+      } = await senderContract.functions
+        .multi_contract_transfer([
+          // 2 Transfers for recipient contract 1
+          ...transferData1.quantities.map(({ amount, assetId }) => ({
+            recipient: { value: transferData1.address.toB256() },
+            asset_id: { value: assetId },
+            amount,
+          })),
+          // 3 Transfers for recipient contract 2
+          ...transferData2.quantities.map(({ amount, assetId }) => ({
+            recipient: { value: transferData2.address.toB256() },
+            asset_id: { value: assetId },
+            amount,
+          })),
+        ])
+        .call();
+
+      validateTransferOperation({
+        operations,
+        sender: senderContract.id,
+        fromType: AddressType.contract,
+        toType: AddressType.contract,
+        recipients: [transferData1, transferData2],
+      });
+    });
+
+    it('should ensure transfer operations are assembled (CUSTOM SCRIPT TRANSFER)', async () => {
+      const wallet = await generateTestWallet(provider, [
+        [10_000, BaseAssetId],
+        [10_000, ASSET_A],
+        [10_000, ASSET_B],
+      ]);
+
+      const recipient1Data = {
+        address: Wallet.generate({ provider }).address,
+        quantities: [{ amount: 250, assetId: ASSET_A }],
+      };
+
+      const recipient2Data = {
+        address: Wallet.generate({ provider }).address,
+        quantities: [
+          { amount: 300, assetId: ASSET_A },
+          { amount: 400, assetId: ASSET_B },
+        ],
+      };
+      const recipient3Data = {
+        address: Wallet.generate({ provider }).address,
+        quantities: [
+          { amount: 500, assetId: ASSET_A },
+          { amount: 700, assetId: ASSET_B },
+          { amount: 100, assetId: BaseAssetId },
+        ],
+      };
+
+      const allRecipients = [recipient1Data, recipient2Data, recipient3Data];
+
+      const request = new ScriptTransactionRequest();
+
+      allRecipients.forEach(({ address, quantities }) => {
+        quantities.forEach(({ amount, assetId }) => {
+          request.addCoinOutput(address, amount, assetId);
+        });
+      });
+
+      const { gasUsed, minGasPrice, maxFee, requiredQuantities } =
+        await provider.getTransactionCost(request, []);
+
+      request.gasLimit = gasUsed;
+      request.gasPrice = minGasPrice;
+
+      await wallet.fund(request, requiredQuantities, maxFee);
+
+      const tx = await wallet.sendTransaction(request);
+
+      const { operations } = await tx.waitForResult();
+
+      validateTransferOperation({
+        operations,
+        sender: wallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.account,
+        recipients: allRecipients,
+      });
+    });
   });
 });

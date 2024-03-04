@@ -5,7 +5,7 @@
     "pretest": {
       "outputMode": "errors-only",
       "inputs": ["contract/src/*.sw", "contract/Forc.toml"],
-      "outputs": ["contract/out/debug/**"]
+      "outputs": ["contract/out/release/**"]
     }
   }
 }

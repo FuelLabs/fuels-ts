@@ -21,8 +21,16 @@ module.exports = {
     },
   },
   rules: {
+    'no-restricted-syntax': [
+      'off',
+      {
+        selector: 'ForOfStatement',
+      },
+    ],
     '@typescript-eslint/no-non-null-assertion': 1,
     // Disable error on devDependencies importing since this isn't a TS library
+    'require-await': 'off',
+    '@typescript-eslint/require-await': 'error',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-await-in-loop': 0,
     'prefer-destructuring': 0,
@@ -56,7 +64,6 @@ module.exports = {
       'warn',
       {
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
       },
     ],
     '@typescript-eslint/no-explicit-any': 'error',

@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
-import { getBytesCopy, hexlify } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { Input, InputMessage } from './input';
 import { InputMessageCoder, InputCoder, InputType } from './input';
@@ -9,6 +9,10 @@ import { InputMessageCoder, InputCoder, InputType } from './input';
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const MAX_U32 = 2 ** 32 - 1;
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('InputCoder', () => {
   it('Can encode Coin', () => {
     const input: Input = {
@@ -37,7 +41,7 @@ describe('InputCoder', () => {
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new InputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(input));
@@ -118,7 +122,7 @@ describe('InputCoder', () => {
       '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new InputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(input);

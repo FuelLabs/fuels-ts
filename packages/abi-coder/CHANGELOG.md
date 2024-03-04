@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.75.0
+
+### Minor Changes
+
+- Introduce the v1 encoding scheme and use correct file naming conventions for `@fuel-ts/abi-coder`, by [@danielbate](https://github.com/danielbate) (See [#1780](https://github.com/FuelLabs/fuels-ts/pull/1780))
+
+### Patch Changes
+
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
+## 0.74.0
+
+### Minor Changes
+
+- New encoding scheme implemented for logs, by [@danielbate](https://github.com/danielbate) (See [#1673](https://github.com/FuelLabs/fuels-ts/pull/1673))
+
+## 0.73.0
+
+### Patch Changes
+
+- filter out tx properties for estimatePredicates query, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1713](https://github.com/FuelLabs/fuels-ts/pull/1713))
+
+## 0.72.0
+
+### Minor Changes
+
+- Improve decode validation of ABI Coders, by [@arboleya](https://github.com/arboleya) (See [#1495](https://github.com/FuelLabs/fuels-ts/pull/1495))
+
 ## 0.71.1
 
 ## 0.71.0

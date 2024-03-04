@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.71.1",
+  "version": "0.75.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,7 +10,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.17.1"
+    "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
@@ -45,16 +45,16 @@
   "scripts": {
     "pretest": "pnpm build:forc",
     "build": "tsup",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects",
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:^",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "commander": "^9.4.1",
-    "ethers": "^6.7.1",
     "glob": "^10.2.6",
     "handlebars": "^4.7.7",
     "mkdirp": "^1.0.4",

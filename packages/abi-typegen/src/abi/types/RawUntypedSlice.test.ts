@@ -1,6 +1,9 @@
 import { RawUntypedSlice } from './RawUntypedSlice';
 import { StructType } from './StructType';
 
+/**
+ * @group node
+ */
 describe('RawUntypedSlice.ts', () => {
   test('should properly parse type attributes', () => {
     const rawSlice = new RawUntypedSlice({

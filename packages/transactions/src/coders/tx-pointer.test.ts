@@ -1,10 +1,14 @@
-import { getBytesCopy, hexlify } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('TxPointerCoder', () => {
   it('can encode TxPointer', () => {
     const txPointer: TxPointer = {
@@ -16,7 +20,7 @@ describe('TxPointerCoder', () => {
 
     expect(encoded).toEqual('0x000000000000000a0000000000000001');
 
-    const [decoded, offset] = new TxPointerCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new TxPointerCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual(16);
     expect(decoded).toEqual(txPointer);

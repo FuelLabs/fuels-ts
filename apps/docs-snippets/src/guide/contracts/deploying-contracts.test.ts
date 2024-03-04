@@ -5,6 +5,9 @@ import { join } from 'path';
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let PRIVATE_KEY: string;
   let projectsPath: string;
@@ -31,10 +34,10 @@ describe(__filename, () => {
     // #context const contractsDir = join(__dirname, '../path/to/contracts/dir')
     // #context const contractName = "contract-name"
 
-    const byteCodePath = join(projectsPath, `${contractName}/out/debug/${contractName}.bin`);
+    const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
     const byteCode = readFileSync(byteCodePath);
 
-    const abiJsonPath = join(projectsPath, `${contractName}/out/debug/${contractName}-abi.json`);
+    const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
     const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
     // #endregion contract-setup-2
 
@@ -47,10 +50,7 @@ describe(__filename, () => {
     // #endregion contract-setup-3
 
     // #region contract-setup-4
-    const { value } = await contract.functions
-      .echo_u8(15)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value } = await contract.functions.echo_u8(15).simulate();
 
     expect(value).toBe(15);
     // #endregion contract-setup-4

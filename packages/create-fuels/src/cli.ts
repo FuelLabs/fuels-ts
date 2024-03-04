@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
+import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
 import { Command } from 'commander';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import { join } from 'path';
 import prompts from 'prompts';
@@ -13,58 +13,189 @@ const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
 
-export const runScaffoldCli = async (
-  explicitProjectPath?: string,
-  explicitPackageManger?: string,
-  shouldInstallDeps = true
-) => {
-  let projectPath = explicitProjectPath || '';
-  let packageManager = explicitPackageManger || '';
-  const program = new Command(packageJson.name).version(packageJson.version);
+export type ProgramsToInclude = {
+  contract: boolean;
+  predicate: boolean;
+  script: boolean;
+};
 
-  if (!explicitProjectPath) {
-    const res = await prompts({
-      type: 'text',
-      name: 'projectName',
-      message: 'What is the name of your project?',
-      initial: 'my-fuel-project',
-    });
+const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsToInclude) => {
+  const parsed = toml.parse(fileContents) as {
+    workspace: {
+      members: ('predicate' | 'contract' | 'script')[];
+    };
+  };
 
-    projectPath = res.projectName;
+  parsed.workspace.members = parsed.workspace.members.filter((m) => programsToInclude[m]);
+
+  return toml.stringify(parsed);
+};
+
+async function promptForProjectPath() {
+  const res = await prompts({
+    type: 'text',
+    name: 'projectName',
+    message: 'What is the name of your project?',
+    initial: 'my-fuel-project',
+  });
+
+  return res.projectName as string;
+}
+
+async function promptForPackageManager() {
+  const packageManagerInput = await prompts({
+    type: 'select',
+    name: 'packageManager',
+    message: 'Select a package manager',
+    choices: [
+      { title: 'pnpm', value: 'pnpm' },
+      { title: 'npm', value: 'npm' },
+    ],
+    initial: 0,
+  });
+  return packageManagerInput.packageManager as string;
+}
+
+async function promptForProgramsToInclude({
+  forceDisablePrompts = false,
+}: {
+  forceDisablePrompts?: boolean;
+}) {
+  if (forceDisablePrompts) {
+    return {
+      contract: false,
+      predicate: false,
+      script: false,
+    };
   }
+  const programsToIncludeInput = await prompts({
+    type: 'multiselect',
+    name: 'programsToInclude',
+    message: 'Which Sway programs do you want?',
+    choices: [
+      { title: 'Contract', value: 'contract', selected: true },
+      { title: 'Predicate', value: 'predicate', selected: true },
+      { title: 'Script', value: 'script', selected: true },
+    ],
+    instructions: false,
+  });
+  return {
+    contract: programsToIncludeInput.programsToInclude.includes('contract'),
+    predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
+    script: programsToIncludeInput.programsToInclude.includes('script'),
+  };
+}
 
+function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude) {
+  /*
+   * Should be like:
+   * NEXT_PUBLIC_HAS_CONTRACT=true
+   * NEXT_PUBLIC_HAS_PREDICATE=false
+   * NEXT_PUBLIC_HAS_SCRIPT=true
+   */
+  const newFileContents = Object.entries(programsToInclude)
+    .map(([program, include]) => `NEXT_PUBLIC_HAS_${program.toUpperCase()}=${include}`)
+    .join('\n');
+  writeFileSync(envFilePath, newFileContents);
+}
+
+export const setupProgram = () => {
+  const program = new Command(packageJson.name)
+    .version(packageJson.version)
+    .arguments('[projectDirectory]')
+    .option('-c, --contract', 'Include contract program')
+    .option('-p, --predicate', 'Include predicate program')
+    .option('-s, --script', 'Include script program')
+    .option('--pnpm', 'Use pnpm as the package manager')
+    .option('--npm', 'Use npm as the package manager')
+    .addHelpCommand()
+    .showHelpAfterError(true);
+  return program;
+};
+
+export const runScaffoldCli = async ({
+  program,
+  args = process.argv,
+  shouldInstallDeps = false,
+  forceDisablePrompts = false,
+}: {
+  program: Command;
+  args: string[];
+  shouldInstallDeps?: boolean;
+  forceDisablePrompts?: boolean;
+}) => {
+  program.parse(args);
+  const projectPath = program.args[0] ?? (await promptForProjectPath());
   if (existsSync(projectPath)) {
-    // throw and exit
-    chalk.red(`A folder already exists at ${projectPath}. Please choose a different project name.`);
-    process.exit(1);
+    throw new Error(
+      `A folder already exists at ${projectPath}. Please choose a different project name.`
+    );
   }
 
   if (!projectPath) {
-    console.log(
-      '\nPlease specify the project directory:\n' +
-        `  ${chalk.cyan(program.name())} ${chalk.green('<project-directory>')}\n`
-    );
-    process.exit(1);
+    throw new Error('Please specify a project directory.');
   }
 
-  if (!explicitPackageManger) {
-    const packageManagerInput = await prompts({
-      type: 'select',
-      name: 'packageManager',
-      message: 'Select a package manager',
-      choices: [
-        { title: 'pnpm', value: 'pnpm' },
-        { title: 'npm', value: 'npm' },
-      ],
-      initial: 0,
+  const cliPackageManagerChoices = {
+    pnpm: program.opts().pnpm,
+    npm: program.opts().npm,
+  };
+  if (Object.values(cliPackageManagerChoices).filter(Boolean).length > 1) {
+    throw new Error('You can only specify one package manager.');
+  }
+  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
+
+  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
+
+  if (!packageManager) {
+    packageManager = 'pnpm';
+  }
+
+  const cliProgramsToInclude = {
+    contract: program.opts().contract,
+    predicate: program.opts().predicate,
+    script: program.opts().script,
+  };
+  const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
+
+  let programsToInclude: ProgramsToInclude;
+  if (hasAnyCliProgramsToInclude) {
+    programsToInclude = cliProgramsToInclude;
+  } else {
+    programsToInclude = await promptForProgramsToInclude({
+      forceDisablePrompts,
     });
-    packageManager = packageManagerInput.packageManager;
+  }
+
+  if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
+    throw new Error('You must include at least one Sway program.');
   }
 
   await mkdir(projectPath);
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
+  await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
+  writeEnvFile(join(projectPath, '.env.local'), programsToInclude);
+
+  // delete the programs that are not to be included
+  if (!programsToInclude.contract) {
+    rmSync(join(projectPath, 'sway-programs/contract'), { recursive: true });
+  }
+  if (!programsToInclude.predicate) {
+    rmSync(join(projectPath, 'sway-programs/predicate'), { recursive: true });
+    rmSync(join(projectPath, 'src/pages/predicate.tsx'), { recursive: true });
+  }
+  if (!programsToInclude.script) {
+    rmSync(join(projectPath, 'sway-programs/script'), { recursive: true });
+    rmSync(join(projectPath, 'src/pages/script.tsx'), { recursive: true });
+  }
+
+  // remove the programs that are not included from the Forc.toml members field and rewrite the file
+  const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
+  const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
+  const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
+  writeFileSync(forcTomlPath, newForcTomlContents);
 
   if (shouldInstallDeps) {
     process.chdir(projectPath);
@@ -73,7 +204,7 @@ export const runScaffoldCli = async (
 
   log();
   log();
-  log(chalk.green(`⚡️ Success! Created a a fullstack Fuel dapp at ${projectPath}`));
+  log(chalk.green(`⚡️ Success! Created a fullstack Fuel dapp at ${projectPath}`));
   log();
   log();
   log('To get started:');

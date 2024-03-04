@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
   AssertFailedRevertError,
@@ -15,6 +15,9 @@ let contractInstance: Contract;
 let wallet: WalletUnlocked;
 let gasPrice: BN;
 
+/**
+ * @group node
+ */
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -30,10 +33,7 @@ describe('Auth Testing', () => {
   });
 
   it('can get is_caller_external', async () => {
-    const { value } = await contractInstance.functions
-      .is_caller_external()
-      .txParams({ gasPrice, gasLimit: 10_000 })
-      .call();
+    const { value } = await contractInstance.functions.is_caller_external().call();
 
     expect(value).toBeTruthy();
   });
@@ -41,7 +41,6 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
       .check_msg_sender({ value: wallet.address.toB256() })
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     expect(value).toBeTruthy();
@@ -49,10 +48,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
-      contractInstance.functions
-        .check_msg_sender({ value: getRandomB256() })
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call()
+      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
     ).rejects.toThrow(AssertFailedRevertError);
   });
 });

@@ -1,13 +1,13 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import { CreateTransactionRequest } from '@fuel-ts/account';
+import type { Account, CreateTransactionRequestLike, Provider } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
-import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
-import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import type { Account } from '@fuel-ts/wallet';
-import { getBytesCopy, type BytesLike } from 'ethers';
+import { arrayify } from '@fuel-ts/utils';
 
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
@@ -43,7 +43,7 @@ export default class ContractFactory {
     accountOrProvider: Account | Provider | null = null
   ) {
     // Force the bytecode to be a byte array
-    this.bytecode = getBytesCopy(bytecode);
+    this.bytecode = arrayify(bytecode);
 
     if (abi instanceof Interface) {
       this.interface = abi;
@@ -152,8 +152,9 @@ export default class ContractFactory {
     transactionRequest.maxFee = this.account.provider.getGasConfig().maxGasPerTx;
 
     await this.account.fund(transactionRequest, requiredQuantities, maxFee);
-    const response = await this.account.sendTransaction(transactionRequest);
-    await response.wait();
+    await this.account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+    });
 
     return new Contract(contractId, this.interface, this.account);
   }
@@ -180,7 +181,7 @@ export default class ContractFactory {
 
         const encoded = this.interface.encodeConfigurable(key, value as InputValue);
 
-        const bytes = getBytesCopy(this.bytecode);
+        const bytes = arrayify(this.bytecode);
 
         bytes.set(encoded, offset);
 

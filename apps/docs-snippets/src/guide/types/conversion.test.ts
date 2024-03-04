@@ -16,6 +16,9 @@ import {
   getDocsSnippetsForcProject,
 } from '../../../test/fixtures/forc-projects';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
   let provider: Provider;
@@ -26,7 +29,7 @@ describe(__filename, () => {
 
   it('converts between bech32 and b256 using address', () => {
     // #region conversion-5
-    // #context import { Address } from 'fuels';
+    // #import { Address };
 
     const bech32 = 'fuel1d5cfwekq78r0zq73g7eg0747etkaxxltrqx5tncm7lvg89awe3hswhqjhs';
     const addressInstance = Address.fromDynamicInput(bech32);
@@ -41,7 +44,7 @@ describe(__filename, () => {
     let b256;
 
     // #region conversion-6
-    // #context import { toB256, isBech32 } from 'fuels';
+    // #import { toB256, isBech32 };
 
     const bech32 = 'fuel1d5cfwekq78r0zq73g7eg0747etkaxxltrqx5tncm7lvg89awe3hswhqjhs';
 
@@ -56,7 +59,7 @@ describe(__filename, () => {
 
   it('converts between b256 and bech32 using address', () => {
     // #region conversion-7
-    // #context import { Address } from 'fuels';
+    // #import { Address };
 
     const b256 = '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f';
     const addressInstance = Address.fromDynamicInput(b256);
@@ -72,7 +75,7 @@ describe(__filename, () => {
     let bech32;
 
     // #region conversion-8
-    // #context import { toB256, isBech32 } from 'fuels';
+    // #import { toBech32, isB256 };
 
     const b256 = '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f';
 
@@ -87,7 +90,7 @@ describe(__filename, () => {
 
   it('should successfully validate contract id equality', () => {
     // #region conversion-2
-    // #context import { Address, Contract} from 'fuels';
+    // #import { Address, Contract };
 
     const address = Address.fromB256(
       '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f'
@@ -104,7 +107,7 @@ describe(__filename, () => {
 
   it('should successfully validate a wallet address equality', () => {
     // #region conversion-3
-    // #context import { Wallet, Address } from 'fuels';
+    // #import { Wallet, Address };
 
     const address = Address.fromB256(
       '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f'
@@ -118,7 +121,7 @@ describe(__filename, () => {
 
   it('should successfully create new address from asset id', () => {
     // #region conversion-4
-    // #context import { Address, AssetId } from 'fuels';
+    // #import { Address, AssetId };
 
     const b256 = '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f';
     const address = Address.fromB256(b256);

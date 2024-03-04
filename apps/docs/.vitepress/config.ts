@@ -125,6 +125,10 @@ export default defineConfig({
                 link: '/guide/types/bytes32',
               },
               {
+                text: 'Numbers',
+                link: '/guide/types/numbers',
+              },
+              {
                 text: 'String',
                 link: '/guide/types/string',
               },
@@ -155,6 +159,10 @@ export default defineConfig({
               {
                 text: 'Vectors',
                 link: '/guide/types/vectors',
+              },
+              {
+                text: 'Date Time',
+                link: '/guide/types/date-time',
               },
             ],
           },
@@ -233,12 +241,16 @@ export default defineConfig({
                 link: '/guide/providers/connection',
               },
               {
-                text: 'Connecting to an External Node',
-                link: '/guide/providers/connecting-to-an-external-node',
+                text: 'Connecting to Testnet',
+                link: '/guide/providers/connecting-to-testnet',
               },
               {
                 text: 'Querying the Chain',
                 link: '/guide/providers/querying-the-chain',
+              },
+              {
+                text: 'Retrying calls',
+                link: '/guide/providers/retrying-calls',
               },
             ],
           },
@@ -266,6 +278,10 @@ export default defineConfig({
               {
                 text: 'Call Parameters',
                 link: '/guide/contracts/call-parameters',
+              },
+              {
+                text: 'Add Transfer',
+                link: '/guide/contracts/add-transfer',
               },
               {
                 text: 'Contract Balance',
@@ -315,7 +331,7 @@ export default defineConfig({
           },
           {
             text: 'Addresses',
-            link: '/guide/addresses',
+            link: '/guide/addresses/',
             collapsed: true,
             items: [
               {
@@ -338,12 +354,12 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions',
               },
               {
-                text: 'Deposit And Withdraw',
-                link: '/guide/cookbook/deposit-and-withdraw',
+                text: 'Custom Transactions from Contract Calls',
+                link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
-                text: 'Transfer All Assets',
-                link: '/guide/cookbook/transfer-all-assets',
+                text: 'Deposit And Withdraw',
+                link: '/guide/cookbook/deposit-and-withdraw',
               },
             ],
           },
@@ -395,8 +411,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing with Jest',
-                link: '/guide/testing/testing-with-jest',
+                text: 'Testing in TS',
+                link: '/guide/testing/testing-in-ts',
               },
               {
                 text: 'Setting Up a Custom Chain',

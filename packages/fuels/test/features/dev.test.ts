@@ -2,43 +2,61 @@ import * as chokidar from 'chokidar';
 
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
+import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
 import { mockLogger } from '../utils/mockLogger';
-import { mockStartFuelCore } from '../utils/mockStartFuelCore';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
-import { runInit, runDev } from '../utils/runCommands';
+import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
 
-jest.mock('chokidar', () => ({
-  __esModule: true,
-  ...jest.requireActual('chokidar'),
-}));
+vi.mock('chokidar', async () => {
+  const mod = await vi.importActual('chokidar');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
 
+/**
+ * @group node
+ */
 describe('dev', () => {
-  beforeEach(mockLogger);
-  afterEach(resetDiskAndMocks);
+  const paths = bootstrapProject(__filename);
+
+  afterEach(() => {
+    resetConfigAndMocks(paths.fuelsConfigPath);
+  });
+
+  afterAll(() => {
+    resetDiskAndMocks(paths.root);
+  });
 
   function mockAll() {
     mockLogger();
 
-    const { startFuelCore, killChildProcess } = mockStartFuelCore();
+    const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
 
-    const build = jest.spyOn(buildMod, 'build').mockImplementation();
-    const deploy = jest.spyOn(deployMod, 'deploy').mockImplementation();
+    const build = vi.spyOn(buildMod, 'build').mockReturnValue(Promise.resolve());
+    const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(Promise.resolve([]));
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const on: any = jest.fn(() => ({ on }));
+    const on: any = vi.fn(() => ({ on }));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const watch = jest.spyOn(chokidar, 'watch').mockReturnValue({ on } as any);
+    const watch = vi.spyOn(chokidar, 'watch').mockReturnValue({ on } as any);
 
-    return { startFuelCore, killChildProcess, build, deploy, on, watch };
+    return { autoStartFuelCore, killChildProcess, build, deploy, on, watch };
   }
 
   it('should run `dev` command', async () => {
-    const { startFuelCore, killChildProcess, build, deploy, on, watch } = mockAll();
+    const { autoStartFuelCore, killChildProcess, build, deploy, on, watch } = mockAll();
 
-    await runInit();
-    await runDev();
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+    });
 
-    expect(startFuelCore).toHaveBeenCalledTimes(1);
+    await runDev({ root: paths.root });
+
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
     expect(killChildProcess).toHaveBeenCalledTimes(0);
     expect(build).toHaveBeenCalledTimes(1);
     expect(deploy).toHaveBeenCalledTimes(1);

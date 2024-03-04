@@ -4,6 +4,9 @@ import { Wallet, BN, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   let contract: Contract;
   let provider: Provider;
@@ -15,8 +18,7 @@ describe(__filename, () => {
 
   it('should successfully get a contract balance', async () => {
     // #region contract-balance-3
-    // #context import type { AssetId } from 'fuels';
-    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
+    // #import { AssetId, Wallet, BN, BaseAssetId };
 
     const amountToForward = 40;
     const amountToTransfer = 10;
@@ -24,8 +26,6 @@ describe(__filename, () => {
     const recipient = Wallet.generate({
       provider,
     });
-
-    const { minGasPrice } = provider.getGasConfig();
 
     const asset: AssetId = {
       value: BaseAssetId,
@@ -35,10 +35,6 @@ describe(__filename, () => {
       .transfer(amountToTransfer, asset, recipient.address.toB256())
       .callParams({
         forward: [amountToForward, BaseAssetId],
-      })
-      .txParams({
-        gasPrice: minGasPrice,
-        gasLimit: 10_000,
       })
       .call();
 

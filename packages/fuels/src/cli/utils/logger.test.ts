@@ -2,6 +2,9 @@ import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
 
 import * as loggerMod from './logger';
 
+/**
+ * @group node
+ */
 describe('logger', () => {
   const { configureLogging, loggingConfig } = loggerMod;
 
@@ -16,8 +19,8 @@ describe('logger', () => {
   afterAll(reset);
 
   function mockStdIO() {
-    const err = jest.spyOn(process.stderr, 'write').mockImplementation();
-    const out = jest.spyOn(process.stdout, 'write').mockImplementation();
+    const err = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+    const out = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
     return { err, out };
   }
 

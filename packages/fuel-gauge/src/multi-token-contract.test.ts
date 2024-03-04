@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN } from 'fuels';
 import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 
@@ -26,12 +26,10 @@ const subIds = [
   '0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5',
 ];
 
+/**
+ * @group node
+ */
 describe('MultiTokenContract', () => {
-  let gasPrice: BN;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    gasPrice = provider.getGasConfig().minGasPrice;
-  });
   it('can mint and transfer coins', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // New wallet to transfer coins and check balance
@@ -61,7 +59,6 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // update assetId on helperDict object
@@ -73,7 +70,7 @@ describe('MultiTokenContract', () => {
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
         .get_balance(address, { value: assetId })
-        .txParams({ gasPrice, gasLimit: 10_000 })
+
         .simulate<BN>();
       return value;
     };
@@ -91,14 +88,13 @@ describe('MultiTokenContract', () => {
     await multiTokenContract
       .multiCall(
         subIds.map((subId) =>
-          multiTokenContract.functions.transfer_coins_to_output(
+          multiTokenContract.functions.transfer_to_address(
             { value: userWallet.address.toB256() },
             { value: helperDict[subId].assetId },
             helperDict[subId].amount
           )
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const validateTransferPromises = subIds.map(async (subId) => {
@@ -148,7 +144,6 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     // update assetId on helperDict object
@@ -160,7 +155,7 @@ describe('MultiTokenContract', () => {
     const getBalance = async (address: { value: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
         .get_balance(address, { value: assetId })
-        .txParams({ gasPrice, gasLimit: 10_000 })
+
         .simulate<BN>();
       return value;
     };
@@ -181,7 +176,6 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.burn_coins(subId, helperDict[subId].amountToBurn)
         )
       )
-      .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
 
     const validateBurnPromises = subIds.map(async (subId) => {

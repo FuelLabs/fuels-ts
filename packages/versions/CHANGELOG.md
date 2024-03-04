@@ -1,5 +1,34 @@
 # @fuel-ts/versions
 
+## 0.75.0
+
+### Patch Changes
+
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
+## 0.74.0
+
+### Minor Changes
+
+- - Updated to support`forc v0.50.0`
+  - `getForcProject` now supports both `debug` and `release` builds, by [@nedsalk](https://github.com/nedsalk) (See [#1744](https://github.com/FuelLabs/fuels-ts/pull/1744))
+
+### Patch Changes
+
+- Upgrading `fuel-core` to `0.22.1`, by [@arboleya](https://github.com/arboleya) (See [#1756](https://github.com/FuelLabs/fuels-ts/pull/1756))
+
+## 0.73.0
+
+### Patch Changes
+
+- Upgrading `forc` to `0.49.2`, by [@arboleya](https://github.com/arboleya) (See [#1707](https://github.com/FuelLabs/fuels-ts/pull/1707))
+
+## 0.72.0
+
+### Patch Changes
+
+- Downgrading forc back to `0.48.1`, by [@arboleya](https://github.com/arboleya) (See [#1680](https://github.com/FuelLabs/fuels-ts/pull/1680))
+
 ## 0.71.1
 
 ## 0.71.0

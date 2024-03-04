@@ -1,5 +1,25 @@
 # @fuel-ts/fuel-core
 
+## 0.75.0
+
+## 0.74.0
+
+### Patch Changes
+
+- Upgrading `fuel-core` to `0.22.1`, by [@arboleya](https://github.com/arboleya) (See [#1756](https://github.com/FuelLabs/fuels-ts/pull/1756))
+
+## 0.73.0
+
+### Patch Changes
+
+- Upgrading `forc` to `0.49.2`, by [@arboleya](https://github.com/arboleya) (See [#1707](https://github.com/FuelLabs/fuels-ts/pull/1707))
+
+## 0.72.0
+
+### Patch Changes
+
+- 🐞 Fixing installation from git branches, by [@arboleya](https://github.com/arboleya) (See [#1667](https://github.com/FuelLabs/fuels-ts/pull/1667))
+
 ## 0.71.1
 
 ### Patch Changes

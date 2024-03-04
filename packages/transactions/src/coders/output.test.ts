@@ -1,11 +1,15 @@
 import { bn } from '@fuel-ts/math';
-import { getBytesCopy, hexlify } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { Output } from './output';
 import { OutputCoder, OutputType } from './output';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('OutputCoder', () => {
   it('Can encode Coin', () => {
     const output: Output = {
@@ -21,7 +25,7 @@ describe('OutputCoder', () => {
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
@@ -41,7 +45,7 @@ describe('OutputCoder', () => {
       '0x00000000000000010000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);
@@ -61,7 +65,7 @@ describe('OutputCoder', () => {
       '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
@@ -81,7 +85,7 @@ describe('OutputCoder', () => {
       '0x0000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
@@ -100,7 +104,7 @@ describe('OutputCoder', () => {
       '0x0000000000000004d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder().decode(getBytesCopy(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);

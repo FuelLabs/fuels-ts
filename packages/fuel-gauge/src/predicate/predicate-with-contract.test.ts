@@ -1,5 +1,5 @@
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
@@ -16,12 +16,16 @@ import type { Validation } from '../types/predicate';
 
 import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
   );
-  const { binHexlified: liquidityPoolBytes, abiContents: liquidityPoolAbi } =
-    getFuelGaugeForcProject(FuelGaugeProjectsEnum.LIQUIDITY_POOL);
+  const { binHexlified: tokenPoolBytes, abiContents: tokenPoolAbi } = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.TOKEN_CONTRACT
+  );
 
   const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
@@ -72,7 +76,6 @@ describe('Predicate', () => {
         .callParams({
           forward: [500, BaseAssetId],
         })
-        .txParams({ gasPrice, gasLimit: 10_000 })
         .call();
 
       expect(value.toString()).toEqual('500');
@@ -83,8 +86,8 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       const contract = await new ContractFactory(
-        liquidityPoolBytes,
-        liquidityPoolAbi,
+        tokenPoolBytes,
+        tokenPoolAbi,
         wallet
       ).deployContract({ gasPrice });
 
@@ -92,20 +95,9 @@ describe('Predicate', () => {
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
-      await expect(
-        contract.functions
-          .deposit({
-            value: receiver.address.toB256(),
-          })
-          .callParams({
-            forward: [100, BaseAssetId],
-          })
-          .txParams({
-            gasPrice,
-            gasLimit: 10_000,
-          })
-          .call()
-      ).rejects.toThrow(/not enough coins to fit the target/);
+      await expect(contract.functions.mint_coins(200).call()).rejects.toThrow(
+        /not enough coins to fit the target/
+      );
 
       // setup predicate
       const amountToPredicate = 700_000;
@@ -129,42 +121,21 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId);
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 
       // calling the contract with the receiver account (with resources)
       const contractAmount = 10;
       const {
-        transactionResult: { fee: receiverTxFee1 },
-      } = await contract.functions
-        .set_base_token(BaseAssetId)
-        .txParams({ gasPrice, gasLimit: 10_000 })
-        .call();
-      const {
-        transactionResult: { fee: receiverTxFee2 },
-      } = await contract.functions
-        .deposit({
-          value: receiver.address.toB256(),
-        })
-        .callParams({
-          forward: [contractAmount, BaseAssetId],
-        })
-        .txParams({
-          gasPrice,
-          gasLimit: 10_000,
-        })
-        .call();
+        transactionResult: { fee: receiverTxFee },
+      } = await contract.functions.mint_coins(200).call();
 
       const finalReceiverBalance = toNumber(await receiver.getBalance());
       const remainingPredicateBalance = toNumber(await predicate.getBalance());
 
       const expectedFinalReceiverBalance =
-        initialReceiverBalance +
-        amountToReceiver -
-        contractAmount -
-        receiverTxFee1.toNumber() -
-        receiverTxFee2.toNumber();
+        initialReceiverBalance + amountToReceiver - contractAmount - receiverTxFee.toNumber();
 
       expectToBeInRange({
         value: finalReceiverBalance,

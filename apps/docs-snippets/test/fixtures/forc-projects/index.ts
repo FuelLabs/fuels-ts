@@ -13,6 +13,7 @@ export enum DocSnippetProjectsEnum {
   ECHO_U64_ARRAY = 'echo-u64-array',
   RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
+  LIQUIDITY_POOL = 'liquidity-pool',
   SIMPLE_PREDICATE = 'simple-predicate',
   ECHO_CONFIGURABLES = 'echo-configurables',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
@@ -31,4 +32,5 @@ export const getDocsSnippetsForcProject = (project: DocSnippetProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, project),
     projectName: project,
+    build: 'release',
   });

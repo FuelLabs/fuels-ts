@@ -1,5 +1,21 @@
 # @fuel-ts/abi-typegen
 
+## 0.75.0
+
+### Patch Changes
+
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
+## 0.74.0
+
+## 0.73.0
+
+### Patch Changes
+
+- Upgrading `forc` to `0.49.2`, by [@arboleya](https://github.com/arboleya) (See [#1707](https://github.com/FuelLabs/fuels-ts/pull/1707))
+
+## 0.72.0
+
 ## 0.71.1
 
 ## 0.71.0

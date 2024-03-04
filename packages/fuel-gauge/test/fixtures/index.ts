@@ -16,7 +16,6 @@ export enum FuelGaugeProjectsEnum {
   COLLISION_IN_FN_NAMES = 'collision_in_fn_names',
   COVERAGE_CONTRACT = 'coverage-contract',
   GENERIC_TYPES_CONTRACT = 'generic-types-contract',
-  LIQUIDITY_POOL = 'liquidity-pool',
   MULTI_TOKEN_CONTRACT = 'multi-token-contract',
   PAYABLE_ANNOTATION = 'payable-annotation',
   PREDICATE_ADDRESS = 'predicate-address',
@@ -60,4 +59,5 @@ export const getFuelGaugeForcProject = (project: FuelGaugeProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, 'forc-projects', project),
     projectName: project,
+    build: 'release',
   });

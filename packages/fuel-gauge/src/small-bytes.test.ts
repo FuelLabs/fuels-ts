@@ -5,6 +5,9 @@ import { join } from 'path';
 
 import { getSetupContract, createWallet } from './utils';
 
+/**
+ * @group node
+ */
 describe('small-bytes', () => {
   const smallBytesProjectDir = join(__dirname, '../test/fixtures/forc-projects/small-bytes');
 
@@ -17,67 +20,49 @@ describe('small-bytes', () => {
   });
   it('should successfully call contract and echo values', async () => {
     const expected = [48, 63];
-    const res1 = await contract.functions.echo_u8_array().txParams({ gasLimit: 10_000 }).simulate();
+    const res1 = await contract.functions.echo_u8_array().simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('should successfully echo u8 array', async () => {
     const expected = [48, 63];
-    const res1 = await contract.functions
-      .echo_u8_array_with_value(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u8_array_with_value(expected).simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('should echo boolean array', async () => {
     const expected = [true, false];
-    const res1 = await contract.functions
-      .echo_boolean_array()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_boolean_array().simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('should echo boolean array with value', async () => {
     const expected = [true, false];
-    const res1 = await contract.functions
-      .echo_boolean_array_with_value(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_boolean_array_with_value(expected).simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('echos a mixed tuple with value', async () => {
     const expected = [73, true];
-    const res1 = await contract.functions
-      .echo_mixed_tuple_with_value(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_mixed_tuple_with_value(expected).simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('echos a mixed tuple', async () => {
     const expected = [48, true];
-    const res1 = await contract.functions
-      .echo_mixed_tuple()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_mixed_tuple().simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('echos a bigger mixed tuple', async () => {
     const expected = [48, true, bn(1337)];
-    const res1 = await contract.functions.echo_tuple().txParams({ gasLimit: 10_000 }).simulate();
+    const res1 = await contract.functions.echo_tuple().simulate();
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
   it('echos a mixed struct with value', async () => {
     const expected = { a: 73, b: true };
-    const res1 = await contract.functions
-      .echo_mixed_struct_with_value(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_mixed_struct_with_value(expected).simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
@@ -85,51 +70,33 @@ describe('small-bytes', () => {
     const expectedA = { a: 73 };
     const expectedB = { b: true };
 
-    const res1 = await contract.functions
-      .echo_mixed_enum_with_value(expectedA)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_mixed_enum_with_value(expectedA).simulate();
     expect(res1.value).toMatchObject(expectedA);
 
-    const res2 = await contract.functions
-      .echo_mixed_enum_with_value(expectedB)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res2 = await contract.functions.echo_mixed_enum_with_value(expectedB).simulate();
     expect(res2.value).toMatchObject(expectedB);
   });
 
   it('accepts native enum', async () => {
-    const res1 = await contract.functions
-      .echo_native_enum('B')
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_native_enum('B').simulate();
     expect(res1.value).toEqual('C');
   });
 
   it('echos a u8 vector with value', async () => {
     const expected = [73, 23];
-    const res1 = await contract.functions
-      .echo_u8_vector_with_value(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u8_vector_with_value(expected).simulate();
     expect(res1.value).toMatchObject(expected);
   });
 
   it('echos a u8 vector', async () => {
     const expected = [23, 32, 78];
-    const res1 = await contract.functions
-      .echo_u8_vector()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u8_vector().simulate();
     expect(res1.value).toMatchObject(expected); // [ 23 ]
   });
 
   it('echos a u64 vector', async () => {
     const expected = [bn(1337), bn(1448), bn(1559)];
-    const res1 = await contract.functions
-      .echo_u64_vector()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u64_vector().simulate();
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
@@ -139,10 +106,7 @@ describe('small-bytes', () => {
       b: bn(1337),
     };
 
-    const res1 = await contract.functions
-      .echo_mixed_struct()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_mixed_struct().simulate();
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
@@ -152,10 +116,7 @@ describe('small-bytes', () => {
       b: bn(1337),
     };
 
-    const res1 = await contract.functions
-      .echo_received_mixed_struct(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_received_mixed_struct(expected).simulate();
     expect(JSON.stringify(res1.value)).toEqual(JSON.stringify(expected));
   });
 
@@ -168,6 +129,7 @@ describe('small-bytes', () => {
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
       projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
+      build: 'release',
     });
 
     const wallet = await createWallet();
@@ -178,10 +140,7 @@ describe('small-bytes', () => {
       configurableConstants,
     });
 
-    const res1 = await configurableContract.functions
-      .echo_configurable_u8()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await configurableContract.functions.echo_configurable_u8().simulate();
 
     expect(res1.value).toBe(expected);
   });
@@ -195,6 +154,7 @@ describe('small-bytes', () => {
     const { binHexlified, abiContents } = getForcProject<JsonAbi>({
       projectDir: smallBytesProjectDir,
       projectName: 'small-bytes',
+      build: 'release',
     });
 
     const wallet = await createWallet();
@@ -205,75 +165,51 @@ describe('small-bytes', () => {
       configurableConstants,
     });
 
-    const res1 = await configurableContract.functions
-      .echo_configurable_boolean()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await configurableContract.functions.echo_configurable_boolean().simulate();
 
     expect(res1.value).toBe(expected);
   });
 
   it('echos a u8 literal', async () => {
     const expected = 47;
-    const res1 = await contract.functions
-      .echo_u8_literal()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u8_literal().simulate();
     expect(res1.value).toBe(expected);
   });
 
   it('echos a u16', async () => {
-    const res1 = await contract.functions.echo_u16(30000).txParams({ gasLimit: 10_000 }).simulate();
+    const res1 = await contract.functions.echo_u16(30000).simulate();
     expect(res1.value).toBe(30000 * 2);
   });
 
   it('echos a u32', async () => {
-    const res1 = await contract.functions
-      .echo_u32(100000)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u32(100000).simulate();
     expect(res1.value).toBe(100000 * 2);
   });
 
   it('echos a boolean literal', async () => {
     const expected = true;
-    const res1 = await contract.functions
-      .echo_boolean_literal()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_boolean_literal().simulate();
     expect(res1.value).toBe(expected);
   });
 
   it('echos a u8 value', async () => {
     const expected = 47;
-    const res1 = await contract.functions
-      .echo_u8(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_u8(expected).simulate();
     expect(res1.value).toBe(expected);
   });
 
   it('accepts two u8 values', async () => {
-    const res1 = await contract.functions
-      .echo_two_u8s(15, 255)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_two_u8s(15, 255).simulate();
     expect(res1.value).toBe(255);
   });
 
   it('accepts two boolean values', async () => {
-    const res1 = await contract.functions
-      .two_booleans(true, true)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.two_booleans(true, true).simulate();
     expect(res1.value).toBe(true);
   });
 
   it('accepts u8, u64, bool', async () => {
-    const res1 = await contract.functions
-      .u8_u64_bool(255, 10000, true)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.u8_u64_bool(255, 10000, true).simulate();
     expect(res1.value).toBe(55);
   });
 
@@ -286,7 +222,6 @@ describe('small-bytes', () => {
         },
         230
       )
-      .txParams({ gasLimit: 10_000 })
       .simulate();
 
     expect(res1.value).toEqual({
@@ -297,10 +232,7 @@ describe('small-bytes', () => {
 
   it('echos a boolean value', async () => {
     const expected = true;
-    const res1 = await contract.functions
-      .echo_boolean(expected)
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const res1 = await contract.functions.echo_boolean(expected).simulate();
     expect(res1.value).toBe(expected);
   });
 });
