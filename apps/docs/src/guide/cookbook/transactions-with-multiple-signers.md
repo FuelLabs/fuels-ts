@@ -6,7 +6,7 @@ Consider a script that requires two signatures to be spent:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/script-signing/src/main.sw#multiple-signers-1{rust:line-numbers}
 
-Here, through the use of the built-in Sway function `tx_witness_data()` to retrieve the witness signatures and `tx_id()` for the transaction hash. Then we retrieve the signing address to validate the script.
+In the snippet above, we use the built-in Sway function `tx_witness_data()` to retrieve the witness signatures and `tx_id()` for the transaction hash. Then, we retrieve the signing address to validate the script.
 
 We would interact with this script in the SDK by creating a transaction request from an invocation scope. The same can be done for a contract. Consider the following script:
 
