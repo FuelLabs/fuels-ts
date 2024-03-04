@@ -53,7 +53,7 @@ Once a connector has been selected by the user, the `useConnect` hook will retur
 
 The `useAccount` hook returns information about the user's account, if they are connected.
 
-The `useBalance` hook returns the user's ETH balance on the [`beta-5` network](https://beta-5.fuel.network), if they are connected.
+The `useBalance` hook returns the user's ETH balance on the [`beta-5` network](https://beta-5.fuel.network/playground), if they are connected.
 
 ## Further Reading
 
