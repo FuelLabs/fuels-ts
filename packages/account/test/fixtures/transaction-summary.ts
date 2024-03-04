@@ -314,6 +314,7 @@ export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {
 export const MOCK_SQUEEZEDOUT_STATUS: SqueezedOutStatus = {
   __typename: 'SqueezedOutStatus',
   type: 'SqueezedOutStatus',
+  reason: 'Transaction removed.',
 };
 
 export const MOCK_TX_SCRIPT_RAW_PAYLOAD =

@@ -52,7 +52,6 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
       cb: '1',
       cfei: '1',
       cfsi: '1',
-      croo: '16',
       div: '1',
       divi: '1',
       ecr1: '3000',
@@ -135,6 +134,11 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
         unitsPerGas: '214',
       },
       ccp: {
+        __typename: 'LightOperation',
+        base: '15',
+        unitsPerGas: '103',
+      },
+      croo: {
         __typename: 'LightOperation',
         base: '15',
         unitsPerGas: '103',
@@ -235,7 +239,8 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
   latestBlock: {
     __typename: 'Block',
     id: '0xb9e55ced368c8d8f1aa487d33e97043e5891406792ea5d61f7807d0441d34722',
-    header: { __typename: 'Header', height: '234', time: '4611686020122537935' },
+    height: '234',
+    header: { __typename: 'Header', time: '4611686020122537935' },
     transactions: [
       {
         __typename: 'Transaction',
