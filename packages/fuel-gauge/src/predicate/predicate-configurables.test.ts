@@ -51,7 +51,8 @@ describe('Predicate', () => {
       const predicate = new Predicate(
         predicateBytesConfigurable,
         wallet.provider,
-        predicateAbiConfigurable
+        predicateAbiConfigurable,
+        [defaultValues.FEE, defaultValues.ADDRESS] // set predicate input data to be the same as default configurable value
       );
 
       const amountToTransfer = 200;
@@ -64,9 +65,6 @@ describe('Predicate', () => {
       });
 
       await assertBalance(destination, 0, BaseAssetId);
-
-      // set predicate input data to be the same as default configurable value
-      predicate.setData(defaultValues.FEE, defaultValues.ADDRESS);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
         gasPrice,
@@ -86,6 +84,7 @@ describe('Predicate', () => {
         predicateBytesConfigurable,
         wallet.provider,
         predicateAbiConfigurable,
+        [configurableConstants.FEE, defaultValues.ADDRESS],
         configurableConstants
       );
 
@@ -99,8 +98,6 @@ describe('Predicate', () => {
 
       // transfer funds to predicate
       await fundPredicate(wallet, predicate, amountToPredicate);
-
-      predicate.setData(configurableConstants.FEE, defaultValues.ADDRESS);
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
@@ -121,6 +118,7 @@ describe('Predicate', () => {
         predicateBytesConfigurable,
         wallet.provider,
         predicateAbiConfigurable,
+        [defaultValues.FEE, configurableConstants.ADDRESS],
         configurableConstants
       );
 
@@ -134,8 +132,6 @@ describe('Predicate', () => {
 
       // transfer funds to predicate
       await fundPredicate(wallet, predicate, amountToPredicate);
-
-      predicate.setData(defaultValues.FEE, configurableConstants.ADDRESS);
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
@@ -160,6 +156,7 @@ describe('Predicate', () => {
         predicateBytesConfigurable,
         wallet.provider,
         predicateAbiConfigurable,
+        [configurableConstants.FEE, configurableConstants.ADDRESS],
         configurableConstants
       );
 
@@ -172,8 +169,6 @@ describe('Predicate', () => {
       await assertBalance(destination, 0, BaseAssetId);
 
       await fundPredicate(wallet, predicate, amountToPredicate);
-
-      predicate.setData(configurableConstants.FEE, configurableConstants.ADDRESS);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
         gasPrice,
@@ -203,11 +198,16 @@ describe('Predicate', () => {
 
     it('throws when setting configurable but predicate has none', () => {
       expect(() => {
-        const predicate = new Predicate(predicateBytesTrue, wallet.provider, predicateAbiTrue, {
-          constant: 'NADA',
-        });
-
-        predicate.setData('NADA');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const predicate = new Predicate(
+          predicateBytesTrue,
+          wallet.provider,
+          predicateAbiTrue,
+          ['NADA'],
+          {
+            constant: 'NADA',
+          }
+        );
       }).toThrow('Predicate has no configurable constants to be set');
     });
 
@@ -215,16 +215,16 @@ describe('Predicate', () => {
       const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
 
       expect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate(
           predicateBytesConfigurable,
           wallet.provider,
           predicateAbiConfigurable,
+          ['NADA'],
           {
             NOPE: 'NADA',
           }
         );
-
-        predicate.setData('NADA');
       }).toThrow(errMsg);
     });
 
@@ -232,11 +232,16 @@ describe('Predicate', () => {
       const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
 
       expect(() => {
-        const predicate = new Predicate(predicateBytesConfigurable, wallet.provider, undefined, {
-          NOPE: 'NADA',
-        });
-
-        predicate.setData('NADA');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const predicate = new Predicate(
+          predicateBytesConfigurable,
+          wallet.provider,
+          undefined,
+          ['NADA'],
+          {
+            NOPE: 'NADA',
+          }
+        );
       }).toThrow(errMsg);
     });
   });

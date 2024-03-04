@@ -86,7 +86,13 @@ describe('Bytes Tests', () => {
       FuelGaugeProjectsEnum.PREDICATE_BYTES
     );
 
-    const predicate = new Predicate<MainArgs>(binHexlified, wallet.provider, abiContents);
+    const bytes = [40, 41, 42];
+    const INPUT: Wrapper = {
+      inner: [bytes, bytes],
+      inner_enum: { Second: bytes },
+    };
+
+    const predicate = new Predicate<MainArgs>(binHexlified, wallet.provider, abiContents, [INPUT]);
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
@@ -97,14 +103,11 @@ describe('Bytes Tests', () => {
 
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
-    const bytes = [40, 41, 42];
-    const INPUT: Wrapper = {
-      inner: [bytes, bytes],
-      inner_enum: { Second: bytes },
-    };
-    const tx = await predicate
-      .setData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await tx.waitForResult();
 
     // Check the balance of the receiver

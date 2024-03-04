@@ -53,7 +53,8 @@ describe('std-lib-string Tests', () => {
     const predicate = new Predicate<MainArgs>(
       predicateStdString,
       wallet.provider,
-      predicateStdStringAbi
+      predicateStdStringAbi,
+      [1, 2, 'Hello World']
     );
 
     // setup predicate
@@ -65,9 +66,10 @@ describe('std-lib-string Tests', () => {
 
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
-    const tx = await predicate
-      .setData(1, 2, 'Hello World')
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await tx.waitForResult();
 
     // Check the balance of the receiver

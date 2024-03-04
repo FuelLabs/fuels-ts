@@ -151,7 +151,20 @@ describe('Vector Types Validation', () => {
     const predicate = new Predicate<MainArgs>(
       predicateVectorTypes,
       wallet.provider,
-      predicateVectorTypesAbi
+      predicateVectorTypesAbi,
+      [
+        U32_VEC,
+        VEC_IN_VEC,
+        STRUCT_IN_VEC,
+        VEC_IN_STRUCT,
+        ARRAY_IN_VEC,
+        VEC_IN_ARRAY,
+        VEC_IN_ENUM,
+        ENUM_IN_VEC,
+        TUPLE_IN_VEC,
+        VEC_IN_TUPLE,
+        VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC,
+      ]
     );
 
     // setup predicate
@@ -164,21 +177,10 @@ describe('Vector Types Validation', () => {
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate
-      .setData(
-        U32_VEC,
-        VEC_IN_VEC,
-        STRUCT_IN_VEC,
-        VEC_IN_STRUCT,
-        ARRAY_IN_VEC,
-        VEC_IN_ARRAY,
-        VEC_IN_ENUM,
-        ENUM_IN_VEC,
-        TUPLE_IN_VEC,
-        VEC_IN_TUPLE,
-        VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-      )
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await tx.waitForResult();
 
     // Check the balance of the receiver

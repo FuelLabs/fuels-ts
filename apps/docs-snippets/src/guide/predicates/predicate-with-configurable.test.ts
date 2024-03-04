@@ -28,10 +28,13 @@ describe(__filename, () => {
 
     const configurable = { WHITELISTED: newWhitelistedAddress };
     // instantiate predicate with configurable constants
-    const predicate = new Predicate(bin, wallet.provider, abi, configurable);
-
-    // set predicate data to be the same as the configurable constant
-    predicate.setData(configurable.WHITELISTED);
+    const predicate = new Predicate(
+      bin,
+      wallet.provider,
+      abi,
+      [configurable.WHITELISTED],
+      configurable
+    );
 
     // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 500_000, BaseAssetId, {
@@ -63,10 +66,9 @@ describe(__filename, () => {
 
   it('should successfully tranfer to default whitelisted address', async () => {
     // #region predicate-with-configurable-constants-3
-    const predicate = new Predicate(bin, wallet.provider, abi);
-
-    // set predicate data to be the same as the configurable constant
-    predicate.setData('0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132');
+    const predicate = new Predicate(bin, wallet.provider, abi, [
+      '0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132',
+    ]);
 
     // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 300_000, BaseAssetId, {

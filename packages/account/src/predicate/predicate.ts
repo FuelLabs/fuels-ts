@@ -43,12 +43,14 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param bytes - The bytes of the predicate.
    * @param provider - The provider used to interact with the blockchain.
    * @param jsonAbi - The JSON ABI of the predicate.
+   * @param predicateData - The predicate data.
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
   constructor(
     bytes: BytesLike,
     provider: Provider,
     jsonAbi?: JsonAbi,
+    predicateData?: ARGS,
     configurableConstants?: { [name: string]: unknown }
   ) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
@@ -61,6 +63,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
+    if (predicateData !== undefined && predicateData.length > 0) {
+      this.predicateArgs = predicateData;
+    }
   }
 
   /**

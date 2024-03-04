@@ -105,7 +105,13 @@ describe('Predicate', () => {
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         provider,
-        predicateAbiMainArgsStruct
+        predicateAbiMainArgsStruct,
+        [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ]
       );
       const initialPredicateBalance = toNumber(await predicate.getBalance());
 
@@ -116,12 +122,7 @@ describe('Predicate', () => {
       );
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate
-        .setData({
-          has_account: true,
-          total_complete: 100,
-        })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 

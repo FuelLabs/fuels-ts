@@ -112,8 +112,7 @@ describe(__filename, () => {
     /**
      * Setup predicate
      */
-    const predicate = new Predicate(binHexlified, provider, abiContents);
-    predicate.setData(bn(1000));
+    const predicate = new Predicate(binHexlified, provider, abiContents, [bn(1000)]);
     await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
 
     /**
@@ -164,8 +163,7 @@ describe(__filename, () => {
     /**
      * Setup predicate
      */
-    const predicate = new Predicate(binHexlified, provider, abiContents);
-    predicate.setData(bn(1000));
+    const predicate = new Predicate(binHexlified, provider, abiContents, [bn(1000)]);
     await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
 
     /**
