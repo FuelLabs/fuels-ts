@@ -978,7 +978,6 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
       txCreatedIdx: bn(coin.txCreatedIdx),
     }));
@@ -1045,7 +1044,6 @@ export default class Provider {
               amount: bn(coin.amount),
               assetId: coin.assetId,
               owner: Address.fromAddressOrString(coin.owner),
-              maturity: bn(coin.maturity).toNumber(),
               blockCreated: bn(coin.blockCreated),
               txCreatedIdx: bn(coin.txCreatedIdx),
             } as Coin;

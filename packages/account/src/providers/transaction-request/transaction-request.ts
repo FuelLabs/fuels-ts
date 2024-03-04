@@ -592,7 +592,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
             amount: quantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),
-            maturity: 0,
             blockCreated: bn(1),
             txCreatedIdx: bn(1),
           },

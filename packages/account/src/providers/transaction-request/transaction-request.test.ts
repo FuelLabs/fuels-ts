@@ -86,7 +86,6 @@ describe('TransactionRequest', () => {
       owner: coinOwner,
       amount: bn(100),
       assetId: ASSET_A,
-      maturity: 0,
       blockCreated: bn(0),
       txCreatedIdx: bn(0),
     };
