@@ -1,4 +1,10 @@
+import type {
+  GqlStatusChangeSubscription,
+  GqlSubmitAndAwaitSubscription,
+} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from 'fuels';
 import {
   BaseAssetId,
@@ -8,6 +14,7 @@ import {
   Wallet,
   randomBytes,
   WalletUnlocked,
+  getRandomB256,
 } from 'fuels';
 import type { MockInstance } from 'vitest';
 
@@ -82,7 +89,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
 /**
  * @group node
  */
-describe('TransactionSummary', () => {
+describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
   let gasPrice: BN;
@@ -92,6 +99,17 @@ describe('TransactionSummary', () => {
     adminWallet = await generateTestWallet(provider, [[500_000]]);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async function* mockAsyncIterable<T>(statuses: T[]): AsyncIterable<T> {
+    for (const status of statuses) {
+      yield status;
+    }
+  }
 
   it('should ensure create method waits till a transaction response is given', async () => {
     const destination = Wallet.generate({
@@ -202,4 +220,60 @@ describe('TransactionSummary', () => {
 
     cleanup();
   }, 18500);
+
+  it('should throw error for a SqueezedOut status update (submitAndAwait)', async () => {
+    const destination = Wallet.generate({
+      provider,
+    });
+
+    const txRequest = await adminWallet.createTransfer(destination.address, 100, BaseAssetId);
+
+    const submitAndAwaitUpdate: GqlSubmitAndAwaitSubscription = {
+      __typename: 'Subscription',
+      submitAndAwait: {
+        __typename: 'SqueezedOutStatus',
+        type: 'SqueezedOutStatus',
+        reason: 'Transaction removed.',
+      },
+    };
+
+    const submitAndAwait = vi
+      .spyOn(provider.operations, 'submitAndAwait')
+      .mockReturnValueOnce(mockAsyncIterable([submitAndAwaitUpdate]));
+
+    await expectToThrowFuelError(
+      async () => adminWallet.sendTransaction(txRequest, { awaitExecution: true }),
+      new FuelError(
+        ErrorCode.TRANSACTION_SQUEEZED_OUT,
+        'Transaction Squeezed Out with reason: Transaction removed.'
+      )
+    );
+
+    expect(submitAndAwait).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw error for a SqueezedOut status update (Transaction Response)', async () => {
+    const statusChangeUpdate: GqlStatusChangeSubscription = {
+      __typename: 'Subscription',
+      statusChange: {
+        __typename: 'SqueezedOutStatus',
+        type: 'SqueezedOutStatus',
+        reason: 'Transaction removed.',
+      },
+    };
+
+    const statusChange = vi
+      .spyOn(provider.operations, 'statusChange')
+      .mockReturnValueOnce(mockAsyncIterable([statusChangeUpdate]));
+
+    await expectToThrowFuelError(
+      async () => TransactionResponse.create(getRandomB256(), provider),
+      new FuelError(
+        ErrorCode.TRANSACTION_SQUEEZED_OUT,
+        'Transaction Squeezed Out with reason: Transaction removed.'
+      )
+    );
+
+    expect(statusChange).toHaveBeenCalledTimes(1);
+  });
 });
