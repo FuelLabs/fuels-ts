@@ -5,9 +5,9 @@ import { bn } from '@fuel-ts/math';
 
 import { U32_MAX } from '../../../../test/utils/constants';
 
+import { BigNumberCoder } from './BigNumberCoder';
 import { BooleanCoder } from './BooleanCoder';
 import { StructCoder } from './StructCoder';
-import { U64Coder } from './U64Coder';
 
 /**
  * @group node
@@ -15,7 +15,10 @@ import { U64Coder } from './U64Coder';
  */
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
-  const coder = new StructCoder(STRUCT_NAME, { a: new BooleanCoder(), b: new U64Coder() });
+  const coder = new StructCoder(STRUCT_NAME, {
+    a: new BooleanCoder(),
+    b: new BigNumberCoder('u64'),
+  });
 
   it('should encode a struct containing a boolean and number', () => {
     const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 255, 255, 255, 255]);

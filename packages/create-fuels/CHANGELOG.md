@@ -1,5 +1,13 @@
 # create-fuels
 
+## 0.76.0
+
+### Patch Changes
+
+- enable auto-install of dependencies in create-fuels, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1825](https://github.com/FuelLabs/fuels-ts/pull/1825))
+- 🐞 fix tailwind syntax error in create-fuels template, by [@red-haze-dev](https://github.com/red-haze-dev) (See [#1816](https://github.com/FuelLabs/fuels-ts/pull/1816))
+- 🐞 fix `create-fuels` crashing when being run, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1823](https://github.com/FuelLabs/fuels-ts/pull/1823))
+
 ## 0.75.0
 
 ### Minor Changes

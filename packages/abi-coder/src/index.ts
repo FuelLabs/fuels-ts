@@ -12,7 +12,6 @@ export { StdStringCoder } from './encoding/coders/v0/StdStringCoder';
 export { StringCoder } from './encoding/coders/v0/StringCoder';
 export { StructCoder } from './encoding/coders/v0/StructCoder';
 export { TupleCoder } from './encoding/coders/v0/TupleCoder';
-export { U64Coder } from './encoding/coders/v0/U64Coder';
 export { VecCoder } from './encoding/coders/v0/VecCoder';
 export type { FunctionFragment } from './FunctionFragment';
 export { Interface } from './Interface';
@@ -25,3 +24,4 @@ export {
   CONTRACT_ID_LEN,
   calculateVmTxMemory,
 } from './utils/constants';
+export { BigNumberCoder } from './encoding/coders/v0/BigNumberCoder';
