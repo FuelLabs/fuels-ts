@@ -41,7 +41,6 @@ fragment transactionStatusFragment on TransactionStatus {
 fragment transactionFragment on Transaction {
   id
   rawPayload
-  gasPrice
   status {
     ...transactionStatusFragment
   }
