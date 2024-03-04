@@ -56,7 +56,7 @@ export {
  */
 export interface BaseTransactionRequestLike {
   /** Gas price for transaction */
-  gasPrice?: BigNumberish;
+  tip?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
@@ -90,7 +90,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  gasPrice: BN;
+  tip: BN;
   /** Block until which tx cannot be included */
   maturity: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
@@ -110,7 +110,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param baseTransactionRequest - Optional object containing properties to initialize the transaction request.
    */
   constructor({
-    gasPrice,
+    tip,
     maturity,
     maxFee,
     witnessLimit,
@@ -118,7 +118,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = bn(gasPrice);
+    this.tip = bn(tip);
     this.maturity = maturity ?? 0;
     this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
     this.maxFee = maxFee ? bn(maxFee) : undefined;
@@ -131,9 +131,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     let policyTypes = 0;
     const policies: Policy[] = [];
 
-    if (req.gasPrice) {
-      policyTypes += PolicyType.GasPrice;
-      policies.push({ data: req.gasPrice, type: PolicyType.GasPrice });
+    if (req.tip) {
+      policyTypes += PolicyType.Tip;
+      policies.push({ data: req.tip, type: PolicyType.Tip });
     }
     if (req.witnessLimit) {
       policyTypes += PolicyType.WitnessLimit;
