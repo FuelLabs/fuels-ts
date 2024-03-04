@@ -503,7 +503,10 @@ export class Account extends AbstractAccount {
    */
   async signTransaction(hashedTransaction: string): Promise<string> {
     if (!this._connector) {
-      throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign transactions.');
+      throw new FuelError(
+        ErrorCode.MISSING_CONNECTOR,
+        'A connector is required to sign transactions.'
+      );
     }
     return this._connector.signTransaction(this.address.toString(), hashedTransaction);
   }
