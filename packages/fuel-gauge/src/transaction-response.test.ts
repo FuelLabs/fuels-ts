@@ -1,9 +1,6 @@
-import type {
-  GqlStatusChangeSubscription,
-  GqlSubmitAndAwaitSubscription,
-} from '@fuel-ts/account/dist/providers/__generated__/operations';
+import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from 'fuels';
 import {
@@ -14,7 +11,7 @@ import {
   Wallet,
   randomBytes,
   WalletUnlocked,
-  getRandomB256,
+  ScriptTransactionRequest,
 } from 'fuels';
 import type { MockInstance } from 'vitest';
 
@@ -103,13 +100,6 @@ describe('TransactionResponse', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
-
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async function* mockAsyncIterable<T>(statuses: T[]): AsyncIterable<T> {
-    for (const status of statuses) {
-      yield status;
-    }
-  }
 
   it('should ensure create method waits till a transaction response is given', async () => {
     const destination = Wallet.generate({
@@ -221,59 +211,75 @@ describe('TransactionResponse', () => {
     cleanup();
   }, 18500);
 
-  it('should throw error for a SqueezedOut status update (submitAndAwait)', async () => {
-    const destination = Wallet.generate({
-      provider,
+  it('should throw error for a SqueezedOut status update [waitForResult]', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      /**
+       * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
+       * before the waitForResult (provider.operations.statusChange) call is made
+       *  */
+      args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
+      loggingEnabled: false,
     });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
-    const txRequest = await adminWallet.createTransfer(destination.address, 100, BaseAssetId);
-
-    const submitAndAwaitUpdate: GqlSubmitAndAwaitSubscription = {
-      __typename: 'Subscription',
-      submitAndAwait: {
-        __typename: 'SqueezedOutStatus',
-        type: 'SqueezedOutStatus',
-        reason: 'Transaction removed.',
-      },
-    };
-
-    const submitAndAwait = vi
-      .spyOn(provider.operations, 'submitAndAwait')
-      .mockReturnValueOnce(mockAsyncIterable([submitAndAwaitUpdate]));
-
-    await expectToThrowFuelError(
-      async () => adminWallet.sendTransaction(txRequest, { awaitExecution: true }),
-      new FuelError(
-        ErrorCode.TRANSACTION_SQUEEZED_OUT,
-        'Transaction Squeezed Out with reason: Transaction removed.'
-      )
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
     );
 
-    expect(submitAndAwait).toHaveBeenCalledTimes(1);
+    const request = new ScriptTransactionRequest();
+
+    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+
+    request.addResources(resources);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
+
+    const response = await nodeProvider.sendTransaction(request);
+
+    await expectToThrowFuelError(
+      async () => {
+        await response.waitForResult();
+      },
+      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+    );
+
+    cleanup();
   });
 
-  it('should throw error for a SqueezedOut status update (Transaction Response)', async () => {
-    const statusChangeUpdate: GqlStatusChangeSubscription = {
-      __typename: 'Subscription',
-      statusChange: {
-        __typename: 'SqueezedOutStatus',
-        type: 'SqueezedOutStatus',
-        reason: 'Transaction removed.',
-      },
-    };
+  it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      /**
+       * --tx-pool-ttl 1ms is possible here because the transaction gets squeezed out during the active subscription
+       *  */
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '1ms'],
+      loggingEnabled: false,
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
-    const statusChange = vi
-      .spyOn(provider.operations, 'statusChange')
-      .mockReturnValueOnce(mockAsyncIterable([statusChangeUpdate]));
-
-    await expectToThrowFuelError(
-      async () => TransactionResponse.create(getRandomB256(), provider),
-      new FuelError(
-        ErrorCode.TRANSACTION_SQUEEZED_OUT,
-        'Transaction Squeezed Out with reason: Transaction removed.'
-      )
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
     );
 
-    expect(statusChange).toHaveBeenCalledTimes(1);
+    const request = new ScriptTransactionRequest();
+
+    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+
+    request.addResources(resources);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
+
+    await expectToThrowFuelError(
+      async () => {
+        await nodeProvider.sendTransaction(request, { awaitExecution: true });
+      },
+      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+    );
+    cleanup();
   });
 });
