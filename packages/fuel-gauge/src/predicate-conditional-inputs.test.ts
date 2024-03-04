@@ -42,7 +42,7 @@ describe('PredicateConditionalInputs', () => {
       [500_000, ASSET_A],
     ]);
 
-    const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
+    const predicate = new Predicate(predicateBytecode, provider, abiJSON, undefined, {
       MAKER: aliceWallet.address.toB256(),
     });
 
@@ -119,7 +119,7 @@ describe('PredicateConditionalInputs', () => {
       [500_000, ASSET_B],
     ]);
 
-    const predicate = new Predicate(predicateBytecode, provider, abiJSON, {
+    const predicate = new Predicate(predicateBytecode, provider, abiJSON, undefined, {
       MAKER: aliceWallet.address.toB256(),
     });
 
