@@ -321,7 +321,6 @@ export default class Provider {
   }
 
   /**
-
    * Constructor to initialize a Provider.
    *
    * @param url - GraphQL endpoint of the Fuel node
