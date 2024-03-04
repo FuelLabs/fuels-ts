@@ -118,7 +118,6 @@ type Coin {
   owner: Address!
   amount: U64!
   assetId: AssetId!
-  maturity: U32!
 
   """
   TxPointer - the height of the block this coin was created in
@@ -523,7 +522,6 @@ type InputCoin {
   assetId: AssetId!
   txPointer: TxPointer!
   witnessIndex: Int!
-  maturity: U32!
   predicateGasUsed: U64!
   predicate: HexString!
   predicateData: HexString!
@@ -799,7 +797,7 @@ type PoAConsensus {
 }
 
 type Policies {
-  gasPrice: U64
+  tip: U64
   witnessLimit: U64
   maturity: U32
   maxFee: U64
@@ -1144,7 +1142,6 @@ type Transaction {
   inputContracts: [ContractId!]
   inputContract: InputContract
   policies: Policies
-  gasPrice: U64
   scriptGasLimit: U64
   maturity: U32
   mintAmount: U64
