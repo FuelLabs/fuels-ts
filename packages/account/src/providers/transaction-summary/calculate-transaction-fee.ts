@@ -88,7 +88,6 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     txBytesSize: transactionBytes.length,
   });
 
-  const gasPrice = bn(policies.find((policy) => policy.type === PolicyType.GasPrice)?.data);
   const witnessLimit = policies.find((policy) => policy.type === PolicyType.WitnessLimit)?.data as
     | BN
     | undefined;
@@ -103,9 +102,10 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     witnessLimit,
   });
 
-  const feeFromGasUsed = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
-  const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
-  const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor);
+  // TODO: fix gas estimation
+  const feeFromGasUsed = calculatePriceWithFactor(gasUsed, bn(0), gasPriceFactor);
+  const minFee = calculatePriceWithFactor(minGas, bn(0), gasPriceFactor);
+  const maxFee = calculatePriceWithFactor(maxGas, bn(0), gasPriceFactor);
   const fee = minFee.add(feeFromGasUsed);
 
   return {
