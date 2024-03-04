@@ -97,10 +97,6 @@ describe('TransactionResponse', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('should ensure create method waits till a transaction response is given', async () => {
     const destination = Wallet.generate({
       provider,
