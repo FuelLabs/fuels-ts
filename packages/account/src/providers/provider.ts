@@ -1,7 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import { BN, bn, max } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -826,8 +826,7 @@ export default class Provider {
   > {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
+    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -882,9 +881,6 @@ export default class Provider {
        */
       // Calculate the gasLimit again as we insert a fake UTXO and signer
 
-      txRequestClone.gasPrice = bn(0);
-      txRequestClone.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
-
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.estimateTxDependencies(txRequestClone);
 
@@ -898,18 +894,27 @@ export default class Provider {
 
     const usedFee = calculatePriceWithFactor(
       gasUsed,
-      gasPrice,
+      minGasPrice,
       gasPriceFactor
     ).normalizeZeroToOne();
-    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
-    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+    const minFee = calculatePriceWithFactor(
+      minGas,
+      minGasPrice,
+      gasPriceFactor
+    ).normalizeZeroToOne();
+    const maxFee = calculatePriceWithFactor(
+      maxGas,
+      minGasPrice,
+      gasPriceFactor
+    ).normalizeZeroToOne();
 
     return {
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       minGasPrice,
-      gasPrice,
+      // TODO: Validate if we need to keeping returning gasPrice here
+      gasPrice: minGasPrice,
       minGas,
       maxGas,
       usedFee,
