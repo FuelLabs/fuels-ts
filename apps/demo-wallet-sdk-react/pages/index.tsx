@@ -17,7 +17,7 @@ export default function Home() {
   const { isConnected } = useIsConnected();
   const { account } = useAccount();
   const { balance } = useBalance({
-    address: account,
+    address: account as string,
   });
 
   return (
