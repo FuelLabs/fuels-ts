@@ -33,7 +33,7 @@ export type CallParams = Partial<{
  */
 // #region transaction-params
 export type TxParams = Partial<{
-  gasPrice: BigNumberish;
+  tip: BigNumberish;
   gasLimit: BigNumberish;
   maturity?: number;
   maxFee?: BigNumberish;
@@ -91,5 +91,4 @@ export type InvocationScopeLike<T = unknown> = {
  */
 export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
-  gasPrice: BigNumberish;
 }>;

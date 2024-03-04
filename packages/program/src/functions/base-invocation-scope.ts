@@ -12,7 +12,7 @@ import type {
   AbstractProgram,
 } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
-import { bn, toNumber } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
@@ -216,11 +216,11 @@ export class BaseInvocationScope<TReturn = any> {
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
+  // TODO: Validate if options param is still needed
   async getTransactionCost(options?: TransactionCostOptions) {
     const provider = this.getProvider();
 
     const request = await this.getTransactionRequest();
-    request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
       resourcesOwner: this.program.account as AbstractAccount,
     });
@@ -239,13 +239,12 @@ export class BaseInvocationScope<TReturn = any> {
     const {
       maxFee,
       gasUsed,
-      minGasPrice,
       estimatedInputs,
       outputVariables,
       missingContractIds,
       requiredQuantities,
     } = await this.getTransactionCost();
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
+    this.setDefaultTxParams(transactionRequest, gasUsed);
 
     // Clean coin inputs before add new coins to the request
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
@@ -277,11 +276,8 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
-    const { minGasPrice } = this.getProvider().getGasConfig();
-
-    request.gasPrice = bn(txParams.gasPrice || request.gasPrice || minGasPrice);
+    request.tip = bn(txParams.tip || request.tip);
     request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
-
     request.maxFee = txParams.maxFee ? bn(txParams.maxFee) : request.maxFee;
     request.witnessLimit = txParams.witnessLimit ? bn(txParams.witnessLimit) : request.witnessLimit;
     request.maturity = txParams.maturity || request.maturity;
@@ -430,17 +426,12 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   * In case the gasLimit is *not* set by the user, this method sets a default value.
    */
-  private setDefaultTxParams(
-    transactionRequest: ScriptTransactionRequest,
-    minGasPrice: BN,
-    gasUsed: BN
-  ) {
+  private setDefaultTxParams(transactionRequest: ScriptTransactionRequest, gasUsed: BN) {
     const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
-    const gasPriceSpecified = !!this.txParameters?.gasPrice;
 
-    const { gasLimit, gasPrice } = transactionRequest;
+    const { gasLimit } = transactionRequest;
 
     if (!gasLimitSpecified) {
       transactionRequest.gasLimit = gasUsed;
@@ -448,15 +439,6 @@ export class BaseInvocationScope<TReturn = any> {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
-
-    if (!gasPriceSpecified) {
-      transactionRequest.gasPrice = minGasPrice;
-    } else if (gasPrice.lt(minGasPrice)) {
-      throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
-        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
       );
     }
   }
