@@ -108,7 +108,6 @@ export abstract class FuelConnector extends EventEmitter {
    * Should start the sign transaction process and return
    * the signed transaction.
    *
-   * Why do we need address, is it not the address of the account?
    * @param address - The address to sign the transaction
    * @param message - The transaction to sign
    *
