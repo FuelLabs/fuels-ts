@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.76.0
+
+### Minor Changes
+
+- Add the DateTime class, which allows for the conversion between common date time formats, by [@petertonysmith94](https://github.com/petertonysmith94) (See [#1627](https://github.com/FuelLabs/fuels-ts/pull/1627))
+
+### Patch Changes
+
+- Add method `addTransfer` to `BaseInvocationScope`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1810](https://github.com/FuelLabs/fuels-ts/pull/1810))
+
+## 0.75.0
+
+### Minor Changes
+
+- - Add `outputVariables` and `missingContractIds` to the return of `estimateTxDependencies`
+  - Removed `estimatedOutputs` from return of `getTransactionCost`
+  - Add `outputVariables` and `missingContractIds` to the return of `getTransactionCost`
+  - Avoid reassigning `inputs` and `outputs` from the estimated TX at `BaseInvocationScope`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [`4bee7751`](https://github.com/FuelLabs/fuels-ts/commit/4bee7751f89c88f5e623c676b157b4a4a515b09b))
+- - For a contract call, reduced the number of dry run calls before the call from 4 to 1
+  - For a contract simulation, reduced the number of dry run calls before the simulation from 3 to 1
+  - For a transfer from an account, reduced the number of dry run calls from 2 to 1
+  - Optimized predicate estimation so that there are no calls to the node if all predicates in a transaction have been estimated
+  - `Predicate.estimateTxDependencies` now returns receipts which are used for the purposes of the optimizations mentioned above
+  - `BaseInvocationScope.fundWithRequiredCoins` now calculates the `fee` parameter internally so it was removed from the function signature, by [@nedsalk](https://github.com/nedsalk) (See [#1767](https://github.com/FuelLabs/fuels-ts/pull/1767))
+- 🐞 fix assemble of transfer operations, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1787](https://github.com/FuelLabs/fuels-ts/pull/1787))
+
+### Patch Changes
+
+- exports InvocationCallResult, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1765](https://github.com/FuelLabs/fuels-ts/pull/1765))
+- 🐞 Fixed subscriptions hanging when not closed by user even after connection is closed, by [@nedsalk](https://github.com/nedsalk) (See [#1793](https://github.com/FuelLabs/fuels-ts/pull/1793))
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+- ✨ feat: migrate over @fuels/assets package into the TS SDK, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1747](https://github.com/FuelLabs/fuels-ts/pull/1747))
+- remove unused connectors types, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1792](https://github.com/FuelLabs/fuels-ts/pull/1792))
+
 ## 0.74.0
 
 ### Minor Changes

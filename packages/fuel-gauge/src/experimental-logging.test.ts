@@ -24,9 +24,8 @@ beforeAll(async () => {
   );
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
-  const versionedAbi = { encoding: 1, ...abi };
 
-  contractInstance = await setup({ contractBytecode, abi: versionedAbi });
+  contractInstance = await setup({ contractBytecode, abi });
 
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
@@ -87,6 +86,14 @@ describe('Experimental Logging', () => {
       .log_u64(expected)
       .txParams({ gasPrice, gasLimit: 10_000 })
       .call();
+
+    expect(bn(logs[0]).toNumber()).toStrictEqual(expected);
+  });
+
+  it('logs u256', async () => {
+    const expected = U32_MAX + 1;
+
+    const { logs } = await contractInstance.functions.log_u256(expected).call();
 
     expect(bn(logs[0]).toNumber()).toStrictEqual(expected);
   });

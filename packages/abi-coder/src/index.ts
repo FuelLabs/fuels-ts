@@ -1,22 +1,21 @@
-export { Coder, InputValue, DecodedValue } from './coders/abstract-coder';
-export { ArrayCoder } from './coders/v0/array';
-export { B256Coder } from './coders/v0/b256';
-export { B512Coder } from './coders/v0/b512';
-export { BooleanCoder } from './coders/v0/boolean';
-export { ByteCoder } from './coders/v0/byte';
-export { EnumCoder } from './coders/v0/enum';
-export { OptionCoder } from './coders/v0/option';
-export { NumberCoder } from './coders/v0/number';
-export { RawSliceCoder } from './coders/v0/raw-slice';
-export { StdStringCoder } from './coders/v0/stdString';
-export { StringCoder } from './coders/v0/string';
-export { StructCoder } from './coders/v0/struct';
-export { TupleCoder } from './coders/v0/tuple';
-export { U64Coder } from './coders/v0/u64';
-export { VecCoder } from './coders/v0/vec';
-export type { FunctionFragment } from './function-fragment';
-export { Interface } from './interface';
-export { JsonAbi } from './json-abi';
+export { Coder, InputValue, DecodedValue } from './encoding/coders/AbstractCoder';
+export { ArrayCoder } from './encoding/coders/v0/ArrayCoder';
+export { B256Coder } from './encoding/coders/v0/B256Coder';
+export { B512Coder } from './encoding/coders/v0/B512Coder';
+export { BooleanCoder } from './encoding/coders/v0/BooleanCoder';
+export { ByteCoder } from './encoding/coders/v0/ByteCoder';
+export { EnumCoder } from './encoding/coders/v0/EnumCoder';
+export { OptionCoder } from './encoding/coders/v0/OptionCoder';
+export { NumberCoder } from './encoding/coders/v0/NumberCoder';
+export { RawSliceCoder } from './encoding/coders/v0/RawSliceCoder';
+export { StdStringCoder } from './encoding/coders/v0/StdStringCoder';
+export { StringCoder } from './encoding/coders/v0/StringCoder';
+export { StructCoder } from './encoding/coders/v0/StructCoder';
+export { TupleCoder } from './encoding/coders/v0/TupleCoder';
+export { VecCoder } from './encoding/coders/v0/VecCoder';
+export type { FunctionFragment } from './FunctionFragment';
+export { Interface } from './Interface';
+export { JsonAbi } from './types/JsonAbi';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
@@ -24,4 +23,5 @@ export {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   calculateVmTxMemory,
-} from './constants';
+} from './utils/constants';
+export { BigNumberCoder } from './encoding/coders/v0/BigNumberCoder';

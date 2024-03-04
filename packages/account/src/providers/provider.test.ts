@@ -7,7 +7,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { arrayify, hexlify } from '@fuel-ts/utils';
+import { DateTime, arrayify, hexlify } from '@fuel-ts/utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -25,8 +25,7 @@ import type {
 } from './transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
-import { fromTai64ToDate } from './transaction-summary';
-import { fromTai64ToUnix, fromUnixToTai64, sleep } from './utils';
+import { sleep } from './utils';
 import * as gasMod from './utils/gas';
 
 afterEach(() => {
@@ -293,8 +292,8 @@ describe('Provider', () => {
 
     expect(producedBlock).toBeDefined();
 
-    const oldest = new Date(fromTai64ToDate(timeLastBlockProduced || ''));
-    const newest = new Date(fromTai64ToDate(producedBlock?.time || ''));
+    const oldest: Date = DateTime.fromTai64(timeLastBlockProduced);
+    const newest: Date = DateTime.fromTai64(producedBlock?.time || DateTime.TAI64_NULL);
 
     expect(newest >= oldest).toBeTruthy();
     // #endregion Provider-produce-blocks
@@ -312,9 +311,9 @@ describe('Provider', () => {
     }
     const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
       block;
-    const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
+    const latestBlockUnixTimestampBeforeProduce = DateTime.fromTai64(
       latestBlockTimestampBeforeProduce
-    );
+    ).toUnixMilliseconds();
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
@@ -340,7 +339,7 @@ describe('Provider', () => {
     }));
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
       height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: fromUnixToTai64(startTime + i * blockTimeInterval),
+      time: DateTime.fromUnixMilliseconds(startTime + i * blockTimeInterval).toTai64(),
     }));
     expect(producedBlocks).toEqual(expectedBlocks);
   });

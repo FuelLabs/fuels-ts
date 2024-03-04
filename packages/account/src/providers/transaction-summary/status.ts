@@ -35,7 +35,7 @@ type IProcessGraphqlStatusResponse = Pick<
 
 /** @hidden */
 export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionStatus) => {
-  let time: Time;
+  let time: Time | undefined;
   let blockId: BlockId | undefined;
   let status: TransactionStatus | undefined;
 

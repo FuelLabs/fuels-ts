@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.76.0
+
+### Minor Changes
+
+- ✨ feat: add missing support for the `u256` type
+  The TS SDK is now capable of handling `u256` types, and hence capable of interacting (encoding/decoding) with any Sway programs that use the `u256` type.
+  **Breaking Change**:
+  - The `U64Coder` was removed in favour of the new `BigNumberCoder` which handles the encoding/decoding logic for both `u64` and `u256`. (`abi-coder` package), by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1799](https://github.com/FuelLabs/fuels-ts/pull/1799))
+
+## 0.75.0
+
+### Minor Changes
+
+- Introduce the v1 encoding scheme and use correct file naming conventions for `@fuel-ts/abi-coder`, by [@danielbate](https://github.com/danielbate) (See [#1780](https://github.com/FuelLabs/fuels-ts/pull/1780))
+
+### Patch Changes
+
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
 ## 0.74.0
 
 ### Minor Changes

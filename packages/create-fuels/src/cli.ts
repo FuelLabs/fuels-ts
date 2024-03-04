@@ -13,7 +13,7 @@ const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
 
-type ProgramsToInclude = {
+export type ProgramsToInclude = {
   contract: boolean;
   predicate: boolean;
   script: boolean;
@@ -56,15 +56,26 @@ async function promptForPackageManager() {
   return packageManagerInput.packageManager as string;
 }
 
-async function promptForProgramsToInclude() {
+async function promptForProgramsToInclude({
+  forceDisablePrompts = false,
+}: {
+  forceDisablePrompts?: boolean;
+}) {
+  if (forceDisablePrompts) {
+    return {
+      contract: false,
+      predicate: false,
+      script: false,
+    };
+  }
   const programsToIncludeInput = await prompts({
     type: 'multiselect',
     name: 'programsToInclude',
     message: 'Which Sway programs do you want?',
     choices: [
       { title: 'Contract', value: 'contract', selected: true },
-      { title: 'Predicate', value: 'predicate' },
-      { title: 'Script', value: 'script' },
+      { title: 'Predicate', value: 'predicate', selected: true },
+      { title: 'Script', value: 'script', selected: true },
     ],
     instructions: false,
   });
@@ -88,15 +99,33 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   writeFileSync(envFilePath, newFileContents);
 }
 
-export const runScaffoldCli = async (
-  explicitProjectPath?: string,
-  explicitPackageManger?: string,
-  shouldInstallDeps = true,
-  explicitProgramsToInclude?: ProgramsToInclude
-) => {
-  new Command(packageJson.name).version(packageJson.version);
+export const setupProgram = () => {
+  const program = new Command(packageJson.name)
+    .version(packageJson.version)
+    .arguments('[projectDirectory]')
+    .option('-c, --contract', 'Include contract program')
+    .option('-p, --predicate', 'Include predicate program')
+    .option('-s, --script', 'Include script program')
+    .option('--pnpm', 'Use pnpm as the package manager')
+    .option('--npm', 'Use npm as the package manager')
+    .addHelpCommand()
+    .showHelpAfterError(true);
+  return program;
+};
 
-  const projectPath = explicitProjectPath || (await promptForProjectPath());
+export const runScaffoldCli = async ({
+  program,
+  args = process.argv,
+  shouldInstallDeps = false,
+  forceDisablePrompts = false,
+}: {
+  program: Command;
+  args: string[];
+  shouldInstallDeps?: boolean;
+  forceDisablePrompts?: boolean;
+}) => {
+  program.parse(args);
+  const projectPath = program.args[0] ?? (await promptForProjectPath());
   if (existsSync(projectPath)) {
     throw new Error(
       `A folder already exists at ${projectPath}. Please choose a different project name.`
@@ -106,10 +135,37 @@ export const runScaffoldCli = async (
   if (!projectPath) {
     throw new Error('Please specify a project directory.');
   }
-  const packageManager = explicitPackageManger || (await promptForPackageManager());
 
-  const programsToInclude: ProgramsToInclude =
-    explicitProgramsToInclude || (await promptForProgramsToInclude());
+  const cliPackageManagerChoices = {
+    pnpm: program.opts().pnpm,
+    npm: program.opts().npm,
+  };
+  if (Object.values(cliPackageManagerChoices).filter(Boolean).length > 1) {
+    throw new Error('You can only specify one package manager.');
+  }
+  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
+
+  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
+
+  if (!packageManager) {
+    packageManager = 'pnpm';
+  }
+
+  const cliProgramsToInclude = {
+    contract: program.opts().contract,
+    predicate: program.opts().predicate,
+    script: program.opts().script,
+  };
+  const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
+
+  let programsToInclude: ProgramsToInclude;
+  if (hasAnyCliProgramsToInclude) {
+    programsToInclude = cliProgramsToInclude;
+  } else {
+    programsToInclude = await promptForProgramsToInclude({
+      forceDisablePrompts,
+    });
+  }
 
   if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
     throw new Error('You must include at least one Sway program.');

@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.76.0
+
+### Patch Changes
+
+- Add method `addTransfer` to `BaseInvocationScope`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1810](https://github.com/FuelLabs/fuels-ts/pull/1810))
+
+## 0.75.0
+
+### Minor Changes
+
+- - Add `outputVariables` and `missingContractIds` to the return of `estimateTxDependencies`
+  - Removed `estimatedOutputs` from return of `getTransactionCost`
+  - Add `outputVariables` and `missingContractIds` to the return of `getTransactionCost`
+  - Avoid reassigning `inputs` and `outputs` from the estimated TX at `BaseInvocationScope`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [`4bee7751`](https://github.com/FuelLabs/fuels-ts/commit/4bee7751f89c88f5e623c676b157b4a4a515b09b))
+- - For a contract call, reduced the number of dry run calls before the call from 4 to 1
+  - For a contract simulation, reduced the number of dry run calls before the simulation from 3 to 1
+  - For a transfer from an account, reduced the number of dry run calls from 2 to 1
+  - Optimized predicate estimation so that there are no calls to the node if all predicates in a transaction have been estimated
+  - `Predicate.estimateTxDependencies` now returns receipts which are used for the purposes of the optimizations mentioned above
+  - `BaseInvocationScope.fundWithRequiredCoins` now calculates the `fee` parameter internally so it was removed from the function signature, by [@nedsalk](https://github.com/nedsalk) (See [#1767](https://github.com/FuelLabs/fuels-ts/pull/1767))
+
+### Patch Changes
+
+- exports InvocationCallResult, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1765](https://github.com/FuelLabs/fuels-ts/pull/1765))
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
 ## 0.74.0
 
 ### Minor Changes

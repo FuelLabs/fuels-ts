@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.76.0
+
+## 0.75.0
+
+### Patch Changes
+
+- 🐞 Fixed encoding/decoding of specific parts of a transaction and its inputs, by [@jasmcaus](https://github.com/jasmcaus) (See [#1783](https://github.com/FuelLabs/fuels-ts/pull/1783))
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
 ## 0.74.0
 
 ## 0.73.0

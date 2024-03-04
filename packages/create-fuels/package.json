@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.74.0",
+  "version": "0.76.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@fuel-ts/versions": "workspace:*",
-    "@types/prompts": "^2.4.8"
+    "@types/prompts": "^2.4.8",
+    "glob": "^10.2.6"
   }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, BigNumberCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
@@ -55,13 +55,13 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
 
     parts.push(new B256Coder().encode(value.from));
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new U64Coder().encode(value.gas));
-    parts.push(new U64Coder().encode(value.param1));
-    parts.push(new U64Coder().encode(value.param2));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.gas));
+    parts.push(new BigNumberCoder('u64').encode(value.param1));
+    parts.push(new BigNumberCoder('u64').encode(value.param2));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -74,19 +74,19 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
     const from = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const gas = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const param1 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const param2 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -128,9 +128,9 @@ export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new U64Coder().encode(value.val));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.val));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -141,11 +141,11 @@ export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -186,11 +186,11 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new U64Coder().encode(value.ptr));
-    parts.push(new U64Coder().encode(value.len));
+    parts.push(new BigNumberCoder('u64').encode(value.ptr));
+    parts.push(new BigNumberCoder('u64').encode(value.len));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -201,15 +201,15 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const ptr = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -250,9 +250,9 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new U64Coder().encode(value.reason));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.reason));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
     parts.push(new B256Coder().encode(value.contractId));
 
     return concat(parts);
@@ -264,11 +264,11 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const reason = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const contractId = decoded;
@@ -308,9 +308,9 @@ export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new U64Coder().encode(value.val));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.val));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -321,11 +321,11 @@ export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -368,12 +368,12 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new U64Coder().encode(value.val0));
-    parts.push(new U64Coder().encode(value.val1));
-    parts.push(new U64Coder().encode(value.val2));
-    parts.push(new U64Coder().encode(value.val3));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.val0));
+    parts.push(new BigNumberCoder('u64').encode(value.val1));
+    parts.push(new BigNumberCoder('u64').encode(value.val2));
+    parts.push(new BigNumberCoder('u64').encode(value.val3));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -384,17 +384,17 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val0 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val1 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val2 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val3 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -442,13 +442,13 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new U64Coder().encode(value.val0));
-    parts.push(new U64Coder().encode(value.val1));
-    parts.push(new U64Coder().encode(value.ptr));
-    parts.push(new U64Coder().encode(value.len));
+    parts.push(new BigNumberCoder('u64').encode(value.val0));
+    parts.push(new BigNumberCoder('u64').encode(value.val1));
+    parts.push(new BigNumberCoder('u64').encode(value.ptr));
+    parts.push(new BigNumberCoder('u64').encode(value.len));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -459,19 +459,19 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val0 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val1 = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const ptr = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -517,10 +517,10 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
 
     parts.push(new B256Coder().encode(value.from));
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -533,13 +533,13 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
     const from = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -583,10 +583,10 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
 
     parts.push(new B256Coder().encode(value.from));
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -599,13 +599,13 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     const from = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     return [
@@ -639,8 +639,8 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
   encode(value: ReceiptScriptResult): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new U64Coder().encode(value.result));
-    parts.push(new U64Coder().encode(value.gasUsed));
+    parts.push(new BigNumberCoder('u64').encode(value.result));
+    parts.push(new BigNumberCoder('u64').encode(value.gasUsed));
 
     return concat(parts);
   }
@@ -649,9 +649,9 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
     let decoded;
     let o = offset;
 
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const result = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const gasUsed = decoded;
 
     return [
@@ -696,7 +696,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(arrayify(value.data || '0x'));
 
     return sha256(concat(parts));
@@ -707,7 +707,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
 
     parts.push(new B256Coder().encode(value.sender));
     parts.push(new B256Coder().encode(value.recipient));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.nonce));
     parts.push(new NumberCoder('u16').encode(value.data.length));
     parts.push(new B256Coder().encode(value.digest));
@@ -724,7 +724,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     const sender = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const recipient = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
@@ -788,9 +788,9 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
 
     parts.push(new B256Coder().encode(value.subId));
     parts.push(new B256Coder().encode(value.contractId));
-    parts.push(new U64Coder().encode(value.val));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.val));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -803,11 +803,11 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
     const subId = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const contractId = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
@@ -856,9 +856,9 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
 
     parts.push(new B256Coder().encode(value.subId));
     parts.push(new B256Coder().encode(value.contractId));
-    parts.push(new U64Coder().encode(value.val));
-    parts.push(new U64Coder().encode(value.pc));
-    parts.push(new U64Coder().encode(value.is));
+    parts.push(new BigNumberCoder('u64').encode(value.val));
+    parts.push(new BigNumberCoder('u64').encode(value.pc));
+    parts.push(new BigNumberCoder('u64').encode(value.is));
 
     return concat(parts);
   }
@@ -871,11 +871,11 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
     const subId = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const contractId = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const val = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
 
     const assetId = ReceiptMintCoder.getAssetId(contractId, subId);

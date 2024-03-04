@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -70,12 +70,12 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new B256Coder().encode(value.txID));
     parts.push(new NumberCoder('u8').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('u32').encode(value.maturity));
-    parts.push(new U64Coder().encode(value.predicateGasUsed));
+    parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(value.predicateLength));
     parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
@@ -94,7 +94,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
@@ -104,7 +104,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateLength = decoded;
@@ -262,7 +262,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(arrayify(value.data || '0x'));
 
     return sha256(concat(parts));
@@ -280,10 +280,10 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
 
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new U64Coder().encode(value.predicateGasUsed));
+    parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(data.length));
     parts.push(new NumberCoder('u32').encode(value.predicateLength));
     parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
@@ -310,13 +310,13 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const sender = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const recipient = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const dataLength = decoded;

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.76.0
+
+## 0.75.0
+
+### Patch Changes
+
+- Use interal utilities for arrayify, hexlify, concat and BytesLike, by [@danielbate](https://github.com/danielbate) (See [#1775](https://github.com/FuelLabs/fuels-ts/pull/1775))
+
 ## 0.74.0
 
 ### Patch Changes
