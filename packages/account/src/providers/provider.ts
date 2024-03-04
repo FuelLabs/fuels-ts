@@ -188,7 +188,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
     gasCosts,
     latestBlock: {
       id: latestBlock.id,
-      height: bn(latestBlock.header.height),
+      height: bn(latestBlock.height),
       time: latestBlock.header.time,
       transactions: latestBlock.transactions.map((i) => ({
         id: i.id,
@@ -509,7 +509,7 @@ export default class Provider {
    */
   async getBlockNumber(): Promise<BN> {
     const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.header.height, 10);
+    return bn(chain.latestBlock.height, 10);
   }
 
   /**
@@ -1087,7 +1087,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.header.height),
+      height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     };
@@ -1104,7 +1104,7 @@ export default class Provider {
 
     const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
       id: block.id,
-      height: bn(block.header.height),
+      height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
@@ -1139,7 +1139,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.header.height, 10),
+      height: bn(block.height, 10),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
