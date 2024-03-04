@@ -113,7 +113,6 @@ export default class ContractFactory {
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
-      gasPrice: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
@@ -148,7 +147,6 @@ export default class ContractFactory {
     const { requiredQuantities, maxFee } =
       await this.account.provider.getTransactionCost(transactionRequest);
 
-    transactionRequest.gasPrice = this.account.provider.getGasConfig().minGasPrice;
     transactionRequest.maxFee = this.account.provider.getGasConfig().maxGasPerTx;
 
     await this.account.fund(transactionRequest, requiredQuantities, maxFee);
