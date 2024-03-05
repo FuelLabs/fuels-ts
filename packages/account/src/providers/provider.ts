@@ -596,6 +596,13 @@ export default class Provider {
     if (awaitExecution) {
       const subscription = this.operations.submitAndAwait({ encodedTransaction });
       for await (const { submitAndAwait } of subscription) {
+        if (submitAndAwait.type === 'SqueezedOutStatus') {
+          throw new FuelError(
+            ErrorCode.TRANSACTION_SQUEEZED_OUT,
+            `Transaction Squeezed Out with reason: ${submitAndAwait.reason}`
+          );
+        }
+
         if (submitAndAwait.type !== 'SubmittedStatus') {
           break;
         }
