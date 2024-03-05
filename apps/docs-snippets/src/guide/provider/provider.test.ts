@@ -3,6 +3,10 @@ import { FUEL_NETWORK_URL, Provider, sleep } from 'fuels';
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
 }
+
+/**
+ * @group node
+ */
 describe('Provider', () => {
   it('can be given options', async () => {
     // #region provider-options
