@@ -27,6 +27,9 @@ fragment transactionStatusFragment on TransactionStatus {
     time
     reason
   }
+  ... on SqueezedOutStatus {
+    reason
+  }
 }
 
 fragment transactionFragment on Transaction {
