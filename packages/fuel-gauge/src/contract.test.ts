@@ -1118,4 +1118,36 @@ describe('Contract', () => {
     expect(finalBalance2.toNumber()).toBe(amountToTransfer2);
     expect(finalBalance3.toNumber()).toBe(amountToTransfer3);
   });
+
+  it('should throw when trying to transfer a zero or negative amount to a contract', async () => {
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    );
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const wallet = await generateTestWallet(provider, [
+      [5_000, BaseAssetId],
+      [5_000, ASSET_A],
+      [5_000, ASSET_B],
+    ]);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
+    const contract = await factory.deployContract();
+
+    await expectToThrowFuelError(
+      async () => {
+        await wallet.transferToContract(contract.id, 0, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
+
+    await expectToThrowFuelError(
+      async () => {
+        await wallet.transferToContract(contract.id, -1, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
+  });
 });
