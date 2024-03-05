@@ -1,15 +1,14 @@
 import { bufferFromString } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
-import { sha256 as ethersSha256 } from 'ethers';
 
 /**
  * @param data - The data to be hashed
  * @returns A sha256 hash of the data in hex format
  */
 export function sha256(data: BytesLike): string {
-  return hexlify(sha256AsBytes(data));
+  return hexlify(sha256AsBytes(arrayify(data)));
 }
 
 /**

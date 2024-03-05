@@ -6,6 +6,7 @@ import { SparseMerkleTree } from './sparseMerkleTree';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Sparse Merkle Tree', () => {
   it('Update and delete', () => {
