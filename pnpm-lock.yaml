@@ -1040,6 +1040,9 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/utils:
     dependencies:
