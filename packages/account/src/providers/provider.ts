@@ -213,14 +213,30 @@ export type CursorPaginationArgs = {
  * Provider initialization options
  */
 export type ProviderOptions = {
+  /**
+   * Custom fetch function to use for making requests.
+   */
   fetch?: (
     url: string,
     requestInit?: RequestInit,
     providerOptions?: Omit<ProviderOptions, 'fetch'>
   ) => Promise<Response>;
+  /**
+   * Timeout [ms] after which every request will be aborted.
+   */
   timeout?: number;
+  /**
+   * Cache UTXOs for the given time [ms].
+   */
   cacheUtxo?: number;
+  /**
+   * Retry options to use when fetching data from the node.
+   */
   retryOptions?: RetryOptions;
+  /**
+   * Middleware to modify the request before it is sent.
+   * This can be used to add headers, modify the body, etc.
+   */
   requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
 };
 
