@@ -12,6 +12,7 @@ import { globSync } from 'glob';
       'apps/demo-react-cra/**',
       'apps/demo-react-vite/**',
       'templates/**',
+      'apps/demo-wallet-sdk-react/**',
     ],
   });
 

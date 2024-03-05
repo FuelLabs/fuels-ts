@@ -215,6 +215,12 @@ export class TransactionResponse {
     });
 
     for await (const { statusChange } of subscription) {
+      if (statusChange.type === 'SqueezedOutStatus') {
+        throw new FuelError(
+          ErrorCode.TRANSACTION_SQUEEZED_OUT,
+          `Transaction Squeezed Out with reason: ${statusChange.reason}`
+        );
+      }
       if (statusChange.type !== 'SubmittedStatus') {
         break;
       }

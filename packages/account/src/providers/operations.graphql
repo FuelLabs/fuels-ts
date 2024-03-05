@@ -36,6 +36,9 @@ fragment transactionStatusFragment on TransactionStatus {
       ...receiptFragment
     }
   }
+  ... on SqueezedOutStatus {
+    reason
+  }
 }
 
 fragment transactionFragment on Transaction {
