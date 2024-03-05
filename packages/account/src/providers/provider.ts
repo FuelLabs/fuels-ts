@@ -318,10 +318,6 @@ export default class Provider {
     const { retryOptions, timeout } = options;
 
     return autoRetryFetch(async (...args) => {
-      if (options.fetch) {
-        return options.fetch(...args);
-      }
-
       const url = args[0];
       const request = args[1];
       const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
@@ -332,7 +328,7 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      return fetch(url, fullRequest);
+      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
     }, retryOptions);
   }
 

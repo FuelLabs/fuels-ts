@@ -1100,4 +1100,46 @@ describe('Provider', () => {
       'x-custom-header': 'custom-value',
     });
   });
+
+  test('custom fetch works with requestMiddleware', async () => {
+    let requestHeaders: HeadersInit | undefined;
+    await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, requestInit) => {
+        requestHeaders = requestInit?.headers;
+        return fetch(url, requestInit);
+      },
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    expect(requestHeaders).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('custom fetch works with timeout', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, requestInit) => fetch(url, requestInit),
+      timeout,
+    });
+    vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
+      sleep(timeout).then(() =>
+        fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+      )
+    );
+
+    const { error } = await safeExec(async () => {
+      await provider.getBlocks({});
+    });
+
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
+  });
 });
