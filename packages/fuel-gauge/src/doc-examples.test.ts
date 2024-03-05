@@ -429,10 +429,16 @@ describe('Doc Examples', () => {
       loggedTypes: [],
       configurables: [],
     };
+    const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    const signature1 = await wallet1.signMessage(dataToSign);
+    const signature2 = await wallet2.signMessage(dataToSign);
+    const signature3 = await wallet3.signMessage(dataToSign);
+    const signatures = [signature1, signature2, signature3];
     const predicate = new Predicate({
       bytecode: predicateTriple,
       provider,
       abi: AbiInputs,
+      inputData: [signatures],
     });
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
@@ -461,16 +467,10 @@ describe('Doc Examples', () => {
       initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
-    const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
-    const signature1 = await wallet1.signMessage(dataToSign);
-    const signature2 = await wallet2.signMessage(dataToSign);
-    const signature3 = await wallet3.signMessage(dataToSign);
-
-    const signatures = [signature1, signature2, signature3];
-
-    const tx = await predicate
-      .setInputData(signatures)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await tx.waitForResult();
 
     // check balances

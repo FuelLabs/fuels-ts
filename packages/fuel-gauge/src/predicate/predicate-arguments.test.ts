@@ -255,20 +255,17 @@ describe('Predicate', () => {
         bytecode: predicateBytesMulti,
         abi: predicateAbiMulti,
         provider,
+        inputData: [20, 30],
       });
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
-      // #region predicate-using-setData
-      // #context const predicate = new Predicate(bytecode, chainId, abi);
-      predicate.setInputData(20, 30);
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
         gasLimit: 10_000,
       });
       await tx.waitForResult();
-      // #endregion predicate-using-setData
 
       await assertBalances(
         predicate,
@@ -285,6 +282,7 @@ describe('Predicate', () => {
         bytecode: predicateBytesMulti,
         abi: predicateAbiMulti,
         provider,
+        inputData: [20, 20],
       });
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -293,9 +291,7 @@ describe('Predicate', () => {
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
       await expect(
-        predicate
-          .setInputData(20, 20)
-          .transfer(receiver.address, 50, BaseAssetId, { gasPrice, gasLimit: 10_000 })
+        predicate.transfer(receiver.address, 50, BaseAssetId, { gasPrice, gasLimit: 10_000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });

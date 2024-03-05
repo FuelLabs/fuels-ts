@@ -51,12 +51,4 @@ const predicate = new Predicate({
 });
 ```
 
-The `setData` method has also been renamed to `setInputData`, to better reflect its purpose and for consistency with the parameter on the `Predicate` constructor.
-
-```ts
-// old API
-predicate.setData(yourData);
-
-// new API
-predicate.setInputData(yourData);
-```
+The `setData` method has been removed. If you want to pass in the predicate data _after_ instantiating the `Predicate` or if you want to use a different data than the one passed in the constructor, you will have to create a new `Predicate` instance.

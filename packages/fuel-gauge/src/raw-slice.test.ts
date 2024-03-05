@@ -77,10 +77,17 @@ describe('Raw Slice Tests', () => {
     const { binHexlified: predicateRawSlice, abiContents: predicateRawSliceAbi } =
       getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_RAW_SLICE);
 
+    const bytes = [40, 41, 42];
+    const INPUT: Wrapper = {
+      inner: [bytes, bytes],
+      inner_enum: { Second: bytes },
+    };
+
     const predicate = new Predicate<MainArgs>({
       bytecode: predicateRawSlice,
       abi: predicateRawSliceAbi,
       provider: wallet.provider,
+      inputData: [INPUT],
     });
 
     // setup predicate
@@ -92,14 +99,11 @@ describe('Raw Slice Tests', () => {
 
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
-    const bytes = [40, 41, 42];
-    const INPUT: Wrapper = {
-      inner: [bytes, bytes],
-      inner_enum: { Second: bytes },
-    };
-    const tx = await predicate
-      .setInputData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await tx.waitForResult();
 
     // Check the balance of the receiver

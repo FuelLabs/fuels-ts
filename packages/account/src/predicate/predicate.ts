@@ -147,18 +147,6 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return super.simulateTransaction(transactionRequest);
   }
 
-  /**
-   * Sets input data for the predicate.
-   *
-   * @param args - Arguments for the predicate function.
-   * @returns The Predicate instance with updated predicate data.
-   */
-  setInputData<T extends ARGS>(...args: T) {
-    this.predicateArgs = args;
-
-    return this;
-  }
-
   private getPredicateData(policiesLength: number): Uint8Array {
     if (!this.predicateArgs.length) {
       return new Uint8Array();
