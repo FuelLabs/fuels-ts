@@ -29,7 +29,12 @@ describe('Predicate', () => {
     it('throws invalid transaction when input_predicate_data is required for predicate validation', async () => {
       const amountToPredicate = 200_000;
       const amountToReceiver = 50;
-      predicate = new Predicate(binHexlified, provider, abiContents, [true]);
+      predicate = new Predicate({
+        bytecode: binHexlified,
+        abi: abiContents,
+        provider,
+        inputData: [true],
+      });
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

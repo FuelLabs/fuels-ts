@@ -148,11 +148,11 @@ describe('Vector Types Validation', () => {
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
-    const predicate = new Predicate<MainArgs>(
-      predicateVectorTypes,
-      wallet.provider,
-      predicateVectorTypesAbi,
-      [
+    const predicate = new Predicate<MainArgs>({
+      bytecode: predicateVectorTypes,
+      provider: wallet.provider,
+      abi: predicateVectorTypesAbi,
+      inputData: [
         U32_VEC,
         VEC_IN_VEC,
         STRUCT_IN_VEC,
@@ -164,8 +164,8 @@ describe('Vector Types Validation', () => {
         TUPLE_IN_VEC,
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC,
-      ]
-    );
+      ],
+    });
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {

@@ -61,7 +61,13 @@ export class {{capitalizedName}}__factory {
 
     const { abi, bin } = {{capitalizedName}}__factory
 
-    const predicate = new Predicate(bin, provider, abi, predicateData, configurables);
+    const predicate = new Predicate({
+      bytecode: bin,
+      abi,
+      provider,
+      inputData: predicateData,
+      configurableConstants: configurables,
+    })
 
     return predicate;
 

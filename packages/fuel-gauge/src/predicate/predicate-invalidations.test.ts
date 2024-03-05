@@ -29,12 +29,12 @@ describe('Predicate', () => {
       [wallet, receiver] = await setupWallets();
       const amountToPredicate = 10_000;
       provider = wallet.provider;
-      predicate = new Predicate<[Validation]>(
-        predicateBytesMainArgsStruct,
+      predicate = new Predicate<[Validation]>({
+        bytecode: predicateBytesMainArgsStruct,
+        abi: predicateAbiMainArgsStruct,
         provider,
-        predicateAbiMainArgsStruct,
-        [validation]
-      );
+        inputData: [validation],
+      });
 
       predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
     });

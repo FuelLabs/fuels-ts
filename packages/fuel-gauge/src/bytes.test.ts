@@ -92,7 +92,12 @@ describe('Bytes Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    const predicate = new Predicate<MainArgs>(binHexlified, wallet.provider, abiContents, [INPUT]);
+    const predicate = new Predicate<MainArgs>({
+      bytecode: binHexlified,
+      abi: abiContents,
+      provider: wallet.provider,
+      inputData: [INPUT],
+    });
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {

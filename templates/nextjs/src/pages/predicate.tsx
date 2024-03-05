@@ -70,7 +70,7 @@ export default function PredicateExample() {
       }
 
       const tx = await predicate
-        .setData(bn(pin))
+        .setInputData(bn(pin))
         .transfer(wallet.address, amount, BaseAssetId);
       const { isStatusSuccess } = await tx.wait();
 

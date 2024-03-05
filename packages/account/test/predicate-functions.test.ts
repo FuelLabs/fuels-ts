@@ -19,13 +19,21 @@ describe('Predicate', () => {
     });
 
     it('sets predicate address for given byte code', () => {
-      const predicate = new Predicate(predicateBytecode, provider);
+      const predicate = new Predicate({
+        bytecode: predicateBytecode,
+        provider,
+      });
       expect(predicate.address.toB256()).toEqual(predicateAddress);
     });
 
     it('sets predicate data for given ABI', () => {
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
-      const predicate = new Predicate(predicateBytecode, provider, predicateAbi, [b256]);
+      const predicate = new Predicate({
+        bytecode: predicateBytecode,
+        abi: predicateAbi,
+        provider,
+        inputData: [b256],
+      });
 
       expect(predicate.predicateArgs).not.toBeUndefined();
     });
@@ -43,8 +51,12 @@ describe('Predicate', () => {
 
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate(predicateBytecode, provider, abiWithNoMain, ['NADA'], {
-          value: 1,
+        const predicate = new Predicate({
+          bytecode: predicateBytecode,
+          abi: abiWithNoMain,
+          provider,
+          inputData: ['NADA'],
+          configurableConstants: { value: 1 },
         });
       }).toThrow('Cannot use ABI without "main" function');
     });

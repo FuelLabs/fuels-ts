@@ -28,6 +28,14 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
+type PredicateConstructorArgs<T> = {
+  bytecode: BytesLike;
+  provider: Provider;
+  abi?: JsonAbi;
+  inputData?: T;
+  configurableConstants?: { [name: string]: unknown };
+};
+
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
@@ -40,22 +48,22 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   /**
    * Creates an instance of the Predicate class.
    *
-   * @param bytes - The bytes of the predicate.
+   * @param bytecode - The bytecode of the predicate.
+   * @param abi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
-   * @param jsonAbi - The JSON ABI of the predicate.
-   * @param predicateData - The predicate data.
+   * @param inputData - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
-  constructor(
-    bytes: BytesLike,
-    provider: Provider,
-    jsonAbi?: JsonAbi,
-    predicateData?: ARGS,
-    configurableConstants?: { [name: string]: unknown }
-  ) {
+  constructor({
+    bytecode,
+    abi,
+    provider,
+    inputData,
+    configurableConstants,
+  }: PredicateConstructorArgs<ARGS>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
-      bytes,
-      jsonAbi,
+      bytecode,
+      abi,
       configurableConstants
     );
     const address = Address.fromB256(getPredicateRoot(predicateBytes));
@@ -63,8 +71,8 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    if (predicateData !== undefined && predicateData.length > 0) {
-      this.predicateArgs = predicateData;
+    if (inputData !== undefined && inputData.length > 0) {
+      this.predicateArgs = inputData;
     }
   }
 
@@ -140,12 +148,12 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   }
 
   /**
-   * Sets data for the predicate.
+   * Sets input data for the predicate.
    *
    * @param args - Arguments for the predicate function.
    * @returns The Predicate instance with updated predicate data.
    */
-  setData<T extends ARGS>(...args: T) {
+  setInputData<T extends ARGS>(...args: T) {
     this.predicateArgs = args;
 
     return this;

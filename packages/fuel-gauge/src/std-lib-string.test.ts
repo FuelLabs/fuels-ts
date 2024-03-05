@@ -50,12 +50,12 @@ describe('std-lib-string Tests', () => {
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     type MainArgs = [number, number, string];
-    const predicate = new Predicate<MainArgs>(
-      predicateStdString,
-      wallet.provider,
-      predicateStdStringAbi,
-      [1, 2, 'Hello World']
-    );
+    const predicate = new Predicate<MainArgs>({
+      bytecode: predicateStdString,
+      abi: predicateStdStringAbi,
+      provider: wallet.provider,
+      inputData: [1, 2, 'Hello World'],
+    });
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {

@@ -354,7 +354,10 @@ describe('Doc Examples', () => {
 
   it('can create a predicate', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const predicate = new Predicate(testPredicateTrue, provider);
+    const predicate = new Predicate({
+      bytecode: testPredicateTrue,
+      provider,
+    });
 
     expect(predicate.address).toBeTruthy();
     expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
@@ -426,7 +429,11 @@ describe('Doc Examples', () => {
       loggedTypes: [],
       configurables: [],
     };
-    const predicate = new Predicate(predicateTriple, provider, AbiInputs);
+    const predicate = new Predicate({
+      bytecode: predicateTriple,
+      provider,
+      abi: AbiInputs,
+    });
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
     const initialPredicateBalance = await predicate.getBalance();
@@ -462,7 +469,7 @@ describe('Doc Examples', () => {
     const signatures = [signature1, signature2, signature3];
 
     const tx = await predicate
-      .setData(signatures)
+      .setInputData(signatures)
       .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
     await tx.waitForResult();
 
