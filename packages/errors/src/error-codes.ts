@@ -68,6 +68,7 @@ export enum ErrorCode {
   TRANSACTION_ERROR = 'transaction-error',
   INVALID_POLICY_TYPE = 'invalid-policy-type',
   DUPLICATED_POLICY = 'duplicated-policy',
+  TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
