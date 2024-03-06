@@ -367,6 +367,12 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    if (bn(amount).lte(0)) {
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSFER_AMOUNT,
+        'Transfer amount must be a positive number.'
+      );
+    }
     const request = await this.createTransfer(destination, amount, assetId, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
@@ -390,6 +396,13 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
+    if (bn(amount).lte(0)) {
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSFER_AMOUNT,
+        'Transfer amount must be a positive number.'
+      );
+    }
+
     const contractAddress = Address.fromAddressOrString(contractId);
 
     const { script, scriptData } = await assembleTransferToContractScript({

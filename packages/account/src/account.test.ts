@@ -1,5 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
@@ -612,5 +614,24 @@ describe('Account', () => {
       });
       await result.wait();
     }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
+  });
+
+  it('should throw when trying to transfer a zero or negative amount', async () => {
+    const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    const receiver = Wallet.generate({ provider });
+
+    await expectToThrowFuelError(
+      async () => {
+        await sender.transfer(receiver.address, 0, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
+
+    await expectToThrowFuelError(
+      async () => {
+        await sender.transfer(receiver.address, -1, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
   });
 });
