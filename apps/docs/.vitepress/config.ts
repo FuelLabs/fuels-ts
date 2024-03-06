@@ -365,6 +365,10 @@ export default defineConfig({
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
               },
+              {
+                text: 'Wallet SDK and React Hooks',
+                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
+              },
             ],
           },
           {
