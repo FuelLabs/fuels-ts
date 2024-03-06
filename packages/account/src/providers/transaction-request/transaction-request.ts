@@ -582,14 +582,21 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const updateAssetInput = (assetId: string, quantity: BN) => {
       const assetInput = findAssetInput(assetId);
 
+      // TODO: improve this logic
+      let usedQuantity = quantity;
+
+      if (assetId === BaseAssetId) {
+        usedQuantity = bn('1000000000000000000');
+      }
+
       if (assetInput && 'assetId' in assetInput) {
         assetInput.id = generateId();
-        assetInput.amount = quantity;
+        assetInput.amount = usedQuantity;
       } else {
         this.addResources([
           {
             id: generateId(),
-            amount: quantity,
+            amount: usedQuantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),
             blockCreated: bn(1),
