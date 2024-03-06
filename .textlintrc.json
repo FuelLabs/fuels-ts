@@ -5,7 +5,10 @@
     "no-dead-link": {
       "ignoreRedirects": true,
       "checkRelative": false,
-      "ignore": ["https://learnmeabitcoin.com/**"]
+      "ignore": [
+        "https://learnmeabitcoin.com/**",
+        "https://faucet-beta-5.fuel.network/"
+      ]
     }
   }
 }
