@@ -64,7 +64,7 @@ describe('Signing transactions', () => {
     transactionRequest.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
 
     // Sign the transaction
-    await transactionRequest.addSigner(signer);
+    await transactionRequest.addAccountWitnesses(signer);
 
     // Send the transaction
     const response = await sender.sendTransaction(transactionRequest);
@@ -105,7 +105,7 @@ describe('Signing transactions', () => {
 
     // Add witnesses including the signer
     parsedRequest.addWitness('0x');
-    await parsedRequest.addSigner(signer);
+    await parsedRequest.addAccountWitnesses(signer);
 
     // Estimate the predicate inputs
     const { estimatedInputs } = await provider.getTransactionCost(parsedRequest);
