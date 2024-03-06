@@ -4,8 +4,8 @@ import { keccak256 as keccak } from './keccak256';
 
 const data = bufferFromString('hashedKey');
 
-vi.mock('ethereum-cryptography/keccak', () => ({
-  keccak256: vi.fn(() => data),
+vi.mock('@noble/hashes/sha3', () => ({
+  keccak_256: vi.fn(() => data),
 }));
 
 /**
