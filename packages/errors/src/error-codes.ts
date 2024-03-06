@@ -100,6 +100,9 @@ export enum ErrorCode {
   SCRIPT_REVERTED = 'script-reverted',
   SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
 
+  // graphql
+  STREAM_PARSING_ERROR = 'stream-parsing-error',
+
   // coder
   // ...
 }
