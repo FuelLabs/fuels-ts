@@ -4,7 +4,7 @@
 describe('Configs', () => {
   it('exports FUEL_NETWORK_URL', async () => {
     const configs = await import('./configs');
-    expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/graphql');
+    expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/v1/graphql');
   });
 });
 
@@ -30,7 +30,7 @@ describe('Configs - undefined process', () => {
 
     const configs = await import('./configs');
 
-    expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/graphql');
+    expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/v1/graphql');
   });
 });
 

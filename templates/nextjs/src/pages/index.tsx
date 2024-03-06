@@ -20,7 +20,9 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       if (hasContract) {
-        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+        const provider = await Provider.create(
+          "http://127.0.0.1:4000/v1/graphql",
+        );
         // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
         const wallet = Wallet.fromPrivateKey("0x01", provider);
         const testContract = TestContractAbi__factory.connect(

@@ -35,7 +35,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
 
     const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
-    const providerUrl = `http://${accessIp}:${port}/graphql`;
+    const providerUrl = `http://${accessIp}:${port}/v1/graphql`;
 
     const { cleanup, chainConfigPath } = await launchNode({
       args: [

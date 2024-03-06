@@ -30,8 +30,8 @@ export default createConfig({
   // #endregion privateKey
 
   // #region providerUrl
-  // Default: http://127.0.0.1:4000/graphql
-  providerUrl: 'http://network:port/graphql',
+  // Default: http://127.0.0.1:4000/v1/graphql
+  providerUrl: 'http://network:port/v1/graphql',
   // #endregion providerUrl
 
   // #region chainConfig
