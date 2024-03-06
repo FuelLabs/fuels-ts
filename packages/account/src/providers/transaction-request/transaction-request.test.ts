@@ -116,7 +116,7 @@ describe('TransactionRequest', () => {
     expect(transactionRequest.witnesses).toStrictEqual([mockSignedTx, mockSignedTx]);
   });
 
-  it('adds signers', async () => {
+  it('adds account based witnesses', async () => {
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
       static async connect(url: string) {
@@ -137,13 +137,13 @@ describe('TransactionRequest', () => {
 
     expect(txRequest.witnesses.length).toEqual(0);
 
-    await txRequest.addSigner(signer);
+    await txRequest.addAccountWitnesses(signer);
 
     expect(txRequest.witnesses.length).toEqual(1);
     expect(signTxSpy).toHaveBeenCalledTimes(1);
     expect(createWitnessSpy).toHaveBeenCalledTimes(1);
 
-    await txRequest.addSigners([signer, signer, signer, signer, signer, signer]);
+    await txRequest.addAccountWitnesses([signer, signer, signer, signer, signer, signer]);
 
     expect(txRequest.witnesses.length).toEqual(7);
     expect(signTxSpy).toHaveBeenCalledTimes(7);
