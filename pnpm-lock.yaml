@@ -499,6 +499,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:^
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
@@ -687,12 +690,12 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
+      '@noble/hashes':
+        specifier: ^1.3.3
+        version: 1.3.3
       bech32:
         specifier: ^2.0.0
         version: 2.0.0
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
 
   packages/contract:
     dependencies:
@@ -711,6 +714,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:^
         version: link:../interfaces
@@ -729,9 +735,6 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
@@ -773,9 +776,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:^
         version: link:../utils
-      ethereum-cryptography:
-        specifier: ^2.1.2
-        version: 2.1.2
+      '@noble/hashes':
+        specifier: ^1.3.3
+        version: 1.3.3
       ethers:
         specifier: ^6.7.1
         version: 6.7.1
@@ -943,9 +946,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
+      '@noble/hashes':
+        specifier: ^1.3.3
+        version: 1.3.3
       ramda:
         specifier: ^0.29.0
         version: 0.29.0
@@ -970,15 +973,15 @@ importers:
 
   packages/merkle:
     dependencies:
+      '@fuel-ts/hasher':
+        specifier: workspace:^
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:^
         version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
 
   packages/program:
     dependencies:
@@ -1068,6 +1071,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:^
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:^
         version: link:../interfaces
@@ -1077,9 +1083,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
 
   packages/utils:
     dependencies:
@@ -4330,7 +4333,7 @@ packages:
     engines: {node: ^18.18.2 || ^20.0.0}
     dependencies:
       '@fuel-ts/errors': 0.73.0
-      ethereum-cryptography: 2.1.2
+      ethereum-cryptography: 2.1.3
       ethers: 6.7.1
     transitivePeerDependencies:
       - bufferutil
@@ -6047,12 +6050,6 @@ packages:
       eslint-scope: 5.1.1
     dev: false
 
-  /@noble/curves@1.1.0:
-    resolution: {integrity: sha512-091oBExgENk/kGj3AZmtBDMpxQPDtxQABR2B9lb1JbVTs6ytdzZNwvhxQ4MWasRNEzlbEH8jCWFCwhF/Obj5AA==}
-    dependencies:
-      '@noble/hashes': 1.3.1
-    dev: false
-
   /@noble/curves@1.3.0:
     resolution: {integrity: sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==}
     dependencies:
@@ -6061,11 +6058,6 @@ packages:
 
   /@noble/hashes@1.1.2:
     resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
-
-  /@noble/hashes@1.3.1:
-    resolution: {integrity: sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==}
-    engines: {node: '>= 16'}
-    dev: false
 
   /@noble/hashes@1.3.3:
     resolution: {integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==}
@@ -6699,23 +6691,23 @@ packages:
     resolution: {integrity: sha512-UY+FGM/2jjMkzQLn8pxcHGMaVLh9aEitG3zY2CiY7XHdLiz3bZOwa6oDxNqEMv7zZkV+cj5DOdz0cQ1BP5Hjgw==}
     dev: true
 
-  /@scure/base@1.1.1:
-    resolution: {integrity: sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==}
+  /@scure/base@1.1.5:
+    resolution: {integrity: sha512-Brj9FiG2W1MRQSTB212YVPRrcbjkv48FoZi/u4l/zds/ieRrqsh7aUf6CLwkAq61oKXr/ZlTzlY66gLIj3TFTQ==}
     dev: false
 
-  /@scure/bip32@1.3.1:
-    resolution: {integrity: sha512-osvveYtyzdEVbt3OfwwXFr4P2iVBL5u1Q3q4ONBfDY/UpOuXmOlbgwc1xECEboY8wIays8Yt6onaWMUdUbfl0A==}
+  /@scure/bip32@1.3.3:
+    resolution: {integrity: sha512-LJaN3HwRbfQK0X1xFSi0Q9amqOgzQnnDngIt+ZlsBC3Bm7/nE7K0kwshZHyaru79yIVRv/e1mQAjZyuZG6jOFQ==}
     dependencies:
-      '@noble/curves': 1.1.0
+      '@noble/curves': 1.3.0
       '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.1
+      '@scure/base': 1.1.5
     dev: false
 
-  /@scure/bip39@1.2.1:
-    resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
+  /@scure/bip39@1.2.2:
+    resolution: {integrity: sha512-HYf9TUXG80beW+hGAt3TRM8wU6pQoYur9iNypTROm42dorCGmLnFe3eWjz3gOq6G62H2WRh0FCzAR1PI+29zIA==}
     dependencies:
       '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.1
+      '@scure/base': 1.1.5
     dev: false
 
   /@sinclair/typebox@0.24.51:
@@ -12592,13 +12584,13 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /ethereum-cryptography@2.1.2:
-    resolution: {integrity: sha512-Z5Ba0T0ImZ8fqXrJbpHcbpAvIswRte2wGNR/KePnu8GbbvgJ47lMxT/ZZPG6i9Jaht4azPDop4HaM00J0J59ug==}
+  /ethereum-cryptography@2.1.3:
+    resolution: {integrity: sha512-BlwbIL7/P45W8FGW2r7LGuvoEZ+7PWsniMvQ4p5s2xCyw9tmaDlpfsN9HjAucbF+t/qpVHwZUisgfK24TCW8aA==}
     dependencies:
-      '@noble/curves': 1.1.0
-      '@noble/hashes': 1.3.1
-      '@scure/bip32': 1.3.1
-      '@scure/bip39': 1.2.1
+      '@noble/curves': 1.3.0
+      '@noble/hashes': 1.3.3
+      '@scure/bip32': 1.3.3
+      '@scure/bip39': 1.2.2
     dev: false
 
   /ethers@6.7.1:
