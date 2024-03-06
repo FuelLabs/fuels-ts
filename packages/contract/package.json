@@ -36,7 +36,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "ethers": "^6.7.1"
+    "@fuel-ts/hasher": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"
