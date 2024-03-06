@@ -341,6 +341,9 @@ export class Account extends AbstractAccount {
       gasLimit: request.gasLimit,
     });
 
+    // TODO: Fix this after fixing maxFee calculation
+    request.maxFee = maxFee.add(20);
+
     await this.fund(request, requiredQuantities, maxFee);
 
     request.updatePredicateInputs(estimatedInputs);
@@ -431,6 +434,9 @@ export class Account extends AbstractAccount {
       gasLimit: request.gasLimit,
     });
 
+    // TODO: Fix this after fixing maxFee calculation
+    request.maxFee = maxFee.add(20);
+
     await this.fund(request, requiredQuantities, maxFee);
 
     return this.sendTransaction(request);
@@ -482,6 +488,9 @@ export class Account extends AbstractAccount {
       gasUsed,
       gasLimit: request.gasLimit,
     });
+
+    // TODO: Fix this after fixing maxFee calculation
+    request.maxFee = maxFee.add(20);
 
     await this.fund(request, requiredQuantities, maxFee);
 
