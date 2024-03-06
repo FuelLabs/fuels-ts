@@ -26,7 +26,6 @@ export const MOCK_COIN_INPUT: InputCoin = {
     txIndex: 0,
   },
   witnessIndex: 0,
-  maturity: 0,
   predicateGasUsed: bn(0),
   predicateLength: 0,
   predicateDataLength: 0,

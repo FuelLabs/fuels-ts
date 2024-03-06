@@ -106,7 +106,6 @@ export const inputify = (value: TransactionRequestInput): Input => {
           txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         witnessIndex: value.witnessIndex,
-        maturity: value.maturity ?? 0,
         predicateGasUsed: bn(value.predicateGasUsed),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
