@@ -1,7 +1,6 @@
 import { hashMessage } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
-import { tr } from '@fuels/vm-asm';
 
 import { Account } from '../account';
 import { transactionRequestify } from '../providers';
