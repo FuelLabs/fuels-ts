@@ -55,6 +55,10 @@ export class RevertError extends Error {
    * The receipt associated with the revert error.
    */
   receipt: TransactionResultRevertReceipt;
+  /**
+   * The logs for `receipt`
+   */
+  logs: Array<unknown>
 
   /**
    * Creates a new instance of RevertError.
@@ -62,8 +66,14 @@ export class RevertError extends Error {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(`The script reverted with reason ${reason}`);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    // @TODO: this is a "hack"
+    // motivation: a custom error revert string is the only "string" type item in the `logs` array
+    // the `logs.filter for string` will make sense only for `RequireFailed` errors, so could potentially
+    // just restrict the following to `RequireFailed` class by modifying `this.message`
+    // produces error messages like so:
+    // ```RequireRevertError: The script reverted with reason RequireFailed (reason: "FailImplicitly")```
+    super(`The script reverted with reason ${reason}: (reason: "${logs.filter(l => typeof l === "string")}")`);
     this.name = 'RevertError';
     this.receipt = receipt;
   }
@@ -92,8 +102,8 @@ export class RequireRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'RequireRevertError';
   }
 }
@@ -110,8 +120,8 @@ export class TransferToAddressRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'TransferToAddressRevertError';
   }
 }
@@ -128,8 +138,8 @@ export class SendMessageRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'SendMessageRevertError';
   }
 }
@@ -146,8 +156,8 @@ export class AssertFailedRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'AssertFailedRevertError';
   }
 }
@@ -161,7 +171,8 @@ export class AssertFailedRevertError extends RevertError {
  * @returns The RevertError instance, or undefined if the revert reason is not recognized.
  */
 export const revertErrorFactory = (
-  receipt: TransactionResultRevertReceipt
+  receipt: TransactionResultRevertReceipt,
+  logs: Array<unknown>
 ): RevertError | undefined => {
   const reason = decodeRevertErrorCode(receipt);
   if (!reason) {
@@ -170,14 +181,14 @@ export const revertErrorFactory = (
 
   switch (reason) {
     case 'RequireFailed':
-      return new RequireRevertError(receipt, reason);
+      return new RequireRevertError(receipt, reason, logs);
     case 'TransferToAddressFailed':
-      return new TransferToAddressRevertError(receipt, reason);
+      return new TransferToAddressRevertError(receipt, reason, logs);
     case 'SendMessageFailed':
-      return new SendMessageRevertError(receipt, reason);
+      return new SendMessageRevertError(receipt, reason, logs);
     case 'AssertFailed':
-      return new AssertFailedRevertError(receipt, reason);
+      return new AssertFailedRevertError(receipt, reason, logs);
     default:
-      return new RevertError(receipt, reason);
+      return new RevertError(receipt, reason, logs);
   }
 };
