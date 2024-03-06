@@ -6,19 +6,20 @@ async function fetchSomeExternalCredentials() {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Provider', () => {
   it('can be given options', async () => {
     // #region provider-options
     await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, requestInit) => {
+      fetch: async (url: string, requestInit: RequestInit | undefined) => {
         // do something
         await sleep(100);
         return fetch(url, requestInit);
       },
       timeout: 2000,
       cacheUtxo: 1500,
-      requestMiddleware: async (request) => {
+      requestMiddleware: async (request: RequestInit) => {
         const credentials = await fetchSomeExternalCredentials();
         request.headers ??= {};
         (request.headers as Record<string, string>).Authorization = credentials;
