@@ -47,7 +47,6 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       }
 
       const text = FuelGraphqlSubscriber.textDecoder.decode(value);
-
       /**
        * We don't care about responses that don't start with 'data:' like keep-alive messages.
        * The only responses that I came across from the node are either 200 responses with data or keep-alive messages.
@@ -61,7 +60,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         continue;
       }
 
-      const { data, errors } = JSON.parse(text.split('data:')[1]);
+      const { data, errors } = JSON.parse(text.replace('data:', ''));
 
       if (Array.isArray(errors)) {
         throw new FuelError(
