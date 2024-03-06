@@ -147,7 +147,8 @@ export default class ContractFactory {
     const { requiredQuantities, maxFee } =
       await this.account.provider.getTransactionCost(transactionRequest);
 
-    transactionRequest.maxFee = maxFee;
+    // TODO: Fix this after fixing maxFee calculation
+    transactionRequest.maxFee = maxFee.add(20);
 
     await this.account.fund(transactionRequest, requiredQuantities, maxFee);
     await this.account.sendTransaction(transactionRequest, {
