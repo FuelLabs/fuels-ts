@@ -113,7 +113,7 @@ export abstract class FuelConnector extends EventEmitter {
    *
    * @returns Transaction signature
    */
-  async signTransaction(_address: string, _transaction: string): Promise<string> {
+  async signTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
     throw new Error('Method not implemented.');
   }
 

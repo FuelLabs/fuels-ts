@@ -1,6 +1,7 @@
 import { hashMessage } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
+import { tr } from '@fuels/vm-asm';
 
 import { Account } from '../account';
 import { transactionRequestify } from '../providers';
@@ -77,7 +78,10 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
-  async signTransaction(hashedTransaction: string): Promise<string> {
+  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const chainId = this.provider.getChain().consensusParameters.chainId.toNumber();
+    const hashedTransaction = transactionRequest.getTransactionId(chainId);
     const signature = await this.signer().sign(hashedTransaction);
     return hexlify(signature);
   }
@@ -90,8 +94,7 @@ export class BaseWalletUnlocked extends Account {
    */
   async populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const hashedTransaction = transactionRequest.getTransactionId(this.provider.getChainId());
-    const signedTransaction = await this.signTransaction(hashedTransaction);
+    const signedTransaction = await this.signTransaction(transactionRequest);
 
     transactionRequest.updateWitnessByOwner(this.address, signedTransaction);
 

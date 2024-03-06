@@ -1,6 +1,6 @@
 # Transactions with Multiple Signers
 
-When a transaction contains a spendable input such as a coin, it must also contain the signature of the coin owner for it to be spent. If the coin owner is also submitting the transaction, then this is straightforward. However, if an external address is required to sign the transaction, then the transaction must contain multiple signatures. Within the SDK, a signer can be added to a transaction by calling either `addSigner` or `addSigners` on the transaction request.
+When a transaction contains a spendable input such as a coin, it must also contain the signature of the coin owner for it to be spent. If the coin owner is also submitting the transaction, then this is straightforward. However, if an external address is required to sign the transaction, then the transaction must contain multiple signatures. Within the SDK, an account signature can be added to a transaction by calling `addAccountWitnesses` on the transaction request.
 
 Consider a script that requires two signatures to be spent:
 

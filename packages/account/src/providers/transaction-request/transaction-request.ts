@@ -40,6 +40,7 @@ import type {
   CoinTransactionRequestOutput,
 } from './output';
 import { outputify } from './output';
+import type { TransactionRequestLike } from './types';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
@@ -266,27 +267,18 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Helper function to add an external signer to the transaction.
+   * Helper function to add an external signature to the transaction.
    *
-   * @param signer - The signer to add to the transaction.
+   * @param account - The account to sign to the transaction.
    * @returns The transaction with the signature witness added.
    */
-  async addSigner(signer: Account) {
-    const hashedTransaction = this.getTransactionId(signer.provider.getChainId());
-    const signature = await signer.signTransaction(hashedTransaction);
-    this.addWitness(signature);
-
-    return this;
-  }
-
-  /**
-   * Adds multiple external signers to the transaction.
-   *
-   * @param signers - The signers to add to the transaction.
-   * @returns The transaction with multiple signature witnesses added.
-   */
-  async addSigners(signers: Account[]) {
-    await Promise.all(signers.map((signer) => this.addSigner(signer)));
+  async addAccountWitnesses(account: Account | Account[]) {
+    const accounts = Array.isArray(account) ? account : [account];
+    await Promise.all(
+      accounts.map(async (acc) => {
+        this.addWitness(await acc.signTransaction(<TransactionRequestLike>this));
+      })
+    );
 
     return this;
   }
