@@ -1048,7 +1048,7 @@ describe('Provider', () => {
     await Promise.all(promises);
   });
 
-  it('should not throw if the subscrtion stream data string contains more than one "data:"', async () => {
+  it('should not throw if the subscription stream data string contains more than one "data:"', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const adminWallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
