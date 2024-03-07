@@ -39,10 +39,10 @@ type PredicateParams<T> = {
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<ARGS extends InputValue[]> extends Account {
+export class Predicate<TInputData extends InputValue[]> extends Account {
   bytes: Uint8Array;
   predicateData: Uint8Array = Uint8Array.from([]);
-  predicateArgs: ARGS = [] as unknown as ARGS;
+  predicateArgs: TInputData = [] as unknown as TInputData;
   interface?: Interface;
 
   /**
@@ -60,7 +60,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     provider,
     inputData,
     configurableConstants,
-  }: PredicateParams<ARGS>) {
+  }: PredicateParams<TInputData>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
