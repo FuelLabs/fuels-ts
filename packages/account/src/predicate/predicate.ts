@@ -28,7 +28,7 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
-type PredicateConstructorArgs<T> = {
+type PredicateParams<T> = {
   bytecode: BytesLike;
   provider: Provider;
   abi?: JsonAbi;
@@ -60,7 +60,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     provider,
     inputData,
     configurableConstants,
-  }: PredicateConstructorArgs<ARGS>) {
+  }: PredicateParams<ARGS>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
