@@ -65,7 +65,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       let errors;
 
       try {
-        ({ data, errors } = JSON.parse(text.split('data:')[1]));
+        ({ data, errors } = JSON.parse(text.replace(/^data:/, '')));
       } catch (e) {
         throw new FuelError(
           ErrorCode.STREAM_PARSING_ERROR,
