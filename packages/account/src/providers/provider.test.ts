@@ -202,7 +202,7 @@ describe('Provider', () => {
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
     const provider = await Provider.create(providerUrl1, {
-      fetch: (url, options) =>
+      fetch: (url: string, options?: RequestInit) =>
         getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
     });
 
