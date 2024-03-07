@@ -16,6 +16,8 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
+import { generateTestWallet } from '../test-utils';
+import { Wallet } from '../wallet';
 
 import type { ChainInfo, FetchRequestOptions, NodeInfo } from './provider';
 import Provider from './provider';
@@ -1044,5 +1046,42 @@ describe('Provider', () => {
     });
 
     await Promise.all(promises);
+  });
+
+  it('should throw an error if stream data string parsing fails for some reason', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const adminWallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+
+    const txRequest = new ScriptTransactionRequest();
+
+    const destination = Wallet.generate({ provider });
+
+    txRequest.addCoinOutput(destination.address, 100);
+
+    const { gasUsed, minFee, minGasPrice } = await provider.getTransactionCost(txRequest, [], {
+      resourcesOwner: adminWallet,
+    });
+
+    txRequest.gasLimit = gasUsed;
+    txRequest.gasPrice = minGasPrice;
+
+    await adminWallet.fund(txRequest, [], minFee);
+
+    const data = 'data:{"data":"dummy","errors":[{"message":"dummy"}';
+
+    vi.spyOn(TextDecoder.prototype, 'decode').mockReturnValueOnce(data);
+
+    await expectToThrowFuelError(
+      () =>
+        adminWallet.sendTransaction(txRequest, {
+          awaitExecution: true,
+          estimateTxDependencies: false,
+        }),
+      new FuelError(
+        ErrorCode.STREAM_PARSING_ERROR,
+        `Error while parsing stream data response: ${data}`
+      )
+    );
   });
 });
