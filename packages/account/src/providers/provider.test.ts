@@ -1048,6 +1048,41 @@ describe('Provider', () => {
     await Promise.all(promises);
   });
 
+  it('should not throw if the subscrtion stream data string contains more than one "data:"', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const adminWallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+
+    const txRequest = new ScriptTransactionRequest();
+
+    const destination = Wallet.generate({ provider });
+
+    txRequest.addCoinOutput(destination.address, 100);
+
+    const { gasUsed, minFee, minGasPrice } = await provider.getTransactionCost(txRequest, [], {
+      resourcesOwner: adminWallet,
+    });
+
+    txRequest.gasLimit = gasUsed;
+    txRequest.gasPrice = minGasPrice;
+
+    await adminWallet.fund(txRequest, [], minFee);
+
+    const data =
+      'text: data:{"data":{"submitAndAwait":{"type":"SuccessStatus", "time":"data: 4611686020137152060"}}}';
+
+    vi.spyOn(TextDecoder.prototype, 'decode').mockReturnValueOnce(data);
+
+    await expect(
+      adminWallet.sendTransaction(txRequest, {
+        awaitExecution: true,
+        estimateTxDependencies: false,
+      })
+    ).resolves.toBeTruthy();
+
+    vi.restoreAllMocks();
+  });
+
   it('should throw an error if stream data string parsing fails for some reason', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -1068,7 +1103,8 @@ describe('Provider', () => {
 
     await adminWallet.fund(txRequest, [], minFee);
 
-    const data = 'data:{"data":"dummy","errors":[{"message":"dummy"}';
+    // poorly formatted data string that will fail to parse
+    const data = 'data:{"data":"dummydata"';
 
     vi.spyOn(TextDecoder.prototype, 'decode').mockReturnValueOnce(data);
 
@@ -1079,9 +1115,11 @@ describe('Provider', () => {
           estimateTxDependencies: false,
         }),
       new FuelError(
-        ErrorCode.STREAM_PARSING_ERROR,
+        FuelError.CODES.STREAM_PARSING_ERROR,
         `Error while parsing stream data response: ${data}`
       )
     );
+
+    vi.restoreAllMocks();
   });
 });
