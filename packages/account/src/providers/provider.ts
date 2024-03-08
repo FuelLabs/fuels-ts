@@ -44,11 +44,7 @@ import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
-import {
-  calculatePriceWithFactor,
-  getGasUsedFromReceipts,
-  getReceiptsWithMissingData,
-} from './utils';
+import { calculateGasFee, getGasUsedFromReceipts, getReceiptsWithMissingData } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { mergeQuantities } from './utils/merge-quantities';
@@ -868,63 +864,79 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
+    txRequestClone.maxFee = bn(0);
+
     const minGas = txRequestClone.calculateMinGas(chainInfo);
-    const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
 
     /**
-     * Estimate gasUsed for script transactions
+     * TODO: Validate if there is a way to while using BN to achive the same VM results
+     * for gas related math operations and removing the need to `add(1)` for handling
+     * a safe margin.
      */
+    const minFee = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: minGas,
+      priceFactor: gasPriceFactor,
+      tip: txRequestClone.tip,
+    }).add(1);
+
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = minGas;
+    }
+
+    let maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
+
+    let maxFee = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: maxGas,
+      priceFactor: gasPriceFactor,
+      tip: txRequestClone.tip,
+    }).add(1);
+
+    txRequestClone.maxFee = maxFee;
 
     let receipts: TransactionResultReceipt[] = [];
     let missingContractIds: string[] = [];
     let outputVariables = 0;
-    // Transactions of type Create does not consume any gas so we can the dryRun
-    if (isScriptTransaction && estimateTxDependencies) {
-      /**
-       * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
-       * This simplifies the funding with fake utxos, since the coin quantities required
-       * will only be amounts being transferred (coin outputs) and amounts being forwarded
-       * to contract calls.
-       */
-      // Calculate the gasLimit again as we insert a fake UTXO and signer
+    let gasUsed = bn(0);
 
-      // Executing dryRun with fake utxos to get gasUsed
+    if (isScriptTransaction) {
       const result = await this.estimateTxDependencies(txRequestClone);
-
       receipts = result.receipts;
       outputVariables = result.outputVariables;
       missingContractIds = result.missingContractIds;
+      gasUsed = getGasUsedFromReceipts(receipts);
+
+      txRequestClone.gasLimit = gasUsed;
+      maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
+      maxFee = calculateGasFee({
+        gasPrice: minGasPrice,
+        gas: maxGas,
+        priceFactor: gasPriceFactor,
+        tip: txRequestClone.tip,
+      }).add(1);
     }
 
-    // For CreateTransaction the gasUsed is going to be the minGas
-    const gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : minGas;
+    const feeForGasUsed = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: gasUsed,
+      priceFactor: gasPriceFactor,
+      tip: txRequestClone.tip,
+    }).add(1);
 
-    const usedFee = calculatePriceWithFactor(
-      gasUsed,
-      minGasPrice,
-      gasPriceFactor
-    ).normalizeZeroToOne();
-    const minFee = calculatePriceWithFactor(
-      minGas,
-      minGasPrice,
-      gasPriceFactor
-    ).normalizeZeroToOne();
-    const maxFee = calculatePriceWithFactor(
-      maxGas,
-      minGasPrice,
-      gasPriceFactor
-    ).normalizeZeroToOne();
+    const fee = maxFee.add(feeForGasUsed);
 
     return {
+      // TODO: Validate if we need to keeping returning gasPrice here and others gas/fee
+      // related properties.
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       minGasPrice,
-      // TODO: Validate if we need to keeping returning gasPrice here
       gasPrice: minGasPrice,
       minGas,
       maxGas,
-      usedFee,
+      usedFee: fee,
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,
