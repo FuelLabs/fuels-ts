@@ -16,8 +16,6 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
-import { generateTestWallet } from '../test-utils';
-import { Wallet } from '../wallet';
 
 import type { ChainInfo, NodeInfo } from './provider';
 import Provider from './provider';
@@ -27,6 +25,7 @@ import type {
 } from './transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
+import type { SubmittedStatus } from './transaction-summary/types';
 import { sleep } from './utils';
 import * as gasMod from './utils/gas';
 
@@ -1044,76 +1043,71 @@ describe('Provider', () => {
   it('should not throw if the subscription stream data string contains more than one "data:"', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const adminWallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
-
-    const txRequest = new ScriptTransactionRequest();
-
-    const destination = Wallet.generate({ provider });
-
-    txRequest.addCoinOutput(destination.address, 100);
-
-    const { gasUsed, minFee, minGasPrice } = await provider.getTransactionCost(txRequest, [], {
-      resourcesOwner: adminWallet,
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const responseObject = {
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+            time: 'data: 4611686020137152060',
+          },
+        },
+      };
+      const streamedResponse = new TextEncoder().encode(
+        `data:${JSON.stringify(responseObject)}\n\n`
+      );
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamedResponse);
+              controller.close();
+            },
+          })
+        )
+      );
     });
 
-    txRequest.gasLimit = gasUsed;
-    txRequest.gasPrice = minGasPrice;
-
-    await adminWallet.fund(txRequest, [], minFee);
-
-    const data =
-      'text: data:{"data":{"submitAndAwait":{"type":"SuccessStatus", "time":"data: 4611686020137152060"}}}';
-
-    vi.spyOn(TextDecoder.prototype, 'decode').mockReturnValueOnce(data);
-
-    await expect(
-      adminWallet.sendTransaction(txRequest, {
-        awaitExecution: true,
-        estimateTxDependencies: false,
-      })
-    ).resolves.toBeTruthy();
-
-    vi.restoreAllMocks();
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
+    }
   });
 
-  it('should throw an error if stream data string parsing fails for some reason', async () => {
+  it('should throw if the subscription stream data string parsing fails for some reason', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const adminWallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
-
-    const txRequest = new ScriptTransactionRequest();
-
-    const destination = Wallet.generate({ provider });
-
-    txRequest.addCoinOutput(destination.address, 100);
-
-    const { gasUsed, minFee, minGasPrice } = await provider.getTransactionCost(txRequest, [], {
-      resourcesOwner: adminWallet,
+    const badResponse = 'data: whatever';
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const streamResponse = new TextEncoder().encode(badResponse);
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamResponse);
+              controller.close();
+            },
+          })
+        )
+      );
     });
 
-    txRequest.gasLimit = gasUsed;
-    txRequest.gasPrice = minGasPrice;
-
-    await adminWallet.fund(txRequest, [], minFee);
-
-    // poorly formatted data string that will fail to parse
-    const data = 'data:{"data":"dummydata"';
-
-    vi.spyOn(TextDecoder.prototype, 'decode').mockReturnValueOnce(data);
-
     await expectToThrowFuelError(
-      () =>
-        adminWallet.sendTransaction(txRequest, {
-          awaitExecution: true,
-          estimateTxDependencies: false,
-        }),
-      new FuelError(
-        FuelError.CODES.STREAM_PARSING_ERROR,
-        `Error while parsing stream data response: ${data}`
-      )
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+          encodedTransaction: "it's mocked so doesn't matter",
+        })) {
+          // shouldn't be reached!
+          expect(true).toBeFalsy();
+        }
+      },
+      {
+        code: FuelError.CODES.STREAM_PARSING_ERROR,
+        message: `Error while parsing stream data response: ${badResponse}`,
+      }
     );
-
-    vi.restoreAllMocks();
   });
 
   test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
