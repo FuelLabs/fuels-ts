@@ -1,5 +1,7 @@
 // A set of useful helper methods for testing binary Merkle trees.
-import { EMPTY, hash } from '../common';
+import { hash } from '@fuel-ts/hasher';
+
+import { EMPTY } from '../common';
 
 import Node from './types/node';
 
