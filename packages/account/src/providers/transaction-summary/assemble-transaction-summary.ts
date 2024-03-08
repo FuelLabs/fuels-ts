@@ -1,5 +1,5 @@
-import { type BN } from '@fuel-ts/math';
-import { type Transaction } from '@fuel-ts/transactions';
+import { bn, type BN } from '@fuel-ts/math';
+import { PolicyType, type Transaction } from '@fuel-ts/transactions';
 import { DateTime, hexlify } from '@fuel-ts/utils';
 
 import type { GqlGasCosts } from '../__generated__/operations';
@@ -64,9 +64,12 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const typeName = getTransactionTypeName(transaction.type);
 
+  const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
+
   const { fee } = calculateTransactionFee({
     gasUsed,
     rawPayload,
+    tip,
     consensusParameters: {
       gasCosts,
       feeParams: {
