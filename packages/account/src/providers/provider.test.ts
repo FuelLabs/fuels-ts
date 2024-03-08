@@ -25,6 +25,7 @@ import type {
 } from './transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
+import type { SubmittedStatus } from './transaction-summary/types';
 import { sleep } from './utils';
 import * as gasMod from './utils/gas';
 
@@ -1037,6 +1038,76 @@ describe('Provider', () => {
     });
 
     await Promise.all(promises);
+  });
+
+  it('should not throw if the subscription stream data string contains more than one "data:"', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const responseObject = {
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+            time: 'data: 4611686020137152060',
+          },
+        },
+      };
+      const streamedResponse = new TextEncoder().encode(
+        `data:${JSON.stringify(responseObject)}\n\n`
+      );
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamedResponse);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
+    }
+  });
+
+  it('should throw if the subscription stream data string parsing fails for some reason', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const badResponse = 'data: whatever';
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const streamResponse = new TextEncoder().encode(badResponse);
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamResponse);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    await expectToThrowFuelError(
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+          encodedTransaction: "it's mocked so doesn't matter",
+        })) {
+          // shouldn't be reached!
+          expect(true).toBeFalsy();
+        }
+      },
+      {
+        code: FuelError.CODES.STREAM_PARSING_ERROR,
+        message: `Error while parsing stream data response: ${badResponse}`,
+      }
+    );
   });
 
   test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
