@@ -8,17 +8,14 @@ import { error } from 'console';
     // Invoke versions' prebuild script (will rewrite version files if needed)
     execSync(`pnpm -C packages/versions prebuild`);
 
-    // Checks git status
-    const isGitClean = !execSync(`git status --porcelain`).toString().trim();
+    const versionsChanged = !!execSync(`git status --porcelain`).toString().trim();
 
-    // Skip adding/committing/releasing stuff if there's nothing new
-    if (!isGitClean) {
+    if (versionsChanged) {
       execSync(`git add packages/versions/src/lib/getBuiltinVersions.ts`);
       execSync(`git commit -m"ci(scripts): update versions"`);
-
-      // Run changeset version
-      execSync(`changeset version`);
     }
+
+    execSync(`changeset version`);
   } catch (err) {
     error(err.toString());
   }
