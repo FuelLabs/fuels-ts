@@ -5,6 +5,7 @@ export const U8_CODER_TYPE = 'u8';
 export const U16_CODER_TYPE = 'u16';
 export const U32_CODER_TYPE = 'u32';
 export const U64_CODER_TYPE = 'u64';
+export const U256_CODER_TYPE = 'u256';
 export const RAW_PTR_CODER_TYPE = 'raw untyped ptr';
 export const RAW_SLICE_CODER_TYPE = 'raw untyped slice';
 export const BOOL_CODER_TYPE = 'bool';

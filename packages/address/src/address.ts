@@ -2,7 +2,7 @@ import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address, EvmAddress, AssetId } from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
-import { sha256 } from 'ethers';
+import { sha256 } from '@noble/hashes/sha256';
 
 import {
   normalizeBech32,
@@ -156,7 +156,7 @@ export default class Address extends AbstractAddress {
       throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
     }
 
-    const b256Address = sha256(hexlify(arrayify(publicKey)));
+    const b256Address = hexlify(sha256(arrayify(publicKey)));
     return new Address(toBech32(b256Address));
   }
 

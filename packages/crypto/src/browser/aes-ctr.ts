@@ -19,7 +19,6 @@ export const keyFromPassword: CryptoApi['keyFromPassword'] = (
 ): Uint8Array => {
   const passBuffer = bufferFromString(String(password).normalize('NFKC'), 'utf-8');
   const key = pbkdf2(passBuffer, saltBuffer, 100000, 32, 'sha256');
-
   return arrayify(key);
 };
 

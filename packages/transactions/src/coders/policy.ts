@@ -1,4 +1,4 @@
-import { Coder, NumberCoder, U64Coder } from '@fuel-ts/abi-coder';
+import { BigNumberCoder, Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
@@ -84,7 +84,7 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
         case PolicyType.MaxFee:
         case PolicyType.GasPrice:
         case PolicyType.WitnessLimit:
-          parts.push(new U64Coder().encode(data));
+          parts.push(new BigNumberCoder('u64').encode(data));
           break;
 
         case PolicyType.Maturity:
@@ -105,13 +105,13 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     const policies: Policy[] = [];
 
     if (policyTypes & PolicyType.GasPrice) {
-      const [gasPrice, nextOffset] = new U64Coder().decode(data, o);
+      const [gasPrice, nextOffset] = new BigNumberCoder('u64').decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.GasPrice, data: gasPrice });
     }
 
     if (policyTypes & PolicyType.WitnessLimit) {
-      const [witnessLimit, nextOffset] = new U64Coder().decode(data, o);
+      const [witnessLimit, nextOffset] = new BigNumberCoder('u64').decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.WitnessLimit, data: witnessLimit });
     }
@@ -123,7 +123,7 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     }
 
     if (policyTypes & PolicyType.MaxFee) {
-      const [maxFee, nextOffset] = new U64Coder().decode(data, o);
+      const [maxFee, nextOffset] = new BigNumberCoder('u64').decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.MaxFee, data: maxFee });
     }

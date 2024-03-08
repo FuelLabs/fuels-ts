@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
@@ -31,7 +31,7 @@ export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -43,7 +43,7 @@ export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
@@ -127,7 +127,7 @@ export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -139,7 +139,7 @@ export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
@@ -175,7 +175,7 @@ export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -187,7 +187,7 @@ export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;

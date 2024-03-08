@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { Coder, ArrayCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, ArrayCoder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
@@ -79,7 +79,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   encode(value: TransactionScript): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new U64Coder().encode(value.scriptGasLimit));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptGasLimit));
     parts.push(new NumberCoder('u32').encode(value.scriptLength));
     parts.push(new NumberCoder('u32').encode(value.scriptDataLength));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
@@ -100,7 +100,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   decode(data: Uint8Array, offset: number): [TransactionScript, number] {
     let decoded;
     let o = offset;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptGasLimit = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const scriptLength = decoded;
@@ -305,7 +305,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new InputContractCoder().encode(value.inputContract));
     parts.push(new OutputContractCoder().encode(value.outputContract));
-    parts.push(new U64Coder().encode(value.mintAmount));
+    parts.push(new BigNumberCoder('u64').encode(value.mintAmount));
     parts.push(new B256Coder().encode(value.mintAssetId));
 
     return concat(parts);
@@ -321,7 +321,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     const inputContract = decoded;
     [decoded, o] = new OutputContractCoder().decode(data, o);
     const outputContract = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const mintAmount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const mintAssetId = decoded;

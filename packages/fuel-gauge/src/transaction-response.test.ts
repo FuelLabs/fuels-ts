@@ -1,4 +1,7 @@
+import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from 'fuels';
 import {
   BaseAssetId,
@@ -8,6 +11,7 @@ import {
   Wallet,
   randomBytes,
   WalletUnlocked,
+  ScriptTransactionRequest,
 } from 'fuels';
 import type { MockInstance } from 'vitest';
 
@@ -82,7 +86,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
 /**
  * @group node
  */
-describe('TransactionSummary', () => {
+describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
   let gasPrice: BN;
@@ -202,4 +206,76 @@ describe('TransactionSummary', () => {
 
     cleanup();
   }, 18500);
+
+  it('should throw error for a SqueezedOut status update [waitForResult]', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      /**
+       * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
+       * before the waitForResult (provider.operations.statusChange) call is made
+       *  */
+      args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
+      loggingEnabled: false,
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
+
+    const request = new ScriptTransactionRequest();
+
+    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+
+    request.addResources(resources);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
+
+    const response = await nodeProvider.sendTransaction(request);
+
+    await expectToThrowFuelError(
+      async () => {
+        await response.waitForResult();
+      },
+      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+    );
+
+    cleanup();
+  });
+
+  it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      /**
+       * --tx-pool-ttl 1ms is possible here because the transaction gets squeezed out during the active subscription
+       *  */
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '1ms'],
+      loggingEnabled: false,
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
+
+    const request = new ScriptTransactionRequest();
+
+    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+
+    request.addResources(resources);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
+
+    await expectToThrowFuelError(
+      async () => {
+        await nodeProvider.sendTransaction(request, { awaitExecution: true });
+      },
+      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+    );
+    cleanup();
+  });
 });

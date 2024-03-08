@@ -55,6 +55,7 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
+  INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
@@ -69,6 +70,7 @@ export enum ErrorCode {
   TRANSACTION_ERROR = 'transaction-error',
   INVALID_POLICY_TYPE = 'invalid-policy-type',
   DUPLICATED_POLICY = 'duplicated-policy',
+  TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
