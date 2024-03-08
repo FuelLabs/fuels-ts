@@ -251,8 +251,7 @@ export class BaseInvocationScope<TReturn = any> {
       (i) => i.type !== InputType.Coin
     );
 
-    // TODO: Fix this after fixing maxFee calculation
-    transactionRequest.maxFee = maxFee.add(20);
+    transactionRequest.maxFee = maxFee;
 
     await this.program.account?.fund(this.transactionRequest, requiredQuantities, maxFee);
 
