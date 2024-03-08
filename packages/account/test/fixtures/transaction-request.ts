@@ -15,7 +15,6 @@ export const SCRIPT_TX_REQUEST = new ScriptTransactionRequest({
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: '0x989680',
       owner: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
-      maturity: 0,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex: 0,
       predicate: '0x',

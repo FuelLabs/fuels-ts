@@ -57,7 +57,6 @@ export const MOCK_REQUEST_COIN_INPUT: CoinTransactionRequestInput = {
   owner: getRandomB256(),
   txPointer: '0x00000000000000000000000000000000',
   witnessIndex: 0,
-  maturity: 0,
 };
 
 export const MOCK_REQUEST_PREDICATE_INPUT: CoinTransactionRequestInput = {
@@ -68,7 +67,6 @@ export const MOCK_REQUEST_PREDICATE_INPUT: CoinTransactionRequestInput = {
   owner: getRandomB256(),
   txPointer: '0x00000000000000000000000000000000',
   witnessIndex: 0,
-  maturity: 0,
   predicate: '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301',
   predicateGasUsed: bn(0),
 };
