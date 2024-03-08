@@ -16,7 +16,7 @@ In order to test your Sway and TS-SDK applications, you can test your code in a 
 
 To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [`Vitest`](https://vitest.dev/) for its tests.
 
-### The `launchTestNode` utility
+### Launching a Test Node
 
 To simplify testing of sway programs in isolation, the SDK provides `launchTestNode`, a utility via which you can spin up a short-lived `fuel-core` node, setup a custom provider and wallets, and deploy contracts in one go.
 Here is a simple contract deployment in a test:
