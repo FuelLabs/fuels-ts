@@ -1,12 +1,12 @@
+import { hash } from '@fuel-ts/hasher';
 import { toHex } from '@fuel-ts/math';
-
-import { hash } from '../common';
 
 import { DeepSparseMerkleSubTree } from './deepSparseMerkleSubTree';
 import { SparseMerkleTree } from './sparseMerkleTree';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Sparse Merkle Tree', () => {
   it('Update and delete', () => {

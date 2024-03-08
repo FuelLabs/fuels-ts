@@ -35,15 +35,8 @@ afterEach(() => {
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
-  async (
-    url: string,
-    options: {
-      body: string;
-      headers: { [key: string]: string };
-      [key: string]: unknown;
-    }
-  ) => {
-    const graphqlRequest = JSON.parse(options.body);
+  async (url: string, options: RequestInit | undefined) => {
+    const graphqlRequest = JSON.parse(options?.body as string);
     const { operationName } = graphqlRequest;
 
     if (operationName === expectedOperationName) {
@@ -1029,5 +1022,109 @@ describe('Provider', () => {
     });
 
     await Promise.all(promises);
+  });
+
+  test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    const requestObject = fetchSpy.mock.calls[0][1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return Promise.resolve(request);
+      },
+    });
+
+    const requestObject = fetchSpy.mock.calls[0][1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('requestMiddleware works for subscriptions', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    await safeExec(async () => {
+      for await (const iterator of provider.operations.statusChange({
+        transactionId: 'doesnt matter, will be aborted',
+      })) {
+        // Just running a subscription to trigger the middleware
+        // shouldn't be reached and should fail if reached
+        expect(iterator).toBeFalsy();
+      }
+    });
+
+    const subscriptionCall = fetchSpy.mock.calls.find((call) => call[0] === `${provider.url}-sub`);
+    const requestObject = subscriptionCall?.[1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('custom fetch works with requestMiddleware', async () => {
+    let requestHeaders: HeadersInit | undefined;
+    await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, requestInit) => {
+        requestHeaders = requestInit?.headers;
+        return fetch(url, requestInit);
+      },
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    expect(requestHeaders).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('custom fetch works with timeout', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, requestInit) => fetch(url, requestInit),
+      timeout,
+    });
+    vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
+      sleep(timeout).then(() =>
+        fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+      )
+    );
+
+    const { error } = await safeExec(async () => {
+      await provider.getBlocks({});
+    });
+
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
   });
 });
