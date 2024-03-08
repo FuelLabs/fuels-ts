@@ -6,7 +6,7 @@ import { Coder } from '../AbstractCoder';
 type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
 
 /**
- * @throws {FuelError} {@link ErrorCode.TYPE_NOT_SUPPORTED}
+ * @throws {@link ErrorCode#TYPE_NOT_SUPPORTED}
  * When the base type is not supported. (valid types: 'u8', 'u16', 'u32')
  */
 const getLength = (baseType: NumberCoderType): number => {
@@ -39,7 +39,10 @@ export class NumberCoder extends Coder<number, number> {
     try {
       bytes = toBytes(value);
     } catch (error) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `The value "${value}" is not a valid "${this.type}" value.`);
+      throw new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        `The value "${value}" is not a valid "${this.type}" value.`
+      );
     }
 
     if (bytes.length > this.length) {

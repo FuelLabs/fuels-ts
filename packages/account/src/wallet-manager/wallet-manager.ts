@@ -29,8 +29,8 @@ const ERROR_MESSAGES = {
 
 /**
  * Generic assert function to avoid undesirable errors
- * 
- * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+ *
+ * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
  * When the condition is not met.
  */
 function assert(condition: unknown, message: string): asserts condition {
@@ -82,11 +82,11 @@ export class WalletManager extends EventEmitter {
   /**
    * Return the vault serialized object containing all the privateKeys,
    * the format of the return depends on the Vault type.
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the wallet is locked.
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the vault can not be found.
    */
   exportVault<T extends Vault>(vaultId: number): ReturnType<T['serialize']> {
@@ -119,8 +119,8 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Create a Wallet instance for the specific account
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the wallet address provided, can not be found.
    */
   getWallet(address: string | AbstractAddress): WalletUnlocked {
@@ -135,11 +135,11 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Export specific account privateKey
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the wallet is locked.
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the wallet address provided, can not be found.
    */
   exportPrivateKey(address: string | AbstractAddress) {
@@ -156,8 +156,8 @@ export class WalletManager extends EventEmitter {
   /**
    * Add account to a selected vault or on the first vault as default.
    * If not vaults are adds it will return error
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the vault can not be found.
    */
   async addAccount(options?: { vaultId: number }) {
@@ -262,8 +262,8 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Retrieve and decrypt WalletManager state from storage
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the wallet is locked.
    */
   async loadState() {
@@ -278,8 +278,8 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Store encrypted WalletManager state on storage
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the wallet is locked.
    */
   private async saveState() {
@@ -323,10 +323,10 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Return a instantiable Class reference from `WalletManager.Vaults` supported list.
-   * 
+   *
    * @param type - The vault type. @see {@link WalletManager.Vaults}
-   * 
-   * @throws {FuelError} {ErrorCode.WALLET_MANAGER_ERROR}
+   *
+   * @throws {@link ErrorCode#WALLET_MANAGER_ERROR}
    * When the vault type is not found.
    */
   private getVaultClass(type: string) {

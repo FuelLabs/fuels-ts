@@ -360,7 +360,7 @@ export class InputCoder extends Coder<Input, Input> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_INPUT}
+   * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
    * When the input type is invalid (valid types: {@link InputType}).
    */
   encode(value: Input): Uint8Array {
@@ -386,7 +386,9 @@ export class InputCoder extends Coder<Input, Input> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_INPUT,
-          `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(InputType).join(', ')}.`
+          `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(
+            InputType
+          ).join(', ')}.`
         );
       }
     }
@@ -395,7 +397,7 @@ export class InputCoder extends Coder<Input, Input> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_INPUT}
+   * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
    * When the input type is invalid (valid types: {@link InputType}).
    */
   decode(data: Uint8Array, offset: number): [Input, number] {
@@ -420,7 +422,9 @@ export class InputCoder extends Coder<Input, Input> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_INPUT,
-          `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(InputType).join(', ')}.`
+          `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(
+            InputType
+          ).join(', ')}.`
         );
       }
     }

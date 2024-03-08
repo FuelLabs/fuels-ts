@@ -75,14 +75,14 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   /**
    * Convert a Big Number to a hex string.
-   * 
+   *
    * @param bytesPadding - The number of bytes to pad the hex string with.
    * @returns The hex string.
-   * 
-   * @throws {FuelError} {@link ErrorCode.CONVERTING_FAILED}
+   *
+   * @throws {@link ErrorCode#CONVERTING_FAILED}
    * When the BN value is negative.
-   * 
-   * @throws {FuelError} {@link ErrorCode.CONVERTING_FAILED}
+   *
+   * @throws {@link ErrorCode#CONVERTING_FAILED}
    * When the BN value is larger than than the maximum bytes.
    */
   toHex(bytesPadding?: number): string {
@@ -104,11 +104,11 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   /**
    * Convert a Big Number to a byte array.
-   * 
-   * @param bytesPadding - The number of bytes to pad the byte array with. 
+   *
+   * @param bytesPadding - The number of bytes to pad the byte array with.
    * @returns The byte array.
-   * 
-   * @throws {FuelError} {@link ErrorCode.CONVERTING_FAILED}
+   *
+   * @throws {@link ErrorCode#CONVERTING_FAILED}
    * When the BN value is negative.
    */
   toBytes(bytesPadding?: number): Uint8Array {
@@ -300,12 +300,12 @@ export const bn = (value?: BNInput | null, base?: number | 'hex', endian?: BnJs.
 
 /**
  * Parse a string value to a Big Number.
- * 
+ *
  * @param value - The value to parse.
  * @param units - The number of units to parse.
  * @returns The parsed Big Number.
- * 
- * @throws {FuelError} {@link ErrorCode.CONVERTING_FAILED}
+ *
+ * @throws {@link ErrorCode#CONVERTING_FAILED}
  * When the value length, is more than the allows length for the given unit.
  */
 bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {

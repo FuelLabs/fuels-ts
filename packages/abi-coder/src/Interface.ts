@@ -37,11 +37,11 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * Attempts to find a function fragment by name, signature or selector.
-   * 
+   *
    * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
    * @returns the function fragment
-   * 
-   * @throws {FuelError} {@link ErrorCode.FUNCTION_NOT_FOUND}
+   *
+   * @throws {@link ErrorCode#FUNCTION_NOT_FOUND}
    * When the function with the given name, signature or selector is not found in the ABI.
    */
   getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
@@ -56,7 +56,9 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       return fn;
     }
 
-    const validFunctionNames = Object.values(this.functions).map(({ name }) => `"${name}"`).join(', ');
+    const validFunctionNames = Object.values(this.functions)
+      .map(({ name }) => `"${name}"`)
+      .join(', ');
     throw new FuelError(
       ErrorCode.FUNCTION_NOT_FOUND,
       `The function "${nameOrSignatureOrSelector}" not found within the ABI.
@@ -66,12 +68,12 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * Decodes the input data for a FunctionFragment.
-   * 
+   *
    * @param functionFragment - the function fragment to decode or a string (name, signature or selector)
    * @param data - the input data to decode
    * @returns an array of decoded values or undefined if the data is empty
-   * 
-   * @throws {FuelError} {@link ErrorCode.FRAGMENT_NOT_FOUND}
+   *
+   * @throws {@link ErrorCode#FRAGMENT_NOT_FOUND}
    * When the function fragment is not found in the ABI.
    */
   decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
@@ -82,13 +84,13 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * Encodes the input arguments with a FunctionFragment.
-   * 
+   *
    * @param functionFragment - the function fragment to encode or a string (name, signature or selector)
    * @param values - the input values to encode
    * @param offset - the offset to start encoding from
    * @returns the encoded input data
-   * 
-   * @throws {FuelError} {@link ErrorCode.FRAGMENT_NOT_FOUND}
+   *
+   * @throws {@link ErrorCode#FRAGMENT_NOT_FOUND}
    * When the function fragment is not found in the ABI.
    */
   encodeFunctionData(
@@ -108,7 +110,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * For a given function fragment, decodes the output data.
-   * 
+   *
    * @param functionFragment - the function fragment to decode or a string (name, signature or selector)
    * @param data - the output data to decode
    * @returns an array of decoded values or undefined if the data is empty
@@ -121,7 +123,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.LOG_TYPE_NOT_FOUND}
+   * @throws {@link ErrorCode#LOG_TYPE_NOT_FOUND}
    * When the log type with the given log ID is not found in the ABI logged types {@link JsonAbi#loggedTypes}.
    */
   decodeLog(data: BytesLike, logId: number, receiptId: string): any {
@@ -153,12 +155,12 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * Encode a configurable value.
-   * 
+   *
    * @param name - the name of the configurable
    * @param value - the value to encode
-   * @returns {Uint8Array}
-   * 
-   * @throws {FuelError} {@link ErrorCode.CONFIGURABLE_NOT_FOUND}
+   * @returns Uint8Array
+   *
+   * @throws {@link ErrorCode#CONFIGURABLE_NOT_FOUND}
    * When the configurable with the given name is not found in the ABI.
    */
   encodeConfigurable(name: string, value: InputValue) {
@@ -180,11 +182,11 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * Get the type by its type ID.
-   * 
+   *
    * @param typeId - the type ID
    * @returns the type from the abi
-   * 
-   * @throws {FuelError} {@link ErrorCode.TYPE_NOT_FOUND}
+   *
+   * @throws {@link ErrorCode#TYPE_NOT_FOUND}
    * When the type with the given type ID is not found in the ABI.
    */
   getTypeById(typeId: number) {

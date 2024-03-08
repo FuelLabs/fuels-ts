@@ -354,7 +354,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+   * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
    * When the transaction type is not recognized (valid types: {@link TransactionType}).
    */
   encode(value: Transaction): Uint8Array {
@@ -384,7 +384,9 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
-          `Invalid transaction type "${type}". Must be one of the following: ${Object.values(TransactionType).join(', ')}`
+          `Invalid transaction type "${type}". Must be one of the following: ${Object.values(
+            TransactionType
+          ).join(', ')}`
         );
       }
     }
@@ -393,7 +395,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+   * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
    * When the transaction type is not recognized (valid types: {@link TransactionType}).
    */
   decode(data: Uint8Array, offset: number): [Transaction, number] {
@@ -419,7 +421,9 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
-          `Invalid transaction type: "${type}". Must be one of the following: ${Object.values(TransactionType).join(', ')}`
+          `Invalid transaction type: "${type}". Must be one of the following: ${Object.values(
+            TransactionType
+          ).join(', ')}`
         );
       }
     }

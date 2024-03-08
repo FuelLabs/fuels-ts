@@ -39,7 +39,7 @@ function isValidExtendedKey(extendedKey: Uint8Array) {
 }
 
 /**
- * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+ * @throws {@link ErrorCode#HD_WALLET_ERROR}
  * When the path is invalid
  */
 function parsePath(path: string, depth: number = 0) {
@@ -80,8 +80,8 @@ class HDWallet {
    * HDWallet is a implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarchy for Deterministic Wallets
    *
    * @param config - Wallet configurations
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When neither privateKey nor publicKey is provided (at least one should be provided).
    */
   constructor(config: HDWalletConfig) {
@@ -118,8 +118,8 @@ class HDWallet {
    *
    * @param index - Index of the child HDWallet.
    * @returns A new instance of HDWallet on the derived index
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When trying to derive the index without a private key set.
    */
   deriveIndex(index: number) {
@@ -193,8 +193,8 @@ class HDWallet {
    * @param isPublic - enable to export public extendedKey, it not required when HDWallet didn't have the privateKey.
    * @param testnet - Inform if should use testnet or mainnet prefix, default value is true (`mainnet`).
    * @returns BIP-32 extended private key
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When the depth is greater than 255
    */
   toExtendedKey(isPublic: boolean = false, testnet: boolean = false): string {
@@ -235,23 +235,23 @@ class HDWallet {
 
   /**
    * Create HDWallet instance from extended key
-   * 
+   *
    * @param extendedKey - Extended key
    * @returns A new instance of HDWallet
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When the provided key is an invalid extended key
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When the provided key has an invalid checksum
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When the depth is zero but fingerprint/index is non-zero
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When the provided key is an invalid **public** extended key
-   * 
-   * @throws {FuelError} {@link ErrorCode.HD_WALLET_ERROR}
+   *
+   * @throws {@link ErrorCode#HD_WALLET_ERROR}
    * When the provided key is an invalid **private** extended key
    */
   static fromExtendedKey(extendedKey: string) {

@@ -88,8 +88,8 @@ export type TransactionRequestInput =
 
 /**
  * @hidden
- * 
- * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_INPUT}
+ *
+ * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
  * When the input type is invalid (valid types: {@link InputType}).
  */
 export const inputify = (value: TransactionRequestInput): Input => {
@@ -156,7 +156,9 @@ export const inputify = (value: TransactionRequestInput): Input => {
     default: {
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_INPUT,
-        `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(InputType).join(', ')}.`
+        `Invalid transaction input type "${type}", type must be one of the following: ${Object.values(
+          InputType
+        ).join(', ')}.`
       );
     }
   }

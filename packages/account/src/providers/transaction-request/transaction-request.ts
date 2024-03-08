@@ -1,6 +1,7 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -41,7 +42,6 @@ import type {
 import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 export {
   /**

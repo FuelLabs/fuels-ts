@@ -66,8 +66,8 @@ export const getContractId = (
  * @param value - The value to be hexlified.
  * @param isKnownHex - Required if using hex values that need to be converted
  * @returns The input value hexlified with prefix.
- * 
- * @throws {FuelError} {@link ErrorCode.UNEXPECTED_HEX_VALUE}
+ *
+ * @throws {@link ErrorCode#UNEXPECTED_HEX_VALUE}
  * Value should be hex string.
  */
 export const hexlifyWithPrefix = (value: string, isKnownHex = false) => {

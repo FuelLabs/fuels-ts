@@ -11,8 +11,8 @@ import { TransactionStatus } from './types';
 
 /**
  * @hidden
- * 
- * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_STATUS}
+ *
+ * @throws {@link ErrorCode#INVALID_TRANSACTION_STATUS}
  * When the transaction status is not recognized (valid statuses: {@link TransactionStatus}).
  */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
@@ -28,7 +28,9 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
     default:
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_STATUS,
-        `Invalid transaction status: ${gqlStatus}. Must be one of the following: ${Object.values(TransactionStatus).join(', ')}`
+        `Invalid transaction status: ${gqlStatus}. Must be one of the following: ${Object.values(
+          TransactionStatus
+        ).join(', ')}`
       );
   }
 };

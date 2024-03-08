@@ -78,8 +78,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Getter for the contract calls.
    *
    * @returns An array of contract calls.
-   * 
-   * @throws {FuelError} {@link ErrorCode.CHAIN_INFO_CACHE_EMPTY}
+   *
+   * @throws {@link ErrorCode#CHAIN_INFO_CACHE_EMPTY}
    * When the chain info cache is empty.
    * This will occur when the user has not called `Provider.create` to initialize the provider.
    */
@@ -435,11 +435,11 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
-   * 
-   * @throws {FuelError} {@link ErrorCode.GAS_LIMIT_TOO_LOW}
+   *
+   * @throws {@link ErrorCode#GAS_LIMIT_TOO_LOW}
    * When the gas limit is lower than the minimum gas limit.
    *
-   * @throws {FuelError} {@link ErrorCode.GAS_PRICE_TOO_LOW}
+   * @throws {@link ErrorCode#GAS_PRICE_TOO_LOW}
    * When the gas price is lower than the minimum gas price.
    */
   private setDefaultTxParams(

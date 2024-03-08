@@ -38,10 +38,10 @@ export const sortPolicies = (policies: Policy[]): Policy[] =>
 
 /**
  * Asserts that there are no policies with the same type.
- * 
+ *
  * @param policies - The policies to check.
- * 
- * @throws {FuelError} {@link ErrorCode.DUPLICATED_POLICY}
+ *
+ * @throws {@link ErrorCode#DUPLICATED_POLICY}
  * When there are policies with the same type.
  */
 function assertNoDuplicatePolicies(policies: Policy[]): void {
@@ -64,12 +64,10 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
   }
 
   /**
-   * @inheritdoc
-   *
-   * @throws {FuelError} {@link ErrorCode.DUPLICATED_POLICY}
+   * @throws {@link ErrorCode#DUPLICATED_POLICY}
    * When there are policies with the same type.
-   * 
-   * @throws {FuelError} {@link ErrorCode.INVALID_POLICY_TYPE}
+   *
+   * @throws {@link ErrorCode#INVALID_POLICY_TYPE}
    * @see {@link PolicyType} for valid policy types.
    * When the policy type is invalid.
    */

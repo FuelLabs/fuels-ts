@@ -22,11 +22,11 @@ type BuildBlockExplorerUrlHelperParam = 'address' | 'txId' | 'blockNumber';
  * @hidden
  *
  * Builds a block explorer url based on and the given path, block explorer URL and provider URL
- * 
- * @throws {FuelError} {@link ErrorCode.ERROR_BUILDING_BLOCK_EXPLORER_URL}
+ *
+ * @throws {@link ErrorCode#ERROR_BUILDING_BLOCK_EXPLORER_URL}
  * When more than one of the following is options is passed: "address", "txId", "blockNumber"
- * 
- * @throws {FuelError} {@link ErrorCode.ERROR_BUILDING_BLOCK_EXPLORER_URL}
+ *
+ * @throws {@link ErrorCode#ERROR_BUILDING_BLOCK_EXPLORER_URL}
  * When a path is passed along with any of the following: "address", "txId", "blockNumber"
  */
 export const buildBlockExplorerUrl = (

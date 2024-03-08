@@ -262,7 +262,7 @@ export class OutputCoder extends Coder<Output, Output> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_OUTPUT}
+   * @throws {@link ErrorCode#INVALID_TRANSACTION_OUTPUT}
    * When the output type is invalid (valid types: {@link OutputType}).
    */
   encode(value: Output): Uint8Array {
@@ -296,7 +296,9 @@ export class OutputCoder extends Coder<Output, Output> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_OUTPUT,
-          `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(OutputType).join(', ')}.`
+          `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(
+            OutputType
+          ).join(', ')}.`
         );
       }
     }
@@ -305,7 +307,7 @@ export class OutputCoder extends Coder<Output, Output> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_OUTPUT}
+   * @throws {@link ErrorCode#INVALID_TRANSACTION_OUTPUT}
    * When the output type is invalid (valid types: {@link OutputType}).
    */
   decode(data: Uint8Array, offset: number): [Output, number] {
@@ -338,7 +340,9 @@ export class OutputCoder extends Coder<Output, Output> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_OUTPUT,
-          `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(OutputType).join(', ')}.`
+          `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(
+            OutputType
+          ).join(', ')}.`
         );
       }
     }

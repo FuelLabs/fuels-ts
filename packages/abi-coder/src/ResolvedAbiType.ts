@@ -12,12 +12,12 @@ export class ResolvedAbiType {
   readonly components: readonly ResolvedAbiType[] | null;
 
   /**
-   * The resolved type from the ABI. 
-   * 
+   * The resolved type from the ABI.
+   *
    * @param abi - The ABI to resolve the type from.
    * @param argument - The argument to resolve the type from.
-   * 
-   * @throws {FuelError} {@link ErrorCode.TYPE_NOT_FOUND}
+   *
+   * @throws {@link ErrorCode#TYPE_NOT_FOUND}
    * When the type with the given type ID is not found in the ABI.
    */
   constructor(abi: JsonAbi, argument: JsonAbiArgument) {

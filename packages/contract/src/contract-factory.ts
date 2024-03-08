@@ -88,8 +88,8 @@ export default class ContractFactory {
    *
    * @param deployContractOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
-   * 
-   * @throws {FuelError} {@link ErrorCode.MISSING_PROVIDER}
+   *
+   * @throws {@link ErrorCode#MISSING_PROVIDER}
    * When the provider has not been set for the contract.
    * Use the `connect` method to set the provider.
    */
@@ -135,8 +135,8 @@ export default class ContractFactory {
    *
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
-   * 
-   * @throws {FuelError} {@link ErrorCode.ACCOUNT_REQUIRED}
+   *
+   * @throws {@link ErrorCode#ACCOUNT_REQUIRED}
    * When the account has not been set for the contract.
    */
   async deployContract(deployContractOptions: DeployContractOptions = {}) {
@@ -170,11 +170,11 @@ export default class ContractFactory {
    * Set configurable constants of the contract with the specified values.
    *
    * @param configurableConstants - An object containing configurable names and their values.
-   * 
-   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   *
+   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
    * When the contract does not have configurables to be set.
-   * 
-   * @throws {FuelError} {@link ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
+   *
+   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
    * When the contract does not have a configurable with the specified name.
    */
   setConfigurableConstants(configurableConstants: { [name: string]: unknown }) {

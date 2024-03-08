@@ -915,7 +915,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_RECEIPT_TYPE}
+   * @throws {@link ErrorCode#INVALID_RECEIPT_TYPE}
    * When the receipt type is invalid (valid types: {@link GqlReceiptType})
    */
   encode(value: Receipt): Uint8Array {
@@ -981,7 +981,9 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_RECEIPT_TYPE,
-          `Invalid receipt type "${type}", type must be one of the following: ${Object.values(ReceiptType).join(', ')}.`
+          `Invalid receipt type "${type}", type must be one of the following: ${Object.values(
+            ReceiptType
+          ).join(', ')}.`
         );
       }
     }
@@ -990,7 +992,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_RECEIPT_TYPE}
+   * @throws {@link ErrorCode#INVALID_RECEIPT_TYPE}
    * When the receipt type is invalid (valid types: {@link GqlReceiptType})
    */
   decode(data: Uint8Array, offset: number): [Receipt, number] {
@@ -1055,7 +1057,9 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       default: {
         throw new FuelError(
           ErrorCode.INVALID_RECEIPT_TYPE,
-          `Invalid receipt type "${type}", type must be one of the following: ${Object.values(ReceiptType).join(', ')}.`
+          `Invalid receipt type "${type}", type must be one of the following: ${Object.values(
+            ReceiptType
+          ).join(', ')}.`
         );
       }
     }

@@ -20,7 +20,7 @@ export class ScriptInvocationScope<
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.CHAIN_INFO_CACHE_EMPTY}
+   * @throws {@link ErrorCode#CHAIN_INFO_CACHE_EMPTY}
    * When the chain info cache is empty.
    * This will occur when the user has not called `Provider.create` to initialize the provider.
    */

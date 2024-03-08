@@ -4,11 +4,11 @@ import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 /**
  * Extracts the struct name from the JSON ABI.
- * 
- * @param params.rawAbiType - The raw JSON ABI type.
+ *
+ * @param rawAbiType - The raw JSON ABI type.
  * @returns The struct name.
- * 
- * @throws {FuelError} {@link ErrorCode.JSON_ABI_ERROR}
+ *
+ * @throws {@link ErrorCode#JSON_ABI_ERROR}
  * When the struct name cannot be extracted from the JSON ABI.
  */
 export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: RegExp }) {
@@ -20,7 +20,7 @@ export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: 
     const errorMessage = [
       `Couldn't extract struct name with: '${regex}'`,
       `Check your JSON ABI.`,
-      `[source]\n${JSON.stringify(rawAbiType, null, 2)}`
+      `[source]\n${JSON.stringify(rawAbiType, null, 2)}`,
     ].join('\n\n');
 
     throw new FuelError(ErrorCode.JSON_ABI_ERROR, errorMessage);

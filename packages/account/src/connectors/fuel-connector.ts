@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { EventEmitter } from 'events';
 
 import type { TransactionRequestLike } from '../providers';
@@ -13,7 +14,6 @@ import type {
   FuelEventArg,
   Version,
 } from './types';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 /**
  * @name FuelConnector

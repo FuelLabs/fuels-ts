@@ -35,7 +35,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.INVALID_REQUEST}
+   * @throws {@link ErrorCode#INVALID_REQUEST}
    * When the request to the Fuel node fails, error messages are propagated from the Fuel node.
    */
   async next(): Promise<IteratorResult<unknown, unknown>> {

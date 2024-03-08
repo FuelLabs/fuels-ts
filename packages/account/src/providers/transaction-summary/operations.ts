@@ -48,8 +48,8 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
 
 /**
  * @hidden
- * 
- * @throws {FuelError} {@link ErrorCode.INVALID_TRANSACTION_TYPE}
+ *
+ * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
  * When the transaction type is not recognized (valid types: {@link TransactionType}).
  */
 export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeName {
@@ -63,7 +63,9 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
     default:
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_TYPE,
-        `Invalid transaction type "${transactionType}". Must be one of the following: ${Object.values(TransactionType).join(', ')}`
+        `Invalid transaction type "${transactionType}". Must be one of the following: ${Object.values(
+          TransactionType
+        ).join(', ')}`
       );
   }
 }

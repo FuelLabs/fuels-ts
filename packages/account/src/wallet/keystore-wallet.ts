@@ -113,7 +113,7 @@ export async function encryptKeystoreWallet(
 }
 
 /**
- * @throws {FuelError} {@link ErrorCode.INVALID_PASSWORD}
+ * @throws {@link ErrorCode#INVALID_PASSWORD}
  * When the provided password is incorrect.
  */
 export async function decryptKeystoreWallet(jsonWallet: string, password: string): Promise<string> {

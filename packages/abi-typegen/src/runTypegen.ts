@@ -22,10 +22,10 @@ export interface IGenerateFilesParams {
 
 /**
  * Generate types from ABIs
- * 
+ *
  * @param params - The parameters to run the typegen
- * 
- * @throws {FuelError} {@link ErrorCode.MISSING_REQUIRED_PARAMETER}
+ *
+ * @throws {@link ErrorCode#MISSING_REQUIRED_PARAMETER}
  * When neither `inputs` or `filepaths` are supplied (at least one is required)
  */
 export function runTypegen(params: IGenerateFilesParams) {

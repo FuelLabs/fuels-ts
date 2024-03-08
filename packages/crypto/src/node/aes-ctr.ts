@@ -53,8 +53,8 @@ export const encrypt: CryptoApi['encrypt'] = async <T>(
 /**
  * Given a password and a keystore object, decrypts the text and returns
  * the resulting value
- * 
- * @throws {FuelError} {ErrorCode.INVALID_CREDENTIALS}
+ *
+ * @throws {@link ErrorCode#INVALID_CREDENTIALS}
  * When the password provided is incorrect
  */
 export const decrypt: CryptoApi['decrypt'] = async <T>(

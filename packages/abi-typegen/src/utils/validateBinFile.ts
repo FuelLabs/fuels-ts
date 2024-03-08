@@ -5,7 +5,7 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 const upperFirst = (s: string): string => s[0].toUpperCase() + s.slice(1);
 
 /**
- * @throws {FuelError} {@link ErrorCode.BIN_FILE_NOT_FOUND}
+ * @throws {@link ErrorCode#BIN_FILE_NOT_FOUND}
  * When the BIN file is not found and the program is Script based.
  */
 export function validateBinFile(params: {

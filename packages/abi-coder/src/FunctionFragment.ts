@@ -123,7 +123,7 @@ export class FunctionFragment<
   }
 
   /**
-   * @throws {FuelError} {@link ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH}
+   * @throws {@link ErrorCode#ABI_TYPES_AND_VALUES_MISMATCH}
    * When the arguments supplied to the function do not match the minimum required input length.
    */
   private static verifyArgsAndInputsAlign(
@@ -146,12 +146,17 @@ export class FunctionFragment<
       return;
     }
 
-    throw new FuelError(ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH, `
-      Mismatch between the number of provided arguments, and the expected ABI inputs for the function "${this.name}".
+    throw new FuelError(
+      ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH,
+      `
+      Mismatch between the number of provided arguments, and the expected ABI inputs for the function "${
+        this.name
+      }".
       Please ensure that the number of arguments provided, is more than the minimum required input arguments.
       Provided argument length: ${args.length}.
       Minimum required argument length: ${inputs.length - optionalInputs.length}.
-    `);
+    `
+    );
   }
 
   decodeArguments(data: BytesLike) {
