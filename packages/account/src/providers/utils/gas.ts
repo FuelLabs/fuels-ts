@@ -1,5 +1,5 @@
-import type { BN, BNInput } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { BN, BNInput } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
@@ -43,20 +43,40 @@ export function gasUsedByInputs(
   gasCosts: GqlGasCosts
 ) {
   const witnessCache: Array<number> = [];
-  const totalGas = inputs.reduce((total, input) => {
+
+  const chargeableInputs = inputs.filter((input) => {
+    const isCoinOrMessage = 'owner' in input || 'sender' in input;
+    let isPredicate = false;
+    if (isCoinOrMessage) {
+      isPredicate = !!('predicate' in input && input.predicate && input.predicate !== '0x');
+
+      if (isPredicate) {
+        // all predicates UTXOs are chargeable
+        return true;
+      }
+
+      if (!witnessCache.includes(input.witnessIndex)) {
+        // should charge only once for each witness
+        witnessCache.push(input.witnessIndex);
+        return true;
+      }
+    }
+    return false;
+  });
+
+  const vmInitializationCost = resolveGasDependentCosts(txBytesSize, gasCosts.vmInitialization);
+
+  const totalGas = chargeableInputs.reduce((total, input) => {
     if ('predicate' in input && input.predicate && input.predicate !== '0x') {
       return total.add(
-        resolveGasDependentCosts(txBytesSize, gasCosts.vmInitialization)
+        vmInitializationCost
           .add(resolveGasDependentCosts(arrayify(input.predicate).length, gasCosts.contractRoot))
           .add(bn(input.predicateGasUsed))
       );
     }
-    if ('witnessIndex' in input && !witnessCache.includes(input.witnessIndex)) {
-      witnessCache.push(input.witnessIndex);
-      return total.add(gasCosts.ecr1);
-    }
-    return total;
-  }, bn());
+
+    return total.add(gasCosts.ecr1);
+  }, bn(0));
   // Never allow gas to exceed MAX_U64
   return totalGas;
 }
