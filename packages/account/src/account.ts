@@ -334,15 +334,15 @@ export class Account extends AbstractAccount {
         resourcesOwner: this,
       });
 
-    request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
+    if (txParams.gasLimit) {
+      this.validateGas({
+        gasUsed,
+        gasLimit: request.gasLimit,
+      });
+    }
 
-    this.validateGas({
-      gasUsed,
-      gasLimit: request.gasLimit,
-    });
-
-    // TODO: Fix this after fixing maxFee calculation
-    request.maxFee = maxFee.add(20);
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
 
     await this.fund(request, requiredQuantities, maxFee);
 
@@ -426,16 +426,15 @@ export class Account extends AbstractAccount {
       request,
       [{ amount: bn(amount), assetId: String(assetId) }]
     );
+    if (txParams.gasLimit) {
+      this.validateGas({
+        gasUsed,
+        gasLimit: request.gasLimit,
+      });
+    }
 
-    request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
-
-    this.validateGas({
-      gasUsed,
-      gasLimit: request.gasLimit,
-    });
-
-    // TODO: Fix this after fixing maxFee calculation
-    request.maxFee = maxFee.add(20);
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
 
     await this.fund(request, requiredQuantities, maxFee);
 
@@ -482,15 +481,15 @@ export class Account extends AbstractAccount {
       forwardingQuantities
     );
 
-    request.gasLimit = bn(params.gasLimit ?? gasUsed);
+    if (txParams.gasLimit) {
+      this.validateGas({
+        gasUsed,
+        gasLimit: request.gasLimit,
+      });
+    }
 
-    this.validateGas({
-      gasUsed,
-      gasLimit: request.gasLimit,
-    });
-
-    // TODO: Fix this after fixing maxFee calculation
-    request.maxFee = maxFee.add(20);
+    request.maxFee = maxFee;
+    request.gasLimit = gasUsed;
 
     await this.fund(request, requiredQuantities, maxFee);
 
