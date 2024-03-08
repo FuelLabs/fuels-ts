@@ -5,8 +5,8 @@ import { scrypt } from './scrypt';
 
 const data = bufferFromString('hashedKey');
 
-vi.mock('ethereum-cryptography/scrypt', () => ({
-  scryptSync: vi.fn(() => data),
+vi.mock('@noble/hashes/scrypt', () => ({
+  scrypt: vi.fn(() => data),
 }));
 
 /**
