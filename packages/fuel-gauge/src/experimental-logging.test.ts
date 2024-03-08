@@ -17,10 +17,10 @@ const B512 =
   '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';
 
 beforeAll(async () => {
-  const contractName = 'logging';
+  const projectName = 'logging';
   const path = join(
     __dirname,
-    `../test/fixtures/forc-projects-experimental/${contractName}/out/release/${contractName}`
+    `../test/fixtures/forc-projects-experimental/${projectName}/out/release/${projectName}`
   );
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));

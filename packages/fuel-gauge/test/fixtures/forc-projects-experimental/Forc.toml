@@ -1,5 +1,5 @@
 [workspace]
-members = ["logging"]
+members = ["logging", "script"]
 
 [patch.'https://github.com/fuellabs/sway']
-std = { git = "https://github.com/fuellabs/sway", branch = "xunilrj/encoding-contract-call" }
+std = { git = "https://github.com/fuellabs/sway", branch = "xunilrj/fix-new-encoding-abi" }

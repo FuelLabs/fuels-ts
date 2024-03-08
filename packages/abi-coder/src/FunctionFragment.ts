@@ -206,7 +206,9 @@ export class FunctionFragment<
     }
 
     const bytes = arrayify(data);
-    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output, {
+      encoding: this.jsonAbi.encoding,
+    });
 
     return coder.decode(bytes, 0) as [DecodedValue | undefined, number];
   }
