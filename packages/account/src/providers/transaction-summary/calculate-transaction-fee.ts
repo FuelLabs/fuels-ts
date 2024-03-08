@@ -5,8 +5,8 @@ import { PolicyType, TransactionCoder, TransactionType } from '@fuel-ts/transact
 import { arrayify } from '@fuel-ts/utils';
 
 import type { GqlConsensusParameters, GqlFeeParameters } from '../__generated__/operations';
-import { calculatePriceWithFactor } from '../utils';
 import {
+  calculateGasFee,
   calculateMetadataGasForTxCreate,
   calculateMetadataGasForTxScript,
   getMaxGas,
@@ -23,6 +23,7 @@ type FeeParams =
 export type CalculateTransactionFeeParams = {
   gasUsed: BN;
   rawPayload: string;
+  tip: BN;
   consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & { feeParams: FeeParams };
 };
 
@@ -30,6 +31,7 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
   const {
     gasUsed,
     rawPayload,
+    tip,
     consensusParameters: { gasCosts, feeParams },
   } = params;
 
@@ -102,14 +104,37 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     witnessLimit,
   });
 
-  // TODO: fix gas estimation
-  const feeFromGasUsed = calculatePriceWithFactor(gasUsed, bn(0), gasPriceFactor);
-  const minFee = calculatePriceWithFactor(minGas, bn(0), gasPriceFactor);
-  const maxFee = calculatePriceWithFactor(maxGas, bn(0), gasPriceFactor);
-  const fee = minFee.add(feeFromGasUsed);
+  /**
+   * TODO: Validate this calculation
+   * Ideally we should calculate the fee using the gas price value that was used
+   * to process the transaction. The gas price value is not available within the
+   * transaction object and there is no ( directly at least ) way to retrieve it.
+   */
+  const feeFromGasUsed = calculateGasFee({
+    gasPrice: bn(1),
+    gas: gasUsed,
+    priceFactor: gasPriceFactor,
+    tip,
+  });
+
+  const minFee = calculateGasFee({
+    gasPrice: bn(1),
+    gas: minGas,
+    priceFactor: gasPriceFactor,
+    tip,
+  });
+
+  const maxFee = calculateGasFee({
+    gasPrice: bn(1),
+    gas: maxGas,
+    priceFactor: gasPriceFactor,
+    tip,
+  });
 
   return {
-    fee,
+    // TODO: Validate if we need to return all these props here. It seems we are
+    // only interested in the fee value.
+    fee: maxFee,
     minFee,
     maxFee,
     feeFromGasUsed,

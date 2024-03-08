@@ -21,6 +21,7 @@ describe('calculateTransactionFee', () => {
     const gasPerByte = 4;
 
     const { fee, feeFromGasUsed, maxFee, minFee } = calculateTransactionFee({
+      tip: bn(0),
       consensusParameters: {
         feeParams: {
           gasPriceFactor,
@@ -51,6 +52,7 @@ describe('calculateTransactionFee', () => {
     const gasPerByte = 4;
 
     const { fee, feeFromGasUsed, maxFee, minFee } = calculateTransactionFee({
+      tip: bn(0),
       consensusParameters: {
         feeParams: {
           gasPriceFactor,
@@ -81,6 +83,7 @@ describe('calculateTransactionFee', () => {
     const gasPerByte = 4;
 
     const { fee, feeFromGasUsed, maxFee, minFee } = calculateTransactionFee({
+      tip: bn(0),
       consensusParameters: {
         feeParams: {
           gasPriceFactor,
