@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
+import type { BN, BaseWalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -120,15 +120,14 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const quantities: CoinQuantityLike[] = [
-      [20_000 + amountToTransfer, BaseAssetId],
-      [amountToTransfer, ASSET_A],
-      [amountToTransfer, ASSET_B],
-    ];
+    const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(request, [], {
+      resourcesOwner: wallet,
+    });
 
-    const resources = await wallet.getResourcesToSpend(quantities);
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
 
-    request.addResources(resources);
+    await wallet.fund(request, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(request);
     const { fee } = await tx.wait();
@@ -152,7 +151,11 @@ describe('Fee', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { transactionRequest } = factory.createTransactionRequest();
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(transactionRequest);
+    const { maxFee, requiredQuantities, gasUsed } =
+      await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = maxFee;
+    transactionRequest.gasLimit = gasUsed;
 
     await wallet.fund(transactionRequest, requiredQuantities, maxFee);
 
