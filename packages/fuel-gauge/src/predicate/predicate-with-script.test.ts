@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
+import type { BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -23,13 +23,11 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
     let provider: Provider;
-    let gasPrice: BN;
 
     beforeEach(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
-      gasPrice = provider.getGasConfig().minGasPrice;
     });
 
     it('calls a predicate and uses proceeds for a script call', async () => {
@@ -69,7 +67,7 @@ describe('Predicate', () => {
           has_account: true,
           total_complete: 100,
         })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+        .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 

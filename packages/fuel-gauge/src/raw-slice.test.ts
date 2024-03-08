@@ -27,10 +27,8 @@ const setup = async (balance = 500_000) => {
 
 const setupContract = getSetupContract('raw-slice');
 let contractInstance: Contract;
-let gasPrice: BN;
 beforeAll(async () => {
   contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 /**
@@ -85,7 +83,6 @@ describe('Raw Slice Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
@@ -99,7 +96,7 @@ describe('Raw Slice Tests', () => {
     };
     const tx = await predicate
       .setData(INPUT)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
     await tx.waitForResult();
 
     // Check the balance of the receiver

@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, WalletUnlocked } from 'fuels';
+import type { WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -43,10 +43,8 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
     let provider: Provider;
-    let gasPrice: BN;
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
     });
 
     beforeEach(async () => {
@@ -89,7 +87,7 @@ describe('Predicate', () => {
         tokenPoolBytes,
         tokenPoolAbi,
         wallet
-      ).deployContract({ gasPrice });
+      ).deployContract();
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
 

@@ -26,9 +26,9 @@ describe('Policies', () => {
   });
 
   type CustomTxParams = {
-    gasPrice: BigNumberish;
     gasLimit?: BigNumberish;
     maturity?: number;
+    tip?: BigNumberish;
     maxFee?: BigNumberish;
     witnessLimit?: BigNumberish;
   };
@@ -45,8 +45,8 @@ describe('Policies', () => {
     transaction: Transaction;
     params: CustomTxParams;
   }) => {
-    expect(transaction.policies?.[0].type).toBe(PolicyType.GasPrice);
-    expect(bn(transaction.policies?.[0].data).eq(params.gasPrice)).toBeTruthy();
+    expect(transaction.policies?.[0].type).toBe(PolicyType.Tip);
+    expect(bn(transaction.policies?.[0].data).eq(bn(params.tip))).toBeTruthy();
     expect(transaction.policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(transaction.policies?.[1].data).eq(bn(params.witnessLimit))).toBeTruthy();
     expect(transaction.policies?.[2].type).toBe(PolicyType.Maturity);
@@ -62,7 +62,6 @@ describe('Policies', () => {
     const txRequest = new ScriptTransactionRequest({
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: randomNumber(9_000, 10_000),
     });
@@ -99,7 +98,6 @@ describe('Policies', () => {
 
     const { transactionRequest: txRequest } = factory.createTransactionRequest({
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: randomNumber(9_000, 10_000),
     });
@@ -132,7 +130,6 @@ describe('Policies', () => {
     const callScope = contract.functions.payable().txParams({
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: randomNumber(9_000, 10_000),
     });
@@ -164,7 +161,6 @@ describe('Policies', () => {
     const callScope = scriptInstance.functions.main(33).txParams({
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: randomNumber(9_000, 10_000),
     });
@@ -188,7 +184,6 @@ describe('Policies', () => {
     const txParams: CustomTxParams = {
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: randomNumber(9_000, 10_000),
     };
@@ -219,7 +214,6 @@ describe('Policies', () => {
     const txParams: CustomTxParams = {
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: randomNumber(9_000, 10_000),
     };
@@ -241,7 +235,6 @@ describe('Policies', () => {
     const txParams: CustomTxParams = {
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: 5,
       maxFee: randomNumber(9_000, 10_000),
     };
@@ -260,7 +253,6 @@ describe('Policies', () => {
     const txParams: CustomTxParams = {
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
-      gasPrice: randomNumber(1, 3),
       witnessLimit: randomNumber(800, 900),
       maxFee: 5,
     };

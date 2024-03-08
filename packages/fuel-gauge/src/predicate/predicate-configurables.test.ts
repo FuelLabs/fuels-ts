@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, CoinQuantityLike } from 'fuels';
+import type { CoinQuantityLike } from 'fuels';
 import {
   getRandomB256,
   BaseAssetId,
@@ -25,7 +25,6 @@ describe('Predicate', () => {
 
   describe('Configurables', () => {
     let wallet: WalletUnlocked;
-    let gasPrice: BN;
     const amountToPredicate = 500_000;
 
     const defaultValues = {
@@ -35,7 +34,6 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL);
-      ({ minGasPrice: gasPrice } = provider.getGasConfig());
 
       const quantities: CoinQuantityLike[] = [
         {
@@ -69,7 +67,6 @@ describe('Predicate', () => {
       predicate.setData(defaultValues.FEE, defaultValues.ADDRESS);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasPrice,
         gasLimit: 10_000,
       });
 
@@ -104,7 +101,6 @@ describe('Predicate', () => {
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasPrice,
         gasLimit: 10_000,
       });
 
@@ -139,7 +135,6 @@ describe('Predicate', () => {
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasPrice,
         gasLimit: 10_000,
       });
 
@@ -176,7 +171,6 @@ describe('Predicate', () => {
       predicate.setData(configurableConstants.FEE, configurableConstants.ADDRESS);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasPrice,
         gasLimit: 10_000,
       });
 

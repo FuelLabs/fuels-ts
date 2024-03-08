@@ -1,4 +1,4 @@
-import type { Contract, Provider } from 'fuels';
+import type { Contract } from 'fuels';
 import { BN, PolicyType } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -9,22 +9,20 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
-  let provider: Provider;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
-    provider = contract.provider;
   });
 
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
     // #region variable-outputs-1
-    const { minGasPrice } = provider.getGasConfig();
-
+    const tip = 10;
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
         gasLimit: 10_000,
         variableOutputs: 1,
+        tip,
       })
       .call();
     // #endregion variable-outputs-1
@@ -32,12 +30,10 @@ describe(__filename, () => {
 
     const { transaction } = transactionResult;
 
-    const gasLimitPolicy = transaction.policies?.find(
-      (policy) => policy.type === PolicyType.GasPrice
-    );
+    const gasLimitPolicy = transaction.policies?.find((policy) => policy.type === PolicyType.Tip);
 
     expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10_000);
-    expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(minGasPrice.toNumber());
+    expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(tip);
   });
 
   it('should succesfully execute contract call without txParams', async () => {

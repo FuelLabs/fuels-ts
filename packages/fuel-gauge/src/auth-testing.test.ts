@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
 import {
   AssertFailedRevertError,
   ContractFactory,
@@ -13,7 +13,6 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
-let gasPrice: BN;
 
 /**
  * @group node
@@ -21,7 +20,6 @@ let gasPrice: BN;
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
@@ -29,7 +27,7 @@ describe('Auth Testing', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract();
   });
 
   it('can get is_caller_external', async () => {

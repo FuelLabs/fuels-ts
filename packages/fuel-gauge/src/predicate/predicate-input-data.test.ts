@@ -1,4 +1,4 @@
-import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import type { InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
 import { BaseAssetId, Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -18,12 +18,10 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
-    let gasPrice: BN;
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
       provider = wallet.provider;
-      gasPrice = provider.getGasConfig().minGasPrice;
     });
 
     it('throws invalid transaction when input_predicate_data is required for predicate validation', async () => {
@@ -35,7 +33,6 @@ describe('Predicate', () => {
 
       await expect(
         predicate.setData(true).transfer(receiver.address, amountToReceiver, BaseAssetId, {
-          gasPrice,
           gasLimit: 10_000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/i);

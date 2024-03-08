@@ -8,11 +8,9 @@ import { getScript, getSetupContract } from './utils';
 
 const setupContract = getSetupContract('std-lib-string');
 let contractInstance: Contract;
-let gasPrice: BN;
 
 beforeAll(async () => {
   contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 const setup = async (balance = 500_000) => {
@@ -58,7 +56,6 @@ describe('std-lib-string Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
@@ -67,7 +64,7 @@ describe('std-lib-string Tests', () => {
     const initialReceiverBalance = await receiver.getBalance();
     const tx = await predicate
       .setData(1, 2, 'Hello World')
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
     await tx.waitForResult();
 
     // Check the balance of the receiver

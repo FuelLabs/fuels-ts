@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
 import {
   ScriptResultDecoderError,
   SendMessageRevertError,
@@ -22,8 +22,6 @@ let wallet: WalletUnlocked;
  * @group node
  */
 describe('Revert Error Testing', () => {
-  let gasPrice: BN;
-
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
@@ -33,8 +31,7 @@ describe('Revert Error Testing', () => {
     );
 
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract();
   });
 
   it('can pass required checks [valid]', async () => {

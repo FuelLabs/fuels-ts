@@ -1,6 +1,5 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
-  BN,
   Bech32Address,
   BigNumberish,
   Bytes,
@@ -59,12 +58,6 @@ const ADDRESS_BYTES = new Uint8Array([
  * @group node
  */
 describe('Doc Examples', () => {
-  let gasPrice: BN;
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
   test('it has an Address class using bech32Address', () => {
     const address = new Address(ADDRESS_BECH32);
 
@@ -432,7 +425,6 @@ describe('Doc Examples', () => {
     const initialPredicateBalance = await predicate.getBalance();
 
     const response = await wallet1.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await response.waitForResult();
@@ -442,7 +434,6 @@ describe('Doc Examples', () => {
     expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
     const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     // Wait for Transaction to succeed
@@ -463,7 +454,7 @@ describe('Doc Examples', () => {
 
     const tx = await predicate
       .setData(signatures)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasLimit: 10_000 });
     await tx.waitForResult();
 
     // check balances

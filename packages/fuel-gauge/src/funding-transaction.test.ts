@@ -32,7 +32,6 @@ describe(__filename, () => {
   }) => {
     const request = new ScriptTransactionRequest({
       gasLimit: 1_000,
-      gasPrice: bn(10),
     });
 
     for (let i = 0; i < splitIn; i++) {
@@ -66,7 +65,6 @@ describe(__filename, () => {
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1_000,
-      gasPrice: bn(10),
     });
 
     const amountToTransfer = 300;
@@ -117,7 +115,6 @@ describe(__filename, () => {
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1_000,
-      gasPrice: bn(10),
     });
 
     const amountToTransfer = 100;
@@ -161,7 +158,6 @@ describe(__filename, () => {
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1_000,
-      gasPrice: bn(10),
     });
 
     const amountToTransfer = 1000;

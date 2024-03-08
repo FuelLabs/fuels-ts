@@ -11,7 +11,6 @@ import { getTestWallet } from '../../utils';
  */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
-  let gasPrice: BN;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE
@@ -19,7 +18,6 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     wallet = await getTestWallet();
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
   });
 
   it('should successfully tranfer to setted whitelisted address', async () => {
@@ -35,7 +33,6 @@ describe(__filename, () => {
 
     // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 500_000, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
@@ -49,7 +46,6 @@ describe(__filename, () => {
 
     // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
@@ -70,7 +66,6 @@ describe(__filename, () => {
 
     // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 300_000, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
@@ -84,7 +79,6 @@ describe(__filename, () => {
 
     // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 

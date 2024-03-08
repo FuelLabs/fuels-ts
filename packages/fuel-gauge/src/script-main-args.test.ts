@@ -79,7 +79,6 @@ describe('Script Coverage', () => {
         .main(foo)
         .txParams({
           gasLimit: 10,
-          gasPrice: 400,
         })
         .call()
     ).rejects.toThrow(/Gas limit '10' is lower than the required/);

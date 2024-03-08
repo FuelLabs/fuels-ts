@@ -27,10 +27,8 @@ const B512 =
 const setupContract = getSetupContract('coverage-contract');
 
 let contractInstance: Contract;
-let gasPrice: BN;
 beforeAll(async () => {
   contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 enum SmallEnum {
@@ -484,7 +482,7 @@ describe('Coverage Contract', () => {
 
   it('should test spending input messages', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice });
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
     const recipient = Wallet.generate({
       provider,
