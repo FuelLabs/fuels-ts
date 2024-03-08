@@ -67,7 +67,7 @@ describe(__filename, () => {
     request.setData(abiContents, scriptArguments).addContractInputAndOutput(contract.id);
 
     // 4. Calculate the transaction fee
-    const { maxFee } = await provider.getTransactionCost(request);
+    const { maxFee, gasUsed } = await provider.getTransactionCost(request);
 
     // 5. Get the transaction resources
     const quantities: CoinQuantityLike[] = [
@@ -75,6 +75,9 @@ describe(__filename, () => {
       [500, ASSET_B],
       [maxFee, BaseAssetId],
     ];
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
 
     const resources = await wallet.getResourcesToSpend(quantities);
 
