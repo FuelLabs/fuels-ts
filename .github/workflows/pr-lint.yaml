@@ -57,6 +57,12 @@ jobs:
           pnpm changeset version
           VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)
           git reset --hard
-          git tag | grep $VERSION && echo "A release for the next patch version $VERSION already exists." && exit 1 || exit 0
+          STATUS_CODE=$(curl -s -w '%{http_code}\n' "https://www.npmjs.com/package/fuels/v/$VERSION" | tail -n1)
+          if [[ $STATUS_CODE  != 404 ]]; then
+            echo "Release for version $VERSION already exists or curl received an unexpected result (result is $STATUS_CODE). Exiting."
+            exit 1
+          else
+            exit 0
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
