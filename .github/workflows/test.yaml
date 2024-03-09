@@ -66,6 +66,7 @@ jobs:
           path: coverage/environments/${{ matrix.env.name }}
 
   test:
+    if: github.base_ref == 'master'
     runs-on: ubuntu-latest
     needs: [environments]
     steps:
@@ -123,7 +124,7 @@ jobs:
 
   test-e2e:
     name: e2e
-    if: github.head_ref == 'changeset-release/master'
+    if: startsWith(github.head_ref, 'changeset-release/') == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

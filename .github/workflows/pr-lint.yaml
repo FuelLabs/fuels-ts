@@ -30,7 +30,7 @@ jobs:
 
   validate-changeset:
     name: Validate PR Changeset
-    if: github.head_ref != 'changeset-release/master'
+    if: startsWith(github.head_ref, 'changeset-release/') != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,4 +42,21 @@ jobs:
         uses: ./.github/actions/ci-setup
 
       - name: Validate Changeset
-        run: pnpm changeset status --since=origin/master
+        run: pnpm changeset status --since=origin/${{ github.base_ref }}
+
+      - name: Validate that there are only patch changes
+        if: startsWith(github.base_ref, 'release/')
+        run: |
+          CHANGES=$(sed -n '/---/,/---/p' .changesets/*.md)
+          echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || echo "No patch changes found." && exit 1
+          echo $CHANGES | grep -E 'minor|major' --silent && echo "Old releases can only be patched; no minor and major versions allowed." && exit 1 || echo "No minor nor major changes."
+
+      - name: Validate that there was no release for the next patch version
+        if: startsWith(github.base_ref, 'release/')
+        run: |
+          pnpm changeset version
+          VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)
+          git reset --hard
+          git tag | grep $VERSION && echo "A release for the next patch version $VERSION already exists." && exit 1 || exit 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
