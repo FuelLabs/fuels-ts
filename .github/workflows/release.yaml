@@ -22,6 +22,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: false
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
