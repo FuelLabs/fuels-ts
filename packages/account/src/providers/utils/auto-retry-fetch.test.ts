@@ -1,7 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import type { FetchRequestOptions } from '../provider';
-
 import type { RetryOptions } from './auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './auto-retry-fetch';
 
@@ -57,7 +55,7 @@ describe('getWaitDelay', () => {
 
 describe('autoRetryFetch', () => {
   const url = 'http://anythibng.com';
-  const fetchOptions: FetchRequestOptions = { method: 'POST', headers: {}, body: '' };
+  const fetchOptions: RequestInit = { method: 'POST', headers: {}, body: '' };
 
   const maxRetries = 5;
   const baseDelay = 1;
