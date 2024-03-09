@@ -1,4 +1,4 @@
-import { FuelError } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 
@@ -65,7 +65,17 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         continue;
       }
 
-      const { data, errors } = JSON.parse(text.split('data:')[1]);
+      let data;
+      let errors;
+
+      try {
+        ({ data, errors } = JSON.parse(text.replace(/^data:/, '')));
+      } catch (e) {
+        throw new FuelError(
+          ErrorCode.STREAM_PARSING_ERROR,
+          `Error while parsing stream data response: ${text}`
+        );
+      }
 
       if (Array.isArray(errors)) {
         throw new FuelError(
