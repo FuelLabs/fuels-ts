@@ -1,5 +1,7 @@
 script;
 
+use std::b512::B512;
+
 // fn main() -> u8 {
 //     255
 // }
@@ -17,13 +19,13 @@ script;
 // }
 
 // fn main() -> u256 {
-//     18446744073709551615
+//     0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFu256
 // }
 
 // fn main() -> bool {
 //     true
 // }
 
-// fn main() -> b256 {
-//     0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6
-// }
+fn main(input: B512) -> B512 {
+    input
+}
