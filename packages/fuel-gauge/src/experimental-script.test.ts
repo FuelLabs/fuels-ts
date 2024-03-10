@@ -8,9 +8,9 @@ import { createWallet } from './utils';
 let script: Script;
 let gasPrice: BN;
 
-const U8_MAX = 2 ** 8 - 1;
-const U16_MAX = 2 ** 16 - 1;
-const U32_MAX = 2 ** 32 - 1;
+const U8_MAX = 255;
+const U16_MAX = 65535;
+const U32_MAX = 4294967295;
 
 beforeAll(async () => {
   const projectName = 'script';
@@ -32,8 +32,8 @@ beforeAll(async () => {
  * @group node
  */
 describe('Experimental Logging', () => {
-  it('prints u8', async () => {
+  it('prints u8 u16 tuple', async () => {
     const { value } = await script.functions.main().call();
-    expect(value).toBe(U8_MAX);
+    expect(value).toStrictEqual([U8_MAX, U16_MAX]);
   });
 });
