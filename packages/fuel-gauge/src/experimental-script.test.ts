@@ -33,8 +33,8 @@ beforeAll(async () => {
  * @group node
  */
 describe('Experimental Logging', () => {
-  it('prints u8 u16 u32 u64 tuple', async () => {
+  it('prints u8 u16 u32 u64 bool tuple', async () => {
     const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual([U8_MAX, U16_MAX, U32_MAX, bn(U64_MAX)]);
+    expect(value).toStrictEqual([U8_MAX, U16_MAX, U32_MAX, bn(U64_MAX), true, false]);
   });
 });
