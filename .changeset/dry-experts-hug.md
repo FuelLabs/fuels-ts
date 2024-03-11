@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-Better error message when deployment fails due to unavailable node.
+Better error message when `fuels` cli deployment fails due to unavailable node.
