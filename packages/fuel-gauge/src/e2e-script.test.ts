@@ -79,13 +79,13 @@ type MainArgs = [
  */
 describe('Live Script Test', () => {
   it('can use script against live Fuel Node', async () => {
-    if (!process.env.FUEL_NETWORK_GENESIS_KEY) {
+    if (!process.env.TEST_WALLET_PVT_KEY) {
       console.log('Skipping live Fuel Node test');
       return;
     }
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(process.env.FUEL_NETWORK_GENESIS_KEY, provider);
+    const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
     const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
 
     let output: BN = bn(0);
@@ -112,9 +112,9 @@ describe('Live Script Test', () => {
       console.warn(`
         not enough coins to fit the target?
         - add assets: https://faucet-beta-5.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
-        - bech32 address: fuel1nknjglsav0fs6603xmc0se2waq6qxck8sk6s7znq2y78akl4hd7qpwlm8m
-        `);
+        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${process.env.TEST_WALLET_ADDRESS}
+        - bech32 address: ${process.env.TEST_WALLET_ADDRESS}
+      `);
     }
 
     expect(output.toString()).toBe('1');
