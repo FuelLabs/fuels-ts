@@ -28,7 +28,7 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
-type PredicateParams<T> = {
+export type PredicateParams<T = InputValue[]> = {
   bytecode: BytesLike;
   provider: Provider;
   abi?: JsonAbi;
