@@ -2,30 +2,30 @@ script;
 
 use std::b512::B512;
 
-// fn main() -> u8 {
+// fn print_u8() -> u8 {
 //     255
 // }
 
-// fn main() -> u16 {
+// fn print_u16() -> u16 {
 //     65535
 // }
 
-// fn main() -> u32 {
+// fn print_u32() -> u32 {
 //     4294967295
 // }
 
-// fn main() -> u64 {
+// fn print_u64() -> u64 {
 //     18446744073709551615
 // }
 
-// fn main() -> u256 {
+// fn print_u256() -> u256 {
 //     0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFu256
 // }
 
-// fn main() -> bool {
+// fn print_bool() -> bool {
 //     true
 // }
 
-fn main(input: B512) -> B512 {
-    input
-}
+// fn echo_b512(input: B512) -> B512 {
+//     input
+// }
