@@ -17,11 +17,9 @@ export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: 
   const match = rawAbiType.type.match(params.regex)?.[1];
 
   if (!match) {
-    const errorMessage = [
-      `Couldn't extract struct name with: '${regex}'`,
-      `Check your JSON ABI.`,
-      `[source]\n${JSON.stringify(rawAbiType, null, 2)}`,
-    ].join('\n\n');
+    let errorMessage = `Couldn't extract struct name with: '${regex}'.\n\n`;
+    errorMessage += `Check your JSON ABI.\n\n[source]\n`;
+    errorMessage += `${JSON.stringify(rawAbiType, null, 2)}`;
 
     throw new FuelError(ErrorCode.JSON_ABI_ERROR, errorMessage);
   }
