@@ -6,7 +6,7 @@ import { majorEq, minorEq, patchEq } from './semver';
 export function checkFuelCoreVersionCompatibility(networkVersion: string) {
   const { FUEL_CORE: supportedVersion } = getBuiltinVersions();
 
-  if (/^[0-9]+\.[0-9]+\.[0-9]+$/m.test(networkVersion)) {
+  if (/^\d+\.\d+\.\d+\D+/m.test(networkVersion)) {
     warn(
       `You're running against an unreleased fuel-core version: ${networkVersion}. Things may work as expected, but it's not guaranteed. Please use a released version.`
     );
