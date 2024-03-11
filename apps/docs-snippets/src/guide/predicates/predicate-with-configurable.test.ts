@@ -28,7 +28,7 @@ describe(__filename, () => {
 
     const configurable = { WHITELISTED: newWhitelistedAddress };
     // instantiate predicate with configurable constants
-    const predicate = new Predicate({
+    const predicate = new Predicate<[string]>({
       bytecode: bin,
       provider: wallet.provider,
       abi,
