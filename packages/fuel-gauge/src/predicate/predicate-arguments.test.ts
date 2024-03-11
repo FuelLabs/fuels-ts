@@ -141,18 +141,27 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
-      const predicate = new Predicate<[Validation]>({
+      const predicateInstanceForBalance = new Predicate<[Validation]>({
         bytecode: predicateBytesMainArgsStruct,
         abi: predicateAbiMainArgsStruct,
         provider,
         inputData: [{ has_account: true, total_complete: 100 }],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      const initialPredicateBalance = await fundPredicate(
+        wallet,
+        predicateInstanceForBalance,
+        amountToPredicate
+      );
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-struct-arg
-      // #context const predicate = new Predicate(bytecode, chainId, abi, [{ has_account: true, total_complete: 100 }]);
+      const predicate = new Predicate<[Validation]>({
+        bytecode: predicateBytesMainArgsStruct,
+        abi: predicateAbiMainArgsStruct,
+        provider,
+        inputData: [{ has_account: true, total_complete: 100 }],
+      });
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
         gasLimit: 10_000,
