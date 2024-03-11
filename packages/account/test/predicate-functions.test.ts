@@ -51,7 +51,7 @@ describe('Predicate', () => {
         });
 
         predicate.setData('NADA');
-      }).toThrow('Cannot use ABI without "main" function');
+      }).toThrow(`ABI doesn't have a 'main()' method.`);
     });
   });
 });
