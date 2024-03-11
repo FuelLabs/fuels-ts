@@ -30,4 +30,16 @@ describe('createWallet', () => {
     expect(error).toBeTruthy();
     expect(error?.message).toMatch(/you must provide.+privateKey.+PRIVATE_KEY/i);
   });
+
+  test('throws error when failed to connect to node', async () => {
+    const providerUrl = 'http://localhost:1234';
+    const { error, result } = await safeExec(async () => {
+      await createWallet(providerUrl, privateKey);
+    });
+    expect(result).not.toBeTruthy();
+    expect(error).toBeTruthy();
+    expect(error?.message).toEqual(
+      `Couldn't connect to the node at ${providerUrl}. Check that you've got a node running at the config's providerUrl or set autoStartFuelCore to true.`
+    );
+  });
 });
