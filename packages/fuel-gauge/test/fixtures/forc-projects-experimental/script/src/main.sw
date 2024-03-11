@@ -1,6 +1,7 @@
 script;
 
 use std::b512::B512;
+use std::string::String;
 
 // fn print_u8() -> u8 {
 //     255
@@ -34,7 +35,12 @@ use std::b512::B512;
 //     input
 // }
 
-fn main() -> str[4] {
-    let my_string: str[4] = __to_str_array("fuel");
+// fn echo_str_array() -> str[4] {
+//     let my_string: str[4] = __to_str_array("fuel");
+//     my_string
+// }
+
+fn main() -> String {
+    let my_string: String = String::from_ascii_str("Hello World");
     my_string
 }

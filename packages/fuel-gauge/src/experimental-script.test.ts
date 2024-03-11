@@ -74,8 +74,13 @@ describe('Experimental Logging', () => {
     expect(value).toStrictEqual(b512);
   });
 
-  it('echos string', async () => {
+  it.skip('echos string', async () => {
     const { value } = await script.functions.main().call();
     expect(value).toStrictEqual('fuel');
+  });
+
+  it('echoes std string', async () => {
+    const { value } = await script.functions.main().call();
+    expect(value).toStrictEqual('Hello World');
   });
 });
