@@ -26,6 +26,10 @@ use std::b512::B512;
 //     true
 // }
 
+// fn echo_b256() -> b256 {
+//     0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6
+// }
+
 // fn echo_b512(input: B512) -> B512 {
 //     input
 // }
