@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
+import type { BaseWalletUnlocked, Provider, CoinQuantity, CallResult } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -408,6 +408,20 @@ export class BaseInvocationScope<TReturn = any> {
     });
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, response, this.isMultiCall);
+  }
+
+  async get<T = TReturn>(): Promise<InvocationCallResult<T>> {
+    const { receipts } = await this.getTransactionCost();
+
+    const callResult: CallResult = {
+      receipts,
+    };
+
+    return InvocationCallResult.build<T>(
+      this.functionInvocationScopes,
+      callResult,
+      this.isMultiCall
+    );
   }
 
   getProvider(): Provider {
