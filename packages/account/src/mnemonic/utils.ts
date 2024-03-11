@@ -7,7 +7,7 @@ import { arrayify } from '@fuel-ts/utils';
 export type MnemonicPhrase = string | Array<string>;
 
 /**
- * @throws {@link ErrorCode#INVALID_INPUT_PARAMETERS}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_INPUT_PARAMETERS}
  * When the provided string is not a valid UTF-8 string.
  */
 export function toUtf8Bytes(stri: string): Uint8Array {
@@ -107,10 +107,10 @@ export function entropyToMnemonicIndices(entropy: Uint8Array): Array<number> {
 }
 
 /**
- * @throws {@link ErrorCode#INVALID_MNEMONIC}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_MNEMONIC}
  * When the provided mnemonic is invalid.
  *
- * @throws {@link ErrorCode#INVALID_CHECKSUM}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_CHECKSUM}
  * Checksum validation failed for the provided mnemonic.
  */
 export function mnemonicWordsToEntropy(words: Array<string>, wordlist: Array<string>): BytesLike {

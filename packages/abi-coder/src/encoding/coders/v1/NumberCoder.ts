@@ -6,7 +6,7 @@ import { Coder } from '../AbstractCoder';
 type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
 
 /**
- * @throws {@link ErrorCode#TYPE_NOT_SUPPORTED}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.TYPE_NOT_SUPPORTED}
  * When the base type is not supported. (valid types: 'u8', 'u16', 'u32')
  */
 const getLength = (baseType: NumberCoderType): number => {

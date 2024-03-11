@@ -41,7 +41,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
    * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
    * @returns the function fragment
    *
-   * @throws {@link ErrorCode#FUNCTION_NOT_FOUND}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.FUNCTION_NOT_FOUND}
    * When the function with the given name, signature or selector is not found in the ABI.
    */
   getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
@@ -73,7 +73,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
    * @param data - the input data to decode
    * @returns an array of decoded values or undefined if the data is empty
    *
-   * @throws {@link ErrorCode#FRAGMENT_NOT_FOUND}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.FRAGMENT_NOT_FOUND}
    * When the function fragment is not found in the ABI.
    */
   decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
@@ -90,7 +90,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
    * @param offset - the offset to start encoding from
    * @returns the encoded input data
    *
-   * @throws {@link ErrorCode#FRAGMENT_NOT_FOUND}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.FRAGMENT_NOT_FOUND}
    * When the function fragment is not found in the ABI.
    */
   encodeFunctionData(
@@ -123,7 +123,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   /**
-   * @throws {@link ErrorCode#LOG_TYPE_NOT_FOUND}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.LOG_TYPE_NOT_FOUND}
    * When the log type with the given log ID is not found in the ABI logged types {@link JsonAbi#loggedTypes}.
    */
   decodeLog(data: BytesLike, logId: number, receiptId: string): any {
@@ -160,7 +160,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
    * @param value - the value to encode
    * @returns Uint8Array
    *
-   * @throws {@link ErrorCode#CONFIGURABLE_NOT_FOUND}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.CONFIGURABLE_NOT_FOUND}
    * When the configurable with the given name is not found in the ABI.
    */
   encodeConfigurable(name: string, value: InputValue) {
@@ -186,7 +186,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
    * @param typeId - the type ID
    * @returns the type from the abi
    *
-   * @throws {@link ErrorCode#TYPE_NOT_FOUND}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.TYPE_NOT_FOUND}
    * When the type with the given type ID is not found in the ABI.
    */
   getTypeById(typeId: number) {

@@ -96,7 +96,7 @@ export function getBytesFromBech32(address: Bech32Address): Uint8Array {
  *
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_BECH32_ADDRESS}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_BECH32_ADDRESS}
  * When the provided Bech32 address is invalid
  */
 export function toB256(address: Bech32Address): B256Address {
@@ -153,7 +153,7 @@ export const getRandomB256 = () => hexlify(randomBytes(32));
  *
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_B256_ADDRESS}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_B256_ADDRESS}
  * When the provided B256 address is invalid
  */
 export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => {
@@ -185,7 +185,7 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
  *
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_EVM_ADDRESS}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_EVM_ADDRESS}
  * When the provided Evm address is invalid
  */
 export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => {

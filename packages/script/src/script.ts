@@ -88,10 +88,10 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
    * @throws Will throw an error if the script has no configurable constants to be set or if an invalid constant is provided.
    * @returns This instance of the `Script`.
    *
-   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
    * When the script does not have configurable constants to be set.
    *
-   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
    * When the script does not have a configurable constant with the provided name.
    */
   setConfigurableConstants(configurables: { [name: string]: unknown }) {

@@ -176,7 +176,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param configurableConstants - Optional configurable constants for the predicate.
    * @returns An object containing the new predicate bytes and interface.
    *
-   * @throws {@link ErrorCode#ABI_MAIN_METHOD_MISSING}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.ABI_MAIN_METHOD_MISSING}
    * When the ABI doesn't have a 'main()' method.
    */
   private static processPredicateData(
@@ -219,13 +219,13 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
    * @param abiInterface - The ABI interface of the predicate.
    * @returns The mutated bytes with the configurable constants set.
    *
-   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
    * When the ABI interface provided is `undefined`.
    *
-   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
    * When the ABI interface has no configurables to be set.
    *
-   * @throws {@link ErrorCode#INVALID_CONFIGURABLE_CONSTANTS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_CONFIGURABLE_CONSTANTS}
    * When the provided configurable constant is not found in the ABI interface.
    */
   private static setConfigurableConstants(

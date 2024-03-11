@@ -123,7 +123,7 @@ export class FunctionFragment<
   }
 
   /**
-   * @throws {@link ErrorCode#ABI_TYPES_AND_VALUES_MISMATCH}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH}
    * When the arguments supplied to the function do not match the minimum required input length.
    */
   private static verifyArgsAndInputsAlign(

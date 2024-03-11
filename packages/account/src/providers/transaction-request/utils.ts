@@ -15,7 +15,7 @@ const VALID_TRANSACTION_TYPES = [TransactionType.Script, TransactionType.Create]
 /**
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_TYPE}
  * When the transaction type is not one of: {@link TransactionType.Script} or {@link TransactionType.Create}.
  */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {

@@ -915,7 +915,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_RECEIPT_TYPE}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_RECEIPT_TYPE}
    * When the receipt type is invalid (valid types: {@link GqlReceiptType})
    */
   encode(value: Receipt): Uint8Array {
@@ -992,7 +992,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_RECEIPT_TYPE}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_RECEIPT_TYPE}
    * When the receipt type is invalid (valid types: {@link GqlReceiptType})
    */
   decode(data: Uint8Array, offset: number): [Receipt, number] {

@@ -8,7 +8,7 @@ import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
  * @param rawAbiType - The raw JSON ABI type.
  * @returns The struct name.
  *
- * @throws {@link ErrorCode#JSON_ABI_ERROR}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.JSON_ABI_ERROR}
  * When the struct name cannot be extracted from the JSON ABI.
  */
 export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: RegExp }) {

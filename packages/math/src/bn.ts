@@ -79,10 +79,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
    * @param bytesPadding - The number of bytes to pad the hex string with.
    * @returns The hex string.
    *
-   * @throws {@link ErrorCode#CONVERTING_FAILED}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.CONVERTING_FAILED}
    * When the BN value is negative.
    *
-   * @throws {@link ErrorCode#CONVERTING_FAILED}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.CONVERTING_FAILED}
    * When the BN value is larger than than the maximum bytes.
    */
   toHex(bytesPadding?: number): string {
@@ -108,7 +108,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
    * @param bytesPadding - The number of bytes to pad the byte array with.
    * @returns The byte array.
    *
-   * @throws {@link ErrorCode#CONVERTING_FAILED}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.CONVERTING_FAILED}
    * When the BN value is negative.
    */
   toBytes(bytesPadding?: number): Uint8Array {
@@ -305,7 +305,7 @@ export const bn = (value?: BNInput | null, base?: number | 'hex', endian?: BnJs.
  * @param units - The number of units to parse.
  * @returns The parsed Big Number.
  *
- * @throws {@link ErrorCode#CONVERTING_FAILED}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.CONVERTING_FAILED}
  * When the value length, is more than the allows length for the given unit.
  */
 bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {

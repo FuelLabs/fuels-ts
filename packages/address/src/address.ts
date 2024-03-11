@@ -30,7 +30,7 @@ export default class Address extends AbstractAddress {
   /**
    * @param address - A Bech32 address
    *
-   * @throws {@link ErrorCode#INVALID_BECH32_ADDRESS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_BECH32_ADDRESS}
    * When the provided Bech32 address is invalid
    */
   constructor(address: Bech32Address) {
@@ -148,7 +148,7 @@ export default class Address extends AbstractAddress {
    * @param publicKey - A wallets public key
    * @returns A new `Address` instance
    *
-   * @throws {@link ErrorCode#INVALID_PUBLIC_KEY}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_PUBLIC_KEY}
    * When the provided public key is invalid
    */
   static fromPublicKey(publicKey: string): Address {
@@ -166,7 +166,7 @@ export default class Address extends AbstractAddress {
    * @param b256Address - A b256 hash
    * @returns A new `Address` instance
    *
-   * @throws {@link ErrorCode#INVALID_B256_ADDRESS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_B256_ADDRESS}
    * When the provided B256 address is invalid
    */
   static fromB256(b256Address: string): Address {
@@ -249,7 +249,7 @@ export default class Address extends AbstractAddress {
    *
    * @returns A new `Address` instance
    *
-   * @throws {@link ErrorCode#INVALID_EVM_ADDRESS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_EVM_ADDRESS}
    * When the provided Evm address is invalid
    */
   static fromEvmAddress(evmAddress: string): Address {

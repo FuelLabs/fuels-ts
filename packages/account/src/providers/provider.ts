@@ -366,7 +366,7 @@ export default class Provider {
   /**
    * Returns the cached chainInfo for the current URL.
    *
-   * @throws {@link ErrorCode#CHAIN_INFO_CACHE_EMPTY}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.CHAIN_INFO_CACHE_EMPTY}
    * When the chain info cache is empty for the current {@link url}.
    */
   getChain() {
@@ -383,7 +383,7 @@ export default class Provider {
   /**
    * Returns the cached nodeInfo for the current URL.
    *
-   * @throws {@link ErrorCode#NODE_INFO_CACHE_EMPTY}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.NODE_INFO_CACHE_EMPTY}
    * When the node info cache is empty for the current {@link url}.
    */
   getNode() {
@@ -442,7 +442,7 @@ export default class Provider {
   }
 
   /**
-   * @throws {@link ErrorCode#UNSUPPORTED_FUEL_CLIENT_VERSION}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION}
    * When the client version is not supported by the Fuel node.
    */
   private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
@@ -1303,7 +1303,7 @@ export default class Provider {
    * @param commitBlockHeight - The commit block height.
    * @returns A promise that resolves to the message proof.
    *
-   * @throws {@link ErrorCode#INVALID_INPUT_PARAMETERS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_INPUT_PARAMETERS}
    * When commitBlockId and commitBlockHeight are used together.
    */
   async getMessageProof(

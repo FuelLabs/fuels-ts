@@ -25,7 +25,7 @@ export interface IGenerateFilesParams {
  *
  * @param params - The parameters to run the typegen
  *
- * @throws {@link ErrorCode#MISSING_REQUIRED_PARAMETER}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.MISSING_REQUIRED_PARAMETER}
  * When neither `inputs` or `filepaths` are supplied (at least one is required)
  */
 export function runTypegen(params: IGenerateFilesParams) {

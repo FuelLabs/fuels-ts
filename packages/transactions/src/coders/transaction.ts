@@ -354,7 +354,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_TYPE}
    * When the transaction type is not recognized (valid types: {@link TransactionType}).
    */
   encode(value: Transaction): Uint8Array {
@@ -395,7 +395,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_TYPE}
    * When the transaction type is not recognized (valid types: {@link TransactionType}).
    */
   decode(data: Uint8Array, offset: number): [Transaction, number] {

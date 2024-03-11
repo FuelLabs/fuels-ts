@@ -89,7 +89,7 @@ export type TransactionRequestInput =
 /**
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_INPUT}
  * When the input type is invalid (valid types: {@link InputType}).
  */
 export const inputify = (value: TransactionRequestInput): Input => {

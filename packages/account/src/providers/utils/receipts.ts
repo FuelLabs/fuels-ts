@@ -67,7 +67,7 @@ export const getReceiptsWithMissingData = (receipts: Array<TransactionResultRece
 const hexOrZero = (hex?: string | null) => hex || ZeroBytes32;
 
 /**
- * @throws {@link ErrorCode#INVALID_RECEIPT_TYPE}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_RECEIPT_TYPE}
  * When the receipt type is invalid (valid types: {@link GqlReceiptType})
  */
 export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {

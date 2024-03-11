@@ -22,10 +22,10 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   /**
-   * @throws {@link ErrorCode#ENCODE_ERROR}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.ENCODE_ERROR}
    * When the value is not an array.
    *
-   * @throws {@link ErrorCode#ENCODE_ERROR}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.ENCODE_ERROR}
    * When the length of the value does not match the length of the coder.
    */
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -41,7 +41,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   /**
-   * @throws {@link ErrorCode#DECODE_ERROR}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.DECODE_ERROR}
    * When the data size is less than the encoded length or greater than the maximum bytes.
    */
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {

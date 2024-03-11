@@ -71,7 +71,7 @@ export class Account extends AbstractAccount {
    *
    * @returns A Provider instance.
    *
-   * @throws {@link ErrorCode#MISSING_PROVIDER}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.MISSING_PROVIDER}
    * The provider has not been set for the account.
    * Use the `connect` method to set the provider.
    */
@@ -509,7 +509,7 @@ export class Account extends AbstractAccount {
    * @param message - The message to sign.
    * @returns A promise that resolves to the signature.
    *
-   * @throws {@link ErrorCode#MISSING_CONNECTOR}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.MISSING_CONNECTOR}
    * A connector is required to sign messages.
    */
   async signMessage(message: string): Promise<string> {
@@ -562,10 +562,10 @@ export class Account extends AbstractAccount {
   }
 
   /**
-   * @throws {@link ErrorCode#GAS_LIMIT_TOO_LOW}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.GAS_LIMIT_TOO_LOW}
    * When the gas limit is lower than the minimum gas limit.
    *
-   * @throws {@link ErrorCode#GAS_PRICE_TOO_LOW}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.GAS_PRICE_TOO_LOW}
    * When the gas price is lower than the minimum gas price.
    */
   private validateGas({

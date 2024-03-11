@@ -360,7 +360,7 @@ export class InputCoder extends Coder<Input, Input> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_INPUT}
    * When the input type is invalid (valid types: {@link InputType}).
    */
   encode(value: Input): Uint8Array {
@@ -397,7 +397,7 @@ export class InputCoder extends Coder<Input, Input> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_INPUT}
    * When the input type is invalid (valid types: {@link InputType}).
    */
   decode(data: Uint8Array, offset: number): [Input, number] {

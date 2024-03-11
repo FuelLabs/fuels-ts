@@ -49,7 +49,7 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
 /**
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_TRANSACTION_TYPE}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_TYPE}
  * When the transaction type is not recognized (valid types: {@link TransactionType}).
  */
 export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeName {

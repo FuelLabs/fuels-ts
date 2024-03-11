@@ -262,7 +262,7 @@ export class OutputCoder extends Coder<Output, Output> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_TRANSACTION_OUTPUT}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_OUTPUT}
    * When the output type is invalid (valid types: {@link OutputType}).
    */
   encode(value: Output): Uint8Array {
@@ -307,7 +307,7 @@ export class OutputCoder extends Coder<Output, Output> {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_TRANSACTION_OUTPUT}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_OUTPUT}
    * When the output type is invalid (valid types: {@link OutputType}).
    */
   decode(data: Uint8Array, offset: number): [Output, number] {

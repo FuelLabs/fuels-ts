@@ -71,7 +71,7 @@ export class AbiTypeGen {
   }
 
   /**
-   * @throws {@link ErrorCode#INVALID_INPUT_PARAMETERS}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_INPUT_PARAMETERS}
    * When the provided programType is not one of the valid types {@link ProgramTypeEnum}.
    */
   private getAssembledFiles(params: { programType: ProgramTypeEnum }): IFile[] {

@@ -16,10 +16,10 @@ export class MemoryCache {
   ttl: number;
 
   /**
-   * @throws {@link ErrorCode#INVALID_TTL}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TTL}
    * When the TTL is not a number
    *
-   * @throws {@link ErrorCode#INVALID_TTL}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TTL}
    * When the TTL is less than or equal to zero
    */
   constructor(ttlInMs: number = DEFAULT_TTL_IN_MS) {

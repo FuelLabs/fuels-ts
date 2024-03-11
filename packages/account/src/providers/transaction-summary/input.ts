@@ -48,7 +48,7 @@ export function getInputFromAssetId(inputs: Input[], assetId: string) {
 /**
  * @hidden
  *
- * @throws {@link ErrorCode#INVALID_TRANSACTION_INPUT}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_TRANSACTION_INPUT}
  * When the input type is invalid (valid types: {@link InputType}).
  */
 export function getInputContractFromIndex(

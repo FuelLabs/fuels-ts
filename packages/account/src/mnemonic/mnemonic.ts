@@ -27,7 +27,7 @@ const TestnetPRV = '0x04358394';
 export const MNEMONIC_SIZES = [12, 15, 18, 21, 24];
 
 /**
- * @throws {@link ErrorCode#INVALID_WORD_LIST}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_WORD_LIST}
  * When the wordlist length is not equal 2048
  */
 function assertWordList(wordlist: Array<string>) {
@@ -40,7 +40,7 @@ function assertWordList(wordlist: Array<string>) {
 }
 
 /**
- * @throws {@link ErrorCode#INVALID_ENTROPY}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_ENTROPY}
  * When the entropy is not: between 16 and 32 bytes; a multiple of 4.
  */
 function assertEntropy(entropy: BytesLike) {
@@ -53,7 +53,7 @@ function assertEntropy(entropy: BytesLike) {
 }
 
 /**
- * @throws {@link ErrorCode#INVALID_MNEMONIC}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_MNEMONIC}
  * When the mnemonic phrase is not: 12, 15, 18, 21, or 24 words in length.
  */
 function assertMnemonic(words: Array<string>) {
@@ -204,7 +204,7 @@ class Mnemonic {
    * @param testnet - Inform if should use testnet or mainnet prefix, the default value is true (`mainnet`).
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    *
-   * @throws {@link ErrorCode#INVALID_SEED}
+   * @throws {@link "@fuel-ts/errors".ErrorCode.INVALID_SEED}
    * When the seed length is not between 16 and 64 bytes.
    */
   static masterKeysFromSeed(seed: string): Uint8Array {

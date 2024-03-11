@@ -78,10 +78,10 @@ export function findRegion(lines: string[], regionName: string) {
 }
 
 /**
- * @throws {@link ErrorCode#VITEPRESS_PLUGIN_ERROR}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.VITEPRESS_PLUGIN_ERROR}
  * When a snippet file path, can not be found on the filesystem.
  * 
- * @throws {@link ErrorCode#VITEPRESS_PLUGIN_ERROR}
+ * @throws {@link "@fuel-ts/errors".ErrorCode.VITEPRESS_PLUGIN_ERROR}
  * When a specified snippet region, can not be found within the file.
  */
 export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
