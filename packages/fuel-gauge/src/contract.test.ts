@@ -1147,4 +1147,32 @@ describe('Contract', () => {
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
   });
+
+  it('should ensure "get" can be used to execute a contract call without a wallet', async () => {
+    const contract = await setupContract();
+
+    // contract with no account set
+    const contractToCall = new Contract(contract.id, contract.interface, contract.provider);
+
+    const { value } = await contractToCall.functions.sum(10, 5).get();
+
+    expect(contractToCall.account).toBeNull();
+    expect(value.toNumber()).toBe(15);
+  });
+
+  it('should ensure "get" can be used to execute a contract call with an unfunded wallet', async () => {
+    const contract = await setupContract();
+
+    const unfundedWallet = Wallet.generate({ provider: contract.provider });
+
+    contract.account = unfundedWallet;
+
+    const balance = await contract.account.getBalance();
+    expect(balance.toNumber()).toBe(0);
+
+    const { value } = await contract.functions.sum(10, 20).get();
+
+    expect(contract.account).toBeDefined();
+    expect(value.toNumber()).toBe(30);
+  });
 });
