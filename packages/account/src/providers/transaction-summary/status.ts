@@ -28,9 +28,7 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
     default:
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_STATUS,
-        `Invalid transaction status: ${gqlStatus}. Must be one of the following: ${Object.values(
-          TransactionStatus
-        ).join(', ')}`
+        `Invalid transaction status: ${gqlStatus}.`
       );
   }
 };

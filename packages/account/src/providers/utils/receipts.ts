@@ -275,11 +275,6 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
     }
 
     default:
-      throw new FuelError(
-        ErrorCode.INVALID_RECEIPT_TYPE,
-        `Invalid receipt type "${receiptType}", type must be one of the following: ${Object.values(
-          ReceiptType
-        ).join(', ')}.`
-      );
+      throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${receiptType}.`);
   }
 }

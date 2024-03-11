@@ -96,10 +96,8 @@ export const outputify = (value: TransactionRequestOutput): Output => {
     }
     default: {
       throw new FuelError(
-        ErrorCode.INVALID_TRANSACTION_OUTPUT,
-        `Invalid transaction output type "${type}", type must be one of the following: ${Object.values(
-          OutputType
-        ).join(', ')}.`
+        ErrorCode.INVALID_TRANSACTION_INPUT,
+        `Invalid transaction output type: ${type}.`
       );
     }
   }
