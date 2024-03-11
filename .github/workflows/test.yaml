@@ -141,4 +141,4 @@ jobs:
         run: pnpm test:e2e
         env:
           FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
-          FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}
+          TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
