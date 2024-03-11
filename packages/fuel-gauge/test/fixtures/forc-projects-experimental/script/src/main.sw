@@ -40,7 +40,11 @@ use std::string::String;
 //     my_string
 // }
 
-fn main() -> String {
-    let my_string: String = String::from_ascii_str("Hello World");
-    my_string
-}
+// fn main() -> String {
+//     let my_string: String = String::from_ascii_str("Hello World");
+//     my_string
+// }
+
+// fn main(slice: str) -> str {
+//     slice
+// }

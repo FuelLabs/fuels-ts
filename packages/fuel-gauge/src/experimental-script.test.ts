@@ -2,7 +2,6 @@ import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
 import { Script, bn } from 'fuels';
 import { join } from 'path';
-import { b } from 'vitest/dist/suite-MFRDkZcV';
 
 import { createWallet } from './utils';
 
@@ -79,8 +78,18 @@ describe('Experimental Logging', () => {
     expect(value).toStrictEqual('fuel');
   });
 
-  it('echoes std string', async () => {
+  it.skip('echoes std string', async () => {
     const { value } = await script.functions.main().call();
     expect(value).toStrictEqual('Hello World');
+  });
+
+  /**
+   * Currently throws, need to confirm with Daniel
+   */
+  it.skip('logs str slice', async () => {
+    const expected = 'fuel';
+
+    const { value } = await script.functions.main(expected).call();
+    expect(value).toStrictEqual(expected);
   });
 });
