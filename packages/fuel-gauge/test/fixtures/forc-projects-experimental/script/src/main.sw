@@ -33,3 +33,8 @@ use std::b512::B512;
 // fn echo_b512(input: B512) -> B512 {
 //     input
 // }
+
+fn main() -> str[4] {
+    let my_string: str[4] = __to_str_array("fuel");
+    my_string
+}

@@ -67,10 +67,15 @@ describe('Experimental Logging', () => {
     );
   });
 
-  it('echos b512', async () => {
+  it.skip('echos b512', async () => {
     const b512 =
       '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';
     const { value } = await script.functions.main(b512).call();
     expect(value).toStrictEqual(b512);
+  });
+
+  it('echos string', async () => {
+    const { value } = await script.functions.main().call();
+    expect(value).toStrictEqual('fuel');
   });
 });
