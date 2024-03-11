@@ -81,7 +81,7 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      "You're running against a non-official fuel-core version: 0.1.2+nightly.20240212.5cbe7e2984. Things may work as expected, but it's not guaranteed. Please use an official release."
+      "You're running against an unreleased fuel-core version: 0.1.2+nightly.20240212.5cbe7e2984. Things may work as expected, but it's not guaranteed. Please use a released version."
     );
   });
 

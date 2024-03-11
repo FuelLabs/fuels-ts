@@ -6,7 +6,7 @@ export function checkFuelCoreVersionCompatibility(networkVersion: string) {
 
   if (networkVersion.match(/^[0-9]+\.[0-9]+\.[0-9]+$/) === null) {
     console.warn(
-      `You're running against a non-official fuel-core version: ${networkVersion}. Things may work as expected, but it's not guaranteed. Please use an official release.`
+      `You're running against an unreleased fuel-core version: ${networkVersion}. Things may work as expected, but it's not guaranteed. Please use a released version.`
     );
   }
 
