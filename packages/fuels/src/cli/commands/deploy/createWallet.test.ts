@@ -32,7 +32,7 @@ describe('createWallet', () => {
   });
 
   test('throws error when failed to connect to node', async () => {
-    const providerUrl = 'http://localhost:1234';
+    const providerUrl = 'nope';
     const { error, result } = await safeExec(async () => {
       await createWallet(providerUrl, privateKey);
     });
