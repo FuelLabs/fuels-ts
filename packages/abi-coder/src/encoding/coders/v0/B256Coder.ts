@@ -15,10 +15,7 @@ export class B256Coder extends Coder<string, string> {
     try {
       encodedValue = arrayify(value);
     } catch (error) {
-      throw new FuelError(
-        ErrorCode.ENCODE_ERROR,
-        `The value "${value}" is not a valid "${this.type}" value.`
-      );
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
     if (encodedValue.length !== this.encodedLength) {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);

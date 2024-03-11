@@ -146,17 +146,13 @@ export class FunctionFragment<
       return;
     }
 
-    throw new FuelError(
-      ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH,
-      `
-      Mismatch between the number of provided arguments, and the expected ABI inputs for the function "${
-        this.name
-      }".
-      Please ensure that the number of arguments provided, is more than the minimum required input arguments.
-      Provided argument length: ${args.length}.
-      Minimum required argument length: ${inputs.length - optionalInputs.length}.
-    `
-    );
+    const errorMsg = `Mismatch between provided arguments and expected ABI inputs. Provided ${
+      args.length
+    } arguments, but expected ${inputs.length - optionalInputs.length} (excluding ${
+      optionalInputs.length
+    } optional inputs).`;
+
+    throw new FuelError(ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH, errorMsg);
   }
 
   decodeArguments(data: BytesLike) {

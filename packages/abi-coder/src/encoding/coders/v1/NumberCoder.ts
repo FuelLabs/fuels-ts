@@ -39,10 +39,7 @@ export class NumberCoder extends Coder<number, number> {
     try {
       bytes = toBytes(value);
     } catch (error) {
-      throw new FuelError(
-        ErrorCode.ENCODE_ERROR,
-        `The value "${value}" is not a valid "${this.type}" value.`
-      );
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
     }
 
     if (bytes.length > this.length) {

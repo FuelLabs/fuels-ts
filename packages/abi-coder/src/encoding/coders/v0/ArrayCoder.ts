@@ -21,13 +21,6 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
     this.length = length;
   }
 
-  /**
-   * @throws {@link "@fuel-ts/errors".ErrorCode.ENCODE_ERROR}
-   * When the value is not an array.
-   *
-   * @throws {@link "@fuel-ts/errors".ErrorCode.ENCODE_ERROR}
-   * When the length of the value does not match the length of the coder.
-   */
   encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
@@ -40,10 +33,6 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
     return concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
-  /**
-   * @throws {@link "@fuel-ts/errors".ErrorCode.DECODE_ERROR}
-   * When the data size is less than the encoded length or greater than the maximum bytes.
-   */
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
     if (data.length < this.encodedLength || data.length > MAX_BYTES) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid array data size.`);

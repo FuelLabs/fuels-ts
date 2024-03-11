@@ -56,29 +56,20 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       return fn;
     }
 
-    const validFunctionNames = Object.values(this.functions)
-      .map(({ name }) => `"${name}"`)
-      .join(', ');
     throw new FuelError(
       ErrorCode.FUNCTION_NOT_FOUND,
-      `The function "${nameOrSignatureOrSelector}" not found within the ABI.
-      The ABI has the following functions defined: ${validFunctionNames}`
+      `function ${nameOrSignatureOrSelector} not found: ${JSON.stringify(fn)}.`
     );
   }
 
-  /**
-   * Decodes the input data for a FunctionFragment.
-   *
-   * @param functionFragment - the function fragment to decode or a string (name, signature or selector)
-   * @param data - the input data to decode
-   * @returns an array of decoded values or undefined if the data is empty
-   *
-   * @throws {@link "@fuel-ts/errors".ErrorCode.FRAGMENT_NOT_FOUND}
-   * When the function fragment is not found in the ABI.
-   */
   decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
+
+    if (!fragment) {
+      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
+    }
+
     return fragment.decodeArguments(data);
   }
 
@@ -170,7 +161,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       () => {
         throw new FuelError(
           ErrorCode.CONFIGURABLE_NOT_FOUND,
-          `A configurable with the "${name}" was not found in the ABI.`
+          `A configurable with the '${name}' was not found in the ABI.`
         );
       }
     );

@@ -22,10 +22,7 @@ export class BigNumberCoder extends Coder<BNInput, BN> {
     try {
       bytes = toBytes(value, this.encodedLength);
     } catch (error) {
-      throw new FuelError(
-        ErrorCode.ENCODE_ERROR,
-        `The value "${value}" is not a valid "${this.type}" value.`
-      );
+      throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.type}.`);
     }
 
     return bytes;
