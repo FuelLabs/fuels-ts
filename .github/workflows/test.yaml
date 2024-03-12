@@ -67,7 +67,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    if: startsWith(github.head_ref, 'changeset-release/') == 'true'
+    if: github.head_ref == 'changeset-release/master'
     timeout-minutes: 5
     steps:
       - name: Checkout
