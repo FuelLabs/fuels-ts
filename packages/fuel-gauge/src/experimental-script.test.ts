@@ -104,6 +104,11 @@ describe('Experimental Logging', () => {
     });
   });
 
+  /**
+   * done: u8, u16, u32, u64, u256, b256, b512, string, stdString, struct, enum, vec
+   *
+   * todo: option, bytes, slice, tuple, deep
+   */
   it('prints mixed struct', async () => {
     const { value } = await script.functions.main(B512).call();
     expect(value).toStrictEqual({
