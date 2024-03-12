@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fuel-wallet/react": "0.15.2",
-    "fuels": "0.73.0",
+    "fuels": "0.76.0",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18"
