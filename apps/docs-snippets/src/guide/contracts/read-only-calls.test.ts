@@ -15,7 +15,7 @@ describe(__filename, () => {
     provider = contract.provider;
   });
 
-  it('should successfully execute a simulate call', async () => {
+  it('should successfully execute a read only call with get', async () => {
     // #region read-only-calls-1
     const { value } = await contract.functions.echo_u8(15).get();
     // #endregion read-only-calls-1
