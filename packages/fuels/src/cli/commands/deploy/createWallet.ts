@@ -1,4 +1,5 @@
 import { Wallet, Provider } from '@fuel-ts/account';
+import { FuelError } from '@fuel-ts/errors';
 
 export async function createWallet(providerUrl: string, privateKey?: string) {
   let pvtKey: string;
@@ -19,7 +20,8 @@ export async function createWallet(providerUrl: string, privateKey?: string) {
     const error = e as Error & { cause?: { code: string } };
 
     if (error.cause?.code === 'ECONNREFUSED') {
-      throw new Error(
+      throw new FuelError(
+        FuelError.CODES.INVALID_URL,
         `Couldn't connect to the node at "${providerUrl}". Check that you've got a node running at the config's providerUrl or set autoStartFuelCore to true.`
       );
     } else {
