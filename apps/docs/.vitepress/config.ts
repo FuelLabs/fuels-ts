@@ -454,7 +454,7 @@ export default defineConfig({
             items: [
               {
                 text: 'Error Codes',
-                link: '/guide/errors/#error-codes',
+                link: '/guide/errors/error-codes',
               },
             ],
           }
