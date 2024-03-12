@@ -62,11 +62,11 @@ describe('Predicate', () => {
       });
       const contract = await setupContract();
       const amountToPredicate = 500_000;
-      const predicate = new Predicate<[Validation]>(
-        predicateBytesTrue,
+      const predicate = new Predicate<[Validation]>({
+        bytecode: predicateBytesTrue,
+        abi: predicateAbiMainArgsStruct,
         provider,
-        predicateAbiMainArgsStruct
-      );
+      });
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
       const predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
@@ -102,11 +102,17 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 700_000;
       const amountToReceiver = 200_000;
-      const predicate = new Predicate<[Validation]>(
-        predicateBytesStruct,
+      const predicate = new Predicate<[Validation]>({
+        bytecode: predicateBytesStruct,
         provider,
-        predicateAbiMainArgsStruct
-      );
+        abi: predicateAbiMainArgsStruct,
+        inputData: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
+      });
       const initialPredicateBalance = toNumber(await predicate.getBalance());
 
       await fundPredicate(wallet, predicate, amountToPredicate);
@@ -116,12 +122,7 @@ describe('Predicate', () => {
       );
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate
-        .setData({
-          has_account: true,
-          total_complete: 100,
-        })
-        .transfer(receiver.address, amountToReceiver, BaseAssetId);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 

@@ -354,7 +354,10 @@ describe('Doc Examples', () => {
 
   it('can create a predicate', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const predicate = new Predicate(testPredicateTrue, provider);
+    const predicate = new Predicate({
+      bytecode: testPredicateTrue,
+      provider,
+    });
 
     expect(predicate.address).toBeTruthy();
     expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
@@ -426,7 +429,17 @@ describe('Doc Examples', () => {
       loggedTypes: [],
       configurables: [],
     };
-    const predicate = new Predicate(predicateTriple, provider, AbiInputs);
+    const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    const signature1 = await wallet1.signMessage(dataToSign);
+    const signature2 = await wallet2.signMessage(dataToSign);
+    const signature3 = await wallet3.signMessage(dataToSign);
+    const signatures = [signature1, signature2, signature3];
+    const predicate = new Predicate({
+      bytecode: predicateTriple,
+      provider,
+      abi: AbiInputs,
+      inputData: [signatures],
+    });
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
     const initialPredicateBalance = await predicate.getBalance();
@@ -454,16 +467,10 @@ describe('Doc Examples', () => {
       initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
-    const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
-    const signature1 = await wallet1.signMessage(dataToSign);
-    const signature2 = await wallet2.signMessage(dataToSign);
-    const signature3 = await wallet3.signMessage(dataToSign);
-
-    const signatures = [signature1, signature2, signature3];
-
-    const tx = await predicate
-      .setData(signatures)
-      .transfer(receiver.address, amountToReceiver, BaseAssetId, { gasPrice, gasLimit: 10_000 });
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      gasPrice,
+      gasLimit: 10_000,
+    });
     await tx.waitForResult();
 
     // check balances
