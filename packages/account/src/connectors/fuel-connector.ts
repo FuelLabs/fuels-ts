@@ -109,7 +109,7 @@ export abstract class FuelConnector extends EventEmitter {
    * the signed transaction.
    *
    * @param address - The address to sign the transaction
-   * @param message - The transaction to sign
+   * @param transaction - The transaction to sign
    *
    * @returns Transaction signature
    */
