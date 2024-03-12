@@ -31,6 +31,7 @@ export enum ErrorCode {
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
   MISSING_PROVIDER = 'missing-provider',
   INVALID_PROVIDER = 'invalid-provider',
+  CONNECTION_REFUSED = 'connection-refused',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
