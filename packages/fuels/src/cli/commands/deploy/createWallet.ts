@@ -21,7 +21,7 @@ export async function createWallet(providerUrl: string, privateKey?: string) {
 
     if (error.cause?.code === 'ECONNREFUSED') {
       throw new FuelError(
-        FuelError.CODES.INVALID_URL,
+        FuelError.CODES.CONNECTION_REFUSED,
         `Couldn't connect to the node at "${providerUrl}". Check that you've got a node running at the config's providerUrl or set autoStartFuelCore to true.`
       );
     } else {

@@ -40,7 +40,7 @@ describe('createWallet', () => {
         await createWallet(providerUrl, privateKey);
       },
       {
-        code: ErrorCode.INVALID_URL,
+        code: ErrorCode.CONNECTION_REFUSED,
         message: `Couldn't connect to the node at "${providerUrl}". Check that you've got a node running at the config's providerUrl or set autoStartFuelCore to true.`,
       }
     );
