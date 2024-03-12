@@ -1,6 +1,6 @@
 # Errors
 
-All errors thrown from our SDK are instances of the `FuelError` class, which have an accomanying `ErrorCode`. Below you will find a table with all our expected error codes and their descriptions.
+All errors thrown from our SDK are instances of the `FuelError` class, which will have an accompanying `ErrorCode`. Below you will find a table with all our expected error codes and their descriptions.
 
 ## Error Codes
 
