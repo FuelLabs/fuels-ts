@@ -57,11 +57,11 @@ export class {{capitalizedName}}__factory {
   static readonly abi = _abi
   static readonly bin = _bin;
 
-  static createInstance(provider: Provider, predicateData?: InputValue[], configurables?: {{capitalizedName}}Configurables) {
+  static createInstance<TInputValue extends InputValue[]>(provider: Provider, predicateData?: TInputValue, configurables?: {{capitalizedName}}Configurables) {
 
     const { abi, bin } = {{capitalizedName}}__factory
 
-    const predicate = new Predicate({
+    const predicate = new Predicate<TInputValue>({
       bytecode: bin,
       abi,
       provider,

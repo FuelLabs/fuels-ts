@@ -10,6 +10,7 @@ import {
   Wallet,
   FUEL_NETWORK_URL,
   Address,
+  InputValue,
 } from 'fuels';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
