@@ -116,7 +116,7 @@ describe('TransactionRequest', () => {
     expect(transactionRequest.witnesses).toStrictEqual([mockSignedTx, mockSignedTx]);
   });
 
-  it.only('adds account based witnesses', async () => {
+  it('adds account based witnesses', async () => {
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
       static async create(url: string) {

@@ -766,7 +766,7 @@ describe('Contract', () => {
     let signedTransaction;
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
-      static async connect(url: string) {
+      static async create(url: string) {
         const newProvider = new ProviderCustom(url);
         return newProvider;
       }
@@ -776,15 +776,14 @@ describe('Contract', () => {
       ): Promise<TransactionResponse> {
         const transactionRequest = transactionRequestify(transactionRequestLike);
         // Simulate a external request of signature
-        const hashedTransaction = transactionRequest.getTransactionId(this.getChainId());
-        signedTransaction = await externalWallet.signTransaction(hashedTransaction);
+        signedTransaction = await externalWallet.signTransaction(transactionRequest);
         transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
         return super.sendTransaction(transactionRequestLike);
       }
     }
 
     // Set custom provider to contract instance
-    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
+    const customProvider = await ProviderCustom.create(FUEL_NETWORK_URL);
     contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
