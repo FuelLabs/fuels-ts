@@ -144,15 +144,3 @@ jobs:
           aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
         env:
           S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
-
-      # If master was published, it's pushed as a release branch (master -> release/v0.1.0)
-      # If a release patch was published, it's pushed as a patched release branch (release/v0.1.0 -> release/v0.1.1)
-      - name: Create a release version branch
-        if: steps.changesets.outputs.published == 'true'
-        run: |
-          git reset --hard
-          git checkout -B $BRANCH_NAME
-          git checkout -B release/v${{ env.BUILD_VERSION }}
-          git push -u origin release/v${{ env.BUILD_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
