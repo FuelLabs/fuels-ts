@@ -20,22 +20,22 @@ describe(__filename, () => {
 
     const { id: contractId, interface: abi } = counterContract;
 
-    // #region read-only-calls-1
+    // #region interacting-with-contracts-1
     const contract = new Contract(contractId, abi, provider);
 
     const { value } = await contract.functions.get_count().get();
-    // #endregion read-only-calls-1
+    // #endregion interacting-with-contracts-1
     expect(value.toNumber()).toBeGreaterThanOrEqual(1);
   });
 
   it('should successfully use "dryRun" to validate a TX without a wallet', async () => {
     const { id: contractId, interface: abi } = counterContract;
 
-    // #region read-only-calls-2
+    // #region interacting-with-contracts-2
     const contract = new Contract(contractId, abi, provider);
 
     const { value } = await contract.functions.increment_count(1).dryRun();
-    // #endregion read-only-calls-2
+    // #endregion interacting-with-contracts-2
     expect(value.toNumber()).toBeGreaterThanOrEqual(1);
   });
 
@@ -44,20 +44,20 @@ describe(__filename, () => {
 
     const fundedWallet = await getTestWallet([[1000, BaseAssetId]]);
 
-    // #region read-only-calls-3
+    // #region interacting-with-contracts-3
     const contract = new Contract(contractId, abi, fundedWallet);
 
     const { value } = await contract.functions.increment_count(10).simulate();
-    // #endregion read-only-calls-3
+    // #endregion interacting-with-contracts-3
     expect(value.toNumber()).toBeGreaterThanOrEqual(10);
   });
 
   it('should successfully execute a contract call without a wallet', async () => {
     const contract = counterContract;
 
-    // #region read-only-calls-4
+    // #region interacting-with-contracts-4
     await contract.functions.increment_count(10).call();
-    // #endregion read-only-calls-4
+    // #endregion interacting-with-contracts-4
 
     const { value } = await contract.functions.get_count().get();
     expect(value.toNumber()).toBeGreaterThanOrEqual(10);
