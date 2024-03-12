@@ -23,6 +23,9 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
+          # workaround to ensure force pushes to changeset branch use REPO_TOKEN owner's account
+          # see https://github.com/changesets/action/issues/70
+          persist-credentials: false
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
