@@ -28,32 +28,42 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
+export type PredicateParams<T = InputValue[]> = {
+  bytecode: BytesLike;
+  provider: Provider;
+  abi?: JsonAbi;
+  inputData?: T;
+  configurableConstants?: { [name: string]: unknown };
+};
+
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<ARGS extends InputValue[]> extends Account {
+export class Predicate<TInputData extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  predicateData: Uint8Array = Uint8Array.from([]);
-  predicateArgs: ARGS = [] as unknown as ARGS;
+  predicateDataBytes: Uint8Array = Uint8Array.from([]);
+  predicateData: TInputData = [] as unknown as TInputData;
   interface?: Interface;
 
   /**
    * Creates an instance of the Predicate class.
    *
-   * @param bytes - The bytes of the predicate.
+   * @param bytecode - The bytecode of the predicate.
+   * @param abi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
-   * @param jsonAbi - The JSON ABI of the predicate.
+   * @param inputData - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
-  constructor(
-    bytes: BytesLike,
-    provider: Provider,
-    jsonAbi?: JsonAbi,
-    configurableConstants?: { [name: string]: unknown }
-  ) {
+  constructor({
+    bytecode,
+    abi,
+    provider,
+    inputData,
+    configurableConstants,
+  }: PredicateParams<TInputData>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
-      bytes,
-      jsonAbi,
+      bytecode,
+      abi,
       configurableConstants
     );
     const address = Address.fromB256(getPredicateRoot(predicateBytes));
@@ -61,6 +71,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
+    if (inputData !== undefined && inputData.length > 0) {
+      this.predicateData = inputData;
+    }
   }
 
   /**
@@ -134,20 +147,8 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return super.simulateTransaction(transactionRequest);
   }
 
-  /**
-   * Sets data for the predicate.
-   *
-   * @param args - Arguments for the predicate function.
-   * @returns The Predicate instance with updated predicate data.
-   */
-  setData<T extends ARGS>(...args: T) {
-    this.predicateArgs = args;
-
-    return this;
-  }
-
   private getPredicateData(policiesLength: number): Uint8Array {
-    if (!this.predicateArgs.length) {
+    if (!this.predicateData.length) {
       return new Uint8Array();
     }
 
@@ -165,7 +166,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       paddedCode.byteLength +
       policiesLength * WORD_SIZE;
 
-    return mainFn?.encodeArguments(this.predicateArgs, OFFSET) || new Uint8Array();
+    return mainFn?.encodeArguments(this.predicateData, OFFSET) || new Uint8Array();
   }
 
   /**
