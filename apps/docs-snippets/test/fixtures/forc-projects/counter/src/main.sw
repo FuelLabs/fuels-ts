@@ -8,6 +8,7 @@ abi Counter {
     fn increment_count(amount: u64) -> u64;
 }
 
+// #region read-only-calls-5
 storage {
     counter: u64 = 0,
 }
@@ -25,3 +26,4 @@ impl Counter for Contract {
         storage.counter.read()
     }
 }
+// #endregion read-only-calls-5
