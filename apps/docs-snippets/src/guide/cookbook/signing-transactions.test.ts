@@ -81,7 +81,7 @@ describe('Signing transactions', () => {
     const amountToReceiver = 100;
 
     // #region multiple-signers-4
-    // #import { Predicate, BaseAssetId };
+    // #import { Predicate, BaseAssetId, ScriptTransactionRequest };
 
     // Create and fund the predicate
     const predicate = new Predicate(binPredicate, provider, abiPredicate).setData(
