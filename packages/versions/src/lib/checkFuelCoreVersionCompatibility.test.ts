@@ -80,9 +80,9 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
     checkFuelCoreVersionCompatibility('0.1.2+nightly.20240212.5cbe7e2984');
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      "You're running against an unreleased fuel-core version: 0.1.2+nightly.20240212.5cbe7e2984. Things may work as expected, but it's not guaranteed. Please use a released version."
-    );
+    expect(consoleWarnSpy)
+      .toHaveBeenCalledWith(`You're running against an unreleased fuel-core version: 0.1.2+nightly.20240212.5cbe7e2984. Things may work as expected, but it's not guaranteed. Please use a released version.      
+This unreleased fuel-core build may include features and updates not yet supported by this version of the TS-SDK.`);
   });
 
   it("doesn't warn when version conforms to strict major.minor.patch versioning", () => {
