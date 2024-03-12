@@ -514,14 +514,14 @@ export class Account extends AbstractAccount {
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature of the transaction.
    */
-  async signTransaction(hashedTransaction: TransactionRequestLike): Promise<string> {
+  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     if (!this._connector) {
       throw new FuelError(
         ErrorCode.MISSING_CONNECTOR,
         'A connector is required to sign transactions.'
       );
     }
-    return this._connector.signTransaction(this.address.toString(), hashedTransaction);
+    return this._connector.signTransaction(this.address.toString(), transactionRequestLike);
   }
 
   /**
