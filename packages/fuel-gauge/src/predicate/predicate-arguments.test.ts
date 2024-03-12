@@ -230,18 +230,27 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
-      const predicate = new Predicate({
+      const predicateForBalance = new Predicate({
         bytecode: predicateBytesMulti,
         abi: predicateAbiMulti,
         provider,
         inputData: [20, 30],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      const initialPredicateBalance = await fundPredicate(
+        wallet,
+        predicateForBalance,
+        amountToPredicate
+      );
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-multi-args
-      // #context const predicate = new Predicate(bytecode, chainId, abi, [20, 30]);
+      const predicate = new Predicate({
+        bytecode: predicateBytesMulti,
+        abi: predicateAbiMulti,
+        provider,
+        inputData: [20, 30],
+      });
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
         gasPrice,
         gasLimit: 10_000,
