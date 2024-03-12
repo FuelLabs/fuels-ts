@@ -90,6 +90,14 @@ describe('Experimental Logging', () => {
     expect(bn(logs[0]).toNumber()).toStrictEqual(expected);
   });
 
+  it('logs u256', async () => {
+    const expected = U32_MAX + 1;
+
+    const { logs } = await contractInstance.functions.log_u256(expected).call();
+
+    expect(bn(logs[0]).toNumber()).toStrictEqual(expected);
+  });
+
   it('logs u64 u8 multiple params', async () => {
     const expected = [U32_MAX + 1, U8_MAX];
 

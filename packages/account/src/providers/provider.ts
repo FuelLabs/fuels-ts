@@ -209,24 +209,35 @@ export type CursorPaginationArgs = {
   before?: string | null;
 };
 
-export type FetchRequestOptions = {
-  method: 'POST';
-  headers: { [key: string]: string };
-  body: string;
-};
-
 /*
  * Provider initialization options
  */
 export type ProviderOptions = {
+  /**
+   * Custom fetch function to use for making requests.
+   */
   fetch?: (
     url: string,
-    options: FetchRequestOptions,
-    providerOptions: Omit<ProviderOptions, 'fetch'>
+    requestInit?: RequestInit,
+    providerOptions?: Omit<ProviderOptions, 'fetch'>
   ) => Promise<Response>;
+  /**
+   * Timeout [ms] after which every request will be aborted.
+   */
   timeout?: number;
+  /**
+   * Cache UTXOs for the given time [ms].
+   */
   cacheUtxo?: number;
+  /**
+   * Retry options to use when fetching data from the node.
+   */
   retryOptions?: RetryOptions;
+  /**
+   * Middleware to modify the request before it is sent.
+   * This can be used to add headers, modify the body, etc.
+   */
+  requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
 };
 
 /**
@@ -306,16 +317,18 @@ export default class Provider {
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
     const { retryOptions, timeout } = options;
 
-    return autoRetryFetch((...args) => {
-      if (options.fetch) {
-        return options.fetch(...args);
-      }
-
+    return autoRetryFetch(async (...args) => {
       const url = args[0];
       const request = args[1];
       const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
 
-      return fetch(url, { ...request, signal });
+      let fullRequest: RequestInit = { ...request, signal };
+
+      if (options.requestMiddleware) {
+        fullRequest = await options.requestMiddleware(fullRequest);
+      }
+
+      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
     }, retryOptions);
   }
 
@@ -442,8 +455,7 @@ export default class Provider {
   private createOperations() {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
-      fetch: (url: string, requestInit: FetchRequestOptions) =>
-        fetchFn(url, requestInit, this.options),
+      fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
     });
 
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
@@ -456,8 +468,7 @@ export default class Provider {
         return new FuelGraphqlSubscriber({
           url: this.url,
           query,
-          fetchFn: (url, requestInit) =>
-            fetchFn(url as string, requestInit as FetchRequestOptions, this.options),
+          fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
         });
       }
@@ -596,6 +607,13 @@ export default class Provider {
     if (awaitExecution) {
       const subscription = this.operations.submitAndAwait({ encodedTransaction });
       for await (const { submitAndAwait } of subscription) {
+        if (submitAndAwait.type === 'SqueezedOutStatus') {
+          throw new FuelError(
+            ErrorCode.TRANSACTION_SQUEEZED_OUT,
+            `Transaction Squeezed Out with reason: ${submitAndAwait.reason}`
+          );
+        }
+
         if (submitAndAwait.type !== 'SubmittedStatus') {
           break;
         }

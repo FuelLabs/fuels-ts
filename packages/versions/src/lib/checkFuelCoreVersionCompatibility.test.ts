@@ -67,4 +67,35 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
       supportedVersion,
     });
   });
+
+  it("warns when the version doesn't conform to strict major.minor.patch versioning (e.g. nightly build)", () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
+      FUELS: '1', // not under test
+      FORC: '1', // not under test
+      FUEL_CORE: '0.1.2',
+    }));
+
+    checkFuelCoreVersionCompatibility('0.1.2+nightly.20240212.5cbe7e2984');
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy)
+      .toHaveBeenCalledWith(`You're running against an unreleased fuel-core version: 0.1.2+nightly.20240212.5cbe7e2984. Things may work as expected, but it's not guaranteed. Please use a released version.      
+This unreleased fuel-core build may include features and updates not yet supported by this version of the TS-SDK.`);
+  });
+
+  it("doesn't warn when version conforms to strict major.minor.patch versioning", () => {
+    vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
+      FUELS: '1', // not under test
+      FORC: '1', // not under test
+      FUEL_CORE: '0.1.2',
+    }));
+
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    checkFuelCoreVersionCompatibility('0.1.2');
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
 });

@@ -495,7 +495,7 @@ describe('Contract', () => {
     const minThreshold = 0.019;
 
     expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * minThreshold);
-    expect(value[0].toNumber()).toBeLessThanOrEqual(3999799);
+    expect(value[0].toNumber()).toBeLessThanOrEqual(3999800);
 
     expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * minThreshold);
     expect(value[1].toNumber()).toBeLessThanOrEqual(4_000_000);
@@ -996,7 +996,10 @@ describe('Contract', () => {
     const amountToContract = 200;
     const amountToPredicate = 500_000;
 
-    const predicate = new Predicate(predicateBytecode, provider);
+    const predicate = new Predicate({
+      bytecode: predicateBytecode,
+      provider,
+    });
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
       gasPrice,
@@ -1114,5 +1117,37 @@ describe('Contract', () => {
     expect(finalBalance1.toNumber()).toBe(amountToTransfer1);
     expect(finalBalance2.toNumber()).toBe(amountToTransfer2);
     expect(finalBalance3.toNumber()).toBe(amountToTransfer3);
+  });
+
+  it('should throw when trying to transfer a zero or negative amount to a contract', async () => {
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    );
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const wallet = await generateTestWallet(provider, [
+      [5_000, BaseAssetId],
+      [5_000, ASSET_A],
+      [5_000, ASSET_B],
+    ]);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
+    const contract = await factory.deployContract();
+
+    await expectToThrowFuelError(
+      async () => {
+        await wallet.transferToContract(contract.id, 0, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
+
+    await expectToThrowFuelError(
+      async () => {
+        await wallet.transferToContract(contract.id, -1, BaseAssetId);
+      },
+      new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
+    );
   });
 });

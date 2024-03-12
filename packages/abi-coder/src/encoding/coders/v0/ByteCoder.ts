@@ -7,7 +7,7 @@ import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
 import { BASE_VECTOR_OFFSET, concatWithDynamicData } from '../../../utils/utilities';
 import { Coder } from '../AbstractCoder';
 
-import { U64Coder } from './U64Coder';
+import { BigNumberCoder } from './BigNumberCoder';
 
 export class ByteCoder extends Coder<number[], Uint8Array> {
   static memorySize = 1;
@@ -23,7 +23,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     const parts: Uint8Array[] = [];
 
     // pointer (ptr)
-    const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_VECTOR_OFFSET);
+    const pointer: Uint8ArrayWithDynamicData = new BigNumberCoder('u64').encode(BASE_VECTOR_OFFSET);
 
     // pointer dynamicData, encode the byte vector now and attach to its pointer
     const data = this.#getPaddedData(value);
@@ -34,10 +34,10 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     parts.push(pointer);
 
     // capacity (cap)
-    parts.push(new U64Coder().encode(data.byteLength));
+    parts.push(new BigNumberCoder('u64').encode(data.byteLength));
 
     // length (len)
-    parts.push(new U64Coder().encode(value.length));
+    parts.push(new BigNumberCoder('u64').encode(value.length));
 
     return concatWithDynamicData(parts);
   }
@@ -59,7 +59,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     }
 
     const len = data.slice(16, 24);
-    const encodedLength = bn(new U64Coder().decode(len, 0)[0]).toNumber();
+    const encodedLength = bn(new BigNumberCoder('u64').decode(len, 0)[0]).toNumber();
     const byteData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + encodedLength);
 
     if (byteData.length !== encodedLength) {

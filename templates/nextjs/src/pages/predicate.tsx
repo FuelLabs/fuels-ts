@@ -59,19 +59,26 @@ export default function PredicateExample() {
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
     try {
-      if (!predicate) {
-        // eslint-disable-next-line no-alert
-        return alert("Predicate not loaded");
-      }
-
       if (!wallet) {
         // eslint-disable-next-line no-alert
         return alert("Wallet not loaded");
       }
 
-      const tx = await predicate
-        .setData(bn(pin))
-        .transfer(wallet.address, amount, BaseAssetId);
+      const reInitializePredicate = TestPredicateAbi__factory.createInstance(
+        wallet.provider,
+        [bn(pin)],
+      );
+
+      if (!reInitializePredicate) {
+        // eslint-disable-next-line no-alert
+        return alert("Failed to initialize predicate");
+      }
+
+      const tx = await reInitializePredicate.transfer(
+        wallet.address,
+        amount,
+        BaseAssetId,
+      );
       const { isStatusSuccess } = await tx.wait();
 
       if (!isStatusSuccess) {
