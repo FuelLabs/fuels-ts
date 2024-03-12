@@ -30,7 +30,7 @@ Take a look into the following contract snippet:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/counter/src/main.sw#read-only-calls-5{rs:line-numbers}
 
-This contract have a storage property named `counter`, and it is initialiazed with `0`.
+This contract have a storage property named `counter`, and it is initialized with `0`.
 
 The function `increment_count` can be used to increment the `counter` value, and `get_count` can be used to get its current value.
 
