@@ -41,8 +41,8 @@ export type PredicateParams<T = InputValue[]> = {
  */
 export class Predicate<TInputData extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  predicateData: Uint8Array = Uint8Array.from([]);
-  predicateArgs: TInputData = [] as unknown as TInputData;
+  predicateDataBytes: Uint8Array = Uint8Array.from([]);
+  predicateData: TInputData = [] as unknown as TInputData;
   interface?: Interface;
 
   /**
@@ -72,7 +72,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
     if (inputData !== undefined && inputData.length > 0) {
-      this.predicateArgs = inputData;
+      this.predicateData = inputData;
     }
   }
 
@@ -148,7 +148,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   }
 
   private getPredicateData(policiesLength: number): Uint8Array {
-    if (!this.predicateArgs.length) {
+    if (!this.predicateData.length) {
       return new Uint8Array();
     }
 
@@ -166,7 +166,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
       paddedCode.byteLength +
       policiesLength * WORD_SIZE;
 
-    return mainFn?.encodeArguments(this.predicateArgs, OFFSET) || new Uint8Array();
+    return mainFn?.encodeArguments(this.predicateData, OFFSET) || new Uint8Array();
   }
 
   /**

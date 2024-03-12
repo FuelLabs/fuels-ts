@@ -35,7 +35,7 @@ describe('Predicate', () => {
         inputData: [b256],
       });
 
-      expect(predicate.predicateArgs).not.toBeUndefined();
+      expect(predicate.predicateData).not.toBeUndefined();
     });
 
     it('throws when predicate ABI has no main function', () => {
