@@ -170,13 +170,13 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
  */
 describe('Contract', () => {
   let gasPrice: BN;
+  let provider: Provider;
   beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    provider = await Provider.create(FUEL_NETWORK_URL);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   it('generates function methods on a simple contract', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
@@ -194,7 +194,6 @@ describe('Contract', () => {
   });
 
   it('generates function methods on a complex contract', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const spy = vi.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
@@ -214,8 +213,7 @@ describe('Contract', () => {
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
-  it('assigns a provider if passed', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  it('assigns a provider if passed', () => {
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
@@ -718,7 +716,6 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.generate({
       provider,
     });
@@ -750,7 +747,7 @@ describe('Contract', () => {
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+
     const externalWallet = Wallet.generate({
       provider,
     });
@@ -831,7 +828,6 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall does not allow multiple calls that return heap types', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.generate({
       provider,
     });
@@ -863,7 +859,6 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.generate({
       provider,
     });
@@ -904,7 +899,6 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[10_000_000_000, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -927,7 +921,6 @@ describe('Contract', () => {
   });
 
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[1000, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -961,7 +954,7 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+
     const wallet = await generateTestWallet(provider, [
       [500_000, BaseAssetId],
       [200, asset],
@@ -986,7 +979,6 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -1054,8 +1046,6 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
     const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1079,8 +1069,6 @@ describe('Contract', () => {
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const wallet = await generateTestWallet(provider, [
       [5_000, BaseAssetId],
@@ -1121,8 +1109,6 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
     const wallet = await generateTestWallet(provider, [
       [5_000, BaseAssetId],
       [5_000, ASSET_A],
@@ -1146,6 +1132,21 @@ describe('Contract', () => {
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
+  });
+
+  it('should ensure "get" does not spend any funds', async () => {
+    const contract = await setupContract();
+
+    const balance = await contract.account?.getBalance();
+
+    expect(balance?.toNumber()).toBeGreaterThan(0);
+
+    const { value } = await contract.functions.sum(10, 5).get();
+
+    const lateBalance = await contract.account?.getBalance();
+
+    expect(value.toNumber()).toBe(15);
+    expect(balance?.toNumber()).toBe(lateBalance?.toNumber());
   });
 
   it('should ensure "get" can be used to execute a contract call without a wallet', async () => {
@@ -1174,5 +1175,35 @@ describe('Contract', () => {
 
     expect(contract.account).toBeDefined();
     expect(value.toNumber()).toBe(30);
+  });
+
+  it('should ensure "get" does not modify the blockchain state', async () => {
+    const { abiContents, binHexlified } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
+    );
+
+    const wallet = await generateTestWallet(provider, [[5000, BaseAssetId]]);
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
+    const storageContract = await factory.deployContract();
+
+    const initialCounterValue = 20;
+
+    // Using get for a write method won't work
+    await storageContract.functions.initialize_counter(initialCounterValue).get();
+
+    // Counter was not initialized since get only dry-runs a TX
+    let { value } = await storageContract.functions.counter().get();
+
+    expect(value.toNumber()).toBe(0);
+
+    // Actually changing the contract state
+    await storageContract.functions.initialize_counter(initialCounterValue).call();
+
+    // Validating that the contract state was modified
+    ({ value } = await storageContract.functions.counter().get());
+
+    expect(value.toNumber()).toBe(initialCounterValue);
   });
 });
