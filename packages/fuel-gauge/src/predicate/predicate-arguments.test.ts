@@ -295,7 +295,7 @@ describe('Predicate', () => {
       );
     });
 
-    it('calls a predicate with invalid multiple arguments and returns false', async () => {
+    it('calls a predicate with invalid multiple arguments and throws error', async () => {
       const predicate = new Predicate({
         bytecode: predicateBytesMulti,
         abi: predicateAbiMulti,
