@@ -46,7 +46,7 @@ describe(__filename, () => {
     expect(value).toEqual(15);
   });
 
-  it('should successfully execute a contract call without a wallet', async () => {
+  it('should validate that "get" does not write on the blockchain', async () => {
     const counterContract = await createAndDeployContractFromProject(
       DocSnippetProjectsEnum.COUNTER
     );
