@@ -1137,6 +1137,36 @@ describe('Contract', () => {
     );
   });
 
+  it('should throw when simulating with an unfunded wallet', async () => {
+    const contract = await setupContract();
+
+    contract.account = Wallet.generate({ provider: contract.provider });
+
+    await expect(
+      contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [100, BaseAssetId],
+        })
+        .simulate()
+    ).rejects.toThrowError('not enough coins to fit the target');
+  });
+
+  it('should throw when dry running with an unfunded wallet', async () => {
+    const contract = await setupContract();
+
+    contract.account = Wallet.generate({ provider: contract.provider });
+
+    await expect(
+      contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [100, BaseAssetId],
+        })
+        .dryRun()
+    ).rejects.toThrowError('not enough coins to fit the target');
+  });
+
   it('should ensure "get" does not spend any funds', async () => {
     const contract = await setupContract();
 
