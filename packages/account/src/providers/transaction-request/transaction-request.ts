@@ -269,7 +269,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * Helper function to add an external signature to the transaction.
    *
-   * @param account - The account to sign to the transaction.
+   * @param account - The account/s to sign to the transaction.
    * @returns The transaction with the signature witness added.
    */
   async addAccountWitnesses(account: Account | Account[]) {
