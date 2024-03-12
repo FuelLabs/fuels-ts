@@ -272,10 +272,6 @@ export default defineConfig({
                 link: '/guide/contracts/interacting-with-contracts',
               },
               {
-                text: 'Simulate Transactions',
-                link: '/guide/contracts/simulate-transactions',
-              },
-              {
                 text: 'Transaction Parameters',
                 link: '/guide/contracts/transaction-parameters',
               },
