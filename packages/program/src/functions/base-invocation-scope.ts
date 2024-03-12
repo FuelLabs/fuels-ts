@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { BaseWalletUnlocked, Provider, CoinQuantity, CallResult } from '@fuel-ts/account';
+import type { Provider, CoinQuantity, CallResult } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -366,18 +366,12 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
     assert(this.program.account, 'Wallet is required!');
-    /**
-     * NOTE: Simulating a transaction with UTXOs validation requires the transaction
-     * to be signed by the wallet. This is only possible if the wallet is unlocked.
-     * Since there is no guarantee at this point that the account instance is an unlocked wallet
-     * (BaseWalletUnlocked instance), we need to check it before run the simulation. Perhaps
-     * we should think in a redesign of the AbstractAccount class to avoid this problem.
-     */
-    const isUnlockedWallet = (<BaseWalletUnlocked>this.program.account)
-      .populateTransactionWitnessesSignature;
 
-    if (!isUnlockedWallet) {
-      return this.dryRun<T>();
+    if (!('populateTransactionWitnessesSignature' in this.program.account)) {
+      throw new FuelError(
+        ErrorCode.ABI_MAIN_METHOD_MISSING,
+        'An unlocked wallet is required to simulate a contract call.'
+      );
     }
 
     await this.fundWithRequiredCoins();
