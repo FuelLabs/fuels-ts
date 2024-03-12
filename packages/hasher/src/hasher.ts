@@ -1,15 +1,24 @@
 import { bufferFromString } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { sha256 } from 'ethers';
+import { arrayify, hexlify } from '@fuel-ts/utils';
+import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
 
 /**
- * hash string messages with sha256
- *
- * @param msg - The string message to be hashed
- * @returns A sha256 hash of the message
+ * @param data - The data to be hashed
+ * @returns A sha256 hash of the data in hex format
  */
-export function hashMessage(msg: string) {
-  return sha256(bufferFromString(msg, 'utf-8'));
+export function sha256(data: BytesLike): string {
+  return hexlify(sha256AsBytes(arrayify(data)));
+}
+
+/**
+ * wrap sha256
+ *
+ * @param data - The data to be hash
+ * @returns A sha256 hash of the data
+ */
+export function hash(data: BytesLike): string {
+  return sha256(data);
 }
 
 /**
@@ -24,11 +33,11 @@ export function uint64ToBytesBE(value: number): Uint8Array {
 }
 
 /**
- * wrap sha256
+ * hash string messages with sha256
  *
- * @param data - The data to be hash
- * @returns A sha256 hash of the data
+ * @param msg - The string message to be hashed
+ * @returns A sha256 hash of the message
  */
-export function hash(data: BytesLike) {
-  return sha256(data);
+export function hashMessage(msg: string) {
+  return hash(bufferFromString(msg, 'utf-8'));
 }

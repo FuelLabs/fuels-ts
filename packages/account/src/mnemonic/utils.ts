@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify } from '@fuel-ts/utils';
-import { sha256 } from 'ethers';
 
 /* Mnemonic phrase composed by words from the provided wordlist it can be a text or a array of words */
 export type MnemonicPhrase = string | Array<string>;

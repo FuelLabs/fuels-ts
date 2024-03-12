@@ -1,6 +1,6 @@
+import { sha256 } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import { arrayify, hexlify, concat } from '@fuel-ts/utils';
-import { sha256 } from 'ethers';
 
 import type { Receipt } from './receipt';
 import { ReceiptCoder, ReceiptMessageOutCoder, ReceiptType } from './receipt';
