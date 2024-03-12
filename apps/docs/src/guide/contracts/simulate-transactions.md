@@ -3,44 +3,50 @@
 <!-- This section should explain simulate transactions -->
 <!-- simulate:example:start -->
 
-Simulating a transaction is a powerful feature that allows you to validate whether a given transaction meets its requirements without modifying the blockchain. It's a safe way to ensure that a transaction will behave as expected without spending any real resources.
+Simulating a transaction allows you to validate whether a specific contract call meets its requirements without making any changes to the blockchain.
 
-You can use the `simulate()` method to test your transactions:
+`simulate()` is a read-only call that does not spend resources. It provides a safe way to access information from the contract, validate how a contract function would behave, and check if the wallet has sufficient resources to cover the transaction fee.
 
 <<< @/../../docs-snippets/src/guide/contracts/simulate-transactions.test.ts#simulate-transactions-1{ts:line-numbers}
 
-Simulating a transaction allows you to catch potential errors or issues before submitting the real transaction, making it a valuable tool for development and user interaction.
-
 <!-- simulate:example:end -->
 
-## Read-only Calls Using `simulate()`
+## Validating if the wallet has enough resources
 
 <!-- This section should explain read-only calls -->
 <!-- read:example:start -->
 
-When interacting with a contract, you might want to execute a method that does not change the state of the blockchain—for example, reading a value from storage without modifying it.
+When interacting with a contract, you may need to verify if the wallet has sufficient resources to cover the transaction fee.
 
-In such cases, you can use the `simulate()` method:
+This includes ensuring that the wallet has enough resources to cover any amount that may be forwarded to the contract call.
+
+`simulate()` is the appropriate method to use in this case, as it always requires a funded wallet for execution.
 
 <<< @/../../docs-snippets/src/guide/contracts/simulate-transactions.test.ts#simulate-transactions-2{ts:line-numbers}
 
-Using `simulate()` for read-only calls or to test transactions provides a way to safely and efficiently access information from the blockchain or validate how a transaction would behave. It ensures that no changes will be made to the blockchain and no resources will be spent, making it a valuable tool for data retrieval and development.
+<!-- TODO: add get doc page link -->
+
+If you want to dry-run a contract call without a funded wallet or even without a wallet at all, please use the `get` method.
 
 <!-- read:example:end -->
 
-## When to use `simulate()` vs `call()`
+## When to use `simulate()` vs `get()` vs `call()`
 
-<!-- This section should explain when to use the simulate vs call methods -->
+<!-- This section should explain when to use the get vs simulate vs call methods -->
 <!-- simulate_call:example:start -->
 
-`simulate()`: Suitable for both read-only calls and testing transactions that could modify the blockchain's state, this method allows you to safely validate how functions will behave without making changes. It's a robust validation, development, and data retrieval utility method, providing confidence in your transactions and interactions with the blockchain.
+`simulate()`: Suitable for both read-only calls and testing calls that could modify the blockchain's state. It not only validates how contract functions will behave but also ensures that the wallet has sufficient resources to meet the requirements of the contract call.
 
-`call()`: Use this method when calling a function that modifies the blockchain's state, such as transferring funds or updating values. Remember that if you use `call()` on a contract method that changes the blockchain state, it _**will**_ spend your resources.
+`get()`: Suitable for both read-only calls and testing calls that could modify the blockchain's state. It can be executed without a wallet or even with an unfunded wallet, making it a versatile method for interacting with the contract.
+
+`call()`: This method is used to submit the contract call transaction to the node. It should be used for write operations such as transferring funds or updating values. It's important to note that using `call()` _**will**_ consume your resources.
 
 <!-- simulate_call:example:end -->
 
 ---
 
-It is worth noting that while `call()` can be used to execute read-only contract methods without spending resources, it's recommended to use `simulate()` for such calls. Using `simulate()` guarantees that no resources will be spent even if you accidentally execute a contract method that would typically change the blockchain. This additional safeguard makes `simulate()` preferable for read-only interactions.
+While `call()` can be used to execute read-only contract methods, it is generally recommended to use `simulate()` for such calls to ensure no resources are unintentionally spent.
 
-> **Note:** Although a `simulate()` call won't modify the blockchain's state and does not spend resources, the transaction must still meet its requirements to be considered valid.
+This additional safeguard makes `simulate()` preferable for read-only interactions.
+
+> **Note:** Although a `simulate()` call won't modify the blockchain's state and does not spend resources, the transaction must still meet its requirements to be considered valid, this includes using a wallet that has enough resources to pay for the transaction fees.
