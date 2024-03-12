@@ -3,6 +3,19 @@ script;
 use std::b512::B512;
 use std::string::String;
 
+enum MyEnum {
+    Checked: (),
+    Pending: (),
+}
+
+struct MyStruct {
+    x: u8,
+    y: u8,
+    state: MyEnum,
+    grades: [u8; 4],
+    tag: str[4],
+}
+
 // fn print_u8() -> u8 {
 //     255
 // }
@@ -48,3 +61,15 @@ use std::string::String;
 // fn main(slice: str) -> str {
 //     slice
 // }
+
+fn main() -> MyStruct {
+    let my_struct = MyStruct {
+        x: 5,
+        y: 128,
+        state: MyEnum::Pending,
+        grades: [1,4,6,22],
+        tag: __to_str_array("fuel"),
+    };
+    
+    my_struct
+}

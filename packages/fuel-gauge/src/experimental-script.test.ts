@@ -73,12 +73,12 @@ describe('Experimental Logging', () => {
     expect(value).toStrictEqual(b512);
   });
 
-  it.skip('echos string', async () => {
+  it.skip('prints string', async () => {
     const { value } = await script.functions.main().call();
     expect(value).toStrictEqual('fuel');
   });
 
-  it.skip('echoes std string', async () => {
+  it.skip('prints std string', async () => {
     const { value } = await script.functions.main().call();
     expect(value).toStrictEqual('Hello World');
   });
@@ -91,5 +91,16 @@ describe('Experimental Logging', () => {
 
     const { value } = await script.functions.main(expected).call();
     expect(value).toStrictEqual(expected);
+  });
+
+  it('prints struct enum u8 vec', async () => {
+    const { value } = await script.functions.main().call();
+    expect(value).toStrictEqual({
+      x: 5,
+      y: 128,
+      state: { Pending: '()' },
+      grades: [1, 4, 6, 22],
+      tag: 'fuel',
+    });
   });
 });
