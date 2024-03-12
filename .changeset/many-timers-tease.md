@@ -23,7 +23,7 @@ const predicate = new Predicate({
 Notice how the `Predicate` constructor now accepts an _object_ with the following properties:
 
 - `bytecode`: The bytecode of the predicate.
-- `abi`: The JSON ABI of the predicate.
+- `abi`: The JSON ABI of the predicate (optional).
 - `provider`: The provider for interacting with the predicate.
 - `inputData`: The predicate input data (optional).
 - `configurableConstants`: The configurable constants for the predicate (optional).
