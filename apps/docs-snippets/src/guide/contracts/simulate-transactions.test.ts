@@ -48,26 +48,4 @@ describe(__filename, () => {
     ).rejects.toThrow('not enough coins to fit the target');
     // #endregion simulate-transactions-2
   });
-
-  it('should throw when simulating with an unfunded wallet', async () => {
-    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    const unfundedWallet = Wallet.generate({ provider: contract.provider });
-    const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
-
-    const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).simulate());
-
-    expect((<Error>error).message).toMatch('not enough coins to fit the target');
-  });
-
-  it('should throw when dry running with an unfunded wallet', async () => {
-    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    const unfundedWallet = Wallet.generate({ provider: contract.provider });
-    const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    const deployedContract = new Contract(contract.id, abi, unfundedWallet);
-
-    const { error } = await safeExec(() => deployedContract.functions.echo_u8(15).dryRun());
-
-    expect((<Error>error).message).toMatch('not enough coins to fit the target');
-  });
 });

@@ -1,6 +1,6 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type {
   TransactionRequestLike,
@@ -1149,5 +1149,35 @@ describe('Contract', () => {
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
+  });
+
+  it('should throw when simulating with an unfunded wallet', async () => {
+    const contract = await setupContract();
+
+    contract.account = Wallet.generate({ provider: contract.provider });
+
+    await expect(
+      contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [100, BaseAssetId],
+        })
+        .simulate()
+    ).rejects.toThrowError('not enough coins to fit the target');
+  });
+
+  it('should throw when dry running with an unfunded wallet', async () => {
+    const contract = await setupContract();
+
+    contract.account = Wallet.generate({ provider: contract.provider });
+
+    await expect(
+      contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [100, BaseAssetId],
+        })
+        .dryRun()
+    ).rejects.toThrowError('not enough coins to fit the target');
   });
 });
