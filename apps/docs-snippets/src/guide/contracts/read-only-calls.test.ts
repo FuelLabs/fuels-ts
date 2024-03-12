@@ -1,85 +1,65 @@
 import type { Provider } from 'fuels';
-import { Wallet, Contract } from 'fuels';
+import { BaseAssetId, Contract } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
+  let counterContract: Contract;
   let provider: Provider;
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    provider = contract.provider;
+    counterContract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
+    provider = counterContract.provider;
   });
 
-  it('should successfully execute a read only call with get', async () => {
+  it('should successfully use "get" to read from the blockchain', async () => {
+    await counterContract.functions.increment_count(1).call();
+
+    const { id: contractId, interface: abi } = counterContract;
+
     // #region read-only-calls-1
-    const { value } = await contract.functions.echo_u8(15).get();
+    const contract = new Contract(contractId, abi, provider);
+
+    const { value } = await contract.functions.get_count().get();
     // #endregion read-only-calls-1
-    expect(value).toEqual(15);
+    expect(value.toNumber()).toBeGreaterThanOrEqual(1);
   });
 
-  it('should successfully execute a contract call using an unfunded wallet', async () => {
+  it('should successfully use "dryRun" to validate a TX without a wallet', async () => {
+    const { id: contractId, interface: abi } = counterContract;
+
     // #region read-only-calls-2
-    const unfundedWallet = Wallet.generate({ provider });
+    const contract = new Contract(contractId, abi, provider);
 
-    contract.account = unfundedWallet;
-
-    const { value } = await contract.functions.echo_u8(15).get();
+    const { value } = await contract.functions.increment_count(1).dryRun();
     // #endregion read-only-calls-2
-    expect(value).toEqual(15);
+    expect(value.toNumber()).toBeGreaterThanOrEqual(1);
+  });
+
+  it('should successfully use "simulate" to validate if wallet can pay for transaction', async () => {
+    const { id: contractId, interface: abi } = counterContract;
+
+    const fundedWallet = await getTestWallet([[1000, BaseAssetId]]);
+
+    // #region read-only-calls-3
+    const contract = new Contract(contractId, abi, fundedWallet);
+
+    const { value } = await contract.functions.increment_count(10).simulate();
+    // #endregion read-only-calls-3
+    expect(value.toNumber()).toBeGreaterThanOrEqual(10);
   });
 
   it('should successfully execute a contract call without a wallet', async () => {
-    const abi = contract.interface;
-    const contractId = contract.id;
+    const contract = counterContract;
 
-    // #region read-only-calls-3
-    // contract instantiated without an account instance
-    const myContract = new Contract(contractId, abi, provider);
+    // #region read-only-calls-4
+    await contract.functions.increment_count(10).call();
+    // #endregion read-only-calls-4
 
-    const { value } = await myContract.functions.echo_u8(15).get();
-    // #endregion read-only-calls-3
-    expect(value).toEqual(15);
-  });
-
-  it('should validate that "get" does not write on the blockchain', async () => {
-    const counterContract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.COUNTER
-    );
-
-    // #region read-only-calls-6
-    const { value: valueUpdateOnlyOnDryRun } = await counterContract.functions
-      .increment_count(1)
-      .get();
-
-    // The dry-run returns the incremented value, but the actual value remains the same
-    // #context console.log(valueUpdateOnlyOnDryRun.toNumber());
-    // #context > 1
-    // #endregion read-only-calls-6
-    expect(valueUpdateOnlyOnDryRun.toNumber()).toEqual(1);
-
-    // #region read-only-calls-7
-    const { value: realValue } = await counterContract.functions.get_count().get();
-
-    // #context console.log(realValue.toNumber());
-    // #context > 0
-    // #endregion read-only-calls-7
-
-    expect(realValue.toNumber()).toEqual(0);
-
-    // #region read-only-calls-8
-    await counterContract.functions.increment_count(1).call();
-
-    const { value } = await counterContract.functions.get_count().get();
-
-    // #context console.log(value.toNumber());
-    // #context > 1
-    // #endregion read-only-calls-8
-
-    expect(value.toNumber()).toEqual(1);
+    const { value } = await contract.functions.get_count().get();
+    expect(value.toNumber()).toBeGreaterThanOrEqual(10);
   });
 });
