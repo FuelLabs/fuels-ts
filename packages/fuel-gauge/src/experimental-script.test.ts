@@ -98,7 +98,7 @@ describe('Experimental Logging', () => {
     expect(value).toStrictEqual({
       x: 5,
       y: 128,
-      state: { Pending: '()' },
+      state: 'Pending',
       grades: [1, 4, 6, 22],
       tag: 'fuel',
     });
