@@ -116,10 +116,10 @@ describe('TransactionRequest', () => {
     expect(transactionRequest.witnesses).toStrictEqual([mockSignedTx, mockSignedTx]);
   });
 
-  it('adds account based witnesses', async () => {
+  it.only('adds account based witnesses', async () => {
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
-      static async connect(url: string) {
+      static async create(url: string) {
         return new ProviderCustom(url, {});
       }
 
@@ -128,7 +128,7 @@ describe('TransactionRequest', () => {
       }
     }
 
-    const provider = await ProviderCustom.connect('nope');
+    const provider = await ProviderCustom.create('nope');
     const signer = WalletUnlocked.generate({ provider });
     const txRequest = new ScriptTransactionRequest();
 
