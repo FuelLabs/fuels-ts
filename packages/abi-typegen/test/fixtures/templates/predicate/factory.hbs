@@ -12,6 +12,7 @@
 import {
   BigNumberish,
   BN,
+  InputValue,
   Predicate,
   Provider,
 } from 'fuels';
@@ -86,11 +87,17 @@ export class MyPredicateAbi__factory {
   static readonly abi = _abi
   static readonly bin = _bin;
 
-  static createInstance(provider: Provider, configurables?: MyPredicateAbiConfigurables) {
+  static createInstance(provider: Provider, predicateData?: InputValue[], configurables?: MyPredicateAbiConfigurables) {
 
     const { abi, bin } = MyPredicateAbi__factory
 
-    const predicate = new Predicate(bin, provider, abi, configurables);
+    const predicate = new Predicate({
+      bytecode: bin,
+      abi,
+      provider,
+      inputData: predicateData,
+      configurableConstants: configurables,
+    })
 
     return predicate;
 
