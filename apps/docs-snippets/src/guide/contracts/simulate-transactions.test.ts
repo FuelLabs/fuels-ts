@@ -1,7 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { AssetId } from 'fuels';
-import { BaseAssetId, Wallet, BN, Contract } from 'fuels';
+import { BaseAssetId, Wallet, Contract } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
