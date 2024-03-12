@@ -9,12 +9,12 @@ ABI_TYPES_AND_VALUES_MISMATCH | When the arguments supplied to the function do n
 ACCOUNT_REQUIRED | When the account has not been set for the contract.
 CONVERTING_FAILED | When the `bn` function failed to convert a value supplied.
 DUPLICATED_POLICY | When there are policies with the same type.
-ERROR_BUILDING_BLOCK_EXPLORER_URL | When more than one of the following is options is passed: "path", "address", "txId", "blockNumber"
+ERROR_BUILDING_BLOCK_EXPLORER_URL | When more than one of the following is options is passed: `path`, `address`, `txId`, `blockNumber`.
 FRAGMENT_NOT_FOUND | When the function fragment is not found in the ABI.
 FUNCTION_NOT_FOUND | When the function with the given name, signature or selector is not found in the ABI.
 GAS_LIMIT_TOO_LOW | When the gas limit is lower than the minimum gas limit.
 GAS_PRICE_TOO_LOW | When the gas price is lower than the minimum gas price.
-HD_WALLET_ERROR | When neither privateKey nor publicKey is provided (at least one should be provided).
+HD_WALLET_ERROR | When neither private key nor public key is provided (at least one should be provided).
 HD_WALLET_ERROR | When the depth is greater than 255.
 HD_WALLET_ERROR | When the depth is zero but fingerprint/index is non-zero.
 HD_WALLET_ERROR | When the path is invalid.
@@ -24,19 +24,19 @@ HD_WALLET_ERROR | When the provided key is an invalid **private** extended key.
 HD_WALLET_ERROR | When the provided key is an invalid extended key.
 HD_WALLET_ERROR | When trying to derive the index without a private key set.
 INVALID_CHECKSUM | Checksum validation failed for the provided mnemonic.
-INVALID_CONFIGURABLE_CONSTANTS | When the ABI interface has no configurables to be set.
+INVALID_CONFIGURABLE_CONSTANTS | When the ABI interface has no configurable constants to be set.
 INVALID_CONFIGURABLE_CONSTANTS | When the ABI interface provided is `undefined`.
 INVALID_CONFIGURABLE_CONSTANTS | When the contract does not have a configurable with the specified name.
-INVALID_CONFIGURABLE_CONSTANTS | When the contract does not have configurables to be set.
+INVALID_CONFIGURABLE_CONSTANTS | When the contract does not have configurable constants to be set.
 INVALID_CONFIGURABLE_CONSTANTS | When the provided configurable constant is not found in the ABI interface.
 INVALID_CONFIGURABLE_CONSTANTS | When the script does not have a configurable constant with the provided name.
 INVALID_CONFIGURABLE_CONSTANTS | When the script does not have configurable constants to be set.
 INVALID_CREDENTIALS | When the password provided is incorrect.
 INVALID_DATA | When the value is more than the max value.
 INVALID_ENTROPY | When the entropy is not: between 16 and 32 bytes; a multiple of 4.
-INVALID_EVM_ADDRESS | When the provided Evm address is invalid.
-INVALID_INPUT_PARAMETERS | When commitBlockId and commitBlockHeight are used together.
-INVALID_INPUT_PARAMETERS | When the provided programType is not one of the valid types ("contract", "script", "predicate").
+INVALID_EVM_ADDRESS | When the provided EVM address is invalid.
+INVALID_INPUT_PARAMETERS | When `commitBlockId` and `commitBlockHeight` are used together.
+INVALID_INPUT_PARAMETERS | When the provided program type is not one of the valid types (`contract`, `script`, `predicate`).
 INVALID_INPUT_PARAMETERS | When the provided string is not a valid UTF-8 string.
 INVALID_MNEMONIC | When the mnemonic phrase is not: 12, 15, 18, 21, or 24 words in length.
 INVALID_MNEMONIC | When the provided mnemonic is invalid.
@@ -54,7 +54,7 @@ INVALID_TRANSACTION_STATUS | When the transaction status is invalid.
 INVALID_TRANSACTION_TYPE | When the transaction type is not recognized.
 INVALID_TTL | When the TTL is less than or equal to zero.
 INVALID_TTL | When the TTL is not a number.
-INVALID_WORD_LIST | When the wordlist length is not equal 2048.
+INVALID_WORD_LIST | When the word list length is not equal 2048.
 JSON_ABI_ERROR | When the struct name cannot be extracted from the JSON ABI.
 LOG_TYPE_NOT_FOUND | When the log type ID supplied, can't be found in the ABI.
 MISSING_CONNECTOR | A connector is required to sign messages.
