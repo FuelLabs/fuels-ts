@@ -53,6 +53,8 @@
   "devDependencies": {
     "@changesets/cli": "^2.25.0",
     "@changesets/get-github-info": "^0.5.2",
+    "@changesets/read": "^0.6.0",
+    "@changesets/types": "^6.0.0",
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
