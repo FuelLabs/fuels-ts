@@ -2,6 +2,7 @@ script;
 
 use std::b512::B512;
 use std::string::String;
+use std::option::Option;
 
 enum NativeEnum {
     Checked: (),
@@ -26,6 +27,8 @@ struct MixedStruct {
     grades: [u8; 4],
     fuel: str[4],
     hello: String,
+    opt: Option<u16>,
+    nada: Option<u32>,
 }
 
 fn main(param_one: B512) -> MixedStruct {
@@ -42,6 +45,8 @@ fn main(param_one: B512) -> MixedStruct {
         grades: [1, 4, 6, 22],
         fuel: __to_str_array("fuel"),
         hello: String::from_ascii_str("Hello World"),
+        opt: Some(42),
+        nada: None,
     };
 
     my_struct

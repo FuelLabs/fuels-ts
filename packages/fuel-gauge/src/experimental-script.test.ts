@@ -105,9 +105,9 @@ describe('Experimental Logging', () => {
   });
 
   /**
-   * done: u8, u16, u32, u64, u256, b256, b512, string, stdString, struct, enum, vec
+   * done: u8, u16, u32, u64, u256, b256, b512, string, stdString, struct, enum, array, option
    *
-   * todo: option, bytes, slice, tuple, deep
+   * todo: bytes, slice, tuple, vec, deep
    */
   it('prints mixed struct', async () => {
     const { value } = await script.functions.main(B512).call();
@@ -124,6 +124,8 @@ describe('Experimental Logging', () => {
       grades: [1, 4, 6, 22],
       fuel: 'fuel',
       hello: 'Hello World',
+      opt: 42,
+      nada: undefined,
     });
   });
 });
