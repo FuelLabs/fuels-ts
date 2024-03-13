@@ -70,7 +70,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (faucetWallet && burnerWalletBalance?.lte(10_000) && !initialTopupDone) {
+    if (faucetWallet && burnerWalletBalance?.lt(10_000) && !initialTopupDone) {
       topUpBurnerWallet();
       setInitialTopupDone(true);
     }
