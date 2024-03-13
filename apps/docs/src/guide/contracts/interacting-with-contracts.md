@@ -4,9 +4,7 @@ There are 4 ways to interact with contracts: `get`, `dryRun`, `simulate`, `call`
 
 ## `get`
 
-The `get` method should be used to read data from the blockchain without using resources.
-
-It can be used with an unfunded wallet or even without a wallet at all:
+The `get` method should be used to read data from the blockchain without using resources. It can be used with an unfunded wallet or even without a wallet at all:
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-1{ts:line-numbers}
 
