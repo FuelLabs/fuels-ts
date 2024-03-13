@@ -26,5 +26,5 @@ members = [
   "token",
   "echo-raw-slice",
   "echo-std-string",
-  "input-output-types"
+  "input-output-types",
 ]
