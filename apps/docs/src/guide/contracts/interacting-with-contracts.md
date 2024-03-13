@@ -24,7 +24,7 @@ It can be used with an unfunded wallet or even without a wallet at all:
 
 The `simulate` method should be used to dry-run a contract call, ensuring that the wallet used has sufficient funds to cover the transaction fees, without consuming any resources.
 
-This dry-run uses the `utxo-validate` parameter set to `true`, preventing the use of fake UTXOs.
+This dry-run uses the `utxo-validate` parameter set to `true`, enforcing the use of real UTXOs.
 
 A funded wallet it's required:
 
