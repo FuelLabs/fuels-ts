@@ -54,7 +54,7 @@ INVALID_TRANSACTION_STATUS | When the transaction status is invalid.
 INVALID_TRANSACTION_TYPE | When the transaction type is not recognized.
 INVALID_TTL | When the TTL is less than or equal to zero.
 INVALID_TTL | When the TTL is not a number.
-INVALID_WORD_LIST | When the word list length is not equal 2048.
+INVALID_WORD_LIST | When the word list length is not equal to 2048.
 JSON_ABI_ERROR | When the struct name cannot be extracted from the JSON ABI.
 LOG_TYPE_NOT_FOUND | When the log type ID supplied, can't be found in the ABI.
 MISSING_CONNECTOR | A connector is required to sign messages.
