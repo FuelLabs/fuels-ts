@@ -97,7 +97,7 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
     .map(([program, include]) => `NEXT_PUBLIC_HAS_${program.toUpperCase()}=${include}`)
     .join('\n');
 
-  newFileContents += `\nNEXT_PUBLIC_FUEL_NETWORK_URL=http://127.0.0.1:4000/graphql`;
+  newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
   writeFileSync(envFilePath, newFileContents);
 }
 
