@@ -19,7 +19,7 @@ impl MyContract for Contract {
         true
     }
     // #endregion revert-errors-1
-    
+
     // #region revert-errors-3
     fn test_function_with_custom_error() -> bool {
         require(false, Errors::InvalidInput);
