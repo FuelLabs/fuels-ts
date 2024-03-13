@@ -62,7 +62,7 @@ MISSING_PROVIDER | The provider has not been set for either an Account or a Cont
 MISSING_REQUIRED_PARAMETER | When neither `inputs` nor `filepaths` are supplied (at least one is required).
 NODE_INFO_CACHE_EMPTY | When the node info cache is empty within the Provider.
 TYPE_NOT_FOUND | When the type with the given type ID is not found in the ABI.
-TYPE_NOT_SUPPORTED | When the type that has been supplied, is not supported by our current coding standards.
+TYPE_NOT_SUPPORTED | When the type that has been supplied is not supported by our current coding standards.
 UNSUPPORTED_FUEL_CLIENT_VERSION | When the client version is not supported by the Fuel node.
 WALLET_MANAGER_ERROR | When the condition is not met.
 WALLET_MANAGER_ERROR | When the vault can not be found.
