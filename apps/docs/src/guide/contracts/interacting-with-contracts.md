@@ -34,6 +34,6 @@ A funded wallet it's required:
 
 The `call` method should be used to submit a real contract call transaction to the node.
 
-Real resources are consumed and any operations executed by the called contract function will be processed on the blockchain.
+Real resources are consumed, and any operations executed by the contract function will be processed on the blockchain.
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-4{ts:line-numbers}
