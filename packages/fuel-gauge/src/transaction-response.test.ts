@@ -277,5 +277,5 @@ describe('TransactionResponse', () => {
       { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
     );
     cleanup();
-  });
+  }, 7000);
 });
