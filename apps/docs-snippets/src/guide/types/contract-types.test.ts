@@ -23,6 +23,7 @@ describe(__filename, () => {
     const callResponse = await contract.functions.address(addressInput).simulate();
 
     // #region address-output
+    // #import { Address };
     const addressOutput = callResponse.value;
     const addressFromOutput: Address = Address.fromB256(addressOutput.value);
     // #endregion address-output
@@ -46,6 +47,7 @@ describe(__filename, () => {
 
   it('should successfully call a function with a Identity type input and output parameters', async () => {
     // #region identity-address-input
+    // #import { Address };
     const address = Address.fromRandom();
     const addressInput = { value: address.toB256() };
     const addressIdentityInput = { Address: addressInput };
@@ -53,6 +55,7 @@ describe(__filename, () => {
     const callResponse1 = await contract.functions.identity(addressIdentityInput).simulate();
 
     // #region identity-address-output
+    // #import { Address };
     const identityFromOutput1 = callResponse1.value;
     const addressStringFromOutput = identityFromOutput1.Address.value;
     const addressFromOutput: Address = Address.fromB256(addressStringFromOutput);
