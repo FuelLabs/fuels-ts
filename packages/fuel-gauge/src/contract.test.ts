@@ -9,6 +9,7 @@ import type {
   JsonAbi,
   ScriptTransactionRequest,
   ReceiptScriptResult,
+  TransactionCost,
 } from 'fuels';
 import {
   BN,
@@ -887,7 +888,7 @@ describe('Contract', () => {
   });
 
   it('Read only call', async () => {
-    const contract = await setupContract();
+    const contract = await setupContract({ cache: false });
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
     expect(value).toEqual(contract.id.toB256());
   });
@@ -1013,14 +1014,14 @@ describe('Contract', () => {
   });
 
   it('should ensure ScriptResultDecoderError works for dryRun and simulate calls', async () => {
-    const contract = await setupContract();
+    const contract = await setupContract({ cache: false });
 
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, BaseAssetId],
     });
 
-    vi.spyOn(contract.provider, 'call').mockImplementation(async () =>
-      Promise.resolve({ receipts: [] })
+    vi.spyOn(contract.provider, 'getTransactionCost').mockImplementationOnce(async () =>
+      Promise.resolve({ receipts: [] } as unknown as TransactionCost)
     );
 
     await expect(invocationScope.dryRun<BN>()).rejects.toThrowError(
@@ -1137,7 +1138,7 @@ describe('Contract', () => {
     );
   });
 
-  it('should throw when simulating with an unfunded wallet', async () => {
+  it('should throw when using "simulate" with an unfunded wallet', async () => {
     const contract = await setupContract();
 
     contract.account = Wallet.generate({ provider: contract.provider });
@@ -1152,7 +1153,36 @@ describe('Contract', () => {
     ).rejects.toThrowError('not enough coins to fit the target');
   });
 
-  it('should throw when dry running with an unfunded wallet', async () => {
+  it('should throw when using "simulate" without a wallet', async () => {
+    const contract = await setupContract();
+
+    contract.account = null;
+    await expect(
+      contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [100, BaseAssetId],
+        })
+        .simulate()
+    ).rejects.toThrowError('Wallet is required!');
+  });
+
+  it('should throw when using "simulate" with a locked wallet', async () => {
+    const contract = await setupContract();
+
+    contract.account = Wallet.fromAddress(getRandomB256());
+
+    await expect(
+      contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [100, BaseAssetId],
+        })
+        .simulate()
+    ).rejects.toThrowError('An unlocked wallet is required to simulate a contract call.');
+  });
+
+  it('should use "dryRun" with an unfunded wallet just fine', async () => {
     const contract = await setupContract();
 
     contract.account = Wallet.generate({ provider: contract.provider });
@@ -1164,11 +1194,11 @@ describe('Contract', () => {
           forward: [100, BaseAssetId],
         })
         .dryRun()
-    ).rejects.toThrowError('not enough coins to fit the target');
+    ).resolves.not.toThrow();
   });
 
   it('should ensure "get" does not spend any funds', async () => {
-    const contract = await setupContract();
+    const contract = await setupContract({ cache: false });
 
     const balance = await contract.account?.getBalance();
 
