@@ -17,7 +17,7 @@ To pass an `Address` as an input parameter to a Sway program, you can define the
 
 ### `AddressOutput`
 
-For a Sway program that returns an `Address` type, you can convert to an `Address` type in `fuels` as shown below:
+For a Sway program that returns an `Address` type, you can convert the returned value to an `Address` type in `fuels` as shown below:
 
 <<< @/../../docs-snippets/src/guide/types/contract-types.test.ts#address-output
 
@@ -31,7 +31,7 @@ To pass a `ContractId` as an input parameter to a Sway program, you can define t
 
 ### `ContractIdOutput`
 
-For a Sway program that returns a `ContractId` type, you can convert to an `string` as shown below:
+For a Sway program that returns a `ContractId` type, you can convert the returned value to a `string` as shown below:
 
 <<< @/../../docs-snippets/src/guide/types/contract-types.test.ts#contract-id-output
 
@@ -51,7 +51,7 @@ For a contract:
 
 ### `IdentityOutput`
 
-For a Sway program that returns an `Identity` type, you can convert to an `Address` or `string` as shown below:
+For a Sway program that returns an `Identity` type, you can convert the returned value to an `Address` or `string` as shown below:
 
 For an address:
 
@@ -71,6 +71,6 @@ To pass an `AssetId` as an input parameter to a Sway program, you can define the
 
 ### `AssetIdOutput`
 
-For a Sway program that returns an `AssetId` type, you can convert to a `string` as shown below:
+For a Sway program that returns an `AssetId` type, you can convert the returned value to a `string` as shown below:
 
 <<< @/../../docs-snippets/src/guide/types/contract-types.test.ts#asset-id-output
