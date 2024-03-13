@@ -1,6 +1,6 @@
 # Error Codes
 
-Here are a list of the expected error code's that can be thrown by the SDK. These error codes are used to help understand the error that has been thrown with potential remedies.
+Here is a list of the expected error codes the SDK can throw. These error codes are used to help understand the error that has been thrown with potential remedies.
 
 Error Codes | Description
 --- | ---
