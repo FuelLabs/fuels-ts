@@ -55,10 +55,6 @@ export class RevertError extends Error {
    * The receipt associated with the revert error.
    */
   receipt: TransactionResultRevertReceipt;
-  /**
-   * The logs for `receipt`
-   */
-  logs: Array<unknown>
 
   /**
    * Creates a new instance of RevertError.
@@ -73,7 +69,11 @@ export class RevertError extends Error {
     // just restrict the following to `RequireFailed` class by modifying `this.message`
     // produces error messages like so:
     // ```RequireRevertError: The script reverted with reason RequireFailed (reason: "FailImplicitly")```
-    super(`The script reverted with reason ${reason}: (reason: "${logs.filter(l => typeof l === "string")}")`);
+    super(
+      `The script reverted with reason ${reason}: (reason: "${logs.filter(
+        (l) => typeof l === 'string'
+      )}")`
+    );
     this.name = 'RevertError';
     this.receipt = receipt;
   }
