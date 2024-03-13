@@ -60,11 +60,11 @@ async function getSingleChangelogInfo(
 async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
   const changesetsWithReleases = changesets.filter((x) => x.releases.length > 0);
 
-  const changesetsWithInfo = await Promise.all(
+  const changelogs = await Promise.all(
     changesetsWithReleases.map(async (changeset) => getSingleChangelogInfo(octokit, changeset))
   );
 
-  const sortedChangesets = changesetsWithInfo.sort((a, b) => {
+  const sortedChangelogs = changelogs.sort((a, b) => {
     const aIdx = prTypes.indexOf(a.prType);
     const bIdx = prTypes.indexOf(b.prType);
 
@@ -82,8 +82,8 @@ async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
     return aIdx - bIdx;
   });
 
-  const breaking = sortedChangesets.filter((x) => x.isBreaking);
-  const nonBreaking = sortedChangesets.filter((x) => !x.isBreaking);
+  const breaking = sortedChangelogs.filter((x) => x.isBreaking);
+  const nonBreaking = sortedChangelogs.filter((x) => !x.isBreaking);
 
   return [breaking, nonBreaking];
 }
