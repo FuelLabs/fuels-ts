@@ -3,7 +3,7 @@ import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { ChainConfig } from '@fuel-ts/utils';
-import { urlIsLive, sleepUntilTrue } from '@fuel-ts/utils/test-utils';
+import { urlIsLive, waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { randomInt, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { writeFile } from 'fs/promises';
@@ -52,7 +52,8 @@ describe('launchTestNode', () => {
       url = provider.url;
       await provider.getBlockNumber();
     }
-    await sleepUntilTrue(async () => !(await urlIsLive(url)));
+
+    await waitUntilUnreachable(url);
 
     const { error } = await safeExec(async () => {
       const p = await Provider.create(url);
@@ -78,8 +79,8 @@ describe('launchTestNode', () => {
       provider: { url },
     } = spy.mock.results[0].value as { provider: { url: string } };
 
-    await sleepUntilTrue(async () => !(await urlIsLive(url)));
-    expect(await urlIsLive(url)).toBe(false);
+    // test will timeout if the node isn't killed
+    await waitUntilUnreachable(url);
   });
 
   test('a contract can be deployed', async () => {

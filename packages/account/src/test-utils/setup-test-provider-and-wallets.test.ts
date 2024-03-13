@@ -3,7 +3,7 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { toHex, toNumber } from '@fuel-ts/math';
-import { sleepUntilTrue, urlIsLive } from '@fuel-ts/utils/test-utils';
+import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 
 import { Provider } from '../providers';
 import { Signer } from '../signer';
@@ -27,11 +27,11 @@ describe('setupTestProviderAndWallets', () => {
       await result.provider.getBlockNumber();
     }
 
-    await sleepUntilTrue(async () => !(await urlIsLive(url)));
+    await waitUntilUnreachable(url);
 
     const { error } = await safeExec(async () => {
       const p = await Provider.create(url);
-      await p.getBlockNumber();
+      return p.getBlockNumber();
     });
 
     expect(error).toMatchObject({
@@ -50,8 +50,9 @@ describe('setupTestProviderAndWallets', () => {
     );
     expect(launchNodeSpy).toHaveBeenCalled();
     const { url } = launchNodeSpy.mock.results[0].value as Awaited<launchNodeMod.LaunchNodeResult>;
-    await sleepUntilTrue(async () => !(await urlIsLive(url)));
-    expect(await urlIsLive(url)).toBe(false);
+
+    // test will timeout if the node isn't killed
+    await waitUntilUnreachable(url);
   });
 
   it('can partially extend the default node configs', async () => {

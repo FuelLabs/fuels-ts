@@ -1,5 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { sleepUntilTrue, urlIsLive } from '@fuel-ts/utils/test-utils';
+import { urlIsLive, waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
 
 import type { LaunchNodeOptions } from './launchNode';
@@ -77,10 +77,8 @@ describe('launchNode', () => {
     expect(await urlIsLive(url)).toBe(true);
 
     cleanup();
-    // give time for cleanup to kill the node
-    await sleepUntilTrue(async () => !(await urlIsLive(url)));
 
-    expect(await urlIsLive(url)).toBe(false);
+    await waitUntilUnreachable(url);
   });
 
   test('should start `fuel-core` node using built-in binary', async () => {
