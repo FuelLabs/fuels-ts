@@ -59,7 +59,7 @@ JSON_ABI_ERROR | When the struct name cannot be extracted from the JSON ABI.
 LOG_TYPE_NOT_FOUND | When the log type ID supplied can not be found in the ABI.
 MISSING_CONNECTOR | A connector is required to sign messages.
 MISSING_PROVIDER | The provider has not been set for either an Account or a Contract. Use the `connect` method to attach a provider.
-MISSING_REQUIRED_PARAMETER | When neither `inputs` or `filepaths` are supplied (at least one is required).
+MISSING_REQUIRED_PARAMETER | When neither `inputs` nor `filepaths` are supplied (at least one is required).
 NODE_INFO_CACHE_EMPTY | When the node info cache is empty within the Provider.
 TYPE_NOT_FOUND | When the type with the given type ID is not found in the ABI.
 TYPE_NOT_SUPPORTED | When the type that has been supplied, is not supported by our current coding standards.
