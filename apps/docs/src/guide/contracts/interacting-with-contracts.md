@@ -1,6 +1,6 @@
 # Interacting With Contracts
 
-There 4 ways to interact with contracts: `get`, `dryRun`, `simulate`, `call`.
+There are 4 ways to interact with contracts: `get`, `dryRun`, `simulate`, `call`.
 
 ## `get`
 
