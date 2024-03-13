@@ -447,6 +447,17 @@ export default defineConfig({
               },
             ],
           },
+          {
+            text: 'Errors',
+            link: '/guide/errors/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Debugging Revert Errors',
+                link: '/guide/errors/debugging-revert-errors',
+              },
+            ],
+          },
         ],
       },
       apiLinks,
