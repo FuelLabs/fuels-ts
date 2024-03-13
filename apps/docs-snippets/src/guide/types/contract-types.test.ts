@@ -39,6 +39,7 @@ describe(__filename, () => {
     const contractIdOutput = callResponse.value;
     const contractIdFromOutput: string = contractIdOutput.value;
     // #endregion contract-id-output
+
     expect(contractIdFromOutput).toEqual(contractId);
   });
 
