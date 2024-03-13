@@ -1,3 +1,4 @@
+import type { PredicateParams } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
 import {
@@ -18,7 +19,12 @@ describe(__filename, () => {
     // #import { Predicate, Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const predicate = new Predicate(binary, provider, jsonAbi);
+    const predicateParams: PredicateParams = {
+      bytecode: binary,
+      provider,
+      abi: jsonAbi,
+    };
+    const predicate = new Predicate(predicateParams);
     // #endregion predicate-index-2
 
     expect(predicate).toBeTruthy();

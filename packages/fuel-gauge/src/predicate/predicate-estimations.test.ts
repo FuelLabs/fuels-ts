@@ -37,12 +37,15 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      predicateTrue = new Predicate(predicateTrueBytecode, provider);
-      predicateStruct = new Predicate<[Validation]>(
-        predicateBytesMainArgsStruct,
+      predicateTrue = new Predicate({
+        bytecode: predicateTrueBytecode,
         provider,
-        predicateAbiMainArgsStruct
-      );
+      });
+      predicateStruct = new Predicate<[Validation]>({
+        bytecode: predicateBytesMainArgsStruct,
+        abi: predicateAbiMainArgsStruct,
+        provider,
+      });
       await seedTestWallet(predicateStruct, [
         {
           assetId: BaseAssetId,
