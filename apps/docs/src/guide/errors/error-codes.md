@@ -68,4 +68,4 @@ WALLET_MANAGER_ERROR | When the condition is not met.
 WALLET_MANAGER_ERROR | When the vault can not be found.
 WALLET_MANAGER_ERROR | When the vault type is not found.
 WALLET_MANAGER_ERROR | When the wallet is locked.
-WALLET_MANAGER_ERROR | When the wallet address provided, can not be found.
+WALLET_MANAGER_ERROR | When the provided wallet address can not be found.
