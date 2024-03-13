@@ -1,6 +1,9 @@
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
+/**
+ * @group node
+ */
 test('logs out custom require messages for error enums when tx reverts', async () => {
   const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.REVERT_ERRORS);
 
