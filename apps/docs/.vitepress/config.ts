@@ -164,6 +164,10 @@ export default defineConfig({
                 text: 'Date Time',
                 link: '/guide/types/date-time',
               },
+              {
+                text: 'Native Parameters',
+                link: '/guide/types/native-parameters',
+              },
             ],
           },
           {
