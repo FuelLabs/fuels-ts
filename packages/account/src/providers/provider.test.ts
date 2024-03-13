@@ -17,7 +17,7 @@ import {
   MESSAGE_PROOF,
 } from '../../test/fixtures';
 
-import type { ChainInfo, FetchRequestOptions, NodeInfo } from './provider';
+import type { ChainInfo, NodeInfo } from './provider';
 import Provider from './provider';
 import type {
   CoinTransactionRequestInput,
@@ -25,6 +25,7 @@ import type {
 } from './transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
+import type { SubmittedStatus } from './transaction-summary/types';
 import { sleep } from './utils';
 import * as gasMod from './utils/gas';
 
@@ -34,15 +35,8 @@ afterEach(() => {
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
-  async (
-    url: string,
-    options: {
-      body: string;
-      headers: { [key: string]: string };
-      [key: string]: unknown;
-    }
-  ) => {
-    const graphqlRequest = JSON.parse(options.body);
+  async (url: string, options: RequestInit | undefined) => {
+    const graphqlRequest = JSON.parse(options?.body as string);
     const { operationName } = graphqlRequest;
 
     if (operationName === expectedOperationName) {
@@ -209,7 +203,7 @@ describe('Provider', () => {
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
 
     const provider = await Provider.create(providerUrl1, {
-      fetch: (url: string, options: FetchRequestOptions) =>
+      fetch: (url: string, options?: RequestInit) =>
         getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
     });
 
@@ -1044,5 +1038,179 @@ describe('Provider', () => {
     });
 
     await Promise.all(promises);
+  });
+
+  it('should not throw if the subscription stream data string contains more than one "data:"', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const responseObject = {
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+            time: 'data: 4611686020137152060',
+          },
+        },
+      };
+      const streamedResponse = new TextEncoder().encode(
+        `data:${JSON.stringify(responseObject)}\n\n`
+      );
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamedResponse);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
+    }
+  });
+
+  it('should throw if the subscription stream data string parsing fails for some reason', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const badResponse = 'data: whatever';
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const streamResponse = new TextEncoder().encode(badResponse);
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamResponse);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    await expectToThrowFuelError(
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+          encodedTransaction: "it's mocked so doesn't matter",
+        })) {
+          // shouldn't be reached!
+          expect(true).toBeFalsy();
+        }
+      },
+      {
+        code: FuelError.CODES.STREAM_PARSING_ERROR,
+        message: `Error while parsing stream data response: ${badResponse}`,
+      }
+    );
+  });
+
+  test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    const requestObject = fetchSpy.mock.calls[0][1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return Promise.resolve(request);
+      },
+    });
+
+    const requestObject = fetchSpy.mock.calls[0][1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('requestMiddleware works for subscriptions', async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    await safeExec(async () => {
+      for await (const iterator of provider.operations.statusChange({
+        transactionId: 'doesnt matter, will be aborted',
+      })) {
+        // Just running a subscription to trigger the middleware
+        // shouldn't be reached and should fail if reached
+        expect(iterator).toBeFalsy();
+      }
+    });
+
+    const subscriptionCall = fetchSpy.mock.calls.find((call) => call[0] === `${provider.url}-sub`);
+    const requestObject = subscriptionCall?.[1];
+
+    expect(requestObject?.headers).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('custom fetch works with requestMiddleware', async () => {
+    let requestHeaders: HeadersInit | undefined;
+    await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, requestInit) => {
+        requestHeaders = requestInit?.headers;
+        return fetch(url, requestInit);
+      },
+      requestMiddleware: (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
+        return request;
+      },
+    });
+
+    expect(requestHeaders).toMatchObject({
+      'x-custom-header': 'custom-value',
+    });
+  });
+
+  test('custom fetch works with timeout', async () => {
+    const timeout = 500;
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      fetch: async (url, requestInit) => fetch(url, requestInit),
+      timeout,
+    });
+    vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
+      sleep(timeout).then(() =>
+        fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
+      )
+    );
+
+    const { error } = await safeExec(async () => {
+      await provider.getBlocks({});
+    });
+
+    expect(error).toMatchObject({
+      code: 23,
+      name: 'TimeoutError',
+      message: 'The operation was aborted due to timeout',
+    });
   });
 });
