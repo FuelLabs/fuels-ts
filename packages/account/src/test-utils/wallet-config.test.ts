@@ -2,15 +2,23 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { AssetId } from './asset-id';
+import type { WalletConfigOptions } from './wallet-config';
 import { WalletConfig } from './wallet-config';
 
 /**
  * @group node
  */
 describe('WalletConfig', () => {
+  const configOptions: WalletConfigOptions = {
+    count: 2,
+    assets: [AssetId.A, AssetId.B],
+    coinsPerAsset: 1,
+    amountPerCoin: 10_000_000_000,
+    messages: [],
+  };
   it('throws on invalid number of wallets', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ wallets: -1 }),
+      () => new WalletConfig({ ...configOptions, count: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -18,7 +26,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ wallets: 0 }),
+      () => new WalletConfig({ ...configOptions, count: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -28,7 +36,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid number of assets', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ assets: -1 }),
+      () => new WalletConfig({ ...configOptions, assets: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
@@ -36,14 +44,14 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ assets: 0 }),
+      () => new WalletConfig({ ...configOptions, assets: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
       )
     );
     await expectToThrowFuelError(
-      () => new WalletConfig({ assets: [] }),
+      () => new WalletConfig({ ...configOptions, assets: [] }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
@@ -53,7 +61,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid number of coins per asset', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ coinsPerAsset: -1 }),
+      () => new WalletConfig({ ...configOptions, coinsPerAsset: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
@@ -61,7 +69,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ coinsPerAsset: 0 }),
+      () => new WalletConfig({ ...configOptions, coinsPerAsset: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
@@ -71,7 +79,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid amount per coin', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ amountPerCoin: -1 }),
+      () => new WalletConfig({ ...configOptions, amountPerCoin: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
@@ -79,7 +87,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ amountPerCoin: 0 }),
+      () => new WalletConfig({ ...configOptions, amountPerCoin: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
@@ -91,7 +99,7 @@ describe('WalletConfig', () => {
     const assetId = AssetId.random();
     const {
       initial_state: { coins: allCoins },
-    } = new WalletConfig({ assets: [assetId] }).apply({});
+    } = new WalletConfig({ ...configOptions, assets: [assetId] }).apply({});
 
     const coins = allCoins.filter((coin, _index, arr) => coin.owner === arr[0].owner);
 

@@ -16,8 +16,7 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
-import { launchNode } from '../test-utils';
-import { setupTestProvider } from '../test-utils/setup-test-provider';
+import { setupTestProviderAndWallets, launchNode } from '../test-utils';
 
 import type { ChainInfo, NodeInfo } from './provider';
 import Provider from './provider';
@@ -58,7 +57,8 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
  */
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const version = await provider.getVersion();
 
@@ -66,7 +66,8 @@ describe('Provider', () => {
   });
 
   it('can call()', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -131,7 +132,8 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -178,7 +180,9 @@ describe('Provider', () => {
 
   it('can get all chain info', async () => {
     // #region provider-definition
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const { consensusParameters } = provider.getChain();
     // #endregion provider-definition
 
@@ -199,7 +203,8 @@ describe('Provider', () => {
   });
 
   it('can change the provider url of the current instance', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const { cleanup, url } = await launchNode({ port: '0' });
 
@@ -213,7 +218,9 @@ describe('Provider', () => {
   });
 
   it('can accept a custom fetch function', async () => {
-    using providerForUrl = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider: providerForUrl } = launched;
+
     const providerUrl = providerForUrl.url;
 
     const provider = await Provider.create(providerUrl, {
@@ -224,7 +231,9 @@ describe('Provider', () => {
   });
 
   it('can accept options override in connect method', async () => {
-    using providerForUrl = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider: providerForUrl } = launched;
+
     const providerUrl = providerForUrl.url;
 
     /**
@@ -259,7 +268,8 @@ describe('Provider', () => {
   });
 
   it('can force-produce blocks', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     // #region Provider-produce-blocks
     const block = await provider.getBlock('latest');
@@ -286,7 +296,8 @@ describe('Provider', () => {
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -328,13 +339,15 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [undefined]', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(provider.cache).toEqual(undefined);
   });
 
   it('can cacheUtxo [numerical]', async () => {
-    using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 2500 } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 2500 } });
+    const { provider } = launched;
 
     expect(provider.cache).toBeTruthy();
     expect(provider.cache?.ttl).toEqual(2_500);
@@ -342,13 +355,15 @@ describe('Provider', () => {
 
   it('can cacheUtxo [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
-      await setupTestProvider({ providerOptions: { cacheUtxo: -500 } });
+      await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    // using launched = await setupTestProviderAndWallets();
     const transactionRequest = new ScriptTransactionRequest({});
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -358,11 +373,12 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    using provider = await setupTestProvider({
+    using launched = await setupTestProviderAndWallets({
       providerOptions: {
         cacheUtxo: 1,
       },
     });
+    const { provider } = launched;
 
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -384,7 +400,8 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
 
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
@@ -442,7 +459,8 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -515,7 +533,8 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -572,7 +591,8 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    using provider = await setupTestProvider({ providerOptions: { cacheUtxo: 10000 } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -657,7 +677,8 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
@@ -713,7 +734,8 @@ describe('Provider', () => {
   });
 
   it('can connect', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
@@ -724,7 +746,8 @@ describe('Provider', () => {
   it('should cache chain and node info', async () => {
     Provider.clearChainAndNodeCaches();
 
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(provider.getChain()).toBeDefined();
     expect(provider.getNode()).toBeDefined();
@@ -737,7 +760,8 @@ describe('Provider', () => {
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -758,7 +782,8 @@ describe('Provider', () => {
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -772,7 +797,8 @@ describe('Provider', () => {
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const gasConfig = provider.getGasConfig();
 
@@ -784,7 +810,8 @@ describe('Provider', () => {
   });
 
   it('should throws when using getChain or getNode and without cached data', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     Provider.clearChainAndNodeCaches();
 
@@ -856,7 +883,8 @@ describe('Provider', () => {
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     await expectToThrowFuelError(
       async () => {
@@ -879,18 +907,20 @@ describe('Provider', () => {
   });
 
   it('default timeout is undefined', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     expect(provider.options.timeout).toBeUndefined();
   });
 
   it('throws TimeoutError on timeout when calling an operation', async () => {
     const timeout = 500;
-    using provider = await setupTestProvider({ providerOptions: { timeout } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { timeout } });
     vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
       sleep(timeout).then(() =>
         fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
       )
     );
+    const { provider } = launched;
 
     const { error } = await safeExec(async () => {
       await provider.getBlocks({});
@@ -905,7 +935,8 @@ describe('Provider', () => {
 
   it('throws TimeoutError on timeout when calling a subscription', async () => {
     const timeout = 500;
-    using provider = await setupTestProvider({ providerOptions: { timeout } });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { timeout } });
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
       sleep(timeout).then(() =>
@@ -928,7 +959,8 @@ describe('Provider', () => {
     });
   });
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const { gasPerByte } = provider.getGasConfig();
 
     const gasLimit = bn(1000);
@@ -956,7 +988,8 @@ describe('Provider', () => {
   });
 
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const { gasPerByte } = provider.getGasConfig();
 
     const transactionRequest = new CreateTransactionRequest({
@@ -984,7 +1017,8 @@ describe('Provider', () => {
   });
 
   it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const request = new ScriptTransactionRequest();
 
@@ -1003,7 +1037,8 @@ describe('Provider', () => {
   });
 
   it('should accept string addresses in methods that require an address', async () => {
-    using provider = await setupTestProvider();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const b256Str = Address.fromRandom().toB256();
 

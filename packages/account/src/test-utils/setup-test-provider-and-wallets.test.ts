@@ -1,5 +1,7 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { toHex, toNumber } from '@fuel-ts/math';
 import { sleepUntilTrue, urlIsLive } from '@fuel-ts/utils/test-utils';
 
@@ -8,19 +10,19 @@ import { Signer } from '../signer';
 import { WalletUnlocked } from '../wallet';
 
 import { AssetId } from './asset-id';
-import { launchCustomProviderAndGetWallets } from './launch-custom-provider-and-get-wallets';
+import * as launchNodeMod from './launchNode';
+import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
 import { TestMessage } from './test-message';
-import { WalletConfig } from './wallet-config';
 
 /**
  * @group node
  */
-describe('launchCustomProviderAndGetWallets', () => {
+describe('setupTestProviderAndWallets', () => {
   it('kills the node after going out of scope', async () => {
     let url = '';
     // eslint-disable-next-line no-lone-blocks
     {
-      using result = await launchCustomProviderAndGetWallets();
+      using result = await setupTestProviderAndWallets();
       url = result.provider.url;
       await result.provider.getBlockNumber();
     }
@@ -37,8 +39,48 @@ describe('launchCustomProviderAndGetWallets', () => {
     });
   });
 
+  test('kills the node if provider cant connect post-launch', async () => {
+    const launchNodeSpy = vi.spyOn(launchNodeMod, 'launchNode');
+
+    await expectToThrowFuelError(
+      async () => {
+        await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+      },
+      { code: ErrorCode.INVALID_TTL }
+    );
+    expect(launchNodeSpy).toHaveBeenCalled();
+    const { url } = launchNodeSpy.mock.results[0].value as Awaited<launchNodeMod.LaunchNodeResult>;
+    await sleepUntilTrue(async () => !(await urlIsLive(url)));
+    expect(await urlIsLive(url)).toBe(false);
+  });
+
+  it('can partially extend the default node configs', async () => {
+    const coin = {
+      owner: '0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d',
+      amount: '0xffffffffffffffff',
+      asset_id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    };
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        chainConfig: {
+          initial_state: {
+            coins: [coin],
+          },
+        },
+      },
+    });
+
+    const { provider } = launched;
+
+    const coins = await provider.getCoins({ toB256: () => coin.owner } as AbstractAddress);
+
+    expect(coins[0].assetId).toEqual(coin.asset_id);
+    expect(coins[0].amount.toHex()).toEqual(coin.amount);
+    expect(coins[0].owner.toB256()).toEqual(coin.owner);
+  });
+
   it('default: two wallets, three assets (BaseAssetId, AssetId.A, AssetId.B), one coin, 10_000_000_000_ amount', async () => {
-    using providerAndWallets = await launchCustomProviderAndGetWallets();
+    using providerAndWallets = await setupTestProviderAndWallets();
     const { wallets, provider } = providerAndWallets;
 
     expect(wallets.length).toBe(2);
@@ -70,8 +112,12 @@ describe('launchCustomProviderAndGetWallets', () => {
   it('can be given custom asset id and message', async () => {
     const assetId = AssetId.random();
     const testMessage = new TestMessage();
-    using providerAndWallets = await launchCustomProviderAndGetWallets({
-      walletConfig: new WalletConfig({ wallets: 1, assets: [assetId], messages: [testMessage] }),
+    using providerAndWallets = await setupTestProviderAndWallets({
+      walletConfig: {
+        count: 1,
+        assets: [assetId],
+        messages: [testMessage],
+      },
     });
 
     const {
@@ -111,13 +157,13 @@ describe('launchCustomProviderAndGetWallets', () => {
     const coinsPerAsset = 10;
     const amountPerCoin = 15;
 
-    using providerAndWallets = await launchCustomProviderAndGetWallets({
-      walletConfig: new WalletConfig({
-        wallets: numWallets,
+    using providerAndWallets = await setupTestProviderAndWallets({
+      walletConfig: {
+        count: numWallets,
         assets: numOfAssets,
         coinsPerAsset,
         amountPerCoin,
-      }),
+      },
     });
     const { wallets } = providerAndWallets;
 
@@ -149,7 +195,7 @@ describe('launchCustomProviderAndGetWallets', () => {
     const coin = { owner: address.toB256(), amount: toHex(100, 8), asset_id: BaseAssetId };
     const message = new TestMessage({ recipient: signer.address }).toChainMessage();
 
-    using providerAndWallets = await launchCustomProviderAndGetWallets({
+    using providerAndWallets = await setupTestProviderAndWallets({
       nodeOptions: {
         chainConfig: {
           initial_state: {

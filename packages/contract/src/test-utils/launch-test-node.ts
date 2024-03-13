@@ -1,7 +1,10 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, WalletUnlocked } from '@fuel-ts/account';
-import { launchCustomProviderAndGetWallets } from '@fuel-ts/account/test-utils';
-import type { LaunchCustomProviderAndGetWalletsOptions } from '@fuel-ts/account/test-utils';
+import type { WalletUnlocked } from '@fuel-ts/account';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
+import type {
+  LaunchCustomProviderAndGetWalletsOptions,
+  SetupTestProviderAndWalletsReturn,
+} from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
 import type { ChainConfig } from '@fuel-ts/utils';
@@ -33,12 +36,13 @@ interface DeployContractConfig {
 }
 
 interface LaunchTestNodeOptions extends LaunchCustomProviderAndGetWalletsOptions {
+  /**
+   * Pass in either the path to the contract's root directory to deploy the contract or use `DeployContractConfig` for more control.
+   */
   deployContracts: (DeployContractConfig | string)[];
 }
 
-interface LaunchTestNodeReturn<TContracts> {
-  wallets: WalletUnlocked[];
-  provider: Provider;
+interface LaunchTestNodeReturn<TContracts> extends SetupTestProviderAndWalletsReturn {
   contracts: TContracts;
 }
 function getChainConfig(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
@@ -49,7 +53,7 @@ function getChainConfig(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
     ) as ChainConfig;
   }
 
-  return mergeDeepRight(envChainConfig ?? {}, nodeOptions.chainConfig ?? {});
+  return mergeDeepRight(envChainConfig ?? {}, nodeOptions?.chainConfig ?? {});
 }
 
 function getFuelCoreArgs(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
@@ -57,7 +61,7 @@ function getFuelCoreArgs(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
     ? process.env.DEFAULT_FUEL_CORE_ARGS.split(' ')
     : undefined;
 
-  return nodeOptions.args ?? envArgs;
+  return nodeOptions?.args ?? envArgs;
 }
 
 function getWalletForDeployment(config: DeployContractConfig, wallets: WalletUnlocked[]) {
@@ -135,56 +139,37 @@ async function deployContractsToNode(
   return contracts;
 }
 
-export async function launchTestNode<
-  TContracts extends Contract[] = Contract[],
-  Dispose extends boolean = true,
-  ReturnType = LaunchTestNodeReturn<TContracts> &
-    (Dispose extends true ? Disposable : { cleanup: () => Promise<void> }),
->(
-  {
-    providerOptions = {},
-    walletConfig,
-    nodeOptions = {},
-    deployContracts = [],
-  }: Partial<LaunchTestNodeOptions> = {},
-  dispose?: Dispose
-): Promise<ReturnType> {
+export async function launchTestNode<TContracts extends Contract[] = Contract[]>({
+  providerOptions = {},
+  walletConfig = {},
+  nodeOptions = {},
+  deployContracts = [],
+}: Partial<LaunchTestNodeOptions> = {}): Promise<LaunchTestNodeReturn<TContracts>> {
   const chainConfig = getChainConfig(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
 
-  const { provider, wallets, cleanup } = await launchCustomProviderAndGetWallets(
-    {
-      walletConfig,
-      providerOptions,
-      nodeOptions: {
-        ...nodeOptions,
-        chainConfig,
-        args,
-      },
+  const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
+    walletConfig,
+    providerOptions,
+    nodeOptions: {
+      ...nodeOptions,
+      chainConfig,
+      args,
     },
-    false
-  );
+  });
 
+  let contracts: TContracts;
   try {
-    const contracts = await deployContractsToNode(deployContracts, wallets);
-
-    return (
-      dispose ?? true
-        ? {
-            provider,
-            wallets,
-            contracts: contracts as TContracts,
-            [Symbol.dispose]: cleanup,
-          }
-        : {
-            provider,
-            wallets,
-            contracts: contracts as TContracts,
-            cleanup,
-          }
-    ) as ReturnType;
+    contracts = (await deployContractsToNode(deployContracts, wallets)) as TContracts;
   } catch (err) {
-    await cleanup();
+    cleanup();
     throw err;
   }
+  return {
+    provider,
+    wallets,
+    contracts: contracts as TContracts,
+    cleanup,
+    [Symbol.dispose]: cleanup,
+  };
 }

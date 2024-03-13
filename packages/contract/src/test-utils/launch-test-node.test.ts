@@ -1,6 +1,5 @@
 import { Provider } from '@fuel-ts/account';
-import { WalletConfig } from '@fuel-ts/account/test-utils';
-import * as launchCustomProviderAndGetWalletsMod from '@fuel-ts/account/test-utils';
+import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { ChainConfig } from '@fuel-ts/utils';
@@ -65,21 +64,19 @@ describe('launchTestNode', () => {
     });
   });
 
-  test('kills the node if error happens post-launch', async () => {
-    const launchNodeSpy = vi.spyOn(
-      launchCustomProviderAndGetWalletsMod,
-      'launchCustomProviderAndGetWallets'
-    );
+  test('kills the node if error happens post-launch on contract deployment', async () => {
+    const spy = vi.spyOn(setupTestProviderAndWalletsMod, 'setupTestProviderAndWallets');
 
     const { error } = await safeExec(() =>
       launchTestNode({ deployContracts: ['invalid location'] })
     );
     expect(error).toBeDefined();
-    expect(launchNodeSpy).toHaveBeenCalled();
+    // Verify that error isn't due to
+    expect(spy).toHaveBeenCalled();
 
     const {
       provider: { url },
-    } = launchNodeSpy.mock.results[0].value as { provider: { url: string } };
+    } = spy.mock.results[0].value as { provider: { url: string } };
 
     await sleepUntilTrue(async () => !(await urlIsLive(url)));
     expect(await urlIsLive(url)).toBe(false);
@@ -131,7 +128,7 @@ describe('launchTestNode', () => {
   test('multiple contracts can be deployed with different wallets', async () => {
     // #region multiple-contracts-and-wallets
     using launched = await launchTestNode({
-      walletConfig: new WalletConfig({ wallets: 2 }),
+      walletConfig: { count: 2 },
       deployContracts: [
         { contractDir: pathToContractRootDir },
         { contractDir: pathToContractRootDir, walletIndex: 1 },

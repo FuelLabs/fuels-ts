@@ -20,13 +20,13 @@ const multiTokenContractDir = getProgramDir(FuelGaugeProjectsEnum.MULTI_TOKEN_CO
  */
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {
-    using launcher = await launchTestNode({
+    using launched = await launchTestNode({
       deployContracts: [multiTokenContractDir],
     });
     const {
       provider,
       contracts: [multiTokenContract],
-    } = launcher;
+    } = launched;
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
 
@@ -105,12 +105,12 @@ describe('MultiTokenContract', () => {
   });
 
   it('can burn coins', async () => {
-    using launcher = await launchTestNode({
+    using launched = await launchTestNode({
       deployContracts: [multiTokenContractDir],
     });
     const {
       contracts: [multiTokenContract],
-    } = launcher;
+    } = launched;
     const contractId = { value: multiTokenContract.id.toB256() };
 
     const helperDict: {

@@ -9,11 +9,11 @@ import { WalletUnlocked } from '../wallet';
 import { AssetId } from './asset-id';
 import type { TestMessage } from './test-message';
 
-interface WalletConfigOptions {
+export interface WalletConfigOptions {
   /**
    * Number of wallets to generate.
    */
-  wallets: number;
+  count: number;
 
   /**
    * If `number`, the number of unique asset ids each wallet will own.
@@ -48,28 +48,18 @@ export class WalletConfig {
   public wallets: WalletUnlocked[];
   private generateWallets: () => WalletUnlocked[] = () => {
     const generatedWallets: WalletUnlocked[] = [];
-    for (let index = 1; index <= this.options.wallets; index++) {
+    for (let index = 1; index <= this.options.count; index++) {
       generatedWallets.push(new WalletUnlocked(randomBytes(32)));
     }
     return generatedWallets;
   };
 
-  constructor({
-    wallets = 2,
-    assets = [AssetId.A, AssetId.B],
-    coinsPerAsset = 1,
-    amountPerCoin = 10_000_000_000,
-    messages = [],
-  }: Partial<WalletConfigOptions> = {}) {
-    WalletConfig.guard({ wallets, assets, coinsPerAsset, amountPerCoin, messages });
+  constructor(config: WalletConfigOptions) {
+    WalletConfig.guard(config);
 
-    this.options = {
-      wallets,
-      assets,
-      coinsPerAsset,
-      amountPerCoin,
-      messages,
-    };
+    this.options = config;
+
+    const { assets, coinsPerAsset, amountPerCoin, messages } = this.options;
     this.wallets = this.generateWallets();
     this.initialState = {
       messages: WalletConfig.createMessages(this.wallets, messages),
@@ -130,7 +120,12 @@ export class WalletConfig {
     return coins;
   }
 
-  private static guard({ wallets, assets, coinsPerAsset, amountPerCoin }: WalletConfigOptions) {
+  private static guard({
+    count: wallets,
+    assets,
+    coinsPerAsset,
+    amountPerCoin,
+  }: WalletConfigOptions) {
     if (
       (Array.isArray(wallets) && wallets.length === 0) ||
       (typeof wallets === 'number' && wallets <= 0)
