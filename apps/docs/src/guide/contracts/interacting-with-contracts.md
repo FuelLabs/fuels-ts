@@ -18,8 +18,6 @@ The `dryRun` method should be used to dry-run a contract call. It does not spend
 
 The `simulate` method should be used to dry-run a contract call, ensuring that the wallet used has sufficient funds to cover the transaction fees, without consuming any resources.
 
-This dry-run uses the `utxoValidation` parameter set to `true`, enforcing the use of real UTXOs.
-
 A funded wallet it's required:
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-3{ts:line-numbers}
