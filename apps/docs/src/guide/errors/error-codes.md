@@ -56,7 +56,7 @@ INVALID_TTL | When the TTL is less than or equal to zero.
 INVALID_TTL | When the TTL is not a number.
 INVALID_WORD_LIST | When the word list length is not equal to 2048.
 JSON_ABI_ERROR | When the struct name cannot be extracted from the JSON ABI.
-LOG_TYPE_NOT_FOUND | When the log type ID supplied, can't be found in the ABI.
+LOG_TYPE_NOT_FOUND | When the log type ID supplied can not be found in the ABI.
 MISSING_CONNECTOR | A connector is required to sign messages.
 MISSING_PROVIDER | The provider has not been set for either an Account or a Contract. Use the `connect` method to attach a provider.
 MISSING_REQUIRED_PARAMETER | When neither `inputs` or `filepaths` are supplied (at least one is required).
