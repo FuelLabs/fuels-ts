@@ -1,5 +1,5 @@
 export const Input: React.FC<{
-  value: string | undefined;
+  value?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type?: string;

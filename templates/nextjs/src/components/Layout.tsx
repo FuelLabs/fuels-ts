@@ -4,6 +4,7 @@ import { BurnerWallet } from "./BurnerWallet";
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
+import { NODE_URL } from "@/lib";
 
 const BURNER_WALLET_LOCAL_STORAGE_KEY = "create-fuels-burner-wallet-pk";
 
@@ -31,7 +32,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     (async () => {
       if (!faucetWallet) {
-        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+        const provider = await Provider.create(NODE_URL);
         const wallet = Wallet.fromPrivateKey("0x01", provider);
         setFaucetWallet(wallet);
       }
@@ -48,12 +49,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       let wallet: WalletUnlocked;
 
       if (burnerWalletPk) {
-        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+        const provider = await Provider.create(NODE_URL);
         wallet = Wallet.fromPrivateKey(burnerWalletPk, provider);
         setBurnerWallet(wallet);
       } else {
         // if not, create a new burner wallet
-        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+        const provider = await Provider.create(NODE_URL);
         wallet = Wallet.generate({ provider });
 
         localStorage.setItem(
