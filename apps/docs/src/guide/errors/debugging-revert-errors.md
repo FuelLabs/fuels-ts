@@ -8,9 +8,7 @@ But for now, if your Sway contract has a revert error with a string message like
 
 The SDK will throw an error that says:
 
-```
-String slices can not be decoded from logs. Convert the slice to `str[N]` with `__to_str_array
-```
+<<< @/../../docs-snippets/src/guide/errors/debugging-revert-errors.test.ts#revert-errors-5{ts:line-numbers}
 
 It will not log out the message associated with the revert error. This can make debugging functions with multiple require statements difficult.
 
@@ -26,6 +24,4 @@ Then, you can use the enum in your contract like this:
 
 The SDK will log out the message associated with the revert error like so:
 
-```
-The script reverted with reason RequireRevertError. (Reason: "InvalidInput")
-```
+<<< @/../../docs-snippets/src/guide/errors/debugging-revert-errors.test.ts#revert-errors-4{ts:line-numbers}
