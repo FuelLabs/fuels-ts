@@ -57,6 +57,24 @@ async function getSingleChangelogInfo(
   };
 }
 
+function sortChangelogsByPrType(a: ChangelogInfo, b: ChangelogInfo) {
+  const aIdx = prTypes.indexOf(a.prType);
+  const bIdx = prTypes.indexOf(b.prType);
+
+  if (aIdx === -1) {
+    if (bIdx === -1) {
+      return 0;
+    }
+    return 1;
+  }
+
+  if (bIdx === -1) {
+    return -1;
+  }
+
+  return aIdx - bIdx;
+}
+
 async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
   const changesetsWithReleases = changesets.filter((x) => x.releases.length > 0);
 
@@ -64,28 +82,7 @@ async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
     changesetsWithReleases.map(async (changeset) => getSingleChangelogInfo(octokit, changeset))
   );
 
-  const sortedChangelogs = changelogs.sort((a, b) => {
-    const aIdx = prTypes.indexOf(a.prType);
-    const bIdx = prTypes.indexOf(b.prType);
-
-    if (aIdx === -1) {
-      if (bIdx === -1) {
-        return 0;
-      }
-      return 1;
-    }
-
-    if (bIdx === -1) {
-      return -1;
-    }
-
-    return aIdx - bIdx;
-  });
-
-  const breaking = sortedChangelogs.filter((x) => x.isBreaking);
-  const nonBreaking = sortedChangelogs.filter((x) => !x.isBreaking);
-
-  return [breaking, nonBreaking];
+  return changelogs.sort(sortChangelogsByPrType);
 }
 
 function mapPrTypeToTitle(changetype: string) {
@@ -133,7 +130,7 @@ export async function getFullChangelog(octokit: Octokit) {
       .sort((a, b) => a.localeCompare(b))
   );
 
-  const [breaking, nonBreaking] = await getChangelogs(octokit, changesets);
+  const changelogs = await getChangelogs(octokit, changesets);
 
   const content = `
 # RELEASE - ${process.env.BUILD_VERSION}
@@ -142,11 +139,11 @@ ${releasedPackages.join(', ')}
     
 ## Breaking Changes
     
-${listChangelogs(breaking) || 'Yay, no breaking changes!'}
+${listChangelogs(changelogs.filter((x) => x.isBreaking)) || 'Yay, no breaking changes!'}
     
 ## Non-breaking Changes
     
-${listChangelogs(nonBreaking)}
+${listChangelogs(changelogs.filter((x) => !x.isBreaking))}
 `;
 
   return content.trim();
