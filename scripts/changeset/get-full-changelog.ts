@@ -1,16 +1,11 @@
-import * as github from "@actions/github";
-import { getInfo } from "@changesets/get-github-info";
-import getChangesets from "@changesets/read";
-import type { NewChangeset } from "@changesets/types";
-import { execSync } from "child_process";
-import { join } from "path";
-
-// TODO: the version can be the same as published if changeset is empty
-process.env.BUILD_VERSION = "0.77.0";
+import * as github from '@actions/github';
+import { getInfo } from '@changesets/get-github-info';
+import getChangesets from '@changesets/read';
+import type { NewChangeset } from '@changesets/types';
+import { execSync } from 'child_process';
+import { join } from 'path';
 
 type Octokit = ReturnType<typeof github.getOctokit>;
-
-const prTypes = ["feat", "fix", "refactor", "chore", "docs"];
 
 interface ChangelogInfo {
   isBreaking: boolean;
@@ -18,25 +13,27 @@ interface ChangelogInfo {
   line: string;
 }
 
+const prTypes = ['feat', 'fix', 'refactor', 'chore', 'docs'];
+
 async function getSingleChangelogInfo(
   octokit: Octokit,
-  changeset: NewChangeset,
+  changeset: NewChangeset
 ): Promise<ChangelogInfo> {
   const changesetCommitLog = execSync(
     `git log --oneline --diff-filter=A -- ${join(
       process.cwd(),
-      ".changeset",
-      `${changeset.id}.md`,
-    )}`,
+      '.changeset',
+      `${changeset.id}.md`
+    )}`
   ).toString(); // e.g. 1f3d3d3 fix!: add breaking fix
 
-  const [commit] = changesetCommitLog.split(" ");
+  const [commit] = changesetCommitLog.split(' ');
 
   const {
     links: { pull: prLink, user },
     pull: prNo,
   } = await getInfo({
-    repo: process.env.GITHUB_REPOSITORY ?? "This should be set by GitHub",
+    repo: process.env.GITHUB_REPOSITORY ?? 'This should be set by GitHub',
     commit,
   });
 
@@ -48,10 +45,10 @@ async function getSingleChangelogInfo(
     pull_number: prNo!,
   });
 
-  const prType = title.replace(/(\w*)\W/, "$1"); // chore!: -> chore
-  const isBreaking = title.includes("!");
+  const prType = title.replace(/(\w*)\W/, '$1'); // chore!: -> chore
+  const isBreaking = title.includes('!');
 
-  const affectedPackages = changeset.releases.map((x) => x.name).join(", ");
+  const affectedPackages = changeset.releases.map((x) => x.name).join(', ');
 
   return {
     prType,
@@ -61,14 +58,10 @@ async function getSingleChangelogInfo(
 }
 
 async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
-  const changesetsWithReleases = changesets.filter(
-    (x) => x.releases.length > 0,
-  );
+  const changesetsWithReleases = changesets.filter((x) => x.releases.length > 0);
 
   const changesetsWithInfo = await Promise.all(
-    changesetsWithReleases.map(async (changeset) =>
-      getSingleChangelogInfo(octokit, changeset),
-    ),
+    changesetsWithReleases.map(async (changeset) => getSingleChangelogInfo(octokit, changeset))
   );
 
   const sortedChangesets = changesetsWithInfo.sort((a, b) => {
@@ -97,18 +90,18 @@ async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
 
 function mapPrTypeToTitle(changetype: string) {
   switch (changetype) {
-    case "feat":
-      return "Features";
-    case "fix":
-      return "Fixes";
-    case "chore":
-      return "Chores";
-    case "docs":
-      return "Docs";
-    case "ci":
-      return "CI";
+    case 'feat':
+      return 'Features';
+    case 'fix':
+      return 'Fixes';
+    case 'chore':
+      return 'Chores';
+    case 'docs':
+      return 'Docs';
+    case 'ci':
+      return 'CI';
     default:
-      return "Misc";
+      return 'Misc';
   }
 }
 
@@ -122,22 +115,22 @@ function listChangelogs(changelogs: ChangelogInfo[]) {
 ${changelogs
   .filter((c) => c.prType === t)
   .map((c) => c.line)
-  .join("\n\n")}
-`,
+  .join('\n\n')}
+`
     )
-    .join("\n")
+    .join('\n')
     .trim();
 }
 
 export async function getFullChangelog(octokit: Octokit) {
   const changesets = await getChangesets(process.cwd());
 
-  const releasedPackages = ["fuels"].concat(
+  const releasedPackages = ['fuels'].concat(
     changesets
       .flat()
       .flatMap((changeset) => changeset.releases.map((y) => y.name))
       .filter((name, idx, arr) => arr.indexOf(name) === idx)
-      .sort((a, b) => a.localeCompare(b)),
+      .sort((a, b) => a.localeCompare(b))
   );
 
   const [breaking, nonBreaking] = await getChangelogs(octokit, changesets);
@@ -145,11 +138,11 @@ export async function getFullChangelog(octokit: Octokit) {
   const content = `
 # RELEASE - ${process.env.BUILD_VERSION}
     
-${releasedPackages.join(", ")}
+${releasedPackages.join(', ')}
     
 ## Breaking Changes
     
-${listChangelogs(breaking) || "Yay, no breaking changes!"}
+${listChangelogs(breaking) || 'Yay, no breaking changes!'}
     
 ## Non-breaking Changes
     
