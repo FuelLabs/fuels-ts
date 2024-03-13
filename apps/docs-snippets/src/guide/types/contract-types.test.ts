@@ -16,6 +16,7 @@ describe(__filename, () => {
 
   it('should successfully call a function with an Address type input and output parameters', async () => {
     // #region address-input
+    // #import { Address };
     const address = Address.fromRandom();
     const addressInput = { value: address.toB256() };
     // #endregion address-input
