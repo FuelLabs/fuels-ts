@@ -15,11 +15,7 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     super('struct', 'struct Bytes', BASE_VECTOR_OFFSET);
   }
 
-  encode(value: number[]): Uint8Array {
-    if (!Array.isArray(value)) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
-    }
-
+  encode(value: number[] | Uint8Array): Uint8Array {
     const parts: Uint8Array[] = [];
 
     // pointer (ptr)
@@ -42,8 +38,9 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     return concatWithDynamicData(parts);
   }
 
-  #getPaddedData(value: number[]): Uint8Array {
-    const data: Uint8Array[] = [Uint8Array.from(value)];
+  #getPaddedData(value: number[] | Uint8Array): Uint8Array {
+    const bytes = value instanceof Uint8Array ? value : new Uint8Array(value);
+    const data: Uint8Array[] = [Uint8Array.from(bytes)];
 
     const paddingLength = (WORD_SIZE - (value.length % WORD_SIZE)) % WORD_SIZE;
     if (paddingLength) {

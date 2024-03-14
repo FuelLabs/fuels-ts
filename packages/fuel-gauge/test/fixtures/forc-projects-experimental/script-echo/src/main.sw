@@ -16,12 +16,45 @@ enum MixedEnum {
     Data: u16,
 }
 
+struct DeeperStruct {
+    a: u8,
+    b: u16,
+    c: u32,
+    d: u64,
+    e: u256,
+    f: b256,
+    g: B512,
+    native: NativeEnum,
+    mixed: MixedEnum,
+    grades: [u8; 4],
+    fuel: str[4],
+    hello: String,
+    opt: Option<u16>,
+    nada: Option<u32>,
+    bytes: Bytes,
+    tuple: (u8, u16, u32, str[4]),
+    vec_u8: Vec<u8>,
+}
+
 struct MixedStruct {
     a: u8,
     b: u16,
     c: u32,
     d: u64,
     e: u256,
+    f: b256,
+    g: B512,
+    native: NativeEnum,
+    mixed: MixedEnum,
+    grades: [u8; 4],
+    fuel: str[4],
+    hello: String,
+    opt: Option<u16>,
+    nada: Option<u32>,
+    bytes: Bytes,
+    tuple: (u8, u16, u32, str[4]),
+    vec_u8: Vec<u8>,
+    deep: DeeperStruct,
 }
 
 fn main(param: MixedStruct) -> MixedStruct {

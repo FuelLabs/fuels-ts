@@ -38,15 +38,6 @@ describe('ByteCoder', () => {
     expect(actual).toStrictEqual(expected);
   });
 
-  it('should throw when value to encode is not array', async () => {
-    const coder = new ByteCoder();
-    const nonArrayInput = { ...[1] };
-    await expectToThrowFuelError(
-      () => coder.encode(nonArrayInput),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
-    );
-  });
-
   it('should decode a byte', () => {
     const coder = new ByteCoder();
     const input = new Uint8Array([
