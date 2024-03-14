@@ -31,6 +31,7 @@ struct MixedStruct {
     opt: Option<u16>,
     nada: Option<u32>,
     bytes: Bytes,
+    tuple: (u8, u16, u32, str[4]),
 }
 
 fn main(param_one: B512) -> MixedStruct {
@@ -56,6 +57,7 @@ fn main(param_one: B512) -> MixedStruct {
         opt: Option::Some(42),
         nada: Option::None,
         bytes: my_bytes,
+        tuple: (255, 65535, 4294967295, __to_str_array("fuel"))
     };
 
     my_struct
