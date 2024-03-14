@@ -35,7 +35,7 @@ jobs:
         with:
           string: ${{ github.head_ref }}
           pattern: "^(.*)$"
-          replace-with: "$1"
+          replace-with: "rc-$1"
 
       - name: Release to @${{ steps.release_name.outputs.replaced }} tag on npm
         id: release
