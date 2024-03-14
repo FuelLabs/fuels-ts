@@ -63,12 +63,6 @@ export class RevertError extends Error {
    * @param reason - The revert reason.
    */
   constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
-    // @TODO: this is a "hack"
-    // motivation: a custom error revert string is the only "string" type item in the `logs` array
-    // the `logs.filter for string` will make sense only for `RequireFailed` errors, so could potentially
-    // just restrict the following to `RequireFailed` class by modifying `this.message`
-    // produces error messages like so:
-    // ```RequireRevertError: The script reverted with reason RequireFailed (reason: "FailImplicitly")```
     super(
       `The script reverted with reason ${reason}. (Reason: "${RevertError.extractErrorReasonFromLogs(
         logs
