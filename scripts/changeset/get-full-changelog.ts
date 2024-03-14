@@ -125,7 +125,7 @@ export async function getFullChangelog(octokit: Octokit) {
   const releasedPackages = ['fuels'].concat(
     changesets
       .flatMap((changeset) => changeset.releases.map((y) => y.name))
-      .filter((name, idx, arr) => arr.indexOf(name) === idx)
+      .filter((name, idx, arr) => arr.indexOf(name) === idx) // remove duplicates
       .sort((a, b) => a.localeCompare(b))
   );
 
