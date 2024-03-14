@@ -62,10 +62,7 @@ function sortChangelogsByPrType(a: ChangelogInfo, b: ChangelogInfo) {
   const bIdx = prTypes.indexOf(b.prType);
 
   if (aIdx === -1) {
-    if (bIdx === -1) {
-      return 0;
-    }
-    return 1;
+    return bIdx === -1 ? 0 : 1;
   }
 
   if (bIdx === -1) {
