@@ -16,6 +16,7 @@ import storageSlots from '../contract/out/release/demo-contract-storage_slots.js
 
 import { DemoContractAbi__factory } from './contract-types';
 import bytecode from './contract-types/DemoContractAbi.hex';
+import type { PredicateAbiInputs } from './predicate-types';
 import { PredicateAbi__factory } from './predicate-types';
 import { ScriptAbi__factory } from './script-types';
 
@@ -132,6 +133,7 @@ test('Example script', async () => {
 
 test('Example predicate', async () => {
   // #region typegen-demo-predicate
+  // #context import type { PredicateAbiInputs } from './types';
   // #context import { PredicateAbi__factory } from './types';
 
   // In this exchange, we are first transferring some coins to the predicate
@@ -139,7 +141,8 @@ test('Example predicate', async () => {
   const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-  const predicate = PredicateAbi__factory.createInstance(provider);
+  const predicateData: PredicateAbiInputs = [];
+  const predicate = PredicateAbi__factory.createInstance(provider, predicateData);
 
   const tx = await wallet.transfer(predicate.address, 100_000, BaseAssetId);
   await tx.wait();
