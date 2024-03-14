@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.76.0",
+  "version": "0.77.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -36,7 +36,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "ethers": "^6.7.1"
+    "@fuel-ts/hasher": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"

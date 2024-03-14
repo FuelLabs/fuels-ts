@@ -1,4 +1,4 @@
-import { hash } from '../common';
+import { hash } from '@fuel-ts/hasher';
 
 import { hashLeaf, hashNode, parseLeaf } from './treeHasher';
 import SparseCompactMerkleProof from './types/sparseCompactMerkleProof';

@@ -1,5 +1,5 @@
+import { sha256 } from '@fuel-ts/hasher';
 import { arrayify } from '@fuel-ts/utils';
-import { sha256 } from 'ethers';
 
 import { Signer } from './signer';
 

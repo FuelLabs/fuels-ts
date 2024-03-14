@@ -164,6 +164,10 @@ export default defineConfig({
                 text: 'Date Time',
                 link: '/guide/types/date-time',
               },
+              {
+                text: 'Native Parameters',
+                link: '/guide/types/native-parameters',
+              },
             ],
           },
           {
@@ -268,8 +272,8 @@ export default defineConfig({
                 link: '/guide/contracts/managing-deployed-contracts',
               },
               {
-                text: 'Simulate Transactions',
-                link: '/guide/contracts/simulate-transactions',
+                text: 'Interacting With Contracts',
+                link: '/guide/contracts/interacting-with-contracts',
               },
               {
                 text: 'Transaction Parameters',
@@ -360,6 +364,10 @@ export default defineConfig({
               {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
+              },
+              {
+                text: 'Wallet SDK and React Hooks',
+                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
               },
             ],
           },

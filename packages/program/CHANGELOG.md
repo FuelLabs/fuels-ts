@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.77.0
+
+### Patch Changes
+
+- implement `get` method on `BaseInvocationScope`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1860](https://github.com/FuelLabs/fuels-ts/pull/1860))
+
 ## 0.76.0
 
 ### Patch Changes

@@ -2,10 +2,12 @@ import type { TestContractAbi } from "@/sway-api";
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
-import { Provider, Wallet, bn } from "fuels";
-import { useEffect, useState } from "react";
+import { bn } from "fuels";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
+import { AppContext } from "@/components/Layout";
+import toast from "react-hot-toast";
 
 const contractId = contractIds.testContract;
 
@@ -14,18 +16,16 @@ const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
 const hasScript = process.env.NEXT_PUBLIC_HAS_SCRIPT === "true";
 
 export default function Home() {
+  const { burnerWallet, burnerWalletBalance } = useContext(AppContext);
   const [contract, setContract] = useState<TestContractAbi>();
   const [counter, setCounter] = useState<number>();
 
   useEffect(() => {
     (async () => {
-      if (hasContract) {
-        const provider = await Provider.create("http://127.0.0.1:4000/graphql");
-        // 0x1 is the private key of one of the fauceted accounts on your local Fuel node
-        const wallet = Wallet.fromPrivateKey("0x01", provider);
+      if (hasContract && burnerWallet && burnerWalletBalance?.gt(0)) {
         const testContract = TestContractAbi__factory.connect(
           contractId,
-          wallet,
+          burnerWallet,
         );
         setContract(testContract);
         const { value } = await testContract.functions.get_count().simulate();
@@ -34,20 +34,26 @@ export default function Home() {
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, []);
+  }, [burnerWallet, burnerWalletBalance]);
 
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
     if (!contract) {
-      // eslint-disable-next-line no-alert
-      return alert("Contract not loaded");
+      return toast.error("Contract not loaded");
     }
+
+    if (burnerWalletBalance?.eq(0)) {
+      return toast.error(
+        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+      );
+    }
+
     const { value } = await contract.functions.increment_counter(bn(1)).call();
     setCounter(value.toNumber());
   };
 
   return (
-    <div className={`min-h-screen items-center p-24 flex flex-col gap-6`}>
+    <>
       <div className="flex gap-4 items-center">
         <FuelLogo />
         <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
@@ -95,6 +101,6 @@ export default function Home() {
       <Link href="https://docs.fuel.network" target="_blank" className="mt-12">
         Fuel Docs
       </Link>
-    </div>
+    </>
   );
 }
