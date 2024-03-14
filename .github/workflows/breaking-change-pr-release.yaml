@@ -7,7 +7,7 @@ on:
 
 jobs:
   release-pr:
-    if: ${{ startsWith(github.head_ref, '^\\w+!:') }}
+    if: startsWith(github.head_ref, '^\\w+!:')
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
