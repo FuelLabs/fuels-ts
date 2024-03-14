@@ -3,7 +3,6 @@ import * as github from '@actions/github';
 
 import { getFullChangelog } from './get-full-changelog';
 
-process.env.GITHUB_REPOSITORY = 'FuelLabs/fuels-ts';
 await (async () => {
   if (!process.env.GITHUB_TOKEN) {
     core.setFailed('Please add GITHUB_TOKEN to the environment');
