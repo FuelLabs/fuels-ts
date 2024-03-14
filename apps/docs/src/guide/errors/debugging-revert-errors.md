@@ -12,9 +12,21 @@ The SDK will throw an error that says:
 
 It will not log out the message associated with the revert error. This can make debugging functions with multiple require statements difficult.
 
-## Temporary Workaround
+## Temporary Workarounds
 
-You can work around this by using custom enums to represent the error messages. For example, you can create an enum like this:
+### Using `__to_str_array`
+
+You can work around this by using the `__to_str_array` helper function to convert the `str` slice to a string array:
+
+<<< @/../../docs-snippets/test/fixtures/forc-projects/revert-errors/src/main.sw#revert-errors-6{rust:line-numbers}
+
+The SDK will log out the message associated with the revert error like so:
+
+<<< @/../../docs-snippets/src/guide/errors/debugging-revert-errors.test.ts#revert-errors-7{ts:line-numbers}
+
+### Using custom error enums
+
+You can also work around this by using custom enums to represent the error messages. For example, you can create an enum like this:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/revert-errors/src/main.sw#revert-errors-2{rust:line-numbers}
 

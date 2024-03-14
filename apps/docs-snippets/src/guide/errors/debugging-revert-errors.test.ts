@@ -14,6 +14,16 @@ test('logs out custom require messages for error enums when tx reverts', async (
   // #endregion revert-errors-4
 });
 
+test('logs out custom require messages for require statements using str array when tx reverts', async () => {
+  const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.REVERT_ERRORS);
+
+  // #region revert-errors-7
+  expect(() => contract.functions.test_function_with_str_array_message().call()).rejects.toThrow(
+    'The script reverted with reason RequireFailed. (Reason: "This is also a revert error")'
+  );
+  // #endregion revert-errors-7
+});
+
 test('logs out a generic error message for require statements with a simple string message', async () => {
   const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.REVERT_ERRORS);
 

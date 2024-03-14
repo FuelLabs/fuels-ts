@@ -10,6 +10,8 @@ abi MyContract {
     fn test_function() -> bool;
 
     fn test_function_with_custom_error() -> bool;
+
+    fn test_function_with_str_array_message() -> bool;
 }
 
 impl MyContract for Contract {
@@ -26,4 +28,11 @@ impl MyContract for Contract {
         true
     }
     // #endregion revert-errors-3
+
+    // #region revert-errors-6
+    fn test_function_with_str_array_message() -> bool {
+        require(false, __to_str_array("This is also a revert error"));
+        true
+    }
+    // #endregion revert-errors-6
 }
