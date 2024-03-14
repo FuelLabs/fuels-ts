@@ -149,6 +149,9 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   usedFee: BN;
+  outputVariables: number;
+  missingContractIds: string[];
+  estimatedInputs: TransactionRequest['inputs'];
 };
 // #endregion cost-estimation-1
 
@@ -815,13 +818,7 @@ export default class Provider {
       estimatePredicates = true,
       resourcesOwner,
     }: TransactionCostParams = {}
-  ): Promise<
-    TransactionCost & {
-      estimatedInputs: TransactionRequest['inputs'];
-      outputVariables: number;
-      missingContractIds: string[];
-    }
-  > {
+  ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const chainInfo = this.getChain();
     const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();

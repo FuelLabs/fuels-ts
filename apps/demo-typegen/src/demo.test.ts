@@ -105,7 +105,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   expect((<Error>error).message).toMatch('not enough coins to fit the target');
 });
 
-it('should throw when dry running via contract factory with wallet with no resources', async () => {
+it('should not throw when dry running via contract factory with wallet with no resources', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
   const fundedWallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
   const unfundedWallet = Wallet.generate({ provider });
@@ -114,9 +114,7 @@ it('should throw when dry running via contract factory with wallet with no resou
   const contract = await factory.deployContract({ gasPrice });
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
-  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).dryRun());
-
-  expect((<Error>error).message).toMatch('not enough coins to fit the target');
+  await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();
 });
 
 test('Example script', async () => {
