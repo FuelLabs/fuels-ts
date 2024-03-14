@@ -33,7 +33,7 @@ jobs:
         uses: frabert/replace-string-action@v2
         id: release_name
         with:
-          string: ${{ github.head_ref }}
+          string: ${{ env.PR_NUMBER }}
           pattern: "^(.*)$"
           replace-with: "rc-$1"
 
@@ -56,6 +56,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
