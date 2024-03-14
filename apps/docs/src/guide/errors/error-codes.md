@@ -8,7 +8,7 @@ ABI_MAIN_METHOD_MISSING | When your ABI does not have a main method. This can be
 ABI_TYPES_AND_VALUES_MISMATCH | When the arguments supplied to the function do not match the minimum required input length. Check that the correct amount and type of arguments have been supplied to the function.
 ACCOUNT_REQUIRED | When the account has not been set for the contract.
 CONVERTING_FAILED | When the `bn` function failed to convert a value supplied.
-DUPLICATED_POLICY | When there are policies with the same type.
+DUPLICATED_POLICY | When there are policies with the same type. A transaction must only contain one of each policy.
 ERROR_BUILDING_BLOCK_EXPLORER_URL | When more than one of the following is options is passed: `path`, `address`, `txId`, `blockNumber`.
 FRAGMENT_NOT_FOUND | When the function fragment is not found in the ABI.
 FUNCTION_NOT_FOUND | When the function with the given name, signature or selector is not found in the ABI.
