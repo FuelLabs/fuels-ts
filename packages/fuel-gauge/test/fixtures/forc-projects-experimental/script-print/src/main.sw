@@ -70,7 +70,7 @@ fn main(param_one: B512) -> MixedStruct {
     my_vec_u8.push(42u8);
 
     let my_struct = MixedStruct {
-        a: 5,
+        a: 255,
         b: 65535,
         c: 4294967295,
         d: 18446744073709551615,
@@ -88,7 +88,7 @@ fn main(param_one: B512) -> MixedStruct {
         tuple: (255, 65535, 4294967295, __to_str_array("fuel")),
         vec_u8: my_vec_u8,
         deep: DeeperStruct {
-            a: 5,
+            a: 255,
             b: 65535,
             c: 4294967295,
             d: 18446744073709551615,

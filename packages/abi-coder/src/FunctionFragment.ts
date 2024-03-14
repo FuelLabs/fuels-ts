@@ -113,6 +113,7 @@ export class FunctionFragment<
     const coders = nonEmptyInputs.map((t) =>
       AbiCoder.getCoder(this.jsonAbi, t, {
         isRightPadded: nonEmptyInputs.length > 1,
+        encoding: this.jsonAbi.encoding,
       })
     );
 
@@ -206,7 +207,6 @@ export class FunctionFragment<
     }
 
     const bytes = arrayify(data);
-    console.log('here');
     const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output, {
       encoding: this.jsonAbi.encoding,
     });
