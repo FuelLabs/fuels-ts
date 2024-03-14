@@ -105,9 +105,10 @@ describe('Experimental Logging', () => {
   });
 
   /**
-   * done: u8, u16, u32, u64, u256, b256, b512, string, stdString, struct, enum, array, option, bytes, tuple
+   * decode: u8, u16, u32, u64, u256, b256, b512, string, stdString, struct, enum, array, option, bytes, tuple, vec
+   * encode: bytes
    *
-   * todo: slice, vec, deep
+   * todo: slice, deep
    */
   it('prints mixed struct', async () => {
     const { value } = await script.functions.main(B512).call();
@@ -128,6 +129,7 @@ describe('Experimental Logging', () => {
       nada: undefined,
       bytes: Uint8Array.from([40, 41, 42]),
       tuple: [255, 65535, 4294967295, 'fuel'],
+      vec_u8: [40, 41, 42],
     });
   });
 });

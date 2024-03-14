@@ -4,6 +4,7 @@ use std::b512::B512;
 use std::string::String;
 use std::option::Option;
 use std::bytes::Bytes;
+use std::vec::Vec;
 
 enum NativeEnum {
     Checked: (),
@@ -32,6 +33,7 @@ struct MixedStruct {
     nada: Option<u32>,
     bytes: Bytes,
     tuple: (u8, u16, u32, str[4]),
+    vec_u8: Vec<u8>,
 }
 
 fn main(param_one: B512) -> MixedStruct {
@@ -40,6 +42,11 @@ fn main(param_one: B512) -> MixedStruct {
     my_bytes.push(40u8);
     my_bytes.push(41u8);
     my_bytes.push(42u8);
+
+    let mut my_vec_u8 = Vec::new();
+    my_vec_u8.push(40u8);
+    my_vec_u8.push(41u8);
+    my_vec_u8.push(42u8);
 
     let my_struct = MixedStruct {
         a: 5,
@@ -57,7 +64,8 @@ fn main(param_one: B512) -> MixedStruct {
         opt: Option::Some(42),
         nada: Option::None,
         bytes: my_bytes,
-        tuple: (255, 65535, 4294967295, __to_str_array("fuel"))
+        tuple: (255, 65535, 4294967295, __to_str_array("fuel")),
+        vec_u8: my_vec_u8,
     };
 
     my_struct
