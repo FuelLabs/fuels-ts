@@ -3,6 +3,7 @@ script;
 use std::b512::B512;
 use std::string::String;
 use std::option::Option;
+use std::bytes::Bytes;
 
 enum NativeEnum {
     Checked: (),
@@ -29,9 +30,16 @@ struct MixedStruct {
     hello: String,
     opt: Option<u16>,
     nada: Option<u32>,
+    bytes: Bytes,
 }
 
 fn main(param_one: B512) -> MixedStruct {
+    let mut my_bytes = Bytes::new();
+
+    my_bytes.push(40u8);
+    my_bytes.push(41u8);
+    my_bytes.push(42u8);
+
     let my_struct = MixedStruct {
         a: 5,
         b: 65535,
@@ -45,8 +53,9 @@ fn main(param_one: B512) -> MixedStruct {
         grades: [1, 4, 6, 22],
         fuel: __to_str_array("fuel"),
         hello: String::from_ascii_str("Hello World"),
-        opt: Some(42),
-        nada: None,
+        opt: Option::Some(42),
+        nada: Option::None,
+        bytes: my_bytes,
     };
 
     my_struct

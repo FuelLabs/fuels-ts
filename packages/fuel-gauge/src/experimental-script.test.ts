@@ -126,6 +126,7 @@ describe('Experimental Logging', () => {
       hello: 'Hello World',
       opt: 42,
       nada: undefined,
+      bytes: Uint8Array.from([40, 41, 42]),
     });
   });
 });
