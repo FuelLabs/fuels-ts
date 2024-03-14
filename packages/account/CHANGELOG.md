@@ -1,5 +1,67 @@
 # Change Log
 
+## 0.77.0
+
+### Minor Changes
+
+- - Rename Asset type `Fuel` to `NetworkFuel`
+  - Rename Asset type `Ethereum` to `NetworkEthereum`
+  - Exporting Asset types, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1877](https://github.com/FuelLabs/fuels-ts/pull/1877))
+- !feat: accept predicate data on the `Predicate` constructor
+  This is a _BREAKING_ change since the API for the `Predicate` constructor has changed:
+  ```ts
+  // old API
+  const predicate = new Predicate(
+    bytecode,
+    provider,
+    abi,
+    configurableConstants,
+  );
+  // new API
+  const predicate = new Predicate({
+    bytecode,
+    abi, // optional
+    provider,
+    inputData, // optional
+    configurableConstants, // optional
+  });
+  ```
+  Notice how the `Predicate` constructor now accepts an _object_ with the following properties:
+  - `bytecode`: The bytecode of the predicate.
+  - `abi`: The JSON ABI of the predicate (optional).
+  - `provider`: The provider for interacting with the predicate.
+  - `inputData`: The predicate input data (optional).
+  - `configurableConstants`: The configurable constants for the predicate (optional).
+    This change was made with readability and ease-of-use in mind, since having too many arguments in a 'flat' constructor can be confusing. Consider a scenario where you want to create a Predicate with configurables but no input data:
+  ```ts
+  const predicate = new Predicate(
+    bytecode,
+    provider,
+    abi,
+    undefined,
+    configurableConstants,
+  );
+  ```
+  In this case, you would have to pass `undefined` as the `inputData` argument, which is not ideal. By using the object-based constructor, you can now pass an object with the properties you want to set, and the constructor will handle the rest:
+  ```ts
+  const predicate = new Predicate({
+    bytecode,
+    abi,
+    provider,
+    configurableConstants,
+  });
+  ```
+  The `setData` method has been removed. If you want to pass in the predicate data _after_ instantiating the `Predicate` or if you want to use a different data than the one passed in the constructor, you will have to create a new `Predicate` instance, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1826](https://github.com/FuelLabs/fuels-ts/pull/1826))
+- Added `requestMiddleware` to `ProviderOptions` as a way to allow the user the modification of each fetch call's request, by [@nedsalk](https://github.com/nedsalk) (See [#1822](https://github.com/FuelLabs/fuels-ts/pull/1822))
+
+### Patch Changes
+
+- Add try/catch block when parsing GraphQL stream data response, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1839](https://github.com/FuelLabs/fuels-ts/pull/1839))
+- Migrate implementations of `sha256`, `keccak` and `scrypt` to `@noble/hashes`, by [@danielbate](https://github.com/danielbate) (See [#1786](https://github.com/FuelLabs/fuels-ts/pull/1786))
+- 🐞 fix: disallow transferring <= 0 amounts, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1827](https://github.com/FuelLabs/fuels-ts/pull/1827))
+- - Handling `SqueezedOut` status update when calling `submitAndAwait` subscription at `Provider.sendTransaction`
+  - Handling `SqueezedOut` status update when calling statusChange subscrition at `TransactionResponse.waitForResult`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1829](https://github.com/FuelLabs/fuels-ts/pull/1829))
+
 ## 0.76.0
 
 ### Minor Changes
