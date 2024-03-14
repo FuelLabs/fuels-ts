@@ -5,7 +5,7 @@ Here is a list of the expected error codes the SDK can throw. These error codes 
 Error Codes | Description
 --- | ---
 ABI_MAIN_METHOD_MISSING | When your ABI does not have a main method. This can be resolved by adding a main method to your ABI.
-ABI_TYPES_AND_VALUES_MISMATCH | When the arguments supplied to the function do not match the minimum required input length. Check that the arguments supplied to the function, match the required type.
+ABI_TYPES_AND_VALUES_MISMATCH | When the arguments supplied to the function do not match the minimum required input length. Check that the correct amount and type of arguments have been supplied to the function.
 ACCOUNT_REQUIRED | When the account has not been set for the contract.
 CONVERTING_FAILED | When the `bn` function failed to convert a value supplied.
 DUPLICATED_POLICY | When there are policies with the same type.
