@@ -17,7 +17,7 @@ const B512 =
   '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';
 
 beforeAll(async () => {
-  const projectName = 'script';
+  const projectName = 'script-print';
   const path = join(
     __dirname,
     `../test/fixtures/forc-projects-experimental/${projectName}/out/release/${projectName}`
@@ -36,81 +36,7 @@ beforeAll(async () => {
  * @group node
  */
 describe('Experimental Logging', () => {
-  it.skip('prints u8', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual(U8_MAX);
-  });
-
-  it.skip('prints u16', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual(U16_MAX);
-  });
-
-  it.skip('prints u32', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual(U32_MAX);
-  });
-
-  it.skip('prints u64', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual(U64_MAX);
-  });
-
-  it.skip('prints u256', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual(U256_MAX);
-  });
-
-  it.skip('prints b256', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual(
-      '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6'
-    );
-  });
-
-  it.skip('echos b512', async () => {
-    const { value } = await script.functions.main(B512).call();
-    expect(value).toStrictEqual(B512);
-  });
-
-  it.skip('prints string', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual('fuel');
-  });
-
-  it.skip('prints std string', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual('Hello World');
-  });
-
-  /**
-   * Currently throws, need to confirm with Daniel
-   */
-  it.skip('logs str slice', async () => {
-    const expected = 'fuel';
-
-    const { value } = await script.functions.main(expected).call();
-    expect(value).toStrictEqual(expected);
-  });
-
-  it.skip('prints struct enum u8 vec', async () => {
-    const { value } = await script.functions.main().call();
-    expect(value).toStrictEqual({
-      x: 5,
-      y: 128,
-      state: 'Pending',
-      grades: [1, 4, 6, 22],
-      tag: 'fuel',
-    });
-  });
-
-  /**
-   * decode: u8, u16, u32, u64, u256, b256, b512, string, stdString, struct, enum, array, option, bytes, tuple, vec
-   * encode: bytes
-   *
-   * todo: slice, deep
-   */
-  it('prints mixed struct', async () => {
+  it('prints mixed struct with all types', async () => {
     const { value } = await script.functions.main(B512).call();
     expect(value).toStrictEqual({
       a: 5,
@@ -130,7 +56,25 @@ describe('Experimental Logging', () => {
       bytes: Uint8Array.from([40, 41, 42]),
       tuple: [255, 65535, 4294967295, 'fuel'],
       vec_u8: [40, 41, 42],
-      vec_to_slice: [40, 41, 42],
+      deep: {
+        a: 5,
+        b: 65535,
+        c: 4294967295,
+        d: U64_MAX,
+        e: U256_MAX,
+        f: '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6',
+        g: B512,
+        native: 'Pending',
+        mixed: { Value: true },
+        grades: [1, 4, 6, 22],
+        fuel: 'fuel',
+        hello: 'Hello World',
+        opt: 42,
+        nada: undefined,
+        bytes: Uint8Array.from([40, 41, 42]),
+        tuple: [255, 65535, 4294967295, 'fuel'],
+        vec_u8: [40, 41, 42],
+      },
     });
   });
 });
