@@ -130,6 +130,7 @@ describe('Experimental Logging', () => {
       bytes: Uint8Array.from([40, 41, 42]),
       tuple: [255, 65535, 4294967295, 'fuel'],
       vec_u8: [40, 41, 42],
+      vec_to_slice: [40, 41, 42],
     });
   });
 });

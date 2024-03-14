@@ -34,6 +34,7 @@ struct MixedStruct {
     bytes: Bytes,
     tuple: (u8, u16, u32, str[4]),
     vec_u8: Vec<u8>,
+    vec_to_slice: raw_slice,
 }
 
 fn main(param_one: B512) -> MixedStruct {
@@ -66,6 +67,7 @@ fn main(param_one: B512) -> MixedStruct {
         bytes: my_bytes,
         tuple: (255, 65535, 4294967295, __to_str_array("fuel")),
         vec_u8: my_vec_u8,
+        vec_to_slice: my_vec_u8.as_raw_slice(),
     };
 
     my_struct
