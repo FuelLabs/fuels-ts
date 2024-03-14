@@ -27,6 +27,7 @@ export enum DocSnippetProjectsEnum {
   ECHO_ASSET_ID = 'echo-asset-id',
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
   REVERT_ERRORS = 'revert-errors',
+  REVERT_ERRORS_SCRIPT = 'revert-errors-script',
   INPUT_OUTPUT_TYPES = 'input-output-types',
 }
 

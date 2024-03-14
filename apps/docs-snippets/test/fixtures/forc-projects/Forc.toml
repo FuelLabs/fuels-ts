@@ -27,5 +27,6 @@ members = [
   "echo-raw-slice",
   "echo-std-string",
   "revert-errors",
+  "revert-errors-script",
   "input-output-types",
 ]
