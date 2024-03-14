@@ -70,12 +70,16 @@ export class RevertError extends Error {
     // produces error messages like so:
     // ```RequireRevertError: The script reverted with reason RequireFailed (reason: "FailImplicitly")```
     super(
-      `The script reverted with reason ${reason}. (Reason: "${logs.filter(
-        (l) => typeof l === 'string'
+      `The script reverted with reason ${reason}. (Reason: "${RevertError.extractErrorReasonFromLogs(
+        logs
       )}")`
     );
     this.name = 'RevertError';
     this.receipt = receipt;
+  }
+
+  static extractErrorReasonFromLogs(logs: Array<unknown>) {
+    return logs.filter((l) => typeof l === 'string');
   }
 
   /**
