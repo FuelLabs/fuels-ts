@@ -44,8 +44,8 @@ jobs:
         run: pnpm lint:package-jsons
 
       # Temp disable
-      # - name: Forc Format Check
-      #   run: pnpm forc:check
+      - name: Forc Format Check
+        run: pnpm forc:check
 
       # linting of some tests depends on pretest being run so that it generates the necessary files
       - name: Pretest
