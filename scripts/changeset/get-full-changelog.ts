@@ -10,7 +10,7 @@ type Octokit = ReturnType<typeof github.getOctokit>;
 interface ChangelogInfo {
   isBreaking: boolean;
   prType: string;
-  line: string;
+  markdown: string;
 }
 
 const prTypes = ['feat', 'fix', 'refactor', 'chore', 'docs'];
@@ -53,7 +53,7 @@ async function getSingleChangelogInfo(
   return {
     prType,
     isBreaking,
-    line: `${changeset.summary}, by ${user} (see [#${prNo}](${prLink}))\n(packages: ${affectedPackages})`,
+    markdown: `${changeset.summary}, by ${user} (see [#${prNo}](${prLink}))\n(packages: ${affectedPackages})`,
   };
 }
 
@@ -102,20 +102,20 @@ function mapPrTypeToTitle(changetype: string) {
   }
 }
 
-function listChangelogs(changelogs: ChangelogInfo[]) {
+function mapChangelogsToMarkdown(changelogs: ChangelogInfo[]) {
   return prTypes
-    .filter((t) => changelogs.some((c) => c.prType === t))
+    .filter((prType) => changelogs.some((c) => c.prType === prType))
     .map(
-      (t) => `
-### ${mapPrTypeToTitle(t)}
+      (prType) => `
+### ${mapPrTypeToTitle(prType)}
 
 ${changelogs
-  .filter((c) => c.prType === t)
-  .map((c) => c.line)
+  .filter((c) => c.prType === prType)
+  .map((c) => c.markdown)
   .join('\n\n')}
 `
     )
-    .join('\n')
+    .join('\n\n')
     .trim();
 }
 
@@ -124,7 +124,6 @@ export async function getFullChangelog(octokit: Octokit) {
 
   const releasedPackages = ['fuels'].concat(
     changesets
-      .flat()
       .flatMap((changeset) => changeset.releases.map((y) => y.name))
       .filter((name, idx, arr) => arr.indexOf(name) === idx)
       .sort((a, b) => a.localeCompare(b))
@@ -139,11 +138,11 @@ ${releasedPackages.join(', ')}
     
 ## Breaking Changes
     
-${listChangelogs(changelogs.filter((x) => x.isBreaking)) || 'Yay, no breaking changes!'}
+${mapChangelogsToMarkdown(changelogs.filter((x) => x.isBreaking)) || 'Yay, no breaking changes!'}
     
 ## Non-breaking Changes
     
-${listChangelogs(changelogs.filter((x) => !x.isBreaking))}
+${mapChangelogsToMarkdown(changelogs.filter((x) => !x.isBreaking))}
 `;
 
   return content.trim();
