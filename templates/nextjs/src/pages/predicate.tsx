@@ -10,8 +10,15 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function PredicateExample() {
-  const { burnerWallet, burnerWalletBalance, refreshBurnerWalletBalance } =
-    useContext(AppContext);
+  const {
+    burnerWallet,
+    burnerWalletBalance,
+    refreshBurnerWalletBalance,
+    refreshConnectedWalletBalance,
+    connectedWallet,
+    activeWallet,
+    connectedWalletBalance,
+  } = useContext(AppContext);
 
   const [predicate, setPredicate] = useState<Predicate<InputValue[]>>();
 
@@ -23,7 +30,7 @@ export default function PredicateExample() {
     (async () => {
       if (burnerWallet) {
         const predicate = TestPredicateAbi__factory.createInstance(
-          burnerWallet.provider,
+          connectedWallet?.provider || burnerWallet.provider,
         );
         setPredicate(predicate);
         setPredicateBalance(await predicate.getBalance());
@@ -31,11 +38,11 @@ export default function PredicateExample() {
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [burnerWallet]);
+  }, [burnerWallet, connectedWallet]);
 
   const refreshBalances = async () => {
-    console.log(refreshBurnerWalletBalance);
     await refreshBurnerWalletBalance?.();
+    await refreshConnectedWalletBalance?.();
     setPredicateBalance(await predicate?.getBalance());
   };
 
@@ -44,11 +51,14 @@ export default function PredicateExample() {
       return toast.error("Predicate not loaded");
     }
 
-    if (!burnerWallet) {
+    const walletToUse =
+      activeWallet === "burner" ? burnerWallet : connectedWallet;
+
+    if (!walletToUse) {
       return toast.error("Wallet not loaded");
     }
 
-    await burnerWallet.transfer(predicate.address, amount, BaseAssetId, {
+    await walletToUse.transfer(predicate.address, amount, BaseAssetId, {
       gasPrice: 1,
       gasLimit: 10_000,
     });
@@ -60,12 +70,15 @@ export default function PredicateExample() {
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
     try {
-      if (!burnerWallet) {
+      const walletToUse =
+        activeWallet === "burner" ? burnerWallet : connectedWallet;
+
+      if (!walletToUse) {
         return toast.error("Wallet not loaded");
       }
 
       const reInitializePredicate = TestPredicateAbi__factory.createInstance(
-        burnerWallet.provider,
+        walletToUse.provider,
         [bn(pin)],
       );
 
@@ -74,7 +87,7 @@ export default function PredicateExample() {
       }
 
       const tx = await reInitializePredicate.transfer(
-        burnerWallet.address,
+        walletToUse.address,
         amount,
         BaseAssetId,
       );
@@ -97,6 +110,9 @@ export default function PredicateExample() {
     }
   };
 
+  const walletBalance =
+    activeWallet === "burner" ? burnerWalletBalance : connectedWalletBalance;
+
   return (
     <>
       <div className="flex gap-4">
@@ -106,7 +122,7 @@ export default function PredicateExample() {
 
       <div className="mt-12 items-baseline flex gap-2">
         <h5 className="font-semibold text-xl">Wallet Balance:</h5>
-        <span className="text-gray-400">{burnerWalletBalance?.toString()}</span>
+        <span className="text-gray-400">{walletBalance?.toString()}</span>
       </div>
 
       <div className="items-baseline flex gap-2">

@@ -16,7 +16,13 @@ const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
 const hasScript = process.env.NEXT_PUBLIC_HAS_SCRIPT === "true";
 
 export default function Home() {
-  const { burnerWallet, burnerWalletBalance } = useContext(AppContext);
+  const {
+    burnerWallet,
+    burnerWalletBalance,
+    connectedWallet,
+    connectedWalletBalance,
+    activeWallet,
+  } = useContext(AppContext);
   const [contract, setContract] = useState<TestContractAbi>();
   const [counter, setCounter] = useState<number>();
 
@@ -25,16 +31,16 @@ export default function Home() {
       if (hasContract && burnerWallet && burnerWalletBalance?.gt(0)) {
         const testContract = TestContractAbi__factory.connect(
           contractId,
-          burnerWallet,
+          connectedWallet || burnerWallet,
         );
         setContract(testContract);
-        const { value } = await testContract.functions.get_count().simulate();
+        const { value } = await testContract.functions.get_count().get();
         setCounter(value.toNumber());
       }
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [burnerWallet, burnerWalletBalance]);
+  }, [connectedWallet, burnerWallet, burnerWalletBalance]);
 
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
@@ -42,7 +48,10 @@ export default function Home() {
       return toast.error("Contract not loaded");
     }
 
-    if (burnerWalletBalance?.eq(0)) {
+    const balanceToCheck =
+      activeWallet === "burner" ? burnerWalletBalance : connectedWalletBalance;
+
+    if (balanceToCheck?.eq(0)) {
       return toast.error(
         "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
       );
