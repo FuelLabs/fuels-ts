@@ -27,6 +27,7 @@ export enum DocSnippetProjectsEnum {
   ECHO_ASSET_ID = 'echo-asset-id',
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
   REVERT_ERRORS = 'revert-errors',
+  INPUT_OUTPUT_TYPES = 'input-output-types',
 }
 
 export const getDocsSnippetsForcProject = (project: DocSnippetProjectsEnum) =>
