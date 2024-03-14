@@ -48,7 +48,7 @@ Constructs an instance of InvocationCallResult.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:201](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L201)
+[packages/program/src/functions/invocation-results.ts:201](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L201)
 
 ## Properties
 
@@ -58,7 +58,7 @@ Constructs an instance of InvocationCallResult.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:192](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L192)
+[packages/program/src/functions/invocation-results.ts:192](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L192)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:40](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L40)
+[packages/program/src/functions/invocation-results.ts:40](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L40)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:42](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L42)
+[packages/program/src/functions/invocation-results.ts:42](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L42)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:41](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L41)
+[packages/program/src/functions/invocation-results.ts:41](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L41)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L43)
+[packages/program/src/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L43)
 
 ## Methods
 
@@ -142,7 +142,7 @@ The decoded logs.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:108](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L108)
+[packages/program/src/functions/invocation-results.ts:108](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L108)
 
 ___
 
@@ -170,7 +170,7 @@ The decoded value.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:82](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L82)
+[packages/program/src/functions/invocation-results.ts:82](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L82)
 
 ___
 
@@ -202,4 +202,4 @@ The invocation call result.
 
 #### Defined in
 
-[packages/program/src/functions/invocation-results.ts:218](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/program/src/functions/invocation-results.ts#L218)
+[packages/program/src/functions/invocation-results.ts:218](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/program/src/functions/invocation-results.ts#L218)

@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:13](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L13)
+[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:13](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L13)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:12](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L12)
+[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:12](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L12)
 
 ___
 
@@ -30,4 +30,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/e239ba64/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L11)
+[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L11)
