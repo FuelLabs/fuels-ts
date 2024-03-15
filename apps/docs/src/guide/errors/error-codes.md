@@ -36,7 +36,7 @@ INVALID_TRANSACTION_STATUS | When the transaction status received from the node 
 INVALID_TRANSACTION_TYPE | When the transaction type from the Fuel Node is _not_ valid. | The type is within [`TransactionType`](../../api/Account/TransactionType.md).
 INVALID_TTL | When the TTL is less than or equal to zero. | Ensure that the TTL is a number, and that the TTL is greater than zero.
 INVALID_WORD_LIST | When the word list length is not equal to 2048. | The word list provided to the mnemonic length should be equal to 2048.
-JSON_ABI_ERROR | When an ABI type does not conform to the correct format. | It is usually caused by incorrect types with your program, could be one of the following: [Enum](../types/enums.md), [Generic](../types/generics.md), [Struct](../types/structs.md).
+JSON_ABI_ERROR | When an ABI type does not conform to the correct format. | It is usually caused by an incorrect type/s within your program, check our type [docs](../types/index.md) here for information on the types we support and their expected format.
 LOG_TYPE_NOT_FOUND | When the log type ID supplied can not be found in the ABI. | Check that the log type ID is correct and exists in the ABI.
 MISSING_CONNECTOR | A connector is missing when it's required for a given operation. | Ensure that a connector has been supplied to the `Account` or `Wallet`.
 MISSING_PROVIDER | A provider is missing when it's required for a given operation. | It could be caused by the provider not being set for either an [`Account`](../../api/Account/index.md) or a [`Wallet`](../wallets/index.md) - use the `connect` method to attach a provider.
