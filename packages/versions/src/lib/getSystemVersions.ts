@@ -44,20 +44,13 @@ export function getSystemFuelCore() {
 }
 
 export function getSystemVersions() {
-  const { error } = console;
-
   const { error: errorForc, systemForcVersion } = getSystemForc();
   const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore();
 
   const err = errorForc ?? errorCore;
 
-  if (err) {
-    error('Make sure you have Forc and Fuel-Core installed.');
-    error(`  ${green(fuelUpLink)}`);
-    throw err;
-  }
-
   return {
+    err,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     systemForcVersion: systemForcVersion!,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
