@@ -1,17 +1,18 @@
-import { green } from 'chalk';
 import { execSync } from 'child_process';
 
-import { fuelUpLink } from './fuelUpLink';
-
-const stdio = 'ignore';
+const matchVersion = /[0-9]+\.[0-9]+\.[0-9]/;
+const excludeVersion = /[^0-9.]+/g;
 
 export function getSystemForc() {
   let systemForcVersion: string | null = null;
   let error: Error | null = null;
 
   try {
-    const reg = /[^0-9.]+/g;
-    systemForcVersion = execSync('forc --version', { stdio }).toString().replace(reg, '');
+    const io = execSync('forc --version').toString()
+    if (!matchVersion.test(io)) {
+      throw new Error(io)
+    }
+    systemForcVersion = io.replace(excludeVersion, '');
   } catch (err: unknown) {
     error = err as Error;
   }
@@ -27,8 +28,11 @@ export function getSystemFuelCore() {
   let error: Error | null = null;
 
   try {
-    const reg = /[^0-9.]+/g;
-    systemFuelCoreVersion = execSync('fuel-core --version', { stdio }).toString().replace(reg, '');
+    const io = execSync('fuel-core --version').toString()
+    if (!matchVersion.test(io)) {
+      throw new Error(io)
+    }
+    systemFuelCoreVersion = io.replace(excludeVersion, '');
   } catch (err: unknown) {
     error = err as Error;
   }
