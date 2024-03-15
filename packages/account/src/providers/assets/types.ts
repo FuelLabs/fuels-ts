@@ -1,4 +1,4 @@
-export type Ethereum = {
+export type NetworkEthereum = {
   /** type of network */
   type: 'ethereum';
   /** chain id of the network */
@@ -9,7 +9,7 @@ export type Ethereum = {
   address?: string;
 };
 
-export type Fuel = {
+export type NetworkFuel = {
   /** type of network */
   type: 'fuel';
   /** chain id of the network */
@@ -30,10 +30,10 @@ export type Asset = {
   /** icon of the asset */
   icon: string;
   /** asset id on Fuel Network */
-  networks: Array<Ethereum | Fuel>;
+  networks: Array<NetworkEthereum | NetworkFuel>;
 };
 
 export type Assets = Array<Asset>;
 
-export type AssetEth = Omit<Asset, 'networks'> & Ethereum;
-export type AssetFuel = Omit<Asset, 'networks'> & Fuel;
+export type AssetEth = Omit<Asset, 'networks'> & NetworkEthereum;
+export type AssetFuel = Omit<Asset, 'networks'> & NetworkFuel;

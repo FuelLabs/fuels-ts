@@ -1,5 +1,11 @@
 # @fuel-ts/abi-typegen
 
+## 0.77.0
+
+### Patch Changes
+
+- Added generic data input for the predicate factory, by [@petertonysmith94](https://github.com/petertonysmith94) (See [#1867](https://github.com/FuelLabs/fuels-ts/pull/1867))
+
 ## 0.76.0
 
 ### Minor Changes
