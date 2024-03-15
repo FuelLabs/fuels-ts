@@ -66,7 +66,7 @@ describe('getSystemVersions.js', () => {
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
   });
 
-  test('should throw if Forc or Fuel-Core is not installed', () => {
+  test('should return error if Forc or Fuel-Core is not installed', () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
@@ -77,16 +77,9 @@ describe('getSystemVersions.js', () => {
     });
 
     // executing
-    let errorMsg: Error | undefined;
-
-    try {
-      getSystemVersions();
-    } catch (err) {
-      errorMsg = err as unknown as Error;
-    }
+    const { err } = getSystemVersions();
 
     // validating
-    expect(error).toHaveBeenCalledTimes(2);
-    expect(errorMsg).toBeTruthy();
+    expect(err).toBeTruthy();
   });
 });
