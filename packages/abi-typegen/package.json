@@ -8,25 +8,21 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "engines": {
     "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     },
     "./runTypegen": {
       "require": "./dist/runTypegen.js",
-      "import": "./dist/runTypegen.mjs",
-      "types": "./dist/runTypegen.d.ts"
+      "import": "./dist/runTypegen.mjs"
     }
   },
   "typesVersions": {
