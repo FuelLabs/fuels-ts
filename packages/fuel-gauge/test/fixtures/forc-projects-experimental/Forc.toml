@@ -1,5 +1,5 @@
 [workspace]
-members = ["logging", "script-print", "script-echo"]
+members = ["predicate-echo"]
 
 [patch.'https://github.com/fuellabs/sway']
 std = { git = "https://github.com/fuellabs/sway", branch = "xunilrj/fix-predicate-entry" }
