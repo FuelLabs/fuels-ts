@@ -41,10 +41,10 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Validate changeset exists
+      - name: Validate Changeset
         run: pnpm changeset status --since=origin/master
         
-      - name: Validate changeset content
+      - name: Validate Changeset Content
         run: |
           CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/master .changeset/*.md)
           
