@@ -15,10 +15,7 @@ interface ChangelogInfo {
 
 const prTypes = ['feat', 'fix', 'refactor', 'chore', 'docs'];
 
-async function getSingleChangelogInfo(
-  octokit: Octokit,
-  changeset: NewChangeset
-): Promise<ChangelogInfo> {
+async function getChangelogInfo(octokit: Octokit, changeset: NewChangeset): Promise<ChangelogInfo> {
   const changesetCommitLog = execSync(
     `git log --oneline --diff-filter=A -- ${join(
       process.cwd(),
@@ -45,15 +42,17 @@ async function getSingleChangelogInfo(
     pull_number: prNo!,
   });
 
-  const prType = title.replace(/(\w*)\W/, '$1'); // chore!: -> chore
-  const isBreaking = title.includes('!');
+  const prType = title.replace(/(\w+).*/, '$1'); // chore!: add something -> chore
+  const isBreaking = title.includes(`${prType}!`);
 
-  const affectedPackages = changeset.releases.map((x) => x.name).join(', ');
+  const titleDescription = title.replace(/\w+\W+(.*)/, '$1'); // chore!: add something -> add something
+  const summary = titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
+  const markdown = `- ${prLink}, ${summary}, by ${user}`;
   return {
     prType,
     isBreaking,
-    markdown: `${changeset.summary}, by ${user} (see [#${prNo}](${prLink}))\n(packages: ${affectedPackages})`,
+    markdown,
   };
 }
 
@@ -74,16 +73,15 @@ function sortChangelogsByPrType(a: ChangelogInfo, b: ChangelogInfo) {
 
 async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
   const changesetsWithReleases = changesets.filter((x) => x.releases.length > 0);
-
   const changelogs = await Promise.all(
-    changesetsWithReleases.map(async (changeset) => getSingleChangelogInfo(octokit, changeset))
+    changesetsWithReleases.map(async (changeset) => getChangelogInfo(octokit, changeset))
   );
 
   return changelogs.sort(sortChangelogsByPrType);
 }
 
-function mapPrTypeToTitle(changetype: string) {
-  switch (changetype) {
+function mapPrTypeToTitle(prType: string) {
+  switch (prType) {
     case 'feat':
       return 'Features';
     case 'fix':
@@ -99,18 +97,40 @@ function mapPrTypeToTitle(changetype: string) {
   }
 }
 
-function mapChangelogsToMarkdown(changelogs: ChangelogInfo[]) {
-  return prTypes
-    .filter((prType) => changelogs.some((c) => c.prType === prType))
-    .map(
-      (prType) => `
-### ${mapPrTypeToTitle(prType)}
+function groupChangelogsForListing(changelogs: ChangelogInfo[]) {
+  const prTypeWithChangelogs = prTypes.reduce(
+    (acc, prType) => {
+      acc[prType] = changelogs.filter((c) => c.prType === prType).map((c) => c.markdown);
+      return acc;
+    },
+    {} as Record<string, string[]>
+  );
+  
 
-${changelogs
-  .filter((c) => c.prType === prType)
-  .map((c) => c.markdown)
-  .join('\n\n')}
-`
+  return Object.entries(prTypeWithChangelogs)
+    .filter(([, c]) => c.length > 0)
+    .map(([prType, c]) => [mapPrTypeToTitle(prType), c] as [string, string[]]);
+}
+
+function listBreakingMd(changelogs: ChangelogInfo[]) {
+  const changelogGroups = groupChangelogsForListing(changelogs.filter((x) => x.isBreaking));
+
+  return changelogGroups
+    .map(
+      ([groupTitle, c]) => `- ${groupTitle}
+${c.map((x) => `    ${x}`).join('\n')}`
+    )
+    .join('\n')
+    .trim();
+}
+
+function listNonBreakingMd(changelogs: ChangelogInfo[]) {
+  const changelogGroups = groupChangelogsForListing(changelogs.filter((x) => !x.isBreaking));
+
+  return changelogGroups
+    .map(
+      ([groupTitle, c]) => `# ${groupTitle}
+${c.join('\n')}`
     )
     .join('\n\n')
     .trim();
@@ -119,28 +139,16 @@ ${changelogs
 export async function getFullChangelog(octokit: Octokit) {
   const changesets = await getChangesets(process.cwd());
 
-  const releasedPackages = ['fuels'].concat(
-    changesets
-      .flatMap((changeset) => changeset.releases.map((y) => y.name))
-      .filter((name, idx, arr) => arr.indexOf(name) === idx) // remove duplicates
-      .sort((a, b) => a.localeCompare(b))
-  );
-
   const changelogs = await getChangelogs(octokit, changesets);
 
-  const content = `
-# RELEASE - ${process.env.BUILD_VERSION}
-    
-${releasedPackages.join(', ')}
-    
-## Breaking Changes
-    
-${mapChangelogsToMarkdown(changelogs.filter((x) => x.isBreaking)) || 'Yay, no breaking changes!'}
-    
-## Non-breaking Changes
-    
-${mapChangelogsToMarkdown(changelogs.filter((x) => !x.isBreaking))}
-`;
+  const breaking = listBreakingMd(changelogs);
+  const nonBreaking = listNonBreakingMd(changelogs);
 
+  let content = `# RELEASE - ${process.env.BUILD_VERSION ?? 'TBD'}\n\n`;
+  content += breaking ? `# Breaking\n\n${breaking}` : '';
+  content += breaking && nonBreaking && '\n\n---\n\n';
+  content += nonBreaking;
+
+  console.log(content)
   return content.trim();
 }

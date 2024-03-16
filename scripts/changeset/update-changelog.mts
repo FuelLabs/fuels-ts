@@ -1,7 +1,8 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import { getFullChangelog } from './get-full-changelog';
+// @ts-expect-error cant import ts in mts
+import { getFullChangelog } from './get-full-changelog.mts';
 
 await (async () => {
   if (!process.env.GITHUB_TOKEN) {
@@ -17,7 +18,6 @@ await (async () => {
   const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
   const changelog = await getFullChangelog(octokit);
-
   if (process.env.PUBLISHED === 'false') {
     // update changesets PR body
     const searchQuery = `repo:${process.env.GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
