@@ -95,8 +95,6 @@ describe('getSystemVersions.js', () => {
     // executing
     const versions = getSystemVersions();
 
-    console.log({ versions });
-
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);
     expect(versions.error?.toString()).toEqual(`Error: ${systemForcVersion}`);
