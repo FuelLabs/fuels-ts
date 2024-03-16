@@ -8,9 +8,9 @@ export const getSystemVersion = (command: string) => {
   let error: Error | null = null;
 
   try {
-    const io = execSync(command).toString()
+    const io = execSync(command).toString();
     if (!matchVersion.test(io)) {
-      throw new Error(io)
+      throw new Error(io);
     }
     version = io.replace(excludeVersion, '');
   } catch (err: unknown) {
@@ -21,7 +21,7 @@ export const getSystemVersion = (command: string) => {
     error,
     version,
   };
-}
+};
 
 export function getSystemForc() {
   const { error, version: v } = getSystemVersion('forc --version');
@@ -37,11 +37,11 @@ export function getSystemVersions() {
   const { error: errorForc, systemForcVersion } = getSystemForc();
   const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore();
 
-  const err = errorForc ?? errorCore;
+  const error = errorForc ?? errorCore;
 
   return {
-    err,
-    systemForcVersion: systemForcVersion,
-    systemFuelCoreVersion: systemFuelCoreVersion,
+    error,
+    systemForcVersion,
+    systemFuelCoreVersion,
   };
 }

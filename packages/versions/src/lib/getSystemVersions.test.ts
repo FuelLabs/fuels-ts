@@ -70,16 +70,17 @@ describe('getSystemVersions.js', () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
-    const { error } = mockAllDeps({
+
+    mockAllDeps({
       systemForcVersion,
       systemFuelCoreVersion,
       shouldThrow: true,
     });
 
     // executing
-    const { err } = getSystemVersions();
+    const { error: systemError } = getSystemVersions();
 
     // validating
-    expect(err).toBeTruthy();
+    expect(systemError).toBeTruthy();
   });
 });

@@ -6,7 +6,6 @@ import { compareSystemVersions } from './lib/compareSystemVersions';
 import { fuelUpLink } from './lib/fuelUpLink';
 import { getBuiltinVersions } from './lib/getBuiltinVersions';
 import { getSystemVersions } from './lib/getSystemVersions';
-import { execSync } from 'child_process';
 
 export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
@@ -21,11 +20,11 @@ export function runVersions() {
     head: ['', bold('Supported'), bold(`Yours / System`)],
   });
 
-  const { err, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
+  const { error: systemError, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
 
   const comparisons = compareSystemVersions({
     systemForcVersion: systemForcVersion ?? '0',
-    systemFuelCoreVersion: systemFuelCoreVersion ?? '0'
+    systemFuelCoreVersion: systemFuelCoreVersion ?? '0',
   });
 
   const userForcColorized = colorizeUserVersion({
@@ -46,39 +45,33 @@ export function runVersions() {
   const someIsGt = comparisons.systemForcIsGt || comparisons.systemFuelCoreIsGt;
   const bothAreExact = comparisons.systemForcIsEq && comparisons.systemFuelCoreIsEq;
 
-  let exitCode: number
+  let exitCode: number;
 
   if (someIsGt) {
-
     info(cliTable.toString());
     info(`\nYour system's components are newer than the ones supported!`);
 
     exitCode = 0;
-
   } else if (bothAreExact) {
-
     info(`\nYou have all the right versions! ⚡`);
     info(cliTable.toString());
 
     exitCode = 0;
-
-
   } else {
-
     error(cliTable.toString());
     error(`\n - You're using outdated versions`);
 
     exitCode = 1;
   }
 
-  if (err) {
+  if (systemError) {
     error(' - Make sure you have Forc and Fuel-Core installed');
-    error('   >> Error: ', err.message)
+    error('   >> Error: ', systemError.message);
   }
 
-  if (err || exitCode === 1) {
+  if (systemError || exitCode === 1) {
     error(`  ${green(fuelUpLink)}`);
   }
 
-  process.exit(exitCode)
+  process.exit(exitCode);
 }
