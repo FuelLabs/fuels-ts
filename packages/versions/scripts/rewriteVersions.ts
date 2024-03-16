@@ -7,13 +7,11 @@ export const readVersionsFromFiles = () => {
 
   // forc
   const forcPath = join(packagesDir, 'forc', 'VERSION');
-  const forcContents = readFileSync(forcPath, 'utf8');
-  const forcVersion = forcContents.match(/^.+$/m)?.[0] || forcContents;
+  const forcVersion = readFileSync(forcPath, 'utf8').match(firstLineReg)?.[0];
 
   // fuel-core
   const fuelCorePath = join(packagesDir, 'fuel-core', 'VERSION');
-  const fuelCoreContents = readFileSync(fuelCorePath, 'utf8');
-  const fuelCoreVersion = fuelCoreContents.match(/^.+$/m)?.[0] || fuelCoreContents;
+  const fuelCoreVersion = readFileSync(fuelCorePath, 'utf8').match(firstLineReg)?.[0];
 
   // fuels
   const fuelsPath = join(packagesDir, 'fuels', 'package.json');
