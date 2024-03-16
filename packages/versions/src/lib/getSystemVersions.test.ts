@@ -82,4 +82,25 @@ describe('getSystemVersions.js', () => {
     // validating
     expect(systemError).toBeTruthy();
   });
+
+  test('should throw for error message', () => {
+    // mocking
+    const systemForcVersion = 'fuelup exception';
+    const systemFuelCoreVersion = 'fuelup exception';
+    const { execSync } = mockAllDeps({
+      systemForcVersion,
+      systemFuelCoreVersion,
+    });
+
+    // executing
+    const versions = getSystemVersions();
+
+    console.log({ versions });
+
+    // validating
+    expect(execSync).toHaveBeenCalledTimes(2);
+    expect(versions.error?.toString()).toEqual(`Error: ${systemForcVersion}`);
+    expect(versions.systemForcVersion).toEqual(null);
+    expect(versions.systemFuelCoreVersion).toEqual(null);
+  });
 });
