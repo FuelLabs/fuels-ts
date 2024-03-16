@@ -5,6 +5,8 @@ export const readVersionsFromFiles = () => {
   const rootDir = join(__dirname, '../../..');
   const packagesDir = join(rootDir, 'packages');
 
+  const firstLineReg = /^.+/m;
+
   // forc
   const forcPath = join(packagesDir, 'forc', 'VERSION');
   const forcVersion = readFileSync(forcPath, 'utf8').match(firstLineReg)?.[0];
@@ -60,8 +62,8 @@ export const rewriteVersions = () => {
   writeFileSync(filepath, contents);
 };
 
-/* istanbul ignore next */
-// Do not auto-run script when inside vitest
+/* istanbul ignore next -- @preserve */
 if (!process.env.VITEST) {
+  // do not auto-run script when inside vitest
   rewriteVersions();
 }
