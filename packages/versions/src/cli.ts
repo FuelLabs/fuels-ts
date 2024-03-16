@@ -71,12 +71,12 @@ export function runVersions() {
     exitCode = 1;
   }
 
-  if  (err) {
-    error('\n - Make sure you have Forc and Fuel-Core installed');
-    error('     > Error: ', err.message)
+  if (err) {
+    error(' - Make sure you have Forc and Fuel-Core installed');
+    error('   >> Error: ', err.message)
   }
 
-  if  (err || exitCode === 1) {
+  if (err || exitCode === 1) {
     error(`  ${green(fuelUpLink)}`);
   }
 
