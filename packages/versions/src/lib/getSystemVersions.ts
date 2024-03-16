@@ -3,44 +3,34 @@ import { execSync } from 'child_process';
 const matchVersion = /[0-9]+\.[0-9]+\.[0-9]/;
 const excludeVersion = /[^0-9.]+/g;
 
-export function getSystemForc() {
-  let systemForcVersion: string | null = null;
+export const getSystemVersion = (command: string) => {
+  let version: string | null = null;
   let error: Error | null = null;
 
   try {
-    const io = execSync('forc --version').toString()
+    const io = execSync(command).toString()
     if (!matchVersion.test(io)) {
       throw new Error(io)
     }
-    systemForcVersion = io.replace(excludeVersion, '');
+    version = io.replace(excludeVersion, '');
   } catch (err: unknown) {
     error = err as Error;
   }
 
   return {
     error,
-    systemForcVersion,
+    version,
   };
 }
 
+export function getSystemForc() {
+  const { error, version: v } = getSystemVersion('forc --version');
+  return { error, systemForcVersion: v };
+}
+
 export function getSystemFuelCore() {
-  let systemFuelCoreVersion: string | null = null;
-  let error: Error | null = null;
-
-  try {
-    const io = execSync('fuel-core --version').toString()
-    if (!matchVersion.test(io)) {
-      throw new Error(io)
-    }
-    systemFuelCoreVersion = io.replace(excludeVersion, '');
-  } catch (err: unknown) {
-    error = err as Error;
-  }
-
-  return {
-    error,
-    systemFuelCoreVersion,
-  };
+  const { error, version: v } = getSystemVersion('fuel-core --version');
+  return { error, systemFuelCoreVersion: v };
 }
 
 export function getSystemVersions() {
@@ -51,9 +41,7 @@ export function getSystemVersions() {
 
   return {
     err,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    systemForcVersion: systemForcVersion!,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    systemFuelCoreVersion: systemFuelCoreVersion!,
+    systemForcVersion: systemForcVersion,
+    systemFuelCoreVersion: systemFuelCoreVersion,
   };
 }
