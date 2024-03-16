@@ -23,6 +23,7 @@ export default defineConfig({
       reporter: ["json", "text", "html"],
       include: ["packages", "internal", "apps"],
       exclude: [
+        "**/*.js",
         "**/node_modules/**",
         "**/dist/**",
         "**/test/**",
