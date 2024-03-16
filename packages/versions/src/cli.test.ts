@@ -1,4 +1,4 @@
-import { runVersions } from './cli';
+import { eitherOr, runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareSystemVersionsMod from './lib/compareSystemVersions';
 import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
@@ -27,6 +27,7 @@ describe('cli.js', () => {
     systemFuelCoreIsEq: boolean;
     systemForcVersion: string;
     systemFuelCoreVersion: string;
+    systemVersionsError: Error | null;
   }) {
     const {
       systemForcVersion,
@@ -35,6 +36,7 @@ describe('cli.js', () => {
       systemFuelCoreIsEq,
       systemForcIsGt,
       systemForcIsEq,
+      systemVersionsError,
     } = params;
 
     const error = vi.spyOn(console, 'error').mockImplementation(() => []);
@@ -53,6 +55,7 @@ describe('cli.js', () => {
     }));
 
     vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
+      error: systemVersionsError,
       systemForcVersion,
       systemFuelCoreVersion,
     }));
@@ -82,6 +85,7 @@ describe('cli.js', () => {
       systemFuelCoreIsEq: false,
       systemForcIsGt: true,
       systemForcIsEq: false,
+      systemVersionsError: null,
     });
 
     // executing
@@ -102,6 +106,7 @@ describe('cli.js', () => {
       systemFuelCoreIsEq: true,
       systemForcIsGt: false,
       systemForcIsEq: true,
+      systemVersionsError: null,
     });
 
     // executing
@@ -122,6 +127,7 @@ describe('cli.js', () => {
       systemFuelCoreIsEq: false,
       systemForcIsGt: false,
       systemForcIsEq: false,
+      systemVersionsError: null,
     });
 
     // executing
@@ -131,5 +137,38 @@ describe('cli.js', () => {
     expect(info).toHaveBeenCalledTimes(0);
     expect(exit).toHaveBeenCalledWith(1);
     expect(error).toHaveBeenCalledTimes(3);
+  });
+
+  test('should warn about fuelup exception', () => {
+    // mocks
+
+    const systemVersionsError = new Error('fuelup exception');
+
+    const { error, info, exit } = mockAllDeps({
+      systemForcVersion: '0.0.1',
+      systemFuelCoreVersion: '0.0.1',
+      systemFuelCoreIsGt: false,
+      systemFuelCoreIsEq: false,
+      systemForcIsGt: false,
+      systemForcIsEq: false,
+      systemVersionsError,
+    });
+
+    // executing
+    runVersions();
+
+    // validating
+    expect(info).toHaveBeenCalledTimes(0);
+    expect(exit).toHaveBeenCalledWith(1);
+    expect(error).toHaveBeenCalledTimes(5);
+    expect(error.mock.calls[1][0]).toMatch(/outdated versions/i);
+    expect(error.mock.calls[2][0]).toMatch(/make sure you/i);
+    expect(error.mock.calls[3][0]).toMatch(/>> Error: /i);
+    expect(error.mock.calls[3][1]).toMatch(new RegExp(systemVersionsError.message, 'i'));
+  });
+
+  it('should use fallback values', () => {
+    expect(eitherOr('a', 'b')).toEqual('a');
+    expect(eitherOr(null, 'b')).toEqual('b');
   });
 });

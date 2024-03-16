@@ -11,6 +11,7 @@ export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
 export * from './lib/getSystemVersions';
 
+export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 export function runVersions() {
   const { error, info } = console;
 
@@ -23,18 +24,18 @@ export function runVersions() {
   const { error: systemError, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
 
   const comparisons = compareSystemVersions({
-    systemForcVersion: systemForcVersion ?? '0',
-    systemFuelCoreVersion: systemFuelCoreVersion ?? '0',
+    systemForcVersion: eitherOr(systemForcVersion, '0'),
+    systemFuelCoreVersion: eitherOr(systemFuelCoreVersion, '0'),
   });
 
   const userForcColorized = colorizeUserVersion({
-    version: systemForcVersion ?? '—',
+    version: eitherOr(systemForcVersion, '—'),
     isGt: comparisons.systemForcIsGt,
     isOk: comparisons.systemForcIsEq,
   });
 
   const userFuelCoreColorized = colorizeUserVersion({
-    version: systemFuelCoreVersion ?? '—',
+    version: eitherOr(systemFuelCoreVersion, '—'),
     isGt: comparisons.systemFuelCoreIsGt,
     isOk: comparisons.systemFuelCoreIsEq,
   });
