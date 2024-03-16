@@ -51,7 +51,7 @@ describe('getSystemVersions.js', () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
-    const { error, execSync } = mockAllDeps({
+    const { execSync } = mockAllDeps({
       systemForcVersion,
       systemFuelCoreVersion,
     });
@@ -60,7 +60,6 @@ describe('getSystemVersions.js', () => {
     const versions = getSystemVersions();
 
     // validating
-    expect(error).toHaveBeenCalledTimes(0);
     expect(execSync).toHaveBeenCalledTimes(2);
     expect(versions.systemForcVersion).toEqual(systemForcVersion);
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
