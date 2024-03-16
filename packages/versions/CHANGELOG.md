@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.77.0
+
+### Patch Changes
+
+- Warn when running against unofficial `fuel-core` (e.g. nightly builds), by [@nedsalk](https://github.com/nedsalk) (See [#1855](https://github.com/FuelLabs/fuels-ts/pull/1855))
+
 ## 0.76.0
 
 ### Minor Changes
