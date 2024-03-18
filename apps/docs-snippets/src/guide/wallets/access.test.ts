@@ -1,4 +1,3 @@
-import fs from 'fs';
 import type { WalletLocked, WalletUnlocked } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
@@ -7,11 +6,9 @@ import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
  */
 describe(__filename, () => {
   let provider: Provider | undefined;
-  let wallet: WalletUnlocked;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = Wallet.generate({ provider });
   });
 
   it('wallets', () => {

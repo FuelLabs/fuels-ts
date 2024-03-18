@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { B256Address, Coin, WalletUnlocked} from 'fuels';
-import { Address, BaseAssetId, FUEL_NETWORK_URL, Provider, bn } from 'fuels';
+import { BaseAssetId, FUEL_NETWORK_URL, Provider, bn } from 'fuels';
 
 /**
  * @group node
