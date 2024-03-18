@@ -160,11 +160,12 @@ describe('cli.js', () => {
     // validating
     expect(info).toHaveBeenCalledTimes(0);
     expect(exit).toHaveBeenCalledWith(1);
-    expect(error).toHaveBeenCalledTimes(5);
-    expect(error.mock.calls[1][0]).toMatch(/outdated versions/i);
-    expect(error.mock.calls[2][0]).toMatch(/make sure you/i);
-    expect(error.mock.calls[3][0]).toMatch(/>> Error: /i);
-    expect(error.mock.calls[3][1]).toMatch(new RegExp(systemVersionsError.message, 'i'));
+    expect(error).toHaveBeenCalledTimes(4);
+
+    expect(error.mock.calls[1][0]).toMatch(/make sure you/i);
+    expect(error.mock.calls[2][0]).toMatch(/>> Error: /i);
+    expect(error.mock.calls[2][1]).toMatch(/fuelup exception/i);
+    expect(error.mock.calls[3][0]).toMatch(/fuellabs\/fuelup/);
   });
 
   it('should use fallback values', () => {
