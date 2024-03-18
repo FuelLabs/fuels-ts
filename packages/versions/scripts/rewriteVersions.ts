@@ -5,7 +5,7 @@ export const readVersionsFromFiles = () => {
   const rootDir = join(__dirname, '../../..');
   const packagesDir = join(rootDir, 'packages');
 
-  const firstLineReg = /^.+/m;
+  const firstLineReg = /^.+$/m;
 
   // forc
   const forcPath = join(packagesDir, 'forc', 'VERSION');
