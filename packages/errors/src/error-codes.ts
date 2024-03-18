@@ -85,6 +85,7 @@ export enum ErrorCode {
   // wallet / account
   INVALID_PASSWORD = 'invalid-password',
   ACCOUNT_REQUIRED = 'account-required',
+  UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
 
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',

@@ -2,13 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-fuel
 
 ## Getting Started
 
-1. Install dependencies.
-
-```bash
-npm install
-```
-
-2. Start the Fuel development server. This server will start a local Fuel node and provide hot-reloading for your smart contracts.
+1. Start the Fuel development server. This server will start a local Fuel node and provide hot-reloading for your smart contracts.
 
 ```bash
 npm run fuels:dev
@@ -17,7 +11,7 @@ npm run fuels:dev
 npx fuels dev
 ```
 
-3. Start the Next.js development server.
+1. Start the Next.js development server.
 
 ```bash
 npm run dev
