@@ -12,6 +12,7 @@ import { Signer } from '../signer';
 
 import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import * as keystoreWMod from './keystore-wallet';
+import { Wallet } from './wallet';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 const { ScriptTransactionRequest } = providersMod;
@@ -48,7 +49,7 @@ describe('WalletUnlocked', () => {
 
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
-    // #import { Provider, WalletUnlocked, Signer };
+    // #import { Provider, Wallet, Signer };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
