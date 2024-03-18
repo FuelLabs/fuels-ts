@@ -5,7 +5,7 @@ import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { ChainConfig } from '@fuel-ts/utils';
-import { urlIsLive, waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
+import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { randomInt, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { writeFile } from 'fs/promises';
