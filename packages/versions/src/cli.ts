@@ -50,28 +50,25 @@ export function runVersions() {
   let exitCode: number;
 
   if (someIsGt) {
+    exitCode = 0;
     info(cliTable.toString());
     info(`\nYour system's components are newer than the ones supported!`);
-
-    exitCode = 0;
   } else if (bothAreExact) {
-    info(`\nYou have all the right versions! ⚡`);
-    info(cliTable.toString());
-
     exitCode = 0;
+    info(cliTable.toString());
+    info(`\nYou have all the right versions! ⚡`);
+  } else if (systemError) {
+    exitCode = 1;
+    error(cliTable.toString());
+    error('\n - Make sure you have Forc and Fuel-Core installed');
+    error('   >> Error: ', systemError.message);
   } else {
+    exitCode = 1;
     error(cliTable.toString());
     error(`\n - You're using outdated versions`);
-
-    exitCode = 1;
   }
 
-  if (systemError) {
-    error(' - Make sure you have Forc and Fuel-Core installed');
-    error('   >> Error: ', systemError.message);
-  }
-
-  if (systemError || exitCode === 1) {
+  if (exitCode === 1) {
     error(`  ${green(fuelUpLink)}`);
   }
 
