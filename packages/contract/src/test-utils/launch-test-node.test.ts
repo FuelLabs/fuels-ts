@@ -1,6 +1,5 @@
 import { Provider } from '@fuel-ts/account';
-import { AssetId } from '@fuel-ts/account/dist/test-utils/asset-id';
-import { TestMessage } from '@fuel-ts/account/dist/test-utils/test-message';
+import { TestMessage, AssetId } from '@fuel-ts/account/test-utils';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
