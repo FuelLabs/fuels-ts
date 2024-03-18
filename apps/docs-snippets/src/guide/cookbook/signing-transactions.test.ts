@@ -50,7 +50,7 @@ describe('Signing transactions', () => {
     const amountToReceiver = 100;
 
     // #region multiple-signers-2
-    // #import { Script, BaseAssetId, FunctionInvocationResult };
+    // #import { Script, BaseAssetId };
 
     // Create invocation scope
     const script = new Script(binScript, abiScript, sender);
