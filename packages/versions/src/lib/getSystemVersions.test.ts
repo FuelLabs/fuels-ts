@@ -83,7 +83,7 @@ describe('getSystemVersions.js', () => {
     expect(systemError).toBeTruthy();
   });
 
-  test('should throw for fuel up exception', () => {
+  test('should throw for fuelup exception', () => {
     // mocking
     const systemForcVersion = 'fuelup exception';
     const systemFuelCoreVersion = 'fuelup exception';
