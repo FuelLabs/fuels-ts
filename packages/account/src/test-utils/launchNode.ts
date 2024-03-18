@@ -45,6 +45,10 @@ export type LaunchNodeOptions = {
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
+  /**
+   * The chain configuration to use.
+   * Passing in a chain configuration path via the `--chain` flag in `args` will override this.
+   * */
   chainConfig?: ChainConfig;
 };
 
