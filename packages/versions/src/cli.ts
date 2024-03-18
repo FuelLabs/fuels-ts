@@ -12,6 +12,7 @@ export * from './lib/fuelUpLink';
 export * from './lib/getSystemVersions';
 
 export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
+
 export function runVersions() {
   const { error, info } = console;
 
