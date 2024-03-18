@@ -136,7 +136,7 @@ describe('launchTestNode', () => {
       },
       deployContracts: [
         pathToContractRootDir,
-        { contractDir: pathToContractRootDir, walletIndex: 1, options: {} },
+        { contractDir: pathToContractRootDir, walletIndex: 1, options: { storageSlots: [] } },
       ],
     });
 
