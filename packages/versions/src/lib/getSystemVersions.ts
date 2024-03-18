@@ -8,11 +8,11 @@ export const getSystemVersion = (command: string) => {
   let error: Error | null = null;
 
   try {
-    const io = execSync(command).toString();
-    if (!matchVersion.test(io)) {
-      throw new Error(io);
+    const contents = execSync(command).toString();
+    if (!matchVersion.test(contents)) {
+      throw new Error(contents);
     }
-    version = io.replace(excludeVersion, '');
+    version = contents.replace(excludeVersion, '');
   } catch (err: unknown) {
     error = err as Error;
   }
