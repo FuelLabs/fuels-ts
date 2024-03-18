@@ -1,6 +1,9 @@
 import * as urlIsLiveMod from './url-is-live';
 import { waitUntilUnreachable } from './wait-until-unreachable';
 
+/**
+ * @group node
+ */
 describe('waitUntilUnreachable', () => {
   afterEach(() => {
     vi.restoreAllMocks();
