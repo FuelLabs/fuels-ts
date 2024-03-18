@@ -2,7 +2,7 @@
 
 We can interact with the `Testnet` node by using the following example.
 
-<<< @/../../docs-snippets/src/guide/wallets/wallet-examples.test.ts#provider-testnet{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/provider/connecting-to-testnet.test.ts#provider-testnet{ts:line-numbers}
 
 In the code example, we connected a new provider to the Testnet node and created a new wallet from a private key.
 
@@ -18,4 +18,4 @@ In the code example, we connected a new provider to the Testnet node and created
 
 If you want to connect to another node just change the URL or IP and port. For example, to connect to a local node that was created with `fuel-core` you can use:
 
-<<< @/../../docs-snippets/src/guide/wallets/wallet-examples.test.ts#provider-local{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/provider/connecting-to-testnet.test.ts#provider-local{ts:line-numbers}
