@@ -174,14 +174,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     connectedWallet && network && network?.url !== NODE_URL;
 
   const tryToAddNetwork = () => {
-    try {
-      addNetwork(NODE_URL);
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        "You might already have localhost in your wallet. Just switch to it.",
-      );
-    }
+    return alert(
+      `Please add the network ${NODE_URL} to your Fuel wallet, or swtich to it if you have it already, and refresh the page.`,
+    );
   };
 
   return (
