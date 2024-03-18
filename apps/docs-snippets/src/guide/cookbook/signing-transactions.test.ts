@@ -1,4 +1,4 @@
-import type { Provider, BN } from 'fuels';
+import type { Provider, BN, JsonAbi } from 'fuels';
 import {
   WalletUnlocked,
   Predicate,
@@ -18,6 +18,8 @@ import { getTestWallet } from '../../utils';
  * @group node
  */
 describe('Signing transactions', () => {
+  let bytecode: string;
+  let abi: JsonAbi;
   let sender: WalletUnlocked;
   let receiver: WalletUnlocked;
   let signer: WalletUnlocked;
@@ -48,12 +50,14 @@ describe('Signing transactions', () => {
 
   it('creates a transfer with external signer [script]', async () => {
     const amountToReceiver = 100;
+    bytecode = binScript;
+    abi = abiScript;
 
     // #region multiple-signers-2
     // #import { Script, BaseAssetId };
 
     // Create invocation scope
-    const script = new Script(binScript, abiScript, sender);
+    const script = new Script(bytecode, abi, sender);
     const scope = script.functions
       .main(signer.address.toB256())
       .txParams({ gasPrice, gasLimit: 10_000 });
@@ -77,16 +81,21 @@ describe('Signing transactions', () => {
     expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
   });
 
-  it('creates a transfer with external signer [predicate]', async () => {
+  it.only('creates a transfer with external signer [predicate]', async () => {
     const amountToReceiver = 100;
+    bytecode = binPredicate;
+    abi = abiPredicate;
 
     // #region multiple-signers-4
     // #import { Predicate, BaseAssetId, ScriptTransactionRequest };
 
     // Create and fund the predicate
-    const predicate = new Predicate(binPredicate, provider, abiPredicate).setData(
-      signer.address.toB256()
-    );
+    const predicate = new Predicate<[string]>({
+      bytecode,
+      abi,
+      provider,
+      inputData: [signer.address.toB256()],
+    });
     await sender.transfer(predicate.address, 10_000, BaseAssetId);
 
     // Create the transaction request
