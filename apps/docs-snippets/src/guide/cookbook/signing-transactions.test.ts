@@ -81,7 +81,7 @@ describe('Signing transactions', () => {
     expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
   });
 
-  it.only('creates a transfer with external signer [predicate]', async () => {
+  it('creates a transfer with external signer [predicate]', async () => {
     const amountToReceiver = 100;
     bytecode = binPredicate;
     abi = abiPredicate;
