@@ -20,7 +20,7 @@ describe(__filename, () => {
     wallet = await getTestWallet();
   });
 
-  it('should successfully sum setted configurable constant with inpputed value', async () => {
+  it('should successfully sum setted configurable constant with inputted value', async () => {
     // #region script-with-configurable-contants-2
     const script = new Script(binHexlified, abiContents, wallet);
 

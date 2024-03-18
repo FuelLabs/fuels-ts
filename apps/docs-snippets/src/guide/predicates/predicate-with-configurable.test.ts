@@ -64,7 +64,7 @@ describe(__filename, () => {
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });
 
-  it('should successfully tranfer to default whitelisted address', async () => {
+  it('should successfully transfer to default whitelisted address', async () => {
     // #region predicate-with-configurable-constants-3
     const predicate = new Predicate({
       bytecode: bin,

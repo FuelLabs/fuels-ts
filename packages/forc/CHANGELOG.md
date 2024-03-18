@@ -6,7 +6,7 @@
 
 ### Minor Changes
 
-- Updated `forc` to verson `0.51.1`, by [@nedsalk](https://github.com/nedsalk) (See [#1804](https://github.com/FuelLabs/fuels-ts/pull/1804))
+- Updated `forc` to version `0.51.1`, by [@nedsalk](https://github.com/nedsalk) (See [#1804](https://github.com/FuelLabs/fuels-ts/pull/1804))
 
 ## 0.75.0
 

@@ -8,7 +8,7 @@
 - Migrate implementations of `sha256`, `keccak` and `scrypt` to `@noble/hashes`, by [@danielbate](https://github.com/danielbate) (See [#1786](https://github.com/FuelLabs/fuels-ts/pull/1786))
 - 🐞 fix: disallow transferring <= 0 amounts, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1827](https://github.com/FuelLabs/fuels-ts/pull/1827))
 - - Handling `SqueezedOut` status update when calling `submitAndAwait` subscription at `Provider.sendTransaction`
-  - Handling `SqueezedOut` status update when calling statusChange subscrition at `TransactionResponse.waitForResult`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1829](https://github.com/FuelLabs/fuels-ts/pull/1829))
+  - Handling `SqueezedOut` status update when calling statusChange subscription at `TransactionResponse.waitForResult`, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1829](https://github.com/FuelLabs/fuels-ts/pull/1829))
 
 ## 0.76.0
 
