@@ -48,10 +48,10 @@ describe('WalletUnlocked', () => {
 
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
-    // #import { WalletUnlocked, Signer };
+    // #import { Provider, WalletUnlocked, Signer };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
     const chainId = wallet.provider.getChainId();
     const verifiedAddress = Signer.recoverAddress(
