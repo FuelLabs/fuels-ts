@@ -297,3 +297,4 @@ ScriptTransactionRequest
 CDN
 DateTime
 Atomique
+typedoc

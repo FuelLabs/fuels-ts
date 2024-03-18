@@ -23,7 +23,7 @@ Here is a simple contract deployment in a test:
 
 <<< @/../../../packages/contract/src/test-utils/launch-test-node.test.ts#deploy-contract{ts:line-numbers}
 
-- The `launched` variable was instantiated with the [`using`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management) declaration. This is a TypeScript 5.2 feaure called explicit resource management and it's used to automatically kill the node once `launched` goes out of scope. **IMPORTANT: if you instantiate it with `const`/`let`, the automatic disposal won't happen and you have to call the returned `cleanup` function yourself.**
+- The `launched` variable was instantiated with the [`using`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management) declaration. This is a TypeScript 5.2 feature called explicit resource management and it's used to automatically kill the node once `launched` goes out of scope. **IMPORTANT: if you instantiate it with `const`/`let`, the automatic disposal won't happen and you have to call the returned `cleanup` function yourself.**
 - `launchTestNode` spun up a short-lived `fuel-core` node, deployed a contract to it and returned it for testing.
 - Besides the contract, you've got the provider and wallets at your disposal.
 
