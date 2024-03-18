@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.77.0
+
+### Patch Changes
+
+- Better error message when `fuels` cli deployment fails due to unavailable node, by [@nedsalk](https://github.com/nedsalk) (See [#1854](https://github.com/FuelLabs/fuels-ts/pull/1854))
+
 ## 0.76.0
 
 ## 0.75.0

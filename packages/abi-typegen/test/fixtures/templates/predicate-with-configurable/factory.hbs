@@ -21,7 +21,7 @@ export type MyPredicateAbiConfigurables = {
   ADDRESS: string;
 };
 
-type MyPredicateAbiInputs = [fee: BigNumberish, address: string];
+export type MyPredicateAbiInputs = [fee: BigNumberish, address: string];
 
 const _abi = {
   "types": [
@@ -98,11 +98,11 @@ export class MyPredicateAbi__factory {
   static readonly abi = _abi
   static readonly bin = _bin;
 
-  static createInstance(provider: Provider, predicateData?: InputValue[], configurables?: MyPredicateAbiConfigurables) {
+  static createInstance(provider: Provider, predicateData?: MyPredicateAbiInputs, configurables?: MyPredicateAbiConfigurables) {
 
     const { abi, bin } = MyPredicateAbi__factory
 
-    const predicate = new Predicate({
+    const predicate = new Predicate<MyPredicateAbiInputs>({
       bytecode: bin,
       abi,
       provider,
