@@ -23,17 +23,28 @@ Here is a simple contract deployment in a test:
 
 <<< @/../../../packages/contract/src/test-utils/launch-test-node.test.ts#deploy-contract{ts:line-numbers}
 
-The code above spins up a `fuel-core` node on the first available port your machine provides, deploys your contract to that node, and returns the contract for you to test. After the `launched` variable goes out of scope, resource disposal is run and the node is killed.
+- The `launched` variable was instantiated with the [`using`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management) declaration. This is a TypeScript 5.2 feaure called explicit resource management and it's used to automatically kill the node once `launched` goes out of scope. **IMPORTANT: if you instantiate it with `const`/`let`, the automatic disposal won't happen and you have to call the returned `cleanup` function yourself.**
+- `launchTestNode` spun up a short-lived `fuel-core` node, deployed a contract to it and returned it for testing.
+- Besides the contract, you've got the provider and wallets at your disposal.
+
+---
 
 You can also configure wallets and deploy multiple contracts with them:
 
 <<< @/../../../packages/contract/src/test-utils/launch-test-node.test.ts#multiple-contracts-and-wallets{ts:line-numbers}
 
+That's a lot of options! These docs showcase some functionality; for a detailed look it's best to fiddle with the utility yourself. Every property is documented with typedoc. If something is still unclear or you found a bug, please contact us via official channels of communication and we'll help you.
+
+---
+
 #### Configuring the node
 
-The default chain config of `launchTestNode` is the current beta network iteration's chain config. [Click here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/chainConfig.json) to see what it looks like.
+`launchTestNode` creates a temporary chain config every time it runs.
 
-If you need a different base chain config, you can specify a `DEFAULT_CHAIN_CONFIG_PATH` environment variable which points to your chain config. `launchTestNode` will read that config and work with it instead.
+The default chain config it uses is that of the current beta network iteration. [Click here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/chainConfig.json) to see what it looks like.
+
+If you need a different base chain config, you can specify a `DEFAULT_CHAIN_CONFIG_PATH` environment variable which points to your chain config. `launchTestNode` will read that config and work with it instead, integrating all the functionality with it the same way it'd do with the default config.
+How you specify the environment variable depends on your testing tool.
 
 <<< @/../../../packages/contract/src/test-utils/launch-test-node.test.ts#custom-chain-config{ts:line-numbers}
 

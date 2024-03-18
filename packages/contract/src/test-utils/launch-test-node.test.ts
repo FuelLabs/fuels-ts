@@ -1,4 +1,6 @@
 import { Provider } from '@fuel-ts/account';
+import { AssetId } from '@fuel-ts/account/dist/test-utils/asset-id';
+import { TestMessage } from '@fuel-ts/account/dist/test-utils/test-message';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
@@ -112,27 +114,30 @@ describe('launchTestNode', () => {
 
     const {
       contracts: [contract],
+      provider,
+      wallets,
     } = launched;
-    const gasPrice = contract.provider.getGasConfig().minGasPrice;
 
-    const response = await contract.functions
-      .test_function()
-      .txParams({
-        gasPrice,
-        gasLimit: 10_000,
-      })
-      .call();
-    expect(response.value).toBe(true);
+    const response = await contract.functions.test_function().call();
     // #endregion deploy-contract
+    expect(response.value).toBe(true);
+    expect(provider).toBeDefined();
+    expect(wallets).toBeDefined();
   });
 
   test('multiple contracts can be deployed with different wallets', async () => {
     // #region multiple-contracts-and-wallets
     using launched = await launchTestNode({
-      walletConfig: { count: 2 },
+      walletConfig: {
+        count: 2,
+        assets: [AssetId.A, AssetId.B],
+        coinsPerAsset: 2,
+        amountPerCoin: 1_000,
+        messages: [new TestMessage({ amount: 4_000 })],
+      },
       deployContracts: [
-        { contractDir: pathToContractRootDir },
-        { contractDir: pathToContractRootDir, walletIndex: 1 },
+        pathToContractRootDir,
+        { contractDir: pathToContractRootDir, walletIndex: 1, options: {} },
       ],
     });
 
@@ -142,14 +147,8 @@ describe('launchTestNode', () => {
     } = launched;
     // #endregion multiple-contracts-and-wallets
 
-    const gasPrice = contract1.provider.getGasConfig().minGasPrice;
-
-    const contract1Response = (
-      await contract1.functions.test_function().txParams({ gasPrice, gasLimit: 10_000 }).call()
-    ).value;
-    const contract2Response = (
-      await contract2.functions.test_function().txParams({ gasPrice, gasLimit: 10_000 }).call()
-    ).value;
+    const contract1Response = (await contract1.functions.test_function().call()).value;
+    const contract2Response = (await contract2.functions.test_function().call()).value;
 
     expect(contract1Response).toBe(true);
     expect(contract2Response).toBe(true);
