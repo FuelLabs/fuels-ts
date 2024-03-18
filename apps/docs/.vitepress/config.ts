@@ -164,6 +164,10 @@ export default defineConfig({
                 text: 'Date Time',
                 link: '/guide/types/date-time',
               },
+              {
+                text: 'Native Parameters',
+                link: '/guide/types/native-parameters',
+              },
             ],
           },
           {
@@ -264,8 +268,8 @@ export default defineConfig({
                 link: '/guide/contracts/managing-deployed-contracts',
               },
               {
-                text: 'Simulate Transactions',
-                link: '/guide/contracts/simulate-transactions',
+                text: 'Interacting With Contracts',
+                link: '/guide/contracts/interacting-with-contracts',
               },
               {
                 text: 'Transaction Parameters',

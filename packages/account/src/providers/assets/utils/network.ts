@@ -1,9 +1,9 @@
 import { CHAIN_IDS } from '../../chains';
-import type { Asset, AssetEth, AssetFuel, Ethereum, Fuel } from '../types';
+import type { Asset, AssetEth, AssetFuel, NetworkEthereum, NetworkFuel } from '../types';
 
-type Network = Ethereum | Fuel;
-export type NetworkTypes = Ethereum['type'] | Fuel['type'];
-type NetworkTypeToNetwork<T> = T extends 'ethereum' ? Ethereum : T extends 'fuel' ? Fuel : Network;
+type Network = NetworkEthereum | NetworkFuel;
+export type NetworkTypes = NetworkEthereum['type'] | NetworkFuel['type'];
+type NetworkTypeToNetwork<T> = T extends 'ethereum' ? NetworkEthereum : T extends 'fuel' ? NetworkFuel : Network;
 
 /**
  * Returns the default chainId for the given network

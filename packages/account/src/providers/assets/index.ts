@@ -35,3 +35,4 @@ export const assets: Assets = [
 ];
 
 export * from './utils';
+export * from './types';
