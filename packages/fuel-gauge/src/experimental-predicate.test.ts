@@ -26,7 +26,7 @@ beforeAll(async () => {
   const bytes = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
 
-  predicate = new Predicate<[number]>(bytes, wallet.provider, abi);
+  predicate = new Predicate(bytes, wallet.provider, abi);
   await fundPredicate(wallet, predicate, 100_000);
 });
 
@@ -34,8 +34,47 @@ beforeAll(async () => {
  * @group node
  */
 describe('Experimental Predicate', () => {
-  it('echos u8', async () => {
-    predicate.setData(U8_MAX);
+  it('echos struct', async () => {
+    const struct = {
+      a: U8_MAX,
+      b: U16_MAX,
+      c: U32_MAX,
+      d: U64_MAX,
+      e: U256_MAX,
+      f: '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6',
+      g: B512,
+      native: 'Pending',
+      mixed: { Value: true },
+      grades: [1, 4, 6, 22],
+      fuel: 'fuel',
+      hello: 'Hello World',
+      opt: 42,
+      nada: undefined,
+      bytes: Uint8Array.from([40, 41, 42]),
+      tuple: [U8_MAX, U16_MAX, U32_MAX, 'fuel'],
+      vec_u8: [40, 41, 42],
+      deep: {
+        a: U8_MAX,
+        b: U16_MAX,
+        c: U32_MAX,
+        d: U64_MAX,
+        e: U256_MAX,
+        f: '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6',
+        g: B512,
+        native: 'Pending',
+        mixed: { Value: true },
+        grades: [1, 4, 6, 22],
+        fuel: 'fuel',
+        hello: 'Hello World',
+        opt: 42,
+        nada: undefined,
+        bytes: Uint8Array.from([40, 41, 42]),
+        tuple: [U8_MAX, U16_MAX, U32_MAX, 'fuel'],
+        vec_u8: [40, 41, 42],
+      },
+    };
+
+    predicate.setData(struct);
     const tx = await predicate.transfer(receiver.address, 100, BaseAssetId);
     await tx.waitForResult();
   });
