@@ -7,7 +7,7 @@ Error Codes | Description | Resolutions
 ABI_MAIN_METHOD_MISSING | When your ABI does not have a main method. | This can be resolved by adding a main method to your ABI.
 ABI_TYPES_AND_VALUES_MISMATCH | When the arguments supplied to the function do not match the minimum required input length. | Check that the arguments supplied to the function, match the required type.
 ACCOUNT_REQUIRED | When an [`Account`](../../api/Account/Account.md) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md) | It could be caused during the deployments of contracts, when an account is required to sign the transaction. This can be resolved by the following the deployment guide [here](../contracts/deploying-contracts.md).
-CONVERTING_FAILED | When a converting a big number into an incompatible format. | Ensure that the value you've supplied to the big number, is compatibility with the value you are converting to.
+CONVERTING_FAILED | When a converting a big number into an incompatible format. | Ensure that the value you've supplied to the big number, is compatible with the value you are converting to.
 DUPLICATED_POLICY | When there are more than policies with the same type, for a transaction. | Ensure that there are no duplicate (by type) policies for a transaction.
 ERROR_BUILDING_BLOCK_EXPLORER_URL | When more than one of the following is options is passed: `path`, `address`, `txId`, `blockNumber`. | Check that only one of the following options is passed: `path`, `address`, `txId`, `blockNumber`.
 FUNCTION_NOT_FOUND | When the function with the given name, signature or selector is not found in the ABI. | Check that the function name, signature or selector is correct and exits on the ABI.
