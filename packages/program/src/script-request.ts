@@ -22,7 +22,7 @@ import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import { ScriptResultDecoderError } from './errors';
+import { extractTxError } from './errors';
 import type { CallConfig } from './types';
 
 export const calculateScriptDataBaseOffset = (maxInputs: number) =>
@@ -116,11 +116,15 @@ export function decodeCallResult<TResult>(
     const scriptResult = callResultToScriptResult(callResult);
     return decoder(scriptResult);
   } catch (error) {
-    throw new ScriptResultDecoderError(
-      callResult as TransactionResult,
-      (error as Error).message,
-      logs
-    );
+    if (/resulted in a non-zero exit code: 1/.test((<Error>error).message)) {
+      throw extractTxError({
+        logs,
+        receipts: callResult.receipts,
+        status: (<TransactionResult>callResult).gqlTransaction?.status,
+      });
+    }
+
+    throw error;
   }
 }
 
