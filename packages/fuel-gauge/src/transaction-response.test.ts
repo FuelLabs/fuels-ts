@@ -247,7 +247,7 @@ describe('TransactionResponse', () => {
 
   it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
     const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
       loggingEnabled: false,
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
