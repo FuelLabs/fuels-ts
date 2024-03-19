@@ -2,4 +2,4 @@
 "@fuel-ts/versions": patch
 ---
 
-Command `fuels version` not working
+fix: command `fuels version` not working
