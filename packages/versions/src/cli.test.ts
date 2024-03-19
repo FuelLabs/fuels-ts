@@ -141,7 +141,6 @@ describe('cli.js', () => {
 
   test('should warn about fuelup exception', () => {
     // mocks
-
     const systemVersionsError = new Error('fuelup exception');
 
     const { error, info, exit } = mockAllDeps({
