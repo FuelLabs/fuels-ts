@@ -43,7 +43,7 @@ jobs:
 
       - name: Validate Changeset
         run: pnpm changeset status --since=origin/master
-
+        
       - name: Validate Changeset Content
         run: |
           CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/master .changeset/*.md)
@@ -56,9 +56,7 @@ jobs:
           
           CHANGESET_CONTENT=$(cat $CHANGESET_FILE | tail -n1)
           
-          TRIMMED_PR_TITLE=$(echo $PR_TITLE | sed 's/.*!\{0,1\}: //')
-          
-          if [ "$CHANGESET_CONTENT" != "$TRIMMED_PR_TITLE" ]; then
+          if [ "$CHANGESET_CONTENT" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
             exit 1
           fi
