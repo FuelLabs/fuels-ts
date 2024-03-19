@@ -5,20 +5,17 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "engines": {
     "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./configs": {
       "require": "./dist/configs.js",
-      "import": "./dist/configs.mjs",
-      "types": "./dist/configs.d.ts"
+      "import": "./dist/configs.mjs"
     }
   },
   "typesVersions": {

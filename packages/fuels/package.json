@@ -8,20 +8,17 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "engines": {
     "node": "^18.18.2 || ^20.0.0"
   },
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     }
   },
   "typesVersions": {
@@ -36,7 +33,7 @@
   ],
   "scripts": {
     "build": "tsup && pnpm vite build",
-    "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
+    "postbuild": "tsx ../../scripts/postbuild.ts",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
