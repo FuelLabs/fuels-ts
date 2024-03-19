@@ -1,13 +1,11 @@
+import { tsupDtsDefaults } from '@internal/tsup';
 import type { Options } from 'tsup';
 
-import tsupDefaults from './tsup.config';
+import tsupPkg from './tsup.config';
 
 const configs: Options = {
-  ...tsupDefaults,
-  tsconfig: 'tsconfig.dts.json',
-  sourcemap: true,
-  dts: true,
-  clean: false,
+  ...tsupPkg,
+  ...tsupDtsDefaults
 };
 
 export default configs;
