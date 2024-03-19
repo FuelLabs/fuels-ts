@@ -1,7 +1,6 @@
 import { execSync } from 'child_process';
 
-const matchVersion = /[0-9]+\.[0-9]+\.[0-9]/;
-const excludeVersion = /[^0-9.]+/g;
+const versionReg = /[0-9]+\.[0-9]+\.[0-9]/;
 
 export const getSystemVersion = (command: string) => {
   let version: string | null = null;
@@ -9,10 +8,11 @@ export const getSystemVersion = (command: string) => {
 
   try {
     const contents = execSync(command).toString();
-    if (!matchVersion.test(contents)) {
+    if (versionReg.test(contents)) {
+      version = contents.match(versionReg)?.[0] as string;
+    } else {
       throw new Error(contents);
     }
-    version = contents.replace(excludeVersion, '');
   } catch (err: unknown) {
     error = err as Error;
   }
