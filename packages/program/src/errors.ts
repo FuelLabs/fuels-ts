@@ -124,5 +124,5 @@ export const extractTxError = (params: IExtractTxError) => {
   err = err.concat(`\n\nlogs: ${JSON.stringify(logs, null, 2)}`);
   err = err.concat(`\n\nreceipts: ${JSON.stringify(receipts, null, 2)}`);
 
-  return new FuelError(ErrorCode.ABI_MAIN_METHOD_MISSING, err);
+  return new FuelError(ErrorCode.SCRIPT_REVERTED, err);
 };
