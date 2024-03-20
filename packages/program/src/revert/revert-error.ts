@@ -4,7 +4,6 @@ import {
   FAILED_ASSERT_EQ_SIGNAL,
   FAILED_ASSERT_SIGNAL,
   FAILED_REQUIRE_SIGNAL,
-  FAILED_SEND_MESSAGE_SIGNAL,
   FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
   FAILED_UNKNOWN_SIGNAL,
 } from '@fuel-ts/transactions/configs';
@@ -26,7 +25,6 @@ export type RevertReason =
 const REVERT_MAP: { [signal: string]: RevertReason } = {
   [FAILED_REQUIRE_SIGNAL]: 'RequireFailed',
   [FAILED_TRANSFER_TO_ADDRESS_SIGNAL]: 'TransferToAddressFailed',
-  [FAILED_SEND_MESSAGE_SIGNAL]: 'SendMessageFailed',
   [FAILED_ASSERT_EQ_SIGNAL]: 'AssertEqFailed',
   [FAILED_ASSERT_SIGNAL]: 'AssertFailed',
   [FAILED_UNKNOWN_SIGNAL]: 'Unknown',
