@@ -1,13 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
-import {
-  AssertFailedRevertError,
-  ContractFactory,
-  BaseAssetId,
-  Provider,
-  getRandomB256,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
