@@ -15,6 +15,7 @@ import type {
   TransactionResultScriptResultReceipt,
   TransactionResult,
 } from '@fuel-ts/account';
+import { extractTxError } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
@@ -22,7 +23,6 @@ import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import { extractTxError } from './errors';
 import type { CallConfig } from './types';
 
 export const calculateScriptDataBaseOffset = (maxInputs: number) =>

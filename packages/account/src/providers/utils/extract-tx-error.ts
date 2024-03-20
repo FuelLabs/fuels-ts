@@ -1,5 +1,3 @@
-import type { TransactionResultReceipt, TransactionResult, FailureStatus } from '@fuel-ts/account';
-import type { GqlTransactionStatusFragmentFragment } from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import type { ReceiptRevert } from '@fuel-ts/transactions';
@@ -7,45 +5,16 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import {
   FAILED_REQUIRE_SIGNAL,
   FAILED_ASSERT_EQ_SIGNAL,
+  FAILED_ASSERT_NE_SIGNAL,
   FAILED_ASSERT_SIGNAL,
   FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
-  FAILED_ASSERT_NE_SIGNAL,
+  PANIC_REASONS,
+  PANIC_DOC_URL,
 } from '@fuel-ts/transactions/configs';
 
-import { PANIC_DOC_URL, PANIC_REASONS } from './configs';
-import { RevertErrorCodes } from './revert/revert-error-codes';
-import { getDocs } from './utils';
-
-const bigintReplacer = (key: unknown, value: unknown) =>
-  typeof value === 'bigint' ? value.toString() : value;
-
-/**
- * @hidden
- */
-export class ScriptResultDecoderError extends Error {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logs: any[];
-  constructor(result: TransactionResult, message: string, logs: Array<unknown>) {
-    let docLink = '';
-
-    if (result?.gqlTransaction?.status) {
-      docLink = `${JSON.stringify(getDocs(result.gqlTransaction.status), null, 2)}\n\n`;
-    }
-
-    const logsText = logs.length ? `Logs:\n${JSON.stringify(logs, null, 2)}\n\n` : '';
-
-    const receiptsText = `Receipts:\n${JSON.stringify(
-      result.receipts.map(({ type, ...r }) => ({ type: ReceiptType[type], ...r })),
-      bigintReplacer,
-      2
-    )}`;
-
-    super(`${message}\n\n${docLink}${logsText}${receiptsText}`);
-    this.logs = logs;
-
-    new RevertErrorCodes(result.receipts).assert(this);
-  }
-}
+import type { GqlTransactionStatusFragmentFragment } from '../__generated__/operations';
+import type { TransactionResultReceipt } from '../transaction-response';
+import type { FailureStatus } from '../transaction-summary';
 
 export const assemblePanicError = (status: FailureStatus) => {
   let errorMessage = `The transaction failed with reason: "${status.reason}".`;
