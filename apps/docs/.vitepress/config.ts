@@ -350,85 +350,85 @@ export default defineConfig({
         items: [
           {
             text: 'Types',
-            link: '/guide/types/',
+            link: '/extras/types/',
             collapsed: true,
             items: [
               {
                 text: 'Address',
-                link: '/guide/types/address',
+                link: '/extras/types/address',
               },
               {
                 text: 'Arrays',
-                link: '/guide/types/arrays',
+                link: '/extras/types/arrays',
               },
               {
                 text: 'Asset Id',
-                link: '/guide/types/asset-id',
+                link: '/extras/types/asset-id',
               },
               {
                 text: 'Bech32',
-                link: '/guide/types/bech32',
+                link: '/extras/types/bech32',
               },
   
               {
                 text: 'Bits256',
-                link: '/guide/types/bits256',
+                link: '/extras/types/bits256',
               },
               {
                 text: 'Bits512',
-                link: '/guide/types/bits512',
+                link: '/extras/types/bits512',
               },
               {
                 text: 'Bytes',
-                link: '/guide/types/bytes',
+                link: '/extras/types/bytes',
               },
               {
                 text: 'Bytes32',
-                link: '/guide/types/bytes32',
+                link: '/extras/types/bytes32',
               },
               {
                 text: 'Enums',
-                link: '/guide/types/enums',
+                link: '/extras/types/enums',
               },
               {
                 text: 'Evm Address',
-                link: '/guide/types/evm-address',
+                link: '/extras/types/evm-address',
               },
               {
                 text: 'Native Parameters',
-                link: '/guide/types/native-parameters',
+                link: '/extras/types/native-parameters',
               },
               {
                 text: 'Numbers',
-                link: '/guide/types/numbers',
+                link: '/extras/types/numbers',
               },
               {
                 text: 'Options',
-                link: '/guide/types/options',
+                link: '/extras/types/options',
               },
               {
                 text: 'Raw Slice',
-                link: '/guide/types/raw-slice',
+                link: '/extras/types/raw-slice',
               },
               {
                 text: 'Std String',
-                link: '/guide/types/std-string',
+                link: '/extras/types/std-string',
               },
               {
                 text: 'String',
-                link: '/guide/types/string',
+                link: '/extras/types/string',
               },
               {
                 text: 'Structs',
-                link: '/guide/types/structs',
+                link: '/extras/types/structs',
               },
               {
                 text: 'Tuples',
-                link: '/guide/types/tuples',
+                link: '/extras/types/tuples',
               },
               {
                 text: 'Vectors',
-                link: '/guide/types/vectors',
+                link: '/extras/types/vectors',
               },
             ],
           },
