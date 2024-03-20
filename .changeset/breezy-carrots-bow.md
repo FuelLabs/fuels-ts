@@ -4,4 +4,4 @@
 "fuels": minor
 ---
 
-feat: add launchTestNode utility
+feat: add `launchTestNode` utility
