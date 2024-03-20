@@ -1,5 +1,4 @@
 import { Provider } from '@fuel-ts/account';
-import { AssetId } from '@fuel-ts/account/test-utils';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
@@ -80,7 +79,7 @@ describe('launchTestNode', () => {
       provider: { url },
     } = spy.mock.results[0].value as { provider: { url: string } };
 
-    // test will timeout if the node isn't killed
+    // test will time out if the node isn't killed
     await waitUntilUnreachable(url);
   });
 
@@ -106,36 +105,26 @@ describe('launchTestNode', () => {
   });
 
   test('a contract can be deployed by providing just the path', async () => {
-    // #region deploy-contract
     using launched = await launchTestNode({
       deployContracts: [pathToContractRootDir],
     });
 
     const {
       contracts: [contract],
-      provider,
-      wallets,
     } = launched;
 
     const response = await contract.functions.test_function().call();
-    // #endregion deploy-contract
     expect(response.value).toBe(true);
-    expect(provider).toBeDefined();
-    expect(wallets).toBeDefined();
   });
 
   test('multiple contracts can be deployed with different wallets', async () => {
-    // #region multiple-contracts-and-wallets
     using launched = await launchTestNode({
       walletConfig: {
         count: 2,
-        assets: [AssetId.A, AssetId.B],
-        coinsPerAsset: 2,
-        amountPerCoin: 1_000,
       },
       deployContracts: [
         pathToContractRootDir,
-        { contractDir: pathToContractRootDir, walletIndex: 1, options: { storageSlots: [] } },
+        { contractDir: pathToContractRootDir, walletIndex: 1 },
       ],
     });
 
@@ -143,7 +132,6 @@ describe('launchTestNode', () => {
       contracts: [contract1, contract2],
       wallets: [wallet1, wallet2],
     } = launched;
-    // #endregion multiple-contracts-and-wallets
 
     const contract1Response = (await contract1.functions.test_function().call()).value;
     const contract2Response = (await contract2.functions.test_function().call()).value;
@@ -170,11 +158,9 @@ describe('launchTestNode', () => {
   });
 
   test('can be given different fuel-core args via an environment variable', async () => {
-    // #region custom-fuel-core-args
     process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
 
     using launched = await launchTestNode();
-    // #endregion custom-fuel-core-args
 
     const { provider } = launched;
 
@@ -186,11 +172,9 @@ describe('launchTestNode', () => {
     const chainName = 'gimme_fuel';
     const [chainConfigPath, cleanup] = await generateChainConfigFile(chainName);
 
-    // #region custom-chain-config
     process.env.DEFAULT_CHAIN_CONFIG_PATH = chainConfigPath;
 
     using launched = await launchTestNode();
-    // #endregion custom-chain-config
     cleanup();
     process.env.DEFAULT_CHAIN_CONFIG_PATH = '';
 
