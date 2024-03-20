@@ -328,7 +328,7 @@ export default defineConfig({
               },
               {
                 text: 'Configurable Constants',
-                link: '/essentials/scripts/script-with-configurable-constants',
+                link: '/essentials/scripts/configurable-constants',
               },
               // New pages
               // {
@@ -604,7 +604,7 @@ export default defineConfig({
                   // Not in Notion
                   {
                     text: 'Binaries',
-                    link: '/tooling/cli/binaries',
+                    link: '/tooling/cli/fuels/binaries',
                   },
                 ]
               },
