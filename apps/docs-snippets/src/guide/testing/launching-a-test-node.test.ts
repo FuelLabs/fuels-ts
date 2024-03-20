@@ -2,6 +2,10 @@ import { AssetId, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
 const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
+
+/**
+ * @group node
+ */
 describe('launching a test node', () => {
   test('simple contract deployment', async () => {
     // #region deploy-contract
