@@ -49,21 +49,19 @@ export class ScriptResultDecoderError extends Error {
 
 export const assemblePanicError = (status: FailureStatus) => {
   let errorMessage = `The transaction failed with reason: "${status.reason}".`;
+
   if (PANIC_REASONS.includes(status.reason)) {
-    errorMessage = `${errorMessage}\n\n`.concat(
-      `You can read more about this error at:\n\n`.concat(
-        `${PANIC_DOC_URL}#variant.${status.reason}`
-      )
-    );
+    errorMessage = `${errorMessage}\n\nYou can read more about this error at:\n\n${PANIC_DOC_URL}#variant.${status.reason}`;
   }
 
   return errorMessage;
 };
 
+const stringify = (obj: unknown) => JSON.stringify(obj, null, 2);
+
 export const assembleRevertError = (
   receipts: Array<TransactionResultReceipt>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logs: Array<any>
+  logs: Array<unknown>
 ) => {
   let errorMessage = '';
 
@@ -74,15 +72,21 @@ export const assembleRevertError = (
 
     switch (reasonHex) {
       case FAILED_REQUIRE_SIGNAL:
-        errorMessage = `The transaction reverted because of a "require" statement has thrown "${logs[0]}".`;
+        errorMessage = `The transaction reverted because of a "require" statement has thrown ${stringify(
+          logs[0]
+        )}.`;
         break;
 
       case FAILED_ASSERT_EQ_SIGNAL:
-        errorMessage = `The transaction reverted because of an "assert_eq" statement comparing "${logs[1]}" and "${logs[0]}".`;
+        errorMessage = `The transaction reverted because of an "assert_eq" statement comparing ${stringify(
+          logs[1]
+        )} and ${logs[0]}.`;
         break;
 
       case FAILED_ASSERT_NE_SIGNAL:
-        errorMessage = `The transaction reverted because of an "assert_ne" statement comparing "${logs[1]}" and "${logs[0]}."`;
+        errorMessage = `The transaction reverted because of an "assert_ne" statement comparing ${stringify(
+          logs[1]
+        )} and ${stringify(logs[0])}.`;
         break;
 
       case FAILED_ASSERT_SIGNAL:
@@ -104,8 +108,7 @@ export const assembleRevertError = (
 interface IExtractTxError {
   receipts: Array<TransactionResultReceipt>;
   status?: GqlTransactionStatusFragmentFragment | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logs: Array<any>;
+  logs: Array<unknown>;
 }
 
 export const extractTxError = (params: IExtractTxError) => {
@@ -113,16 +116,13 @@ export const extractTxError = (params: IExtractTxError) => {
 
   const wasPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
 
-  let err: string;
+  let err =
+    status?.type === 'FailureStatus' && wasPanic
+      ? assemblePanicError(status)
+      : assembleRevertError(receipts, logs);
 
-  if (status?.type === 'FailureStatus' && wasPanic) {
-    err = assemblePanicError(status);
-  } else {
-    err = assembleRevertError(receipts, logs);
-  }
-
-  err = err.concat(`\n\nlogs: ${JSON.stringify(logs, null, 2)}`);
-  err = err.concat(`\n\nreceipts: ${JSON.stringify(receipts, null, 2)}`);
+  err += `\n\nlogs: ${JSON.stringify(logs, null, 2)}`;
+  err += `\n\nreceipts: ${JSON.stringify(receipts, null, 2)}`;
 
   return new FuelError(ErrorCode.SCRIPT_REVERTED, err);
 };
