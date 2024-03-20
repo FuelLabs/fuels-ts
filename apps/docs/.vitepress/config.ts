@@ -49,6 +49,11 @@ export default defineConfig({
             text: 'Getting Started',
             link: '/getting-started',
           },
+          // Not in Notion
+          {
+            text: 'Quickstart',
+            link: '/quickstart',
+          },
           // New page
           // {
           //   text: 'Creating a Fuel dApp',
