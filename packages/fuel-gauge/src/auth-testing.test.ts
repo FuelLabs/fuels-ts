@@ -49,6 +49,8 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
       contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
-    ).rejects.toThrow(AssertFailedRevertError);
+    ).rejects.toThrow(
+      'The transaction reverted because of an "assert" statement failed to evaluate to true.'
+    );
   });
 });
