@@ -61,24 +61,24 @@ export default defineConfig({
         items: [
           {
             text: 'Providers',
-            link: '/guide/providers/',
+            link: '/basics/providers/',
             collapsed: true,
             items: [
               {
                 text: 'Connection',
-                link: '/guide/providers/connection',
+                link: '/basics/providers/connection',
               },
               {
                 text: 'Connecting to Testnet',
-                link: '/guide/providers/connecting-to-testnet',
+                link: '/basics/providers/connecting-to-testnet',
               },
               {
                 text: 'Querying the Chain',
-                link: '/guide/providers/querying-the-chain',
+                link: '/basics/providers/querying-the-chain',
               },
               {
                 text: 'Retrying calls',
-                link: '/guide/providers/retrying-calls',
+                link: '/basics/providers/retrying-calls',
               },
             ],
           },
