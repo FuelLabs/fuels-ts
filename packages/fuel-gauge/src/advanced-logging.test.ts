@@ -78,24 +78,28 @@ describe('Advanced Logging', () => {
 
       throw new Error('it should have thrown');
     } catch (error) {
-      if (error instanceof RequireRevertError && error.cause instanceof ScriptResultDecoderError) {
-        const logs = error.cause.logs;
-        logs[0].game_id = logs[0].game_id.toHex();
-        expect(logs).toEqual([
-          {
-            score: 0,
-            time_left: 100,
-            ammo: 10,
-            game_id: '0x18af8',
-            state: { Playing: 1 },
-            contract_Id: {
-              value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
-            },
-            difficulty: { Medium: true },
-          },
-        ]);
+      if ((<Error>error).message) {
+        expect((<Error>error).message).toMatch(
+          JSON.stringify(
+            [
+              {
+                score: 0,
+                time_left: 100,
+                ammo: 10,
+                game_id: '0x18af8',
+                state: { Playing: 1 },
+                contract_Id: {
+                  value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+                },
+                difficulty: { Medium: true },
+              },
+            ],
+            null,
+            2
+          )
+        );
       } else {
-        throw new Error('it should throw RequireRevertError');
+        throw new Error('it should be possible to decode error from "require" statement');
       }
     }
   });
