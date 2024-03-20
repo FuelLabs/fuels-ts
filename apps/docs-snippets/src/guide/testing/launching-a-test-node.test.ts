@@ -1,7 +1,10 @@
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
+const pathToCounterContractRootDir = join(
+  __dirname,
+  '../../../test/fixtures/forc-projects/counter'
+);
 
 /**
  * @group node
@@ -10,7 +13,7 @@ describe('launching a test node', () => {
   test('simple contract deployment', async () => {
     // #region deploy-contract
     using launched = await launchTestNode({
-      deployContracts: [pathToContractRootDir],
+      deployContracts: [pathToCounterContractRootDir],
     });
 
     const {
@@ -19,9 +22,9 @@ describe('launching a test node', () => {
       wallets,
     } = launched;
 
-    const response = await contract.functions.test_function().call();
+    const response = await contract.functions.get_count().call();
     // #endregion deploy-contract
-    expect(response.value).toBe(true);
+    expect(response.value).toBe(0);
     expect(provider).toBeDefined();
     expect(wallets).toBeDefined();
   });
@@ -36,8 +39,12 @@ describe('launching a test node', () => {
         amountPerCoin: 1_000,
       },
       deployContracts: [
-        pathToContractRootDir,
-        { contractDir: pathToContractRootDir, walletIndex: 1, options: { storageSlots: [] } },
+        pathToCounterContractRootDir,
+        {
+          contractDir: pathToCounterContractRootDir,
+          walletIndex: 1,
+          options: { storageSlots: [] },
+        },
       ],
     });
 
