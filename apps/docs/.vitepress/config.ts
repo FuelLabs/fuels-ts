@@ -107,62 +107,62 @@ export default defineConfig({
           // },
           {
             text: 'Wallets',
-            link: '/guide/wallets/',
+            link: '/basics/wallets/',
             collapsed: true,
             items: [
               // Deprecated?
               // {
               //   text: 'Access',
-              //   link: '/guide/wallets/access',
+              //   link: '/basics/wallets/access',
               // },
               {
                 text: 'Private Keys',
-                link: '/guide/wallets/private-keys',
+                link: '/basics/wallets/private-keys',
               },
               {
                 text: 'Mnemonic Wallet',
-                link: '/guide/wallets/mnemonic-wallet',
+                link: '/basics/wallets/mnemonic-wallet',
               },
               {
                 text: 'Encrypting and Decrypting JSON Wallets',
-                link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
+                link: '/basics/wallets/encrypting-and-decrypting-json-wallets',
               },
               {
                 text: 'Checking Balances',
-                link: '/guide/wallets/checking-balances-and-coins',
+                link: '/basics/wallets/checking-balances-and-coins',
               },
               {
                 text: 'Wallet Manager',
-                link: '/guide/wallet-manager/',
+                link: '/basics/wallets/wallet-manager/',
                 collapsed: true,
                 items: [
                   {
                     text: 'Getting Started With Wallet Manager',
-                    link: '/guide/wallet-manager/getting-started-with-wallet-manager',
+                    link: '/basics/wallets/wallet-manager/getting-started-with-wallet-manager',
                   },
                   {
                     text: 'Locking And Unlocking Wallet Manager',
-                    link: '/guide/wallet-manager/locking-and-unlocking-wallet-manager',
+                    link: '/basics/wallets/wallet-manager/locking-and-unlocking-wallet-manager',
                   },
                 ],
               },
               // New page
               // {
               //   text: 'Locking & Unlocking',
-              //   link: '/guide/wallets/locking-and-unlocking',
+              //   link: '/basics/wallets/locking-and-unlocking',
               // },
               {
                 text: 'Signing', // change to "Signing Transactions"
-                link: '/guide/wallets/signing',
+                link: '/basics/wallets/signing',
               },
               // New page
               // {
               //   text: 'External Connectors',
-              //   link: '/guide/wallets/external-connectors',
+              //   link: '/basics/wallets/external-connectors',
               // },
               {
                 text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
+                link: '/basics/wallets/test-wallets',
               },
             ],
           },
