@@ -1,4 +1,4 @@
 ---
 ---
 
-Re-organize the menu and page structure for the documentation.
+docs: reorganize documentation
