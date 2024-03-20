@@ -83,7 +83,7 @@ const { transactionId, value } = await contract.functions
 console.log(transactionId, value);
 ```
 
-[READ MORE](./guide/contracts/)
+[READ MORE](./essentials/contracts/)
 
 ## Deploying Contracts
 

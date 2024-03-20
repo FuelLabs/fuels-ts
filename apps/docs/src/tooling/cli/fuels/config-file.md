@@ -141,7 +141,7 @@ Parameters:
 
 ## `useBuiltinForc`
 
-Opt-in or out from using [built-in](./built-in-binaries.md) `forc` binaries.
+Opt-in or out from using [built-in](./binaries.md) `forc` binaries.
 
 When not supplied, will default to using the `system` binaries.
 
@@ -151,11 +151,11 @@ If `system` binaries are absent, print a warning and use `built-in` ones instead
 
 Check also:
 
-- [Built-in Binaries](./built-in-binaries.md)
+- [Built-in Binaries](./binaries.md)
 
 ## `useBuiltinFuelCore`
 
-Opt-in or out from using [built-in](./built-in-binaries.md) `fuel-core` binaries.
+Opt-in or out from using [built-in](./binaries.md) `fuel-core` binaries.
 
 When not supplied, will default to using the `system` binaries.
 
@@ -165,4 +165,4 @@ If `system` binaries are absent, print a warning and use `built-in` ones instead
 
 Check also:
 
-- [Built-in Binaries](./built-in-binaries.md)
+- [Built-in Binaries](./binaries.md)

@@ -140,7 +140,7 @@ Options:
 
 For more info, check:
 
-- [Generating Types from ABI](../../basics/abi/generating-types.md)
+- [Generating Types from ABI](../../../basics/abi/generating-types.md)
 
 ## `fuels versions`
 
@@ -163,18 +163,18 @@ You have all the right versions! ⚡
 
 ## `fuels forc`
 
-Simple [wrapper](./built-in-binaries.md) around the `forc` binary.
+Simple [wrapper](./binaries.md) around the `forc` binary.
 
 Check also:
 
-- [Built-in Binaries](./built-in-binaries.md)
+- [Built-in Binaries](./binaries.md)
 - [`forc` documentation](https://docs.fuel.network/docs/forc/commands/)
 
 ## `fuels core`
 
-Simple [wrapper](./built-in-binaries.md) around the `fuel-core` binary.
+Simple [wrapper](./binaries.md) around the `fuel-core` binary.
 
 Check also:
 
-- [Built-in Binaries](./built-in-binaries.md)
+- [Built-in Binaries](./binaries.md)
 - [`fuel-core` documentation](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)

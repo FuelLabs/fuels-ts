@@ -1,6 +1,6 @@
 # Script With Configurable
 
-In the same way as [contracts](../contracts/configurable-constants.md) and [predicates](../predicates/predicate-with-configurable-constants.md), Scripts also support configurable constants. This feature enables dynamic adjustment of certain values within your scripts.
+In the same way as [contracts](../contracts/deploying-contracts/configurable-constants.md) and [predicates](../predicates/configurable-constants.md), Scripts also support configurable constants. This feature enables dynamic adjustment of certain values within your scripts.
 
 Configurable constants are fairly straightforward to add and set in your scripts.
 

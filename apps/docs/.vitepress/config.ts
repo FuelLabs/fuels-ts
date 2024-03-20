@@ -57,13 +57,13 @@ export default defineConfig({
           // New page
           // {
           //   text: 'Creating a Fuel dApp',
-          //   link: '/creating-a-fuel-dapp', // need to add
+          //   link: '/creating-a-fuel-dapp',
           // }
         ],
       },
       {
         text: 'Basics',
-        link: '/basics/', // need to add
+        link: '/basics/',
         items: [
           {
             text: 'Providers',
@@ -364,12 +364,12 @@ export default defineConfig({
               //   link: '/essentials/predicates/instantiating-a-predicate',
               // },
               {
-                text: 'Send And Spend Funds From Predicates',
-                link: '/essentials/predicates/send-and-spend-funds-from-predicates',
+                text: 'Configurable Constants',
+                link: '/essentials/predicates/configurable-constants',
               },
               {
-                text: 'Predicate With Configurable Constants',
-                link: '/essentials/predicates/predicate-with-configurable-constants',
+                text: 'Send And Spend Funds From Predicates',
+                link: '/essentials/predicates/send-and-spend-funds-from-predicates',
               },
               // Not in Notion
               // {
@@ -408,7 +408,6 @@ export default defineConfig({
             ],
           },
         ],
-
       },
       {
         text: 'Extras',
@@ -498,6 +497,7 @@ export default defineConfig({
               },
             ],
           },
+          // New pages
           // {
           //   text: 'Errors',
           //   link: '/extras/errors/',
@@ -544,6 +544,7 @@ export default defineConfig({
             link: '/tooling/testing/',
             collapsed: true,
             items: [
+              // New pages
               // {
               //   text: 'Launching nodes',
               //   link: '/tooling/testing/launching-nodes',
@@ -599,13 +600,13 @@ export default defineConfig({
                   {
                     text: 'Commands',
                     link: '/tooling/cli/fuels/commands',
-                  }
+                  },
+                  // Not in Notion
+                  {
+                    text: 'Binaries',
+                    link: '/tooling/cli/binaries',
+                  },
                 ]
-              },
-              // Not in Notion
-              {
-                text: 'Binaries',
-                link: '/tooling/cli/binaries',
               },
             ],
           },
