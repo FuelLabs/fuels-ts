@@ -35,9 +35,6 @@ export const FAILED_REQUIRE_SIGNAL = '0xffffffffffff0000';
 // Revert with this value for a failing call to `std::asset::transfer_to_address`.
 export const FAILED_TRANSFER_TO_ADDRESS_SIGNAL = '0xffffffffffff0001';
 
-// Revert with this value for a failing call to `std::message::send_message`.
-export const FAILED_SEND_MESSAGE_SIGNAL = '0xffffffffffff0002';
-
 // Revert with this value for a failing call to `std::assert::assert_eq`.
 export const FAILED_ASSERT_EQ_SIGNAL = '0xffffffffffff0003';
 
