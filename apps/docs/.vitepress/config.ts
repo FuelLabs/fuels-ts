@@ -565,30 +565,33 @@ export default defineConfig({
             text: 'CLI',
             link: '/guide/cli/',
             collapsed: true,
-            // Review required
             items: [
+              // New page
+              // {
+              //   text: 'create fuels CLI',
+              //   link: '',
+              //   collapsed: true,
+              // },
               {
-                text: 'create fuels',
-                link: '/guide/quickstart/', //placeholder
+                text: 'fuels CLI',
+                link: '/tooling/cli/fuels/',
                 collapsed: true,
-              },
+                items: [
               {
-                text: 'fuels',
-                link: '/guide/quickstart/', //placeholder
-                collapsed: true,
+                    text: 'Config File',
+                    link: '/tooling/cli/fuels/config-file',
               },
-              // {
-              //   text: 'Commands',
-              //   link: '/guide/cli/commands',
-              // },
-              // {
-              //   text: 'Config File',
-              //   link: '/guide/cli/config-file',
-              // },
-              // {
-              //   text: 'Built-in Binaries',
-              //   link: '/guide/cli/built-in-binaries',
-              // },
+                  {
+                    text: 'Commands',
+                    link: '/tooling/cli/fuels/commands',
+                  }
+                ]
+              },
+              // Not in Notion
+              {
+                text: 'Binaries',
+                link: '/guide/cli/binaries',
+              },
             ],
           },
         ]
