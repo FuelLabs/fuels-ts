@@ -72,18 +72,8 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
     }
   });
 
-  if (!scriptResultReceipt) {
-    throw new FuelError(
-      ErrorCode.TRANSACTION_ERROR,
-      `The script call result does not contain a 'scriptResultReceipt'.`
-    );
-  }
-
-  if (!returnReceipt) {
-    throw new FuelError(
-      ErrorCode.TRANSACTION_ERROR,
-      `The script call result does not contain a 'returnReceipt'.`
-    );
+  if (!scriptResultReceipt || !returnReceipt) {
+    throw new FuelError(ErrorCode.SCRIPT_REVERTED, `Transaction reverted.`);
   }
 
   const scriptResult: ScriptResult = {
@@ -116,7 +106,7 @@ export function decodeCallResult<TResult>(
     const scriptResult = callResultToScriptResult(callResult);
     return decoder(scriptResult);
   } catch (error) {
-    if (/resulted in a non-zero exit code: 1/.test((<Error>error).message)) {
+    if ((<FuelError>error).code === ErrorCode.SCRIPT_REVERTED) {
       throw extractTxError({
         logs,
         receipts: callResult.receipts,
