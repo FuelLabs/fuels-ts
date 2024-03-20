@@ -94,16 +94,6 @@ describe('Revert Error Testing', () => {
   /**
    * TODO: fix this
    * we could not get this sway function to revert
-   */
-  it.skip('can throw SendMessageRevertError', async () => {
-    await expect(contractInstance.functions.failed_message().call()).rejects.toThrow(
-      SendMessageRevertError
-    );
-  });
-
-  /**
-   * TODO: fix this
-   * we could not get this sway function to revert
    * according to sway docs: this should revert if amount = 0
    * https://fuellabs.github.io/sway/master/reference/documentation/operations/asset/transfer/address.html
    */
