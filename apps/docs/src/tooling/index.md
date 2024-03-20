@@ -2,5 +2,5 @@
 
 ## Table of contents
 
-- [CLI](./cli.md)
-- [Testing](./testing.md)
+- [CLI](./cli/index.md)
+- [Testing](./testing/index.md)

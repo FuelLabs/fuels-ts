@@ -2,5 +2,5 @@
 
 ## Table of contents
 
-- [Address conversions](./address-conversions.md)
+- [Address conversions](./address-conversion.md)
 - [Date time conversions](./date-time-conversion.md)

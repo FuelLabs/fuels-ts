@@ -7,6 +7,6 @@
 - [Call Parameters](./call-parameters.md)
 - [Cost Estimation](./cost-estimation.md)
 - [Dependency estimation](./dependency-estimation.md)
-- [Variable Outputs & Messages](./variable-outputs-and-messages.md)
+- [Variable Outputs](./variable-outputs.md)
 <!-- - [Transaction response](./transaction-response.md) -->
 - [Logs](./logs.md)
