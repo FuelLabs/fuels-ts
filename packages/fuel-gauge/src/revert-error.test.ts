@@ -1,10 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
 import {
-  ScriptResultDecoderError,
-  SendMessageRevertError,
-  RequireRevertError,
-  AssertFailedRevertError,
   TransferToAddressRevertError,
   bn,
   ContractFactory,
@@ -55,7 +51,7 @@ describe('Revert Error Testing', () => {
     ]);
   });
 
-  it('can throw RequireRevertError [invalid price]', async () => {
+  it('should throw for "require" revert TX [PriceCantBeZero]', async () => {
     const INPUT_PRICE = bn(0);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -64,10 +60,12 @@ describe('Revert Error Testing', () => {
         .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
 
         .call()
-    ).rejects.toThrow(RequireRevertError);
+    ).rejects.toThrow(
+      `The transaction reverted because of a "require" statement has thrown "PriceCantBeZero".`
+    );
   });
 
-  it('can throw RequireRevertError [invalid token id]', async () => {
+  it('should throw for "require" revert TX [InvalidTokenId]', async () => {
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(55);
 
@@ -76,10 +74,12 @@ describe('Revert Error Testing', () => {
         .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
 
         .call()
-    ).rejects.toThrow(RequireRevertError);
+    ).rejects.toThrow(
+      `The transaction reverted because of a "require" statement has thrown "InvalidTokenId".`
+    );
   });
 
-  it('can throw AssertFailedRevertError', async () => {
+  it('should throw for "assert" revert TX', async () => {
     const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
 
@@ -88,7 +88,9 @@ describe('Revert Error Testing', () => {
         .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
 
         .call()
-    ).rejects.toThrow(AssertFailedRevertError);
+    ).rejects.toThrow(
+      'The transaction reverted because of an "assert" statement failed to evaluate to true.'
+    );
   });
 
   /**
@@ -103,9 +105,9 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('can throw ScriptResultDecoderError', async () => {
+  it('should throw for revert TX with reason "NotEnoughBalance"', async () => {
     await expect(contractInstance.functions.failed_transfer().call()).rejects.toThrow(
-      ScriptResultDecoderError
+      'The transaction failed with reason: "NotEnoughBalance".'
     );
   });
 });
