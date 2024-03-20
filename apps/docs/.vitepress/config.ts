@@ -468,7 +468,7 @@ export default defineConfig({
           },
           {
             text: 'Utilities',
-            link: '/guide/utilities/',
+            link: '/extras/utilities/',
             collapsed: true,
             items: [
               // {
@@ -477,11 +477,11 @@ export default defineConfig({
               // },
               {
                 text: 'Date time conversion',
-                link: '/guide/types/date-time',
+                link: '/extras/utilities/date-time-conversion',
               },
               {
                 text: 'Address conversion',
-                link: '/guide/addresses/conversion',
+                link: '/extras/utilities/address-conversion',
               }
             ]
           }
