@@ -49,6 +49,7 @@ export default defineConfig({
             text: 'Getting Started',
             link: '/getting-started',
           },
+          // New page
           // {
           //   text: 'Creating a Fuel dApp',
           //   link: '/creating-a-fuel-dapp', // need to add
@@ -215,80 +216,100 @@ export default defineConfig({
         text: 'Essentials',
         link: '/essentials/',
         items: [
-          // Review required
           {
             text: 'Contracts',
-            link: '/guide/contracts/',
+            link: '/essentials/contracts/',
             collapsed: true,
             items: [
+              // New page?
+              // {
+              //   text: 'Instantiating a Contract',
+              //   link: '/essentials/contracts/instantiating-a-contract',
+              // },
+              {
+                text: 'Calling Contract Functions',
+                link: '/essentials/contracts/calling-contract-functions/',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Methods',
+                    link: '/essentials/contracts/calling-contract-functions/methods',
+                  },
+                  {
+                    text: 'Transaction Parameters',
+                    link: '/essentials/contracts/calling-contract-functions/transaction-parameters',
+                  },
+                  {
+                    text: 'Call Parameters',
+                    link: '/essentials/contracts/calling-contract-functions/call-parameters',
+                  },
+                  {
+                    text: 'Cost Estimation',
+                    link: '/essentials/contracts/calling-contract-functions/cost-estimation',
+                  },
+                  {
+                    text: 'Dependency Estimation',
+                    link: '/essentials/contracts/calling-contract-functions/transaction-dependency-estimation',
+                  },
+                  {
+                    text: 'Variable Outputs',
+                    link: '/essentials/contracts/calling-contract-functions/variable-outputs',
+                  },
+                  // New page
+                  // {
+                  //   text: 'Transaction response',
+                  //   link: '/essentials/contracts/transaction-response',
+                  // },
+                  {
+                    text: 'Logs',
+                    link: '/essentials/contracts/calling-contract-functions/logs',
+                  },
+                ]
+              },
+              {
+                text: 'Inter-contract Calls',
+                link: '/essentials/contracts/inter-contract-calls',
+              },
+              {
+                text: 'Multi-contract calls',
+                link: '/essentials/contracts/multi-contract-calls',
+              },
+              {
+                text: 'Using different Wallets', // Using different Wallets
+                link: '/essentials/contracts/calls-with-different-wallets',
+              },
               {
                 text: 'Deploying Contracts',
-                link: '/guide/contracts/deploying-contracts',
+                link: '/essentials/contracts/deploying-contracts',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Storage Slots',
+                    link: '/essentials/contracts/deploying-contracts/storage-slots',
+                  },
+                  {
+                    text: 'Configurable Constants',
+                    link: '/essentials/contracts/deploying-contracts/configurable-constants',
+                  },
+                  {
+                    text: 'Understanding the FuelVM Binary File',
+                    link: '/essentials/contracts/deploying-contracts/understanding-the-fuelvm-binary-file',
+                  },
+                ]
               },
-              {
-                text: 'Managing Deployed Contracts',
-                link: '/guide/contracts/managing-deployed-contracts',
-              },
-              {
-                text: 'Interacting With Contracts',
-                link: '/guide/contracts/interacting-with-contracts',
-              },
-              {
-                text: 'Transaction Parameters',
-                link: '/guide/contracts/transaction-parameters',
-              },
-              {
-                text: 'Call Parameters',
-                link: '/guide/contracts/call-parameters',
-              },
-              {
-                text: 'Add Transfer',
-                link: '/guide/contracts/add-transfer',
-              },
-              {
-                text: 'Contract Balance',
-                link: '/guide/contracts/contract-balance',
-              },
-              {
-                text: 'Multicalls',
-                link: '/guide/contracts/multicalls',
-              },
-              {
-                text: 'Cost Estimation',
-                link: '/guide/contracts/cost-estimation',
-              },
-              {
-                text: 'Inter-Contract Calls',
-                link: '/guide/contracts/inter-contract-calls',
-              },
-              {
-                text: 'Calls With Different Wallets',
-                link: '/guide/contracts/calls-with-different-wallets',
-              },
-              {
-                text: 'Configurable Constants',
-                link: '/guide/contracts/configurable-constants',
-              },
-              {
-                text: 'Storage Slots',
-                link: '/guide/contracts/storage-slots',
-              },
-              {
-                text: 'Logs',
-                link: '/guide/contracts/logs',
-              },
-              {
-                text: 'Variable Outputs',
-                link: '/guide/contracts/variable-outputs',
-              },
-              {
-                text: 'Transaction Dependency Estimation',
-                link: '/guide/contracts/transaction-dependency-estimation',
-              },
-              {
-                text: 'The Fuelvm Binary File',
-                link: '/guide/contracts/the-fuelvm-binary-file',
-              },
+              // Removed in Notion?
+              // {
+              //   text: 'Managing Deployed Contracts',
+              //   link: '/essentials/contracts/managing-deployed-contracts',
+              // },
+              // {
+              //   text: 'Add Transfer',
+              //   link: '/essentials/contracts/add-transfer',
+              // },
+              // {
+              //   text: 'Contract Balance',
+              //   link: '/essentials/contracts/contract-balance',
+              // },
             ],
           },
           // Review required
@@ -479,9 +500,10 @@ export default defineConfig({
             link: '/extras/utilities/',
             collapsed: true,
             items: [
+              // New page
               // {
               //   text: 'Big Number conversions',
-              //   link: '/guide/utilities/big-number-conversions', // New page
+              //   link: '/guide/utilities/big-number-conversions',
               // },
               {
                 text: 'Date time conversion',
