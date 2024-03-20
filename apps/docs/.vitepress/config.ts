@@ -168,7 +168,7 @@ export default defineConfig({
           },
           {
             text: 'ABI',
-            link: '/guide/abi-typegen/',  // change dir name to abi
+            link: '/basics/abi/',
             collapsed: true,
             items: [
               // New page
@@ -178,11 +178,11 @@ export default defineConfig({
               // },
               {
                 text: 'Generating Types',
-                link: '/guide/abi-typegen/generating-types-from-abi',
+                link: '/basics/abi/generating-types',
               },
               {
                 text: 'Using Generated Types',
-                link: '/guide/abi-typegen/using-generated-types',
+                link: '/basics/abi/using-generated-types',
               },
             ],
           },

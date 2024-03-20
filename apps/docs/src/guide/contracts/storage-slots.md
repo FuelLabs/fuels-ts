@@ -14,4 +14,4 @@ Instead of importing from a file, you can also specify the custom storage slots 
 
 ## Auto-load of Storage Slots
 
-Code generated using [Typegen](../abi-typegen//generating-types-from-abi.md) automatically [load](../abi-typegen/using-generated-types.md#autoloading-of-storage-slots) Storage Slots for you.
+Code generated using [Typegen](../../basics/abi/generating-types.md) automatically [load](../../basics/abi/using-generating-types.md#autoloading-of-storage-slots) Storage Slots for you.

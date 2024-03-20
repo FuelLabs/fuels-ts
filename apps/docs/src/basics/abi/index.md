@@ -60,5 +60,5 @@ $ cat out/debug/my-test-abi.json
 
 See also:
 
-- [Generating Types](./generating-types-from-abi.md)
+- [Generating Types](./generating-types.md)
 - [Using Generated Types](./using-generated-types.md)

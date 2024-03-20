@@ -50,6 +50,6 @@ We can use these files like so:
 
 See also:
 
-- [Generating Types for Contracts](./generating-types-from-abi.md#generating-types-for-contracts)
-- [Generating Types for Scripts](./generating-types-from-abi.md#generating-types-for-scripts)
-- [Generating Types for Predicates](./generating-types-from-abi.md#generating-types-for-predicates)
+- [Generating Types for Contracts](./generating-types.md#generating-types-for-contracts)
+- [Generating Types for Scripts](./generating-types.md#generating-types-for-scripts)
+- [Generating Types for Predicates](./generating-types.md#generating-types-for-predicates)

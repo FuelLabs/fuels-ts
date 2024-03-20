@@ -140,7 +140,7 @@ Options:
 
 For more info, check:
 
-- [Generating Types from ABI](https://docs.fuel.network/docs/fuels-ts/abi-typegen/generating-types-from-abi/)
+- [Generating Types from ABI](../../basics/abi/generating-types.md)
 
 ## `fuels versions`
 
