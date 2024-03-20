@@ -47,4 +47,26 @@ packagesWithExports.forEach((pkg) => {
   }
 })
 
+/**
+ * 2). Verify that each package can be packed and types are correct
+ */
+Object
+  .values(packagesWithExports)
+  .flatMap(pkg => Object
+      .values(pkg.exports)
+      .flatMap((e) => [e.require, e.import])
+      .map((entrypoint) => join(pkg.path, entrypoint))
+  )
+  .forEach(entrypoint => {
+    try {
+      execSync(`node ${entrypoint}`)
+      log(entrypoint)
+    } catch (e) {
+      error(`Error | Package export types`);
+      error(entrypoint)
+      error(e.toString());
+      errorCode = 1;
+    }
+  })
+
 process.exit(errorCode);
