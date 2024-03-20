@@ -75,6 +75,29 @@ export default defineConfig({
               {
                 text: 'Querying the Chain',
                 link: '/basics/providers/querying-the-chain',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Messages',
+                    link: '/basics/providers/messages/',
+                    collapsed: true,
+                    // These could probably be consolidated to the same page (/basics/providers/messages/)
+                    items: [
+                      {
+                        text: 'Getting a Message Proof',
+                        link: '/basics/providers/messages/getting-a-message-proof',
+                      },
+                      {
+                        text: 'Getting All Resources',
+                        link: '/basics/providers/messages/getting-all-resources',
+                      },
+                      {
+                        text: 'Getting Messages',
+                        link: '/basics/providers/messages/getting-messages',
+                      },
+                    ],
+                  },
+                ]
               },
               {
                 text: 'Retrying calls',
@@ -447,25 +470,6 @@ export default defineConfig({
           //     },
           //   ],
           // },
-          {
-            text: 'Messages',
-            link: '/guide/messages/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Getting a Message Proof',
-                link: '/guide/messages/getting-a-message-proof',
-              },
-              {
-                text: 'Getting All Resources',
-                link: '/guide/messages/getting-all-resources',
-              },
-              {
-                text: 'Getting Messages',
-                link: '/guide/messages/getting-messages',
-              },
-            ],
-          },
           {
             text: 'Utilities',
             link: '/extras/utilities/',
