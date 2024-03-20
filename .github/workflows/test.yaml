@@ -67,7 +67,6 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    if: github.head_ref == 'changeset-release/master'
     timeout-minutes: 5
     steps:
       - name: Checkout
