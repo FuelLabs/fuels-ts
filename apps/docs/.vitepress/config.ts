@@ -312,28 +312,31 @@ export default defineConfig({
               // },
             ],
           },
-          // Review required
           {
             text: 'Scripts',
-            link: '/guide/scripts/',
+            link: '/essentials/scripts/',
             collapsed: true,
             items: [
               {
                 text: 'Instantiating A Script',
-                link: '/guide/scripts/instantiating-a-script',
+                link: '/essentials/scripts/instantiating-a-script',
               },
               {
-                text: 'Calling A Script',
-                link: '/guide/scripts/calling-a-script',
+                text: 'Configurable Constants',
+                link: '/essentials/scripts/script-with-configurable-constants',
               },
-              {
-                text: 'Preparing A Script',
-                link: '/guide/scripts/preparing-a-script',
-              },
-              {
-                text: 'Script With Configurable Constants',
-                link: '/guide/scripts/script-with-configurable-constants',
-              },
+              // New page? Running scripts
+              // New page?  Custom script Call
+
+              // Not in Notion
+              // {
+              //   text: 'Calling A Script',
+              //   link: '/essentials/scripts/calling-a-script',
+              // },
+              // {
+              //   text: 'Preparing A Script',
+              //   link: '/essentials/scripts/preparing-a-script',
+              // },
             ],
           },
           {
