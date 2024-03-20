@@ -63,6 +63,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Prettify changelog
+        run: |
+          pnpm changeset:update-changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          RELEASE_TAG: v${{ env.BUILD_VERSION }}
+          PUBLISHED: ${{ steps.changesets.outputs.published }}
+
       - name: Release to @next tag on npm
         if: steps.changesets.outputs.published != 'true'
         run: |
