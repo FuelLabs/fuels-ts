@@ -79,6 +79,12 @@ describe('Revert Error Testing', () => {
     );
   });
 
+  it('should throw for revert TX with reason "TransferZeroCoins"', async () => {
+    await expect(contractInstance.functions.failed_transfer_revert().call()).rejects.toThrow(
+      'The transaction failed with reason: "TransferZeroCoins".'
+    );
+  });
+
   it('should throw for "assert" revert TX', async () => {
     const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
@@ -90,18 +96,6 @@ describe('Revert Error Testing', () => {
         .call()
     ).rejects.toThrow(
       'The transaction reverted because of an "assert" statement failed to evaluate to true.'
-    );
-  });
-
-  /**
-   * TODO: fix this
-   * we could not get this sway function to revert
-   * according to sway docs: this should revert if amount = 0
-   * https://fuellabs.github.io/sway/master/reference/documentation/operations/asset/transfer/address.html
-   */
-  it.skip('can throw TransferToAddressRevertError', async () => {
-    await expect(contractInstance.functions.failed_transfer_revert().call()).rejects.toThrow(
-      TransferToAddressRevertError
     );
   });
 
