@@ -113,24 +113,24 @@ export default defineConfig({
           },
           // {
           //   text: 'GraphQL',
-          //   link: '/guide/graphql/', // need to add
+          //   link: '/basics/graphql/', // need to add
           //   collapsed: true,
           //   items: [
           //     {
           //       text: 'Schema',
-          //       link: '/guide/graphql/schema', // need to add
+          //       link: '/basics/graphql/schema', // need to add
           //     },
           //     {
           //       text: 'Playground',
-          //       link: '/guide/graphql/playground', // need to add
+          //       link: '/basics/graphql/playground', // need to add
           //     },
           //     {
           //       text: 'Custom Queries',
-          //       link: '/guide/graphql/custom-queries', // need to add
+          //       link: '/basics/graphql/custom-queries', // need to add
           //     },
           //     {
           //       text: 'Subscriptions',
-          //       link: '/guide/graphql/subscriptions', // need to add
+          //       link: '/basics/graphql/subscriptions', // need to add
           //     }
           //   ],
           // },
@@ -203,7 +203,7 @@ export default defineConfig({
               // New page
               // {
               //   text: 'The JSON ABI file',
-              //   link: '/guide/abi-typegen/the-json-abi-file',
+              //   link: '/basics/abi/the-json-abi-file',
               // },
               {
                 text: 'Generating Types',
@@ -280,7 +280,7 @@ export default defineConfig({
                 link: '/essentials/contracts/multi-contract-calls',
               },
               {
-                text: 'Using different Wallets', // Using different Wallets
+                text: 'Using different Wallets',
                 link: '/essentials/contracts/calls-with-different-wallets',
               },
               {
@@ -330,8 +330,17 @@ export default defineConfig({
                 text: 'Configurable Constants',
                 link: '/essentials/scripts/script-with-configurable-constants',
               },
-              // New page? Running scripts
-              // New page?  Custom script Call
+              // New pages
+              // {
+              //   text: 'Running Scripts',
+              //   link: '/essentials/scripts/running-scripts',
+              // },
+              // {
+              //   text: 'Custom script Call',
+              //   link: '/essentials/scripts/custom-script-call',
+              // },
+
+              // ---
 
               // Not in Notion
               // {
@@ -349,9 +358,10 @@ export default defineConfig({
             link: '/essentials/predicates/',
             collapsed: true,
             items: [
+              // New page?
               // {
               //   text: 'Instantiating A Predicate',
-              //   link: '/guide/predicates/instantiating-a-predicate',
+              //   link: '/essentials/predicates/instantiating-a-predicate',
               // },
               {
                 text: 'Send And Spend Funds From Predicates',
@@ -362,10 +372,10 @@ export default defineConfig({
                 link: '/essentials/predicates/predicate-with-configurable-constants',
               },
               // Not in Notion
-              {
-                text: 'Predicate with More Complex Args',
-                link: '/essentials/predicates/predicate-with-more-complex-args',
-              },
+              // {
+              //   text: 'Predicate with More Complex Args',
+              //   link: '/essentials/predicates/predicate-with-more-complex-args',
+              // },
             ],
           },
           {
@@ -386,14 +396,14 @@ export default defineConfig({
                 link: '/essentials/cookbook/wallet-sdk-and-react-hooks',
               },
 
-              // Deprecated?
+              // Not in Notion
               // {
               //   text: 'Custom Transactions',
-              //   link: '/guide/cookbook/custom-transactions',
+              //   link: '/essentials/cookbook/custom-transactions',
               // },
               // {
               //   text: 'Custom Transactions from Contract Calls',
-              //   link: '/guide/cookbook/custom-transactions-from-contract-calls',
+              //   link: '/essentials/cookbook/custom-transactions-from-contract-calls',
               // },
             ],
           },
@@ -402,7 +412,7 @@ export default defineConfig({
       },
       {
         text: 'Extras',
-        link: '/extras/', // new dir required
+        link: '/extras/',
         items: [
           {
             text: 'Types',
@@ -490,16 +500,16 @@ export default defineConfig({
           },
           // {
           //   text: 'Errors',
-          //   link: '/guide/errors/',
+          //   link: '/extras/errors/',
           //   collapsed: true,
           //   items: [
           //     {
           //       text: 'Error Codes',
-          //       link: '/guide/errors/error-codes',
+          //       link: '/extras/errors/error-codes',
           //     },
           //     {
           //       text: 'Revert Errors',
-          //       link: '/guide/errors/revert-errors',
+          //       link: '/extras/errors/revert-errors',
           //     },
           //   ],
           // },
@@ -511,7 +521,7 @@ export default defineConfig({
               // New page
               // {
               //   text: 'Big Number conversions',
-              //   link: '/guide/utilities/big-number-conversions',
+              //   link: '/extras/utilities/big-number-conversions',
               // },
               {
                 text: 'Date time conversion',
@@ -527,7 +537,7 @@ export default defineConfig({
       },
       {
         text: 'Tooling',
-        link: '/tooling/',  // new dir required
+        link: '/tooling/',
         items: [
           {
             text: 'Testing',
@@ -568,7 +578,7 @@ export default defineConfig({
           },
           {
             text: 'CLI',
-            link: '/guide/cli/',
+            link: '/tooling/cli/',
             collapsed: true,
             items: [
               // New page
@@ -595,7 +605,7 @@ export default defineConfig({
               // Not in Notion
               {
                 text: 'Binaries',
-                link: '/guide/cli/binaries',
+                link: '/tooling/cli/binaries',
               },
             ],
           },
