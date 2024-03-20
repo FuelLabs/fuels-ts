@@ -52,7 +52,7 @@ export const assemblePanicError = (status: FailureStatus) => {
   if (PANIC_REASONS.includes(status.reason)) {
     errorMessage = `${errorMessage}\n\n`.concat(
       `You can read more about this error at:\n\n`.concat(
-        `${PANIC_DOC_URL}#variant.${status.reason}\n\n`
+        `${PANIC_DOC_URL}#variant.${status.reason}`
       )
     );
   }
