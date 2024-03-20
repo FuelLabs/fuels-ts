@@ -149,6 +149,5 @@ export async function getFullChangelog(octokit: Octokit) {
   content += breaking && nonBreaking && '\n\n---\n\n';
   content += nonBreaking;
 
-  console.log(content)
   return content.trim();
 }
