@@ -49,192 +49,16 @@ export default defineConfig({
             text: 'Getting Started',
             link: '/getting-started',
           },
-          {
-            text: 'Glossary',
-            link: '/glossary',
-          },
+          // {
+          //   text: 'Creating a Fuel dApp',
+          //   link: '/creating-a-fuel-dapp', // need to add
+          // }
         ],
       },
       {
-        text: 'Guide',
-        link: '/guide/',
+        text: 'Basics',
+        link: '/basics/', // need to add
         items: [
-          {
-            text: 'CLI',
-            link: '/guide/cli/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Commands',
-                link: '/guide/cli/commands',
-              },
-              {
-                text: 'Config File',
-                link: '/guide/cli/config-file',
-              },
-              {
-                text: 'Built-in Binaries',
-                link: '/guide/cli/built-in-binaries',
-              },
-            ],
-          },
-          {
-            text: 'Quickstart',
-            link: '/guide/quickstart/',
-            collapsed: true,
-          },
-          {
-            text: 'Types',
-            link: '/guide/types/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Address',
-                link: '/guide/types/address',
-              },
-              {
-                text: 'Evm Address',
-                link: '/guide/types/evm-address',
-              },
-              {
-                text: 'Asset Id',
-                link: '/guide/types/asset-id',
-              },
-              {
-                text: 'Arrays',
-                link: '/guide/types/arrays',
-              },
-              {
-                text: 'Bech32',
-                link: '/guide/types/bech32',
-              },
-              {
-                text: 'Bits256',
-                link: '/guide/types/bits256',
-              },
-              {
-                text: 'Bits512',
-                link: '/guide/types/bits512',
-              },
-              {
-                text: 'Bytes',
-                link: '/guide/types/bytes',
-              },
-              {
-                text: 'Bytes32',
-                link: '/guide/types/bytes32',
-              },
-              {
-                text: 'Numbers',
-                link: '/guide/types/numbers',
-              },
-              {
-                text: 'String',
-                link: '/guide/types/string',
-              },
-              {
-                text: 'Std String',
-                link: '/guide/types/std-string',
-              },
-              {
-                text: 'Enums',
-                link: '/guide/types/enums',
-              },
-              {
-                text: 'Options',
-                link: '/guide/types/options',
-              },
-              {
-                text: 'Tuples',
-                link: '/guide/types/tuples',
-              },
-              {
-                text: 'Raw Slice',
-                link: '/guide/types/raw-slice',
-              },
-              {
-                text: 'Structs',
-                link: '/guide/types/structs',
-              },
-              {
-                text: 'Vectors',
-                link: '/guide/types/vectors',
-              },
-              {
-                text: 'Date Time',
-                link: '/guide/types/date-time',
-              },
-              {
-                text: 'Native Parameters',
-                link: '/guide/types/native-parameters',
-              },
-            ],
-          },
-          {
-            text: 'Abi Typegen',
-            link: '/guide/abi-typegen/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Generating Types from ABI',
-                link: '/guide/abi-typegen/generating-types-from-abi',
-              },
-              {
-                text: 'Using Generated Types',
-                link: '/guide/abi-typegen/using-generated-types',
-              },
-            ],
-          },
-          {
-            text: 'Wallets',
-            link: '/guide/wallets/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Access',
-                link: '/guide/wallets/access',
-              },
-              {
-                text: 'Checking Balances And Coins',
-                link: '/guide/wallets/checking-balances-and-coins',
-              },
-              {
-                text: 'Encrypting and Decrypting JSON Wallets',
-                link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
-              },
-              {
-                text: 'Mnemonic Wallet',
-                link: '/guide/wallets/mnemonic-wallet',
-              },
-              {
-                text: 'Private Keys',
-                link: '/guide/wallets/private-keys',
-              },
-              {
-                text: 'Signing',
-                link: '/guide/wallets/signing',
-              },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
-            ],
-          },
-          {
-            text: 'Wallet Manager',
-            link: '/guide/wallet-manager/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Getting Started With Wallet Manager',
-                link: '/guide/wallet-manager/getting-started-with-wallet-manager',
-              },
-              {
-                text: 'Locking And Unlocking Wallet Manager',
-                link: '/guide/wallet-manager/locking-and-unlocking-wallet-manager',
-              },
-            ],
-          },
           {
             text: 'Providers',
             link: '/guide/providers/',
@@ -258,6 +82,117 @@ export default defineConfig({
               },
             ],
           },
+          // {
+          //   text: 'GraphQL',
+          //   link: '/guide/graphql/', // need to add
+          //   collapsed: true,
+          //   items: [
+          //     {
+          //       text: 'Schema',
+          //       link: '/guide/graphql/schema', // need to add
+          //     },
+          //     {
+          //       text: 'Playground',
+          //       link: '/guide/graphql/playground', // need to add
+          //     },
+          //     {
+          //       text: 'Custom Queries',
+          //       link: '/guide/graphql/custom-queries', // need to add
+          //     },
+          //     {
+          //       text: 'Subscriptions',
+          //       link: '/guide/graphql/subscriptions', // need to add
+          //     }
+          //   ],
+          // },
+          {
+            text: 'Wallets',
+            link: '/guide/wallets/',
+            collapsed: true,
+            items: [
+              // Deprecated?
+              // {
+              //   text: 'Access',
+              //   link: '/guide/wallets/access',
+              // },
+              {
+                text: 'Private Keys',
+                link: '/guide/wallets/private-keys',
+              },
+              {
+                text: 'Mnemonic Wallet',
+                link: '/guide/wallets/mnemonic-wallet',
+              },
+              {
+                text: 'Encrypting and Decrypting JSON Wallets',
+                link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
+              },
+              {
+                text: 'Checking Balances',
+                link: '/guide/wallets/checking-balances-and-coins',
+              },
+              {
+                text: 'Wallet Manager',
+                link: '/guide/wallet-manager/',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Getting Started With Wallet Manager',
+                    link: '/guide/wallet-manager/getting-started-with-wallet-manager',
+                  },
+                  {
+                    text: 'Locking And Unlocking Wallet Manager',
+                    link: '/guide/wallet-manager/locking-and-unlocking-wallet-manager',
+                  },
+                ],
+              },
+              // New page
+              // {
+              //   text: 'Locking & Unlocking',
+              //   link: '/guide/wallets/locking-and-unlocking',
+              // },
+              {
+                text: 'Signing', // change to "Signing Transactions"
+                link: '/guide/wallets/signing',
+              },
+              // New page
+              // {
+              //   text: 'External Connectors',
+              //   link: '/guide/wallets/external-connectors',
+              // },
+              {
+                text: 'Test Wallets',
+                link: '/guide/wallets/test-wallets',
+              },
+            ],
+          },
+          {
+            text: 'ABI',
+            link: '/guide/abi-typegen/',  // change dir name to abi
+            collapsed: true,
+            items: [
+              // New page
+              // {
+              //   text: 'The JSON ABI file',
+              //   link: '/guide/abi-typegen/the-json-abi-file',
+              // },
+              {
+                text: 'Generating Types',
+                link: '/guide/abi-typegen/generating-types-from-abi',
+              },
+              {
+                text: 'Using Generated Types',
+                link: '/guide/abi-typegen/using-generated-types',
+              },
+            ],
+          },
+        ]
+      },
+      {
+        text: 'Essentials',
+        link: '/essentials/',
+        items: [
+          // Review required
           {
             text: 'Contracts',
             link: '/guide/contracts/',
@@ -333,63 +268,7 @@ export default defineConfig({
               },
             ],
           },
-          {
-            text: 'Addresses',
-            link: '/guide/addresses/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Conversion',
-                link: 'guide/addresses/conversion',
-              },
-            ],
-          },
-          {
-            text: 'Cookbook',
-            link: '/guide/cookbook/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Transferring Assets',
-                link: '/guide/cookbook/transferring-assets',
-              },
-              {
-                text: 'Custom Transactions',
-                link: '/guide/cookbook/custom-transactions',
-              },
-              {
-                text: 'Custom Transactions from Contract Calls',
-                link: '/guide/cookbook/custom-transactions-from-contract-calls',
-              },
-              {
-                text: 'Deposit And Withdraw',
-                link: '/guide/cookbook/deposit-and-withdraw',
-              },
-              {
-                text: 'Wallet SDK and React Hooks',
-                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
-              },
-            ],
-          },
-          {
-            text: 'Predicates',
-            link: '/guide/predicates/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Send And Spend Funds From Predicates',
-                link: '/guide/predicates/send-and-spend-funds-from-predicates',
-              },
-              {
-                text: 'Predicate With Configurable Constants',
-                link: '/guide/predicates/predicate-with-configurable-constants',
-              },
-              {
-                text: 'Predicate with More Complex Args',
-                link: '/guide/predicates/predicate-with-more-complex-args',
-              },
-            ],
-          },
+          // Review required
           {
             text: 'Scripts',
             link: '/guide/scripts/',
@@ -413,6 +292,205 @@ export default defineConfig({
               },
             ],
           },
+          // Review required
+          {
+            text: 'Predicates',
+            link: '/guide/predicates/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Send And Spend Funds From Predicates',
+                link: '/guide/predicates/send-and-spend-funds-from-predicates',
+              },
+              {
+                text: 'Predicate With Configurable Constants',
+                link: '/guide/predicates/predicate-with-configurable-constants',
+              },
+              {
+                text: 'Predicate with More Complex Args',
+                link: '/guide/predicates/predicate-with-more-complex-args',
+              },
+            ],
+          },
+          {
+            text: 'Tutorials',
+            link: '/guide/cookbook/', // change dir
+            collapsed: true,
+            items: [
+              {
+                text: 'Transferring Assets',
+                link: '/guide/cookbook/transferring-assets',
+              },
+              {
+                text: 'Deposit And Withdraw',
+                link: '/guide/cookbook/deposit-and-withdraw',
+              },
+              {
+                text: 'Wallet SDK and React Hooks',
+                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
+              },
+
+              // Deprecated?
+              // {
+              //   text: 'Custom Transactions',
+              //   link: '/guide/cookbook/custom-transactions',
+              // },
+              // {
+              //   text: 'Custom Transactions from Contract Calls',
+              //   link: '/guide/cookbook/custom-transactions-from-contract-calls',
+              // },
+            ],
+          },
+        ],
+
+      },
+      {
+        text: 'Extras',
+        link: '/extras/', // new dir required
+        items: [
+          {
+            text: 'Types',
+            link: '/guide/types/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Address',
+                link: '/guide/types/address',
+              },
+              {
+                text: 'Arrays',
+                link: '/guide/types/arrays',
+              },
+              {
+                text: 'Asset Id',
+                link: '/guide/types/asset-id',
+              },
+              {
+                text: 'Bech32',
+                link: '/guide/types/bech32',
+              },
+  
+              {
+                text: 'Bits256',
+                link: '/guide/types/bits256',
+              },
+              {
+                text: 'Bits512',
+                link: '/guide/types/bits512',
+              },
+              {
+                text: 'Bytes',
+                link: '/guide/types/bytes',
+              },
+              {
+                text: 'Bytes32',
+                link: '/guide/types/bytes32',
+              },
+              {
+                text: 'Enums',
+                link: '/guide/types/enums',
+              },
+              {
+                text: 'Evm Address',
+                link: '/guide/types/evm-address',
+              },
+              {
+                text: 'Native Parameters',
+                link: '/guide/types/native-parameters',
+              },
+              {
+                text: 'Numbers',
+                link: '/guide/types/numbers',
+              },
+              {
+                text: 'Options',
+                link: '/guide/types/options',
+              },
+              {
+                text: 'Raw Slice',
+                link: '/guide/types/raw-slice',
+              },
+              {
+                text: 'Std String',
+                link: '/guide/types/std-string',
+              },
+              {
+                text: 'String',
+                link: '/guide/types/string',
+              },
+              {
+                text: 'Structs',
+                link: '/guide/types/structs',
+              },
+              {
+                text: 'Tuples',
+                link: '/guide/types/tuples',
+              },
+              {
+                text: 'Vectors',
+                link: '/guide/types/vectors',
+              },
+            ],
+          },
+          // {
+          //   text: 'Errors',
+          //   link: '/guide/errors/',
+          //   collapsed: true,
+          //   items: [
+          //     {
+          //       text: 'Error Codes',
+          //       link: '/guide/errors/error-codes',
+          //     },
+          //     {
+          //       text: 'Revert Errors',
+          //       link: '/guide/errors/revert-errors',
+          //     },
+          //   ],
+          // },
+          {
+            text: 'Messages',
+            link: '/guide/messages/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Getting a Message Proof',
+                link: '/guide/messages/getting-a-message-proof',
+              },
+              {
+                text: 'Getting All Resources',
+                link: '/guide/messages/getting-all-resources',
+              },
+              {
+                text: 'Getting Messages',
+                link: '/guide/messages/getting-messages',
+              },
+            ],
+          },
+          {
+            text: 'Utilities',
+            link: '/guide/utilities/',
+            collapsed: true,
+            items: [
+              // {
+              //   text: 'Big Number conversions',
+              //   link: '/guide/utilities/big-number-conversions', // New page
+              // },
+              {
+                text: 'Date time conversion',
+                link: '/guide/types/date-time',
+              },
+              {
+                text: 'Address conversion',
+                link: '/guide/addresses/conversion',
+              }
+            ]
+          }
+        ]
+      },
+      {
+        text: 'Tooling',
+        link: '/tooling/',  // new dir required
+        items: [
           {
             text: 'Testing',
             link: '/guide/testing/',
@@ -433,25 +511,59 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Messages',
-            link: '/guide/messages/',
+            text: 'Testing',
+            link: '/guide/testing/',
             collapsed: true,
             items: [
               {
-                text: 'Getting a Message Proof',
-                link: '/guide/messages/getting-a-message-proof',
+                text: 'Launching nodes',
+                link: '/guide/testing/launching-nodes',
               },
               {
-                text: 'Getting All Resources',
-                link: '/guide/messages/getting-all-resources',
+                text: 'Launching test nodes',
+                link: '/guide/testing/launching-test-nodes',
               },
               {
-                text: 'Getting Messages',
-                link: '/guide/messages/getting-messages',
+                text: 'Generate test wallets',
+                link: '/guide/testing/generate-test-wallets',
               },
+              {
+                text: 'Test Utilities',
+                link: '/guide/testing/test-utilities',
+              }
+            ]
+          },
+          {
+            text: 'CLI',
+            link: '/guide/cli/',
+            collapsed: true,
+            // Review required
+            items: [
+              {
+                text: 'create fuels',
+                link: '/guide/quickstart/', //placeholder
+                collapsed: true,
+              },
+              {
+                text: 'fuels',
+                link: '/guide/quickstart/', //placeholder
+                collapsed: true,
+              },
+              // {
+              //   text: 'Commands',
+              //   link: '/guide/cli/commands',
+              // },
+              // {
+              //   text: 'Config File',
+              //   link: '/guide/cli/config-file',
+              // },
+              // {
+              //   text: 'Built-in Binaries',
+              //   link: '/guide/cli/built-in-binaries',
+              // },
             ],
           },
-        ],
+        ]
       },
       apiLinks,
     ],
