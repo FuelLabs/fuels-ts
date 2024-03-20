@@ -74,5 +74,5 @@ jobs:
         with:
           workflow: update-sdk-manual.yaml
           repo: FuelLabs/fuels-wallet
-          inputs: '{ "packages": "fuels", "npm-tag": "${{ steps.release_name.outputs.replaced }}" }'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          inputs: '{ "publisher": "fuels-ts", "issue": "${{ github.event.pull_request.number }}", "packages": "fuels", "npm-tag": "${{ steps.release_name.outputs.replaced }}" }'
+          token: ${{ secrets.REPO_TOKEN }}
