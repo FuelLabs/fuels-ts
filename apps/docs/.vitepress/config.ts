@@ -315,23 +315,27 @@ export default defineConfig({
               },
             ],
           },
-          // Review required
           {
             text: 'Predicates',
-            link: '/guide/predicates/',
+            link: '/essentials/predicates/',
             collapsed: true,
             items: [
+              // {
+              //   text: 'Instantiating A Predicate',
+              //   link: '/guide/predicates/instantiating-a-predicate',
+              // },
               {
                 text: 'Send And Spend Funds From Predicates',
-                link: '/guide/predicates/send-and-spend-funds-from-predicates',
+                link: '/essentials/predicates/send-and-spend-funds-from-predicates',
               },
               {
                 text: 'Predicate With Configurable Constants',
-                link: '/guide/predicates/predicate-with-configurable-constants',
+                link: '/essentials/predicates/predicate-with-configurable-constants',
               },
+              // Not in Notion
               {
                 text: 'Predicate with More Complex Args',
-                link: '/guide/predicates/predicate-with-more-complex-args',
+                link: '/essentials/predicates/predicate-with-more-complex-args',
               },
             ],
           },
