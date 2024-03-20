@@ -526,44 +526,39 @@ export default defineConfig({
         items: [
           {
             text: 'Testing',
-            link: '/guide/testing/',
+            link: '/tooling/testing/',
             collapsed: true,
             items: [
+              // {
+              //   text: 'Launching nodes',
+              //   link: '/tooling/testing/launching-nodes',
+              // },
+              // {
+              //   text: 'Launching test nodes',
+              //   link: '/tooling/testing/launching-test-nodes',
+              // },
+              // {
+              //   text: 'Generate test wallets',
+              //   link: '/tooling/testing/generate-test-wallets',
+              // },
+              // {
+              //   text: 'Test Utilities',
+              //   link: '/tooling/testing/test-utilities',
+              // },
+
+              // Deprecated?
               {
                 text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
+                link: '/tooling/testing/testing-in-ts',
               },
               {
                 text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
+                link: '/tooling/testing/setting-up-a-custom-chain',
               },
               {
                 text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
+                link: '/tooling/testing/tweaking-the-blockchain',
               },
-            ],
-          },
-          {
-            text: 'Testing',
-            link: '/guide/testing/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Launching nodes',
-                link: '/guide/testing/launching-nodes',
-              },
-              {
-                text: 'Launching test nodes',
-                link: '/guide/testing/launching-test-nodes',
-              },
-              {
-                text: 'Generate test wallets',
-                link: '/guide/testing/generate-test-wallets',
-              },
-              {
-                text: 'Test Utilities',
-                link: '/guide/testing/test-utilities',
-              }
             ]
           },
           {
