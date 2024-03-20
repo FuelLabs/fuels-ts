@@ -364,21 +364,21 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Tutorials',
-            link: '/guide/cookbook/', // change dir
+            text: 'Cookbook',
+            link: '/essentials/cookbook/', // change dir
             collapsed: true,
             items: [
               {
                 text: 'Transferring Assets',
-                link: '/guide/cookbook/transferring-assets',
+                link: '/essentials/cookbook/transferring-assets',
               },
               {
                 text: 'Deposit And Withdraw',
-                link: '/guide/cookbook/deposit-and-withdraw',
+                link: '/essentials/cookbook/deposit-and-withdraw',
               },
               {
                 text: 'Wallet SDK and React Hooks',
-                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
+                link: '/essentials/cookbook/wallet-sdk-and-react-hooks',
               },
 
               // Deprecated?
