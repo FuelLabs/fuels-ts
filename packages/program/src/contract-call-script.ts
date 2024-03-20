@@ -131,10 +131,7 @@ const getMainCallReceipt = (
 const scriptResultDecoder =
   (contractId: AbstractAddress, isOutputDataHeap: boolean) => (result: ScriptResult) => {
     if (toNumber(result.code) !== 0) {
-      throw new FuelError(
-        ErrorCode.TRANSACTION_ERROR,
-        `Execution of the script associated with contract ${contractId} resulted in a non-zero exit code: ${result.code}.`
-      );
+      throw new FuelError(ErrorCode.SCRIPT_REVERTED, `Transaction reverted.`);
     }
 
     const mainCallResult = getMainCallReceipt(
