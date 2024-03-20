@@ -31,6 +31,7 @@
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
     "prettier:check": "prettier --check packages",
     "prettier:format": "prettier --write packages",
+    "verify:package-distro": "tsx ./scripts/verify-package-distro",
     "changeset:publish": "changeset publish --no-git-tag",
     "changeset:next": "tsx ./scripts/changeset-next",
     "changeset:version-with-docs": "tsx ./scripts/changeset-version-with-docs",
