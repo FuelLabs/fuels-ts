@@ -34,7 +34,7 @@
   "scripts": {
     "prebuild": "tsx ./scripts/rewriteVersions.ts",
     "build": "tsup",
-    "postbuild": "tsx ../../scripts/postbuild.ts"
+    "postbuild": "tsup --config tsup.config.dts.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {

@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "tsup && pnpm vite build",
-    "postbuild": "tsx ../../scripts/postbuild.ts",
+    "postbuild": "tsup --config tsup.config.dts.ts",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
