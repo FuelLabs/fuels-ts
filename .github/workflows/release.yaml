@@ -1,15 +1,17 @@
 name: "Release"
 
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows: "Test"
+    types: completed
+    branches: master
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
     name: "Release"
+    if: ${{ github.event.workflow_run.conclusion == 'success'}}
     runs-on: ubuntu-latest
     permissions: write-all
     environment:
