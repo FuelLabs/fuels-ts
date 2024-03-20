@@ -1,3 +1,4 @@
+import type { BN } from 'fuels';
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
@@ -24,7 +25,7 @@ describe('launching a test node', () => {
 
     const response = await contract.functions.get_count().call();
     // #endregion deploy-contract
-    expect(response.value).toBe(0);
+    expect((response.value as BN).toNumber()).toBe(0);
     expect(provider).toBeDefined();
     expect(wallets).toBeDefined();
   });
@@ -76,7 +77,7 @@ describe('launching a test node', () => {
   test('configuring a base chain config', async () => {
     const chainConfigPath = join(
       __dirname,
-      '../../../../',
+      '../../../../../',
       '.fuel-core',
       'configs',
       'chainConfig.json'
