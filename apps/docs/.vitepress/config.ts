@@ -577,10 +577,10 @@ export default defineConfig({
                 link: '/tooling/cli/fuels/',
                 collapsed: true,
                 items: [
-              {
+                  {
                     text: 'Config File',
                     link: '/tooling/cli/fuels/config-file',
-              },
+                  },
                   {
                     text: 'Commands',
                     link: '/tooling/cli/fuels/commands',
