@@ -16,7 +16,7 @@ enum MixedEnum {
     Data: u16,
 }
 
-struct DeeperStruct { 
+struct DeeperStruct {
     a: u8,
     b: u16,
     c: u32,

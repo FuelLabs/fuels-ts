@@ -1,5 +1,11 @@
 [workspace]
-members = ["predicate-echo", "script-echo", "script-print", "logging", "contract-echo"]
+members = [
+  "predicate-echo",
+  "script-echo",
+  "script-print",
+  "logging",
+  "contract-echo",
+]
 
 [patch.'https://github.com/fuellabs/sway']
 std = { git = "https://github.com/fuellabs/sway", branch = "xunilrj/remove-method-name-log" }
