@@ -77,7 +77,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           )}
 
           <div className="ml-auto">
-            <WalletDisplay wallet={wallet} walletBalance={walletBalance} />
+            <WalletDisplay />
           </div>
 
           {showTopUpButton && (

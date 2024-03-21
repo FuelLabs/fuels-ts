@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import type { WalletUnlocked, WalletLocked, BN } from "fuels";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 
 const getTruncatedAddress = (address: string) => {
   return address.slice(0, 6) + "..." + address.slice(-4);
@@ -10,13 +10,9 @@ const copyToClipboard = (text: string) => {
   toast.success("Address copied to clipboard");
 };
 
-export const WalletDisplay = ({
-  wallet,
-  walletBalance,
-}: {
-  wallet?: WalletUnlocked | WalletLocked;
-  walletBalance?: BN;
-}) => {
+export const WalletDisplay = () => {
+  const { wallet, walletBalance } = useActiveWallet();
+
   if (!wallet) {
     return null;
   }
