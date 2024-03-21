@@ -76,6 +76,13 @@ jobs:
           RELEASE_TAG: v${{ env.BUILD_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
+          
+      - name: Delete the release branch
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') == 'true'
+        run: |
+          git push origin --delete ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       - name: Release to @next tag on npm
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'

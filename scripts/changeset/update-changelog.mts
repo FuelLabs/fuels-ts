@@ -57,7 +57,9 @@ await (async () => {
       ...github.context.repo,
       tag: RELEASE_TAG,
     });
-
+    
+    execSync("git fetch --tags")
+    
     const commit = execSync(`git rev-list --no-walk ${RELEASE_TAG}`)
       .toString()
       .trim();
