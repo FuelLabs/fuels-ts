@@ -3,11 +3,11 @@ import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
-import { AppContext } from "@/components/Layout";
 import toast from "react-hot-toast";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 
 const contractId = contractIds.testContract;
 
@@ -16,22 +16,16 @@ const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
 const hasScript = process.env.NEXT_PUBLIC_HAS_SCRIPT === "true";
 
 export default function Home() {
-  const {
-    burnerWallet,
-    burnerWalletBalance,
-    browserWallet,
-    browserWalletBalance,
-    activeWallet,
-  } = useContext(AppContext);
+  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
   const [contract, setContract] = useState<TestContractAbi>();
   const [counter, setCounter] = useState<number>();
 
   useEffect(() => {
     (async () => {
-      if (hasContract && burnerWallet) {
+      if (hasContract && wallet) {
         const testContract = TestContractAbi__factory.connect(
           contractId,
-          browserWallet || burnerWallet,
+          wallet,
         );
         setContract(testContract);
         const { value } = await testContract.functions.get_count().get();
@@ -40,7 +34,7 @@ export default function Home() {
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [browserWallet, burnerWallet]);
+  }, [wallet]);
 
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
@@ -48,10 +42,7 @@ export default function Home() {
       return toast.error("Contract not loaded");
     }
 
-    const balanceToCheck =
-      activeWallet === "burner" ? burnerWalletBalance : browserWalletBalance;
-
-    if (balanceToCheck?.eq(0)) {
+    if (walletBalance?.eq(0)) {
       return toast.error(
         "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
       );
@@ -59,6 +50,8 @@ export default function Home() {
 
     const { value } = await contract.functions.increment_counter(bn(1)).call();
     setCounter(value.toNumber());
+
+    await refreshWalletBalance?.();
   };
 
   return (

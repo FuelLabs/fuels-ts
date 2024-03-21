@@ -1,13 +1,15 @@
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { AppContext } from "@/components/Layout";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { BN, bn } from "fuels";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Faucet() {
-  const { faucetWallet, refreshBurnerWalletBalance, burnerWallet } =
-    useContext(AppContext);
+  const { faucetWallet } = useContext(AppContext);
+
+  const { refreshWalletBalance } = useActiveWallet();
 
   const [receiverAddress, setReceiverAddress] = useState<string>();
   const [amountToSend, setAmountToSend] = useState<BN>();
@@ -30,14 +32,8 @@ export default function Faucet() {
 
     toast.success("Funds sent!");
 
-    await refreshBurnerWalletBalance?.();
+    await refreshWalletBalance?.();
   };
-
-  useEffect(() => {
-    if (burnerWallet) {
-      setReceiverAddress(burnerWallet.address.toB256() as string);
-    }
-  }, [burnerWallet]);
 
   return (
     <>

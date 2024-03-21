@@ -1,15 +1,15 @@
 import { Button } from "@/components/Button";
 import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
-import { AppContext } from "@/components/Layout";
 import { Link } from "@/components/Link";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { TestScriptAbi__factory } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function ScriptExample() {
-  const { burnerWallet, browserWallet } = useContext(AppContext);
+  const { wallet } = useActiveWallet();
 
   const [script, setScript] = useState<Script<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<string>();
@@ -17,16 +17,14 @@ export default function ScriptExample() {
 
   useEffect(() => {
     (async () => {
-      if (burnerWallet) {
-        const script = TestScriptAbi__factory.createInstance(
-          browserWallet || burnerWallet,
-        );
+      if (wallet) {
+        const script = TestScriptAbi__factory.createInstance(wallet);
         setScript(script);
       }
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [burnerWallet, browserWallet]);
+  }, [wallet]);
 
   const runScript = async () => {
     try {

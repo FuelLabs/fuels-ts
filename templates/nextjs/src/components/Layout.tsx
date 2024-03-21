@@ -1,60 +1,29 @@
-import { BN, Provider, Wallet, WalletLocked, WalletUnlocked } from "fuels";
+import { Provider, Wallet, WalletUnlocked } from "fuels";
 import { createContext, useEffect, useState } from "react";
-import { BurnerWallet } from "./BurnerWallet";
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
 import { NODE_URL } from "@/lib";
 import { useConnectUI, useDisconnect } from "@fuel-wallet/react";
 import { WalletDisplay } from "./WalletDisplay";
-import { useBurnerWallet } from "@/hooks/useBurnerWallet";
 import { useBrowserWallet } from "@/hooks/useBrowserWallet";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 
 export const AppContext = createContext<{
   faucetWallet?: WalletUnlocked;
   setFaucetWallet?: (wallet: WalletUnlocked) => void;
-
-  burnerWallet?: WalletUnlocked;
-  burnerWalletBalance?: BN;
-  refreshBurnerWalletBalance?: () => Promise<void>;
-
-  browserWallet?: WalletLocked;
-  browserWalletBalance?: BN;
-  refreshBrowserWalletBalance?: () => Promise<void>;
-
-  activeWallet: "burner" | "connected";
-}>({
-  activeWallet: "burner",
-});
+}>({});
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [faucetWallet, setFaucetWallet] = useState<WalletUnlocked>();
 
-  const { burnerWallet, burnerWalletBalance, refreshBurnerWalletBalance } =
-    useBurnerWallet();
-
-  const {
-    browserWallet,
-    browserWalletBalance,
-    isBrowserWalletConnected,
-    refreshBrowserWalletBalance,
-    browserWalletNetwork,
-  } = useBrowserWallet();
+  const { browserWallet, isBrowserWalletConnected, browserWalletNetwork } =
+    useBrowserWallet();
 
   const { connect } = useConnectUI();
   const { disconnect } = useDisconnect();
 
-  const [activeWallet, setActiveWallet] = useState<"burner" | "connected">(
-    "burner",
-  );
-
-  useEffect(() => {
-    if (browserWallet) {
-      setActiveWallet("connected");
-    } else {
-      setActiveWallet("burner");
-    }
-  }, [browserWallet]);
+  const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
 
   useEffect(() => {
     (async () => {
@@ -66,9 +35,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     })().catch(console.error);
   }, [faucetWallet]);
 
-  const topUpWallet = async (walletType: "burner" | "connected") => {
-    const wallet = walletType === "burner" ? burnerWallet : browserWallet;
-
+  const topUpWallet = async () => {
     if (!wallet) {
       return console.error("Unable to topup wallet because wallet is not set.");
     }
@@ -82,16 +49,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
     toast.success("Wallet topped up!");
 
-    if (walletType === "burner") {
-      await refreshBurnerWalletBalance?.();
-    } else {
-      await refreshBrowserWalletBalance?.();
-    }
+    await refreshWalletBalance?.();
   };
 
-  const shouldShowTopUpButton =
-    (browserWallet && browserWalletBalance?.lt(10_000)) ||
-    (!browserWallet && burnerWallet && burnerWalletBalance?.lt(10_000));
+  const shouldShowTopUpButton = walletBalance?.lt(10_000);
 
   const shouldShowAddNetworkButton =
     browserWallet &&
@@ -109,13 +70,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       value={{
         faucetWallet,
         setFaucetWallet,
-        burnerWallet,
-        burnerWalletBalance,
-        refreshBurnerWalletBalance,
-        browserWallet,
-        browserWalletBalance,
-        refreshBrowserWalletBalance,
-        activeWallet,
       }}
     >
       <Toaster />
@@ -139,24 +93,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           )}
 
           <div className="ml-auto">
-            {isBrowserWalletConnected ? (
-              <WalletDisplay
-                wallet={browserWallet}
-                walletBalance={browserWalletBalance}
-              />
-            ) : (
-              <BurnerWallet />
-            )}
+            <WalletDisplay wallet={wallet} walletBalance={walletBalance} />
           </div>
 
           {shouldShowTopUpButton && (
-            <Button
-              onClick={() =>
-                topUpWallet(isBrowserWalletConnected ? "connected" : "burner")
-              }
-            >
-              Top-up Wallet
-            </Button>
+            <Button onClick={() => topUpWallet()}>Top-up Wallet</Button>
           )}
         </nav>
 
