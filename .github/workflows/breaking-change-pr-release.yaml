@@ -75,5 +75,5 @@ jobs:
           workflow: update-sdk-manual.yaml
           ref: master
           repo: FuelLabs/fuels-wallet
-          inputs: '{ "publisher": "${{ github.event.repository.name }}", "issue": "${{ github.event.pull_request.number }}", "packages": "fuels", "npm-tag": "${{ steps.release_name.outputs.replaced }}" }'
+          inputs: '{ "publisher": "${{ github.event.repository.name }}", "issue": "${{ github.event.pull_request.number }}", "packages": "fuels", "tag": "${{ steps.release_name.outputs.replaced }}" }'
           token: ${{ secrets.REPO_TOKEN }}
