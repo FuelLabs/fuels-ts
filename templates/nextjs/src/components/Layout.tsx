@@ -1,5 +1,3 @@
-import { Provider, Wallet, WalletUnlocked } from "fuels";
-import { createContext, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
@@ -8,14 +6,10 @@ import { useConnectUI, useDisconnect } from "@fuel-wallet/react";
 import { WalletDisplay } from "./WalletDisplay";
 import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-
-export const AppContext = createContext<{
-  faucetWallet?: WalletUnlocked;
-  setFaucetWallet?: (wallet: WalletUnlocked) => void;
-}>({});
+import { useFaucet } from "@/hooks/useFaucet";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [faucetWallet, setFaucetWallet] = useState<WalletUnlocked>();
+  const { faucetWallet } = useFaucet();
 
   const { browserWallet, isBrowserWalletConnected, browserWalletNetwork } =
     useBrowserWallet();
@@ -24,16 +18,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { disconnect } = useDisconnect();
 
   const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
-
-  useEffect(() => {
-    (async () => {
-      if (!faucetWallet) {
-        const provider = await Provider.create(NODE_URL);
-        const wallet = Wallet.fromPrivateKey("0x01", provider);
-        setFaucetWallet(wallet);
-      }
-    })().catch(console.error);
-  }, [faucetWallet]);
 
   const topUpWallet = async () => {
     if (!wallet) {
@@ -66,12 +50,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider
-      value={{
-        faucetWallet,
-        setFaucetWallet,
-      }}
-    >
+    <>
       <Toaster />
       <div className="flex flex-col">
         <nav className="flex justify-between items-center p-4 bg-black text-white gap-6">
@@ -105,6 +84,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </div>
       </div>
-    </AppContext.Provider>
+    </>
   );
 };

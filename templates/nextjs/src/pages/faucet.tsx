@@ -1,13 +1,13 @@
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { AppContext } from "@/components/Layout";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useFaucet } from "@/hooks/useFaucet";
 import { BN, bn } from "fuels";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Faucet() {
-  const { faucetWallet } = useContext(AppContext);
+  const { faucetWallet } = useFaucet();
 
   const { refreshWalletBalance } = useActiveWallet();
 
