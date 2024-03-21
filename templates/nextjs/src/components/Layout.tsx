@@ -7,6 +7,7 @@ import { WalletDisplay } from "./WalletDisplay";
 import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
+import Head from "next/head";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();
@@ -51,6 +52,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
+      <Head>
+        <title>Fuel App</title>
+        <link rel="icon" href="/fuel.ico" />
+      </Head>
       <Toaster />
       <div className="flex flex-col">
         <nav className="flex justify-between items-center p-4 bg-black text-white gap-6">
