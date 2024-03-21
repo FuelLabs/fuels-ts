@@ -55,14 +55,21 @@ struct MixedStruct {
     tuple: (u8, u16, u32, str[4]),
     vec_u8: Vec<u8>,
     deep: DeeperStruct,
+    str_slice: str,
 }
 
 abi MyContract {
     fn echo_struct(param: MixedStruct) -> MixedStruct;
+    fn test_revert() -> bool;
 }
 
 impl MyContract for Contract {
     fn echo_struct(param: MixedStruct) -> MixedStruct {
         param
+    }
+
+    fn test_revert() -> bool {
+        require(false, "This is a revert error");
+        true
     }
 }

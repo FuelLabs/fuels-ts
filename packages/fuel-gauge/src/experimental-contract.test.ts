@@ -1,7 +1,6 @@
-import { randomBytes } from 'crypto';
 import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
-import { bn, hexlify } from 'fuels';
+import { bn } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
@@ -51,6 +50,7 @@ describe('Experimental Contract', () => {
       bytes: Uint8Array.from([40, 41, 42]),
       tuple: [U8_MAX, U16_MAX, U32_MAX, 'fuel'],
       vec_u8: [40, 41, 42],
+      str_slice: 'fuel',
       deep: {
         a: U8_MAX,
         b: U16_MAX,
@@ -74,5 +74,11 @@ describe('Experimental Contract', () => {
 
     const { value } = await contractInstance.functions.echo_struct(struct).call();
     expect(value).toStrictEqual(struct);
+  });
+
+  it('extracts str slice from revert', async () => {
+    await expect(contractInstance.functions.test_revert().call()).rejects.toThrow(
+      /The script reverted with reason RequireFailed/
+    );
   });
 });
