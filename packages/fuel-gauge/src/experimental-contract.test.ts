@@ -69,6 +69,10 @@ describe('Experimental Contract', () => {
         bytes: Uint8Array.from([40, 41, 42]),
         tuple: [U8_MAX, U16_MAX, U32_MAX, 'fuel'],
         vec_u8: [40, 41, 42],
+        even_deeper: {
+          nested_vec: [1, 2, 3, 4, 5],
+          nested_str: 'fuel labs',
+        },
       },
     };
 

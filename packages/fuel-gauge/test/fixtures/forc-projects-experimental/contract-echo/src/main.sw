@@ -16,6 +16,11 @@ enum MixedEnum {
     Data: u16,
 }
 
+struct EvenDeeperStruct {
+    nested_vec: Vec<u8>,
+    nested_str: str,
+}
+
 struct DeeperStruct {
     a: u8,
     b: u16,
@@ -34,6 +39,7 @@ struct DeeperStruct {
     bytes: Bytes,
     tuple: (u8, u16, u32, str[4]),
     vec_u8: Vec<u8>,
+    even_deeper: EvenDeeperStruct,
 }
 
 struct MixedStruct {
