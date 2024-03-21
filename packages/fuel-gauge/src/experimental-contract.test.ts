@@ -72,6 +72,7 @@ describe('Experimental Contract', () => {
         even_deeper: {
           nested_vec: [1, 2, 3, 4, 5],
           nested_str: 'fuel labs',
+          nested_raw: [88, 89, 90, 100],
         },
       },
     };

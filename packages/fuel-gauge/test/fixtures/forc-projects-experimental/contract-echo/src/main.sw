@@ -19,6 +19,7 @@ enum MixedEnum {
 struct EvenDeeperStruct {
     nested_vec: Vec<u8>,
     nested_str: str,
+    nested_raw: raw_slice,
 }
 
 struct DeeperStruct {
