@@ -1,4 +1,4 @@
-name: Release to @rc-<name> tag on npm
+name: Release to @rc-<pr_number> tag on npm
 
 on:
   pull_request:
@@ -37,18 +37,11 @@ jobs:
       - name: Release to @${{ steps.release_name.outputs.replaced }} tag on npm
         id: release
         run: |
-          echo "${{ steps.release_name.outputs.replaced }}"
-          echo "STEP 1"
           pnpm changeset:next
-          echo "STEP 2"
           git add .changeset/fuel-labs-ci.md
-          echo "STEP 3"
           pnpm changeset version --snapshot ${{ steps.release_name.outputs.replaced }}
-          echo "STEP 4"
           changetsets=$(pnpm changeset publish --tag ${{ steps.release_name.outputs.replaced }})
-          echo "STEP 5"
           published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-${{ steps.release_name.outputs.replaced }}-\d+' | head -1)
-          echo "STEP 6"
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
