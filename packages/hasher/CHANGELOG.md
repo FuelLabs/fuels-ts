@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.76.2
+
+### Patch Changes
+
+- @fuel-ts/address@0.76.2
+- @fuel-ts/crypto@0.76.2
+- @fuel-ts/interfaces@0.76.2
+- @fuel-ts/math@0.76.2
+- @fuel-ts/utils@0.76.2
+
 ## 0.76.1
 
 ### Patch Changes
