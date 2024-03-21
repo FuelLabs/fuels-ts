@@ -14,6 +14,7 @@ import {
   useWallet,
 } from "@fuel-wallet/react";
 import { WalletDisplay } from "./WalletDisplay";
+import { useBurnerWallet } from "@/hooks/useBurnerWallet";
 
 const BURNER_WALLET_LOCAL_STORAGE_KEY = "create-fuels-burner-wallet-pk";
 
@@ -22,7 +23,6 @@ export const AppContext = createContext<{
   setFaucetWallet?: (wallet: WalletUnlocked) => void;
 
   burnerWallet?: WalletUnlocked;
-  setBurnerWallet?: (wallet: WalletUnlocked) => void;
 
   burnerWalletBalance?: BN;
   setBurnerWalletBalance?: (balance: BN) => void;
@@ -45,8 +45,8 @@ export const AppContext = createContext<{
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [faucetWallet, setFaucetWallet] = useState<WalletUnlocked>();
 
-  const [burnerWallet, setBurnerWallet] = useState<WalletUnlocked>();
-  const [burnerWalletBalance, setBurnerWalletBalance] = useState<BN>();
+  const { burnerWallet, burnerWalletBalance, refreshBurnerWalletBalance } =
+    useBurnerWallet();
 
   const [initialTopupDone, setInitialTopupDone] = useState(false);
 
@@ -97,46 +97,16 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [faucetWallet]);
 
   useEffect(() => {
-    (async () => {
-      // check if burner wallet pk is stored in local storage
-      const burnerWalletPk = localStorage.getItem(
-        BURNER_WALLET_LOCAL_STORAGE_KEY,
-      );
-
-      let wallet: WalletUnlocked;
-
-      if (burnerWalletPk) {
-        const provider = await Provider.create(NODE_URL);
-        wallet = Wallet.fromPrivateKey(burnerWalletPk, provider);
-        setBurnerWallet(wallet);
-      } else {
-        // if not, create a new burner wallet
-        const provider = await Provider.create(NODE_URL);
-        wallet = Wallet.generate({ provider });
-
-        localStorage.setItem(
-          BURNER_WALLET_LOCAL_STORAGE_KEY,
-          wallet.privateKey,
-        );
-        setBurnerWallet(wallet);
-      }
-
-      const burnerWalletBalance = await wallet?.getBalance();
-      setBurnerWalletBalance(burnerWalletBalance);
-    })().catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (faucetWallet && burnerWalletBalance?.lt(10_000) && !initialTopupDone) {
+    if (
+      faucetWallet &&
+      burnerWalletBalance?.lt(10_000) &&
+      !initialTopupDone &&
+      activeWallet === "burner"
+    ) {
       topUpWallet("burner");
       setInitialTopupDone(true);
     }
-  }, [faucetWallet, burnerWalletBalance, initialTopupDone]);
-
-  const refreshBurnerWalletBalance = useCallback(async () => {
-    const burnerWalletBalance = await burnerWallet?.getBalance();
-    setBurnerWalletBalance(burnerWalletBalance);
-  }, [burnerWallet]);
+  }, [faucetWallet, burnerWalletBalance, initialTopupDone, activeWallet]);
 
   const refreshConnectedWalletBalance = useCallback(async () => {
     const connectedWalletBalance = await connectedWallet?.getBalance();
@@ -185,9 +155,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         faucetWallet,
         setFaucetWallet,
         burnerWallet,
-        setBurnerWallet,
         burnerWalletBalance,
-        setBurnerWalletBalance,
         refreshBurnerWalletBalance,
         connectedWallet,
         setConnectedWallet,
