@@ -23,5 +23,7 @@ export {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   calculateVmTxMemory,
+  ENCODING_V0,
+  ENCODING_V1,
 } from './utils/constants';
 export { BigNumberCoder } from './encoding/coders/v0/BigNumberCoder';

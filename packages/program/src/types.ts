@@ -12,6 +12,8 @@ export type ContractCall = {
   contractId: AbstractAddress;
   data: BytesLike;
   fnSelector: string;
+  fnSelectorBytes: Uint8Array;
+  encoding?: string;
   isInputDataPointer: boolean;
   isOutputDataHeap: boolean;
   outputEncodedLength: number;
