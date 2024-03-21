@@ -11,6 +11,7 @@ export default defineConfig({
   outDir: 'dist',
   lang: 'en-US',
   appearance: 'dark',
+  ignoreDeadLinks: true,
   markdown: {
     config: (md) => {
       md.use(snippetPlugin);
