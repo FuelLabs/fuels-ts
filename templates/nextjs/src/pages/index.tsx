@@ -8,6 +8,7 @@ import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import useAsync from "react-use/lib/useAsync";
 
 const contractId = contractIds.testContract;
 
@@ -20,20 +21,17 @@ export default function Home() {
   const [contract, setContract] = useState<TestContractAbi>();
   const [counter, setCounter] = useState<number>();
 
-  useEffect(() => {
-    (async () => {
-      if (hasContract && wallet) {
-        const testContract = TestContractAbi__factory.connect(
-          contractId,
-          wallet,
-        );
-        setContract(testContract);
-        const { value } = await testContract.functions.get_count().get();
-        setCounter(value.toNumber());
-      }
-
-      // eslint-disable-next-line no-console
-    })().catch(console.error);
+  /**
+   * useAsync is a wrapper around useEffect that allows us to run asynchronous code
+   * See: https://github.com/streamich/react-use/blob/master/docs/useAsync.md
+   */
+  useAsync(async () => {
+    if (hasContract && wallet) {
+      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      setContract(testContract);
+      const { value } = await testContract.functions.get_count().get();
+      setCounter(value.toNumber());
+    }
   }, [wallet]);
 
   // eslint-disable-next-line consistent-return

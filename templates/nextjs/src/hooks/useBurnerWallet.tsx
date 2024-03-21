@@ -1,6 +1,7 @@
 import { NODE_URL } from "@/lib";
 import { BN, Provider, Wallet, WalletUnlocked } from "fuels";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import useAsync from "react-use/lib/useAsync";
 
 const BURNER_WALLET_LOCAL_STORAGE_KEY = "create-fuels-burner-wallet-pk";
 
@@ -8,34 +9,29 @@ export const useBurnerWallet = () => {
   const [burnerWallet, setBurnerWallet] = useState<WalletUnlocked>();
   const [burnerWalletBalance, setBurnerWalletBalance] = useState<BN>();
 
-  useEffect(() => {
-    (async () => {
-      // check if burner wallet pk is stored in local storage
-      const burnerWalletPk = localStorage.getItem(
-        BURNER_WALLET_LOCAL_STORAGE_KEY,
-      );
+  useAsync(async () => {
+    // check if burner wallet pk is stored in local storage
+    const burnerWalletPk = localStorage.getItem(
+      BURNER_WALLET_LOCAL_STORAGE_KEY,
+    );
 
-      let wallet: WalletUnlocked;
+    let wallet: WalletUnlocked;
 
-      if (burnerWalletPk) {
-        const provider = await Provider.create(NODE_URL);
-        wallet = Wallet.fromPrivateKey(burnerWalletPk, provider);
-        setBurnerWallet(wallet);
-      } else {
-        // if not, create a new burner wallet
-        const provider = await Provider.create(NODE_URL);
-        wallet = Wallet.generate({ provider });
+    if (burnerWalletPk) {
+      const provider = await Provider.create(NODE_URL);
+      wallet = Wallet.fromPrivateKey(burnerWalletPk, provider);
+      setBurnerWallet(wallet);
+    } else {
+      // if not, create a new burner wallet
+      const provider = await Provider.create(NODE_URL);
+      wallet = Wallet.generate({ provider });
 
-        localStorage.setItem(
-          BURNER_WALLET_LOCAL_STORAGE_KEY,
-          wallet.privateKey,
-        );
-        setBurnerWallet(wallet);
-      }
+      localStorage.setItem(BURNER_WALLET_LOCAL_STORAGE_KEY, wallet.privateKey);
+      setBurnerWallet(wallet);
+    }
 
-      const burnerWalletBalance = await wallet?.getBalance();
-      setBurnerWalletBalance(burnerWalletBalance);
-    })().catch(console.error);
+    const burnerWalletBalance = await wallet?.getBalance();
+    setBurnerWalletBalance(burnerWalletBalance);
   }, []);
 
   const refreshBurnerWalletBalance = useCallback(async () => {

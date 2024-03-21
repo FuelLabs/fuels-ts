@@ -7,6 +7,7 @@ import { TestScriptAbi__factory } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useAsync from "react-use/lib/useAsync";
 
 export default function ScriptExample() {
   const { wallet } = useActiveWallet();
@@ -15,15 +16,11 @@ export default function ScriptExample() {
   const [input, setInput] = useState<string>();
   const [result, setResult] = useState<string>();
 
-  useEffect(() => {
-    (async () => {
-      if (wallet) {
-        const script = TestScriptAbi__factory.createInstance(wallet);
-        setScript(script);
-      }
-
-      // eslint-disable-next-line no-console
-    })().catch(console.error);
+  useAsync(async () => {
+    if (wallet) {
+      const script = TestScriptAbi__factory.createInstance(wallet);
+      setScript(script);
+    }
   }, [wallet]);
 
   const runScript = async () => {

@@ -8,6 +8,7 @@ import type { BN, InputValue, Predicate } from "fuels";
 import { BaseAssetId, bn } from "fuels";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useAsync from "react-use/lib/useAsync";
 
 export default function PredicateExample() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
@@ -18,18 +19,14 @@ export default function PredicateExample() {
 
   const [pin, setPin] = useState<string>();
 
-  useEffect(() => {
-    (async () => {
-      if (wallet) {
-        const predicate = TestPredicateAbi__factory.createInstance(
-          wallet.provider,
-        );
-        setPredicate(predicate);
-        setPredicateBalance(await predicate.getBalance());
-      }
-
-      // eslint-disable-next-line no-console
-    })().catch(console.error);
+  useAsync(async () => {
+    if (wallet) {
+      const predicate = TestPredicateAbi__factory.createInstance(
+        wallet.provider,
+      );
+      setPredicate(predicate);
+      setPredicateBalance(await predicate.getBalance());
+    }
   }, [wallet]);
 
   const refreshBalances = async () => {

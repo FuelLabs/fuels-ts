@@ -1,6 +1,7 @@
 import { useIsConnected, useNetwork, useWallet } from "@fuel-wallet/react";
 import { BN, WalletLocked } from "fuels";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import useAsync from "react-use/lib/useAsync";
 
 export const useBrowserWallet = () => {
   const { wallet }: { wallet: WalletLocked } = useWallet();
@@ -8,9 +9,9 @@ export const useBrowserWallet = () => {
   const { isConnected } = useIsConnected();
   const { network } = useNetwork();
 
-  useEffect(() => {
+  useAsync(async () => {
     if (wallet) {
-      wallet.getBalance().then(setBrowserWalletBalance);
+      await wallet.getBalance().then(setBrowserWalletBalance);
     }
   }, [wallet]);
 
