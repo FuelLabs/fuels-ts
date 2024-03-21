@@ -1,62 +1,47 @@
-import { green } from 'chalk';
 import { execSync } from 'child_process';
 
-import { fuelUpLink } from './fuelUpLink';
+const versionReg = /[0-9]+\.[0-9]+\.[0-9]/;
 
-const stdio = 'ignore';
-
-export function getSystemForc() {
-  let systemForcVersion: string | null = null;
+export const getSystemVersion = (command: string) => {
+  let version: string | null = null;
   let error: Error | null = null;
 
   try {
-    const reg = /[^0-9.]+/g;
-    systemForcVersion = execSync('forc --version', { stdio }).toString().replace(reg, '');
+    const contents = execSync(command).toString();
+    if (versionReg.test(contents)) {
+      version = contents.match(versionReg)?.[0] as string;
+    } else {
+      throw new Error(contents);
+    }
   } catch (err: unknown) {
     error = err as Error;
   }
+
+  return {
+    error,
+    version,
+  };
+};
+
+export function getSystemForc() {
+  const { error, version: v } = getSystemVersion('forc --version');
+  return { error, systemForcVersion: v };
+}
+
+export function getSystemFuelCore() {
+  const { error, version: v } = getSystemVersion('fuel-core --version');
+  return { error, systemFuelCoreVersion: v };
+}
+
+export function getSystemVersions() {
+  const { error: errorForc, systemForcVersion } = getSystemForc();
+  const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore();
+
+  const error = errorForc ?? errorCore;
 
   return {
     error,
     systemForcVersion,
-  };
-}
-
-export function getSystemFuelCore() {
-  let systemFuelCoreVersion: string | null = null;
-  let error: Error | null = null;
-
-  try {
-    const reg = /[^0-9.]+/g;
-    systemFuelCoreVersion = execSync('fuel-core --version', { stdio }).toString().replace(reg, '');
-  } catch (err: unknown) {
-    error = err as Error;
-  }
-
-  return {
-    error,
     systemFuelCoreVersion,
-  };
-}
-
-export function getSystemVersions() {
-  const { error } = console;
-
-  const { error: errorForc, systemForcVersion } = getSystemForc();
-  const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore();
-
-  const err = errorForc ?? errorCore;
-
-  if (err) {
-    error('Make sure you have Forc and Fuel-Core installed.');
-    error(`  ${green(fuelUpLink)}`);
-    throw err;
-  }
-
-  return {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    systemForcVersion: systemForcVersion!,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    systemFuelCoreVersion: systemFuelCoreVersion!,
   };
 }
