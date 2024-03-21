@@ -120,25 +120,25 @@ jobs:
           name: coverage-master
           path: coverage/report
 
-#      - name: Download Master Coverage Artifact
-#        uses: dawidd6/action-download-artifact@v2
-#        if: ${{ steps.findPr.outputs.number }}
-#        with:
-#          workflow: test.yaml
-#          branch: master
-#          name: coverage-master
-#          path: coverage-master
-#
-#      - name: Generate Coverage Diff
-#        if: ${{ (steps.findPr.outputs.number) }}
-#        run: pnpm test:coverage-diff
-#
-#      - name: Report Coverage
-#        uses: thollander/actions-comment-pull-request@v2
-#        if: ${{ steps.findPr.outputs.number }}
-#        with:
-#          filePath: coverage/report/coverage-diff.txt
-#          pr_number: ${{ (steps.findPr.outputs.number) }}
-#          comment_tag: diff
-#          mode: recreate
-#          create_if_not_exists: true
+      - name: Download Master Coverage Artifact
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          workflow: test.yaml
+          branch: master
+          name: coverage-master
+          path: coverage-master
+
+      - name: Generate Coverage Diff
+        if: ${{ (steps.findPr.outputs.number) }}
+        run: pnpm test:coverage-diff
+
+      - name: Report Coverage
+        uses: thollander/actions-comment-pull-request@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          filePath: coverage/report/coverage-diff.txt
+          pr_number: ${{ (steps.findPr.outputs.number) }}
+          comment_tag: diff
+          mode: recreate
+          create_if_not_exists: true
