@@ -54,12 +54,15 @@ export default defineConfig({
             text: 'Quickstart',
             link: '/quickstart',
           },
-
+          {
+            text: 'Glossary',
+            link: '/glossary',
+          }
         ],
       },
       {
         text: 'Basics',
-        link: '/guide/providers/',
+        link: '/guide/basics/',
         items: [
           {
             text: 'Providers',
@@ -75,15 +78,8 @@ export default defineConfig({
                 link: '/guide/providers/connecting-to-testnet',
               },
               {
-                text: 'Querying the Chain',
+                text: 'Querying the chain',
                 link: '/guide/providers/querying-the-chain',
-                collapsed: true,
-                items: [
-                  {
-                    text: 'Messages',
-                    link: '/guide/providers/messages',
-                  },
-                ]
               },
               {
                 text: 'Retrying calls',
@@ -113,7 +109,7 @@ export default defineConfig({
                 link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
               },
               {
-                text: 'Checking Balances',
+                text: 'Checking Balances and Coins',
                 link: '/guide/wallets/checking-balances-and-coins',
               },
               {
