@@ -13,24 +13,22 @@ const copyToClipboard = (text: string) => {
 export const WalletDisplay = () => {
   const { wallet, walletBalance } = useActiveWallet();
 
-  if (!wallet) {
-    return null;
-  }
-
   return (
-    <div className="flex gap-4 items-center">
-      <span className="text-gray-400">
-        {getTruncatedAddress(wallet.address.toB256() as string)}
-      </span>
-      <img
-        src="/copy.svg"
-        alt="copy"
-        className="cursor-pointer h-5 hover:opacity-80 active:scale-[90%]"
-        onClick={() => copyToClipboard(wallet.address.toB256() as string)}
-      />
-      <span className="text-gray-400">
-        Balance: {walletBalance?.toString()}
-      </span>
-    </div>
+    wallet && (
+      <div className="flex gap-4 items-center">
+        <span className="text-gray-400">
+          {getTruncatedAddress(wallet.address.toB256() as string)}
+        </span>
+        <img
+          src="/copy.svg"
+          alt="copy"
+          className="cursor-pointer h-5 hover:opacity-80 active:scale-[90%]"
+          onClick={() => copyToClipboard(wallet.address.toB256() as string)}
+        />
+        <span className="text-gray-400">
+          Balance: {walletBalance?.toString()}
+        </span>
+      </div>
+    )
   );
 };
