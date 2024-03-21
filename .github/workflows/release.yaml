@@ -70,12 +70,12 @@ jobs:
 
       - name: Prettify changelog
         run: |
-          git checkout ${{ github.ref_name }}
           pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           RELEASE_TAG: v${{ env.BUILD_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
+          REF_NAME: ${{ github.ref_name }}
 
       - name: Release to @next tag on npm
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
