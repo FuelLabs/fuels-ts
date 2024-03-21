@@ -1,5 +1,12 @@
 # @fuel-ts/utils
 
+## 0.76.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.76.1
+- @fuel-ts/interfaces@0.76.1
+
 ## 0.76.0
 
 ### Minor Changes
