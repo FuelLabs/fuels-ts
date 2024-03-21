@@ -3,7 +3,7 @@ import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
 import toast from "react-hot-toast";

@@ -6,7 +6,7 @@ import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import type { BN, InputValue, Predicate } from "fuels";
 import { BaseAssetId, bn } from "fuels";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 

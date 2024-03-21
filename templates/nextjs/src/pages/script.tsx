@@ -5,7 +5,7 @@ import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { TestScriptAbi__factory } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
