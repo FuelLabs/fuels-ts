@@ -1,5 +1,9 @@
 [workspace]
 members = [
+  "predicate-echo",
+  "script-echo",
+  "script-print",
+  "logging",
   "contract-echo",
 ]
 
