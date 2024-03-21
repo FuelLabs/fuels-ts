@@ -66,9 +66,31 @@ jobs:
           name: ${{ matrix.env.name }}
           path: coverage/environments/${{ matrix.env.name }}
 
-  test:
+  e2e:
     runs-on: ubuntu-latest
-    needs: [environments]
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Pretest
+        run: pnpm pretest
+
+      - name: Run Isolated Tests
+        run: pnpm test:e2e
+        env:
+          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
+          TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
+
+  test:
+    if: github.base_ref == 'master' || github.ref_name == 'master'
+    runs-on: ubuntu-latest
+    needs: [environments, e2e]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -121,26 +143,3 @@ jobs:
           comment_tag: diff
           mode: recreate
           create_if_not_exists: true
-
-  test-e2e:
-    name: e2e
-    if: github.head_ref == 'changeset-release/master'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
-
-      - name: Pretest
-        run: pnpm pretest
-
-      - name: Run Isolated Tests
-        run: pnpm test:e2e
-        env:
-          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
-          FUEL_NETWORK_GENESIS_KEY: ${{ secrets.FUEL_NETWORK_GENESIS_KEY }}

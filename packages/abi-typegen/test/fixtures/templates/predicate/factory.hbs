@@ -12,6 +12,7 @@
 import {
   BigNumberish,
   BN,
+  InputValue,
   Predicate,
   Provider,
 } from 'fuels';
@@ -22,7 +23,7 @@ export type ValidationOutput = { has_account: boolean, total_complete: BN };
 export type MyPredicateAbiConfigurables = {
 };
 
-type MyPredicateAbiInputs = [received: ValidationInput];
+export type MyPredicateAbiInputs = [received: ValidationInput];
 
 const _abi = {
   "types": [
@@ -86,11 +87,17 @@ export class MyPredicateAbi__factory {
   static readonly abi = _abi
   static readonly bin = _bin;
 
-  static createInstance(provider: Provider, configurables?: MyPredicateAbiConfigurables) {
+  static createInstance(provider: Provider, predicateData?: MyPredicateAbiInputs, configurables?: MyPredicateAbiConfigurables) {
 
     const { abi, bin } = MyPredicateAbi__factory
 
-    const predicate = new Predicate(bin, provider, abi, configurables);
+    const predicate = new Predicate<MyPredicateAbiInputs>({
+      bytecode: bin,
+      abi,
+      provider,
+      inputData: predicateData,
+      configurableConstants: configurables,
+    })
 
     return predicate;
 

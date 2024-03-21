@@ -1,5 +1,6 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 
 import { createWallet } from './createWallet';
 
@@ -29,5 +30,19 @@ describe('createWallet', () => {
     expect(result).not.toBeTruthy();
     expect(error).toBeTruthy();
     expect(error?.message).toMatch(/you must provide.+privateKey.+PRIVATE_KEY/i);
+  });
+
+  test('throws error when failed to connect to node', async () => {
+    const providerUrl = 'http://localhost:0';
+
+    await expectToThrowFuelError(
+      async () => {
+        await createWallet(providerUrl, privateKey);
+      },
+      {
+        code: ErrorCode.CONNECTION_REFUSED,
+        message: `Couldn't connect to the node at "${providerUrl}". Check that you've got a node running at the config's providerUrl or set autoStartFuelCore to true.`,
+      }
+    );
   });
 });

@@ -93,9 +93,11 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
    * NEXT_PUBLIC_HAS_PREDICATE=false
    * NEXT_PUBLIC_HAS_SCRIPT=true
    */
-  const newFileContents = Object.entries(programsToInclude)
+  let newFileContents = Object.entries(programsToInclude)
     .map(([program, include]) => `NEXT_PUBLIC_HAS_${program.toUpperCase()}=${include}`)
     .join('\n');
+
+  newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
   writeFileSync(envFilePath, newFileContents);
 }
 
