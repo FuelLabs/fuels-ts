@@ -43,7 +43,6 @@ jobs:
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
 
-      # Temp disable
       - name: Forc Format Check
         run: pnpm forc:check
 
