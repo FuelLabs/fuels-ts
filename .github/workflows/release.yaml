@@ -13,9 +13,9 @@ jobs:
     name: "Release"
     runs-on: ubuntu-latest
     permissions: write-all
-#    environment:
-#      name: github-pages
-#      url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout
