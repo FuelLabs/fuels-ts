@@ -68,7 +68,7 @@ jobs:
         if: startsWith(github.base_ref, 'release/')
         run: |
           CHANGES=$(sed -n '/---/,/---/p' .changeset/*.md)
-          echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || echo "No patch changes found." && exit 1
+          echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || (echo "No patch changes found." && exit 1)
           echo $CHANGES | grep -E 'minor|major' --silent && echo "Old releases can only be patched; no minor and major versions allowed." && exit 1 || echo "No minor nor major changes."
 
       - name: Validate that there was no release for the next patch version
