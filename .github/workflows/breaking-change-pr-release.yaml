@@ -12,19 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
-
-      - name: Ensure NPM access
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.10.0
+          pnpm-version: 8.9.0
+      - uses: FuelLabs/github-actions/setups/npm@master
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Build
         run: pnpm build
@@ -71,3 +68,12 @@ jobs:
             - https://www.npmjs.com/package/fuels/v/${{ steps.release_name.outputs.replaced }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update SDK on Wallet
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-sdk-manual.yaml
+          ref: master
+          repo: FuelLabs/fuels-wallet
+          inputs: '{ "publisher": "${{ github.event.repository.name }}", "issue": "${{ github.event.pull_request.number }}", "packages": "fuels", "tag": "${{ steps.release_name.outputs.replaced }}" }'
+          token: ${{ secrets.REPO_TOKEN }}
