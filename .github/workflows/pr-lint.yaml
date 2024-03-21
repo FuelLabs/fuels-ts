@@ -30,7 +30,7 @@ jobs:
 
   validate-changeset:
     name: Validate PR Changeset
-    if: github.head_ref != 'changeset-release/master'
+    if: startsWith(github.head_ref, 'changeset-release') == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
