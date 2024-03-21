@@ -659,7 +659,6 @@ export default class Provider {
       utxoValidation: utxoValidation || false,
     });
     const receipts = gqlReceipts.map(processGqlReceipt);
-    console.log(receipts);
     return {
       receipts,
     };
