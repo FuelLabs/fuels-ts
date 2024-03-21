@@ -96,18 +96,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     })().catch(console.error);
   }, [faucetWallet]);
 
-  useEffect(() => {
-    if (
-      faucetWallet &&
-      burnerWalletBalance?.lt(10_000) &&
-      !initialTopupDone &&
-      activeWallet === "burner"
-    ) {
-      topUpWallet("burner");
-      setInitialTopupDone(true);
-    }
-  }, [faucetWallet, burnerWalletBalance, initialTopupDone, activeWallet]);
-
   const refreshConnectedWalletBalance = useCallback(async () => {
     const connectedWalletBalance = await connectedWallet?.getBalance();
     setConnectedWalletBalance(connectedWalletBalance);

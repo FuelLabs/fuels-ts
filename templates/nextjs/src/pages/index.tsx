@@ -28,7 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      if (hasContract && burnerWallet && burnerWalletBalance?.gt(0)) {
+      if (hasContract && burnerWallet) {
         const testContract = TestContractAbi__factory.connect(
           contractId,
           connectedWallet || burnerWallet,
@@ -40,7 +40,7 @@ export default function Home() {
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [connectedWallet, burnerWallet, burnerWalletBalance]);
+  }, [connectedWallet, burnerWallet]);
 
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
