@@ -55,16 +55,12 @@ export default defineConfig({
             text: 'Quickstart',
             link: '/quickstart',
           },
-          // New page
-          // {
-          //   text: 'Creating a Fuel dApp',
-          //   link: '/creating-a-fuel-dapp',
-          // }
+
         ],
       },
       {
         text: 'Basics',
-        link: '/guide/basics/',
+        link: '/guide/providers/',  //placeholder
         items: [
           {
             text: 'Providers',
@@ -112,29 +108,7 @@ export default defineConfig({
               },
             ],
           },
-          // {
-          //   text: 'GraphQL',
-          //   link: '/guide/graphql/', // need to add
-          //   collapsed: true,
-          //   items: [
-          //     {
-          //       text: 'Schema',
-          //       link: '/guide/graphql/schema', // need to add
-          //     },
-          //     {
-          //       text: 'Playground',
-          //       link: '/guide/graphql/playground', // need to add
-          //     },
-          //     {
-          //       text: 'Custom Queries',
-          //       link: '/guide/graphql/custom-queries', // need to add
-          //     },
-          //     {
-          //       text: 'Subscriptions',
-          //       link: '/guide/graphql/subscriptions', // need to add
-          //     }
-          //   ],
-          // },
+
           {
             text: 'Wallets',
             link: '/guide/wallets/',
@@ -176,20 +150,10 @@ export default defineConfig({
               //     },
               //   ],
               // },
-              // New page
-              // {
-              //   text: 'Locking & Unlocking',
-              //   link: '/guide/wallets/locking-and-unlocking',
-              // },
               {
                 text: 'Signing', // change to "Signing Transactions"
                 link: '/guide/wallets/signing',
               },
-              // New page
-              // {
-              //   text: 'External Connectors',
-              //   link: '/guide/wallets/external-connectors',
-              // },
               {
                 text: 'Test Wallets',
                 link: '/guide/wallets/test-wallets',
@@ -201,11 +165,6 @@ export default defineConfig({
             link: '/guide/abi/',
             collapsed: true,
             items: [
-              // New page
-              // {
-              //   text: 'The JSON ABI file',
-              //   link: '/guide/abi/the-json-abi-file',
-              // },
               {
                 text: 'Generating Types',
                 link: '/guide/abi/generating-types',
