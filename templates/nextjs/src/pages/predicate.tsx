@@ -14,10 +14,10 @@ export default function PredicateExample() {
     burnerWallet,
     burnerWalletBalance,
     refreshBurnerWalletBalance,
-    refreshConnectedWalletBalance,
-    connectedWallet,
+    refreshBrowserWalletBalance,
+    browserWallet,
     activeWallet,
-    connectedWalletBalance,
+    browserWalletBalance,
   } = useContext(AppContext);
 
   const [predicate, setPredicate] = useState<Predicate<InputValue[]>>();
@@ -30,7 +30,7 @@ export default function PredicateExample() {
     (async () => {
       if (burnerWallet) {
         const predicate = TestPredicateAbi__factory.createInstance(
-          connectedWallet?.provider || burnerWallet.provider,
+          browserWallet?.provider || burnerWallet.provider,
         );
         setPredicate(predicate);
         setPredicateBalance(await predicate.getBalance());
@@ -38,11 +38,11 @@ export default function PredicateExample() {
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [burnerWallet, connectedWallet]);
+  }, [burnerWallet, browserWallet]);
 
   const refreshBalances = async () => {
     await refreshBurnerWalletBalance?.();
-    await refreshConnectedWalletBalance?.();
+    await refreshBrowserWalletBalance?.();
     setPredicateBalance(await predicate?.getBalance());
   };
 
@@ -52,7 +52,7 @@ export default function PredicateExample() {
     }
 
     const walletToUse =
-      activeWallet === "burner" ? burnerWallet : connectedWallet;
+      activeWallet === "burner" ? burnerWallet : browserWallet;
 
     if (!walletToUse) {
       return toast.error("Wallet not loaded");
@@ -71,7 +71,7 @@ export default function PredicateExample() {
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
     try {
       const walletToUse =
-        activeWallet === "burner" ? burnerWallet : connectedWallet;
+        activeWallet === "burner" ? burnerWallet : browserWallet;
 
       if (!walletToUse) {
         return toast.error("Wallet not loaded");
@@ -111,7 +111,7 @@ export default function PredicateExample() {
   };
 
   const walletBalance =
-    activeWallet === "burner" ? burnerWalletBalance : connectedWalletBalance;
+    activeWallet === "burner" ? burnerWalletBalance : browserWalletBalance;
 
   return (
     <>

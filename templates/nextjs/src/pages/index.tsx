@@ -19,8 +19,8 @@ export default function Home() {
   const {
     burnerWallet,
     burnerWalletBalance,
-    connectedWallet,
-    connectedWalletBalance,
+    browserWallet,
+    browserWalletBalance,
     activeWallet,
   } = useContext(AppContext);
   const [contract, setContract] = useState<TestContractAbi>();
@@ -31,7 +31,7 @@ export default function Home() {
       if (hasContract && burnerWallet) {
         const testContract = TestContractAbi__factory.connect(
           contractId,
-          connectedWallet || burnerWallet,
+          browserWallet || burnerWallet,
         );
         setContract(testContract);
         const { value } = await testContract.functions.get_count().get();
@@ -40,7 +40,7 @@ export default function Home() {
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [connectedWallet, burnerWallet]);
+  }, [browserWallet, burnerWallet]);
 
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
@@ -49,7 +49,7 @@ export default function Home() {
     }
 
     const balanceToCheck =
-      activeWallet === "burner" ? burnerWalletBalance : connectedWalletBalance;
+      activeWallet === "burner" ? burnerWalletBalance : browserWalletBalance;
 
     if (balanceToCheck?.eq(0)) {
       return toast.error(

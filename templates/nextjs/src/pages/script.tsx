@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function ScriptExample() {
-  const { burnerWallet, connectedWallet } = useContext(AppContext);
+  const { burnerWallet, browserWallet } = useContext(AppContext);
 
   const [script, setScript] = useState<Script<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<string>();
@@ -19,14 +19,14 @@ export default function ScriptExample() {
     (async () => {
       if (burnerWallet) {
         const script = TestScriptAbi__factory.createInstance(
-          connectedWallet || burnerWallet,
+          browserWallet || burnerWallet,
         );
         setScript(script);
       }
 
       // eslint-disable-next-line no-console
     })().catch(console.error);
-  }, [burnerWallet, connectedWallet]);
+  }, [burnerWallet, browserWallet]);
 
   const runScript = async () => {
     try {
