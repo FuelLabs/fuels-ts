@@ -3,4 +3,4 @@
 "@fuel-ts/program": minor
 ---
 
-feat!: support v1 encoding in program types
+feat!: support `v1` encoding in program types
