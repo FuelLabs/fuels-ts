@@ -212,10 +212,11 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
   });
 
 /**
+ * Obtains script data for a contract call according to the V0 specification.
  *
- * @param call
- * @param segmentOffset
- * @returns
+ * @param call - the contract call to obtain for script data for.
+ * @param segmentOffset - the segment to generate pointers and offset data from.
+ * @returns the populated script data and call parameter offsets.
  */
 export const getScriptDataV0 = (
   call: ContractCall,
@@ -268,10 +269,11 @@ export const getScriptDataV0 = (
 };
 
 /**
+ * Obtains script data for a contract call according to the V1 specification.
  *
- * @param call
- * @param segmentOffset
- * @returns
+ * @param call - the contract call to obtain for script data for.
+ * @param segmentOffset - the segment to generate pointers and offset data from.
+ * @returns the populated script data and call parameter offsets.
  */
 export const getScriptDataV1 = (
   call: ContractCall,
@@ -320,9 +322,10 @@ export const getScriptDataV1 = (
 };
 
 /**
+ * Retrieves a script data function for a specific encoding version.
  *
- * @param encoding
- * @returns
+ * @param encoding - the encoding version used for the contract call.
+ * @returns an appropriate script data function.
  */
 export const getScriptDataForEncoding = (encoding?: string): ContractCallScriptFn => {
   if (encoding === ENCODING_V1) {
