@@ -23,7 +23,8 @@ export const onPreAction = (command: Command) => {
 
 export const configureCli = () => {
   const program = new Command();
-
+  // eslint-disable-next-line no-console
+  console.log('test');
   program.name('fuels');
 
   program.option('-D, --debug', 'Enables verbose logging', false);
