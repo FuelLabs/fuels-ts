@@ -37,9 +37,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     await refreshWalletBalance?.();
   };
 
-  const shouldShowTopUpButton = walletBalance?.lt(10_000);
+  const showTopUpButton = walletBalance?.lt(10_000);
 
-  const shouldShowAddNetworkButton =
+  const showAddNetworkButton =
     browserWallet &&
     browserWalletNetwork &&
     browserWalletNetwork?.url !== NODE_URL;
@@ -70,7 +70,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <Button onClick={connect}>Connect Wallet</Button>
           )}
 
-          {shouldShowAddNetworkButton && (
+          {showAddNetworkButton && (
             <Button onClick={tryToAddNetwork} className="bg-red-500">
               Wrong Network
             </Button>
@@ -80,7 +80,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <WalletDisplay wallet={wallet} walletBalance={walletBalance} />
           </div>
 
-          {shouldShowTopUpButton && (
+          {showTopUpButton && (
             <Button onClick={() => topUpWallet()}>Top-up Wallet</Button>
           )}
         </nav>
