@@ -70,6 +70,7 @@ jobs:
 
       - name: Prettify changelog
         run: |
+          git checkout master
           pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
