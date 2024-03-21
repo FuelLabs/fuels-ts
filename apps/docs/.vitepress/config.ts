@@ -50,7 +50,6 @@ export default defineConfig({
             text: 'Getting Started',
             link: '/getting-started',
           },
-          // Not in Notion
           {
             text: 'Quickstart',
             link: '/quickstart',
@@ -60,7 +59,7 @@ export default defineConfig({
       },
       {
         text: 'Basics',
-        link: '/guide/providers/',  //placeholder
+        link: '/guide/providers/',
         items: [
           {
             text: 'Providers',
@@ -83,22 +82,6 @@ export default defineConfig({
                   {
                     text: 'Messages',
                     link: '/guide/providers/messages',
-                    // // These could probably be consolidated to the same page (/guide/providers/messages/)
-                    // collapsed: true,
-                    // items: [
-                    //   {
-                    //     text: 'Getting a Message Proof',
-                    //     link: '/guide/providers/messages/getting-a-message-proof',
-                    //   },
-                    //   {
-                    //     text: 'Getting All Resources',
-                    //     link: '/guide/providers/messages/getting-all-resources',
-                    //   },
-                    //   {
-                    //     text: 'Getting Messages',
-                    //     link: '/guide/providers/messages/getting-messages',
-                    //   },
-                    // ],
                   },
                 ]
               },
@@ -108,17 +91,15 @@ export default defineConfig({
               },
             ],
           },
-
           {
             text: 'Wallets',
             link: '/guide/wallets/',
             collapsed: true,
             items: [
-              // Deprecated?
-              // {
-              //   text: 'Access',
-              //   link: '/guide/wallets/access',
-              // },
+              {
+                text: 'Access',
+                link: '/guide/wallets/access',
+              },
               {
                 text: 'Private Keys',
                 link: '/guide/wallets/private-keys',
@@ -135,23 +116,8 @@ export default defineConfig({
                 text: 'Checking Balances',
                 link: '/guide/wallets/checking-balances-and-coins',
               },
-              // {
-              //   text: 'Wallet Manager',
-              //   link: '/guide/wallets/wallet-manager/',
-              //   collapsed: true,
-              //   items: [
-              //     {
-              //       text: 'Getting Started With Wallet Manager',
-              //       link: '/guide/wallets/wallet-manager/getting-started-with-wallet-manager',
-              //     },
-              //     {
-              //       text: 'Locking And Unlocking Wallet Manager',
-              //       link: '/guide/wallets/wallet-manager/locking-and-unlocking-wallet-manager',
-              //     },
-              //   ],
-              // },
               {
-                text: 'Signing', // change to "Signing Transactions"
+                text: 'Signing',
                 link: '/guide/wallets/signing',
               },
               {
