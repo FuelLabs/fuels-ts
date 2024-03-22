@@ -1,12 +1,5 @@
 import type { Provider, BN, JsonAbi } from 'fuels';
-import {
-  WalletUnlocked,
-  Predicate,
-  BaseAssetId,
-  Script,
-  FunctionInvocationResult,
-  ScriptTransactionRequest,
-} from 'fuels';
+import { WalletUnlocked, Predicate, BaseAssetId, Script, ScriptTransactionRequest } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -56,26 +49,13 @@ describe('Signing transactions', () => {
     // #region multiple-signers-2
     // #import { Script, BaseAssetId };
 
-    // Create invocation scope
     const script = new Script(bytecode, abi, sender);
-    const scope = script.functions
+    const { value } = await script.functions
       .main(signer.address.toB256())
-      .txParams({ gasPrice, gasLimit: 10_000 });
-    await scope.fundWithRequiredCoins();
-
-    // Create the transaction request
-    const transactionRequest = await scope.getTransactionRequest();
-    transactionRequest.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
-
-    // Sign the transaction
-    await transactionRequest.addAccountWitnesses(signer);
-
-    // Send the transaction
-    const response = await sender.sendTransaction(transactionRequest);
-    await response.waitForResult();
+      .addTransfer(receiver.address, amountToReceiver, BaseAssetId)
+      .addSigners(signer)
+      .call<BN>();
     // #endregion multiple-signers-2
-
-    const { value } = await FunctionInvocationResult.build<BN>([scope], response, false, script);
 
     expect(value.toNumber()).toEqual(1);
     expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
