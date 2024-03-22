@@ -1,4 +1,4 @@
-# Encrypting and Decrypting JSON Wallet
+# Encrypting and Decrypting
 
 JSON wallets are a standardized way of storing wallets securely. They follow a specific schema and are encrypted using a password. This makes it easier to manage multiple wallets and securely store them on disk. This guide will take you through the process of encrypting and decrypting JSON wallets using the Typescript SDK.
 

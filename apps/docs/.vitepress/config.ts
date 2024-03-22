@@ -87,11 +87,15 @@ export default defineConfig({
               },
               {
                 text: 'Wallet Manager',
-                link: '/guide/wallet-manager/',
+                link: '/guide/wallets/wallet-manager',
               },
               {
-                text: 'Signing',
-                link: '/guide/wallets/signing',
+                text: 'Locking and Unlocking',
+                link: '/guide/wallets/locking-and-unlocking'
+              },
+              {
+                text: 'Signing Transactions',
+                link: '/guide/wallets/signing-transactions',
               },
               {
                 text: 'Test Wallets',
@@ -242,14 +246,6 @@ export default defineConfig({
             link: '/guide/providers/',
             collapsed: true,
             items: [
-              {
-                text: 'Connection',
-                link: '/guide/providers/connection',
-              },
-              {
-                text: 'Connecting to Testnet',
-                link: '/guide/providers/connecting-to-testnet',
-              },
               {
                 text: 'Querying the Chain',
                 link: '/guide/providers/querying-the-chain',
