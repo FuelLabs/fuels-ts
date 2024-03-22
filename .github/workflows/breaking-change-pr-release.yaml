@@ -19,7 +19,8 @@ jobs:
       - name: Check if PR title is a breaking change
         id: check-title
         run: |
-          if echo "${{ github.event.pull_request.title }}" | grep -qE '^\w+!:'; then
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if echo "$PR_TITLE" | grep -qE '^\w+!:'; then
             echo "isBreakingChange=true" >> "$GITHUB_OUTPUT"
           else
             echo "isBreakingChange=false" >> "$GITHUB_OUTPUT"
