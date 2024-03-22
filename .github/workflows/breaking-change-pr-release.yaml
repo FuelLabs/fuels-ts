@@ -61,21 +61,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add PR comment
-        uses: mshick/add-pr-comment@v2
-        with:
-          message: |
-            Breaking change PR published under the `${{ steps.release_name.outputs.replaced }}` tag.
-            Install it:
-            ```bash
-            pnpm add fuels@${{ steps.release_name.outputs.replaced }}
-            pnpm add fuels@${{ steps.release.outputs.published_version }}
-            ```
-            Check it out:
-            - https://www.npmjs.com/package/fuels/v/${{ steps.release_name.outputs.replaced }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Update SDK on Wallet
         uses: benc-uk/workflow-dispatch@v1
         with:
