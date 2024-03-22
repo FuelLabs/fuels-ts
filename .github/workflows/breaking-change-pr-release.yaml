@@ -19,14 +19,14 @@ jobs:
         run: |
           if echo '${{ github.event.pull_request.title }}' | grep -q '^\\w+!:'; then
             echo "This PR is a breaking change."
-            echo "IS_BREAKING_CHANGE=true" >> $GITHUB_ENV
+            echo "IS_BREAKING_CHANGE=true" >> "$GITHUB_ENV"
           else
             echo "This PR is not a breaking change."
-            echo "IS_BREAKING_CHANGE=false" >> $GITHUB_ENV
+            echo "IS_BREAKING_CHANGE=false" >> "$GITHUB_ENV"
 
   release-pr:
     needs: check-title
-    if: $IS_BREAKING_CHANGE == 'true'
+    if: $IS_BREAKING_CHANGE == "true"
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
