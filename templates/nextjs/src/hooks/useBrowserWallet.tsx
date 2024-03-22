@@ -1,9 +1,15 @@
+import { AppWallet } from "@/lib";
 import { useIsConnected, useNetwork, useWallet } from "@fuel-wallet/react";
 import { BN, WalletLocked } from "fuels";
 import { useCallback, useState } from "react";
 import useAsync from "react-use/lib/useAsync";
 
-export const useBrowserWallet = () => {
+interface BrowserWallet extends AppWallet {
+  isConnected: boolean | null;
+  network: any;
+}
+
+export const useBrowserWallet: () => BrowserWallet = () => {
   const { wallet }: { wallet: WalletLocked } = useWallet();
   const [browserWalletBalance, setBrowserWalletBalance] = useState<BN>();
   const { isConnected } = useIsConnected();
@@ -23,10 +29,10 @@ export const useBrowserWallet = () => {
   }, [wallet]);
 
   return {
-    browserWallet: wallet,
-    browserWalletBalance,
-    refreshBrowserWalletBalance,
-    isBrowserWalletConnected: isConnected,
-    browserWalletNetwork: network,
+    wallet,
+    walletBalance: browserWalletBalance,
+    refreshWalletBalance: refreshBrowserWalletBalance,
+    isConnected,
+    network,
   };
 };

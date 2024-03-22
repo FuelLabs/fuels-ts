@@ -1,11 +1,11 @@
-import { NODE_URL } from "@/lib";
+import { AppWallet, NODE_URL } from "@/lib";
 import { BN, Provider, Wallet, WalletUnlocked } from "fuels";
 import { useCallback, useState } from "react";
 import useAsync from "react-use/lib/useAsync";
 
 const BURNER_WALLET_LOCAL_STORAGE_KEY = "create-fuels-burner-wallet-pk";
 
-export const useBurnerWallet = () => {
+export const useBurnerWallet: () => AppWallet = () => {
   const [burnerWallet, setBurnerWallet] = useState<WalletUnlocked>();
   const [burnerWalletBalance, setBurnerWalletBalance] = useState<BN>();
 
@@ -40,8 +40,8 @@ export const useBurnerWallet = () => {
   }, [burnerWallet]);
 
   return {
-    burnerWallet,
-    burnerWalletBalance,
-    refreshBurnerWalletBalance,
+    wallet: burnerWallet,
+    walletBalance: burnerWalletBalance,
+    refreshWalletBalance: refreshBurnerWalletBalance,
   };
 };

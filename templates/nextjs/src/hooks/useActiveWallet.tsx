@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useBrowserWallet } from "./useBrowserWallet";
 import { useBurnerWallet } from "./useBurnerWallet";
+import { AppWallet } from "@/lib";
 
 /**
  * burner -> a burner wallet embedded inside of the template app and stored in local storage
@@ -8,14 +9,17 @@ import { useBurnerWallet } from "./useBurnerWallet";
  */
 type WalletTypes = "burner" | "browser";
 
-export const useActiveWallet = () => {
-  const { burnerWallet, burnerWalletBalance, refreshBurnerWalletBalance } =
-    useBurnerWallet();
+export const useActiveWallet = (): AppWallet => {
   const {
-    browserWallet,
-    browserWalletBalance,
-    refreshBrowserWalletBalance,
-    isBrowserWalletConnected,
+    wallet: burnerWallet,
+    walletBalance: burnerWalletBalance,
+    refreshWalletBalance: refreshBurnerWalletBalance,
+  } = useBurnerWallet();
+  const {
+    wallet: browserWallet,
+    walletBalance: browserWalletBalance,
+    refreshWalletBalance: refreshBrowserWalletBalance,
+    isConnected: isBrowserWalletConnected,
   } = useBrowserWallet();
 
   const [activeWallet, setActiveWallet] = useState<WalletTypes>("burner");

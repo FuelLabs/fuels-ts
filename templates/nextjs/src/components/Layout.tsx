@@ -12,8 +12,11 @@ import Head from "next/head";
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();
 
-  const { browserWallet, isBrowserWalletConnected, browserWalletNetwork } =
-    useBrowserWallet();
+  const {
+    wallet: browserWallet,
+    walletBalance: isBrowserWalletConnected,
+    network: browserWalletNetwork,
+  } = useBrowserWallet();
 
   const { connect } = useConnectUI();
   const { disconnect } = useDisconnect();
