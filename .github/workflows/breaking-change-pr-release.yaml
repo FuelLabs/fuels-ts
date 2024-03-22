@@ -24,6 +24,7 @@ jobs:
             echo "isBreakingChange=true" >> "$GITHUB_OUTPUT"
           else
             echo "isBreakingChange=false" >> "$GITHUB_OUTPUT"
+          fi
 
   release-pr:
     needs: check-title
