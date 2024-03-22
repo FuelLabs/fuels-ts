@@ -7,7 +7,7 @@
 
 This guide will walk you through the process of setting up and using the Fuels-ts library in your front-end project.
 
-## Installing the Fuels-ts Library
+## Installation
 
 To begin, you need to add the `fuels` dependency to your project. You can do this using the following command:
 
@@ -38,7 +38,7 @@ This is to ensure that bun includes the `fuel-core` and `forc` binaries in your 
 
 > IMPORTANT: We don't officially support `bun` yet; use it at your own risk.
 
-## Creating a React Component to Connect to the Blockchain
+## Usage
 
 With the Fuels dependency set up, you can now create a React component that will connect to the Fuel provider and retrieve the base asset balance for a given wallet address. Here's an example of how to do this:
 
@@ -88,6 +88,41 @@ For a quick test or just playing around, you can load it in your Web Apps straig
   exec();
 </script>
 ```
+
+## Connecting to the Network
+
+At a high level, you can use the Fuel TypeScript SDK to build applications that can run computations on the Fuel Virtual Machine through interactions with smart contracts written in Sway.
+
+For this interaction to work, the SDK must be able to communicate with a `fuel-core` node; you have two options at your disposal:
+
+1. Use the [Testnet](#connecting-to-the-testnet). (For application building)
+2. Running a [local node](https://docs.fuel.network/guides/running-a-node/). (For smart contract testing)
+
+
+### Connecting to the Testnet
+
+We can interact with the `Testnet` node by using the following example.
+
+<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-testnet{ts:line-numbers}
+
+In the code example, we connected a new provider to the Testnet node and created a new wallet from a private key.
+
+> **Note:** New wallets on the Testnet will not have any assets! They can be obtained by providing the wallet address to the faucet at
+>
+> [faucet-beta-5.fuel.network](https://faucet-beta-5.fuel.network/)
+>
+> Once the assets have been transferred to the wallet, you can reuse it in other tests by providing the private key!
+>
+> In addition to the faucet, there is a block explorer for the Testnet at
+>
+> [block-explorer](https://fuellabs.github.io/block-explorer-v2)
+
+### Connecting to a local node
+
+If you want to connect to another node just change the URL or IP and port. For example, to connect to a local node that was created with `fuel-core` you can use:
+
+<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-local{ts:line-numbers}
+
 
 ## Further Resources and Next Steps
 
