@@ -20,10 +20,8 @@ jobs:
         id: check-title
         run: |
           if echo "${{ github.event.pull_request.title }}" | grep -qE '^\w+!:'; then
-            echo "This PR is a breaking change."
             echo "isBreakingChange=true" >> $GITHUB_OUTPUT
           else
-            echo "This PR is not a breaking change."
             echo "isBreakingChange=false" >> $GITHUB_OUTPUT
 
   release-pr:
