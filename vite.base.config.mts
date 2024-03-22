@@ -23,11 +23,13 @@ export default defineConfig({
       reporter: ["json", "text", "html"],
       include: ["packages", "internal", "apps"],
       exclude: [
+        "**/*.js",
         "**/node_modules/**",
         "**/dist/**",
         "**/test/**",
         "**/*.test.ts",
         "**/*.d.ts",
+        "**/bin.ts",
         "packages/fuel-gauge/**",
         "apps/demo-*",
         "apps/docs",

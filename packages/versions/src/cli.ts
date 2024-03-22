@@ -11,6 +11,8 @@ export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
 export * from './lib/getSystemVersions';
 
+export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
+
 export function runVersions() {
   const { error, info } = console;
 
@@ -20,21 +22,21 @@ export function runVersions() {
     head: ['', bold('Supported'), bold(`Yours / System`)],
   });
 
-  const { systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
+  const { error: systemError, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
 
   const comparisons = compareSystemVersions({
-    systemForcVersion,
-    systemFuelCoreVersion,
+    systemForcVersion: eitherOr(systemForcVersion, '0'),
+    systemFuelCoreVersion: eitherOr(systemFuelCoreVersion, '0'),
   });
 
   const userForcColorized = colorizeUserVersion({
-    version: systemForcVersion,
+    version: eitherOr(systemForcVersion, '—'),
     isGt: comparisons.systemForcIsGt,
     isOk: comparisons.systemForcIsEq,
   });
 
   const userFuelCoreColorized = colorizeUserVersion({
-    version: systemFuelCoreVersion,
+    version: eitherOr(systemFuelCoreVersion, '—'),
     isGt: comparisons.systemFuelCoreIsGt,
     isOk: comparisons.systemFuelCoreIsEq,
   });
@@ -45,18 +47,30 @@ export function runVersions() {
   const someIsGt = comparisons.systemForcIsGt || comparisons.systemFuelCoreIsGt;
   const bothAreExact = comparisons.systemForcIsEq && comparisons.systemFuelCoreIsEq;
 
+  let exitCode: number;
+
   if (someIsGt) {
-    info(`Your system's components are newer than the ones supported!`);
+    exitCode = 0;
     info(cliTable.toString());
-    process.exit(0);
+    info(`\nYour system's components are newer than the ones supported!`);
   } else if (bothAreExact) {
-    info(`You have all the right versions! ⚡`);
+    exitCode = 0;
     info(cliTable.toString());
-    process.exit(0);
-  } else {
-    error(`You're using outdated versions — update them with:`);
-    error(`  ${green(fuelUpLink)}`);
+    info(`\nYou have all the right versions! ⚡`);
+  } else if (systemError) {
+    exitCode = 1;
     error(cliTable.toString());
-    process.exit(1);
+    error('\n - Make sure you have Forc and Fuel-Core installed');
+    error('   >> Error: ', systemError.message);
+  } else {
+    exitCode = 1;
+    error(cliTable.toString());
+    error(`\n - You're using outdated versions`);
   }
+
+  if (exitCode === 1) {
+    error(`  ${green(fuelUpLink)}`);
+  }
+
+  process.exit(exitCode);
 }
