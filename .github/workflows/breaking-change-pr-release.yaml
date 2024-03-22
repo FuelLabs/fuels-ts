@@ -26,7 +26,7 @@ jobs:
       - name: Check if PR title is a breaking change
         id: check-title
         run: |
-          PR_TITLE="test `command` test"
+          PR_TITLE="ci(changesets): versioning packages for branch `master`"
           if echo "$PR_TITLE" | grep -qE '^\w+!:'; then
             echo "isBreakingChange=true" >> "$GITHUB_OUTPUT"
           else
