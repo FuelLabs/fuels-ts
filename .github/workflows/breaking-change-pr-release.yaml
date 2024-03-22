@@ -18,11 +18,17 @@ jobs:
     steps:
       - name: Check if PR title is a breaking change
         id: check-title
-        run: echo "::set-output name=is-breaking-change::$(echo '${{ github.event.pull_request.title }}' | grep -q '^\\w+!:' && echo 'true' || echo 'false')"
+        run: |
+          if echo '${{ github.event.pull_request.title }}' | grep -q '^\\w+!:'; then
+            echo "This PR is a breaking change."
+            echo "IS_BREAKING_CHANGE=true" >> $GITHUB_ENV
+          else
+            echo "This PR is not a breaking change."
+            echo "IS_BREAKING_CHANGE=false" >> $GITHUB_ENV
 
   release-pr:
     needs: check-title
-    if: needs.check-title.outputs.is-breaking-change == 'true'
+    if: $IS_BREAKING_CHANGE == 'true'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
