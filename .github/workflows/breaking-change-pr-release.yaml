@@ -13,20 +13,22 @@ jobs:
   check-title:
     runs-on: ubuntu-latest
     name: "Validate if PR is a breaking change"
+    outputs:
+      is-breaking-change: ${{ steps.check-title.outputs.is-breaking-change }}
     steps:
       - name: Check if PR title is a breaking change
         id: check-title
         run: |
           if echo '${{ github.event.pull_request.title }}' | grep -q '^\\w+!:'; then
             echo "This PR is a breaking change."
-            echo "IS_BREAKING_CHANGE=true" >> "$GITHUB_ENV"
+            echo "is-breaking-change=true" >> "$GITHUB_OUTPUT"
           else
             echo "This PR is not a breaking change."
-            echo "IS_BREAKING_CHANGE=false" >> "$GITHUB_ENV"
+            echo "is-breaking-change=false" >> "$GITHUB_OUTPUT"
 
   release-pr:
     needs: check-title
-    if: $IS_BREAKING_CHANGE == "true"
+    if: needs.check-title.outputs.is-breaking-change == 'true'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
