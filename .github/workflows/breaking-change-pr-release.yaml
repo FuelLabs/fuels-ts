@@ -6,8 +6,18 @@ on:
       - "master"
 
 jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    outputs:
+      is-breaking-change: ${{ steps.check-title.outputs.is-breaking-change }}
+    steps:
+      - name: Check if PR title is a breaking change
+        id: check-title
+        run: echo "::set-output name=is-breaking-change::$(echo '${{ github.event.pull_request.title }}' | grep -q '^\\w+!:' && echo 'true' || echo 'false')"
+
   release-pr:
-    if: startsWith(${{ github.head_ref }}, '^\\w+!:')
+    needs: check-title
+    if: needs.check-title.outputs.is-breaking-change == 'true'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
