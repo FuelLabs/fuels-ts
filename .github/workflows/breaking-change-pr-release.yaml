@@ -9,6 +9,7 @@ on:
       - edited
       - synchronize
       - ready_for_review
+      - converted_to_draft
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
