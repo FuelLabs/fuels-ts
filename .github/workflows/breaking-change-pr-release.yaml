@@ -13,8 +13,6 @@ jobs:
   check-title:
     runs-on: ubuntu-latest
     name: "Validate if PR is a breaking change"
-    outputs:
-      is-breaking-change: ${{ steps.check-title.outputs.is-breaking-change }}
     steps:
       - name: Check if PR title is a breaking change
         id: check-title
