@@ -251,8 +251,8 @@ export default defineConfig({
                 link: '/guide/providers/querying-the-chain',
               },
               {
-                text: 'Retrying calls',
-                link: '/guide/providers/retrying-calls',
+                text: 'Retrying upon errors',
+                link: '/guide/providers/retrying-upon-errors',
               },
             ],
           },
@@ -346,8 +346,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Date time conversion',
-                link: '/guide/utilities/date-time-conversion',
+                text: 'Date conversion',
+                link: '/guide/utilities/date-conversion',
               },
               {
                 text: 'Address conversion',
