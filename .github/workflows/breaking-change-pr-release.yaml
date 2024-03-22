@@ -43,7 +43,7 @@ jobs:
 
   release-pr:
     needs: check-pr
-    if: needs.check-title.outputs.isBreakingChange == 'true' && needs.check-title.outputs.isDraft == 'false'
+    if: needs.check-pr.outputs.isBreakingChange == 'true' && needs.check-pr.outputs.isDraft == 'false'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
