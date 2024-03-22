@@ -28,7 +28,7 @@ jobs:
 
   release-pr:
     needs: check-title
-    if: steps.check-title.outputs.isBreakingChange == 'true'
+    if: needs.check-title.outputs.isBreakingChange == 'true'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
