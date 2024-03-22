@@ -10,11 +10,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-title:
+  check-pr:
     runs-on: ubuntu-latest
-    name: "Validate if PR is a breaking change"
+    name: "Validate if PR needs to be released"
     outputs:
       isBreakingChange: ${{ steps.check-title.outputs.isBreakingChange }}
+      isDraft: ${{ steps.check-draft.outputs.isDraft }}
     steps:
       - name: Check if PR title is a breaking change
         id: check-title
@@ -26,9 +27,18 @@ jobs:
             echo "isBreakingChange=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check if PR is a draft
+        id: check-draft
+        run: |
+          if ${{ github.event.pull_request.draft }}; then
+            echo "isDraft=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "isDraft=false" >> "$GITHUB_OUTPUT"
+          fi
+
   release-pr:
-    needs: check-title
-    if: needs.check-title.outputs.isBreakingChange == 'true'
+    needs: check-pr
+    if: needs.check-title.outputs.isBreakingChange == 'true' && needs.check-title.outputs.isDraft == 'false'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
