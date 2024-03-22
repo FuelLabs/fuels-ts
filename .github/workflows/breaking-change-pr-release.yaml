@@ -4,10 +4,47 @@ on:
   pull_request:
     branches:
       - "master"
+    types:
+      - opened
+      - edited
+      - synchronize
+      - ready_for_review
+      - converted_to_draft
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+    name: "Validate if PR needs to be released"
+    outputs:
+      isBreakingChange: ${{ steps.check-title.outputs.isBreakingChange }}
+      isDraft: ${{ steps.check-draft.outputs.isDraft }}
+    steps:
+      - name: Check if PR title is a breaking change
+        id: check-title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if echo "$PR_TITLE" | grep -qE '^\w+!:'; then
+            echo "isBreakingChange=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "isBreakingChange=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check if PR is a draft
+        id: check-draft
+        run: |
+          if ${{ github.event.pull_request.draft }}; then
+            echo "isDraft=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "isDraft=false" >> "$GITHUB_OUTPUT"
+          fi
+
   release-pr:
-    if: startsWith(${{ github.head_ref }}, '^\\w+!:')
+    needs: check-pr
+    if: needs.check-pr.outputs.isBreakingChange == 'true' && needs.check-pr.outputs.isDraft == 'false'
     name: "Release breaking change PR to npm"
     runs-on: ubuntu-latest
     permissions: write-all
@@ -45,21 +82,6 @@ jobs:
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add PR comment
-        uses: mshick/add-pr-comment@v2
-        with:
-          message: |
-            Breaking change PR published under the `${{ steps.release_name.outputs.replaced }}` tag.
-            Install it:
-            ```bash
-            pnpm add fuels@${{ steps.release_name.outputs.replaced }}
-            pnpm add fuels@${{ steps.release.outputs.published_version }}
-            ```
-            Check it out:
-            - https://www.npmjs.com/package/fuels/v/${{ steps.release_name.outputs.replaced }}
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update SDK on Wallet
