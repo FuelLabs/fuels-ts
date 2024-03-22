@@ -51,8 +51,7 @@ jobs:
 
       - name: Set branch name and changeset PR title
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages for branch \`$BRANCH_NAME\`")" >> $GITHUB_ENV
+          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages for branch \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -71,6 +70,7 @@ jobs:
 
       - name: Prettify changelog
         run: |
+          git checkout master
           pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -78,7 +78,7 @@ jobs:
           PUBLISHED: ${{ steps.changesets.outputs.published }}
 
       - name: Release to @next tag on npm
-        if: env.BRANCH_NAME == 'master' && steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           git checkout master
           pnpm changeset:next
@@ -94,7 +94,7 @@ jobs:
         run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
 
       - name: Decides if Docs should be deployed
-        if: env.BRANCH_NAME == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
+        if: github.ref_name == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
       - name: Configure GitHub Pages
