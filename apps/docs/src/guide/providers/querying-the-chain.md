@@ -32,3 +32,23 @@ Get all the spendable balances of all assets for an address. This is different f
 This method returns all the blocks from the blockchain that match the given query. The below code snippet shows how to get the last 10 blocks.
 
 <<< @/../../../packages/account/src/providers/provider.test.ts#Provider-get-blocks{ts:line-numbers}
+
+### Get messages
+
+You can use the `getMessages` method to retrieve a list of messages from the blockchain.
+
+<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Message-getMessages{ts:line-numbers}
+
+### Get resources
+
+You can use the `getResourcesToSpend` method to retrieve a list of all the resources (coins + assets) that can be spent by a given address.
+
+<<< @/../../../packages/account/src/account.test.ts#Message-getResourcesToSpend{ts:line-numbers}
+
+### Get message proof
+
+A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
+
+<<< @/../../../packages/account/src/account.test.ts#Message-getMessageProof{ts:line-numbers}
+
+<!-- TODO: Add docs for the two new parameters `commitBlockId` and `commitBlockHeight` -->
