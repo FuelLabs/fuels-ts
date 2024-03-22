@@ -29,10 +29,8 @@ jobs:
           PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
           echo "$PR_TITLE"
           if echo "$PR_TITLE" | grep -qE '^\w+!:'; then
-            echo "Is a breaking change"
             echo "isBreakingChange=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Is not a breaking change"
             echo "isBreakingChange=false" >> "$GITHUB_OUTPUT"
           fi
 
