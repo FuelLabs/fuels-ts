@@ -13,7 +13,7 @@
 - [Types](../types/index.md)
   - [Address](../types/address.md)
   - [Arrays](../types/arrays.md)
-  - [AssetId](../types/asset-id.md)
+  - [Asset ID](../types/asset-id.md)
   - [Bech32](../types/bech32.md)
   - [Bits256](../types/bits256.md)
   - [Bits512](../types/bits512.md)
