@@ -44,6 +44,7 @@ export default defineConfig({
       {
         text: 'Introduction',
         link: '/guide/introduction/',
+        collapsed: false,
         items: [
           {
             text: 'Getting Started',
@@ -58,7 +59,7 @@ export default defineConfig({
       {
         text: 'Basics',
         link: '/guide/basics/',
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: 'Wallets',
@@ -119,7 +120,7 @@ export default defineConfig({
       {
         text: 'Essentials',
         link: '/guide/essentials/',
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: 'Contracts',
@@ -235,7 +236,7 @@ export default defineConfig({
       {
         text: 'Extras',
         link: '/guide/extras/',
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: 'Providers',
@@ -375,7 +376,7 @@ export default defineConfig({
       {
         text: 'Tooling',
         link: '/guide/tooling/',
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: 'Testing',
