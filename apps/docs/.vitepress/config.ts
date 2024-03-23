@@ -88,7 +88,7 @@ export default defineConfig({
               },
               {
                 text: 'Locking and Unlocking',
-                link: '/guide/wallets/locking-and-unlocking'
+                link: '/guide/wallets/locking-and-unlocking',
               },
               {
                 text: 'Signing Transactions',
@@ -115,7 +115,7 @@ export default defineConfig({
               },
             ],
           },
-        ]
+        ],
       },
       {
         text: 'Essentials',
@@ -274,7 +274,7 @@ export default defineConfig({
                 text: 'Bech32',
                 link: '/guide/types/bech32',
               },
-  
+
               {
                 text: 'Bits256',
                 link: '/guide/types/bits256',
@@ -349,8 +349,8 @@ export default defineConfig({
               {
                 text: 'Address conversion',
                 link: '/guide/utilities/address-conversion',
-              }
-            ]
+              },
+            ],
           },
           {
             text: 'Cookbook',
@@ -371,7 +371,7 @@ export default defineConfig({
               },
             ],
           },
-        ]
+        ],
       },
       {
         text: 'Tooling',
@@ -395,7 +395,7 @@ export default defineConfig({
                 text: 'Tweaking the Blockchain',
                 link: '/guide/testing/tweaking-the-blockchain',
               },
-            ]
+            ],
           },
           {
             text: 'CLI',
@@ -419,11 +419,11 @@ export default defineConfig({
                     text: 'Binaries',
                     link: '/guide/fuels/binaries',
                   },
-                ]
+                ],
               },
             ],
           },
-        ]
+        ],
       },
       apiLinks,
     ],
