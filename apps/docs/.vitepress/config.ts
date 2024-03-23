@@ -53,10 +53,6 @@ export default defineConfig({
             text: 'Quickstart',
             link: '/quickstart',
           },
-          {
-            text: 'Glossary',
-            link: '/glossary',
-          }
         ],
       },
       {
