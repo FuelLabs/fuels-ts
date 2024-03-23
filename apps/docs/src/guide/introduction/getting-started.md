@@ -1,9 +1,9 @@
 <script setup>
-  import { data } from './versions.data'
+  import { data } from '../../versions.data'
   const { fuels } = data
 </script>
 
-# Getting Started with Fuels-ts
+# Getting Started
 
 This guide will walk you through the process of setting up and using the Fuels-ts library in your front-end project.
 

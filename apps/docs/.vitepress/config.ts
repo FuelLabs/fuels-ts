@@ -48,11 +48,11 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/getting-started',
+            link: '/guide/introduction/getting-started',
           },
           {
             text: 'Quickstart',
-            link: '/quickstart',
+            link: '/guide/introduction/quickstart',
           },
         ],
       },
