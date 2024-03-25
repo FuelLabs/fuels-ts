@@ -7,14 +7,14 @@ import type { TransactionResultReceipt } from './transaction-response';
 /** @hidden */
 export function getDecodedLogs<T = unknown>(
   receipts: Array<TransactionResultReceipt>,
-  mainAbiInterface: JsonAbi,
+  mainAbi: JsonAbi,
   externalAbis: Record<string, JsonAbi> = {}
 ): T[] {
   return receipts.reduce((logs: T[], receipt) => {
     if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
       const interfaceToUse = externalAbis[receipt.id]
         ? new Interface(externalAbis[receipt.id])
-        : new Interface(mainAbiInterface);
+        : new Interface(mainAbi);
 
       const data =
         receipt.type === ReceiptType.Log
