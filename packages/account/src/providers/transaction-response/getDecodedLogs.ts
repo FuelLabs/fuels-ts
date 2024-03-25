@@ -1,5 +1,5 @@
-import type { Interface } from '@fuel-ts/abi-coder';
-import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { Interface, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
@@ -7,17 +7,22 @@ import type { TransactionResultReceipt } from './transaction-response';
 /** @hidden */
 export function getDecodedLogs<T = unknown>(
   receipts: Array<TransactionResultReceipt>,
-  abiInterface: Interface
+  mainAbiInterface: JsonAbi,
+  externalAbis: Record<string, JsonAbi> = {}
 ): T[] {
-  return receipts.reduce((logs: T[], r) => {
-    if (r.type === ReceiptType.LogData) {
-      logs.push(abiInterface.decodeLog(r.data, r.val1.toNumber(), r.id)[0]);
-    }
+  return receipts.reduce((logs: T[], receipt) => {
+    if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
+      const interfaceToUse = externalAbis[receipt.id]
+        ? new Interface(externalAbis[receipt.id])
+        : new Interface(mainAbiInterface);
 
-    if (r.type === ReceiptType.Log) {
-      logs.push(
-        abiInterface.decodeLog(new BigNumberCoder('u64').encode(r.val0), r.val1.toNumber(), r.id)[0]
-      );
+      const data =
+        receipt.type === ReceiptType.Log
+          ? new BigNumberCoder('u64').encode(receipt.val0)
+          : receipt.data;
+
+      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toNumber());
+      logs.push(decodedLog);
     }
 
     return logs;
