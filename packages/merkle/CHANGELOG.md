@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.78.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.78.0
+- @fuel-ts/math@0.78.0
+- @fuel-ts/interfaces@0.78.0
+
 ## 0.77.0
 
 ### Patch Changes
