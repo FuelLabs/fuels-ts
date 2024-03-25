@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.78.0
+
+### Minor Changes
+
+- fabb7a89: feat!: improve signing DX
+
+### Patch Changes
+
+- Updated dependencies [9df48991]
+  - @fuel-ts/versions@0.78.0
+  - @fuel-ts/abi-coder@0.78.0
+  - @fuel-ts/address@0.78.0
+  - @fuel-ts/errors@0.78.0
+  - @fuel-ts/transactions@0.78.0
+  - @fuel-ts/hasher@0.78.0
+  - @fuel-ts/crypto@0.78.0
+  - @fuel-ts/math@0.78.0
+  - @fuel-ts/utils@0.78.0
+  - @fuel-ts/merkle@0.78.0
+  - @fuel-ts/fuel-core@0.78.0
+  - @fuel-ts/interfaces@0.78.0
+
 ## 0.77.0
 
 ### Minor Changes

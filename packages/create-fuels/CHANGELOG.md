@@ -1,5 +1,11 @@
 # create-fuels
 
+## 0.78.0
+
+### Patch Changes
+
+- fuels@0.78.0
+
 ## 0.77.0
 
 ### Minor Changes

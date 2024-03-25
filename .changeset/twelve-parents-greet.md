@@ -1,4 +1,0 @@
----
----
-
-docs: reorganize documentation
