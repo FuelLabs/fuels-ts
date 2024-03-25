@@ -52,6 +52,7 @@ export class FunctionInvocationScope<
       txParameters: this.txParameters,
       forward: this.forward,
       args: this.args,
+      externalAbis: this.externalAbis,
     };
   }
 
