@@ -27,138 +27,141 @@ jobs:
           # see https://github.com/changesets/action/issues/70
           persist-credentials: false
 
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
+      - name: Test on which branch I am
+        run: echo $(git rev-parse --abbrev-ref HEAD)
+        
+#      - name: CI Setup
+#        uses: ./.github/actions/ci-setup
+#
+#      # if there are changesets present, package.json will be bumped
+#      - name: Bump and Collect Versions
+#        run: |
+#          pnpm changeset version
+#          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+#          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
+#          echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
+#          git reset --hard
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # if there are changesets present, package.json will be bumped
-      - name: Bump and Collect Versions
-        run: |
-          pnpm changeset version
-          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
-          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
-          echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
-          git reset --hard
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Ensure NPM access
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Build
-        run: pnpm build
-
-      - name: Set branch name and changeset PR title
-        run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages for branch \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: FuelLabs/changesets-action@main
-        with:
-          publish: pnpm changeset:publish
-          version: pnpm changeset:version-with-docs
-          commit: "ci(changesets): versioning packages"
-          title: ${{ env.CHANGESET_PR_TITLE }}
-          createGithubReleases: aggregate
-          githubReleaseName: v${{ env.BUILD_VERSION }}
-          githubTagName: v${{ env.BUILD_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Prettify changelog
-        run: |
-          pnpm changeset:update-changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          RELEASE_TAG: v${{ env.BUILD_VERSION }}
-          PUBLISHED: ${{ steps.changesets.outputs.published }}
-          REF_NAME: ${{ github.ref_name }}
-          
-      - name: Delete the release branch
-        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') == 'true'
-        run: |
-          git push origin --delete ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-
-      - name: Release to @next tag on npm
-        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
-        run: |
-          git checkout master
-          pnpm changeset:next
-          git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot next
-          pnpm changeset publish --tag next
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # ensure docs are always deployed after merge of changeset PR
-      - name: Get the last commit message and set env vars
-        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
-
-      - name: Decides if Docs should be deployed
-        if: github.ref_name == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
-        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
-
-      - name: Configure GitHub Pages
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/configure-pages@v2
-
-      - name: Upload Docs Artifact
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: apps/docs/dist
-
-      - name: Deploy Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        id: deployment
-        uses: actions/deploy-pages@v1
-
-      - name: Checkout API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/checkout@v3
-        with:
-          ref: docs
-          fetch-depth: 0
-
-      - name: Generate and Push API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git merge origin/master --no-edit
-          pnpm install
-          pnpm build
-          rm -f apps/docs/.gitignore
-          git add apps/docs/src/api/
-          git add apps/docs/.typedoc/api-links.json
-          git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
-          git push
-          git restore apps/docs/.gitignore
-
-      # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.3
-        if: steps.changesets.outputs.published != 'true'
-        with:
-          version: 2
-          verbose: false
-          arch: amd64
-          rootdir: ""
-          workdir: ""
-      - uses: aws-actions/configure-aws-credentials@v1
-        if: steps.changesets.outputs.published != 'true'
-        with:
-          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
-          aws-region: us-east-1
-      - name: Upload assets to s3
-        if: steps.changesets.outputs.published != 'true'
-        run: |
-          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
-        env:
-          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
+#      - name: Ensure NPM access
+#        run: npm whoami
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#
+#      - name: Build
+#        run: pnpm build
+#
+#      - name: Set branch name and changeset PR title
+#        run: |
+#          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages for branch \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+#
+#      - name: Create Release Pull Request or Publish to npm
+#        id: changesets
+#        uses: FuelLabs/changesets-action@main
+#        with:
+#          publish: pnpm changeset:publish
+#          version: pnpm changeset:version-with-docs
+#          commit: "ci(changesets): versioning packages"
+#          title: ${{ env.CHANGESET_PR_TITLE }}
+#          createGithubReleases: aggregate
+#          githubReleaseName: v${{ env.BUILD_VERSION }}
+#          githubTagName: v${{ env.BUILD_VERSION }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#
+#      - name: Prettify changelog
+#        run: |
+#          pnpm changeset:update-changelog
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+#          RELEASE_TAG: v${{ env.BUILD_VERSION }}
+#          PUBLISHED: ${{ steps.changesets.outputs.published }}
+#          REF_NAME: ${{ github.ref_name }}
+#          
+#      - name: Delete the release branch
+#        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') == 'true'
+#        run: |
+#          git push origin --delete ${{ github.ref_name }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+#
+#      - name: Release to @next tag on npm
+#        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+#        run: |
+#          git checkout master
+#          pnpm changeset:next
+#          git add .changeset/fuel-labs-ci.md
+#          pnpm changeset version --snapshot next
+#          pnpm changeset publish --tag next
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      # ensure docs are always deployed after merge of changeset PR
+#      - name: Get the last commit message and set env vars
+#        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
+#
+#      - name: Decides if Docs should be deployed
+#        if: github.ref_name == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
+#        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
+#
+#      - name: Configure GitHub Pages
+#        if: env.SHOULD_DEPLOY_DOCS == 'true'
+#        uses: actions/configure-pages@v2
+#
+#      - name: Upload Docs Artifact
+#        if: env.SHOULD_DEPLOY_DOCS == 'true'
+#        uses: actions/upload-pages-artifact@v1
+#        with:
+#          path: apps/docs/dist
+#
+#      - name: Deploy Docs
+#        if: env.SHOULD_DEPLOY_DOCS == 'true'
+#        id: deployment
+#        uses: actions/deploy-pages@v1
+#
+#      - name: Checkout API Docs
+#        if: env.SHOULD_DEPLOY_DOCS == 'true'
+#        uses: actions/checkout@v3
+#        with:
+#          ref: docs
+#          fetch-depth: 0
+#
+#      - name: Generate and Push API Docs
+#        if: env.SHOULD_DEPLOY_DOCS == 'true'
+#        run: |
+#          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git config user.name "github-actions[bot]"
+#          git merge origin/master --no-edit
+#          pnpm install
+#          pnpm build
+#          rm -f apps/docs/.gitignore
+#          git add apps/docs/src/api/
+#          git add apps/docs/.typedoc/api-links.json
+#          git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
+#          git push
+#          git restore apps/docs/.gitignore
+#
+#      # Upload assets to S3
+#      - uses: unfor19/install-aws-cli-action@v1.0.3
+#        if: steps.changesets.outputs.published != 'true'
+#        with:
+#          version: 2
+#          verbose: false
+#          arch: amd64
+#          rootdir: ""
+#          workdir: ""
+#      - uses: aws-actions/configure-aws-credentials@v1
+#        if: steps.changesets.outputs.published != 'true'
+#        with:
+#          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
+#          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
+#          aws-region: us-east-1
+#      - name: Upload assets to s3
+#        if: steps.changesets.outputs.published != 'true'
+#        run: |
+#          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
+#        env:
+#          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
