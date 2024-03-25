@@ -15,12 +15,12 @@ Check that the arguments supplied to the function, match the required type.
 ## `ACCOUNT_REQUIRED`
 When an [`Account`](../../api/Account/Account.md) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).
 
-It could be caused during the deployments of contracts, when an account is required to sign the transaction. This can be resolved by the following the deployment guide [here](../contracts/deploying-contracts.md).
+It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
 
 ## `CONVERTING_FAILED`
-When a converting a big number into an incompatible format.
+When converting a big number into an incompatible format.
 
-Ensure that the value you've supplied to the big number, is compatible with the value you are converting to.
+Ensure that the value you've supplied to the big number is compatible with the value you are converting to.
 
 ## `DUPLICATED_POLICY`
 When there are more than policies with the same type, for a transaction.
@@ -28,7 +28,7 @@ When there are more than policies with the same type, for a transaction.
 Ensure that there are no duplicate (by type) policies for a transaction.
 
 ## `ERROR_BUILDING_BLOCK_EXPLORER_URL`
-When more than one of the following is options is passed: `path`, `address`, `txId`, `blockNumber`.
+When more than one of the following options is passed: `path`, `address`, `txId`, `blockNumber`.
 
 Check that only one of the following options is passed: `path`, `address`, `txId`, `blockNumber`.
 
@@ -58,7 +58,7 @@ Checksum validation failed for the provided mnemonic.
 Ensure that the mnemonic is correct.
 
 ## `INVALID_CONFIGURABLE_CONSTANTS`
-When the program type either: does _not_ have configurable constants to be set; or the provided configurable constant does not belong to the program type, as defined by it's ABI.
+When the program type either: does _not_ have configurable constants to be set; or the provided configurable constant does not belong to the program type, as defined by its ABI.
 
 Ensure the configurable constants provided are correct and are defined in ABI.
 
@@ -85,12 +85,12 @@ Ensure that the [EVM address](../types/evm-address.md) is valid.
 ## `INVALID_INPUT_PARAMETERS`
 When the provided input parameters are _not_ valid.
 
-The error message will determine which parameter is missing. It could be that the provided program type is not one of the following `contract`, `script`, `predicate`.
+The error message will determine which parameter is missing. It could be that the provided program type is not one of the following `contract`, `script`, or `predicate`.
 
 ## `INVALID_MNEMONIC`
 When the supplied mnemonic is invalid.
 
-Check the message for more details. It could be that the mnemonic phrase word length, is _not_ one of the following: 12, 15, 18, 21, or 24 lengths.
+Check the message for more details. It could be that the mnemonic phrase word length is _not__ one of the following: 12, 15, 18, 21, or 24 lengths.
 
 ## `INVALID_MULTICALL`
 When the multi-call has a call that returns a heap type that is not the last call, or the multi-call has more than one call that returns a heap type.
@@ -150,7 +150,7 @@ The type is within [`TransactionType`](../../api/Account/TransactionType.md).
 ## `INVALID_TTL`
 When the TTL is less than or equal to zero.
 
-Ensure that the TTL is a number, and that the TTL is greater than zero.
+Ensure that the TTL is a number and that the TTL is greater than zero.
 
 ## `INVALID_WORD_LIST`
 When the word list length is not equal to 2048.
@@ -180,7 +180,7 @@ It could be caused by the provider not being set for either an [`Account`](../..
 ## `MISSING_REQUIRED_PARAMETER`
 When a required parameter has not been supplied to a given method.
 
-The error message will determine which parameter is missing. This could be caused during type generation, when neither `inputs` or `filepaths` are supplied (at least one is required).
+The error message will determine which parameter is missing. This could be caused during type generation when neither `inputs` nor `filepaths` are supplied (at least one is required).
 
 ## `NODE_INFO_CACHE_EMPTY`
 When the Fuel Node info cache is empty; This is usually caused by not being connected to the Fuel Node.
