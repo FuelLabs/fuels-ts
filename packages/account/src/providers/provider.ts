@@ -800,7 +800,7 @@ export default class Provider {
   /**
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
-   * on the the transaction.
+   * on the transaction.
    *
    * @privateRemarks
    * The tolerance is add on top of the gasUsed calculated
