@@ -3,11 +3,9 @@ import type { Options } from 'tsup';
 
 import { keystoreOptions } from './tsup.config';
 
-const configs: Options[] = keystoreOptions.map(
-  (config) => ({
-    ...config,
-    ...tsupDtsDefaults,
-  })
-) 
+const configs: Options[] = keystoreOptions.map((config) => ({
+  ...config,
+  ...tsupDtsDefaults,
+}));
 
 export default configs;

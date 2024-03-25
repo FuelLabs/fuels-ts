@@ -5,7 +5,7 @@ import tsupPkg from './tsup.config';
 
 const configs: Options = {
   ...tsupPkg,
-  ...tsupDtsDefaults
+  ...tsupDtsDefaults,
 };
 
 export default configs;
