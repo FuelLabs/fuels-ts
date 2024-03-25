@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.76.3
+
+### Patch Changes
+
+- dd0b4f14: chore: test release
+  - @fuel-ts/abi-coder@0.76.3
+  - @fuel-ts/abi-typegen@0.76.3
+  - @fuel-ts/account@0.76.3
+  - @fuel-ts/address@0.76.3
+  - @fuel-ts/contract@0.76.3
+  - @fuel-ts/crypto@0.76.3
+  - @fuel-ts/errors@0.76.3
+  - @fuel-ts/forc@0.76.3
+  - @fuel-ts/fuel-core@0.76.3
+  - @fuel-ts/hasher@0.76.3
+  - @fuel-ts/interfaces@0.76.3
+  - @fuel-ts/math@0.76.3
+  - @fuel-ts/merkle@0.76.3
+  - @fuel-ts/program@0.76.3
+  - @fuel-ts/script@0.76.3
+  - @fuel-ts/transactions@0.76.3
+  - @fuel-ts/utils@0.76.3
+  - @fuel-ts/versions@0.76.3
+
 ## 0.76.2
 
 ### Patch Changes
