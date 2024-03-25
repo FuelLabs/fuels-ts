@@ -94,3 +94,8 @@ export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
   gasPrice: BigNumberish;
 }>;
+
+export type JsonAbisFromAllCalls = {
+  main: JsonAbi;
+  otherContractsAbis: Record<string, JsonAbi>;
+};
