@@ -14,6 +14,7 @@ import {
 } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 
+import type { Account } from '../../account';
 import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
@@ -39,6 +40,7 @@ import type {
   CoinTransactionRequestOutput,
 } from './output';
 import { outputify } from './output';
+import type { TransactionRequestLike } from './types';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
@@ -213,11 +215,26 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * @hidden
    *
-   * Creates an empty witness without any side effects and returns the index
+   * Pushes a witness to the list and returns the index
+   *
+   * @param signature - The signature to add to the witness.
+   * @returns The index of the created witness.
    */
-  protected createWitness() {
+  addWitness(signature: BytesLike) {
+    this.witnesses.push(signature);
+    return this.witnesses.length - 1;
+  }
+
+  /**
+   * @hidden
+   *
+   * Creates an empty witness without any side effects and returns the index
+   *
+   * @returns The index of the created witness.
+   */
+  protected addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
+    this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
   }
 
@@ -247,6 +264,23 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       throw new NoWitnessAtIndexError(index);
     }
     this.witnesses[index] = witness;
+  }
+
+  /**
+   * Helper function to add an external signature to the transaction.
+   *
+   * @param account - The account/s to sign to the transaction.
+   * @returns The transaction with the signature witness added.
+   */
+  async addAccountWitnesses(account: Account | Account[]) {
+    const accounts = Array.isArray(account) ? account : [account];
+    await Promise.all(
+      accounts.map(async (acc) => {
+        this.addWitness(await acc.signTransaction(<TransactionRequestLike>this));
+      })
+    );
+
+    return this;
   }
 
   /**
@@ -326,7 +360,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       // Insert a dummy witness if no witness exists
       if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createWitness();
+        witnessIndex = this.addEmptyWitness();
       }
     }
 
@@ -371,7 +405,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       // Insert a dummy witness if no witness exists
       if (typeof witnessIndex !== 'number') {
-        witnessIndex = this.createWitness();
+        witnessIndex = this.addEmptyWitness();
       }
     }
 

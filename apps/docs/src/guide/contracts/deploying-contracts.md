@@ -1,4 +1,4 @@
-<script setup>
+ <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
   const indexUrl = `https://docs.fuel.network/docs/sway/introduction/`
@@ -37,4 +37,4 @@ Now that the contract is deployed, you can interact with it. In the following st
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
 
-For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../abi-typegen/generating-types-from-abi.md)
+For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../typegen/generating-types.md)
