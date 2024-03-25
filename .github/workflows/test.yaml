@@ -87,6 +87,7 @@ jobs:
           TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
 
   test:
+    if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
     needs: [environments, e2e]
     steps:

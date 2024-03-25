@@ -1,5 +1,12 @@
 # @fuel-ts/errors
 
+## 0.78.0
+
+### Patch Changes
+
+- Updated dependencies [9df48991]
+  - @fuel-ts/versions@0.78.0
+
 ## 0.77.0
 
 ### Patch Changes
