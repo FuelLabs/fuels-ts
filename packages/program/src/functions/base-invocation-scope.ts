@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { BaseWalletUnlocked, Provider, CoinQuantity } from '@fuel-ts/account';
+import type { Provider, CoinQuantity, CallResult, Account } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -60,6 +60,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
+  private addSignersCallback?: (
+    txRequest: ScriptTransactionRequest
+  ) => Promise<ScriptTransactionRequest>;
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -223,6 +226,7 @@ export class BaseInvocationScope<TReturn = any> {
     const request = await this.getTransactionRequest();
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
       resourcesOwner: this.program.account as AbstractAccount,
+      signatureCallback: this.addSignersCallback,
     });
 
     return txCost;
@@ -264,6 +268,10 @@ export class BaseInvocationScope<TReturn = any> {
 
     // Adding required number of OutputVariables
     this.transactionRequest.addVariableOutputs(outputVariables);
+
+    if (this.addSignersCallback) {
+      await this.addSignersCallback(this.transactionRequest);
+    }
 
     return this;
   }
@@ -321,6 +329,13 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  addSigners(signers: Account | Account[]) {
+    this.addSignersCallback = async (transactionRequest) =>
+      transactionRequest.addAccountWitnesses(signers);
+
+    return this;
+  }
+
   /**
    * Prepares and returns the transaction request object.
    *
@@ -364,18 +379,12 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
     assert(this.program.account, 'Wallet is required!');
-    /**
-     * NOTE: Simulating a transaction with UTXOs validation requires the transaction
-     * to be signed by the wallet. This is only possible if the wallet is unlocked.
-     * Since there is no guarantee at this point that the account instance is an unlocked wallet
-     * (BaseWalletUnlocked instance), we need to check it before run the simulation. Perhaps
-     * we should think in a redesign of the AbstractAccount class to avoid this problem.
-     */
-    const isUnlockedWallet = (<BaseWalletUnlocked>this.program.account)
-      .populateTransactionWitnessesSignature;
 
-    if (!isUnlockedWallet) {
-      return this.dryRun<T>();
+    if (!('populateTransactionWitnessesSignature' in this.program.account)) {
+      throw new FuelError(
+        ErrorCode.ABI_MAIN_METHOD_MISSING,
+        'An unlocked wallet is required to simulate a contract call.'
+      );
     }
 
     await this.fundWithRequiredCoins();
@@ -396,16 +405,31 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    assert(this.program.account, 'Wallet is required!');
+    const { receipts } = await this.getTransactionCost();
 
-    const provider = this.getProvider();
-    await this.fundWithRequiredCoins();
+    const callResult: CallResult = {
+      receipts,
+    };
 
-    const response = await provider.call(await this.getTransactionRequest(), {
-      utxoValidation: false,
-    });
+    return InvocationCallResult.build<T>(
+      this.functionInvocationScopes,
+      callResult,
+      this.isMultiCall
+    );
+  }
 
-    return InvocationCallResult.build<T>(this.functionInvocationScopes, response, this.isMultiCall);
+  async get<T = TReturn>(): Promise<InvocationCallResult<T>> {
+    const { receipts } = await this.getTransactionCost();
+
+    const callResult: CallResult = {
+      receipts,
+    };
+
+    return InvocationCallResult.build<T>(
+      this.functionInvocationScopes,
+      callResult,
+      this.isMultiCall
+    );
   }
 
   getProvider(): Provider {

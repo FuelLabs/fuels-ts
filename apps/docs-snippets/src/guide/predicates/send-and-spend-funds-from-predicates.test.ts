@@ -17,7 +17,6 @@ describe(__filename, () => {
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
-
   beforeAll(async () => {
     walletWithFunds = await getTestWallet();
     provider = walletWithFunds.provider;
@@ -25,7 +24,13 @@ describe(__filename, () => {
 
   it('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
-    const predicate = new Predicate(bin, provider, abi);
+    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
+    const predicate = new Predicate({
+      bytecode: bin,
+      provider,
+      abi,
+      inputData: [inputAddress],
+    });
     // #endregion send-and-spend-funds-from-predicates-2
 
     // #region send-and-spend-funds-from-predicates-3
@@ -41,12 +46,6 @@ describe(__filename, () => {
     const initialPredicateBalance = new BN(await predicate.getBalance()).toNumber();
 
     expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
-
-    // #region send-and-spend-funds-from-predicates-4
-    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
-
-    predicate.setData(inputAddress);
-    // #endregion send-and-spend-funds-from-predicates-4
 
     // #region send-and-spend-funds-from-predicates-5
     const receiverWallet = WalletUnlocked.generate({
@@ -67,7 +66,12 @@ describe(__filename, () => {
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {
-    const predicate = new Predicate(bin, provider, abi);
+    const predicate = new Predicate({
+      bytecode: bin,
+      provider,
+      abi,
+      inputData: ['0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4'],
+    });
 
     const amountToPredicate = 100;
 
@@ -82,8 +86,6 @@ describe(__filename, () => {
     const receiverWallet = WalletUnlocked.generate({
       provider,
     });
-
-    predicate.setData('0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4');
 
     const { error } = await safeExec(() =>
       predicate.transfer(receiverWallet.address, predicateBalance, BaseAssetId, {
@@ -102,7 +104,12 @@ describe(__filename, () => {
     const predicateOwner = WalletUnlocked.generate({
       provider,
     });
-    const predicate = new Predicate(bin, predicateOwner.provider, abi);
+    const predicate = new Predicate({
+      bytecode: bin,
+      abi,
+      provider: predicateOwner.provider,
+      inputData: [getRandomB256()],
+    });
 
     const amountToPredicate = 10_000;
 
@@ -115,8 +122,6 @@ describe(__filename, () => {
     const receiverWallet = WalletUnlocked.generate({
       provider,
     });
-
-    predicate.setData(getRandomB256());
 
     const { error } = await safeExec(() =>
       predicate.transfer(receiverWallet.address, amountToPredicate, BaseAssetId, {
@@ -132,7 +137,13 @@ describe(__filename, () => {
   });
 
   it('should ensure predicate createTransfer works as expected', async () => {
-    const predicate = new Predicate(bin, provider, abi);
+    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
+    const predicate = new Predicate({
+      bytecode: bin,
+      abi,
+      provider,
+      inputData: [inputAddress],
+    });
 
     const amountToPredicate = 10_000;
 
@@ -141,10 +152,6 @@ describe(__filename, () => {
     });
 
     await tx.waitForResult();
-
-    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
-
-    predicate.setData(inputAddress);
 
     const receiverWallet = WalletUnlocked.generate({
       provider,

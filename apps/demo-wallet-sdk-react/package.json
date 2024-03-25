@@ -1,6 +1,6 @@
 {
   "name": "demo-wallet-sdk-react",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fuel-wallet/react": "0.15.2",
-    "fuels": "0.73.0",
+    "fuels": "workspace:*",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18"

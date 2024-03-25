@@ -33,7 +33,10 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
-      predicate = new Predicate(predicateBytesTrue, provider);
+      predicate = new Predicate({
+        bytecode: predicateBytesTrue,
+        provider,
+      });
 
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
@@ -56,7 +59,10 @@ describe('Predicate', () => {
       const amountToPredicate = 200_000;
       const amountToReceiver = 50;
 
-      predicate = new Predicate(predicateBytesFalse, provider);
+      predicate = new Predicate({
+        bytecode: predicateBytesFalse,
+        provider,
+      });
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

@@ -39,6 +39,7 @@ import type {
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
+  ScriptTransactionRequest,
 } from './transaction-request';
 import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
@@ -151,6 +152,9 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   usedFee: BN;
+  outputVariables: number;
+  missingContractIds: string[];
+  estimatedInputs: TransactionRequest['inputs'];
 };
 // #endregion cost-estimation-1
 
@@ -263,6 +267,7 @@ export type EstimatePredicateParams = {
 export type TransactionCostParams = EstimateTransactionParams &
   EstimatePredicateParams & {
     resourcesOwner?: AbstractAccount;
+    signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
   };
 
 /**
@@ -830,14 +835,9 @@ export default class Provider {
       estimateTxDependencies = true,
       estimatePredicates = true,
       resourcesOwner,
+      signatureCallback,
     }: TransactionCostParams = {}
-  ): Promise<
-    TransactionCost & {
-      estimatedInputs: TransactionRequest['inputs'];
-      outputVariables: number;
-      missingContractIds: string[];
-    }
-  > {
+  ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const chainInfo = this.getChain();
     const { gasPriceFactor, minGasPrice } = this.getGasConfig();
@@ -870,6 +870,10 @@ export default class Provider {
         (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
       }
       await this.estimatePredicates(txRequestClone);
+    }
+
+    if (signatureCallback && isScriptTransaction) {
+      await signatureCallback(txRequestClone);
     }
 
     /**

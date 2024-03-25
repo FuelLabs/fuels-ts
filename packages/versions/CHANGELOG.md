@@ -1,5 +1,17 @@
 # @fuel-ts/versions
 
+## 0.78.0
+
+### Patch Changes
+
+- 9df48991: fix: command `fuels version` not working
+
+## 0.77.0
+
+### Patch Changes
+
+- Warn when running against unofficial `fuel-core` (e.g. nightly builds), by [@nedsalk](https://github.com/nedsalk) (See [#1855](https://github.com/FuelLabs/fuels-ts/pull/1855))
+
 ## 0.76.0
 
 ### Minor Changes

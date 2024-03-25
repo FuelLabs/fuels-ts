@@ -31,6 +31,7 @@ export enum ErrorCode {
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
   MISSING_PROVIDER = 'missing-provider',
   INVALID_PROVIDER = 'invalid-provider',
+  CONNECTION_REFUSED = 'connection-refused',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
@@ -84,6 +85,7 @@ export enum ErrorCode {
   // wallet / account
   INVALID_PASSWORD = 'invalid-password',
   ACCOUNT_REQUIRED = 'account-required',
+  UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
 
   // chain
   LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
@@ -99,6 +101,9 @@ export enum ErrorCode {
   // script
   SCRIPT_REVERTED = 'script-reverted',
   SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
+
+  // graphql
+  STREAM_PARSING_ERROR = 'stream-parsing-error',
 
   // coder
   // ...

@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.78.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.78.0
+- @fuel-ts/utils@0.78.0
+
+## 0.77.0
+
+### Patch Changes
+
+- Migrate implementations of `sha256`, `keccak` and `scrypt` to `@noble/hashes`, by [@danielbate](https://github.com/danielbate) (See [#1786](https://github.com/FuelLabs/fuels-ts/pull/1786))
+
 ## 0.76.0
 
 ## 0.75.0

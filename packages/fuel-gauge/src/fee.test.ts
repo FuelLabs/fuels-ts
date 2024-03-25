@@ -239,7 +239,11 @@ describe('Fee', () => {
       FuelGaugeProjectsEnum.PREDICATE_TRUE
     );
 
-    const predicate = new Predicate(binHexlified, provider, abiContents);
+    const predicate = new Predicate({
+      bytecode: binHexlified,
+      abi: abiContents,
+      provider,
+    });
 
     const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
       gasLimit: 10_000,

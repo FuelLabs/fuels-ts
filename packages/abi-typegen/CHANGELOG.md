@@ -1,5 +1,21 @@
 # @fuel-ts/abi-typegen
 
+## 0.78.0
+
+### Patch Changes
+
+- Updated dependencies [9df48991]
+  - @fuel-ts/versions@0.78.0
+  - @fuel-ts/errors@0.78.0
+  - @fuel-ts/utils@0.78.0
+  - @fuel-ts/interfaces@0.78.0
+
+## 0.77.0
+
+### Patch Changes
+
+- Added generic data input for the predicate factory, by [@petertonysmith94](https://github.com/petertonysmith94) (See [#1867](https://github.com/FuelLabs/fuels-ts/pull/1867))
+
 ## 0.76.0
 
 ### Minor Changes

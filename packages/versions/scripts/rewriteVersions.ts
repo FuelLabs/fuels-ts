@@ -5,15 +5,15 @@ export const readVersionsFromFiles = () => {
   const rootDir = join(__dirname, '../../..');
   const packagesDir = join(rootDir, 'packages');
 
+  const firstLineReg = /^.+$/m;
+
   // forc
   const forcPath = join(packagesDir, 'forc', 'VERSION');
-  const forcContents = readFileSync(forcPath, 'utf8');
-  const forcVersion = forcContents.match(/^.+$/m)?.[0] || forcContents;
+  const forcVersion = readFileSync(forcPath, 'utf8').match(firstLineReg)?.[0];
 
   // fuel-core
   const fuelCorePath = join(packagesDir, 'fuel-core', 'VERSION');
-  const fuelCoreContents = readFileSync(fuelCorePath, 'utf8');
-  const fuelCoreVersion = fuelCoreContents.match(/^.+$/m)?.[0] || fuelCoreContents;
+  const fuelCoreVersion = readFileSync(fuelCorePath, 'utf8').match(firstLineReg)?.[0];
 
   // fuels
   const fuelsPath = join(packagesDir, 'fuels', 'package.json');
@@ -62,8 +62,8 @@ export const rewriteVersions = () => {
   writeFileSync(filepath, contents);
 };
 
-/* istanbul ignore next */
-// Do not auto-run script when inside vitest
+/* istanbul ignore next -- @preserve */
 if (!process.env.VITEST) {
+  // do not auto-run script when inside vitest
   rewriteVersions();
 }

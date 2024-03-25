@@ -1,0 +1,11 @@
+# demo-wallet-sdk-react
+
+## 0.1.2
+
+### Patch Changes
+
+- fuels@0.78.0
+
+## 0.1.1
+
+## 0.1.1
