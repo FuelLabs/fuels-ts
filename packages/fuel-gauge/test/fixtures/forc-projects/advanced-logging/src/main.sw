@@ -8,7 +8,6 @@ use std::contract_id::ContractId;
 use advanced_logging_abi::AdvancedLogging;
 use advanced_logging_other_contract_abi::AdvancedLoggingOtherContract;
 
-
 enum GameState {
     Playing: u8,
     GameOver: u8,

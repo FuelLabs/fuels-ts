@@ -4,8 +4,3 @@ license = "Apache-2.0"
 name = "advanced-logging-abi"
 
 [dependencies]
-
-
-
-
-
