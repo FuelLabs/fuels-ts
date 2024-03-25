@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:74](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L74)
+[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:74](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L74)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:73](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L73)
+[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:73](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L73)
 
 ___
 
@@ -30,4 +30,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:72](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L72)
+[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:72](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L72)

@@ -42,7 +42,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L79)
+[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L79)
 
 ___
 
@@ -71,7 +71,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L69)
+[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L69)
 
 ___
 
@@ -102,7 +102,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L60)
+[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L60)
 
 ___
 
@@ -132,7 +132,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L49)
+[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L49)
 
 ___
 
@@ -160,7 +160,7 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L39)
+[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L39)
 
 ## Methods
 
@@ -185,7 +185,7 @@ A locked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L18)
+[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L18)
 
 ___
 
@@ -210,4 +210,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/067580a5/packages/account/src/wallet/wallet.ts#L29)
+[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/wallet/wallet.ts#L29)
