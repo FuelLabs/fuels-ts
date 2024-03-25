@@ -1,4 +1,4 @@
-# Managing wallets
+# Wallets
 
 You can use wallets for many important things, for instance:
 

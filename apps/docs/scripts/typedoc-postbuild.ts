@@ -55,7 +55,7 @@ const renameInterfaces = () => {
  * Generates a json file containing the links for the sidebar to be used by vitepress.
  */
 const exportLinksJson = () => {
-  const links: Link = { link: '/api/', text: 'API', items: [] };
+  const links: Link = { link: '/api/', text: 'API', collapsed: true, items: [] };
   const directories = readdirSync(apiDocsDir);
   directories
     .filter((directory) => !directory.endsWith('.md'))
