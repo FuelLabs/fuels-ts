@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import type { Interface } from '@fuel-ts/abi-coder';
-import { getDecodedLogs } from '@fuel-ts/account';
 import type {
   CallResult,
   TransactionResponse,
   TransactionResult,
   TransactionResultReceipt,
 } from '@fuel-ts/account';
+import { getDecodedLogs } from '@fuel-ts/account';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -16,7 +15,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from '../contract-call-script';
 import { callResultToInvocationResult } from '../script-request';
-import type { CallConfig, InvocationScopeLike } from '../types';
+import type { CallConfig, InvocationScopeLike, JsonAbisFromAllCalls } from '../types';
 
 /**
  * Calculates the gas usage from a CallResult.
@@ -74,6 +73,27 @@ export class InvocationResult<T = any> {
   }
 
   /**
+   * Gets the ABI from all calls.
+   *
+   * @returns The ABIs from all calls.
+   */
+  getAbiFromAllCalls = () =>
+    this.functionScopes.reduce((acc, funcScope, i) => {
+      const { program, externalAbis } = funcScope.getCallConfig();
+
+      if (i === 0) {
+        acc.main = program.interface.jsonAbi;
+        acc.otherContractsAbis = {};
+      } else {
+        acc.otherContractsAbis[(<AbstractContract>program).id.toB256()] = program.interface.jsonAbi;
+      }
+
+      acc.otherContractsAbis = { ...acc.otherContractsAbis, ...externalAbis };
+
+      return acc;
+    }, {} as JsonAbisFromAllCalls);
+
+  /**
    * Decodes the value from the call result.
    *
    * @param callResult - The call result.
@@ -106,13 +126,14 @@ export class InvocationResult<T = any> {
    * @returns The decoded logs.
    */
   protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
-    const callConfig = this.getFirstCallConfig();
-    if (!callConfig) {
+    const mainCallConfig = this.getFirstCallConfig();
+    if (!mainCallConfig) {
       return [];
     }
 
-    const { program } = callConfig;
-    return getDecodedLogs(receipts, program.interface as Interface);
+    const { main, otherContractsAbis } = this.getAbiFromAllCalls();
+
+    return getDecodedLogs(receipts, main, otherContractsAbis);
   }
 }
 
