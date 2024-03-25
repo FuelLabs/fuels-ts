@@ -1,5 +1,6 @@
 [workspace]
 members = [
+  "advanced-logging-abi",
   "advanced-logging-other-contract-abi",
   "advanced-logging-other-contract",
   "advanced-logging",
