@@ -2,4 +2,4 @@
 "@fuel-ts/abi-typegen": minor
 ---
 
-Added correct ESM types exports for abi-typegen
+fix: ESM module types
