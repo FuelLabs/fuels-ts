@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult } from '@fuel-ts/account';
+import type { Provider, CoinQuantity, CallResult, Account } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -62,6 +62,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
+  private addSignersCallback?: (
+    txRequest: ScriptTransactionRequest
+  ) => Promise<ScriptTransactionRequest>;
 
   /**
    * Constructs an instance of BaseInvocationScope.
@@ -225,6 +228,7 @@ export class BaseInvocationScope<TReturn = any> {
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
       resourcesOwner: this.program.account as AbstractAccount,
+      signatureCallback: this.addSignersCallback,
     });
 
     return txCost;
@@ -265,6 +269,10 @@ export class BaseInvocationScope<TReturn = any> {
 
     // Adding required number of OutputVariables
     this.transactionRequest.addVariableOutputs(outputVariables);
+
+    if (this.addSignersCallback) {
+      await this.addSignersCallback(this.transactionRequest);
+    }
 
     return this;
   }
@@ -321,6 +329,13 @@ export class BaseInvocationScope<TReturn = any> {
       amount,
       assetId
     );
+
+    return this;
+  }
+
+  addSigners(signers: Account | Account[]) {
+    this.addSignersCallback = async (transactionRequest) =>
+      transactionRequest.addAccountWitnesses(signers);
 
     return this;
   }
