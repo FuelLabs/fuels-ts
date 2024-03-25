@@ -362,6 +362,10 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
+                text: 'Transactions with Multiple Signers',
+                link: '/guide/cookbook/transactions-with-multiple-signers',
+              },
+              {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
               },

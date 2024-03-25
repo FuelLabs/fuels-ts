@@ -105,6 +105,19 @@ export abstract class FuelConnector extends EventEmitter {
   }
 
   /**
+   * Should start the sign transaction process and return
+   * the signed transaction.
+   *
+   * @param address - The address to sign the transaction
+   * @param transaction - The transaction to sign
+   *
+   * @returns Transaction signature
+   */
+  async signTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
    * Should start the send transaction process and return
    * the transaction id submitted to the network.
    *
