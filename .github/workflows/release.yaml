@@ -31,9 +31,9 @@ jobs:
       
       - name: Unpublish old releases
         run: |
-          npm unpublish fuels@0.76.3
-          npm unpublish fuels@0.76.2
-          npm unpublish fuels@0.76.1
+          npm deprecate fuels@0.76.3
+          npm deprecate fuels@0.76.2
+          npm deprecate fuels@0.76.1
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 #          
