@@ -34,6 +34,7 @@ members = [
   "raw-slice",
   "revert-error",
   "script-bytes",
+  "script-call-contract",
   "script-main-args",
   "script-main-return-struct",
   "script-main-two-args",
