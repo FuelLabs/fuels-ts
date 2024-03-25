@@ -48,6 +48,8 @@ await (async () => {
       core.setFailed("Please add RELEASE_TAG to the environment");
       return;
     }
+    
+    execSync("git fetch --tags");
 
     const release = await octokit.rest.repos.getReleaseByTag({
       ...github.context.repo,
