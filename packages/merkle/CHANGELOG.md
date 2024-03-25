@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.76.3
+
+### Patch Changes
+
+- @fuel-ts/interfaces@0.76.3
+- @fuel-ts/math@0.76.3
+
 ## 0.76.2
 
 ### Patch Changes
