@@ -161,11 +161,7 @@ describe('Advanced Logging', () => {
     ];
 
     logs.forEach((log, i) => {
-      if (typeof log === 'object') {
-        expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
-      } else {
-        expect(log).toBe(expectedLogs[i]);
-      }
+      expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
     });
   });
 
@@ -185,16 +181,12 @@ describe('Advanced Logging', () => {
       .addContracts([advancedLogContract, otherAdvancedLogContract])
       .call();
 
-    const expecedLogs = [
+    expect(logs).toStrictEqual([
       'Hello from script',
       'Hello from main Contract',
       'Hello from other Contract',
       'Received value from main Contract:',
       amount,
-    ];
-
-    expecedLogs.forEach((log, i) => {
-      expect(logs[i]).toBe(log);
-    });
+    ]);
   });
 });
