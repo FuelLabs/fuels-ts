@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": patch
+"@fuel-ts/account": minor
 ---
 
 feat!: improve signing DX
