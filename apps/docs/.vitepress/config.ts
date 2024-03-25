@@ -369,6 +369,18 @@ export default defineConfig({
                 text: 'Wallet SDK and React Hooks',
                 link: '/guide/cookbook/wallet-sdk-and-react-hooks',
               },
+              {
+                text: 'Custom Transactions',
+                link: '/guide/cookbook/custom-transactions',
+              },
+              {
+                text: 'Custom Transactions from Contract Calls',
+                link: '/guide/cookbook/custom-transactions-from-contract-calls',
+              },
+              {
+                text: 'Transactions with Multiple Signers',
+                link: '/guide/cookbook/transactions-with-multiple-signers',
+              },
             ],
           },
         ],
