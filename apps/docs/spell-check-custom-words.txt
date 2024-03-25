@@ -297,3 +297,5 @@ ScriptTransactionRequest
 CDN
 DateTime
 Atomique
+Bech
+CLIs

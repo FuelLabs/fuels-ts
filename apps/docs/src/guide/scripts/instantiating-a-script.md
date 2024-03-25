@@ -12,4 +12,4 @@ Similar to contracts and predicates, once you've written a script in Sway and co
 
 <<< @/../../../packages/script/src/script.test.ts#script-init{ts:line-numbers}
 
-In the [next section](./calling-a-script.md), we show how to call a script.
+In the [next section](./running-scripts.md), we show how to run a script.
