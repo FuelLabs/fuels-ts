@@ -16,7 +16,7 @@ describe('await-execution', () => {
     const { cleanup, ip, port } = await launchNode({
       args: ['--poa-instant', 'false', '--poa-interval-period', '400ms'],
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -26,7 +26,6 @@ describe('await-execution', () => {
     const destination = Wallet.generate({ provider: nodeProvider });
 
     const transfer = await genesisWallet.createTransfer(destination.address, 100, BaseAssetId, {
-      gasPrice: nodeProvider.getGasConfig().minGasPrice,
       gasLimit: 10_000,
     });
 
@@ -58,7 +57,6 @@ describe('await-execution', () => {
       100,
       BaseAssetId,
       {
-        gasPrice: provider.getGasConfig().minGasPrice,
         gasLimit: 10_000,
       }
       // { awaitExecution: true }
@@ -84,7 +82,6 @@ describe('await-execution', () => {
       destination.address,
       100,
       {
-        gasPrice: provider.getGasConfig().minGasPrice,
         gasLimit: 10_000,
       }
       // { awaitExecution: true }

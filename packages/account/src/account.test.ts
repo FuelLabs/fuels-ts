@@ -2,7 +2,6 @@ import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
@@ -15,7 +14,6 @@ import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
 let provider: Provider;
-let gasPrice: BN;
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -23,7 +21,6 @@ afterEach(() => {
 
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
-  ({ minGasPrice: gasPrice } = provider.getGasConfig());
 });
 
 /**
@@ -374,7 +371,6 @@ describe('Account', () => {
     const receiver = await generateTestWallet(provider);
 
     const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await response.wait();
@@ -391,7 +387,6 @@ describe('Account', () => {
     const receiver = await generateTestWallet(provider);
 
     const request = await sender.createTransfer(receiver.address.toB256(), 1, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 
@@ -411,7 +406,6 @@ describe('Account', () => {
 
     const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
       gasLimit: 600,
-      gasPrice,
     });
 
     await response.wait();
@@ -441,7 +435,7 @@ describe('Account', () => {
     const assetIdB = ASSET_B;
     const amount = 1;
 
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice });
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     const sender = await generateTestWallet(provider, [
       [500_000, assetIdA],
       [500_000, assetIdB],
@@ -494,7 +488,7 @@ describe('Account', () => {
     );
     const amount = 10;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice, gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasLimit: 10_000 });
     const result = await tx.waitForResult();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
@@ -522,7 +516,6 @@ describe('Account', () => {
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
     const resp = await sender.transfer(recipient, AMOUNT, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const nextBlock = await resp.waitForResult();
@@ -553,7 +546,6 @@ describe('Account', () => {
     await seedTestWallet(sender, [[500_000, BaseAssetId]]);
 
     const transfer = await sender.transfer(receiver.address, 110, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await transfer.wait();
@@ -574,7 +566,9 @@ describe('Account', () => {
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 110;
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice, gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount, {
+      gasLimit: 10_000,
+    });
     const result = await tx.wait();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
@@ -598,9 +592,7 @@ describe('Account', () => {
     }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
 
     await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
-        gasPrice: 0,
-      });
+      const result = await sender.transfer(receiver.address, 1, BaseAssetId);
       await result.wait();
     }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
   });
@@ -612,9 +604,7 @@ describe('Account', () => {
     );
 
     await expect(async () => {
-      const result = await sender.withdrawToBaseLayer(recipient, 10, {
-        gasPrice: 0,
-      });
+      const result = await sender.withdrawToBaseLayer(recipient, 10);
       await result.wait();
     }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
 

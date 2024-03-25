@@ -14,8 +14,7 @@ const deployContract = async (
   if (contractInstance && useCache) {
     return contractInstance;
   }
-  const { minGasPrice } = provider.getGasConfig();
-  contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
+  contractInstance = await factory.deployContract();
   return contractInstance;
 };
 

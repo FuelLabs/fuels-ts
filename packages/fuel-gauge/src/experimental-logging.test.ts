@@ -1,13 +1,12 @@
 import { randomBytes } from 'crypto';
 import { readFileSync } from 'fs';
-import type { BN, Contract } from 'fuels';
+import type { Contract } from 'fuels';
 import { bn, hexlify } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
 
 let contractInstance: Contract;
-let gasPrice: BN;
 
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
@@ -26,8 +25,6 @@ beforeAll(async () => {
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
 
   contractInstance = await setup({ contractBytecode, abi });
-
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 /**
@@ -39,7 +36,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u8(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toStrictEqual([expected]);
@@ -50,7 +47,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u16(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toStrictEqual([expected]);
@@ -61,7 +58,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u32(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toStrictEqual([expected]);
@@ -72,7 +69,7 @@ describe('Experimental Logging', () => {
 
     const { value, logs } = await contractInstance.functions
       .log_u8_u16_u32(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(value).toEqual(expected);
@@ -84,7 +81,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u64(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(bn(logs[0]).toNumber()).toStrictEqual(expected);
@@ -103,7 +100,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u64_u8(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(bn(logs[0]).toNumber()).toStrictEqual(expected[0]);
@@ -115,7 +112,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_boolean(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toStrictEqual([expected]);
@@ -126,7 +123,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_boolean_boolean(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -137,7 +134,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_number_boolean(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -148,7 +145,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_b256(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toStrictEqual([expected]);
@@ -159,7 +156,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_b512(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toStrictEqual([expected]);
@@ -170,7 +167,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_b256_b512(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -181,7 +178,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_vec_u8(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -192,7 +189,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_vec_b256(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -203,7 +200,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_bytes(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([Uint8Array.from(expected)]);
@@ -214,7 +211,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_std_string(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -225,7 +222,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u16_bytes(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([U16_MAX, Uint8Array.from([40, 41, 42])]);
@@ -236,7 +233,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u8_array(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -247,7 +244,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u16_array(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -258,7 +255,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u16_u8_array(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -269,7 +266,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_str_4(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -280,7 +277,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u8_str_2(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -291,7 +288,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_u8_u16_tuple(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -303,12 +300,12 @@ describe('Experimental Logging', () => {
 
     const { logs: logsFoo } = await contractInstance.functions
       .log_enum(expectedFoo)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     const { logs: logsBar } = await contractInstance.functions
       .log_enum(expectedBar)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logsFoo).toEqual([expectedFoo]);
@@ -321,12 +318,12 @@ describe('Experimental Logging', () => {
 
     const { logs: logsFoo } = await contractInstance.functions
       .log_native_enum(expectedFoo)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     const { logs: logsBar } = await contractInstance.functions
       .log_native_enum(expectedBar)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logsFoo).toEqual([expectedFoo]);
@@ -338,7 +335,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_boolean_enum(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -352,7 +349,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_struct(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -372,7 +369,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_struct_vec(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -389,7 +386,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_struct_boolean(...expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual(expected);
@@ -401,12 +398,12 @@ describe('Experimental Logging', () => {
 
     const { logs: logsSome } = await contractInstance.functions
       .log_option_u8(expectedSome)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     const { logs: logsNone } = await contractInstance.functions
       .log_option_u8(expectedNone)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logsSome).toEqual([expectedSome]);
@@ -418,7 +415,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_raw_slice(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);
@@ -430,7 +427,7 @@ describe('Experimental Logging', () => {
 
     const { logs } = await contractInstance.functions
       .log_str_slice(expected)
-      .txParams({ gasPrice, gasLimit: 10_000 })
+      .txParams({ gasLimit: 10_000 })
       .call();
 
     expect(logs).toEqual([expected]);

@@ -45,11 +45,8 @@ const callScript = async <TData, TResult>(
   result: TResult;
   response: TransactionResponse;
 }> => {
-  const { minGasPrice } = account.provider.getGasConfig();
-
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
-    gasPrice: minGasPrice,
   });
   request.setScript(script, data);
 

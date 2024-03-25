@@ -15,11 +15,10 @@ let provider: Provider;
 const setup = async () => {
   // Create wallet
   const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-  const { minGasPrice } = wallet.provider.getGasConfig();
 
   // Deploy contract
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({ gasPrice: minGasPrice });
+  const contract = await factory.deployContract();
 
   return contract;
 };

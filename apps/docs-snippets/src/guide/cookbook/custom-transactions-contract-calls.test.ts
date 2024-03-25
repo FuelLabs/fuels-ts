@@ -30,13 +30,11 @@ describe('Custom Transactions from Contract Calls', () => {
     senderWallet = await getTestWallet();
     receiverWallet = Wallet.generate({ provider: senderWallet.provider });
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-    const { minGasPrice: gasPrice } = senderWallet.provider.getGasConfig();
-    contract = await factory.deployContract({ storageSlots, gasPrice });
+    contract = await factory.deployContract({ storageSlots });
     abi = abiContents;
   });
 
   it('creates a custom transaction from a contract call', async () => {
-    const gasPrice = senderWallet.provider.getGasConfig().minGasPrice;
     const initialBalance = await receiverWallet.getBalance(BaseAssetId);
     expect(initialBalance.toNumber()).toBe(0);
 
@@ -47,9 +45,7 @@ describe('Custom Transactions from Contract Calls', () => {
     // Connect to the contract
     const contractInstance = new Contract(contract.id, abi, senderWallet);
     // Create an invocation scope for the contract function you'd like to call in the transaction
-    const scope = contractInstance.functions
-      .increment_count(amountToRecipient)
-      .txParams({ gasPrice });
+    const scope = contractInstance.functions.increment_count(amountToRecipient);
     // Fund the transaction
     await scope.fundWithRequiredCoins();
     // Build a transaction request from the invocation scope

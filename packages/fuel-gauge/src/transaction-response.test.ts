@@ -2,7 +2,6 @@ import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { BN } from 'fuels';
 import {
   BaseAssetId,
   FUEL_NETWORK_URL,
@@ -89,12 +88,10 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
 describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
-  let gasPrice: BN;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     adminWallet = await generateTestWallet(provider, [[500_000]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   it('should ensure create method waits till a transaction response is given', async () => {
@@ -106,7 +103,7 @@ describe('TransactionResponse', () => {
       destination.address,
       100,
       BaseAssetId,
-      { gasPrice, gasLimit: 10_000 }
+      { gasLimit: 10_000 }
     );
 
     const response = await TransactionResponse.create(transactionId, provider);
@@ -125,7 +122,7 @@ describe('TransactionResponse', () => {
       destination.address,
       100,
       BaseAssetId,
-      { gasPrice, gasLimit: 10_000 }
+      { gasLimit: 10_000 }
     );
 
     const response = new TransactionResponse(transactionId, provider);
@@ -172,7 +169,7 @@ describe('TransactionResponse', () => {
        * */
       args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -185,7 +182,7 @@ describe('TransactionResponse', () => {
       destination.address,
       100,
       BaseAssetId,
-      { gasPrice, gasLimit: 10_000 }
+      { gasLimit: 10_000 }
     );
     const response = await TransactionResponse.create(transactionId, nodeProvider);
 

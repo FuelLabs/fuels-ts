@@ -33,12 +33,10 @@ import { getSetupContract } from './utils';
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
-  let gasPrice: BN;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     adminWallet = await generateTestWallet(provider, [[100_000_000, BaseAssetId]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   const verifyTransactionSummary = (params: {
@@ -75,7 +73,6 @@ describe('TransactionSummary', () => {
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
-      gasPrice: 1,
     });
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
@@ -107,7 +104,6 @@ describe('TransactionSummary', () => {
     });
 
     const tx1 = await adminWallet.transfer(sender.address, 500_000, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const transactionResponse1 = await tx1.waitForResult();
@@ -119,7 +115,6 @@ describe('TransactionSummary', () => {
     });
 
     const tx2 = await sender.transfer(destination.address, amountToTransfer, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const transactionResponse2 = await tx2.waitForResult();
@@ -147,7 +142,6 @@ describe('TransactionSummary', () => {
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
-      gasPrice: 1,
     });
 
     const resources = await adminWallet.getResourcesToSpend([[100_000, BaseAssetId]]);
@@ -474,11 +468,12 @@ describe('TransactionSummary', () => {
         });
       });
 
-      const { gasUsed, minGasPrice, maxFee, requiredQuantities } =
-        await provider.getTransactionCost(request, []);
+      const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(
+        request,
+        []
+      );
 
       request.gasLimit = gasUsed;
-      request.gasPrice = minGasPrice;
 
       await wallet.fund(request, requiredQuantities, maxFee);
 

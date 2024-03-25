@@ -49,7 +49,6 @@ export default function PredicateExample() {
     }
 
     await burnerWallet.transfer(predicate.address, amount, BaseAssetId, {
-      gasPrice: 1,
       gasLimit: 10_000,
     });
 

@@ -47,7 +47,7 @@ import { bn } from "@fuel-ts/math";
 import { BaseAssetId } from "fuels";
 import { seedTestWallet, generateTestWallet } from "@account/test-utils";
 
-const provider = await Provider.create("http://127.0.0.1:4000/graphql");
+const provider = await Provider.create("http://127.0.0.1:4000/v1/graphql");
 
 // seeding
 const wallet = Wallet.fromPrivateKey("0x...", provider);

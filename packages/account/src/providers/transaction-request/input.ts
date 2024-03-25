@@ -28,9 +28,6 @@ export type CoinTransactionRequestInput = {
   /** Index of witness that authorizes spending the coin */
   witnessIndex: number;
 
-  /** UTXO being spent must have been created at least this many blocks ago */
-  maturity?: number;
-
   /** Gas used by predicate */
   predicateGasUsed?: BigNumberish;
 
@@ -106,7 +103,6 @@ export const inputify = (value: TransactionRequestInput): Input => {
           txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         witnessIndex: value.witnessIndex,
-        maturity: value.maturity ?? 0,
         predicateGasUsed: bn(value.predicateGasUsed),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,

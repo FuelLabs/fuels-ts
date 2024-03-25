@@ -40,9 +40,6 @@ export type InputCoin = {
   /** Index of witness that authorizes spending the coin (u8) */
   witnessIndex: number;
 
-  /** UTXO being spent must have been created at least this many blocks ago (u32) */
-  maturity: number;
-
   /** Gas used by predicate (u64) */
   predicateGasUsed: BN;
 
@@ -74,7 +71,6 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new B256Coder().encode(value.assetId));
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(value.predicateLength));
     parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
@@ -102,8 +98,6 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const txPointer = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
-    const maturity = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
@@ -125,7 +119,6 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         assetId,
         txPointer,
         witnessIndex,
-        maturity,
         predicateGasUsed,
         predicateLength,
         predicateDataLength,

@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
+import type { BN, BaseWalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -9,7 +9,6 @@ import {
   Provider,
   ScriptTransactionRequest,
   Wallet,
-  bn,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -20,11 +19,9 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 describe('Fee', () => {
   let wallet: BaseWalletUnlocked;
   let provider: Provider;
-  let minGasPrice: number;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    minGasPrice = provider.getGasConfig().minGasPrice.toNumber();
     wallet = await generateTestWallet(provider, [
       [1_000_000_000],
       [1_000_000_000, ASSET_A],
@@ -49,29 +46,22 @@ describe('Fee', () => {
     }
   };
 
-  const randomGasPrice = (minValue: number, maxValue: number) => {
-    const randomValue = Math.floor(Math.random() * (maxValue - minValue + 1) + minValue);
-    return bn(randomValue);
-  };
-
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
     // minting coins
     let balanceBefore = await wallet.getBalance();
-
-    let gasPrice = randomGasPrice(minGasPrice, 7);
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions.mint_coins(subId, 1_000).call();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -82,11 +72,9 @@ describe('Fee', () => {
     // burning coins
     balanceBefore = await wallet.getBalance();
 
-    gasPrice = randomGasPrice(minGasPrice, 7);
-
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions.mint_coins(subId, 1_000).call();
 
     balanceAfter = await wallet.getBalance();
 
@@ -101,10 +89,7 @@ describe('Fee', () => {
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
-
     const tx = await wallet.transfer(destination.address, amountToTransfer, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const { fee } = await tx.wait();
@@ -125,11 +110,9 @@ describe('Fee', () => {
     const destination3 = Wallet.generate({ provider });
 
     const amountToTransfer = 120;
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const request = new ScriptTransactionRequest({
-      gasPrice,
       gasLimit: 10000,
     });
 
@@ -137,15 +120,14 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const quantities: CoinQuantityLike[] = [
-      [20_000 + amountToTransfer, BaseAssetId],
-      [amountToTransfer, ASSET_A],
-      [amountToTransfer, ASSET_B],
-    ];
+    const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(request, [], {
+      resourcesOwner: wallet,
+    });
 
-    const resources = await wallet.getResourcesToSpend(quantities);
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
 
-    request.addResources(resources);
+    await wallet.fund(request, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(request);
     const { fee } = await tx.wait();
@@ -167,10 +149,13 @@ describe('Fee', () => {
 
     const balanceBefore = await wallet.getBalance();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { transactionRequest } = factory.createTransactionRequest({ gasPrice });
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(transactionRequest);
+    const { transactionRequest } = factory.createTransactionRequest();
+    const { maxFee, requiredQuantities, gasUsed } =
+      await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = maxFee;
+    transactionRequest.gasLimit = gasUsed;
 
     await wallet.fund(transactionRequest, requiredQuantities, maxFee);
 
@@ -193,18 +178,15 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const {
       transactionResult: { fee },
     } = await contract.functions
       .sum_multparams(1, 2, 3, 4, 5)
-      .txParams({
-        gasPrice,
-      })
+
       .call();
 
     const balanceAfter = await wallet.getBalance();
@@ -223,9 +205,8 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const scope = contract
@@ -236,7 +217,6 @@ describe('Fee', () => {
         contract.functions.return_bytes(),
       ])
       .txParams({
-        gasPrice,
         gasLimit: 10000,
       });
 
@@ -266,16 +246,13 @@ describe('Fee', () => {
     });
 
     const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
-      gasPrice: minGasPrice,
       gasLimit: 10_000,
     });
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const gasPrice = randomGasPrice(minGasPrice, 9);
     const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
 

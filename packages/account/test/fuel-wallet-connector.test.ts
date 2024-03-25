@@ -351,7 +351,7 @@ describe('Fuel Connector', () => {
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
     const response = await wallet.transfer(receiver.address, bn(1000), BaseAssetId, {
-      gasPrice: bn(1),
+      tip: bn(1),
       gasLimit: bn(100_000),
     });
     const { status } = await response.waitForResult();

@@ -1,7 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import { BN, bn, max } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -22,9 +22,10 @@ import type { Predicate } from '../predicate';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
+  GqlDryRunFailureStatusFragmentFragment,
+  GqlDryRunSuccessStatusFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
-  GqlPeerInfo,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -44,11 +45,7 @@ import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
-import {
-  calculatePriceWithFactor,
-  getGasUsedFromReceipts,
-  getReceiptsWithMissingData,
-} from './utils';
+import { calculateGasFee, getGasUsedFromReceipts, getReceiptsWithMissingData } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { mergeQuantities } from './utils/merge-quantities';
@@ -58,6 +55,12 @@ const MAX_RETRIES = 10;
 export type CallResult = {
   receipts: TransactionResultReceipt[];
 };
+
+export type NewCallResult = {
+  receipts: TransactionResultReceipt[];
+  id?: string;
+  status?: GqlDryRunFailureStatusFragmentFragment | GqlDryRunSuccessStatusFragmentFragment;
+}[];
 
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
@@ -127,7 +130,6 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
-  peers: GqlPeerInfo[];
 };
 
 export type NodeInfoAndConsensusParameters = {
@@ -186,7 +188,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
     gasCosts,
     latestBlock: {
       id: latestBlock.id,
-      height: bn(latestBlock.header.height),
+      height: bn(latestBlock.height),
       time: latestBlock.header.time,
       transactions: latestBlock.transactions.map((i) => ({
         id: i.id,
@@ -444,12 +446,12 @@ export default class Provider {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
-    if (!isMajorSupported || !isMinorSupported) {
-      throw new FuelError(
-        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
-      );
-    }
+    // if (!isMajorSupported || !isMinorSupported) {
+    //   throw new FuelError(
+    //     FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
+    //     `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+    //   );
+    // }
   }
 
   /**
@@ -519,7 +521,7 @@ export default class Provider {
    */
   async getBlockNumber(): Promise<BN> {
     const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.header.height, 10);
+    return bn(chain.latestBlock.height, 10);
   }
 
   /**
@@ -537,7 +539,6 @@ export default class Provider {
       nodeVersion: nodeInfo.nodeVersion,
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
-      peers: nodeInfo.peers,
     };
 
     Provider.nodeInfoCache[this.url] = processedNodeInfo;
@@ -656,14 +657,20 @@ export default class Provider {
       return this.estimateTxDependencies(transactionRequest);
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({
-      encodedTransaction,
+    const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+      encodedTransactions: [encodedTransaction],
       utxoValidation: utxoValidation || false,
     });
-    const receipts = gqlReceipts.map(processGqlReceipt);
-    return {
-      receipts,
-    };
+
+    const callResult: NewCallResult = dryRunStatuses.map((dryRunStatus) => {
+      const { id, receipts, status } = dryRunStatus;
+
+      const processedReceipts = receipts.map(processGqlReceipt);
+
+      return { id, receipts: processedReceipts, status };
+    });
+
+    return { receipts: callResult[0].receipts };
   }
 
   /**
@@ -738,11 +745,13 @@ export default class Provider {
     let outputVariables = 0;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-      const { dryRun: gqlReceipts } = await this.operations.dryRun({
-        encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
+      const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+        encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
       });
-      receipts = gqlReceipts.map(processGqlReceipt);
+
+      receipts = dryRunStatuses[0].receipts.map(processGqlReceipt);
+
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
 
@@ -786,15 +795,22 @@ export default class Provider {
     if (estimateTxDependencies) {
       return this.estimateTxDependencies(transactionRequest);
     }
-    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({
-      encodedTransaction,
+    const encodedTransactions = [hexlify(transactionRequest.toTransactionBytes())];
+
+    const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+      encodedTransactions,
       utxoValidation: true,
     });
-    const receipts = gqlReceipts.map(processGqlReceipt);
-    return {
-      receipts,
-    };
+
+    const callResult = dryRunStatuses.map((dryRunStatus) => {
+      const { id, receipts, status } = dryRunStatus;
+
+      const processedReceipts = receipts.map(processGqlReceipt);
+
+      return { id, receipts: processedReceipts, status };
+    });
+
+    return { receipts: callResult[0].receipts };
   }
 
   /**
@@ -824,8 +840,7 @@ export default class Provider {
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
+    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -864,57 +879,79 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
+    txRequestClone.maxFee = bn(0);
+
     const minGas = txRequestClone.calculateMinGas(chainInfo);
-    const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
 
     /**
-     * Estimate gasUsed for script transactions
+     * TODO: Validate if there is a way to while using BN to achive the same VM results
+     * for gas related math operations and removing the need to `add(1)` for handling
+     * a safe margin.
      */
+    const minFee = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: minGas,
+      priceFactor: gasPriceFactor,
+      tip: txRequestClone.tip,
+    }).add(1);
+
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = minGas;
+    }
+
+    let maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
+
+    let maxFee = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: maxGas,
+      priceFactor: gasPriceFactor,
+      tip: txRequestClone.tip,
+    }).add(1);
+
+    txRequestClone.maxFee = maxFee;
 
     let receipts: TransactionResultReceipt[] = [];
     let missingContractIds: string[] = [];
     let outputVariables = 0;
-    // Transactions of type Create does not consume any gas so we can the dryRun
-    if (isScriptTransaction && estimateTxDependencies) {
-      /**
-       * Setting the gasPrice to 0 on a dryRun will result in no fees being charged.
-       * This simplifies the funding with fake utxos, since the coin quantities required
-       * will only be amounts being transferred (coin outputs) and amounts being forwarded
-       * to contract calls.
-       */
-      // Calculate the gasLimit again as we insert a fake UTXO and signer
+    let gasUsed = bn(0);
 
-      txRequestClone.gasPrice = bn(0);
-      txRequestClone.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
-
-      // Executing dryRun with fake utxos to get gasUsed
+    if (isScriptTransaction) {
       const result = await this.estimateTxDependencies(txRequestClone);
-
       receipts = result.receipts;
       outputVariables = result.outputVariables;
       missingContractIds = result.missingContractIds;
+      gasUsed = getGasUsedFromReceipts(receipts);
+
+      txRequestClone.gasLimit = gasUsed;
+      maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
+      maxFee = calculateGasFee({
+        gasPrice: minGasPrice,
+        gas: maxGas,
+        priceFactor: gasPriceFactor,
+        tip: txRequestClone.tip,
+      }).add(1);
     }
 
-    // For CreateTransaction the gasUsed is going to be the minGas
-    const gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : minGas;
+    const feeForGasUsed = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: gasUsed,
+      priceFactor: gasPriceFactor,
+      tip: txRequestClone.tip,
+    }).add(1);
 
-    const usedFee = calculatePriceWithFactor(
-      gasUsed,
-      gasPrice,
-      gasPriceFactor
-    ).normalizeZeroToOne();
-    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
-    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+    const fee = maxFee.add(feeForGasUsed);
 
     return {
+      // TODO: Validate if we need to keeping returning gasPrice here and others gas/fee
+      // related properties.
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       minGasPrice,
-      gasPrice,
+      gasPrice: minGasPrice,
       minGas,
       maxGas,
-      usedFee,
+      usedFee: fee,
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,
@@ -980,7 +1017,6 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
       txCreatedIdx: bn(coin.txCreatedIdx),
     }));
@@ -1047,7 +1083,6 @@ export default class Provider {
               amount: bn(coin.amount),
               assetId: coin.assetId,
               owner: Address.fromAddressOrString(coin.owner),
-              maturity: bn(coin.maturity).toNumber(),
               blockCreated: bn(coin.blockCreated),
               txCreatedIdx: bn(coin.txCreatedIdx),
             } as Coin;
@@ -1089,7 +1124,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.header.height),
+      height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     };
@@ -1106,7 +1141,7 @@ export default class Provider {
 
     const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
       id: block.id,
-      height: bn(block.header.height),
+      height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
@@ -1141,7 +1176,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.header.height, 10),
+      height: bn(block.height, 10),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(

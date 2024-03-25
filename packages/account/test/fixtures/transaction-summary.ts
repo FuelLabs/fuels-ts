@@ -30,7 +30,6 @@ import type {
 export const MOCK_INPUT_COIN: InputCoin = {
   amount: bn(4999989993),
   assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-  maturity: 0,
   owner: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
   predicateGasUsed: bn(0),
   predicate: '0x',
@@ -290,6 +289,7 @@ export const MOCK_SUCCESS_STATUS: SuccessStatus = {
     __typename: 'Block',
     id: '0x123',
   },
+  receipts: [],
 };
 
 export const MOCK_FAILURE_STATUS: FailureStatus = {
@@ -301,6 +301,7 @@ export const MOCK_FAILURE_STATUS: FailureStatus = {
   },
   reason: 'reason',
   time: '4611686020122012535',
+  receipts: [],
 };
 
 export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {

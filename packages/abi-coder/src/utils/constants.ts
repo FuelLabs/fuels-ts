@@ -69,7 +69,6 @@ export const INPUT_COIN_FIXED_SIZE =
   ASSET_ID_LEN + // Asset id
   TX_POINTER_LEN + // TxPointer
   WORD_SIZE + // Witnesses index
-  WORD_SIZE + // Maturity
   WORD_SIZE + // Predicate size
   WORD_SIZE + // Predicate data size
   WORD_SIZE; // Predicate gas used

@@ -11,8 +11,8 @@ import { PoliciesCoder, PolicyType } from './policy';
  */
 describe('PoliciesCoder', () => {
   describe('encode', () => {
-    it('should encode policy correctly (GasPrice)', () => {
-      const policies: Policy[] = [{ type: PolicyType.GasPrice, data: bn(57) }];
+    it('should encode policy correctly (Tip)', () => {
+      const policies: Policy[] = [{ type: PolicyType.Tip, data: bn(57) }];
       const encoded = new PoliciesCoder().encode(policies);
 
       expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 57]));
@@ -39,9 +39,9 @@ describe('PoliciesCoder', () => {
       expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 76]));
     });
 
-    it('should encode policy correctly (GasPrice + MaxFee)', () => {
+    it('should encode policy correctly (Tip + MaxFee)', () => {
       const policies: Policy[] = [
-        { type: PolicyType.GasPrice, data: bn(19) },
+        { type: PolicyType.Tip, data: bn(19) },
         { type: PolicyType.MaxFee, data: bn(76) },
       ];
       const encoded = new PoliciesCoder().encode(policies);
@@ -78,9 +78,9 @@ describe('PoliciesCoder', () => {
       );
     });
 
-    it('should encode policy correctly (GasPrice + WitnessLimit + Maturity + MaxFee)', () => {
+    it('should encode policy correctly (Tip + WitnessLimit + Maturity + MaxFee)', () => {
       const policies: Policy[] = [
-        { type: PolicyType.GasPrice, data: bn(28) },
+        { type: PolicyType.Tip, data: bn(28) },
         { type: PolicyType.WitnessLimit, data: bn(87) },
         { type: PolicyType.Maturity, data: 26 },
         { type: PolicyType.MaxFee, data: bn(199) },
@@ -98,7 +98,7 @@ describe('PoliciesCoder', () => {
     it('should ensure unsorted policies array will not reflect in error when encoding', () => {
       const policies: Policy[] = [
         { type: PolicyType.MaxFee, data: bn(199) },
-        { type: PolicyType.GasPrice, data: bn(28) },
+        { type: PolicyType.Tip, data: bn(28) },
         { type: PolicyType.Maturity, data: 26 },
         { type: PolicyType.WitnessLimit, data: bn(87) },
       ];
@@ -116,7 +116,7 @@ describe('PoliciesCoder', () => {
       const policies: Policy[] = [
         { type: PolicyType.MaxFee, data: bn(199) },
         { type: PolicyType.MaxFee, data: bn(199) },
-        { type: PolicyType.GasPrice, data: bn(28) },
+        { type: PolicyType.Tip, data: bn(28) },
         { type: PolicyType.Maturity, data: 26 },
         { type: PolicyType.WitnessLimit, data: bn(87) },
       ];
@@ -132,19 +132,19 @@ describe('PoliciesCoder', () => {
   });
 
   describe('decode', () => {
-    it('should decode gasPrice', () => {
-      // gasPrice is 100
+    it('should decode tip', () => {
+      // tip is 100
       const byteArr = [0, 0, 0, 0, 0, 0, 0, 100];
       const data = Uint8Array.from(byteArr);
 
-      // bitfield is 1 representing gasPrice
-      const policyTypes = PolicyType.GasPrice;
+      // bitfield is 1 representing tip
+      const policyTypes = PolicyType.Tip;
 
       const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
 
       expect(policies).toHaveLength(1);
       expect(policies[0]).toStrictEqual({
-        type: PolicyType.GasPrice,
+        type: PolicyType.Tip,
         data: bn(byteArr),
       });
     });
@@ -201,21 +201,21 @@ describe('PoliciesCoder', () => {
     });
 
     it('should decode garPrice and witnessLimit', () => {
-      const gasPriceByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
+      const tipByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
       const witLimitByteArr = [0, 0, 0, 0, 0, 0, 11, 184];
 
-      const data = Uint8Array.from([...gasPriceByteArr, ...witLimitByteArr]);
+      const data = Uint8Array.from([...tipByteArr, ...witLimitByteArr]);
 
       // bitfield is 3 representing gasLimit + witnessLimit
-      const policyTypes = PolicyType.GasPrice + PolicyType.WitnessLimit;
+      const policyTypes = PolicyType.Tip + PolicyType.WitnessLimit;
       expect(policyTypes).toBe(3);
 
       const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
 
       expect(policies).toHaveLength(2);
       expect(policies[0]).toStrictEqual({
-        type: PolicyType.GasPrice,
-        data: bn(gasPriceByteArr),
+        type: PolicyType.Tip,
+        data: bn(tipByteArr),
       });
       expect(policies[1]).toStrictEqual({
         type: PolicyType.WitnessLimit,
@@ -270,13 +270,13 @@ describe('PoliciesCoder', () => {
     });
 
     it('should decode when all policy types are present', () => {
-      const gasPriceByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
+      const tipByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
       const witLimitByteArr = [0, 0, 0, 0, 0, 0, 11, 184];
       const maturityByteArr = [0, 0, 0, 0, 0, 0, 0, 25];
       const maxFeeByteArr = [0, 0, 0, 0, 0, 0, 1, 244];
 
       const data = Uint8Array.from([
-        ...gasPriceByteArr,
+        ...tipByteArr,
         ...witLimitByteArr,
         ...maturityByteArr,
         ...maxFeeByteArr,
@@ -284,7 +284,7 @@ describe('PoliciesCoder', () => {
 
       // bitfield is 15 representing witnessLimit + maxFee
       const policyTypes =
-        PolicyType.GasPrice + PolicyType.WitnessLimit + PolicyType.Maturity + PolicyType.MaxFee;
+        PolicyType.Tip + PolicyType.WitnessLimit + PolicyType.Maturity + PolicyType.MaxFee;
       expect(policyTypes).toBe(15);
 
       const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
@@ -292,8 +292,8 @@ describe('PoliciesCoder', () => {
       expect(policies).toHaveLength(4);
       expect(policies).toStrictEqual([
         {
-          type: PolicyType.GasPrice,
-          data: bn(gasPriceByteArr),
+          type: PolicyType.Tip,
+          data: bn(tipByteArr),
         },
         {
           type: PolicyType.WitnessLimit,

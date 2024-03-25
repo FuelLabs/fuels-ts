@@ -15,9 +15,15 @@ fragment transactionStatusFragment on TransactionStatus {
       id
     }
     time
+    receipts {
+      ...receiptFragment
+    }
     programState {
       returnType
       data
+    }
+    receipts {
+      ...receiptFragment
     }
   }
   ... on FailureStatus {
@@ -26,6 +32,9 @@ fragment transactionStatusFragment on TransactionStatus {
     }
     time
     reason
+    receipts {
+      ...receiptFragment
+    }
   }
   ... on SqueezedOutStatus {
     reason
@@ -35,10 +44,6 @@ fragment transactionStatusFragment on TransactionStatus {
 fragment transactionFragment on Transaction {
   id
   rawPayload
-  gasPrice
-  receipts {
-    ...receiptFragment
-  }
   status {
     ...transactionStatusFragment
   }
@@ -59,31 +64,26 @@ fragment transactionEstimatePredicatesFragment on Transaction {
   }
 }
 
-fragment receiptFragment on Receipt {
-  contract {
-    id
-    #
-    # NOTE:
-    #     Props removed due to excessive bandwidth usage:
-    #     https://github.com/FuelLabs/fuels-ts/issues/1706
-    #
-    # bytecode
-    # salt
-    #
+fragment dryRunFailureStatusFragment on DryRunFailureStatus {
+  reason
+  programState {
+    returnType
+    data
   }
+}
+
+fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
+  programState {
+    returnType
+    data
+  }
+}
+
+fragment receiptFragment on Receipt {
+  id
   pc
   is
-  to {
-    id
-    #
-    # NOTE:
-    #     Props removed due to excessive bandwidth usage:
-    #     https://github.com/FuelLabs/fuels-ts/issues/1706
-    #
-    # bytecode
-    # salt
-    #
-  }
+  to
   toAddress
   amount
   assetId
@@ -110,10 +110,25 @@ fragment receiptFragment on Receipt {
   subId
 }
 
+fragment dryRunTransactionExecutionStatusFragment on DryRunTransactionExecutionStatus {
+  id
+  status {
+    ... on DryRunFailureStatus {
+      ...dryRunFailureStatusFragment
+    }
+    ... on DryRunSuccessStatus {
+      ...dryRunSuccessStatusFragment
+    }
+  }
+  receipts {
+    ...receiptFragment
+  }
+}
+
 fragment blockFragment on Block {
   id
+  height
   header {
-    height
     time
   }
   transactions {
@@ -127,7 +142,6 @@ fragment coinFragment on Coin {
   owner
   amount
   assetId
-  maturity
   blockCreated
   txCreatedIdx
 }
@@ -252,7 +266,6 @@ fragment GasCostsFragment on GasCosts {
   cb
   cfei
   cfsi
-  croo
   div
   divi
   ecr1
@@ -333,6 +346,9 @@ fragment GasCostsFragment on GasCosts {
     ...DependentCostFragment
   }
   ccp {
+    ...DependentCostFragment
+  }
+  croo {
     ...DependentCostFragment
   }
   csiz {
@@ -453,14 +469,6 @@ fragment nodeInfoFragment on NodeInfo {
   maxTx
   maxDepth
   nodeVersion
-  peers {
-    id
-    addresses
-    clientVersion
-    blockHeight
-    lastHeartbeatMs
-    appScore
-  }
 }
 
 query getNodeInfo {
@@ -484,9 +492,6 @@ query getTransaction($transactionId: TransactionId!) {
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
-    receipts {
-      ...receiptFragment
-    }
   }
 }
 
@@ -689,9 +694,9 @@ query getMessageStatus($nonce: Nonce!) {
   }
 }
 
-mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
-  dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
-    ...receiptFragment
+mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
+  dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
+    ...dryRunTransactionExecutionStatusFragment
   }
 }
 

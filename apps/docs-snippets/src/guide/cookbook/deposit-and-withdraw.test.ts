@@ -23,8 +23,7 @@ describe(__filename, () => {
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { minGasPrice } = sender.provider.getGasConfig();
-    liquidityPoolContract = await factory.deployContract({ gasPrice: minGasPrice });
+    liquidityPoolContract = await factory.deployContract();
   });
 
   it('deposit and withdraw cookbook guide', async () => {

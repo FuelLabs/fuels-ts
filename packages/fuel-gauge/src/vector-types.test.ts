@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, BigNumberish } from 'fuels';
+import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -88,15 +88,8 @@ const setup = async (balance = 500_000) => {
  * @group node
  */
 describe('Vector Types Validation', () => {
-  let gasPrice: BN;
-
   const { binHexlified: predicateVectorTypes, abiContents: predicateVectorTypesAbi } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_VECTOR_TYPES);
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-  });
 
   it('can use supported vector types [vector-types-contract]', async () => {
     const setupContract = getSetupContract('vector-types-contract');
@@ -169,7 +162,6 @@ describe('Vector Types Validation', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
@@ -178,7 +170,6 @@ describe('Vector Types Validation', () => {
     const initialReceiverBalance = await receiver.getBalance();
 
     const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await tx.waitForResult();

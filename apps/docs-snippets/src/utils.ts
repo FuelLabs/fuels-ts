@@ -23,12 +23,9 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // create a new test wallet
   const testWallet = Wallet.generate({ provider });
 
-  const { minGasPrice } = provider.getGasConfig();
-
   // create a transaction request to transfer resources to the test wallet
   const request = new ScriptTransactionRequest({
     gasLimit: 10000,
-    gasPrice: minGasPrice,
   });
 
   // add the transaction outputs (coins to be sent to the test wallet)
@@ -37,10 +34,12 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
     .forEach(({ amount, assetId }) => request.addCoinOutput(testWallet.address, amount, assetId));
 
   // get the cost of the transaction
-  const { minFee, requiredQuantities, gasUsed } =
+  const { minFee, requiredQuantities, gasUsed, maxFee } =
     await genesisWallet.provider.getTransactionCost(request);
 
   request.gasLimit = gasUsed;
+  // TODO: Fix max fee assigning
+  request.maxFee = maxFee.add(20);
 
   // funding the transaction with the required quantities
   await genesisWallet.fund(request, requiredQuantities, minFee);
@@ -59,15 +58,11 @@ export const createAndDeployContractFromProject = async (
 
   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
-  const { minGasPrice } = wallet.provider.getGasConfig();
-
   return contractFactory.deployContract({
     storageSlots,
-    gasPrice: minGasPrice,
   });
 };
 
 export const defaultTxParams = {
   gasLimit: 10000,
-  gasPrice: 1,
 };
