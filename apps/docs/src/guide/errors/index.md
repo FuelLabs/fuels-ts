@@ -1,3 +1,3 @@
 # Errors
 
-<!-- Will replace this file's contents with the content from PR #1866 once it's merged -->
+All errors thrown from our SDK are instances of the `FuelError` class, which will have an accompanying `ErrorCode`. You can find a table with all our expected error codes and their descriptions [here](./error-codes.md).

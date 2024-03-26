@@ -28,6 +28,8 @@ export enum DocSnippetProjectsEnum {
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
   REVERT_ERRORS = 'revert-errors',
   REVERT_ERRORS_SCRIPT = 'revert-errors-script',
+  PREDICATE_SIGNING = 'predicate-signing',
+  SCRIPT_SIGNING = 'script-signing',
   INPUT_OUTPUT_TYPES = 'input-output-types',
 }
 
