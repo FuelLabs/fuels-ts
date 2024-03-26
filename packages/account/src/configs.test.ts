@@ -10,7 +10,7 @@ describe('Configs', () => {
   it('exports FUEL_BETA_5_NETWORK_URL', async () => {
     const configs = await import('./configs');
     expect(configs.FUEL_BETA_5_NETWORK_URL).toBe('https://beta-5.fuel.network/graphql');
-  })
+  });
 });
 
 describe('Configs - undefined process', () => {

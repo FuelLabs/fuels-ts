@@ -26,7 +26,7 @@ import {
   ZeroBytes32,
   BaseAssetId,
   FUEL_NETWORK_URL,
-  FUEL_BETA_5_NETWORK_URL
+  FUEL_BETA_5_NETWORK_URL,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
