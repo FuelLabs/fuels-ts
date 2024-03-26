@@ -101,17 +101,18 @@ For this interaction to work, the SDK must be able to communicate with a [`fuel-
 
 ### Connecting to the Testnet
 
-The Testnet is a public network that allows you to interact with a Fuel Virtual Machine (managed by Fuel) and is used predominantly for application building. Our latest Testnet is `beta-5` and you can connect to it using the following URL:
+The **Testnet** is a public network that allows you to interact with a Fuel Virtual Machine (managed by Fuel) and is used predominantly for application building.
 
-```console
-https://beta-5.fuel.network/graphql
-```
+> [!NOTE] Latest Testnet
+> Beta 5
+>
+> `https://beta-5.fuel.network/graphql`
 
-Here are some useful resources for the Testnet:
+We have some useful resources for the Testnet:
 
-- [**Faucet**](https://faucet-beta-5.fuel.network/) - for funding wallets that have been created on the Testnet.
-- [**Explorer**](https://next-app.fuel.network/) - for viewing transactions and blocks on the Testnet.
-- [**Playground**](https://beta-5.fuel.network/playground) - for testing GraphQL queries and mutations on the Testnet.
+- [**Faucet**](https://faucet-beta-5.fuel.network/) - for funding wallets that have been created.
+- [**Explorer**](https://next-app.fuel.network/) - for viewing transactions and blocks.
+- [**Playground**](https://beta-5.fuel.network/playground) - for testing GraphQL queries and mutations.
 
 ---
 
@@ -126,7 +127,6 @@ With the example below, we connect a [Provider](../providers/index.md) to the La
 If you want to connect to another node just change the URL or IP and port. For example, to connect to a local node that was created with `fuel-core` you can use:
 
 <<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-local{ts:line-numbers}
-
 
 ## Further Resources and Next Steps
 
