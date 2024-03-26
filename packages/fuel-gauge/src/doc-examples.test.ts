@@ -26,6 +26,7 @@ import {
   ZeroBytes32,
   BaseAssetId,
   FUEL_NETWORK_URL,
+  FUEL_LATEST_TESTNET_URL
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -266,19 +267,28 @@ describe('Doc Examples', () => {
 
   it('can connect to testnet', async () => {
     // #region provider-testnet
-    // #import { Provider, WalletUnlocked };
-    const provider = await Provider.create('https://beta-5.fuel.network/graphql');
-    // Setup a private key
-    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+    // #import { Provider, Wallet, FUEL_LATEST_TESTNET_URL };
 
-    // Create the wallet, passing provider
-    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    // Setup a provider, with the Testnet URL.
+    // > FUEL_LATEST_TESTNET_URL=https://beta-5.fuel.network/graphql
+    const provider = await Provider.create(FUEL_LATEST_TESTNET_URL);
+    
+    // Create our Testnet wallet (with a private key).
+    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+
+    // Perform a balance check.
+    const balances = await wallet.getBalances()
+    // [{ assetId: '0x', amount: 42 }, ...]
+    // #endregion provider-testnet
+
+    expect(balances).toBeTruthy();
+    expect(balances).toBeInstanceOf(Array);
 
     // #region signer-address
     const signer = new Signer(PRIVATE_KEY);
     // validate address
     expect(wallet.address).toEqual(signer.address);
-    // #endregion provider-testnet
     // #endregion signer-address
   });
 

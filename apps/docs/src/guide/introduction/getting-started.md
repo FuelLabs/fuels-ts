@@ -93,29 +93,33 @@ For a quick test or just playing around, you can load it in your Web Apps straig
 
 At a high level, you can use the Fuel TypeScript SDK to build applications that can run computations on the Fuel Virtual Machine through interactions with smart contracts written in Sway.
 
-For this interaction to work, the SDK must be able to communicate with a `fuel-core` node; you have two options at your disposal:
+For this interaction to work, the SDK must be able to communicate with a [`fuel-core`](https://github.com/FuelLabs/fuel-core) node; you have two options at your disposal:
 
-1. Use the [Testnet](#connecting-to-the-testnet). (For application building)
+1. Connecting to the [Testnet](#connecting-to-the-testnet). (For application building)
 2. Running a [local node](https://docs.fuel.network/guides/running-a-node/). (For smart contract testing)
 
 
 ### Connecting to the Testnet
 
-We can interact with the `Testnet` node by using the following example.
+The Testnet is a public network that allows you to interact with a Fuel Virtual Machine (managed by Fuel) and is used predominantly for application building. Our latest Testnet is `beta-5` and you can connect to it using the following URL:
+
+```console
+https://beta-5.fuel.network/graphql
+```
+
+Here are some useful resources for the Testnet:
+
+- [**Faucet**](https://faucet-beta-5.fuel.network/) - for funding wallets that have been created on the Testnet.
+- [**Explorer**](https://next-app.fuel.network/) - for viewing transactions and blocks on the Testnet.
+- [**Playground**](https://beta-5.fuel.network/playground) - for testing GraphQL queries and mutations on the Testnet.
+
+---
+
+With the example below, we connect a [Provider](../providers/index.md) to the Latest Testnet node and create a new wallet from a private key.
+
+> **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-beta-5.fuel.network/) to fund your wallet.
 
 <<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-testnet{ts:line-numbers}
-
-In the code example, we connected a new provider to the Testnet node and created a new wallet from a private key.
-
-> **Note:** New wallets on the Testnet will not have any assets! They can be obtained by providing the wallet address to the faucet at
->
-> [faucet-beta-5.fuel.network](https://faucet-beta-5.fuel.network/)
->
-> Once the assets have been transferred to the wallet, you can reuse it in other tests by providing the private key!
->
-> In addition to the faucet, there is a block explorer for the Testnet at
->
-> [block-explorer](https://fuellabs.github.io/block-explorer-v2)
 
 ### Connecting to a local node
 
@@ -128,7 +132,7 @@ If you want to connect to another node just change the URL or IP and port. For e
 
 For a more in-depth, step-by-step guide on working with the Fuels ecosystem, check out the [Developer Quickstart guide](https://fuelbook.fuel.network/master/quickstart/developer-quickstart.html). This guide covers:
 
-1. Installing all tools needed to develop on the Fuels ecosystem.
+1. Installing all tools needed to develop with the Fuels ecosystem.
 
 2. Writing your first Sway Project.
 
