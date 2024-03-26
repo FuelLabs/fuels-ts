@@ -31,6 +31,6 @@ export class ScriptResultDecoderError extends Error {
     super(`${message}\n\n${docLink}${logsText}${receiptsText}`);
     this.logs = logs;
 
-    new RevertErrorCodes(result.receipts).assert(this);
+    new RevertErrorCodes(result.receipts, logs).assert(this);
   }
 }
