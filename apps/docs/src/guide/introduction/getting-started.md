@@ -119,7 +119,7 @@ With the example below, we connect a [Provider](../providers/index.md) to the La
 
 > **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-beta-5.fuel.network/) to fund your wallet.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-testnet{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/introduction/getting-started.test.ts#connecting-to-the-testnet{ts:line-numbers}
 
 ### Connecting to a local node
 
