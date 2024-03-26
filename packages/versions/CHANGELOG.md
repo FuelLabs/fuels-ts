@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.78.0
+
+### Patch Changes
+
+- 9df48991: fix: command `fuels version` not working
+
 ## 0.77.0
 
 ### Patch Changes
