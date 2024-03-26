@@ -64,7 +64,7 @@ await (async () => {
       /**
        * Changeset PRs don't get created when there are no changesets.
        * Example PR without a changeset: https://github.com/FuelLabs/fuels-ts/pull/1939
-       * It got merged into master right after a publishing of master.
+       * It got merged into master right after a publishing of master (so there's a clean changeset slate).
        * It doesn't have a changeset and caused an issue in the CI:
        * https://github.com/FuelLabs/fuels-ts/actions/runs/8421817249/job/23059607346#step:9:24
        * That's why this return statement was added.
