@@ -8,7 +8,7 @@ You can also provide options to the `Provider`:
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#provider-options{ts:line-numbers}
 
-## Predefined URLs
+## Predefined constants
 
 We export predefined constants that can be used with the `Provider` class
 
@@ -18,8 +18,8 @@ The URL of either a user-defined environmental variable `FUEL_NETWORK_URL` (via 
 
 <<< @/../../../packages/account/src/configs.ts#FUEL_NETWORK_URL{ts:line-numbers}
 
-### `FUEL_LATEST_TESTNET_URL`
+### `FUEL_BETA_5_NETWORK_URL`
 
 The URL of the Latest Testnet Fuel node.
 
-<<< @/../../../packages/account/src/configs.ts#FUEL_LATEST_TESTNET_URL{ts:line-numbers}
+<<< @/../../../packages/account/src/configs.ts#FUEL_BETA_5_NETWORK_URL{ts:line-numbers}

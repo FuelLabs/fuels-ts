@@ -7,9 +7,9 @@ describe('Configs', () => {
     expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/graphql');
   });
 
-  it('exports FUEL_LATEST_TESTNET_URL', async () => {
+  it('exports FUEL_BETA_5_NETWORK_URL', async () => {
     const configs = await import('./configs');
-    expect(configs.FUEL_LATEST_TESTNET_URL).toBe('https://beta-5.fuel.network/graphql');
+    expect(configs.FUEL_BETA_5_NETWORK_URL).toBe('https://beta-5.fuel.network/graphql');
   })
 });
 
