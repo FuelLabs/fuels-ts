@@ -62,6 +62,21 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'Errors',
+            link: '/guide/errors/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Error Codes',
+                link: '/guide/errors/error-codes',
+              },
+              {
+                text: 'Debugging Revert Errors',
+                link: '/guide/errors/debugging-revert-errors',
+              },
+            ],
+          },
+          {
             text: 'Wallets',
             link: '/guide/wallets/',
             collapsed: true,
@@ -436,21 +451,6 @@ export default defineConfig({
                     link: '/guide/fuels/binaries',
                   },
                 ],
-              },
-            ],
-          },
-          {
-            text: 'Errors',
-            link: '/guide/errors/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Debugging Revert Errors',
-                link: '/guide/errors/debugging-revert-errors',
-              },
-              {
-                text: 'Error Codes',
-                link: '/guide/errors/error-codes',
               },
             ],
           },
