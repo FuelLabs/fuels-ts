@@ -48,7 +48,9 @@ export function assert(condition: unknown, message: string): asserts condition {
  *
  * Gets the ABI from an array of InvocationScopeLike.
  */
-export function getAbisFromAllCalls(functionScopes: Array<InvocationScopeLike>) {
+export function getAbisFromAllCalls(
+  functionScopes: Array<InvocationScopeLike>
+): JsonAbisFromAllCalls {
   return functionScopes.reduce((acc, funcScope, i) => {
     const { program, externalAbis } = funcScope.getCallConfig();
 
