@@ -1,10 +1,18 @@
-import { FUEL_LATEST_TESTNET_URL, Provider, Wallet } from "fuels";
+import { FUEL_LATEST_TESTNET_URL, FUEL_NETWORK_URL, Provider, Wallet } from "fuels";
 
 /**
  * @group node
  * @group browser
  */
 describe(__filename, () => {
+  beforeAll(() => {
+    // Avoids using the actual network.
+    vi.spyOn(Provider, 'create')
+      .mockImplementationOnce(
+        () => Provider.create(FUEL_NETWORK_URL)
+      )
+  })
+
   it('can connect to testnet', async () => {
     // #region connecting-to-the-testnet
     // #import { Provider, Wallet, FUEL_LATEST_TESTNET_URL };
