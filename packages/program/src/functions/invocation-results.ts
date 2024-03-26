@@ -77,8 +77,8 @@ export class InvocationResult<T = any> {
    *
    * @returns The ABIs from all calls.
    */
-  getAbiFromAllCalls = () =>
-    this.functionScopes.reduce((acc, funcScope, i) => {
+  getAbiFromAllCalls(): JsonAbisFromAllCalls {
+    return this.functionScopes.reduce((acc, funcScope, i) => {
       const { program, externalAbis } = funcScope.getCallConfig();
 
       if (i === 0) {
@@ -92,6 +92,7 @@ export class InvocationResult<T = any> {
 
       return acc;
     }, {} as JsonAbisFromAllCalls);
+  }
 
   /**
    * Decodes the value from the call result.
