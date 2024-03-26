@@ -130,7 +130,7 @@ If you want to connect to another node just change the URL or IP and port. For e
 
 ## Further Resources and Next Steps
 
-For a more in-depth, step-by-step guide on working with the Fuels ecosystem, check out the [Developer Quickstart guide](https://fuelbook.fuel.network/master/quickstart/developer-quickstart.html). This guide covers:
+For a more in-depth, step-by-step guide on working with the wider Fuels ecosystem, check out the [Developer Quickstart](https://docs.fuel.network/guides/quickstart/). This guide covers:
 
 1. Installing all tools needed to develop with the Fuels ecosystem.
 
