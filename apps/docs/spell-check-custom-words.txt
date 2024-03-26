@@ -297,4 +297,9 @@ ScriptTransactionRequest
 CDN
 DateTime
 Atomique
+HD
+MULTICALL
+TTL
+Bech
+CLIs
 typedoc

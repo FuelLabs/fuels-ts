@@ -12,6 +12,7 @@ import { Signer } from '../signer';
 
 import { BaseWalletUnlocked } from './base-wallet-unlocked';
 import * as keystoreWMod from './keystore-wallet';
+import { Wallet } from './wallet';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 const { ScriptTransactionRequest } = providersMod;
@@ -48,19 +49,19 @@ describe('WalletUnlocked', () => {
 
   it('Sign a transaction using wallet instance', async () => {
     // #region wallet-transaction-signing
-    // #import { WalletUnlocked, Signer };
+    // #import { Provider, Wallet, Signer };
+
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked(PRIVATE_KEY, provider);
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
-    const chainId = wallet.provider.getChain().consensusParameters.chainId.toNumber();
+    const chainId = wallet.provider.getChainId();
     const verifiedAddress = Signer.recoverAddress(
       SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction
     );
-
+    // #endregion wallet-transaction-signing
     expect(signedTransaction).toEqual(SIGNED_TX);
     expect(verifiedAddress).toEqual(wallet.address);
-    // #endregion wallet-transaction-signing
   });
 
   it('Populate transaction witnesses signature using wallet instance', async () => {
