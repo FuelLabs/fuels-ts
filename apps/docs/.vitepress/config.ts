@@ -441,11 +441,15 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Debugging Revert Errors',
+                link: '/guide/errors/debugging-revert-errors',
+              },
+              {
                 text: 'Error Codes',
                 link: '/guide/errors/error-codes',
               },
             ],
-          }
+          },
         ],
       },
       apiLinks,
