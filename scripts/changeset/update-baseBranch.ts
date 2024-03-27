@@ -8,7 +8,7 @@ const changesetConfig = JSON.parse(readFileSync(changesetPath, 'utf-8')) as { ba
 const currentBranchName = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
 /**
- * Update the base branch in the changeset config file to ensure that the changeset is published based on the correct branch.
+ * Update the base branch in the changeset config file to ensure that the changes are published based on the correct branch.
  * This is necessary because we publish both from the master and release/* branches.
  * https://github.com/changesets/changesets/blob/main/docs/config-file-options.md#basebranch-git-branch-name
  */
