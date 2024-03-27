@@ -24,12 +24,8 @@ import type Provider from '../provider';
 import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
-import type {
-  TransactionSummary,
-  FailureStatus,
-  GqlTransaction,
-  AbiMap,
-} from '../transaction-summary/types';
+import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
+import { extractTxError } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
 
@@ -250,14 +246,29 @@ export class TransactionResponse {
       ...transactionSummary,
     };
 
+    let logs: Array<unknown> = [];
+
     if (this.abis) {
-      const logs = getDecodedLogs(
+      logs = getDecodedLogs(
         transactionSummary.receipts,
         this.abis.main,
         this.abis.otherContractsAbis
       );
 
       transactionResult.logs = logs;
+    }
+
+    if (transactionResult.isStatusFailure) {
+      const {
+        receipts,
+        gqlTransaction: { status },
+      } = transactionResult;
+
+      throw extractTxError({
+        receipts,
+        status,
+        logs,
+      });
     }
 
     return transactionResult;
@@ -274,10 +285,17 @@ export class TransactionResponse {
     const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
 
     if (result.isStatusFailure) {
-      throw new FuelError(
-        ErrorCode.TRANSACTION_FAILED,
-        `Transaction failed: ${(<FailureStatus>result.gqlTransaction.status).reason}`
-      );
+      const {
+        receipts,
+        logs = [],
+        gqlTransaction: { status },
+      } = result;
+
+      throw extractTxError({
+        receipts,
+        logs,
+        status,
+      });
     }
 
     return result;
