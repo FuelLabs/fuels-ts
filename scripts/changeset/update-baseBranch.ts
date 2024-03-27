@@ -19,6 +19,10 @@ if (changesetConfig.baseBranch !== currentBranchName) {
   changesetConfig.baseBranch = currentBranchName;
 
   writeFileSync(changesetPath, JSON.stringify(changesetConfig, null, 2), 'utf-8');
+
+  execSync('git config user.name "github-actions[bot]"');
+  execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+
   execSync(`git add .changeset/config.json`);
   execSync(`git commit -m"ci(scripts): update baseBranch of .changeset/config.json"`);
 }
