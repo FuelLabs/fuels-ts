@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL, Provider, Signer, Wallet, toBytes } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Signer, Wallet } from 'fuels';
 
 /**
  * @group node

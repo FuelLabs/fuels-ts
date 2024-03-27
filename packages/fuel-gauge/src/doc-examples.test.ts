@@ -285,7 +285,6 @@ describe('Doc Examples', () => {
   it('can connect to a local provider', async () => {
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
 
-
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
     const signer = new Signer(PRIVATE_KEY);
