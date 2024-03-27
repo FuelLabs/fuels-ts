@@ -37,7 +37,7 @@ await (async () => {
 
   if (PUBLISHED === "false") {
     async function getChangesetPr(retried = false) {
-      const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
+      const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/${REF_NAME}+base:${REF_NAME}`;
       const searchResult = await octokit.rest.search.issuesAndPullRequests({
         q: searchQuery,
       });
@@ -72,6 +72,7 @@ await (async () => {
        * https://github.com/FuelLabs/fuels-ts/actions/runs/8421817249/job/23059607346#step:9:24
        * That's why this return statement was added.
        */
+      execSync('echo "Did not find changeset PR..."', {stdio: "inherit"})
       return;
     }
 
