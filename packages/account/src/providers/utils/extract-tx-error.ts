@@ -17,7 +17,7 @@ import type { TransactionResultReceipt } from '../transaction-response';
 import type { FailureStatus } from '../transaction-summary';
 
 export const assemblePanicError = (status: FailureStatus) => {
-  let errorMessage = `The transaction failed with reason: "${status.reason}".`;
+  let errorMessage = `The transaction reverted with reason: "${status.reason}".`;
 
   if (PANIC_REASONS.includes(status.reason)) {
     errorMessage = `${errorMessage}\n\nYou can read more about this error at:\n\n${PANIC_DOC_URL}#variant.${status.reason}`;
@@ -25,14 +25,13 @@ export const assemblePanicError = (status: FailureStatus) => {
 
   return errorMessage;
 };
-
 const stringify = (obj: unknown) => JSON.stringify(obj, null, 2);
 
 export const assembleRevertError = (
   receipts: Array<TransactionResultReceipt>,
   logs: Array<unknown>
 ) => {
-  let errorMessage = '';
+  let errorMessage = 'The transaction reverted with an unknown reason.';
 
   const revertReceipt = receipts.find(({ type }) => type === ReceiptType.Revert) as ReceiptRevert;
 
@@ -40,23 +39,28 @@ export const assembleRevertError = (
     const reasonHex = bn(revertReceipt.val).toHex();
 
     switch (reasonHex) {
-      case FAILED_REQUIRE_SIGNAL:
-        errorMessage = `The transaction reverted because of a "require" statement has thrown ${stringify(
-          logs[0]
-        )}.`;
+      case FAILED_REQUIRE_SIGNAL: {
+        errorMessage = `The transaction reverted because of a "require" statement has thrown ${
+          logs.length ? stringify(logs[0]) : 'an error.'
+        }.`;
         break;
+      }
 
-      case FAILED_ASSERT_EQ_SIGNAL:
-        errorMessage = `The transaction reverted because of an "assert_eq" statement comparing ${stringify(
-          logs[1]
-        )} and ${logs[0]}.`;
-        break;
+      case FAILED_ASSERT_EQ_SIGNAL: {
+        const sufix =
+          logs.length >= 2 ? ` comparing ${stringify(logs[1])} and ${stringify(logs[0])}.` : '.';
 
-      case FAILED_ASSERT_NE_SIGNAL:
-        errorMessage = `The transaction reverted because of an "assert_ne" statement comparing ${stringify(
-          logs[1]
-        )} and ${stringify(logs[0])}.`;
+        errorMessage = `The transaction reverted because of an "assert_eq" statement${sufix}`;
         break;
+      }
+
+      case FAILED_ASSERT_NE_SIGNAL: {
+        const sufix =
+          logs.length >= 2 ? ` comparing ${stringify(logs[1])} and ${stringify(logs[0])}.` : '.';
+
+        errorMessage = `The transaction reverted because of an "assert_ne" statement${sufix}`;
+        break;
+      }
 
       case FAILED_ASSERT_SIGNAL:
         errorMessage = `The transaction reverted because of an "assert" statement failed to evaluate to true.`;
@@ -67,7 +71,7 @@ export const assembleRevertError = (
         break;
 
       default:
-        errorMessage = `The transaction reverted because of an unknown reason.`;
+        errorMessage = `The transaction reverted with an unknown reason: ${revertReceipt.val}`;
     }
   }
 
@@ -80,7 +84,7 @@ interface IExtractTxError {
   logs: Array<unknown>;
 }
 
-export const extractTxError = (params: IExtractTxError) => {
+export const extractTxError = (params: IExtractTxError): FuelError => {
   const { receipts, status, logs } = params;
 
   const wasPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
