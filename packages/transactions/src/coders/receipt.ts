@@ -767,12 +767,6 @@ export type ReceiptMint = {
   is: BN;
 };
 
-/**
- * Returns the minted asset ID based on the contract ID and sub ID.
- * @param contractId The contract ID.
- * @param subId The sub ID.
- * @returns The asset ID.
- */
 export const getMintedAssetId = (contractId: string, subId: string): string => {
   const contractIdBytes = arrayify(contractId);
   const subIdBytes = arrayify(subId);
