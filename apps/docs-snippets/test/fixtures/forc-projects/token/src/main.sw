@@ -18,6 +18,7 @@ impl Token for Contract {
     fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
         force_transfer_to_contract(target, asset_id, amount);
     }
+    // #endregion variable-outputs-1
 
     fn mint_coins(sub_id: b256, mint_amount: u64) {
         mint(sub_id, mint_amount);
@@ -26,5 +27,4 @@ impl Token for Contract {
     fn burn_coins(sub_id: b256, burn_amount: u64) {
         burn(sub_id, burn_amount);
     }
-    // #endregion variable-outputs-1
 }
