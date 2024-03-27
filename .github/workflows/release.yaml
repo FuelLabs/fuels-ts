@@ -31,6 +31,8 @@ jobs:
       
       - name: Update changeset baseBranch
         run: pnpm changeset:update-baseBranch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
