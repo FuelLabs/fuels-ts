@@ -109,10 +109,6 @@ export default defineConfig({
                 text: 'Signing Transactions',
                 link: '/guide/wallets/signing-transactions',
               },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
             ],
           },
           {
