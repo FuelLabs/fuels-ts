@@ -22,15 +22,13 @@ export function getDecodedLogs<T = unknown>(
    * These ABIs were added using `contract.addContracts` or through a multicall with `contract.multiCall`.
    *
    * @param receipts - The array of transaction result receipts.
-   * @param mainAbi - The ABI of the main contract.
+   * @param mainAbi - The ABI of the script or main contract.
    * @param externalAbis - The record of external contract ABIs.
    * @returns An array of decoded logs from Sway projects.
    */
   return receipts.reduce((logs: T[], receipt) => {
     if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-      const interfaceToUse = externalAbis[receipt.id]
-        ? new Interface(externalAbis[receipt.id])
-        : new Interface(mainAbi);
+      const interfaceToUse = new Interface(externalAbis[receipt.id] || mainAbi);
 
       const data =
         receipt.type === ReceiptType.Log
