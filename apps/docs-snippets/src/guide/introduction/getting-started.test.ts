@@ -26,7 +26,7 @@ describe('Getting started', () => {
 
     // Perform a balance check.
     const balances = await wallet.getBalances()
-    // [{ assetId: '0x', amount:  }, ...]
+    // [{ assetId: '0x..', amount: bn(..) }, ..]
     // #endregion connecting-to-the-testnet
 
     expect(balances).toBeTruthy();
