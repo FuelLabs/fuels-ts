@@ -18,7 +18,7 @@ When your contract invokes any of these functions, or if it calls a function tha
 
 This can be done as shown in the following example:
 
-<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
 
 In the TypeScript SDK, the Output Variables are automatically added to the transaction's list of outputs.
 

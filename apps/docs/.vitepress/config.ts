@@ -123,6 +123,29 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'Transactions',
+            link: '/guide/transactions/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Transaction Request',
+                link: '/guide/transactions/transaction-request',
+              },
+              {
+                text: 'Transaction Response',
+                link: '/guide/transactions/transaction-response',
+              },
+              {
+                text: 'Transaction Parameters',
+                link: '/guide/transactions/transaction-parameters',
+              },
+              {
+                text: 'Transaction Policies',
+                link: '/guide/transactions/transaction-policies',
+              },
+            ],
+          },
+          {
             text: 'Contracts',
             link: '/guide/contracts/',
             collapsed: true,
@@ -130,10 +153,6 @@ export default defineConfig({
               {
                 text: 'Methods',
                 link: '/guide/contracts/methods',
-              },
-              {
-                text: 'Transaction Parameters',
-                link: '/guide/contracts/transaction-parameters',
               },
               {
                 text: 'Call Parameters',
@@ -445,7 +464,7 @@ export default defineConfig({
                 link: '/guide/errors/error-codes',
               },
             ],
-          }
+          },
         ],
       },
       apiLinks,
