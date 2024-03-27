@@ -39,6 +39,7 @@ import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
   ScriptTransactionRequest,
+  JsonAbisFromAllCalls,
 } from './transaction-request';
 import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
@@ -609,6 +610,12 @@ export default class Provider {
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
+    let abis: JsonAbisFromAllCalls | undefined;
+
+    if (transactionRequest.type === TransactionType.Script) {
+      abis = transactionRequest.abis;
+    }
+
     if (awaitExecution) {
       const subscription = this.operations.submitAndAwait({ encodedTransaction });
       for await (const { submitAndAwait } of subscription) {
@@ -625,7 +632,7 @@ export default class Provider {
       }
 
       const transactionId = transactionRequest.getTransactionId(this.getChainId());
-      const response = new TransactionResponse(transactionId, this);
+      const response = new TransactionResponse(transactionId, this, abis);
       await response.fetch();
       return response;
     }
@@ -634,7 +641,7 @@ export default class Provider {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
 
-    return new TransactionResponse(transactionId, this);
+    return new TransactionResponse(transactionId, this, abis);
   }
 
   /**
