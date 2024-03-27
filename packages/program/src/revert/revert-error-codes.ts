@@ -13,9 +13,11 @@ const getRevertReceipts = (
 
 export class RevertErrorCodes {
   private revertReceipts: TransactionResultRevertReceipt[];
+  private logs: Array<unknown>;
 
-  constructor(receipts: TransactionResultReceipt[]) {
+  constructor(receipts: TransactionResultReceipt[], logs: Array<unknown>) {
     this.revertReceipts = getRevertReceipts(receipts);
+    this.logs = logs;
   }
 
   assert(detailedError: Error): void {
@@ -38,6 +40,6 @@ export class RevertErrorCodes {
       );
     }
 
-    return revertErrorFactory(this.revertReceipts[0]);
+    return revertErrorFactory(this.revertReceipts[0], this.logs);
   }
 }
