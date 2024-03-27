@@ -4,7 +4,7 @@ import { FUEL_BETA_5_NETWORK_URL, FUEL_NETWORK_URL, Provider, Wallet } from 'fue
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Getting started', () => {
   beforeAll(() => {
     // Avoids using the actual network.
     vi.spyOn(Provider, 'create')
@@ -19,7 +19,7 @@ describe(__filename, () => {
 
     // Create a provider, with the Latest Testnet URL.
     const provider = await Provider.create(FUEL_BETA_5_NETWORK_URL);
-    
+
     // Create our wallet (with a private key).
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
