@@ -227,7 +227,7 @@ describe('Advanced Logging', () => {
 
     let wallet: WalletUnlocked;
 
-    const expecedLogs = [
+    const expectedLogs = [
       'Hello from script',
       'Hello from main Contract',
       'Hello from other Contract',
@@ -246,7 +246,7 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .call();
 
-      expect(expecedLogs).toStrictEqual(logs);
+      expect(logs).toStrictEqual(expectedLogs);
     });
 
     it('when using ScriptTransactionRequest', async () => {
@@ -276,7 +276,7 @@ describe('Advanced Logging', () => {
 
       expect(logs).toBeDefined();
 
-      expect(expecedLogs).toStrictEqual(logs);
+      expect(logs).toStrictEqual(expectedLogs);
     });
   });
 });
