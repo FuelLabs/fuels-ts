@@ -1,10 +1,16 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.0.0/schema.json",
   "commit": false,
-  "fixed": [["@fuel-ts/*", "fuels", "create-fuels"]],
+  "fixed": [
+    [
+      "@fuel-ts/*",
+      "fuels",
+      "create-fuels"
+    ]
+  ],
   "linked": [],
   "access": "public",
-  "baseBranch": "master",
+  "baseBranch": "release/0.76.3",
   "updateInternalDependencies": "patch",
   "ignore": [
     "fuel-gauge",
