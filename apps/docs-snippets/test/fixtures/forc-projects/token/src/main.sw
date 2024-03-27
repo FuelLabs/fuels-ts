@@ -19,7 +19,6 @@ impl Token for Contract {
         force_transfer_to_contract(target, asset_id, amount);
     }
     // #endregion variable-outputs-1
-
     fn mint_coins(sub_id: b256, mint_amount: u64) {
         mint(sub_id, mint_amount);
     }
