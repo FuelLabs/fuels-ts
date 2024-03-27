@@ -5,6 +5,14 @@ import { execSync } from "child_process";
 
 import { getFullChangelog } from "./get-full-changelog.mts";
 
+function sleep(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+}
+
 await (async () => {
 
   const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG, REF_NAME } =
@@ -28,13 +36,44 @@ await (async () => {
   const octokit = github.getOctokit(GITHUB_TOKEN);
 
   if (PUBLISHED === "false") {
-    // update changesets PR body
-    const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/${REF_NAME}+base:${REF_NAME}`;
-    const searchResult = await octokit.rest.search.issuesAndPullRequests({
-      q: searchQuery,
-    });
+    async function getChangesetPr(retried = false) {
+      const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
+      const searchResult = await octokit.rest.search.issuesAndPullRequests({
+        q: searchQuery,
+      });
 
-    const pr = searchResult.data.items[0];
+      let result = searchResult.data.items[0];
+
+      if (!result && !retried) {
+        /**
+         * A workflow that generated a changeset PR still failed in this script:
+         * https://github.com/FuelLabs/fuels-ts/actions/runs/8431124880/job/23088059451#step:9:24
+         *
+         * The same workflow passed when it was run later:
+         * https://github.com/FuelLabs/fuels-ts/actions/runs/8431124880
+         *
+         * I can't attribute this to anything except GitHub services not syncing up fast enough behind the scenes.
+         * That's why I added this sleep and retry mechanism.
+         */
+        await sleep(10000);
+        result = await getChangesetPr(true);
+      }
+
+      return result;
+    }
+    const changesetPr = await getChangesetPr();
+
+    if (!changesetPr) {
+      /**
+       * Changeset PRs don't get created when there are no changesets.
+       * Example PR without a changeset: https://github.com/FuelLabs/fuels-ts/pull/1939
+       * It got merged into master right after a publishing of master (so there's a clean changeset slate).
+       * It doesn't have a changeset and caused an issue in the CI:
+       * https://github.com/FuelLabs/fuels-ts/actions/runs/8421817249/job/23059607346#step:9:24
+       * That's why this return statement was added.
+       */
+      return;
+    }
 
     const changelog = await getFullChangelog(octokit);
 
