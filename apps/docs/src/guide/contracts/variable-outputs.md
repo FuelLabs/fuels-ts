@@ -6,11 +6,9 @@ When using these transfer functions within your Sway projects, it is important t
 
 For instance, if a contract function calls a Sway transfer function 3 times, it will require 3 Output Variables present within the list of outputs in your transaction.
 
-## Example: Sway's built-in functions that requires `Output Variable`
+## Example: Sway's functions that requires `Output Variable`
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/token/src/main.sw#variable-outputs-1{ts:line-numbers}
-
-> **Note:** Functions like `mint` and `burn` also requires an Output Variable for each call, as they internally execute the transfer function.
 
 ## Adding Variable Outputs to the contract call
 
@@ -18,7 +16,7 @@ When your contract invokes any of these functions, or if it calls a function tha
 
 This can be done as shown in the following example:
 
-<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#variable-outputs-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/variable-outputs.test.ts#variable-outputs-2{ts:line-numbers}
 
 In the TypeScript SDK, the Output Variables are automatically added to the transaction's list of outputs.
 
