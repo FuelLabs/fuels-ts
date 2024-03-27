@@ -80,7 +80,7 @@ jobs:
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
 
-      - name: Delete the release branch, unpublish package and remove tag
+      - name: Delete the release branch
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
         run: git push origin --delete ${{ github.ref_name }}
         env:
