@@ -79,7 +79,7 @@ await (async () => {
 
     await octokit.rest.pulls.update({
       ...github.context.repo,
-      pull_number: pr.number,
+      pull_number: changesetPr.number,
       body: changelog,
     });
     return;
