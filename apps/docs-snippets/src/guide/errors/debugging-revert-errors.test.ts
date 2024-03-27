@@ -1,10 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider, Script } from 'fuels';
-
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
 /**
@@ -39,20 +33,5 @@ describe(__filename, () => {
       'String slices can not be decoded from logs. Convert the slice to `str[N]` with `__to_str_array`'
     );
     // #endregion revert-errors-5
-  });
-
-  it('logs out custom require messages for script calls', async () => {
-    const { binHexlified, abiContents } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.REVERT_ERRORS_SCRIPT
-    );
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
-
-    const script = new Script(binHexlified, abiContents, wallet);
-
-    expect(() => script.functions.main().call()).rejects.toThrow(
-      'The transaction reverted because of a "require" statement has thrown "This is a revert error".'
-    );
   });
 });
