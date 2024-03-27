@@ -119,12 +119,12 @@ In the code example, we connected a new provider to the Testnet node and created
 
 ### Connecting to a local node
 
-You will need a local node running on your machine. We recommend one of the following methods:
+Firstly, you will need a local node running on your machine. We recommend one of the following methods:
 
 - [Testing utilities](../testing/index.md#wallet-test-utilities) can assist in programmatically launching a short-lived node.
-- By running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](../fuels/commands.md#fuels-core).
+- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](../fuels/commands.md#fuels-core).
 
-In the following example, we create a provider to connect to the local node.
+In the following example, we create a provider to connect to the local node and sign a message.
 
 > **Note:** We use a [predefined constant](../providers/index.md#predefined-constants) `FUEL_NETWORK_URL` to connect to the local node.
 
