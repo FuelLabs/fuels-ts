@@ -46,6 +46,6 @@ The SDK provides a way of either modifying the witnesses for a transaction reque
 
 ### Getting the Transaction ID for a Transaction Request
 
-The transaction ID is a sha256 hash of the entire transaction request. This can be useful for tracking the transaction on chain. To get the transaction ID, you can use the following method:
+The transaction ID is a SHA-256 hash of the entire transaction request. This can be useful for tracking the transaction on chain. To get the transaction ID, you can use the following method:
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-request.test.ts#transaction-request-7{ts:line-numbers}
