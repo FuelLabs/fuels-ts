@@ -22,7 +22,6 @@ export const onPreAction = (command: Command) => {
 };
 
 export const configureCli = () => {
-  console.log('test');
   const program = new Command();
   program.name('fuels');
 
