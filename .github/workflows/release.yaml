@@ -71,8 +71,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Prettify changelog
-        run: |
-          pnpm changeset:update-changelog
+        run: pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           RELEASE_TAG: v${{ env.BUILD_VERSION }}
@@ -81,8 +80,6 @@ jobs:
 
       - name: Delete the release branch, unpublish package and remove tag
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
-        with: 
-          npm-token: ${{ secrets.NPM_TOKEN }}
         run: git push origin --delete ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
