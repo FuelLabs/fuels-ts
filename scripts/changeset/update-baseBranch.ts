@@ -1,9 +1,10 @@
+import type { Config } from '@changesets/types';
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 
 const changesetPath = path.join(process.cwd(), '.changeset', 'config.json');
-const changesetConfig = JSON.parse(readFileSync(changesetPath, 'utf-8')) as { baseBranch: string };
+const changesetConfig = JSON.parse(readFileSync(changesetPath, 'utf-8')) as Config;
 
 const currentBranchName = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
