@@ -70,7 +70,7 @@ export abstract class AbstractAccount {
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
   abstract interface: {
-    updateExternalLoggedTypes: (id: string, abiInterface: any) => any;
+    readonly jsonAbi: any;
   };
 
   abstract provider: {

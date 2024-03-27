@@ -1,16 +1,28 @@
-import type { Contract } from 'fuels';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import type { BN, Contract, Provider, WalletUnlocked } from 'fuels';
+import { Script, bn } from 'fuels';
+
+import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { getSetupContract } from './utils';
 
 const setupContract = getSetupContract('advanced-logging');
 const setupOtherContract = getSetupContract('advanced-logging-other-contract');
 
-let contractInstance: Contract;
-let otherContractInstance: Contract;
+let provider: Provider;
+let advancedLogContract: Contract;
+let otherAdvancedLogContract: Contract;
+let advancedLogId: string;
+let otherLogId: string;
+let minGasPrice: BN;
 
 beforeAll(async () => {
-  contractInstance = await setupContract();
-  otherContractInstance = await setupOtherContract({ cache: false });
+  advancedLogContract = await setupContract();
+  otherAdvancedLogContract = await setupOtherContract({ cache: false });
+  provider = advancedLogContract.provider;
+  advancedLogId = advancedLogContract.id.toB256();
+  otherLogId = otherAdvancedLogContract.id.toB256();
+  minGasPrice = provider.getGasConfig().minGasPrice;
 });
 
 /**
@@ -18,7 +30,7 @@ beforeAll(async () => {
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
-    const { value, logs } = await contractInstance.functions.test_function().call();
+    const { value, logs } = await advancedLogContract.functions.test_function().call();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
@@ -62,7 +74,7 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
-    const { value, logs } = await contractInstance.functions
+    const { value, logs } = await advancedLogContract.functions
       .test_function_with_require(1, 1)
       .call();
 
@@ -71,7 +83,7 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
-    const invocation = contractInstance.functions.test_function_with_require(1, 3);
+    const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
     try {
       await invocation.call();
 
@@ -105,9 +117,9 @@ describe('Advanced Logging', () => {
 
   it('can get log data from a downstream Contract', async () => {
     const INPUT = 3;
-    const { value, logs } = await contractInstance.functions
-      .test_log_from_other_contract(INPUT, otherContractInstance.id.toB256())
-      .addContracts([otherContractInstance])
+    const { value, logs } = await advancedLogContract.functions
+      .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
+      .addContracts([otherAdvancedLogContract])
       .call();
 
     expect(value).toBeTruthy();
@@ -117,5 +129,158 @@ describe('Advanced Logging', () => {
       'Received value from main Contract:',
       INPUT,
     ]);
+  });
+
+  describe('should properly decode all logs in a multicall with inter-contract calls', () => {
+    const setupCallTest = getSetupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+    const setupConfigurable = getSetupContract(FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT);
+    const setupCoverage = getSetupContract(FuelGaugeProjectsEnum.COVERAGE_CONTRACT);
+
+    let wallet: WalletUnlocked;
+    const testStruct = {
+      a: true,
+      b: 100000,
+    };
+
+    const expectedLogs = [
+      'Hello from main Contract',
+      'Hello from other Contract',
+      'Received value from main Contract:',
+      10,
+      bn(100000),
+      { tag: '000', age: 21, scores: [1, 3, 4] },
+      'fuelfuel',
+    ];
+
+    beforeAll(async () => {
+      wallet = await generateTestWallet(provider, [[2_000]]);
+    });
+
+    it('when using InvacationScope', async () => {
+      const callTest = await setupCallTest({ cache: false });
+      const configurable = await setupConfigurable({ cache: false });
+      const coverage = await setupCoverage({ cache: false });
+
+      const { logs } = await callTest
+        .multiCall([
+          advancedLogContract.functions
+            .test_log_from_other_contract(10, otherLogId)
+            .addContracts([otherAdvancedLogContract]),
+          callTest.functions.boo(testStruct),
+          configurable.functions.echo_struct(),
+          coverage.functions.echo_str_8('fuelfuel'),
+        ])
+        .call();
+
+      logs.forEach((log, i) => {
+        expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
+      });
+    });
+
+    it('when using ScriptTransactionRequest', async () => {
+      const callTest = await setupCallTest({ cache: false });
+      const configurable = await setupConfigurable({ cache: false });
+      const coverage = await setupCoverage({ cache: false });
+
+      const request = await callTest
+        .multiCall([
+          advancedLogContract.functions
+            .test_log_from_other_contract(10, otherLogId)
+            .addContracts([otherAdvancedLogContract]),
+          callTest.functions.boo(testStruct),
+          configurable.functions.echo_struct(),
+          coverage.functions.echo_str_8('fuelfuel'),
+        ])
+        .getTransactionRequest();
+
+      const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(
+        request,
+        [],
+        {
+          resourcesOwner: wallet,
+        }
+      );
+
+      request.gasLimit = gasUsed;
+      request.gasPrice = minGasPrice;
+
+      await wallet.fund(request, requiredQuantities, maxFee);
+
+      const tx = await wallet.sendTransaction(request);
+
+      const { logs } = await tx.waitForResult();
+
+      expect(logs).toBeDefined();
+
+      logs?.forEach((log, i) => {
+        if (typeof log === 'object') {
+          expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
+        } else {
+          expect(log).toBe(expectedLogs[i]);
+        }
+      });
+    });
+  });
+
+  describe('decode logs from a script set to manually call other contracts', () => {
+    const { abiContents, binHexlified } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.SCRIPT_CALL_CONTRACT
+    );
+
+    const amount = Math.floor(Math.random() * 10) + 1;
+
+    let wallet: WalletUnlocked;
+
+    const expectedLogs = [
+      'Hello from script',
+      'Hello from main Contract',
+      'Hello from other Contract',
+      'Received value from main Contract:',
+      amount,
+    ];
+
+    beforeAll(async () => {
+      wallet = await generateTestWallet(provider, [[1_000]]);
+    });
+
+    it('when using InvocationScope', async () => {
+      const script = new Script(binHexlified, abiContents, wallet);
+      const { logs } = await script.functions
+        .main(advancedLogId, otherLogId, amount)
+        .addContracts([advancedLogContract, otherAdvancedLogContract])
+        .call();
+
+      expect(logs).toStrictEqual(expectedLogs);
+    });
+
+    it('when using ScriptTransactionRequest', async () => {
+      const script = new Script(binHexlified, abiContents, wallet);
+
+      const request = await script.functions
+        .main(advancedLogId, otherLogId, amount)
+        .addContracts([advancedLogContract, otherAdvancedLogContract])
+        .getTransactionRequest();
+
+      const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(
+        request,
+        [],
+        {
+          resourcesOwner: wallet,
+        }
+      );
+
+      request.gasLimit = gasUsed;
+      request.gasPrice = minGasPrice;
+
+      await wallet.fund(request, requiredQuantities, maxFee);
+
+      const tx = await wallet.sendTransaction(request);
+
+      const { logs } = await tx.waitForResult();
+
+      expect(logs).toBeDefined();
+
+      expect(logs).toStrictEqual(expectedLogs);
+    });
   });
 });

@@ -283,6 +283,7 @@ impl CoverageContract for Contract {
         input
     }
     fn echo_str_8(input: str[8]) -> str[8] {
+        log(input);
         input
     }
     fn echo_str_9(input: str[9]) -> str[9] {
