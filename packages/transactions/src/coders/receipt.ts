@@ -767,7 +767,13 @@ export type ReceiptMint = {
   is: BN;
 };
 
-export const getAssetId = (contractId: string, subId: string): string => {
+/**
+ * Returns the minted asset ID based on the contract ID and sub ID.
+ * @param contractId The contract ID.
+ * @param subId The sub ID.
+ * @returns The asset ID.
+ */
+export const getMintedAssetId = (contractId: string, subId: string): string => {
   const contractIdBytes = arrayify(contractId);
   const subIdBytes = arrayify(subId);
 
@@ -780,7 +786,7 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
   }
 
   static getAssetId(contractId: string, subId: string): string {
-    return getAssetId(contractId, subId);
+    return getMintedAssetId(contractId, subId);
   }
 
   encode(value: ReceiptMint): Uint8Array {
@@ -848,7 +854,7 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
   }
 
   static getAssetId(contractId: string, subId: string): string {
-    return getAssetId(contractId, subId);
+    return getMintedAssetId(contractId, subId);
   }
 
   encode(value: ReceiptBurn): Uint8Array {
