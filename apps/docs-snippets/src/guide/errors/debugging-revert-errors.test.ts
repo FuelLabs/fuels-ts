@@ -15,7 +15,7 @@ test('logs out custom require messages for error enums when tx reverts', async (
 
   // #region revert-errors-4
   expect(() => contract.functions.test_function_with_custom_error().call()).rejects.toThrow(
-    'The script reverted with reason RequireFailed. (Reason: "InvalidInput")'
+    'The transaction reverted because of a "require" statement has thrown "InvalidInput".'
   );
   // #endregion revert-errors-4
 });
@@ -25,7 +25,7 @@ test('logs out custom require messages for require statements using str array wh
 
   // #region revert-errors-7
   expect(() => contract.functions.test_function_with_str_array_message().call()).rejects.toThrow(
-    'The script reverted with reason RequireFailed. (Reason: "This is also a revert error")'
+    'The transaction reverted because of a "require" statement has thrown "This is also a revert error".'
   );
   // #endregion revert-errors-7
 });
@@ -51,6 +51,6 @@ test('logs out custom require messages for script calls', async () => {
   const script = new Script(binHexlified, abiContents, wallet);
 
   expect(() => script.functions.main().call()).rejects.toThrow(
-    'The script reverted with reason RequireFailed. (Reason: "This is a revert error")'
+    'The transaction reverted because of a "require" statement has thrown "This is a revert error".'
   );
 });
