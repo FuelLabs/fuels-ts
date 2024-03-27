@@ -26,6 +26,8 @@ members = [
   "token",
   "echo-raw-slice",
   "echo-std-string",
+  "revert-errors",
+  "revert-errors-script",
   "predicate-signing",
   "script-signing",
   "input-output-types",
