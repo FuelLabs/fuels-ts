@@ -20,42 +20,29 @@ describe(__filename, () => {
     privateKey = wallet.privateKey;
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  /* eslint-disable no-console */
   it('should fetch specific balance just fine', async () => {
-    vi.spyOn(console, 'log').mockImplementation(() => ({}));
-
     // #region checking-balances-1
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
+    // The returned amount is a BigNumber
     const balance: BN = await myWallet.getBalance(assetId);
-
-    // Amount is returned as a BigNumber
-    console.log(`Balance amount: ${balance.toString()}`);
     // #endregion checking-balances-1
 
     expect(balance).toBeDefined();
   });
 
   it('should fetch all balances just fine', async () => {
-    vi.spyOn(console, 'log').mockImplementation(() => ({}));
-
     // #region checking-balances-2
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
     const balances: CoinQuantity[] = await myWallet.getBalances();
 
-    balances.forEach((balance) => {
-      // Amount is a BigNumber
-      console.log(`Balance amount: ${balance.amount.toString()}`);
-      console.log(`Balance asset ID: ${balance.assetId}`);
+    balances.forEach((_balance) => {
+      // _balance.amount is a BigNumber
+      // _balance.assetId is a hex string
     });
     // #endregion checking-balances-2
 
     expect(balances).toBeDefined();
   });
 });
-/* eslint-enable no-console */
