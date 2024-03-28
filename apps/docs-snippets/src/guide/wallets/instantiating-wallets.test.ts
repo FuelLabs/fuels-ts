@@ -66,15 +66,29 @@ describe(__filename, () => {
     expect(myWallet).toBeDefined();
   });
 
+  it('should instantiate wallet using a bech32 string address', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const address = `fuel14kjrdcdcp7z4l9xk0pm3cwz9qnjxxd04wx4zgnc3kknslclxzezqyeux5d`;
+
+    // #region instantiating-wallets-7
+    const myWallet = Wallet.fromAddress(address, provider);
+    // #endregion instantiating-wallets-7
+
+    myWallet.connect(provider);
+
+    expect(myWallet).toBeDefined();
+  });
+
   it('should connect a wallet to a provider', async () => {
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
     const myWallet = Wallet.fromAddress(address);
 
-    // #region instantiating-wallets-7
+    // #region instantiating-wallets-8
     const provider = await Provider.create('https://beta-5.fuel.network/graphql');
 
     myWallet.connect(provider);
-    // #endregion instantiating-wallets-7
+    // #endregion instantiating-wallets-8
 
     expect(myWallet).toBeDefined();
   });
@@ -84,9 +98,9 @@ describe(__filename, () => {
 
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
 
-    // #region instantiating-wallets-8
+    // #region instantiating-wallets-9
     const myWallet = Wallet.fromAddress(address, provider);
-    // #endregion instantiating-wallets-8
+    // #endregion instantiating-wallets-9
 
     myWallet.connect(provider);
 

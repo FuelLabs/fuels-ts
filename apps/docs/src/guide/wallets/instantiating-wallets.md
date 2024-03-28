@@ -34,29 +34,9 @@ From a JSON wallet:
 
 ## Instantiating Locked Wallets
 
-You can also instantiate [`WalletLocked`](../../api/Account/WalletLocked) instances using just the wallet address:
+You can also instantiate [`WalletLocked`](../../api/Account/WalletLocked) instances using just the wallet address.
 
-::: code-group
-
-```ts [Bech32]
-const address =
-  "fuel14kjrdcdcp7z4l9xk0pm3cwz9qnjxxd04wx4zgnc3kknslclxzezqyeux5d";
-
-const myWallet = Wallet.fromAddress(address);
-
-expect(myWallet).toBeDefined();
-```
-
-```ts [Hex]
-const address =
-  "0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644";
-
-const myWallet = Wallet.fromAddress(address);
-
-expect(myWallet).toBeDefined();
-```
-
-:::
+<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-7{ts:line-numbers}
 
 ## Connecting to a Provider
 
@@ -64,8 +44,8 @@ While wallets can be used independently of a [`Provider`](../../api/Account/Prov
 
 Connecting an existing wallet to a Provider:
 
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-7{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-8{ts:line-numbers}
 
 Instantiating a wallet with a Provider:
 
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-8{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-9{ts:line-numbers}
