@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import { getInfo } from "@changesets/get-github-info";
+import { Octokit } from "@octokit/rest";
 import { execSync } from "child_process";
 
 import { getFullChangelog } from "./get-full-changelog.mts";
@@ -14,6 +15,8 @@ function sleep(time: number) {
 }
 
 async function getChangesetPr(ghRepo: string, retried = false) {
+  const octokit = new Octokit();
+
   const searchQuery = `repo:${ghRepo}+state:open+head:changeset-release/master+base:master`;
   const searchResult = await octokit.rest.search.issuesAndPullRequests({
     q: searchQuery,
