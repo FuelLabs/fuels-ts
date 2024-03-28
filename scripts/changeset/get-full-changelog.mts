@@ -52,7 +52,7 @@ async function getChangelogInfo(
   const summary =
     titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
-  const markdown = `- ${prLink}, ${summary}, by ${user}`;
+  const markdown = `- ${prLink} - ${summary}, by ${user}`;
   return {
     prType,
     isBreaking,
