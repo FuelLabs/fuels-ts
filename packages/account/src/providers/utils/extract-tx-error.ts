@@ -87,10 +87,10 @@ interface IExtractTxError {
 export const extractTxError = (params: IExtractTxError): FuelError => {
   const { receipts, status, logs } = params;
 
-  const wasPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
+  const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
 
   let err =
-    status?.type === 'FailureStatus' && wasPanic
+    status?.type === 'FailureStatus' && isPanic
       ? assemblePanicError(status)
       : assembleRevertError(receipts, logs);
 
