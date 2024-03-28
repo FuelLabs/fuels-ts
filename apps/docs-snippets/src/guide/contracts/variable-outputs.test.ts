@@ -13,7 +13,7 @@ describe(__filename, () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TOKEN);
   });
 
-  it('should successfully execute contract call with txParams', async () => {
+  it('should successfully execute contract call with variable outputs', async () => {
     const subId = getRandomB256();
 
     await contract.functions.mint_coins(subId, 100).call();
