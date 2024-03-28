@@ -1,5 +1,15 @@
 # create-fuels
 
+## 0.79.0
+
+### Minor Changes
+
+- 3e1cdacb: feat: add browser wallet support to the create-fuels template app
+
+### Patch Changes
+
+- fuels@0.79.0
+
 ## 0.78.0
 
 ### Patch Changes
