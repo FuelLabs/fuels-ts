@@ -1,9 +1,12 @@
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
+import path from 'path';
 
 const FORC = '~/.fuelup/bin/forc'; // node doesn't find it in PATH and fails, thus we need to provide the full path
 
-const EXPECTED_FORC_VERSION = readFileSync('FORC_VERSION_EXPERIMENTAL').toString();
+const EXPECTED_FORC_VERSION = readFileSync(
+  path.join(process.cwd(), '..', 'forc', 'VERSION_EXPERIMENTAL')
+).toString();
 
 const installedForcVersion = execSync(`${FORC} --version | sed "s/forc//"`, {
   env: process.env,
