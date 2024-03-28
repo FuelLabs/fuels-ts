@@ -18,8 +18,7 @@ export async function createWallet(providerUrl: string, privateKey?: string) {
     return Wallet.fromPrivateKey(pvtKey, provider);
   } catch (e) {
     const error = e as Error & { cause?: { code: string } };
-
-    if (error.cause?.code === 'ECONNREFUSED') {
+    if (/EADDRNOTAVAIL|ECONNREFUSED/.test(error.cause?.code ?? '')) {
       throw new FuelError(
         FuelError.CODES.CONNECTION_REFUSED,
         `Couldn't connect to the node at "${providerUrl}". Check that you've got a node running at the config's providerUrl or set autoStartFuelCore to true.`
