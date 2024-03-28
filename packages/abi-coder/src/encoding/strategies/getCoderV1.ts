@@ -111,7 +111,17 @@ export const getCoder: GetCoderFn = (
   }
 
   if (resolvedAbiType.type === VEC_CODER_TYPE) {
-    const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments?.[0];
+    const arg = findOrThrow(
+      components,
+      (c) => c.name === 'buf',
+      () => {
+        throw new FuelError(
+          ErrorCode.INVALID_COMPONENT,
+          `The provided Vec type is missing the 'buf' component.`
+        );
+      }
+    ).originalTypeArguments?.[0];
+
     if (!arg) {
       throw new FuelError(
         ErrorCode.INVALID_COMPONENT,
