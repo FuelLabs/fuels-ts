@@ -9,6 +9,8 @@ When interacting with contracts, you can configure specific parameters for contr
 2. `gasLimit`
 <!-- call_params:example:end -->
 
+> **Note**: Setting transaction parameters is also available when calling contracts. More information on this can be found at [Transaction Parameters](../transactions/transaction-parameters.md).
+
 ## Forward Parameter
 
 <!-- This section should explain the `forward` param -->
@@ -33,7 +35,7 @@ The `gasLimit` refers to the maximum amount of gas that can be consumed specific
 
 ## Call Parameters `gasLimit` vs Transaction Parameters `gasLimit`
 
-The Call `gasLimit` parameter sets the maximum gas allowed for the actual contract call, whereas the Transaction `gasLimit` _(see [Transaction Parameters](./transaction-parameters.md))_ sets the maximum gas allowed for the entire transaction and constrains the `gasLimit` for the Call. If the Call `gasLimit` is set to a value greater than the _available_ Transaction gas, then the entire available Transaction gas will be allocated for the contract call execution.
+The Call `gasLimit` parameter sets the maximum gas allowed for the actual contract call, whereas the Transaction `gasLimit` _(see [Transaction Parameters](../transactions/transaction-parameters.md))_ sets the maximum gas allowed for the entire transaction and constrains the `gasLimit` for the Call. If the Call `gasLimit` is set to a value greater than the _available_ Transaction gas, then the entire available Transaction gas will be allocated for the contract call execution.
 
 If you don't set the `gasLimit` for the Call, the Transaction `gasLimit` will be applied.
 
