@@ -36,11 +36,6 @@ describe(__filename, () => {
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
     const balances: CoinQuantity[] = await myWallet.getBalances();
-
-    balances.forEach((_balance) => {
-      // _balance.amount is a BigNumber
-      // _balance.assetId is a hex string
-    });
     // #endregion checking-balances-2
 
     expect(balances).toBeDefined();
