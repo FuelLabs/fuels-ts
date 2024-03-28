@@ -1,5 +1,7 @@
 # Wallet Transferring
 
+This guide demonstrates how to transfer assets between accounts and contracts, and how to validate your balance prior to a transfer.
+
 ## Transferring Between Wallets
 
 Transferring assets between wallets is really simple within the SDK.
