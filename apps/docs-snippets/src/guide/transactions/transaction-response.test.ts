@@ -84,7 +84,7 @@ describe('Transaction Response', () => {
 
     // Get a transaction ID from the transaction request, this could have been stored from a
     // previous transaction request. You will need the chain ID to obtain this.
-    const transactionId = transactionRequest.getTransactionId(await provider.getChainId());
+    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
     // Retrieve the transaction response from the transaction ID
     const transactionResponse = await TransactionResponse.create(transactionId, provider);
     // Generate the transaction summary
