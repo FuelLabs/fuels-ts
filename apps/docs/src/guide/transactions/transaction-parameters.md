@@ -2,7 +2,7 @@
 
 Transaction parameters allow you to configure various aspects of your blockchain transactions. The parameters are:
 
-1. Gas Price - The price you're willing to pay for each unit of gas consumed during the transaction execution.
+1. Gas Price - The price you're willing to pay for each unit of [gas](https://docs.fuel.network/docs/intro/glossary/#gas) consumed during the transaction execution. 
 1. Gas Limit - The maximum amount of gas you're willing to allow the transaction to consume. If the transaction execution requires more gas than the specified gas limit, the transaction will fail and any state changes made during the execution will be reverted.
 1. Variable Outputs - The number of variable outputs allowed in the transaction. Variable outputs are used in transactions that have a dynamic number of outputs, such as those involving multiple recipients or complex contract interactions. By setting this value, you can control the number of variable outputs permitted in the transaction, which can be useful for managing transaction size and complexity.
 
