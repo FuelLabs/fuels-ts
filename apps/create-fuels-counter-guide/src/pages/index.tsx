@@ -52,6 +52,25 @@ export default function Home() {
     await refreshWalletBalance?.();
   };
 
+  // #region create-fuels-counter-guide-on-decrement-react-function
+  const onDecrementPressed = async () => {
+    if (!contract) {
+      return toast.error("Contract not loaded");
+    }
+
+    if (walletBalance?.eq(0)) {
+      return toast.error(
+        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+      );
+    }
+
+    const { value } = await contract.functions.decrement_counter(bn(1)).call();
+    setCounter(value.toNumber());
+
+    await refreshWalletBalance?.();
+  };
+  // #endregion create-fuels-counter-guide-on-decrement-react-function
+
   return (
     <>
       <div className="flex gap-4 items-center">
@@ -68,7 +87,7 @@ export default function Home() {
 
       <span className="text-gray-400">
         This template uses the new{" "}
-        <Link href="https://fuellabs.github.io/fuels-ts/guide/fuels/">
+        <Link href="https://fuellabs.github.io/fuels-ts/tooling/cli/fuels/">
           Fuels CLI
         </Link>{" "}
         to enable type-safe hot-reloading for your Sway programs.
@@ -83,6 +102,12 @@ export default function Home() {
           <Button onClick={onIncrementPressed} className="mt-6">
             Increment Counter
           </Button>
+
+          {/* #region create-fuels-counter-guide-on-decrement-ui */}
+          <Button onClick={onDecrementPressed} className="mt-6">
+            Decrement Counter
+          </Button>
+          {/* #endregion create-fuels-counter-guide-on-decrement-ui */}
         </>
       )}
 

@@ -10,6 +10,7 @@ apps/demo-typegen/src/predicate-types
 apps/demo-nextjs
 apps/demo-react-cra
 apps/demo-react-vite
+apps/create-fuels-counter-guide
 
 packages/fuels/test/fixtures/project
 packages/account/src/providers/__generated__
