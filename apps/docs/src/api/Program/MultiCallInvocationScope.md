@@ -47,9 +47,23 @@ BaseInvocationScope&lt;TReturn\&gt;.constructor
 
 #### Defined in
 
-[packages/program/src/functions/multicall-scope.ts:20](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/multicall-scope.ts#L20)
+[packages/program/src/functions/multicall-scope.ts:20](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/multicall-scope.ts#L20)
 
 ## Properties
+
+### externalAbis
+
+• `Protected` **externalAbis**: `Record`&lt;`string`, `JsonAbi`\> = `{}`
+
+#### Inherited from
+
+BaseInvocationScope.externalAbis
+
+#### Defined in
+
+[packages/program/src/functions/base-invocation-scope.ts:63](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L63)
+
+___
 
 ### functionInvocationScopes
 
@@ -61,7 +75,7 @@ BaseInvocationScope.functionInvocationScopes
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:58](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L58)
+[packages/program/src/functions/base-invocation-scope.ts:58](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L58)
 
 ___
 
@@ -75,7 +89,7 @@ BaseInvocationScope.hasCallParamsGasLimit
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:62](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L62)
+[packages/program/src/functions/base-invocation-scope.ts:62](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L62)
 
 ___
 
@@ -89,7 +103,7 @@ BaseInvocationScope.isMultiCall
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:61](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L61)
+[packages/program/src/functions/base-invocation-scope.ts:61](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L61)
 
 ___
 
@@ -103,7 +117,7 @@ BaseInvocationScope.program
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:57](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L57)
+[packages/program/src/functions/base-invocation-scope.ts:57](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L57)
 
 ___
 
@@ -117,7 +131,7 @@ BaseInvocationScope.requiredCoins
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:60](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L60)
+[packages/program/src/functions/base-invocation-scope.ts:60](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L60)
 
 ___
 
@@ -131,7 +145,7 @@ BaseInvocationScope.transactionRequest
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:56](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L56)
+[packages/program/src/functions/base-invocation-scope.ts:56](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L56)
 
 ___
 
@@ -145,7 +159,7 @@ BaseInvocationScope.txParameters
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:59](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L59)
+[packages/program/src/functions/base-invocation-scope.ts:59](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L59)
 
 ## Accessors
 
@@ -167,7 +181,7 @@ BaseInvocationScope.calls
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:85](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L85)
+[packages/program/src/functions/base-invocation-scope.ts:86](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L86)
 
 ## Methods
 
@@ -195,7 +209,7 @@ BaseInvocationScope.addCall
 
 #### Defined in
 
-[packages/program/src/functions/multicall-scope.ts:32](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/multicall-scope.ts#L32)
+[packages/program/src/functions/multicall-scope.ts:32](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/multicall-scope.ts#L32)
 
 ___
 
@@ -223,7 +237,7 @@ BaseInvocationScope.addCalls
 
 #### Defined in
 
-[packages/program/src/functions/multicall-scope.ts:42](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/multicall-scope.ts#L42)
+[packages/program/src/functions/multicall-scope.ts:42](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/multicall-scope.ts#L42)
 
 ___
 
@@ -251,7 +265,7 @@ BaseInvocationScope.addContracts
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:308](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L308)
+[packages/program/src/functions/base-invocation-scope.ts:313](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L313)
 
 ___
 
@@ -275,7 +289,7 @@ BaseInvocationScope.addSigners
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:334](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L334)
+[packages/program/src/functions/base-invocation-scope.ts:339](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L339)
 
 ___
 
@@ -305,7 +319,7 @@ BaseInvocationScope.addTransfer
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:324](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L324)
+[packages/program/src/functions/base-invocation-scope.ts:329](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L329)
 
 ___
 
@@ -333,7 +347,7 @@ BaseInvocationScope.call
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:356](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L356)
+[packages/program/src/functions/base-invocation-scope.ts:361](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L361)
 
 ___
 
@@ -353,7 +367,7 @@ BaseInvocationScope.checkGasLimitTotal
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:203](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L203)
+[packages/program/src/functions/base-invocation-scope.ts:208](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L208)
 
 ___
 
@@ -381,7 +395,7 @@ BaseInvocationScope.dryRun
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:409](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L409)
+[packages/program/src/functions/base-invocation-scope.ts:414](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L414)
 
 ___
 
@@ -403,7 +417,7 @@ BaseInvocationScope.fundWithRequiredCoins
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:240](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L240)
+[packages/program/src/functions/base-invocation-scope.ts:245](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L245)
 
 ___
 
@@ -427,7 +441,7 @@ BaseInvocationScope.get
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:423](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L423)
+[packages/program/src/functions/base-invocation-scope.ts:428](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L428)
 
 ___
 
@@ -445,7 +459,7 @@ BaseInvocationScope.getProvider
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:437](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L437)
+[packages/program/src/functions/base-invocation-scope.ts:442](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L442)
 
 ___
 
@@ -467,7 +481,7 @@ BaseInvocationScope.getRequiredCoins
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:127](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L127)
+[packages/program/src/functions/base-invocation-scope.ts:128](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L128)
 
 ___
 
@@ -495,7 +509,7 @@ BaseInvocationScope.getTransactionCost
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:222](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L222)
+[packages/program/src/functions/base-invocation-scope.ts:227](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L227)
 
 ___
 
@@ -523,7 +537,7 @@ BaseInvocationScope.getTransactionId
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:449](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L449)
+[packages/program/src/functions/base-invocation-scope.ts:454](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L454)
 
 ___
 
@@ -545,7 +559,7 @@ BaseInvocationScope.getTransactionRequest
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:346](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L346)
+[packages/program/src/functions/base-invocation-scope.ts:351](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L351)
 
 ___
 
@@ -565,7 +579,7 @@ BaseInvocationScope.prepareTransaction
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:185](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L185)
+[packages/program/src/functions/base-invocation-scope.ts:186](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L186)
 
 ___
 
@@ -593,7 +607,7 @@ BaseInvocationScope.simulate
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:382](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L382)
+[packages/program/src/functions/base-invocation-scope.ts:387](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L387)
 
 ___
 
@@ -621,7 +635,7 @@ BaseInvocationScope.txParams
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:284](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L284)
+[packages/program/src/functions/base-invocation-scope.ts:289](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L289)
 
 ___
 
@@ -641,7 +655,7 @@ BaseInvocationScope.updateContractInputAndOutput
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:113](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L113)
+[packages/program/src/functions/base-invocation-scope.ts:114](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L114)
 
 ___
 
@@ -661,7 +675,7 @@ BaseInvocationScope.updateRequiredCoins
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:140](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L140)
+[packages/program/src/functions/base-invocation-scope.ts:141](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L141)
 
 ___
 
@@ -681,7 +695,7 @@ BaseInvocationScope.updateScriptRequest
 
 #### Defined in
 
-[packages/program/src/functions/base-invocation-scope.ts:104](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/base-invocation-scope.ts#L104)
+[packages/program/src/functions/base-invocation-scope.ts:105](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/base-invocation-scope.ts#L105)
 
 ___
 
@@ -695,4 +709,4 @@ ___
 
 #### Defined in
 
-[packages/program/src/functions/multicall-scope.ts:46](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/program/src/functions/multicall-scope.ts#L46)
+[packages/program/src/functions/multicall-scope.ts:46](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/functions/multicall-scope.ts#L46)

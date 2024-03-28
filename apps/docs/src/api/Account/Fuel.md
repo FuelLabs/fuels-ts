@@ -35,7 +35,7 @@ that should be implemented to be compatible with the Fuel SDK.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:56](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L56)
+[packages/account/src/connectors/fuel.ts:56](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L56)
 
 ## Properties
 
@@ -45,7 +45,7 @@ that should be implemented to be compatible with the Fuel SDK.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:49](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L49)
+[packages/account/src/connectors/fuel.ts:49](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L49)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:54](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L54)
+[packages/account/src/connectors/fuel.ts:54](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L54)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:53](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L53)
+[packages/account/src/connectors/fuel.ts:53](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L53)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:48](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L48)
+[packages/account/src/connectors/fuel.ts:48](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L48)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:50](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L50)
+[packages/account/src/connectors/fuel.ts:50](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L50)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:52](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L52)
+[packages/account/src/connectors/fuel.ts:52](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L52)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:51](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L51)
+[packages/account/src/connectors/fuel.ts:51](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L51)
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L26)
+[packages/account/src/connectors/fuel-connector.ts:26](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L26)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:28](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L28)
+[packages/account/src/connectors/fuel-connector.ts:28](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L28)
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:27](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L27)
+[packages/account/src/connectors/fuel-connector.ts:27](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L27)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L25)
+[packages/account/src/connectors/fuel-connector.ts:25](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L25)
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:24](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L24)
+[packages/account/src/connectors/fuel-connector.ts:24](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L24)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:46](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L46)
+[packages/account/src/connectors/fuel.ts:46](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L46)
 
 ___
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:47](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L47)
+[packages/account/src/connectors/fuel.ts:47](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L47)
 
 ___
 
@@ -292,7 +292,7 @@ connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:393](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L393)
+[packages/account/src/connectors/fuel.ts:393](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L393)
 
 ___
 
@@ -315,7 +315,7 @@ The accounts addresses strings
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:66](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L66)
+[packages/account/src/connectors/fuel-connector.ts:66](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L66)
 
 ___
 
@@ -344,7 +344,7 @@ Return true if the ABI was added successfully.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:237](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L237)
+[packages/account/src/connectors/fuel-connector.ts:237](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L237)
 
 ___
 
@@ -381,7 +381,7 @@ True if the asset was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:175](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L175)
+[packages/account/src/connectors/fuel-connector.ts:175](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L175)
 
 ___
 
@@ -418,7 +418,7 @@ True if the asset was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:160](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L160)
+[packages/account/src/connectors/fuel-connector.ts:160](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L160)
 
 ___
 
@@ -440,7 +440,7 @@ Add a new connector to the list of connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:255](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L255)
+[packages/account/src/connectors/fuel.ts:255](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L255)
 
 ___
 
@@ -505,7 +505,7 @@ Return true if the network was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:196](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L196)
+[packages/account/src/connectors/fuel-connector.ts:196](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L196)
 
 ___
 
@@ -527,7 +527,7 @@ Array of assets metadata from the connector vinculated to the all accounts from 
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:184](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L184)
+[packages/account/src/connectors/fuel-connector.ts:184](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L184)
 
 ___
 
@@ -550,7 +550,7 @@ Call method from the current connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:137](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L137)
+[packages/account/src/connectors/fuel.ts:137](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L137)
 
 ___
 
@@ -566,7 +566,7 @@ Clean all the data from the storage.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:441](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L441)
+[packages/account/src/connectors/fuel.ts:441](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L441)
 
 ___
 
@@ -593,7 +593,7 @@ boolean - connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:79](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L79)
+[packages/account/src/connectors/fuel-connector.ts:79](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L79)
 
 ___
 
@@ -609,7 +609,7 @@ Return the list of connectors with the status of installed and connected.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:303](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L303)
+[packages/account/src/connectors/fuel.ts:303](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L303)
 
 ___
 
@@ -634,7 +634,7 @@ The current account selected otherwise null.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:145](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L145)
+[packages/account/src/connectors/fuel-connector.ts:145](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L145)
 
 ___
 
@@ -650,7 +650,7 @@ Return the current selected connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:345](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L345)
+[packages/account/src/connectors/fuel.ts:345](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L345)
 
 ___
 
@@ -672,7 +672,7 @@ Return the current network selected inside the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:226](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L226)
+[packages/account/src/connectors/fuel-connector.ts:226](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L226)
 
 ___
 
@@ -688,7 +688,7 @@ Removes all listeners and cleans the storage.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:448](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L448)
+[packages/account/src/connectors/fuel.ts:448](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L448)
 
 ___
 
@@ -713,7 +713,7 @@ The connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L90)
+[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L90)
 
 ___
 
@@ -841,7 +841,7 @@ status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:166](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L166)
+[packages/account/src/connectors/fuel.ts:166](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L166)
 
 ___
 
@@ -858,7 +858,7 @@ status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:198](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L198)
+[packages/account/src/connectors/fuel.ts:198](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L198)
 
 ___
 
@@ -886,7 +886,7 @@ The ABI if it exists, otherwise return null.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:247](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L247)
+[packages/account/src/connectors/fuel-connector.ts:247](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L247)
 
 ___
 
@@ -908,7 +908,7 @@ Get a connector from the list of connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:294](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L294)
+[packages/account/src/connectors/fuel.ts:294](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L294)
 
 ___
 
@@ -960,7 +960,7 @@ getProvider is deprecated and is going to be removed in the future, use getWalle
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:382](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L382)
+[packages/account/src/connectors/fuel.ts:382](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L382)
 
 ___
 
@@ -976,7 +976,7 @@ Return the storage used.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:94](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L94)
+[packages/account/src/connectors/fuel.ts:94](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L94)
 
 ___
 
@@ -998,7 +998,7 @@ Return the target object to listen for global events.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:78](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L78)
+[packages/account/src/connectors/fuel.ts:78](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L78)
 
 ___
 
@@ -1022,7 +1022,7 @@ connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:418](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L418)
+[packages/account/src/connectors/fuel.ts:418](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L418)
 
 ___
 
@@ -1050,7 +1050,7 @@ Returns true if the abi exists or false if not.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:257](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L257)
+[packages/account/src/connectors/fuel-connector.ts:257](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L257)
 
 ___
 
@@ -1066,7 +1066,7 @@ Return true if any connector is available.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:352](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L352)
+[packages/account/src/connectors/fuel.ts:352](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L352)
 
 ___
 
@@ -1080,7 +1080,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:372](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L372)
+[packages/account/src/connectors/fuel.ts:372](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L372)
 
 ___
 
@@ -1103,7 +1103,7 @@ The connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:56](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L56)
+[packages/account/src/connectors/fuel-connector.ts:56](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L56)
 
 ___
 
@@ -1193,7 +1193,7 @@ Return all the networks added to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:217](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L217)
+[packages/account/src/connectors/fuel-connector.ts:217](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L217)
 
 ___
 
@@ -1258,7 +1258,7 @@ Event listener for the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:267](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L267)
+[packages/account/src/connectors/fuel-connector.ts:267](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L267)
 
 ___
 
@@ -1334,7 +1334,7 @@ Always true.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L36)
+[packages/account/src/connectors/fuel-connector.ts:36](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L36)
 
 ___
 
@@ -1357,7 +1357,7 @@ status. If no connector is provided it will ping the current connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:208](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L208)
+[packages/account/src/connectors/fuel.ts:208](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L208)
 
 ___
 
@@ -1659,7 +1659,7 @@ Set the current connector to be used.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:311](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L311)
+[packages/account/src/connectors/fuel.ts:311](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L311)
 
 ___
 
@@ -1693,7 +1693,7 @@ Return true if the network was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:208](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L208)
+[packages/account/src/connectors/fuel-connector.ts:208](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L208)
 
 ___
 
@@ -1727,7 +1727,7 @@ The transaction id
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:133](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L133)
+[packages/account/src/connectors/fuel-connector.ts:133](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L133)
 
 ___
 
@@ -1743,7 +1743,7 @@ Setup the default connector from the storage.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:104](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L104)
+[packages/account/src/connectors/fuel.ts:104](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L104)
 
 ___
 
@@ -1801,7 +1801,7 @@ connector and emit them to the Fuel instance
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:121](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L121)
+[packages/account/src/connectors/fuel.ts:121](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L121)
 
 ___
 
@@ -1824,7 +1824,7 @@ to the list of new connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:230](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L230)
+[packages/account/src/connectors/fuel.ts:230](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L230)
 
 ___
 
@@ -1841,7 +1841,7 @@ and call the method from the current connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:156](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L156)
+[packages/account/src/connectors/fuel.ts:156](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L156)
 
 ___
 
@@ -1871,7 +1871,7 @@ Message signature
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:103](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L103)
+[packages/account/src/connectors/fuel-connector.ts:103](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L103)
 
 ___
 
@@ -1901,7 +1901,7 @@ Transaction signature
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:116](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L116)
+[packages/account/src/connectors/fuel-connector.ts:116](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L116)
 
 ___
 
@@ -1915,7 +1915,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:272](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L272)
+[packages/account/src/connectors/fuel.ts:272](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L272)
 
 ___
 
@@ -1932,7 +1932,7 @@ remove the Fuel instance and avoid memory leaks.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:430](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel.ts#L430)
+[packages/account/src/connectors/fuel.ts:430](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel.ts#L430)
 
 ___
 
@@ -1955,7 +1955,7 @@ boolean - connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:46](https://github.com/FuelLabs/fuels-ts/blob/2df4d7e5/packages/account/src/connectors/fuel-connector.ts#L46)
+[packages/account/src/connectors/fuel-connector.ts:46](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/connectors/fuel-connector.ts#L46)
 
 ___
 
