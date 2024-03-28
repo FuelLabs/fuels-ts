@@ -2,8 +2,11 @@
 
 Transaction parameters allow you to configure various aspects of your blockchain transactions. The parameters are:
 
-1. Gas Price - The price you're willing to pay for each unit of [gas](https://docs.fuel.network/docs/intro/glossary/#gas) consumed during the transaction execution. 
+1. Gas Price - The price you're willing to pay for each unit of [gas](https://docs.fuel.network/docs/intro/glossary/#gas) consumed during the transaction execution.
 1. Gas Limit - The maximum amount of gas you're willing to allow the transaction to consume. If the transaction execution requires more gas than the specified gas limit, the transaction will fail and any state changes made during the execution will be reverted.
+1. Maturity - The number of blocks that must pass before the transaction can be included in a block. This is useful for time-sensitive transactions, such as those involving time-locked assets.
+1. Max Fee - The maximum amount you're willing to pay for the transaction.
+1. Witness Limit - The maximum number of witnesses allowed in the transaction. Witnesses are used in transactions that require multiple signatures, such as those involving multi-signature wallets.
 1. Variable Outputs - The number of variable outputs allowed in the transaction. Variable outputs are used in transactions that have a dynamic number of outputs, such as those involving multiple recipients or complex contract interactions. By setting this value, you can control the number of variable outputs permitted in the transaction, which can be useful for managing transaction size and complexity.
 
 > **Note**: Setting transaction parameters is optional. If you don't specify them, the SDK will fetch some sensible defaults from the chain.
