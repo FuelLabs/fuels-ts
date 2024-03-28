@@ -64,7 +64,6 @@
     "@fuel-ts/versions": "workspace:^",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@octokit/rest": "^20.0.2",
     "@types/node": "18.15.3",
     "@types/node-fetch": "^2.6.2",
     "@types/web": "^0.0.65",

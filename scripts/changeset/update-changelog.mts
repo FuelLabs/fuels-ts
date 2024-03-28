@@ -1,12 +1,12 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import { getInfo } from "@changesets/get-github-info";
-import { Octokit } from "@octokit/rest";
 import { execSync } from "child_process";
 
 import { getFullChangelog } from "./get-full-changelog.mts";
 
 const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG } = process.env;
+
 function sleep(time: number) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -15,8 +15,8 @@ function sleep(time: number) {
   });
 }
 
-  const octokit = new Octokit();
-
+async function getChangesetPr(retried = false) {
+  const octokit = github.getOctokit(GITHUB_TOKEN as string);
   const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
   const searchResult = await octokit.rest.search.issuesAndPullRequests({
     q: searchQuery,
