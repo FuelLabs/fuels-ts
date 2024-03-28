@@ -46,8 +46,6 @@ jobs:
       - name: Forc Format Check
         run: pnpm forc:check
 
-
-
       # linting of some tests depends on pretest being run so that it generates the necessary files
       - name: Pretest
         run: pnpm pretest
