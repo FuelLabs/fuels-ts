@@ -203,6 +203,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Managing Deployed Contracts',
+                link: '/guide/contracts/managing-deployed-contracts',
+              },
+              {
                 text: 'Understanding the FuelVM Binary File',
                 link: '/guide/contracts/understanding-the-fuelvm-binary-file',
               },
