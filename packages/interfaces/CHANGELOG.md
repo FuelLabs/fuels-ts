@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.79.0
+
+### Minor Changes
+
+- 3ebb9bcd: chore!: remove `externalLoggedTypes` from `Interface` class
+
 ## 0.78.0
 
 ## 0.77.0
