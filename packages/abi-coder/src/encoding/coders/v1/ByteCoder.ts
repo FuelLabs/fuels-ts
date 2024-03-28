@@ -11,13 +11,9 @@ export class ByteCoder extends Coder<number[], Uint8Array> {
     super('struct', 'struct Bytes', WORD_SIZE);
   }
 
-  encode(value: number[]): Uint8Array {
-    if (!Array.isArray(value)) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
-    }
-
-    const bytes = new Uint8Array(value);
-    const lengthBytes = new BigNumberCoder('u64').encode(value.length);
+  encode(value: number[] | Uint8Array): Uint8Array {
+    const bytes = value instanceof Uint8Array ? value : new Uint8Array(value);
+    const lengthBytes = new BigNumberCoder('u64').encode(bytes.length);
 
     return new Uint8Array([...lengthBytes, ...bytes]);
   }
