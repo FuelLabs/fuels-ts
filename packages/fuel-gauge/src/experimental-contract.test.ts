@@ -1,12 +1,11 @@
 import { readFileSync } from 'fs';
-import type { BN, Contract } from 'fuels';
+import type { Contract } from 'fuels';
 import { bn } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
 
 let contractInstance: Contract;
-let gasPrice: BN;
 
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
@@ -26,8 +25,6 @@ beforeAll(async () => {
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
 
   contractInstance = await setup({ contractBytecode, abi });
-
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 describe('Experimental Contract', () => {

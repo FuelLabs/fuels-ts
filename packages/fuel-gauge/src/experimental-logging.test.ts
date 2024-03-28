@@ -1,7 +1,6 @@
-import { randomBytes } from 'crypto';
 import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
-import { bn, hexlify } from 'fuels';
+import { bn } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
