@@ -282,22 +282,6 @@ export class TransactionResponse {
   async wait<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    const result = await this.waitForResult<TTransactionType>(contractsAbiMap);
-
-    if (result.isStatusFailure) {
-      const {
-        receipts,
-        logs = [],
-        gqlTransaction: { status },
-      } = result;
-
-      throw extractTxError({
-        receipts,
-        logs,
-        status,
-      });
-    }
-
-    return result;
+    return this.waitForResult<TTransactionType>(contractsAbiMap);
   }
 }
