@@ -96,7 +96,16 @@ export class ResolvedAbiType {
         };
       }
 
-      const argType = findOrThrow(abi.types, (t) => t.typeId === arg.type);
+      const argType = findOrThrow(
+        abi.types,
+        (t) => t.typeId === arg.type,
+        () => {
+          throw new FuelError(
+            ErrorCode.TYPE_NOT_FOUND,
+            `The component with type ID "${arg.type}" was not found in the provided ABI.`
+          );
+        }
+      );
       const implicitTypeParameters = this.getImplicitGenericTypeParameters(abi, argType.components);
 
       if (implicitTypeParameters && implicitTypeParameters.length > 0) {
@@ -122,7 +131,16 @@ export class ResolvedAbiType {
     const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
 
     args.forEach((a) => {
-      const argType = findOrThrow(abi.types, (t) => t.typeId === a.type);
+      const argType = findOrThrow(
+        abi.types,
+        (t) => t.typeId === a.type,
+        () => {
+          throw new FuelError(
+            ErrorCode.TYPE_NOT_FOUND,
+            `The component with type ID "${a.type}" was not found in the provided ABI.`
+          );
+        }
+      );
 
       if (genericRegEx.test(argType.type)) {
         implicitGenericParameters.push(argType.typeId);
