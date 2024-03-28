@@ -1,6 +1,6 @@
 # Checking balances
 
-## Understanding UTXO Model
+## Understanding the UTXO Model
 
 In UTXO (Unspent Transaction Output) based systems, each coin is unique, similar to how physical currency bills have different denominations.
 
