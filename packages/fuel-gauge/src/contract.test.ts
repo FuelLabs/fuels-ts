@@ -1016,11 +1016,11 @@ describe('Contract', () => {
     const scope = contract.functions.assert_u8(10, 11);
 
     await expect(scope.dryRun()).rejects.toThrowError(
-      `The transaction reverted because of an "assert" statement failed to evaluate to true.`
+      `The transaction reverted because an "assert" statement failed to evaluate to true.`
     );
 
     await expect(scope.simulate<BN>()).rejects.toThrowError(
-      `The transaction reverted because of an "assert" statement failed to evaluate to true.`
+      `The transaction reverted because an "assert" statement failed to evaluate to true.`
     );
   });
 

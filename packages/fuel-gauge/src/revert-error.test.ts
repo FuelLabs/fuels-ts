@@ -52,7 +52,7 @@ describe('Revert Error Testing', () => {
     await expect(
       contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call()
     ).rejects.toThrow(
-      `The transaction reverted because of a "require" statement has thrown "PriceCantBeZero".`
+      `The transaction reverted because a "require" statement has thrown "PriceCantBeZero".`
     );
   });
 
@@ -63,7 +63,7 @@ describe('Revert Error Testing', () => {
     await expect(
       contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call()
     ).rejects.toThrow(
-      `The transaction reverted because of a "require" statement has thrown "InvalidTokenId".`
+      `The transaction reverted because a "require" statement has thrown "InvalidTokenId".`
     );
   });
 
@@ -80,7 +80,7 @@ describe('Revert Error Testing', () => {
     await expect(
       contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call()
     ).rejects.toThrow(
-      'The transaction reverted because of an "assert" statement failed to evaluate to true.'
+      'The transaction reverted because an "assert" statement failed to evaluate to true.'
     );
   });
 
@@ -135,7 +135,7 @@ describe('Revert Error Testing', () => {
     });
 
     await expect(tx.wait()).rejects.toThrow(
-      `The transaction reverted because missing "OutputChange"(s).`
+      `The transaction reverted because it's missing an "OutputChange".`
     );
   });
 

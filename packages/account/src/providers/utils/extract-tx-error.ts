@@ -40,7 +40,7 @@ export const assembleRevertError = (
 
     switch (reasonHex) {
       case FAILED_REQUIRE_SIGNAL: {
-        errorMessage = `The transaction reverted because of a "require" statement has thrown ${
+        errorMessage = `The transaction reverted because a "require" statement has thrown ${
           logs.length ? stringify(logs[0]) : 'an error.'
         }.`;
         break;
@@ -63,11 +63,11 @@ export const assembleRevertError = (
       }
 
       case FAILED_ASSERT_SIGNAL:
-        errorMessage = `The transaction reverted because of an "assert" statement failed to evaluate to true.`;
+        errorMessage = `The transaction reverted because an "assert" statement failed to evaluate to true.`;
         break;
 
       case FAILED_TRANSFER_TO_ADDRESS_SIGNAL:
-        errorMessage = `The transaction reverted because missing "OutputChange"(s).`;
+        errorMessage = `The transaction reverted because it's missing an "OutputChange".`;
         break;
 
       default:

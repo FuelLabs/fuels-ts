@@ -10,7 +10,7 @@ describe(__filename, () => {
 
     // #region revert-errors-4
     expect(() => contract.functions.test_function_with_custom_error().call()).rejects.toThrow(
-      'The transaction reverted because of a "require" statement has thrown "InvalidInput".'
+      'The transaction reverted because a "require" statement has thrown "InvalidInput".'
     );
     // #endregion revert-errors-4
   });
@@ -20,7 +20,7 @@ describe(__filename, () => {
 
     // #region revert-errors-7
     expect(() => contract.functions.test_function_with_str_array_message().call()).rejects.toThrow(
-      'The transaction reverted because of a "require" statement has thrown "This is also a revert error".'
+      'The transaction reverted because a "require" statement has thrown "This is also a revert error".'
     );
     // #endregion revert-errors-7
   });

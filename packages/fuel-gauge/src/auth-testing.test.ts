@@ -43,7 +43,7 @@ describe('Auth Testing', () => {
     await expect(
       contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
     ).rejects.toThrow(
-      'The transaction reverted because of an "assert" statement failed to evaluate to true.'
+      'The transaction reverted because an "assert" statement failed to evaluate to true.'
     );
   });
 });
