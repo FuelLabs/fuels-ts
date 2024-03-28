@@ -12,7 +12,7 @@ In Ethereum, balances are tracked as cumulative totals, similar to a bank accoun
 
 Each UTXO corresponds to a unique coin and has an associated amount. This model allows for greater transparency and control in cryptocurrency transactions. Understanding UTXOs is key for effectively managing and tracking your digital assets.
 
-## Using `getBalance` to Query a Single Asset
+## Get the Balance of a Single Asset
 
 To check the balance of a specific asset, you can use [`getBalance`](../../api/Account/Account.html#getbalance) method. This function aggregates the amounts of all unspent coins of the given asset in your wallet.
 
