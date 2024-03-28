@@ -47,3 +47,10 @@ export const binAndCli: Options = {
     cli: 'src/cli.ts',
   },
 };
+
+export const tsupDtsDefaults: Options = {
+  tsconfig: 'tsconfig.dts.json',
+  sourcemap: true,
+  dts: true,
+  clean: false,
+}

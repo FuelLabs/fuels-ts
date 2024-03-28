@@ -1,5 +1,5 @@
 import { versions } from '@fuel-ts/versions';
-import { compile } from 'handlebars';
+import Handlebars from 'handlebars';
 
 import headerTemplate from './common/_header.hbs';
 
@@ -15,8 +15,8 @@ export function renderHbsTemplate(params: { template: string; data?: Record<stri
     noEscape: true,
   };
 
-  const renderTemplate = compile(template, options);
-  const renderHeaderTemplate = compile(headerTemplate, options);
+  const renderTemplate = Handlebars.compile(template, options);
+  const renderHeaderTemplate = Handlebars.compile(headerTemplate, options);
 
   const text = renderTemplate({
     ...data,

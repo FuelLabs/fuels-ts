@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference path="../../hbs.d.ts" />
 
-import Handlebars, { compile } from 'handlebars';
+import Handlebars from 'handlebars';
 
 import fuelsConfigTemplate from './fuels.config.hbs';
 
@@ -17,7 +17,7 @@ export function renderFuelsConfigTemplate(props: {
   useBuiltinFuelCore?: boolean;
   autoStartFuelCore?: boolean;
 }) {
-  const renderTemplate = compile(fuelsConfigTemplate, {
+  const renderTemplate = Handlebars.compile(fuelsConfigTemplate, {
     strict: true,
     noEscape: true,
   });
