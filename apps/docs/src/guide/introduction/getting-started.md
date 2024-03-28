@@ -101,7 +101,7 @@ For this interaction to work, the SDK must be able to communicate with a [`fuel-
 
 ### Connecting to the Testnet
 
-The **Testnet** is a public network that allows you to interact with a Fuel Virtual Machine (managed by Fuel) and is used predominantly for application building.
+The **Testnet** is a public network that allows you to interact with a Fuel Virtual Machine and is used for testing and development purposes.
 
 > [!NOTE] Latest Testnet
 > Beta 5
