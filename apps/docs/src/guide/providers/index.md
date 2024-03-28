@@ -10,7 +10,7 @@ You can also provide options to the `Provider`:
 
 ## Predefined constants
 
-We export predefined constants that can be used with the `Provider` class
+We export predefined constants that can be used with the `Provider` class.
 
 ### `FUEL_NETWORK_URL`
 
