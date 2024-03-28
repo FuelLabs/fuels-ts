@@ -51,7 +51,7 @@ jobs:
 
       - name: Set branch name and changeset PR title
         run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages for branch \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - v`${{ env.BUILD_VERSION }}` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
