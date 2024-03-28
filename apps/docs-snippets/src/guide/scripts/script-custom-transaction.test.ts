@@ -46,7 +46,7 @@ describe(__filename, () => {
     expect(contractInitialBalanceAssetB).toStrictEqual(new BN(0));
 
     // #region custom-transactions-2
-    // #import { BN, CoinQuantityLike, ScriptTransactionRequest }
+    // #import { BN, CoinQuantityLike, ScriptTransactionRequest };
 
     // 1. Create a script transaction using the script binary
     const { minGasPrice } = contract.provider.getGasConfig();

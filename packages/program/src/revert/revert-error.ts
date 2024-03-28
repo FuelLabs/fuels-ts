@@ -62,10 +62,18 @@ export class RevertError extends Error {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(`The script reverted with reason ${reason}`);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(
+      `The script reverted with reason ${reason}. (Reason: "${RevertError.extractErrorReasonFromLogs(
+        logs
+      )}")`
+    );
     this.name = 'RevertError';
     this.receipt = receipt;
+  }
+
+  static extractErrorReasonFromLogs(logs: Array<unknown>) {
+    return logs.filter((l) => typeof l === 'string');
   }
 
   /**
@@ -92,8 +100,8 @@ export class RequireRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'RequireRevertError';
   }
 }
@@ -110,8 +118,8 @@ export class TransferToAddressRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'TransferToAddressRevertError';
   }
 }
@@ -128,8 +136,8 @@ export class SendMessageRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'SendMessageRevertError';
   }
 }
@@ -146,8 +154,8 @@ export class AssertFailedRevertError extends RevertError {
    * @param receipt - The transaction revert receipt.
    * @param reason - The revert reason.
    */
-  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
-    super(receipt, reason);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason, logs: Array<unknown>) {
+    super(receipt, reason, logs);
     this.name = 'AssertFailedRevertError';
   }
 }
@@ -161,7 +169,8 @@ export class AssertFailedRevertError extends RevertError {
  * @returns The RevertError instance, or undefined if the revert reason is not recognized.
  */
 export const revertErrorFactory = (
-  receipt: TransactionResultRevertReceipt
+  receipt: TransactionResultRevertReceipt,
+  logs: Array<unknown>
 ): RevertError | undefined => {
   const reason = decodeRevertErrorCode(receipt);
   if (!reason) {
@@ -170,14 +179,14 @@ export const revertErrorFactory = (
 
   switch (reason) {
     case 'RequireFailed':
-      return new RequireRevertError(receipt, reason);
+      return new RequireRevertError(receipt, reason, logs);
     case 'TransferToAddressFailed':
-      return new TransferToAddressRevertError(receipt, reason);
+      return new TransferToAddressRevertError(receipt, reason, logs);
     case 'SendMessageFailed':
-      return new SendMessageRevertError(receipt, reason);
+      return new SendMessageRevertError(receipt, reason, logs);
     case 'AssertFailed':
-      return new AssertFailedRevertError(receipt, reason);
+      return new AssertFailedRevertError(receipt, reason, logs);
     default:
-      return new RevertError(receipt, reason);
+      return new RevertError(receipt, reason, logs);
   }
 };

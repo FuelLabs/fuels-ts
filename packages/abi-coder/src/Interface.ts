@@ -13,20 +13,11 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
 
   readonly configurables: Record<string, JsonAbiConfigurable>;
-  /*
-  TODO: Refactor so that there's no need for externalLoggedTypes
 
-  This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method.
-  This is used to decode logs from contracts other than the main contract
-  we're interacting with.
-  */
-  private externalLoggedTypes: Record<string, Interface>;
   readonly jsonAbi: TAbi;
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
-
-    this.externalLoggedTypes = {};
 
     this.functions = Object.fromEntries(
       this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
@@ -91,22 +82,12 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     return fragment.decodeOutput(data);
   }
 
-  decodeLog(data: BytesLike, logId: number, receiptId: string): any {
-    const isExternalLoggedType = this.externalLoggedTypes[receiptId];
-    if (isExternalLoggedType) {
-      const externalInterface = this.externalLoggedTypes[receiptId];
-      return externalInterface.decodeLog(data, logId, receiptId);
-    }
-
+  decodeLog(data: BytesLike, logId: number): any {
     const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
 
     return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0, {
       encoding: this.jsonAbi.encoding,
     });
-  }
-
-  updateExternalLoggedTypes(id: string, loggedTypes: Interface) {
-    this.externalLoggedTypes[id] = loggedTypes;
   }
 
   encodeConfigurable(name: string, value: InputValue) {
