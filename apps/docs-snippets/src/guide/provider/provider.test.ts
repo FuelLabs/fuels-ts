@@ -9,6 +9,20 @@ async function fetchSomeExternalCredentials() {
  * @group browser
  */
 describe('Provider', () => {
+  it('can connect using pre-defined constants', async () => {
+    // #region provider-definition
+    // #import { Provider, FUEL_NETWORK_URL };
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { consensusParameters } = provider.getChain();
+    // #endregion provider-definition
+
+    expect(provider).toBeDefined();
+    expect(provider).toBeInstanceOf(Provider);
+    expect(consensusParameters).toBeDefined();
+    expect(consensusParameters).toBeInstanceOf(Object);
+  })
+
   it('can be given options', async () => {
     // #region provider-options
     await Provider.create(FUEL_NETWORK_URL, {
