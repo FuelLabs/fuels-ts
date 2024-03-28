@@ -6,6 +6,7 @@ import { execSync } from "child_process";
 
 import { getFullChangelog } from "./get-full-changelog.mts";
 
+const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG } = process.env;
 function sleep(time: number) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -14,10 +15,9 @@ function sleep(time: number) {
   });
 }
 
-async function getChangesetPr(ghRepo: string, retried = false) {
   const octokit = new Octokit();
 
-  const searchQuery = `repo:${ghRepo}+state:open+head:changeset-release/master+base:master`;
+  const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
   const searchResult = await octokit.rest.search.issuesAndPullRequests({
     q: searchQuery,
   });
@@ -36,16 +36,13 @@ async function getChangesetPr(ghRepo: string, retried = false) {
      * That's why I added this sleep and retry mechanism.
      */
     await sleep(10000);
-    result = await getChangesetPr(ghRepo, true);
+    result = await getChangesetPr(true);
   }
 
   return result;
 }
 
 await (async () => {
-  const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG } =
-    process.env;
-
   if (!GITHUB_TOKEN) {
     core.setFailed("Please add GITHUB_TOKEN to the environment");
     return;
@@ -62,7 +59,7 @@ await (async () => {
 
   // update changesets PR body
   if (PUBLISHED === "false") {
-    const changesetPr = await getChangesetPr(GITHUB_REPOSITORY as string);
+    const changesetPr = await getChangesetPr();
 
     if (!changesetPr) {
       /**
