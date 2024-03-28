@@ -12,6 +12,7 @@ const installedForcVersion = execSync(`${FORC} --version | sed "s/forc//"`, {
   .trim();
 
 if (installedForcVersion !== EXPECTED_FORC_VERSION) {
+  // eslint-disable-next-line no-console
   console.log(
     `Please install the correct version of forc. Installed version: ${installedForcVersion}, expected version: ${EXPECTED_FORC_VERSION}`
   );
