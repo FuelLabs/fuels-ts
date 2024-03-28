@@ -8,6 +8,7 @@ Within the Fuel Network, we have the following transaction types:
 - Create
 - Mint
 
-The SDK provides class helpers for handling script and create transactions, `ScriptTransactionRequest` and `CreateTransactionRequest` respectively. Mint transactions are recognized by the SDK but can only be created by the block producer so do not have use any use outside of block creation. Therefore there is no need to manually create them.
+The SDK provides class helpers for handling script and create transactions: `ScriptTransactionRequest` and `CreateTransactionRequest`, respectively. 
+Mint transactions can only be created by the block producer and do not have any use outside of block creation. Therefore, the SDK only provides the ability to decode them.
 
 This guide will discuss how to modify transactions, set their transaction parameters and policies, and submit them to the network to then produce an extractable transaction response.
