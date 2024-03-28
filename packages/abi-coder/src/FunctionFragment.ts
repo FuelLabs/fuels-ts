@@ -158,7 +158,18 @@ export class FunctionFragment<
       return;
     }
 
-    const inputTypes = inputs.map((i) => findOrThrow(abi.types, (t) => t.typeId === i.type));
+    const inputTypes = inputs.map((input) =>
+      findOrThrow(
+        abi.types,
+        (t) => t.typeId === input.type,
+        () => {
+          throw new FuelError(
+            ErrorCode.TYPE_NOT_FOUND,
+            `Unable to find type with ID ${input.type} in the function "${this.name}"`
+          );
+        }
+      )
+    );
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
