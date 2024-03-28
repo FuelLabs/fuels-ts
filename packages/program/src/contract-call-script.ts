@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WORD_SIZE, B256Coder, ASSET_ID_LEN, BigNumberCoder } from '@fuel-ts/abi-coder';
-import { CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
-import { ENCODING_V1 } from '@fuel-ts/abi-coder';
+import {
+  WORD_SIZE,
+  B256Coder,
+  ASSET_ID_LEN,
+  BigNumberCoder,
+  CONTRACT_ID_LEN,
+  ENCODING_V1,
+} from '@fuel-ts/abi-coder';
 import type {
   CallResult,
   TransactionResultCallReceipt,
