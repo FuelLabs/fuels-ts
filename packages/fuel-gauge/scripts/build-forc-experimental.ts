@@ -13,7 +13,7 @@ const installedForcVersion = execSync(`${FORC} --version | sed "s/forc//"`, {
 
 if (installedForcVersion !== EXPECTED_FORC_VERSION) {
   console.log(
-    `Please install the correct version of forc. Installed version: ${installedForcVersion}, expect ed version: ${EXPECTED_FORC_VERSION}`
+    `Please install the correct version of forc. Installed version: ${installedForcVersion}, expected version: ${EXPECTED_FORC_VERSION}`
   );
   process.exit(1);
 }
