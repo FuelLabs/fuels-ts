@@ -84,7 +84,16 @@ export class FunctionFragment<
   }
 
   #isOutputDataHeap(): boolean {
-    const outputType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === this.jsonFn.output.type);
+    const outputType = findOrThrow(
+      this.jsonAbi.types,
+      (t) => t.typeId === this.jsonFn.output.type,
+      () => {
+        throw new FuelError(
+          ErrorCode.TYPE_NOT_FOUND,
+          `Unable to find output type with ID "${this.jsonFn.output.type}" was not found in the ABI.\nCheck the function "${this.name}".`
+        );
+      }
+    );
 
     return isHeapType(outputType?.type || '');
   }
@@ -208,7 +217,13 @@ export class FunctionFragment<
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
     const outputAbiType = findOrThrow(
       this.jsonAbi.types,
-      (t) => t.typeId === this.jsonFn.output.type
+      (t) => t.typeId === this.jsonFn.output.type,
+      () => {
+        throw new FuelError(
+          ErrorCode.TYPE_NOT_FOUND,
+          `Unable to find output type with ID "${this.jsonFn.output.type}" was not found in the ABI.\nCheck the function "${this.name}".`
+        );
+      }
     );
     if (outputAbiType.type === '()') {
       return [undefined, 0];
