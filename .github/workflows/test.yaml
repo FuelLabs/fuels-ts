@@ -48,7 +48,7 @@ jobs:
 
       - name: Install forc for experimental builds
         run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -y
           curl https://install.fuel.network > install-fuelup.sh
           chmod +x install-fuelup.sh
           ./install-fuelup.sh --no-modify-path --skip-toolchain-installation
