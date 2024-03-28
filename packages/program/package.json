@@ -14,18 +14,6 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
-    },
-    "./configs": {
-      "require": "./dist/configs.js",
-      "import": "./dist/configs.mjs",
-      "types": "./dist/configs.d.ts"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "configs": [
-        "./dist/configs.d.ts"
-      ]
     }
   },
   "files": [

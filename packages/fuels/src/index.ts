@@ -10,7 +10,6 @@ export * from '@fuel-ts/interfaces';
 export * from '@fuel-ts/math';
 export * from '@fuel-ts/math/configs';
 export * from '@fuel-ts/program';
-export * from '@fuel-ts/program/configs';
 export * from '@fuel-ts/transactions';
 export * from '@fuel-ts/utils';
 export * from '@fuel-ts/account';

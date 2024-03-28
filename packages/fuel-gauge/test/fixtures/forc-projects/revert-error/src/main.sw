@@ -18,6 +18,9 @@ abi RevertError {
     fn failed_message();
     fn failed_transfer();
     fn failed_transfer_revert();
+    fn assert_value_eq_10(value: u8);
+    fn assert_value_ne_5(value: u8);
+    fn revert_with_0();
 }
 
 const BASE_TOKEN_A: AssetId = AssetId {
@@ -71,5 +74,17 @@ impl RevertError for Contract {
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
         let user = Address::from(address);
         transfer_to_address(user, BASE_TOKEN_B, amount);
+    }
+
+    fn assert_value_eq_10(value: u8) {
+        assert_eq(value, 10);
+    }
+
+    fn assert_value_ne_5(value: u8) {
+        assert_ne(value, 5);
+    }
+
+    fn revert_with_0() {
+        revert(0);
     }
 }

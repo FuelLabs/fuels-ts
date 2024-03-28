@@ -1,13 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN, Contract, WalletUnlocked } from 'fuels';
-import {
-  AssertFailedRevertError,
-  ContractFactory,
-  BaseAssetId,
-  Provider,
-  getRandomB256,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -49,6 +42,8 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
       contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
-    ).rejects.toThrow(AssertFailedRevertError);
+    ).rejects.toThrow(
+      'The transaction reverted because an "assert" statement failed to evaluate to true.'
+    );
   });
 });

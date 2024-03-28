@@ -70,6 +70,7 @@ abi TestContract {
     fn take_b256_enum(a: TestB256Enum) -> b256;
     fn take_bool_enum(enum_arg: TestBoolEnum) -> bool;
     fn take_string_enum(enum_arg: TestStringEnum) -> str[3];
+    fn assert_u8(value_1: u8, value_2: u8);
 }
 
 impl TestContract for Contract {
@@ -177,5 +178,8 @@ impl TestContract for Contract {
         let bytes = Bytes::with_capacity(8);
 
         bytes
+    }
+    fn assert_u8(value_1: u8, value_2: u8) {
+        assert(value_1 == value_2);
     }
 }

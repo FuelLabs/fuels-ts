@@ -1,3 +1,3 @@
-import { indexAndConfigs } from '@internal/tsup';
+import { index } from '@internal/tsup';
 
-export default indexAndConfigs;
+export default index;
