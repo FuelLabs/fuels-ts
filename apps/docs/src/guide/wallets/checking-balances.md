@@ -6,7 +6,7 @@ In UTXO (Unspent Transaction Output) based systems, each coin is unique, similar
 
 A UTXO represents a coin with a specific amount, similar to having a $10 or $5 bill. It's crucial to understand this unique feature of UTXOs, as it differs significantly from Ethereum's account-based system.
 
-In Ethereum, balances are tracked as cumulative totals, similar to a bank account, rather than as distinct 'coins' or 'bills.
+In Ethereum, balances are tracked as cumulative totals, similar to a bank account, rather than as distinct 'coins' or 'bills'.
 
 ## Why UTXOs Matter
 
