@@ -21,6 +21,7 @@ import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import type Provider from '../provider';
+import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
 import type {
@@ -29,6 +30,8 @@ import type {
   GqlTransaction,
   AbiMap,
 } from '../transaction-summary/types';
+
+import { getDecodedLogs } from './getDecodedLogs';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -74,6 +77,7 @@ export type TransactionResultReceipt =
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   gqlTransaction: GqlTransaction;
+  logs?: Array<unknown>;
 };
 
 /**
@@ -89,15 +93,18 @@ export class TransactionResponse {
   /** The graphql Transaction with receipts object. */
   gqlTransaction?: GqlTransaction;
 
+  abis?: JsonAbisFromAllCalls;
+
   /**
    * Constructor for `TransactionResponse`.
    *
    * @param id - The transaction ID.
    * @param provider - The provider.
    */
-  constructor(id: string, provider: Provider) {
+  constructor(id: string, provider: Provider, abis?: JsonAbisFromAllCalls) {
     this.id = id;
     this.provider = provider;
+    this.abis = abis;
   }
 
   /**
@@ -108,8 +115,12 @@ export class TransactionResponse {
    * @param id - The transaction ID.
    * @param provider - The provider.
    */
-  static async create(id: string, provider: Provider): Promise<TransactionResponse> {
-    const response = new TransactionResponse(id, provider);
+  static async create(
+    id: string,
+    provider: Provider,
+    abis?: JsonAbisFromAllCalls
+  ): Promise<TransactionResponse> {
+    const response = new TransactionResponse(id, provider, abis);
     await response.fetch();
     return response;
   }
@@ -238,6 +249,16 @@ export class TransactionResponse {
       gqlTransaction: this.gqlTransaction as GqlTransaction,
       ...transactionSummary,
     };
+
+    if (this.abis) {
+      const logs = getDecodedLogs(
+        transactionSummary.receipts,
+        this.abis.main,
+        this.abis.otherContractsAbis
+      );
+
+      transactionResult.logs = logs;
+    }
 
     return transactionResult;
   }
