@@ -17,7 +17,6 @@ describe(__filename, () => {
 
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
-    // #region variable-outputs-1
     const { minGasPrice } = provider.getGasConfig();
 
     const { transactionResult } = await contract.functions
@@ -27,7 +26,6 @@ describe(__filename, () => {
         variableOutputs: 1,
       })
       .call();
-    // #endregion variable-outputs-1
     // #endregion transaction-parameters-2
 
     const { transaction } = transactionResult;

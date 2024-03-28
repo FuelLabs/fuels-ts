@@ -13,6 +13,7 @@ export enum DocSnippetProjectsEnum {
   ECHO_U64_ARRAY = 'echo-u64-array',
   RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
+  TOKEN = 'token',
   LIQUIDITY_POOL = 'liquidity-pool',
   SIMPLE_PREDICATE = 'simple-predicate',
   ECHO_CONFIGURABLES = 'echo-configurables',
