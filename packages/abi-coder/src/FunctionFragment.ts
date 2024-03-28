@@ -40,7 +40,16 @@ export class FunctionFragment<
 
   constructor(jsonAbi: JsonAbi, name: FnName) {
     this.jsonAbi = jsonAbi;
-    this.jsonFn = findOrThrow(this.jsonAbi.functions, (f) => f.name === name);
+    this.jsonFn = findOrThrow(
+      this.jsonAbi.functions,
+      (f) => f.name === name,
+      () => {
+        throw new FuelError(
+          ErrorCode.FUNCTION_NOT_FOUND,
+          `Function "${name}" not found in the ABI`
+        );
+      }
+    );
     this.name = name;
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
