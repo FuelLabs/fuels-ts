@@ -54,6 +54,10 @@ export default defineConfig({
             text: 'Quickstart',
             link: '/guide/introduction/quickstart',
           },
+          {
+            text: 'Creating a Fuel dApp',
+            link: '/guide/creating-a-fuel-dapp/',
+          },
         ],
       },
       {
