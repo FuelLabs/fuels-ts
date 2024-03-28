@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.79.1
+
+### Patch Changes
+
+- Updated dependencies [fb941a9c]
+  - fuels@0.79.1
+
 ## 0.79.0
 
 ### Minor Changes

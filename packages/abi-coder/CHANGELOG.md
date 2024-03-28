@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.79.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.79.1
+- @fuel-ts/errors@0.79.1
+- @fuel-ts/hasher@0.79.1
+- @fuel-ts/interfaces@0.79.1
+- @fuel-ts/math@0.79.1
+- @fuel-ts/utils@0.79.1
+- @fuel-ts/versions@0.79.1
+
 ## 0.79.0
 
 ### Minor Changes

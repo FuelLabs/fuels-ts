@@ -1,5 +1,7 @@
 # @fuel-ts/versions
 
+## 0.79.1
+
 ## 0.79.0
 
 ### Minor Changes
