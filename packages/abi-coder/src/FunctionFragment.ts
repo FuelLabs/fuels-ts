@@ -120,7 +120,16 @@ export class FunctionFragment<
     const shallowCopyValues = values.slice();
 
     const nonEmptyInputs = this.jsonFn.inputs.filter(
-      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
+      (input) => {
+        const inputType = this.jsonAbi.types.find(t => t.typeId === input.type);
+        if (!inputType) {
+          throw new FuelError(
+            ErrorCode.TYPE_NOT_FOUND,
+            `Unable to find type with ID ${input.type} in the function "${this.name}"`
+          );
+        }
+        return inputType.type !== '()';
+      }
     );
 
     if (Array.isArray(values) && nonEmptyInputs.length !== values.length) {
@@ -172,7 +181,16 @@ export class FunctionFragment<
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
     const nonEmptyInputs = this.jsonFn.inputs.filter(
-      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
+      (input) => {
+        const inputType = this.jsonAbi.types.find(t => t.typeId === input.type);
+        if (!inputType) {
+          throw new FuelError(
+            ErrorCode.TYPE_NOT_FOUND,
+            `Unable to find type with ID ${input.type} in the function "${this.name}"`
+          );
+        }
+        return inputType.type !== '()';        
+      }
     );
 
     if (nonEmptyInputs.length === 0) {
