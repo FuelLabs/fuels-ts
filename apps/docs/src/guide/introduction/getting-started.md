@@ -126,8 +126,6 @@ Firstly, you will need a local node running on your machine. We recommend one of
 
 In the following example, we create a provider to connect to the local node and sign a message.
 
-> **Note:** We use a [predefined constant](../providers/index.md#predefined-constants) `FUEL_NETWORK_URL` to connect to the local node.
-
 <<< @/../../docs-snippets/src/guide/introduction/getting-started.test.ts#connecting-to-the-local-node{ts:line-numbers}
 
 ## Further Resources and Next Steps

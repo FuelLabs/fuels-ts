@@ -15,19 +15,11 @@ describe('Getting started', () => {
 
   it('can connect to a local network', async () => {
     // #region connecting-to-the-local-node
-    // #import { Provider, Wallet, Signer, FUEL_NETWORK_URL };
+    // #import { Provider, Wallet, Signer };
 
-    /**
-     * Create a provider, with our predefined constant.
-     * 
-     * Default:
-     * FUEL_NETWORK_URL="http://127.0.0.1:4000/graphql"
-     * 
-     * You can override this by setting the environment variable.
-     * (uncomment below to connect to the testnet)
-     */
-    // process.env.FUEL_NETWORK_URL="https://beta-5.fuel.network/graphql"
-    const localProvider = await Provider.create(FUEL_NETWORK_URL);
+    // Create a provider.
+    const LOCAL_FUEL_NETWORK = "http://127.0.0.1:4000/graphql"
+    const localProvider = await Provider.create(LOCAL_FUEL_NETWORK);
 
     // Create our wallet (with a private key).
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
