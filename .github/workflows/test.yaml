@@ -59,7 +59,7 @@ jobs:
           curl https://install.fuel.network > install-fuelup.sh
           chmod +x install-fuelup.sh
           ./install-fuelup.sh --no-modify-path --skip-toolchain-installation
-          echo "export PATH=\"\$HOME/.fuelup/bin:\$PATH"\" >>"$HOME/.bashrc"
+          export PATH="${HOME}/.fuelup/bin:${PATH}"
           fuelup toolchain new forc-experimental
           fuelup component add forc@$(cat ./packages/fuel-gauge/FORC_VERSION_EXPERIMENTAL)
 
