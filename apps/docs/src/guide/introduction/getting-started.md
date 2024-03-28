@@ -111,7 +111,7 @@ The **Testnet** is a public network that allows you to interact with a Fuel Virt
 We have some useful resources for the Testnet:
 
 - [**Faucet**](https://faucet-beta-5.fuel.network/) - for funding wallets that have been created.
-- [**Explorer**](https://next-app.fuel.network/) - for viewing transactions and blocks.
+- [**Explorer**](https://app.fuel.network/) - for viewing transactions and blocks.
 - [**Playground**](https://beta-5.fuel.network/playground) - for testing GraphQL queries and mutations.
 
 ---
