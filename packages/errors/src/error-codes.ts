@@ -10,6 +10,7 @@ export enum ErrorCode {
   FRAGMENT_NOT_FOUND = 'fragment-not-found',
   CONFIGURABLE_NOT_FOUND = 'configurable-not-found',
   TYPE_NOT_FOUND = 'type-not-found',
+  LOG_TYPE_NOT_FOUND = 'log-type-not-found',
   TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
   JSON_ABI_ERROR = 'json-abi-error',
