@@ -82,6 +82,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
+              {
                 text: 'Private Keys',
                 link: '/guide/wallets/private-keys',
               },
