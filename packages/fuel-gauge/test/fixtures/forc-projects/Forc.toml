@@ -1,5 +1,6 @@
 [workspace]
 members = [
+  "advanced-logging-abi",
   "advanced-logging-other-contract-abi",
   "advanced-logging-other-contract",
   "advanced-logging",
@@ -33,6 +34,7 @@ members = [
   "raw-slice",
   "revert-error",
   "script-bytes",
+  "script-call-contract",
   "script-main-args",
   "script-main-return-struct",
   "script-main-two-args",
