@@ -3,9 +3,9 @@ library;
 use std::{address::Address, asset::*, contract_id::ContractId};
 
 pub struct TransferParams<Recipient> {
-    pub recipient: Recipient,
-    pub asset_id: AssetId,
-    pub amount: u64,
+    recipient: Recipient,
+    asset_id: AssetId,
+    amount: u64,
 }
 
 abi Token {

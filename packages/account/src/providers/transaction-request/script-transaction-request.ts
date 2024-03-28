@@ -19,6 +19,7 @@ import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput
 import { returnZeroScript } from './scripts';
 import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest } from './transaction-request';
+import type { JsonAbisFromAllCalls } from './types';
 
 /**
  * @hidden
@@ -30,6 +31,8 @@ export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike
   script?: BytesLike;
   /** Script input data (parameters) */
   scriptData?: BytesLike;
+
+  abis?: JsonAbisFromAllCalls;
 }
 
 /**
@@ -52,6 +55,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   /** Script input data (parameters) */
   scriptData: Uint8Array;
 
+  abis?: JsonAbisFromAllCalls;
+
   /**
    * Constructor for `ScriptTransactionRequest`.
    *
@@ -62,6 +67,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.gasLimit = bn(gasLimit);
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
+    this.abis = rest.abis;
   }
 
   /**
