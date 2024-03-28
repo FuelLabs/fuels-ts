@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.79.1
+
+### Patch Changes
+
+- fb941a9c: chore: handling `EADDRNOTAVAIL` errors on top of `ECONNREFUSED`
+  - @fuel-ts/abi-coder@0.79.1
+  - @fuel-ts/abi-typegen@0.79.1
+  - @fuel-ts/account@0.79.1
+  - @fuel-ts/address@0.79.1
+  - @fuel-ts/contract@0.79.1
+  - @fuel-ts/crypto@0.79.1
+  - @fuel-ts/errors@0.79.1
+  - @fuel-ts/forc@0.79.1
+  - @fuel-ts/fuel-core@0.79.1
+  - @fuel-ts/hasher@0.79.1
+  - @fuel-ts/interfaces@0.79.1
+  - @fuel-ts/math@0.79.1
+  - @fuel-ts/merkle@0.79.1
+  - @fuel-ts/program@0.79.1
+  - @fuel-ts/script@0.79.1
+  - @fuel-ts/transactions@0.79.1
+  - @fuel-ts/utils@0.79.1
+  - @fuel-ts/versions@0.79.1
+
 ## 0.79.0
 
 ### Patch Changes
