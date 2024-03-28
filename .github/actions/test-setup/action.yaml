@@ -33,6 +33,8 @@ runs:
 
     - name: Install rust toolchain
       uses: dtolnay/rust-toolchain@stable
+      # selecting a toolchain either by action or manual `rustup` calls should happen
+      # before the cache plugin, as it uses the current rustc version as its cache key
     - uses: Swatinem/rust-cache@v2
       with:
         prefix-key: "v1-rust"
