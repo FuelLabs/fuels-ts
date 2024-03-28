@@ -46,6 +46,16 @@ jobs:
       - name: Forc Format Check
         run: pnpm forc:check
 
+      - name: Install forc for experimental builds
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          curl https://install.fuel.network > install-fuelup.sh
+          chmod +x install-fuelup.sh
+          ./install-fuelup.sh --no-modify-path --skip-toolchain-installation
+          echo "export PATH=\"\$HOME/.fuelup/bin:\$PATH"\" >>"$HOME/.bashrc"
+          fuelup toolchain new forc-experimental
+          fuelup component add forc@$(cat ./packages/fuel-gauge/FORC_VERSION_EXPERIMENTAL)
+
       # linting of some tests depends on pretest being run so that it generates the necessary files
       - name: Pretest
         run: pnpm pretest
@@ -89,7 +99,7 @@ jobs:
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
-    needs: [environments, e2e]
+    needs: [ environments, e2e ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
