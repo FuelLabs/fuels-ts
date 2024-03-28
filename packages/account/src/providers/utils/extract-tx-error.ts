@@ -16,6 +16,11 @@ import type { GqlTransactionStatusFragmentFragment } from '../__generated__/oper
 import type { TransactionResultReceipt } from '../transaction-response';
 import type { FailureStatus } from '../transaction-summary';
 
+/**
+ * Assembles an error message for a panic status.
+ * @param status - The transaction failure status.
+ * @returns The error message.
+ */
 export const assemblePanicError = (status: FailureStatus) => {
   let errorMessage = `The transaction reverted with reason: "${status.reason}".`;
 
@@ -25,8 +30,16 @@ export const assemblePanicError = (status: FailureStatus) => {
 
   return errorMessage;
 };
+
+/** @hidden */
 const stringify = (obj: unknown) => JSON.stringify(obj, null, 2);
 
+/**
+ * Assembles an error message for a revert status.
+ * @param receipts - The transaction result processed receipts.
+ * @param logs - The transaction decoded logs.
+ * @returns The error message.
+ */
 export const assembleRevertError = (
   receipts: Array<TransactionResultReceipt>,
   logs: Array<unknown>
@@ -84,6 +97,11 @@ interface IExtractTxError {
   logs: Array<unknown>;
 }
 
+/**
+ * Extracts the transaction error and returns a FuelError object.
+ * @param IExtractTxError - The parameters for extracting the error.
+ * @returns The FuelError object.
+ */
 export const extractTxError = (params: IExtractTxError): FuelError => {
   const { receipts, status, logs } = params;
 
