@@ -7,19 +7,3 @@ An instance of the [`Provider`](../../api/Account/Provider.md) class lets you co
 You can also provide options to the `Provider`:
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#provider-options{ts:line-numbers}
-
-## Predefined constants
-
-We export predefined constants that can be used with the `Provider` class
-
-### `FUEL_NETWORK_URL`
-
-The URL of either a user-defined environmental variable `FUEL_NETWORK_URL` (via process) or the default local node URL.
-
-<<< @/../../../packages/account/src/configs.ts#FUEL_NETWORK_URL{ts:line-numbers}
-
-### `FUEL_BETA_5_NETWORK_URL`
-
-The URL of the Latest Testnet Fuel node.
-
-<<< @/../../../packages/account/src/configs.ts#FUEL_BETA_5_NETWORK_URL{ts:line-numbers}
