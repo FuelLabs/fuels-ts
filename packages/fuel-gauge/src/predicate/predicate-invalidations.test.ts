@@ -27,7 +27,7 @@ describe('Predicate', () => {
 
     beforeAll(async () => {
       [wallet, receiver] = await setupWallets();
-      const amountToPredicate = 10_000;
+      const amountToPredicate = 1000;
       provider = wallet.provider;
       predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesMainArgsStruct,

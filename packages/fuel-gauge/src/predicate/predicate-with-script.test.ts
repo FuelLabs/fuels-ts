@@ -46,8 +46,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 500_000;
-      const amountToReceiver = 110_000;
+      const amountToPredicate = 1200;
+      const amountToReceiver = 100;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
@@ -67,7 +67,7 @@ describe('Predicate', () => {
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 10_000,
+        gasLimit: 500,
       });
 
       const { fee: predicateTxFee } = await tx.waitForResult();

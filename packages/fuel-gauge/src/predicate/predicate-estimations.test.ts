@@ -105,7 +105,6 @@ describe('Predicate', () => {
         amount: bn(100),
         assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
         owner: '0xd8813d1f9ca165ce2e8710382c3d65d64e7bd43c0f7a3d51689bcdf9513411cd',
-        maturity: 0,
         type: 0,
         txPointer: '0x00000000000000000000000000000000',
         witnessIndex: 0,
@@ -168,7 +167,7 @@ describe('Predicate', () => {
     });
 
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
-      const amountToPredicate = 10_000;
+      const amountToPredicate = 1000;
 
       await seedTestWallet(predicateTrue, [[amountToPredicate]]);
 

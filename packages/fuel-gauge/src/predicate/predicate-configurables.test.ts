@@ -25,7 +25,7 @@ describe('Predicate', () => {
 
   describe('Configurables', () => {
     let wallet: WalletUnlocked;
-    const amountToPredicate = 500_000;
+    const amountToPredicate = 2000;
 
     const defaultValues = {
       FEE: 10,
@@ -65,7 +65,7 @@ describe('Predicate', () => {
       await assertBalance(destination, 0, BaseAssetId);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasLimit: 10_000,
+        gasLimit: 500,
       });
 
       await tx.waitForResult();
@@ -98,7 +98,7 @@ describe('Predicate', () => {
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasLimit: 10_000,
+        gasLimit: 500,
       });
 
       await tx.waitForResult();
@@ -131,7 +131,7 @@ describe('Predicate', () => {
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasLimit: 10_000,
+        gasLimit: 500,
       });
 
       await tx.waitForResult();
@@ -166,7 +166,7 @@ describe('Predicate', () => {
       await fundPredicate(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, BaseAssetId, {
-        gasLimit: 10_000,
+        gasLimit: 500,
       });
 
       await tx.waitForResult();
@@ -186,7 +186,7 @@ describe('Predicate', () => {
       });
 
       await expect(
-        predicate.transfer(destination.address, 300, BaseAssetId, { gasLimit: 10_000 })
+        predicate.transfer(destination.address, 300, BaseAssetId, { gasLimit: 500 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 

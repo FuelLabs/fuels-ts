@@ -59,7 +59,7 @@ describe('Predicate', () => {
         cache: true,
       });
       const contract = await setupContract();
-      const amountToPredicate = 500_000;
+      const amountToPredicate = 1000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesTrue,
         abi: predicateAbiMainArgsStruct,
@@ -98,8 +98,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 700_000;
-      const amountToReceiver = 200_000;
+      const amountToPredicate = 1000;
+      const amountToReceiver = 20;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,

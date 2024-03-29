@@ -35,8 +35,8 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 500_000, BaseAssetId, {
-      gasLimit: 10_000,
+    const tx1 = await wallet.transfer(predicate.address, 1000, BaseAssetId, {
+      gasLimit: 100,
     });
 
     await tx1.waitForResult();
@@ -49,7 +49,7 @@ describe(__filename, () => {
 
     // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
-      gasLimit: 10_000,
+      gasLimit: 100,
     });
 
     await tx2.waitForResult();
@@ -70,8 +70,8 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 300_000, BaseAssetId, {
-      gasLimit: 10_000,
+    const tx1 = await wallet.transfer(predicate.address, 1000, BaseAssetId, {
+      gasLimit: 100,
     });
 
     await tx1.waitForResult();
@@ -84,7 +84,7 @@ describe(__filename, () => {
 
     // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
-      gasLimit: 10_000,
+      gasLimit: 100,
     });
 
     await tx2.waitForResult();
