@@ -45,13 +45,13 @@ describe('Custom Transactions from Contract Calls', () => {
     // Connect to the contract
     const contractInstance = new Contract(contract.id, abi, senderWallet);
     // Create an invocation scope for the contract function you'd like to call in the transaction
-    const scope = contractInstance.functions.increment_count(amountToRecipient);
+    const scope = contractInstance.functions
+      .increment_count(amountToRecipient)
+      .addTransfer(receiverWallet.address, amountToRecipient, BaseAssetId);
     // Fund the transaction
     await scope.fundWithRequiredCoins();
     // Build a transaction request from the invocation scope
     const transactionRequest = await scope.getTransactionRequest();
-    // Add coin output for the recipient
-    transactionRequest.addCoinOutput(receiverWallet.address, amountToRecipient, BaseAssetId);
     // Submit the transaction
     const response = await senderWallet.sendTransaction(transactionRequest);
     await response.waitForResult();
