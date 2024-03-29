@@ -12,6 +12,7 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
   gas: '499999489',
   param1: '1208122719',
   param2: '12568',
+  id: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
   contractId: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
   val: '1',
   ptr: '13296',

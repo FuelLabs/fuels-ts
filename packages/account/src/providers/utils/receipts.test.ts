@@ -238,7 +238,7 @@ describe('assembleReceiptByType', () => {
   });
 
   it('should return a ReceiptMint when GqlReceiptType.Mint is provided', () => {
-    const contractId = MOCK_GQL_RECEIPT_FRAGMENT.contractId || '';
+    const contractId = MOCK_GQL_RECEIPT_FRAGMENT.id || '';
     const subId = MOCK_GQL_RECEIPT_FRAGMENT.subId || '';
     const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
 
@@ -257,7 +257,7 @@ describe('assembleReceiptByType', () => {
   });
 
   it('should return a ReceiptBurn when GqlReceiptType.Burn is provided', () => {
-    const contractId = MOCK_GQL_RECEIPT_FRAGMENT.contractId || '';
+    const contractId = MOCK_GQL_RECEIPT_FRAGMENT.id || '';
     const subId = MOCK_GQL_RECEIPT_FRAGMENT.subId || '';
     const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
 
