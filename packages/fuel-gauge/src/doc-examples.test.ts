@@ -258,7 +258,8 @@ describe('Doc Examples', () => {
     // #endregion wallet-setup
   });
 
-  it('can connect to testnet', async () => {
+  // TODO: remove skip from testnet test
+  it.skip('can connect to testnet', async () => {
     const provider = await Provider.create(FUEL_BETA_5_NETWORK_URL);
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);

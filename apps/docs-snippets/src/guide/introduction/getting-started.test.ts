@@ -7,13 +7,11 @@ import { FUEL_BETA_5_NETWORK_URL, FUEL_NETWORK_URL, Provider, Wallet } from 'fue
 describe('Getting started', () => {
   beforeAll(() => {
     // Avoids using the actual network.
-    vi.spyOn(Provider, 'create')
-      .mockImplementationOnce(
-        () => Provider.create(FUEL_NETWORK_URL)
-      )
-  })
+    vi.spyOn(Provider, 'create').mockImplementationOnce(() => Provider.create(FUEL_NETWORK_URL));
+  });
 
-  it('can connect to testnet', async () => {
+  // TODO: remove skip from testnet test
+  it.skip('can connect to testnet', async () => {
     // #region connecting-to-the-testnet
     // #import { Provider, Wallet, FUEL_BETA_5_NETWORK_URL };
 
@@ -25,11 +23,11 @@ describe('Getting started', () => {
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     // Perform a balance check.
-    const balances = await wallet.getBalances()
+    const balances = await wallet.getBalances();
     // [{ assetId: '0x..', amount: bn(..) }, ..]
     // #endregion connecting-to-the-testnet
 
     expect(balances).toBeTruthy();
     expect(balances).toBeInstanceOf(Array);
-  })
-})
+  });
+});

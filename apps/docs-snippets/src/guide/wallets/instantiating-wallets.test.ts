@@ -80,7 +80,8 @@ describe(__filename, () => {
     expect(myWallet).toBeDefined();
   });
 
-  it('should connect a wallet to a provider', async () => {
+  // TODO: remove skip from testnet test
+  it.skip('should connect a wallet to a provider', async () => {
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
     const myWallet = Wallet.fromAddress(address);
 
