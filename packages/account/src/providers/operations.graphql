@@ -628,6 +628,12 @@ query getBalance($owner: Address!, $assetId: AssetId!) {
   }
 }
 
+query getLatestGasPrice {
+  latestGasPrice {
+    gasPrice
+  }
+}
+
 query getBalances(
   $filter: BalanceFilterInput!
   $after: String
