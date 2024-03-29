@@ -77,7 +77,7 @@ describe('TransactionRequest', () => {
 
     expect(inputA?.amount).toEqual(bn(700));
     expect(inputB?.amount).toEqual(bn(300));
-    expect(inputBase?.amount).toEqual(bn(500));
+    expect(inputBase?.amount).toEqual(bn('1000000000000000000'));
   });
 
   it('updates witnesses', () => {
