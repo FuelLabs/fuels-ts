@@ -102,6 +102,10 @@ export default defineConfig({
                 link: '/guide/wallets/checking-balances',
               },
               {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
+              },
+              {
                 text: 'Wallet Manager',
                 link: '/guide/wallets/wallet-manager',
               },
