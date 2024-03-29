@@ -773,7 +773,7 @@ export default class Provider {
           missingContractIds.push(contractId);
         });
 
-        const { maxFee } = this.estimateTxGasAndFee(transactionRequest);
+        const { maxFee } = await this.estimateTxGasAndFee({ transactionRequest });
 
         // eslint-disable-next-line no-param-reassign
         transactionRequest.maxFee = maxFee;
@@ -789,33 +789,49 @@ export default class Provider {
     };
   }
 
-  estimateTxGasAndFee(transactionRequest: TransactionRequest) {
+  async estimateTxGasAndFee(params: {
+    transactionRequest: TransactionRequest;
+    gasUsed?: BN;
+    gasPrice?: BN;
+  }) {
+    const { transactionRequest, gasUsed } = params;
+
+    let { gasPrice } = params;
     const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
 
-    const clonedRequest = clone(transactionRequest);
-    clonedRequest.maxFee = bn(0);
+    const { gasPriceFactor } = this.getGasConfig();
 
-    const minGas = clonedRequest.calculateMinGas(chainInfo);
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
 
-    const minFee = calculateGasFee({
-      gasPrice: bn(minGasPrice),
-      gas: minGas,
-      priceFactor: gasPriceFactor,
-      tip: clonedRequest.tip,
-    }).add(1);
-
-    if (clonedRequest.type === TransactionType.Script) {
-      clonedRequest.gasLimit = minGas;
+    if (!gasPrice) {
+      const { latestGasPrice } = await this.operations.getLatestGasPrice();
+      gasPrice = bn(latestGasPrice.gasPrice);
     }
 
-    const maxGas = clonedRequest.calculateMaxGas(chainInfo, minGas);
+    /**
+     * TODO: Validate if there is a way to while using BN to achive the same VM results
+     * for gas related math operations and removing the need to `add(1)` for handling
+     * a safe margin.
+     */
+
+    const minFee = calculateGasFee({
+      gasPrice: bn(gasPrice),
+      gas: minGas,
+      priceFactor: gasPriceFactor,
+      tip: transactionRequest.tip,
+    }).add(1);
+
+    if (transactionRequest.type === TransactionType.Script) {
+      transactionRequest.gasLimit = gasUsed || minGas;
+    }
+
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
 
     const maxFee = calculateGasFee({
-      gasPrice: minGasPrice,
+      gasPrice: bn(gasPrice),
       gas: maxGas,
       priceFactor: gasPriceFactor,
-      tip: clonedRequest.tip,
+      tip: transactionRequest.tip,
     }).add(1);
 
     return {
@@ -823,6 +839,7 @@ export default class Provider {
       minFee,
       maxGas,
       maxFee,
+      gasPrice,
     };
   }
 
@@ -888,8 +905,7 @@ export default class Provider {
     }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
+    const { gasPriceFactor } = this.getGasConfig();
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -930,36 +946,10 @@ export default class Provider {
      */
     txRequestClone.maxFee = bn(0);
 
-    let minGas = txRequestClone.calculateMinGas(chainInfo);
-
-    /**
-     * TODO: Validate if there is a way to while using BN to achive the same VM results
-     * for gas related math operations and removing the need to `add(1)` for handling
-     * a safe margin.
-     */
-    const {
-      latestGasPrice: { gasPrice },
-    } = await this.operations.getLatestGasPrice();
-
-    let minFee = calculateGasFee({
-      gasPrice: bn(gasPrice),
-      gas: minGas,
-      priceFactor: gasPriceFactor,
-      tip: txRequestClone.tip,
-    }).add(1);
-
-    if (isScriptTransaction) {
-      txRequestClone.gasLimit = minGas;
-    }
-
-    let maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
-
-    const maxFee = calculateGasFee({
-      gasPrice: minGasPrice,
-      gas: maxGas,
-      priceFactor: gasPriceFactor,
-      tip: txRequestClone.tip,
-    }).add(1);
+    // eslint-disable-next-line prefer-const
+    let { maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+      transactionRequest: txRequestClone,
+    });
 
     txRequestClone.maxFee = maxFee;
 
@@ -977,16 +967,19 @@ export default class Provider {
 
       txRequestClone.gasLimit = gasUsed;
 
-      const newEstimate = this.estimateTxGasAndFee(txRequestClone);
+      const newEstimate = await this.estimateTxGasAndFee({
+        transactionRequest: txRequestClone,
+        gasUsed,
+      });
 
       minGas = newEstimate.minGas;
       maxGas = newEstimate.maxGas;
       minFee = newEstimate.minFee;
-      maxGas = newEstimate.maxGas;
+      maxFee = newEstimate.maxFee;
     }
 
     const feeForGasUsed = calculateGasFee({
-      gasPrice: minGasPrice,
+      gasPrice,
       gas: gasUsed,
       priceFactor: gasPriceFactor,
       tip: txRequestClone.tip,
@@ -1000,8 +993,9 @@ export default class Provider {
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
-      minGasPrice,
-      gasPrice: minGasPrice,
+      // TODO: remove minGasPrice
+      minGasPrice: gasPrice,
+      gasPrice,
       minGas,
       maxGas,
       usedFee: fee,
