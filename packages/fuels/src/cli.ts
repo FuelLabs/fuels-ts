@@ -22,6 +22,8 @@ export const onPreAction = (command: Command) => {
 };
 
 export const configureCli = () => {
+  // eslint-disable-next-line no-console
+  console.log('test release');
   const program = new Command();
   program.name('fuels');
 
