@@ -50,7 +50,7 @@ async function getChangelogInfo(
   const summary =
     titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
-  const markdown = `- ${prLink}, ${summary}, by ${user}`;
+  const markdown = `- ${prLink} - ${summary}, by ${user}`;
   return {
     prType,
     isBreaking,
@@ -155,7 +155,8 @@ export async function getFullChangelog(octokit: Octokit) {
   const breaking = listBreakingMd(changelogs);
   const nonBreaking = listNonBreakingMd(changelogs);
 
-  let content = `# RELEASE - ${process.env.RELEASE_TAG ?? "TBD"}\n\n`;
+  let content = ``;
+
   content += breaking ? `# Breaking\n\n${breaking}` : "";
   content += breaking && nonBreaking && "\n\n---\n\n";
   content += nonBreaking;
