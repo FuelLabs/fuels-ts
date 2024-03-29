@@ -139,7 +139,7 @@ jobs:
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.3
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2
           verbose: false
