@@ -11,18 +11,22 @@ export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLi
     wallet.provider
   );
 
-  // Connect to the same Provider as wallet
-  const resources = await genesisWallet.getResourcesToSpend(quantities);
-
   // Create transaction
-  const request = new ScriptTransactionRequest({
-    maxFee: 1000,
+  const request = new ScriptTransactionRequest();
+
+  // Connect to the same Provider as wallet
+  quantities.forEach((quantity) => {
+    const { amount, assetId } = coinQuantityfy(quantity);
+    request.addCoinOutput(wallet.address, amount, assetId);
   });
 
-  request.addResources(resources);
+  const { gasUsed, maxFee, requiredQuantities } =
+    await genesisWallet.provider.getTransactionCost(request);
 
-  quantities
-    .map(coinQuantityfy)
-    .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
+  request.gasLimit = gasUsed;
+  request.maxFee = maxFee;
+
+  await genesisWallet.fund(request, requiredQuantities, maxFee);
+
   await genesisWallet.sendTransaction(request, { awaitExecution: true });
 };
