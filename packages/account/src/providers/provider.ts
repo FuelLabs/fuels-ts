@@ -897,12 +897,7 @@ export default class Provider {
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = [],
-    {
-      estimateTxDependencies = true,
-      estimatePredicates = true,
-      resourcesOwner,
-      signatureCallback,
-    }: TransactionCostParams = {}
+    { estimatePredicates = true, resourcesOwner, signatureCallback }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const { gasPriceFactor } = this.getGasConfig();

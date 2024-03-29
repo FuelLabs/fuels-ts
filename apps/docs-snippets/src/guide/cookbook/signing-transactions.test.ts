@@ -1,6 +1,5 @@
 import type { Provider, BN, JsonAbi } from 'fuels';
 import { WalletUnlocked, Predicate, BaseAssetId, Script, ScriptTransactionRequest } from 'fuels';
-import { maxHeaderSize } from 'http';
 
 import {
   DocSnippetProjectsEnum,
