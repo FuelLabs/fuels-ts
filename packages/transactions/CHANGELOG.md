@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.76.5
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.76.5
+- @fuel-ts/address@0.76.5
+- @fuel-ts/errors@0.76.5
+- @fuel-ts/interfaces@0.76.5
+- @fuel-ts/math@0.76.5
+- @fuel-ts/utils@0.76.5
+
 ## 0.76.4
 
 ### Patch Changes
