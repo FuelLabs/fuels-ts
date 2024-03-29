@@ -334,7 +334,9 @@ export class Account extends AbstractAccount {
         resourcesOwner: this,
       });
 
-    if (txParams.gasLimit) {
+    // TODO: Fix this logic. The if was not working when gasLimit was 0, "if(txParams.gasLimit)"
+    // was being evaluated as false. Should we change this on master?
+    if ('gasLimit' in txParams) {
       this.validateGas({
         gasUsed,
         gasLimit: request.gasLimit,
