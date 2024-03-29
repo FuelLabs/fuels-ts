@@ -63,13 +63,17 @@ describe('Transaction Policies', () => {
       witnessLimit: 900,
       maxFee: bn(10_000),
     });
+
     // Set the script main function arguments
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+
     // Fund the transaction
     transactionRequest.addResources(resources);
+
     // Submit the transaction and retrieve the transaction response
     const tx: TransactionResponse = await wallet.sendTransaction(transactionRequest);
     const response = await tx.waitForResult();
+    
     // Retrieve the policies from the transaction response. The policies property
     // is undefined if the transaction had no policies applied.
     const policies: Policy[] | undefined = response.transaction.policies;

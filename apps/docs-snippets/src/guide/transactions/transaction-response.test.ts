@@ -33,8 +33,10 @@ describe('Transaction Response', () => {
 
     // Call a contract function
     const call = await contract.functions.increment_count(15).call();
+
     // Pick off the transaction response
     const transactionResponse: TransactionResponse = call.transactionResponse;
+
     // Retrieve the full transaction summary
     const transactionSummary = await transactionResponse.getTransactionSummary();
     // #endregion transaction-response-1
@@ -56,10 +58,13 @@ describe('Transaction Response', () => {
       gasPrice,
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+
     // Fund the transaction
     transactionRequest.addResources(resources);
+
     // Submit the transaction
     const response: TransactionResponse = await wallet.sendTransaction(transactionRequest);
+
     // Generate the transaction summary
     const transactionSummary = await response.getTransactionSummary();
     // #endregion transaction-response-2
@@ -85,8 +90,10 @@ describe('Transaction Response', () => {
     // Get a transaction ID from the transaction request, this could have been stored from a
     // previous transaction request. You will need the chain ID to obtain this.
     const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+
     // Retrieve the transaction response from the transaction ID
     const transactionResponse = await TransactionResponse.create(transactionId, provider);
+    
     // Generate the transaction summary
     const transactionSummary = await transactionResponse.getTransactionSummary();
     // #endregion transaction-response-3

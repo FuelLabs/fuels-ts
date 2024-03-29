@@ -64,6 +64,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request using a ScriptTransactionRequest
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+
     // Set the script main function arguments (can also be passed in the class constructor)
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
     // #endregion transaction-request-1
@@ -94,12 +95,15 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+
     // Adding resources (coins or messages)
     transactionRequest.addResources(resources);
     transactionRequest.addResource(resource);
+
     // Adding coin inputs and outputs (including transfer to recipient)
     transactionRequest.addCoinInput(coin);
     transactionRequest.addCoinOutput(recipientAddress, 1000, BaseAssetId);
+
     // Adding message inputs
     transactionRequest.addMessageInput(message);
     // #endregion transaction-request-3
@@ -118,6 +122,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+
     // Add the contract input and output using the contract ID
     transactionRequest.addContractInputAndOutput(contractId);
     // #endregion transaction-request-4
@@ -132,8 +137,10 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+
     // Instantiate the predicate
     const predicate = new Predicate({ bytecode: predicateBytecode, abi: predicateAbi, provider });
+
     // Add the predicate input and resources
     transactionRequest.addPredicateResource(coin, predicate);
     // #endregion transaction-request-5
@@ -150,8 +157,10 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+
     // Add a witness directly
     transactionRequest.addWitness(witness);
+
     // Add a witness using an account
     const account: Account = WalletUnlocked.generate({ provider });
     await transactionRequest.addAccountWitnesses(account);
@@ -166,8 +175,10 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+
     // Get the chain ID
     const chainId = await provider.getChainId();
+    
     // Get the transaction ID using the Chain ID
     const transactionId = transactionRequest.getTransactionId(chainId);
     // TX ID: 0x55667d...

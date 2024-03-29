@@ -62,7 +62,6 @@ describe(__filename, () => {
 
   it('executes contract call with txParams', async () => {
     // #region transaction-parameters-3
-    // #region variable-outputs-1
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
@@ -70,7 +69,6 @@ describe(__filename, () => {
         variableOutputs: 1,
       })
       .call();
-    // #endregion variable-outputs-1
     // #endregion transaction-parameters-3
 
     const { transaction } = transactionResult;
