@@ -160,7 +160,7 @@ describe(__filename, () => {
     // #region send-and-spend-funds-from-predicates-8
     const transactionRequest = await predicate.createTransfer(
       receiverWallet.address,
-      amountToPredicate,
+      amountToPredicate / 2,
       BaseAssetId,
       {
         gasLimit: 1_000,
