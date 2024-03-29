@@ -178,10 +178,8 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
-    // #region provider-definition
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { consensusParameters } = provider.getChain();
-    // #endregion provider-definition
 
     expect(consensusParameters.baseAssetId).toBeDefined();
     expect(consensusParameters.contractMaxSize).toBeDefined();
