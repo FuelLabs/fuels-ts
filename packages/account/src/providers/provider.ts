@@ -772,6 +772,11 @@ export default class Provider {
           transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
           missingContractIds.push(contractId);
         });
+
+        const { maxFee } = this.estimateTxGasAndFee(transactionRequest);
+
+        // eslint-disable-next-line no-param-reassign
+        transactionRequest.maxFee = maxFee;
       } else {
         break;
       }
