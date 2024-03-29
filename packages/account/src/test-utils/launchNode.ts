@@ -1,4 +1,4 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { toHex } from '@fuel-ts/math';
 import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
@@ -170,7 +170,7 @@ export const launchNode = async ({
               {
                 owner: signer.address.toHexString(),
                 amount: toHex(1_000_000_000),
-                asset_id: BaseAssetId,
+                asset_id: defaultChainConfig?.consensus_parameters?.base_asset_id ?? ZeroBytes32,
               },
             ],
           },
@@ -256,9 +256,10 @@ export const launchNode = async ({
   });
 
 const generateWallets = async (count: number, provider: Provider) => {
+  const baseAssetId = provider.getBaseAssetId();
   const wallets: WalletUnlocked[] = [];
   for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
     wallets.push(wallet);
   }
   return wallets;

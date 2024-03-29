@@ -1,4 +1,4 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -16,11 +16,11 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
   let max;
   if (Array.isArray(coinQuantityLike)) {
     amount = coinQuantityLike[0];
-    assetId = coinQuantityLike[1] ?? BaseAssetId;
+    assetId = coinQuantityLike[1] ?? ZeroBytes32;
     max = coinQuantityLike[2] ?? undefined;
   } else {
     amount = coinQuantityLike.amount;
-    assetId = coinQuantityLike.assetId ?? BaseAssetId;
+    assetId = coinQuantityLike.assetId ?? ZeroBytes32;
     max = coinQuantityLike.max ?? undefined;
   }
 

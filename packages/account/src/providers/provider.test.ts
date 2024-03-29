@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
@@ -67,13 +67,14 @@ describe('Provider', () => {
 
   it('can call()', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
         type: InputType.Coin,
         id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-        owner: BaseAssetId,
-        assetId: BaseAssetId,
+        owner: baseAssetId,
+        assetId: baseAssetId,
         txPointer: '0x00000000000000000000000000000000',
         amount: 100,
         witnessIndex: 0,
@@ -387,13 +388,14 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 1,
     });
+    const baseAssetId = provider.getBaseAssetId();
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const transactionRequest = new ScriptTransactionRequest({
       inputs: [MessageInput],
@@ -410,6 +412,7 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -418,35 +421,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -469,6 +472,7 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -477,35 +481,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -544,6 +548,7 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -552,35 +557,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -603,6 +608,7 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       cacheUtxo: 10000,
     });
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -611,35 +617,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -1035,15 +1041,15 @@ describe('Provider', () => {
 
   it('should accept string addresses in methods that require an address', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-
+    const baseAssetId = provider.getBaseAssetId();
     const b256Str = Address.fromRandom().toB256();
 
     const methodCalls = [
-      () => provider.getBalance(b256Str, BaseAssetId),
+      () => provider.getBalance(b256Str, baseAssetId),
       () => provider.getCoins(b256Str),
       () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
       () => provider.getResourcesToSpend(b256Str, []),
-      () => provider.getContractBalance(b256Str, BaseAssetId),
+      () => provider.getContractBalance(b256Str, baseAssetId),
       () => provider.getBalances(b256Str),
       () => provider.getMessages(b256Str),
     ];

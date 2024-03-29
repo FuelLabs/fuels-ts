@@ -7,7 +7,6 @@ import {
   SCRIPT_FIXED_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -114,11 +113,12 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    const request = await super.createTransfer(destination, amount, assetId, txParams);
+    const assetIdToTransfer = assetId ?? (await this.provider.getBaseAssetId());
+    const request = await super.createTransfer(destination, amount, assetIdToTransfer, txParams);
     return this.populateTransactionPredicateData(request);
   }
 
