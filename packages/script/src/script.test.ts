@@ -28,10 +28,10 @@ const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcPro
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const BaseAssetId = provider.getBaseAssetId();
+  const baseAssetId = provider.getBaseAssetId();
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
 
   return wallet;
 };
