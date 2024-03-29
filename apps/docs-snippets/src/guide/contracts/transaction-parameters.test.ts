@@ -24,7 +24,6 @@ describe(__filename, () => {
         tip,
       })
       .call();
-    // #endregion variable-outputs-1
     // #endregion transaction-parameters-2
 
     const { transaction } = transactionResult;

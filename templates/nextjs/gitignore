@@ -35,5 +35,5 @@ next-env.d.ts
 
 .fuels
 src/sway-api
-sway-contracts/out
+sway-programs/**/out
 .turbo

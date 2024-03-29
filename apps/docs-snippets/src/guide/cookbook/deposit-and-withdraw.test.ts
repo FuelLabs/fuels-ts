@@ -1,5 +1,5 @@
 import type { Contract, WalletUnlocked, Provider } from 'fuels';
-import { ContractFactory, BaseAssetId, Wallet, ZeroBytes32, getAssetId } from 'fuels';
+import { ContractFactory, BaseAssetId, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -35,7 +35,7 @@ describe(__filename, () => {
     const subId = ZeroBytes32;
     const contractId = liquidityPoolContract.id.toB256();
 
-    const assetId = getAssetId(contractId, subId);
+    const assetId = getMintedAssetId(contractId, subId);
 
     await liquidityPoolContract.functions
       .deposit({ value: liquidityOwner.address.toB256() })

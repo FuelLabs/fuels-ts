@@ -1,17 +1,17 @@
 import { Button } from "@/components/Button";
 import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
-import { AppContext } from "@/components/Layout";
 import { Link } from "@/components/Link";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import type { BN, InputValue, Predicate } from "fuels";
 import { BaseAssetId, bn } from "fuels";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import useAsync from "react-use/lib/useAsync";
 
 export default function PredicateExample() {
-  const { burnerWallet, burnerWalletBalance, refreshBurnerWalletBalance } =
-    useContext(AppContext);
+  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
 
   const [predicate, setPredicate] = useState<Predicate<InputValue[]>>();
 
@@ -19,23 +19,18 @@ export default function PredicateExample() {
 
   const [pin, setPin] = useState<string>();
 
-  useEffect(() => {
-    (async () => {
-      if (burnerWallet) {
-        const predicate = TestPredicateAbi__factory.createInstance(
-          burnerWallet.provider,
-        );
-        setPredicate(predicate);
-        setPredicateBalance(await predicate.getBalance());
-      }
-
-      // eslint-disable-next-line no-console
-    })().catch(console.error);
-  }, [burnerWallet]);
+  useAsync(async () => {
+    if (wallet) {
+      const predicate = TestPredicateAbi__factory.createInstance(
+        wallet.provider,
+      );
+      setPredicate(predicate);
+      setPredicateBalance(await predicate.getBalance());
+    }
+  }, [wallet]);
 
   const refreshBalances = async () => {
-    console.log(refreshBurnerWalletBalance);
-    await refreshBurnerWalletBalance?.();
+    await refreshWalletBalance?.();
     setPredicateBalance(await predicate?.getBalance());
   };
 
@@ -44,11 +39,11 @@ export default function PredicateExample() {
       return toast.error("Predicate not loaded");
     }
 
-    if (!burnerWallet) {
+    if (!wallet) {
       return toast.error("Wallet not loaded");
     }
 
-    await burnerWallet.transfer(predicate.address, amount, BaseAssetId, {
+    await wallet.transfer(predicate.address, amount, BaseAssetId, {
       gasLimit: 10_000,
     });
 
@@ -59,12 +54,12 @@ export default function PredicateExample() {
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
     try {
-      if (!burnerWallet) {
+      if (!wallet) {
         return toast.error("Wallet not loaded");
       }
 
       const reInitializePredicate = TestPredicateAbi__factory.createInstance(
-        burnerWallet.provider,
+        wallet.provider,
         [bn(pin)],
       );
 
@@ -73,7 +68,7 @@ export default function PredicateExample() {
       }
 
       const tx = await reInitializePredicate.transfer(
-        burnerWallet.address,
+        wallet.address,
         amount,
         BaseAssetId,
       );
@@ -105,7 +100,7 @@ export default function PredicateExample() {
 
       <div className="mt-12 items-baseline flex gap-2">
         <h5 className="font-semibold text-xl">Wallet Balance:</h5>
-        <span className="text-gray-400">{burnerWalletBalance?.toString()}</span>
+        <span className="text-gray-400">{walletBalance?.toString()}</span>
       </div>
 
       <div className="items-baseline flex gap-2">
