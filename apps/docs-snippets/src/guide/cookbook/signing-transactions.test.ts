@@ -1,5 +1,6 @@
 import type { Provider, BN, JsonAbi } from 'fuels';
 import { WalletUnlocked, Predicate, BaseAssetId, Script, ScriptTransactionRequest } from 'fuels';
+import { maxHeaderSize } from 'http';
 
 import {
   DocSnippetProjectsEnum,
@@ -17,7 +18,6 @@ describe('Signing transactions', () => {
   let receiver: WalletUnlocked;
   let signer: WalletUnlocked;
   let provider: Provider;
-  let gasPrice: BN;
   const { abiContents: abiPredicate, binHexlified: binPredicate } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.PREDICATE_SIGNING
   );
@@ -32,7 +32,6 @@ describe('Signing transactions', () => {
     });
 
     provider = sender.provider;
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   beforeEach(() => {
@@ -79,7 +78,7 @@ describe('Signing transactions', () => {
     await sender.transfer(predicate.address, 10_000, BaseAssetId);
 
     // Create the transaction request
-    const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_000 });
+    const request = new ScriptTransactionRequest();
     request.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
 
     // Get the predicate resources and add them and predicate data to the request
@@ -90,15 +89,24 @@ describe('Signing transactions', () => {
       },
     ]);
     request.addPredicateResources(resources, predicate);
-    const parsedRequest = predicate.populateTransactionPredicateData(request);
 
     // Add witnesses including the signer
-    parsedRequest.addWitness('0x');
-    await parsedRequest.addAccountWitnesses(signer);
-
+    request.addWitness('0x');
     // Estimate the predicate inputs
-    const { estimatedInputs } = await provider.getTransactionCost(parsedRequest);
-    parsedRequest.updatePredicateInputs(estimatedInputs);
+    const { estimatedInputs, gasUsed, maxFee, requiredQuantities } =
+      await provider.getTransactionCost(request, [], {
+        signatureCallback: (tx) => tx.addAccountWitnesses(signer),
+      });
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    request.updatePredicateInputs(estimatedInputs);
+
+    const parsedRequest = predicate.populateTransactionPredicateData(request);
+    await predicate.fund(parsedRequest, requiredQuantities, maxFee);
+
+    await parsedRequest.addAccountWitnesses(signer);
 
     // Send the transaction
     const res = await provider.sendTransaction(parsedRequest);
