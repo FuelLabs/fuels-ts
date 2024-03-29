@@ -26,11 +26,11 @@ jobs:
           # see https://github.com/changesets/action/issues/70
           persist-credentials: false
 
-      - name: Validate Changeset baseBranch
-        run: pnpm changeset:validate-baseBranch
-
       - name: CI Setup
         uses: ./.github/actions/ci-setup
+
+      - name: Validate Changeset baseBranch
+        run: pnpm changeset:validate-baseBranch
 
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
