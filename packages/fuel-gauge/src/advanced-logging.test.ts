@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, Contract, Provider, WalletUnlocked } from 'fuels';
+import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { RequireRevertError, Script, ScriptResultDecoderError, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -14,7 +14,6 @@ let advancedLogContract: Contract;
 let otherAdvancedLogContract: Contract;
 let advancedLogId: string;
 let otherLogId: string;
-let minGasPrice: BN;
 
 beforeAll(async () => {
   advancedLogContract = await setupContract();
@@ -22,7 +21,6 @@ beforeAll(async () => {
   provider = advancedLogContract.provider;
   advancedLogId = advancedLogContract.id.toB256();
   otherLogId = otherAdvancedLogContract.id.toB256();
-  minGasPrice = provider.getGasConfig().minGasPrice;
 });
 
 /**
@@ -198,7 +196,7 @@ describe('Advanced Logging', () => {
       );
 
       request.gasLimit = gasUsed;
-      request.gasPrice = minGasPrice;
+      request.maxFee = maxFee;
 
       await wallet.fund(request, requiredQuantities, maxFee);
 
@@ -266,7 +264,7 @@ describe('Advanced Logging', () => {
       );
 
       request.gasLimit = gasUsed;
-      request.gasPrice = minGasPrice;
+      request.maxFee = maxFee;
 
       await wallet.fund(request, requiredQuantities, maxFee);
 
