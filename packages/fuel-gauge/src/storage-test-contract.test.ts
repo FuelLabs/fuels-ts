@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN } from 'fuels';
-import { toHex, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { toHex, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -12,8 +12,9 @@ const {
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
   const { minGasPrice } = wallet.provider.getGasConfig();
   // Deploy contract
   // #region contract-deployment-storage-slots
@@ -34,9 +35,11 @@ const setup = async () => {
  */
 describe('StorageTestContract', () => {
   let gasPrice: BN;
+  let baseAssetId: string;
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     gasPrice = provider.getGasConfig().minGasPrice;
+    baseAssetId = provider.getBaseAssetId();
   });
   it('can increment counter', async () => {
     const contract = await setup();
@@ -56,7 +59,7 @@ describe('StorageTestContract', () => {
 
   it('can increment counter - using custom inline storage slots', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const factory = new ContractFactory(bytecode, abi, wallet);
     // #region contract-deployment-storage-slots-inline
     const contract = await factory.deployContract({

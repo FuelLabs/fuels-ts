@@ -4,7 +4,6 @@ import {
   Wallet,
   FUEL_NETWORK_URL,
   Provider,
-  BaseAssetId,
   bn,
   TransactionStatus,
   ScriptTransactionRequest,
@@ -21,13 +20,20 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
  * @group node
  */
 describe(__filename, () => {
+  let provider: Provider;
+  let baseAssetId: string;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
+  });
+
   it('sets gas requirements (contract)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(
       '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
       provider
     );
-    await seedTestWallet(wallet, [[500_000, BaseAssetId]]);
+    await seedTestWallet(wallet, [[500_000, baseAssetId]]);
 
     /**
      * Create a contract transaction
@@ -44,7 +50,7 @@ describe(__filename, () => {
     const resources = await provider.getResourcesToSpend(wallet.address, [
       {
         amount: bn(100_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     request.addResources(resources);
@@ -65,12 +71,11 @@ describe(__filename, () => {
   });
 
   it('sets gas requirements (script)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const sender = Wallet.fromPrivateKey(
       '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
       provider
     );
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
 
     /**
      * Create a script transaction
@@ -81,7 +86,7 @@ describe(__filename, () => {
       script: binHexlified,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
-    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
@@ -104,7 +109,6 @@ describe(__filename, () => {
   });
 
   it('sets gas requirements (predicate)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const { abiContents, binHexlified } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.COMPLEX_PREDICATE
     );
@@ -118,17 +122,17 @@ describe(__filename, () => {
       provider,
       inputData: [bn(1000)],
     });
-    await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
+    await seedTestWallet(predicate, [[500_000, baseAssetId]]);
 
     /**
      * Create a script transaction transfer
      */
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
     const resources = await provider.getResourcesToSpend(predicate.address, [
       {
         amount: bn(100_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     request.addResources(resources);
@@ -152,7 +156,6 @@ describe(__filename, () => {
   });
 
   it('sets gas requirements (account and predicate with script)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const { abiContents, binHexlified } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.COMPLEX_PREDICATE
     );
@@ -163,7 +166,7 @@ describe(__filename, () => {
       '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
       provider
     );
-    await seedTestWallet(wallet, [[500_000, BaseAssetId]]);
+    await seedTestWallet(wallet, [[500_000, baseAssetId]]);
 
     /**
      * Setup predicate
@@ -174,7 +177,7 @@ describe(__filename, () => {
       provider,
       inputData: [bn(1000)],
     });
-    await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
+    await seedTestWallet(predicate, [[500_000, baseAssetId]]);
 
     /**
      * Create a script transaction
@@ -187,20 +190,20 @@ describe(__filename, () => {
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     // add predicate transfer
-    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
     const resourcesPredicate = await provider.getResourcesToSpend(predicate.address, [
       {
         amount: bn(100_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     request.addPredicateResources(resourcesPredicate, predicate);
     // add account transfer
-    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
     const resourcesWallet = await provider.getResourcesToSpend(wallet.address, [
       {
         amount: bn(100_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     request.addResources(resourcesWallet);

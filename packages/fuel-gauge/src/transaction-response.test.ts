@@ -4,7 +4,6 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from 'fuels';
 import {
-  BaseAssetId,
   FUEL_NETWORK_URL,
   Provider,
   TransactionResponse,
@@ -90,9 +89,11 @@ describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
   let gasPrice: BN;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     adminWallet = await generateTestWallet(provider, [[500_000]]);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
@@ -105,7 +106,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
+      baseAssetId,
       { gasPrice, gasLimit: 10_000 }
     );
 
@@ -124,7 +125,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
+      baseAssetId,
       { gasPrice, gasLimit: 10_000 }
     );
 
@@ -184,7 +185,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await genesisWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
+      baseAssetId,
       { gasPrice, gasLimit: 10_000 }
     );
     const response = await TransactionResponse.create(transactionId, nodeProvider);

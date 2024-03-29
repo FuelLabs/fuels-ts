@@ -14,7 +14,6 @@ import {
   getTransactionsSummaries,
   getTransactionSummary,
   getTransactionSummaryFromRequest,
-  BaseAssetId,
   Provider,
   ScriptTransactionRequest,
   TransactionTypeName,
@@ -34,10 +33,12 @@ describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
   let gasPrice: BN;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    adminWallet = await generateTestWallet(provider, [[100_000_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    adminWallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
@@ -78,7 +79,7 @@ describe('TransactionSummary', () => {
       gasPrice: 1,
     });
 
-    request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(destination.address, amountToTransfer, baseAssetId);
 
     const resources = await adminWallet.getResourcesToSpend([[100_000]]);
 
@@ -106,7 +107,7 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx1 = await adminWallet.transfer(sender.address, 500_000, BaseAssetId, {
+    const tx1 = await adminWallet.transfer(sender.address, 500_000, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -118,7 +119,7 @@ describe('TransactionSummary', () => {
       provider,
     });
 
-    const tx2 = await sender.transfer(destination.address, amountToTransfer, BaseAssetId, {
+    const tx2 = await sender.transfer(destination.address, amountToTransfer, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -150,7 +151,7 @@ describe('TransactionSummary', () => {
       gasPrice: 1,
     });
 
-    const resources = await adminWallet.getResourcesToSpend([[100_000, BaseAssetId]]);
+    const resources = await adminWallet.getResourcesToSpend([[100_000, baseAssetId]]);
 
     request.addResources(resources);
 
@@ -200,13 +201,13 @@ describe('TransactionSummary', () => {
     };
 
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER)', async () => {
-      const wallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+      const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
 
       const recipient = Wallet.generate({ provider });
 
       const amount = 1233;
 
-      const tx1 = await wallet.transfer(recipient.address, amount, BaseAssetId);
+      const tx1 = await wallet.transfer(recipient.address, amount, baseAssetId);
 
       const { operations } = await tx1.waitForResult();
 
@@ -218,14 +219,14 @@ describe('TransactionSummary', () => {
         fromType: AddressType.account,
         toType: AddressType.account,
         recipients: [
-          { address: recipient.address, quantities: [{ amount, assetId: BaseAssetId }] },
+          { address: recipient.address, quantities: [{ amount, assetId: baseAssetId }] },
         ],
       });
     });
 
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER TO CONTRACT)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, BaseAssetId],
+        [10_000, baseAssetId],
         [10_000, ASSET_A],
       ]);
 
@@ -280,7 +281,7 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO ACCOUNTS)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, BaseAssetId],
+        [10_000, baseAssetId],
         [10_000, ASSET_A],
         [10_000, ASSET_B],
       ]);
@@ -289,7 +290,7 @@ describe('TransactionSummary', () => {
       senderContract.account = wallet;
       const fundAmount = 5_000;
 
-      const assets = [BaseAssetId, ASSET_A, ASSET_B];
+      const assets = [baseAssetId, ASSET_A, ASSET_B];
       for await (const asset of assets) {
         const tx = await wallet.transferToContract(senderContract.id, fundAmount, asset);
         await tx.waitForResult();
@@ -300,13 +301,13 @@ describe('TransactionSummary', () => {
         quantities: [
           { amount: 543, assetId: ASSET_A },
           { amount: 400, assetId: ASSET_B },
-          { amount: 123, assetId: BaseAssetId },
+          { amount: 123, assetId: baseAssetId },
         ],
       };
       const transferData2 = {
         address: Wallet.generate({ provider }).address,
         quantities: [
-          { amount: 12, assetId: BaseAssetId },
+          { amount: 12, assetId: baseAssetId },
           { amount: 612, assetId: ASSET_B },
         ],
       };
@@ -374,7 +375,7 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO CONTRACTS)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, BaseAssetId],
+        [10_000, baseAssetId],
         [10_000, ASSET_A],
         [10_000, ASSET_B],
       ]);
@@ -383,7 +384,7 @@ describe('TransactionSummary', () => {
       senderContract.account = wallet;
       const fundAmount = 5_000;
 
-      const assets = [BaseAssetId, ASSET_A, ASSET_B];
+      const assets = [baseAssetId, ASSET_A, ASSET_B];
       for await (const asset of assets) {
         const tx = await wallet.transferToContract(senderContract.id, fundAmount, asset);
         await tx.waitForResult();
@@ -404,7 +405,7 @@ describe('TransactionSummary', () => {
         quantities: [
           { amount: 500, assetId: ASSET_A },
           { amount: 700, assetId: ASSET_B },
-          { amount: 100, assetId: BaseAssetId },
+          { amount: 100, assetId: baseAssetId },
         ],
       };
 
@@ -438,7 +439,7 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CUSTOM SCRIPT TRANSFER)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, BaseAssetId],
+        [10_000, baseAssetId],
         [10_000, ASSET_A],
         [10_000, ASSET_B],
       ]);
@@ -460,7 +461,7 @@ describe('TransactionSummary', () => {
         quantities: [
           { amount: 500, assetId: ASSET_A },
           { amount: 700, assetId: ASSET_B },
-          { amount: 100, assetId: BaseAssetId },
+          { amount: 100, assetId: baseAssetId },
         ],
       };
 

@@ -5,7 +5,6 @@ import type {
   ContractTransactionRequestInput,
 } from 'fuels';
 import {
-  BaseAssetId,
   Provider,
   Predicate,
   bn,
@@ -34,9 +33,11 @@ describe('Predicate', () => {
     let provider: Provider;
     let predicateTrue: Predicate<[]>;
     let predicateStruct: Predicate<[Validation]>;
+    let baseAssetId: string;
 
     beforeEach(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
+      baseAssetId = provider.getBaseAssetId();
       predicateTrue = new Predicate({
         bytecode: predicateTrueBytecode,
         provider,
@@ -48,7 +49,7 @@ describe('Predicate', () => {
       });
       await seedTestWallet(predicateStruct, [
         {
-          assetId: BaseAssetId,
+          assetId: baseAssetId,
           amount: bn(1000),
         },
       ]);
@@ -60,7 +61,7 @@ describe('Predicate', () => {
       // Get resources from the predicate struct
       const ressources = await predicateStruct.getResourcesToSpend([
         {
-          assetId: BaseAssetId,
+          assetId: baseAssetId,
           amount: bn(1000),
         },
       ]);
@@ -184,7 +185,7 @@ describe('Predicate', () => {
       const response = await predicateTrue.transfer(
         receiverWallet.address.toB256(),
         1,
-        BaseAssetId
+        baseAssetId
       );
       await response.waitForResult();
       const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();

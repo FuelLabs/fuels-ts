@@ -9,7 +9,6 @@ import {
   bn,
   ContractFactory,
   Provider,
-  BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
 
@@ -23,10 +22,12 @@ let wallet: WalletUnlocked;
  */
 describe('Revert Error Testing', () => {
   let gasPrice: BN;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
     const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.REVERT_ERROR

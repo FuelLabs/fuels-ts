@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AssetId, BN } from 'fuels';
-import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { toHex, Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -11,10 +11,11 @@ const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
 );
 
 let provider: Provider;
+let baseAssetId: string;
 
 const setup = async () => {
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
   const { minGasPrice } = wallet.provider.getGasConfig();
 
   // Deploy contract
@@ -26,6 +27,7 @@ const setup = async () => {
 
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
+  baseAssetId = provider.getBaseAssetId();
 });
 
 /**
@@ -154,7 +156,7 @@ describe('TokenTestContract', () => {
     const addressParameter = {
       value: userWallet.address,
     };
-    const assetId: AssetId = { value: BaseAssetId };
+    const assetId: AssetId = { value: baseAssetId };
 
     await expectToThrowFuelError(
       () => token.functions.transfer_to_address(addressParameter, assetId, 50).call(),

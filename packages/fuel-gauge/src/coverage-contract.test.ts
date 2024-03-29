@@ -6,7 +6,6 @@ import {
   Provider,
   Wallet,
   ScriptTransactionRequest,
-  BaseAssetId,
   isMessage,
   isCoin,
   randomBytes,
@@ -28,8 +27,10 @@ const setupContract = getSetupContract('coverage-contract');
 
 let contractInstance: Contract;
 let gasPrice: BN;
+let baseAssetId: string;
 beforeAll(async () => {
   contractInstance = await setupContract();
+  baseAssetId = contractInstance.provider.getBaseAssetId();
   ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
@@ -494,14 +495,14 @@ describe('Coverage Contract', () => {
       provider
     );
 
-    const coins = await sender.getResourcesToSpend([[bn(100), BaseAssetId]]);
+    const coins = await sender.getResourcesToSpend([[bn(100), baseAssetId]]);
 
     expect(coins.length).toEqual(1);
     expect(isMessage(coins[0])).toBeTruthy();
     expect(isCoin(coins[0])).toBeFalsy();
 
     request.addResources(coins);
-    request.addCoinOutput(recipient.address, 10, BaseAssetId);
+    request.addCoinOutput(recipient.address, 10, baseAssetId);
 
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();

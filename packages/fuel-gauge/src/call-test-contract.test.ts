@@ -1,5 +1,5 @@
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
-import { BN, bn, toHex, BaseAssetId } from 'fuels';
+import { BN, bn, toHex } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -141,10 +141,11 @@ describe('CallTestContract', () => {
 
   it('Forward amount value on contract call', async () => {
     const contract = await setupContract();
+    const baseAssetId = contract.provider.getBaseAssetId();
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [1_000_000, BaseAssetId],
+        forward: [1_000_000, baseAssetId],
       })
       .call();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());

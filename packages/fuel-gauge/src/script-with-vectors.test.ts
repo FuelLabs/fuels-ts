@@ -1,14 +1,15 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish, BN } from 'fuels';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider } from 'fuels';
+import { FUEL_NETWORK_URL, Provider } from 'fuels';
 
 import { getScript } from './utils';
 
 const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
 
   return wallet;
 };

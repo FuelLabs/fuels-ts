@@ -24,7 +24,6 @@ import {
   WalletUnlocked,
   Signer,
   ZeroBytes32,
-  BaseAssetId,
   FUEL_NETWORK_URL,
 } from 'fuels';
 
@@ -60,9 +59,11 @@ const ADDRESS_BYTES = new Uint8Array([
  */
 describe('Doc Examples', () => {
   let gasPrice: BN;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
   test('it has an Address class using bech32Address', () => {
@@ -180,7 +181,7 @@ describe('Doc Examples', () => {
 
     // #region wallet-check-balance
     // #import { BigNumberish };
-    const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
+    const balance: BigNumberish = await myWallet.getBalance(baseAssetId);
     // #endregion wallet-check-balance
 
     // #region wallet-check-balances
@@ -235,14 +236,14 @@ describe('Doc Examples', () => {
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
     // single asset
-    const walletA = await generateTestWallet(provider, [[42, BaseAssetId]]);
+    const walletA = await generateTestWallet(provider, [[42, baseAssetId]]);
 
     // multiple assets
     const walletB = await generateTestWallet(provider, [
       // [Amount, AssetId]
       [100, assetIdA],
       [200, assetIdB],
-      [30, BaseAssetId],
+      [30, baseAssetId],
     ]);
 
     // this wallet has no assets
@@ -254,9 +255,9 @@ describe('Doc Examples', () => {
     const walletCBalances = await walletC.getBalances();
 
     // validate balances
-    expect(walletABalances).toEqual([{ assetId: BaseAssetId, amount: bn(42) }]);
+    expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
     expect(walletBBalances).toEqual([
-      { assetId: BaseAssetId, amount: bn(30) },
+      { assetId: baseAssetId, amount: bn(30) },
       { assetId: assetIdA, amount: bn(100) },
       { assetId: assetIdB, amount: bn(200) },
     ]);
@@ -305,12 +306,12 @@ describe('Doc Examples', () => {
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     const wallet = await generateTestWallet(provider, [
-      [42, BaseAssetId],
+      [42, baseAssetId],
       [100, assetIdA],
     ]);
 
     // get single coin
-    const coin = await wallet.getCoins(BaseAssetId);
+    const coin = await wallet.getCoins(baseAssetId);
 
     // get all coins
     const coins = await wallet.getCoins();
@@ -318,13 +319,13 @@ describe('Doc Examples', () => {
     expect(coin.length).toEqual(1);
     expect(coin).toEqual([
       expect.objectContaining({
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
         amount: bn(42),
       }),
     ]);
     expect(coins).toEqual([
       expect.objectContaining({
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
         amount: bn(42),
       }),
       expect.objectContaining({
@@ -337,14 +338,14 @@ describe('Doc Examples', () => {
     // #region wallet-get-balances
     const walletBalances = await wallet.getBalances();
     expect(walletBalances).toEqual([
-      { assetId: BaseAssetId, amount: bn(42) },
+      { assetId: baseAssetId, amount: bn(42) },
       { assetId: assetIdA, amount: bn(100) },
     ]);
     // #endregion wallet-get-balances
 
     // #region wallet-get-spendable-resources
     const spendableResources = await wallet.getResourcesToSpend([
-      { amount: 32, assetId: BaseAssetId, max: 42 },
+      { amount: 32, assetId: baseAssetId, max: 42 },
       { amount: 50, assetId: assetIdA },
     ]);
     expect(spendableResources[0].amount).toEqual(bn(42));
@@ -376,9 +377,9 @@ describe('Doc Examples', () => {
     const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
     const receiver = Wallet.generate({ provider });
 
-    await seedTestWallet(wallet1, [{ assetId: BaseAssetId, amount: bn(1_000_000) }]);
-    await seedTestWallet(wallet2, [{ assetId: BaseAssetId, amount: bn(2_000_000) }]);
-    await seedTestWallet(wallet3, [{ assetId: BaseAssetId, amount: bn(300_000) }]);
+    await seedTestWallet(wallet1, [{ assetId: baseAssetId, amount: bn(1_000_000) }]);
+    await seedTestWallet(wallet2, [{ assetId: baseAssetId, amount: bn(2_000_000) }]);
+    await seedTestWallet(wallet3, [{ assetId: baseAssetId, amount: bn(300_000) }]);
 
     const AbiInputs: JsonAbi = {
       types: [
@@ -444,7 +445,7 @@ describe('Doc Examples', () => {
     const amountToReceiver = 100;
     const initialPredicateBalance = await predicate.getBalance();
 
-    const response = await wallet1.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const response = await wallet1.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -454,7 +455,7 @@ describe('Doc Examples', () => {
     // assert that predicate address now has the expected amount to predicate
     expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
-    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
+    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -467,7 +468,7 @@ describe('Doc Examples', () => {
       initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });

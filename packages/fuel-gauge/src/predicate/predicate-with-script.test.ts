@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -24,10 +24,12 @@ describe('Predicate', () => {
     let receiver: WalletUnlocked;
     let provider: Provider;
     let gasPrice: BN;
+    let baseAssetId: string;
 
     beforeEach(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+      baseAssetId = provider.getBaseAssetId();
+      wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
       receiver = await generateTestWallet(provider);
       gasPrice = provider.getGasConfig().minGasPrice;
     });
@@ -70,7 +72,7 @@ describe('Predicate', () => {
       );
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
         gasPrice,
         gasLimit: 10_000,
       });

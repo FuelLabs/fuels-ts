@@ -1,15 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, WalletUnlocked } from 'fuels';
-import {
-  BaseAssetId,
-  ContractFactory,
-  toNumber,
-  Contract,
-  Provider,
-  Predicate,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { ContractFactory, toNumber, Contract, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -44,13 +36,15 @@ describe('Predicate', () => {
     let receiver: WalletUnlocked;
     let provider: Provider;
     let gasPrice: BN;
+    let baseAssetId: string;
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       gasPrice = provider.getGasConfig().minGasPrice;
+      baseAssetId = provider.getBaseAssetId();
     });
 
     beforeEach(async () => {
-      wallet = await generateTestWallet(provider, [[2_000_000, BaseAssetId]]);
+      wallet = await generateTestWallet(provider, [[2_000_000, baseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
 
@@ -74,7 +68,7 @@ describe('Predicate', () => {
       const { value } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
-          forward: [500, BaseAssetId],
+          forward: [500, baseAssetId],
         })
         .call();
 
@@ -122,7 +116,7 @@ describe('Predicate', () => {
       );
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 

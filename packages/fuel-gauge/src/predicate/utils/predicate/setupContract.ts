@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
-import { BaseAssetId, ContractFactory, FUEL_NETWORK_URL, Provider } from 'fuels';
+import { ContractFactory, FUEL_NETWORK_URL, Provider } from 'fuels';
 import type { Interface, JsonAbi, Contract, WalletUnlocked, BytesLike } from 'fuels';
 
 let walletInstance: WalletUnlocked;
@@ -30,8 +30,9 @@ const createWallet = async () => {
     return walletInstance;
   }
   const provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 10 });
+  const baseAssetId = provider.getBaseAssetId();
   walletInstance = await generateTestWallet(provider, [
-    [5_000_000, BaseAssetId],
+    [5_000_000, baseAssetId],
     [5_000_000, ASSET_A],
   ]);
   return walletInstance;

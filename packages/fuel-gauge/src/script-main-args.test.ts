@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { Provider, bn, Script, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -8,9 +8,10 @@ import { getScript } from './utils';
 
 const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
 
   return wallet;
 };
