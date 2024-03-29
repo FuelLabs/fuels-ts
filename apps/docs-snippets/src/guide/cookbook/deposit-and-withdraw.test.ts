@@ -1,5 +1,5 @@
 import type { Contract, WalletUnlocked, Provider } from 'fuels';
-import { ContractFactory, BaseAssetId, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
+import { ContractFactory, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -14,6 +14,7 @@ describe(__filename, () => {
   let sender: WalletUnlocked;
   let liquidityPoolContract: Contract;
   let provider: Provider;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     sender = await getTestWallet();
@@ -22,6 +23,7 @@ describe(__filename, () => {
       DocSnippetProjectsEnum.LIQUIDITY_POOL
     );
     provider = sender.provider;
+    baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
     const { minGasPrice } = sender.provider.getGasConfig();
     liquidityPoolContract = await factory.deployContract({ gasPrice: minGasPrice });
@@ -40,7 +42,7 @@ describe(__filename, () => {
 
     await liquidityPoolContract.functions
       .deposit({ value: liquidityOwner.address.toB256() })
-      .callParams({ forward: [depositAmount, BaseAssetId] })
+      .callParams({ forward: [depositAmount, baseAssetId] })
       .txParams({ variableOutputs: 1 })
       .call();
 
@@ -52,11 +54,11 @@ describe(__filename, () => {
     // #region deposit-and-withdraw-cookbook-3
     await liquidityPoolContract.functions
       .withdraw({ value: liquidityOwner.address.toB256() })
-      .callParams({ forward: [depositAmount, BaseAssetId] })
+      .callParams({ forward: [depositAmount, baseAssetId] })
       .txParams({ variableOutputs: 1 })
       .call();
 
-    const baseAssetAfterWithdraw = await liquidityOwner.getBalance(BaseAssetId);
+    const baseAssetAfterWithdraw = await liquidityOwner.getBalance(baseAssetId);
 
     expect(baseAssetAfterWithdraw.toNumber()).toBe(depositAmount / 2);
     // #endregion deposit-and-withdraw-cookbook-3

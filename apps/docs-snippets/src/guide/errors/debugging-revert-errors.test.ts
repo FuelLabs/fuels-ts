@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider, Script } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Script } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -46,7 +46,8 @@ test('logs out custom require messages for script calls', async () => {
   );
 
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+  const baseAssetId = provider.getBaseAssetId();
+  const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
   const script = new Script(binHexlified, abiContents, wallet);
 

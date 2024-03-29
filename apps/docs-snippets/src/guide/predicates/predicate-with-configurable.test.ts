@@ -1,4 +1,4 @@
-import { WalletUnlocked, Predicate, BaseAssetId, BN, getRandomB256 } from 'fuels';
+import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -12,6 +12,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   let gasPrice: BN;
+  let baseAssetId: string;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE
@@ -20,6 +21,7 @@ describe(__filename, () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
+    baseAssetId = wallet.provider.getBaseAssetId();
   });
 
   it('should successfully tranfer to setted whitelisted address', async () => {
@@ -37,7 +39,7 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 500_000, BaseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 500_000, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -51,7 +53,7 @@ describe(__filename, () => {
     const amountToTransfer = 100;
 
     // transferring funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
+    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -59,7 +61,7 @@ describe(__filename, () => {
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-2
 
-    const destinationBalance = await destinationWallet.getBalance(BaseAssetId);
+    const destinationBalance = await destinationWallet.getBalance(baseAssetId);
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });
@@ -74,7 +76,7 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 300_000, BaseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 300_000, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -88,7 +90,7 @@ describe(__filename, () => {
     const amountToTransfer = 100;
 
     // transferring funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, BaseAssetId, {
+    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -96,7 +98,7 @@ describe(__filename, () => {
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-3
 
-    const destinationBalance = await destinationWallet.getBalance(BaseAssetId);
+    const destinationBalance = await destinationWallet.getBalance(baseAssetId);
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });

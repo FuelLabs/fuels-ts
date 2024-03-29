@@ -1,4 +1,4 @@
-import { BaseAssetId, type Contract } from 'fuels';
+import { type Contract } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -8,9 +8,11 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
+    baseAssetId = contract.provider.getBaseAssetId();
   });
 
   it('should successfully get transaction cost estimate for a single contract call', async () => {
@@ -18,7 +20,7 @@ describe(__filename, () => {
     const cost = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [100, BaseAssetId],
+        forward: [100, baseAssetId],
       })
       .getTransactionCost();
 
@@ -35,10 +37,10 @@ describe(__filename, () => {
 
     const scope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, BaseAssetId],
+        forward: [100, baseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [300, BaseAssetId],
+        forward: [300, baseAssetId],
       }),
     ]);
 
