@@ -10,7 +10,6 @@ import type {
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -29,6 +28,7 @@ const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcPro
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const BaseAssetId = provider.getBaseAssetId();
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
@@ -46,6 +46,7 @@ const callScript = async <TData, TResult>(
   response: TransactionResponse;
 }> => {
   const { minGasPrice } = account.provider.getGasConfig();
+  const BaseAssetId = account.provider.getBaseAssetId();
 
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
