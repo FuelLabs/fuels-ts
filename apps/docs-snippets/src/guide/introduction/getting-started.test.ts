@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL, Provider, Signer, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
 
 /**
  * @group node
@@ -15,7 +15,7 @@ describe('Getting started', () => {
 
   it('can connect to a local network', async () => {
     // #region connecting-to-the-local-node
-    // #import { Provider, Wallet, Signer };
+    // #import { Provider, Wallet };
 
     // Create a provider.
     const LOCAL_FUEL_NETWORK = "http://127.0.0.1:4000/graphql"
@@ -24,12 +24,11 @@ describe('Getting started', () => {
     // Create our wallet (with a private key).
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
-
-    // Sign a message.
-    const signer = new Signer(PRIVATE_KEY);
-    signer.sign(Buffer.from("Hello, world!"));
     // #endregion connecting-to-the-local-node
 
-    expect(wallet.address).toEqual(signer.address);
+    expect(provider).toBeTruthy();
+    expect(provider).toBeInstanceOf(Provider);
+    expect(wallet).toBeTruthy();
+    expect(wallet).toBeInstanceOf(WalletUnlocked);
   })
 })
