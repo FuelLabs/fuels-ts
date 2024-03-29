@@ -256,6 +256,7 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     transactionRequest.maxFee = maxFee;
+    transactionRequest.gasLimit = gasUsed;
 
     await this.program.account?.fund(this.transactionRequest, requiredQuantities, maxFee);
 
