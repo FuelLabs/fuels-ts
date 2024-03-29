@@ -719,10 +719,15 @@ describe('Contract', () => {
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);
 
-    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+    const transactionRequestParsed = transactionRequestify(
+      txRequestParsed
+    ) as ScriptTransactionRequest;
 
-    const { requiredQuantities, maxFee } =
+    const { requiredQuantities, maxFee, gasUsed } =
       await provider.getTransactionCost(transactionRequestParsed);
+
+    transactionRequestParsed.gasLimit = gasUsed;
+    transactionRequestParsed.maxFee = maxFee;
 
     // Fund tx
     await wallet.fund(transactionRequestParsed, requiredQuantities, maxFee);
@@ -786,12 +791,13 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const { gasUsed, minFee, requiredQuantities } =
+    const { gasUsed, maxFee, requiredQuantities } =
       await contract.provider.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = gasUsed;
+    transactionRequestParsed.maxFee = maxFee;
 
-    await contract.account.fund(transactionRequestParsed, requiredQuantities, minFee);
+    await contract.account.fund(transactionRequestParsed, requiredQuantities, maxFee);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const response = await contract.account!.sendTransaction(transactionRequestParsed);
@@ -923,15 +929,6 @@ describe('Contract', () => {
       );
       await result.wait();
     }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
-
-    await expect(async () => {
-      const result = await wallet.transferToContract(
-        contract.id.toB256(),
-        amountToContract,
-        BaseAssetId
-      );
-      await result.wait();
-    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
   });
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
