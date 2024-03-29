@@ -100,6 +100,7 @@ type ConsensusParameters = {
   maxMessageDataLength: BN;
   chainId: BN;
   gasCosts: GqlGasCosts;
+  baseAssetId: string;
 };
 
 /**
@@ -182,6 +183,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       gasPerByte: bn(feeParams.gasPerByte),
       maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
       chainId: bn(consensusParameters.chainId),
+      baseAssetId: consensusParameters.baseAssetId,
       gasCosts,
     },
     gasCosts,
@@ -570,6 +572,18 @@ export default class Provider {
       consensusParameters: { chainId },
     } = this.getChain();
     return chainId.toNumber();
+  }
+
+  /**
+   * Returns the base asset ID
+   *
+   * @returns A promise that resolves to the base asset ID
+   */
+  getBaseAssetId() {
+    const {
+      consensusParameters: { baseAssetId },
+    } = this.getChain();
+    return baseAssetId;
   }
 
   /**

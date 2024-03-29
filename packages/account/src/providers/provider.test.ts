@@ -182,6 +182,7 @@ describe('Provider', () => {
     const { consensusParameters } = provider.getChain();
     // #endregion provider-definition
 
+    expect(consensusParameters.baseAssetId).toBeDefined();
     expect(consensusParameters.contractMaxSize).toBeDefined();
     expect(consensusParameters.maxInputs).toBeDefined();
     expect(consensusParameters.maxOutputs).toBeDefined();
@@ -196,6 +197,20 @@ describe('Provider', () => {
     expect(consensusParameters.gasPriceFactor).toBeDefined();
     expect(consensusParameters.gasPerByte).toBeDefined();
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
+  });
+
+  it('gets the chain ID', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const chainId = provider.getChainId();
+
+    expect(chainId).toBe(0);
+  });
+
+  it('gets the base asset ID', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+
+    expect(baseAssetId).toBe('0x0000000000000000000000000000000000000000000000000000000000000000');
   });
 
   it('can change the provider url of the current instance', async () => {
