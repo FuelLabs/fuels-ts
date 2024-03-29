@@ -1,6 +1,6 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -393,8 +393,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addMessageInput(message: MessageCoin, predicate?: Predicate<InputValue[]>) {
     const { recipient, sender, amount } = message;
-
-    const assetId = BaseAssetId;
 
     let witnessIndex;
 
