@@ -784,6 +784,43 @@ export default class Provider {
     };
   }
 
+  estimateTxGasAndFee(transactionRequest: TransactionRequest) {
+    const chainInfo = this.getChain();
+    const { gasPriceFactor, minGasPrice } = this.getGasConfig();
+
+    const clonedRequest = clone(transactionRequest);
+    clonedRequest.maxFee = bn(0);
+
+    const minGas = clonedRequest.calculateMinGas(chainInfo);
+
+    const minFee = calculateGasFee({
+      gasPrice: bn(minGasPrice),
+      gas: minGas,
+      priceFactor: gasPriceFactor,
+      tip: clonedRequest.tip,
+    }).add(1);
+
+    if (clonedRequest.type === TransactionType.Script) {
+      clonedRequest.gasLimit = minGas;
+    }
+
+    const maxGas = clonedRequest.calculateMaxGas(chainInfo, minGas);
+
+    const maxFee = calculateGasFee({
+      gasPrice: minGasPrice,
+      gas: maxGas,
+      priceFactor: gasPriceFactor,
+      tip: clonedRequest.tip,
+    }).add(1);
+
+    return {
+      minGas,
+      minFee,
+      maxGas,
+      maxFee,
+    };
+  }
+
   /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
@@ -888,7 +925,7 @@ export default class Provider {
      */
     txRequestClone.maxFee = bn(0);
 
-    const minGas = txRequestClone.calculateMinGas(chainInfo);
+    let minGas = txRequestClone.calculateMinGas(chainInfo);
 
     /**
      * TODO: Validate if there is a way to while using BN to achive the same VM results
@@ -899,7 +936,7 @@ export default class Provider {
       latestGasPrice: { gasPrice },
     } = await this.operations.getLatestGasPrice();
 
-    const minFee = calculateGasFee({
+    let minFee = calculateGasFee({
       gasPrice: bn(gasPrice),
       gas: minGas,
       priceFactor: gasPriceFactor,
@@ -912,7 +949,7 @@ export default class Provider {
 
     let maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
 
-    let maxFee = calculateGasFee({
+    const maxFee = calculateGasFee({
       gasPrice: minGasPrice,
       gas: maxGas,
       priceFactor: gasPriceFactor,
@@ -934,13 +971,13 @@ export default class Provider {
       gasUsed = getGasUsedFromReceipts(receipts);
 
       txRequestClone.gasLimit = gasUsed;
-      maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
-      maxFee = calculateGasFee({
-        gasPrice: minGasPrice,
-        gas: maxGas,
-        priceFactor: gasPriceFactor,
-        tip: txRequestClone.tip,
-      }).add(1);
+
+      const newEstimate = this.estimateTxGasAndFee(txRequestClone);
+
+      minGas = newEstimate.minGas;
+      maxGas = newEstimate.maxGas;
+      minFee = newEstimate.minFee;
+      maxGas = newEstimate.maxGas;
     }
 
     const feeForGasUsed = calculateGasFee({
