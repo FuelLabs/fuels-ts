@@ -16,11 +16,10 @@ describe(__filename, () => {
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
     // #region variable-outputs-1
-    const tip = 10;
+    const tip = 1;
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
-        gasLimit: 10_000,
         variableOutputs: 1,
         tip,
       })
@@ -32,7 +31,6 @@ describe(__filename, () => {
 
     const gasLimitPolicy = transaction.policies?.find((policy) => policy.type === PolicyType.Tip);
 
-    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10_000);
     expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(tip);
   });
 

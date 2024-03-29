@@ -142,9 +142,7 @@ test('Example predicate', async () => {
   const initialPredicateBalance = await predicate.getBalance();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)
-  const tx2 = await predicate.transfer(receiver.address, 50_000, BaseAssetId, {
-    gasLimit: 50,
-  });
+  const tx2 = await predicate.transfer(receiver.address, 50_000, BaseAssetId);
   await tx2.wait();
 
   expect((await receiver.getBalance()).toNumber()).toEqual(50_000);

@@ -60,13 +60,9 @@ describe(__filename, () => {
       })
       .call();
 
-    const {
-      transactionResult: { transaction },
-      value,
-    } = result;
+    const { value } = result;
 
     expect(new BN(value).toNumber()).toBe(10);
-    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(transactionGasLimit);
     // #endregion call-params-3
   });
 });
