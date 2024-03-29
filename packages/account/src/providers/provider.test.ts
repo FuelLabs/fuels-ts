@@ -83,7 +83,8 @@ describe('Provider', () => {
     const callResult = await provider.call({
       type: TransactionType.Script,
       tip: 0,
-      gasLimit: 1000000,
+      gasLimit: 100,
+      maxFee: 100,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
