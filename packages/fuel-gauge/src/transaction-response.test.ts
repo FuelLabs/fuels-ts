@@ -213,7 +213,7 @@ describe('TransactionResponse', () => {
       args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
       loggingEnabled: false,
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -222,9 +222,16 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+    request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
 
-    request.addResources(resources);
+    const { maxFee, gasUsed, requiredQuantities } =
+      await genesisWallet.provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await genesisWallet.fund(request, requiredQuantities, maxFee);
+
     request.updateWitnessByOwner(
       genesisWallet.address,
       await genesisWallet.signTransaction(request)
@@ -247,7 +254,7 @@ describe('TransactionResponse', () => {
       args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
       loggingEnabled: false,
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -256,9 +263,16 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+    request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
 
-    request.addResources(resources);
+    const { maxFee, gasUsed, requiredQuantities } =
+      await genesisWallet.provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await genesisWallet.fund(request, requiredQuantities, maxFee);
+
     request.updateWitnessByOwner(
       genesisWallet.address,
       await genesisWallet.signTransaction(request)
