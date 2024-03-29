@@ -42,33 +42,30 @@ describe('PredicateConditionalInputs', () => {
     });
 
     // transfer asset A to predicate so it can transfer to alice
-    const tx1 = await adminWallet.transfer(predicate.address, 100_000, ASSET_A, {
-      gasLimit: 10_000,
-    });
+    const tx1 = await adminWallet.transfer(predicate.address, 100_000, ASSET_A);
 
     await tx1.waitForResult();
 
     // transfer base asset to Alice so she can pay the fees
-    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, BaseAssetId);
 
     await tx2.waitForResult();
 
-    const request = new ScriptTransactionRequest({
-      gasLimit: 1000,
-    });
+    const request = new ScriptTransactionRequest();
 
     // fetch predicate resources to spend
     const predicateResoruces = await predicate.getResourcesToSpend([[amountToTransfer, ASSET_A]]);
 
-    // fetch Alice resources to spend
-    const aliceResources = await aliceWallet.getResourcesToSpend([[request.gasLimit, BaseAssetId]]);
-
     request
-      .addResources(aliceResources)
       .addPredicateResources(predicateResoruces, predicate)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
+
+    const { gasUsed, maxFee } = await aliceWallet.provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await aliceWallet.fund(request, [], maxFee);
 
     const aliceBaseAssetBefore = await aliceWallet.getBalance();
     const aliceAssetABefore = await aliceWallet.getBalance(ASSET_A);
@@ -119,36 +116,25 @@ describe('PredicateConditionalInputs', () => {
     });
 
     // transfer asset A to predicate so it can transfer to alice
-    const tx1 = await adminWallet.transfer(predicate.address, 2_000, ASSET_A, {
-      gasLimit: 10_000,
-    });
+    const tx1 = await adminWallet.transfer(predicate.address, 2_000, ASSET_A);
 
     await tx1.waitForResult();
 
     // transfer base asset to predicate so it can pay the fees
-    const tx2 = await adminWallet.transfer(predicate.address, 2_000, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx2 = await adminWallet.transfer(predicate.address, 2_000, BaseAssetId);
 
     await tx2.waitForResult();
 
     // transfer asset B to Alice so it can add symbolic UTXOs to the transaction
     // inputs in order to the predicate validate her inputs in the transaction.
-    const tx3 = await adminWallet.transfer(aliceWallet.address, 2_000, ASSET_B, {
-      gasLimit: 10_000,
-    });
+    const tx3 = await adminWallet.transfer(aliceWallet.address, 2_000, ASSET_B);
 
     await tx3.waitForResult();
 
-    const request = new ScriptTransactionRequest({
-      gasLimit: 1000,
-    });
+    const request = new ScriptTransactionRequest();
 
     // predicate will pay the fee so it will need the base asset
-    const predicateResources = await predicate.getResourcesToSpend([
-      [amountToTransfer, ASSET_A],
-      [1000, BaseAssetId],
-    ]);
+    const predicateResources = await predicate.getResourcesToSpend([[amountToTransfer, ASSET_A]]);
 
     /**
      * we need to add Alice resources in order to the predicate validates that she have inputs
@@ -160,6 +146,18 @@ describe('PredicateConditionalInputs', () => {
       .addResources(aliceResources)
       .addPredicateResources(predicateResources, predicate)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
+
+    const { gasUsed, maxFee } = await aliceWallet.provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    // predicate will pay for the transaction fee
+    await predicate.fund(request, [], maxFee);
+
+    predicate.populateTransactionPredicateData(request);
+
+    await aliceWallet.populateTransactionWitnessesSignature(request);
 
     const aliceAssetABefore = await aliceWallet.getBalance(ASSET_A);
     const predicateAssetABefore = await predicate.getBalance(ASSET_A);

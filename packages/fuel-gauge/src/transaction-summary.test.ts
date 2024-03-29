@@ -69,6 +69,7 @@ describe('TransactionSummary', () => {
     const destination = Wallet.generate({
       provider,
     });
+
     const amountToTransfer = 100;
 
     const request = new ScriptTransactionRequest({
@@ -77,9 +78,15 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
-    const resources = await adminWallet.getResourcesToSpend([[100_000]]);
+    const { gasUsed, requiredQuantities, maxFee } = await adminWallet.provider.getTransactionCost(
+      request,
+      []
+    );
 
-    request.addResources(resources);
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await adminWallet.fund(request, requiredQuantities, maxFee);
 
     const tx = await adminWallet.sendTransaction(request);
 
@@ -144,9 +151,15 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
     });
 
-    const resources = await adminWallet.getResourcesToSpend([[100_000, BaseAssetId]]);
+    const { gasUsed, requiredQuantities, maxFee } = await adminWallet.provider.getTransactionCost(
+      request,
+      []
+    );
 
-    request.addResources(resources);
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await adminWallet.fund(request, requiredQuantities, maxFee);
 
     const transactionRequest = await adminWallet.populateTransactionWitnessesSignature(request);
 
@@ -474,7 +487,7 @@ describe('TransactionSummary', () => {
       );
 
       request.gasLimit = gasUsed;
-      request.gasLimit = maxFee;
+      request.maxFee = maxFee;
 
       await wallet.fund(request, requiredQuantities, maxFee);
 

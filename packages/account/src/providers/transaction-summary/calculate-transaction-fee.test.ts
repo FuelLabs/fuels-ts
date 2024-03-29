@@ -20,7 +20,7 @@ describe('calculateTransactionFee', () => {
     const gasPriceFactor = 92;
     const gasPerByte = 4;
 
-    const { fee, feeFromGasUsed, maxFee, minFee } = calculateTransactionFee({
+    const { fee, maxFee, minFee } = calculateTransactionFee({
       tip: bn(0),
       consensusParameters: {
         feeParams: {
@@ -33,13 +33,11 @@ describe('calculateTransactionFee', () => {
       rawPayload: transactionRawPayload,
     });
 
-    const expectedfee = bn(90);
-    const expectedfeeFromGasUsed = bn(1);
-    const expectedmaxFee = bn(198);
-    const expectedminFee = bn(89);
+    const expectedfee = bn(197);
+    const expectedmaxFee = bn(197);
+    const expectedminFee = bn(88);
 
     expect(fee.toNumber()).toEqual(expectedfee.toNumber());
-    expect(feeFromGasUsed.toNumber()).toEqual(expectedfeeFromGasUsed.toNumber());
     expect(maxFee.toNumber()).toEqual(expectedmaxFee.toNumber());
     expect(minFee.toNumber()).toEqual(expectedminFee.toNumber());
   });
@@ -51,7 +49,7 @@ describe('calculateTransactionFee', () => {
     const gasPriceFactor = 92;
     const gasPerByte = 4;
 
-    const { fee, feeFromGasUsed, maxFee, minFee } = calculateTransactionFee({
+    const { fee, maxFee, minFee } = calculateTransactionFee({
       tip: bn(0),
       consensusParameters: {
         feeParams: {
@@ -64,13 +62,11 @@ describe('calculateTransactionFee', () => {
       rawPayload: transactionRawPayload,
     });
 
-    const expectedfee = bn(88);
-    const expectedfeeFromGasUsed = bn(1);
-    const expectedmaxFee = bn(87);
-    const expectedminFee = bn(87);
+    const expectedfee = bn(86);
+    const expectedmaxFee = bn(86);
+    const expectedminFee = bn(86);
 
     expect(fee.toNumber()).toEqual(expectedfee.toNumber());
-    expect(feeFromGasUsed.toNumber()).toEqual(expectedfeeFromGasUsed.toNumber());
     expect(maxFee.toNumber()).toEqual(expectedmaxFee.toNumber());
     expect(minFee.toNumber()).toEqual(expectedminFee.toNumber());
   });
