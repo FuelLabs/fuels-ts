@@ -30,7 +30,7 @@ jobs:
         uses: ./.github/actions/ci-setup
 
       - name: Validate Changeset baseBranch
-        run: pnpm changeset:validate-baseBranch
+        run: pnpm changeset:validate-baseBranch ${{ github.ref_name }}
 
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
