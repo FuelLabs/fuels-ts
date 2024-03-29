@@ -82,6 +82,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
+              {
                 text: 'Private Keys',
                 link: '/guide/wallets/private-keys',
               },
@@ -96,6 +100,10 @@ export default defineConfig({
               {
                 text: 'Checking Balances',
                 link: '/guide/wallets/checking-balances',
+              },
+              {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
               },
               {
                 text: 'Wallet Manager',
