@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.76.6
+
+### Patch Changes
+
+- testing out patching old release
+  - @fuel-ts/abi-coder@0.76.6
+  - @fuel-ts/abi-typegen@0.76.6
+  - @fuel-ts/account@0.76.6
+  - @fuel-ts/address@0.76.6
+  - @fuel-ts/contract@0.76.6
+  - @fuel-ts/crypto@0.76.6
+  - @fuel-ts/errors@0.76.6
+  - @fuel-ts/forc@0.76.6
+  - @fuel-ts/fuel-core@0.76.6
+  - @fuel-ts/hasher@0.76.6
+  - @fuel-ts/interfaces@0.76.6
+  - @fuel-ts/math@0.76.6
+  - @fuel-ts/merkle@0.76.6
+  - @fuel-ts/program@0.76.6
+  - @fuel-ts/script@0.76.6
+  - @fuel-ts/transactions@0.76.6
+  - @fuel-ts/utils@0.76.6
+  - @fuel-ts/versions@0.76.6
+
 ## 0.76.5
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.76.6
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.76.6
+- @fuel-ts/abi-typegen@0.76.6
+- @fuel-ts/account@0.76.6
+- @fuel-ts/address@0.76.6
+- @fuel-ts/errors@0.76.6
+- @fuel-ts/interfaces@0.76.6
+- @fuel-ts/math@0.76.6
+- @fuel-ts/program@0.76.6
+- @fuel-ts/transactions@0.76.6
+- @fuel-ts/utils@0.76.6
+
 ## 0.76.5
 
 ### Patch Changes
