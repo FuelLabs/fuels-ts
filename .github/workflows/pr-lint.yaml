@@ -38,31 +38,33 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Validate Changeset baseBranch
+        run: pnpm changeset:validate-baseBranch
+
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
       - name: Validate Changeset
-        run: pnpm changeset status --since=origin/${{ github.base_ref }}
+        run: pnpm changeset status
 
       - name: Validate Changeset Content
         run: |
           CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} .changeset/*.md)
-          
+
           if [ -z "$CHANGESET_FILE" ]; then
             # A PR doesn't have to have a changeset when packages aren't affected
             # e.g. when a script is added in the scripts folder
             exit 0
           fi
-          
+
           CHANGESET_CONTENT=$(cat $CHANGESET_FILE | tail -n1)
-          
+
           if [ "$CHANGESET_CONTENT" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
             exit 1
           fi
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-          
 
       - name: Validate that there are only patch changes
         if: startsWith(github.base_ref, 'release/')
