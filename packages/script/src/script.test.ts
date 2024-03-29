@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type {
-  Account,
-  CoinQuantityLike,
-  TransactionResponse,
-  TransactionResult,
-} from '@fuel-ts/account';
+import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
@@ -45,21 +40,18 @@ const callScript = async <TData, TResult>(
   result: TResult;
   response: TransactionResponse;
 }> => {
-  const request = new ScriptTransactionRequest({
-    gasLimit: 1000000,
-  });
+  const request = new ScriptTransactionRequest();
   request.setScript(script, data);
 
   // Keep a list of coins we need to input to this transaction
-  const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push({ amount: 1000, assetId: BaseAssetId });
+  const { maxFee, gasUsed, requiredQuantities } =
+    await account.provider.getTransactionCost(request);
 
-  // Get and add required coins to the transaction
-  if (requiredCoinQuantities.length) {
-    const resources = await account.getResourcesToSpend(requiredCoinQuantities);
-    request.addResources(resources);
-  }
+  request.gasLimit = gasUsed;
+  request.maxFee = maxFee;
+
+  await account.fund(request, requiredQuantities, maxFee);
 
   const response = await account.sendTransaction(request);
   const transactionResult = await response.waitForResult();
