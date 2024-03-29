@@ -5,6 +5,8 @@ import { execSync } from "child_process";
 
 import { getFullChangelog } from "./get-full-changelog.mts";
 
+const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG } = process.env;
+
 function sleep(time: number) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -13,10 +15,34 @@ function sleep(time: number) {
   });
 }
 
-await (async () => {
-  const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG } =
-    process.env;
+async function getChangesetPr(retried = false) {
+  const octokit = github.getOctokit(GITHUB_TOKEN as string);
+  const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
+  const searchResult = await octokit.rest.search.issuesAndPullRequests({
+    q: searchQuery,
+  });
 
+  let result = searchResult.data.items[0];
+
+  if (!result && !retried) {
+    /**
+     * A workflow that generated a changeset PR still failed in this script:
+     * https://github.com/FuelLabs/fuels-ts/actions/runs/8431124880/job/23088059451#step:9:24
+     *
+     * The same workflow passed when it was run later:
+     * https://github.com/FuelLabs/fuels-ts/actions/runs/8431124880
+     *
+     * I can't attribute this to anything except GitHub services not syncing up fast enough behind the scenes.
+     * That's why I added this sleep and retry mechanism.
+     */
+    await sleep(10000);
+    result = await getChangesetPr(true);
+  }
+
+  return result;
+}
+
+await (async () => {
   if (!GITHUB_TOKEN) {
     core.setFailed("Please add GITHUB_TOKEN to the environment");
     return;
@@ -31,35 +57,10 @@ await (async () => {
 
   const octokit = github.getOctokit(GITHUB_TOKEN);
 
-    // update changesets PR body
+  // update changesets PR body
   if (PUBLISHED === "false") {
-    async function getChangesetPr(retried = false) {
-      const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
-      const searchResult = await octokit.rest.search.issuesAndPullRequests({
-        q: searchQuery,
-      });
-
-      let result = searchResult.data.items[0];
-      
-      if (!result && !retried) {
-        /**
-         * A workflow that generated a changeset PR still failed in this script:
-         * https://github.com/FuelLabs/fuels-ts/actions/runs/8431124880/job/23088059451#step:9:24
-         * 
-         * The same workflow passed when it was run later:
-         * https://github.com/FuelLabs/fuels-ts/actions/runs/8431124880
-         * 
-         * I can't attribute this to anything except GitHub services not syncing up fast enough behind the scenes.
-         * That's why I added this sleep and retry mechanism.
-         */
-        await sleep(10000);
-        result = await getChangesetPr(true);
-      }
-      
-      return result;
-    }
     const changesetPr = await getChangesetPr();
-    
+
     if (!changesetPr) {
       /**
        * Changeset PRs don't get created when there are no changesets.
@@ -71,7 +72,7 @@ await (async () => {
        */
       return;
     }
-    
+
     const changelog = await getFullChangelog(octokit);
 
     await octokit.rest.pulls.update({
@@ -88,7 +89,7 @@ await (async () => {
       core.setFailed("Please add RELEASE_TAG to the environment");
       return;
     }
-    
+
     execSync("git fetch --tags");
 
     const release = await octokit.rest.repos.getReleaseByTag({
