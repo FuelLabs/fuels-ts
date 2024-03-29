@@ -888,8 +888,12 @@ export default class Provider {
      * for gas related math operations and removing the need to `add(1)` for handling
      * a safe margin.
      */
+    const {
+      latestGasPrice: { gasPrice },
+    } = await this.operations.getLatestGasPrice();
+
     const minFee = calculateGasFee({
-      gasPrice: minGasPrice,
+      gasPrice: bn(gasPrice),
       gas: minGas,
       priceFactor: gasPriceFactor,
       tip: txRequestClone.tip,
