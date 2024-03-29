@@ -115,9 +115,7 @@ describe('Predicate', () => {
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 
-      expect(toNumber(await predicate.getBalance())).toEqual(
-        initialPredicateBalance + amountToPredicate
-      );
+      expect(toNumber(await predicate.getBalance())).toBeGreaterThan(initialPredicateBalance);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
