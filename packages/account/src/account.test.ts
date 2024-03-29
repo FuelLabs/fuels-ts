@@ -444,13 +444,6 @@ describe('Account', () => {
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
 
-    const resources = await sender.getResourcesToSpend([
-      [500_000, BaseAssetId],
-      [500_000, assetIdA],
-      [500_000, assetIdB],
-    ]);
-
-    request.addResources(resources);
     request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
       [amount, assetIdB],
@@ -459,6 +452,14 @@ describe('Account', () => {
       [amount, assetIdA],
       [amount, assetIdB],
     ]);
+
+    const { maxFee, gasUsed, requiredQuantities } =
+      await sender.provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await sender.fund(request, requiredQuantities, maxFee);
 
     const response = await sender.sendTransaction(request);
 
@@ -581,20 +582,15 @@ describe('Account', () => {
   });
 
   it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
-    const sender = await generateTestWallet(provider);
+    const sender = await generateTestWallet(provider, [[1000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
     await expect(async () => {
       const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
-        gasLimit: 0,
+        gasLimit: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
-
-    await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, BaseAssetId);
-      await result.wait();
-    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
+    }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
   });
 
   it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
@@ -604,16 +600,11 @@ describe('Account', () => {
     );
 
     await expect(async () => {
-      const result = await sender.withdrawToBaseLayer(recipient, 10);
-      await result.wait();
-    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
-
-    await expect(async () => {
       const result = await sender.withdrawToBaseLayer(recipient, 10, {
-        gasLimit: 0,
+        gasLimit: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
+    }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
   });
 
   it('should throw when trying to transfer a zero or negative amount', async () => {
