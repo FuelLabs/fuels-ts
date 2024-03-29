@@ -72,7 +72,7 @@ describe('autoStartFuelCore', () => {
     expect(core.bindIp).toEqual('0.0.0.0');
     expect(core.accessIp).toEqual('127.0.0.1');
     expect(core.port).toBeGreaterThanOrEqual(4000);
-    expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/graphql/);
+    expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/v1\/graphql/);
     expect(core.killChildProcess).toBeTruthy();
 
     core.killChildProcess();
@@ -91,7 +91,7 @@ describe('autoStartFuelCore', () => {
     expect(core.bindIp).toEqual('0.0.0.0');
     expect(core.accessIp).toEqual('127.0.0.1');
     expect(core.port).toBeGreaterThanOrEqual(4000);
-    expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/graphql/);
+    expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/v1\/graphql/);
     expect(core.killChildProcess).toBeTruthy();
 
     core.killChildProcess();
