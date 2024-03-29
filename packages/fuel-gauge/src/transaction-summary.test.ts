@@ -474,6 +474,7 @@ describe('TransactionSummary', () => {
       );
 
       request.gasLimit = gasUsed;
+      request.gasLimit = maxFee;
 
       await wallet.fund(request, requiredQuantities, maxFee);
 
