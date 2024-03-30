@@ -54,10 +54,10 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const chain = await provider.operations.getChain();
-    const blocks = await provider.operations.getBlocks();
+    const nodeInfo = await provider.operations.getNodeInfo();
     // #endregion operations
 
     expect(chain).toBeDefined();
-    expect(blocks).toBeDefined();
+    expect(nodeInfo).toBeDefined();
   });
 });
