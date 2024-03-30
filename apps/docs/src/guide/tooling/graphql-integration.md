@@ -1,4 +1,4 @@
-# GraphQL Integration
+# Graphql Integration
 
 The Fuel Network provides a GraphQL API to query the blockchain ([docs](https://graphql-docs.fuel.network/)).
 
