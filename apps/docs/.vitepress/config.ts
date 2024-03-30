@@ -466,6 +466,10 @@ export default defineConfig({
               },
             ],
           },
+          {
+            text: 'GraphQL Integration',
+            link: '/guide/tooling/graphql-integration',
+          },
         ],
       },
       apiLinks,
