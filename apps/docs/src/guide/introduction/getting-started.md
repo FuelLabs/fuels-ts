@@ -124,9 +124,14 @@ In the example below, we connect a [Provider](../providers/index.md) to the late
 
 ### Connecting to a local node
 
-If you want to connect to another node just change the URL or IP and port. For example, to connect to a local node that was created with `fuel-core` you can use:
+Firstly, you will need a local node running on your machine. We recommend one of the following methods:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#provider-local{ts:line-numbers}
+- [Testing utilities](../testing/index.md#wallet-test-utilities) can assist in programmatically launching a short-lived node.
+- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](../fuels/commands.md#fuels-core).
+
+In the following example, we create a provider to connect to the local node and sign a message.
+
+<<< @/../../docs-snippets/src/guide/introduction/getting-started.test.ts#connecting-to-the-local-node{ts:line-numbers}
 
 ## Further Resources and Next Steps
 
