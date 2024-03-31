@@ -19,22 +19,20 @@ async function getChangelogInfo(
   octokit: Octokit,
   changeset: NewChangeset,
 ): Promise<ChangelogInfo> {
-  const changesetCommitLog = execSync(
-    `git log --oneline --diff-filter=A -- ${join(
+  const changesetCommit = execSync(
+    `git log -n 1 --oneline --pretty=format:%H -- ${join(
       process.cwd(),
       ".changeset",
       `${changeset.id}.md`,
     )}`,
-  ).toString(); // e.g. 1f3d3d3 fix!: add breaking fix
-
-  const [commit] = changesetCommitLog.split(" ");
+  ).toString(); // e.g. d603eecd1e453c60fe8cadfd1bfe530050ff0cfe
 
   const {
     links: { pull: prLink, user },
     pull: prNo,
   } = await getInfo({
     repo: process.env.GITHUB_REPOSITORY ?? "This should be set by GitHub",
-    commit,
+    commit: changesetCommit,
   });
 
   const {
