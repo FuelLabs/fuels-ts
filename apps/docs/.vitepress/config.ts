@@ -82,6 +82,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
+              {
                 text: 'Private Keys',
                 link: '/guide/wallets/private-keys',
               },
@@ -96,6 +100,10 @@ export default defineConfig({
               {
                 text: 'Checking Balances',
                 link: '/guide/wallets/checking-balances',
+              },
+              {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
               },
               {
                 text: 'Wallet Manager',
@@ -151,6 +159,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
+              },
+              {
                 text: 'Cost Estimation',
                 link: '/guide/contracts/cost-estimation',
               },
@@ -193,6 +205,10 @@ export default defineConfig({
               {
                 text: 'Configurable Constants',
                 link: '/guide/contracts/configurable-constants',
+              },
+              {
+                text: 'Managing Deployed Contracts',
+                link: '/guide/contracts/managing-deployed-contracts',
               },
               {
                 text: 'Understanding the FuelVM Binary File',

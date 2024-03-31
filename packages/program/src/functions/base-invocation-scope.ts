@@ -13,13 +13,13 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, TransactionType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
 import { POINTER_DATA_OFFSET } from '../script-request';
 import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
-import { assert } from '../utils';
+import { assert, getAbisFromAllCalls } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
@@ -196,6 +196,10 @@ export class BaseInvocationScope<TReturn = any> {
     // Check if gasLimit is less than the
     // sum of all call gasLimits
     this.checkGasLimitTotal();
+
+    if (this.transactionRequest.type === TransactionType.Script) {
+      this.transactionRequest.abis = getAbisFromAllCalls(this.functionInvocationScopes);
+    }
   }
 
   /**

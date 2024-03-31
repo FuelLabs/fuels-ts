@@ -180,12 +180,10 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
-    // #region provider-definition
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     const { consensusParameters } = provider.getChain();
-    // #endregion provider-definition
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
     expect(consensusParameters.maxInputs).toBeDefined();
