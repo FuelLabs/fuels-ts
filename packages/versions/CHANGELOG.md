@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.76.7
+
+### Patch Changes
+
+- whatever
+
 ## 0.76.6
 
 ## 0.76.5

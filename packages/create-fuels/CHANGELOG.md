@@ -1,5 +1,11 @@
 # create-fuels
 
+## 0.76.7
+
+### Patch Changes
+
+- fuels@0.76.7
+
 ## 0.76.6
 
 ### Patch Changes
