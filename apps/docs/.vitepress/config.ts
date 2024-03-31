@@ -270,17 +270,13 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
-            text: 'Providers',
-            link: '/guide/providers/',
+            text: 'Provider',
+            link: '/guide/provider/',
             collapsed: true,
             items: [
               {
                 text: 'Querying the Chain',
-                link: '/guide/providers/querying-the-chain',
-              },
-              {
-                text: 'Retrying upon errors',
-                link: '/guide/providers/retrying-upon-errors',
+                link: '/guide/provider/querying-the-chain',
               },
             ],
           },
