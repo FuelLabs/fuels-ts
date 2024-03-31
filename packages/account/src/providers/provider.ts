@@ -773,7 +773,7 @@ export default class Provider {
           missingContractIds.push(contractId);
         });
 
-        const { maxFee } = await this.estimateTxGasAndFee({ transactionRequest });
+        const { maxFee } = await this.estimateTxGasAndFee(transactionRequest);
 
         // eslint-disable-next-line no-param-reassign
         transactionRequest.maxFee = maxFee;
@@ -789,22 +789,22 @@ export default class Provider {
     };
   }
 
-  async estimateTxGasAndFee(params: {
-    transactionRequest: TransactionRequest;
-    gasUsed?: BN;
-    gasPrice?: BN;
-  }) {
-    const { transactionRequest, gasUsed } = params;
+  async estimateTxGasAndFee(transactionRequest: TransactionRequest, gasPrice?: BN) {
+    const request = transactionRequest;
 
-    let { gasPrice } = params;
     const chainInfo = this.getChain();
+
+    const {
+      consensusParameters: { maxGasPerTx },
+    } = chainInfo;
 
     const { gasPriceFactor } = this.getGasConfig();
 
-    const minGas = transactionRequest.calculateMinGas(chainInfo);
+    const minGas = request.calculateMinGas(chainInfo);
 
     if (!gasPrice) {
       const { latestGasPrice } = await this.operations.getLatestGasPrice();
+      // eslint-disable-next-line no-param-reassign
       gasPrice = bn(latestGasPrice.gasPrice);
     }
 
@@ -821,8 +821,10 @@ export default class Provider {
       tip: transactionRequest.tip,
     }).add(1);
 
-    if (transactionRequest.type === TransactionType.Script) {
-      transactionRequest.gasLimit = gasUsed || minGas;
+    if (request.type === TransactionType.Script) {
+      if (!request.gasLimit || request.gasLimit.lte(0)) {
+        request.gasLimit = maxGasPerTx.sub(minGas);
+      }
     }
 
     const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
@@ -942,9 +944,8 @@ export default class Provider {
     txRequestClone.maxFee = bn(0);
 
     // eslint-disable-next-line prefer-const
-    let { maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
-      transactionRequest: txRequestClone,
-    });
+    let { maxFee, maxGas, minFee, minGas, gasPrice } =
+      await this.estimateTxGasAndFee(txRequestClone);
 
     txRequestClone.maxFee = maxFee;
 
@@ -962,10 +963,7 @@ export default class Provider {
 
       txRequestClone.gasLimit = gasUsed;
 
-      const newEstimate = await this.estimateTxGasAndFee({
-        transactionRequest: txRequestClone,
-        gasUsed,
-      });
+      const newEstimate = await this.estimateTxGasAndFee(txRequestClone);
 
       minGas = newEstimate.minGas;
       maxGas = newEstimate.maxGas;
