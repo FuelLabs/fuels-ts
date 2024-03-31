@@ -5,7 +5,7 @@ The Fuel Network provides a GraphQL API to query the blockchain ([docs](https://
 For its own purposes, the SDK creates custom operations based off of the API's schema and auto-generates TypeScript client code via codegen tools.
 The details of our integration can be found in the source code in the relevant [scripts](https://github.com/FuelLabs/fuels-ts/blob/e6df29c2d4ef373c6d266ba08110d6480732f0e1/packages/account/package.json#L42) that automate the process.
 
-The end result of this are the operations available on the `Provider`, of which some are shown below:
+The end result of this are the operations available on the [`Provider`](../providers/index.md), of which some are shown below:
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#operations{ts:line-numbers}
 
