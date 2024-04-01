@@ -200,7 +200,7 @@ describe('Advanced Logging', () => {
 
       await wallet.fund(request, requiredQuantities, maxFee);
 
-      const tx = await wallet.sendTransaction(request);
+      const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
 
       const { logs } = await tx.waitForResult();
 
