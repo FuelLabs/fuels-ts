@@ -44,6 +44,8 @@ The SDK provides a way of either modifying the witnesses for a transaction reque
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-request.test.ts#transaction-request-6{ts:line-numbers}
 
+> **Note**: Once `addAccountWitnesses` has been called, any additional modifications to the transaction request will invalidate the signature as the transaction ID changes. Therefore, it is recommended to add witnesses last.
+
 ### Getting the Transaction ID for a Transaction Request
 
 The transaction ID is a SHA-256 hash of the entire transaction request. This can be useful for tracking the transaction on chain. To get the transaction ID, you can use the following method:
