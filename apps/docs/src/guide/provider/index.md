@@ -19,9 +19,9 @@ You can provide the following settings:
 
 - `maxRetries` - Amount of attempts to retry after initial attempt before failing the call.
 - `backoff` - Strategy used to define the intervals between attempts.
-  - `exponential` _(default)_: Doubles the waiting time with each attempt.
-  - `linear` - Increases the waiting time linearly with each attempt.
-  - `fixed`: Uses a constant waiting time between attempts.
+  - `exponential` _(default)_: Doubles the delay with each attempt.
+  - `linear` - Increases the delay linearly with each attempt.
+  - `fixed`: Uses a constant delay between attempts.
 - `baseDelay` _(default 150ms)_ - Base time in milliseconds for the backoff strategy.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-retryOptions{ts:line-numbers}
