@@ -348,12 +348,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addCoinInput(coin: Coin, predicate?: Predicate<InputValue[]>) {
+  addCoinInput(coin: Coin, _predicate?: Predicate<InputValue[]>) {
     const { assetId, owner, amount } = coin;
 
     let witnessIndex;
 
-    if (predicate) {
+    // TODO: add "predicate" and "predicateData" to the Coin type
+    if ('predicate' in coin) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
@@ -372,8 +373,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
-      predicate: predicate?.bytes,
-      predicateData: predicate?.predicateDataBytes,
     };
 
     // Insert the Input
@@ -391,14 +390,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addMessageInput(message: MessageCoin, predicate?: Predicate<InputValue[]>) {
+  addMessageInput(message: MessageCoin, _predicate?: Predicate<InputValue[]>) {
     const { recipient, sender, amount } = message;
 
     const assetId = BaseAssetId;
 
     let witnessIndex;
 
-    if (predicate) {
+    // TODO: add "predicate" and "predicateData" to the Coin type
+    if ('predicate' in message) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
@@ -416,8 +416,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
-      predicate: predicate?.bytes,
-      predicateData: predicate?.predicateDataBytes,
     };
 
     // Insert the Input
@@ -577,7 +575,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte } = consensusParameters;
+    const { gasPerByte, maxGasPerTx } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
@@ -588,6 +586,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       minGas,
       witnessesLength,
       witnessLimit: this.witnessLimit,
+      maxGasPerTx,
     });
   }
 
