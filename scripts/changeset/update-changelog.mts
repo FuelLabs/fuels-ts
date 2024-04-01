@@ -14,11 +14,9 @@ function sleep(time: number) {
 }
 
 await (async () => {
-
   const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG, REF_NAME } =
     process.env;
 
-  
   if (!GITHUB_TOKEN) {
     core.setFailed("Please add GITHUB_TOKEN to the environment");
     return;
@@ -32,7 +30,7 @@ await (async () => {
   }
 
   execSync(`git checkout ${REF_NAME}`);
-  
+
   const octokit = github.getOctokit(GITHUB_TOKEN);
 
   if (PUBLISHED === "false") {
@@ -72,7 +70,7 @@ await (async () => {
        * https://github.com/FuelLabs/fuels-ts/actions/runs/8421817249/job/23059607346#step:9:24
        * That's why this return statement was added.
        */
-      execSync('echo "Did not find changeset PR..."', {stdio: "inherit"})
+      execSync('echo "Did not find changeset PR..."', { stdio: "inherit" });
       return;
     }
 
@@ -97,16 +95,10 @@ await (async () => {
       ...github.context.repo,
       tag: RELEASE_TAG,
     });
-    
-    execSync("git fetch --tags")
-    
-    const commit = execSync(`git rev-list --no-walk ${RELEASE_TAG}`)
-      .toString()
-      .trim();
 
     const { pull } = await getInfo({
       repo: GITHUB_REPOSITORY as string,
-      commit,
+      commit: release.data.target_commitish,
     });
 
     const pr = await octokit.rest.pulls.get({
@@ -118,6 +110,7 @@ await (async () => {
       ...github.context.repo,
       release_id: release.data.id,
       body: pr.data.body as string,
+      make_latest: REF_NAME === "master" ? "true" : "false",
     });
   }
 })();
