@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 const TAG_NAME = process.argv[2];
 const REF_NAME = process.argv[3];
 
-const npmTag = REF_NAME === 'master' ? 'lates' : 'patch';
+const npmTag = REF_NAME === 'master' ? 'latest' : 'patch';
 
 const changesetPublishOutput = execSync(
   `pnpm changeset publish --no-git-tag --tag ${npmTag}`
