@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.76.8
+
+### Patch Changes
+
+- Updated dependencies [20f5b35]
+  - fuels@0.76.8
+
 ## 0.76.7
 
 ### Patch Changes

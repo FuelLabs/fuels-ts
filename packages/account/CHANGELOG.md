@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.76.8
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.76.8
+- @fuel-ts/address@0.76.8
+- @fuel-ts/crypto@0.76.8
+- @fuel-ts/errors@0.76.8
+- @fuel-ts/fuel-core@0.76.8
+- @fuel-ts/hasher@0.76.8
+- @fuel-ts/interfaces@0.76.8
+- @fuel-ts/math@0.76.8
+- @fuel-ts/merkle@0.76.8
+- @fuel-ts/transactions@0.76.8
+- @fuel-ts/utils@0.76.8
+- @fuel-ts/versions@0.76.8
+
 ## 0.76.7
 
 ### Patch Changes
