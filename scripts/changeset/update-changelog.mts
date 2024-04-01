@@ -139,6 +139,7 @@ await (async () => {
 
     const changelog = await getFullChangelog(octokit);
 
+    console.log(changelog);
     await octokit.rest.pulls.update({
       ...github.context.repo,
       pull_number: changesetPr.number,
