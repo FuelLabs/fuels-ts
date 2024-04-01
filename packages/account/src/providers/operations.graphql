@@ -110,15 +110,19 @@ fragment receiptFragment on Receipt {
   subId
 }
 
+fragment dryRunTransactionStatusFragment on DryRunTransactionStatus {
+  ... on DryRunFailureStatus {
+    ...dryRunFailureStatusFragment
+  }
+  ... on DryRunSuccessStatus {
+    ...dryRunSuccessStatusFragment
+  }
+}
+
 fragment dryRunTransactionExecutionStatusFragment on DryRunTransactionExecutionStatus {
   id
   status {
-    ... on DryRunFailureStatus {
-      ...dryRunFailureStatusFragment
-    }
-    ... on DryRunSuccessStatus {
-      ...dryRunSuccessStatusFragment
-    }
+    ...dryRunTransactionStatusFragment
   }
   receipts {
     ...receiptFragment
