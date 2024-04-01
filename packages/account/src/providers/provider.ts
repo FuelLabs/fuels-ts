@@ -773,7 +773,10 @@ export default class Provider {
           missingContractIds.push(contractId);
         });
 
-        const { maxFee } = await this.estimateTxGasAndFee(transactionRequest);
+        const { maxFee } = await this.estimateTxGasAndFee({
+          transactionRequest,
+          optimizeGas: false,
+        });
 
         // eslint-disable-next-line no-param-reassign
         transactionRequest.maxFee = maxFee;
@@ -789,14 +792,18 @@ export default class Provider {
     };
   }
 
-  async estimateTxGasAndFee(transactionRequest: TransactionRequest, gasPrice?: BN) {
+  async estimateTxGasAndFee(params: {
+    transactionRequest: TransactionRequest;
+    optimizeGas?: boolean;
+    totalGasUsedByPredicates?: BN;
+    gasPrice?: BN;
+  }) {
+    const { transactionRequest, totalGasUsedByPredicates = bn(0), optimizeGas = true } = params;
+    let { gasPrice } = params;
+
     const request = transactionRequest;
 
     const chainInfo = this.getChain();
-
-    const {
-      consensusParameters: { maxGasPerTx },
-    } = chainInfo;
 
     const { gasPriceFactor } = this.getGasConfig();
 
@@ -804,16 +811,16 @@ export default class Provider {
 
     if (!gasPrice) {
       const { latestGasPrice } = await this.operations.getLatestGasPrice();
-      // eslint-disable-next-line no-param-reassign
       gasPrice = bn(latestGasPrice.gasPrice);
     }
+
+    const shouldSetGaslimit = request.type === TransactionType.Script && !optimizeGas;
 
     /**
      * TODO: Validate if there is a way to while using BN to achive the same VM results
      * for gas related math operations and removing the need to `add(1)` for handling
      * a safe margin.
      */
-
     const minFee = calculateGasFee({
       gasPrice: bn(gasPrice),
       gas: minGas,
@@ -821,10 +828,10 @@ export default class Provider {
       tip: transactionRequest.tip,
     }).add(1);
 
-    if (request.type === TransactionType.Script) {
-      if (!request.gasLimit || request.gasLimit.lte(0)) {
-        request.gasLimit = maxGasPerTx.sub(minGas);
-      }
+    if (shouldSetGaslimit) {
+      request.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(
+        minGas.add(totalGasUsedByPredicates)
+      );
     }
 
     const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
@@ -835,6 +842,10 @@ export default class Provider {
       priceFactor: gasPriceFactor,
       tip: transactionRequest.tip,
     }).add(1);
+
+    if (shouldSetGaslimit) {
+      request.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(maxFee);
+    }
 
     return {
       minGas,
@@ -899,7 +910,7 @@ export default class Provider {
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     forwardingQuantities: CoinQuantity[] = [],
-    { estimatePredicates = true, resourcesOwner, signatureCallback }: TransactionCostParams = {}
+    { resourcesOwner, signatureCallback }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const { gasPriceFactor } = this.getGasConfig();
@@ -916,23 +927,21 @@ export default class Provider {
     /**
      * Estimate predicates gasUsed
      */
-    if (estimatePredicates) {
-      // Remove gasLimit to avoid gasLimit when estimating predicates
-      if (isScriptTransaction) {
-        txRequestClone.gasLimit = bn(0);
-      }
-
-      /**
-       * The fake utxos added above can be from a predicate
-       * If the resources owner is a predicate,
-       * we need to populate the resources with the predicate's data
-       * so that predicate estimation can happen.
-       */
-      if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
-        (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-      }
-      await this.estimatePredicates(txRequestClone);
+    // Remove gasLimit to avoid gasLimit when estimating predicates
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = bn(0);
     }
+
+    /**
+     * The fake utxos added above can be from a predicate
+     * If the resources owner is a predicate,
+     * we need to populate the resources with the predicate's data
+     * so that predicate estimation can happen.
+     */
+    if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
+      (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
+    }
+    await this.estimatePredicates(txRequestClone);
 
     if (signatureCallback && isScriptTransaction) {
       await signatureCallback(txRequestClone);
@@ -943,9 +952,10 @@ export default class Provider {
      */
     txRequestClone.maxFee = bn(0);
 
-    // eslint-disable-next-line prefer-const
-    let { maxFee, maxGas, minFee, minGas, gasPrice } =
-      await this.estimateTxGasAndFee(txRequestClone);
+    let { maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+      transactionRequest: txRequestClone,
+      optimizeGas: false,
+    });
 
     txRequestClone.maxFee = maxFee;
 
@@ -963,12 +973,9 @@ export default class Provider {
 
       txRequestClone.gasLimit = gasUsed;
 
-      const newEstimate = await this.estimateTxGasAndFee(txRequestClone);
-
-      minGas = newEstimate.minGas;
-      maxGas = newEstimate.maxGas;
-      minFee = newEstimate.minFee;
-      maxFee = newEstimate.maxFee;
+      ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+        transactionRequest: txRequestClone,
+      }));
     }
 
     const feeForGasUsed = calculateGasFee({
