@@ -34,7 +34,7 @@ jobs:
       - name: Bump and Collect Versions
         run: |
           pnpm changeset version
-          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
           echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
@@ -51,19 +51,19 @@ jobs:
 
       - name: Set branch name and changeset PR title
         run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`v${{ env.BUILD_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
-          publish: pnpm changeset:publish v${{ env.BUILD_VERSION }} ${{ github.ref_name }}
+          publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
           version: pnpm changeset:version-with-docs
           commit: "ci(changesets): versioning packages"
           title: ${{ env.CHANGESET_PR_TITLE }}
           createGithubReleases: aggregate
-          githubReleaseName: v${{ env.BUILD_VERSION }}
-          githubTagName: v${{ env.BUILD_VERSION }}
+          githubReleaseName: ${{ env.RELEASE_VERSION }}
+          githubTagName: ${{ env.RELEASE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
         run: pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          RELEASE_TAG: v${{ env.BUILD_VERSION }}
+          RELEASE_TAG: ${{ env.RELEASE_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
 
@@ -135,7 +135,7 @@ jobs:
           rm -f apps/docs/.gitignore
           git add apps/docs/src/api/
           git add apps/docs/.typedoc/api-links.json
-          git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
+          git commit -m "docs: API docs - ${{ env.RELEASE_VERSION }}"
           git push
           git restore apps/docs/.gitignore
 
