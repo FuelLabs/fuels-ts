@@ -5,15 +5,48 @@ import { bn } from 'fuels';
  * @group browser
  */
 describe('unit-conversion', () => {
-  it('should convert one gwei to wei', () => {
-    // #region parse-units-1
-    const oneGwei = bn.parseUnits('0.000000001')
+  it('should parse small units', () => {
+    const expected = "1"
 
-    // 1
-    const result = oneGwei.toNumber();
+    // #region parse-units-1
+    const result = bn.parseUnits('0.000000001').toString();
+    // "1"
     // #endregion parse-units-1
 
-    expect(result).toEqual(1);
+    expect(result).toEqual(expected);
+  })
+
+  it('should parse large units', () => {
+    const expected = "100100000000000";
+
+    // #region parse-units-2
+    const result = bn.parseUnits('100100').toString();
+    // "100100000000000"
+    // #endregion parse-units-2
+
+    expect(result).toEqual(expected);
+  })
+
+  it('should parse human readable numbers', () => {
+    const expected = "100100000200001";
+
+    // #region parse-units-3
+    const result = bn.parseUnits('100,100.000200001').toString();
+    // "100100000200001"
+    // #endregion parse-units-3
+
+    expect(result).toEqual(expected);
+  })
+
+  it('should parse different units', () => {
+    const expected = "1000000000000000000";
+
+    // #region parse-units-4
+    const result = bn.parseUnits('1', 18).toString();
+    // "1000000000000000000"
+    // #endregion parse-units-4
+
+    expect(result).toEqual(expected);
   })
 
   it('should format one gwei', () => {

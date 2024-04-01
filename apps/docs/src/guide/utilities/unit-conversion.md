@@ -1,15 +1,26 @@
 # Unit conversion
 
-Handling of very small and very large numbers is a common task in blockchain development. The SDK provides utility functions to handle these numbers.
+It is often necessary to convert between values that are easily understood by humans (such as ether) and the machine-readable form that is used by contracts (such as wei).
 
-## Parse
+## Parsing
 
-The `parseUnits` function is used to convert a string for specified units into our internal format.
+Parsing string-represented numbers has never been easier, using the `parseUnits` function.
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#parse-units-1{ts:line-numbers}
 
+We can parse large numbers.
 
-## Format
+<<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#parse-units-2{ts:line-numbers}
+
+Or numbers formatted for human readability.
+
+<<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#parse-units-3{ts:line-numbers}
+
+We can also parse numbers in other units of measure.
+
+<<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#parse-units-4{ts:line-numbers}
+
+## Formatting
 
 We can format common units of measure using the `format` function.
 
