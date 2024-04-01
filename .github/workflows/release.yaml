@@ -53,6 +53,10 @@ jobs:
         run: |
           echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
+      - name: Get latest release
+        run: |
+          echo "LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)" >> $GITHUB_ENV
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: FuelLabs/changesets-action@main
@@ -75,6 +79,7 @@ jobs:
           RELEASE_TAG: ${{ env.RELEASE_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
+          LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
 
       - name: Delete the release branch
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
