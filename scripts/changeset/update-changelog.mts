@@ -85,7 +85,7 @@ await (async () => {
   }
 
   if (PUBLISHED === "true") {
-    // update release's body
+    // update release's bodyy
     if (!RELEASE_TAG) {
       core.setFailed("Please add RELEASE_TAG to the environment");
       return;
