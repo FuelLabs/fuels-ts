@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BigNumberish, Transaction } from 'fuels';
+import type { BigNumberish, Transaction, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -21,8 +21,10 @@ import { createSetupConfig } from './utils';
  */
 describe('Policies', () => {
   let provider: Provider;
+  let wallet: WalletUnlocked;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
   });
 
   type CustomTxParams = {
@@ -52,27 +54,33 @@ describe('Policies', () => {
     expect(transaction.policies?.[2].type).toBe(PolicyType.Maturity);
     expect(transaction.policies?.[2]?.data).toBe(params.maturity);
     expect(transaction.policies?.[3].type).toBe(PolicyType.MaxFee);
-    expect(bn(transaction.policies?.[3].data).eq(bn(params.maxFee))).toBeTruthy();
+    expect(bn(transaction.policies?.[3].data)).toBeTruthy();
   };
 
   it('should ensure TX policies are properly set (ScriptTransactionRequest)', async () => {
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
-    const txRequest = new ScriptTransactionRequest({
-      gasLimit: randomNumber(800, 1_000),
+    const setGasLimit = 400;
+    const setMaxFee = 200;
+
+    let txRequest = new ScriptTransactionRequest({
+      gasLimit: setGasLimit,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: randomNumber(9_000, 10_000),
+      maxFee: setMaxFee,
     });
+
+    expect(txRequest.gasLimit.toNumber()).toBe(setGasLimit);
+    expect(txRequest.maxFee?.toNumber()).toBe(setMaxFee);
 
     txRequest.addCoinOutput(receiver.address, 500, BaseAssetId);
 
     const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(txRequest);
 
     txRequest.gasLimit = gasUsed;
+    txRequest.maxFee = maxFee;
 
-    await wallet.fund(txRequest, requiredQuantities, maxFee);
+    txRequest = await wallet.fund(txRequest, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(txRequest);
 
@@ -92,19 +100,16 @@ describe('Policies', () => {
       FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
     );
 
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
-
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const { transactionRequest: txRequest } = factory.createTransactionRequest({
+    let { transactionRequest: txRequest } = factory.createTransactionRequest({
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: randomNumber(9_000, 10_000),
     });
 
     const { maxFee, requiredQuantities } = await provider.getTransactionCost(txRequest);
 
-    await wallet.fund(txRequest, requiredQuantities, maxFee);
+    txRequest = await wallet.fund(txRequest, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(txRequest);
 
@@ -127,14 +132,17 @@ describe('Policies', () => {
       cache: true,
     })();
 
+    const gasLimit = randomNumber(800, 1_000);
+
     const callScope = contract.functions.payable().txParams({
-      gasLimit: randomNumber(800, 1_000),
+      gasLimit,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: randomNumber(9_000, 10_000),
     });
 
     const txRequest = await callScope.getTransactionRequest();
+
+    expect(txRequest.gasLimit.toNumber()).toBe(gasLimit);
 
     const {
       transactionResult: { transaction },
@@ -150,7 +158,6 @@ describe('Policies', () => {
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
     );
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
       binHexlified,
@@ -158,14 +165,17 @@ describe('Policies', () => {
       wallet
     );
 
+    const setGasLimit = randomNumber(800, 1_000);
+
     const callScope = scriptInstance.functions.main(33).txParams({
-      gasLimit: randomNumber(800, 1_000),
+      gasLimit: setGasLimit,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: randomNumber(9_000, 10_000),
     });
 
     const txRequest = await callScope.getTransactionRequest();
+
+    expect(txRequest.gasLimit.toNumber()).toBe(setGasLimit);
 
     const {
       transactionResult: { transaction },
@@ -178,15 +188,17 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (Account Transfer)', async () => {
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
+    const setGasLimit = randomNumber(800, 1_000);
+
     const txParams: CustomTxParams = {
-      gasLimit: randomNumber(800, 1_000),
+      gasLimit: setGasLimit,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: randomNumber(9_000, 10_000),
     };
+
+    expect(txParams.gasLimit).toBe(setGasLimit);
 
     const pendingTx = await wallet.transfer(receiver.address, 500, BaseAssetId, txParams);
 
@@ -209,13 +221,10 @@ describe('Policies', () => {
       cache: true,
     })();
 
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
-
     const txParams: CustomTxParams = {
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: randomNumber(9_000, 10_000),
     };
 
     const pendingTx = await wallet.transferToContract(contract.id, 500, BaseAssetId, txParams);
@@ -229,14 +238,12 @@ describe('Policies', () => {
   });
 
   it('should ensure TX witnessLimit rule limits tx execution as expected', async () => {
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
     const txParams: CustomTxParams = {
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
       witnessLimit: 5,
-      maxFee: randomNumber(9_000, 10_000),
     };
 
     await expect(async () => {
@@ -247,7 +254,6 @@ describe('Policies', () => {
   });
 
   it('should ensure TX maxFee rule limits tx execution as Expected', async () => {
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
     const txParams: CustomTxParams = {
