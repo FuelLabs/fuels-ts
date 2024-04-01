@@ -801,26 +801,19 @@ export default class Provider {
     const { transactionRequest, totalGasUsedByPredicates = bn(0), optimizeGas = true } = params;
     let { gasPrice } = params;
 
-    const request = transactionRequest;
-
     const chainInfo = this.getChain();
 
     const { gasPriceFactor } = this.getGasConfig();
 
-    const minGas = request.calculateMinGas(chainInfo);
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
 
     if (!gasPrice) {
       const { latestGasPrice } = await this.operations.getLatestGasPrice();
       gasPrice = bn(latestGasPrice.gasPrice);
     }
 
-    const shouldSetGaslimit = request.type === TransactionType.Script && !optimizeGas;
+    const shouldSetGaslimit = transactionRequest.type === TransactionType.Script && !optimizeGas;
 
-    /**
-     * TODO: Validate if there is a way to while using BN to achive the same VM results
-     * for gas related math operations and removing the need to `add(1)` for handling
-     * a safe margin.
-     */
     const minFee = calculateGasFee({
       gasPrice: bn(gasPrice),
       gas: minGas,
@@ -829,7 +822,7 @@ export default class Provider {
     }).add(1);
 
     if (shouldSetGaslimit) {
-      request.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(
+      transactionRequest.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(
         minGas.add(totalGasUsedByPredicates)
       );
     }
@@ -844,7 +837,12 @@ export default class Provider {
     }).add(1);
 
     if (shouldSetGaslimit) {
-      request.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(maxFee);
+      /**
+       * NOTE: The dry estimate TX might fail if it uses a gas value higher that the "gaslimit".
+       * Therefore, we need to set it as the highest value possible. The sum of "gasLimit" and
+       * "gasFee" cannot be higher than "maxGasPerTx".
+       */
+      transactionRequest.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(maxFee);
     }
 
     return {
