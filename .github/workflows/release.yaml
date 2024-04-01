@@ -59,8 +59,7 @@ jobs:
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
-          publish: git rev-parse --abrev-ref HEAD && exit 1
-          #  && git checkout ${{ github.ref_name }} && pnpm changeset publish --tag testing-release
+          publish: pnpm changeset publish --tag testing-release --no-git-tag && git tag -d v${{ env.BUILD_VERSION }}
           version: pnpm changeset:version-with-docs
           commit: "ci(changesets): versioning packages"
           title: ${{ env.CHANGESET_PR_TITLE }}
