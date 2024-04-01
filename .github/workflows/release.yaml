@@ -56,6 +56,8 @@ jobs:
       - name: Get latest release
         run: |
           echo "LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
