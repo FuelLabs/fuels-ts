@@ -4,6 +4,29 @@
 
 ### Patch Changes
 
+- Updated dependencies [ee7ee72]
+  - fuels@0.76.10
+  - @fuel-ts/abi-coder@0.76.10
+  - @fuel-ts/abi-typegen@0.76.10
+  - @fuel-ts/account@0.76.10
+  - @fuel-ts/address@0.76.10
+  - @fuel-ts/contract@0.76.10
+  - @fuel-ts/crypto@0.76.10
+  - @fuel-ts/errors@0.76.10
+  - @fuel-ts/hasher@0.76.10
+  - @fuel-ts/interfaces@0.76.10
+  - @fuel-ts/math@0.76.10
+  - @fuel-ts/merkle@0.76.10
+  - @fuel-ts/program@0.76.10
+  - @fuel-ts/script@0.76.10
+  - @fuel-ts/transactions@0.76.10
+  - @fuel-ts/utils@0.76.10
+  - @fuel-ts/versions@0.76.10
+
+## null
+
+### Patch Changes
+
 - Updated dependencies [7df8de1]
   - fuels@0.76.9
   - @fuel-ts/abi-coder@0.76.9

@@ -1,5 +1,11 @@
 # @fuel-ts/errors
 
+## 0.76.10
+
+### Patch Changes
+
+- @fuel-ts/versions@0.76.10
+
 ## 0.76.9
 
 ### Patch Changes
