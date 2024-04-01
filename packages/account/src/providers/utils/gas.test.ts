@@ -206,6 +206,7 @@ describe('gas', () => {
       const witnessesLength = 128;
       const minGas = bn(567);
       const gasLimit = bn(10_000);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = witnessLimit
         .sub(bn(witnessesLength))
@@ -219,6 +220,7 @@ describe('gas', () => {
         witnessesLength,
         minGas,
         gasLimit,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -229,6 +231,7 @@ describe('gas', () => {
       const witnessLimit = bn(200);
       const witnessesLength = 500;
       const minGas = bn(210);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = minGas;
 
@@ -237,6 +240,7 @@ describe('gas', () => {
         witnessLimit,
         witnessesLength,
         minGas,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -247,6 +251,7 @@ describe('gas', () => {
       const witnessLimit = undefined;
       const witnessesLength = 64;
       const minGas = bn(350);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = minGas;
 
@@ -255,6 +260,7 @@ describe('gas', () => {
         witnessLimit,
         witnessesLength,
         minGas,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();

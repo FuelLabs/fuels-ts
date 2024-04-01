@@ -33,6 +33,7 @@ describe('TransactionSummary', () => {
   const gasPerByte = bn(2);
   const gasPriceFactor = bn(3);
   const maxInputs = bn(255);
+  const maxGasPerTx = bn(10000000);
   const transaction = MOCK_TRANSACTION;
   const transactionBytes = arrayify(MOCK_TRANSACTION_RAWPAYLOAD);
   const receipts: TransactionResultReceipt[] = [
@@ -81,6 +82,7 @@ describe('TransactionSummary', () => {
       maxInputs,
       gasCosts,
       abiMap: {},
+      maxGasPerTx,
     });
 
     expect(transactionSummary).toMatchObject(expected);

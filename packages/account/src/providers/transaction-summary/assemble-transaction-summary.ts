@@ -29,6 +29,7 @@ export interface AssembleTransactionSummaryParams {
   abiMap?: AbiMap;
   maxInputs: BN;
   gasCosts: GqlGasCosts;
+  maxGasPerTx: BN;
 }
 
 /** @hidden */
@@ -46,6 +47,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     abiMap = {},
     maxInputs,
     gasCosts,
+    maxGasPerTx,
   } = params;
 
   const gasUsed = getGasUsedFromReceipts(receipts);
@@ -72,6 +74,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     tip,
     consensusParameters: {
       gasCosts,
+      maxGasPerTx,
       feeParams: {
         gasPerByte,
         gasPriceFactor,

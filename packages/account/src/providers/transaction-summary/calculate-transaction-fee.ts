@@ -24,7 +24,10 @@ export type CalculateTransactionFeeParams = {
   gasUsed: BN;
   rawPayload: string;
   tip: BN;
-  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & { feeParams: FeeParams };
+  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & {
+    feeParams: FeeParams;
+    maxGasPerTx: BN;
+  };
 };
 
 export const calculateTransactionFee = (params: CalculateTransactionFeeParams) => {
@@ -32,7 +35,7 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     gasUsed,
     rawPayload,
     tip,
-    consensusParameters: { gasCosts, feeParams },
+    consensusParameters: { gasCosts, feeParams, maxGasPerTx },
   } = params;
 
   const gasPerByte = bn(feeParams.gasPerByte);
@@ -102,6 +105,7 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     witnessesLength,
     gasLimit,
     witnessLimit,
+    maxGasPerTx,
   });
 
   /**

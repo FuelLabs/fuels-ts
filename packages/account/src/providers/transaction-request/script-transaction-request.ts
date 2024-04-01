@@ -155,7 +155,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte } = consensusParameters;
+    const { gasPerByte, maxGasPerTx } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
@@ -168,6 +168,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
       witnessesLength,
       witnessLimit: this.witnessLimit,
       gasLimit: this.gasLimit,
+      maxGasPerTx,
     });
   }
 
