@@ -20,7 +20,6 @@ import { transactionRequestify, BaseTransactionRequest } from '../providers';
 import type {
   CallResult,
   Provider,
-  ProviderSendTxParams,
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
@@ -73,6 +72,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     this.interface = predicateInterface;
     if (inputData !== undefined && inputData.length > 0) {
       this.predicateData = inputData;
+      this.predicateDataBytes = this.getPredicateData(0);
     }
   }
 
@@ -90,9 +90,9 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     request.inputs?.forEach((input) => {
       if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
         // eslint-disable-next-line no-param-reassign
-        input.predicate = this.bytes;
+        input.predicate = hexlify(this.bytes);
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.getPredicateData(policies.length);
+        input.predicateData = hexlify(this.getPredicateData(policies.length));
       }
     });
 
@@ -118,8 +118,10 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    const request = await super.createTransfer(destination, amount, assetId, txParams);
-    return this.populateTransactionPredicateData(request);
+    // TODO: Validate if predicateData needs byte shifting using policies length
+    // const request = await super.createTransfer(destination, amount, assetId, txParams);
+    // return this.populateTransactionPredicateData(request);
+    return super.createTransfer(destination, amount, assetId, txParams);
   }
 
   /**
@@ -128,12 +130,12 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
-  ): Promise<TransactionResponse> {
-    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.sendTransaction(transactionRequest, options);
+  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
+    // TODO: Validate if predicateData needs byte shifting using policies length
+    // const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
+    // return super.sendTransaction(transactionRequest, options);
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   /**
@@ -143,8 +145,11 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @returns A promise that resolves to the call result.
    */
   simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
-    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.simulateTransaction(transactionRequest);
+    // TODO: Validate if predicateData needs byte shifting using policies length
+    // const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
+    // return super.simulateTransaction(transactionRequest);
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   private getPredicateData(policiesLength: number): Uint8Array {
