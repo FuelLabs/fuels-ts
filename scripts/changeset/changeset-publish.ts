@@ -1,5 +1,14 @@
 import { execSync } from 'child_process';
 
 const TAG_NAME = process.argv[2];
-execSync(`pnpm changeset publish --no-git-tag --tag testing-release`);
-execSync(`git tag -d ${TAG_NAME}`);
+const changesetPublishOutput = execSync(
+  `pnpm changeset publish --no-git-tag --tag testing-release`
+).toString();
+
+console.log(changesetPublishOutput);
+
+const publishedSucceed = changesetPublishOutput.includes(`published successfully`);
+
+if (publishedSucceed) {
+  execSync(`git tag ${TAG_NAME}`);
+}
