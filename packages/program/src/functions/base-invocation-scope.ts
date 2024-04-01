@@ -256,30 +256,28 @@ export class BaseInvocationScope<TReturn = any> {
     this.setDefaultTxParams(transactionRequest, gasUsed);
 
     // Clean coin inputs before add new coins to the request
-    this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
-      (i) => i.type !== InputType.Coin
-    );
+    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
+
+    transactionRequest.updatePredicateInputs(estimatedInputs);
+
+    // Adding missing contract ids
+    missingContractIds.forEach((contractId) => {
+      transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+    });
+
+    // Adding required number of OutputVariables
+    transactionRequest.addVariableOutputs(outputVariables);
 
     transactionRequest.maxFee = maxFee;
     transactionRequest.gasLimit = gasUsed;
 
-    await this.program.account?.fund(this.transactionRequest, requiredQuantities, maxFee);
-
-    this.transactionRequest.updatePredicateInputs(estimatedInputs);
-
-    // Adding missing contract ids
-    missingContractIds.forEach((contractId) => {
-      this.transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
-    });
-
-    // Adding required number of OutputVariables
-    this.transactionRequest.addVariableOutputs(outputVariables);
+    await this.program.account?.fund(transactionRequest, requiredQuantities, maxFee);
 
     if (this.addSignersCallback) {
-      await this.addSignersCallback(this.transactionRequest);
+      await this.addSignersCallback(transactionRequest);
     }
 
-    return this;
+    return transactionRequest;
   }
 
   /**
@@ -360,15 +358,12 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    await this.fundWithRequiredCoins();
+    const transactionRequest = await this.fundWithRequiredCoins();
 
-    const response = await this.program.account.sendTransaction(
-      await this.getTransactionRequest(),
-      {
-        awaitExecution: true,
-        estimateTxDependencies: false,
-      }
-    );
+    const response = await this.program.account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+      estimateTxDependencies: false,
+    });
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -392,15 +387,11 @@ export class BaseInvocationScope<TReturn = any> {
         'An unlocked wallet is required to simulate a contract call.'
       );
     }
+    const transactionRequest = await this.fundWithRequiredCoins();
 
-    await this.fundWithRequiredCoins();
-
-    const result = await this.program.account.simulateTransaction(
-      await this.getTransactionRequest(),
-      {
-        estimateTxDependencies: false,
-      }
-    );
+    const result = await this.program.account.simulateTransaction(transactionRequest, {
+      estimateTxDependencies: false,
+    });
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
