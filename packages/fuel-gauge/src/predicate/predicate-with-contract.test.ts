@@ -98,8 +98,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 1000;
-      const amountToReceiver = 20;
+      const amountToPredicate = 10_000;
+      const amountToReceiver = 2_000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
