@@ -46,12 +46,8 @@ export function gasUsedByInputs(
 
   const chargeableInputs = inputs.filter((input) => {
     const isCoinOrMessage = 'owner' in input || 'sender' in input;
-    let isPredicate = false;
     if (isCoinOrMessage) {
-      isPredicate = !!('predicate' in input && input.predicate && input.predicate !== '0x');
-
-      if (isPredicate) {
-        // all predicates UTXOs are chargeable
+      if ('predicate' in input && input.predicate && input.predicate !== '0x') {
         return true;
       }
 
