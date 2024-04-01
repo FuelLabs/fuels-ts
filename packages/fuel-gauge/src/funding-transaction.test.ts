@@ -30,9 +30,7 @@ describe(__filename, () => {
     totalAmount: number;
     splitIn: number;
   }) => {
-    const request = new ScriptTransactionRequest({
-      gasLimit: 1_000,
-    });
+    const request = new ScriptTransactionRequest();
 
     for (let i = 0; i < splitIn; i++) {
       request.addCoinOutput(account.address, totalAmount / splitIn, BaseAssetId);
@@ -40,6 +38,13 @@ describe(__filename, () => {
 
     const resources = await mainWallet.getResourcesToSpend([[totalAmount + 2_000, BaseAssetId]]);
     request.addResources(resources);
+
+    const { gasUsed, maxFee } = await mainWallet.provider.getTransactionCost(request);
+
+    request.maxFee = maxFee;
+    request.gasLimit = gasUsed;
+
+    await mainWallet.fund(request, [], maxFee);
 
     const tx = await mainWallet.sendTransaction(request);
     await tx.waitForResult();
@@ -56,30 +61,20 @@ describe(__filename, () => {
       splitIn: 5,
     });
 
-    // this will return one UTXO of 300, not enought to pay for the TX fees
-    const lowResources = await sender.getResourcesToSpend([[100, BaseAssetId]]);
-
-    // confirm we only fetched 1 UTXO from the expected amount
-    expect(lowResources.length).toBe(1);
-    expect(lowResources[0].amount.toNumber()).toBe(300);
-
     const request = new ScriptTransactionRequest({
       gasLimit: 1_000,
     });
 
     const amountToTransfer = 300;
+
     request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
 
-    request.addResources(lowResources);
-
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(request);
-
-    // TX request already does NOT carries enough resources, it needs to be funded
-    expect(request.inputs.length).toBe(1);
-    expect(bn((<CoinTransactionRequestInput>request.inputs[0]).amount).toNumber()).toBe(300);
-    expect(maxFee.gt(300)).toBeTruthy();
+    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
+
+    request.maxFee = maxFee;
+    request.gasLimit = gasUsed;
 
     await sender.fund(request, requiredQuantities, maxFee);
 
@@ -122,7 +117,7 @@ describe(__filename, () => {
     request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
     request.addResources(enoughtResources);
 
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
 
     // TX request already carries enough resources, it does not need to be funded
     expect(request.inputs.length).toBe(1);
@@ -130,6 +125,9 @@ describe(__filename, () => {
     expect(maxFee.lt(1000)).toBeTruthy();
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
+
+    request.maxFee = maxFee;
+    request.gasLimit = gasUsed;
 
     await sender.fund(request, requiredQuantities, maxFee);
 

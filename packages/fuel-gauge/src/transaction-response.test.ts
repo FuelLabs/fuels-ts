@@ -265,8 +265,11 @@ describe('TransactionResponse', () => {
 
     request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
 
-    const { maxFee, gasUsed, requiredQuantities } =
-      await genesisWallet.provider.getTransactionCost(request);
+    const { maxFee, gasUsed, requiredQuantities } = await genesisWallet.provider.getTransactionCost(
+      request,
+      [],
+      { signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet) }
+    );
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
