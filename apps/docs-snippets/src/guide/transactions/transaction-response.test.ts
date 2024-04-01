@@ -84,16 +84,20 @@ describe('Transaction Response', () => {
     transactionRequest.addResources(resources);
     const response: TransactionResponse = await wallet.sendTransaction(transactionRequest);
 
+    const previouslySubmittedTransactionId = transactionRequest.getTransactionId(
+      provider.getChainId()
+    );
+
     // #region transaction-response-3
     // #import { TransactionResponse };
 
-    // Get a transaction ID from the transaction request, this could have been stored from a
-    // previous transaction request. You will need the chain ID to obtain this.
-    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+    // Take a transaction ID from a previous transaction
+    const transactionId = previouslySubmittedTransactionId;
+    // 0x...
 
     // Retrieve the transaction response from the transaction ID
     const transactionResponse = await TransactionResponse.create(transactionId, provider);
-    
+
     // Generate the transaction summary
     const transactionSummary = await transactionResponse.getTransactionSummary();
     // #endregion transaction-response-3
