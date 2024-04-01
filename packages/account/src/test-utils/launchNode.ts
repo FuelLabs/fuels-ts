@@ -190,7 +190,7 @@ export const launchNode = async ({
         ['--ip', ipToUse],
         ['--port', portToUse],
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
-        ['--min-gas-price', '0'],
+        ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--consensus-key', consensusKey],
         ['--chain', chainConfigPathToUse as string],
