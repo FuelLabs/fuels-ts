@@ -119,6 +119,7 @@ describe(__filename, () => {
       provider,
       inputData: [bn(1000)],
     });
+
     await seedTestWallet(predicate, [[500_000, BaseAssetId]]);
 
     /**
@@ -127,20 +128,15 @@ describe(__filename, () => {
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
 
-    const resources = await provider.getResourcesToSpend(predicate.address, [
-      {
-        amount: bn(100_000),
-        assetId: BaseAssetId,
-      },
-    ]);
-    request.addResources(resources);
-
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
     const { gasUsed, maxFee } = await provider.getTransactionCost(request);
+
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
+
+    await predicate.fund(request, [], maxFee);
 
     /**
      * Send transaction predicate
