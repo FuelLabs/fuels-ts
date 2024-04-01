@@ -118,6 +118,8 @@ await (async () => {
     return;
   }
 
+  execSync(`git checkout ${REF_NAME}`);
+
   const octokit = github.getOctokit(GITHUB_TOKEN);
 
   // update changesets PR body
@@ -139,7 +141,6 @@ await (async () => {
 
     const changelog = await getFullChangelog(octokit);
 
-    console.log(changelog);
     await octokit.rest.pulls.update({
       ...github.context.repo,
       pull_number: changesetPr.number,
