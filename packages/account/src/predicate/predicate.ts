@@ -19,7 +19,10 @@ import type { TxParamsType } from '../account';
 import { transactionRequestify, BaseTransactionRequest } from '../providers';
 import type {
   CallResult,
+  CoinQuantityLike,
+  ExcludeResourcesOption,
   Provider,
+  Resource,
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
@@ -212,6 +215,29 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
       predicateBytes,
       predicateInterface: abiInterface,
     };
+  }
+
+  /**
+   * Retrieves resources satisfying the spend query for the account.
+   *
+   * @param quantities - IDs of coins to exclude.
+   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @returns A promise that resolves to an array of Resources.
+   */
+  async getResourcesToSpend(
+    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<Resource[]> {
+    const resources = await this.provider.getResourcesToSpend(
+      this.address,
+      quantities,
+      excludedIds
+    );
+    return resources.map((resource) => ({
+      ...resource,
+      predicate: hexlify(this.bytes),
+      predicateData: hexlify(this.predicateDataBytes),
+    }));
   }
 
   /**
