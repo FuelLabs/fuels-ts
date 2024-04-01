@@ -28,7 +28,7 @@ You can provide the following settings:
 
 ### `requestMiddleware`
 
-Allows you to modify the request object to add additional headers, modify the request's body, etc.
+Allows you to modify the request object to add additional headers, modify the request's body, and much more.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-requestMiddleware{ts:line-numbers}
 
