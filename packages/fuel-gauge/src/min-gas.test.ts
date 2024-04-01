@@ -94,8 +94,6 @@ describe(__filename, () => {
 
     await sender.fund(request, requiredQuantities, maxFee);
 
-    request.gasLimit = bn(20_000);
-
     /**
      * Send transaction
      */
@@ -191,30 +189,30 @@ describe(__filename, () => {
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     // add predicate transfer
-    request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
-    const resourcesPredicate = await provider.getResourcesToSpend(predicate.address, [
+    const resourcesPredicate = await predicate.getResourcesToSpend([
       {
         amount: bn(100_000),
         assetId: BaseAssetId,
       },
     ]);
     request.addPredicateResources(resourcesPredicate, predicate);
+
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
-    const resourcesWallet = await provider.getResourcesToSpend(wallet.address, [
-      {
-        amount: bn(100_000),
-        assetId: BaseAssetId,
-      },
-    ]);
-    request.addResources(resourcesWallet);
+
+    const { gasUsed, maxFee } = await provider.getTransactionCost(request, [], {
+      resourcesOwner: predicate,
+    });
+    request.gasLimit = gasUsed;
+    request.maxFee = maxFee;
+
+    await wallet.provider.estimatePredicates(request);
+
+    await wallet.fund(request, [], maxFee);
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { gasUsed, maxFee } = await provider.getTransactionCost(request);
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
 
     /**
      * Send transaction predicate
@@ -222,7 +220,7 @@ describe(__filename, () => {
     predicate.populateTransactionPredicateData(request);
     await wallet.populateTransactionWitnessesSignature(request);
     const result = await predicate.sendTransaction(request);
-    const { status, receipts } = await result.waitForResult();
+    const { status, receipts } = await result.wait();
     const txGasUsed = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
