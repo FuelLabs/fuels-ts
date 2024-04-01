@@ -22,7 +22,7 @@ You can provide the following settings:
   - `exponential` _(default)_: Doubles the waiting time with each attempt.
   - `linear` - Increases the waiting time linearly with each attempt.
   - `fixed`: Uses a constant waiting time between attempts.
-- `baseDelay` - Base time in milliseconds for the backoff strategy.
+- `baseDelay` _(default 150ms)_ - Base time in milliseconds for the backoff strategy.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-retryOptions{ts:line-numbers}
 
