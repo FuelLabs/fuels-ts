@@ -79,7 +79,7 @@ describe('Experimental Predicate', () => {
       bytecode,
       provider,
       abi,
-      inputData: struct,
+      inputData: [struct],
     });
     await fundPredicate(wallet, predicate, 100_000);
 
