@@ -30,7 +30,7 @@ jobs:
 
   validate-changeset:
     name: Validate PR Changeset
-    if: startsWith(github.head_ref, 'changeset-release') == 'false'
+    if: startsWith(github.head_ref, 'changeset-release') != true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,11 +41,8 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Validate Changeset baseBranch
-        run: pnpm changeset:validate-baseBranch ${{ github.base_ref }}
-
       - name: Validate Changeset
-        run: pnpm changeset status
+        run: pnpm changeset status --since=origin/${{ github.base_ref }}
 
       - name: Validate Changeset Content
         run: |
