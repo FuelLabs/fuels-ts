@@ -7,8 +7,6 @@ import {
   Wallet,
   ScriptTransactionRequest,
   BaseAssetId,
-  isMessage,
-  isCoin,
   randomBytes,
   hexlify,
   FUEL_NETWORK_URL,
