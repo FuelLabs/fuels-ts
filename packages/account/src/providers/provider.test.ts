@@ -944,7 +944,7 @@ describe('Provider', () => {
   });
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { gasPerByte } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const gasLimit = bn(1000);
     const transactionRequest = new ScriptTransactionRequest({
@@ -964,6 +964,7 @@ describe('Provider', () => {
     expect(maxGasSpy).toHaveBeenCalledWith({
       gasPerByte,
       minGas,
+      maxGasPerTx,
       witnessesLength,
       witnessLimit: transactionRequest.witnessLimit,
       gasLimit: transactionRequest.gasLimit,
@@ -972,7 +973,7 @@ describe('Provider', () => {
 
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { gasPerByte } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const transactionRequest = new CreateTransactionRequest({
       witnesses: [ZeroBytes32],
@@ -994,6 +995,7 @@ describe('Provider', () => {
       gasPerByte,
       minGas,
       witnessesLength,
+      maxGasPerTx,
       witnessLimit: transactionRequest.witnessLimit,
     });
   });
