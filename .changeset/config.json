@@ -4,7 +4,7 @@
   "fixed": [["@fuel-ts/*", "fuels", "create-fuels"]],
   "linked": [],
   "access": "public",
-  "baseBranch": "release/0.76.7",
+  "baseBranch": "release/0.76.8",
   "updateInternalDependencies": "patch",
   "ignore": [
     "fuel-gauge",
