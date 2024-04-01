@@ -31,7 +31,7 @@
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
     "prettier:check": "prettier --check packages",
     "prettier:format": "prettier --write packages",
-    "changeset:publish": "changeset publish --no-git-tag",
+    "changeset:publish": "tsx ./scripts/changeset/changeset-publish",
     "changeset:next": "tsx ./scripts/changeset/changeset-next",
     "changeset:version-with-docs": "tsx ./scripts/changeset/changeset-version-with-docs",
     "changeset:update-changelog": "tsx ./scripts/changeset/update-changelog.mts",

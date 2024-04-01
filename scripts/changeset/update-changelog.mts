@@ -5,7 +5,8 @@ import { execSync } from "child_process";
 
 import { getFullChangelog } from "./get-full-changelog.mts";
 
-const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG } = process.env;
+const { PUBLISHED, GITHUB_REPOSITORY, GITHUB_TOKEN, RELEASE_TAG, REF_NAME } =
+  process.env;
 
 function sleep(time: number) {
   return new Promise((resolve) => {
@@ -17,7 +18,7 @@ function sleep(time: number) {
 
 async function getChangesetPr(retried = false) {
   const octokit = github.getOctokit(GITHUB_TOKEN as string);
-  const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/master+base:master`;
+  const searchQuery = `repo:${GITHUB_REPOSITORY}+state:open+head:changeset-release/${REF_NAME}+base:${REF_NAME}`;
   const searchResult = await octokit.rest.search.issuesAndPullRequests({
     q: searchQuery,
   });
@@ -70,6 +71,7 @@ await (async () => {
        * https://github.com/FuelLabs/fuels-ts/actions/runs/8421817249/job/23059607346#step:9:24
        * That's why this return statement was added.
        */
+      execSync('echo "Did not find changeset PR..."', { stdio: "inherit" });
       return;
     }
 
@@ -115,6 +117,7 @@ await (async () => {
       ...github.context.repo,
       release_id: release.data.id,
       body: pr.data.body as string,
+      make_latest: REF_NAME === "master" ? "true" : "false",
     });
   }
 })();

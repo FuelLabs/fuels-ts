@@ -57,7 +57,7 @@ jobs:
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
-          publish: pnpm changeset:publish
+          publish: pnpm changeset:publish v${{ env.BUILD_VERSION }} ${{ github.ref_name }}
           version: pnpm changeset:version-with-docs
           commit: "ci(changesets): versioning packages"
           title: ${{ env.CHANGESET_PR_TITLE }}
@@ -69,13 +69,18 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Prettify changelog
-        run: |
-          git checkout master
-          pnpm changeset:update-changelog
+        run: pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           RELEASE_TAG: v${{ env.BUILD_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
+          REF_NAME: ${{ github.ref_name }}
+
+      - name: Delete the release branch
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
+        run: git push origin --delete ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       - name: Release to @next tag on npm
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
@@ -136,7 +141,7 @@ jobs:
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.3
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2
           verbose: false
@@ -144,13 +149,13 @@ jobs:
           rootdir: ""
           workdir: ""
       - uses: aws-actions/configure-aws-credentials@v1
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
           aws-region: us-east-1
       - name: Upload assets to s3
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
         env:
