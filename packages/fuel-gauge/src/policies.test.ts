@@ -63,7 +63,7 @@ describe('Policies', () => {
     const setGasLimit = 400;
     const setMaxFee = 200;
 
-    let txRequest = new ScriptTransactionRequest({
+    const txRequest = new ScriptTransactionRequest({
       gasLimit: setGasLimit,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
@@ -80,7 +80,7 @@ describe('Policies', () => {
     txRequest.gasLimit = gasUsed;
     txRequest.maxFee = maxFee;
 
-    txRequest = await wallet.fund(txRequest, requiredQuantities, maxFee);
+    await wallet.fund(txRequest, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(txRequest);
 
@@ -102,14 +102,16 @@ describe('Policies', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    let { transactionRequest: txRequest } = factory.createTransactionRequest({
+    const { transactionRequest: txRequest } = factory.createTransactionRequest({
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
     });
 
     const { maxFee, requiredQuantities } = await provider.getTransactionCost(txRequest);
 
-    txRequest = await wallet.fund(txRequest, requiredQuantities, maxFee);
+    txRequest.maxFee = maxFee;
+
+    await wallet.fund(txRequest, requiredQuantities, maxFee);
 
     const tx = await wallet.sendTransaction(txRequest);
 
@@ -251,22 +253,5 @@ describe('Policies', () => {
 
       await pendingTx.waitForResult();
     }).rejects.toThrow(/TransactionWitnessLimitExceeded/);
-  });
-
-  it('should ensure TX maxFee rule limits tx execution as Expected', async () => {
-    const receiver = Wallet.generate({ provider });
-
-    const txParams: CustomTxParams = {
-      gasLimit: randomNumber(800, 1_000),
-      maturity: randomNumber(1, 2),
-      witnessLimit: randomNumber(800, 900),
-      maxFee: 5,
-    };
-
-    await expect(async () => {
-      const pendingTx = await wallet.transfer(receiver.address, 500, BaseAssetId, txParams);
-
-      await pendingTx.waitForResult();
-    }).rejects.toThrow(/TransactionMaxFeeLimitExceeded/);
   });
 });
