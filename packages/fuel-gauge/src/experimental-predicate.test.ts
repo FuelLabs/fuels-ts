@@ -75,7 +75,7 @@ describe('Experimental Predicate', () => {
       },
     };
 
-    const predicate = new Predicate({
+    const predicate = new Predicate<[typeof struct]>({
       bytecode,
       provider,
       abi,
