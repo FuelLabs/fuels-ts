@@ -241,7 +241,8 @@ export class Account extends AbstractAccount {
     request: T,
     coinQuantities: CoinQuantity[],
     fee: BN
-  ): Promise<void> {
+  ): Promise<T> {
+    const txRequest = request as T;
     const updatedQuantities = addAmountToAsset({
       amount: bn(fee),
       assetId: BaseAssetId,
@@ -262,7 +263,7 @@ export class Account extends AbstractAccount {
 
     const owner = this.address.toB256();
 
-    request.inputs.forEach((input) => {
+    txRequest.inputs.forEach((input) => {
       const isResource = 'amount' in input;
 
       if (isResource) {
@@ -303,8 +304,18 @@ export class Account extends AbstractAccount {
         messages: cachedMessages,
         utxos: cachedUtxos,
       });
-      request.addResources(resources);
+
+      txRequest.addResources(resources);
+
+      // TODO: implement cached predicates gasUsed to be return from getTransactionCost
+      await this.provider.estimatePredicates(txRequest);
+
+      const { maxFee } = await this.provider.estimateTxGasAndFee({ transactionRequest: txRequest });
+
+      txRequest.maxFee = maxFee;
     }
+
+    return txRequest;
   }
 
   /**
