@@ -1,4 +1,4 @@
-# Quickstart
+# npm create fuels
 
 You can quickly bootstrap a full-stack Fuel project locally with the following command:
 
