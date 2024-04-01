@@ -3,7 +3,7 @@ import * as extractImportsMod from './extractImports';
 import fs from 'fs';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-const { collectImportStatements, combineImportStatements, validateImports, extractImports } =
+const { collectImportStatements, combineImportStatements, validateImports, extractImports, validateSnippetContent } =
   extractImportsMod;
 
 /**
@@ -85,6 +85,36 @@ describe('extractImports', () => {
       );
     });
   });
+
+  describe('validateSnippetContent', () => {
+    it('should pass validation for a valid code snippet content', () => {
+      const codeSnippet = [
+        '// #import { AssetId };',
+        '',
+        'const assetId: AssetId = {',
+        '  value: Bits256,',
+        '};',
+      ];
+      const filepath = '/some/file/asset-id.test.ts';
+      expect(() => validateSnippetContent(codeSnippet, filepath)).not.toThrow();
+    })
+
+    it('should throw an error when malformed #imports detected', async () => {
+      const codeSnippet = [
+        '// #import { AssetId }',
+      ]
+      const filepath = '/some/file/asset-id.test.ts';
+      
+      await expectToThrowFuelError(
+        () => validateSnippetContent(codeSnippet, filepath),
+        new FuelError(
+          ErrorCode.VITEPRESS_PLUGIN_ERROR,
+          `Found malformed "#import" statements in code snippet.\nPlease check "${filepath}".\n// #import { AssetId }`
+        )
+      )
+    });
+
+  })
 
   describe('collectImportStatements', () => {
     it('should handle empty lines', () => {
