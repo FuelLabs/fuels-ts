@@ -1,5 +1,14 @@
 # @fuel-ts/abi-typegen
 
+## 0.76.10
+
+### Patch Changes
+
+- @fuel-ts/errors@0.76.10
+- @fuel-ts/interfaces@0.76.10
+- @fuel-ts/utils@0.76.10
+- @fuel-ts/versions@0.76.10
+
 ## 0.76.9
 
 ### Patch Changes
