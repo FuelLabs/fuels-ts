@@ -118,6 +118,8 @@ await (async () => {
     return;
   }
 
+  execSync(`git checkout ${REF_NAME}`);
+
   const octokit = github.getOctokit(GITHUB_TOKEN);
 
   // update changesets PR body
