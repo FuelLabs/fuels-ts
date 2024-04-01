@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.76.8
+
+### Patch Changes
+
+- @fuel-ts/errors@0.76.8
+- @fuel-ts/utils@0.76.8
+
 ## 0.76.7
 
 ### Patch Changes
