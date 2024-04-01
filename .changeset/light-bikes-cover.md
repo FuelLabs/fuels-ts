@@ -1,5 +1,6 @@
 ---
 "@fuel-ts/abi-coder": minor
+"@fuel-ts/forc": minor
 "@fuel-ts/program": minor
 ---
 
