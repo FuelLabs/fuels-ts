@@ -85,7 +85,6 @@ export enum ErrorCode {
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
 
   // chain
-  LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
   UNSUPPORTED_FUEL_CLIENT_VERSION = 'unsupported-fuel-client-version',
 
