@@ -84,11 +84,9 @@ const currentLocale: Locale = "PT_BR";
 const i18nDict = {
   PT_BR: {
     [FuelError.CODES.INVALID_URL]: "Endereço inválido",
-    [FuelError.CODES.INSUFFICIENT_BALANCE]: "Saldo insuficiente",
   },
   BS_BA: {
     [FuelError.CODES.INVALID_URL]: "Nevažeća adresa",
-    [FuelError.CODES.INSUFFICIENT_BALANCE]: "Nedovoljan balans",
   },
 };
 

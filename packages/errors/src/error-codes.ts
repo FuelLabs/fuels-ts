@@ -34,7 +34,6 @@ export enum ErrorCode {
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
-  INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
   MISSING_CONNECTOR = 'missing-connector',
