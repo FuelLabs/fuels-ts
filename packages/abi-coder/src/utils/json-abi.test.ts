@@ -35,7 +35,7 @@ describe('json-abi', () => {
 
     it('should throw an error if the function is not found', () => {
       expect(() => findFunctionByName(MOCK_ABI, 'bar')).toThrowError(
-        'Function "bar" not found in the ABI'
+        `Function with name 'bar' doesn't exist in the ABI`
       );
     });
   });
@@ -55,7 +55,7 @@ describe('json-abi', () => {
     });
 
     it('should throw an error if the type is not found', () => {
-      expect(() => findTypeById(MOCK_ABI, -1)).toThrowError('Unable to find type with ID -1');
+      expect(() => findTypeById(MOCK_ABI, -1)).toThrowError(`Type with typeId '-1' doesn't exist in the ABI.`);
     });
   });
 
@@ -76,7 +76,7 @@ describe('json-abi', () => {
       const inputs: JsonAbiArgument[] = [{ name: 'a', type: -1, typeArguments: [] }];
 
       expect(() => findNonEmptyInputs(MOCK_ABI, inputs)).toThrowError(
-        'Unable to find type with ID -1'
+        `Type with typeId '-1' doesn't exist in the ABI.`
       );
     });
   });
