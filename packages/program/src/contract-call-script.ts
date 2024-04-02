@@ -237,33 +237,28 @@ export const getScriptDataV0 = (
     callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
   };
 
-  /// script data, consisting of the following items in the given order:
-  /// 1. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
+  // 1. Amount
   scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
-  /// 2. Asset ID to be forwarded ([`AssetId::LEN`])
+  // 2. Asset ID
   scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
-  /// 3. Contract ID ([`ContractId::LEN`]);
+  // 3. Contract ID
   scriptData.push(call.contractId.toBytes());
-  /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
+  // 4. Function selector
   scriptData.push(new BigNumberCoder('u64').encode(call.fnSelector));
-  /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
+  // 5. Gas to be forwarded
   if (call.gas) {
     scriptData.push(new BigNumberCoder('u64').encode(call.gas));
 
     gasForwardedSize = WORD_SIZE;
   }
 
-  /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
-  // If the method call takes custom inputs or has more than
-  // one argument, we need to calculate the `call_data_offset`,
-  // which points to where the data for the custom types start in the
-  // transaction. If it doesn't take any custom inputs, this isn't necessary.
+  // 6. Calldata offset
   if (call.isInputDataPointer) {
     const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize;
     scriptData.push(new BigNumberCoder('u64').encode(pointerInputOffset));
   }
 
-  /// 7. Encoded arguments (optional) (variable length)
+  // 7. Encoded arguments (optional) (variable length)
   const args = arrayify(call.data);
   scriptData.push(args);
 
