@@ -805,8 +805,7 @@ export default class Provider {
     const minGas = transactionRequest.calculateMinGas(chainInfo);
 
     if (!gasPrice) {
-      const { latestGasPrice } = await this.operations.getLatestGasPrice();
-      gasPrice = bn(latestGasPrice.gasPrice);
+      gasPrice = await this.estimateGasPrice(10);
     }
 
     const shouldSetGaslimit = transactionRequest.type === TransactionType.Script && !optimizeGas;
@@ -1476,6 +1475,13 @@ export default class Provider {
   async getLatestGasPrice(): Promise<BN> {
     const { latestGasPrice } = await this.operations.getLatestGasPrice();
     return bn(latestGasPrice.gasPrice);
+  }
+
+  async estimateGasPrice(blockHorizon: number): Promise<BN> {
+    const { estimateGasPrice } = await this.operations.estimateGasPrice({
+      blockHorizon: String(blockHorizon),
+    });
+    return bn(estimateGasPrice.gasPrice);
   }
 
   /**
