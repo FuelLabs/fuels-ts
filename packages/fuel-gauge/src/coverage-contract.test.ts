@@ -492,12 +492,13 @@ describe('Coverage Contract', () => {
 
     request.addCoinOutput(recipient.address, 10, BaseAssetId);
 
-    const { gasUsed, maxFee } = await sender.provider.getTransactionCost(request);
+    const { gasUsed, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
+      await sender.provider.getTransactionCost(request);
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await sender.fund(request, [], maxFee);
+    await sender.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
 
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();

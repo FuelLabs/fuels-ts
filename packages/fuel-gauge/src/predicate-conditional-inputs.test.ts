@@ -8,6 +8,7 @@ import {
   Wallet,
   ScriptTransactionRequest,
   bn,
+  max,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -60,12 +61,13 @@ describe('PredicateConditionalInputs', () => {
       .addPredicateResources(predicateResoruces, predicate)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
-    const { gasUsed, maxFee } = await aliceWallet.provider.getTransactionCost(request);
+    const { gasUsed, maxFee, addedSignatures, inputsWithEstimatedPredicates } =
+      await aliceWallet.provider.getTransactionCost(request, [], { resourcesOwner: aliceWallet });
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await aliceWallet.fund(request, [], maxFee);
+    await aliceWallet.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
 
     const aliceBaseAssetBefore = await aliceWallet.getBalance();
     const aliceAssetABefore = await aliceWallet.getBalance(ASSET_A);
@@ -147,13 +149,14 @@ describe('PredicateConditionalInputs', () => {
       .addPredicateResources(predicateResources, predicate)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
-    const { gasUsed, maxFee } = await aliceWallet.provider.getTransactionCost(request);
+    const { gasUsed, maxFee, addedSignatures, inputsWithEstimatedPredicates } =
+      await aliceWallet.provider.getTransactionCost(request);
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
     // predicate will pay for the transaction fee
-    await predicate.fund(request, [], maxFee);
+    await predicate.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
 
     predicate.populateTransactionPredicateData(request);
 

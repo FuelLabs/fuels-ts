@@ -87,28 +87,36 @@ describe('Signing transactions', () => {
         amount: amountToReceiver,
       },
     ]);
+
     request.addPredicateResources(resources, predicate);
 
-    // Add witnesses including the signer
     request.addWitness('0x');
+
+    // Add witnesses including the signer
     // Estimate the predicate inputs
-    const { estimatedInputs, gasUsed, maxFee, requiredQuantities } =
+    const { inputsWithEstimatedPredicates, gasUsed, maxFee, requiredQuantities, addedSignatures } =
       await provider.getTransactionCost(request, [], {
         signatureCallback: (tx) => tx.addAccountWitnesses(signer),
+        resourcesOwner: predicate,
       });
+
+    request.updatePredicateGasUsed(inputsWithEstimatedPredicates);
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    request.updatePredicateInputs(estimatedInputs);
+    await predicate.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
-    const parsedRequest = predicate.populateTransactionPredicateData(request);
-    await predicate.fund(parsedRequest, requiredQuantities, maxFee);
-
-    await parsedRequest.addAccountWitnesses(signer);
+    await request.addAccountWitnesses(signer);
 
     // Send the transaction
-    const res = await provider.sendTransaction(parsedRequest);
+    const res = await provider.sendTransaction(request);
     await res.waitForResult();
 
     // #endregion multiple-signers-4

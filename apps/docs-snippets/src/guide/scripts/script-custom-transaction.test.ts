@@ -70,15 +70,19 @@ describe(__filename, () => {
     const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
 
     // 5. Calculate the transaction fee
-    const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(
-      request,
-      quantities
-    );
+    const { maxFee, gasUsed, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request, quantities);
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await wallet.fund(request, requiredQuantities, maxFee);
+    await wallet.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     // 6. Send the transaction
     const tx = await wallet.sendTransaction(request);

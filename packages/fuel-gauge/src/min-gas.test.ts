@@ -87,12 +87,19 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(request);
+    const { gasUsed, maxFee, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request);
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await sender.fund(request, requiredQuantities, maxFee);
+    await sender.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     /**
      * Send transaction
@@ -131,12 +138,13 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { gasUsed, maxFee } = await provider.getTransactionCost(request);
+    const { gasUsed, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request, [], { resourcesOwner: predicate });
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await predicate.fund(request, [], maxFee);
+    await predicate.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
 
     /**
      * Send transaction predicate
@@ -196,15 +204,16 @@ describe(__filename, () => {
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
 
-    const { gasUsed, maxFee } = await provider.getTransactionCost(request, [], {
-      resourcesOwner: predicate,
-    });
+    const { gasUsed, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request, [], {
+        resourcesOwner: predicate,
+      });
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
     await wallet.provider.estimatePredicates(request);
 
-    await wallet.fund(request, [], maxFee);
+    await wallet.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice

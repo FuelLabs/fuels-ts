@@ -144,12 +144,17 @@ export default class ContractFactory {
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
 
-    const { requiredQuantities, maxFee } =
+    const { requiredQuantities, maxFee, inputsWithEstimatedPredicates } =
       await this.account.provider.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = maxFee;
 
-    await this.account.fund(transactionRequest, requiredQuantities, maxFee);
+    await this.account.fund(
+      transactionRequest,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates
+    );
     await this.account.sendTransaction(transactionRequest, {
       awaitExecution: true,
     });

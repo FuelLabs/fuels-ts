@@ -224,13 +224,19 @@ describe('TransactionResponse', () => {
 
     request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
 
-    const { maxFee, gasUsed, requiredQuantities } =
+    const { maxFee, gasUsed, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
       await genesisWallet.provider.getTransactionCost(request);
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await genesisWallet.fund(request, requiredQuantities, maxFee);
+    await genesisWallet.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     request.updateWitnessByOwner(
       genesisWallet.address,
@@ -265,16 +271,21 @@ describe('TransactionResponse', () => {
 
     request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
 
-    const { maxFee, gasUsed, requiredQuantities } = await genesisWallet.provider.getTransactionCost(
-      request,
-      [],
-      { signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet) }
-    );
+    const { maxFee, gasUsed, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
+      await genesisWallet.provider.getTransactionCost(request, [], {
+        signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+      });
 
     request.gasLimit = gasUsed;
     request.maxFee = maxFee;
 
-    await genesisWallet.fund(request, requiredQuantities, maxFee);
+    await genesisWallet.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     request.updateWitnessByOwner(
       genesisWallet.address,

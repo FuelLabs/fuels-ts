@@ -20,13 +20,13 @@ export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLi
     request.addCoinOutput(wallet.address, amount, assetId);
   });
 
-  const { gasUsed, maxFee, requiredQuantities } =
+  const { gasUsed, maxFee, requiredQuantities, inputsWithEstimatedPredicates } =
     await genesisWallet.provider.getTransactionCost(request);
 
   request.gasLimit = gasUsed;
   request.maxFee = maxFee;
 
-  await genesisWallet.fund(request, requiredQuantities, maxFee);
+  await genesisWallet.fund(request, requiredQuantities, maxFee, inputsWithEstimatedPredicates);
 
   await genesisWallet.sendTransaction(request, { awaitExecution: true });
 };

@@ -39,12 +39,13 @@ describe(__filename, () => {
     const resources = await mainWallet.getResourcesToSpend([[totalAmount + 2_000, BaseAssetId]]);
     request.addResources(resources);
 
-    const { gasUsed, maxFee } = await mainWallet.provider.getTransactionCost(request);
+    const { gasUsed, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
+      await mainWallet.provider.getTransactionCost(request);
 
     request.maxFee = maxFee;
     request.gasLimit = gasUsed;
 
-    await mainWallet.fund(request, [], maxFee);
+    await mainWallet.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
 
     const tx = await mainWallet.sendTransaction(request);
     await tx.waitForResult();
@@ -69,14 +70,21 @@ describe(__filename, () => {
 
     request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
 
-    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request);
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
     request.maxFee = maxFee;
     request.gasLimit = gasUsed;
 
-    await sender.fund(request, requiredQuantities, maxFee);
+    await sender.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     const tx = await sender.sendTransaction(request);
 
@@ -117,7 +125,8 @@ describe(__filename, () => {
     request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
     request.addResources(enoughtResources);
 
-    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request);
 
     // TX request already carries enough resources, it does not need to be funded
     expect(request.inputs.length).toBe(1);
@@ -129,7 +138,13 @@ describe(__filename, () => {
     request.maxFee = maxFee;
     request.gasLimit = gasUsed;
 
-    await sender.fund(request, requiredQuantities, maxFee);
+    await sender.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     const tx = await sender.sendTransaction(request);
 
@@ -161,14 +176,21 @@ describe(__filename, () => {
     const amountToTransfer = 1000;
     request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
 
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
+      await provider.getTransactionCost(request);
 
     // TX request does NOT carry any resources, it needs to be funded
     expect(request.inputs.length).toBe(0);
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
-    await sender.fund(request, requiredQuantities, maxFee);
+    await sender.fund(
+      request,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     const tx = await sender.sendTransaction(request);
 

@@ -62,7 +62,13 @@ export abstract class AbstractAccount {
   abstract getResourcesToSpend(quantities: any[], options?: any): any;
   abstract sendTransaction(transactionRequest: any, options?: any): any;
   abstract simulateTransaction(transactionRequest: any, options?: any): any;
-  abstract fund(transactionRequest: any, quantities: any, fee: any): Promise<any>;
+  abstract fund(
+    transactionRequest: any,
+    quantities: any,
+    fee: any,
+    inputsWithEstimatedPredicates: any,
+    addedSignatures: any
+  ): Promise<any>;
 }
 /**
  * @hidden

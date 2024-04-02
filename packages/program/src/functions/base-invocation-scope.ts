@@ -252,13 +252,12 @@ export class BaseInvocationScope<TReturn = any> {
       missingContractIds,
       requiredQuantities,
       inputsWithEstimatedPredicates,
+      addedSignatures,
     } = await this.getTransactionCost();
     this.setDefaultTxParams(transactionRequest, gasUsed);
 
     // Clean coin inputs before add new coins to the request
     transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
-
-    transactionRequest.updatePredicateGasUsed(inputsWithEstimatedPredicates);
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
@@ -281,7 +280,13 @@ export class BaseInvocationScope<TReturn = any> {
       transactionRequest.maxFee = maxFee;
     }
 
-    await this.program.account?.fund(transactionRequest, requiredQuantities, maxFee);
+    await this.program.account?.fund(
+      transactionRequest,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);

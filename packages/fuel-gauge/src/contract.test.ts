@@ -725,14 +725,20 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const { requiredQuantities, maxFee, gasUsed } =
+    const { requiredQuantities, maxFee, gasUsed, inputsWithEstimatedPredicates, addedSignatures } =
       await provider.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = gasUsed;
     transactionRequestParsed.maxFee = maxFee;
 
     // Fund tx
-    await wallet.fund(transactionRequestParsed, requiredQuantities, maxFee);
+    await wallet.fund(
+      transactionRequestParsed,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     // Send tx
     const response = await wallet.sendTransaction(transactionRequestParsed);
@@ -793,13 +799,19 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const { gasUsed, maxFee, requiredQuantities } =
+    const { gasUsed, maxFee, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
       await contract.provider.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = gasUsed;
     transactionRequestParsed.maxFee = maxFee;
 
-    await contract.account.fund(transactionRequestParsed, requiredQuantities, maxFee);
+    await contract.account.fund(
+      transactionRequestParsed,
+      requiredQuantities,
+      maxFee,
+      inputsWithEstimatedPredicates,
+      addedSignatures
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const response = await contract.account!.sendTransaction(transactionRequestParsed);
