@@ -108,7 +108,7 @@ export class BaseWalletUnlocked extends Account {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
+    { estimateTxDependencies = false, awaitExecution }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
