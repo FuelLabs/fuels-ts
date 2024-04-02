@@ -7,9 +7,9 @@
     "original:build": "next build",
     "original:start": "next start",
     "original:lint": "next lint",
-    "pretest": "pnpm original:build",
-    "prebuild": "fuels build --deploy",
-    "fuels:dev": "fuels dev"
+    "fuels:build": "fuels build --deploy",
+    "fuels:dev": "fuels dev",
+    "postbuild": "run-s fuels:build original:build"
   },
   "dependencies": {
     "@fuel-wallet/react": "0.15.2",
