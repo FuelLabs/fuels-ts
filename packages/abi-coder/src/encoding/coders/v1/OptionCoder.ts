@@ -12,7 +12,7 @@ export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCode
     return result;
   }
 
-  toSwayOption(input: InputValueOf<TCoders>): SwayOption<unknown> {
+  private toSwayOption(input: InputValueOf<TCoders>): SwayOption<unknown> {
     if (input !== undefined) {
       return { Some: input };
     }
