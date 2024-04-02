@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "original:dev": "next dev",
+    "original:build": "next build",
+    "original:start": "next start",
+    "original:lint": "next lint",
+    "pretest": "pnpm original:build",
     "prebuild": "fuels build --deploy",
-    "fuels:dev": "fuels dev",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "fuels:dev": "fuels dev"
   },
   "dependencies": {
     "@fuel-wallet/react": "0.15.2",
