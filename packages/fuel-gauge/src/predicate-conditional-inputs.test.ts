@@ -8,7 +8,6 @@ import {
   Wallet,
   ScriptTransactionRequest,
   bn,
-  max,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
