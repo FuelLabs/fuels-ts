@@ -248,17 +248,17 @@ export class BaseInvocationScope<TReturn = any> {
     const {
       maxFee,
       gasUsed,
-      estimatedInputs,
       outputVariables,
       missingContractIds,
       requiredQuantities,
+      inputsWithEstimatedPredicates,
     } = await this.getTransactionCost();
     this.setDefaultTxParams(transactionRequest, gasUsed);
 
     // Clean coin inputs before add new coins to the request
     transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
-    transactionRequest.updatePredicateInputs(estimatedInputs);
+    transactionRequest.updatePredicateGasUsed(inputsWithEstimatedPredicates);
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
