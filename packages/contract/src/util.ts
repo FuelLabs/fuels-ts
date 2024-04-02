@@ -1,4 +1,3 @@
-import { FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
