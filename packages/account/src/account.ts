@@ -312,7 +312,7 @@ export class Account extends AbstractAccount {
       txRequest.addResources(resources);
     }
 
-    txRequest.shiftPredicateData();
+    txRequest.populateAllPredicatesData();
     txRequest.updatePredicateGasUsed(inputsWithEstimatedPredicates);
 
     const requestToBeReEstimate = clone(txRequest);

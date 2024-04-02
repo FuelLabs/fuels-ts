@@ -933,9 +933,7 @@ export default class Provider {
      * we need to populate the resources with the predicate's data
      * so that predicate estimation can happen.
      */
-    if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
-      (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-    }
+    txRequestClone.populateAllPredicatesData();
 
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
 
@@ -1472,11 +1470,20 @@ export default class Provider {
     };
   }
 
+  /**
+   * Retrieves the latest gas price.
+   * @returns A Promise that resolves to a BN (BigNumber) representing the latest gas price.
+   */
   async getLatestGasPrice(): Promise<BN> {
     const { latestGasPrice } = await this.operations.getLatestGasPrice();
     return bn(latestGasPrice.gasPrice);
   }
 
+  /**
+   * Estimates the gas price for a given block horizon.
+   * @param blockHorizon - The number of blocks to look ahead for estimating the gas price.
+   * @returns A Promise that resolves to a BigNumber representing the estimated gas price.
+   */
   async estimateGasPrice(blockHorizon: number): Promise<BN> {
     const { estimateGasPrice } = await this.operations.estimateGasPrice({
       blockHorizon: String(blockHorizon),

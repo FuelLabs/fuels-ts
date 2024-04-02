@@ -231,7 +231,8 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
       ...resource,
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.predicateDataBytes),
-      paddPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
+      populatePredicateData: (txRequest: TransactionRequest) =>
+        this.populateTransactionPredicateData(txRequest),
     }));
   }
 
