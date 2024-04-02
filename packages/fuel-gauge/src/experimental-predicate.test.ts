@@ -81,9 +81,17 @@ describe('Experimental Predicate', () => {
       abi,
       inputData: [struct],
     });
-    await fundPredicate(wallet, predicate, 100_000);
 
-    const tx = await predicate.transfer(receiver.address, 100, BaseAssetId);
+    const initialBalance = await receiver.getBalance(BaseAssetId);
+    expect(initialBalance).toStrictEqual(bn(0));
+
+    const amountToReceiver = 100;
+
+    await fundPredicate(wallet, predicate, 100_000);
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
     await tx.waitForResult();
+
+    const finalBalance = await receiver.getBalance(BaseAssetId);
+    expect(finalBalance).toStrictEqual(bn(amountToReceiver));
   });
 });
