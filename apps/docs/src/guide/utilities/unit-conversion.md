@@ -12,7 +12,7 @@ Or using our `bn` utility function.
 
 ## Parsing
 
-Parsing string-represented numbers (from user input) has never been easier, than using the `parseUnits`` function.
+Parsing string-represented numbers (from user input) has never been easier, than using the `parseUnits` function.
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#parse-units-1{ts:line-numbers}
 
