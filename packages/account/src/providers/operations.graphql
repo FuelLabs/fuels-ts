@@ -638,6 +638,12 @@ query getLatestGasPrice {
   }
 }
 
+query estimateGasPrice($blockHorizon: U32!) {
+  estimateGasPrice(blockHorizon: $blockHorizon) {
+    gasPrice
+  }
+}
+
 query getBalances(
   $filter: BalanceFilterInput!
   $after: String
