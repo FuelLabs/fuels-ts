@@ -233,7 +233,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @returns The index of the created witness.
    */
-  protected addEmptyWitness(): number {
+  addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
     this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
