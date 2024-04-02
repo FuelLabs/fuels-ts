@@ -64,17 +64,9 @@ export const getContractId = (
  * Ensures that a string is hexlified.
  *
  * @param value - The value to be hexlified.
- * @param isKnownHex - Required if using hex values that need to be converted
+ *
  * @returns The input value hexlified with prefix.
  */
-export const hexlifyWithPrefix = (value: string, isKnownHex = false) => {
-  if (value.startsWith('0x')) {
-    return hexlify(value);
-  }
-
-  if (isKnownHex) {
-    return hexlify(`0x${value}`);
-  }
-
-  throw new FuelError(FuelError.CODES.UNEXPECTED_HEX_VALUE, `Value should be hex string ${value}.`);
-};
+export const hexlifyWithPrefix = (value: string) => hexlify(
+    value.startsWith('0x') ? value : `0x${value}`
+  );

@@ -51,7 +51,6 @@ export enum ErrorCode {
   ELEMENT_NOT_FOUND = 'element-not-found',
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
-  UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
 
   // transaction
