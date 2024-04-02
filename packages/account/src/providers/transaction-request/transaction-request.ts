@@ -671,7 +671,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return normalizeJSON(this);
   }
 
-  updatePredicateInputs(inputs: TransactionRequestInput[]) {
+  updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
     this.inputs.forEach((i) => {
       let correspondingInput: TransactionRequestInput | undefined;
       switch (i.type) {

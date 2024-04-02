@@ -155,7 +155,7 @@ export type TransactionCost = {
   usedFee: BN;
   outputVariables: number;
   missingContractIds: string[];
-  estimatedInputs: TransactionRequest['inputs'];
+  inputsWithEstimatedPredicates: TransactionRequestInput[];
 };
 // #endregion cost-estimation-1
 
@@ -999,7 +999,7 @@ export default class Provider {
       usedFee: fee,
       minFee,
       maxFee,
-      estimatedInputs: txRequestClone.inputs,
+      inputsWithEstimatedPredicates: txRequestClone.inputs,
       outputVariables,
       missingContractIds,
     };
