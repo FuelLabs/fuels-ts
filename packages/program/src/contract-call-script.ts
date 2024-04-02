@@ -223,7 +223,7 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
  * @param segmentOffset - the segment to generate pointers and offset data from.
  * @returns the populated script data and call parameter offsets.
  */
-export const getScriptDataV0 = (
+export const getScriptDataV0: ContractCallScriptFn = (
   call: ContractCall,
   segmentOffset: number
 ): { scriptData: Uint8Array[]; callParamOffsets: CallOpcodeParamsOffset } => {
