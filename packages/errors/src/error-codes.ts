@@ -7,7 +7,6 @@ export enum ErrorCode {
   ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
   ABI_MAIN_METHOD_MISSING = 'abi-main-method-missing',
   INVALID_COMPONENT = 'invalid-component',
-  FRAGMENT_NOT_FOUND = 'fragment-not-found',
   CONFIGURABLE_NOT_FOUND = 'configurable-not-found',
   TYPE_NOT_FOUND = 'type-not-found',
   TYPE_NOT_SUPPORTED = 'type-not-supported',
