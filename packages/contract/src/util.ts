@@ -66,6 +66,5 @@ export const getContractId = (
  *
  * @returns The input value hexlified with prefix.
  */
-export const hexlifyWithPrefix = (value: string) => hexlify(
-    value.startsWith('0x') ? value : `0x${value}`
-  );
+export const hexlifyWithPrefix = (value: string) =>
+  hexlify(value.startsWith('0x') ? value : `0x${value}`);
