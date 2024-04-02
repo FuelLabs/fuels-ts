@@ -36,6 +36,8 @@ export type CoinTransactionRequestInput = {
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  paddPredicateData?: (policiesLenght: number) => BytesLike;
 };
 
 export type MessageTransactionRequestInput = {
@@ -64,6 +66,8 @@ export type MessageTransactionRequestInput = {
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  paddPredicateData?: (policiesLenght: number) => BytesLike;
 
   /** data of message */
   data?: BytesLike;
