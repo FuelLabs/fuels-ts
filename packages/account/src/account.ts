@@ -306,8 +306,7 @@ export class Account extends AbstractAccount {
       });
 
       txRequest.addResources(resources);
-
-      // TODO: implement cached predicates gasUsed to be return from getTransactionCost
+      txRequest.shiftPredicateData();
       await this.provider.estimatePredicates(txRequest);
 
       const { maxFee } = await this.provider.estimateTxGasAndFee({ transactionRequest: txRequest });
@@ -339,11 +338,14 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionRequest> {
     const request = new ScriptTransactionRequest(txParams);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
-      await this.provider.getTransactionCost(request, [], {
+    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(
+      request,
+      [],
+      {
         estimateTxDependencies: true,
         resourcesOwner: this,
-      });
+      }
+    );
 
     // TODO: Fix this logic. The if was not working when gasLimit was 0, "if(txParams.gasLimit)"
     // was being evaluated as false. Should we change this on master?
@@ -355,11 +357,9 @@ export class Account extends AbstractAccount {
     }
 
     request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.maxFee = maxFee.add(10);
 
     await this.fund(request, requiredQuantities, maxFee);
-
-    request.updatePredicateInputs(estimatedInputs);
 
     return request;
   }
