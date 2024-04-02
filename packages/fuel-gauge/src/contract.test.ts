@@ -482,6 +482,7 @@ describe('Contract', () => {
       ])
       .txParams({
         gasLimit: 4_000_000,
+        optimizeGas: false,
       })
       .call<[BN, BN]>();
 
@@ -514,6 +515,7 @@ describe('Contract', () => {
     const { value } = await invocationScope
       .txParams({
         gasLimit: transactionCost.gasUsed,
+        optimizeGas: false,
       })
       .call<[string, string]>();
 
