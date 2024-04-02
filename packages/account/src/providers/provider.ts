@@ -1473,6 +1473,11 @@ export default class Provider {
     };
   }
 
+  async getLatestGasPrice(): Promise<BN> {
+    const { latestGasPrice } = await this.operations.getLatestGasPrice();
+    return bn(latestGasPrice.gasPrice);
+  }
+
   /**
    * Returns Message Proof for given transaction id and the message id from MessageOut receipt.
    *
