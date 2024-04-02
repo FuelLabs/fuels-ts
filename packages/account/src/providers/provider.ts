@@ -156,6 +156,7 @@ export type TransactionCost = {
   outputVariables: number;
   missingContractIds: string[];
   inputsWithEstimatedPredicates: TransactionRequestInput[];
+  addedSignatures: number;
 };
 // #endregion cost-estimation-1
 
@@ -745,8 +746,6 @@ export default class Provider {
       };
     }
 
-    await this.estimatePredicates(transactionRequest);
-
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
@@ -827,7 +826,7 @@ export default class Provider {
       );
     }
 
-    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
+    let maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
 
     const maxFee = calculateGasFee({
       gasPrice: bn(gasPrice),
@@ -842,7 +841,8 @@ export default class Provider {
        * Therefore, we need to set it as the highest value possible. The sum of "gasLimit" and
        * "gasFee" cannot be higher than "maxGasPerTx".
        */
-      transactionRequest.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(maxFee);
+      maxGas = chainInfo.consensusParameters.maxGasPerTx.sub(maxFee);
+      transactionRequest.gasLimit = maxGas;
     }
 
     return {
@@ -926,6 +926,7 @@ export default class Provider {
      * Estimate predicates gasUsed
      */
     // Remove gasLimit to avoid gasLimit when estimating predicates
+    txRequestClone.maxFee = bn(0);
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
@@ -939,19 +940,24 @@ export default class Provider {
     if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
       (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
     }
-    await this.estimatePredicates(txRequestClone);
 
+    const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
+
+    let addedSignatures = 0;
     if (signatureCallback && isScriptTransaction) {
-      await signatureCallback(txRequestClone);
+      const lengthBefore = signedRequest.witnesses.length;
+      await signatureCallback(signedRequest);
+      addedSignatures = signedRequest.witnesses.length - lengthBefore;
     }
+
+    await this.estimatePredicates(signedRequest);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    txRequestClone.maxFee = bn(0);
 
     let { maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
-      transactionRequest: txRequestClone,
+      transactionRequest: signedRequest,
       optimizeGas: false,
     });
 
@@ -962,7 +968,13 @@ export default class Provider {
     let outputVariables = 0;
     let gasUsed = bn(0);
 
+    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
+
     if (isScriptTransaction) {
+      if (signatureCallback) {
+        await signatureCallback(txRequestClone);
+      }
+      txRequestClone.gasLimit = maxGas;
       const result = await this.estimateTxDependencies(txRequestClone);
       receipts = result.receipts;
       outputVariables = result.outputVariables;
@@ -1002,6 +1014,7 @@ export default class Provider {
       inputsWithEstimatedPredicates: txRequestClone.inputs,
       outputVariables,
       missingContractIds,
+      addedSignatures,
     };
   }
 
