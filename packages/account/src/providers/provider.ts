@@ -979,8 +979,9 @@ export default class Provider {
 
       txRequestClone.gasLimit = gasUsed;
 
-      ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+      ({ maxFee, maxGas, minFee, minGas } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
+        gasPrice,
       }));
     }
 
