@@ -1,3 +1,4 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { TransactionType } from '@fuel-ts/transactions';
 
 import type {
@@ -13,3 +14,8 @@ export type TransactionRequest = ScriptTransactionRequest | CreateTransactionReq
 export type TransactionRequestLike =
   | ({ type: TransactionType.Script } & ScriptTransactionRequestLike)
   | ({ type: TransactionType.Create } & CreateTransactionRequestLike);
+
+export type JsonAbisFromAllCalls = {
+  main: JsonAbi;
+  otherContractsAbis: Record<string, JsonAbi>;
+};
