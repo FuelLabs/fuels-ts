@@ -82,10 +82,13 @@ export const validateSnippetContent = (snippetContent: string[], filepath: strin
 
   // Validates that all the import statements have been picked up
   if (allImportStatements.length !== validImportStatements.length) {
-    const invalidLines = allImportStatements.filter((line) => !validImportStatements.includes(line));
+    const invalidLines = allImportStatements
+      .filter((line) => !validImportStatements.includes(line))
+      .map((line) => line.trim())
+      .join('\n');
     throw new FuelError(
       ErrorCode.VITEPRESS_PLUGIN_ERROR,
-      `Found malformed "#import" statements in code snippet.\n\nPlease check "${filepath}".\n\n${invalidLines.map((line) => line.trim()).join('\n')}`
+      `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n${invalidLines}`
     );
   }
 }

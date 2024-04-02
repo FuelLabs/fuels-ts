@@ -109,7 +109,7 @@ describe('extractImports', () => {
         () => validateSnippetContent(codeSnippet, filepath),
         new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
-          `Found malformed "#import" statements in code snippet.\n\nPlease check "${filepath}".\n\n// #import { AssetId }`
+          `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n// #import { AssetId }`
         )
       )
     });
