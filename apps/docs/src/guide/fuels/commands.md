@@ -104,7 +104,7 @@ Use it when instantiating your contracts:
 
 For a complete example, see:
 
-- [Using Generated Types](https://docs.fuel.network/docs/fuels-ts/abi-typegen/using-generated-types/)
+- [Using Generated Types](https://docs.fuel.network/docs/fuels-ts/typegen/using-generated-types/)
 
 ## `fuels dev`
 
