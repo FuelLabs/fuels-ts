@@ -11,10 +11,6 @@ import type {
 } from '../transaction-response';
 
 /** @hidden */
-export const calculatePriceWithFactor = (gas: BN, gasPrice: BN, priceFactor: BN): BN =>
-  bn(Math.ceil(gas.mul(gasPrice).toNumber() / priceFactor.toNumber()));
-
-/** @hidden */
 export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): BN => {
   const scriptResult = receipts.filter(
     (receipt) => receipt.type === ReceiptType.ScriptResult

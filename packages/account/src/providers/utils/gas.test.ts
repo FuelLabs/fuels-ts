@@ -21,7 +21,6 @@ import type { TransactionResultReceipt } from '../transaction-response';
 import {
   calculateMetadataGasForTxCreate,
   calculateMetadataGasForTxScript,
-  calculatePriceWithFactor,
   gasUsedByInputs,
   getGasUsedFromReceipts,
   getMaxGas,
@@ -304,28 +303,6 @@ describe('gas', () => {
       });
 
       expect(expectedMetadataGas.eq(metadataGas)).toBeTruthy();
-    });
-  });
-
-  describe('calculatePriceWithFactor', () => {
-    it('should correctly calculate the price with factor', () => {
-      const gasUsed = new BN(10);
-      const gasPrice = new BN(2);
-      const priceFactor = new BN(5);
-
-      const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
-
-      expect(result.toNumber()).toEqual(4); // ceil(10 / 5) * 2 = 4
-    });
-
-    it('should correctly round up the result', () => {
-      const gasUsed = new BN(11);
-      const gasPrice = new BN(2);
-      const priceFactor = new BN(5);
-
-      const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
-
-      expect(result.toNumber()).toEqual(5); // ceil(11 * 2) / 2 = 5
     });
   });
 
