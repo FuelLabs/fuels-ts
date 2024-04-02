@@ -38,11 +38,11 @@ npm add @fuel-ts/errors
 import { FuelError, ErrorCodes } from "@fuel-ts/error";
 
 export function singleImport() {
-  throw new FuelError(FuelError.CODES.INVALID_URL, "Invalid URL");
+  throw new FuelError(FuelError.CODES.INVALID_DATA, "Invalid data");
 }
 
 export function multipleImports() {
-  throw new FuelError(ErrorCodes.INVALID_URL, "Invalid URL");
+  throw new FuelError(ErrorCodes.INVALID_DATA, "Invalid data");
 }
 ```
 
@@ -57,7 +57,7 @@ import { expectToThrowFuelError } from "@fuel-ts/errors";
 import { myFn } from "...";
 
 describe('this and that' () => {
-  const code = FuelError.CODES.INVALID_URL;
+  const code = FuelError.CODES.INVALID_DATA;
 
   it("should throw FuelError", async () => {
     const expected = new FuelError(code);
@@ -77,16 +77,19 @@ describe('this and that' () => {
 ```ts
 import { FuelError, Provider } from "fuels";
 
-type Locale = "PT_BR" | "BS_BA";
+type Locale = "pt-BR" | "bs-BA" | "en-GB";
 
-const currentLocale: Locale = "PT_BR";
+const currentLocale: Locale = "pt-BR";
 
 const i18nDict = {
-  PT_BR: {
-    [FuelError.CODES.INVALID_URL]: "Endereço inválido",
+  pt-BR: {
+    [FuelError.CODES.INVALID_DATA]: "Dados inválidos",
   },
-  BS_BA: {
-    [FuelError.CODES.INVALID_URL]: "Nevažeća adresa",
+  bs-BA: {
+    [FuelError.CODES.INVALID_DATA]: "Nevažeći podaci",
+  },
+  en-GB: {
+    [FuelError.CODES.INVALID_DATA]: "Invalid data",
   },
 };
 
