@@ -701,7 +701,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     });
   }
 
-  paddPredicatesData() {
+  shiftPredicateData() {
     this.inputs.forEach((input) => {
       // TODO: improve logic
       if (
