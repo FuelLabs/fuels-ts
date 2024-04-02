@@ -121,9 +121,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    // TODO: Validate if predicateData needs byte shifting using policies length
-    // const request = await super.createTransfer(destination, amount, assetId, txParams);
-    // return this.populateTransactionPredicateData(request);
     return super.createTransfer(destination, amount, assetId, txParams);
   }
 
@@ -134,9 +131,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @returns A promise that resolves to the transaction response.
    */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
-    // TODO: Validate if predicateData needs byte shifting using policies length
-    // const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    // return super.sendTransaction(transactionRequest, options);
     const transactionRequest = transactionRequestify(transactionRequestLike);
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
@@ -237,6 +231,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
       ...resource,
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.predicateDataBytes),
+      paddPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
     }));
   }
 
