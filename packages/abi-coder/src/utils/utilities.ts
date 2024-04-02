@@ -1,4 +1,3 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { concat, concatBytes, arrayify } from '@fuel-ts/utils';
 
@@ -146,21 +145,6 @@ export const isPointerType = (type: string) => {
 
 export const isHeapType = (type: string) =>
   type === VEC_CODER_TYPE || type === BYTES_CODER_TYPE || type === STD_STRING_CODER_TYPE;
-
-export function findOrThrow<T>(
-  arr: readonly T[],
-  predicate: (val: T) => boolean,
-  throwFn: () => never = () => {
-    throw new FuelError(ErrorCode.ELEMENT_NOT_FOUND, 'Element not found in the array.');
-  }
-): T {
-  const found = arr.find(predicate);
-  if (found === undefined) {
-    throwFn();
-  }
-
-  return found;
-}
 
 /**
  * Because some properties can be single-bytes, we need to pad them

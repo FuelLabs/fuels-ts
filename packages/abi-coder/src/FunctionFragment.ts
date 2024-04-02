@@ -18,8 +18,9 @@ import type {
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
 import { OPTION_CODER_TYPE } from './utils/constants';
+import { findFunctionByName, findNonEmptyInputs, findTypeById } from './utils/json-abi';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
-import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utils/utilities';
+import { isHeapType, isPointerType, unpackDynamicData } from './utils/utilities';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
@@ -40,16 +41,8 @@ export class FunctionFragment<
 
   constructor(jsonAbi: JsonAbi, name: FnName) {
     this.jsonAbi = jsonAbi;
-    this.jsonFn = findOrThrow(
-      this.jsonAbi.functions,
-      (f) => f.name === name,
-      () => {
-        throw new FuelError(
-          ErrorCode.FUNCTION_NOT_FOUND,
-          `Function "${name}" not found in the ABI`
-        );
-      }
-    );
+    this.jsonFn = findFunctionByName(this.jsonAbi, name);
+
     this.name = name;
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
@@ -76,24 +69,13 @@ export class FunctionFragment<
   }
 
   #isInputDataPointer(): boolean {
-    const inputTypes = this.jsonFn.inputs.map((i) =>
-      this.jsonAbi.types.find((t) => t.typeId === i.type)
-    );
+    const inputTypes = this.jsonFn.inputs.map((i) => findTypeById(this.jsonAbi, i.type));
 
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
   #isOutputDataHeap(): boolean {
-    const outputType = findOrThrow(
-      this.jsonAbi.types,
-      (t) => t.typeId === this.jsonFn.output.type,
-      () => {
-        throw new FuelError(
-          ErrorCode.TYPE_NOT_FOUND,
-          `Unable to find output type with ID "${this.jsonFn.output.type}" was not found in the ABI.\nCheck the function "${this.name}".`
-        );
-      }
-    );
+    const outputType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
 
     return isHeapType(outputType?.type || '');
   }
@@ -118,19 +100,7 @@ export class FunctionFragment<
     FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
     const shallowCopyValues = values.slice();
-
-    const nonEmptyInputs = this.jsonFn.inputs.filter(
-      (input) => {
-        const inputType = this.jsonAbi.types.find(t => t.typeId === input.type);
-        if (!inputType) {
-          throw new FuelError(
-            ErrorCode.TYPE_NOT_FOUND,
-            `Unable to find type with ID ${input.type} in the function "${this.name}"`
-          );
-        }
-        return inputType.type !== '()';
-      }
-    );
+    const nonEmptyInputs = findNonEmptyInputs(this.jsonAbi, this.jsonFn.inputs);
 
     if (Array.isArray(values) && nonEmptyInputs.length !== values.length) {
       shallowCopyValues.length = this.jsonFn.inputs.length;
@@ -158,18 +128,7 @@ export class FunctionFragment<
       return;
     }
 
-    const inputTypes = inputs.map((input) =>
-      findOrThrow(
-        abi.types,
-        (t) => t.typeId === input.type,
-        () => {
-          throw new FuelError(
-            ErrorCode.TYPE_NOT_FOUND,
-            `Unable to find type with ID ${input.type} in the function "${this.name}"`
-          );
-        }
-      )
-    );
+    const inputTypes = inputs.map((input) => findTypeById(abi, input.type));
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
@@ -191,18 +150,7 @@ export class FunctionFragment<
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyInputs = this.jsonFn.inputs.filter(
-      (input) => {
-        const inputType = this.jsonAbi.types.find(t => t.typeId === input.type);
-        if (!inputType) {
-          throw new FuelError(
-            ErrorCode.TYPE_NOT_FOUND,
-            `Unable to find type with ID ${input.type} in the function "${this.name}"`
-          );
-        }
-        return inputType.type !== '()';        
-      }
-    );
+    const nonEmptyInputs = findNonEmptyInputs(this.jsonAbi, this.jsonFn.inputs);
 
     if (nonEmptyInputs.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
@@ -244,16 +192,7 @@ export class FunctionFragment<
   }
 
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
-    const outputAbiType = findOrThrow(
-      this.jsonAbi.types,
-      (t) => t.typeId === this.jsonFn.output.type,
-      () => {
-        throw new FuelError(
-          ErrorCode.TYPE_NOT_FOUND,
-          `Unable to find output type with ID "${this.jsonFn.output.type}" was not found in the ABI.\nCheck the function "${this.name}".`
-        );
-      }
-    );
+    const outputAbiType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
     if (outputAbiType.type === '()') {
       return [undefined, 0];
     }
