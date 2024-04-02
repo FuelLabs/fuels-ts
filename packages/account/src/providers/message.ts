@@ -2,7 +2,6 @@ import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
 import type { GqlMessageState } from './__generated__/operations';
-import type { TransactionRequest } from './transaction-request';
 
 // #region Message-shape
 /**
@@ -28,7 +27,7 @@ export type MessageCoin = {
   daHeight: BN;
   predicate?: BytesLike;
   predicateData?: BytesLike;
-  populatePredicateData?: (tx: TransactionRequest) => unknown;
+  paddPredicateData?: (policiesLenght: number) => BytesLike;
 };
 
 export type MerkleProof = {

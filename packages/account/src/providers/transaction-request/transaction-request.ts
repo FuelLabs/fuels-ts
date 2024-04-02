@@ -701,10 +701,18 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     });
   }
 
-  populateAllPredicatesData() {
+  shiftPredicateData() {
     this.inputs.forEach((input) => {
-      if ('populatePredicateData' in input && typeof input.populatePredicateData === 'function') {
-        input.populatePredicateData(this);
+      // TODO: improve logic
+      if (
+        'predicateData' in input &&
+        'paddPredicateData' in input &&
+        typeof input.paddPredicateData === 'function'
+      ) {
+        // eslint-disable-next-line no-param-reassign
+        input.predicateData = input.paddPredicateData(
+          BaseTransactionRequest.getPolicyMeta(this).policies.length
+        );
       }
     });
   }
