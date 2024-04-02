@@ -275,7 +275,7 @@ export const getScriptDataV0: ContractCallScriptFn = (
  * @param segmentOffset - the segment to generate pointers and offset data from.
  * @returns the populated script data and call parameter offsets.
  */
-export const getScriptDataV1 = (
+export const getScriptDataV1: ContractCallScriptFn = (
   call: ContractCall,
   segmentOffset: number
 ): { scriptData: Uint8Array[]; callParamOffsets: CallOpcodeParamsOffset } => {
