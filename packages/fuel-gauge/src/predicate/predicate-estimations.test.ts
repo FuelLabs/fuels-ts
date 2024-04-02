@@ -189,7 +189,7 @@ describe('Predicate', () => {
       const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
       expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
 
-      expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
+      expect(estimatePredicatesSpy).toHaveBeenCalledTimes(2);
       expect(dryRunSpy).toHaveBeenCalledOnce();
     });
   });
