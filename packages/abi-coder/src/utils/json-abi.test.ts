@@ -55,7 +55,9 @@ describe('json-abi', () => {
     });
 
     it('should throw an error if the type is not found', () => {
-      expect(() => findTypeById(MOCK_ABI, -1)).toThrowError(`Type with typeId '-1' doesn't exist in the ABI.`);
+      expect(() => findTypeById(MOCK_ABI, -1)).toThrowError(
+        `Type with typeId '-1' doesn't exist in the ABI.`
+      );
     });
   });
 
