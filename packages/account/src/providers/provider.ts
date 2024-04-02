@@ -143,19 +143,17 @@ export type NodeInfoAndConsensusParameters = {
 
 // #region cost-estimation-1
 export type TransactionCost = {
-  requiredQuantities: CoinQuantity[];
-  receipts: TransactionResultReceipt[];
-  minGasPrice: BN;
   gasPrice: BN;
-  minGas: BN;
-  maxGas: BN;
   gasUsed: BN;
+  minGas: BN;
   minFee: BN;
   maxFee: BN;
-  usedFee: BN;
+  maxGas: BN;
+  receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
   inputsWithEstimatedPredicates: TransactionRequestInput[];
+  requiredQuantities: CoinQuantity[];
   addedSignatures: number;
 };
 // #endregion cost-estimation-1
@@ -911,7 +909,6 @@ export default class Provider {
     { resourcesOwner, signatureCallback }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const { gasPriceFactor } = this.getGasConfig();
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -988,27 +985,13 @@ export default class Provider {
       }));
     }
 
-    const feeForGasUsed = calculateGasFee({
-      gasPrice,
-      gas: gasUsed,
-      priceFactor: gasPriceFactor,
-      tip: txRequestClone.tip,
-    }).add(1);
-
-    const fee = maxFee.add(feeForGasUsed);
-
     return {
-      // TODO: Validate if we need to keeping returning gasPrice here and others gas/fee
-      // related properties.
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
-      // TODO: remove minGasPrice
-      minGasPrice: gasPrice,
       gasPrice,
       minGas,
       maxGas,
-      usedFee: fee,
       minFee,
       maxFee,
       inputsWithEstimatedPredicates: txRequestClone.inputs,
