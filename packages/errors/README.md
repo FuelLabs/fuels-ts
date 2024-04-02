@@ -103,7 +103,7 @@ function main() {
     const prettyError = translateError(e);
     console.log({ prettyError });
   }
-);
+};
 ```
 
 ## Contributing
