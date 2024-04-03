@@ -305,3 +305,4 @@ CLIs
 extractable
 SHA-256
 programmatically
+transactional
