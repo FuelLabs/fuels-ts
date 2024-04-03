@@ -1,6 +1,6 @@
 /**
  * Types for Fuel JSON ABI Format as defined on:
- * https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#json-abi-format
+ * https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/json-abi-format.md
  */
 
 import type { EncodingVersion } from '../utils/constants';
