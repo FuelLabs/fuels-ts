@@ -259,15 +259,10 @@ export type EstimateTransactionParams = {
   estimateTxDependencies?: boolean;
 };
 
-export type EstimatePredicateParams = {
-  estimatePredicates?: boolean;
+export type TransactionCostParams = EstimateTransactionParams & {
+  resourcesOwner?: AbstractAccount;
+  signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
 };
-
-export type TransactionCostParams = EstimateTransactionParams &
-  EstimatePredicateParams & {
-    resourcesOwner?: AbstractAccount;
-    signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
-  };
 
 /**
  * Provider Call transaction params
