@@ -54,8 +54,8 @@ import { mergeQuantities } from './utils/merge-quantities';
 const MAX_RETRIES = 10;
 
 export type DryRunStatus =
-  | GqlDryRunFailureStatusFragmentFragment
-  | GqlDryRunSuccessStatusFragmentFragment;
+  | Omit<GqlDryRunFailureStatusFragmentFragment, '__typename'>
+  | Omit<GqlDryRunSuccessStatusFragmentFragment, '__typename'>;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -719,9 +719,6 @@ export default class Provider {
    * If there are missing variable outputs,
    * `addVariableOutputs` is called on the transaction.
    *
-   * @privateRemarks
-   * TODO: Investigate support for missing contract IDs
-   * TODO: Add support for missing output messages
    *
    * @param transactionRequest - The transaction request object.
    * @returns A promise.
@@ -785,6 +782,99 @@ export default class Provider {
       missingContractIds,
       dryrunStatus,
     };
+  }
+
+  /**
+   * Dry runs multiple transactions and checks for missing dependencies in batches.
+   *
+   * Transactions are dry run in batches. After each dry run, transactions requiring
+   * further modifications are identified. The method iteratively updates these transactions
+   * and performs subsequent dry runs until all dependencies for each transaction are satisfied.
+   *
+   * @param transactionRequests - Array of transaction request objects.
+   * @returns A promise that resolves to an array of results for each transaction.
+   */
+  async estimateMultipleTxDependencies(
+    transactionRequests: TransactionRequest[]
+  ): Promise<EstimateTxDependenciesReturns[]> {
+    const results: EstimateTxDependenciesReturns[] = transactionRequests.map(() => ({
+      receipts: [],
+      outputVariables: 0,
+      missingContractIds: [],
+      dryrunStatus: undefined,
+    }));
+
+    const allRequests = clone(transactionRequests);
+
+    // Map of original request index to its serialized transaction (for ScriptTransactionRequest only)
+    const serializedTransactionsMap = new Map();
+
+    // Prepare ScriptTransactionRequests and their indices
+    allRequests.forEach((req, index) => {
+      if (req.type === TransactionType.Script) {
+        serializedTransactionsMap.set(index, hexlify(req.toTransactionBytes()));
+      }
+    });
+
+    // Indices of ScriptTransactionRequests
+    let transactionsToProcess = Array.from(serializedTransactionsMap.keys());
+    let attempt = 0;
+
+    while (transactionsToProcess.length > 0 && attempt < MAX_RETRIES) {
+      const encodedTransactions = transactionsToProcess.map((index) =>
+        serializedTransactionsMap.get(index)
+      );
+      const dryRunResults = await this.operations.dryRun({
+        encodedTransactions,
+        utxoValidation: false,
+      });
+
+      const nextRoundTransactions = [];
+
+      for (let i = 0; i < dryRunResults.dryRun.length; i++) {
+        const currentResultIndex = transactionsToProcess[i];
+        const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
+        results[currentResultIndex].receipts = rawReceipts.map(processGqlReceipt);
+        results[currentResultIndex].dryrunStatus = status;
+
+        const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
+          results[currentResultIndex].receipts
+        );
+        const hasMissingOutputs =
+          missingOutputVariables.length > 0 || missingOutputContractIds.length > 0;
+
+        const requestToProcess = allRequests[currentResultIndex];
+
+        if (hasMissingOutputs && requestToProcess?.type === TransactionType.Script) {
+          results[currentResultIndex].outputVariables += missingOutputVariables.length;
+          requestToProcess.addVariableOutputs(missingOutputVariables.length);
+          missingOutputContractIds.forEach(({ contractId }) => {
+            requestToProcess.addContractInputAndOutput(Address.fromString(contractId));
+            results[currentResultIndex].missingContractIds.push(contractId);
+          });
+
+          const { maxFee } = await this.estimateTxGasAndFee({
+            transactionRequest: requestToProcess,
+            optimizeGas: false,
+          });
+          requestToProcess.maxFee = maxFee;
+
+          // Prepare for the next round of dry run
+          serializedTransactionsMap.set(
+            currentResultIndex,
+            hexlify(requestToProcess.toTransactionBytes())
+          );
+          nextRoundTransactions.push(currentResultIndex);
+
+          allRequests[currentResultIndex] = requestToProcess;
+        }
+      }
+
+      transactionsToProcess = nextRoundTransactions;
+      attempt += 1;
+    }
+
+    return results;
   }
 
   async estimateTxGasAndFee(params: {
