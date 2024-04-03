@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL, Provider, sleep } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, ZeroBytes32, sleep } from 'fuels';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
@@ -21,7 +21,7 @@ describe('Provider', () => {
     expect(provider).toBeInstanceOf(Provider);
     expect(consensusParameters).toBeDefined();
     expect(consensusParameters).toBeInstanceOf(Object);
-  })
+  });
 
   it('can be given options', async () => {
     // #region provider-options
@@ -47,5 +47,22 @@ describe('Provider', () => {
       },
     });
     // #endregion provider-options
+  });
+
+  it('fetches the base asset ID', async () => {
+    // #region provider-getBaseAssetId
+    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest };
+
+    // Fetch the base asset ID using the provider
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+    // 0x...
+
+    // Create a transaction request and pass the base asset ID
+    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    // #endregion provider-getBaseAssetId
+
+    expect(baseAssetId).toBe(ZeroBytes32);
+    expect(transactionRequest.baseAssetId).toBe(baseAssetId);
   });
 });
