@@ -51,7 +51,7 @@ describe('getSystemVersions.js', () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
-    const { error, execSync } = mockAllDeps({
+    const { execSync } = mockAllDeps({
       systemForcVersion,
       systemFuelCoreVersion,
     });
@@ -60,33 +60,45 @@ describe('getSystemVersions.js', () => {
     const versions = getSystemVersions();
 
     // validating
-    expect(error).toHaveBeenCalledTimes(0);
     expect(execSync).toHaveBeenCalledTimes(2);
     expect(versions.systemForcVersion).toEqual(systemForcVersion);
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
   });
 
-  test('should throw if Forc or Fuel-Core is not installed', () => {
+  test('should return error if Forc or Fuel-Core is not installed', () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
-    const { error } = mockAllDeps({
+
+    mockAllDeps({
       systemForcVersion,
       systemFuelCoreVersion,
       shouldThrow: true,
     });
 
     // executing
-    let errorMsg: Error | undefined;
-
-    try {
-      getSystemVersions();
-    } catch (err) {
-      errorMsg = err as unknown as Error;
-    }
+    const { error: systemError } = getSystemVersions();
 
     // validating
-    expect(error).toHaveBeenCalledTimes(2);
-    expect(errorMsg).toBeTruthy();
+    expect(systemError).toBeTruthy();
+  });
+
+  test('should throw for fuelup exception', () => {
+    // mocking
+    const systemForcVersion = 'fuelup exception';
+    const systemFuelCoreVersion = 'fuelup exception';
+    const { execSync } = mockAllDeps({
+      systemForcVersion,
+      systemFuelCoreVersion,
+    });
+
+    // executing
+    const versions = getSystemVersions();
+
+    // validating
+    expect(execSync).toHaveBeenCalledTimes(2);
+    expect(versions.error?.toString()).toEqual(`Error: ${systemForcVersion}`);
+    expect(versions.systemForcVersion).toEqual(null);
+    expect(versions.systemFuelCoreVersion).toEqual(null);
   });
 });

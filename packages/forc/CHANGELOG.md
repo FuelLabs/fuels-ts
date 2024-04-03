@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.79.0
+
+### Minor Changes
+
+- dc1b0925: chore!: reset base `forc` version to `0.49.3` except for experimental builds
+
+## 0.78.0
+
 ## 0.77.0
 
 ## 0.76.0

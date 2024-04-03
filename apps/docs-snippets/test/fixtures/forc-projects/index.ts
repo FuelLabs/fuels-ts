@@ -13,6 +13,7 @@ export enum DocSnippetProjectsEnum {
   ECHO_U64_ARRAY = 'echo-u64-array',
   RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
+  TOKEN = 'token',
   LIQUIDITY_POOL = 'liquidity-pool',
   SIMPLE_PREDICATE = 'simple-predicate',
   ECHO_CONFIGURABLES = 'echo-configurables',
@@ -26,6 +27,10 @@ export enum DocSnippetProjectsEnum {
   ECHO_STD_STRING = 'echo-std-string',
   ECHO_ASSET_ID = 'echo-asset-id',
   SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
+  REVERT_ERRORS = 'revert-errors',
+  REVERT_ERRORS_SCRIPT = 'revert-errors-script',
+  PREDICATE_SIGNING = 'predicate-signing',
+  SCRIPT_SIGNING = 'script-signing',
   INPUT_OUTPUT_TYPES = 'input-output-types',
 }
 

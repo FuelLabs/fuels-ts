@@ -67,7 +67,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -85,8 +85,10 @@ jobs:
         env:
           FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
           TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
+          TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
 
   test:
+    if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
     needs: [environments, e2e]
     steps:

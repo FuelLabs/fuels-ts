@@ -1,115 +1,64 @@
-import { BN, Provider, Wallet, WalletUnlocked } from "fuels";
-import { createContext, useCallback, useEffect, useState } from "react";
-import { BurnerWallet } from "./BurnerWallet";
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
 import { NODE_URL } from "@/lib";
-
-const BURNER_WALLET_LOCAL_STORAGE_KEY = "create-fuels-burner-wallet-pk";
-
-export const AppContext = createContext<{
-  faucetWallet?: WalletUnlocked;
-  setFaucetWallet?: (wallet: WalletUnlocked) => void;
-
-  burnerWallet?: WalletUnlocked;
-  setBurnerWallet?: (wallet: WalletUnlocked) => void;
-
-  burnerWalletBalance?: BN;
-  setBurnerWalletBalance?: (balance: BN) => void;
-
-  refreshBurnerWalletBalance?: () => Promise<void>;
-}>({});
+import { useConnectUI, useDisconnect } from "@fuel-wallet/react";
+import { WalletDisplay } from "./WalletDisplay";
+import { useBrowserWallet } from "@/hooks/useBrowserWallet";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useFaucet } from "@/hooks/useFaucet";
+import Head from "next/head";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [faucetWallet, setFaucetWallet] = useState<WalletUnlocked>();
+  const { faucetWallet } = useFaucet();
 
-  const [burnerWallet, setBurnerWallet] = useState<WalletUnlocked>();
-  const [burnerWalletBalance, setBurnerWalletBalance] = useState<BN>();
+  const {
+    wallet: browserWallet,
+    walletBalance: isBrowserWalletConnected,
+    network: browserWalletNetwork,
+  } = useBrowserWallet();
 
-  const [initialTopupDone, setInitialTopupDone] = useState(false);
+  const { connect } = useConnectUI();
+  const { disconnect } = useDisconnect();
 
-  useEffect(() => {
-    (async () => {
-      if (!faucetWallet) {
-        const provider = await Provider.create(NODE_URL);
-        const wallet = Wallet.fromPrivateKey("0x01", provider);
-        setFaucetWallet(wallet);
-      }
-    })().catch(console.error);
-  }, [faucetWallet]);
+  const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
 
-  useEffect(() => {
-    (async () => {
-      // check if burner wallet pk is stored in local storage
-      const burnerWalletPk = localStorage.getItem(
-        BURNER_WALLET_LOCAL_STORAGE_KEY,
-      );
-
-      let wallet: WalletUnlocked;
-
-      if (burnerWalletPk) {
-        const provider = await Provider.create(NODE_URL);
-        wallet = Wallet.fromPrivateKey(burnerWalletPk, provider);
-        setBurnerWallet(wallet);
-      } else {
-        // if not, create a new burner wallet
-        const provider = await Provider.create(NODE_URL);
-        wallet = Wallet.generate({ provider });
-
-        localStorage.setItem(
-          BURNER_WALLET_LOCAL_STORAGE_KEY,
-          wallet.privateKey,
-        );
-        setBurnerWallet(wallet);
-      }
-
-      const burnerWalletBalance = await wallet?.getBalance();
-      setBurnerWalletBalance(burnerWalletBalance);
-    })().catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (faucetWallet && burnerWalletBalance?.lt(10_000) && !initialTopupDone) {
-      topUpBurnerWallet();
-      setInitialTopupDone(true);
-    }
-  }, [faucetWallet, burnerWalletBalance, initialTopupDone]);
-
-  const refreshBurnerWalletBalance = useCallback(async () => {
-    const burnerWalletBalance = await burnerWallet?.getBalance();
-    setBurnerWalletBalance(burnerWalletBalance);
-  }, [burnerWallet]);
-
-  const topUpBurnerWallet = async () => {
-    if (!burnerWallet) {
-      return toast.error("Burner wallet not found.");
+  const topUpWallet = async () => {
+    if (!wallet) {
+      return console.error("Unable to topup wallet because wallet is not set.");
     }
 
     if (!faucetWallet) {
       return toast.error("Faucet wallet not found.");
     }
 
-    const tx = await faucetWallet.transfer(burnerWallet.address, 10_000);
-    await tx.waitForResult();
+    const tx = await faucetWallet?.transfer(wallet.address, 10_000);
+    await tx?.waitForResult();
 
     toast.success("Wallet topped up!");
 
-    await refreshBurnerWalletBalance?.();
+    await refreshWalletBalance?.();
+  };
+
+  const showTopUpButton = walletBalance?.lt(10_000);
+
+  const showAddNetworkButton =
+    browserWallet &&
+    browserWalletNetwork &&
+    browserWalletNetwork?.url !== NODE_URL;
+
+  const tryToAddNetwork = () => {
+    return alert(
+      `Please add the network ${NODE_URL} to your Fuel wallet, or swtich to it if you have it already, and refresh the page.`,
+    );
   };
 
   return (
-    <AppContext.Provider
-      value={{
-        faucetWallet,
-        setFaucetWallet,
-        burnerWallet,
-        setBurnerWallet,
-        burnerWalletBalance,
-        setBurnerWalletBalance,
-        refreshBurnerWalletBalance,
-      }}
-    >
+    <>
+      <Head>
+        <title>Fuel App</title>
+        <link rel="icon" href="/fuel.ico" />
+      </Head>
       <Toaster />
       <div className="flex flex-col">
         <nav className="flex justify-between items-center p-4 bg-black text-white gap-6">
@@ -117,12 +66,25 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
           <Link href="/faucet">Faucet</Link>
 
+          {isBrowserWalletConnected && (
+            <Button onClick={disconnect}>Disconnect Wallet</Button>
+          )}
+          {!isBrowserWalletConnected && (
+            <Button onClick={connect}>Connect Wallet</Button>
+          )}
+
+          {showAddNetworkButton && (
+            <Button onClick={tryToAddNetwork} className="bg-red-500">
+              Wrong Network
+            </Button>
+          )}
+
           <div className="ml-auto">
-            <BurnerWallet />
+            <WalletDisplay />
           </div>
 
-          {burnerWalletBalance && burnerWalletBalance.lte(100) && (
-            <Button onClick={topUpBurnerWallet}>Top-up Wallet</Button>
+          {showTopUpButton && (
+            <Button onClick={() => topUpWallet()}>Top-up Wallet</Button>
           )}
         </nav>
 
@@ -130,6 +92,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </div>
       </div>
-    </AppContext.Provider>
+    </>
   );
 };

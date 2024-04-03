@@ -1,4 +1,4 @@
-import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
 import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -53,6 +53,7 @@ export type CallConfig<T = unknown> = {
   callParameters?: CallParams;
   txParameters?: TxParams;
   forward?: CoinQuantity;
+  externalAbis: Record<string, JsonAbi>;
   args: T;
 };
 
