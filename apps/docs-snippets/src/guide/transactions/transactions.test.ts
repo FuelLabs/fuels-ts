@@ -1,5 +1,5 @@
 import type { Provider, WalletUnlocked } from 'fuels';
-import { BaseAssetId, Wallet, hexlify } from 'fuels';
+import { BaseAssetId, Wallet } from 'fuels';
 
 import { getTestWallet } from '../../utils';
 
