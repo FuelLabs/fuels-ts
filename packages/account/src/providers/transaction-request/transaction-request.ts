@@ -397,7 +397,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     let witnessIndex;
 
-    // TODO: add "predicate" and "predicateData" to the Coin type
     if (message.predicate) {
       witnessIndex = 0;
     } else {
@@ -578,7 +577,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const updateAssetInput = (assetId: string, quantity: BN) => {
       const assetInput = findAssetInput(assetId);
 
-      // TODO: improve this logic
       let usedQuantity = quantity;
 
       if (assetId === BaseAssetId) {

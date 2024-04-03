@@ -142,9 +142,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @returns A promise that resolves to the call result.
    */
   simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
-    // TODO: Validate if predicateData needs byte shifting using policies length
-    // const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    // return super.simulateTransaction(transactionRequest);
     const transactionRequest = transactionRequestify(transactionRequestLike);
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
