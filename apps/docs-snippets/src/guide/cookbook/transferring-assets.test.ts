@@ -14,7 +14,6 @@ describe(__filename, () => {
   let sender: WalletUnlocked;
   let deployedContract: Contract;
   let provider: Provider;
-  let baseAssetId: string;
 
   beforeAll(async () => {
     sender = await getTestWallet();
@@ -25,22 +24,22 @@ describe(__filename, () => {
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
     const { minGasPrice } = sender.provider.getGasConfig();
-    baseAssetId = provider.getBaseAssetId();
     deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
   });
 
   it('should successfully transfer asset to another account', async () => {
     // #region transferring-assets-1
-    // #import { Wallet, BN, baseAssetId };
+    // #import { Wallet, BN };
 
     // #context const sender = Wallet.fromPrivateKey('...');
     const destination = Wallet.generate({
       provider: sender.provider,
     });
     const amountToTransfer = 500;
-    const assetId = baseAssetId;
 
-    const response = await sender.transfer(destination.address, amountToTransfer, assetId);
+    const baseAssetId = await sender.provider.getBaseAssetId();
+
+    const response = await sender.transfer(destination.address, amountToTransfer, baseAssetId);
 
     await response.wait();
 
@@ -57,8 +56,8 @@ describe(__filename, () => {
       provider: sender.provider,
     });
 
+    const assetId = provider.getBaseAssetId();
     const amountToTransfer = 200;
-    const assetId = baseAssetId;
 
     // #region transferring-assets-2
     const transactionRequest = await sender.createTransfer(
@@ -86,7 +85,7 @@ describe(__filename, () => {
     });
 
     const amountToTransfer = 200;
-    const assetId = baseAssetId;
+    const assetId = provider.getBaseAssetId();
 
     // #region transferring-assets-3
     const transactionRequest = await sender.createTransfer(
@@ -112,12 +111,12 @@ describe(__filename, () => {
   it('should successfully prepare transfer transaction request', async () => {
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-4
-    // #import { Wallet, BN, baseAssetId };
+    // #import { Wallet, BN };
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
 
     const amountToTransfer = 400;
-    const assetId = baseAssetId;
+    const assetId = provider.getBaseAssetId();
     // #context const contractId = Address.fromAddressOrString('0x123...');
 
     const contractBalance = await deployedContract.getBalance(assetId);
