@@ -94,7 +94,7 @@ describe('TransactionResponse', () => {
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
-    adminWallet = await generateTestWallet(provider, [[500_000]]);
+    adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
@@ -226,7 +226,7 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+    const resources = await genesisWallet.getResourcesToSpend([[100_000, baseAssetId]]);
 
     request.addResources(resources);
     request.updateWitnessByOwner(
@@ -260,7 +260,7 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const resources = await genesisWallet.getResourcesToSpend([[100_000]]);
+    const resources = await genesisWallet.getResourcesToSpend([[100_000, baseAssetId]]);
 
     request.addResources(resources);
     request.updateWitnessByOwner(

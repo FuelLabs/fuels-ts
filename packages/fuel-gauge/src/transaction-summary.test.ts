@@ -81,7 +81,7 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, baseAssetId);
 
-    const resources = await adminWallet.getResourcesToSpend([[100_000]]);
+    const resources = await adminWallet.getResourcesToSpend([[100_000, baseAssetId]]);
 
     request.addResources(resources);
 
@@ -250,7 +250,7 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO ACCOUNT)', async () => {
-      const wallet = await generateTestWallet(provider, [[10_000]]);
+      const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
 
       const contract = await setupContract();
       contract.account = wallet;
@@ -341,7 +341,7 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO CONTRACT)', async () => {
-      const wallet = await generateTestWallet(provider, [[10_000]]);
+      const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
 
       const contractSender = await setupContract({ cache: false });
       contractSender.account = wallet;

@@ -27,7 +27,7 @@ describe('Fee', () => {
     baseAssetId = provider.getBaseAssetId();
     minGasPrice = provider.getGasConfig().minGasPrice.toNumber();
     wallet = await generateTestWallet(provider, [
-      [1_000_000_000],
+      [1_000_000_000, baseAssetId],
       [1_000_000_000, ASSET_A],
       [1_000_000_000, ASSET_B],
     ]);

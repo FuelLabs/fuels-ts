@@ -16,7 +16,7 @@ describe('Edge Cases', () => {
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
-    const adminWallet = await generateTestWallet(provider, [[500_000]]);
+    const adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     const destination = Wallet.generate({
       provider,

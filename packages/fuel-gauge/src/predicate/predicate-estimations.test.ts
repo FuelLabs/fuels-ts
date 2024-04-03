@@ -135,8 +135,8 @@ describe('Predicate', () => {
 
     test('predicate does not get estimated again if it has already been estimated', async () => {
       const tx = new ScriptTransactionRequest();
-      await seedTestWallet(predicateTrue, [[100]]);
-      const resources = await predicateTrue.getResourcesToSpend([[1]]);
+      await seedTestWallet(predicateTrue, [[100, baseAssetId]]);
+      const resources = await predicateTrue.getResourcesToSpend([[1, baseAssetId]]);
       tx.addPredicateResources(resources, predicateTrue);
 
       const spy = vi.spyOn(provider.operations, 'estimatePredicates');
@@ -149,15 +149,15 @@ describe('Predicate', () => {
 
     test('Predicates get estimated if one of them is not estimated', async () => {
       const tx = new ScriptTransactionRequest();
-      await seedTestWallet(predicateTrue, [[100]]);
-      const trueResources = await predicateTrue.getResourcesToSpend([[1]]);
+      await seedTestWallet(predicateTrue, [[100, baseAssetId]]);
+      const trueResources = await predicateTrue.getResourcesToSpend([[1, baseAssetId]]);
       tx.addPredicateResources(trueResources, predicateTrue);
 
       const spy = vi.spyOn(provider.operations, 'estimatePredicates');
       await provider.estimatePredicates(tx);
 
-      await seedTestWallet(predicateStruct, [[100]]);
-      const structResources = await predicateStruct.getResourcesToSpend([[1]]);
+      await seedTestWallet(predicateStruct, [[100, baseAssetId]]);
+      const structResources = await predicateStruct.getResourcesToSpend([[1, baseAssetId]]);
       tx.addPredicateResources(structResources, predicateStruct);
 
       await provider.estimatePredicates(tx);
@@ -171,7 +171,7 @@ describe('Predicate', () => {
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
       const amountToPredicate = 10_000;
 
-      await seedTestWallet(predicateTrue, [[amountToPredicate]]);
+      await seedTestWallet(predicateTrue, [[amountToPredicate, baseAssetId]]);
 
       const initialPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
 

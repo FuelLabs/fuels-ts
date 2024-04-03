@@ -5,8 +5,8 @@ import { bn } from '@fuel-ts/math';
 import { hexlify } from '@fuel-ts/utils';
 
 export type CoinQuantityLike =
-  | [amount: BigNumberish, assetId?: BytesLike, max?: BigNumberish]
-  | { amount: BigNumberish; assetId?: BytesLike; max?: BigNumberish };
+  | [amount: BigNumberish, assetId: BytesLike, max?: BigNumberish]
+  | { amount: BigNumberish; assetId: BytesLike; max?: BigNumberish };
 export type CoinQuantity = { amount: BN; assetId: string; max?: BN };
 
 /** @hidden */
@@ -16,11 +16,11 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
   let max;
   if (Array.isArray(coinQuantityLike)) {
     amount = coinQuantityLike[0];
-    assetId = coinQuantityLike[1] ?? ZeroBytes32;
-    max = coinQuantityLike[2] ?? undefined;
+    assetId = coinQuantityLike[1];
+    max = coinQuantityLike[2];
   } else {
     amount = coinQuantityLike.amount;
-    assetId = coinQuantityLike.assetId ?? ZeroBytes32;
+    assetId = coinQuantityLike.assetId;
     max = coinQuantityLike.max ?? undefined;
   }
 
