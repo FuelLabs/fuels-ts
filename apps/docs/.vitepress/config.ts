@@ -62,10 +62,29 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'Errors',
+            link: '/guide/errors/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Error Codes',
+                link: '/guide/errors/error-codes',
+              },
+              {
+                text: 'Debugging Revert Errors',
+                link: '/guide/errors/debugging-revert-errors',
+              },
+            ],
+          },
+          {
             text: 'Wallets',
             link: '/guide/wallets/',
             collapsed: true,
             items: [
+              {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
               {
                 text: 'Private Keys',
                 link: '/guide/wallets/private-keys',
@@ -81,6 +100,10 @@ export default defineConfig({
               {
                 text: 'Checking Balances',
                 link: '/guide/wallets/checking-balances',
+              },
+              {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
               },
               {
                 text: 'Wallet Manager',
@@ -140,6 +163,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
+              },
+              {
                 text: 'Cost Estimation',
                 link: '/guide/contracts/cost-estimation',
               },
@@ -182,6 +209,10 @@ export default defineConfig({
               {
                 text: 'Configurable Constants',
                 link: '/guide/contracts/configurable-constants',
+              },
+              {
+                text: 'Managing Deployed Contracts',
+                link: '/guide/contracts/managing-deployed-contracts',
               },
               {
                 text: 'Understanding the FuelVM Binary File',
@@ -435,17 +466,6 @@ export default defineConfig({
               },
             ],
           },
-          {
-            text: 'Errors',
-            link: '/guide/errors/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Error Codes',
-                link: '/guide/errors/error-codes',
-              },
-            ],
-          }
         ],
       },
       apiLinks,

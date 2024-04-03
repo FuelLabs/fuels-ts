@@ -37,6 +37,7 @@ export enum FuelGaugeProjectsEnum {
   RAW_SLICE = 'raw-slice',
   REVERT_ERROR = 'revert-error',
   SCRIPT_BYTES = 'script-bytes',
+  SCRIPT_CALL_CONTRACT = 'script-call-contract',
   SCRIPT_MAIN_ARGS = 'script-main-args',
   SCRIPT_MAIN_RETURN_STRUCT = 'script-main-return-struct',
   SCRIPT_MAIN_TWO_ARGS = 'script-main-two-args',

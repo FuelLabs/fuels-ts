@@ -2,4 +2,4 @@
 "@fuel-ts/account": minor
 ---
 
-feat!: improve signing DX
+docs: upgrade testnet documentation

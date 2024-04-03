@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.79.0
+
+### Patch Changes
+
+- Updated dependencies [3ebb9bcd]
+  - @fuel-ts/interfaces@0.79.0
+  - @fuel-ts/address@0.79.0
+  - @fuel-ts/utils@0.79.0
+  - @fuel-ts/crypto@0.79.0
+  - @fuel-ts/math@0.79.0
+
+## 0.78.0
+
+### Patch Changes
+
+- @fuel-ts/address@0.78.0
+- @fuel-ts/crypto@0.78.0
+- @fuel-ts/math@0.78.0
+- @fuel-ts/utils@0.78.0
+- @fuel-ts/interfaces@0.78.0
+
 ## 0.77.0
 
 ### Patch Changes

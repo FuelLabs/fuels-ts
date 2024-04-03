@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.79.0
+
+### Minor Changes
+
+- 3ebb9bcd: chore!: remove `externalLoggedTypes` from `Interface` class
+
+### Patch Changes
+
+- Updated dependencies [3ebb9bcd]
+- Updated dependencies [dc1b0925]
+  - @fuel-ts/interfaces@0.79.0
+  - @fuel-ts/versions@0.79.0
+  - @fuel-ts/hasher@0.79.0
+  - @fuel-ts/utils@0.79.0
+  - @fuel-ts/errors@0.79.0
+  - @fuel-ts/crypto@0.79.0
+  - @fuel-ts/math@0.79.0
+
+## 0.78.0
+
+### Patch Changes
+
+- Updated dependencies [9df48991]
+  - @fuel-ts/versions@0.78.0
+  - @fuel-ts/errors@0.78.0
+  - @fuel-ts/hasher@0.78.0
+  - @fuel-ts/crypto@0.78.0
+  - @fuel-ts/math@0.78.0
+  - @fuel-ts/utils@0.78.0
+  - @fuel-ts/interfaces@0.78.0
+
 ## 0.77.0
 
 ### Patch Changes

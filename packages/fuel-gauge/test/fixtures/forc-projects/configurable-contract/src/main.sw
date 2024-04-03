@@ -86,6 +86,7 @@ impl ConfigurableContract for Contract {
     }
 
     fn echo_struct() -> Struct1 {
+        log(STRUCT_1);
         STRUCT_1
     }
 
