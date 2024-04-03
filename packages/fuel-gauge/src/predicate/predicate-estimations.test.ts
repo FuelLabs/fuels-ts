@@ -135,7 +135,7 @@ describe('Predicate', () => {
       const tx = new ScriptTransactionRequest();
       await seedTestWallet(predicateTrue, [[100]]);
       const resources = await predicateTrue.getResourcesToSpend([[1]]);
-      tx.addPredicateResources(resources, predicateTrue);
+      tx.addResources(resources);
 
       const spy = vi.spyOn(provider.operations, 'estimatePredicates');
 
@@ -149,14 +149,14 @@ describe('Predicate', () => {
       const tx = new ScriptTransactionRequest();
       await seedTestWallet(predicateTrue, [[100]]);
       const trueResources = await predicateTrue.getResourcesToSpend([[1]]);
-      tx.addPredicateResources(trueResources, predicateTrue);
+      tx.addResources(trueResources);
 
       const spy = vi.spyOn(provider.operations, 'estimatePredicates');
       await provider.estimatePredicates(tx);
 
       await seedTestWallet(predicateStruct, [[100]]);
       const structResources = await predicateStruct.getResourcesToSpend([[1]]);
-      tx.addPredicateResources(structResources, predicateStruct);
+      tx.addResources(structResources);
 
       await provider.estimatePredicates(tx);
 

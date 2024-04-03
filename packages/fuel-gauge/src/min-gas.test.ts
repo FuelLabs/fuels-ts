@@ -199,7 +199,7 @@ describe(__filename, () => {
         assetId: BaseAssetId,
       },
     ]);
-    request.addPredicateResources(resourcesPredicate, predicate);
+    request.addResources(resourcesPredicate);
 
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);

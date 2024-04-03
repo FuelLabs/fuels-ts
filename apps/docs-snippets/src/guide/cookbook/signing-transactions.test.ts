@@ -88,7 +88,7 @@ describe('Signing transactions', () => {
       },
     ]);
 
-    request.addPredicateResources(resources, predicate);
+    request.addResources(resources);
 
     request.addWitness('0x');
 

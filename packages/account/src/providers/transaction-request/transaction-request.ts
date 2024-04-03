@@ -349,13 +349,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addCoinInput(coin: Coin, _predicate?: Predicate<InputValue[]>) {
+  addCoinInput(coin: Coin) {
     const { assetId, owner, amount } = coin;
 
     let witnessIndex;
 
-    // TODO: add "predicate" and "predicateData" to the Coin type
-    if ('predicate' in coin) {
+    if (coin.predicate) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
@@ -391,7 +390,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addMessageInput(message: MessageCoin, _predicate?: Predicate<InputValue[]>) {
+  addMessageInput(message: MessageCoin) {
     const { recipient, sender, amount } = message;
 
     const assetId = BaseAssetId;
@@ -399,7 +398,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     let witnessIndex;
 
     // TODO: add "predicate" and "predicateData" to the Coin type
-    if ('predicate' in message) {
+    if (message.predicate) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
@@ -452,36 +451,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addResources(resources: ReadonlyArray<Resource>) {
     resources.forEach((resource) => this.addResource(resource));
-
-    return this;
-  }
-
-  /**
-   * Adds multiple resources to the transaction by adding coin/message inputs and change
-   * outputs from the related assetIds.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addPredicateResource(resource: Resource, predicate: Predicate<InputValue[]>) {
-    if (isCoin(resource)) {
-      this.addCoinInput(resource, predicate);
-    } else {
-      this.addMessageInput(resource, predicate);
-    }
-
-    return this;
-  }
-
-  /**
-   * Adds multiple predicate coin/message inputs to the transaction and change outputs
-   * from the related assetIds.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addPredicateResources(resources: Resource[], predicate: Predicate<InputValue[]>) {
-    resources.forEach((resource) => this.addPredicateResource(resource, predicate));
 
     return this;
   }
