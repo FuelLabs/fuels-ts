@@ -269,8 +269,6 @@ export class Account extends AbstractAccount {
       };
     });
 
-    const owner = this.address.toB256();
-
     txRequest.inputs.forEach((input) => {
       const isResource = 'amount' in input;
 
@@ -279,11 +277,11 @@ export class Account extends AbstractAccount {
 
         if (isCoin) {
           const assetId = String(input.assetId);
-          if (input.owner === owner && quantitiesDict[assetId]) {
+          if (quantitiesDict[assetId]) {
             const amount = bn(input.amount);
             quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
           }
-        } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
+        } else if (input.amount && quantitiesDict[BaseAssetId]) {
           quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
         }
       }
