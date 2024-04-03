@@ -123,12 +123,28 @@ describe('Experimental Logging', () => {
     expect(logs).toStrictEqual([expected]);
   });
 
+  it('logs b256 vec', async () => {
+    const expected = [B256, B256];
+
+    const { logs } = await contractInstance.functions.log_vec_b256(expected).call();
+
+    expect(logs).toEqual([expected]);
+  });
+
   it('logs b512', async () => {
     const expected = B512;
 
     const { logs } = await contractInstance.functions.log_b512(expected).call();
 
     expect(logs).toStrictEqual([expected]);
+  });
+
+  it('logs b512 vec', async () => {
+    const expected = [B512, B512];
+
+    const { logs } = await contractInstance.functions.log_vec_b512(expected).call();
+
+    expect(logs).toEqual([expected]);
   });
 
   it('logs b256 b512 multiple params', async () => {
