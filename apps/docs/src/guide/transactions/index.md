@@ -1,6 +1,6 @@
 # Transactions
 
-A transaction is a way of interacting with Fuel Network's blockchain and can include actions like transferring assets, deploying contracts and minting tokens.
+A transaction is a way of interacting with a Fuel blockchain and can include actions like transferring assets, deploying contracts and minting tokens.
 
 Within the Fuel Network, we have the following transaction types:
 
