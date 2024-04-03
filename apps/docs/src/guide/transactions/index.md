@@ -6,6 +6,6 @@ Transferring assets is the most common transaction type and can be be executed b
 
 <<< @/../../docs-snippets/src/guide/transactions/transactions.test.ts#transactions-1{ts:line-numbers}
 
-Deploying and interacting with contracts are other common transactions. More information on this can be found in the [contracts guide](../contracts/index.md), either through the [contract deployment guide](../contracts/deploying-contracts.md) or the [contract interaction guide](../contracts/interacting-with-contracts.md).
+Deploying and interacting with contracts are other common transactions. More information on this can be found in the [contracts guide](../contracts/index.md), either through the [contract deployment guide](../contracts/deploying-contracts.md) or the [contract interaction guide](../contracts/methods.md).
 
 This guide will discuss how to create and modify transactions to fit bespoke use cases, as well as submit them to the network using transactional policies and parameters. As well as retrieving information about submitted transactions.
