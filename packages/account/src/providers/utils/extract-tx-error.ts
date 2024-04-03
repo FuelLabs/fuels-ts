@@ -23,12 +23,13 @@ import type { FailureStatus } from '../transaction-summary';
  */
 export const assemblePanicError = (status: FailureStatus) => {
   let errorMessage = `The transaction reverted with reason: "${status.reason}".`;
+  const reason = status.reason;
 
   if (PANIC_REASONS.includes(status.reason)) {
     errorMessage = `${errorMessage}\n\nYou can read more about this error at:\n\n${PANIC_DOC_URL}#variant.${status.reason}`;
   }
 
-  return errorMessage;
+  return { errorMessage, reason };
 };
 
 /** @hidden */
@@ -47,12 +48,14 @@ export const assembleRevertError = (
   let errorMessage = 'The transaction reverted with an unknown reason.';
 
   const revertReceipt = receipts.find(({ type }) => type === ReceiptType.Revert) as ReceiptRevert;
+  let reason = '';
 
   if (revertReceipt) {
     const reasonHex = bn(revertReceipt.val).toHex();
 
     switch (reasonHex) {
       case FAILED_REQUIRE_SIGNAL: {
+        reason = 'require';
         errorMessage = `The transaction reverted because a "require" statement has thrown ${
           logs.length ? stringify(logs[0]) : 'an error.'
         }.`;
@@ -63,6 +66,7 @@ export const assembleRevertError = (
         const sufix =
           logs.length >= 2 ? ` comparing ${stringify(logs[1])} and ${stringify(logs[0])}.` : '.';
 
+        reason = 'assert_eq';
         errorMessage = `The transaction reverted because of an "assert_eq" statement${sufix}`;
         break;
       }
@@ -71,24 +75,28 @@ export const assembleRevertError = (
         const sufix =
           logs.length >= 2 ? ` comparing ${stringify(logs[1])} and ${stringify(logs[0])}.` : '.';
 
+        reason = 'assert_ne';
         errorMessage = `The transaction reverted because of an "assert_ne" statement${sufix}`;
         break;
       }
 
       case FAILED_ASSERT_SIGNAL:
+        reason = 'assert';
         errorMessage = `The transaction reverted because an "assert" statement failed to evaluate to true.`;
         break;
 
       case FAILED_TRANSFER_TO_ADDRESS_SIGNAL:
+        reason = 'MissingOutputChange';
         errorMessage = `The transaction reverted because it's missing an "OutputChange".`;
         break;
 
       default:
+        reason = 'unknown';
         errorMessage = `The transaction reverted with an unknown reason: ${revertReceipt.val}`;
     }
   }
 
-  return errorMessage;
+  return { errorMessage, reason };
 };
 
 interface IExtractTxError {
@@ -106,14 +114,20 @@ export const extractTxError = (params: IExtractTxError): FuelError => {
   const { receipts, status, logs } = params;
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
+  const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
 
-  let err =
+  const { errorMessage, reason } =
     status?.type === 'FailureStatus' && isPanic
       ? assemblePanicError(status)
       : assembleRevertError(receipts, logs);
 
-  err += `\n\nlogs: ${JSON.stringify(logs, null, 2)}`;
-  err += `\n\nreceipts: ${JSON.stringify(receipts, null, 2)}`;
+  const metadata = {
+    logs,
+    receipts,
+    panic: isPanic,
+    revert: isRevert,
+    reason,
+  };
 
-  return new FuelError(ErrorCode.SCRIPT_REVERTED, err);
+  return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, metadata);
 };
