@@ -1,4 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import type { FuelError } from '@fuel-ts/errors';
 import type { BN, Contract, Provider, WalletUnlocked } from 'fuels';
 import { Script, bn } from 'fuels';
 
@@ -90,24 +91,20 @@ describe('Advanced Logging', () => {
       throw new Error('it should have thrown');
     } catch (error) {
       if ((<Error>error).message) {
-        expect((<Error>error).message).toMatch(
-          JSON.stringify(
-            [
-              {
-                score: 0,
-                time_left: 100,
-                ammo: 10,
-                game_id: '0x18af8',
-                state: { Playing: 1 },
-                contract_Id: {
-                  value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
-                },
-                difficulty: { Medium: true },
+        expect(JSON.stringify((<FuelError>error).metadata.logs)).toMatch(
+          JSON.stringify([
+            {
+              score: 0,
+              time_left: 100,
+              ammo: 10,
+              game_id: bn(0x18af8),
+              state: { Playing: 1 },
+              contract_Id: {
+                value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
               },
-            ],
-            null,
-            2
-          )
+              difficulty: { Medium: true },
+            },
+          ])
         );
       } else {
         throw new Error('it should be possible to decode error from "require" statement');
