@@ -229,8 +229,9 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
 
     const request = await this.getTransactionRequest();
-    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
+    const txCost = await provider.getTransactionCost(request, {
       resourcesOwner: this.program.account as AbstractAccount,
+      quantitiesToContract: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
 

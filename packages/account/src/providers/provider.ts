@@ -261,6 +261,7 @@ export type EstimateTransactionParams = {
 
 export type TransactionCostParams = EstimateTransactionParams & {
   resourcesOwner?: AbstractAccount;
+  quantitiesToContract?: CoinQuantity[];
   signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
 };
 
@@ -1008,8 +1009,7 @@ export default class Provider {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    forwardingQuantities: CoinQuantity[] = [],
-    { resourcesOwner, signatureCallback }: TransactionCostParams = {}
+    { resourcesOwner, signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
@@ -1018,7 +1018,7 @@ export default class Provider {
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
+    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
     // Funding transaction with fake utxos
     txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
 
@@ -1107,11 +1107,13 @@ export default class Provider {
   async getResourcesForTransaction(
     owner: string | AbstractAddress,
     transactionRequestLike: TransactionRequestLike,
-    forwardingQuantities: CoinQuantity[] = []
+    quantitiesToContract: CoinQuantity[] = []
   ) {
     const ownerAddress = Address.fromAddressOrString(owner);
     const transactionRequest = transactionRequestify(clone(transactionRequestLike));
-    const transactionCost = await this.getTransactionCost(transactionRequest, forwardingQuantities);
+    const transactionCost = await this.getTransactionCost(transactionRequest, {
+      quantitiesToContract,
+    });
 
     // Add the required resources to the transaction from the owner
     transactionRequest.addResources(
@@ -1123,10 +1125,9 @@ export default class Provider {
     // Also for the dryRun we could have the same issue as we are going to run twice the dryRun and the
     // estimateTxDependencies as we don't have access to the transaction, maybe returning the transaction would
     // be better.
-    const { requiredQuantities, ...txCost } = await this.getTransactionCost(
-      transactionRequest,
-      forwardingQuantities
-    );
+    const { requiredQuantities, ...txCost } = await this.getTransactionCost(transactionRequest, {
+      quantitiesToContract,
+    });
     const resources = await this.getResourcesToSpend(ownerAddress, requiredQuantities);
 
     return {

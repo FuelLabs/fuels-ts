@@ -70,7 +70,7 @@ describe(__filename, () => {
     const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
 
     // 5. Calculate the transaction fee
-    const txCost = await provider.getTransactionCost(request, quantities);
+    const txCost = await provider.getTransactionCost(request, { quantitiesToContract: quantities });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

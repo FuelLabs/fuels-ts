@@ -187,7 +187,7 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      const txCost = await provider.getTransactionCost(request, [], {
+      const txCost = await provider.getTransactionCost(request, {
         resourcesOwner: wallet,
       });
 
@@ -251,7 +251,7 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      const txCost = await provider.getTransactionCost(request, [], {
+      const txCost = await provider.getTransactionCost(request, {
         resourcesOwner: wallet,
       });
 

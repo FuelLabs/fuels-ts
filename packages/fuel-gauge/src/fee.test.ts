@@ -120,7 +120,7 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const txCost = await provider.getTransactionCost(request, [], {
+    const txCost = await provider.getTransactionCost(request, {
       resourcesOwner: wallet,
     });
 

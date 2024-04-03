@@ -94,7 +94,7 @@ describe('Signing transactions', () => {
 
     // Add witnesses including the signer
     // Estimate the predicate inputs
-    const txCost = await provider.getTransactionCost(request, [], {
+    const txCost = await provider.getTransactionCost(request, {
       signatureCallback: (tx) => tx.addAccountWitnesses(signer),
       resourcesOwner: predicate,
     });

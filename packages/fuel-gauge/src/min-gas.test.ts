@@ -131,7 +131,7 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request, [], { resourcesOwner: predicate });
+    const txCost = await provider.getTransactionCost(request, { resourcesOwner: predicate });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -196,7 +196,7 @@ describe(__filename, () => {
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
 
-    const txCost = await provider.getTransactionCost(request, [], {
+    const txCost = await provider.getTransactionCost(request, {
       resourcesOwner: predicate,
     });
     request.gasLimit = txCost.gasUsed;

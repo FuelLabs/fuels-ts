@@ -347,7 +347,7 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionRequest> {
     const request = new ScriptTransactionRequest(txParams);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const txCost = await this.provider.getTransactionCost(request, [], {
+    const txCost = await this.provider.getTransactionCost(request, {
       estimateTxDependencies: true,
       resourcesOwner: this,
     });
@@ -440,11 +440,10 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractAddress);
 
-    const txCost = await this.provider.getTransactionCost(
-      request,
-      [{ amount: bn(amount), assetId: String(assetId) }],
-      { resourcesOwner: this }
-    );
+    const txCost = await this.provider.getTransactionCost(request, {
+      resourcesOwner: this,
+      quantitiesToContract: [{ amount: bn(amount), assetId: String(assetId) }],
+    });
     if (txParams.gasLimit) {
       this.validateGas({
         gasUsed: txCost.gasUsed,
@@ -493,9 +492,9 @@ export class Account extends AbstractAccount {
     const params: ScriptTransactionRequestLike = { script, ...txParams };
 
     const request = new ScriptTransactionRequest(params);
-    const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
+    const quantitiesToContract = [{ amount: bn(amount), assetId: BaseAssetId }];
 
-    const txCost = await this.provider.getTransactionCost(request, forwardingQuantities);
+    const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
 
     if (txParams.gasLimit) {
       this.validateGas({

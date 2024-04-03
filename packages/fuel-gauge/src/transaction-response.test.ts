@@ -264,7 +264,7 @@ describe('TransactionResponse', () => {
 
     request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
 
-    const txCost = await genesisWallet.provider.getTransactionCost(request, [], {
+    const txCost = await genesisWallet.provider.getTransactionCost(request, {
       signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
     });
 
