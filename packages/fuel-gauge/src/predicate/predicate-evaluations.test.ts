@@ -1,5 +1,5 @@
 import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import {  Predicate } from 'fuels';
+import { Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 

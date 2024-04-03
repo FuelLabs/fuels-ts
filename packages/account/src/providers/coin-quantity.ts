@@ -1,4 +1,3 @@
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
