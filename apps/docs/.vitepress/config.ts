@@ -52,7 +52,7 @@ export default defineConfig({
           },
           {
             text: 'Creating a Fuel dApp',
-            link: '/guide/creating-a-fuel-dapp',
+            link: '/guide/introduction/creating-a-fuel-dapp',
           },
         ],
       },
