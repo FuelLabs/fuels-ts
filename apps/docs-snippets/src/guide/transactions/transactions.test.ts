@@ -1,5 +1,5 @@
 import type { Provider, WalletUnlocked } from 'fuels';
-import { BaseAssetId, Wallet } from 'fuels';
+import { BaseAssetId, Wallet, hexlify } from 'fuels';
 
 import { getTestWallet } from '../../utils';
 
@@ -26,7 +26,7 @@ describe('Transactions', () => {
     // #region transactions-1
     await sender.transfer(receiver.address, 100, assetIdToTransfer);
 
-    await sender.getBalance(BaseAssetId);
+    await receiver.getBalance(BaseAssetId);
     // 100
     // #endregion transactions-1
 
