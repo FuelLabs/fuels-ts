@@ -53,15 +53,14 @@ import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
+export type DryRunStatus =
+  | GqlDryRunFailureStatusFragmentFragment
+  | GqlDryRunSuccessStatusFragmentFragment;
+
 export type CallResult = {
   receipts: TransactionResultReceipt[];
+  dryrunStatus?: DryRunStatus;
 };
-
-export type NewCallResult = {
-  receipts: TransactionResultReceipt[];
-  id?: string;
-  status?: GqlDryRunFailureStatusFragmentFragment | GqlDryRunSuccessStatusFragmentFragment;
-}[];
 
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
@@ -664,19 +663,13 @@ export default class Provider {
     }
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: dryRunStatuses } = await this.operations.dryRun({
-      encodedTransactions: [encodedTransaction],
+      encodedTransactions: encodedTransaction,
       utxoValidation: utxoValidation || false,
     });
+    const [{ receipts: rawReceipts, status }] = dryRunStatuses;
+    const receipts = rawReceipts.map(processGqlReceipt);
 
-    const callResult: NewCallResult = dryRunStatuses.map((dryRunStatus) => {
-      const { id, receipts, status } = dryRunStatus;
-
-      const processedReceipts = receipts.map(processGqlReceipt);
-
-      return { id, receipts: processedReceipts, status };
-    });
-
-    return { receipts: callResult[0].receipts };
+    return { receipts, dryrunStatus: status };
   }
 
   /**
@@ -747,14 +740,18 @@ export default class Provider {
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
+    let dryrunStatus: DryRunStatus | undefined;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-      const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+      const {
+        dryRun: [{ receipts: rawReceipts, status }],
+      } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
       });
 
-      receipts = dryRunStatuses[0].receipts.map(processGqlReceipt);
+      receipts = rawReceipts.map(processGqlReceipt);
+      dryrunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
@@ -786,6 +783,7 @@ export default class Provider {
       receipts,
       outputVariables,
       missingContractIds,
+      dryrunStatus,
     };
   }
 
