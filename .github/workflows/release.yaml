@@ -34,7 +34,7 @@ jobs:
       - name: Bump and Collect Versions
         run: |
           pnpm changeset version
-          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
           echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
@@ -51,31 +51,43 @@ jobs:
 
       - name: Set branch name and changeset PR title
         run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`v${{ env.BUILD_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+
+      - name: Get latest release
+        run: |
+          echo "LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
-          publish: pnpm changeset:publish
+          publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
           version: pnpm changeset:version-with-docs
           commit: "ci(changesets): versioning packages"
           title: ${{ env.CHANGESET_PR_TITLE }}
           createGithubReleases: aggregate
-          githubReleaseName: v${{ env.BUILD_VERSION }}
-          githubTagName: v${{ env.BUILD_VERSION }}
+          githubReleaseName: ${{ env.RELEASE_VERSION }}
+          githubTagName: ${{ env.RELEASE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Prettify changelog
-        run: |
-          git checkout master
-          pnpm changeset:update-changelog
+        run: pnpm changeset:update-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          RELEASE_TAG: v${{ env.BUILD_VERSION }}
+          RELEASE_TAG: ${{ env.RELEASE_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
+          REF_NAME: ${{ github.ref_name }}
+          LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
+
+      - name: Delete the release branch
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
+        run: git push origin --delete ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       - name: Release to @next tag on npm
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
@@ -130,13 +142,13 @@ jobs:
           rm -f apps/docs/.gitignore
           git add apps/docs/src/api/
           git add apps/docs/.typedoc/api-links.json
-          git commit -m "docs: API docs - v${{ env.BUILD_VERSION }}"
+          git commit -m "docs: API docs - ${{ env.RELEASE_VERSION }}"
           git push
           git restore apps/docs/.gitignore
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.3
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2
           verbose: false
@@ -144,13 +156,13 @@ jobs:
           rootdir: ""
           workdir: ""
       - uses: aws-actions/configure-aws-credentials@v1
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
           aws-region: us-east-1
       - name: Upload assets to s3
-        if: steps.changesets.outputs.published != 'true'
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
         env:
