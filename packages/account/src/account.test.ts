@@ -267,7 +267,7 @@ describe('Account', () => {
     await account.fund(request, {
       requiredQuantities: quantities,
       maxFee: fee,
-      inputsWithEstimatedPredicates: [],
+      estimatedPredicates: [],
       addedSignatures: 0,
     });
 

@@ -42,7 +42,7 @@ export type TxParamsType = Pick<
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'maxFee' | 'inputsWithEstimatedPredicates' | 'addedSignatures' | 'requiredQuantities'
+  'maxFee' | 'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities'
 >;
 
 /**
@@ -246,12 +246,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const {
-      addedSignatures,
-      inputsWithEstimatedPredicates,
-      maxFee: fee,
-      requiredQuantities,
-    } = params;
+    const { addedSignatures, estimatedPredicates, maxFee: fee, requiredQuantities } = params;
 
     const txRequest = request as T;
     const requiredQuantitiesWithFee = addAmountToCoinQuantities({
@@ -308,7 +303,7 @@ export class Account extends AbstractAccount {
     }
 
     txRequest.shiftPredicateData();
-    txRequest.updatePredicateGasUsed(inputsWithEstimatedPredicates);
+    txRequest.updatePredicateGasUsed(estimatedPredicates);
 
     const requestToBeReEstimate = clone(txRequest);
     if (addedSignatures) {

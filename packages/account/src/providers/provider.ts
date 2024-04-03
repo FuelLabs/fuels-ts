@@ -151,7 +151,7 @@ export type TransactionCost = {
   receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
-  inputsWithEstimatedPredicates: TransactionRequestInput[];
+  estimatedPredicates: TransactionRequestInput[];
   requiredQuantities: CoinQuantity[];
   addedSignatures: number;
 };
@@ -1097,10 +1097,10 @@ export default class Provider {
       maxGas,
       minFee,
       maxFee,
-      inputsWithEstimatedPredicates: txRequestClone.inputs,
       outputVariables,
       missingContractIds,
       addedSignatures,
+      estimatedPredicates: txRequestClone.inputs,
     };
   }
 

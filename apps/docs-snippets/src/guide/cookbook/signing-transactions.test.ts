@@ -99,7 +99,7 @@ describe('Signing transactions', () => {
       resourcesOwner: predicate,
     });
 
-    request.updatePredicateGasUsed(txCost.inputsWithEstimatedPredicates);
+    request.updatePredicateGasUsed(txCost.estimatedPredicates);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
