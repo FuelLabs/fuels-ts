@@ -1,6 +1,16 @@
 # Transaction Request
 
-A transaction request provides the foundations for submitting a transaction and interacting with the blockchain. The SDK provides the `ScriptTransactionRequest` and `CreateTransactionRequest` classes to assist in the shaping and modification of a transaction.
+A transaction request provides the foundations for submitting a transaction and interacting with the blockchain.
+
+Within Fuel, we have the following transaction types:
+
+- Script
+- Create
+- Mint
+
+The SDK provides class helpers for handling script and create transactions: `ScriptTransactionRequest` and `CreateTransactionRequest`, respectively.
+
+> **Note**: Mint transactions can only be created by the block producer and do not have any use outside of block creation. Therefore, the SDK only provides the ability to decode them.
 
 ## Creating a Transaction Request
 

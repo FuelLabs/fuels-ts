@@ -1,14 +1,11 @@
 # Transactions
 
-A transaction is a way of interacting with a Fuel blockchain and can include actions like transferring assets, deploying contracts and minting tokens.
+A transaction is a way of interacting with a Fuel blockchain and can include actions like transferring assets, deploying contracts and minting tokens. All of which are possible through the SDK by using simple utility methods or building out more custom transactions.
 
-Within Fuel, we have the following transaction types:
+Transferring assets is the most common transaction type and can be be executed by calling the `transfer` function from an account to a recipient address:
 
-- Script
-- Create
-- Mint
+<<< @/../../docs-snippets/src/guide/transactions/transactions.test.ts#transactions-1{ts:line-numbers}
 
-The SDK provides class helpers for handling script and create transactions: `ScriptTransactionRequest` and `CreateTransactionRequest`, respectively.
-Mint transactions can only be created by the block producer and do not have any use outside of block creation. Therefore, the SDK only provides the ability to decode them.
+Deploying and interacting with contracts are other common transactions. More information on this can be found in the [contracts guide](../contracts/index.md), either through the [contract deployment guide](../contracts/deploying-contracts.md) or the [contract interaction guide](../contracts/interacting-with-contracts.md).
 
-This guide will discuss how to create, modify and submit transactions to the network, as well as how to get info on transactions that have previously executed.
+This guide will discuss how to create and modify transactions to fit bespoke use cases, as well as submit them to the network using transactional policies and parameters. As well as retrieving information about submitted transactions.
