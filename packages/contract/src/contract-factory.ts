@@ -7,9 +7,9 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
-import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
+import { getContractId, getContractStorageRoot } from './util';
 
 /**
  * Options for deploying a contract.
@@ -92,8 +92,8 @@ export default class ContractFactory {
   createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
-        key: hexlifyWithPrefix(key),
-        value: hexlifyWithPrefix(value),
+        key: hexlify(key),
+        value: hexlify(value),
       }))
       .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
