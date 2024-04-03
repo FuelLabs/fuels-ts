@@ -5,6 +5,7 @@ import { ErrorCode } from './error-codes';
 export class FuelError extends Error {
   static readonly CODES = ErrorCode;
   readonly VERSIONS = versions;
+  readonly metadata: Record<string, unknown>;
 
   static parse(e: unknown) {
     const error = e as FuelError;
@@ -31,14 +32,15 @@ export class FuelError extends Error {
 
   code: ErrorCode;
 
-  constructor(code: ErrorCode, message: string) {
+  constructor(code: ErrorCode, message: string, metadata: Record<string, unknown> = {}) {
     super(message);
     this.code = code;
     this.name = 'FuelError';
+    this.metadata = metadata;
   }
 
   toObject() {
-    const { code, name, message, VERSIONS } = this;
-    return { code, name, message, VERSIONS };
+    const { code, name, message, metadata, VERSIONS } = this;
+    return { code, name, message, metadata, VERSIONS };
   }
 }
