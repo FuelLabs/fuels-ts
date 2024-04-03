@@ -106,7 +106,7 @@ export class FunctionInvocationScope<
    * @returns True if the function is read-only, false otherwise.
    */
   isReadOnly(): boolean {
-    const storageAttribute = this.func.attributes.find((attr) => attr.name === 'storage')
-    return !(storageAttribute?.arguments.includes('write'));
+    const storageAttribute = this.func.attributes.find((attr) => attr.name === 'storage');
+    return !storageAttribute?.arguments.includes('write');
   }
 }
