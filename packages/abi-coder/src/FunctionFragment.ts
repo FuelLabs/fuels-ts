@@ -19,6 +19,7 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
+import type { EncodingVersion } from './utils/constants';
 import { ENCODING_V0, ENCODING_V1, OPTION_CODER_TYPE } from './utils/constants';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
 import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utils/utilities';
@@ -30,7 +31,7 @@ export class FunctionFragment<
   readonly signature: string;
   readonly selector: string;
   readonly selectorBytes: Uint8Array;
-  readonly encoding: string;
+  readonly encoding: EncodingVersion;
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];

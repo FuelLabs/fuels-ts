@@ -1,4 +1,4 @@
-import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
+import type { FunctionFragment, JsonAbi, EncodingVersion } from '@fuel-ts/abi-coder';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
 import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -13,7 +13,7 @@ export type ContractCall = {
   data: BytesLike;
   fnSelector: string;
   fnSelectorBytes: Uint8Array;
-  encoding?: string;
+  encoding?: EncodingVersion;
   isInputDataPointer: boolean;
   isOutputDataHeap: boolean;
   outputEncodedLength: number;

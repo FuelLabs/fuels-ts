@@ -3,12 +3,14 @@
  * https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#json-abi-format
  */
 
+import type { EncodingVersion } from '../utils/constants';
+
 export interface JsonAbi {
   readonly types: readonly JsonAbiType[];
   readonly loggedTypes: readonly JsonAbiLoggedType[];
   readonly functions: readonly JsonAbiFunction[];
   readonly configurables: readonly JsonAbiConfigurable[];
-  readonly encoding?: string;
+  readonly encoding?: EncodingVersion;
 }
 
 export interface JsonAbiType {
