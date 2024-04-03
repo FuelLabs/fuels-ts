@@ -71,6 +71,8 @@ export interface BaseTransactionRequestLike {
   outputs?: TransactionRequestOutput[];
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
+  /** Base asset ID */
+  baseAssetId?: string;
 }
 
 type ToBaseTransactionResponse = Pick<
@@ -105,6 +107,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   outputs: TransactionRequestOutput[] = [];
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
+  /** Base asset ID */
+  baseAssetId: string = ZeroBytes32;
 
   /**
    * Constructor for initializing a base transaction request.
@@ -119,6 +123,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     inputs,
     outputs,
     witnesses,
+    baseAssetId,
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = bn(gasPrice);
     this.maturity = maturity ?? 0;
@@ -127,6 +132,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
+    this.baseAssetId = baseAssetId ?? ZeroBytes32;
   }
 
   static getPolicyMeta(req: BaseTransactionRequest) {
@@ -389,7 +395,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param message - Message resource.
    * @param predicate - Predicate bytes.
-   * @param predicateData - Predicate data bytes.
    */
   addMessageInput(message: MessageCoin, predicate?: Predicate<InputValue[]>) {
     const { recipient, sender, amount } = message;
@@ -422,7 +427,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.pushInput(input);
 
     // Insert a ChangeOutput if it does not exist
-    this.addChangeOutput(recipient, assetId);
+    this.addChangeOutput(recipient, this.baseAssetId);
   }
 
   /**
@@ -492,12 +497,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param amount - Amount of coin.
    * @param assetId - Asset ID of coin.
    */
-  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike = BaseAssetId) {
+  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId?: BytesLike) {
     this.pushOutput({
       type: OutputType.Coin,
       to: addressify(to).toB256(),
       amount,
-      assetId,
+      assetId: assetId ?? this.baseAssetId,
     });
 
     return this;
@@ -528,7 +533,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param to - Address of the owner.
    * @param assetId - Asset ID of coin.
    */
-  addChangeOutput(to: AddressLike, assetId: BytesLike = BaseAssetId) {
+  addChangeOutput(to: AddressLike, assetId?: BytesLike) {
     // Find the ChangeOutput for the AssetId of the Resource
     const changeOutput = this.getChangeOutputs().find(
       (output) => hexlify(output.assetId) === assetId
@@ -539,7 +544,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       this.pushOutput({
         type: OutputType.Change,
         to: addressify(to).toB256(),
-        assetId,
+        assetId: assetId ?? this.baseAssetId,
       });
     }
   }
@@ -632,7 +637,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       }
     };
 
-    updateAssetInput(BaseAssetId, bn(100_000_000_000));
+    updateAssetInput(this.baseAssetId, bn(100_000_000_000));
     quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
   }
 
