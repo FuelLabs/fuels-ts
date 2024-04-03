@@ -30,6 +30,7 @@ export interface AssembleTransactionSummaryParams {
   maxInputs: BN;
   gasCosts: GqlGasCosts;
   maxGasPerTx: BN;
+  gasPrice: BN;
 }
 
 /** @hidden */
@@ -48,6 +49,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     maxInputs,
     gasCosts,
     maxGasPerTx,
+    gasPrice,
   } = params;
 
   const gasUsed = getGasUsedFromReceipts(receipts);
@@ -69,7 +71,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
 
   const { fee } = calculateTransactionFee({
-    gasUsed,
+    gasPrice,
     rawPayload,
     tip,
     consensusParameters: {

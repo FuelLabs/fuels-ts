@@ -60,7 +60,6 @@ describe('TransactionSummary', () => {
         fee: bn(0),
         minFee: bn(0),
         maxFee: bn(0),
-        feeFromGasUsed: bn(0),
       });
 
     return {
@@ -83,6 +82,7 @@ describe('TransactionSummary', () => {
       gasCosts,
       abiMap: {},
       maxGasPerTx,
+      gasPrice: bn(1),
     });
 
     expect(transactionSummary).toMatchObject(expected);

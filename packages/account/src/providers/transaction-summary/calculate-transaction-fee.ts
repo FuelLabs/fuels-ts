@@ -21,7 +21,7 @@ type FeeParams =
     };
 
 export type CalculateTransactionFeeParams = {
-  gasUsed: BN;
+  gasPrice: BN;
   rawPayload: string;
   tip: BN;
   consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & {
@@ -32,7 +32,7 @@ export type CalculateTransactionFeeParams = {
 
 export const calculateTransactionFee = (params: CalculateTransactionFeeParams) => {
   const {
-    gasUsed,
+    gasPrice,
     rawPayload,
     tip,
     consensusParameters: { gasCosts, feeParams, maxGasPerTx },
@@ -50,7 +50,6 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
       fee: bn(0),
       minFee: bn(0),
       maxFee: bn(0),
-      feeFromGasUsed: bn(0),
     };
   }
 
@@ -108,39 +107,23 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     maxGasPerTx,
   });
 
-  /**
-   * TODO: Validate this calculation
-   * Ideally we should calculate the fee using the gas price value that was used
-   * to process the transaction. The gas price value is not available within the
-   * transaction object and there is no ( directly at least ) way to retrieve it.
-   */
-  const feeFromGasUsed = calculateGasFee({
-    gasPrice: bn(1),
-    gas: gasUsed,
-    priceFactor: gasPriceFactor,
-    tip,
-  });
-
   const minFee = calculateGasFee({
-    gasPrice: bn(1),
+    gasPrice,
     gas: minGas,
     priceFactor: gasPriceFactor,
     tip,
   });
 
   const maxFee = calculateGasFee({
-    gasPrice: bn(1),
+    gasPrice,
     gas: maxGas,
     priceFactor: gasPriceFactor,
     tip,
   });
 
   return {
-    // TODO: Validate if we need to return all these props here. It seems we are
-    // only interested in the fee value.
-    fee: maxFee,
     minFee,
     maxFee,
-    feeFromGasUsed,
+    fee: maxFee,
   };
 };
