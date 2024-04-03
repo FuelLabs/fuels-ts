@@ -56,3 +56,15 @@ export const getContractId = (
   const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
   return contractId;
 };
+
+/**
+ * @hidden
+ *
+ * Ensures that a string is hexlified.
+ *
+ * @param value - The value to be hexlified.
+ *
+ * @returns The input value hexlified with prefix.
+ */
+export const hexlifyWithPrefix = (value: string) =>
+  hexlify(value.startsWith('0x') ? value : `0x${value}`);
