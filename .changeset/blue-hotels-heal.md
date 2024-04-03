@@ -1,4 +1,4 @@
 ---
 ---
 
-Moved wallet doc snippets from `fuel-gauge` to `docs-snippets` and updated documentation.
+docs: migrate wallet code snippets to doc-snippets
