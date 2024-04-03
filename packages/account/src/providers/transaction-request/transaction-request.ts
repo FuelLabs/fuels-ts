@@ -71,7 +71,7 @@ export interface BaseTransactionRequestLike {
   outputs?: TransactionRequestOutput[];
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
-  /** Base asset ID */
+  /** Base asset ID - should be fetched from the chain */
   baseAssetId?: string;
 }
 
@@ -107,7 +107,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   outputs: TransactionRequestOutput[] = [];
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
-  /** Base asset ID */
+  /** Base asset ID - should be fetched from the chain */
   baseAssetId: string = ZeroBytes32;
 
   /**
