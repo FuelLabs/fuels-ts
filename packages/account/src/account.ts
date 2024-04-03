@@ -31,6 +31,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToAsset,
+  cacheTxInputsFromOwner,
 } from './providers';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
@@ -268,9 +269,6 @@ export class Account extends AbstractAccount {
       };
     });
 
-    const cachedUtxos: BytesLike[] = [];
-    const cachedMessages: BytesLike[] = [];
-
     const owner = this.address.toB256();
 
     txRequest.inputs.forEach((input) => {
@@ -284,15 +282,9 @@ export class Account extends AbstractAccount {
           if (input.owner === owner && quantitiesDict[assetId]) {
             const amount = bn(input.amount);
             quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
-
-            // caching this utxo to avoid fetching it again if requests needs to be funded
-            cachedUtxos.push(input.id);
           }
         } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
           quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
-
-          // caching this message to avoid fetching it again if requests needs to be funded
-          cachedMessages.push(input.nonce);
         }
       }
     });
@@ -310,10 +302,9 @@ export class Account extends AbstractAccount {
     const needsToBeFunded = missingQuantities.length;
 
     if (needsToBeFunded) {
-      const resources = await this.getResourcesToSpend(missingQuantities, {
-        messages: cachedMessages,
-        utxos: cachedUtxos,
-      });
+      const excludedIds = cacheTxInputsFromOwner(txRequest.inputs, this.address.toString());
+
+      const resources = await this.getResourcesToSpend(missingQuantities, excludedIds);
 
       txRequest.addResources(resources);
     }
