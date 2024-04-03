@@ -447,7 +447,7 @@ export default defineConfig({
             items: [
               {
                 text: 'npm create fuels',
-                link: '/guide/cli/create-fuels',
+                link: '/guide/cli/npm-create-fuels',
               },
               {
                 text: 'fuels',
