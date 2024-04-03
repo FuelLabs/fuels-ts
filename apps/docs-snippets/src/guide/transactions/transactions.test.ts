@@ -26,11 +26,10 @@ describe('Transactions', () => {
     // #region transactions-1
     await sender.transfer(receiver.address, 100, assetIdToTransfer);
 
-    await receiver.getBalance(BaseAssetId);
+    const newBalance = await receiver.getBalance(BaseAssetId);
     // 100
     // #endregion transactions-1
 
-    const newBalance = await receiver.getBalance(assetIdToTransfer);
     expect(newBalance.toNumber()).toBe(100);
   });
 });
