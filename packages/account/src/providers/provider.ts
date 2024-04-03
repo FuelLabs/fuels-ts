@@ -951,7 +951,6 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-
     let { maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
       transactionRequest: signedRequest,
       optimizeGas: false,
@@ -979,7 +978,7 @@ export default class Provider {
 
       txRequestClone.gasLimit = gasUsed;
 
-      ({ maxFee, maxGas, minFee, minGas } = await this.estimateTxGasAndFee({
+      ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
         gasPrice,
       }));
