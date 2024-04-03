@@ -16,6 +16,7 @@ import {
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { Address } from '@fuel-ts/address';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
@@ -62,6 +63,7 @@ log(runCliAction);
  * address
  */
 log(Address);
+log(ZeroBytes32);
 log(Address.fromPublicKey('asdfasdf'));
 
 /**
