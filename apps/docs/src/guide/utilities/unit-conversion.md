@@ -53,3 +53,9 @@ The `formatUnits` function is a lesser alternative to the `format` function, as 
 We can also format numbers in other units of measure by specifying the `units` variable.
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#format-units-2{ts:line-numbers}
+
+## See also
+
+- [Sway Numbers](../types/numbers.md)
+- Ether.js [`formatUnits`](https://docs.ethers.org/v5/api/utils/display-logic/#utils-formatUnits)
+- Ether.js [`parseUnits`](https://docs.ethers.org/v5/api/utils/display-logic/#utils-parseUnits)
