@@ -117,7 +117,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    const assetIdToTransfer = assetId ?? (await this.provider.getBaseAssetId());
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
     const request = await super.createTransfer(destination, amount, assetIdToTransfer, txParams);
     return this.populateTransactionPredicateData(request);
   }
