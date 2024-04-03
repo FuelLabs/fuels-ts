@@ -877,6 +877,27 @@ export default class Provider {
     return results;
   }
 
+  async dryRunMultipleTransactions(
+    transactionRequests: TransactionRequest[],
+    { utxoValidation, estimateTxDependencies = true }: ProviderCallParams = {}
+  ): Promise<CallResult[]> {
+    if (estimateTxDependencies) {
+      return this.estimateMultipleTxDependencies(transactionRequests);
+    }
+    const encodedTransactions = transactionRequests.map((tx) => hexlify(tx.toTransactionBytes()));
+    const { dryRun: dryRunStatuses } = await this.operations.dryRun({
+      encodedTransactions,
+      utxoValidation: utxoValidation || false,
+    });
+
+    const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
+      const receipts = rawReceipts.map(processGqlReceipt);
+      return { receipts, dryrunStatus: status };
+    });
+
+    return results;
+  }
+
   async estimateTxGasAndFee(params: {
     transactionRequest: TransactionRequest;
     optimizeGas?: boolean;
