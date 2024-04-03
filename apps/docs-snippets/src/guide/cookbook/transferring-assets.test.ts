@@ -44,7 +44,7 @@ describe(__filename, () => {
     await response.wait();
 
     // Retrieve balances
-    const receiverBalance = await destination.getBalance(assetId);
+    const receiverBalance = await destination.getBalance(baseAssetId);
 
     // Validate new balance
     expect(new BN(receiverBalance).toNumber()).toEqual(amountToTransfer);
