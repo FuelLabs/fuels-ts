@@ -187,26 +187,14 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      const {
-        maxFee,
-        gasUsed,
-        requiredQuantities,
-        addedSignatures,
-        inputsWithEstimatedPredicates,
-      } = await provider.getTransactionCost(request, [], {
+      const txCost = await provider.getTransactionCost(request, [], {
         resourcesOwner: wallet,
       });
 
-      request.gasLimit = gasUsed;
-      request.maxFee = maxFee;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-      await wallet.fund(
-        request,
-        requiredQuantities,
-        maxFee,
-        inputsWithEstimatedPredicates,
-        addedSignatures
-      );
+      await wallet.fund(request, txCost);
 
       const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
 
@@ -263,26 +251,14 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      const {
-        maxFee,
-        gasUsed,
-        requiredQuantities,
-        inputsWithEstimatedPredicates,
-        addedSignatures,
-      } = await provider.getTransactionCost(request, [], {
+      const txCost = await provider.getTransactionCost(request, [], {
         resourcesOwner: wallet,
       });
 
-      request.gasLimit = gasUsed;
-      request.maxFee = maxFee;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-      await wallet.fund(
-        request,
-        requiredQuantities,
-        maxFee,
-        inputsWithEstimatedPredicates,
-        addedSignatures
-      );
+      await wallet.fund(request, txCost);
 
       const tx = await wallet.sendTransaction(request);
 

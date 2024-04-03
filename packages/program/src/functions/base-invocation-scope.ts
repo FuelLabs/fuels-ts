@@ -245,15 +245,8 @@ export class BaseInvocationScope<TReturn = any> {
   async fundWithRequiredCoins() {
     const transactionRequest = await this.getTransactionRequest();
 
-    const {
-      maxFee,
-      gasUsed,
-      outputVariables,
-      missingContractIds,
-      requiredQuantities,
-      inputsWithEstimatedPredicates,
-      addedSignatures,
-    } = await this.getTransactionCost();
+    const txCost = await this.getTransactionCost();
+    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed);
 
     // Clean coin inputs before add new coins to the request
@@ -280,13 +273,7 @@ export class BaseInvocationScope<TReturn = any> {
       transactionRequest.maxFee = maxFee;
     }
 
-    await this.program.account?.fund(
-      transactionRequest,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await this.program.account?.fund(transactionRequest, txCost);
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);

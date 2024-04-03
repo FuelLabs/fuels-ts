@@ -94,24 +94,17 @@ describe('Signing transactions', () => {
 
     // Add witnesses including the signer
     // Estimate the predicate inputs
-    const { inputsWithEstimatedPredicates, gasUsed, maxFee, requiredQuantities, addedSignatures } =
-      await provider.getTransactionCost(request, [], {
-        signatureCallback: (tx) => tx.addAccountWitnesses(signer),
-        resourcesOwner: predicate,
-      });
+    const txCost = await provider.getTransactionCost(request, [], {
+      signatureCallback: (tx) => tx.addAccountWitnesses(signer),
+      resourcesOwner: predicate,
+    });
 
-    request.updatePredicateGasUsed(inputsWithEstimatedPredicates);
+    request.updatePredicateGasUsed(txCost.inputsWithEstimatedPredicates);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await predicate.fund(
-      request,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await predicate.fund(request, txCost);
 
     await request.addAccountWitnesses(signer);
 

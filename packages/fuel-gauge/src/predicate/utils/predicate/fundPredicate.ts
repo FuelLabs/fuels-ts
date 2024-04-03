@@ -9,17 +9,10 @@ export const fundPredicate = async <T extends InputValue[]>(
   const request = new ScriptTransactionRequest();
 
   request.addCoinOutput(predicate.address, amountToPredicate, BaseAssetId);
-  const { requiredQuantities, gasUsed, maxFee, addedSignatures, inputsWithEstimatedPredicates } =
-    await wallet.provider.getTransactionCost(request);
-  request.gasLimit = gasUsed;
-  request.maxFee = maxFee;
-  await wallet.fund(
-    request,
-    requiredQuantities,
-    maxFee,
-    inputsWithEstimatedPredicates,
-    addedSignatures
-  );
+  const txCost = await wallet.provider.getTransactionCost(request);
+  request.gasLimit = txCost.gasUsed;
+  request.maxFee = txCost.maxFee;
+  await wallet.fund(request, txCost);
 
   await wallet.sendTransaction(request, { awaitExecution: true });
 

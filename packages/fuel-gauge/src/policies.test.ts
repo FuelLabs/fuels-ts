@@ -75,19 +75,12 @@ describe('Policies', () => {
 
     txRequest.addCoinOutput(receiver.address, 500, BaseAssetId);
 
-    const { gasUsed, maxFee, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
-      await provider.getTransactionCost(txRequest);
+    const txCost = await provider.getTransactionCost(txRequest);
 
-    txRequest.gasLimit = gasUsed;
-    txRequest.maxFee = maxFee;
+    txRequest.gasLimit = txCost.gasUsed;
+    txRequest.maxFee = txCost.maxFee;
 
-    await wallet.fund(
-      txRequest,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await wallet.fund(txRequest, txCost);
 
     const tx = await wallet.sendTransaction(txRequest);
 
@@ -114,18 +107,11 @@ describe('Policies', () => {
       witnessLimit: randomNumber(800, 900),
     });
 
-    const { maxFee, requiredQuantities, addedSignatures, inputsWithEstimatedPredicates } =
-      await provider.getTransactionCost(txRequest);
+    const txCost = await provider.getTransactionCost(txRequest);
 
-    txRequest.maxFee = maxFee;
+    txRequest.maxFee = txCost.maxFee;
 
-    await wallet.fund(
-      txRequest,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await wallet.fund(txRequest, txCost);
 
     const tx = await wallet.sendTransaction(txRequest);
 

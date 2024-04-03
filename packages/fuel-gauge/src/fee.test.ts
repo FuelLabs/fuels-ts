@@ -120,21 +120,14 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const { gasUsed, maxFee, requiredQuantities, addedSignatures, inputsWithEstimatedPredicates } =
-      await provider.getTransactionCost(request, [], {
-        resourcesOwner: wallet,
-      });
+    const txCost = await provider.getTransactionCost(request, [], {
+      resourcesOwner: wallet,
+    });
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await wallet.fund(
-      request,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await wallet.fund(request, txCost);
 
     const tx = await wallet.sendTransaction(request);
     const { fee } = await tx.wait();
@@ -158,18 +151,11 @@ describe('Fee', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
     const { transactionRequest } = factory.createTransactionRequest();
-    const { maxFee, requiredQuantities, addedSignatures, inputsWithEstimatedPredicates } =
-      await provider.getTransactionCost(transactionRequest);
+    const txCost = await provider.getTransactionCost(transactionRequest);
 
-    transactionRequest.maxFee = maxFee;
+    transactionRequest.maxFee = txCost.maxFee;
 
-    await wallet.fund(
-      transactionRequest,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await wallet.fund(transactionRequest, txCost);
 
     const tx = await wallet.sendTransaction(transactionRequest);
     const { fee } = await tx.wait();

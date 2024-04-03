@@ -264,7 +264,12 @@ describe('Account', () => {
       provider
     );
 
-    await account.fund(request, quantities, fee, []);
+    await account.fund(request, {
+      requiredQuantities: quantities,
+      maxFee: fee,
+      inputsWithEstimatedPredicates: [],
+      addedSignatures: 0,
+    });
 
     expect(addAmountToAssetSpy).toBeCalledTimes(1);
     expect(addAmountToAssetSpy).toHaveBeenCalledWith({
@@ -453,19 +458,12 @@ describe('Account', () => {
       [amount, assetIdB],
     ]);
 
-    const { maxFee, gasUsed, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
-      await sender.provider.getTransactionCost(request);
+    const txCost = await sender.provider.getTransactionCost(request);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await sender.fund(
-      request,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await sender.fund(request, txCost);
 
     const response = await sender.sendTransaction(request);
 

@@ -78,19 +78,12 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
-    const { gasUsed, requiredQuantities, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
-      await adminWallet.provider.getTransactionCost(request, []);
+    const txCost = await adminWallet.provider.getTransactionCost(request, []);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await adminWallet.fund(
-      request,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await adminWallet.fund(request, txCost);
 
     const tx = await adminWallet.sendTransaction(request);
 
@@ -155,19 +148,12 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
     });
 
-    const { gasUsed, requiredQuantities, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
-      await adminWallet.provider.getTransactionCost(request, []);
+    const txCost = await adminWallet.provider.getTransactionCost(request, []);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await adminWallet.fund(
-      request,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await adminWallet.fund(request, txCost);
 
     const transactionRequest = await adminWallet.populateTransactionWitnessesSignature(request);
 
@@ -489,24 +475,12 @@ describe('TransactionSummary', () => {
         });
       });
 
-      const {
-        gasUsed,
-        maxFee,
-        requiredQuantities,
-        inputsWithEstimatedPredicates,
-        addedSignatures,
-      } = await provider.getTransactionCost(request, []);
+      const txCost = await provider.getTransactionCost(request, []);
 
-      request.gasLimit = gasUsed;
-      request.maxFee = maxFee;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-      await wallet.fund(
-        request,
-        requiredQuantities,
-        maxFee,
-        inputsWithEstimatedPredicates,
-        addedSignatures
-      );
+      await wallet.fund(request, txCost);
 
       const tx = await wallet.sendTransaction(request);
 

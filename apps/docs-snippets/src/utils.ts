@@ -32,14 +32,13 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
     .forEach(({ amount, assetId }) => request.addCoinOutput(testWallet.address, amount, assetId));
 
   // get the cost of the transaction
-  const { requiredQuantities, gasUsed, maxFee, inputsWithEstimatedPredicates } =
-    await genesisWallet.provider.getTransactionCost(request);
+  const txCost = await genesisWallet.provider.getTransactionCost(request);
 
-  request.gasLimit = gasUsed;
-  request.maxFee = maxFee;
+  request.gasLimit = txCost.gasUsed;
+  request.maxFee = txCost.maxFee;
 
   // funding the transaction with the required quantities
-  await genesisWallet.fund(request, requiredQuantities, maxFee, inputsWithEstimatedPredicates);
+  await genesisWallet.fund(request, txCost);
 
   await genesisWallet.sendTransaction(request, { awaitExecution: true });
 

@@ -24,7 +24,7 @@ import type {
   ProviderSendTxParams,
   TransactionResponse,
   EstimateTransactionParams,
-  TransactionRequestInput,
+  TransactionCost,
 } from './providers';
 import {
   withdrawScript,
@@ -37,6 +37,11 @@ import { assembleTransferToContractScript } from './utils/formatTransferToContra
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
   'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit'
+>;
+
+export type EstimatedTxParams = Pick<
+  TransactionCost,
+  'maxFee' | 'inputsWithEstimatedPredicates' | 'addedSignatures' | 'requiredQuantities'
 >;
 
 /**
@@ -239,23 +244,24 @@ export class Account extends AbstractAccount {
    * @param fee - The estimated transaction fee.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
-  async fund<T extends TransactionRequest>(
-    request: T,
-    coinQuantities: CoinQuantity[],
-    fee: BN,
-    inputsWithEstimatedPredicates: TransactionRequestInput[],
-    addedSignatures?: number
-  ): Promise<T> {
+  async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
+    const {
+      addedSignatures,
+      inputsWithEstimatedPredicates,
+      maxFee: fee,
+      requiredQuantities,
+    } = params;
+
     const txRequest = request as T;
-    const updatedQuantities = addAmountToAsset({
+    const requiredQuantitiesWithFee = addAmountToAsset({
       amount: bn(fee),
       assetId: BaseAssetId,
-      coinQuantities,
+      coinQuantities: requiredQuantities,
     });
 
     const quantitiesDict: Record<string, { required: BN; owned: BN }> = {};
 
-    updatedQuantities.forEach(({ amount, assetId }) => {
+    requiredQuantitiesWithFee.forEach(({ amount, assetId }) => {
       quantitiesDict[assetId] = {
         required: amount,
         owned: bn(0),
@@ -352,25 +358,24 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionRequest> {
     const request = new ScriptTransactionRequest(txParams);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const { maxFee, requiredQuantities, gasUsed, inputsWithEstimatedPredicates } =
-      await this.provider.getTransactionCost(request, [], {
-        estimateTxDependencies: true,
-        resourcesOwner: this,
-      });
+    const txCost = await this.provider.getTransactionCost(request, [], {
+      estimateTxDependencies: true,
+      resourcesOwner: this,
+    });
 
     // TODO: Fix this logic. The if was not working when gasLimit was 0, "if(txParams.gasLimit)"
     // was being evaluated as false. Should we change this on master?
     if ('gasLimit' in txParams) {
       this.validateGas({
-        gasUsed,
+        gasUsed: txCost.gasUsed,
         gasLimit: request.gasLimit,
       });
     }
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await this.fund(request, requiredQuantities, maxFee, inputsWithEstimatedPredicates);
+    await this.fund(request, txCost);
 
     return request;
   }
@@ -446,23 +451,22 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractAddress);
 
-    const { maxFee, requiredQuantities, gasUsed, inputsWithEstimatedPredicates } =
-      await this.provider.getTransactionCost(
-        request,
-        [{ amount: bn(amount), assetId: String(assetId) }],
-        { resourcesOwner: this }
-      );
+    const txCost = await this.provider.getTransactionCost(
+      request,
+      [{ amount: bn(amount), assetId: String(assetId) }],
+      { resourcesOwner: this }
+    );
     if (txParams.gasLimit) {
       this.validateGas({
-        gasUsed,
+        gasUsed: txCost.gasUsed,
         gasLimit: request.gasLimit,
       });
     }
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await this.fund(request, requiredQuantities, maxFee, inputsWithEstimatedPredicates);
+    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }
@@ -502,20 +506,19 @@ export class Account extends AbstractAccount {
     const request = new ScriptTransactionRequest(params);
     const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
 
-    const { requiredQuantities, maxFee, gasUsed, inputsWithEstimatedPredicates } =
-      await this.provider.getTransactionCost(request, forwardingQuantities);
+    const txCost = await this.provider.getTransactionCost(request, forwardingQuantities);
 
     if (txParams.gasLimit) {
       this.validateGas({
-        gasUsed,
+        gasUsed: txCost.gasUsed,
         gasLimit: request.gasLimit,
       });
     }
 
-    request.maxFee = maxFee;
-    request.gasLimit = gasUsed;
+    request.maxFee = txCost.maxFee;
+    request.gasLimit = txCost.gasUsed;
 
-    await this.fund(request, requiredQuantities, maxFee, inputsWithEstimatedPredicates);
+    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }

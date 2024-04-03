@@ -87,19 +87,12 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { gasUsed, maxFee, requiredQuantities, inputsWithEstimatedPredicates, addedSignatures } =
-      await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await sender.fund(
-      request,
-      requiredQuantities,
-      maxFee,
-      inputsWithEstimatedPredicates,
-      addedSignatures
-    );
+    await sender.fund(request, txCost);
 
     /**
      * Send transaction
@@ -108,7 +101,7 @@ describe(__filename, () => {
     const { status, gasUsed: txGasUsed } = await result.wait();
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(txGasUsed.toString());
+    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
   });
 
   it('sets gas requirements (predicate)', async () => {
@@ -138,13 +131,12 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { gasUsed, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
-      await provider.getTransactionCost(request, [], { resourcesOwner: predicate });
+    const txCost = await provider.getTransactionCost(request, [], { resourcesOwner: predicate });
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await predicate.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
+    await predicate.fund(request, txCost);
 
     /**
      * Send transaction predicate
@@ -154,7 +146,7 @@ describe(__filename, () => {
     const gasUsedFromReceipts = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(gasUsedFromReceipts.toString());
+    expect(txCost.gasUsed.toString()).toBe(gasUsedFromReceipts.toString());
   });
 
   it('sets gas requirements (account and predicate with script)', async () => {
@@ -204,16 +196,15 @@ describe(__filename, () => {
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
 
-    const { gasUsed, maxFee, inputsWithEstimatedPredicates, addedSignatures } =
-      await provider.getTransactionCost(request, [], {
-        resourcesOwner: predicate,
-      });
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    const txCost = await provider.getTransactionCost(request, [], {
+      resourcesOwner: predicate,
+    });
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
     await wallet.provider.estimatePredicates(request);
 
-    await wallet.fund(request, [], maxFee, inputsWithEstimatedPredicates, addedSignatures);
+    await wallet.fund(request, txCost);
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
@@ -229,6 +220,6 @@ describe(__filename, () => {
     const txGasUsed = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(txGasUsed.toString());
+    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
   });
 });
