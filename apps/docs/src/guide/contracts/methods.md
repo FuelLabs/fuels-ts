@@ -29,3 +29,13 @@ The `call` method should be used to submit a real contract call transaction to t
 Real resources are consumed, and any operations executed by the contract function will be processed on the blockchain.
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-4{ts:line-numbers}
+
+## `isReadOnly` (utility)
+
+If you want to figure out whether a function is read-only, you can use the `isReadOnly` method:
+
+<<< @/../../docs-snippets/src/guide/contracts/is-function-readonly.test.ts#is-function-readonly-1{ts:line-numbers}
+
+Usually, if the function is read-only, you can use the `get` method to read the data from the blockchain without using resources.
+
+If the function is not read-only, you can use the `call` method to submit a 'real' transaction to the blockchain which _will_ consume resources.

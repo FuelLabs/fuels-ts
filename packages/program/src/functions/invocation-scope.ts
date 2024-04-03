@@ -99,4 +99,19 @@ export class FunctionInvocationScope<
 
     return this;
   }
+
+  /**
+   * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
+   *
+   * @returns True if the function is read-only, false otherwise.
+   */
+  isReadOnly(): boolean {
+    const storageAtribute = this.func.attributes.find((attr) => attr.name === 'storage');
+
+    if (storageAtribute?.arguments?.length === 1 && storageAtribute.arguments[0] === 'read') {
+      return true;
+    }
+
+    return false;
+  }
 }
