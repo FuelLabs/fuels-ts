@@ -257,7 +257,7 @@ describe('Account', () => {
 
     const addResourcesSpy = vi.spyOn(request, 'addResources');
 
-    const addAmountToAssetSpy = vi.spyOn(providersMod, 'addAmountToAsset');
+    const addAmountToCoinQuantitiesSpy = vi.spyOn(providersMod, 'addAmountToCoinQuantities');
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -271,8 +271,8 @@ describe('Account', () => {
       addedSignatures: 0,
     });
 
-    expect(addAmountToAssetSpy).toBeCalledTimes(1);
-    expect(addAmountToAssetSpy).toHaveBeenCalledWith({
+    expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);
+    expect(addAmountToCoinQuantitiesSpy).toHaveBeenCalledWith({
       amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: quantities,

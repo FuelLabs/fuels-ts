@@ -30,7 +30,7 @@ import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
-  addAmountToAsset,
+  addAmountToCoinQuantities,
   cacheTxInputsFromOwner,
 } from './providers';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
@@ -254,7 +254,7 @@ export class Account extends AbstractAccount {
     } = params;
 
     const txRequest = request as T;
-    const requiredQuantitiesWithFee = addAmountToAsset({
+    const requiredQuantitiesWithFee = addAmountToCoinQuantities({
       amount: bn(fee),
       assetId: BaseAssetId,
       coinQuantities: requiredQuantities,
