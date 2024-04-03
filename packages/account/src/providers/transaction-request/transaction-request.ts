@@ -1,4 +1,3 @@
-import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
@@ -16,7 +15,6 @@ import { concat, hexlify } from '@fuel-ts/utils';
 import { randomBytes } from 'ethers';
 
 import type { Account } from '../../account';
-import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
