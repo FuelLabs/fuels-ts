@@ -12,14 +12,14 @@ test('isReadOnly returns true for read-only functions', async () => {
   // #region is-function-readonly-1
   const isReadOnly = contract.functions.get_count().isReadOnly();
 
-  expect(isReadOnly).toBe(true);
-
   if (isReadOnly) {
     await contract.functions.get_count().get();
   } else {
     await contract.functions.get_count().call();
   }
   // #endregion is-function-readonly-1
+
+  expect(isReadOnly).toBe(true);
 });
 
 test('isReadOnly returns false for functions containing write operations', async () => {
