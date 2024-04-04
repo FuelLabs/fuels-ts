@@ -1,6 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import type { FuelError } from '@fuel-ts/errors';
 import type { BN, Contract, Provider, WalletUnlocked } from 'fuels';
-import { RequireRevertError, Script, ScriptResultDecoderError, bn } from 'fuels';
+import { Script, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -89,24 +90,24 @@ describe('Advanced Logging', () => {
 
       throw new Error('it should have thrown');
     } catch (error) {
-      if (error instanceof RequireRevertError && error.cause instanceof ScriptResultDecoderError) {
-        const logs = error.cause.logs;
-        logs[0].game_id = logs[0].game_id.toHex();
-        expect(logs).toEqual([
-          {
-            score: 0,
-            time_left: 100,
-            ammo: 10,
-            game_id: '0x18af8',
-            state: { Playing: 1 },
-            contract_Id: {
-              value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+      if ((<Error>error).message) {
+        expect(JSON.stringify((<FuelError>error).metadata.logs)).toMatch(
+          JSON.stringify([
+            {
+              score: 0,
+              time_left: 100,
+              ammo: 10,
+              game_id: bn(0x18af8),
+              state: { Playing: 1 },
+              contract_Id: {
+                value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+              },
+              difficulty: { Medium: true },
             },
-            difficulty: { Medium: true },
-          },
-        ]);
+          ])
+        );
       } else {
-        throw new Error('it should throw RequireRevertError');
+        throw new Error('it should be possible to decode error from "require" statement');
       }
     }
   });
