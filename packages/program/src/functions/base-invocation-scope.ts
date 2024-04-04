@@ -30,7 +30,7 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  * @returns The contract call object.
  */
 function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
-  const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
+  const { program, args, forward, func, callParameters, externalAbis } = funcScope.getCallConfig();
   const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer
     ? POINTER_DATA_OFFSET
     : 0;
@@ -46,6 +46,7 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
+    externalContractsAbis: externalAbis,
   };
 }
 
@@ -116,6 +117,11 @@ export class BaseInvocationScope<TReturn = any> {
     calls.forEach((c) => {
       if (c.contractId) {
         this.transactionRequest.addContractInputAndOutput(c.contractId);
+      }
+      if (c.externalContractsAbis) {
+        Object.keys(c.externalContractsAbis).forEach((contractId) =>
+          this.transactionRequest.addContractInputAndOutput(Address.fromB256(contractId))
+        );
       }
     });
   }

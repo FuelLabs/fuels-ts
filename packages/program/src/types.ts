@@ -18,6 +18,7 @@ export type ContractCall = {
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
+  externalContractsAbis?: Record<string, JsonAbi>;
 };
 
 /**
