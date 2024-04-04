@@ -110,6 +110,7 @@ export const setupProgram = () => {
     .option('-s, --script', 'Include script program')
     .option('--pnpm', 'Use pnpm as the package manager')
     .option('--npm', 'Use npm as the package manager')
+    .option('--verbose', 'Enable verbose logging')
     .addHelpCommand()
     .showHelpAfterError(true);
   return program;
@@ -127,7 +128,10 @@ export const runScaffoldCli = async ({
   forceDisablePrompts?: boolean;
 }) => {
   program.parse(args);
+
   const projectPath = program.args[0] ?? (await promptForProjectPath());
+  const verboseEnabled = program.opts().verbose ?? false;
+
   if (existsSync(projectPath)) {
     throw new Error(
       `A folder already exists at ${projectPath}. Please choose a different project name.`
@@ -201,7 +205,7 @@ export const runScaffoldCli = async ({
 
   if (shouldInstallDeps) {
     process.chdir(projectPath);
-    execSync(`${packageManager} install`, { stdio: 'inherit' });
+    execSync(`${packageManager} install`, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
 
   log();
