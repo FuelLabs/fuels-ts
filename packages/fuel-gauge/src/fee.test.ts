@@ -234,25 +234,22 @@ describe('Fee', () => {
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.PREDICATE_TRUE
+      FuelGaugeProjectsEnum.PREDICATE_U32
     );
 
     const predicate = new Predicate({
       bytecode: binHexlified,
       abi: abiContents,
       provider,
+      inputData: [1078],
     });
 
-    const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx1 = await wallet.transfer(predicate.address, 2000, BaseAssetId);
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId);
 
     const { fee } = await tx2.wait();
 
