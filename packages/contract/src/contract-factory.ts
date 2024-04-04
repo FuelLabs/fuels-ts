@@ -92,8 +92,8 @@ export default class ContractFactory {
   createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
-        key: hexlifyWithPrefix(key, true),
-        value: hexlifyWithPrefix(value, true),
+        key: hexlifyWithPrefix(key),
+        value: hexlifyWithPrefix(value),
       }))
       .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
