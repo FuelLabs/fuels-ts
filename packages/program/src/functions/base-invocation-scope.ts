@@ -39,6 +39,8 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
   return {
     contractId: (program as AbstractContract).id,
     fnSelector: func.selector,
+    fnSelectorBytes: func.selectorBytes,
+    encoding: func.encoding,
     data,
     isInputDataPointer: func.isInputDataPointer,
     isOutputDataHeap: func.outputMetadata.isHeapType,

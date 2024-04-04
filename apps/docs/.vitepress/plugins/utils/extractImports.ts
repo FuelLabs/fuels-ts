@@ -3,6 +3,11 @@ import fs from 'fs';
 import { IMPORT_REGEXP, IMPORT_START_REGEXP } from '../snippetPlugin';
 
 /**
+ * Constant used to prefix type imports.
+ */
+const TYPE_IMPORT_PREFIX = 'type::';
+
+/**
  * Combines import statements into a single string.
  *
  * @param importStatements - The import statements to combine.
@@ -12,7 +17,13 @@ export const combineImportStatements = (importStatements: Record<string, Set<str
   return Object.keys(importStatements)
     .map(
       // Transforming collected imports into import statements
-      (source) => `import { ${Array.from(importStatements[source]).join(', ')} } from '${source}';`
+      (source) => {
+        const importItems = Array.from(importStatements[source]).join(', ');
+        const isTypeImport = source.startsWith(TYPE_IMPORT_PREFIX);
+        const importType = isTypeImport ? 'type ' : '';
+
+        return `import ${importType}{ ${importItems} } from '${source.replace(TYPE_IMPORT_PREFIX, '')}';`;
+      }
     )
     .join('\n');
 };
@@ -150,22 +161,28 @@ export const collectImportStatements = (lines: string[], specifiedImports: strin
        */
 
       if (matches && matches.length >= 1) {
+        // Is the current import a type import?
+        const isTypeImport = matches[1]?.trim() === 'type';
+
         // importedItems: ['Provider', 'Wallet']
         const importedItems = matches[2].replace(/[\{\}\s]/g, '').split(/\,/);
 
         // importSource: 'fuels'
         const [, importSource] = matches[3].split("'");
 
+        // source: 'type::fuels' or 'fuels'
+        const source = isTypeImport ? `${TYPE_IMPORT_PREFIX}${importSource}` : importSource;
+
         // Add collected imports 'allImportedItems' only if they were specified
         importedItems.forEach((item) => {
           if (specifiedImports.includes(item)) {
             allImportedItems.add(item);
 
-            if (!importStatements[importSource]) {
-              importStatements[importSource] = new Set();
+            if (!importStatements[source]) {
+              importStatements[source] = new Set();
             }
 
-            importStatements[importSource].add(item);
+            importStatements[source].add(item);
           }
         });
       }
