@@ -1,2 +1,8 @@
 [workspace]
-members = ["logging"]
+members = [
+  "predicate-echo",
+  "script-echo",
+  "script-print",
+  "logging",
+  "contract-echo",
+]
