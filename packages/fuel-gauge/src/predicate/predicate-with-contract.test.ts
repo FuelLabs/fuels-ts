@@ -37,6 +37,7 @@ describe('Predicate', () => {
     let provider: Provider;
     let gasPrice: BN;
     let baseAssetId: string;
+    
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       gasPrice = provider.getGasConfig().minGasPrice;
