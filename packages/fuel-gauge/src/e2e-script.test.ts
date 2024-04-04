@@ -108,12 +108,14 @@ describe('Live Script Test', () => {
 
       output = value;
     } catch (e) {
+      const address = wallet.address.toAddress();
+
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
         - add assets: https://faucet-beta-5.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${process.env.TEST_WALLET_ADDRESS}
-        - bech32 address: ${process.env.TEST_WALLET_ADDRESS}
+        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${address}
+        - bech32 address: ${address}
       `);
     }
 
