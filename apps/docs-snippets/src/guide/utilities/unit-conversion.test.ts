@@ -1,4 +1,4 @@
-import { BN, bn } from 'fuels';
+import { BN, UNITS_ETHER, bn } from 'fuels';
 import { createAndDeployContractFromProject } from 'src/utils';
 import { DocSnippetProjectsEnum } from 'test/fixtures/forc-projects';
 
@@ -93,7 +93,9 @@ describe('unit-conversion', () => {
       const expected = "1000000000000000000";
 
       // #region parse-units-4
-      const result = bn.parseUnits('1', 18).toString();
+      // #import { bn, UNITS_ETHER };
+
+      const result = bn.parseUnits('1', UNITS_ETHER).toString();
       // "1000000000000000000"
       // #endregion parse-units-4
 
@@ -119,9 +121,11 @@ describe('unit-conversion', () => {
       const expected = "2.000";
 
       // #region format-2
+      // #import { bn, UNITS_ETHER };
+
       const oneEther = bn('2000000000000000000');
 
-      const result = oneEther.format({ units: 18 });
+      const result = oneEther.format({ units: UNITS_ETHER });
       // "2.000"
       // #endregion format-2
 
@@ -160,9 +164,11 @@ describe('unit-conversion', () => {
       const expected = '1.000000000000000000'; 
 
       // #region format-units-2
+      // #import { bn, UNITS_ETHER };
+
       const oneEther = bn('1000000000000000000');
 
-      const result = oneEther.formatUnits(18);
+      const result = oneEther.formatUnits(UNITS_ETHER);
       // "1.000000000000000000"
       // #endregion format-units-2
 

@@ -52,7 +52,7 @@ A `precision` variable will allow for the formatting of numbers with a specific 
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#format-3{ts:line-numbers}
 
-## Format units
+### Format units
 
 The `formatUnits` function is a lesser alternative to the `format` function, as it will maintain the same precision as the input value.
 
