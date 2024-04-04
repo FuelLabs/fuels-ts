@@ -8,8 +8,6 @@ import type {
   TransactionType,
   JsonAbi,
   ScriptTransactionRequest,
-  ReceiptScriptResult,
-  TransactionCost,
 } from 'fuels';
 import {
   BN,
@@ -28,7 +26,6 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
   Predicate,
-  ReceiptType,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -988,36 +985,18 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
 
-  it('should ensure ScriptResultDecoderError works for dryRun and simulate calls', async () => {
+  it('should ensure TX revert error can be extracted for dryRun and simulate calls', async () => {
     const contract = await setupContract({ cache: false });
 
-    const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, BaseAssetId],
-    });
+    const scope = contract.functions.assert_u8(10, 11);
 
-    vi.spyOn(contract.provider, 'getTransactionCost').mockImplementationOnce(async () =>
-      Promise.resolve({ receipts: [] } as unknown as TransactionCost)
+    await expect(scope.dryRun()).rejects.toThrowError(
+      `The transaction reverted because an "assert" statement failed to evaluate to true.`
     );
 
-    await expect(invocationScope.dryRun<BN>()).rejects.toThrowError(
-      `The script call result does not contain a 'scriptResultReceipt'.`
+    await expect(scope.simulate<BN>()).rejects.toThrowError(
+      `The transaction reverted because an "assert" statement failed to evaluate to true.`
     );
-
-    const scriptResultReceipt: ReceiptScriptResult = {
-      type: ReceiptType.ScriptResult,
-      result: bn(1),
-      gasUsed: bn(2),
-    };
-
-    vi.spyOn(contract.provider, 'call').mockImplementation(async () =>
-      Promise.resolve({ receipts: [scriptResultReceipt] })
-    );
-
-    await expect(invocationScope.simulate<BN>()).rejects.toThrowError(
-      `The script call result does not contain a 'returnReceipt'.`
-    );
-
-    vi.restoreAllMocks();
   });
 
   it('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {

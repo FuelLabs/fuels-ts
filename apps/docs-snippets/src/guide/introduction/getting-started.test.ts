@@ -1,4 +1,4 @@
-import { FUEL_BETA_5_NETWORK_URL, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, FUEL_BETA_5_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
 
 /**
  * @group node
@@ -29,5 +29,24 @@ describe('Getting started', () => {
 
     expect(balances).toBeTruthy();
     expect(balances).toBeInstanceOf(Array);
+  });
+
+  it('can connect to a local network', async () => {
+    // #region connecting-to-the-local-node
+    // #import { Provider, Wallet };
+
+    // Create a provider.
+    const LOCAL_FUEL_NETWORK = 'http://127.0.0.1:4000/graphql';
+    const provider = await Provider.create(LOCAL_FUEL_NETWORK);
+
+    // Create our wallet (with a private key).
+    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    // #endregion connecting-to-the-local-node
+
+    expect(provider).toBeTruthy();
+    expect(provider).toBeInstanceOf(Provider);
+    expect(wallet).toBeTruthy();
+    expect(wallet).toBeInstanceOf(WalletUnlocked);
   });
 });
