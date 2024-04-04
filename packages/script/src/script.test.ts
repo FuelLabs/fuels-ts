@@ -46,7 +46,7 @@ const callScript = async <TData, TResult>(
   response: TransactionResponse;
 }> => {
   const { minGasPrice } = account.provider.getGasConfig();
-  const BaseAssetId = account.provider.getBaseAssetId();
+  const baseAssetId = account.provider.getBaseAssetId();
 
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
@@ -57,7 +57,7 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push({ amount: 1000, assetId: BaseAssetId });
+  requiredCoinQuantities.push({ amount: 1000, assetId: baseAssetId });
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
