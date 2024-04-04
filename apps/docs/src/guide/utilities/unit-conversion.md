@@ -16,7 +16,7 @@ Generally, we will need to convert `u64` and `u256` numbers to a `BN` object whe
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#contract-calls-1{ts:line-numbers}
 
-> Note: If a contract call returns a number that is too large to be represented as a JavaScript number, you can convert it to a string using the .toString() method instead of .toNumber().
+> Note: If a contract call returns a number that is too large to be represented as a JavaScript number, you can convert it to a string using the `toString` method instead of `toNumber`.
 
 ## Parsing
 
