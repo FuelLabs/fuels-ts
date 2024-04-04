@@ -1,4 +1,6 @@
 import { BN, bn } from 'fuels';
+import { createAndDeployContractFromProject } from 'src/utils';
+import { DocSnippetProjectsEnum } from 'test/fixtures/forc-projects';
 
 /**
  * @group node
@@ -30,6 +32,26 @@ describe('unit-conversion', () => {
       // #endregion instantiation-2
 
       expect(result).toEqual(expected);
+    })
+  })
+
+  describe('Contract', () => {
+    it('should use BN in a contract', async () => {
+      const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+
+      // #region contract-calls-1
+      const MAX_U64 = bn('18446744073709551615')
+
+      const { value } = await contract.functions.echo_u64(MAX_U64).call();
+
+      value.toString()
+      // "18446744073709551615"
+      
+      value.toNumber()
+      // Will throw an error - as the number is too large.
+      // #endregion contract-calls-1
+    
+      expect(value.toString()).toEqual(MAX_U64.toString());      
     })
   })
 

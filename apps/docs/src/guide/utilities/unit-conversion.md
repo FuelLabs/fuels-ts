@@ -10,6 +10,14 @@ Or using our `bn` utility function.
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#instantiation-2{ts:line-numbers}
 
+## Contract calls
+
+Generally, we will need to convert `u64` and `u256` numbers to a `BN` object when passing them to a Sway program from JavaScript. More information on this can be found [here](../types/numbers.md).
+
+<<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#contract-calls-1{ts:line-numbers}
+
+> Note: If a contract call returns a number that is too large to be represented as a JavaScript number, you can convert it to a string using the .toString() method instead of .toNumber().
+
 ## Parsing
 
 Parsing string-represented numbers (from user input) has never been easier, than using the `parseUnits` function.
