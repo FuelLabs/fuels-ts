@@ -13,4 +13,4 @@
 "@fuel-ts/versions": minor
 ---
 
-chore: upgrade `fuel-core` to `0.23.0`
+chore!: upgrade `fuel-core` to `0.23.0`
