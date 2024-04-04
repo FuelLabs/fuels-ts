@@ -1,8 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../types/JsonAbi';
+import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
-export const findFunctionByName = (abi: JsonAbi, name: string) => {
+export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction => {
   const fn = abi.functions.find((f) => f.name === name);
   if (!fn) {
     throw new FuelError(
