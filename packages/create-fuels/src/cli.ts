@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { Command } from 'commander';
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
+import ora from 'ora';
 import { join } from 'path';
 import prompts from 'prompts';
 
@@ -177,6 +178,11 @@ export const runScaffoldCli = async ({
     throw new Error('You must include at least one Sway program.');
   }
 
+  const fileCopySpinner = ora({
+    text: 'Copying template files..',
+    color: 'green',
+  }).start();
+
   await mkdir(projectPath);
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
@@ -203,10 +209,19 @@ export const runScaffoldCli = async ({
   const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
   writeFileSync(forcTomlPath, newForcTomlContents);
 
+  fileCopySpinner.succeed('Copied template files!');
+
+  const installDepsSpinner = ora({
+    text: 'Installing dependencies..',
+    color: 'green',
+  }).start();
+
   if (shouldInstallDeps) {
     process.chdir(projectPath);
     execSync(`${packageManager} install`, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
+
+  installDepsSpinner.succeed('Installed dependencies!');
 
   log();
   log();
