@@ -83,7 +83,7 @@ describe('Experimental Contract', () => {
 
   it('extracts str slice from revert', async () => {
     await expect(contractInstance.functions.test_revert().call()).rejects.toThrow(
-      /The script reverted with reason RequireFailed/
+      'The transaction reverted because a "require" statement has thrown "This is a revert error".'
     );
   });
 });
