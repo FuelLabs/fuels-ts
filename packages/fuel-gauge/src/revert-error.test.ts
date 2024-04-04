@@ -173,7 +173,7 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for "assert_ne" revert TX', async () => {
+  it('should throw for a missing OutputChange', async () => {
     const { binHexlified: tokenBytecode, abiContents: tokenAbi } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.TOKEN_CONTRACT
     );
@@ -192,7 +192,6 @@ describe('Revert Error Testing', () => {
         tokenContract.functions.mint_coins(500),
         tokenContract.functions.mint_to_addresses(addresses, 300),
       ])
-      .txParams({ gasPrice })
       .getTransactionRequest();
 
     const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(request);
