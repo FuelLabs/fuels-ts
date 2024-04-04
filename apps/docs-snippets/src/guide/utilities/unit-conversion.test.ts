@@ -5,7 +5,6 @@ import { createAndDeployContractFromProject } from '../../utils';
 
 /**
  * @group node
- * @group browser
  */
 describe('unit-conversion', () => {
   describe('instantiation', () => {
