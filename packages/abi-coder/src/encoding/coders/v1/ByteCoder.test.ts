@@ -17,6 +17,13 @@ describe('ByteCoder', () => {
     expect(actual).toStrictEqual(expected);
   });
 
+  it('should encode a byte [byte array]', () => {
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
+    const actual = coder.encode(Uint8Array.from([1, 2, 3]));
+
+    expect(actual).toStrictEqual(expected);
+  });
+
   it('should encode a byte [full word]', () => {
     const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 8, 1, 2, 3, 4, 5, 6, 7, 8]);
     const actual = coder.encode([1, 2, 3, 4, 5, 6, 7, 8]);

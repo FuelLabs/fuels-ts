@@ -1,14 +1,16 @@
 /**
  * Types for Fuel JSON ABI Format as defined on:
- * https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#json-abi-format
+ * https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/json-abi-format.md
  */
+
+import type { EncodingVersion } from '../utils/constants';
 
 export interface JsonAbi {
   readonly types: readonly JsonAbiType[];
   readonly loggedTypes: readonly JsonAbiLoggedType[];
   readonly functions: readonly JsonAbiFunction[];
   readonly configurables: readonly JsonAbiConfigurable[];
-  readonly encoding?: string;
+  readonly encoding?: EncodingVersion;
 }
 
 export interface JsonAbiType {
