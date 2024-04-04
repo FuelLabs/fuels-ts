@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WORD_SIZE, B256Coder, ASSET_ID_LEN, BigNumberCoder } from '@fuel-ts/abi-coder';
+import {
+  WORD_SIZE,
+  B256Coder,
+  ASSET_ID_LEN,
+  BigNumberCoder,
+  CONTRACT_ID_LEN,
+  ENCODING_V1,
+} from '@fuel-ts/abi-coder';
 import type {
   CallResult,
   TransactionResultCallReceipt,
@@ -36,6 +43,11 @@ type CallOutputInfo = {
   isHeap: boolean;
   encodedLength: number;
 };
+
+type ContractCallScriptFn = (
+  call: ContractCall,
+  segmentOffset: number
+) => { scriptData: Uint8Array[]; callParamOffsets: CallOpcodeParamsOffset };
 
 const DEFAULT_OPCODE_PARAMS: CallOpcodeParamsOffset = {
   assetIdOffset: 0,
@@ -201,6 +213,124 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
     };
   });
 
+/**
+ * Obtains script data for a contract call according to the V0 specification.
+ *
+ * @param call - the contract call to obtain for script data for.
+ * @param segmentOffset - the segment to generate pointers and offset data from.
+ * @returns the populated script data and call parameter offsets.
+ */
+export const getScriptDataV0: ContractCallScriptFn = (
+  call: ContractCall,
+  segmentOffset: number
+): { scriptData: Uint8Array[]; callParamOffsets: CallOpcodeParamsOffset } => {
+  const scriptData: Uint8Array[] = [];
+  let gasForwardedSize: number = 0;
+
+  const callParamOffsets: CallOpcodeParamsOffset = {
+    amountOffset: segmentOffset,
+    assetIdOffset: segmentOffset + WORD_SIZE,
+    gasForwardedOffset: call.gas ? segmentOffset + WORD_SIZE + ASSET_ID_LEN : 0,
+    callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
+  };
+
+  // 1. Amount
+  scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
+  // 2. Asset ID
+  scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
+  // 3. Contract ID
+  scriptData.push(call.contractId.toBytes());
+  // 4. Function selector
+  scriptData.push(new BigNumberCoder('u64').encode(call.fnSelector));
+  // 5. Gas to be forwarded
+  if (call.gas) {
+    scriptData.push(new BigNumberCoder('u64').encode(call.gas));
+
+    gasForwardedSize = WORD_SIZE;
+  }
+
+  // 6. Calldata offset
+  if (call.isInputDataPointer) {
+    const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize;
+    scriptData.push(new BigNumberCoder('u64').encode(pointerInputOffset));
+  }
+
+  // 7. Encoded arguments (optional) (variable length)
+  const args = arrayify(call.data);
+  scriptData.push(args);
+
+  return {
+    scriptData,
+    callParamOffsets,
+  };
+};
+
+/**
+ * Obtains script data for a contract call according to the V1 specification.
+ *
+ * @param call - the contract call to obtain for script data for.
+ * @param segmentOffset - the segment to generate pointers and offset data from.
+ * @returns the populated script data and call parameter offsets.
+ */
+export const getScriptDataV1: ContractCallScriptFn = (
+  call: ContractCall,
+  segmentOffset: number
+): { scriptData: Uint8Array[]; callParamOffsets: CallOpcodeParamsOffset } => {
+  const scriptData: Uint8Array[] = [];
+  const callSegmentOffset = segmentOffset + WORD_SIZE;
+  let gasForwardedSize: number = 0;
+
+  // 1. Amount
+  scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
+  // 2. Asset ID
+  scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
+  // 3. Gas to be forwarded
+  if (call.gas) {
+    scriptData.push(new BigNumberCoder('u64').encode(call.gas));
+    gasForwardedSize = WORD_SIZE;
+  }
+
+  const callParamOffsets: CallOpcodeParamsOffset = {
+    amountOffset: callSegmentOffset,
+    assetIdOffset: callSegmentOffset + WORD_SIZE,
+    gasForwardedOffset: callSegmentOffset + WORD_SIZE + ASSET_ID_LEN,
+    callDataOffset: callSegmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
+  };
+  const encodedSelectorOffset =
+    callParamOffsets.callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
+  const customInputOffset = encodedSelectorOffset + call.fnSelectorBytes.length;
+  const bytes = arrayify(call.data);
+
+  // 4. Contract ID
+  scriptData.push(call.contractId.toBytes());
+  // 5. Function selector offset
+  scriptData.push(new BigNumberCoder('u64').encode(encodedSelectorOffset));
+  // 6. CallData offset
+  scriptData.push(new BigNumberCoder('u64').encode(customInputOffset));
+  // 7. Function selector
+  scriptData.push(call.fnSelectorBytes);
+  // 8. Encoded arguments
+  scriptData.push(bytes);
+
+  return {
+    scriptData,
+    callParamOffsets,
+  };
+};
+
+/**
+ * Retrieves a script data function for a specific encoding version.
+ *
+ * @param encoding - the encoding version used for the contract call.
+ * @returns an appropriate script data function.
+ */
+export const getScriptDataForEncoding = (encoding?: string): ContractCallScriptFn => {
+  if (encoding === ENCODING_V1) {
+    return getScriptDataV1;
+  }
+  return getScriptDataV0;
+};
+
 export const getContractCallScript = (
   functionScopes: InvocationScopeLike[],
   maxInputs: BN
@@ -213,78 +343,43 @@ export const getContractCallScript = (
     ),
     (contractCalls): EncodedScriptCall => {
       const TOTAL_CALLS = contractCalls.length;
+
       if (TOTAL_CALLS === 0) {
         return { data: new Uint8Array(), script: new Uint8Array() };
       }
 
-      // Calculate instructions length for call instructions
+      // Get total data offset AFTER all scripts
       const callInstructionsLength = getCallInstructionsLength(contractCalls);
 
-      // pad length
+      // Pad length
       const paddingLength = (8 - (callInstructionsLength % 8)) % 8;
       const paddedInstructionsLength = callInstructionsLength + paddingLength;
 
-      // get total data offset AFTER all scripts
+      // Base offset
       const dataOffset =
         calculateScriptDataBaseOffset(maxInputs.toNumber()) + paddedInstructionsLength;
 
       // The data for each call is ordered into segments
       const paramOffsets: CallOpcodeParamsOffset[] = [];
-      let segmentOffset = dataOffset;
-
       // the data about the contract output
       const outputInfos: CallOutputInfo[] = [];
+      let segmentOffset = dataOffset;
 
       const scriptData: Uint8Array[] = [];
       for (let i = 0; i < TOTAL_CALLS; i += 1) {
         const call = contractCalls[i];
+
+        const { scriptData: callScriptData, callParamOffsets } = getScriptDataForEncoding(
+          call.encoding
+        )(call, segmentOffset);
 
         // store output and param offsets for asm instructions later
         outputInfos.push({
           isHeap: call.isOutputDataHeap,
           encodedLength: call.outputEncodedLength,
         });
-
-        let gasForwardedSize = 0;
-
-        paramOffsets.push({
-          amountOffset: segmentOffset,
-          assetIdOffset: segmentOffset + WORD_SIZE,
-          gasForwardedOffset: call.gas ? segmentOffset + WORD_SIZE + ASSET_ID_LEN : 0,
-          callDataOffset: segmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
-        });
-
-        /// script data, consisting of the following items in the given order:
-        /// 1. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
-        /// 2. Asset ID to be forwarded ([`AssetId::LEN`])
-        scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
-        /// 3. Contract ID ([`ContractId::LEN`]);
-        scriptData.push(call.contractId.toBytes());
-        /// 4. Function selector `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new BigNumberCoder('u64').encode(call.fnSelector));
-        /// 5. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        if (call.gas) {
-          scriptData.push(new BigNumberCoder('u64').encode(call.gas));
-
-          gasForwardedSize = WORD_SIZE;
-        }
-
-        /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
-        // If the method call takes custom inputs or has more than
-        // one argument, we need to calculate the `call_data_offset`,
-        // which points to where the data for the custom types start in the
-        // transaction. If it doesn't take any custom inputs, this isn't necessary.
-        if (call.isInputDataPointer) {
-          const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET + gasForwardedSize;
-          scriptData.push(new BigNumberCoder('u64').encode(pointerInputOffset));
-        }
-
-        /// 7. Encoded arguments (optional) (variable length)
-        const args = arrayify(call.data);
-        scriptData.push(args);
-
-        // move offset for next call
+        scriptData.push(concat(callScriptData));
+        paramOffsets.push(callParamOffsets);
         segmentOffset = dataOffset + concat(scriptData).byteLength;
       }
 
