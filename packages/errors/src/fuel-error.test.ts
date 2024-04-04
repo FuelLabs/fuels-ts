@@ -20,10 +20,10 @@ it('has properties set as expected on creation', () => {
 describe('Parsing', () => {
   it('parses correctly', () => {
     const message = 'my-message';
-    const error = FuelError.parse({ code: ErrorCode.INVALID_URL, message });
+    const error = FuelError.parse({ code: ErrorCode.INVALID_DATA, message });
     expect(error).toBeInstanceOf(FuelError);
     expect(error.message).toBe(message);
-    expect(error.code).toBe(ErrorCode.INVALID_URL);
+    expect(error.code).toBe(ErrorCode.INVALID_DATA);
   });
 
   it('fails when parsing an object without a code property', async () => {
@@ -49,6 +49,7 @@ it('converts error to plain object', () => {
   const code = FuelError.CODES.PARSE_FAILED;
   const name = 'FuelError';
   const message = 'It happens';
-  const err = new FuelError(code, message);
-  expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS });
+  const metadata = { name: 'FuelLabs' };
+  const err = new FuelError(code, message, metadata);
+  expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS, metadata });
 });
