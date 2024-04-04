@@ -49,6 +49,7 @@ it('converts error to plain object', () => {
   const code = FuelError.CODES.PARSE_FAILED;
   const name = 'FuelError';
   const message = 'It happens';
-  const err = new FuelError(code, message);
-  expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS });
+  const metadata = { name: 'FuelLabs' };
+  const err = new FuelError(code, message, metadata);
+  expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS, metadata });
 });
