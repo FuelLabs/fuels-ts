@@ -3,8 +3,6 @@ import fs from 'fs';
 import { IMPORT_REGEXP, IMPORT_START_REGEXP } from '../snippetPlugin';
 
 /**
- * @hidden
- * 
  * Constant used to prefix type imports.
  */
 const TYPE_IMPORT_PREFIX = 'type::';
