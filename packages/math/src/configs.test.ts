@@ -12,6 +12,10 @@ import {
   UNITS_WEI,
 } from './configs';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('configs', () => {
   it('units should not change', () => {
     // Defaults
