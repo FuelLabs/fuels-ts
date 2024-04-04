@@ -1,6 +1,7 @@
 import { BN, UNITS_ETHER, bn } from 'fuels';
-import { createAndDeployContractFromProject } from 'src/utils';
-import { DocSnippetProjectsEnum } from 'test/fixtures/forc-projects';
+
+import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 /**
  * @group node
@@ -46,9 +47,6 @@ describe('unit-conversion', () => {
 
       value.toString()
       // "18446744073709551615"
-      
-      value.toNumber()
-      // Will throw an error - as the number is too large.
       // #endregion contract-calls-1
     
       expect(value.toString()).toEqual(MAX_U64.toString());      
