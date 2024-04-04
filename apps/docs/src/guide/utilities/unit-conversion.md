@@ -65,5 +65,3 @@ We can also format numbers in other units of measure by specifying the `units` v
 ## See also
 
 - [Sway Numbers](../types/numbers.md)
-- Ether.js [`formatUnits`](https://docs.ethers.org/v5/api/utils/display-logic/#utils-formatUnits)
-- Ether.js [`parseUnits`](https://docs.ethers.org/v5/api/utils/display-logic/#utils-parseUnits)
