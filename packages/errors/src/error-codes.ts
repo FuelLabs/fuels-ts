@@ -7,7 +7,6 @@ export enum ErrorCode {
   ABI_TYPES_AND_VALUES_MISMATCH = 'abi-types-and-values-mismatch',
   ABI_MAIN_METHOD_MISSING = 'abi-main-method-missing',
   INVALID_COMPONENT = 'invalid-component',
-  FRAGMENT_NOT_FOUND = 'fragment-not-found',
   CONFIGURABLE_NOT_FOUND = 'configurable-not-found',
   TYPE_NOT_FOUND = 'type-not-found',
   LOG_TYPE_NOT_FOUND = 'log-type-not-found',
@@ -27,7 +26,6 @@ export enum ErrorCode {
   INVALID_B256_ADDRESS = 'invalid-b256-address',
 
   // provider
-  INVALID_URL = 'invalid-url',
   CHAIN_INFO_CACHE_EMPTY = 'chain-info-cache-empty',
   NODE_INFO_CACHE_EMPTY = 'node-info-cache-empty',
   MISSING_PROVIDER = 'missing-provider',
@@ -36,7 +34,6 @@ export enum ErrorCode {
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
-  INSUFFICIENT_BALANCE = 'insufficient-balance',
   WALLET_MANAGER_ERROR = 'wallet-manager-error',
   HD_WALLET_ERROR = 'hd-wallet-error',
   MISSING_CONNECTOR = 'missing-connector',
@@ -55,7 +52,6 @@ export enum ErrorCode {
   ELEMENT_NOT_FOUND = 'element-not-found',
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
-  UNEXPECTED_HEX_VALUE = 'unexpected-hex-value',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
 
   // transaction
@@ -89,7 +85,6 @@ export enum ErrorCode {
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
 
   // chain
-  LATEST_BLOCK_UNAVAILABLE = 'latest-block-unavailable',
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
   UNSUPPORTED_FUEL_CLIENT_VERSION = 'unsupported-fuel-client-version',
 

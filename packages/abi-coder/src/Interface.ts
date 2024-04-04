@@ -52,10 +52,6 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
-    if (!fragment) {
-      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
-    }
-
     return fragment.decodeArguments(data);
   }
 
@@ -66,10 +62,6 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
-    if (!fragment) {
-      throw new FuelError(ErrorCode.FRAGMENT_NOT_FOUND, 'Fragment not found.');
-    }
 
     return fragment.encodeArguments(values, offset);
   }
