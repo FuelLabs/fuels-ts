@@ -1,6 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import fs from 'fs';
-import { IMPORT_REGEXP } from '../snippetPlugin';
+import { IMPORT_REGEXP, IMPORT_START_REGEXP } from '../snippetPlugin';
 
 /**
  * @hidden
@@ -72,6 +72,39 @@ export const validateImports = (
     }
   }
 };
+
+/**
+ * Validates that the snippet content contains valid import statements.
+ * 
+ * @param snippetContent - the snippet content to validate
+ * @param filepath - file path of the snippet
+
+ * @throws {FuelError} - If there are malformed "#import" statements in the code snippet.
+ * ```ts
+ * // Valid
+ * // #import { AssetId };
+ * 
+ * // Not valid
+ * // Missing semicolon: "#import { AssetId }"
+ * // Plain wrong: "#import "
+ * ```
+ */
+export const validateSnippetContent = (snippetContent: string[], filepath: string) => {
+  const allImportStatements = snippetContent.filter((line) => IMPORT_START_REGEXP.test(line));
+  const validImportStatements = snippetContent.filter((line) => IMPORT_REGEXP.test(line));
+
+  // Validates that all the import statements have been picked up
+  if (allImportStatements.length !== validImportStatements.length) {
+    const invalidLines = allImportStatements
+      .filter((line) => !validImportStatements.includes(line))
+      .map((line) => line.trim())
+      .join('\n');
+    throw new FuelError(
+      ErrorCode.VITEPRESS_PLUGIN_ERROR,
+      `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n${invalidLines}`
+    );
+  }
+}
 
 /**
  * Collects import statements from the given lines of code and extracts the imported items and their sources.
