@@ -36,7 +36,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
       (max, coder) => Math.max(max, coder.encodedLength),
       0
     );
-    super('enum', `enum ${name}`, caseIndexCoder.encodedLength + encodedValueSize);
+    super(`enum ${name}`, `enum ${name}`, caseIndexCoder.encodedLength + encodedValueSize);
     this.name = name;
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
