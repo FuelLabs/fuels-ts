@@ -2,6 +2,13 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
+/**
+ * Find a function by name in the ABI.
+ * 
+ * @param abi - the JsonAbi object
+ * @param name - the name of the function to find
+ * @returns the JsonAbi function object
+ */
 export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction => {
   const fn = abi.functions.find((f) => f.name === name);
   if (!fn) {
@@ -13,6 +20,13 @@ export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction 
   return fn;
 };
 
+/**
+ * Find a type by its typeId in the ABI.
+ * 
+ * @param abi - the JsonAbi object
+ * @param typeId - the typeId of the type to find
+ * @returns the JsonAbi type object
+ */
 export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
   const type = abi.types.find((t) => t.typeId === typeId);
   if (!type) {
@@ -24,6 +38,14 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
   return type;
 };
 
+/**
+ * Find all non-empty inputs in a list of inputs.
+ * i.e. all inputs that are not of the type '()'.
+ * 
+ * @param abi - the JsonAbi object
+ * @param inputs - the list of inputs to filter 
+ * @returns the list of non-empty inputs
+ */
 export const findNonEmptyInputs = (
   abi: JsonAbi,
   inputs: readonly JsonAbiArgument[]
