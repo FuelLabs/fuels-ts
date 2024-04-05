@@ -37,7 +37,7 @@ export type InputCoin = {
   /** Points to the TX whose output is being spent. (TxPointer) */
   txPointer: TxPointer;
 
-  /** Index of witness that authorizes spending the coin (u8) */
+  /** Index of witness that authorizes spending the coin (u16) */
   witnessIndex: number;
 
   /** Gas used by predicate (u64) */
@@ -70,7 +70,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
     parts.push(new TxPointerCoder().encode(value.txPointer));
-    parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16').encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
     parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
@@ -98,7 +98,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const assetId = decoded;
     [decoded, o] = new TxPointerCoder().decode(data, o);
     const txPointer = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const witnessIndex = Number(decoded);
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
@@ -225,7 +225,7 @@ export type InputMessage = {
   /** Unique nonce of message */
   nonce: string;
 
-  /** Index of witness that authorizes message (u8) */
+  /** Index of witness that authorizes message (u16) */
   witnessIndex: number;
 
   /** Gas used by predicate (u64) */
@@ -277,7 +277,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
-    parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16').encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(data.length));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
@@ -311,7 +311,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const witnessIndex = Number(decoded);
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
