@@ -34,11 +34,11 @@ export type TransactionScript = {
   /** Merkle root of receipts (b256) */
   receiptsRoot: string;
 
-  /** Script length, in instructions (u16) */
-  scriptLength: number;
+  /** Script length, in instructions (u64) */
+  scriptLength: BN;
 
-  /** Length of script input data, in bytes (u16) */
-  scriptDataLength: number;
+  /** Length of script input data, in bytes (u64) */
+  scriptDataLength: BN;
 
   /** Bitfield of used policy types (u32) */
   policyTypes: number;
@@ -81,10 +81,14 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 
     parts.push(new BigNumberCoder('u64').encode(value.scriptGasLimit));
     parts.push(new B256Coder().encode(value.receiptsRoot));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptLength));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptDataLength));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
     parts.push(new NumberCoder('u16').encode(value.inputsCount));
     parts.push(new NumberCoder('u16').encode(value.outputsCount));
     parts.push(new NumberCoder('u16').encode(value.witnessesCount));
+    parts.push(new ByteArrayCoder(value.scriptLength.toNumber()).encode(value.script));
+    parts.push(new ByteArrayCoder(value.scriptDataLength.toNumber()).encode(value.scriptData));
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
@@ -100,8 +104,9 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const scriptGasLimit = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const receiptsRoot = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptLength = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptDataLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const policyTypes = decoded;
@@ -113,7 +118,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const witnessesCount = decoded;
     [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
     const script = decoded;
-    [decoded, o] = new ByteArrayCoder(scriptDataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(scriptDataLength.toNumber()).decode(data, o);
     const scriptData = decoded;
     [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
     const policies = decoded;
