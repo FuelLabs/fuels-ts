@@ -46,7 +46,7 @@ describe(__filename, () => {
     const amountToPredicate = 1000;
     const amountToReceiver = 200;
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasLimit: 100,
+      gasLimit: 1000,
     });
 
     await tx.waitForResult();
@@ -64,10 +64,7 @@ describe(__filename, () => {
     const tx2 = await predicate.transfer(
       receiverWallet.address.toB256(),
       amountToReceiver,
-      BaseAssetId,
-      {
-        gasLimit: 100,
-      }
+      BaseAssetId
     );
 
     await tx2.waitForResult();
@@ -113,7 +110,7 @@ describe(__filename, () => {
     const amountToPredicate = 10000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasLimit: 100,
+      gasLimit: 1000,
     });
 
     await tx.waitForResult();
@@ -125,9 +122,7 @@ describe(__filename, () => {
     const amountToWallet = 150;
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, amountToWallet, BaseAssetId, {
-        gasLimit: 100,
-      })
+      predicate.transfer(receiverWallet.address, amountToWallet, BaseAssetId)
     );
 
     // #region send-and-spend-funds-from-predicates-7
@@ -158,7 +153,7 @@ describe(__filename, () => {
       amountToReceiver,
       BaseAssetId,
       {
-        gasLimit: 100,
+        gasLimit: 1000,
       }
     );
 

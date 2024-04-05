@@ -67,7 +67,7 @@ describe('Predicate', () => {
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
 
       const { fee: predicateTxFee } = await tx.waitForResult();

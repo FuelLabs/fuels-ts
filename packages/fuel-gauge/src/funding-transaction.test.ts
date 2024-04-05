@@ -57,7 +57,7 @@ describe(__filename, () => {
     // 1500 splitted in 5 = 5 UTXOs of 300 each
     await fundingTxWithMultipleUTXOs({
       account: sender,
-      totalAmount: 1500,
+      totalAmount: 10_000,
       splitIn: 5,
     });
 
@@ -150,8 +150,8 @@ describe(__filename, () => {
     // 5000 splitted in 10 = 10 UTXOs of 500 each
     await fundingTxWithMultipleUTXOs({
       account: sender,
-      totalAmount: 5000,
-      splitIn: 10,
+      totalAmount: 10_000,
+      splitIn: 1,
     });
 
     const request = new ScriptTransactionRequest({

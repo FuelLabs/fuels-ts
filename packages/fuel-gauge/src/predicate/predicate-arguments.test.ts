@@ -53,7 +53,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
 
@@ -99,7 +99,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
 
@@ -130,7 +130,7 @@ describe('Predicate', () => {
 
       await expect(
         predicate.transfer(receiver.address, amountToPredicate, BaseAssetId, {
-          gasLimit: 500,
+          gasLimit: 1000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
@@ -158,7 +158,7 @@ describe('Predicate', () => {
         inputData: [{ has_account: true, total_complete: 100 }],
       });
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
       // #endregion predicate-struct-arg
@@ -192,7 +192,7 @@ describe('Predicate', () => {
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
       await expect(
-        predicate.transfer(receiver.address, 50, BaseAssetId, { gasLimit: 500 })
+        predicate.transfer(receiver.address, 50, BaseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -208,7 +208,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
 
@@ -245,7 +245,7 @@ describe('Predicate', () => {
         inputData: [20, 30],
       });
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
       // #endregion predicate-multi-args
@@ -272,7 +272,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
 
@@ -300,7 +300,7 @@ describe('Predicate', () => {
       expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
       await expect(
-        predicate.transfer(receiver.address, 50, BaseAssetId, { gasLimit: 500 })
+        predicate.transfer(receiver.address, 50, BaseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });

@@ -646,9 +646,7 @@ describe('Contract', () => {
     const num = 1337;
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract.multiCall(invocationScopes).txParams({
-      gasLimit: 20_000,
-    });
+    const multiCallScope = contract.multiCall(invocationScopes);
     await multiCallScope.fundWithRequiredCoins();
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
@@ -865,9 +863,7 @@ describe('Contract', () => {
     const u64Amount = bn(5_000_000_000);
     const amountToContract = u64Amount;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await wallet.transferToContract(contract.id, amountToContract, BaseAssetId);
 
     await tx.waitForResult();
 
@@ -910,9 +906,7 @@ describe('Contract', () => {
 
     const amountToContract = 100;
 
-    const tx = await wallet.transferToContract(contract.id.toB256(), amountToContract, asset, {
-      gasLimit: 10_000,
-    });
+    const tx = await wallet.transferToContract(contract.id.toB256(), amountToContract, asset);
 
     await tx.waitForResult();
 
@@ -936,15 +930,11 @@ describe('Contract', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx1 = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
 
     await tx1.waitForResult();
 
-    const tx2 = await predicate.transferToContract(contract.id, amountToContract, BaseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx2 = await predicate.transferToContract(contract.id, amountToContract, BaseAssetId);
 
     await tx2.waitForResult();
 

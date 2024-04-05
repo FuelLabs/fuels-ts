@@ -41,7 +41,7 @@ describe('Predicate', () => {
       const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasLimit: 500,
+        gasLimit: 1000,
       });
       await tx.waitForResult();
 
@@ -68,7 +68,7 @@ describe('Predicate', () => {
 
       await expect(
         predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-          gasLimit: 500,
+          gasLimit: 1000,
         })
       ).rejects.toThrow('PredicateVerificationFailed');
     });
