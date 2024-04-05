@@ -171,7 +171,6 @@ describe('Contract', () => {
   let provider: Provider;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   it('generates function methods on a simple contract', async () => {
@@ -513,37 +512,6 @@ describe('Contract', () => {
       .txParams({
         gasLimit: transactionCost.gasUsed,
         optimizeGas: false,
-      })
-      .call<[string, string]>();
-
-    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
-  });
-
-  it('Get transaction cost with minGasPrice ', async () => {
-    const contract = await setupContract();
-    const { minGasPrice } = contract.provider.getGasConfig();
-    const invocationScope = contract.multiCall([
-      contract.functions.return_context_amount().callParams({
-        forward: [100, BaseAssetId],
-      }),
-      contract.functions.return_context_amount().callParams({
-        forward: [200, AltToken],
-      }),
-    ]);
-
-    // Get transaction cost using gasPrice from
-    // invocation scope
-    const transactionCost = await invocationScope.getTransactionCost();
-
-    expect(toNumber(transactionCost.gasPrice)).toBe(minGasPrice.toNumber());
-    expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(1);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
-
-    // Test that gasUsed is correctly calculated
-    // and can be used as gasLimit
-    const { value } = await invocationScope
-      .txParams({
-        gasLimit: transactionCost.gasUsed,
       })
       .call<[string, string]>();
 
