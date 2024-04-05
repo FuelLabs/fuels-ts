@@ -467,7 +467,6 @@ query getVersion {
 fragment nodeInfoFragment on NodeInfo {
   utxoValidation
   vmBacktrace
-  minGasPrice
   maxTx
   maxDepth
   nodeVersion
