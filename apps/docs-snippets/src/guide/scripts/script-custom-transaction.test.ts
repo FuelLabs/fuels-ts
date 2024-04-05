@@ -61,9 +61,9 @@ describe(__filename, () => {
     // 2. Instantiate the script main arguments
     const scriptArguments = [
       contract.id.toB256(),
-      { value: ASSET_A },
+      { bits: ASSET_A },
       new BN(1000),
-      { value: ASSET_B },
+      { bits: ASSET_B },
       new BN(500),
     ];
 

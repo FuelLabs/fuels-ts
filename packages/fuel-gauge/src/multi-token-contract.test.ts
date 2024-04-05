@@ -35,7 +35,7 @@ describe('MultiTokenContract', () => {
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const multiTokenContract = await setup();
-    const contractId = { value: multiTokenContract.id.toB256() };
+    const contractId = { bits: multiTokenContract.id.toB256() };
 
     const helperDict: { [key: string]: { assetId: string; amount: number } } = {
       [subIds[0]]: {
@@ -67,9 +67,9 @@ describe('MultiTokenContract', () => {
     });
 
     // define helper to get contract balance
-    const getBalance = async (address: { value: string }, assetId: string) => {
+    const getBalance = async (address: { bits: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
-        .get_balance(address, { value: assetId })
+        .get_balance(address, { bits: assetId })
 
         .simulate<BN>();
       return value;
@@ -89,8 +89,8 @@ describe('MultiTokenContract', () => {
       .multiCall(
         subIds.map((subId) =>
           multiTokenContract.functions.transfer_to_address(
-            { value: userWallet.address.toB256() },
-            { value: helperDict[subId].assetId },
+            { bits: userWallet.address.toB256() },
+            { bits: helperDict[subId].assetId },
             helperDict[subId].amount
           )
         )
@@ -111,7 +111,7 @@ describe('MultiTokenContract', () => {
 
   it('can burn coins', async () => {
     const multiTokenContract = await setup();
-    const contractId = { value: multiTokenContract.id.toB256() };
+    const contractId = { bits: multiTokenContract.id.toB256() };
 
     const helperDict: {
       [key: string]: {
@@ -152,9 +152,9 @@ describe('MultiTokenContract', () => {
     });
 
     // define helper to get contract balance
-    const getBalance = async (address: { value: string }, assetId: string) => {
+    const getBalance = async (address: { bits: string }, assetId: string) => {
       const { value } = await multiTokenContract.functions
-        .get_balance(address, { value: assetId })
+        .get_balance(address, { bits: assetId })
 
         .simulate<BN>();
       return value;

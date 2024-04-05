@@ -29,7 +29,7 @@ import type { Option, Enum, Vec } from "./common";
 export enum MyEnumInput { Checked = 'Checked', Pending = 'Pending' };
 export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };
 
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
 export type MyStructInput = { x: BigNumberish, y: BigNumberish, state: MyEnumInput };
 export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
