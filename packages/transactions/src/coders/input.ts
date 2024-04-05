@@ -22,7 +22,7 @@ export type InputCoin = {
   /** Hash of transaction (b256) */
   txID: string;
 
-  /** Index of transaction output (u8) */
+  /** Index of transaction output (u16) */
   outputIndex: number;
 
   /** Owning address or script hash (b256) */
@@ -65,7 +65,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.txID));
-    parts.push(new NumberCoder('u8').encode(value.outputIndex));
+    parts.push(new NumberCoder('u16').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
@@ -86,7 +86,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const txID = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
@@ -136,7 +136,7 @@ export type InputContract = {
   /** Hash of transaction (b256) */
   txID: string;
 
-  /** Index of transaction output (u8) */
+  /** Index of transaction output (u16) */
   outputIndex: number;
 
   /** Root of amount of coins owned by contract before transaction execution (b256) */
@@ -161,7 +161,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.txID));
-    parts.push(new NumberCoder('u8').encode(value.outputIndex));
+    parts.push(new NumberCoder('u16').encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
     parts.push(new TxPointerCoder().encode(value.txPointer));
@@ -176,7 +176,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const txID = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const balanceRoot = decoded;
