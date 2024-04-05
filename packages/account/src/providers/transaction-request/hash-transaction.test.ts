@@ -11,7 +11,7 @@ import { hashTransaction } from './hash-transaction';
 describe('hashTransaction', () => {
   it('Hash script transaction request', () => {
     expect(hashTransaction(SCRIPT_TX_REQUEST, 0)).toEqual(
-      '0xef06f034adc08aff5ae3c078b7248798ab2c6e1b762f3a631e3e202067ff686f'
+      '0xca726f37b730b61b54dbbe41c47d260f22b5093f157d47840d53de9d9890af4a'
     );
   });
 
@@ -35,7 +35,7 @@ describe('hashTransaction', () => {
     ];
 
     expect(hashTransaction(txRequest, 0)).toEqual(
-      '0x1eeee0608173f11d4761a868555d9c8cfe141cd36d1becc95bc1bc656721969f'
+      '0xc8a1f25420cfe9f26bfa67403dbaa8344d7618bfb76e90bdf53cea50a47e7fa7'
     );
   });
 });
