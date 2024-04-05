@@ -195,7 +195,7 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (testMode) {
-      process.exit(1);
+      throw new Error();
     }
 
     programsToInclude = await promptForProgramsToInclude({
