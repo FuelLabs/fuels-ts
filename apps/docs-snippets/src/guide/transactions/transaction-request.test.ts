@@ -132,6 +132,8 @@ describe('Transaction Request', () => {
   });
 
   it('adds a predicate to a transaction request', () => {
+    const dataToValidatePredicate = ZeroBytes32;
+
     // #region transaction-request-5
     // #import { ScriptTransactionRequest, Predicate };
 
@@ -140,6 +142,9 @@ describe('Transaction Request', () => {
 
     // Instantiate the predicate
     const predicate = new Predicate({ bytecode: predicateBytecode, abi: predicateAbi, provider });
+
+    // Pass the data to validate the predicate and unlock the funds
+    predicate.setData(dataToValidatePredicate);
 
     // Add the predicate input and resources
     transactionRequest.addPredicateResource(coin, predicate);
@@ -178,7 +183,7 @@ describe('Transaction Request', () => {
 
     // Get the chain ID
     const chainId = await provider.getChainId();
-    
+
     // Get the transaction ID using the Chain ID
     const transactionId = transactionRequest.getTransactionId(chainId);
     // TX ID: 0x55667d...

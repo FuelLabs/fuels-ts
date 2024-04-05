@@ -48,6 +48,8 @@ Predicates are used to define the conditions under which a transaction can be ex
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-request.test.ts#transaction-request-5{ts:line-numbers}
 
+> **Note**: For more information on predicates, including information on configuring them, funding them and using them to unlock funds, please refer to the [predicate guide](../contracts/predicates.md).
+
 ### Adding a Witness and Signing a Transaction Request
 
 The SDK provides a way of either modifying the witnesses for a transaction request directly, or by passing accounts. This will then sign the transaction request with the account's private key. Below will detail how to add a witness to a transaction request:
