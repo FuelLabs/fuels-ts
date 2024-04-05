@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import type { JsonAbi, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import { BaseTransactionRequest, Predicate, bn } from 'fuels';
+import { Predicate, bn } from 'fuels';
 import { join } from 'path';
 
 import { fundPredicate, setupWallets } from './predicate/utils/predicate';
