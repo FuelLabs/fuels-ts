@@ -43,9 +43,10 @@ export const MAX_BYTES = 2 ** 32 - 1; // Max u32
 
 export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
   BYTES_32 + // Tx ID
-  WORD_SIZE + // Tx size
+  ASSET_ID_LEN + // Base asset ID
   // Asset ID/Balance coin input pairs
-  maxInputs * (ASSET_ID_LEN + WORD_SIZE);
+  maxInputs * (ASSET_ID_LEN + WORD_SIZE) +
+  WORD_SIZE; // Tx size
 
 // SCRIPT_FIXED_SIZE = 104
 export const SCRIPT_FIXED_SIZE =
