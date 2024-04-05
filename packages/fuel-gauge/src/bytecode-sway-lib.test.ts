@@ -14,7 +14,7 @@ test('compute_bytecode_root', async () => {
     FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
   );
 
-  const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB_TEST);
+  const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
   const contract = await setupContract();
 
   const { logs } = await contract.functions
@@ -29,18 +29,16 @@ test('compute_bytecode_root', async () => {
 
 test('verify_contract_bytecode', async () => {
   const { binHexlified: bytecodeFromFile } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB
   );
-  const setupTestContract = getSetupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
-  const testContract = await setupTestContract();
 
-  const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB_TEST);
+  const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
   const contract = await setupContract();
 
   const { value } = await contract.functions
     .verify_contract_bytecode(
       {
-        value: testContract.id.toB256(),
+        value: contract.id.toB256(),
       },
       arrayify(bytecodeFromFile)
     )
@@ -60,7 +58,7 @@ test('compute_predicate_address', async () => {
 
   const address = predicate.address;
 
-  const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB_TEST);
+  const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
   const contract = await setupContract();
 
   const { value } = await contract.functions
