@@ -8,6 +8,7 @@ import { InputMessageCoder, InputCoder, InputType } from './input';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const MAX_U32 = 2 ** 32 - 1;
+const MAX_U64 = bn(2).pow(64).sub(1);
 
 /**
  * @group node
@@ -28,8 +29,8 @@ describe('InputCoder', () => {
       },
       witnessIndex: 0,
       predicateGasUsed: bn(0),
-      predicateLength: 0,
-      predicateDataLength: 0,
+      predicateLength: bn(0),
+      predicateDataLength: bn(0),
       predicate: '0x',
       predicateData: '0x',
     };
@@ -60,8 +61,8 @@ describe('InputCoder', () => {
       },
       witnessIndex: 0,
       predicateGasUsed: bn(0),
-      predicateLength: MAX_U32,
-      predicateDataLength: MAX_U32,
+      predicateLength: bn(MAX_U32),
+      predicateDataLength: bn(MAX_U32),
       predicate: '0x',
       predicateData: '0x',
     };
@@ -87,15 +88,15 @@ describe('InputCoder', () => {
       },
       witnessIndex: 0,
       predicateGasUsed: bn(0),
-      predicateLength: MAX_U32 + 1,
-      predicateDataLength: MAX_U32 + 1,
+      predicateLength: MAX_U64.add(1),
+      predicateDataLength: MAX_U64.add(1),
       predicate: '0x',
       predicateData: '0x',
     };
 
     await expectToThrowFuelError(
       () => new InputCoder().encode(input),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u32, too many bytes.')
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64.')
     );
   });
 
@@ -134,8 +135,8 @@ describe('InputCoder', () => {
       nonce: '0x0000000000000000000000000000000000000000000000000000000000001234',
       witnessIndex: 0,
       predicateGasUsed: bn(0),
-      predicateLength: 0,
-      predicateDataLength: 0,
+      predicateLength: bn(0),
+      predicateDataLength: bn(0),
       predicate: '0x',
       predicateData: '0x',
     };
@@ -155,8 +156,8 @@ describe('InputCoder', () => {
       nonce: '0x0000000000000000000000000000000000000000000000000000000000001234',
       witnessIndex: 0,
       predicateGasUsed: bn(0),
-      predicateLength: 0,
-      predicateDataLength: 0,
+      predicateLength: bn(0),
+      predicateDataLength: bn(0),
       predicate: '0x',
       predicateData: '0x',
     };
