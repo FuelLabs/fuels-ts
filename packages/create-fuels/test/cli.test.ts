@@ -133,7 +133,9 @@ test('create-fuels reports an error if the project directory already exists', as
     args,
     shouldInstallDeps: false,
     testMode: true,
-  }).catch((e) => {});
+  }).catch((e) => {
+    expect(e).toBeInstanceOf(Error);
+  });
 
   expect(writeSpy).toHaveBeenCalledWith(
     expect.stringContaining('A folder already exists at test-project-2')
@@ -160,7 +162,9 @@ test('create-fuels reports an error if no programs are chosen to be included', a
     shouldInstallDeps: false,
     forceDisablePrompts: true,
     testMode: true,
-  }).catch((e) => {});
+  }).catch((e) => {
+    expect(e).toBeInstanceOf(Error);
+  });
 
   expect(writeSpy).toHaveBeenCalledWith(
     expect.stringContaining('You must include at least one Sway program.')
