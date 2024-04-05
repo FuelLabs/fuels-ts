@@ -1,6 +1,6 @@
 # Transaction Parameters
 
-Transaction parameters allow you to configure various aspects of your blockchain transactions. The parameters are:
+Transaction parameters allow you to configure various aspects of your blockchain transactions. Dependent on these parameters, it may introduce a [transaction policy](./transaction-policies.md). The parameters are:
 
 1. Gas Price - The price you're willing to pay for each unit of [gas](https://docs.fuel.network/docs/intro/glossary/#gas) consumed during the transaction execution.
 1. Gas Limit - The maximum amount of gas you're willing to allow the transaction to consume. If the amount of gas a transaction will use is greater than the gas limit, the transaction will fail.

@@ -1,6 +1,6 @@
 # Transaction Policies
 
-Transaction policies are rules that can govern how a transaction is processed, based off the transaction parameters that are passed to a transaction request. The available policies are as follows:
+Transaction policies are rules that can govern how a transaction is processed, introduced by the [transaction parameters](./transaction-parameters.md) that you pass to a transaction request. The available policies are as follows:
 
 1. Gas Price - Maximum gas price for transaction.
 1. Witness Limit - The maximum amount of witness data allowed for the transaction.
