@@ -27,8 +27,8 @@ export const MOCK_COIN_INPUT: InputCoin = {
   },
   witnessIndex: 0,
   predicateGasUsed: bn(0),
-  predicateLength: 0,
-  predicateDataLength: 0,
+  predicateLength: bn(0),
+  predicateDataLength: bn(0),
   predicate: '0x',
   predicateData: '0x',
 };
@@ -43,8 +43,8 @@ export const MOCK_MESSAGE_INPUT: InputMessage = {
   dataLength: ZeroBytes32.length,
   data: ZeroBytes32,
   predicateGasUsed: bn(0),
-  predicateLength: 0,
-  predicateDataLength: 0,
+  predicateLength: bn(0),
+  predicateDataLength: bn(0),
   predicate: '0x',
   predicateData: '0x',
 };
