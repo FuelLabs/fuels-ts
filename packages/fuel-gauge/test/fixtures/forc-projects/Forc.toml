@@ -6,6 +6,7 @@ members = [
   "advanced-logging",
   "auth_testing_abi",
   "auth_testing_contract",
+  "bytecode-sway-lib-test",
   "bytes",
   "call-test-contract",
   "collision_in_fn_names",

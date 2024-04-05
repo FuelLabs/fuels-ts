@@ -12,6 +12,8 @@ import { BigNumberCoder } from './BigNumberCoder';
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
+const isUintArray = (value: unknown): value is Uint8Array => value instanceof Uint8Array;
+
 export class VecCoder<TCoder extends Coder> extends Coder<
   InputValueOf<TCoder>,
   DecodedValueOf<TCoder>
@@ -24,8 +26,11 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
-    if (!Array.isArray(value)) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+    if (!Array.isArray(value) && !isUintArray(value)) {
+      throw new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        `Expected array value, or a Uint8Array. You can use arrayify to convert a value to a Uint8Array.`
+      );
     }
 
     const parts: Uint8Array[] = [];

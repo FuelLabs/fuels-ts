@@ -9,6 +9,7 @@ export enum FuelGaugeProjectsEnum {
   AUTH_TESTING_ABI = 'auth_testing_abi',
   AUTH_TESTING_CONTRACT = 'auth_testing_contract',
   BYTES = 'bytes',
+  BYTECODE_SWAY_LIB_TEST = 'bytecode-sway-lib-test',
   CALL_TEST_CONTRACT = 'call-test-contract',
   CONFIGURABLE_CONTRACT = 'configurable-contract',
   COMPLEX_SCRIPT = 'complex-script',
