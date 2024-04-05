@@ -78,7 +78,7 @@ async function promptForProgramsToInclude({
       { title: 'Predicate', value: 'predicate', selected: true },
       { title: 'Script', value: 'script', selected: true },
     ],
-    instructions: true,
+    instructions: false,
   });
   return {
     contract: programsToIncludeInput.programsToInclude.includes('contract'),
@@ -122,16 +122,17 @@ export const runScaffoldCli = async ({
   args = process.argv,
   shouldInstallDeps = false,
   forceDisablePrompts = false,
+  testMode = false,
 }: {
   program: Command;
   args: string[];
   shouldInstallDeps?: boolean;
   forceDisablePrompts?: boolean;
+  testMode: boolean;
 }) => {
   program.parse(args);
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
-
   const verboseEnabled = program.opts().verbose ?? false;
 
   while (existsSync(projectPath)) {
@@ -141,16 +142,33 @@ export const runScaffoldCli = async ({
       )
     );
 
+    // Exit the program if we are testing to prevent hanging
+    if (testMode) {
+      throw new Error();
+    }
+
     projectPath = await promptForProjectPath();
   }
 
-  while (projectPath) {
+  while (!projectPath) {
     log(chalk.red('Please specify a project directory.'));
 
+    // Exit the program if we are testing to prevent hanging
+    if (testMode) {
+      throw new Error();
+    }
+
     projectPath = await promptForProjectPath();
   }
 
-  let packageManager = await promptForPackageManager();
+  const cliPackageManagerChoices = {
+    pnpm: program.opts().pnpm,
+    npm: program.opts().npm,
+  };
+
+  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
+
+  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
 
   if (!packageManager) {
     packageManager = 'pnpm';
@@ -175,6 +193,11 @@ export const runScaffoldCli = async ({
   while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
     log(chalk.red('You must include at least one Sway program.'));
 
+    // Exit the program if we are testing to prevent hanging
+    if (testMode) {
+      process.exit(1);
+    }
+
     programsToInclude = await promptForProgramsToInclude({
       forceDisablePrompts,
     });
@@ -189,7 +212,7 @@ export const runScaffoldCli = async ({
 
   await cp(join(__dirname, '../templates/nextjs'), projectPath, {
     recursive: true,
-    filter: (filename) => filename !== 'CHANGELOG.md',
+    filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
