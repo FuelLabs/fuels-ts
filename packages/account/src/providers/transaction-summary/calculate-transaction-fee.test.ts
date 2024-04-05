@@ -37,9 +37,9 @@ describe('calculateTransactionFee', () => {
       rawPayload: transactionRawPayload,
     });
 
-    const expectedfee = bn(197);
-    const expectedmaxFee = bn(197);
-    const expectedminFee = bn(88);
+    const expectedfee = bn(84);
+    const expectedmaxFee = bn(84);
+    const expectedminFee = bn(77);
 
     expect(fee.toNumber()).toEqual(expectedfee.toNumber());
     expect(maxFee.toNumber()).toEqual(expectedmaxFee.toNumber());
@@ -70,9 +70,9 @@ describe('calculateTransactionFee', () => {
       rawPayload: transactionRawPayload,
     });
 
-    const expectedfee = bn(86);
-    const expectedmaxFee = bn(86);
-    const expectedminFee = bn(86);
+    const expectedfee = bn(159);
+    const expectedmaxFee = bn(159);
+    const expectedminFee = bn(159);
 
     expect(fee.toNumber()).toEqual(expectedfee.toNumber());
     expect(maxFee.toNumber()).toEqual(expectedmaxFee.toNumber());
