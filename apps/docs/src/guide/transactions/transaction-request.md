@@ -48,7 +48,7 @@ Predicates are used to define the conditions under which a transaction can be ex
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-request.test.ts#transaction-request-5{ts:line-numbers}
 
-> **Note**: For more information on predicates, including information on configuring them, funding them and using them to unlock funds, please refer to the [predicate guide](../contracts/predicates.md).
+> **Note**: For more information on predicates, including information on configuring them, funding them and using them to unlock funds, please refer to the [predicate guide](../predicates/index.md).
 
 ### Adding a Witness and Signing a Transaction Request
 
