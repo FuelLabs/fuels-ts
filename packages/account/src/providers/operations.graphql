@@ -256,6 +256,11 @@ fragment DependentCostFragment on DependentCost {
 }
 
 fragment GasCostsFragment on GasCosts {
+  version {
+    ... on Version {
+      value
+    }
+  }
   add
   addi
   aloc
@@ -411,6 +416,11 @@ fragment GasCostsFragment on GasCosts {
 }
 
 fragment consensusParametersFragment on ConsensusParameters {
+  version {
+    ... on Version {
+      value
+    }
+  }
   txParams {
     ...TxParametersFragment
   }

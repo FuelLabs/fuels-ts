@@ -6,6 +6,7 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
   daHeight: '234',
   consensusParameters: {
     __typename: 'ConsensusParameters',
+    version: { __typename: 'Version', value: 'V1' },
     txParams: {
       __typename: 'TxParameters',
       maxInputs: '255',
@@ -39,6 +40,7 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
     baseAssetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
     chainId: '0',
     gasCosts: {
+      version: { __typename: 'Version', value: 'V1' },
       __typename: 'GasCosts',
       add: '1',
       addi: '1',
