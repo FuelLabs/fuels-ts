@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
 import { Address } from '@fuel-ts/address';
-import { BN } from '@fuel-ts/math'
+import { BN } from '@fuel-ts/math';
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
