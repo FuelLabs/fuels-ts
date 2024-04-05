@@ -1,15 +1,9 @@
 import { readFileSync } from 'fs';
 import type { JsonAbi, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import { Predicate, bn } from 'fuels';
+import { BaseTransactionRequest, Predicate, bn } from 'fuels';
 import { join } from 'path';
 
 import { fundPredicate, setupWallets } from './predicate/utils/predicate';
-
-let wallet: WalletUnlocked;
-let receiver: WalletLocked;
-let bytecode: Buffer;
-let abi: JsonAbi;
-let provider: Provider;
 
 const U8_MAX = 255;
 const U16_MAX = 65535;
@@ -23,8 +17,16 @@ const B512 =
  * @group node
  */
 describe('Experimental Predicate', () => {
+  let wallet: WalletUnlocked;
+  let receiver: WalletLocked;
+  let bytecode: Buffer;
+  let abi: JsonAbi;
+  let provider: Provider;
+  let baseAssetId: string;
+
   beforeAll(async () => {
     [wallet, receiver] = await setupWallets();
+    baseAssetId = wallet.provider.getBaseAssetId();
     const name = 'predicate-echo';
     const path = join(
       __dirname,
@@ -82,16 +84,16 @@ describe('Experimental Predicate', () => {
       inputData: [struct],
     });
 
-    const initialBalance = await receiver.getBalance(BaseAssetId);
+    const initialBalance = await receiver.getBalance(baseAssetId);
     expect(initialBalance).toStrictEqual(bn(0));
 
     const amountToReceiver = 100;
 
     await fundPredicate(wallet, predicate, 100_000);
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
     await tx.waitForResult();
 
-    const finalBalance = await receiver.getBalance(BaseAssetId);
+    const finalBalance = await receiver.getBalance(baseAssetId);
     expect(finalBalance).toStrictEqual(bn(amountToReceiver));
   });
 });
