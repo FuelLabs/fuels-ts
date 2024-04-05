@@ -187,7 +187,6 @@ fragment messageProofFragment on MessageProof {
     prevRoot
     time
     applicationHash
-    messageReceiptRoot
     messageReceiptCount
   }
   commitBlockHeader {
@@ -199,7 +198,6 @@ fragment messageProofFragment on MessageProof {
     prevRoot
     time
     applicationHash
-    messageReceiptRoot
     messageReceiptCount
   }
   sender
