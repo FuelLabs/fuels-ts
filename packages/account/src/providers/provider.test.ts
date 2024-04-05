@@ -1173,7 +1173,7 @@ describe('Provider', () => {
   test('custom fetch works with requestMiddleware', async () => {
     let requestHeaders: HeadersInit | undefined;
     await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, requestInit) => {
+      fetch: (url, requestInit): Promise<Response> => {
         requestHeaders = requestInit?.headers;
         return fetch(url, requestInit);
       },
@@ -1192,7 +1192,7 @@ describe('Provider', () => {
   test('custom fetch works with timeout', async () => {
     const timeout = 500;
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      fetch: async (url, requestInit) => fetch(url, requestInit),
+      fetch: (url, requestInit): Promise<Response> => fetch(url, requestInit),
       timeout,
     });
     vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
