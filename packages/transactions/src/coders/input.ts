@@ -43,11 +43,11 @@ export type InputCoin = {
   /** Gas used by predicate (u64) */
   predicateGasUsed: BN;
 
-  /** Length of predicate, in instructions (u16) */
-  predicateLength: number;
+  /** Length of predicate, in instructions (u64) */
+  predicateLength: BN;
 
-  /** Length of predicate input data, in bytes (u16) */
-  predicateDataLength: number;
+  /** Length of predicate input data, in bytes (u64) */
+  predicateDataLength: BN;
 
   /** Predicate bytecode (byte[]) */
   predicate: string;
@@ -72,10 +72,12 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
-    parts.push(new NumberCoder('u32').encode(value.predicateLength));
-    parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
-    parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
-    parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
+    parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
+    parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
+    parts.push(new ByteArrayCoder(value.predicateLength.toNumber()).encode(value.predicate));
+    parts.push(
+      new ByteArrayCoder(value.predicateDataLength.toNumber()).encode(value.predicateData)
+    );
 
     return concat(parts);
   }
@@ -100,13 +102,13 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateLength = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateDataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(predicateLength.toNumber()).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateDataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(predicateDataLength.toNumber()).decode(data, o);
     const predicateData = decoded;
 
     return [
@@ -229,11 +231,11 @@ export type InputMessage = {
   /** Gas used by predicate (u64) */
   predicateGasUsed: BN;
 
-  /** Length of predicate, in instructions (u16) */
-  predicateLength: number;
+  /** Length of predicate, in instructions (u64) */
+  predicateLength: BN;
 
-  /** Length of predicate input data, in bytes (u16) */
-  predicateDataLength: number;
+  /** Length of predicate input data, in bytes (u64) */
+  predicateDataLength: BN;
 
   /** Predicate bytecode (byte[]) */
   predicate: string;
@@ -278,11 +280,13 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(data.length));
-    parts.push(new NumberCoder('u32').encode(value.predicateLength));
-    parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
+    parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
+    parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(data.length).encode(data));
-    parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
-    parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
+    parts.push(new ByteArrayCoder(value.predicateLength.toNumber()).encode(value.predicate));
+    parts.push(
+      new ByteArrayCoder(value.predicateDataLength.toNumber()).encode(value.predicateData)
+    );
 
     return concat(parts);
   }
@@ -315,13 +319,13 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const dataLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateLength = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
     const messageData = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(predicateLength.toNumber()).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateDataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(predicateDataLength.toNumber()).decode(data, o);
     const predicateData = decoded;
 
     return [
