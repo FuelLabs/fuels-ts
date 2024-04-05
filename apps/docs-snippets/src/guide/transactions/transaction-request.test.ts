@@ -132,7 +132,7 @@ describe('Transaction Request', () => {
   });
 
   it('adds a predicate to a transaction request', () => {
-    const dataToValidatePredicate = ZeroBytes32;
+    const dataToValidatePredicate = [ZeroBytes32];
 
     // #region transaction-request-5
     // #import { ScriptTransactionRequest, Predicate };
@@ -140,11 +140,14 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
 
-    // Instantiate the predicate
-    const predicate = new Predicate({ bytecode: predicateBytecode, abi: predicateAbi, provider });
-
-    // Pass the data to validate the predicate and unlock the funds
-    predicate.setData(dataToValidatePredicate);
+    // Instantiate the predicate and pass valid input data to validate
+    // the predicate and unlock the funds
+    const predicate = new Predicate({
+      bytecode: predicateBytecode,
+      abi: predicateAbi,
+      inputData: dataToValidatePredicate,
+      provider,
+    });
 
     // Add the predicate input and resources
     transactionRequest.addPredicateResource(coin, predicate);
