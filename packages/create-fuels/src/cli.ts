@@ -78,7 +78,7 @@ async function promptForProgramsToInclude({
       { title: 'Predicate', value: 'predicate', selected: true },
       { title: 'Script', value: 'script', selected: true },
     ],
-    instructions: false,
+    instructions: true,
   });
   return {
     contract: programsToIncludeInput.programsToInclude.includes('contract'),
@@ -185,7 +185,10 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
+  await cp(join(__dirname, '../templates/nextjs'), projectPath, {
+    recursive: true,
+    filter: (filename) => filename !== 'CHANGELOG.md',
+  });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
   writeEnvFile(join(projectPath, '.env.local'), programsToInclude);

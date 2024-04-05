@@ -95,6 +95,7 @@ test.each(possibleProgramsToInclude)(
     });
 
     let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
+    originalTemplateFiles.filter((filename) => !filename.includes('CHANGELOG'));
     originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
 
     const testProjectFiles = await getAllFiles('test-project');
