@@ -126,14 +126,12 @@ export type ChainInfo = {
 export type NodeInfo = {
   utxoValidation: boolean;
   vmBacktrace: boolean;
-  minGasPrice: BN;
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
 };
 
 export type NodeInfoAndConsensusParameters = {
-  minGasPrice: BN;
   nodeVersion: string;
   gasPerByte: BN;
   gasPriceFactor: BN;
@@ -397,11 +395,9 @@ export default class Provider {
    * Returns some helpful parameters related to gas fees.
    */
   getGasConfig() {
-    const { minGasPrice } = this.getNode();
     const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte, gasCosts } =
       this.getChain().consensusParameters;
     return {
-      minGasPrice,
       maxGasPerTx,
       maxGasPerPredicate,
       gasPriceFactor,
@@ -530,7 +526,6 @@ export default class Provider {
     const processedNodeInfo: NodeInfo = {
       maxDepth: bn(nodeInfo.maxDepth),
       maxTx: bn(nodeInfo.maxTx),
-      minGasPrice: bn(nodeInfo.minGasPrice),
       nodeVersion: nodeInfo.nodeVersion,
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,

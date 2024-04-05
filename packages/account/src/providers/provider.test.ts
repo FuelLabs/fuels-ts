@@ -795,7 +795,6 @@ describe('Provider', () => {
     expect(gasConfig.gasPriceFactor).toBeDefined();
     expect(gasConfig.maxGasPerPredicate).toBeDefined();
     expect(gasConfig.maxGasPerTx).toBeDefined();
-    expect(gasConfig.minGasPrice).toBeDefined();
   });
 
   it('should throws when using getChain or getNode and without cached data', async () => {
