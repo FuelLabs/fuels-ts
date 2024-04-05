@@ -281,6 +281,8 @@ export type TransactionMint = {
 
   /** The asset ID corresponding to the minted amount. */
   mintAssetId: string;
+
+  gasPrice: BN;
 };
 
 export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint> {
@@ -296,6 +298,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     parts.push(new OutputContractCoder().encode(value.outputContract));
     parts.push(new BigNumberCoder('u64').encode(value.mintAmount));
     parts.push(new B256Coder().encode(value.mintAssetId));
+    parts.push(new BigNumberCoder('u64').encode(value.gasPrice));
 
     return concat(parts);
   }
@@ -314,6 +317,8 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     const mintAmount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const mintAssetId = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    const gasPrice = decoded;
 
     return [
       {
@@ -323,6 +328,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
         outputContract,
         mintAmount,
         mintAssetId,
+        gasPrice,
       },
       o,
     ];
