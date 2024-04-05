@@ -155,9 +155,6 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 export type TransactionCreate = {
   type: TransactionType.Create;
 
-  /** Contract bytecode length, in instructions (u16) */
-  bytecodeLength: number;
-
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
 
