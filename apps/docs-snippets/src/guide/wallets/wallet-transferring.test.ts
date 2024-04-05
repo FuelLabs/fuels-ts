@@ -18,8 +18,8 @@ describe(__filename, () => {
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [
-      [1000, BaseAssetId],
-      [1000, ASSET_A],
+      [100_000, BaseAssetId],
+      [100_000, ASSET_A],
     ]);
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     privateKey = wallet.privateKey;
