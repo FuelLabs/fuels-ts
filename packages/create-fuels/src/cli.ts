@@ -130,29 +130,27 @@ export const runScaffoldCli = async ({
 }) => {
   program.parse(args);
 
-  const projectPath = program.args[0] ?? (await promptForProjectPath());
+  let projectPath = program.args[0] ?? (await promptForProjectPath());
+
   const verboseEnabled = program.opts().verbose ?? false;
 
-  if (existsSync(projectPath)) {
-    throw new Error(
-      `A folder already exists at ${projectPath}. Please choose a different project name.`
+  while (existsSync(projectPath)) {
+    log(
+      chalk.red(
+        `A folder already exists at ${projectPath}. Please choose a different project name.`
+      )
     );
+
+    projectPath = await promptForProjectPath();
   }
 
-  if (!projectPath) {
-    throw new Error('Please specify a project directory.');
+  while (projectPath) {
+    log(chalk.red('Please specify a project directory.'));
+
+    projectPath = await promptForProjectPath();
   }
 
-  const cliPackageManagerChoices = {
-    pnpm: program.opts().pnpm,
-    npm: program.opts().npm,
-  };
-  if (Object.values(cliPackageManagerChoices).filter(Boolean).length > 1) {
-    throw new Error('You can only specify one package manager.');
-  }
-  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
-
-  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
+  let packageManager = await promptForPackageManager();
 
   if (!packageManager) {
     packageManager = 'pnpm';
@@ -174,8 +172,12 @@ export const runScaffoldCli = async ({
     });
   }
 
-  if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    throw new Error('You must include at least one Sway program.');
+  while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
+    log(chalk.red('You must include at least one Sway program.'));
+
+    programsToInclude = await promptForProgramsToInclude({
+      forceDisablePrompts,
+    });
   }
 
   const fileCopySpinner = ora({

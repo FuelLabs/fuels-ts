@@ -12,4 +12,5 @@ runScaffoldCli({
   .then(() => process.exit(0))
   .catch((e) => {
     log(chalk.red(e));
+    process.exit(1);
   });
