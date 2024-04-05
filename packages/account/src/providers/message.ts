@@ -44,7 +44,6 @@ export type BlockHeader = {
   prevRoot: string;
   time: string;
   applicationHash: string;
-  messageReceiptRoot: string;
   messageReceiptCount: BN;
 };
 
