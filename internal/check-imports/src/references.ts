@@ -24,9 +24,9 @@ import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
 import { FunctionInvocationScope } from '@fuel-ts/program';
-import { PANIC_REASONS } from '@fuel-ts/program/configs';
 import { Script } from '@fuel-ts/script';
 import { InputCoinCoder } from '@fuel-ts/transactions';
+import { PANIC_REASONS } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 // TODO: Add `launchNode` and `launchNodeAndGetWallets` here
