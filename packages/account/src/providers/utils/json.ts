@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
+import { Address } from '@fuel-ts/address';
+import { BN } from '@fuel-ts/math'
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -10,21 +12,23 @@ import { clone } from 'ramda';
 /** @hidden */
 function normalize(object: any) {
   Object.keys(object).forEach((key) => {
-    switch (object[key]?.constructor.name) {
-      case 'Uint8Array':
-        object[key] = hexlify(object[key]);
+    const obj = object[key];
+
+    switch (true) {
+      case obj instanceof BN:
+        object[key] = obj.toHex();
         break;
-      case 'Array':
-        object[key] = normalize(object[key]);
+      case obj instanceof Address:
+        object[key] = obj.toB256();
         break;
-      case 'BN':
-        object[key] = object[key].toHex();
+      case obj instanceof Uint8Array:
+        object[key] = hexlify(obj);
         break;
-      case 'Address':
-        object[key] = object[key].toB256();
+      case Array.isArray(obj):
+        object[key] = normalize(obj);
         break;
-      case 'Object':
-        object[key] = normalize(object[key]);
+      case obj instanceof Object:
+        object[key] = normalize(obj);
         break;
       default:
         break;
