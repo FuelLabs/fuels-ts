@@ -31,6 +31,9 @@ export type TransactionScript = {
   /** Gas limit for transaction (u64) */
   scriptGasLimit: BN;
 
+  /** Merkle root of receipts (b256) */
+  receiptsRoot: string;
+
   /** Script length, in instructions (u16) */
   scriptLength: number;
 
@@ -49,20 +52,17 @@ export type TransactionScript = {
   /** Number of witnesses (u8) */
   witnessesCount: number;
 
-  /** Merkle root of receipts (b256) */
-  receiptsRoot: string;
-
   /** Script to execute (byte[]) */
   script: string;
 
   /** Script input data (parameters) (byte[]) */
   scriptData: string;
 
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
   /** List of policies, sorted by PolicyType. */
   policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
 
   /** List of outputs (Output[]) */
   outputs: Output[];
@@ -80,15 +80,9 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const parts: Uint8Array[] = [];
 
     parts.push(new BigNumberCoder('u64').encode(value.scriptGasLimit));
-    parts.push(new NumberCoder('u32').encode(value.scriptLength));
-    parts.push(new NumberCoder('u32').encode(value.scriptDataLength));
-    parts.push(new NumberCoder('u32').encode(value.policyTypes));
-    parts.push(new NumberCoder('u8').encode(value.inputsCount));
-    parts.push(new NumberCoder('u8').encode(value.outputsCount));
-    parts.push(new NumberCoder('u8').encode(value.witnessesCount));
     parts.push(new B256Coder().encode(value.receiptsRoot));
-    parts.push(new ByteArrayCoder(value.scriptLength).encode(value.script));
-    parts.push(new ByteArrayCoder(value.scriptDataLength).encode(value.scriptData));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
@@ -102,7 +96,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     let o = offset;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptGasLimit = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
+    const receiptsRoot = decoded;
     const scriptLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const scriptDataLength = decoded;
@@ -114,9 +109,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const outputsCount = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessesCount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const receiptsRoot = decoded;
-    [decoded, o] = new ByteArrayCoder(scriptLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
     const script = decoded;
     [decoded, o] = new ByteArrayCoder(scriptDataLength).decode(data, o);
     const scriptData = decoded;
