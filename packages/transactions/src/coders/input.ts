@@ -216,12 +216,6 @@ export type InputMessage = {
   /** Amount of coins */
   amount: BN;
 
-  /** data of message */
-  data?: string;
-
-  /** Length of predicate, in instructions (u16) */
-  dataLength?: number;
-
   /** Unique nonce of message */
   nonce: string;
 
@@ -231,11 +225,17 @@ export type InputMessage = {
   /** Gas used by predicate (u64) */
   predicateGasUsed: BN;
 
+  /** Length of data (u64) */
+  dataLength?: number;
+
   /** Length of predicate, in instructions (u64) */
   predicateLength: BN;
 
   /** Length of predicate input data, in bytes (u64) */
   predicateDataLength: BN;
+
+  /** data of message */
+  data?: string;
 
   /** Predicate bytecode (byte[]) */
   predicate: string;
@@ -279,7 +279,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u16').encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
-    parts.push(new NumberCoder('u32').encode(data.length));
+    parts.push(new BigNumberCoder('u64').encode(data.length));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
     parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(data.length).encode(data));
@@ -317,7 +317,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateDataLength = decoded;
