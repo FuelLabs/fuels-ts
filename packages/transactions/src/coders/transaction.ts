@@ -199,6 +199,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
+    parts.push(new NumberCoder('u16').encode(value.bytecodeWitnessIndex));
     parts.push(new B256Coder().encode(value.salt));
     parts.push(new BigNumberCoder('u64').encode(value.storageSlotsCount));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
@@ -222,9 +223,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
-    const bytecodeLength = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const bytecodeWitnessIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const salt = decoded;
