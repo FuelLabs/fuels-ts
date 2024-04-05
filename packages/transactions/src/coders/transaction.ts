@@ -43,13 +43,13 @@ export type TransactionScript = {
   /** Bitfield of used policy types (u32) */
   policyTypes: number;
 
-  /** Number of inputs (u8) */
+  /** Number of inputs (u16) */
   inputsCount: number;
 
-  /** Number of outputs (u8) */
+  /** Number of outputs (u16) */
   outputsCount: number;
 
-  /** Number of witnesses (u8) */
+  /** Number of witnesses (u16) */
   witnessesCount: number;
 
   /** Script to execute (byte[]) */
@@ -82,6 +82,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     parts.push(new BigNumberCoder('u64').encode(value.scriptGasLimit));
     parts.push(new B256Coder().encode(value.receiptsRoot));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
     parts.push(new NumberCoder('u16').encode(value.witnessesCount));
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
@@ -103,11 +105,11 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const scriptDataLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const policyTypes = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const inputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const outputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const witnessesCount = decoded;
     [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
     const script = decoded;
@@ -157,16 +159,13 @@ export type TransactionCreate = {
   /** Bitfield of used policy types (u32) */
   policyTypes: number;
 
-  /** Number of storage slots to initialize (u16) */
-  storageSlotsCount: number;
-
-  /** Number of inputs (u8) */
+  /** Number of inputs (u16) */
   inputsCount: number;
 
-  /** Number of outputs (u8) */
+  /** Number of outputs (u16) */
   outputsCount: number;
 
-  /** Number of witnesses (u8) */
+  /** Number of witnesses (u16) */
   witnessesCount: number;
 
   /** Salt (b256) */
@@ -199,12 +198,9 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     parts.push(new NumberCoder('u32').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('u32').encode(value.policyTypes));
-    parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
-    parts.push(new NumberCoder('u8').encode(value.inputsCount));
-    parts.push(new NumberCoder('u8').encode(value.outputsCount));
-    parts.push(new NumberCoder('u8').encode(value.witnessesCount));
-    parts.push(new B256Coder().encode(value.salt));
-    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
     parts.push(
       new ArrayCoder(new StorageSlotCoder(), value.storageSlotsCount).encode(value.storageSlots)
     );
@@ -229,9 +225,9 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     const storageSlotsCount = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const inputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const outputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const salt = decoded;
