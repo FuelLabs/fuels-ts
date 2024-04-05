@@ -6,6 +6,9 @@ import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
 
 import { getSetupContract } from './utils';
 
+/**
+ * @group node
+ */
 test('compute_bytecode_root', async () => {
   const { binHexlified: bytecodeFromFile } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
