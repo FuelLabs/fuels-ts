@@ -2,4 +2,4 @@
 "create-fuels": minor
 ---
 
-user solveable errors no longer cause the cli to exit
+fix: user resolvable errors no longer cause the cli to exit
