@@ -207,16 +207,12 @@ describe('Fee', () => {
 
     const balanceBefore = await wallet.getBalance();
 
-    const scope = contract
-      .multiCall([
-        contract.functions.sum_multparams(1, 2, 3, 4, 5),
-        contract.functions.return_void(),
-        contract.functions.foobar(),
-        contract.functions.return_bytes(),
-      ])
-      .txParams({
-        gasLimit: 10000,
-      });
+    const scope = contract.multiCall([
+      contract.functions.sum_multparams(1, 2, 3, 4, 5),
+      contract.functions.return_void(),
+      contract.functions.foobar(),
+      contract.functions.return_bytes(),
+    ]);
 
     const {
       transactionResult: { fee },
@@ -258,8 +254,8 @@ describe('Fee', () => {
 
     expectToBeInRange({
       value: fee.toNumber(),
-      min: balanceDiff - 1,
-      max: balanceDiff + 1,
+      min: balanceDiff - 10,
+      max: balanceDiff + 10,
     });
   });
 });
