@@ -36,6 +36,6 @@ If you want to figure out whether a function is read-only, you can use the `isRe
 
 <<< @/../../docs-snippets/src/guide/contracts/is-function-readonly.test.ts#is-function-readonly-1{ts:line-numbers}
 
-Usually, if the function is read-only, you can use the `get` method to read the data from the blockchain without using resources.
+If the function is read-only, you can use the `get` method to read the data from the blockchain without using resources.
 
 If the function is not read-only, you can use the `call` method to submit a 'real' transaction to the blockchain which _will_ consume resources.
