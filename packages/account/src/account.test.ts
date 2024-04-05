@@ -383,7 +383,7 @@ describe('Account', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499112) }]);
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
@@ -401,7 +401,7 @@ describe('Account', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499112) }]);
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
@@ -409,13 +409,11 @@ describe('Account', () => {
     const sender = await generateTestWallet(provider, [[1000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasLimit: 600,
-    });
+    const response = await sender.transfer(receiver.address, 1, BaseAssetId);
 
     await response.wait();
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(921) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(112) }]);
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
@@ -440,7 +438,7 @@ describe('Account', () => {
     const assetIdB = ASSET_B;
     const amount = 1;
 
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+    const request = new ScriptTransactionRequest();
     const sender = await generateTestWallet(provider, [
       [500_000, assetIdA],
       [500_000, assetIdB],
@@ -493,7 +491,7 @@ describe('Account', () => {
     );
     const amount = 10;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, 10);
     const result = await tx.waitForResult();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
@@ -505,7 +503,7 @@ describe('Account', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499911) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(498427) }]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
@@ -571,9 +569,7 @@ describe('Account', () => {
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 110;
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, {
-      gasLimit: 10_000,
-    });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount);
     const result = await tx.wait();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
@@ -582,7 +578,7 @@ describe('Account', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1498327) }]);
   });
 
   it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
