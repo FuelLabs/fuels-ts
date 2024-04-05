@@ -132,21 +132,25 @@ You should now be able to see the counter dApp running at `http://localhost:3000
 
 ## Adding Decrement Functionality
 
-To add decrement functionality to our counter, we will modify the `./sway-programs/contract/src/main.sw` file.
+To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/pages/index.tsx` file to add a button that calls this function.
 
-There are two steps when adding a new function to a Sway program:
+### 1. Modifying the Sway Contract
 
-### 1. Specifying the function's ABI
+To add a `decrement_counter` function to our Sway contract, we will modify the `./sway-programs/contract/src/main.sw` file.
+
+There are two steps when adding a new function to a Sway program. The first step is to specify the function's ABI.
 
 Towards the top of the file, you will find the ABI section for the contract. Let's add a new function to it:
 
 <<< @/../../create-fuels-counter-guide/sway-programs/contract/src/main.sw#create-fuels-counter-guide-abi{rust:line-numbers}
 
-### 2. Implementing the function
+The second step is to implement the function.
 
 We will add the implementation of the `decrement_counter` function right below the `increment_counter` function.
 
 <<< @/../../create-fuels-counter-guide/sway-programs/contract/src/main.sw#create-fuels-counter-guide-impl{rust:line-numbers}
+
+### 2. Modifying the Frontend
 
 We will now add a new button to the frontend that will call the `decrement_counter` function when clicked. To do this, we will modify the `./src/pages/index.tsx` file.
 
