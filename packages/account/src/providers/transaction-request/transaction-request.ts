@@ -582,12 +582,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       }
 
       if (assetInput && 'assetId' in assetInput) {
-        assetInput.id = hexlify(randomBytes(33));
+        assetInput.id = hexlify(randomBytes(34));
         assetInput.amount = usedQuantity;
       } else {
         this.addResources([
           {
-            id: hexlify(randomBytes(33)),
+            id: hexlify(randomBytes(34)),
             amount: usedQuantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),
