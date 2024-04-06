@@ -895,7 +895,7 @@ export default class Provider {
     totalGasUsedByPredicates?: BN;
     gasPrice?: BN;
   }) {
-    const { transactionRequest, totalGasUsedByPredicates = bn(0), optimizeGas = true } = params;
+    const { transactionRequest, optimizeGas = true } = params;
     let { gasPrice } = params;
 
     const chainInfo = this.getChain();
@@ -908,8 +908,6 @@ export default class Provider {
       gasPrice = await this.estimateGasPrice(10);
     }
 
-    const shouldSetGaslimit = transactionRequest.type === TransactionType.Script && !optimizeGas;
-
     const minFee = calculateGasFee({
       gasPrice: bn(gasPrice),
       gas: minGas,
@@ -917,13 +915,21 @@ export default class Provider {
       tip: transactionRequest.tip,
     }).add(1);
 
-    if (shouldSetGaslimit) {
-      transactionRequest.gasLimit = chainInfo.consensusParameters.maxGasPerTx.sub(
-        minGas.add(totalGasUsedByPredicates)
-      );
+    let gasLimit = bn(0);
+
+    if (transactionRequest.type === TransactionType.Script) {
+      gasLimit = transactionRequest.gasLimit;
+
+      if (!optimizeGas) {
+        transactionRequest.gasLimit = minGas;
+
+        gasLimit = transactionRequest.calculateMaxGas(chainInfo, minGas);
+
+        transactionRequest.gasLimit = gasLimit;
+      }
     }
 
-    let maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
 
     const maxFee = calculateGasFee({
       gasPrice: bn(gasPrice),
@@ -932,22 +938,13 @@ export default class Provider {
       tip: transactionRequest.tip,
     }).add(1);
 
-    if (shouldSetGaslimit) {
-      /**
-       * NOTE: The dry estimate TX might fail if it uses a gas value higher that the "gaslimit".
-       * Therefore, we need to set it as the highest value possible. The sum of "gasLimit" and
-       * "gasFee" cannot be higher than "maxGasPerTx".
-       */
-      maxGas = chainInfo.consensusParameters.maxGasPerTx.sub(maxFee);
-      transactionRequest.gasLimit = maxGas;
-    }
-
     return {
       minGas,
       minFee,
       maxGas,
       maxFee,
       gasPrice,
+      gasLimit,
     };
   }
 
@@ -1050,7 +1047,8 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    let { maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+    // eslint-disable-next-line prefer-const
+    let { maxFee, maxGas, minFee, minGas, gasPrice, gasLimit } = await this.estimateTxGasAndFee({
       transactionRequest: signedRequest,
       optimizeGas: false,
     });
@@ -1068,7 +1066,7 @@ export default class Provider {
       if (signatureCallback) {
         await signatureCallback(txRequestClone);
       }
-      txRequestClone.gasLimit = maxGas;
+      txRequestClone.gasLimit = gasLimit;
       const result = await this.estimateTxDependencies(txRequestClone);
       receipts = result.receipts;
       outputVariables = result.outputVariables;
