@@ -30,7 +30,7 @@ describe('Predicate', () => {
     let receiver: WalletLocked;
     let provider: Provider;
     const amountToReceiver = 50;
-    const amountToPredicate = 1000;
+    const amountToPredicate = 4000;
 
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);

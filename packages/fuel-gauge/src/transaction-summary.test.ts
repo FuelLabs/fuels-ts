@@ -281,9 +281,9 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO ACCOUNTS)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, BaseAssetId],
-        [10_000, ASSET_A],
-        [10_000, ASSET_B],
+        [50_000, BaseAssetId],
+        [50_000, ASSET_A],
+        [50_000, ASSET_B],
       ]);
 
       const senderContract = await setupContract({ cache: false });
@@ -375,9 +375,9 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO CONTRACTS)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, BaseAssetId],
-        [10_000, ASSET_A],
-        [10_000, ASSET_B],
+        [60_000, BaseAssetId],
+        [60_000, ASSET_A],
+        [60_000, ASSET_B],
       ]);
 
       const senderContract = await setupContract({ cache: false });

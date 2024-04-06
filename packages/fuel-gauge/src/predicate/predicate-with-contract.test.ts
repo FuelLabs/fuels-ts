@@ -59,7 +59,7 @@ describe('Predicate', () => {
         cache: true,
       });
       const contract = await setupContract();
-      const amountToPredicate = 1000;
+      const amountToPredicate = 3000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesTrue,
         abi: predicateAbiMainArgsStruct,

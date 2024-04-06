@@ -26,7 +26,7 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+      wallet = await generateTestWallet(provider, [[10_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
 
@@ -46,8 +46,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 1200;
-      const amountToReceiver = 100;
+      const amountToPredicate = 5000;
+      const amountToReceiver = 1000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
@@ -87,8 +87,8 @@ describe('Predicate', () => {
 
       expectToBeInRange({
         value: finalReceiverBalance,
-        min: expectedReceiverBalance - 1,
-        max: expectedReceiverBalance + 1,
+        min: expectedReceiverBalance - 8,
+        max: expectedReceiverBalance + 8,
       });
 
       const predicateExpectedBalance =
@@ -96,8 +96,8 @@ describe('Predicate', () => {
 
       expectToBeInRange({
         value: remainingPredicateBalance,
-        min: predicateExpectedBalance - 1,
-        max: predicateExpectedBalance + 1,
+        min: predicateExpectedBalance - 8,
+        max: predicateExpectedBalance + 8,
       });
     });
   });

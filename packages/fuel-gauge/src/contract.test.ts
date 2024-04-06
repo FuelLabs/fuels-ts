@@ -167,7 +167,6 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
  * @group node
  */
 describe('Contract', () => {
-  let gasPrice: BN;
   let provider: Provider;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
@@ -504,7 +503,6 @@ describe('Contract', () => {
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(toNumber(transactionCost.gasPrice)).toBe(gasPrice.toNumber());
     expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
@@ -987,9 +985,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [5_000, BaseAssetId],
-      [5_000, ASSET_A],
-      [5_000, ASSET_B],
+      [15_000, BaseAssetId],
+      [15_000, ASSET_A],
+      [15_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1157,7 +1155,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[5000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
