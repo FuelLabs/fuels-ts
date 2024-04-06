@@ -122,13 +122,11 @@ export const runScaffoldCli = async ({
   args = process.argv,
   shouldInstallDeps = false,
   forceDisablePrompts = false,
-  testMode = false,
 }: {
   program: Command;
   args: string[];
   shouldInstallDeps?: boolean;
   forceDisablePrompts?: boolean;
-  testMode: boolean;
 }) => {
   program.parse(args);
 
@@ -143,7 +141,7 @@ export const runScaffoldCli = async ({
     );
 
     // Exit the program if we are testing to prevent hanging
-    if (testMode) {
+    if (process.env.VITEST) {
       throw new Error();
     }
 
@@ -154,7 +152,7 @@ export const runScaffoldCli = async ({
     log(chalk.red('Please specify a project directory.'));
 
     // Exit the program if we are testing to prevent hanging
-    if (testMode) {
+    if (process.env.VITEST) {
       throw new Error();
     }
 
@@ -194,7 +192,7 @@ export const runScaffoldCli = async ({
     log(chalk.red('You must include at least one Sway program.'));
 
     // Exit the program if we are testing to prevent hanging
-    if (testMode) {
+    if (process.env.VITEST) {
       throw new Error();
     }
 

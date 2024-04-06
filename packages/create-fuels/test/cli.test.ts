@@ -100,7 +100,6 @@ test.each(possibleProgramsToInclude)(
       program,
       args,
       shouldInstallDeps: false,
-      testMode: false,
     });
 
     let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
@@ -132,7 +131,6 @@ test('create-fuels reports an error if the project directory already exists', as
     program,
     args,
     shouldInstallDeps: false,
-    testMode: true,
   }).catch((e) => {
     expect(e).toBeInstanceOf(Error);
   });
@@ -161,7 +159,6 @@ test('create-fuels reports an error if no programs are chosen to be included', a
     args,
     shouldInstallDeps: false,
     forceDisablePrompts: true,
-    testMode: true,
   }).catch((e) => {
     expect(e).toBeInstanceOf(Error);
   });
