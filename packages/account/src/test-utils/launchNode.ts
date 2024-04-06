@@ -1,10 +1,10 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import { toHex } from '@fuel-ts/math';
-import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
+import { defaultChainConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
+import { randomBytes } from 'ethers';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
@@ -106,13 +106,13 @@ export const launchNode = async ({
   new Promise(async (resolve, reject) => {
     // filter out the flags chain, consensus-key, db-type, and poa-instant. we don't want to pass them twice to fuel-core. see line 214.
     const remainingArgs = extractRemainingArgs(args, [
-      '--chain',
+      '--snapshot',
       '--consensus-key',
       '--db-type',
       '--poa-instant',
     ]);
 
-    const chainConfigPath = getFlagValueFromArgs(args, '--chain');
+    const chainConfigPath = getFlagValueFromArgs(args, '--snapshot');
     const consensusKey = getFlagValueFromArgs(args, '--consensus-key') || defaultConsensusKey;
 
     const dbTypeFlagValue = getFlagValueFromArgs(args, '--db-type');
@@ -143,7 +143,7 @@ export const launchNode = async ({
 
     const prefix = basePath || os.tmpdir();
     const suffix = basePath ? '' : randomUUID();
-    const tempDirPath = path.join(prefix, '.fuels', suffix);
+    const tempDirPath = path.join(prefix, '.fuels', suffix, 'chainConfigs');
 
     if (chainConfigPath) {
       chainConfigPathToUse = chainConfigPath;
@@ -151,9 +151,24 @@ export const launchNode = async ({
       if (!existsSync(tempDirPath)) {
         mkdirSync(tempDirPath, { recursive: true });
       }
-      const tempChainConfigFilePath = path.join(tempDirPath, 'chainConfig.json');
 
-      let chainConfig = defaultChainConfig;
+      let { stateConfigJson } = defaultChainConfigs;
+      const { chainConfigJson, metadataJson } = defaultChainConfigs;
+
+      stateConfigJson = {
+        ...stateConfigJson,
+        coins: [
+          ...stateConfigJson.coins.map((coin) => ({
+            ...coin,
+            amount: '18446744073709551615',
+          })),
+        ],
+        messages: stateConfigJson.messages.map((message) => ({
+          ...message,
+          amount: '18446744073709551615',
+        })),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
 
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
@@ -161,26 +176,34 @@ export const launchNode = async ({
         const signer = new Signer(pk);
         process.env.GENESIS_SECRET = hexlify(pk);
 
-        chainConfig = {
-          ...defaultChainConfig,
-          initial_state: {
-            ...defaultChainConfig.initial_state,
-            coins: [
-              ...defaultChainConfig.initial_state.coins,
-              {
-                owner: signer.address.toHexString(),
-                amount: toHex(1_000_000_000),
-                asset_id: BaseAssetId,
-              },
-            ],
-          },
-        };
+        stateConfigJson.coins.push({
+          tx_id: hexlify(randomBytes(34)),
+          owner: signer.address.toHexString(),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          amount: '18446744073709551615' as any,
+          asset_id: BaseAssetId,
+          output_index: 0,
+          tx_pointer_block_height: 0,
+          tx_pointer_tx_idx: 0,
+        });
       }
 
-      // Write a temporary chain configuration file.
-      writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      let fixedStateConfigJSON = JSON.stringify(stateConfigJson);
 
-      chainConfigPathToUse = tempChainConfigFilePath;
+      const regexMakeNumber = /("amount":)"(\d+)"/gm;
+
+      fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
+
+      // Write a temporary chain configuration files.
+      const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
+      const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
+      const metadataWritePath = path.join(tempDirPath, 'metadata.json');
+
+      writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
+      writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
+      writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
+
+      chainConfigPathToUse = tempDirPath;
     }
 
     const child = spawn(
@@ -193,7 +216,7 @@ export const launchNode = async ({
         ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--consensus-key', consensusKey],
-        ['--chain', chainConfigPathToUse as string],
+        ['--snapshot', chainConfigPathToUse as string],
         '--vm-backtrace',
         '--utxo-validation',
         '--debug',

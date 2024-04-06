@@ -39,7 +39,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
 
     const { cleanup, chainConfigPath } = await launchNode({
       args: [
-        ['--chain', config.chainConfig],
+        ['--snapshot', config.chainConfig],
         ['--db-type', 'rocks-db'],
       ].flat() as string[],
       ip: bindIp,

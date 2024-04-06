@@ -26,11 +26,11 @@ describe('launchNode', () => {
 
   test('launchNodeAndGetWallets - custom config', async () => {
     // #region launchNode-custom-config
-    const chainConfigPath = path.join(cwd(), '.fuel-core/configs/chainConfig.json');
+    const chainConfigPath = path.join(cwd(), '.fuel-core/configs');
 
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
-        args: ['--chain', chainConfigPath],
+        args: ['--snapshot', chainConfigPath],
         loggingEnabled: false,
       },
     });
@@ -39,7 +39,7 @@ describe('launchNode', () => {
       consensusParameters: { gasPerByte },
     } = provider.getChain();
 
-    expect(gasPerByte.toNumber()).toEqual(4);
+    expect(gasPerByte.toNumber()).toEqual(63);
 
     stop();
     // #endregion launchNode-custom-config
