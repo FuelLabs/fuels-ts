@@ -302,6 +302,7 @@ MULTICALL
 TTL
 Bech
 CLIs
+scaffolded
 programmatically
 BigNumber
 Gwei
