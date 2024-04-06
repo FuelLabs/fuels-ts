@@ -168,6 +168,9 @@ describe(__filename, () => {
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
     await sender.fund(request, txCost);
 
     const tx = await sender.sendTransaction(request);

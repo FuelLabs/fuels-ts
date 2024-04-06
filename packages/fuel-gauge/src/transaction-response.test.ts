@@ -118,18 +118,11 @@ describe('TransactionResponse', () => {
       provider,
     });
 
-    const { id: transactionId } = await adminWallet.transfer(
-      destination.address,
-      100,
-      BaseAssetId,
-      { gasLimit: 10_000 }
-    );
+    const { id: transactionId } = await adminWallet.transfer(destination.address, 100, BaseAssetId);
 
-    const response = new TransactionResponse(transactionId, provider);
+    const response = await TransactionResponse.create(transactionId, provider);
 
-    expect(response.gqlTransaction).toBeUndefined();
-
-    const transactionSummary = await response.getTransactionSummary();
+    const transactionSummary = await response.waitForResult();
 
     expect(transactionSummary.id).toBeDefined();
     expect(transactionSummary.fee).toBeDefined();

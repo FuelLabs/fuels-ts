@@ -62,7 +62,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.24.1');
+    expect(version).toEqual('0.24.2');
   });
 
   it('can call()', async () => {
@@ -75,16 +75,14 @@ describe('Provider', () => {
         owner: BaseAssetId,
         assetId: BaseAssetId,
         txPointer: '0x00000000000000000000000000000000',
-        amount: 100,
+        amount: 1000,
         witnessIndex: 0,
       },
     ];
-
-    const callResult = await provider.call({
-      type: TransactionType.Script,
+    const transactionRequest = new ScriptTransactionRequest({
       tip: 0,
-      gasLimit: 100,
-      maxFee: 100,
+      gasLimit: 500,
+      maxFee: 1000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -98,6 +96,13 @@ describe('Provider', () => {
       witnesses: ['0x'],
     });
 
+    const { maxFee, gasUsed } = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = maxFee;
+    transactionRequest.gasLimit = gasUsed;
+
+    const callResult = await provider.call(transactionRequest);
+
     const expectedReceipts: Receipt[] = [
       {
         type: ReceiptType.Log,
@@ -106,20 +111,20 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
-        pc: bn(0x2868),
-        is: bn(0x2860),
+        pc: bn(0x2888),
+        is: bn(0x2880),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: bn(1),
-        pc: bn(0x286c),
-        is: bn(0x2860),
+        pc: bn(0x288c),
+        is: bn(0x2880),
       },
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x18),
+        gasUsed: bn(0x5d3),
       },
     ];
 

@@ -98,6 +98,10 @@ describe(__filename, () => {
 
     transactionRequest.maturity = 1;
 
+    const { maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+    transactionRequest.maxFee = maxFee;
+
     const response = await sender.sendTransaction(transactionRequest);
 
     const { id } = await response.wait();
