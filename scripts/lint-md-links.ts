@@ -13,6 +13,7 @@ import { globSync } from 'glob';
       'apps/demo-react-vite/**',
       'templates/**',
       'apps/demo-wallet-sdk-react/**',
+      'apps/create-fuels-counter-guide/**',
     ],
   });
 
