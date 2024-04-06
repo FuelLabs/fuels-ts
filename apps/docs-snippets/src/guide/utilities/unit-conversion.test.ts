@@ -21,7 +21,7 @@ describe('unit-conversion', () => {
       expect(result).toEqual(expected);
     })
 
-    it('should create a BN instance', () => {
+    it('should return a big number instance using the bn utility function', () => {
       const expected = "100000000"
 
       // #region instantiation-2
