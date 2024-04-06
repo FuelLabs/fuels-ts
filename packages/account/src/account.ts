@@ -295,7 +295,7 @@ export class Account extends AbstractAccount {
     const needsToBeFunded = missingQuantities.length;
 
     if (needsToBeFunded) {
-      const excludedIds = cacheTxInputsFromOwner(txRequest.inputs, this.address.toString());
+      const excludedIds = cacheTxInputsFromOwner(txRequest.inputs, this.address.toB256());
 
       const resources = await this.getResourcesToSpend(missingQuantities, excludedIds);
 
