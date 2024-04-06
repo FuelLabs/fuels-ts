@@ -449,11 +449,11 @@ describe('Coverage Contract', () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
-        messageId: '0x9ca8b2c626327692c7a865d0bbfe6232503e8dc0f7c442abe0b864ffdcca2da9',
+        messageId: '0x5e4b9a05438f912573515dd32093657499310cb650766ce868f21dfb05f09a1a',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
         nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
-        amount: bn('ffff', 'hex'),
+        amount: bn('0xffffffffffffffff', 'hex'),
         data: arrayify('0x'),
         daHeight: bn(0),
       },
