@@ -46,8 +46,26 @@ jobs:
       - name: Forc Format Check
         run: pnpm forc:check
 
-      - name: Debugging `forc build`
+      - name: Debugging `forc build` @ docs-snippets
+        run: cd packages/docs-snippets && pnpm pretest
+
+      - name: Debugging `forc build` @ demo-typegen
+        run: cd packages/demo-typegen && pnpm pretest
+
+      - name: Debugging `forc build` @ abi-coder
+        run: cd packages/abi-coder && pnpm pretest
+
+      - name: Debugging `forc build` @ fuel-gauge
         run: cd packages/fuel-gauge && pnpm pretest
+
+      - name: Debugging `forc build` @ script
+        run: cd packages/script && pnpm pretest
+
+      - name: Debugging `forc build` @ abi-typegen
+        run: cd packages/abi-typegen && pnpm pretest
+
+      - name: Debugging `forc build` @ utils
+        run: cd packages/utils && pnpm pretest
 
       # linting of some tests depends on pretest being run so that it generates the necessary files
       - name: Pretest
