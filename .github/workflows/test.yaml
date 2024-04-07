@@ -47,7 +47,7 @@ jobs:
         run: pnpm forc:check
 
       - name: Debugging `forc build` @ docs-snippets
-        run: cd packages/docs-snippets && pnpm pretest
+        run: cd apps/docs-snippets && pnpm pretest
 
       - name: Debugging `forc build` @ demo-typegen
         run: cd packages/demo-typegen && pnpm pretest
