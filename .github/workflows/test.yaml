@@ -50,7 +50,7 @@ jobs:
         run: cd apps/docs-snippets && pnpm pretest
 
       - name: Debugging `forc build` @ demo-typegen
-        run: cd packages/demo-typegen && pnpm pretest
+        run: cd apps/demo-typegen && pnpm pretest
 
       - name: Debugging `forc build` @ abi-coder
         run: cd packages/abi-coder && pnpm pretest
