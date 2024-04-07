@@ -189,4 +189,44 @@ describe(__filename, () => {
 
     expect(txId).toEqual(txIdFromExecutedTx);
   });
+
+  it('should be able to pre-stage a transaction, get TX ID, and then send the transaction', async () => {
+    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
+    const predicate = new Predicate({
+      bytecode: bin,
+      abi,
+      provider,
+      inputData: [inputAddress],
+    });
+
+    const amountToPredicate = 10_000;
+
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+      gasPrice,
+      gasLimit: 1_000,
+    });
+
+    await tx.waitForResult();
+
+    const receiverWallet = WalletUnlocked.generate({
+      provider,
+    });
+
+    // #region predicates-prestage-transaction
+    const preparedTx = await predicate.createTransfer(
+      receiverWallet.address,
+      amountToPredicate,
+      BaseAssetId
+    ); // Prepare the transaction
+
+    const txId = preparedTx.getTransactionId(provider.getChainId()); // Get the transaction ID before sending the transaction
+
+    const res = await predicate.sendTransaction(preparedTx); // Send the transaction
+    await res.waitForResult();
+    // #endregion predicates-prestage-transaction
+
+    const txIdFromExecutedTx = res.id;
+
+    expect(txId).toEqual(txIdFromExecutedTx);
+  });
 });
