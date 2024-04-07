@@ -46,6 +46,9 @@ jobs:
       - name: Forc Format Check
         run: pnpm forc:check
 
+      - name: Debugging `forc build`
+        run: cd packages/fuel-gauge && pnpm pretest
+
       # linting of some tests depends on pretest being run so that it generates the necessary files
       - name: Pretest
         run: pnpm pretest
