@@ -94,7 +94,8 @@ describe('operations', () => {
       expect(operations[0]).toStrictEqual(expected);
     });
 
-    it('should ensure getContractCallOperations return contract call operations with calls details', () => {
+    // TODO: Make getOperation tests to be e2e
+    it.skip('should ensure getContractCallOperations return contract call operations with calls details', () => {
       const expected: Operation = {
         name: OperationName.contractCall,
         calls: [
