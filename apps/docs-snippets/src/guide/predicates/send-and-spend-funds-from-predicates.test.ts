@@ -213,15 +213,18 @@ describe(__filename, () => {
     });
 
     // #region predicates-prestage-transaction
+    // Prepare the transaction
     const preparedTx = await predicate.createTransfer(
       receiverWallet.address,
       amountToPredicate,
       BaseAssetId
-    ); // Prepare the transaction
+    );
 
-    const txId = preparedTx.getTransactionId(provider.getChainId()); // Get the transaction ID before sending the transaction
+    // Get the transaction ID before sending the transaction
+    const txId = preparedTx.getTransactionId(provider.getChainId());
 
-    const res = await predicate.sendTransaction(preparedTx); // Send the transaction
+    // Send the transaction
+    const res = await predicate.sendTransaction(preparedTx);
     await res.waitForResult();
     // #endregion predicates-prestage-transaction
 
