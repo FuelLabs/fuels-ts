@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-fuels`](https://github.com/fuellabs/fuels-ts).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-fuels`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/create-fuels).
 
 ## Getting Started
 
@@ -6,9 +6,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-fuel
 
 ```bash
 npm run fuels:dev
-
-# or
-npx fuels dev
 ```
 
 1. Start the Next.js development server.
@@ -19,5 +16,5 @@ npm run dev
 
 ## Learn More
 
-- [Fuel TS SDK docs](https://fuellabs.github.io/fuels-ts/)
+- [Fuel TS SDK docs](https://docs.fuel.network/docs/fuels-ts/)
 - [Fuel Docs Portal](https://docs.fuel.network/)
