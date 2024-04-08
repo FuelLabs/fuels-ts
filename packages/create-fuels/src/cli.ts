@@ -33,27 +33,33 @@ const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsT
 };
 
 async function promptForProjectPath() {
-  const res = await prompts({
-    type: 'text',
-    name: 'projectName',
-    message: 'What is the name of your project?',
-    initial: 'my-fuel-project',
-  });
+  const res = await prompts(
+    {
+      type: 'text',
+      name: 'projectName',
+      message: 'What is the name of your project?',
+      initial: 'my-fuel-project',
+    },
+    { onCancel: () => process.exit(0) }
+  );
 
   return res.projectName as string;
 }
 
 async function promptForPackageManager() {
-  const packageManagerInput = await prompts({
-    type: 'select',
-    name: 'packageManager',
-    message: 'Select a package manager',
-    choices: [
-      { title: 'pnpm', value: 'pnpm' },
-      { title: 'npm', value: 'npm' },
-    ],
-    initial: 0,
-  });
+  const packageManagerInput = await prompts(
+    {
+      type: 'select',
+      name: 'packageManager',
+      message: 'Select a package manager',
+      choices: [
+        { title: 'pnpm', value: 'pnpm' },
+        { title: 'npm', value: 'npm' },
+      ],
+      initial: 0,
+    },
+    { onCancel: () => process.exit(0) }
+  );
   return packageManagerInput.packageManager as string;
 }
 
@@ -69,17 +75,20 @@ async function promptForProgramsToInclude({
       script: false,
     };
   }
-  const programsToIncludeInput = await prompts({
-    type: 'multiselect',
-    name: 'programsToInclude',
-    message: 'Which Sway programs do you want?',
-    choices: [
-      { title: 'Contract', value: 'contract', selected: true },
-      { title: 'Predicate', value: 'predicate', selected: true },
-      { title: 'Script', value: 'script', selected: true },
-    ],
-    instructions: false,
-  });
+  const programsToIncludeInput = await prompts(
+    {
+      type: 'multiselect',
+      name: 'programsToInclude',
+      message: 'Which Sway programs do you want?',
+      choices: [
+        { title: 'Contract', value: 'contract', selected: true },
+        { title: 'Predicate', value: 'predicate', selected: true },
+        { title: 'Script', value: 'script', selected: true },
+      ],
+      instructions: false,
+    },
+    { onCancel: () => process.exit(0) }
+  );
   return {
     contract: programsToIncludeInput.programsToInclude.includes('contract'),
     predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
