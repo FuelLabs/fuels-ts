@@ -11,7 +11,7 @@ fn main(vector: Vec<u64>) {
             assert(length == 4);
             assert(vector.capacity() == 4);
             assert(vector.is_empty() == false);
-            log(__to_str_array("vector.buf.ptr"));
+            log(__to_str_array("vector.ptr()"));
             log(vector.ptr());
             log(__to_str_array("vector.capacity()"));
             log(vector.capacity());
