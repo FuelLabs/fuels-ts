@@ -815,9 +815,6 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
-      fuels:
-        specifier: workspace:*
-        version: link:../fuels
       ora:
         specifier: 5.4.1
         version: 5.4.1
