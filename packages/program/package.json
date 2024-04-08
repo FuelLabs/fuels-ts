@@ -26,14 +26,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/hasher": "workspace:^",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/account": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.42.1"
   },

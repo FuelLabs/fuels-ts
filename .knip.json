@@ -1,4 +1,4 @@
 {
   "ignore": ["**/*/fuels.config.*", "**/*/.vitepress/*", "/apps/docs/*"],
-  "ignoreDependencies": ["eslint*", "@types/*"]
+  "ignoreDependencies": ["eslint*", "@types/*", "rimraf"]
 }
