@@ -302,4 +302,5 @@ MULTICALL
 TTL
 Bech
 CLIs
+scaffolded
 programmatically

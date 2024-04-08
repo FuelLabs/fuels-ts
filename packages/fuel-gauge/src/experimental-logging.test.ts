@@ -1,7 +1,6 @@
-import { randomBytes } from 'crypto';
 import { readFileSync } from 'fs';
 import type { Contract } from 'fuels';
-import { bn, hexlify } from 'fuels';
+import { bn, hexlify, randomBytes } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
@@ -16,10 +15,10 @@ const B512 =
   '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';
 
 beforeAll(async () => {
-  const contractName = 'logging';
+  const projectName = 'logging';
   const path = join(
     __dirname,
-    `../test/fixtures/forc-projects-experimental/${contractName}/out/release/${contractName}`
+    `../test/fixtures/forc-projects-experimental/${projectName}/out/release/${projectName}`
   );
   const contractBytecode = readFileSync(`${path}.bin`);
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
@@ -121,12 +120,28 @@ describe('Experimental Logging', () => {
     expect(logs).toStrictEqual([expected]);
   });
 
+  it('logs b256 vec', async () => {
+    const expected = [B256, B256];
+
+    const { logs } = await contractInstance.functions.log_vec_b256(expected).call();
+
+    expect(logs).toEqual([expected]);
+  });
+
   it('logs b512', async () => {
     const expected = B512;
 
     const { logs } = await contractInstance.functions.log_b512(expected).call();
 
     expect(logs).toStrictEqual([expected]);
+  });
+
+  it('logs b512 vec', async () => {
+    const expected = [B512, B512];
+
+    const { logs } = await contractInstance.functions.log_vec_b512(expected).call();
+
+    expect(logs).toEqual([expected]);
   });
 
   it('logs b256 b512 multiple params', async () => {
@@ -162,7 +177,7 @@ describe('Experimental Logging', () => {
   });
 
   it('logs StdString', async () => {
-    const expected = 'hello world';
+    const expected = 'fuel';
 
     const { logs } = await contractInstance.functions.log_std_string(expected).call();
 
@@ -319,8 +334,7 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([expected]);
   });
 
-  // Requires v1 encoding to be supported for contract calls
-  it.skip('logs str slice', async () => {
+  it('logs str slice', async () => {
     const expected = 'fuel';
 
     const { logs } = await contractInstance.functions.log_str_slice(expected).call();
