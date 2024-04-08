@@ -42,7 +42,6 @@ export type PredicateParams<T = InputValue[]> = {
  */
 export class Predicate<TInputData extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  predicateDataBytes: Uint8Array = Uint8Array.from([]);
   predicateData: TInputData = [] as unknown as TInputData;
   interface?: Interface;
 
