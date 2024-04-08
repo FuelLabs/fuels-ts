@@ -51,8 +51,8 @@ export default defineConfig({
             link: '/guide/introduction/getting-started',
           },
           {
-            text: 'Quickstart',
-            link: '/guide/introduction/quickstart',
+            text: 'Creating a Fuel dApp',
+            link: '/guide/introduction/creating-a-fuel-dapp',
           },
         ],
       },
@@ -464,6 +464,10 @@ export default defineConfig({
             link: '/guide/cli/',
             collapsed: true,
             items: [
+              {
+                text: 'npm create fuels',
+                link: '/guide/cli/npm-create-fuels',
+              },
               {
                 text: 'fuels',
                 link: '/guide/fuels/',
