@@ -114,8 +114,13 @@ describe('TransactionResponse', () => {
   });
 
   it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
+    const { ip, port } = await launchNode({
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+
     const destination = Wallet.generate({
-      provider,
+      provider: nodeProvider,
     });
 
     const { id: transactionId } = await adminWallet.transfer(destination.address, 100, BaseAssetId);
