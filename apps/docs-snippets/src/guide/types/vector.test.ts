@@ -59,15 +59,16 @@ describe(__filename, () => {
     const bytecodeContract = await createAndDeployContractFromProject(
       DocSnippetProjectsEnum.BYTECODE_INPUT
     );
+    const bytecodePath = join(
+      __dirname,
+      '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
+    );
 
     // #region vector-bytecode-input-ts
-    // #context import { arrayify } from 'fuels';
-    const bytecode = await readFile(
-      join(
-        __dirname,
-        '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
-      )
-    );
+    // #import { arrayify };
+    // #context import { readFile } from 'fs/promises';
+
+    const bytecode = await readFile(bytecodePath);
 
     const { value: bytecodeRoot } = await bytecodeContract.functions
       .compute_bytecode_root(arrayify(bytecode))

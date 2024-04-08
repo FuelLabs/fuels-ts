@@ -179,3 +179,5 @@ export const rightPadToWordSize = (encoded: Uint8Array) => {
   const padding = new Uint8Array(WORD_SIZE - (encoded.length % WORD_SIZE));
   return concatBytes([encoded, padding]);
 };
+
+export const isUint8Array = (value: unknown): value is Uint8Array => value instanceof Uint8Array;
