@@ -62,6 +62,6 @@ When a predicate fails to validate, the SDK throws an error that starts like thi
 
 In some cases, you may want to pre-stage a predicate transaction before submitting it for execution. To do this, you can use the `createTransfer` method on the `Predicate` class.
 
-In the following example, we are pe-staging a transcation to be able to know the transaction ID without actually submitting the transaction.
+In the following example, we are pre-staging a transaction to be able to know the transaction ID without actually submitting the transaction.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#predicates-prestage-transaction{ts:line-numbers}
