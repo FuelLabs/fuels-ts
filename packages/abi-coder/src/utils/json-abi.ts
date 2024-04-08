@@ -1,5 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
+import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
 /**
@@ -50,3 +51,30 @@ export const findNonEmptyInputs = (
   abi: JsonAbi,
   inputs: readonly JsonAbiArgument[]
 ): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
+
+/**
+ * Find the vector buffer argument in a list of components.
+ *
+ * @param components - the list of components to search
+ * @returns the vector buffer argument
+ */
+export const findVectorBufferArgument = (
+  components: readonly ResolvedAbiType[]
+): JsonAbiArgument => {
+  const bufferComponent = components.find((c) => c.name === 'buf');
+  if (!bufferComponent) {
+    throw new FuelError(
+      ErrorCode.INVALID_COMPONENT,
+      `The provided Vec type is missing the 'buf' component.`
+    );
+  }
+
+  const arg = bufferComponent.originalTypeArguments?.[0];
+  if (!arg) {
+    throw new FuelError(
+      ErrorCode.INVALID_COMPONENT,
+      `The provided Vec type is missing the 'type argument'.`
+    );
+  }
+  return arg;
+};

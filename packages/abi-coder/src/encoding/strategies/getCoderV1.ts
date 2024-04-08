@@ -26,6 +26,7 @@ import {
   structRegEx,
   tupleRegEx,
 } from '../../utils/constants';
+import { findVectorBufferArgument } from '../../utils/json-abi';
 import type { Coder } from '../coders/AbstractCoder';
 import { ArrayCoder } from '../coders/v0/ArrayCoder';
 import { B256Coder } from '../coders/v0/B256Coder';
@@ -113,21 +114,7 @@ export const getCoder: GetCoderFn = (
   }
 
   if (resolvedAbiType.type === VEC_CODER_TYPE) {
-    const bufferComponent = components.find((c) => c.name === 'buf');
-    if (!bufferComponent) {
-      throw new FuelError(
-        ErrorCode.INVALID_COMPONENT,
-        `The provided Vec type is missing the 'buf' component.`
-      );
-    }
-
-    const arg = bufferComponent.originalTypeArguments?.[0];
-    if (!arg) {
-      throw new FuelError(
-        ErrorCode.INVALID_COMPONENT,
-        `The provided Vec type is missing the 'type argument'.`
-      );
-    }
+    const arg = findVectorBufferArgument(components);
     const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
     const itemCoder = getCoder(argType, { isSmallBytes: true, encoding: ENCODING_V0 });

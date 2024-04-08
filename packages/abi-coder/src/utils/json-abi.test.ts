@@ -1,6 +1,12 @@
+import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
 
-import { findFunctionByName, findNonEmptyInputs, findTypeById } from './json-abi';
+import {
+  findFunctionByName,
+  findNonEmptyInputs,
+  findTypeById,
+  findVectorBufferArgument,
+} from './json-abi';
 
 const MOCK_ABI: JsonAbi = {
   types: [
@@ -80,6 +86,43 @@ describe('json-abi', () => {
       expect(() => findNonEmptyInputs(MOCK_ABI, inputs)).toThrowError(
         `Type with typeId '-1' doesn't exist in the ABI.`
       );
+    });
+  });
+
+  describe('findVectorBufferArgument', () => {
+    it('should throw, when there are no components with the name of `buf', () => {
+      const components: ResolvedAbiType[] = [];
+
+      expect(() => findVectorBufferArgument(components)).toThrowError(
+        `The provided Vec type is missing the 'buf' component.`
+      );
+    });
+
+    it('should throw, when the buffer component is missing type arguments', () => {
+      const components: ResolvedAbiType[] = [
+        {
+          name: 'buf',
+          originalTypeArguments: [],
+        } as unknown as ResolvedAbiType,
+      ];
+
+      expect(() => findVectorBufferArgument(components)).toThrowError(
+        `The provided Vec type is missing the 'type argument'.`
+      );
+    });
+
+    it('should return the buffer argument', () => {
+      const components: ResolvedAbiType[] = [
+        {
+          name: 'buf',
+          originalTypeArguments: [{ name: 'u256', components: [], typeParameters: [] }],
+        } as unknown as ResolvedAbiType,
+      ];
+
+      const expected = { name: 'u256', components: [], typeParameters: [] };
+      const actual = findVectorBufferArgument(components);
+
+      expect(actual).toEqual(expected);
     });
   });
 });
