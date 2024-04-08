@@ -24,7 +24,7 @@ The code snippet below demonstrates how to call this Sway contract method, which
 
 Some Sway functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually `Vec<u8>`.
 
-Take the `verify_contract_bytecode` function from the [`bytecode` Sway library](https://github.com/FuelLabs/sway-libs/tree/master/libs/src/bytecode), for example.
+Take the `compute_bytecode_root` function from the [`bytecode` Sway library](https://github.com/FuelLabs/sway-libs/tree/master/libs/src/bytecode.sw), for example.
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers}
 
