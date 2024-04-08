@@ -170,7 +170,7 @@ Second, we will add a new button to the UI that will call the `onDecrementPresse
 
 Congratulations! That's all. You should now be able to see the counter dApp running at `http://localhost:3000` with our newly added decrement functionality.
 
-For reference, you can find the completed source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
+You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
