@@ -182,7 +182,6 @@ describe(__filename, () => {
     const amountToPredicate = 10_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
       gasLimit: 1_000,
     });
 
