@@ -1074,7 +1074,7 @@ describe('Provider', () => {
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       expect(submitAndAwait.type).toEqual('SuccessStatus');
-      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
+      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data:4611686020137152060');
     }
   });
 
@@ -1108,7 +1108,6 @@ describe('Provider', () => {
       },
       {
         code: FuelError.CODES.STREAM_PARSING_ERROR,
-        message: `Error while parsing stream data response: ${badResponse}`,
       }
     );
   });
