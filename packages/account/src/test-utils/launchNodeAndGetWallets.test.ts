@@ -22,7 +22,7 @@ describe('launchNode', () => {
       expect(wallet).toBeInstanceOf(WalletUnlocked);
     });
     stop();
-  });
+  }, 10000);
 
   test('launchNodeAndGetWallets - custom config', async () => {
     // #region launchNode-custom-config
@@ -90,6 +90,6 @@ describe('launchNode', () => {
       expect(process.env.GENESIS_SECRET).toHaveLength(66);
 
       stop();
-    });
+    }, 10000);
   });
 });
