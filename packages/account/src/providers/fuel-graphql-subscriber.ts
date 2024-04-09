@@ -64,7 +64,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       let errors;
 
       try {
-        ({ data, errors } = JSON.parse(text.replace(/^data:/, '')));
+        /**
+         * Removing lines spaces or new lines characters from the string to avoid errors
+         * when running tests on the CI.
+         */
+        const sanitizedText = text.replace(/\s/g, '');
+
+        ({ data, errors } = JSON.parse(sanitizedText.replace(/^data:/, '')));
       } catch (e) {
         throw new FuelError(
           ErrorCode.STREAM_PARSING_ERROR,
