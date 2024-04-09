@@ -6,6 +6,8 @@
     "/packages/abi-typegen/test/**"
   ],
   "ignoreDependencies": [
+    "@graphql-codegen*",
+    "graphql-tag",
     "eslint-plugin-jsdoc",
     "eslint-plugin-jsx-a11y",
     "eslint-plugin-prettier",
@@ -16,8 +18,5 @@
     "open",
     "textlint",
     "textlint-rule-no-dead-link"
-  ],
-  "rules": {
-    "unresolved": "off"
-  }
+  ]
 }

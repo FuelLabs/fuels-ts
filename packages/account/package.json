@@ -64,6 +64,7 @@
     "ethers": "^6.7.1",
     "graphql": "^16.6.0",
     "graphql-request": "5.0.0",
+    "graphql-tag": "^2.12.6",
     "portfinder": "^1.0.32",
     "ramda": "^0.29.0",
     "tree-kill": "^1.2.2",
@@ -74,6 +75,9 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "^2.13.7",
+    "@graphql-codegen/typescript": "^2.8.0",
+    "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
+    "@graphql-codegen/typescript-operations": "^2.5.5",
     "@types/ramda": "^0.29.3",
     "@types/uuid": "^9.0.1",
     "get-graphql-schema": "^2.1.2"

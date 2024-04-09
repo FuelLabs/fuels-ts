@@ -15,7 +15,7 @@
     "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
-    "depcheck": "knip --dependencies",
+    "depcheck": "knip --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
     "test": "vitest --run --coverage --config vite.node.config.mts $(scripts/tests-find.sh --node)",
     "test:filter": "vitest --run --coverage --config vite.node.config.mts",
