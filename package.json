@@ -62,9 +62,7 @@
     "@changesets/read": "^0.6.0",
     "@changesets/types": "^6.0.0",
     "@fuel-ts/forc": "workspace:*",
-    "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/versions": "workspace:^",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/node": "18.15.3",
@@ -75,7 +73,6 @@
     "@vitest/browser": "^1.1.3",
     "@vitest/coverage-istanbul": "^1.1.3",
     "compare-versions": "^6.1.0",
-    "conventional-changelog-angular": "^5.0.13",
     "coverage-diff": "^3.2.0",
     "dotenv": "^9.0.2",
     "eslint": "^8.52.0",
@@ -101,7 +98,6 @@
     "rimraf": "^3.0.2",
     "textlint": "^13.3.2",
     "textlint-rule-no-dead-link": "^5.1.2",
-    "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
     "tsx": "^4.7.0",
     "turbo": "^1.8.8",
@@ -109,8 +105,7 @@
     "vite": "^5.0.11",
     "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-plain-text": "^1.4.2",
-    "vitest": "^1.1.3",
-    "webdriverio": "^8.32.0"
+    "vitest": "^1.1.3"
   },
   "pnpm": {
     "overrides": {

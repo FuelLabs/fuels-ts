@@ -66,13 +66,11 @@
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
-    "rimraf": "^3.0.2",
     "toml": "^3.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
-    "@types/rimraf": "^3.0.2",
     "vite": "^4.3.9"
   },
   "keywords": [

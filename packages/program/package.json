@@ -34,8 +34,5 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.42.1"
-  },
-  "devDependencies": {
-    "@fuel-ts/forc": "workspace:*"
   }
 }

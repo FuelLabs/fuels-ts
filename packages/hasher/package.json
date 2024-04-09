@@ -29,8 +29,5 @@
     "@fuel-ts/interfaces": "workspace:^",
     "@fuel-ts/utils": "workspace:*",
     "@noble/hashes": "^1.3.3"
-  },
-  "devDependencies": {
-    "@types/ramda": "^0.29.3"
   }
 }

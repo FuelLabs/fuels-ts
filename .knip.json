@@ -1,4 +1,23 @@
 {
-  "ignore": ["**/*/fuels.config.*", "**/*/.vitepress/*", "/apps/docs/*"],
-  "ignoreDependencies": ["eslint*", "@types/*", "rimraf"]
+  "ignore": [
+    "**/*/fuels.config.*",
+    "**/*/.vitepress/*",
+    "/apps/docs/*",
+    "/packages/abi-typegen/test/**"
+  ],
+  "ignoreDependencies": [
+    "eslint-plugin-jsdoc",
+    "eslint-plugin-jsx-a11y",
+    "eslint-plugin-prettier",
+    "eslint-plugin-react",
+    "eslint-plugin-react-hooks",
+    "dotenv",
+    "memfs",
+    "open",
+    "textlint",
+    "textlint-rule-no-dead-link"
+  ],
+  "rules": {
+    "unresolved": "off"
+  }
 }
