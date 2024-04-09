@@ -68,7 +68,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       } catch (e) {
         throw new FuelError(
           ErrorCode.STREAM_PARSING_ERROR,
-          `Error while parsing stream data response: ${text}`
+          `Error while parsing stream data response: ${text}\n\nThrown error: ${e}`
         );
       }
 
