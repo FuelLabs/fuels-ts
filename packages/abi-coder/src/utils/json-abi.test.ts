@@ -94,7 +94,7 @@ describe('json-abi', () => {
       const components: ResolvedAbiType[] = [];
 
       expect(() => findVectorBufferArgument(components)).toThrowError(
-        `The provided Vec type is missing the 'buf' component.`
+        `The Vec type provided is missing or has a malformed 'buf' component.`
       );
     });
 
@@ -107,7 +107,7 @@ describe('json-abi', () => {
       ];
 
       expect(() => findVectorBufferArgument(components)).toThrowError(
-        `The provided Vec type is missing the 'type argument'.`
+        `The Vec type provided is missing or has a malformed 'buf' component.`
       );
     });
 

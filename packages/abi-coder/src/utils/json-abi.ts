@@ -62,11 +62,12 @@ export const findVectorBufferArgument = (
   components: readonly ResolvedAbiType[]
 ): JsonAbiArgument => {
   const bufferComponent = components.find((c) => c.name === 'buf');
-if (!bufferComponent || !bufferComponent.originalTypeArguments?.[0]) {
- throw new FuelError(
+  const bufferTypeArgument = bufferComponent?.originalTypeArguments?.[0];
+  if (!bufferComponent || !bufferTypeArgument) {
+    throw new FuelError(
       ErrorCode.INVALID_COMPONENT,
-      `The provided Vec type is missing the 'buf' component.`
+      `The Vec type provided is missing or has a malformed 'buf' component.`
     );
   }
-  return arg;
+  return bufferTypeArgument;
 };
