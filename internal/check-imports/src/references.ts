@@ -63,7 +63,6 @@ log(runCliAction);
  * address
  */
 log(Address);
-log(ZeroBytes32);
 log(Address.fromPublicKey('asdfasdf'));
 
 /**
