@@ -28,7 +28,7 @@ Take the `compute_bytecode_root` function from the [`bytecode` Sway library](htt
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers}
 
-To pass in some bytecode to this function, you can make use of the `arrayify` function to convert the bytecode file contents into a `Vec<u8>` type and pass it to the function like this:
+To pass bytecode to this function, you can make use of the `arrayify` function to convert the bytecode file contents into a `UInt8Array`, the TS compatible type for Sway's `Vec<u8>` type and pass it the function like so:
 
 <<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-bytecode-input-ts{ts:line-numbers}
 
