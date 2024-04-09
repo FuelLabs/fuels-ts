@@ -400,6 +400,10 @@ export default defineConfig({
                 text: 'Address conversion',
                 link: '/guide/utilities/address-conversion',
               },
+              {
+                text: 'Unit conversion',
+                link: '/guide/utilities/unit-conversion',
+              }
             ],
           },
           {

@@ -307,3 +307,5 @@ SHA-256
 scaffolded
 programmatically
 transactional
+BigNumber
+Gwei
