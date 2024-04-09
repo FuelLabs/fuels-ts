@@ -21,4 +21,12 @@ describe('isReadOnly', () => {
 
     expect(isReadOnly).toBe(false);
   });
+
+  test('isReadOnly does not throw a runtime error for a function that does not use storage', async () => {
+    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+
+    const isReadOnly = contract.functions.return_true.isReadOnly();
+
+    expect(isReadOnly).toBe(true);
+  });
 });

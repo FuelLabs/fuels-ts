@@ -225,7 +225,7 @@ export class FunctionFragment<
   /**
    * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
    *
-   * @returns True if the function is read-only, false otherwise.
+   * @returns True if the function is read-only or pure, false otherwise.
    */
   isReadOnly(): boolean {
     const storageAttribute = this.attributes.find((attr) => attr.name === 'storage');
