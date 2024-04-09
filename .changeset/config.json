@@ -16,6 +16,7 @@
     "demo-node-esm",
     "demo-typegen",
     "@fuel-ts/docs-snippets",
-    "template-nextjs"
+    "template-nextjs",
+    "create-fuels-counter-guide"
   ]
 }
