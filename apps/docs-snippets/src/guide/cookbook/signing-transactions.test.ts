@@ -89,7 +89,7 @@ describe('Signing transactions', () => {
         amount: amountToReceiver,
       },
     ]);
-    request.addPredicateResources(resources, predicate);
+    request.addResources(resources);
     const parsedRequest = predicate.populateTransactionPredicateData(request);
 
     // Add witnesses including the signer

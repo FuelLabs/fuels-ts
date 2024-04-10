@@ -188,13 +188,13 @@ describe(__filename, () => {
     });
     // add predicate transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
-    const resourcesPredicate = await provider.getResourcesToSpend(predicate.address, [
+    const resourcesPredicate = await predicate.getResourcesToSpend([
       {
         amount: bn(100_000),
         assetId: BaseAssetId,
       },
     ]);
-    request.addPredicateResources(resourcesPredicate, predicate);
+    request.addResources(resourcesPredicate);
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), BaseAssetId);
     const resourcesWallet = await provider.getResourcesToSpend(wallet.address, [
