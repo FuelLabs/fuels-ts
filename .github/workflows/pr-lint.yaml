@@ -73,6 +73,7 @@ jobs:
 
           if [ "$CHANGESET_CONTENT" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
+            echo "Changeset file: $CHANGESET_FILE"
             exit 1
           fi
         env:
