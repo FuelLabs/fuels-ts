@@ -792,10 +792,23 @@ export default class Provider {
     const minGas = transactionRequest.calculateMinGas(chainInfo);
     const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
 
+    // Only Script transactions consume gas
     if (transactionRequest.type === TransactionType.Script) {
+      // If the gasLimit is set to 0, it means we need to estimate it.
       if (transactionRequest.gasLimit.eq(0)) {
         transactionRequest.gasLimit = minGas;
 
+        /**
+         * Everytime we change the gasLimit from a TX, by consequence we increase its maxGas. Since maxFee is calculated with
+         * maxGas, it is also increased when the maxGas increases. The safest way to calculate the gasLimit for an estimation
+         * (we do not know how much of gas the TX will consume on the dry-run) we:
+         * 1 - First set the minGas to the gasLimit.
+         * 2 - Calculate the maxGas
+         * 3 - Subtract the max gas per TX allowed by the chain to the maxGas
+         * 4 - Use the value for the definitive gasLimit
+         * 5 - The maxGas will be calculated again since it will have a new value, which will then be used to calculate the maxFee,
+         * which will be the safe value to be used to fund a TX.
+         */
         transactionRequest.gasLimit = maxGasPerTx.sub(
           transactionRequest.calculateMaxGas(chainInfo, minGas)
         );
@@ -803,7 +816,6 @@ export default class Provider {
     }
 
     const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
-
     const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
 
     return {
