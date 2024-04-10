@@ -797,16 +797,17 @@ export default class Provider {
       if (transactionRequest.gasLimit.eq(0)) {
         transactionRequest.gasLimit = minGas;
 
-        /**
-         * Everytime we change the gasLimit from a TX, by consequence we increase its maxGas. Since maxFee is calculated with
-         * maxGas, it is also increased when the maxGas increases. The safest way to calculate the gasLimit for an estimation
-         * (we do not know how much of gas the TX will consume on the dry-run) we:
-         * 1 - First set the minGas to the gasLimit.
-         * 2 - Calculate the maxGas
-         * 3 - Subtract the max gas per TX allowed by the chain to the maxGas
-         * 4 - Use the value for the definitive gasLimit
-         * 5 - The maxGas will be calculated again since it will have a new value, which will then be used to calculate the maxFee,
-         * which will be the safe value to be used to fund a TX.
+        /*
+         * Adjusting the gasLimit of a transaction (TX) impacts its maxGas.
+         * Consequently, this affects the maxFee, as it is derived from the maxGas. To accurately estimate the
+         * gasLimit for a transaction, especially when the exact gas consumption is uncertain (as in an estimation dry-run),
+         * the following steps are required:
+         * 1 - Initially, set the gasLimit using the calculated minGas.
+         * 2 - Based on this initial gasLimit, calculate the maxGas.
+         * 3 - Get the maximum gas per transaction allowed by the chain, and subtract the previously calculated maxGas from this limit.
+         * 4 - The result of this subtraction should then be adopted as the new, definitive gasLimit.
+         * 5 - Recalculate the maxGas with the updated gasLimit. This new maxGas is then used to compute the maxFee.
+         * 6 - The calculated maxFee represents the safe, estimated cost required to fund the transaction.
          */
         transactionRequest.gasLimit = maxGasPerTx.sub(
           transactionRequest.calculateMaxGas(chainInfo, minGas)
