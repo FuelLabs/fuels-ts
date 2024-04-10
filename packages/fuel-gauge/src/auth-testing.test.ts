@@ -24,7 +24,7 @@ describe('Auth Testing', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract({ gasPrice, baseAssetId });
   });
 
   it('can get is_caller_external', async () => {

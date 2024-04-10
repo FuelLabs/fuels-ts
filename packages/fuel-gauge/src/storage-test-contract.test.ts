@@ -24,6 +24,7 @@ const setup = async () => {
   const contract = await factory.deployContract({
     storageSlots,
     gasPrice: minGasPrice,
+    baseAssetId,
   });
   // #endregion contract-deployment-storage-slots
 
@@ -64,6 +65,7 @@ describe('StorageTestContract', () => {
     // #region contract-deployment-storage-slots-inline
     const contract = await factory.deployContract({
       gasPrice,
+      baseAssetId,
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',

@@ -31,6 +31,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   const request = new ScriptTransactionRequest({
     gasLimit: 10000,
     gasPrice: minGasPrice,
+    baseAssetId,
   });
 
   // add the transaction outputs (coins to be sent to the test wallet)
@@ -62,10 +63,12 @@ export const createAndDeployContractFromProject = async (
   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
   const { minGasPrice } = wallet.provider.getGasConfig();
+  const baseAssetId = wallet.provider.getBaseAssetId();
 
   return contractFactory.deployContract({
     storageSlots,
     gasPrice: minGasPrice,
+    baseAssetId,
   });
 };
 

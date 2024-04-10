@@ -14,9 +14,11 @@ describe('small-bytes', () => {
   const setupContract = getSetupContract('small-bytes');
 
   let contract: Contract;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     contract = await setupContract();
+    baseAssetId = contract.provider.getBaseAssetId();
   });
   it('should successfully call contract and echo values', async () => {
     const expected = [48, 63];
@@ -138,6 +140,7 @@ describe('small-bytes', () => {
     const configurableContract = await factory.deployContract({
       gasPrice: minGasPrice,
       configurableConstants,
+      baseAssetId,
     });
 
     const res1 = await configurableContract.functions.echo_configurable_u8().simulate();
@@ -163,6 +166,7 @@ describe('small-bytes', () => {
     const configurableContract = await factory.deployContract({
       gasPrice: minGasPrice,
       configurableConstants,
+      baseAssetId,
     });
 
     const res1 = await configurableContract.functions.echo_configurable_boolean().simulate();

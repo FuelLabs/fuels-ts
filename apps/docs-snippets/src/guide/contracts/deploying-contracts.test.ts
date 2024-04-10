@@ -45,8 +45,9 @@ describe(__filename, () => {
     const factory = new ContractFactory(byteCode, abi, wallet);
 
     const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
+    const baseAssetId = wallet.provider.getBaseAssetId();
 
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract({ gasPrice, baseAssetId });
     // #endregion contract-setup-3
 
     // #region contract-setup-4

@@ -328,8 +328,9 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
     const { minGasPrice } = this.provider.getGasConfig();
+    const baseAssetId = this.provider.getBaseAssetId();
     const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    const params = { gasPrice: minGasPrice, ...txParams };
+    const params = { gasPrice: minGasPrice, baseAssetId, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
     const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
@@ -413,8 +414,9 @@ export class Account extends AbstractAccount {
 
     const contractAddress = Address.fromAddressOrString(contractId);
     const { minGasPrice } = this.provider.getGasConfig();
+    const baseAssetId = this.provider.getBaseAssetId();
     const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    const params = { gasPrice: minGasPrice, ...txParams };
+    const params = { gasPrice: minGasPrice, baseAssetId, ...txParams };
 
     const { script, scriptData } = await assembleTransferToContractScript({
       hexlifiedContractId: contractAddress.toB256(),
@@ -482,7 +484,12 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    const params: ScriptTransactionRequestLike = { script, gasPrice: minGasPrice, ...txParams };
+    const params: ScriptTransactionRequestLike = {
+      script,
+      gasPrice: minGasPrice,
+      baseAssetId,
+      ...txParams,
+    };
 
     const request = new ScriptTransactionRequest(params);
     const forwardingQuantities = [{ amount: bn(amount), assetId: baseAssetId }];

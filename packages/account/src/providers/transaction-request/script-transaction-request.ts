@@ -62,7 +62,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    *
    * @param scriptTransactionRequestLike - The initial values for the instance.
    */
-  constructor({ script, scriptData, gasLimit, ...rest }: ScriptTransactionRequestLike = {}) {
+  constructor({ script, scriptData, gasLimit, ...rest }: ScriptTransactionRequestLike) {
     super(rest);
     this.gasLimit = bn(gasLimit);
     this.script = arrayify(script ?? returnZeroScript.bytes);

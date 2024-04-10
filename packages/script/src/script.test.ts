@@ -49,6 +49,7 @@ const callScript = async <TData, TResult>(
   const baseAssetId = account.provider.getBaseAssetId();
 
   const request = new ScriptTransactionRequest({
+    baseAssetId,
     gasLimit: 1000000,
     gasPrice: minGasPrice,
   });

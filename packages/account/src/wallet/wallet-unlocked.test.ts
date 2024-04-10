@@ -28,6 +28,7 @@ describe('WalletUnlocked', () => {
   const expectedMessage = 'my message';
   const expectedSignedMessage =
     '0x8eeb238db1adea4152644f1cd827b552dfa9ab3f4939718bb45ca476d167c6512a656f4d4c7356bfb9561b14448c230c6e7e4bd781df5ee9e5999faa6495163d';
+  const baseAssetId = '0x';
 
   it('Instantiate a new wallet', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -217,8 +218,9 @@ describe('WalletUnlocked', () => {
   it('simulates a transaction', async () => {
     const transactionRequestLike: TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
+      baseAssetId,
     };
-    const transactionReq = new ScriptTransactionRequest();
+    const transactionReq = new ScriptTransactionRequest({ baseAssetId });
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = vi

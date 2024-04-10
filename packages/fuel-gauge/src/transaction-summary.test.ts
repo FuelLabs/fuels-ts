@@ -75,6 +75,7 @@ describe('TransactionSummary', () => {
     const amountToTransfer = 100;
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 10000,
       gasPrice: 1,
     });
@@ -147,6 +148,7 @@ describe('TransactionSummary', () => {
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 10000,
       gasPrice: 1,
     });
@@ -467,7 +469,7 @@ describe('TransactionSummary', () => {
 
       const allRecipients = [recipient1Data, recipient2Data, recipient3Data];
 
-      const request = new ScriptTransactionRequest();
+      const request = new ScriptTransactionRequest({ baseAssetId });
 
       allRecipients.forEach(({ address, quantities }) => {
         quantities.forEach(({ amount, assetId }) => {

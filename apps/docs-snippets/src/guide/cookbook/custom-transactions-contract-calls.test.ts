@@ -21,13 +21,18 @@ describe('Custom Transactions from Contract Calls', () => {
     const { abiContents, binHexlified, storageSlots } = getDocsSnippetsForcProject(
       DocSnippetProjectsEnum.COUNTER
     );
+    console.log(1);
     senderWallet = await getTestWallet();
+    console.log(2);
     receiverWallet = Wallet.generate({ provider: senderWallet.provider });
+    console.log(3);
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
+    console.log(4)
     const { minGasPrice: gasPrice } = senderWallet.provider.getGasConfig();
-    contract = await factory.deployContract({ storageSlots, gasPrice });
     abi = abiContents;
+    console.log(5)
     baseAssetId = senderWallet.provider.getBaseAssetId();
+    contract = await factory.deployContract({ storageSlots, gasPrice, baseAssetId });
   });
 
   it('creates a custom transaction from a contract call', async () => {

@@ -112,7 +112,9 @@ export default class ContractFactory {
 
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
+    const baseAssetId = this.provider.getBaseAssetId();
     const transactionRequest = new CreateTransactionRequest({
+      baseAssetId,
       gasPrice: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
@@ -132,7 +134,7 @@ export default class ContractFactory {
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContract(deployContractOptions: DeployContractOptions = {}) {
+  async deployContract(deployContractOptions: DeployContractOptions) {
     if (!this.account) {
       throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
     }

@@ -61,7 +61,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
 
     // minting coins
     let balanceBefore = await wallet.getBalance();
@@ -132,6 +132,7 @@ describe('Fee', () => {
     const request = new ScriptTransactionRequest({
       gasPrice,
       gasLimit: 10000,
+      baseAssetId,
     });
 
     request.addCoinOutput(destination1.address, amountToTransfer, baseAssetId);
@@ -170,7 +171,7 @@ describe('Fee', () => {
 
     const gasPrice = randomGasPrice(minGasPrice, 7);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { transactionRequest } = factory.createTransactionRequest({ gasPrice });
+    const { transactionRequest } = factory.createTransactionRequest({ gasPrice, baseAssetId });
     const { maxFee, requiredQuantities } = await provider.getTransactionCost(transactionRequest);
 
     await wallet.fund(transactionRequest, requiredQuantities, maxFee);
@@ -194,7 +195,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
 
     const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
@@ -224,7 +225,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
 
     const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();

@@ -252,7 +252,7 @@ describe('Account', () => {
     ];
     const fee = bn(29);
 
-    const request = new ScriptTransactionRequest();
+    const request = new ScriptTransactionRequest({ baseAssetId });
 
     const resourcesToSpend: Resource[] = [];
     const getResourcesToSpendSpy = vi
@@ -294,8 +294,9 @@ describe('Account', () => {
   it('should execute sendTransaction just fine', async () => {
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
+      baseAssetId,
     };
-    const transactionRequest = new ScriptTransactionRequest();
+    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
     const transactionResponse =
       'transactionResponse' as unknown as providersMod.TransactionResponse;
 
@@ -333,8 +334,9 @@ describe('Account', () => {
   it('should execute simulateTransaction just fine', async () => {
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
+      baseAssetId,
     };
-    const transactionRequest = new ScriptTransactionRequest();
+    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
     const callResult = 'callResult' as unknown as providersMod.CallResult;
 
     const transactionRequestify = vi
@@ -442,7 +444,7 @@ describe('Account', () => {
     const assetIdB = ASSET_B;
     const amount = 1;
 
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice });
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice, baseAssetId });
     const sender = await generateTestWallet(provider, [
       [500_000, assetIdA],
       [500_000, assetIdB],

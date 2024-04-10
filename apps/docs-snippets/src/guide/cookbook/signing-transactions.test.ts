@@ -81,7 +81,7 @@ describe('Signing transactions', () => {
     await sender.transfer(predicate.address, 10_000, baseAssetId);
 
     // Create the transaction request
-    const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_000 });
+    const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_00, baseAssetId });
     request.addCoinOutput(receiver.address, amountToReceiver, baseAssetId);
 
     // Get the predicate resources and add them and predicate data to the request

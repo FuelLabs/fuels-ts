@@ -28,7 +28,7 @@ describe('Revert Error Testing', () => {
 
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
     ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract({ gasPrice, baseAssetId });
   });
 
   it('can pass require checks [valid]', async () => {
@@ -183,7 +183,7 @@ describe('Revert Error Testing', () => {
     );
 
     const factory = new ContractFactory(tokenBytecode, tokenAbi, wallet);
-    const tokenContract = await factory.deployContract();
+    const tokenContract = await factory.deployContract({ baseAssetId });
 
     const addresses = [
       { value: getRandomB256() },

@@ -44,7 +44,7 @@ describe(__filename, () => {
     wallet = await getTestWallet(seedQuantities);
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
     const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-    contract = await factory.deployContract({ gasPrice });
+    contract = await factory.deployContract({ gasPrice, baseAssetId });
   });
 
   it('transfer multiple assets to a contract', async () => {
@@ -58,13 +58,14 @@ describe(__filename, () => {
     // #import { BN, CoinQuantityLike, ScriptTransactionRequest };
 
     // 1. Create a script transaction using the script binary
-    const { minGasPrice } = contract.provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
       gasLimit: 3_000_000,
       script: scriptBin,
       gasPrice: minGasPrice,
+      baseAssetId: provider.getBaseAssetId(),
     });
 
     // 2. Instantiate the script main arguments

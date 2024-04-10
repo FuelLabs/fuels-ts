@@ -26,6 +26,7 @@ describe(__filename, () => {
     splitIn: number;
   }) => {
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 1_000,
       gasPrice: bn(10),
     });
@@ -60,6 +61,7 @@ describe(__filename, () => {
     expect(lowResources[0].amount.toNumber()).toBe(300);
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 1_000,
       gasPrice: bn(10),
     });
@@ -111,6 +113,7 @@ describe(__filename, () => {
     expect(enoughtResources[0].amount.toNumber()).toBe(1000);
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 1_000,
       gasPrice: bn(10),
     });
@@ -155,6 +158,7 @@ describe(__filename, () => {
     });
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 1_000,
       gasPrice: bn(10),
     });

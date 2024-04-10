@@ -22,9 +22,10 @@ describe(__filename, () => {
       DocSnippetProjectsEnum.COUNTER
     );
     provider = sender.provider;
+    const baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
     const { minGasPrice } = sender.provider.getGasConfig();
-    deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
+    deployedContract = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
   });
 
   it('should successfully transfer asset to another account', async () => {

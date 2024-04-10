@@ -77,7 +77,7 @@ export class MyContractAbi__factory {
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
-    options: DeployContractOptions = {}
+    options: DeployContractOptions
   ): Promise<MyContractAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 

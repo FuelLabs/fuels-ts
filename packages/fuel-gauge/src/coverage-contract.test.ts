@@ -485,7 +485,7 @@ describe('Coverage Contract', () => {
 
   it('should test spending input messages', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice });
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice, baseAssetId });
 
     const recipient = Wallet.generate({
       provider,

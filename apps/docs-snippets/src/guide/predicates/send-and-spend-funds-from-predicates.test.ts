@@ -203,7 +203,7 @@ describe(__filename, () => {
 
     const amountToPredicate = 10_000;
 
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasPrice,
       gasLimit: 1_000,
     });
@@ -219,7 +219,7 @@ describe(__filename, () => {
     const preparedTx = await predicate.createTransfer(
       receiverWallet.address,
       amountToPredicate,
-      BaseAssetId
+      baseAssetId
     );
 
     // Get the transaction ID before sending the transaction

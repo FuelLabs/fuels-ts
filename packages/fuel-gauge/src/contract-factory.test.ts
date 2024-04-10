@@ -32,7 +32,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract({ gasPrice });
+    const contact = await factory.deployContract({ gasPrice, baseAssetId });
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
@@ -49,7 +49,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract({ gasPrice });
+    const contact = await factory.deployContract({ gasPrice, baseAssetId });
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
@@ -92,7 +92,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract({ gasPrice, baseAssetId });
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
@@ -111,6 +111,7 @@ describe('Contract Factory', () => {
     const contract = await factory.deployContract({
       storageSlots,
       gasPrice,
+      baseAssetId,
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
@@ -143,6 +144,7 @@ describe('Contract Factory', () => {
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
+      baseAssetId,
     });
 
     const { value: vB256 } = await contact.functions.return_b256().simulate();
@@ -159,6 +161,7 @@ describe('Contract Factory', () => {
         ...storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
+      baseAssetId,
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();

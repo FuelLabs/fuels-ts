@@ -20,7 +20,10 @@ const setup = async () => {
 
   // Deploy contract
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({ gasPrice: minGasPrice });
+  const contract = await factory.deployContract({
+    gasPrice: minGasPrice,
+    baseAssetId: provider.getBaseAssetId(),
+  });
 
   return contract;
 };

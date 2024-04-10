@@ -56,7 +56,7 @@ describe('Predicate', () => {
     });
 
     it('estimatePredicates should assign gas to the correct input', async () => {
-      const tx = new ScriptTransactionRequest();
+      const tx = new ScriptTransactionRequest({ baseAssetId });
 
       // Get resources from the predicate struct
       const ressources = await predicateStruct.getResourcesToSpend([
@@ -134,7 +134,7 @@ describe('Predicate', () => {
     });
 
     test('predicate does not get estimated again if it has already been estimated', async () => {
-      const tx = new ScriptTransactionRequest();
+      const tx = new ScriptTransactionRequest({ baseAssetId });
       await seedTestWallet(predicateTrue, [[100, baseAssetId]]);
       const resources = await predicateTrue.getResourcesToSpend([[1, baseAssetId]]);
       tx.addPredicateResources(resources, predicateTrue);
@@ -148,7 +148,7 @@ describe('Predicate', () => {
     });
 
     test('Predicates get estimated if one of them is not estimated', async () => {
-      const tx = new ScriptTransactionRequest();
+      const tx = new ScriptTransactionRequest({ baseAssetId });
       await seedTestWallet(predicateTrue, [[100, baseAssetId]]);
       const trueResources = await predicateTrue.getResourcesToSpend([[1, baseAssetId]]);
       tx.addPredicateResources(trueResources, predicateTrue);

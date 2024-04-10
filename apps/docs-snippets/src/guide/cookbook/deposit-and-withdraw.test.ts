@@ -26,7 +26,7 @@ describe(__filename, () => {
     baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
     const { minGasPrice } = sender.provider.getGasConfig();
-    liquidityPoolContract = await factory.deployContract({ gasPrice: minGasPrice });
+    liquidityPoolContract = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
   });
 
   it('deposit and withdraw cookbook guide', async () => {

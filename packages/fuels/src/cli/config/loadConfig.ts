@@ -1,4 +1,5 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { defaultConsensusKey } from '@fuel-ts/utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
@@ -53,7 +54,9 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     contracts: [],
     scripts: [],
     predicates: [],
-    deployConfig: {},
+    deployConfig: {
+      baseAssetId: ZeroBytes32,
+    },
     autoStartFuelCore: true,
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,

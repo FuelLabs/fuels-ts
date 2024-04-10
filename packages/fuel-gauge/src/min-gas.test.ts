@@ -83,6 +83,7 @@ describe(__filename, () => {
     const { binHexlified } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_SCRIPT);
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       script: binHexlified,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
@@ -127,7 +128,7 @@ describe(__filename, () => {
     /**
      * Create a script transaction transfer
      */
-    const request = new ScriptTransactionRequest();
+    const request = new ScriptTransactionRequest({ baseAssetId });
     request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
     const resources = await provider.getResourcesToSpend(predicate.address, [
       {
@@ -186,6 +187,7 @@ describe(__filename, () => {
       FuelGaugeProjectsEnum.COMPLEX_SCRIPT
     );
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       script: scriptBin,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });

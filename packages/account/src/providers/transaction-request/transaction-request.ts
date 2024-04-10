@@ -72,7 +72,7 @@ export interface BaseTransactionRequestLike {
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
   /** Base asset ID - should be fetched from the chain */
-  baseAssetId?: string;
+  baseAssetId: string;
 }
 
 type ToBaseTransactionResponse = Pick<
@@ -108,7 +108,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
   /** Base asset ID - should be fetched from the chain */
-  baseAssetId: string = ZeroBytes32;
+  baseAssetId: string;
 
   /**
    * Constructor for initializing a base transaction request.
@@ -124,7 +124,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     outputs,
     witnesses,
     baseAssetId,
-  }: BaseTransactionRequestLike = {}) {
+  }: BaseTransactionRequestLike) {
     this.gasPrice = bn(gasPrice);
     this.maturity = maturity ?? 0;
     this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
@@ -132,7 +132,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
-    this.baseAssetId = baseAssetId ?? ZeroBytes32;
+    this.baseAssetId = baseAssetId;
   }
 
   static getPolicyMeta(req: BaseTransactionRequest) {

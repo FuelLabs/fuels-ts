@@ -1,6 +1,7 @@
 import { ScriptTransactionRequest } from '../../src/providers';
 
 export const SCRIPT_TX_REQUEST = new ScriptTransactionRequest({
+  baseAssetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
   gasLimit: 5_000,
   script: '0x',
   scriptData: Uint8Array.from([]),

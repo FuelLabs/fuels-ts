@@ -15,9 +15,11 @@ export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLi
   const resources = await genesisWallet.getResourcesToSpend(quantities);
 
   const { minGasPrice } = genesisWallet.provider.getGasConfig();
+  const baseAssetId = genesisWallet.provider.getBaseAssetId();
 
   // Create transaction
   const request = new ScriptTransactionRequest({
+    baseAssetId,
     gasLimit: 10000,
     gasPrice: minGasPrice,
   });

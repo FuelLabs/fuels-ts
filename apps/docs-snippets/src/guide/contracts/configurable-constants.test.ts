@@ -12,6 +12,8 @@ import { getTestWallet } from '../../utils';
  */
 describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
+  let provider: Provider;
+  let baseAssetId: string;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.ECHO_CONFIGURABLES
@@ -28,10 +30,10 @@ describe('configurable-constants', () => {
     },
   };
 
-  let provider: Provider;
   beforeAll(async () => {
     wallet = await getTestWallet();
     provider = wallet.provider;
+    baseAssetId = provider.getBaseAssetId();
   });
 
   it('should successfully set new values for all configurable constants', async () => {
@@ -54,6 +56,7 @@ describe('configurable-constants', () => {
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
+      baseAssetId: provider.getBaseAssetId(),
     });
     // #endregion configurable-constants-2
 
@@ -78,6 +81,7 @@ describe('configurable-constants', () => {
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
+      baseAssetId: provider.getBaseAssetId(),
     });
     // #endregion configurable-constants-3
 
@@ -105,6 +109,7 @@ describe('configurable-constants', () => {
       factory.deployContract({
         configurableConstants,
         gasPrice: minGasPrice,
+        baseAssetId: provider.getBaseAssetId(),
       })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4

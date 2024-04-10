@@ -21,7 +21,8 @@ const deployContract = async (
     return contractInstance;
   }
   const { minGasPrice } = provider.getGasConfig();
-  contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
+  const baseAssetId = provider.getBaseAssetId();
+  contractInstance = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
   return contractInstance;
 };
 

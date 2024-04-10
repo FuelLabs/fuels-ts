@@ -60,6 +60,7 @@ describe('PredicateConditionalInputs', () => {
     await tx2.waitForResult();
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 1000,
       gasPrice: 1,
     });
@@ -149,6 +150,7 @@ describe('PredicateConditionalInputs', () => {
     await tx3.waitForResult();
 
     const request = new ScriptTransactionRequest({
+      baseAssetId,
       gasLimit: 1000,
       gasPrice: 1,
     });

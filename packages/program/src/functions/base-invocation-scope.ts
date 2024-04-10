@@ -4,6 +4,7 @@ import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type { Provider, CoinQuantity, CallResult, Account } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type {
   AbstractAccount,
@@ -77,7 +78,11 @@ export class BaseInvocationScope<TReturn = any> {
     this.program = program;
     this.isMultiCall = isMultiCall;
 
-    this.transactionRequest = new ScriptTransactionRequest();
+    const provider = <Provider>program.provider;
+
+    this.transactionRequest = new ScriptTransactionRequest({
+      baseAssetId: provider.getBaseAssetId(),
+    });
   }
 
   /**
