@@ -1,5 +1,7 @@
+import { readFile } from 'fs/promises';
 import type { Contract } from 'fuels';
-import { BN, getRandomB256 } from 'fuels';
+import { BN, arrayify, getRandomB256 } from 'fuels';
+import { join } from 'path';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -51,5 +53,28 @@ describe(__filename, () => {
     expect(value.idHash).toEqual(employees[1].idHash);
     expect(value.ratings).toEqual(employees[1].ratings);
     expect(value.isActive).toEqual(employees[1].isActive);
+  });
+
+  it('should successfully execute a contract call with a bytecode input', async () => {
+    const bytecodeContract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.BYTECODE_INPUT
+    );
+    const bytecodePath = join(
+      __dirname,
+      '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
+    );
+
+    // #region vector-bytecode-input-ts
+    // #import { arrayify, readFile };
+
+    const bytecode = await readFile(bytecodePath);
+
+    const { value: bytecodeRoot } = await bytecodeContract.functions
+      .compute_bytecode_root(arrayify(bytecode))
+      .call();
+    // #endregion vector-bytecode-input-ts
+
+    expect(bytecodeRoot).toBeDefined();
+    expect(bytecodeRoot.length).toBe(66);
   });
 });
