@@ -776,6 +776,46 @@ export default class Provider {
   }
 
   /**
+   * Estimates the transaction gas and fee based on the provided transaction request.
+   * @param transactionRequest - The transaction request object.
+   * @param optimizeGas - Optional. Specifies whether to optimize the gas. Default is false.
+   * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
+   */
+  estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; optimizeGas?: boolean }) {
+    const { transactionRequest } = params;
+    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
+
+    const chainInfo = this.getChain();
+
+    const gasPrice = transactionRequest.gasPrice.eq(0) ? minGasPrice : transactionRequest.gasPrice;
+    transactionRequest.gasPrice = gasPrice;
+
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
+    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+
+    if (transactionRequest.type === TransactionType.Script) {
+      if (transactionRequest.gasLimit.eq(0)) {
+        transactionRequest.gasLimit = minGas;
+
+        transactionRequest.gasLimit = maxGasPerTx.sub(
+          transactionRequest.calculateMaxGas(chainInfo, minGas)
+        );
+      }
+    }
+
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
+
+    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+
+    return {
+      minGas,
+      minFee,
+      maxGas,
+      maxFee,
+    };
+  }
+
+  /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
    *
