@@ -1,0 +1,7 @@
+[project]
+authors = ["Fuel Labs <contact@fuel.sh>"]
+license = "Apache-2.0"
+name = "bytecode-sway-lib"
+
+[dependencies]
+bytecode = { git = "https://github.com/FuelLabs/sway-libs", tag = "v0.19.0" }

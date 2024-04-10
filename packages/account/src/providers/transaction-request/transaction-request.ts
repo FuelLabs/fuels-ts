@@ -379,7 +379,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
       predicate: predicate?.bytes,
-      predicateData: predicate?.predicateDataBytes,
     };
 
     // Insert the Input
@@ -420,7 +419,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       amount,
       witnessIndex,
       predicate: predicate?.bytes,
-      predicateData: predicate?.predicateDataBytes,
     };
 
     // Insert the Input
