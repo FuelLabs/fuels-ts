@@ -23,7 +23,6 @@
     "open",
     "textlint",
     "textlint-rule-no-dead-link",
-    "rimraf",
     "tree-kill",
     "ts-generator",
     "webdriverio"

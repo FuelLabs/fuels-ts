@@ -931,9 +931,6 @@ importers:
       portfinder:
         specifier: ^1.0.32
         version: 1.0.32
-      rimraf:
-        specifier: ^3.0.2
-        version: 3.0.2
       toml:
         specifier: ^3.0.0
         version: 3.0.0
@@ -952,7 +949,7 @@ importers:
         version: 3.0.2
       vite:
         specifier: ^4.3.9
-        version: 4.3.9(@types/node@18.15.3)
+        version: 4.3.9
 
   packages/hasher:
     dependencies:
@@ -22356,6 +22353,38 @@ packages:
       '@napi-rs/magic-string': 0.3.4
       fast-glob: 3.3.1
       minimatch: 6.2.0
+    dev: true
+
+  /vite@4.3.9:
+    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.17.19
+      postcss: 8.4.33
+      rollup: 3.25.3
+    optionalDependencies:
+      fsevents: 2.3.3
     dev: true
 
   /vite@4.3.9(@types/node@18.15.3):
