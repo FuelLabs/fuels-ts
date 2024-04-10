@@ -43,19 +43,22 @@
   "dependencies": {
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
-    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/forc": "workspace:*",
+    "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "bundle-require": "^4.0.1",
     "chalk": "4",
     "chokidar": "^3.5.3",
@@ -66,11 +69,14 @@
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
+    "rimraf": "^3.0.2",
     "toml": "^3.0.0",
+    "tree-kill": "^1.2.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
+    "@types/rimraf": "^3.0.2",
     "vite": "^4.3.9"
   },
   "keywords": [
