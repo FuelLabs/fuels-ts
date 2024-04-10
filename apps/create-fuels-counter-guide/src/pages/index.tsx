@@ -87,7 +87,7 @@ export default function Home() {
 
       <span className="text-gray-400">
         This template uses the new{" "}
-        <Link href="https://fuellabs.github.io/fuels-ts/tooling/cli/fuels/">
+        <Link href="https://docs.fuel.network/docs/fuels-ts/fuels/#fuels-cli">
           Fuels CLI
         </Link>{" "}
         to enable type-safe hot-reloading for your Sway programs.
