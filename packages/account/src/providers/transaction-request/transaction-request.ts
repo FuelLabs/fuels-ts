@@ -1,4 +1,5 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -609,12 +610,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       const assetInput = findAssetInput(assetId);
 
       if (assetInput && 'assetId' in assetInput) {
-        assetInput.id = hexlify(randomBytes(33));
+        assetInput.id = hexlify(randomBytes(UTXO_ID_LEN));
         assetInput.amount = quantity;
       } else {
         this.addResources([
           {
-            id: hexlify(randomBytes(33)),
+            id: hexlify(randomBytes(UTXO_ID_LEN)),
             amount: quantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),

@@ -1,3 +1,4 @@
+import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -96,8 +97,8 @@ export const inputify = (value: TransactionRequestInput): Input => {
       const predicateData = arrayify(value.predicateData ?? '0x');
       return {
         type: InputType.Coin,
-        txID: hexlify(arrayify(value.id).slice(0, 32)),
-        outputIndex: toNumber(arrayify(value.id).slice(32, 33)),
+        txID: hexlify(arrayify(value.id).slice(0, BYTES_32)),
+        outputIndex: toNumber(arrayify(value.id).slice(BYTES_32, UTXO_ID_LEN)),
         owner: hexlify(value.owner),
         amount: bn(value.amount),
         assetId: hexlify(value.assetId),
