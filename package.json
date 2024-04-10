@@ -62,7 +62,9 @@
     "@changesets/read": "^0.6.0",
     "@changesets/types": "^6.0.0",
     "@fuel-ts/forc": "workspace:*",
+    "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:^",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/node": "18.15.3",
@@ -88,7 +90,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^10.2.6",
-    "knip": "^5.9.1",
+    "knip": "^5.9.3",
     "memfs": "^4.6.0",
     "nodemon": "^3.0.3",
     "npm-run-all": "^4.1.5",
@@ -98,6 +100,7 @@
     "rimraf": "^3.0.2",
     "textlint": "^13.3.2",
     "textlint-rule-no-dead-link": "^5.1.2",
+    "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
     "tsx": "^4.7.0",
     "turbo": "^1.8.8",
@@ -106,7 +109,7 @@
     "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.1.3",
-    "webdriverio": "^8.35.1"
+    "webdriverio": "^8.32.0"
   },
   "pnpm": {
     "overrides": {
