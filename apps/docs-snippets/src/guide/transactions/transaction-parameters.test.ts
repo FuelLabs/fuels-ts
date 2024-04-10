@@ -28,7 +28,7 @@ describe(__filename, () => {
 
   it('matches tx param types', () => {
     // #region transaction-parameters-1
-    // import { TxParams, bn };
+    // #import { TxParams, bn };
 
     const txParams: TxParams = {
       gasPrice: bn(1), // BigNumberish or undefined
