@@ -1,8 +1,6 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
 import { arrayRegEx, enumRegEx, genericRegEx, stringRegEx, structRegEx } from './utils/constants';
-import { findOrThrow } from './utils/utilities';
+import { findTypeById } from './utils/json-abi';
 
 export class ResolvedAbiType {
   readonly abi: JsonAbi;
@@ -13,22 +11,10 @@ export class ResolvedAbiType {
 
   constructor(abi: JsonAbi, argument: JsonAbiArgument) {
     this.abi = abi;
-    const type = findOrThrow(
-      abi.types,
-      (t) => t.typeId === argument.type,
-      () => {
-        throw new FuelError(
-          ErrorCode.TYPE_NOT_FOUND,
-          `Type does not exist in the provided abi: ${JSON.stringify({
-            argument,
-            abi: this.abi,
-          })}`
-        );
-      }
-    );
 
     this.name = argument.name;
 
+    const type = findTypeById(abi, argument.type);
     this.type = type.type;
     this.originalTypeArguments = argument.typeArguments;
     this.components = ResolvedAbiType.getResolvedGenericComponents(
@@ -96,7 +82,7 @@ export class ResolvedAbiType {
         };
       }
 
-      const argType = findOrThrow(abi.types, (t) => t.typeId === arg.type);
+      const argType = findTypeById(abi, arg.type);
       const implicitTypeParameters = this.getImplicitGenericTypeParameters(abi, argType.components);
 
       if (implicitTypeParameters && implicitTypeParameters.length > 0) {
@@ -122,7 +108,7 @@ export class ResolvedAbiType {
     const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
 
     args.forEach((a) => {
-      const argType = findOrThrow(abi.types, (t) => t.typeId === a.type);
+      const argType = findTypeById(abi, a.type);
 
       if (genericRegEx.test(argType.type)) {
         implicitGenericParameters.push(argType.typeId);
