@@ -348,8 +348,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addCoinInput(coin: Coin, predicate?: Predicate<InputValue[]>) {
-    const { assetId, owner, amount } = coin;
+  addCoinInput(coin: Coin, _predicate?: Predicate<InputValue[]>) {
+    const { assetId, owner, amount, id, predicate } = coin;
 
     let witnessIndex;
 
@@ -365,14 +365,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     }
 
     const input: CoinTransactionRequestInput = {
-      ...coin,
+      id,
       type: InputType.Coin,
       owner: owner.toB256(),
       amount,
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
-      predicate: predicate?.bytes,
+      predicate,
     };
 
     // Insert the Input
@@ -390,8 +390,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param predicate - Predicate bytes.
    * @param predicateData - Predicate data bytes.
    */
-  addMessageInput(message: MessageCoin, predicate?: Predicate<InputValue[]>) {
-    const { recipient, sender, amount } = message;
+  addMessageInput(message: MessageCoin, _predicate?: Predicate<InputValue[]>) {
+    const { recipient, sender, amount, predicate, nonce } = message;
 
     const assetId = BaseAssetId;
 
@@ -409,13 +409,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     }
 
     const input: MessageTransactionRequestInput = {
-      ...message,
+      nonce,
       type: InputType.Message,
       sender: sender.toB256(),
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
-      predicate: predicate?.bytes,
+      predicate,
     };
 
     // Insert the Input
