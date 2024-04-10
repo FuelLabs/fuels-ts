@@ -1,6 +1,7 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -13,7 +14,6 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
-import { randomBytes } from 'ethers';
 
 import type { Account } from '../../account';
 import type { Predicate } from '../../predicate';
