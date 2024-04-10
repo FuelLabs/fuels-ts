@@ -7,7 +7,7 @@ import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
-import { findOrThrow } from './utils/utilities';
+import { findTypeById } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
@@ -75,24 +75,27 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   decodeLog(data: BytesLike, logId: number): any {
-    const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
+    const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId === logId);
+    if (!loggedType) {
+      throw new FuelError(
+        ErrorCode.LOG_TYPE_NOT_FOUND,
+        `Log type with logId '${logId}' doesn't exist in the ABI.`
+      );
+    }
 
-    return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0, {
+    return AbiCoder.decode(this.jsonAbi, loggedType.loggedType, arrayify(data), 0, {
       encoding: this.jsonAbi.encoding,
     });
   }
 
   encodeConfigurable(name: string, value: InputValue) {
-    const configurable = findOrThrow(
-      this.jsonAbi.configurables,
-      (c) => c.name === name,
-      () => {
-        throw new FuelError(
-          ErrorCode.CONFIGURABLE_NOT_FOUND,
-          `A configurable with the '${name}' was not found in the ABI.`
-        );
-      }
-    );
+    const configurable = this.jsonAbi.configurables.find((c) => c.name === name);
+    if (!configurable) {
+      throw new FuelError(
+        ErrorCode.CONFIGURABLE_NOT_FOUND,
+        `A configurable with the '${name}' was not found in the ABI.`
+      );
+    }
 
     return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
       isRightPadded: true,
@@ -101,15 +104,6 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   getTypeById(typeId: number) {
-    return findOrThrow(
-      this.jsonAbi.types,
-      (t) => t.typeId === typeId,
-      () => {
-        throw new FuelError(
-          ErrorCode.TYPE_NOT_FOUND,
-          `Type with typeId '${typeId}' doesn't exist in the ABI.`
-        );
-      }
-    );
+    return findTypeById(this.jsonAbi, typeId);
   }
 }
