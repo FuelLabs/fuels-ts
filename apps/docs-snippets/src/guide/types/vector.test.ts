@@ -65,8 +65,7 @@ describe(__filename, () => {
     );
 
     // #region vector-bytecode-input-ts
-    // #import { arrayify };
-    // #context import { readFile } from 'fs/promises';
+    // #import { arrayify, readFile };
 
     const bytecode = await readFile(bytecodePath);
 
