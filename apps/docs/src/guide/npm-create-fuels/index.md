@@ -60,7 +60,7 @@ my-fuel-project
 └── ...
 ```
 
-The most important file in this setup is the `./fuels.config.ts` file, which contains information about your Sway contracts, your local Fuel node, and where your TypeScript types are generated. You can read more about this file in the [Fuels CLI documentation](../../fuels/config-file.md).
+The most important file in this setup is the `./fuels.config.ts` file, which contains information about your Sway contracts, your local Fuel node, and where your TypeScript types are generated. You can read more about this file in the [Fuels CLI documentation](../fuels/config-file.md).
 
 The `sway-programs` directory contains your Sway programs.
 
