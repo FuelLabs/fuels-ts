@@ -13,4 +13,4 @@
 "@fuel-ts/math": patch
 ---
 
-chore: add initial depcheck using knip
+chore: add initial `depcheck` using knip
