@@ -150,7 +150,6 @@ export type TransactionCost = {
   gasUsed: BN;
   minFee: BN;
   maxFee: BN;
-  usedFee: BN;
   outputVariables: number;
   missingContractIds: string[];
   estimatedInputs: TransactionRequest['inputs'];
@@ -870,9 +869,8 @@ export default class Provider {
     }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
+    const { minGasPrice } = this.getGasConfig();
+    const setGasPrice = max(txRequestClone.gasPrice, minGasPrice);
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -883,15 +881,14 @@ export default class Provider {
     // Funding transaction with fake utxos
     txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
 
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = bn(0);
+    }
+
     /**
      * Estimate predicates gasUsed
      */
     if (estimatePredicates) {
-      // Remove gasLimit to avoid gasLimit when estimating predicates
-      if (isScriptTransaction) {
-        txRequestClone.gasLimit = bn(0);
-      }
-
       /**
        * The fake utxos added above can be from a predicate
        * If the resources owner is a predicate,
@@ -911,16 +908,17 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    const minGas = txRequestClone.calculateMinGas(chainInfo);
-    const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
+    let { maxFee, maxGas, minFee, minGas } = this.estimateTxGasAndFee({
+      transactionRequest: txRequestClone,
+    });
 
     /**
      * Estimate gasUsed for script transactions
      */
-
     let receipts: TransactionResultReceipt[] = [];
     let missingContractIds: string[] = [];
     let outputVariables = 0;
+    let gasUsed = bn(0);
     // Transactions of type Create does not consume any gas so we can the dryRun
     if (isScriptTransaction && estimateTxDependencies) {
       /**
@@ -929,10 +927,7 @@ export default class Provider {
        * will only be amounts being transferred (coin outputs) and amounts being forwarded
        * to contract calls.
        */
-      // Calculate the gasLimit again as we insert a fake UTXO and signer
-
       txRequestClone.gasPrice = bn(0);
-      txRequestClone.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
 
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.estimateTxDependencies(txRequestClone);
@@ -940,28 +935,26 @@ export default class Provider {
       receipts = result.receipts;
       outputVariables = result.outputVariables;
       missingContractIds = result.missingContractIds;
+
+      gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : gasUsed;
+
+      txRequestClone.gasLimit = gasUsed;
+      txRequestClone.gasPrice = setGasPrice;
+
+      // Estimating fee again with the real gas consumed and set gasPrice
+      ({ maxFee, maxGas, minFee, minGas } = this.estimateTxGasAndFee({
+        transactionRequest: txRequestClone,
+      }));
     }
-
-    // For CreateTransaction the gasUsed is going to be the minGas
-    const gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : minGas;
-
-    const usedFee = calculatePriceWithFactor(
-      gasUsed,
-      gasPrice,
-      gasPriceFactor
-    ).normalizeZeroToOne();
-    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
-    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
 
     return {
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       minGasPrice,
-      gasPrice,
+      gasPrice: setGasPrice,
       minGas,
       maxGas,
-      usedFee,
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,
