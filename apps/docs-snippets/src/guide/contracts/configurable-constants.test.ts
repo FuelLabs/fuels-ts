@@ -13,7 +13,6 @@ import { getTestWallet } from '../../utils';
 describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
-  let baseAssetId: string;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.ECHO_CONFIGURABLES
@@ -33,7 +32,6 @@ describe('configurable-constants', () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
     provider = wallet.provider;
-    baseAssetId = provider.getBaseAssetId();
   });
 
   it('should successfully set new values for all configurable constants', async () => {
