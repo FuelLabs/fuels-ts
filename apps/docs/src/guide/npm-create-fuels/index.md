@@ -110,4 +110,4 @@ Your frontend should now be running at `http://localhost:3000`.
 
 You should now have a local full-stack Fuel development environment that looks like this:
 
-![Fullstack Fuel Dev Workflow](../../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
+![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
