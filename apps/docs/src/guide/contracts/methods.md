@@ -36,6 +36,6 @@ If you want to figure out whether a function is read-only, you can use the `isRe
 
 <<< @/../../docs-snippets/src/guide/contracts/is-function-readonly.test.ts#is-function-readonly-1{ts:line-numbers}
 
-If the function is read-only, you can use the `get` method to retrieve on-chain data without spending gas.
+If the function is read-only, you can use the `get` method to retrieve onchain data without spending gas.
 
-If the function is not read-only you will have to use the `call` method to submit a transaction onchain which incurs  a gas fee.
+If the function is not read-only you will have to use the `call` method to submit a transaction onchain which incurs a gas fee.
