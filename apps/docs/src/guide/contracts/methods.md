@@ -38,4 +38,4 @@ If you want to figure out whether a function is read-only, you can use the `isRe
 
 If the function is read-only, you can use the `get` method to retrieve on-chain data without spending gas.
 
-If the function is not read-only, you can use the `call` method to submit a 'real' transaction to the blockchain which _will_ consume resources.
+If the function is not read-only you will have to use the `call` method to submit a transaction onchain which incurs  a gas fee.
