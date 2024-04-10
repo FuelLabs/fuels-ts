@@ -97,7 +97,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
       return {
         type: InputType.Coin,
         txID: hexlify(arrayify(value.id).slice(0, 32)),
-        outputIndex: arrayify(value.id)[32],
+        outputIndex: toNumber(arrayify(value.id).slice(32, 33)),
         owner: hexlify(value.owner),
         amount: bn(value.amount),
         assetId: hexlify(value.assetId),
