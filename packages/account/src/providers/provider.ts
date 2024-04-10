@@ -777,10 +777,9 @@ export default class Provider {
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
    * @param transactionRequest - The transaction request object.
-   * @param optimizeGas - Optional. Specifies whether to optimize the gas. Default is false.
    * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
    */
-  estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; optimizeGas?: boolean }) {
+  estimateTxGasAndFee(params: { transactionRequest: TransactionRequest }) {
     const { transactionRequest } = params;
     const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
 
