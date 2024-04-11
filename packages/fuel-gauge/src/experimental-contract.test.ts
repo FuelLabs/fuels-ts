@@ -1,9 +1,9 @@
 import { readFileSync } from 'fs';
-import type { Contract, ContractFactory } from 'fuels';
-import { bn } from 'fuels';
+import type { Contract } from 'fuels';
+import { ContractFactory, bn } from 'fuels';
 import { join } from 'path';
 
-import { setup, setupFactory } from './utils';
+import { setup } from './utils';
 
 let contractInstance: Contract;
 let contractFactory: ContractFactory;
@@ -30,7 +30,7 @@ describe('Experimental Contract', () => {
     const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
 
     contractInstance = await setup({ contractBytecode, abi });
-    contractFactory = await setupFactory({ contractBytecode, abi });
+    contractFactory = new ContractFactory(contractBytecode, abi, contractInstance.account);
   });
 
   it('echos mixed struct with all types', async () => {

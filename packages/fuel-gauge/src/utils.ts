@@ -9,14 +9,13 @@ let contractInstance: Contract;
 const deployContract = async (
   factory: ContractFactory,
   provider: Provider,
-  useCache: boolean = true,
-  configurableConstants?: { [name: string]: unknown }
+  useCache: boolean = true
 ) => {
   if (contractInstance && useCache) {
     return contractInstance;
   }
   const { minGasPrice } = provider.getGasConfig();
-  contractInstance = await factory.deployContract({ configurableConstants, gasPrice: minGasPrice });
+  contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
   return contractInstance;
 };
 
@@ -37,7 +36,6 @@ export type SetupConfig = {
   contractBytecode: BytesLike;
   abi: JsonAbi | Interface;
   cache?: boolean;
-  configurableConstants?: { [name: string]: unknown };
 };
 
 export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
@@ -46,11 +44,6 @@ export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
   const factory = new ContractFactory(contractBytecode, abi, wallet);
   const contract = await deployContract(factory, wallet.provider, cache);
   return contract;
-};
-
-export const setupFactory = async ({ contractBytecode, abi }: SetupConfig) => {
-  const wallet = await createWallet();
-  return new ContractFactory(contractBytecode, abi, wallet);
 };
 
 export const createSetupConfig =
