@@ -24,6 +24,7 @@ import type {
   Provider,
   Resource,
   TransactionRequest,
+  TransactionRequestInput,
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
@@ -43,7 +44,6 @@ export type PredicateParams<T = InputValue[]> = {
  */
 export class Predicate<TInputData extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  predicateDataBytes: Uint8Array = Uint8Array.from([]);
   predicateData: TInputData = [] as unknown as TInputData;
   interface?: Interface;
 
@@ -90,7 +90,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     const { policies } = BaseTransactionRequest.getPolicyMeta(request);
 
-    request.inputs?.forEach((input) => {
+    request.inputs?.forEach((input: TransactionRequestInput) => {
       if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
         // eslint-disable-next-line no-param-reassign
         input.predicate = hexlify(this.bytes);
