@@ -177,11 +177,11 @@ describe('Predicate', () => {
 
       const sender = contract.account as Account;
 
-      // adding any amount of resources from the sender to ensure it witnesse index will be 0
+      // Adding any amount of resources from the sender to ensure its witness index will be 0
       const senderResources = await sender.getResourcesToSpend([[1, BaseAssetId]]);
       request.addResources(senderResources);
 
-      // any amount of the predicate will do as it is not going to pay for the fee
+      // Any amount of the predicate will do as it is not going to pay for the fee
       const predicateResources = await predicate.getResourcesToSpend([[1, BaseAssetId]]);
       request.addResources(predicateResources);
 
@@ -191,7 +191,7 @@ describe('Predicate', () => {
       request.updatePredicateInputs(estimatedInputs);
       request.gasLimit = gasUsed;
 
-      // properly funding the TX if needed
+      // Properly funding the TX to ensure the fee was covered
       await sender?.fund(request, requiredQuantities, maxFee);
 
       const tx = await sender?.sendTransaction(request);
@@ -209,8 +209,10 @@ describe('Predicate', () => {
       expect(predicateInputs?.length).toBe(1);
       expect((<InputCoin>predicateInputs?.[0]).witnessIndex).toBe(0);
 
-      // TX should have only one witness entry which is from the sender as a predicate should
-      // not add witnesses entries
+      /**
+       * TX should have only one witness entry which is from the sender as a predicate should
+       * not add witnesses entries
+       */
       expect(witnesses?.length).toBe(1);
     });
   });

@@ -102,7 +102,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
          * the user has fetched the predicate resources using the provider `getResourcesToSpend` method,
          * as the method will not populate the predicate property and the resources are going to be added
          * as common resources. We should enforce users to always fetch resources using the predicate instance,
-         * as they will need it to populate the predicate data anyway.
+         * as they will need it to populate the predicate data anyway using this method.
          */
         // eslint-disable-next-line no-param-reassign
         input.witnessIndex = 0;
