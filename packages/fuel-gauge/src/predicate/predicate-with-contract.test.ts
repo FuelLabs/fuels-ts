@@ -32,9 +32,11 @@ describe('Predicate', () => {
   const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
-  const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_TRUE
-  );
+  const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_TRUE);
+
+  const { binHexlified: complexPredicateBytes, abiContents: complexPredicateAbi } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_PREDICATE);
 
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
@@ -60,9 +62,15 @@ describe('Predicate', () => {
       const contract = await setupContract();
       const amountToPredicate = 500_000;
       const predicate = new Predicate<[Validation]>({
-        bytecode: predicateBytesTrue,
+        bytecode: predicateBytesStruct,
         abi: predicateAbiMainArgsStruct,
         provider,
+        inputData: [
+          {
+            has_account: true,
+            total_complete: bn(100),
+          },
+        ],
       });
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
@@ -107,15 +115,9 @@ describe('Predicate', () => {
       const amountToPredicate = 700_000;
       const amountToReceiver = 200_000;
       const predicate = new Predicate<[Validation]>({
-        bytecode: predicateBytesStruct,
+        bytecode: predicateBytesTrue,
         provider,
-        abi: predicateAbiMainArgsStruct,
-        inputData: [
-          {
-            has_account: true,
-            total_complete: 100,
-          },
-        ],
+        abi: predicateAbiTrue,
       });
       const initialPredicateBalance = toNumber(await predicate.getBalance());
 
