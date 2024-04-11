@@ -10,7 +10,7 @@ You can provide various [options](../../api/Account/index.md#provideroptions) on
 
 ### `retryOptions`
 
-Calls done via the `Provider` towards a fuel node will fail if the connection cannot be established.
+Calls to a fuel node via the `Provider` will fail if a connection cannot be established.
 Specifying retry options allows you to customize the way you want to handle that failure scenario before ultimately throwing an error.
 
 _NOTE: retrying is only done when a connection cannot be established. If the connection is established and the node throws an error, no retry will happen._
