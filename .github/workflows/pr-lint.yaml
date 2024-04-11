@@ -58,7 +58,7 @@ jobs:
 
           if [ -z "$AFFECTED_PACKAGES" ]; then
             # The changelog logic ignores changesets that don't affect any packages so we can ignore them here as well,
-            # because this changeset linting logic is only for changesets that will be in the changelog.
+            # because this changeset linting logic is only for changesets who's PRs will be referenced in the changelog.
 
             # The relevant changelog logic is here:
             # https://github.com/FuelLabs/fuels-ts/blob/155b6f2fe28e988b277dac231af6d6a0cff1df0c/scripts/changeset/get-full-changelog.mts#L77
