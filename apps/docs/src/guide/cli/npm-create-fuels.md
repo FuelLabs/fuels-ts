@@ -1,4 +1,4 @@
-# Quickstart
+# npm create fuels
 
 You can quickly bootstrap a full-stack Fuel project locally with the following command:
 
@@ -20,6 +20,7 @@ Options:
   --pnpm                Use pnpm as the package manager
   --npm                 Use npm as the package manager
   -cs, -cp, -sp, -cps   Shorthand to include combination of contract, script and predicate programs
+  --verbose             Enable verbose logging
   -h, --help            Display help for command
 ```
 
@@ -39,6 +40,7 @@ Options:
   --pnpm                Use pnpm as the package manager
   --npm                 Use npm as the package manager
   -cs, -cp, -sp, -cps   Shorthand to include combination of contract, script and predicate programs
+  --verbose             Enable verbose logging
   -h, --help            Display help for command
 ```
 
