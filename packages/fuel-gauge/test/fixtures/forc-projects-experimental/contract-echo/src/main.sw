@@ -65,9 +65,14 @@ struct MixedStruct {
     str_slice: str,
 }
 
+configurable {
+    CONF: (u8, u16, u32, str[4]) = (1, 2, 3, __to_str_array("four")),
+}
+
 abi MyContract {
     fn echo_struct(param: MixedStruct) -> MixedStruct;
     fn test_revert() -> bool;
+    fn echo_configurable(param: (u8, u16, u32, str[4])) -> (u8, u16, u32, str[4]);
 }
 
 impl MyContract for Contract {
@@ -78,5 +83,17 @@ impl MyContract for Contract {
     fn test_revert() -> bool {
         require(false, "This is a revert error");
         true
+    }
+
+    fn echo_configurable(param: (u8, u16, u32, str[4])) -> (u8, u16, u32, str[4]) {
+        assert_eq(param.0, CONF.0);
+        assert_eq(param.1, CONF.1);
+        assert_eq(param.2, CONF.2);
+
+        let param_str: str = from_str_array(param.3);
+        let conf_str: str = from_str_array(CONF.3);
+        assert_eq(param_str, conf_str);
+
+        CONF
     }
 }

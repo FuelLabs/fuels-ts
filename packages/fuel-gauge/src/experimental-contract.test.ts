@@ -1,11 +1,12 @@
 import { readFileSync } from 'fs';
 import type { Contract } from 'fuels';
-import { bn } from 'fuels';
+import { ContractFactory, bn } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
 
 let contractInstance: Contract;
+let contractFactory: ContractFactory;
 
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
@@ -29,6 +30,7 @@ describe('Experimental Contract', () => {
     const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
 
     contractInstance = await setup({ contractBytecode, abi });
+    contractFactory = new ContractFactory(contractBytecode, abi, contractInstance.account);
   });
 
   it('echos mixed struct with all types', async () => {
@@ -85,5 +87,25 @@ describe('Experimental Contract', () => {
     await expect(contractInstance.functions.test_revert().call()).rejects.toThrow(
       'The transaction reverted because a "require" statement has thrown "This is a revert error".'
     );
+  });
+
+  it('echos configurable (both encoding versions)', async () => {
+    const param = [1, 2, 3, 'four'];
+    const { value } = await contractInstance.functions.echo_configurable(param).call();
+
+    expect(value).toStrictEqual(param);
+
+    const configurableParam = [5, 6, 7, 'fuel'];
+    const configurableConstants = {
+      CONF: configurableParam,
+    };
+    const configurableContractInstance = await contractFactory.deployContract({
+      configurableConstants,
+    });
+    const { value: configurableValue } = await configurableContractInstance.functions
+      .echo_configurable(configurableParam)
+      .call();
+
+    expect(configurableValue).toStrictEqual(configurableParam);
   });
 });
