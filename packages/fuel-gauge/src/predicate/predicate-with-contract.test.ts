@@ -29,13 +29,8 @@ describe('Predicate', () => {
     FuelGaugeProjectsEnum.TOKEN_CONTRACT
   );
 
-  const { abiContents: predicateAbiMainArgsStruct } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
-  );
-
-  const { binHexlified: predicateBytesStruct } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT
-  );
+  const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
 
   const { binHexlified: predicateBytesTrue } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_TRUE
