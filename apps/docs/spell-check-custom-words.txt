@@ -302,6 +302,8 @@ MULTICALL
 TTL
 Bech
 CLIs
+API's
+codegen
 scaffolded
 programmatically
 BigNumber
