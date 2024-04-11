@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet, launchNode, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, BN, CoinQuantity, InputCoin, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
@@ -10,6 +10,7 @@ import {
   FUEL_NETWORK_URL,
   bn,
   InputType,
+  Wallet,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -53,17 +54,25 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate from a contract function', async () => {
-      const setupContract = setupContractWithConfig({
-        contractBytecode: contractBytes,
-        abi: contractAbi,
-        cache: true,
+      const { cleanup, ip, port } = await launchNode({
+        args: ['--poa-instant', 'true'],
+        loggingEnabled: false,
       });
-      const contract = await setupContract();
+
+      const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+
+      const testWallet = Wallet.generate({ provider: nodeProvider });
+
+      await seedTestWallet(testWallet, [[1_000_000, BaseAssetId]]);
+
+      const factory = new ContractFactory(contractBytes, contractAbi, testWallet);
+      const contract = await factory.deployContract({ gasPrice });
+
       const amountToPredicate = 500_000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         abi: predicateAbiMainArgsStruct,
-        provider,
+        provider: nodeProvider,
         inputData: [
           {
             has_account: true,
@@ -73,7 +82,7 @@ describe('Predicate', () => {
       });
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
-      const predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      const predicateBalance = await fundPredicate(testWallet, predicate, amountToPredicate);
 
       const {
         value,
@@ -93,6 +102,8 @@ describe('Predicate', () => {
 
       const finalPredicateBalance = await predicate.getBalance();
       expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
+
+      cleanup();
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
