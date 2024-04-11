@@ -9,7 +9,8 @@ import { getSetupContract } from './utils';
 /**
  * @group node
  */
-test('compute_bytecode_root', async () => {
+// TODO: Unskip test after sway-libs become compatible with latest forc (0.52+)
+test.skip('compute_bytecode_root', async () => {
   const { binHexlified: bytecodeFromFile } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
   );
