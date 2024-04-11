@@ -21,7 +21,7 @@ describe('Provider', () => {
     expect(provider).toBeInstanceOf(Provider);
     expect(consensusParameters).toBeDefined();
     expect(consensusParameters).toBeInstanceOf(Object);
-  })
+  });
 
   it('can be given options', async () => {
     // #region provider-options
