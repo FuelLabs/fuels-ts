@@ -96,6 +96,16 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
         input.predicateData = this.getPredicateData(policies.length);
+
+        /**
+         * Not sure if this is needed. The only scenario that this could help is if
+         * the user has fetched the predicate resources using the provider `getResourcesToSpend` method,
+         * as the method will not populate the predicate property and the resources are going to be added
+         * as common resources. We should enforce users to always fetch resources using the predicate instance,
+         * as they will need it to populate the predicate data anyway.
+         */
+        // eslint-disable-next-line no-param-reassign
+        input.witnessIndex = 0;
       }
     });
 
