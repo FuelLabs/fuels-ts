@@ -65,4 +65,16 @@ describe('Provider', () => {
     expect(baseAssetId).toBe(ZeroBytes32);
     expect(transactionRequest.baseAssetId).toBe(baseAssetId);
   });
+
+  it('using operations', async () => {
+    // #region operations
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const chain = await provider.operations.getChain();
+    const nodeInfo = await provider.operations.getNodeInfo();
+    // #endregion operations
+
+    expect(chain).toBeDefined();
+    expect(nodeInfo).toBeDefined();
+  });
 });
