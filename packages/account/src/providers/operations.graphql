@@ -181,24 +181,32 @@ fragment messageProofFragment on MessageProof {
   messageBlockHeader {
     id
     daHeight
+    consensusParametersVersion
+    stateTransitionBytecodeVersion
     transactionsCount
+    messageReceiptCount
     transactionsRoot
+    messageOutboxRoot
+    eventInboxRoot
     height
     prevRoot
     time
     applicationHash
-    messageReceiptCount
   }
   commitBlockHeader {
     id
     daHeight
+    consensusParametersVersion
+    stateTransitionBytecodeVersion
     transactionsCount
+    messageReceiptCount
     transactionsRoot
+    messageOutboxRoot
+    eventInboxRoot
     height
     prevRoot
     time
     applicationHash
-    messageReceiptCount
   }
   sender
   recipient
