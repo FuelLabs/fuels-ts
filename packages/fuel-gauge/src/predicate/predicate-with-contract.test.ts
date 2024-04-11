@@ -167,10 +167,11 @@ describe('Predicate', () => {
         cache: true,
       });
 
-      const predicate = new Predicate<[Validation]>({
-        bytecode: predicateBytesTrue,
-        abi: predicateAbiMainArgsStruct,
+      const predicate = new Predicate<[BN]>({
+        bytecode: complexPredicateBytes,
+        abi: complexPredicateAbi,
         provider,
+        inputData: [bn(10)],
       });
 
       await fundPredicate(wallet, predicate, 5000);
