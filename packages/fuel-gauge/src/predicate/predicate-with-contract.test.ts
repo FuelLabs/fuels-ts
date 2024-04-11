@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, WalletUnlocked } from 'fuels';
+import type { Account, BN, CoinQuantity, InputCoin, WalletUnlocked } from 'fuels';
 import {
   BaseAssetId,
   ContractFactory,
@@ -9,6 +9,8 @@ import {
   Provider,
   Predicate,
   FUEL_NETWORK_URL,
+  bn,
+  InputType,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -71,13 +73,20 @@ describe('Predicate', () => {
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
       const predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
 
-      const { value } = await contractPredicate.functions
+      const {
+        value,
+        transactionResult: {
+          transaction: { witnesses },
+        },
+      } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
           forward: [500, BaseAssetId],
         })
         .call();
 
+      // not witnesses entry were added to Transaction witnesses
+      expect(witnesses?.length).toBe(0);
       expect(value.toString()).toEqual('500');
 
       const finalPredicateBalance = await predicate.getBalance();
@@ -152,6 +161,71 @@ describe('Predicate', () => {
         min: remainingPredicateBalance - 20,
         max: remainingPredicateBalance + 20,
       });
+    });
+
+    it('executes a contract call with a predicate to ensure not extra witnesses are added', async () => {
+      const setupContract = setupContractWithConfig({
+        contractBytecode: contractBytes,
+        abi: contractAbi,
+        cache: true,
+      });
+
+      const predicate = new Predicate<[Validation]>({
+        bytecode: predicateBytesTrue,
+        abi: predicateAbiMainArgsStruct,
+        provider,
+      });
+
+      await fundPredicate(wallet, predicate, 5000);
+
+      const contract = await setupContract();
+      const forward: CoinQuantity = { amount: bn(500), assetId: BaseAssetId };
+
+      const request = await contract.functions
+        .return_context_amount()
+        .txParams({ gasPrice })
+        .callParams({
+          forward,
+        })
+        .getTransactionRequest();
+
+      const sender = contract.account as Account;
+
+      // adding any amount of resources from the sender to ensure it witnesse index will be 0
+      const senderResources = await sender.getResourcesToSpend([[1, BaseAssetId]]);
+      request.addResources(senderResources);
+
+      // any amount of the predicate will do as it is not going to pay for the fee
+      const predicateResources = await predicate.getResourcesToSpend([[1, BaseAssetId]]);
+      request.addResources(predicateResources);
+
+      const { maxFee, requiredQuantities, estimatedInputs, gasUsed } =
+        await provider.getTransactionCost(request, [forward]);
+
+      request.updatePredicateInputs(estimatedInputs);
+      request.gasLimit = gasUsed;
+
+      // properly funding the TX if needed
+      await sender?.fund(request, requiredQuantities, maxFee);
+
+      const tx = await sender?.sendTransaction(request);
+
+      const {
+        transaction: { witnesses, inputs },
+      } = await tx.waitForResult();
+
+      const predicateAddress = predicate.address.toB256();
+      const predicateInputs = inputs?.filter(
+        (input) => input.type === InputType.Coin && input.owner === predicateAddress
+      );
+
+      // It ensures a predicate witness index is set to 0
+      expect(predicateInputs?.length).toBe(1);
+      expect((<InputCoin>predicateInputs?.[0]).witnessIndex).toBe(0);
+
+      // TX should have only one witness entry which is from the sender as a predicate should
+      // not add witnesses entries
+      expect(witnesses?.length).toBe(1);
     });
   });
 });
