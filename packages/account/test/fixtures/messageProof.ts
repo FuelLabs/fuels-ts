@@ -33,6 +33,10 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
     prevRoot: '0x26e49e4af2253e0bca68d2a8b38fa7406a546ebc476b6ca51569cb325ad55ea6',
     time: '4611686020115956241',
     applicationHash: '0x76b6838a38a3049fa1dd42f923a0f287594a390493003af0f1c3da94f3d2b8c7',
+    consensusParametersVersion: '0',
+    stateTransitionBytecodeVersion: '0',
+    eventInboxRoot: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    messageOutboxRoot: '0x8817eb3173bc39ae465def50f978153fd84ea4badbe3a4e26486ba7f1bcd0579',
   },
   commitBlockHeader: {
     __typename: 'Header',
@@ -45,6 +49,10 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
     prevRoot: '0xcc024475c2ccd175082bc233f5ebb3736e47a648a666d82567b001ab46cf0a83',
     time: '4611686020115956241',
     applicationHash: '0x441dece8e41d111f3a875ed89d716e48abf450ad385b111cf7c55e06e0b57d6b',
+    consensusParametersVersion: '0',
+    stateTransitionBytecodeVersion: '0',
+    eventInboxRoot: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    messageOutboxRoot: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
   },
   sender: '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
   recipient: '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263',
@@ -72,6 +80,12 @@ export const MESSAGE_PROOF: MessageProof = {
     time: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.applicationHash,
     messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
+    consensusParametersVersion:
+      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.consensusParametersVersion,
+    stateTransitionBytecodeVersion:
+      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.stateTransitionBytecodeVersion,
+    eventInboxRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.eventInboxRoot,
+    messageOutboxRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageOutboxRoot,
   },
   commitBlockHeader: {
     id: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.id,
@@ -83,6 +97,12 @@ export const MESSAGE_PROOF: MessageProof = {
     time: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.applicationHash,
     messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
+    consensusParametersVersion:
+      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.consensusParametersVersion,
+    stateTransitionBytecodeVersion:
+      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.stateTransitionBytecodeVersion,
+    eventInboxRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.eventInboxRoot,
+    messageOutboxRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageOutboxRoot,
   },
   sender: Address.fromAddressOrString(MESSAGE_PROOF_RAW_RESPONSE.sender),
   recipient: Address.fromAddressOrString(MESSAGE_PROOF_RAW_RESPONSE.recipient),
