@@ -12,4 +12,4 @@
 "@fuel-ts/math": minor
 ---
 
-Upgrading `forc` to `0.53.0`
+chore!: upgrading `forc` to `0.53.0`
