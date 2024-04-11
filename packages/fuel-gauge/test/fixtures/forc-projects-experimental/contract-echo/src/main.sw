@@ -94,7 +94,6 @@ impl MyContract for Contract {
         let param_str: str = from_str_array(param.3);
         let conf_str: str = from_str_array(CONF.3);
         assert_eq(param_str, conf_str);
-
         
         CONF
     }
