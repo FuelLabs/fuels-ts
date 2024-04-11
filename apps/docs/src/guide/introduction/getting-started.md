@@ -71,7 +71,7 @@ export default App;
 
 For a quick test or just playing around, you can load it in your Web Apps straight from our CDN.
 
-```html-vue
+```html
 <script type="module">
   import {
     Wallet,

@@ -35,7 +35,10 @@ describe('VecCoder', () => {
     const coder = new VecCoder(new BooleanCoder(options));
     await expectToThrowFuelError(
       () => coder.encode('Nope' as never),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
+      new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        'Expected array value, or a Uint8Array. You can use arrayify to convert a value to a Uint8Array.'
+      )
     );
   });
 

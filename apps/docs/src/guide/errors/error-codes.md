@@ -62,6 +62,11 @@ When the program type either: does _not_ have configurable constants to be set; 
 
 Ensure the configurable constants provided are correct and are defined in ABI.
 
+## `INVALID_COMPONENT`
+When an expected component is not found in the ABI or is malformed.
+
+Ensure that you have correctly formed Sway types for [Arrays](../types/arrays.md) and [Vectors](../types/vectors.md).
+
 ## `INVALID_CREDENTIALS`
 When the password provided is incorrect.
 

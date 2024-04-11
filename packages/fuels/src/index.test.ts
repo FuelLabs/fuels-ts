@@ -16,7 +16,6 @@ describe('index.js', () => {
     expect(fuels.Provider).toBeTruthy();
     expect(fuels.Wallet).toBeTruthy();
     expect(fuels.TransactionType).toBeTruthy();
-    expect(fuels.ScriptResultDecoderError).toBeTruthy();
     expect(fuels.Script).toBeTruthy();
     expect(fuels.FunctionInvocationScope).toBeTruthy();
     expect(fuels.arrayify).toBeTruthy();

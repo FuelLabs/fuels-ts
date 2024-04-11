@@ -37,6 +37,10 @@ export const expectToThrowFuelError = async (
     );
   }
 
+  if (expectedError.metadata) {
+    expect(thrownError.metadata).toEqual(expect.objectContaining(expectedError.metadata));
+  }
+
   expect(thrownError.name).toEqual('FuelError');
   expect(thrownError).toMatchObject(expectedError);
 };
