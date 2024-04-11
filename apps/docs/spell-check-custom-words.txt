@@ -303,7 +303,10 @@ TTL
 Bech
 CLIs
 backoff
+API's
+codegen
 scaffolded
 programmatically
 BigNumber
 Gwei
+onchain

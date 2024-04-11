@@ -88,4 +88,16 @@ describe('Provider', () => {
     });
     // #endregion options-fetch
   });
+
+  it('using operations', async () => {
+    // #region operations
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const chain = await provider.operations.getChain();
+    const nodeInfo = await provider.operations.getNodeInfo();
+    // #endregion operations
+
+    expect(chain).toBeDefined();
+    expect(nodeInfo).toBeDefined();
+  });
 });
