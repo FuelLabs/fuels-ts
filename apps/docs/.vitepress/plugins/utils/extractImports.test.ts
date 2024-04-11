@@ -3,7 +3,7 @@ import * as extractImportsMod from './extractImports';
 import fs from 'fs';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-const { collectImportStatements, combineImportStatements, validateImports, extractImports } =
+const { collectImportStatements, combineImportStatements, validateImports, extractImports, validateSnippetContent } =
   extractImportsMod;
 
 /**
@@ -40,6 +40,17 @@ describe('extractImports', () => {
       const expected = `import { firstImport, secondImport } from 'somewhere';`;
       expect(combineImportStatements(importStatements)).toBe(expected);
     });
+
+    it('should import types correctly', () => {
+      const expected = `import { implementationImport } from 'somewhere';\nimport type { typeImport } from 'somewhere';`;
+      const importStatements = {
+        somewhere: new Set(['implementationImport']),
+        'type::somewhere': new Set(['typeImport']),
+      }
+
+      const actual = combineImportStatements(importStatements)
+      expect(actual).toBe(expected);
+    })
   });
 
   describe('validateImports', () => {
@@ -85,6 +96,36 @@ describe('extractImports', () => {
       );
     });
   });
+
+  describe('validateSnippetContent', () => {
+    it('should pass validation for a valid code snippet content', () => {
+      const codeSnippet = [
+        '// #import { AssetId };',
+        '',
+        'const assetId: AssetId = {',
+        '  value: Bits256,',
+        '};',
+      ];
+      const filepath = '/some/file/asset-id.test.ts';
+      expect(() => validateSnippetContent(codeSnippet, filepath)).not.toThrow();
+    })
+
+    it('should throw an error when malformed #imports detected', async () => {
+      const codeSnippet = [
+        '// #import { AssetId }',
+      ]
+      const filepath = '/some/file/asset-id.test.ts';
+      
+      await expectToThrowFuelError(
+        () => validateSnippetContent(codeSnippet, filepath),
+        new FuelError(
+          ErrorCode.VITEPRESS_PLUGIN_ERROR,
+          `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n// #import { AssetId }`
+        )
+      )
+    });
+
+  })
 
   describe('collectImportStatements', () => {
     it('should handle empty lines', () => {
@@ -149,13 +190,14 @@ describe('extractImports', () => {
 
     it('should ensure imports are extracted just fine', () => {
       const filepath = 'mockedPath';
-      const specifiedImports = ['AssetId'];
+      const specifiedImports = ['AssetId', 'Address'];
       const snippetContent = [
-        '    // #import { AssetId };',
+        '    // #import { AssetId, Address };',
         '',
         '    const assetId: AssetId = {',
         '      value: Bits256,',
         '    };',
+        '    const address: Address = new Address();',
       ];
 
       const mockedFileContent = `
@@ -174,7 +216,7 @@ describe('extractImports', () => {
 
       expect(readFileSync).toBeCalledTimes(1);
 
-      expect(result).toEqual("import { AssetId } from 'fuels';");
+      expect(result).toEqual("import { Address } from 'fuels';\nimport type { AssetId } from 'fuels';");
     });
   });
 });

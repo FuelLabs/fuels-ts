@@ -303,4 +303,7 @@ TTL
 Bech
 CLIs
 typedoc
+scaffolded
 programmatically
+BigNumber
+Gwei

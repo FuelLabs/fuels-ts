@@ -1,6 +1,11 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import fs from 'fs';
-import { IMPORT_REGEXP } from '../snippetPlugin';
+import { IMPORT_REGEXP, IMPORT_START_REGEXP } from '../snippetPlugin';
+
+/**
+ * Constant used to prefix type imports.
+ */
+const TYPE_IMPORT_PREFIX = 'type::';
 
 /**
  * Combines import statements into a single string.
@@ -12,7 +17,13 @@ export const combineImportStatements = (importStatements: Record<string, Set<str
   return Object.keys(importStatements)
     .map(
       // Transforming collected imports into import statements
-      (source) => `import { ${Array.from(importStatements[source]).join(', ')} } from '${source}';`
+      (source) => {
+        const importItems = Array.from(importStatements[source]).join(', ');
+        const isTypeImport = source.startsWith(TYPE_IMPORT_PREFIX);
+        const importType = isTypeImport ? 'type ' : '';
+
+        return `import ${importType}{ ${importItems} } from '${source.replace(TYPE_IMPORT_PREFIX, '')}';`;
+      }
     )
     .join('\n');
 };
@@ -59,6 +70,39 @@ export const validateImports = (
     }
   }
 };
+
+/**
+ * Validates that the snippet content contains valid import statements.
+ * 
+ * @param snippetContent - the snippet content to validate
+ * @param filepath - file path of the snippet
+
+ * @throws {FuelError} - If there are malformed "#import" statements in the code snippet.
+ * ```ts
+ * // Valid
+ * // #import { AssetId };
+ * 
+ * // Not valid
+ * // Missing semicolon: "#import { AssetId }"
+ * // Plain wrong: "#import "
+ * ```
+ */
+export const validateSnippetContent = (snippetContent: string[], filepath: string) => {
+  const allImportStatements = snippetContent.filter((line) => IMPORT_START_REGEXP.test(line));
+  const validImportStatements = snippetContent.filter((line) => IMPORT_REGEXP.test(line));
+
+  // Validates that all the import statements have been picked up
+  if (allImportStatements.length !== validImportStatements.length) {
+    const invalidLines = allImportStatements
+      .filter((line) => !validImportStatements.includes(line))
+      .map((line) => line.trim())
+      .join('\n');
+    throw new FuelError(
+      ErrorCode.VITEPRESS_PLUGIN_ERROR,
+      `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n${invalidLines}`
+    );
+  }
+}
 
 /**
  * Collects import statements from the given lines of code and extracts the imported items and their sources.
@@ -117,22 +161,28 @@ export const collectImportStatements = (lines: string[], specifiedImports: strin
        */
 
       if (matches && matches.length >= 1) {
+        // Is the current import a type import?
+        const isTypeImport = matches[1]?.trim() === 'type';
+
         // importedItems: ['Provider', 'Wallet']
         const importedItems = matches[2].replace(/[\{\}\s]/g, '').split(/\,/);
 
         // importSource: 'fuels'
         const [, importSource] = matches[3].split("'");
 
+        // source: 'type::fuels' or 'fuels'
+        const source = isTypeImport ? `${TYPE_IMPORT_PREFIX}${importSource}` : importSource;
+
         // Add collected imports 'allImportedItems' only if they were specified
         importedItems.forEach((item) => {
           if (specifiedImports.includes(item)) {
             allImportedItems.add(item);
 
-            if (!importStatements[importSource]) {
-              importStatements[importSource] = new Set();
+            if (!importStatements[source]) {
+              importStatements[source] = new Set();
             }
 
-            importStatements[importSource].add(item);
+            importStatements[source].add(item);
           }
         });
       }

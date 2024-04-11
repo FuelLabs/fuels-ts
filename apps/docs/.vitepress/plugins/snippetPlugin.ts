@@ -3,10 +3,11 @@ import path from 'path';
 import fs from 'fs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { RuleBlock } from 'markdown-it/lib/parser_block';
-import { extractImports } from './utils/extractImports';
+import { extractImports, validateSnippetContent } from './utils/extractImports';
 
 // Regex to match import comments
 export const IMPORT_REGEXP = /\/\/ #import \{(.+)\};$/;
+export const IMPORT_START_REGEXP = /\/\/ #import/;
 
 // Regex to match region start/end comments
 export const REGION_REGEXP = /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/;
@@ -142,6 +143,7 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       }
 
       const snippetContent = lines.slice(region.start, region.end);
+      validateSnippetContent(snippetContent, filepath);
 
       // Extract and add imports specified in the #import flag
       let importStatements = '';
