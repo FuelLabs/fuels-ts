@@ -6,7 +6,7 @@ import type { AbstractAddress, AbstractContract, BytesLike } from '@fuel-ts/inte
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { InvokeFunctions } from './types';
+import type { InvokeFunction, InvokeFunctions } from './types';
 
 /**
  * `Contract` provides a way to interact with the contract program type.
@@ -89,7 +89,17 @@ export default class Contract implements AbstractContract {
    * @returns A function that creates a FunctionInvocationScope.
    */
   buildFunction(func: FunctionFragment) {
-    return (...args: Array<unknown>) => new FunctionInvocationScope(this, func, args);
+    return (() => {
+      const funcInvocationScopeCreator = (...args: Array<unknown>) =>
+        new FunctionInvocationScope(this, func, args);
+
+      Object.defineProperty(funcInvocationScopeCreator, 'isReadOnly', {
+        value: () => func.isReadOnly(),
+        writable: false,
+      });
+
+      return funcInvocationScopeCreator;
+    })() as InvokeFunction;
   }
 
   /**
