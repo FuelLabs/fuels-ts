@@ -44,6 +44,10 @@ export type BlockHeader = {
   prevRoot: string;
   time: string;
   applicationHash: string;
+  messageOutboxRoot: string;
+  eventInboxRoot: string;
+  consensusParametersVersion: number;
+  stateTransitionBytecodeVersion: number;
   messageReceiptCount: BN;
 };
 
