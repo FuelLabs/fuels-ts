@@ -1,5 +1,7 @@
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -564,13 +566,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param quantities - CoinQuantity Array.
    */
   fundWithFakeUtxos(quantities: CoinQuantity[], resourcesOwner?: AbstractAddress) {
-    let idCounter = 0;
-    const generateId = (): string => {
-      const counterString = String(idCounter++);
-      const id = ZeroBytes32.slice(0, -counterString.length).concat(counterString);
-      return id;
-    };
-
     const findAssetInput = (assetId: string) =>
       this.inputs.find((input) => {
         if ('assetId' in input) {
@@ -583,12 +578,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       const assetInput = findAssetInput(assetId);
 
       if (assetInput && 'assetId' in assetInput) {
-        assetInput.id = generateId();
+        assetInput.id = hexlify(randomBytes(UTXO_ID_LEN));
         assetInput.amount = quantity;
       } else {
         this.addResources([
           {
-            id: generateId(),
+            id: hexlify(randomBytes(UTXO_ID_LEN)),
             amount: quantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),
