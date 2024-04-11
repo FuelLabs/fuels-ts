@@ -100,6 +100,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
       isRightPadded: true,
+      // TODO: Review support for configurables in v1 encoding when it becomes available
       encoding: ENCODING_V0,
     });
   }
