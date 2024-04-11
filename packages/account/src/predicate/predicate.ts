@@ -75,7 +75,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     this.interface = predicateInterface;
     if (inputData !== undefined && inputData.length > 0) {
       this.predicateData = inputData;
-      this.predicateDataBytes = this.getPredicateData(0);
     }
   }
 
@@ -227,7 +226,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     return resources.map((resource) => ({
       ...resource,
       predicate: hexlify(this.bytes),
-      predicateData: hexlify(this.predicateDataBytes),
       paddPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
     }));
   }
