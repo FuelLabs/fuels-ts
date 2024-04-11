@@ -39,7 +39,7 @@ test('verify_contract_bytecode', async () => {
   const { value } = await contract.functions
     .verify_contract_bytecode(
       {
-        value: contract.id.toB256(),
+        bits: contract.id.toB256(),
       },
       arrayify(bytecodeFromFile)
     )
@@ -66,5 +66,5 @@ test('compute_predicate_address', async () => {
     .compute_predicate_address(arrayify(defaultPredicateBytecode))
     .call();
 
-  expect(value.value).toEqual(address.toB256());
+  expect(value.bits).toEqual(address.toB256());
 });

@@ -265,7 +265,7 @@ describe('Fee', () => {
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
-    const genAddresses = () => Array.from({ length: 3 }, () => ({ value: getRandomB256() }));
+    const genAddresses = () => Array.from({ length: 3 }, () => ({ bits: getRandomB256() }));
 
     const calls = Array.from({ length: 15 }).map(() =>
       contract.functions.mint_to_addresses(genAddresses(), subId, 100)
