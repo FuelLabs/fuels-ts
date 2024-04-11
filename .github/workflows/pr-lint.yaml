@@ -54,7 +54,7 @@ jobs:
             exit 0
           fi
 
-          CHANGESET_CONTENT=$(cat $CHANGESET_FILE | tail -n1)
+          CHANGESET_CONTENT=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
 
           if [ "$CHANGESET_CONTENT" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
