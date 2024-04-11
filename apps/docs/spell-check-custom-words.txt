@@ -304,8 +304,11 @@ Bech
 CLIs
 extractable
 SHA-256
+API's
+codegen
 scaffolded
 programmatically
 transactional
 BigNumber
 Gwei
+onchain
