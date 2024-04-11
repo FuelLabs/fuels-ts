@@ -2,4 +2,4 @@
 "@fuel-ts/abi-coder": minor
 ---
 
-Deprecate multiple encoding version support for configurables
+feat!: deprecate multiple encoding version support for configurable constants
