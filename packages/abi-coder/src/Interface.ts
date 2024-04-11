@@ -7,6 +7,7 @@ import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
+import { ENCODING_V0 } from './utils/constants';
 import { findTypeById } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
@@ -99,7 +100,8 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
       isRightPadded: true,
-      encoding: this.jsonAbi.encoding,
+      // TODO: Review support for configurables in v1 encoding when it becomes available
+      encoding: ENCODING_V0,
     });
   }
 
