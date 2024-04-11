@@ -423,7 +423,7 @@ export default defineConfig({
         items: [
           {
             text: 'GraphQL Integration',
-            link: '/guide/tooling/graphql-integration/',
+            link: '/guide/tooling/graphql-integration',
           },
           {
             text: 'Testing',
