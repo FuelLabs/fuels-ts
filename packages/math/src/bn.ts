@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import BnJs from 'bn.js';
 
-import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
+import { DEFAULT_DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
 import { toFixed } from './decimal';
 import type { FormatConfig } from './types';
 
@@ -108,7 +108,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   format(options?: FormatConfig): string {
     const {
-      units = DECIMAL_UNITS,
+      units = DEFAULT_DECIMAL_UNITS,
       precision = DEFAULT_PRECISION,
       minPrecision = DEFAULT_MIN_PRECISION,
     } = options || {};
@@ -130,7 +130,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return formattedFixed;
   }
 
-  formatUnits(units: number = DECIMAL_UNITS): string {
+  formatUnits(units: number = DEFAULT_DECIMAL_UNITS): string {
     const valueUnits = this.toString().slice(0, units * -1);
     const valueDecimals = this.toString().slice(units * -1);
     const length = valueDecimals.length;
@@ -277,7 +277,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 export const bn = (value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) =>
   new BN(value, base, endian);
 
-bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {
+bn.parseUnits = (value: string, units: number = DEFAULT_DECIMAL_UNITS): BN => {
   const valueToParse = value === '.' ? '0.' : value;
   const [valueUnits = '0', valueDecimals = '0'] = valueToParse.split('.');
   const length = valueDecimals.length;

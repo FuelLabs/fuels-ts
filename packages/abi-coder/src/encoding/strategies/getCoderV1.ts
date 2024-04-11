@@ -26,19 +26,20 @@ import {
   structRegEx,
   tupleRegEx,
 } from '../../utils/constants';
-import { findOrThrow } from '../../utils/utilities';
+import { findVectorBufferArgument } from '../../utils/json-abi';
 import type { Coder } from '../coders/AbstractCoder';
 import { ArrayCoder } from '../coders/v0/ArrayCoder';
 import { B256Coder } from '../coders/v0/B256Coder';
 import { B512Coder } from '../coders/v0/B512Coder';
 import { BigNumberCoder } from '../coders/v0/BigNumberCoder';
-import { OptionCoder } from '../coders/v0/OptionCoder';
 import { BooleanCoder } from '../coders/v1/BooleanCoder';
 import { ByteCoder } from '../coders/v1/ByteCoder';
 import { EnumCoder } from '../coders/v1/EnumCoder';
 import { NumberCoder } from '../coders/v1/NumberCoder';
+import { OptionCoder } from '../coders/v1/OptionCoder';
 import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
 import { StdStringCoder } from '../coders/v1/StdStringCoder';
+import { StrSliceCoder } from '../coders/v1/StrSliceCoder';
 import { StringCoder } from '../coders/v1/StringCoder';
 import { StructCoder } from '../coders/v1/StructCoder';
 import { TupleCoder } from '../coders/v1/TupleCoder';
@@ -79,6 +80,8 @@ export const getCoder: GetCoderFn = (
       return new ByteCoder();
     case STD_STRING_CODER_TYPE:
       return new StdStringCoder();
+    case STR_SLICE_CODER_TYPE:
+      return new StrSliceCoder();
     default:
       break;
   }
@@ -111,13 +114,7 @@ export const getCoder: GetCoderFn = (
   }
 
   if (resolvedAbiType.type === VEC_CODER_TYPE) {
-    const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments?.[0];
-    if (!arg) {
-      throw new FuelError(
-        ErrorCode.INVALID_COMPONENT,
-        `The provided Vec type is missing the 'type argument'.`
-      );
-    }
+    const arg = findVectorBufferArgument(components);
     const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
     const itemCoder = getCoder(argType, { isSmallBytes: true, encoding: ENCODING_V0 });
@@ -147,13 +144,6 @@ export const getCoder: GetCoderFn = (
       getCoder(component, { isRightPadded: true, encoding: ENCODING_V0 })
     );
     return new TupleCoder(coders as Coder[]);
-  }
-
-  if (resolvedAbiType.type === STR_SLICE_CODER_TYPE) {
-    throw new FuelError(
-      ErrorCode.INVALID_DATA,
-      'String slices can not be decoded from logs. Convert the slice to `str[N]` with `__to_str_array`'
-    );
   }
 
   throw new FuelError(

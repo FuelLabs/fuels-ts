@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { Command } from 'commander';
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
+import ora from 'ora';
 import { join } from 'path';
 import prompts from 'prompts';
 
@@ -32,27 +33,33 @@ const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsT
 };
 
 async function promptForProjectPath() {
-  const res = await prompts({
-    type: 'text',
-    name: 'projectName',
-    message: 'What is the name of your project?',
-    initial: 'my-fuel-project',
-  });
+  const res = await prompts(
+    {
+      type: 'text',
+      name: 'projectName',
+      message: 'What is the name of your project?',
+      initial: 'my-fuel-project',
+    },
+    { onCancel: () => process.exit(0) }
+  );
 
   return res.projectName as string;
 }
 
 async function promptForPackageManager() {
-  const packageManagerInput = await prompts({
-    type: 'select',
-    name: 'packageManager',
-    message: 'Select a package manager',
-    choices: [
-      { title: 'pnpm', value: 'pnpm' },
-      { title: 'npm', value: 'npm' },
-    ],
-    initial: 0,
-  });
+  const packageManagerInput = await prompts(
+    {
+      type: 'select',
+      name: 'packageManager',
+      message: 'Select a package manager',
+      choices: [
+        { title: 'pnpm', value: 'pnpm' },
+        { title: 'npm', value: 'npm' },
+      ],
+      initial: 0,
+    },
+    { onCancel: () => process.exit(0) }
+  );
   return packageManagerInput.packageManager as string;
 }
 
@@ -68,17 +75,20 @@ async function promptForProgramsToInclude({
       script: false,
     };
   }
-  const programsToIncludeInput = await prompts({
-    type: 'multiselect',
-    name: 'programsToInclude',
-    message: 'Which Sway programs do you want?',
-    choices: [
-      { title: 'Contract', value: 'contract', selected: true },
-      { title: 'Predicate', value: 'predicate', selected: true },
-      { title: 'Script', value: 'script', selected: true },
-    ],
-    instructions: false,
-  });
+  const programsToIncludeInput = await prompts(
+    {
+      type: 'multiselect',
+      name: 'programsToInclude',
+      message: 'Which Sway programs do you want?',
+      choices: [
+        { title: 'Contract', value: 'contract', selected: true },
+        { title: 'Predicate', value: 'predicate', selected: true },
+        { title: 'Script', value: 'script', selected: true },
+      ],
+      instructions: false,
+    },
+    { onCancel: () => process.exit(0) }
+  );
   return {
     contract: programsToIncludeInput.programsToInclude.includes('contract'),
     predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
@@ -110,6 +120,7 @@ export const setupProgram = () => {
     .option('-s, --script', 'Include script program')
     .option('--pnpm', 'Use pnpm as the package manager')
     .option('--npm', 'Use npm as the package manager')
+    .option('--verbose', 'Enable verbose logging')
     .addHelpCommand()
     .showHelpAfterError(true);
   return program;
@@ -127,24 +138,41 @@ export const runScaffoldCli = async ({
   forceDisablePrompts?: boolean;
 }) => {
   program.parse(args);
-  const projectPath = program.args[0] ?? (await promptForProjectPath());
-  if (existsSync(projectPath)) {
-    throw new Error(
-      `A folder already exists at ${projectPath}. Please choose a different project name.`
+
+  let projectPath = program.args[0] ?? (await promptForProjectPath());
+  const verboseEnabled = program.opts().verbose ?? false;
+
+  while (existsSync(projectPath)) {
+    log(
+      chalk.red(
+        `A folder already exists at ${projectPath}. Please choose a different project name.`
+      )
     );
+
+    // Exit the program if we are testing to prevent hanging
+    if (process.env.VITEST) {
+      throw new Error();
+    }
+
+    projectPath = await promptForProjectPath();
   }
 
-  if (!projectPath) {
-    throw new Error('Please specify a project directory.');
+  while (!projectPath) {
+    log(chalk.red('Please specify a project directory.'));
+
+    // Exit the program if we are testing to prevent hanging
+    if (process.env.VITEST) {
+      throw new Error();
+    }
+
+    projectPath = await promptForProjectPath();
   }
 
   const cliPackageManagerChoices = {
     pnpm: program.opts().pnpm,
     npm: program.opts().npm,
   };
-  if (Object.values(cliPackageManagerChoices).filter(Boolean).length > 1) {
-    throw new Error('You can only specify one package manager.');
-  }
+
   const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
 
   let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
@@ -169,13 +197,30 @@ export const runScaffoldCli = async ({
     });
   }
 
-  if (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    throw new Error('You must include at least one Sway program.');
+  while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
+    log(chalk.red('You must include at least one Sway program.'));
+
+    // Exit the program if we are testing to prevent hanging
+    if (process.env.VITEST) {
+      throw new Error();
+    }
+
+    programsToInclude = await promptForProgramsToInclude({
+      forceDisablePrompts,
+    });
   }
+
+  const fileCopySpinner = ora({
+    text: 'Copying template files..',
+    color: 'green',
+  }).start();
 
   await mkdir(projectPath);
 
-  await cp(join(__dirname, '../templates/nextjs'), projectPath, { recursive: true });
+  await cp(join(__dirname, '../templates/nextjs'), projectPath, {
+    recursive: true,
+    filter: (filename) => !filename.includes('CHANGELOG.md'),
+  });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
   writeEnvFile(join(projectPath, '.env.local'), programsToInclude);
@@ -199,10 +244,19 @@ export const runScaffoldCli = async ({
   const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
   writeFileSync(forcTomlPath, newForcTomlContents);
 
+  fileCopySpinner.succeed('Copied template files!');
+
+  const installDepsSpinner = ora({
+    text: 'Installing dependencies..',
+    color: 'green',
+  }).start();
+
   if (shouldInstallDeps) {
     process.chdir(projectPath);
-    execSync(`${packageManager} install`, { stdio: 'inherit' });
+    execSync(`${packageManager} install`, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
+
+  installDepsSpinner.succeed('Installed dependencies!');
 
   log();
   log();
