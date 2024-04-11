@@ -2,6 +2,8 @@
 
 The Fuel Network provides a [GraphQL API](https://docs.fuel.network/docs/graphql/overview/) to query the blockchain. To get a better understanding of the underlying schema and other operations, you can visit the [playground](https://beta-5.fuel.network/playground) for an interactive deep dive.
 
+### Operations
+
 For its own purposes, the SDK creates custom operations based off of the API's schema and auto-generates TypeScript client code via codegen tools.
 The end result of this code generation are the operations available on the [`Provider`](../providers/index.md), of which some are shown below:
 
