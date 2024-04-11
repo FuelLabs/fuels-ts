@@ -3,7 +3,6 @@ import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { arrayify, hexlify, concat } from '@fuel-ts/utils';
-import { toBeHex, dataSlice, encodeBase58, decodeBase58, computeHmac, ripemd160 } from 'ethers';
 
 import { Mnemonic } from '../mnemonic';
 import { Signer } from '../signer';

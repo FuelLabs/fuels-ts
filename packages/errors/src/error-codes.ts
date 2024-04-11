@@ -102,5 +102,5 @@ export enum ErrorCode {
   STREAM_PARSING_ERROR = 'stream-parsing-error',
 
   // coder
-  // ...
+  BUFFER_OVERRUN = 'buffer-overrun',
 }

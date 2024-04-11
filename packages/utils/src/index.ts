@@ -6,3 +6,6 @@ export * from './utils/hexlify';
 export * from './utils/normalizeString';
 export * from './utils/date-time';
 export * from './utils/defaultChainConfig';
+export * from './utils/base58';
+export * from './utils/dataSlice';
+export * from './utils/getBytes';

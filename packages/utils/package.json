@@ -49,6 +49,7 @@
   "dependencies": {
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
     "ramda": "^0.29.0",
     "rimraf": "^3.0.2"
   }
