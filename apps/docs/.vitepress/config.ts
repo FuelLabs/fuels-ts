@@ -452,6 +452,7 @@ export default defineConfig({
               {
                 text: 'npm create fuels',
                 link: '/guide/npm-create-fuels/',
+                collapsed: true,
                 items: [
                   {
                     text: 'Options',
