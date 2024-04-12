@@ -62,6 +62,21 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'Provider',
+            link: '/guide/provider/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Provider Options',
+                link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Querying the Chain',
+                link: '/guide/provider/querying-the-chain',
+              },
+            ],
+          },
+          {
             text: 'Errors',
             link: '/guide/errors/',
             collapsed: true,
@@ -270,17 +285,6 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
-            text: 'Provider',
-            link: '/guide/provider/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Querying the Chain',
-                link: '/guide/provider/querying-the-chain',
-              },
-            ],
-          },
-          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,
@@ -380,7 +384,7 @@ export default defineConfig({
               {
                 text: 'Unit conversion',
                 link: '/guide/utilities/unit-conversion',
-              }
+              },
             ],
           },
           {
