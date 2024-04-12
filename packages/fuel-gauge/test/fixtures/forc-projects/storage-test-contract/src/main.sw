@@ -37,6 +37,7 @@ abi StorageTestContract {
     fn return_var4() -> bool;
     #[storage(read)]
     fn return_var5() -> StructValidation;
+    fn return_true() -> bool;
 }
 
 const COUNTER_KEY: b256 = 0x0000000000000000000000000000000000000000000000000000000000000000;
@@ -87,5 +88,8 @@ impl StorageTestContract for Contract {
     #[storage(read)]
     fn return_var5() -> StructValidation {
         storage.var5.read()
+    }
+    fn return_true() -> bool {
+        true
     }
 }

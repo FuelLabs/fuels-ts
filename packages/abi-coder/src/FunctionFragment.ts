@@ -11,15 +11,19 @@ import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import { ByteCoder } from './encoding/coders/v0/ByteCoder';
 import { TupleCoder } from './encoding/coders/v0/TupleCoder';
 import { VecCoder } from './encoding/coders/v0/VecCoder';
+import { StdStringCoder } from './encoding/coders/v1/StdStringCoder';
+import { TupleCoder as TupleCoderV1 } from './encoding/coders/v1/TupleCoder';
 import type {
   JsonAbi,
   JsonAbiArgument,
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
-import { OPTION_CODER_TYPE } from './utils/constants';
+import type { EncodingVersion } from './utils/constants';
+import { ENCODING_V0, ENCODING_V1, OPTION_CODER_TYPE } from './utils/constants';
+import { findFunctionByName, findNonEmptyInputs, findTypeById } from './utils/json-abi';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
-import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utils/utilities';
+import { isHeapType, isPointerType, unpackDynamicData } from './utils/utilities';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
@@ -27,6 +31,8 @@ export class FunctionFragment<
 > {
   readonly signature: string;
   readonly selector: string;
+  readonly selectorBytes: Uint8Array;
+  readonly encoding: EncodingVersion;
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
@@ -40,10 +46,13 @@ export class FunctionFragment<
 
   constructor(jsonAbi: JsonAbi, name: FnName) {
     this.jsonAbi = jsonAbi;
-    this.jsonFn = findOrThrow(this.jsonAbi.functions, (f) => f.name === name);
+    this.jsonFn = findFunctionByName(this.jsonAbi, name);
+
     this.name = name;
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
+    this.selectorBytes = new StdStringCoder().encode(name);
+    this.encoding = this.jsonAbi.encoding ?? ENCODING_V0;
     this.isInputDataPointer = this.#isInputDataPointer();
     this.outputMetadata = {
       isHeapType: this.#isOutputDataHeap(),
@@ -67,15 +76,13 @@ export class FunctionFragment<
   }
 
   #isInputDataPointer(): boolean {
-    const inputTypes = this.jsonFn.inputs.map((i) =>
-      this.jsonAbi.types.find((t) => t.typeId === i.type)
-    );
+    const inputTypes = this.jsonFn.inputs.map((i) => findTypeById(this.jsonAbi, i.type));
 
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
   #isOutputDataHeap(): boolean {
-    const outputType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === this.jsonFn.output.type);
+    const outputType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
 
     return isHeapType(outputType?.type || '');
   }
@@ -100,10 +107,7 @@ export class FunctionFragment<
     FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
     const shallowCopyValues = values.slice();
-
-    const nonEmptyInputs = this.jsonFn.inputs.filter(
-      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
-    );
+    const nonEmptyInputs = findNonEmptyInputs(this.jsonAbi, this.jsonFn.inputs);
 
     if (Array.isArray(values) && nonEmptyInputs.length !== values.length) {
       shallowCopyValues.length = this.jsonFn.inputs.length;
@@ -113,12 +117,14 @@ export class FunctionFragment<
     const coders = nonEmptyInputs.map((t) =>
       AbiCoder.getCoder(this.jsonAbi, t, {
         isRightPadded: nonEmptyInputs.length > 1,
+        encoding: this.encoding,
       })
     );
 
-    const coder = new TupleCoder(coders);
-    const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
-
+    if (this.encoding === ENCODING_V1) {
+      return new TupleCoderV1(coders).encode(shallowCopyValues);
+    }
+    const results: Uint8ArrayWithDynamicData = new TupleCoder(coders).encode(shallowCopyValues);
     return unpackDynamicData(results, offset, results.byteLength);
   }
 
@@ -131,7 +137,7 @@ export class FunctionFragment<
       return;
     }
 
-    const inputTypes = inputs.map((i) => findOrThrow(abi.types, (t) => t.typeId === i.type));
+    const inputTypes = inputs.map((input) => findTypeById(abi, input.type));
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
@@ -153,9 +159,7 @@ export class FunctionFragment<
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyInputs = this.jsonFn.inputs.filter(
-      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
-    );
+    const nonEmptyInputs = findNonEmptyInputs(this.jsonAbi, this.jsonFn.inputs);
 
     if (nonEmptyInputs.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
@@ -182,7 +186,7 @@ export class FunctionFragment<
 
     const result = nonEmptyInputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
-        const coder = AbiCoder.getCoder(this.jsonAbi, input);
+        const coder = AbiCoder.getCoder(this.jsonAbi, input, { encoding: this.encoding });
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {
@@ -197,17 +201,26 @@ export class FunctionFragment<
   }
 
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
-    const outputAbiType = findOrThrow(
-      this.jsonAbi.types,
-      (t) => t.typeId === this.jsonFn.output.type
-    );
+    const outputAbiType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
     if (outputAbiType.type === '()') {
       return [undefined, 0];
     }
 
     const bytes = arrayify(data);
-    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output, {
+      encoding: this.encoding,
+    });
 
     return coder.decode(bytes, 0) as [DecodedValue | undefined, number];
+  }
+
+  /**
+   * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
+   *
+   * @returns True if the function is read-only or pure, false otherwise.
+   */
+  isReadOnly(): boolean {
+    const storageAttribute = this.attributes.find((attr) => attr.name === 'storage');
+    return !storageAttribute?.arguments.includes('write');
   }
 }

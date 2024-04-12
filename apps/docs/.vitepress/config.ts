@@ -51,8 +51,8 @@ export default defineConfig({
             link: '/guide/introduction/getting-started',
           },
           {
-            text: 'Quickstart',
-            link: '/guide/introduction/quickstart',
+            text: 'Creating a Fuel dApp',
+            link: '/guide/introduction/creating-a-fuel-dapp',
           },
         ],
       },
@@ -381,6 +381,10 @@ export default defineConfig({
                 text: 'Address conversion',
                 link: '/guide/utilities/address-conversion',
               },
+              {
+                text: 'Unit conversion',
+                link: '/guide/utilities/unit-conversion',
+              },
             ],
           },
           {
@@ -422,6 +426,10 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'GraphQL Integration',
+            link: '/guide/tooling/graphql-integration',
+          },
+          {
             text: 'Testing',
             link: '/guide/testing/',
             collapsed: true,
@@ -445,6 +453,17 @@ export default defineConfig({
             link: '/guide/cli/',
             collapsed: true,
             items: [
+              {
+                text: 'npm create fuels',
+                link: '/guide/npm-create-fuels/',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Options',
+                    link: '/guide/npm-create-fuels/options',
+                  },
+                ],
+              },
               {
                 text: 'fuels',
                 link: '/guide/fuels/',

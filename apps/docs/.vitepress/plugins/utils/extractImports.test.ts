@@ -40,6 +40,17 @@ describe('extractImports', () => {
       const expected = `import { firstImport, secondImport } from 'somewhere';`;
       expect(combineImportStatements(importStatements)).toBe(expected);
     });
+
+    it('should import types correctly', () => {
+      const expected = `import { implementationImport } from 'somewhere';\nimport type { typeImport } from 'somewhere';`;
+      const importStatements = {
+        somewhere: new Set(['implementationImport']),
+        'type::somewhere': new Set(['typeImport']),
+      }
+
+      const actual = combineImportStatements(importStatements)
+      expect(actual).toBe(expected);
+    })
   });
 
   describe('validateImports', () => {
@@ -179,13 +190,14 @@ describe('extractImports', () => {
 
     it('should ensure imports are extracted just fine', () => {
       const filepath = 'mockedPath';
-      const specifiedImports = ['AssetId'];
+      const specifiedImports = ['AssetId', 'Address'];
       const snippetContent = [
-        '    // #import { AssetId };',
+        '    // #import { AssetId, Address };',
         '',
         '    const assetId: AssetId = {',
         '      value: Bits256,',
         '    };',
+        '    const address: Address = new Address();',
       ];
 
       const mockedFileContent = `
@@ -204,7 +216,7 @@ describe('extractImports', () => {
 
       expect(readFileSync).toBeCalledTimes(1);
 
-      expect(result).toEqual("import { AssetId } from 'fuels';");
+      expect(result).toEqual("import { Address } from 'fuels';\nimport type { AssetId } from 'fuels';");
     });
   });
 });
