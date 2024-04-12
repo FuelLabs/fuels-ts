@@ -229,7 +229,7 @@ impl CoverageContract for Contract {
             0 => false,
             length => {
                 assert(length == 5);
-                assert(vector.capacity() == 8);
+                assert(vector.capacity() == 5);
                 assert(vector.is_empty() == false);
                 log(__to_str_array("vector.items"));
                 log(vector.get(0));
