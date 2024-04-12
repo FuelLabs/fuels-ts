@@ -22,6 +22,8 @@ export {
   WORD_SIZE,
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
+  UTXO_ID_LEN,
+  BYTES_32,
   calculateVmTxMemory,
   type EncodingVersion,
   ENCODING_V0,
