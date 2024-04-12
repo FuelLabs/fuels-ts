@@ -384,7 +384,7 @@ export default defineConfig({
               {
                 text: 'Unit conversion',
                 link: '/guide/utilities/unit-conversion',
-              }
+              },
             ],
           },
           {
@@ -426,6 +426,10 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'GraphQL Integration',
+            link: '/guide/tooling/graphql-integration',
+          },
+          {
             text: 'Testing',
             link: '/guide/testing/',
             collapsed: true,
@@ -451,7 +455,14 @@ export default defineConfig({
             items: [
               {
                 text: 'npm create fuels',
-                link: '/guide/cli/npm-create-fuels',
+                link: '/guide/npm-create-fuels/',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Options',
+                    link: '/guide/npm-create-fuels/options',
+                  },
+                ],
               },
               {
                 text: 'fuels',

@@ -69,9 +69,21 @@ jobs:
             exit 0
           fi
 
-          CHANGESET_CONTENT=$(cat $CHANGESET_FILE | tail -n1)
+          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
 
-          if [ "$CHANGESET_CONTENT" != "$PR_TITLE" ]; then
+          if [ -z "$AFFECTED_PACKAGES" ]; then
+            # The changelog logic ignores changesets that don't affect any packages so we can ignore them here as well,
+            # because this changeset linting logic is only for changesets who's PRs will be referenced in the changelog.
+
+            # The relevant changelog logic is here:
+            # https://github.com/FuelLabs/fuels-ts/blob/155b6f2fe28e988b277dac231af6d6a0cff1df0c/scripts/changeset/get-full-changelog.mts#L77
+
+            exit 0
+          fi
+
+          CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
+
+          if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
             echo "Changeset file: $CHANGESET_FILE"
             echo "Changeset content: $CHANGESET_CONTENT"
