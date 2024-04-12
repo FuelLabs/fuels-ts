@@ -15,4 +15,5 @@ export const {
   encryptJsonWalletData,
   computeHmac,
   pbkdf2,
+  ripemd160,
 } = cryptoApi;

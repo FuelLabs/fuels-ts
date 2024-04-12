@@ -1,3 +1,5 @@
+import type { BytesLike } from '@fuel-ts/interfaces';
+
 export interface Keystore {
   data: string;
   iv: string;
@@ -26,12 +28,13 @@ export interface CryptoApi {
   keccak256(data: Uint8Array): Uint8Array;
   encryptJsonWalletData(data: Uint8Array, key: Uint8Array, iv: Uint8Array): Promise<Uint8Array>;
   decryptJsonWalletData(data: Uint8Array, key: Uint8Array, iv: Uint8Array): Promise<Uint8Array>;
-  computeHmac(algorithm: 'sha256' | 'sha512', key: Uint8Array, data: Uint8Array): Uint8Array;
+  computeHmac(algorithm: 'sha256' | 'sha512', key: BytesLike, data: BytesLike): string;
   pbkdf2(
-    password: Uint8Array,
-    salt: Uint8Array,
+    password: BytesLike,
+    salt: BytesLike,
     iterations: number,
     keylen: number,
     algo: 'sha256' | 'sha512'
-  ): Uint8Array;
+  ): string;
+  ripemd160(data: BytesLike): string;
 }

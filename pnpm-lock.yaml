@@ -837,6 +837,9 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
       '@fuel-ts/utils':
         specifier: workspace:^
         version: link:../utils

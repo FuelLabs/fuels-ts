@@ -13,4 +13,7 @@ export const {
   keccak256,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  pbkdf2,
+  computeHmac,
+  ripemd160,
 } = cryptoApi;
