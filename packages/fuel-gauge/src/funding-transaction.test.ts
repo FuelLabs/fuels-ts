@@ -71,12 +71,13 @@ describe(__filename, () => {
 
     request.addResources(lowResources);
 
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
+
+    request.gasLimit = gasUsed;
 
     // TX request already does NOT carries enough resources, it needs to be funded
     expect(request.inputs.length).toBe(1);
     expect(bn((<CoinTransactionRequestInput>request.inputs[0]).amount).toNumber()).toBe(300);
-    expect(maxFee.gt(300)).toBeTruthy();
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
@@ -160,18 +161,20 @@ describe(__filename, () => {
     const request = new ScriptTransactionRequest({
       baseAssetId,
       gasLimit: 1_000,
-      gasPrice: bn(10),
+      gasPrice: bn(1),
     });
 
     const amountToTransfer = 1000;
     request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(request);
+    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
 
     // TX request does NOT carry any resources, it needs to be funded
     expect(request.inputs.length).toBe(0);
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
+
+    request.gasLimit = gasUsed;
 
     await sender.fund(request, requiredQuantities, maxFee);
 

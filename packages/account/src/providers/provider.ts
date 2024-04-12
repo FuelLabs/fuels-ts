@@ -151,7 +151,6 @@ export type TransactionCost = {
   gasUsed: BN;
   minFee: BN;
   maxFee: BN;
-  usedFee: BN;
   outputVariables: number;
   missingContractIds: string[];
   estimatedInputs: TransactionRequest['inputs'];
@@ -790,6 +789,58 @@ export default class Provider {
   }
 
   /**
+   * Estimates the transaction gas and fee based on the provided transaction request.
+   * @param transactionRequest - The transaction request object.
+   * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
+   */
+  estimateTxGasAndFee(params: { transactionRequest: TransactionRequest }) {
+    const { transactionRequest } = params;
+    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
+
+    const chainInfo = this.getChain();
+
+    const gasPrice = transactionRequest.gasPrice.eq(0) ? minGasPrice : transactionRequest.gasPrice;
+    transactionRequest.gasPrice = gasPrice;
+
+    const minGas = transactionRequest.calculateMinGas(chainInfo);
+    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+
+    // Only Script transactions consume gas
+    if (transactionRequest.type === TransactionType.Script) {
+      // If the gasLimit is set to 0, it means we need to estimate it.
+      if (transactionRequest.gasLimit.eq(0)) {
+        transactionRequest.gasLimit = minGas;
+
+        /*
+         * Adjusting the gasLimit of a transaction (TX) impacts its maxGas.
+         * Consequently, this affects the maxFee, as it is derived from the maxGas. To accurately estimate the
+         * gasLimit for a transaction, especially when the exact gas consumption is uncertain (as in an estimation dry-run),
+         * the following steps are required:
+         * 1 - Initially, set the gasLimit using the calculated minGas.
+         * 2 - Based on this initial gasLimit, calculate the maxGas.
+         * 3 - Get the maximum gas per transaction allowed by the chain, and subtract the previously calculated maxGas from this limit.
+         * 4 - The result of this subtraction should then be adopted as the new, definitive gasLimit.
+         * 5 - Recalculate the maxGas with the updated gasLimit. This new maxGas is then used to compute the maxFee.
+         * 6 - The calculated maxFee represents the safe, estimated cost required to fund the transaction.
+         */
+        transactionRequest.gasLimit = maxGasPerTx.sub(
+          transactionRequest.calculateMaxGas(chainInfo, minGas)
+        );
+      }
+    }
+
+    const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
+    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
+
+    return {
+      minGas,
+      minFee,
+      maxGas,
+      maxFee,
+    };
+  }
+
+  /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
    *
@@ -844,9 +895,8 @@ export default class Provider {
     }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const chainInfo = this.getChain();
-    const { gasPriceFactor, minGasPrice, maxGasPerTx } = this.getGasConfig();
-    const gasPrice = max(txRequestClone.gasPrice, minGasPrice);
+    const { minGasPrice } = this.getGasConfig();
+    const setGasPrice = max(txRequestClone.gasPrice, minGasPrice);
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -857,15 +907,14 @@ export default class Provider {
     // Funding transaction with fake utxos
     txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
 
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = bn(0);
+    }
+
     /**
      * Estimate predicates gasUsed
      */
     if (estimatePredicates) {
-      // Remove gasLimit to avoid gasLimit when estimating predicates
-      if (isScriptTransaction) {
-        txRequestClone.gasLimit = bn(0);
-      }
-
       /**
        * The fake utxos added above can be from a predicate
        * If the resources owner is a predicate,
@@ -885,16 +934,17 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    const minGas = txRequestClone.calculateMinGas(chainInfo);
-    const maxGas = txRequestClone.calculateMaxGas(chainInfo, minGas);
+    let { maxFee, maxGas, minFee, minGas } = this.estimateTxGasAndFee({
+      transactionRequest: txRequestClone,
+    });
 
     /**
      * Estimate gasUsed for script transactions
      */
-
     let receipts: TransactionResultReceipt[] = [];
     let missingContractIds: string[] = [];
     let outputVariables = 0;
+    let gasUsed = bn(0);
     // Transactions of type Create does not consume any gas so we can the dryRun
     if (isScriptTransaction && estimateTxDependencies) {
       /**
@@ -903,10 +953,7 @@ export default class Provider {
        * will only be amounts being transferred (coin outputs) and amounts being forwarded
        * to contract calls.
        */
-      // Calculate the gasLimit again as we insert a fake UTXO and signer
-
       txRequestClone.gasPrice = bn(0);
-      txRequestClone.gasLimit = bn(maxGasPerTx.sub(maxGas).toNumber() * 0.9);
 
       // Executing dryRun with fake utxos to get gasUsed
       const result = await this.estimateTxDependencies(txRequestClone);
@@ -914,28 +961,26 @@ export default class Provider {
       receipts = result.receipts;
       outputVariables = result.outputVariables;
       missingContractIds = result.missingContractIds;
+
+      gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : gasUsed;
+
+      txRequestClone.gasLimit = gasUsed;
+      txRequestClone.gasPrice = setGasPrice;
+
+      // Estimating fee again with the real gas consumed and set gasPrice
+      ({ maxFee, maxGas, minFee, minGas } = this.estimateTxGasAndFee({
+        transactionRequest: txRequestClone,
+      }));
     }
-
-    // For CreateTransaction the gasUsed is going to be the minGas
-    const gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : minGas;
-
-    const usedFee = calculatePriceWithFactor(
-      gasUsed,
-      gasPrice,
-      gasPriceFactor
-    ).normalizeZeroToOne();
-    const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
-    const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor).normalizeZeroToOne();
 
     return {
       requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       minGasPrice,
-      gasPrice,
+      gasPrice: setGasPrice,
       minGas,
       maxGas,
-      usedFee,
       minFee,
       maxFee,
       estimatedInputs: txRequestClone.inputs,

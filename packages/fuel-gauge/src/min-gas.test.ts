@@ -92,12 +92,13 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const costs = await provider.getTransactionCost(request);
+    const { maxFee, gasUsed, requiredQuantities, minGasPrice } =
+      await provider.getTransactionCost(request);
 
-    await sender.fund(request, costs.requiredQuantities, costs.maxFee);
+    request.gasLimit = gasUsed;
+    request.gasPrice = minGasPrice;
 
-    request.gasLimit = bn(20_000);
-    request.gasPrice = costs.gasPrice;
+    await sender.fund(request, requiredQuantities, maxFee);
 
     /**
      * Send transaction
@@ -106,7 +107,7 @@ describe(__filename, () => {
     const { status, gasUsed: txGasUsed } = await result.wait();
 
     expect(status).toBe(TransactionStatus.success);
-    expect(costs.gasUsed.toString()).toBe(txGasUsed.toString());
+    expect(gasUsed.toString()).toBe(txGasUsed.toString());
   });
 
   it('sets gas requirements (predicate)', async () => {
