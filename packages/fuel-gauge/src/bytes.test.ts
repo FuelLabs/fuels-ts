@@ -138,6 +138,6 @@ describe('Bytes Tests', () => {
     };
 
     const { value } = await scriptInstance.functions.main(1, INPUT).call<BN>();
-    expect(value.toNumber()).toStrictEqual(0);
+    expect(value).toBe(true);
   });
 });

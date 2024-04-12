@@ -2,7 +2,7 @@ script;
 
 use std::logging::log;
 
-fn main(vector: Vec<u64>) {
+fn main(vector: Vec<u64>) -> bool {
     log(vector.get(0).unwrap());
 
     let _is_valid = match vector.len() {
@@ -20,4 +20,6 @@ fn main(vector: Vec<u64>) {
     };
 
     require(vector.get(0).unwrap() == 7, "value is not as expected");
+
+    _is_valid
 }

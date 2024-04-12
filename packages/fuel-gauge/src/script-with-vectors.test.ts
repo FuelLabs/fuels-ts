@@ -88,7 +88,7 @@ describe('Script With Vectors', () => {
     const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
 
     const { value } = await scriptInstance.functions.main(importantDates).call();
-    expect((value as unknown as BN).toString()).toBe('1');
+    expect(value).toBe(true);
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
@@ -155,6 +155,6 @@ describe('Script With Vectors', () => {
     const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
 
     const { value } = await scriptInstance.functions.main(vectorOfStructs).call();
-    expect((value as unknown as BN).toString()).toBe('1');
+    expect(value).toBe(true);
   });
 });
