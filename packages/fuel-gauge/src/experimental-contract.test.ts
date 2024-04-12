@@ -108,4 +108,21 @@ describe('Experimental Contract', () => {
 
     expect(configurableValue).toStrictEqual(configurableParam);
   });
+
+  it('multicalls', async () => {
+    const { value: firstResults } = await contractInstance
+      .multiCall([contractInstance.functions.first_call(255)])
+      .call();
+
+    expect(firstResults).toStrictEqual([255]);
+
+    const { value: secondResults } = await contractInstance
+      .multiCall([
+        contractInstance.functions.first_call(255),
+        contractInstance.functions.second_call(555),
+      ])
+      .call();
+
+    expect(secondResults).toStrictEqual([255, 555]);
+  });
 });
