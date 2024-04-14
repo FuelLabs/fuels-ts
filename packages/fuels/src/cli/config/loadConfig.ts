@@ -12,9 +12,6 @@ import type { FuelsConfig, UserFuelsConfig } from '../types';
 import { readForcToml, readSwayType } from './forcUtils';
 import { validateConfig } from './validateConfig';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config();
-
 export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const configJoycon = new JoyCon();
 
