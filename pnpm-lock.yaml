@@ -77,9 +77,6 @@ importers:
       coverage-diff:
         specifier: ^3.2.0
         version: 3.2.0
-      dotenv:
-        specifier: ^9.0.2
-        version: 9.0.2
       eslint:
         specifier: ^8.52.0
         version: 8.52.0
@@ -952,6 +949,9 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       esbuild:
         specifier: ^0.19.3
         version: 0.19.3
@@ -11048,10 +11048,10 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /dotenv@9.0.2:
-    resolution: {integrity: sha512-I9OvvrHp4pIARv4+x9iuewrWycX6CcZtoAu1XrzPxc5UygMJXJZYmBsynku8IkrJwgypE5DGNjDPmPRhDCptUg==}
-    engines: {node: '>=10'}
-    dev: true
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
+    dev: false
 
   /dset@3.1.2:
     resolution: {integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==}
