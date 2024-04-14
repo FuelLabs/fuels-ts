@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FUEL_NETWORK_URL, Provider, WalletUnlocked, sleep } from 'fuels';
 
 async function fetchSomeExternalCredentials() {
