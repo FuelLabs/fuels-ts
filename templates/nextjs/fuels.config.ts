@@ -1,5 +1,9 @@
 import { createConfig } from 'fuels';
-import 'dotenv/config.js';
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: ['.env.local', '.env'],
+});
 
 export default createConfig({
   workspace: './sway-programs',
