@@ -4,5 +4,5 @@ import 'dotenv/config.js';
 export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-api',
-  fuelCorePort: +(process.env.NEXT_PUBLIC_FUEL_NODE_PORT as string),
+  fuelCorePort: +(process.env.NEXT_PUBLIC_FUEL_NODE_PORT as string) || 4000,
 });
