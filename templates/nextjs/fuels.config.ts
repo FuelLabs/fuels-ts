@@ -1,5 +1,12 @@
 import { createConfig } from 'fuels';
 
+const fuelCorePort = +(process.env.NEXT_PUBLIC_FUEL_NODE_PORT as string) || 4000;
+
+const nodeUrl =
+  process.env.NODE_ENV === 'development'
+    ? `http://127.0.0.1:${fuelCorePort}/graphql`
+    : 'https://beta-5.fuel.networ/graphql';
+
 export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-api',
@@ -8,4 +15,5 @@ export default createConfig({
     Please keep these values in sync.
   */
   fuelCorePort: 4000,
+  providerUrl: nodeUrl,
 });

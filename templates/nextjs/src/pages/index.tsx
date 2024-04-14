@@ -9,8 +9,12 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
+import { CURRENT_ENVIRONMENT } from "@/lib";
 
-const contractId = contractIds.testContract;
+const contractId =
+  CURRENT_ENVIRONMENT === "local"
+    ? contractIds.testContract
+    : "0x7d0e267018076a977b47327286b8a3d98b18950354606bb74492b40a2fd897f3";
 
 const hasContract = process.env.NEXT_PUBLIC_HAS_CONTRACT === "true";
 const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
