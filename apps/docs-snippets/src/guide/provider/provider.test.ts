@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL, Provider, sleep } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, WalletUnlocked, sleep } from 'fuels';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
@@ -13,12 +13,19 @@ function decorateResponseWithCustomLogic(response: Response) {
  * @group browser
  */
 describe('Provider', () => {
-  it('can connect using pre-defined constants', async () => {
+  it('base examples', async () => {
     // #region provider-definition
-    // #import { Provider, FUEL_NETWORK_URL };
+    // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    // querying the blockchain
     const { consensusParameters } = provider.getChain();
+
+    const wallet = WalletUnlocked.generate({ provider });
+    // get the balances of the wallet, uses the provider under the hood
+    // the balances will be empty because the wallet is new
+    const balances = await wallet.getBalances();
     // #endregion provider-definition
 
     expect(provider).toBeDefined();
