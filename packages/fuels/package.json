@@ -63,7 +63,6 @@
     "chalk": "4",
     "chokidar": "^3.5.3",
     "commander": "^9.4.1",
-    "dotenv": "^16.4.5",
     "esbuild": "^0.19.3",
     "glob": "^10.2.6",
     "handlebars": "^4.7.7",

@@ -179,6 +179,9 @@ importers:
       '@fuel-wallet/react':
         specifier: 0.15.2
         version: 0.15.2(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0)(react@18.2.0)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -949,9 +952,6 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
       esbuild:
         specifier: ^0.19.3
         version: 0.19.3
@@ -1181,6 +1181,9 @@ importers:
       '@fuel-wallet/react':
         specifier: 0.15.2
         version: 0.15.2(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0)(react@18.2.0)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -4845,7 +4848,7 @@ packages:
       '@whatwg-node/fetch': 0.8.8
       chalk: 4.1.2
       debug: 4.3.4(supports-color@5.5.0)
-      dotenv: 16.3.1
+      dotenv: 16.4.5
       graphql: 16.6.0
       graphql-request: 6.1.0(graphql@16.6.0)
       http-proxy-agent: 6.1.1
@@ -11043,15 +11046,9 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /dotenv@16.3.1:
-    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
-    engines: {node: '>=12'}
-    dev: true
-
   /dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
-    dev: false
 
   /dset@3.1.2:
     resolution: {integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==}
