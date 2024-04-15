@@ -3,7 +3,6 @@ import { BaseAssetId, FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn }
 
 /**
  * @group node
- * @group browser
  */
 describe('querying the chain', () => {
   it('query coins', async () => {
