@@ -62,7 +62,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuels/assets": "^0.1.4",
     "@fuels/vm-asm": "0.42.1",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-request": "5.0.0",
     "graphql-tag": "^2.12.6",
     "ramda": "^0.29.0",
