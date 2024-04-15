@@ -10,6 +10,7 @@ import {
   ScriptTransactionRequest,
   Wallet,
   bn,
+  getRandomB256,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -245,6 +246,42 @@ describe('Fee', () => {
     } = await scope.call();
 
     const balanceAfter = await wallet.getBalance();
+    const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
+
+    expectToBeInRange({
+      value: fee.toNumber(),
+      min: balanceDiff - 1,
+      max: balanceDiff + 1,
+    });
+  });
+
+  it('should ensure fee is properly calculated in a multi call [MINT TO 15 ADDRESSES]', async () => {
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
+    );
+
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+
+    const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
+
+    const genAddresses = () => Array.from({ length: 3 }, () => ({ value: getRandomB256() }));
+
+    const calls = Array.from({ length: 15 }).map(() =>
+      contract.functions.mint_to_addresses(genAddresses(), subId, 100)
+    );
+
+    const balanceBefore = await wallet.getBalance();
+
+    const {
+      transactionResult: { fee },
+    } = await contract
+      .multiCall(calls)
+      .txParams({ variableOutputs: calls.length * 3 })
+      .call();
+
+    const balanceAfter = await wallet.getBalance();
+
     const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
 
     expectToBeInRange({

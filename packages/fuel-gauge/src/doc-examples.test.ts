@@ -26,6 +26,7 @@ import {
   ZeroBytes32,
   BaseAssetId,
   FUEL_NETWORK_URL,
+  FUEL_BETA_5_NETWORK_URL,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -265,91 +266,25 @@ describe('Doc Examples', () => {
   });
 
   it('can connect to testnet', async () => {
-    // #region provider-testnet
-    // #import { Provider, WalletUnlocked };
-    const provider = await Provider.create('https://beta-5.fuel.network/graphql');
-    // Setup a private key
+    const provider = await Provider.create(FUEL_BETA_5_NETWORK_URL);
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
-
-    // Create the wallet, passing provider
-    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     // #region signer-address
     const signer = new Signer(PRIVATE_KEY);
     // validate address
     expect(wallet.address).toEqual(signer.address);
-    // #endregion provider-testnet
     // #endregion signer-address
   });
 
   it('can connect to a local provider', async () => {
-    // #region provider-local
-    // #import { Provider, WalletUnlocked, FUEL_NETWORK_URL };
     const localProvider = await Provider.create(FUEL_NETWORK_URL);
-    // Setup a private key
+
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
-
-    // Create the wallet, passing provider
     const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
-
     const signer = new Signer(PRIVATE_KEY);
-    // validate address
+
     expect(wallet.address).toEqual(signer.address);
-    // #endregion provider-local
-  });
-
-  it('can query address with wallets', async () => {
-    // #region wallet-query
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-
-    const wallet = await generateTestWallet(provider, [
-      [42, BaseAssetId],
-      [100, assetIdA],
-    ]);
-
-    // get single coin
-    const coin = await wallet.getCoins(BaseAssetId);
-
-    // get all coins
-    const coins = await wallet.getCoins();
-
-    expect(coin.length).toEqual(1);
-    expect(coin).toEqual([
-      expect.objectContaining({
-        assetId: BaseAssetId,
-        amount: bn(42),
-      }),
-    ]);
-    expect(coins).toEqual([
-      expect.objectContaining({
-        assetId: BaseAssetId,
-        amount: bn(42),
-      }),
-      expect.objectContaining({
-        assetId: assetIdA,
-        amount: bn(100),
-      }),
-    ]);
-    // #endregion wallet-query
-
-    // #region wallet-get-balances
-    const walletBalances = await wallet.getBalances();
-    expect(walletBalances).toEqual([
-      { assetId: BaseAssetId, amount: bn(42) },
-      { assetId: assetIdA, amount: bn(100) },
-    ]);
-    // #endregion wallet-get-balances
-
-    // #region wallet-get-spendable-resources
-    const spendableResources = await wallet.getResourcesToSpend([
-      { amount: 32, assetId: BaseAssetId, max: 42 },
-      { amount: 50, assetId: assetIdA },
-    ]);
-    expect(spendableResources[0].amount).toEqual(bn(42));
-    expect(spendableResources[1].amount).toEqual(bn(100));
-    // #endregion wallet-get-spendable-resources
   });
 
   it('can create a predicate', async () => {

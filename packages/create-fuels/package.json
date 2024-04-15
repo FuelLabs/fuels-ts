@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.79.0",
+  "version": "0.80.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -22,7 +22,7 @@
     "@iarna/toml": "^2.2.5",
     "chalk": "4",
     "commander": "^9.4.1",
-    "fuels": "workspace:*",
+    "ora": "5.4.1",
     "prompts": "^2.4.2"
   },
   "devDependencies": {

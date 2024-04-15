@@ -30,7 +30,7 @@ jobs:
 
   validate-changeset:
     name: Validate PR Changeset
-    if: github.head_ref != 'changeset-release/master'
+    if: startsWith(github.head_ref, 'changeset-release') != true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,28 +47,39 @@ jobs:
       - name: Validate Changeset Content
         run: |
           CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} .changeset/*.md)
-          
+
           if [ -z "$CHANGESET_FILE" ]; then
             # A PR doesn't have to have a changeset when packages aren't affected
             # e.g. when a script is added in the scripts folder
             exit 0
           fi
-          
-          CHANGESET_CONTENT=$(cat $CHANGESET_FILE | tail -n1)
-          
-          if [ "$CHANGESET_CONTENT" != "$PR_TITLE" ]; then
+
+          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
+
+          if [ -z "$AFFECTED_PACKAGES" ]; then
+            # The changelog logic ignores changesets that don't affect any packages so we can ignore them here as well,
+            # because this changeset linting logic is only for changesets who's PRs will be referenced in the changelog.
+
+            # The relevant changelog logic is here:
+            # https://github.com/FuelLabs/fuels-ts/blob/155b6f2fe28e988b277dac231af6d6a0cff1df0c/scripts/changeset/get-full-changelog.mts#L77
+
+            exit 0
+          fi
+
+          CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
+
+          if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
             exit 1
           fi
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-          
 
       - name: Validate that there are only patch changes
         if: startsWith(github.base_ref, 'release/')
         run: |
           CHANGES=$(sed -n '/---/,/---/p' .changeset/*.md)
-          echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || echo "No patch changes found." && exit 1
+          echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || (echo "No patch changes found." && exit 1)
           echo $CHANGES | grep -E 'minor|major' --silent && echo "Old releases can only be patched; no minor and major versions allowed." && exit 1 || echo "No minor nor major changes."
 
       - name: Validate that there was no release for the next patch version

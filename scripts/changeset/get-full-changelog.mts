@@ -1,9 +1,9 @@
-import * as github from '@actions/github';
-import { getInfo } from '@changesets/get-github-info';
-import getChangesets from '@changesets/read';
-import type { NewChangeset } from '@changesets/types';
-import { execSync } from 'child_process';
-import { join } from 'path';
+import * as github from "@actions/github";
+import { getInfo } from "@changesets/get-github-info";
+import getChangesets from "@changesets/read";
+import type { NewChangeset } from "@changesets/types";
+import { execSync } from "child_process";
+import { join } from "path";
 
 type Octokit = ReturnType<typeof github.getOctokit>;
 
@@ -13,25 +13,26 @@ interface ChangelogInfo {
   markdown: string;
 }
 
-const prTypes = ['feat', 'fix', 'refactor', 'chore', 'docs'];
+const prTypes = ["feat", "fix", "refactor", "chore", "docs"];
 
-async function getChangelogInfo(octokit: Octokit, changeset: NewChangeset): Promise<ChangelogInfo> {
-  const changesetCommitLog = execSync(
-    `git log --oneline --diff-filter=A -- ${join(
+async function getChangelogInfo(
+  octokit: Octokit,
+  changeset: NewChangeset,
+): Promise<ChangelogInfo> {
+  const changesetCommit = execSync(
+    `git log -n 1 --oneline --pretty=format:%H -- ${join(
       process.cwd(),
-      '.changeset',
-      `${changeset.id}.md`
-    )}`
-  ).toString(); // e.g. 1f3d3d3 fix!: add breaking fix
-
-  const [commit] = changesetCommitLog.split(' ');
+      ".changeset",
+      `${changeset.id}.md`,
+    )}`,
+  ).toString(); // e.g. d603eecd1e453c60fe8cadfd1bfe530050ff0cfe
 
   const {
     links: { pull: prLink, user },
     pull: prNo,
   } = await getInfo({
-    repo: process.env.GITHUB_REPOSITORY ?? 'This should be set by GitHub',
-    commit,
+    repo: process.env.GITHUB_REPOSITORY ?? "This should be set by GitHub",
+    commit: changesetCommit,
   });
 
   const {
@@ -42,13 +43,14 @@ async function getChangelogInfo(octokit: Octokit, changeset: NewChangeset): Prom
     pull_number: prNo!,
   });
 
-  const prType = title.replace(/(\w+).*/, '$1'); // chore!: add something -> chore
+  const prType = title.replace(/(\w+).*/, "$1"); // chore!: add something -> chore
   const isBreaking = title.includes(`${prType}!`);
 
-  const titleDescription = title.replace(/\w+\W+(.*)/, '$1'); // chore!: add something -> add something
-  const summary = titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
+  const titleDescription = title.replace(/\w+\W+(.*)/, "$1"); // chore!: add something -> add something
+  const summary =
+    titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
-  const markdown = `- ${prLink}, ${summary}, by ${user}`;
+  const markdown = `- ${prLink} - ${summary}, by ${user}`;
   return {
     prType,
     isBreaking,
@@ -72,9 +74,13 @@ function sortChangelogsByPrType(a: ChangelogInfo, b: ChangelogInfo) {
 }
 
 async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
-  const changesetsWithReleases = changesets.filter((x) => x.releases.length > 0);
+  const changesetsWithReleases = changesets.filter(
+    (x) => x.releases.length > 0,
+  );
   const changelogs = await Promise.all(
-    changesetsWithReleases.map(async (changeset) => getChangelogInfo(octokit, changeset))
+    changesetsWithReleases.map(async (changeset) =>
+      getChangelogInfo(octokit, changeset),
+    ),
   );
 
   return changelogs.sort(sortChangelogsByPrType);
@@ -82,30 +88,31 @@ async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
 
 function mapPrTypeToTitle(prType: string) {
   switch (prType) {
-    case 'feat':
-      return 'Features';
-    case 'fix':
-      return 'Fixes';
-    case 'chore':
-      return 'Chores';
-    case 'docs':
-      return 'Docs';
-    case 'ci':
-      return 'CI';
+    case "feat":
+      return "Features";
+    case "fix":
+      return "Fixes";
+    case "chore":
+      return "Chores";
+    case "docs":
+      return "Docs";
+    case "ci":
+      return "CI";
     default:
-      return 'Misc';
+      return "Misc";
   }
 }
 
 function groupChangelogsForListing(changelogs: ChangelogInfo[]) {
   const prTypeWithChangelogs = prTypes.reduce(
     (acc, prType) => {
-      acc[prType] = changelogs.filter((c) => c.prType === prType).map((c) => c.markdown);
+      acc[prType] = changelogs
+        .filter((c) => c.prType === prType)
+        .map((c) => c.markdown);
       return acc;
     },
-    {} as Record<string, string[]>
+    {} as Record<string, string[]>,
   );
-  
 
   return Object.entries(prTypeWithChangelogs)
     .filter(([, c]) => c.length > 0)
@@ -113,26 +120,30 @@ function groupChangelogsForListing(changelogs: ChangelogInfo[]) {
 }
 
 function listBreakingMd(changelogs: ChangelogInfo[]) {
-  const changelogGroups = groupChangelogsForListing(changelogs.filter((x) => x.isBreaking));
+  const changelogGroups = groupChangelogsForListing(
+    changelogs.filter((x) => x.isBreaking),
+  );
 
   return changelogGroups
     .map(
       ([groupTitle, c]) => `- ${groupTitle}
-${c.map((x) => `    ${x}`).join('\n')}`
+${c.map((x) => `    ${x}`).join("\n")}`,
     )
-    .join('\n')
+    .join("\n")
     .trim();
 }
 
 function listNonBreakingMd(changelogs: ChangelogInfo[]) {
-  const changelogGroups = groupChangelogsForListing(changelogs.filter((x) => !x.isBreaking));
+  const changelogGroups = groupChangelogsForListing(
+    changelogs.filter((x) => !x.isBreaking),
+  );
 
   return changelogGroups
     .map(
       ([groupTitle, c]) => `# ${groupTitle}
-${c.join('\n')}`
+${c.join("\n")}`,
     )
-    .join('\n\n')
+    .join("\n\n")
     .trim();
 }
 
@@ -144,9 +155,10 @@ export async function getFullChangelog(octokit: Octokit) {
   const breaking = listBreakingMd(changelogs);
   const nonBreaking = listNonBreakingMd(changelogs);
 
-  let content = `# RELEASE - ${process.env.RELEASE_TAG ?? 'TBD'}\n\n`;
-  content += breaking ? `# Breaking\n\n${breaking}` : '';
-  content += breaking && nonBreaking && '\n\n---\n\n';
+  let content = ``;
+
+  content += breaking ? `# Breaking\n\n${breaking}` : "";
+  content += breaking && nonBreaking && "\n\n---\n\n";
   content += nonBreaking;
 
   return content.trim();

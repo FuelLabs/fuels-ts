@@ -51,8 +51,8 @@ export default defineConfig({
             link: '/guide/introduction/getting-started',
           },
           {
-            text: 'Quickstart',
-            link: '/guide/introduction/quickstart',
+            text: 'Creating a Fuel dApp',
+            link: '/guide/introduction/creating-a-fuel-dapp',
           },
         ],
       },
@@ -61,6 +61,21 @@ export default defineConfig({
         link: '/guide/basics/',
         collapsed: false,
         items: [
+          {
+            text: 'Provider',
+            link: '/guide/provider/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Provider Options',
+                link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Querying the Chain',
+                link: '/guide/provider/querying-the-chain',
+              },
+            ],
+          },
           {
             text: 'Errors',
             link: '/guide/errors/',
@@ -82,6 +97,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
+              {
                 text: 'Private Keys',
                 link: '/guide/wallets/private-keys',
               },
@@ -96,6 +115,10 @@ export default defineConfig({
               {
                 text: 'Checking Balances',
                 link: '/guide/wallets/checking-balances',
+              },
+              {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
               },
               {
                 text: 'Wallet Manager',
@@ -138,6 +161,29 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'Transactions',
+            link: '/guide/transactions/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Transaction Request',
+                link: '/guide/transactions/transaction-request',
+              },
+              {
+                text: 'Transaction Response',
+                link: '/guide/transactions/transaction-response',
+              },
+              {
+                text: 'Transaction Parameters',
+                link: '/guide/transactions/transaction-parameters',
+              },
+              {
+                text: 'Transaction Policies',
+                link: '/guide/transactions/transaction-policies',
+              },
+            ],
+          },
+          {
             text: 'Contracts',
             link: '/guide/contracts/',
             collapsed: true,
@@ -147,12 +193,12 @@ export default defineConfig({
                 link: '/guide/contracts/methods',
               },
               {
-                text: 'Transaction Parameters',
-                link: '/guide/contracts/transaction-parameters',
-              },
-              {
                 text: 'Call Parameters',
                 link: '/guide/contracts/call-parameters',
+              },
+              {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
               },
               {
                 text: 'Cost Estimation',
@@ -197,6 +243,10 @@ export default defineConfig({
               {
                 text: 'Configurable Constants',
                 link: '/guide/contracts/configurable-constants',
+              },
+              {
+                text: 'Managing Deployed Contracts',
+                link: '/guide/contracts/managing-deployed-contracts',
               },
               {
                 text: 'Understanding the FuelVM Binary File',
@@ -253,21 +303,6 @@ export default defineConfig({
         link: '/guide/extras/',
         collapsed: false,
         items: [
-          {
-            text: 'Providers',
-            link: '/guide/providers/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Querying the Chain',
-                link: '/guide/providers/querying-the-chain',
-              },
-              {
-                text: 'Retrying upon errors',
-                link: '/guide/providers/retrying-upon-errors',
-              },
-            ],
-          },
           {
             text: 'Types',
             link: '/guide/types/',
@@ -365,6 +400,10 @@ export default defineConfig({
                 text: 'Address conversion',
                 link: '/guide/utilities/address-conversion',
               },
+              {
+                text: 'Unit conversion',
+                link: '/guide/utilities/unit-conversion',
+              },
             ],
           },
           {
@@ -406,6 +445,10 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'GraphQL Integration',
+            link: '/guide/tooling/graphql-integration',
+          },
+          {
             text: 'Testing',
             link: '/guide/testing/',
             collapsed: true,
@@ -429,6 +472,17 @@ export default defineConfig({
             link: '/guide/cli/',
             collapsed: true,
             items: [
+              {
+                text: 'npm create fuels',
+                link: '/guide/npm-create-fuels/',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Options',
+                    link: '/guide/npm-create-fuels/options',
+                  },
+                ],
+              },
               {
                 text: 'fuels',
                 link: '/guide/fuels/',

@@ -22,6 +22,11 @@ export {
   WORD_SIZE,
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
+  UTXO_ID_LEN,
+  BYTES_32,
   calculateVmTxMemory,
+  type EncodingVersion,
+  ENCODING_V0,
+  ENCODING_V1,
 } from './utils/constants';
 export { BigNumberCoder } from './encoding/coders/v0/BigNumberCoder';
