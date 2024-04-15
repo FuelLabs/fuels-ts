@@ -1,11 +1,14 @@
+// #region fuels-config-file-env
 import { createConfig } from 'fuels';
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: ['.env.local', '.env'],
+});
 
 export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-api',
-  /*
-    This is the same value as the port specified in the `.env.local` file.
-    Please keep these values in sync.
-  */
-  fuelCorePort: 4000,
+  fuelCorePort: +(process.env.NEXT_PUBLIC_FUEL_NODE_PORT as string) || 4000,
 });
+// #endregion fuels-config-file-env
