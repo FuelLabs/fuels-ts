@@ -22,6 +22,10 @@ describe('querying the chain', () => {
 
     // get all coins
     const coins = await wallet.getCoins();
+    // [
+    //   { amount: bn(42), assetId: BaseAssetId }
+    //   { amount: bn(100), assetId: assetIdA }
+    // ]
     // #endregion wallet-query
 
     expect(coin.length).toEqual(1);
