@@ -8,7 +8,6 @@
   ],
   "ignoreDependencies": [
     "@fuel-ts/*",
-    "@types/jest",
     "@types/rimraf",
     "@graphql-codegen*",
     "graphql-tag",
