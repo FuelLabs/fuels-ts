@@ -15,7 +15,6 @@ describe('Provider correctly', () => {
   test('Provider should always wrap `fetchFn`', async () => {
     const autoRetryFetchFn = vi.spyOn(autoRetryFetchMod, 'autoRetryFetch');
 
-    // #region provider-retry-options
     const retryOptions: RetryOptions = {
       maxRetries: 5,
       baseDelay: 100,
@@ -23,7 +22,6 @@ describe('Provider correctly', () => {
     };
 
     const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
-    // #endregion provider-retry-options
 
     expect(provider).toBeTruthy();
     expect(autoRetryFetchFn).toHaveBeenCalledTimes(1);

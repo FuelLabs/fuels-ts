@@ -73,7 +73,6 @@ describe('Transaction Policies', () => {
     // Submit the transaction and retrieve the transaction response
     const tx: TransactionResponse = await wallet.sendTransaction(transactionRequest);
     const response = await tx.waitForResult();
-    // Retrieve the policies from the transaction response. The policies property
     // is undefined if the transaction had no policies applied.
     const policies: Policy[] | undefined = response.transaction.policies;
     // #endregion transaction-policies-2
