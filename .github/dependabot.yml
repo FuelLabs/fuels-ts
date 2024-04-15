@@ -6,8 +6,7 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 10
     labels:
-      - "dependencies"
-      - "security"
+      - "chore"
     security:
       # Set this to true to create private pull requests
       # for vulnerabilities
