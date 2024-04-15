@@ -303,6 +303,7 @@ TTL
 Bech
 CLIs
 typedoc
+backoff
 extractable
 SHA-256
 API's

@@ -680,11 +680,9 @@ describe('Provider', () => {
     const { provider } = launched;
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
-    // #region Provider-get-blocks
     const blocks = await provider.getBlocks({
       last: 10,
     });
-    // #endregion Provider-get-blocks
     expect(blocks.length).toBe(10);
     blocks.forEach((block) => {
       expect(block).toEqual(
