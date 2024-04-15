@@ -7,7 +7,7 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "chore"
-    security:
-      # Set this to true to create private pull requests
-      # for vulnerabilities
-      private: true
+    # security:
+    #  # Set this to true to create private pull requests
+    #  # for vulnerabilities
+    #  private: true
