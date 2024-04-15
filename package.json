@@ -29,6 +29,7 @@
     "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
+    "verify:package-exports": "tsx ./scripts/verify-package-exports",
     "prettier:check": "prettier --check packages",
     "prettier:format": "prettier --write packages",
     "changeset:publish": "tsx ./scripts/changeset/changeset-publish",
