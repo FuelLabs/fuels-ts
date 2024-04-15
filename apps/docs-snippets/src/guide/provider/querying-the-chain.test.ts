@@ -60,6 +60,10 @@ describe('querying the chain', () => {
     ]);
 
     const walletBalances = await wallet.getBalances();
+    // [
+    //   { amount: bn(42), assetId: BaseAssetId }
+    //   { amount: bn(100), assetId: assetIdA }
+    // ]
     // #endregion wallet-get-balances
 
     expect(walletBalances).toEqual([
