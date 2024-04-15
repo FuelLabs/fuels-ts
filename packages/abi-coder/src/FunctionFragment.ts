@@ -213,4 +213,14 @@ export class FunctionFragment<
 
     return coder.decode(bytes, 0) as [DecodedValue | undefined, number];
   }
+
+  /**
+   * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
+   *
+   * @returns True if the function is read-only or pure, false otherwise.
+   */
+  isReadOnly(): boolean {
+    const storageAttribute = this.attributes.find((attr) => attr.name === 'storage');
+    return !storageAttribute?.arguments.includes('write');
+  }
 }

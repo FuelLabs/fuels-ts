@@ -303,7 +303,13 @@ TTL
 Bech
 CLIs
 typedoc
+extractable
+SHA-256
+API's
+codegen
 scaffolded
 programmatically
+transactional
 BigNumber
 Gwei
+onchain

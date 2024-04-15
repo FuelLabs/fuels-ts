@@ -142,6 +142,29 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'Transactions',
+            link: '/guide/transactions/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Transaction Request',
+                link: '/guide/transactions/transaction-request',
+              },
+              {
+                text: 'Transaction Response',
+                link: '/guide/transactions/transaction-response',
+              },
+              {
+                text: 'Transaction Parameters',
+                link: '/guide/transactions/transaction-parameters',
+              },
+              {
+                text: 'Transaction Policies',
+                link: '/guide/transactions/transaction-policies',
+              },
+            ],
+          },
+          {
             text: 'Contracts',
             link: '/guide/contracts/',
             collapsed: true,
@@ -149,10 +172,6 @@ export default defineConfig({
               {
                 text: 'Methods',
                 link: '/guide/contracts/methods',
-              },
-              {
-                text: 'Transaction Parameters',
-                link: '/guide/contracts/transaction-parameters',
               },
               {
                 text: 'Call Parameters',
@@ -380,7 +399,7 @@ export default defineConfig({
               {
                 text: 'Unit conversion',
                 link: '/guide/utilities/unit-conversion',
-              }
+              },
             ],
           },
           {
@@ -422,6 +441,10 @@ export default defineConfig({
         collapsed: false,
         items: [
           {
+            text: 'GraphQL Integration',
+            link: '/guide/tooling/graphql-integration',
+          },
+          {
             text: 'Testing',
             link: '/guide/testing/',
             collapsed: true,
@@ -443,7 +466,14 @@ export default defineConfig({
             items: [
               {
                 text: 'npm create fuels',
-                link: '/guide/cli/npm-create-fuels',
+                link: '/guide/npm-create-fuels/',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Options',
+                    link: '/guide/npm-create-fuels/options',
+                  },
+                ],
               },
               {
                 text: 'fuels',
