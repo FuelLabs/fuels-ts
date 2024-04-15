@@ -18,15 +18,18 @@ describe('Provider', () => {
     // #region provider-definition
     // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
 
+    // Create the provider
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    // querying the blockchain
+    // Querying the blockchain
     const { consensusParameters } = provider.getChain();
 
+    // Create a new wallet
     const wallet = WalletUnlocked.generate({ provider });
-    // get the balances of the wallet, uses the provider under the hood
-    // the balances will be empty because the wallet is new
+    
+    // Get the balances of the wallet (this will be empty until we have assets)
     const balances = await wallet.getBalances();
+    // []
     // #endregion provider-definition
 
     expect(provider).toBeDefined();
