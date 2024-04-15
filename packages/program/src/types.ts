@@ -33,7 +33,6 @@ export type CallParams = Partial<{
 /**
  * Represents transaction parameters for a contract call.
  */
-// #region transaction-params
 export type TxParams = Partial<{
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
@@ -42,7 +41,6 @@ export type TxParams = Partial<{
   witnessLimit?: BigNumberish;
   variableOutputs: number;
 }>;
-// #endregion transaction-params
 
 /**
  * Represents configuration for calling a contract function.
@@ -66,9 +64,10 @@ export type CallConfig<T = unknown> = {
  * @template TReturn - Type of the function's return value.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> = (
-  ...args: TArgs
-) => FunctionInvocationScope<TArgs, TReturn>;
+export interface InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> {
+  (...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
+  isReadOnly: () => boolean;
+}
 
 /**
  * Represents a collection of functions that can be invoked.

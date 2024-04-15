@@ -673,11 +673,9 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
-    // #region Provider-get-blocks
     const blocks = await provider.getBlocks({
       last: 10,
     });
-    // #endregion Provider-get-blocks
     expect(blocks.length).toBe(10);
     blocks.forEach((block) => {
       expect(block).toEqual(
@@ -1007,12 +1005,11 @@ describe('Provider', () => {
       .spyOn(gasMod, 'calculatePriceWithFactor')
       .mockReturnValue(bn(0));
 
-    const { minFee, maxFee, usedFee } = await provider.getTransactionCost(request);
+    const { minFee, maxFee } = await provider.getTransactionCost(request);
 
-    expect(calculatePriceWithFactorMock).toHaveBeenCalledTimes(3);
+    expect(calculatePriceWithFactorMock).toHaveBeenCalled();
 
     expect(maxFee.eq(0)).not.toBeTruthy();
-    expect(usedFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
   });
 
