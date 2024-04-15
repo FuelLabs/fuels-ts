@@ -6,4 +6,4 @@ Represents a collection of functions that can be invoked.
 
 ## Indexable
 
-▪ [key: `string`]: [`InvokeFunction`](/api/Program/index.md#invokefunction)
+▪ [key: `string`]: [`InvokeFunction`](/api/Program/InvokeFunction.md)

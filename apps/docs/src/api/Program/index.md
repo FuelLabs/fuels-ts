@@ -13,6 +13,7 @@
 
 ## Interfaces
 
+- [InvokeFunction](/api/Program/InvokeFunction.md)
 - [InvokeFunctions](/api/Program/InvokeFunctions.md)
 
 ## Type Aliases
@@ -43,7 +44,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[packages/program/src/types.ts:50](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L50)
+[types.ts:50](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L50)
 
 ___
 
@@ -55,7 +56,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L26)
+[types.ts:28](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L28)
 
 ___
 
@@ -73,7 +74,9 @@ Represents a contract call.
 | `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
 | `contractId` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
 | `data` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
+| `encoding?` | `EncodingVersion` |
 | `fnSelector` | `string` |
+| `fnSelectorBytes` | `Uint8Array` |
 | `gas?` | `BigNumberish` |
 | `isInputDataPointer` | `boolean` |
 | `isOutputDataHeap` | `boolean` |
@@ -81,7 +84,7 @@ Represents a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L11)
+[types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L11)
 
 ___
 
@@ -105,52 +108,7 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[packages/program/src/types.ts:82](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L82)
-
-___
-
-### InvokeFunction
-
-Ƭ **InvokeFunction**&lt;`TArgs`, `TReturn`\>: (...`args`: `TArgs`) => [`FunctionInvocationScope`](/api/Program/FunctionInvocationScope.md)&lt;`TArgs`, `TReturn`\>
-
-#### Type parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `TArgs` | extends `any`[] = `any`[] | Type of the function's arguments. |
-| `TReturn` | `any` | Type of the function's return value. |
-
-#### Type declaration
-
-▸ (`...args`): [`FunctionInvocationScope`](/api/Program/FunctionInvocationScope.md)&lt;`TArgs`, `TReturn`\>
-
-Represents a function that can be invoked.
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `...args` | `TArgs` |
-
-##### Returns
-
-[`FunctionInvocationScope`](/api/Program/FunctionInvocationScope.md)&lt;`TArgs`, `TReturn`\>
-
-#### Defined in
-
-[packages/program/src/types.ts:67](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L67)
-
-___
-
-### RevertReason
-
-Ƭ **RevertReason**: ``"RequireFailed"`` \| ``"TransferToAddressFailed"`` \| ``"SendMessageFailed"`` \| ``"AssertEqFailed"`` \| ``"AssertFailed"`` \| ``"Unknown"``
-
-Represents the possible reasons for a revert.
-
-#### Defined in
-
-[packages/program/src/revert/revert-error.ts:15](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/revert/revert-error.ts#L15)
+[types.ts:83](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L83)
 
 ___
 
@@ -162,7 +120,7 @@ Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[packages/program/src/types.ts:93](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L93)
+[types.ts:94](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L94)
 
 ___
 
@@ -174,4 +132,4 @@ Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[packages/program/src/types.ts:35](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/program/src/types.ts#L35)
+[types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L36)

@@ -22,7 +22,7 @@ Mnemonic instance
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:65](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L65)
+[packages/account/src/mnemonic/mnemonic.ts:65](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L65)
 
 ## Properties
 
@@ -32,7 +32,7 @@ Mnemonic instance
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:58](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L58)
+[packages/account/src/mnemonic/mnemonic.ts:58](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L58)
 
 ## Methods
 
@@ -54,7 +54,7 @@ Mnemonic phrase
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:85](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L85)
+[packages/account/src/mnemonic/mnemonic.ts:85](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L85)
 
 ___
 
@@ -76,7 +76,7 @@ Entropy hash
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:76](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L76)
+[packages/account/src/mnemonic/mnemonic.ts:76](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L76)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:169](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L169)
+[packages/account/src/mnemonic/mnemonic.ts:169](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L169)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:108](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L108)
+[packages/account/src/mnemonic/mnemonic.ts:108](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L108)
 
 ___
 
@@ -148,7 +148,7 @@ A randomly generated mnemonic
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:250](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L250)
+[packages/account/src/mnemonic/mnemonic.ts:250](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L250)
 
 ___
 
@@ -172,7 +172,7 @@ true if phrase is a valid mnemonic
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:148](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L148)
+[packages/account/src/mnemonic/mnemonic.ts:148](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L148)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:195](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L195)
+[packages/account/src/mnemonic/mnemonic.ts:195](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L195)
 
 ___
 
@@ -217,7 +217,7 @@ Mnemonic phrase
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:95](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L95)
+[packages/account/src/mnemonic/mnemonic.ts:95](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L95)
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L138)
+[packages/account/src/mnemonic/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L138)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:124](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L124)
+[packages/account/src/mnemonic/mnemonic.ts:124](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L124)
 
 ___
 
@@ -288,4 +288,4 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:215](https://github.com/FuelLabs/fuels-ts/blob/e0e95c40/packages/account/src/mnemonic/mnemonic.ts#L215)
+[packages/account/src/mnemonic/mnemonic.ts:215](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/mnemonic/mnemonic.ts#L215)
