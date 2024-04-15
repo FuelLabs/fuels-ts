@@ -1,7 +1,5 @@
 # Change Log
 
-## 0.80.0
-
 ## 0.79.0
 
 ### Minor Changes
