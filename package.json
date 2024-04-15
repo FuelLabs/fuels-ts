@@ -102,7 +102,7 @@
     "tsx": "^4.7.0",
     "turbo": "^1.8.8",
     "typescript": "~5.2.2",
-    "vite": "^5.0.11",
+    "vite": "^5.0.13",
     "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.1.3",
