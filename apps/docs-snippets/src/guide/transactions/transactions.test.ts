@@ -24,7 +24,8 @@ describe('Transactions', () => {
     expect(initialBalance.toNumber()).toBe(0);
 
     // #region transactions-1
-    await sender.transfer(receiver.address, 100, assetIdToTransfer);
+    const tx = await sender.transfer(receiver.address, 100, assetIdToTransfer);
+    await tx.waitForResult();
 
     const newBalance = await receiver.getBalance(BaseAssetId);
     // 100

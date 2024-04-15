@@ -33,7 +33,7 @@ export const ENCODING_V1 = '1';
  */
 export const WORD_SIZE = 8;
 export const BYTES_32 = 32;
-export const UTXO_ID_LEN = BYTES_32 + 1;
+export const UTXO_ID_LEN = BYTES_32 + 2;
 export const MAX_INPUTS = 255;
 export const ASSET_ID_LEN = BYTES_32;
 export const CONTRACT_ID_LEN = BYTES_32;

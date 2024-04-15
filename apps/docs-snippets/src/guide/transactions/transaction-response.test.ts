@@ -1,5 +1,5 @@
-import type { Provider, Contract, WalletUnlocked, BN } from 'fuels';
-import { BaseAssetId, ScriptTransactionRequest, TransactionResponse } from 'fuels';
+import type { Provider, Contract, WalletUnlocked } from 'fuels';
+import { ScriptTransactionRequest, TransactionResponse } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -14,7 +14,6 @@ describe('Transaction Response', () => {
   let contract: Contract;
   let provider: Provider;
   let wallet: WalletUnlocked;
-  let gasPrice: BN;
 
   const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SUM_SCRIPT
@@ -24,7 +23,6 @@ describe('Transaction Response', () => {
     wallet = await getTestWallet();
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     provider = contract.provider;
-    gasPrice = provider.getGasConfig().minGasPrice;
   });
 
   it('gets transaction response from contract call', async () => {
@@ -46,8 +44,6 @@ describe('Transaction Response', () => {
 
   it('gets transaction response from transaction request', async () => {
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: BaseAssetId }]);
-
     // #region transaction-response-2
     // #import { ScriptTransactionRequest, TransactionResponse };
 
@@ -55,12 +51,16 @@ describe('Transaction Response', () => {
     // the script main function arguments
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      gasPrice,
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
     // Fund the transaction
-    transactionRequest.addResources(resources);
+    const txCost = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = txCost.maxFee;
+    transactionRequest.gasLimit = txCost.gasUsed;
+
+    await wallet.fund(transactionRequest, txCost);
 
     // Submit the transaction
     const response: TransactionResponse = await wallet.sendTransaction(transactionRequest);
@@ -74,14 +74,18 @@ describe('Transaction Response', () => {
 
   it('gets transaction response from tx id', async () => {
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: BaseAssetId }]);
 
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      gasPrice,
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
-    transactionRequest.addResources(resources);
+
+    const txCost = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = txCost.maxFee;
+    transactionRequest.gasLimit = txCost.gasUsed;
+
+    await wallet.fund(transactionRequest, txCost);
     const response: TransactionResponse = await wallet.sendTransaction(transactionRequest);
 
     const previouslySubmittedTransactionId = transactionRequest.getTransactionId(

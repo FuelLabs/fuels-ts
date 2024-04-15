@@ -1,3 +1,4 @@
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, Coin, Resource } from 'fuels';
 import {
   CreateTransactionRequest,
@@ -47,13 +48,21 @@ describe('Transaction Request', () => {
     assetId: BaseAssetId,
     amount: bn(0),
     owner: address,
-    maturity: 1,
     blockCreated: bn(0),
     txCreatedIdx: bn(0),
   };
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const predicate = new Predicate({
+      bytecode: predicateBytecode,
+      abi: predicateAbi,
+      inputData: [ZeroBytes32],
+      provider,
+    });
+
+    await seedTestWallet(predicate, [[10_000]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
@@ -131,7 +140,7 @@ describe('Transaction Request', () => {
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
-  it('adds a predicate to a transaction request', () => {
+  it('adds a predicate to a transaction request', async () => {
     const dataToValidatePredicate = [ZeroBytes32];
 
     // #region transaction-request-5
@@ -149,8 +158,12 @@ describe('Transaction Request', () => {
       provider,
     });
 
+    const predicateCoins = await predicate.getResourcesToSpend([
+      { amount: 1000, assetId: BaseAssetId },
+    ]);
+
     // Add the predicate input and resources
-    transactionRequest.addPredicateResource(coin, predicate);
+    transactionRequest.addResources(predicateCoins);
     // #endregion transaction-request-5
 
     expect(transactionRequest.inputs.length).toEqual(1);
@@ -193,7 +206,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x35cd6a10e917d5d0223413c1fb9863d27da40e5d602a7f37cfbcefb570172f6c'
+      '0x3eeeca6eb1375da063b4e6ab2b2000e047fe7e2d32468ee707df3b044f984a4c'
     );
   });
 });
