@@ -1,5 +1,7 @@
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -12,7 +14,6 @@ import {
   TransactionType,
 } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
-import { randomBytes } from 'ethers';
 
 import type { Account } from '../../account';
 import type { GqlGasCosts } from '../__generated__/operations';
@@ -582,12 +583,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       }
 
       if (assetInput && 'assetId' in assetInput) {
-        assetInput.id = hexlify(randomBytes(34));
+        assetInput.id = hexlify(randomBytes(UTXO_ID_LEN));
         assetInput.amount = usedQuantity;
       } else {
         this.addResources([
           {
-            id: hexlify(randomBytes(34)),
+            id: hexlify(randomBytes(UTXO_ID_LEN)),
             amount: usedQuantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),

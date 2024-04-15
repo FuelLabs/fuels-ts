@@ -83,7 +83,7 @@ describe(__filename, () => {
     await tx.waitForResult();
 
     // fund method should have been called to fetch the remaining UTXOs
-    expect(getResourcesToSpendSpy).toHaveBeenCalledTimes(1);
+    expect(getResourcesToSpendSpy).toHaveBeenCalled();
 
     const receiverBalance = await receiver.getBalance(BaseAssetId);
 

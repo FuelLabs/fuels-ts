@@ -15,7 +15,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
-import { clone } from 'ramda';
+import { clone, max } from 'ramda';
 
 import type { Predicate } from '../predicate';
 
@@ -757,7 +757,6 @@ export default class Provider {
 
         const { maxFee } = await this.estimateTxGasAndFee({
           transactionRequest,
-          optimizeGas: false,
         });
 
         // eslint-disable-next-line no-param-reassign
@@ -846,7 +845,6 @@ export default class Provider {
 
           const { maxFee } = await this.estimateTxGasAndFee({
             transactionRequest: requestToProcess,
-            optimizeGas: false,
           });
           requestToProcess.maxFee = maxFee;
 
@@ -889,21 +887,19 @@ export default class Provider {
     return results;
   }
 
-  async estimateTxGasAndFee(params: {
-    transactionRequest: TransactionRequest;
-    optimizeGas?: boolean;
-    totalGasUsedByPredicates?: BN;
-    gasPrice?: BN;
-  }) {
-    const { transactionRequest, optimizeGas = true } = params;
+  /**
+   * Estimates the transaction gas and fee based on the provided transaction request.
+   * @param transactionRequest - The transaction request object.
+   * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
+   */
+  async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
+    const { transactionRequest } = params;
     let { gasPrice } = params;
 
     const chainInfo = this.getChain();
-
-    const { gasPriceFactor } = this.getGasConfig();
+    const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
 
     const minGas = transactionRequest.calculateMinGas(chainInfo);
-
     if (!gasPrice) {
       gasPrice = await this.estimateGasPrice(10);
     }
@@ -917,20 +913,33 @@ export default class Provider {
 
     let gasLimit = bn(0);
 
+    // Only Script transactions consume gas
     if (transactionRequest.type === TransactionType.Script) {
+      // If the gasLimit is set to 0, it means we need to estimate it.
       gasLimit = transactionRequest.gasLimit;
-
-      if (!optimizeGas) {
+      if (transactionRequest.gasLimit.eq(0)) {
         transactionRequest.gasLimit = minGas;
 
-        gasLimit = transactionRequest.calculateMaxGas(chainInfo, minGas);
+        /*
+         * Adjusting the gasLimit of a transaction (TX) impacts its maxGas.
+         * Consequently, this affects the maxFee, as it is derived from the maxGas. To accurately estimate the
+         * gasLimit for a transaction, especially when the exact gas consumption is uncertain (as in an estimation dry-run),
+         * the following steps are required:
+         * 1 - Initially, set the gasLimit using the calculated minGas.
+         * 2 - Based on this initial gasLimit, calculate the maxGas.
+         * 3 - Get the maximum gas per transaction allowed by the chain, and subtract the previously calculated maxGas from this limit.
+         * 4 - The result of this subtraction should then be adopted as the new, definitive gasLimit.
+         * 5 - Recalculate the maxGas with the updated gasLimit. This new maxGas is then used to compute the maxFee.
+         * 6 - The calculated maxFee represents the safe, estimated cost required to fund the transaction.
+         */
+        transactionRequest.gasLimit = maxGasPerTx.sub(
+          transactionRequest.calculateMaxGas(chainInfo, minGas)
+        );
 
-        transactionRequest.gasLimit = gasLimit;
+        gasLimit = transactionRequest.gasLimit;
       }
     }
-
     const maxGas = transactionRequest.calculateMaxGas(chainInfo, minGas);
-
     const maxFee = calculateGasFee({
       gasPrice: bn(gasPrice),
       gas: maxGas,
@@ -1050,10 +1059,7 @@ export default class Provider {
     // eslint-disable-next-line prefer-const
     let { maxFee, maxGas, minFee, minGas, gasPrice, gasLimit } = await this.estimateTxGasAndFee({
       transactionRequest: signedRequest,
-      optimizeGas: false,
     });
-
-    txRequestClone.maxFee = maxFee;
 
     let receipts: TransactionResultReceipt[] = [];
     let missingContractIds: string[] = [];
@@ -1062,16 +1068,18 @@ export default class Provider {
 
     txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
+    txRequestClone.maxFee = maxFee;
     if (isScriptTransaction) {
+      txRequestClone.gasLimit = gasLimit;
       if (signatureCallback) {
         await signatureCallback(txRequestClone);
       }
-      txRequestClone.gasLimit = gasLimit;
+
       const result = await this.estimateTxDependencies(txRequestClone);
       receipts = result.receipts;
       outputVariables = result.outputVariables;
       missingContractIds = result.missingContractIds;
-      gasUsed = getGasUsedFromReceipts(receipts);
+      gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : gasUsed;
 
       txRequestClone.gasLimit = gasUsed;
 

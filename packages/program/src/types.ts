@@ -34,7 +34,6 @@ export type CallParams = Partial<{
 /**
  * Represents transaction parameters for a contract call.
  */
-// #region transaction-params
 export type TxParams = Partial<{
   tip: BigNumberish;
   gasLimit: BigNumberish;
@@ -44,7 +43,6 @@ export type TxParams = Partial<{
   variableOutputs: number;
   optimizeGas?: boolean;
 }>;
-// #endregion transaction-params
 
 /**
  * Represents configuration for calling a contract function.
