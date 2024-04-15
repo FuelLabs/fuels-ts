@@ -75,7 +75,6 @@
     "compare-versions": "^6.1.0",
     "conventional-changelog-angular": "^5.0.13",
     "coverage-diff": "^3.2.0",
-    "dotenv": "^9.0.2",
     "eslint": "^8.52.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
