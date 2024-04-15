@@ -1,6 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { BaseAssetId, FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn } from 'fuels';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('querying the chain', () => {
   it('query coins', async () => {
     // #region wallet-query
