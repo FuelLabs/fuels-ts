@@ -43,6 +43,9 @@ jobs:
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
 
+      - name: Verify package exports integrity
+        run: pnpm verify:package-exports
+
       - name: Forc Format Check
         run: pnpm forc:check
 
