@@ -1,4 +1,4 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
+import { launchNode, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -168,30 +168,44 @@ describe('Predicate', () => {
     });
 
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
-      const amountToPredicate = 10_000;
-
-      await seedTestWallet(predicateTrue, [[amountToPredicate]]);
-
-      const initialPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
-
-      const receiverWallet = WalletUnlocked.generate({
-        provider,
+      const { cleanup, ip, port } = await launchNode({
+        args: ['--poa-instant', 'true'],
+        loggingEnabled: false,
       });
 
-      const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
-      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
+      const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
 
-      const response = await predicateTrue.transfer(
+      const predicateTrueTempInstance = new Predicate({
+        bytecode: predicateTrueBytecode,
+        provider: nodeProvider,
+      });
+
+      const amountToPredicate = 10_000;
+
+      await seedTestWallet(predicateTrueTempInstance, [[amountToPredicate]]);
+
+      const initialPredicateBalance = bn(await predicateTrueTempInstance.getBalance()).toNumber();
+
+      const receiverWallet = WalletUnlocked.generate({
+        provider: nodeProvider,
+      });
+
+      const dryRunSpy = vi.spyOn(nodeProvider.operations, 'dryRun');
+      const estimatePredicatesSpy = vi.spyOn(nodeProvider.operations, 'estimatePredicates');
+
+      const response = await predicateTrueTempInstance.transfer(
         receiverWallet.address.toB256(),
         1,
         BaseAssetId
       );
       await response.waitForResult();
-      const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
+      const finalPredicateBalance = bn(await predicateTrueTempInstance.getBalance()).toNumber();
       expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
 
       expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
       expect(dryRunSpy).toHaveBeenCalledOnce();
+
+      cleanup();
     });
   });
 });
