@@ -314,3 +314,4 @@ BigNumber
 Gwei
 onchain
 Vercel
+hardcoded
