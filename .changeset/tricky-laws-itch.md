@@ -1,4 +1,0 @@
----
----
-
-docs: transferring between wallets
