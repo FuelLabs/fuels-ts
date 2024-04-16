@@ -26,7 +26,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/hasher": "workspace:^",
-    "@fuel-ts/interfaces": "workspace:^",
     "@fuel-ts/math": "workspace:*"
   }
 }
