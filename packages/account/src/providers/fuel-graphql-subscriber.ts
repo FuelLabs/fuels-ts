@@ -34,7 +34,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     this.stream = response.body!.getReader();
   }
 
-  private events: Array<{ data: unknown; errors: unknown }> = [];
+  private events: Array<{ data: unknown; errors?: unknown }> = [];
   private parsingLeftover = '';
 
   async next(): Promise<IteratorResult<unknown, unknown>> {
