@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.80.0
+
+### Patch Changes
+
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+  - @fuel-ts/abi-coder@0.80.0
+  - @fuel-ts/transactions@0.80.0
+  - @fuel-ts/program@0.80.0
+  - @fuel-ts/account@0.80.0
+  - @fuel-ts/errors@0.80.0
+  - @fuel-ts/abi-typegen@0.80.0
+  - @fuel-ts/address@0.80.0
+  - @fuel-ts/math@0.80.0
+  - @fuel-ts/utils@0.80.0
+  - @fuel-ts/interfaces@0.80.0
+
 ## 0.79.0
 
 ### Patch Changes
