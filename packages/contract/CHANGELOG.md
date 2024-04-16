@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.80.0
+
+### Minor Changes
+
+- 29d5303: chore: remove redundant error codes
+
+### Patch Changes
+
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+  - @fuel-ts/abi-coder@0.80.0
+  - @fuel-ts/transactions@0.80.0
+  - @fuel-ts/program@0.80.0
+  - @fuel-ts/account@0.80.0
+  - @fuel-ts/errors@0.80.0
+  - @fuel-ts/address@0.80.0
+  - @fuel-ts/crypto@0.80.0
+  - @fuel-ts/utils@0.80.0
+  - @fuel-ts/hasher@0.80.0
+  - @fuel-ts/merkle@0.80.0
+  - @fuel-ts/interfaces@0.80.0
+  - @fuel-ts/versions@0.80.0
+
 ## 0.79.0
 
 ### Patch Changes

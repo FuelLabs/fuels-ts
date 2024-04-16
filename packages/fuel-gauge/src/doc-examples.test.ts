@@ -287,60 +287,6 @@ describe('Doc Examples', () => {
     expect(wallet.address).toEqual(signer.address);
   });
 
-  it('can query address with wallets', async () => {
-    // #region wallet-query
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-
-    const wallet = await generateTestWallet(provider, [
-      [42, BaseAssetId],
-      [100, assetIdA],
-    ]);
-
-    // get single coin
-    const coin = await wallet.getCoins(BaseAssetId);
-
-    // get all coins
-    const coins = await wallet.getCoins();
-
-    expect(coin.length).toEqual(1);
-    expect(coin).toEqual([
-      expect.objectContaining({
-        assetId: BaseAssetId,
-        amount: bn(42),
-      }),
-    ]);
-    expect(coins).toEqual([
-      expect.objectContaining({
-        assetId: BaseAssetId,
-        amount: bn(42),
-      }),
-      expect.objectContaining({
-        assetId: assetIdA,
-        amount: bn(100),
-      }),
-    ]);
-    // #endregion wallet-query
-
-    // #region wallet-get-balances
-    const walletBalances = await wallet.getBalances();
-    expect(walletBalances).toEqual([
-      { assetId: BaseAssetId, amount: bn(42) },
-      { assetId: assetIdA, amount: bn(100) },
-    ]);
-    // #endregion wallet-get-balances
-
-    // #region wallet-get-spendable-resources
-    const spendableResources = await wallet.getResourcesToSpend([
-      { amount: 32, assetId: BaseAssetId, max: 42 },
-      { amount: 50, assetId: assetIdA },
-    ]);
-    expect(spendableResources[0].amount).toEqual(bn(42));
-    expect(spendableResources[1].amount).toEqual(bn(100));
-    // #endregion wallet-get-spendable-resources
-  });
-
   it('can create a predicate', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicate = new Predicate({

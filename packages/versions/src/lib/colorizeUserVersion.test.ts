@@ -1,4 +1,4 @@
-import { cyan, red, green } from 'chalk';
+import chalk from 'chalk';
 
 import { colorizeUserVersion } from './colorizeUserVersion';
 
@@ -30,8 +30,8 @@ describe('colorizeUserVersion.js', () => {
       isOk: false,
     });
 
-    expect(newerVersion).toEqual(cyan(version));
-    expect(exactVersion).toEqual(green(version));
-    expect(olderVersion).toEqual(red(version));
+    expect(newerVersion).toEqual(chalk.cyan(version));
+    expect(exactVersion).toEqual(chalk.green(version));
+    expect(olderVersion).toEqual(chalk.red(version));
   });
 });
