@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- b4cbd53: feat!: support `v1` encoding in program types
+- 29d5303: feat!: support `v1` encoding in program types
 
 ## 0.79.0
 

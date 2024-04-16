@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- Updated dependencies [0be814e]
+- Updated dependencies [29d5303]
   - @fuel-ts/errors@0.80.0
   - @fuel-ts/crypto@0.80.0
   - @fuel-ts/utils@0.80.0

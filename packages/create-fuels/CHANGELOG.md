@@ -4,12 +4,12 @@
 
 ### Minor Changes
 
-- 95dac31: fix: user resolvable errors no longer cause the cli to exit
+- 29d5303: fix: user resolvable errors no longer cause the cli to exit
 
 ### Patch Changes
 
-- 4b0d44e: fix: remove unused dependency `fuels` from the `create-fuels` package
-- 0cda64a: feat: hide unnecessary logs and add loading spinners for `create-fuels`
+- 29d5303: fix: remove unused dependency `fuels` from the `create-fuels` package
+- 29d5303: feat: hide unnecessary logs and add loading spinners for `create-fuels`
 
 ## 0.79.0
 

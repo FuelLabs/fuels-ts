@@ -4,20 +4,20 @@
 
 ### Minor Changes
 
-- e995aab: chore!: enhance TX error handling and message formatting
-- 498cffe: fix!: fee estimation for multicall
-- 155b6f2: chore: removed `predicateDataBytes` from the `Predicate` class
-- 6da02a5: docs: upgrade testnet documentation
+- 29d5303: chore!: enhance TX error handling and message formatting
+- 29d5303: fix!: fee estimation for multicall
+- 29d5303: chore: removed `predicateDataBytes` from the `Predicate` class
+- 29d5303: docs: upgrade testnet documentation
 
 ### Patch Changes
 
-- Updated dependencies [b51dc5e]
-- Updated dependencies [2c605a5]
-- Updated dependencies [5964a8d]
-- Updated dependencies [b4cbd53]
-- Updated dependencies [e995aab]
-- Updated dependencies [0be814e]
-- Updated dependencies [3dfeafb]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
   - @fuel-ts/abi-coder@0.80.0
   - @fuel-ts/transactions@0.80.0
   - @fuel-ts/errors@0.80.0

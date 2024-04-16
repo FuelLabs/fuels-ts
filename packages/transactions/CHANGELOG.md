@@ -4,16 +4,16 @@
 
 ### Minor Changes
 
-- 2c605a5: docs!: fix wrong info at variable outputs page
-- e995aab: chore!: enhance TX error handling and message formatting
+- 29d5303: docs!: fix wrong info at variable outputs page
+- 29d5303: chore!: enhance TX error handling and message formatting
 
 ### Patch Changes
 
-- Updated dependencies [b51dc5e]
-- Updated dependencies [5964a8d]
-- Updated dependencies [b4cbd53]
-- Updated dependencies [0be814e]
-- Updated dependencies [3dfeafb]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
   - @fuel-ts/abi-coder@0.80.0
   - @fuel-ts/errors@0.80.0
   - @fuel-ts/address@0.80.0
