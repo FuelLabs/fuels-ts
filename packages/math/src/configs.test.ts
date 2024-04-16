@@ -2,13 +2,10 @@ import {
   DEFAULT_DECIMAL_UNITS,
   DEFAULT_PRECISION,
   DEFAULT_MIN_PRECISION,
-  DECIMAL_ETHER,
-  DECIMAL_FINNEY,
   DECIMAL_FUEL,
   DECIMAL_GWEI,
   DECIMAL_KWEI,
   DECIMAL_MWEI,
-  DECIMAL_SZADO,
   DECIMAL_WEI,
 } from './configs';
 
@@ -27,12 +24,9 @@ describe('configs', () => {
     expect(DECIMAL_FUEL).toEqual(9);
 
     // Ether units
-    expect(DECIMAL_WEI).toEqual(0);
-    expect(DECIMAL_KWEI).toEqual(3);
-    expect(DECIMAL_MWEI).toEqual(6);
+    expect(DECIMAL_WEI).toEqual(18);
+    expect(DECIMAL_KWEI).toEqual(15);
+    expect(DECIMAL_MWEI).toEqual(12);
     expect(DECIMAL_GWEI).toEqual(9);
-    expect(DECIMAL_SZADO).toEqual(12);
-    expect(DECIMAL_FINNEY).toEqual(15);
-    expect(DECIMAL_ETHER).toEqual(18);
   });
 });
