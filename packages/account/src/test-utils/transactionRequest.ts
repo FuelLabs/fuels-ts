@@ -1,9 +1,10 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { getRandomB256 } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
-import { hexlify, randomBytes } from 'ethers';
+import { hexlify } from '@fuel-ts/utils';
 
 import type {
   CoinTransactionRequestInput,
