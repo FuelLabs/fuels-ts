@@ -1,15 +1,11 @@
 {
   "versionGroups": [
     {
-      "label": "Use workspace protocol when developing local packages",
+      "label": "Ignore local dependencies",
       "dependencies": [
         "$LOCAL"
       ],
-      "dependencyTypes": [
-        "dev",
-        "prod"
-      ],
-      "pinVersion": "workspace:*"
+      "isIgnored": true
     }
   ]
 }

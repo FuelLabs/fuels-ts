@@ -55,7 +55,7 @@
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "commander": "^9.4.1",
-    "glob": "^10.2.6",
+    "glob": "^10.3.12",
     "handlebars": "^4.7.7",
     "mkdirp": "^1.0.4",
     "ramda": "^0.29.0",

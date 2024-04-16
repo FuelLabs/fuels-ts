@@ -64,7 +64,7 @@
     "chokidar": "^3.5.3",
     "commander": "^9.4.1",
     "esbuild": "^0.19.3",
-    "glob": "^10.2.6",
+    "glob": "^10.3.12",
     "handlebars": "^4.7.7",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
@@ -77,7 +77,7 @@
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
     "@types/rimraf": "^3.0.2",
-    "vite": "^4.3.9"
+    "vite": "^5.2.9"
   },
   "keywords": [
     "ethereum",
