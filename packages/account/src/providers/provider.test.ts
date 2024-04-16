@@ -1263,7 +1263,6 @@ describe('Provider', () => {
         data: {
           submitAndAwait: {
             type: 'SubmittedStatus',
-            time: '4611686020140076244',
           },
         },
       });
@@ -1271,7 +1270,6 @@ describe('Provider', () => {
         data: {
           submitAndAwait: {
             type: 'SuccessStatus',
-            time: '4611686020140076244',
           },
         },
       });
@@ -1282,11 +1280,14 @@ describe('Provider', () => {
           new ReadableStream({
             start: (controller) => {
               controller.enqueue(encoder.encode(`data:${event1.slice(0, 25)}`));
-              controller.enqueue(
-                encoder.encode(`${event1.slice(25)}\n\ndata:${event2.slice(0, 25)}`)
-              );
               controller.enqueue(encoder.encode(':keep-alive-text\n\n'));
-              controller.enqueue(encoder.encode(`${event2.slice(25)}\n\n`));
+
+              controller.enqueue(
+                encoder.encode(
+                  `${event1.slice(25)}\n\ndata:${event2.slice(0, 30)}:keep-alive-text\n\n`
+                )
+              );
+              controller.enqueue(encoder.encode(`${event2.slice(30)}\n\n`));
               controller.close();
             },
           })
@@ -1303,11 +1304,9 @@ describe('Provider', () => {
 
       if (numberOfEvents === 1) {
         expect(submitAndAwait.type).toEqual('SubmittedStatus');
-        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
       }
       if (numberOfEvents === 2) {
         expect(submitAndAwait.type).toEqual('SuccessStatus');
-        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
       }
     }
 

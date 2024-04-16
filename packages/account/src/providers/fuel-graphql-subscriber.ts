@@ -60,7 +60,6 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         return { value, done };
       }
 
-      const decoded = FuelGraphqlSubscriber.textDecoder.decode(value);
       /**
        * We don't care about keep-alive messages.
        * The only responses that I came across from the node are either 200 responses with "data:.*" or keep-alive messages.
@@ -69,12 +68,16 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
        * To get the actual latest info you need to check out the master branch (might change):
        * https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
        * */
-      if (decoded === ':keep-alive-text\n\n') {
+      const decoded = FuelGraphqlSubscriber.textDecoder
+        .decode(value)
+        .replace(':keep-alive-text\n\n', '');
+
+      if (decoded === '') {
         // eslint-disable-next-line no-continue
         continue;
       }
-      const text = `${this.parsingLeftover}${decoded}`;
 
+      const text = `${this.parsingLeftover}${decoded}`;
       const regex = /data:.*\n\n/g;
 
       const matches = [...text.matchAll(regex)].flatMap((match) => match);
