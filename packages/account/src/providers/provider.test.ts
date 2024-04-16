@@ -1035,7 +1035,7 @@ describe('Provider', () => {
     await Promise.all(promises);
   });
 
-  it('should not throw if the subscription stream data string contains more than one "data:"', async () => {
+  it('subscriptions: does not throw when stream contains more than one "data:"', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -1068,6 +1068,250 @@ describe('Provider', () => {
       expect(submitAndAwait.type).toEqual('SuccessStatus');
       expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
     }
+  });
+
+  test('subscriptions: ignores keep-alive messages', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    const readableStream = new ReadableStream({
+      start(controller) {
+        const encoder = new TextEncoder();
+
+        controller.enqueue(
+          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 0 } } })}\n\n`)
+        );
+        controller.enqueue(encoder.encode(':keep-alive-text\n\n'));
+        controller.enqueue(
+          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 1 } } })}\n\n`)
+        );
+        controller.close();
+      },
+    });
+    fetchSpy.mockImplementationOnce(() => Promise.resolve(new Response(readableStream)));
+
+    let numberOfEvents = 0;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      numberOfEvents += 1;
+    }
+
+    expect(numberOfEvents).toEqual(2);
+  });
+
+  it('subscriptions: does not throw when stream has two events in the same chunk', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const event1 = {
+        data: {
+          submitAndAwait: {
+            type: 'SubmittedStatus',
+            time: '4611686020140076244',
+          },
+        },
+      };
+      const event2 = {
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+            time: '4611686020140076244',
+          },
+        },
+      };
+      const encoder = new TextEncoder();
+      const streamedResponse = new Uint8Array([
+        ...encoder.encode(`data:${JSON.stringify(event1)}\n\n`),
+        ...encoder.encode(`data:${JSON.stringify(event2)}\n\n`),
+      ]);
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamedResponse);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    let numberOfEvents = 0;
+
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      numberOfEvents += 1;
+
+      if (numberOfEvents === 1) {
+        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
+      }
+      if (numberOfEvents === 2) {
+        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
+      }
+    }
+
+    expect(numberOfEvents).toEqual(2);
+  });
+  it('subscriptions: does not throw when an event is streamed in multiple chunks', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const responseObject = JSON.stringify({
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+            time: '4611686020137152060',
+          },
+        },
+      });
+
+      const encoder = new TextEncoder();
+
+      const chunk1 = encoder.encode(`data:${responseObject.slice(0, 10)}`);
+      const chunk2 = encoder.encode(`${responseObject.slice(10, 20)}`);
+      const chunk3 = encoder.encode(`${responseObject.slice(20)}\n\n`);
+
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(chunk1);
+              controller.enqueue(chunk2);
+              controller.enqueue(chunk3);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020137152060');
+    }
+  });
+
+  it('subscriptions: does not throw when chunk has a full and partial event in it', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const event1 = {
+        data: {
+          submitAndAwait: {
+            type: 'SubmittedStatus',
+          },
+        },
+      };
+      const event2 = JSON.stringify({
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+          },
+        },
+      });
+
+      const encoder = new TextEncoder();
+      const chunk1 = new Uint8Array([
+        ...encoder.encode(`data:${JSON.stringify(event1)}\n\n`),
+        ...encoder.encode(`data:${event2.slice(0, 25)}`),
+      ]);
+      const chunk2 = encoder.encode(`${event2.slice(25)}\n\n`);
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(chunk1);
+              controller.enqueue(chunk2);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    let numberOfEvents = 0;
+
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      numberOfEvents += 1;
+
+      if (numberOfEvents === 1) {
+        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+      }
+      if (numberOfEvents === 2) {
+        expect(submitAndAwait.type).toEqual('SuccessStatus');
+      }
+    }
+
+    expect(numberOfEvents).toEqual(2);
+  });
+
+  it('subscriptions: does not throw when multiple chunks contain multiple events with a keep-alive message in-between', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const event1 = JSON.stringify({
+        data: {
+          submitAndAwait: {
+            type: 'SubmittedStatus',
+            time: '4611686020140076244',
+          },
+        },
+      });
+      const event2 = JSON.stringify({
+        data: {
+          submitAndAwait: {
+            type: 'SuccessStatus',
+            time: '4611686020140076244',
+          },
+        },
+      });
+
+      const encoder = new TextEncoder();
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(encoder.encode(`data:${event1.slice(0, 25)}`));
+              controller.enqueue(
+                encoder.encode(`${event1.slice(25)}\n\ndata:${event2.slice(0, 25)}`)
+              );
+              controller.enqueue(encoder.encode(':keep-alive-text\n\n'));
+              controller.enqueue(encoder.encode(`${event2.slice(25)}\n\n`));
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    let numberOfEvents = 0;
+
+    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+      encodedTransaction: "it's mocked so doesn't matter",
+    })) {
+      numberOfEvents += 1;
+
+      if (numberOfEvents === 1) {
+        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
+      }
+      if (numberOfEvents === 2) {
+        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
+      }
+    }
+
+    expect(numberOfEvents).toEqual(2);
   });
 
   it('should throw if the subscription stream data string parsing fails for some reason', async () => {
