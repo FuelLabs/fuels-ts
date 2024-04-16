@@ -1,9 +1,11 @@
 import { BN, WalletLocked, WalletUnlocked } from 'fuels';
 
+// #region deploying-dapp-to-testnet-lib-current-environment
 type DappEnvironment = 'local' | 'testnet';
 
 export const CURRENT_ENVIRONMENT: DappEnvironment =
   (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as DappEnvironment) || 'local';
+// #endregion deploying-dapp-to-testnet-lib-current-environment
 
 export const NODE_URL =
   CURRENT_ENVIRONMENT === 'local'

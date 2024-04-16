@@ -51,22 +51,13 @@ Let's now prepare our frontend so that we can deploy it to the cloud.
 
 Go to your `src/pages/index.tsx` file and replace the hardcoded contract ID with the one you copied earlier:
 
-```tsx
-const contractId =
-  CURRENT_ENVIRONMENT === "local"
-    ? contractIds.testContract
-    : // Replace the below string with the contract ID you copied earlier
-      "0x7d0e267018076a977b47327286b8a3d98b18950354606bb74492b40a2fd897f3";
-```
+<<< @/../../create-fuels-counter-guide/src/pages/index.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
 
 You will notice that this piece of code is getting the contract ID depending on the current environment. If the environment is `local`, it will use the contract ID from the auto-generated `contract-ids.json` file. Otherwise, for a testnet deployment, it will use the contract ID provided by you.
 
 The `CURRENT_ENVIRONMENT` variable is defined in the `lib.ts` file:
 
-```ts
-export const CURRENT_ENVIRONMENT: DappEnvironment =
-  process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT;
-```
+<<< @/../../create-fuels-counter-guide/src/lib.ts#deploying-dapp-to-testnet-lib-current-environment{ts:line-numbers}
 
 As you can see, it depends on the `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable. If you go to your `.env.local` file, you will see that it is set to `local` by default. If you change this value to `testnet`, the frontend will now be connected to the testnet instead of your local node.
 
