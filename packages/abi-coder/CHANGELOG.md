@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.80.0
+
+### Minor Changes
+
+- 29d5303: feat!: deprecate multiple encoding version support for configurable constants
+- 29d5303: feat!: support `v1` encoding in program types
+- 29d5303: chore: remove redundant error codes
+- 29d5303: chore: helper functions for common JsonAbi features
+
+### Patch Changes
+
+- 29d5303: feat: accept `Uint8Array`s as inputs for `Vec`s, add docs for bytecode inputs
+- Updated dependencies [29d5303]
+  - @fuel-ts/errors@0.80.0
+  - @fuel-ts/crypto@0.80.0
+  - @fuel-ts/math@0.80.0
+  - @fuel-ts/utils@0.80.0
+  - @fuel-ts/hasher@0.80.0
+  - @fuel-ts/interfaces@0.80.0
+  - @fuel-ts/versions@0.80.0
+
 ## 0.79.0
 
 ### Minor Changes
