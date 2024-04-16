@@ -17,6 +17,10 @@ import {
   isRequestInputResourceFromOwner,
 } from './helpers';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe(__filename, () => {
   const coinInput = generateFakeRequestInputCoin();
   const messageInput = generateFakeRequestInputMessage();
