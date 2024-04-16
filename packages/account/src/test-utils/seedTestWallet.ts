@@ -5,10 +5,16 @@ import { coinQuantityfy, ScriptTransactionRequest } from '../providers';
 import type { CoinQuantityLike } from '../providers';
 import { WalletUnlocked } from '../wallet';
 
-export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLike[]) => {
+export const seedTestWallet = async (
+  wallet: Account | Account[],
+  quantities: CoinQuantityLike[],
+  utxosAmount = 1
+) => {
+  const toFundAccounts = Array.isArray(wallet) ? wallet : [wallet];
+
   const genesisWallet = new WalletUnlocked(
     process.env.GENESIS_SECRET || randomBytes(32),
-    wallet.provider
+    toFundAccounts[0].provider
   );
 
   // Connect to the same Provider as wallet
@@ -24,8 +30,13 @@ export const seedTestWallet = async (wallet: Account, quantities: CoinQuantityLi
 
   request.addResources(resources);
 
-  quantities
-    .map(coinQuantityfy)
-    .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
+  quantities.map(coinQuantityfy).forEach(({ amount, assetId }) =>
+    toFundAccounts.forEach(({ address }) => {
+      for (let i = 0; i < utxosAmount; i++) {
+        request.addCoinOutput(address, amount.div(utxosAmount), assetId);
+      }
+    })
+  );
+
   await genesisWallet.sendTransaction(request, { awaitExecution: true });
 };
