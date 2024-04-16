@@ -44,6 +44,8 @@ export enum FuelGaugeProjectsEnum {
   SCRIPT_MAIN_TWO_ARGS = 'script-main-two-args',
   SCRIPT_STD_LIB_STRING = 'script-std-lib-string',
   SCRIPT_WITH_CONFIGURABLE = 'script-with-configurable',
+  REENTRANT_FOO = 'reentrant-foo',
+  REENTRANT_BAR = 'reentrant-bar',
   SCRIPT_WITH_ARRAY = 'script-with-array',
   SCRIPT_WITH_VECTOR = 'script-with-vector',
   SCRIPT_WITH_VECTOR_ADVANCED = 'script-with-vector-advanced',
