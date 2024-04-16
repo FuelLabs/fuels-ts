@@ -1,11 +1,5 @@
 # Change Log
 
-## 0.80.0
-
-### Minor Changes
-
-- b4cbd53: feat!: support `v1` encoding in program types
-
 ## 0.79.0
 
 ### Minor Changes
