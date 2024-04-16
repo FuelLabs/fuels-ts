@@ -35,8 +35,9 @@ describe('Reentrant Contract Calls', () => {
      * Bar contract, then the Bar contract within bar function will call the Foo contract again
      * but this time the baz function wich will return 1337. At this point the foo function (original
      * called function) will continue its execution and return 42. Because 2 functions from Foo
-     * contract were called, 2 Return receipts are generated with the same contract ID. The SDK
-     * should return the value from the last one, which is the returned value from the foo function.
+     * contract were called and both of them return values, 2 Return receipts are generated with
+     * the same contract ID. The SDK should return the value from the last one, which is the
+     * returned value from the foo function.
      */
     expect(value.toNumber()).toBe(42);
     expect(returnReceipts.length).toBe(2);
