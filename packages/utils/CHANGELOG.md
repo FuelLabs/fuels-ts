@@ -1,5 +1,13 @@
 # @fuel-ts/utils
 
+## 0.80.0
+
+### Patch Changes
+
+- Updated dependencies [29d5303]
+  - @fuel-ts/errors@0.80.0
+  - @fuel-ts/interfaces@0.80.0
+
 ## 0.79.0
 
 ### Patch Changes
