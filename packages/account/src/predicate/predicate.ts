@@ -11,12 +11,17 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
+import { ByteArrayCoder } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
 import type { TxParamsType } from '../account';
-import { transactionRequestify, BaseTransactionRequest } from '../providers';
+import {
+  transactionRequestify,
+  BaseTransactionRequest,
+  isRequestInputResource,
+  isRequestInputResourceFromOwner,
+} from '../providers';
 import type {
   CallResult,
   CoinQuantityLike,
@@ -25,7 +30,6 @@ import type {
   ProviderSendTxParams,
   Resource,
   TransactionRequest,
-  TransactionRequestInput,
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
@@ -85,25 +89,25 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns The transaction request with predicate data.
    */
-  populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
-    const request = transactionRequestify(transactionRequestLike);
+  populateTransactionPredicateData<T extends TransactionRequest>(
+    transactionRequestLike: TransactionRequestLike
+  ) {
+    const request = transactionRequestify(transactionRequestLike) as T;
 
     const { policies } = BaseTransactionRequest.getPolicyMeta(request);
 
-    request.inputs?.forEach((input: TransactionRequestInput) => {
-      if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
+    const placeholderIndex = this.getIndexFromPlaceholderWitness(request);
+
+    if (placeholderIndex !== -1) {
+      request.removeWitness(placeholderIndex);
+    }
+
+    request.inputs.filter(isRequestInputResource).forEach((input) => {
+      if (isRequestInputResourceFromOwner(input, this.address)) {
         // eslint-disable-next-line no-param-reassign
         input.predicate = this.bytes;
         // eslint-disable-next-line no-param-reassign
         input.predicateData = this.getPredicateData(policies.length);
-
-        /**
-         * Not sure if this is needed. The only scenario that this could help is if
-         * the user has fetched the predicate resources using the provider `getResourcesToSpend` method,
-         * as the method will not populate the predicate property and the resources are going to be added
-         * as common resources. We should enforce users to always fetch resources using the predicate instance,
-         * as they will need it to populate the predicate data anyway using this method.
-         */
         // eslint-disable-next-line no-param-reassign
         input.witnessIndex = 0;
       }
@@ -286,5 +290,38 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     }
 
     return mutatedBytes;
+  }
+
+  private getIndexFromPlaceholderWitness(request: TransactionRequest): number {
+    const predicateInputs = request.inputs
+      .filter(isRequestInputResource)
+      .filter((input) => isRequestInputResourceFromOwner(input, this.address));
+
+    let index = -1;
+
+    const hasEmptyPredicateInputs = predicateInputs.find((input) => !input.predicate);
+
+    if (hasEmptyPredicateInputs) {
+      index = hasEmptyPredicateInputs.witnessIndex;
+
+      const allInputsAreEmpty = predicateInputs.every((input) => !input.predicate);
+
+      if (!allInputsAreEmpty) {
+        /**
+         * If at least one resource was added as predicate resource, we need to check if it was the
+         * first one. If that is the case, we don't need to remove the witness placeholder
+         * as this was added with the "witnessIndex" as 0 and without a placeholder witness. Later if
+         * any resource without predicate is added, it will have the same witnessIndex because it has the
+         * same owner.
+         */
+        const wasFilledInputAddedFirst = !!predicateInputs[0]?.predicate;
+
+        if (wasFilledInputAddedFirst) {
+          index = -1;
+        }
+      }
+    }
+
+    return index;
   }
 }
