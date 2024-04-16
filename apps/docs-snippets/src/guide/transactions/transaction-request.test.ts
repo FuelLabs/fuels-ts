@@ -1,3 +1,4 @@
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, Coin, Resource } from 'fuels';
 import {
   CreateTransactionRequest,
@@ -54,6 +55,15 @@ describe('Transaction Request', () => {
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const predicate = new Predicate({
+      bytecode: predicateBytecode,
+      abi: predicateAbi,
+      inputData: [ZeroBytes32],
+      provider,
+    });
+
+    await seedTestWallet(predicate, [[10_000]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
@@ -131,7 +141,7 @@ describe('Transaction Request', () => {
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
-  it('adds a predicate to a transaction request', () => {
+  it('adds a predicate to a transaction request', async () => {
     const dataToValidatePredicate = [ZeroBytes32];
 
     // #region transaction-request-5
@@ -149,11 +159,13 @@ describe('Transaction Request', () => {
       provider,
     });
 
+    const coins = await predicate.getResourcesToSpend([[2000, BaseAssetId]]);
+
     // Add the predicate input and resources
-    transactionRequest.addPredicateResource(coin, predicate);
+    transactionRequest.addResources(coins);
     // #endregion transaction-request-5
 
-    expect(transactionRequest.inputs.length).toEqual(1);
+    expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
