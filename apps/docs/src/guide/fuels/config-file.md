@@ -166,3 +166,25 @@ If `system` binaries are absent, print a warning and use `built-in` ones instead
 Check also:
 
 - [Built-in Binaries](./binaries.md)
+
+## Loading environment variables
+
+If you want to load environment variables from a `.env` file, you can use the `dotenv` package.
+
+First, install it:
+
+::: code-group
+
+```sh [pnpm]
+pnpm install dotenv
+```
+
+```sh [npm]
+npm install dotenv
+```
+
+:::
+
+Then, you can use it in your `fuels.config.ts` file:
+
+<<< @../../../create-fuels-counter-guide/fuels.config.ts#fuels-config-file-env{ts:line-numbers}
