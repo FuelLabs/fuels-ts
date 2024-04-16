@@ -1314,10 +1314,10 @@ describe('Provider', () => {
     expect(numberOfEvents).toEqual(2);
   });
 
-  it('should throw if the subscription stream data string parsing fails for some reason', async () => {
+  it('subscriptions: throws if the stream data string parsing fails for some reason', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const badResponse = 'data: whatever';
+    const badResponse = 'data: {f: {}\n\n';
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const streamResponse = new TextEncoder().encode(badResponse);
       return Promise.resolve(
