@@ -1,4 +1,4 @@
-import { BN, DECIMAL_ETHER, bn } from 'fuels';
+import { BN, DECIMAL_GWEI, DECIMAL_KWEI, bn } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -86,14 +86,14 @@ describe('unit-conversion', () => {
       expect(result).toEqual(expected);
     })
 
-    it('should parse different units', () => {
-      const expected = "1000000000000000000";
+    it('should parse one gwei', () => {
+      const expected = "1000000000";
 
       // #region parse-units-4
-      // #import { bn, DECIMAL_ETHER };
+      // #import { bn, DECIMAL_GWEI };
 
-      const result = bn.parseUnits('1', DECIMAL_ETHER).toString();
-      // "1000000000000000000"
+      const result = bn.parseUnits('1', DECIMAL_GWEI).toString();
+      // "1000000000"
       // #endregion parse-units-4
 
       expect(result).toEqual(expected);
@@ -114,15 +114,15 @@ describe('unit-conversion', () => {
       expect(result).toEqual(expected);
     })
 
-    it('should format two Ether (BN) into Ether units', () => {
+    it('should format two Gwei (BN) into Gwei units', () => {
       const expected = "2.000";
 
       // #region format-2
-      // #import { bn, DECIMAL_ETHER };
+      // #import { bn, DECIMAL_GWEI };
 
-      const oneEther = bn('2000000000000000000');
+      const twoGwei = bn('2000000000');
 
-      const result = oneEther.format({ units: DECIMAL_ETHER });
+      const result = twoGwei.format({ units: DECIMAL_GWEI });
       // "2.000"
       // #endregion format-2
 
@@ -157,16 +157,16 @@ describe('unit-conversion', () => {
       expect(result).toEqual(expected);
     })
 
-    it('should format units of one ether', () => {
-      const expected = '1.000000000000000000'; 
+    it('should format units of one kwei', () => {
+      const expected = '1.000000000000000'; 
 
       // #region format-units-2
-      // #import { bn, DECIMAL_ETHER };
+      // #import { bn, DECIMAL_KWEI };
 
-      const oneEther = bn('1000000000000000000');
+      const oneKwei = bn('1000000000000000');
 
-      const result = oneEther.formatUnits(DECIMAL_ETHER);
-      // "1.000000000000000000"
+      const result = oneKwei.formatUnits(DECIMAL_KWEI);
+      // "1.000000000000000"
       // #endregion format-units-2
 
       expect(result).toEqual(expected);
