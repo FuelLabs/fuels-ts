@@ -39,8 +39,7 @@ This method returns all the blocks from the blockchain that match the given quer
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
 
-<!-- TODO: fix these examples to not reference hardcoded values after #1356 which introduces message generation tools --->
-
+<!-- TODO: fix these examples to not reference hardcoded values after #1356 which introduces message generation tools
 ### Get messages
 
 You can use the `getMessages` method to retrieve a list of messages from the blockchain.
@@ -58,5 +57,7 @@ You can use the `getResourcesToSpend` method to retrieve a list of all the resou
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof{ts:line-numbers}
+
+--->
 
 <!-- TODO: Add docs for the two new parameters `commitBlockId` and `commitBlockHeight` -->
