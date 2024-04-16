@@ -1,0 +1,7 @@
+[project]
+entry = "main.sw"
+license = "Apache-2.0"
+name = "bar"
+
+[dependencies]
+foobar_abi = { path = "../foobar_abi" }
