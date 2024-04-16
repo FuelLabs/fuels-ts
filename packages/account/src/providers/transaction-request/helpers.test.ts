@@ -21,7 +21,7 @@ import {
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('helpers', () => {
   const coinInput = generateFakeRequestInputCoin();
   const messageInput = generateFakeRequestInputMessage();
   const contractInput = generateFakeRequestInputContract();
