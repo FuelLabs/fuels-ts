@@ -98,7 +98,6 @@ For this interaction to work, the SDK must be able to communicate with a [`fuel-
 1. Connecting to the [Testnet](#connecting-to-the-testnet). (For application building)
 2. Running a [local node](https://docs.fuel.network/guides/running-a-node/). (For smart contract testing)
 
-
 ### Connecting to the Testnet
 
 The **Testnet** is a public network that allows you to interact with a Fuel Virtual Machine and is used for testing and development purposes.
@@ -116,7 +115,7 @@ We have some useful resources for the Testnet:
 
 ---
 
-In the example below, we connect a [Provider](../providers/index.md) to the latest testnet and create a new wallet from a private key.
+In the example below, we connect a [Provider](../provider/index.md) to the latest testnet and create a new wallet from a private key.
 
 > **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-beta-5.fuel.network/) to fund your wallet.
 

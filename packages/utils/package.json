@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/utils",
-  "version": "0.79.0",
+  "version": "0.80.0",
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -47,9 +47,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "ramda": "^0.29.0",
-    "rimraf": "^3.0.2"
+    "@fuel-ts/interfaces": "workspace:*"
   }
 }
