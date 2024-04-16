@@ -14,7 +14,7 @@ import { CURRENT_ENVIRONMENT } from "@/lib";
 const contractId =
   CURRENT_ENVIRONMENT === "local"
     ? contractIds.testContract
-    : "0x7d0e267018076a977b47327286b8a3d98b18950354606bb74492b40a2fd897f3";
+    : "0x7d0e267018076a977b47327286b8a3d98b18950354606bb74492b40a2fd897f3"; // Testnet Contract ID
 
 const hasContract = process.env.NEXT_PUBLIC_HAS_CONTRACT === "true";
 const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
