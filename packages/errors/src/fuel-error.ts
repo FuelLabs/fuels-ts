@@ -36,7 +36,7 @@ export class FuelError extends Error {
     super(message);
     this.code = code;
     this.name = 'FuelError';
-    this.metadata = metadata;
+    this.metadata = {};
   }
 
   toObject() {
