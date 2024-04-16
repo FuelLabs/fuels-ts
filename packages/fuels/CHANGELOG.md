@@ -1,45 +1,5 @@
 # Change Log
 
-## 0.80.0
-
-### Minor Changes
-
-- e995aab: chore!: enhance TX error handling and message formatting
-
-### Patch Changes
-
-- fb941a9: chore: handling `EADDRNOTAVAIL` errors on top of `ECONNREFUSED`
-- 40622a5: fix: properly load env vars in `create-fuels` template, and add docs for fuels CLI
-- Updated dependencies [b51dc5e]
-- Updated dependencies [2c605a5]
-- Updated dependencies [3e60d34]
-- Updated dependencies [5964a8d]
-- Updated dependencies [b4cbd53]
-- Updated dependencies [e995aab]
-- Updated dependencies [498cffe]
-- Updated dependencies [0be814e]
-- Updated dependencies [155b6f2]
-- Updated dependencies [3dfeafb]
-- Updated dependencies [6da02a5]
-  - @fuel-ts/abi-coder@0.80.0
-  - @fuel-ts/transactions@0.80.0
-  - @fuel-ts/program@0.80.0
-  - @fuel-ts/forc@0.80.0
-  - @fuel-ts/account@0.80.0
-  - @fuel-ts/contract@0.80.0
-  - @fuel-ts/errors@0.80.0
-  - @fuel-ts/script@0.80.0
-  - @fuel-ts/abi-typegen@0.80.0
-  - @fuel-ts/address@0.80.0
-  - @fuel-ts/crypto@0.80.0
-  - @fuel-ts/math@0.80.0
-  - @fuel-ts/utils@0.80.0
-  - @fuel-ts/hasher@0.80.0
-  - @fuel-ts/merkle@0.80.0
-  - @fuel-ts/fuel-core@0.80.0
-  - @fuel-ts/interfaces@0.80.0
-  - @fuel-ts/versions@0.80.0
-
 ## 0.79.0
 
 ### Patch Changes

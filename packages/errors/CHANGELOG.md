@@ -1,15 +1,5 @@
 # @fuel-ts/errors
 
-## 0.80.0
-
-### Minor Changes
-
-- 0be814e: chore: remove redundant error codes
-
-### Patch Changes
-
-- @fuel-ts/versions@0.80.0
-
 ## 0.79.0
 
 ### Patch Changes
