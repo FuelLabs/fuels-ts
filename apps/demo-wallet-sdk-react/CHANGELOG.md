@@ -4,9 +4,9 @@
 
 ### Patch Changes
 
-- Updated dependencies [fb941a9]
-- Updated dependencies [e995aab]
-- Updated dependencies [40622a5]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
   - fuels@0.80.0
 
 ## 0.1.3

@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 0be814e: chore: remove redundant error codes
+- 29d5303: chore: remove redundant error codes
 
 ### Patch Changes
 
