@@ -76,7 +76,8 @@ describe('Signing transactions', () => {
       provider,
       inputData: [signer.address.toB256()],
     });
-    await sender.transfer(predicate.address, 10_000, BaseAssetId);
+    const tx = await sender.transfer(predicate.address, 10_000, BaseAssetId);
+    await tx.waitForResult();
 
     // Create the transaction request
     const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_000 });
