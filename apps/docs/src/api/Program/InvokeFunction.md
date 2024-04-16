@@ -29,7 +29,7 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[types.ts:68](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L68)
+[types.ts:68](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/program/src/types.ts#L68)
 
 ## Properties
 
@@ -47,4 +47,4 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[types.ts:69](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/program/src/types.ts#L69)
+[types.ts:69](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/program/src/types.ts#L69)

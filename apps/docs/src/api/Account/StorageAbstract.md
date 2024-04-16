@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:66](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/wallet-manager/types.ts#L66)
+[packages/account/src/wallet-manager/types.ts:66](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/types.ts#L66)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/wallet-manager/types.ts#L64)
+[packages/account/src/wallet-manager/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/types.ts#L64)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/wallet-manager/types.ts#L65)
+[packages/account/src/wallet-manager/types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/types.ts#L65)
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:63](https://github.com/FuelLabs/fuels-ts/blob/f4302fbd/packages/account/src/wallet-manager/types.ts#L63)
+[packages/account/src/wallet-manager/types.ts:63](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/types.ts#L63)
