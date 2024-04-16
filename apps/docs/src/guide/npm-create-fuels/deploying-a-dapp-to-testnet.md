@@ -73,7 +73,7 @@ As you can see, it depends on the `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment var
 Go ahead and change the `NEXT_PUBLIC_DAPP_ENVIRONMENT` value to `testnet` in your `.env.local` file.
 If you run your frontend now, you should be able to interact with your contract on the testnet.
 
-To deploy your frontend to the cloud, you can use any service like [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/). Make sure that you setup your environment variables correctly and that your contract ID is correct. Your environment variables should look something like this:
+To deploy your frontend to the cloud, you can use any service like [Vercel](https://vercel.com/). Make sure that you setup your environment variables correctly and that your contract ID is correct. Your environment variables should look something like this:
 
 ```md
 NEXT_PUBLIC_HAS_CONTRACT=true
