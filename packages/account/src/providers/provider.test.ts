@@ -1110,7 +1110,6 @@ describe('Provider', () => {
         data: {
           submitAndAwait: {
             type: 'SubmittedStatus',
-            time: '4611686020140076244',
           },
         },
       };
@@ -1118,7 +1117,6 @@ describe('Provider', () => {
         data: {
           submitAndAwait: {
             type: 'SuccessStatus',
-            time: '4611686020140076244',
           },
         },
       };
@@ -1148,11 +1146,9 @@ describe('Provider', () => {
 
       if (numberOfEvents === 1) {
         expect(submitAndAwait.type).toEqual('SubmittedStatus');
-        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
       }
       if (numberOfEvents === 2) {
         expect(submitAndAwait.type).toEqual('SuccessStatus');
-        expect((<SubmittedStatus>submitAndAwait).time).toEqual('4611686020140076244');
       }
     }
 
@@ -1166,7 +1162,6 @@ describe('Provider', () => {
         data: {
           submitAndAwait: {
             type: 'SuccessStatus',
-            time: '4611686020137152060',
           },
         },
       });
