@@ -28,6 +28,7 @@ import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
+import { isRequestInputResource } from './helpers';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -633,6 +634,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return normalizeJSON(this);
   }
 
+  removeWitness(index: number) {
+    this.witnesses.splice(index, 1);
+    this.adjustWitnessIndexes(index);
+  }
+
   updatePredicateInputs(inputs: TransactionRequestInput[]) {
     this.inputs.forEach((i) => {
       let correspondingInput: TransactionRequestInput | undefined;
@@ -659,6 +665,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         i.predicateData = correspondingInput.predicateData;
         // eslint-disable-next-line no-param-reassign
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
+      }
+    });
+  }
+
+  private adjustWitnessIndexes(removedIndex: number) {
+    this.inputs.filter(isRequestInputResource).forEach((input) => {
+      if (input.witnessIndex > removedIndex) {
+        // eslint-disable-next-line no-param-reassign
+        input.witnessIndex -= 1;
       }
     });
   }
