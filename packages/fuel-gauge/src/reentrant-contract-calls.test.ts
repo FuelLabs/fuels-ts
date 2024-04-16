@@ -7,6 +7,9 @@ import { getFuelGaugeForcProject } from '../test/fixtures';
 const bar = getFuelGaugeForcProject('bar' as FuelGaugeProjectsEnum);
 const foo = getFuelGaugeForcProject('foo' as FuelGaugeProjectsEnum);
 
+/**
+ * @group node
+ */
 describe('Reentrant Contract Calls', () => {
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
