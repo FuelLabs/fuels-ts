@@ -1,6 +1,6 @@
 contract;
 
-use foobar_abi::{Bar, Foo};
+use reentrant_foobar_abi::{Bar, Foo};
 
 impl Foo for Contract {
     fn foo(foo_addr: Address, bar_addr: Address) -> u64 {
