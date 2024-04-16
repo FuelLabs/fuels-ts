@@ -1,4 +1,4 @@
-import { bold, green } from 'chalk';
+import chalk from 'chalk';
 import CliTable from 'cli-table';
 
 import { colorizeUserVersion } from './lib/colorizeUserVersion';
@@ -19,7 +19,7 @@ export function runVersions() {
   const supportedVersions = getBuiltinVersions();
 
   const cliTable = new CliTable({
-    head: ['', bold('Supported'), bold(`Yours / System`)],
+    head: ['', chalk.bold('Supported'), chalk.bold(`Yours / System`)],
   });
 
   const { error: systemError, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
@@ -69,7 +69,7 @@ export function runVersions() {
   }
 
   if (exitCode === 1) {
-    error(`  ${green(fuelUpLink)}`);
+    error(`  ${chalk.green(fuelUpLink)}`);
   }
 
   process.exit(exitCode);
