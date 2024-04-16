@@ -2,18 +2,16 @@ import { createConfig } from 'fuels';
 
 const fuelCorePort = +(process.env.NEXT_PUBLIC_FUEL_NODE_PORT as string) || 4000;
 
+const dappEnvironment = process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT;
+
 const nodeUrl =
-  process.env.NODE_ENV === 'development'
+  dappEnvironment === ('local' || undefined)
     ? `http://127.0.0.1:${fuelCorePort}/graphql`
-    : 'https://beta-5.fuel.networ/graphql';
+    : 'https://beta-5.fuel.network/graphql';
 
 export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-api',
-  /*
-    This is the same value as the port specified in the `.env.local` file.
-    Please keep these values in sync.
-  */
-  fuelCorePort: 4000,
+  fuelCorePort,
   providerUrl: nodeUrl,
 });

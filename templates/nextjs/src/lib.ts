@@ -1,6 +1,9 @@
 import { BN, WalletLocked, WalletUnlocked } from 'fuels';
 
-export const CURRENT_ENVIRONMENT = process.env.NODE_ENV === 'development' ? 'local' : 'testnet';
+type DappEnvironment = 'local' | 'testnet';
+
+export const CURRENT_ENVIRONMENT: DappEnvironment =
+  (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as DappEnvironment) || 'local';
 
 export const NODE_URL =
   CURRENT_ENVIRONMENT === 'local'
