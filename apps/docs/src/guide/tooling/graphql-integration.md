@@ -5,7 +5,7 @@ The Fuel Network provides a [GraphQL API](https://docs.fuel.network/docs/graphql
 ## Operations
 
 For its own purposes, the SDK creates custom operations based off of the API's schema and auto-generates TypeScript client code via codegen tools.
-The end result of this code generation are the operations available on the [`Provider`](../providers/index.md), of which some are shown below:
+The end result of this code generation are the operations available on the [`Provider`](../provider/index.md), of which some are shown below:
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#operations{ts:line-numbers}
 
