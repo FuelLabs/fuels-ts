@@ -1,4 +1,4 @@
 ---
 ---
 
-chore: reverted the doc menu categories
+docs: reverted the doc menu categories
