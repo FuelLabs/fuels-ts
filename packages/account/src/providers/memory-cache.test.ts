@@ -148,11 +148,11 @@ describe('Memory Cache', () => {
   it('should validate that MemoryCache uses a global cache', async () => {
     const oldValue = randomBytes(8);
 
-    const instance1 = new MemoryCache(3_000);
+    const instance1 = new MemoryCache(1000);
     instance1.set(oldValue);
 
     await new Promise((resolve) => {
-      setTimeout(resolve, 1_000);
+      setTimeout(resolve, 200);
     });
 
     const newValue = randomBytes(8);
