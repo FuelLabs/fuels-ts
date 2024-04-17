@@ -25,7 +25,6 @@ export default defineConfig({
   ],
   themeConfig: {
     logo: 'fuel-logo.png',
-
     nav: [
       {
         text: 'Home',
@@ -301,7 +300,6 @@ export default defineConfig({
                 text: 'Bech32',
                 link: '/guide/types/bech32',
               },
-    
               {
                 text: 'Bits256',
                 link: '/guide/types/bits256',
