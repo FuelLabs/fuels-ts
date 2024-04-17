@@ -221,7 +221,8 @@ class HDWallet {
   }
 
   static fromExtendedKey(extendedKey: string) {
-    const decoded = toHex(decodeBase58(extendedKey));
+    let decoded = toHex(decodeBase58(extendedKey));
+    decoded = `${decoded.substring(0, 2)}0${decoded.substring(2)}`;
     const bytes = arrayify(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 

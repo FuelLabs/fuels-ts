@@ -36,5 +36,5 @@ export interface CryptoApi {
     keylen: number,
     algo: 'sha256' | 'sha512'
   ): string;
-  ripemd160(data: BytesLike): string;
+  ripemd160(data: BytesLike): Uint8Array;
 }

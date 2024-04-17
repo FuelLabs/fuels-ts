@@ -810,9 +810,6 @@ importers:
       '@noble/hashes':
         specifier: ^1.3.3
         version: 1.3.3
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
 
   packages/errors:
     dependencies:
@@ -1464,7 +1461,7 @@ packages:
       '@babel/traverse': 7.23.4
       '@babel/types': 7.23.9
       convert-source-map: 2.0.0
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -3507,7 +3504,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.22.5
       '@babel/parser': 7.22.5
       '@babel/types': 7.22.5
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -3524,7 +3521,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.4
       '@babel/types': 7.23.4
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -5130,7 +5127,7 @@ packages:
       '@types/json-stable-stringify': 1.0.34
       '@whatwg-node/fetch': 0.8.8
       chalk: 4.1.2
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
       dotenv: 16.4.5
       graphql: 16.6.0
       graphql-request: 6.1.0(graphql@16.6.0)
@@ -8888,7 +8885,7 @@ packages:
     resolution: {integrity: sha512-o/zjMZRhJxny7OyEF+Op8X+efiELC7k7yOjMzgfzVqOzXqkBkWI79YoTdOtsuWd5BWhAGAuOY/Xa6xpiaWXiNg==}
     engines: {node: '>= 14'}
     dependencies:
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -11112,6 +11109,17 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.3
+
+  /debug@4.3.4:
+    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.2
 
   /debug@4.3.4(supports-color@5.5.0):
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -14168,7 +14176,7 @@ packages:
     engines: {node: '>= 14'}
     dependencies:
       agent-base: 7.1.0
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -14240,7 +14248,7 @@ packages:
     engines: {node: '>= 14'}
     dependencies:
       agent-base: 7.1.0
-      debug: 4.3.4(supports-color@5.5.0)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
     dev: true

@@ -32,7 +32,7 @@ export function encodeBase58(_value: BytesLike): string {
 
   let value = bn(bytes);
   let result = '';
-  while (value) {
+  while (value.gt(BN_0)) {
     result = Alphabet[Number(value.mod(BN_58))] + result;
     value = value.div(BN_58);
   }
