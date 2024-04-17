@@ -144,4 +144,25 @@ describe('Memory Cache', () => {
 
     expect(memCache.getAllData()).containSubset(EXPECTED);
   });
+
+  it('should validate that MemoryCache uses a global cache', async () => {
+    const oldValue = randomBytes(8);
+
+    const instance1 = new MemoryCache(3_000);
+    instance1.set(oldValue);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1_000);
+    });
+
+    const newValue = randomBytes(8);
+
+    const instance2 = new MemoryCache(100);
+    instance2.set(newValue);
+
+    const activeData = instance2.getActiveData();
+
+    expect(activeData).toContain(oldValue);
+    expect(activeData).toContain(newValue);
+  });
 });
