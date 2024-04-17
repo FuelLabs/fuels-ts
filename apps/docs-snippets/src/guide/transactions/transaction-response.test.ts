@@ -1,5 +1,5 @@
 import type { Provider, Contract, WalletUnlocked, BN } from 'fuels';
-import { BaseAssetId, ScriptTransactionRequest, TransactionResponse } from 'fuels';
+import { ScriptTransactionRequest, TransactionResponse } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -13,6 +13,7 @@ import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
 describe('Transaction Response', () => {
   let contract: Contract;
   let provider: Provider;
+  let baseAssetId: string;
   let wallet: WalletUnlocked;
   let gasPrice: BN;
 
@@ -25,6 +26,7 @@ describe('Transaction Response', () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     provider = contract.provider;
     gasPrice = provider.getGasConfig().minGasPrice;
+    baseAssetId = await provider.getBaseAssetId();
   });
 
   it('gets transaction response from contract call', async () => {
@@ -46,7 +48,7 @@ describe('Transaction Response', () => {
 
   it('gets transaction response from transaction request', async () => {
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: BaseAssetId }]);
+    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: baseAssetId }]);
 
     // #region transaction-response-2
     // #import { ScriptTransactionRequest, TransactionResponse };
@@ -56,6 +58,7 @@ describe('Transaction Response', () => {
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
       gasPrice,
+      baseAssetId
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
@@ -74,11 +77,12 @@ describe('Transaction Response', () => {
 
   it('gets transaction response from tx id', async () => {
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: BaseAssetId }]);
+    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: baseAssetId }]);
 
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
       gasPrice,
+      baseAssetId
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
     transactionRequest.addResources(resources);
