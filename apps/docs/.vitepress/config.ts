@@ -45,11 +45,11 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/guide/introduction/getting-started',
+            link: '/getting-started.md',
           },
           {
             text: 'Creating a Fuel dApp',
-            link: '/guide/introduction/creating-a-fuel-dapp',
+            link: '/creating-a-fuel-dapp',
           },
           {
             text: 'Provider',
