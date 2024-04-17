@@ -123,7 +123,7 @@ describe('Transaction Request', () => {
 
     expect(transactionRequest.script).toEqual(arrayify(scriptBytecode));
     expect(transactionRequest.inputs.length).toEqual(4);
-    expect(transactionRequest.outputs.length).toEqual(4);
+    expect(transactionRequest.outputs.length).toEqual(2);
     expect(transactionRequest.witnesses.length).toEqual(1);
   });
 
