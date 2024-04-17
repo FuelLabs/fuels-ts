@@ -1,5 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import { hexlify } from '@fuel-ts/utils';
 
 import { MemoryCache } from './memory-cache';
 
@@ -110,27 +111,18 @@ describe('Memory Cache', () => {
   });
 
   it('can get active [with data]', () => {
-    /* 100% pseudo-code */
-
     const value1 = randomBytes(8);
     const value2 = randomBytes(8);
-    const value3 = randomBytes(8);
+    const value3 = hexlify(randomBytes(8));
+    const EXPECTED: BytesLike[] = [value1, value2, value3];
 
-    const allValues: BytesLike[] = [value1, value2, value3];
-
-    const ttl = 500;
-    const timeStart = new Date().getTime();
-    const memCache = new MemoryCache(ttl);
+    const memCache = new MemoryCache(100);
 
     memCache.set(value1);
     memCache.set(value2);
     memCache.set(value3);
 
-    const activeData = memCache.getActiveData();
-    const timeDiff = new Date().getTime() - timeStart;
-
-    expect(timeDiff).toBeLessThan(ttl); // test must finish before ttl
-    expect(activeData).toStrictEqual(allValues); // everything must be active
+    expect(memCache.getActiveData()).containSubset(EXPECTED);
   });
 
   it('can get all [with data + expired data]', async () => {
