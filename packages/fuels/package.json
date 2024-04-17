@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.79.0",
+  "version": "0.80.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -43,6 +43,7 @@
   "dependencies": {
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
@@ -58,7 +59,6 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/account": "workspace:*",
     "bundle-require": "^4.0.1",
     "chalk": "4",
     "chokidar": "^3.5.3",
@@ -69,7 +69,6 @@
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
-    "rimraf": "^3.0.2",
     "toml": "^3.0.0",
     "tree-kill": "^1.2.2",
     "yup": "^0.32.11"

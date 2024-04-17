@@ -1,4 +1,4 @@
-import { cyan, green, red } from 'chalk';
+import chalk from 'chalk';
 
 export interface IColorizeUserVersion {
   version: string;
@@ -10,12 +10,12 @@ export const colorizeUserVersion = (params: IColorizeUserVersion) => {
   const { version, isGt, isOk } = params;
 
   if (isGt) {
-    return cyan(version);
+    return chalk.cyan(version);
   }
 
   if (isOk) {
-    return green(version);
+    return chalk.green(version);
   }
 
-  return red(version);
+  return chalk.red(version);
 };
