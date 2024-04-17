@@ -142,6 +142,12 @@ describe('Memory Cache', () => {
       setTimeout(resolve, 10);
     });
 
+    /*
+      MemoryCache uses a global cache with values from
+      several instances, all returned by `getActiveData()`.
+      However, we only want to check the ones from this
+      test, so we use `containSubset`.
+    */
     expect(memCache.getAllData()).containSubset(EXPECTED);
   });
 
