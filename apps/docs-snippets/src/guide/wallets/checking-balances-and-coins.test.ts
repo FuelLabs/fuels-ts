@@ -1,12 +1,17 @@
-import type { BigNumberish, CoinQuantity, Provider, WalletUnlocked } from 'fuels';
-import { BaseAssetId, Wallet } from 'fuels';
+import type { BigNumberish, CoinQuantity, WalletUnlocked } from 'fuels';
+import { Provider , BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 /**
  * @group node
  */
 describe(__filename, () => {
+  let provider: Provider | undefined;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+  });
+
   it('wallet-check-balance', async () => {
-    const provider: Provider | undefined = undefined;
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
 
     // #region wallet-check-balance
@@ -15,11 +20,10 @@ describe(__filename, () => {
     const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
     // #endregion wallet-check-balance
 
-    expect(balance).toEqual(0);
+    expect(balance.toNumber()).toEqual(0);
   });
 
   it('wallet-check-balances', async () => {
-    const provider: Provider | undefined = undefined;
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
 
     // #region wallet-check-balances

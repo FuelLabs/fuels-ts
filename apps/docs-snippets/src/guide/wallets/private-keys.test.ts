@@ -26,7 +26,7 @@ describe(__filename, () => {
     unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     // #endregion wallet-from-private-key
 
-    expect(unlockedWallet.address).toBe(wallet.address);
+    expect(unlockedWallet.address).toStrictEqual(wallet.address);
   });
 
   it('signer-address', () => {
@@ -36,6 +36,6 @@ describe(__filename, () => {
     const signer = new Signer(PRIVATE_KEY);
     // #endregion signer-address
 
-    expect(wallet.address).toEqual(signer.address);
+    expect(wallet.address).toStrictEqual(signer.address);
   });
 });
