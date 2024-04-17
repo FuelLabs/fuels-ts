@@ -1,6 +1,6 @@
 import { AppWallet } from "@/lib";
 import { useIsConnected, useNetwork, useWallet } from "@fuels/react";
-import { Account, BN, WalletLocked } from "fuels";
+import { Account, BN } from "fuels";
 import { useCallback, useState } from "react";
 import useAsync from "react-use/lib/useAsync";
 
@@ -29,7 +29,7 @@ export const useBrowserWallet: () => BrowserWallet = () => {
   }, [wallet]);
 
   return {
-    wallet,
+    wallet: wallet || undefined,
     walletBalance: browserWalletBalance,
     refreshWalletBalance: refreshBrowserWalletBalance,
     isConnected,

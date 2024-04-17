@@ -29,7 +29,7 @@ export const useBrowserWallet: () => BrowserWallet = () => {
   }, [wallet]);
 
   return {
-    wallet,
+    wallet: wallet || undefined,
     walletBalance: browserWalletBalance,
     refreshWalletBalance: refreshBrowserWalletBalance,
     isConnected,
