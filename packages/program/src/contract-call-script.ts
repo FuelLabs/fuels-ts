@@ -21,7 +21,6 @@ import { bn, toNumber } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { concat, arrayify } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
-import { a } from 'vitest/dist/suite-MFRDkZcV';
 
 import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
