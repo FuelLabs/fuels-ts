@@ -1,5 +1,4 @@
 ---
-"demo-wallet-sdk-react": minor
 "create-fuels": minor
 ---
 
