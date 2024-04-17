@@ -5,4 +5,4 @@
 "@fuel-ts/errors": patch
 ---
 
-fix!: deprecate `getNetwork` + remove `ethers` from account
+fix!: deprecate `getNetwork` + remove `ethers` from `account` and `crypto`
