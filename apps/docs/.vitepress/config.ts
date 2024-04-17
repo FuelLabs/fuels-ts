@@ -57,8 +57,8 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Basics',
-        link: '/guide/basics/',
+        text: 'Guide',
+        link: '/guide/',
         collapsed: false,
         items: [
           {
@@ -153,13 +153,6 @@ export default defineConfig({
               },
             ],
           },
-        ],
-      },
-      {
-        text: 'Essentials',
-        link: '/guide/essentials/',
-        collapsed: false,
-        items: [
           {
             text: 'Transactions',
             link: '/guide/transactions/',
@@ -296,13 +289,6 @@ export default defineConfig({
               },
             ],
           },
-        ],
-      },
-      {
-        text: 'Extras',
-        link: '/guide/extras/',
-        collapsed: false,
-        items: [
           {
             text: 'Types',
             link: '/guide/types/',
@@ -437,16 +423,9 @@ export default defineConfig({
               },
             ],
           },
-        ],
-      },
-      {
-        text: 'Tooling',
-        link: '/guide/tooling/',
-        collapsed: false,
-        items: [
           {
             text: 'GraphQL Integration',
-            link: '/guide/tooling/graphql-integration',
+            link: '/guide/graphql-integration.md',
           },
           {
             text: 'Testing',
