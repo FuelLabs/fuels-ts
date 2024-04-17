@@ -24,7 +24,7 @@ describe(__filename, () => {
 
     expect(myWallet.address).toBeTruthy();
     expect(someWallet.address).toBeTruthy();
-  })
+  });
 
   it('wallet-locked-to-unlocked', () => {
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
@@ -42,7 +42,7 @@ describe(__filename, () => {
 
     expect(myWallet.address).toBeTruthy();
     expect(unlockedWallet.address).toEqual(myWallet.address);
-  })
+  });
 
   it('wallet-unlocked-to-locked', () => {
     const unlockedWallet: WalletUnlocked = Wallet.generate({ provider });
@@ -53,7 +53,7 @@ describe(__filename, () => {
 
     expect(unlockedWallet).toBeTruthy();
     expect(newlyLockedWallet.address).toEqual(unlockedWallet.address);
-  })
+  });
 
   it('it can be created without a provider', async () => {
     // #region wallet-optional-provider
@@ -70,4 +70,4 @@ describe(__filename, () => {
     await expect(() => unlockedWallet.getCoins()).rejects.toThrow(/Provider not set/);
     // #endregion wallet-optional-provider
   });
-})
+});

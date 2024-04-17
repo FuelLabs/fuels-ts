@@ -3,7 +3,7 @@ import { FUEL_NETWORK_URL, Provider, Signer, WalletUnlocked, hashMessage } from 
 /**
  * @group node
  */
-describe(__filename, () => {  
+describe(__filename, () => {
   it('should sign a message using wallet instance', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     // #region wallet-message-signing
@@ -23,5 +23,5 @@ describe(__filename, () => {
     expect(wallet.privateKey).toBeTruthy();
     expect(wallet.publicKey).toBeTruthy();
     expect(wallet.address).toEqual(recoveredAddress);
-  })
-})
+  });
+});

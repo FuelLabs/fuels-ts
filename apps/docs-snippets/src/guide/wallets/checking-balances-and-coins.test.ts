@@ -16,7 +16,7 @@ describe(__filename, () => {
     // #endregion wallet-check-balance
 
     expect(balance).toEqual(0);
-  })
+  });
 
   it('wallet-check-balances', async () => {
     const provider: Provider | undefined = undefined;
@@ -29,5 +29,5 @@ describe(__filename, () => {
     // #endregion wallet-check-balances
 
     expect(balances).toEqual([]);
-  })
-})
+  });
+});

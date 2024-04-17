@@ -13,7 +13,7 @@ describe(__filename, () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = Wallet.generate({ provider });
     privateKey = wallet.privateKey;
-  })
+  });
 
   it('wallet-from-private-key', () => {
     const lockedWallet: WalletLocked = wallet.lock();
@@ -27,7 +27,7 @@ describe(__filename, () => {
     // #endregion wallet-from-private-key
 
     expect(unlockedWallet.address).toBe(wallet.address);
-  })
+  });
 
   it('signer-address', () => {
     const PRIVATE_KEY = privateKey;
@@ -37,5 +37,5 @@ describe(__filename, () => {
     // #endregion signer-address
 
     expect(wallet.address).toEqual(signer.address);
-  })  
-})
+  });
+});

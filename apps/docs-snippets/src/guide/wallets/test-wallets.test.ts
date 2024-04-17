@@ -5,7 +5,7 @@ import { BaseAssetId, FUEL_NETWORK_URL, Provider, bn } from 'fuels';
 /**
  * @group node
  */
-describe(__filename, () => {  
+describe(__filename, () => {
   it('wallet-setup', async () => {
     // #region wallet-setup
     // #import { FUEL_NETWORK_URL, Provider, WalletUnlocked, CoinQuantity, generateTestWallet, BaseAssetId };
@@ -42,5 +42,5 @@ describe(__filename, () => {
     ]);
     expect(walletCBalances).toEqual([]);
     // #endregion wallet-setup
-  })
-})
+  });
+});
