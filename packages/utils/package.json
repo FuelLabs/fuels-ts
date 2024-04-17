@@ -48,9 +48,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/math": "workspace:*",
-    "ramda": "^0.29.0",
-    "rimraf": "^3.0.2",
-    "@fuel-ts/interfaces": "workspace:*"
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*"
   }
 }
