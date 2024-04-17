@@ -116,6 +116,10 @@
     {
       "tagName": "@type",
       "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@knipignore",
+      "syntaxKind": "modifier"
     }
   ]
 }
