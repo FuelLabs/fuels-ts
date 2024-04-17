@@ -3,6 +3,7 @@ import { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
+/** @knipignore */
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
 import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';

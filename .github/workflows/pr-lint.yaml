@@ -12,6 +12,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dependency-check:
+    name: Validate Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Validate Dependencies
+        run: pnpm depcheck
+
   validate-title:
     name: Validate PR title
     runs-on: ubuntu-latest
@@ -27,6 +42,16 @@ jobs:
             docs
             ci
             rc
+      - name: Check PR title length
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          title_length=${#TITLE}
+          if [ $title_length -gt 72 ]
+          then
+            echo "PR title is too long (greater than 72 characters)"
+            exit 1
+          fi
 
   validate-changeset:
     name: Validate PR Changeset
@@ -70,6 +95,8 @@ jobs:
 
           if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
+            echo "Changeset file: $CHANGESET_FILE"
+            echo "Changeset content: $CHANGESET_CONTENT"
             exit 1
           fi
         env:
