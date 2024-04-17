@@ -1,0 +1,30 @@
+{
+  "ignore": [
+    "**/*/fuels.config.*",
+    "**/*/.vitepress/*",
+    "/apps/docs/*",
+    "/packages/abi-typegen/test/**",
+    "templates/**"
+  ],
+  "ignoreDependencies": [
+    "@fuel-ts/*",
+    "@types/jest",
+    "@types/rimraf",
+    "@graphql-codegen*",
+    "graphql-tag",
+    "events",
+    "eslint-plugin-jsdoc",
+    "eslint-plugin-jsx-a11y",
+    "eslint-plugin-prettier",
+    "eslint-plugin-react",
+    "eslint-plugin-react-hooks",
+    "dotenv",
+    "memfs",
+    "open",
+    "textlint",
+    "textlint-rule-no-dead-link",
+    "tree-kill",
+    "ts-generator",
+    "webdriverio"
+  ]
+}
