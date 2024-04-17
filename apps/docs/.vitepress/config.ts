@@ -421,11 +421,11 @@ export default defineConfig({
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
+              {
+                text: 'GraphQL Integration',
+                link: '/guide/cookbook/graphql-integration',
+              },
             ],
-          },
-          {
-            text: 'GraphQL Integration',
-            link: '/guide/graphql-integration.md',
           },
           {
             text: 'Testing',
