@@ -98,7 +98,7 @@
     "open": "^8.4.0",
     "prettier": "^3.0.3",
     "rimraf": "^3.0.2",
-    "textlint": "^13.3.2",
+    "textlint": "^14.0.4",
     "textlint-rule-no-dead-link": "^5.1.2",
     "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
