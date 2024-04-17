@@ -6,7 +6,6 @@ import {
   Predicate,
   FUEL_NETWORK_URL,
   ScriptTransactionRequest,
-  bn,
   Wallet,
   cacheResources,
 } from 'fuels';
@@ -17,8 +16,12 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtu
  * @group node
  */
 describe('Predicate', () => {
-  const complexArtifacts = getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_PREDICATE);
-  const addressArtifacts = getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_ADDRESS);
+  const assertNumberArtifacts = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_ASSERT_NUMBER
+  );
+  const assertValueArtifacts = getFuelGaugeForcProject(
+    FuelGaugeProjectsEnum.PREDICATE_ASSERT_VALUE
+  );
 
   describe('Populate Predicate Witness', () => {
     const UTXOS_AMOUNT = 12;
@@ -26,8 +29,8 @@ describe('Predicate', () => {
     let gasPrice: BN;
     let provider: Provider;
     let receiver: WalletUnlocked;
-    let predicate1: Predicate<[BN]>;
-    let predicate2: Predicate<[string]>;
+    let predicate1: Predicate<[number]>;
+    let predicate2: Predicate<[boolean]>;
 
     let wallet1: WalletUnlocked;
     let wallet2: WalletUnlocked;
@@ -41,18 +44,18 @@ describe('Predicate', () => {
       wallet3 = Wallet.generate({ provider });
       receiver = Wallet.generate({ provider });
       gasPrice = provider.getGasConfig().minGasPrice;
-      predicate1 = new Predicate<[BN]>({
-        bytecode: complexArtifacts.binHexlified,
+      predicate1 = new Predicate<[number]>({
+        bytecode: assertNumberArtifacts.binHexlified,
         provider,
-        abi: complexArtifacts.abiContents,
-        inputData: [bn(1)],
+        abi: assertNumberArtifacts.abiContents,
+        inputData: [11],
       });
 
-      predicate2 = new Predicate<[string]>({
-        bytecode: addressArtifacts.binHexlified,
-        abi: addressArtifacts.abiContents,
+      predicate2 = new Predicate<[boolean]>({
+        bytecode: assertValueArtifacts.binHexlified,
+        abi: assertValueArtifacts.abiContents,
         provider,
-        inputData: ['0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a'],
+        inputData: [true],
       });
 
       await seedTestWallet(

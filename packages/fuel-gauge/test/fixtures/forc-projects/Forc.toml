@@ -29,6 +29,8 @@ members = [
   "predicate-true",
   "predicate-u32",
   "predicate-vector-types",
+  "predicate-assert-value",
+  "predicate-assert-number",
   "predicate-with-configurable",
   "complex-predicate",
   "complex-script",

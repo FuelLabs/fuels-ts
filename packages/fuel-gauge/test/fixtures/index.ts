@@ -20,6 +20,8 @@ export enum FuelGaugeProjectsEnum {
   MULTI_TOKEN_CONTRACT = 'multi-token-contract',
   PAYABLE_ANNOTATION = 'payable-annotation',
   PREDICATE_ADDRESS = 'predicate-address',
+  PREDICATE_ASSERT_VALUE = 'predicate-assert-value',
+  PREDICATE_ASSERT_NUMBER = 'predicate-assert-number',
   PREDICATE_BYTES = 'predicate-bytes',
   PREDICATE_CONDITIONAL_INPUTS = 'predicate-conditional-inputs',
   PREDICATE_FALSE = 'predicate-false',
