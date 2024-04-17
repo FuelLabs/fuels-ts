@@ -31,6 +31,7 @@ members = [
   "predicate-vector-types",
   "predicate-assert-value",
   "predicate-assert-number",
+  "predicate-sum",
   "predicate-with-configurable",
   "complex-predicate",
   "complex-script",
