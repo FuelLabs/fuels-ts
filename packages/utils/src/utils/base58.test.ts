@@ -3,6 +3,10 @@ import { bn } from '@fuel-ts/math';
 
 import { decodeBase58, encodeBase58 } from './base58';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('base58', () => {
   describe('encodeBase58', () => {
     it('should encode a BytesLike value to a base58 string', () => {
