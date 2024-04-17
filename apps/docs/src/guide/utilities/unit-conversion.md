@@ -1,6 +1,12 @@
 # Unit conversion
 
-Internally, we use [Arbitrary-precision](https://mathworld.wolfram.com/ArbitraryPrecision.html) arithmetic (also known as Big Number arithmetic) to allow for the handling of large numbers. Below we will go over some common use cases for unit conversion.
+Internally, we use [Arbitrary-precision](https://mathworld.wolfram.com/ArbitraryPrecision.html) arithmetic (also known as Big Number arithmetic) to allow for the handling of large numbers and different assets.
+
+On the Fuel network, we work with 9 decimals to represent amounts under a unit. This differs from chain to chain, so it is important to know the number of decimals used on the chain you are working with.
+
+> Note: The package [`@fuels/assets`](https://www.npmjs.com/package/@fuels/assets) provides a list of assets and their decimals.
+
+Below we will go over some common use cases for unit conversion.
 
 Using our `BN` class we can instantiate these numbers.
 
@@ -40,7 +46,7 @@ We can also parse numbers in other units of measure.
 
 We can format common units of measure using the `format` function.
 
-In the following example, we format a BigNumber representation of one Ether, into Gwei units (with 3 decimal place precision).
+In the following example, we format a BigNumber representation of one Gwei, into units for the Fuel network (with 3 decimal place precision).
 
 <<< @/../../docs-snippets/src/guide/utilities/unit-conversion.test.ts#format-1{ts:line-numbers}
 

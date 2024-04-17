@@ -34,6 +34,9 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     this.stream = response.body!.getReader();
   }
 
+  private events: Array<{ data: unknown; errors?: { message: string }[] }> = [];
+  private parsingLeftover = '';
+
   async next(): Promise<IteratorResult<unknown, unknown>> {
     if (!this.stream) {
       await this.setStream();
@@ -41,46 +44,56 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
+      if (this.events.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const { data, errors } = this.events.shift()!;
+        if (Array.isArray(errors)) {
+          throw new FuelError(
+            FuelError.CODES.INVALID_REQUEST,
+            errors.map((err) => err.message).join('\n\n')
+          );
+        }
+        return { value: data, done: false };
+      }
       const { value, done } = await this.stream.read();
       if (done) {
         return { value, done };
       }
 
-      const text = FuelGraphqlSubscriber.textDecoder.decode(value);
-
       /**
-       * We don't care about responses that don't start with 'data:' like keep-alive messages.
-       * The only responses that I came across from the node are either 200 responses with data or keep-alive messages.
+       * We don't care about keep-alive messages.
+       * The only responses that I came across from the node are either 200 responses with "data:.*" or keep-alive messages.
        * You can find the keep-alive message in the fuel-core codebase (latest permalink as of writing):
        * https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
        * To get the actual latest info you need to check out the master branch (might change):
        * https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
        * */
-      if (!text.startsWith('data:')) {
+      const decoded = FuelGraphqlSubscriber.textDecoder
+        .decode(value)
+        .replace(':keep-alive-text\n\n', '');
+
+      if (decoded === '') {
         // eslint-disable-next-line no-continue
         continue;
       }
 
-      let data;
-      let errors;
+      const text = `${this.parsingLeftover}${decoded}`;
+      const regex = /data:.*\n\n/g;
 
-      try {
-        ({ data, errors } = JSON.parse(text.replace(/^data:/, '')));
-      } catch (e) {
-        throw new FuelError(
-          ErrorCode.STREAM_PARSING_ERROR,
-          `Error while parsing stream data response: ${text}`
-        );
-      }
+      const matches = [...text.matchAll(regex)].flatMap((match) => match);
 
-      if (Array.isArray(errors)) {
-        throw new FuelError(
-          FuelError.CODES.INVALID_REQUEST,
-          errors.map((err) => err.message).join('\n\n')
-        );
-      }
+      matches.forEach((match) => {
+        try {
+          this.events.push(JSON.parse(match.replace(/^data:/, '')));
+        } catch (e) {
+          throw new FuelError(
+            ErrorCode.STREAM_PARSING_ERROR,
+            `Error while parsing stream data response: ${text}`
+          );
+        }
+      });
 
-      return { value: data, done: false };
+      this.parsingLeftover = text.replace(matches.join(), '');
     }
   }
 
