@@ -15,10 +15,14 @@ import { error } from 'console';
     // Invoke versions' prebuild script (will rewrite version files if needed)
     execSync(`pnpm -C packages/versions prebuild`);
 
-    const versionsChanged = !!execSync(`git status --porcelain`).toString().trim();
+    const versionsFilePath = `packages/versions/src/lib/getBuiltinVersions.ts`;
+
+    const versionsChanged = !!execSync(`git status --porcelain ${versionsFilePath}`)
+      .toString()
+      .trim();
 
     if (versionsChanged) {
-      execSync(`git add packages/versions/src/lib/getBuiltinVersions.ts`);
+      execSync(`git add ${versionsFilePath}`);
       execSync(`git commit -m"ci(scripts): update versions"`);
     }
   } catch (err) {
