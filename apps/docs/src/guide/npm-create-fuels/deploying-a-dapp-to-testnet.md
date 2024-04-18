@@ -49,7 +49,13 @@ Copy the contract ID and save it for later use.
 
 Let's now prepare our frontend so that we can deploy it to the cloud.
 
-Go to your `src/pages/index.tsx` file and replace the hardcoded contract ID with the one you copied earlier:
+Go to your `.env.local` file and add a new variable named `NEXT_PUBLIC_TESTNET_CONTRACT_ID`. Set its value to the contract ID you had copied earlier after deploying your contract.
+
+```md
+NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
+```
+
+If you are curious, this environment variable is used here in the `src/pages/index.tsx` file to set the contract ID:
 
 <<< @/../../create-fuels-counter-guide/src/pages/index.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
 
@@ -69,6 +75,7 @@ To deploy your frontend to the cloud, you can use any service like [Vercel](http
 ```md
 NEXT_PUBLIC_HAS_CONTRACT=true
 NEXT_PUBLIC_DAPP_ENVIRONMENT=testnet
+NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 
 (the rest of the environment variables are optional)
 ```

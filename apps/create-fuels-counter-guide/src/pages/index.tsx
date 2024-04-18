@@ -15,8 +15,7 @@ import { CURRENT_ENVIRONMENT } from '@/lib'
 const contractId =
   CURRENT_ENVIRONMENT === "local"
     ? contractIds.testContract
-    // Replace the below string with the contract ID you copied earlier
-    : "0x9310ab0b757826b745d601cb682c1b4f35abde02cddd67f8535c0b5bfb296d25"; // Testnet Contract ID
+    : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
 // #endregion deploying-dapp-to-testnet-frontend-contract-id
 
 
