@@ -1,4 +1,3 @@
-import { versions } from '@fuel-ts/versions';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
