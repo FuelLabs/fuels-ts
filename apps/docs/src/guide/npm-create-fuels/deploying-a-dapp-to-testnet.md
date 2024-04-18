@@ -11,15 +11,11 @@ There are mainly two steps to get our dApp live on the testnet:
 
 ## Deploying the Contract
 
-We recommend using [`forc`](https://docs.fuel.network/docs/forc/) to deploy your contracts to the testnet.
+We will be using [`forc`](https://docs.fuel.network/docs/forc/) to deploy our contracts to the testnet. `forc` is a part of the Fuel Toolchain.
 
-`forc` comes bundled in with the Fuel toolchain. To install the Fuel toolchain, run the following command:
+> If you don't have the Fuel Toolchain installed, follow [this guide](https://docs.fuel.network/guides/installation/) to install it.
 
-```sh
-curl https://install.fuel.network | sh
-```
-
-Once you have the toolchain installed, `cd` into the directory containing your contract:
+The first step is to `cd` into the directory containing your contract:
 
 ```sh
 cd sway-programs/contract
