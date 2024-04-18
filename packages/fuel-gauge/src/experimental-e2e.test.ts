@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { readFileSync } from 'fs';
 import type { BN, Contract } from 'fuels';
 import { ContractFactory, FUEL_NETWORK_URL, Provider, WalletUnlocked, bn } from 'fuels';
