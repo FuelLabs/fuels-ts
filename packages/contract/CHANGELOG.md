@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.81.0
+
+### Patch Changes
+
+- 37743e8: chore: add initial `depcheck` using knip
+- Updated dependencies [37743e8]
+- Updated dependencies [3c0aacc]
+  - @fuel-ts/abi-coder@0.81.0
+  - @fuel-ts/account@0.81.0
+  - @fuel-ts/program@0.81.0
+  - @fuel-ts/errors@0.81.0
+  - @fuel-ts/hasher@0.81.0
+  - @fuel-ts/merkle@0.81.0
+  - @fuel-ts/utils@0.81.0
+  - @fuel-ts/transactions@0.81.0
+  - @fuel-ts/crypto@0.81.0
+  - @fuel-ts/interfaces@0.81.0
+
 ## 0.80.0
 
 ### Minor Changes
