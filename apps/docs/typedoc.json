@@ -12,7 +12,8 @@
     "../../packages/account",
     "../../packages/program",
     "../../packages/contract",
-    "../../packages/script"
+    "../../packages/script",
+    "../../packages/utils"
   ],
   "out": "src/api",
   "githubPages": false,

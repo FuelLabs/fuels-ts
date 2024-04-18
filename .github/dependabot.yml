@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/" 
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    labels:
+      - "chore"
+    commit-message:
+      prefix: "ci:deps"
+      prefix-development: "ci:deps(dev)"
+    # security:
+    #  # Set this to true to create private pull requests
+    #  # for vulnerabilities
+    #  private: true
