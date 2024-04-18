@@ -10,7 +10,7 @@ interface BrowserWallet extends AppWallet {
 }
 
 export const useBrowserWallet: () => BrowserWallet = () => {
-  const { wallet }: { wallet: Account | null | undefined } = useWallet();
+  const { wallet } = useWallet();
   const [browserWalletBalance, setBrowserWalletBalance] = useState<BN>();
   const { isConnected } = useIsConnected();
   const { network } = useNetwork();
