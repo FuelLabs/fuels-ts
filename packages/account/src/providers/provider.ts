@@ -15,7 +15,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
-import { clone, max } from 'ramda';
+import { clone } from 'ramda';
 
 import type { Predicate } from '../predicate';
 
