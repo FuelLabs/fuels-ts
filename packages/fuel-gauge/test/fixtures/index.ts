@@ -38,6 +38,7 @@ export enum FuelGaugeProjectsEnum {
   PREDICATE_U32 = 'predicate-u32',
   PREDICATE_VECTOR_TYPES = 'predicate-vector-types',
   PREDICATE_INPUT_DATA = 'predicate-input-data',
+  PREDICATE_VALIDATE_TRANSFER = 'predicate-validate-transfer',
   RAW_SLICE = 'raw-slice',
   REVERT_ERROR = 'revert-error',
   SCRIPT_BYTES = 'script-bytes',

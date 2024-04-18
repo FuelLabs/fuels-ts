@@ -33,6 +33,7 @@ members = [
   "predicate-assert-number",
   "predicate-sum",
   "predicate-with-configurable",
+  "predicate-validate-transfer",
   "complex-predicate",
   "complex-script",
   "raw-slice",
