@@ -233,8 +233,8 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 
 - Checkout the release commit via its tag and create a release branch based on it (`git checkout -b release/0.69.0 v0.69.0 && git push --set-upstream origin release/0.69.0`)
 - Create PRs with base set to that release branch
-  - When the PR is merged, a changeset PR is created
-  - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
+    - When the PR is merged, a changeset PR is created
+    - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
 - After release, delete the release branch from GitHub
 
 # FAQ
