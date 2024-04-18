@@ -12,8 +12,16 @@ jobs:
     if: github.actor == 'dependabot[bot]'
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.10.0
+          pnpm-version: 8.9.0
+      - uses: FuelLabs/github-actions/setups/npm@master
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Install jq
         run: sudo apt-get install -y jq
