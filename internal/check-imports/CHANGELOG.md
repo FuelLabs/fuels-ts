@@ -4,19 +4,45 @@
 
 ### Patch Changes
 
-- Updated dependencies [b51dc5e]
-- Updated dependencies [2c605a5]
-- Updated dependencies [3e60d34]
-- Updated dependencies [5964a8d]
-- Updated dependencies [b4cbd53]
-- Updated dependencies [fb941a9]
-- Updated dependencies [e995aab]
-- Updated dependencies [498cffe]
-- Updated dependencies [0be814e]
-- Updated dependencies [155b6f2]
-- Updated dependencies [3dfeafb]
-- Updated dependencies [40622a5]
-- Updated dependencies [6da02a5]
+- Updated dependencies [1d92ce7]
+- Updated dependencies [37743e8]
+- Updated dependencies [3c0aacc]
+- Updated dependencies [124099b]
+  - @fuel-ts/abi-typegen@0.81.0
+  - fuels@0.81.0
+  - @fuel-ts/versions@0.81.0
+  - @fuel-ts/abi-coder@0.81.0
+  - @fuel-ts/contract@0.81.0
+  - @fuel-ts/account@0.81.0
+  - @fuel-ts/address@0.81.0
+  - @fuel-ts/program@0.81.0
+  - @fuel-ts/errors@0.81.0
+  - @fuel-ts/hasher@0.81.0
+  - @fuel-ts/merkle@0.81.0
+  - @fuel-ts/script@0.81.0
+  - @fuel-ts/utils@0.81.0
+  - @fuel-ts/math@0.81.0
+  - @fuel-ts/transactions@0.81.0
+  - @fuel-ts/crypto@0.81.0
+  - @fuel-ts/interfaces@0.81.0
+
+## null
+
+### Patch Changes
+
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
+- Updated dependencies [29d5303]
   - @fuel-ts/abi-coder@0.80.0
   - @fuel-ts/transactions@0.80.0
   - @fuel-ts/program@0.80.0

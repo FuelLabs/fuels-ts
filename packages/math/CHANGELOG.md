@@ -1,10 +1,22 @@
 # Change Log
 
+## 0.81.0
+
+### Minor Changes
+
+- 124099b: fix: updating incorrect decimal constants
+
+### Patch Changes
+
+- 37743e8: chore: add initial `depcheck` using knip
+- Updated dependencies [37743e8]
+  - @fuel-ts/errors@0.81.0
+
 ## 0.80.0
 
 ### Patch Changes
 
-- Updated dependencies [0be814e]
+- Updated dependencies [29d5303]
   - @fuel-ts/errors@0.80.0
 
 ## 0.79.0

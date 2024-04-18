@@ -4,8 +4,6 @@ import { hexlify } from '@fuel-ts/utils';
 
 import { MemoryCache } from './memory-cache';
 
-const CACHE_ITEMS = [hexlify(randomBytes(8)), randomBytes(8), randomBytes(8)];
-
 /**
  * @group node
  * @group browser
@@ -53,81 +51,124 @@ describe('Memory Cache', () => {
     const ttl = 1000;
     const expiresAt = Date.now() + ttl;
     const memCache = new MemoryCache(ttl);
+    const value = randomBytes(8);
 
-    expect(memCache.set(CACHE_ITEMS[0])).toBeGreaterThanOrEqual(expiresAt);
+    expect(memCache.set(value)).toBeGreaterThanOrEqual(expiresAt);
   });
 
   it('can get [valid key]', () => {
-    const KEY = CACHE_ITEMS[1];
+    const value = randomBytes(8);
     const memCache = new MemoryCache(100);
 
-    memCache.set(KEY);
+    memCache.set(value);
 
-    expect(memCache.get(KEY)).toEqual(KEY);
+    expect(memCache.get(value)).toEqual(value);
   });
 
   it('can get [valid key bytes like]', () => {
-    const KEY = CACHE_ITEMS[2];
+    const value = randomBytes(8);
     const memCache = new MemoryCache(100);
 
-    memCache.set(KEY);
+    memCache.set(value);
 
-    expect(memCache.get(KEY)).toEqual(KEY);
+    expect(memCache.get(value)).toEqual(value);
   });
 
   it('can get [valid key, expired content]', async () => {
-    const KEY = randomBytes(8);
+    const value = randomBytes(8);
     const memCache = new MemoryCache(1);
 
-    memCache.set(KEY);
+    memCache.set(value);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 10);
     });
 
-    expect(memCache.get(KEY)).toEqual(undefined);
+    expect(memCache.get(value)).toEqual(undefined);
   });
 
   it('can get, disabling auto deletion [valid key, expired content]', async () => {
-    const KEY = randomBytes(8);
+    const value = randomBytes(8);
     const memCache = new MemoryCache(1);
 
-    memCache.set(KEY);
+    memCache.set(value);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 10);
     });
 
-    expect(memCache.get(KEY, false)).toEqual(KEY);
+    expect(memCache.get(value, false)).toEqual(value);
   });
 
   it('can delete', () => {
-    const KEY = randomBytes(8);
+    const value = randomBytes(8);
     const memCache = new MemoryCache(100);
 
-    memCache.set(KEY);
-    memCache.del(KEY);
+    memCache.set(value);
+    memCache.del(value);
 
-    expect(memCache.get(KEY)).toEqual(undefined);
+    expect(memCache.get(value)).toEqual(undefined);
   });
 
   it('can get active [with data]', () => {
-    const EXPECTED: BytesLike[] = [CACHE_ITEMS[0], CACHE_ITEMS[1], CACHE_ITEMS[2]];
+    const value1 = randomBytes(8);
+    const value2 = randomBytes(8);
+    const value3 = hexlify(randomBytes(8));
+    const EXPECTED: BytesLike[] = [value1, value2, value3];
+
     const memCache = new MemoryCache(100);
 
-    expect(memCache.getActiveData()).toStrictEqual(EXPECTED);
+    memCache.set(value1);
+    memCache.set(value2);
+    memCache.set(value3);
+
+    expect(memCache.getActiveData()).containSubset(EXPECTED);
   });
 
   it('can get all [with data + expired data]', async () => {
-    const KEY = randomBytes(8);
-    const EXPECTED: BytesLike[] = [CACHE_ITEMS[0], CACHE_ITEMS[1], CACHE_ITEMS[2], KEY];
-    const memCache = new MemoryCache(1);
-    memCache.set(KEY);
+    const oldValue = randomBytes(8);
+    const value1 = randomBytes(8);
+    const value2 = randomBytes(8);
+    const EXPECTED: BytesLike[] = [value1, value2, oldValue];
+
+    let memCache = new MemoryCache(500);
+    memCache.set(value1);
+    memCache.set(value2);
+
+    memCache = new MemoryCache(1);
+    memCache.set(oldValue);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 10);
     });
 
-    expect(memCache.getAllData()).toStrictEqual(EXPECTED);
+    /*
+      MemoryCache uses a global cache with values from
+      several instances, all returned by `getActiveData()`.
+      However, we only want to check the ones from this
+      test, so we use `containSubset`.
+    */
+    expect(memCache.getAllData()).containSubset(EXPECTED);
+  });
+
+  it('should validate that MemoryCache uses a global cache', async () => {
+    const oldValue = randomBytes(8);
+
+    const instance1 = new MemoryCache(1000);
+    instance1.set(oldValue);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 200);
+    });
+
+    const newValue = randomBytes(8);
+
+    const instance2 = new MemoryCache(100);
+    instance2.set(newValue);
+
+    const activeData = instance2.getActiveData();
+
+    expect(activeData).toContain(oldValue);
+    expect(activeData).toContain(newValue);
   });
 });

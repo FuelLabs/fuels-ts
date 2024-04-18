@@ -1,10 +1,25 @@
 # @fuel-ts/abi-typegen
 
+## 0.81.0
+
+### Minor Changes
+
+- 1d92ce7: fix: runtime errors for ESM distributions
+
+### Patch Changes
+
+- Updated dependencies [1d92ce7]
+- Updated dependencies [37743e8]
+  - @fuel-ts/versions@0.81.0
+  - @fuel-ts/errors@0.81.0
+  - @fuel-ts/utils@0.81.0
+  - @fuel-ts/interfaces@0.81.0
+
 ## 0.80.0
 
 ### Patch Changes
 
-- Updated dependencies [0be814e]
+- Updated dependencies [29d5303]
   - @fuel-ts/errors@0.80.0
   - @fuel-ts/utils@0.80.0
   - @fuel-ts/interfaces@0.80.0

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-coder",
-  "version": "0.80.0",
+  "version": "0.81.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -33,7 +33,6 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
     "ethers": "^6.7.1",
     "type-fest": "^3.1.0"
   }
