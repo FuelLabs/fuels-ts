@@ -86,7 +86,7 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
+          FUEL_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
           TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
 
