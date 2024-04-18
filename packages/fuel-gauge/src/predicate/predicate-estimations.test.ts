@@ -1,8 +1,9 @@
-import { launchNode, seedTestWallet } from '@fuel-ts/account/test-utils';
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
   ContractTransactionRequestInput,
+  BN,
 } from 'fuels';
 import {
   BaseAssetId,
@@ -168,44 +169,37 @@ describe('Predicate', () => {
     });
 
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
-      const { cleanup, ip, port } = await launchNode({
-        args: ['--poa-instant', 'true'],
-        loggingEnabled: false,
-      });
-
-      const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
-
-      const predicateTrueTempInstance = new Predicate({
-        bytecode: predicateTrueBytecode,
-        provider: nodeProvider,
-      });
+      const { binHexlified, abiContents } = getFuelGaugeForcProject(
+        FuelGaugeProjectsEnum.PREDICATE_VALIDATE_TRANSFER
+      );
 
       const amountToPredicate = 10_000;
 
-      await seedTestWallet(predicateTrueTempInstance, [[amountToPredicate]]);
-
-      const initialPredicateBalance = bn(await predicateTrueTempInstance.getBalance()).toNumber();
-
-      const receiverWallet = WalletUnlocked.generate({
-        provider: nodeProvider,
+      const predicate = new Predicate<[BN]>({
+        bytecode: binHexlified,
+        abi: abiContents,
+        provider,
+        inputData: [bn(amountToPredicate)],
       });
 
-      const dryRunSpy = vi.spyOn(nodeProvider.operations, 'dryRun');
-      const estimatePredicatesSpy = vi.spyOn(nodeProvider.operations, 'estimatePredicates');
+      await seedTestWallet(predicate, [[amountToPredicate]]);
 
-      const response = await predicateTrueTempInstance.transfer(
-        receiverWallet.address.toB256(),
-        1,
-        BaseAssetId
-      );
+      const initialPredicateBalance = bn(await predicate.getBalance()).toNumber();
+
+      const receiverWallet = WalletUnlocked.generate({
+        provider,
+      });
+
+      const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
+      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
+
+      const response = await predicate.transfer(receiverWallet.address.toB256(), 1, BaseAssetId);
       await response.waitForResult();
-      const finalPredicateBalance = bn(await predicateTrueTempInstance.getBalance()).toNumber();
+      const finalPredicateBalance = bn(await predicate.getBalance()).toNumber();
       expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
 
       expect(estimatePredicatesSpy).toHaveBeenCalledOnce();
       expect(dryRunSpy).toHaveBeenCalledOnce();
-
-      cleanup();
     });
   });
 });
