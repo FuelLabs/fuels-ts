@@ -6,7 +6,7 @@
   "scripts": {
     "original:dev": "vite",
     "original:build": "tsc && vite build",
-    "original:lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "original:lint": "eslint src -c ts,tsx --report-unused-disable-directives --max-warnings 0",
     "original:preview": "vite preview",
     "pretest": "pnpm original:build"
   },

@@ -43,7 +43,7 @@ export const encrypt: CryptoApi['encrypt'] = async <T>(
     length: 64,
   };
   const key = await crypto.subtle.importKey('raw', secret, alg, false, ['encrypt']);
-  const encBuffer = await crypto.subtle.encrypt(alg, key, dataBuffer);
+  const encBuffer = new Uint8Array(await crypto.subtle.encrypt(alg, key, dataBuffer));
 
   return {
     data: stringFromBuffer(encBuffer),
