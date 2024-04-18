@@ -180,7 +180,7 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - Now that you have a basic counter dApp running and have the `npm create fuels` workflow powering you, you can start building more complex dApps using the Fuel Stack. A good place to start for ideas and reference code is the [Sway Applications Repo](https://github.com/FuelLabs/sway-applications).
 
-- If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](../npm-create-fuels/deploying-a-dapp-to-testnet.md) guide.
+- If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./guide/npm-create-fuels/deploying-a-dapp-to-testnet.md) guide.
 
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 
