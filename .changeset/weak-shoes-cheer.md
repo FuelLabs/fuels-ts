@@ -2,4 +2,4 @@
 "create-fuels": minor
 ---
 
-feat: make create-fuels deployment ready
+feat: make `create-fuels` deployment ready
