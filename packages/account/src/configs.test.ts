@@ -11,6 +11,11 @@ describe('Configs', () => {
     const configs = await import('./configs');
     expect(configs.FUEL_BETA_5_NETWORK_URL).toBe('https://beta-5.fuel.network/graphql');
   });
+
+  it('exports FUEL_TEST_NET_NETWORK_URL', async () => {
+    const configs = await import('./configs');
+    expect(configs.FUEL_TEST_NET_NETWORK_URL).toBe('https://testnet.swayswap.io/v1/graphql');
+  });
 });
 
 describe('Configs - undefined process', () => {
