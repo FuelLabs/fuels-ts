@@ -42,25 +42,15 @@ export default defineConfig({
     },
     sidebar: [
       {
-        text: 'Introduction',
-        link: '/guide/introduction/',
-        collapsed: false,
         items: [
           {
             text: 'Getting Started',
-            link: '/guide/introduction/getting-started',
+            link: '/getting-started.md',
           },
           {
             text: 'Creating a Fuel dApp',
-            link: '/guide/introduction/creating-a-fuel-dapp',
+            link: '/creating-a-fuel-dapp',
           },
-        ],
-      },
-      {
-        text: 'Basics',
-        link: '/guide/basics/',
-        collapsed: false,
-        items: [
           {
             text: 'Provider',
             link: '/guide/provider/',
@@ -149,13 +139,6 @@ export default defineConfig({
               },
             ],
           },
-        ],
-      },
-      {
-        text: 'Essentials',
-        link: '/guide/essentials/',
-        collapsed: false,
-        items: [
           {
             text: 'Transactions',
             link: '/guide/transactions/',
@@ -292,13 +275,6 @@ export default defineConfig({
               },
             ],
           },
-        ],
-      },
-      {
-        text: 'Extras',
-        link: '/guide/extras/',
-        collapsed: false,
-        items: [
           {
             text: 'Types',
             link: '/guide/types/',
@@ -320,7 +296,6 @@ export default defineConfig({
                 text: 'Bech32',
                 link: '/guide/types/bech32',
               },
-
               {
                 text: 'Bits256',
                 link: '/guide/types/bits256',
@@ -431,18 +406,11 @@ export default defineConfig({
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
+              {
+                text: 'GraphQL Integration',
+                link: '/guide/cookbook/graphql-integration',
+              },
             ],
-          },
-        ],
-      },
-      {
-        text: 'Tooling',
-        link: '/guide/tooling/',
-        collapsed: false,
-        items: [
-          {
-            text: 'GraphQL Integration',
-            link: '/guide/tooling/graphql-integration',
           },
           {
             text: 'Testing',
@@ -496,9 +464,9 @@ export default defineConfig({
               },
             ],
           },
-        ],
+          apiLinks,
+        ]
       },
-      apiLinks,
     ],
   },
 });
