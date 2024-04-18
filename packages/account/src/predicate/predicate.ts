@@ -167,12 +167,12 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   /**
    * Retrieves resources satisfying the spend query for the account.
    *
-   * @param quantities - IDs of coins to exclude.
+   * @param quantities - Coins to retrieve.
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
-    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const resources = await super.getResourcesToSpend(quantities, excludedIds);
