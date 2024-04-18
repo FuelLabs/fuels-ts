@@ -1,4 +1,10 @@
-import { FUEL_NETWORK_URL, FUEL_BETA_5_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+import {
+  FUEL_NETWORK_URL,
+  Provider,
+  Wallet,
+  WalletUnlocked,
+  FUEL_TEST_NET_NETWORK_URL,
+} from 'fuels';
 
 /**
  * @group node
@@ -29,13 +35,12 @@ describe('Getting started', () => {
     expect(wallet).toBeInstanceOf(WalletUnlocked);
   });
 
-  // TODO: remove skip from testnet test
-  it.skip('can connect to testnet', async () => {
+  it('can connect to testnet', async () => {
     // #region connecting-to-the-testnet
-    // #import { Provider, Wallet, FUEL_BETA_5_NETWORK_URL };
+    // #import { Provider, Wallet, FUEL_TEST_NET_NETWORK_URL };
 
     // Create a provider, with the Latest Testnet URL.
-    const provider = await Provider.create(FUEL_BETA_5_NETWORK_URL);
+    const provider = await Provider.create(FUEL_TEST_NET_NETWORK_URL);
 
     // Create our wallet (with a private key).
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';

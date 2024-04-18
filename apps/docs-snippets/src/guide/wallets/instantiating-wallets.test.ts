@@ -1,4 +1,4 @@
-import { FUEL_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, FUEL_TEST_NET_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
 
 /**
  * @group node
@@ -80,13 +80,12 @@ describe(__filename, () => {
     expect(myWallet).toBeDefined();
   });
 
-  // TODO: remove skip from testnet test
-  it.skip('should connect a wallet to a provider', async () => {
+  it('should connect a wallet to a provider', async () => {
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-8
-    const provider = await Provider.create('https://beta-5.fuel.network/graphql');
+    const provider = await Provider.create(FUEL_TEST_NET_NETWORK_URL);
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-8
