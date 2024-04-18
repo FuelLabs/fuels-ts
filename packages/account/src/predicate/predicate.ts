@@ -292,6 +292,12 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     return mutatedBytes;
   }
 
+  /**
+   * Returns the index of the witness placeholder that was added to this predicate.
+   * If no witness placeholder was added, it returns -1.
+   * @param request - The transaction request.
+   * @returns The index of the witness placeholder, or -1 if there is no witness placeholder.
+   */
   private getIndexFromPlaceholderWitness(request: TransactionRequest): number {
     const predicateInputs = request.inputs
       .filter(isRequestInputResource)
