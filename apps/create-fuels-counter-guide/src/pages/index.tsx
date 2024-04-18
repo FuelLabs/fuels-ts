@@ -1,6 +1,9 @@
+/** @knipignore */
 import type { TestContractAbi } from "@/sway-api";
+/** @knipignore */
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
+
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
 import { useState } from "react";
