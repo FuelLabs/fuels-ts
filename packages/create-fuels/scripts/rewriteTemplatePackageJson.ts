@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-const fuelsVersion = "0.81.0";
+const fuelsVersion = '0.81.0';
 const filepath = join(__dirname, '../templates/nextjs/package.json');
 
 let contents = readFileSync(filepath, 'utf-8');
