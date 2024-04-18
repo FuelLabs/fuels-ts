@@ -142,10 +142,16 @@ The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqf
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
-To override the default wallet address, private key or network url, you can set the following environment variables:
+These can be overridden by generating an environment file:
 
 ```sh
-FUEL_NETWORK_URL=https://fuel-core-beta-5.fuel.network
+cp .env.example .env.test
+```
+
+And changing the below variables:
+
+```sh
+FUEL_NETWORK_URL=https://beta-5.fuel.network/graphql
 TEST_WALLET_PVT_KEY=0x...
 TEST_WALLET_ADDRESS=fuel...
 ```
@@ -233,8 +239,8 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 
 - Checkout the release commit via its tag and create a release branch based on it (`git checkout -b release/0.69.0 v0.69.0 && git push --set-upstream origin release/0.69.0`)
 - Create PRs with base set to that release branch
-    - When the PR is merged, a changeset PR is created
-    - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
+  - When the PR is merged, a changeset PR is created
+  - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
 - After release, delete the release branch from GitHub
 
 # FAQ
