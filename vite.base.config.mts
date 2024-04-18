@@ -1,3 +1,4 @@
+import { loadEnv } from "vite";
 import plainText from "vite-plugin-plain-text";
 import { defineConfig } from "vitest/config";
 
@@ -17,6 +18,7 @@ export default defineConfig({
     ],
     globals: true,
     setupFiles: ["./vite.env.ts"],
+    env: loadEnv("", process.cwd(), ""),
     coverage: {
       enabled: true,
       provider: "istanbul",
