@@ -33,11 +33,11 @@ Add it to your `my-fuel-dapp` project:
 ::: code-group
 
 ```console [npm]
-npm install fuels --save
+npm install fuels@0.81.0 --save
 ```
 
 ```console [pnpm]
-pnpm add fuels
+pnpm add fuels@0.81.0
 ```
 
 :::
@@ -45,7 +45,7 @@ pnpm add fuels
 ## Double-checking
 
 ```console
-npx fuels -v
+npx fuels@0.81.0 -v
 ```
 
 ## Next Step

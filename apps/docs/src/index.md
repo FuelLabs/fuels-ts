@@ -37,11 +37,11 @@ Learn more about the Fuel Ecosystem.
 ::: code-group
 
 ```sh [pnpm]
-pnpm add fuels
+pnpm add fuels@0.81.0
 ```
 
 ```sh [npm]
-npm install fuels --save
+npm install fuels@0.81.0 --save
 ```
 
 :::

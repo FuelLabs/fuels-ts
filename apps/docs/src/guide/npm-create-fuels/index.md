@@ -9,11 +9,11 @@ Run the following command in your terminal to get started:
 ::: code-group
 
 ```sh [npm]
-npm create fuels
+npm create fuels@0.81.0
 ```
 
 ```sh [pnpm]
-pnpm create fuels
+pnpm create fuels@0.81.0
 ```
 
 :::

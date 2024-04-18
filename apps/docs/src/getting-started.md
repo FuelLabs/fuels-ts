@@ -14,14 +14,16 @@ To begin, you need to add the `fuels` dependency to your project. You can do thi
 ::: code-group
 
 ```sh [npm]
-npm install fuels --save
+npm install fuels@0.81.0 --save
 ```
 
 ```sh [pnpm]
-pnpm add fuels
+pnpm add fuels@0.81.0
 ```
 
 :::
+
+> **Note**: We use the `0.81.0` to ensure compatibility with out latest testnet
 
 ### Note
 

@@ -14,15 +14,15 @@ Here's how to configure this explicitly:
 You can also call the `built-in` binaries directly:
 
 ```console
-npx fuels help forc
-npx fuels forc --version
-npx fuels forc test -h
+npx fuels@0.81.0 help forc
+npx fuels@0.81.0 forc --version
+npx fuels@0.81.0 forc test -h
 ```
 
 ```console
-npx fuels help core
-npx fuels core --version
-npx fuels core run -h
+npx fuels@0.81.0 help core
+npx fuels@0.81.0 core --version
+npx fuels@0.81.0 core run -h
 ```
 
 Check the docs for `forc` and `fuel-core`:

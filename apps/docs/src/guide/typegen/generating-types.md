@@ -5,7 +5,7 @@
 First we install `fuels` to our project:
 
 ```console
-pnpm add fuels
+pnpm add fuels@0.81.0
 ```
 
 ## Help

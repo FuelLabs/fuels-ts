@@ -5,11 +5,11 @@ The `npm create fuels` command has several command-line options that you can use
 ::: code-group
 
 ```sh [pnpm]
-pnpm create fuels [project-name] [options]
+pnpm create fuels@0.81.0 [project-name] [options]
 ```
 
 ```sh [npm]
-npm create fuels [project-name] [options]
+npm create fuels@0.81.0 [project-name] [options]
 ```
 
 :::
