@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:4](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/storages/memory-storage.ts#L4)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:4](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/wallet-manager/storages/memory-storage.ts#L4)
 
 ## Methods
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/storages/memory-storage.ts#L19)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/wallet-manager/storages/memory-storage.ts#L19)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:6](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/storages/memory-storage.ts#L6)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:6](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/wallet-manager/storages/memory-storage.ts#L6)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/storages/memory-storage.ts#L15)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/wallet-manager/storages/memory-storage.ts#L15)
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/wallet-manager/storages/memory-storage.ts#L11)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/wallet-manager/storages/memory-storage.ts#L11)

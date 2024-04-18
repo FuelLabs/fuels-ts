@@ -26,7 +26,7 @@ Constructor for `TransactionResponse`.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:100](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L100)
+[packages/account/src/providers/transaction-response/transaction-response.ts:100](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L100)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Constructor for `TransactionResponse`.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:92](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L92)
+[packages/account/src/providers/transaction-response/transaction-response.ts:92](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L92)
 
 ___
 
@@ -48,7 +48,7 @@ Gas used on the transaction
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:88](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L88)
+[packages/account/src/providers/transaction-response/transaction-response.ts:88](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L88)
 
 ___
 
@@ -71,7 +71,7 @@ The graphql Transaction with receipts object.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:90](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L90)
+[packages/account/src/providers/transaction-response/transaction-response.ts:90](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L90)
 
 ___
 
@@ -83,7 +83,7 @@ Transaction ID
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:84](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L84)
+[packages/account/src/providers/transaction-response/transaction-response.ts:84](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L84)
 
 ___
 
@@ -95,7 +95,7 @@ Current provider
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:86](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L86)
+[packages/account/src/providers/transaction-response/transaction-response.ts:86](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L86)
 
 ## Methods
 
@@ -131,7 +131,7 @@ The decoded transaction.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:159](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L159)
+[packages/account/src/providers/transaction-response/transaction-response.ts:159](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L159)
 
 ___
 
@@ -149,7 +149,7 @@ Transaction with receipts query result.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:129](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L129)
+[packages/account/src/providers/transaction-response/transaction-response.ts:129](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L129)
 
 ___
 
@@ -178,7 +178,7 @@ fetch it from the provider
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:173](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L173)
+[packages/account/src/providers/transaction-response/transaction-response.ts:173](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L173)
 
 ___
 
@@ -206,7 +206,7 @@ Waits for transaction to complete and returns the result.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:282](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L282)
+[packages/account/src/providers/transaction-response/transaction-response.ts:282](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L282)
 
 ___
 
@@ -236,7 +236,7 @@ The completed transaction result
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:237](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L237)
+[packages/account/src/providers/transaction-response/transaction-response.ts:237](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L237)
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:207](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L207)
+[packages/account/src/providers/transaction-response/transaction-response.ts:207](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L207)
 
 ___
 
@@ -276,4 +276,4 @@ from the chain, ensuring that the `gqlTransaction` property is set.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:114](https://github.com/FuelLabs/fuels-ts/blob/fd411a37/packages/account/src/providers/transaction-response/transaction-response.ts#L114)
+[packages/account/src/providers/transaction-response/transaction-response.ts:114](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/account/src/providers/transaction-response/transaction-response.ts#L114)
