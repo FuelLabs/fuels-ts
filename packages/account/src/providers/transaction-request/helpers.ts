@@ -25,12 +25,7 @@ export const isRequestInputResource = (
 
 export const getRequestInputResourceOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput
-) => {
-  if (isRequestInputCoin(input)) {
-    return input.owner;
-  }
-  return input.recipient;
-};
+) => (isRequestInputCoin(input) ? input.owner : input.recipient);
 
 export const isRequestInputResourceFromOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput,
