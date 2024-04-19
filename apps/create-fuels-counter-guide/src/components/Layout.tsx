@@ -1,8 +1,8 @@
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
-import { NODE_URL } from "@/lib";
-import { useConnectUI, useDisconnect } from "@fuel-wallet/react";
+import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "@/lib";
+import { useConnectUI, useDisconnect } from "@fuels/react";
 import { WalletDisplay } from "./WalletDisplay";
 import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
@@ -28,16 +28,25 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return console.error("Unable to topup wallet because wallet is not set.");
     }
 
-    if (!faucetWallet) {
-      return toast.error("Faucet wallet not found.");
+    if (CURRENT_ENVIRONMENT === "local") {
+      if (!faucetWallet) {
+        return toast.error("Faucet wallet not found.");
+      }
+
+      const tx = await faucetWallet?.transfer(wallet.address, 10_000);
+      await tx?.waitForResult();
+
+      toast.success("Wallet topped up!");
+
+      return await refreshWalletBalance?.();
     }
 
-    const tx = await faucetWallet?.transfer(wallet.address, 10_000);
-    await tx?.waitForResult();
-
-    toast.success("Wallet topped up!");
-
-    await refreshWalletBalance?.();
+    if (CURRENT_ENVIRONMENT === "testnet") {
+      return window.open(
+        `${TESTNET_FAUCET_LINK}?address=${wallet.address.toAddress()}`,
+        "_blank",
+      );
+    }
   };
 
   const showTopUpButton = walletBalance?.lt(10_000);
@@ -64,7 +73,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <nav className="flex justify-between items-center p-4 bg-black text-white gap-6">
           <Link href="/">Home</Link>
 
-          <Link href="/faucet">Faucet</Link>
+          <Link
+            href={
+              CURRENT_ENVIRONMENT === "local" ? "/faucet" : TESTNET_FAUCET_LINK
+            }
+            target={CURRENT_ENVIRONMENT === "local" ? "_self" : "_blank"}
+          >
+            Faucet
+          </Link>
 
           {isBrowserWalletConnected && (
             <Button onClick={disconnect}>Disconnect Wallet</Button>
