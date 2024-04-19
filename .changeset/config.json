@@ -17,6 +17,7 @@
     "demo-typegen",
     "@fuel-ts/docs-snippets",
     "template-nextjs",
-    "create-fuels-counter-guide"
+    "create-fuels-counter-guide",
+    "demo-wallet-sdk-react"
   ]
 }

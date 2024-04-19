@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    labels:
+      - "chore"
+    commit-message:
+      prefix: "build(deps):"
+      prefix-development: "build(deps-dev):"

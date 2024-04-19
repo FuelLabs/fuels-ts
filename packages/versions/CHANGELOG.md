@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.81.0
+
+### Minor Changes
+
+- 1d92ce7: fix: runtime errors for ESM distributions
+
 ## 0.80.0
 
 ## 0.79.0
