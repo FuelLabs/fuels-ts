@@ -35,4 +35,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git add .
           git commit -m "build: update dependency changeset"
-          git push
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
