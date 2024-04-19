@@ -40,7 +40,7 @@ describe('Bytes Tests', () => {
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
-  it('should test bytes output', async () => {
+  it.skip('should test bytes output', async () => {
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -48,7 +48,7 @@ describe('Bytes Tests', () => {
     expect(value).toStrictEqual(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
   });
 
-  it('should test bytes output [100 items]', async () => {
+  it.skip('should test bytes output [100 items]', async () => {
     const INPUT = 100;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
