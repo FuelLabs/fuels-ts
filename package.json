@@ -6,9 +6,9 @@
   "private": true,
   "engines": {
     "node": "^18.18.2 || ^20.0.0",
-    "pnpm": "^8.9.0"
+    "pnpm": "^9.0.2"
   },
-  "packageManager": "pnpm@8.9.0",
+  "packageManager": "pnpm@9.0.2",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build --cache-dir=.turbo",
@@ -111,6 +111,9 @@
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.1.3",
     "webdriverio": "^8.32.0"
+  },
+  "peerDependencies": {
+    "webpack-dev-middleware": "~5.3.4"
   },
   "pnpm": {
     "overrides": {
