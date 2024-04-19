@@ -6,9 +6,9 @@
   "private": true,
   "engines": {
     "node": "^18.18.2 || ^20.0.0",
-    "pnpm": "^9.0.2"
+    "pnpm": "^8.9.0"
   },
-  "packageManager": "pnpm@9.0.2",
+  "packageManager": "pnpm@8.9.0",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build --cache-dir=.turbo",
@@ -106,7 +106,7 @@
     "tsx": "^4.7.0",
     "turbo": "^1.8.8",
     "typescript": "~5.2.2",
-    "vite": "^5.0.11",
+    "vite": "^5.2.9",
     "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.1.3",

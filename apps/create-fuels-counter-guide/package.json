@@ -15,7 +15,7 @@
     "@fuel-wallet/react": "0.15.2",
     "dotenv": "^16.4.5",
     "fuels": "workspace:*",
-    "next": "14.0.1",
+    "next": "14.2.2",
     "react": "^18.2",
     "react-dom": "^18.2",
     "react-hot-toast": "^2.4.1",
