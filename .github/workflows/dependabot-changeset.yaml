@@ -16,13 +16,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: FuelLabs/github-actions/setups/node@master
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
         with:
-          node-version: 20.10.0
-          pnpm-version: 8.9.0
-      - uses: FuelLabs/github-actions/setups/npm@master
-        with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
+          version: 8.9.0
+          run_install: true
 
       - name: Install jq
         run: sudo apt-get install -y jq
