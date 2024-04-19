@@ -6,7 +6,7 @@ import {
   useConnectors,
   useDisconnect,
   useIsConnected,
-} from "@fuel-wallet/react";
+} from "@fuels/react";
 import { useState } from "react";
 
 export default function Home() {
