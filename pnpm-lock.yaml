@@ -10,10 +10,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      webpack-dev-middleware:
-        specifier: ~5.3.4
-        version: 5.3.4(webpack@5.88.0(esbuild@0.17.19))
     devDependencies:
       '@actions/core':
         specifier: ^1.10.1

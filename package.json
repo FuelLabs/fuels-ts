@@ -112,9 +112,6 @@
     "vitest": "^1.1.3",
     "webdriverio": "^8.32.0"
   },
-  "peerDependencies": {
-    "webpack-dev-middleware": "~5.3.4"
-  },
   "pnpm": {
     "overrides": {
       "cross-fetch": "4.0.0"
