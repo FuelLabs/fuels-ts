@@ -449,6 +449,10 @@ export default defineConfig({
                     text: 'Options',
                     link: '/guide/npm-create-fuels/options',
                   },
+                  {
+                    text: 'Deploying a dApp to Testnet',
+                    link: '/guide/npm-create-fuels/deploying-a-dapp-to-testnet',
+                  },
                 ],
               },
               {
