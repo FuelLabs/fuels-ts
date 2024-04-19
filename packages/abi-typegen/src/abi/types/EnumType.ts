@@ -5,6 +5,7 @@ import { extractStructName } from '../../utils/extractStructName';
 import { findType } from '../../utils/findType';
 
 import { AType } from './AType';
+import { EmptyType } from './EmptyType';
 
 export class EnumType extends AType implements IType {
   public static swayType = 'enum MyEnumName';
@@ -56,7 +57,7 @@ export class EnumType extends AType implements IType {
     // `components` array guaranteed to always exist for structs/enums
     const enumComponents = components as IRawAbiTypeComponent[];
 
-    if (!enumComponents.every(({ type }) => typeHash[type] === '()')) {
+    if (!enumComponents.every(({ type }) => typeHash[type] === EmptyType.swayType)) {
       return undefined;
     }
 

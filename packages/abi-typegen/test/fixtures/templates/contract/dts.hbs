@@ -46,6 +46,7 @@ interface MyContractAbiInterface extends Interface {
     types_b512: FunctionFragment;
     types_bool: FunctionFragment;
     types_bytes: FunctionFragment;
+    types_empty: FunctionFragment;
     types_enum: FunctionFragment;
     types_evm_address: FunctionFragment;
     types_option: FunctionFragment;
@@ -71,6 +72,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_b512', values: [string]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_bool', values: [boolean]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_bytes', values: [Bytes]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_empty', values: [undefined]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_enum', values: [MyEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
@@ -95,6 +97,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_b512', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_bool', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_bytes', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_empty', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_evm_address', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option', data: BytesLike): DecodedValue;
@@ -123,6 +126,7 @@ export class MyContractAbi extends Contract {
     types_b512: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_bytes: InvokeFunction<[x: Bytes], Bytes>;
+    types_empty: InvokeFunction<[x: undefined], undefined>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
