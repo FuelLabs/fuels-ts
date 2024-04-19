@@ -23,7 +23,7 @@ pnpm add fuels@0.81.0
 
 :::
 
-> **Note**: We use the `0.81.0` to ensure compatibility with out latest testnet
+**Note**: We use `0.81.0` to ensure compatibility with our latest testnet
 
 ### Note
 
