@@ -1,7 +1,9 @@
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import type { BigNumberish, Contract } from 'fuels';
 import { BN, bn, toHex, BaseAssetId } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import type { CallTestContractAbi } from '../test/typegen/contracts';
 
 import { createSetupConfig } from './utils';
 
@@ -9,7 +11,7 @@ const { binHexlified, abiContents } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
-const setupContract = createSetupConfig({
+const setupContract = createSetupConfig<CallTestContractAbi>({
   contractBytecode: binHexlified,
   abi: abiContents,
   cache: true,
@@ -23,7 +25,7 @@ const U64_MAX = bn(2).pow(64).sub(1);
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setupContract();
-    const { value } = await contract.functions.foo(num).call<BN>();
+    const { value } = await contract.functions.foo(num).call();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
@@ -47,7 +49,7 @@ describe('CallTestContract', () => {
     const { value: value0 } = await contract.functions.barfoo(0).call();
     expect(value0.toHex()).toEqual(toHex(63));
 
-    const { value: value1 } = await contract.functions.foobar().call();
+    const { value: value1 } = await contract.functions.foobar(undefined).call();
     expect(value1.toHex()).toEqual(toHex(63));
   });
 
@@ -124,10 +126,14 @@ describe('CallTestContract', () => {
         expected: '0x0000000000000000000000000000000000000000000000000000000000000001',
       },
     ],
-  ])(
+  ] as Array<
+    [keyof CallTestContractAbi['functions'], { values: unknown[]; expected: BigNumberish }]
+  >)(
     `Test call with multiple arguments and different types -> %s`,
     async (method, { values, expected }) => {
-      const contract = await setupContract();
+      // Type cast to Contract because of the dynamic nature of the test
+      // But the function names are type-constrained to correct Contract's type
+      const contract = (await setupContract()) as Contract;
 
       const { value } = await contract.functions[method](...values).call();
 

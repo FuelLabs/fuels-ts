@@ -6,7 +6,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
     "pretest": "run-s build:forc build:forc-experimental build:process-predicates",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
+    "build:forc": "../../scripts/forc-build-with-typegen.sh",
     "build:forc-experimental": "tsx ./scripts/build-forc-experimental.ts",
     "build:process-predicates": "tsx ./scripts/process-predicates.ts"
   },

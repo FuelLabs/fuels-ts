@@ -77,5 +77,12 @@ module.exports = {
         '@typescript-eslint/no-unused-expressions': 'off',
       },
     },
+    {
+      files: ['**/test/typegen/**/*.ts'],
+      rules: {
+        'eslint-comments/no-unlimited-disable': 'off',
+        'eslint-comments/no-unused-disable': 'off',
+      },
+    },
   ],
 };

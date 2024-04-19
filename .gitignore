@@ -144,6 +144,9 @@ Forc.lock
 **/out/release
 **/test-predicate-*/index.ts
 
+# Ignore typegen test files
+**/test/typegen
+
 # Ignore [local] history directory (VsCode extension)
 .history
 

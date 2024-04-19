@@ -38,17 +38,22 @@ export type SetupConfig = {
   cache?: boolean;
 };
 
-export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
+export const setup = async <T extends Contract = Contract>({
+  contractBytecode,
+  abi,
+  cache,
+}: SetupConfig) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
   const contract = await deployContract(factory, wallet.provider, cache);
-  return contract;
+  return contract as T;
 };
 
 export const createSetupConfig =
-  (defaultConfig: SetupConfig) => async (config?: Partial<SetupConfig>) =>
-    setup({
+  <T extends Contract = Contract>(defaultConfig: SetupConfig) =>
+  async (config?: Partial<SetupConfig>) =>
+    setup<T>({
       contractBytecode: defaultConfig.contractBytecode,
       abi: defaultConfig.abi,
       ...config,
