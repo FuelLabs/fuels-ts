@@ -5,6 +5,7 @@ import { extractStructName } from '../../utils/extractStructName';
 import { findType } from '../../utils/findType';
 
 import { AType } from './AType';
+import { EmptyType } from './EmptyType';
 
 export class EnumType extends AType implements IType {
   public static swayType = 'enum MyEnumName';
