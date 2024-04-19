@@ -29,6 +29,8 @@ export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
   FnName extends TAbi['functions'][number]['name'] = string,
 > {
+  private static DEFAULT_ENCODING_VERSION = ENCODING_V0;
+
   readonly signature: string;
   readonly selector: string;
   readonly selectorBytes: Uint8Array;
@@ -52,7 +54,7 @@ export class FunctionFragment<
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
     this.selectorBytes = new StdStringCoder().encode(name);
-    this.encoding = this.jsonAbi.encoding ?? ENCODING_V0;
+    this.encoding = this.jsonAbi.encoding ?? FunctionFragment.DEFAULT_ENCODING_VERSION;
     this.isInputDataPointer = this.#isInputDataPointer();
     this.outputMetadata = {
       isHeapType: this.#isOutputDataHeap(),

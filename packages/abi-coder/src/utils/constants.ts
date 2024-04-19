@@ -25,9 +25,9 @@ export const genericRegEx = /^generic (?<name>\w+)$/;
 /**
  * Encoding versions
  */
-export type EncodingVersion = '0' | '1';
 export const ENCODING_V0 = '0';
 export const ENCODING_V1 = '1';
+export type EncodingVersion = string;
 /**
  * Property space and config constants
  */
