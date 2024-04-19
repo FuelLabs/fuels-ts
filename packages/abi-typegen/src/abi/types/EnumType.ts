@@ -56,7 +56,7 @@ export class EnumType extends AType implements IType {
     // `components` array guaranteed to always exist for structs/enums
     const enumComponents = components as IRawAbiTypeComponent[];
 
-    if (!enumComponents.every(({ type }) => typeHash[type] === '()')) {
+    if (!enumComponents.every(({ type }) => typeHash[type] === EmptyType.swayType)) {
       return undefined;
     }
 
