@@ -23,9 +23,7 @@ describe('EnumType.ts', () => {
       abiContents: { types: rawTypes },
     } = getTypegenForcProject(project);
 
-    const types = rawTypes
-      .filter((t) => t.type !== '()')
-      .map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     return { types };
   }
