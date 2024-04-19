@@ -590,7 +590,7 @@ describe('Coverage Contract', () => {
     expect(1).toEqual(1);
   });
 
-  it.skip('should test b256 multiple params vector input/output', async () => {
+  it('should test b256 multiple params vector input/output', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));

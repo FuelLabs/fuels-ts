@@ -27,7 +27,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test u16 vector input/output', async () => {
+  it('should test u16 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
     const { value } = await contractInstance.functions.echo_u16(INPUT).call<number[]>();
@@ -35,7 +35,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test u32 vector input/output', async () => {
+  it('should test u32 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
 
     const { value } = await contractInstance.functions.echo_u32(INPUT).call<number[]>();
@@ -59,7 +59,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test b256 vector input/output', async () => {
+  it('should test b256 vector input/output', async () => {
     const INPUT = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
 
     const { value } = await contractInstance.functions.echo_b256(INPUT).call<string[]>();
@@ -67,7 +67,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test b512 vector input/output', async () => {
+  it('should test b512 vector input/output', async () => {
     const INPUT = [hexlify(randomBytes(64)), hexlify(randomBytes(64)), hexlify(randomBytes(64))];
 
     const { value } = await contractInstance.functions.echo_b512(INPUT).call<string[]>();
@@ -83,7 +83,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test str[9] vector input/output', async () => {
+  it('should test str[9] vector input/output', async () => {
     const INPUT = ['123456789', 'abcdefghi', 'catdogcat', 'onetwoone'];
 
     const { value } = await contractInstance.functions.echo_str_9(INPUT).call<string[]>();
@@ -138,7 +138,7 @@ describe('Vector Tests', () => {
     expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
   });
 
-  it.skip('should test [bool; 2] vector input/output', async () => {
+  it('should test [bool; 2] vector input/output', async () => {
     const INPUT = [
       [true, true],
       [true, false],
@@ -170,7 +170,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test B256Struct vector input/output', async () => {
+  it('should test B256Struct vector input/output', async () => {
     const INPUT = [
       {
         i: hexlify(randomBytes(32)),
@@ -188,7 +188,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test ComplexStruct vector input/output', async () => {
+  it('should test ComplexStruct vector input/output', async () => {
     type ComplexStruct = { foo: number; bar: BN; baz: string };
     const INPUT = [
       {
@@ -234,7 +234,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test BigEnum vector input/output', async () => {
+  it('should test BigEnum vector input/output', async () => {
     const INPUT = [
       {
         AddressA: hexlify(randomBytes(32)),

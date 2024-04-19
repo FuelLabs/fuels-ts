@@ -31,7 +31,7 @@ describe('std-lib-string Tests', () => {
   const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
 
-  it.skip('should test std-lib-string return', async () => {
+  it('should test std-lib-string return', async () => {
     const { value } = await contractInstance.functions.return_dynamic_string().call<string>();
     expect(value).toBe('Hello World');
   });

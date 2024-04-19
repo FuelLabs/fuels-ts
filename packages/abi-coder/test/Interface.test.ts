@@ -53,7 +53,7 @@ const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 /**
  * @group node
  */
-describe.skip('Abi interface', () => {
+describe('Abi interface', () => {
   it('can retrieve a function fragment', () => {
     const fn = exhaustiveExamplesInterface.functions.entry_one;
 

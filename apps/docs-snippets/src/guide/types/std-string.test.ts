@@ -25,7 +25,7 @@ describe('StdString', () => {
     // #endregion std-string-1
   });
 
-  it.skip('should retrieve a std string from a contract', async () => {
+  it('should retrieve a std string from a contract', async () => {
     // #region std-string-2
     // #import { StdString };
 
