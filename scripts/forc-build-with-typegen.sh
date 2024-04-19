@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-output=$(pnpm fuels-forc build -p test/fixtures/forc-projects --release | tee -a /dev/tty)
+output=$(pnpm fuels-forc build -p test/fixtures/forc-projects --release | tee >(cat >&2))
 
 exit_code=$?
 
