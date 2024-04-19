@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { EncodingVersion } from '@fuel-ts/abi-coder';
 import {
   WORD_SIZE,
   B256Coder,
@@ -6,6 +7,7 @@ import {
   BigNumberCoder,
   CONTRACT_ID_LEN,
   ENCODING_V1,
+  ENCODING_V0,
 } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
@@ -42,6 +44,7 @@ type CallOpcodeParamsOffset = {
 type CallOutputInfo = {
   isHeap: boolean;
   encodedLength: number;
+  encoding: EncodingVersion;
 };
 
 type ContractCallScriptFn = (
@@ -90,7 +93,7 @@ const getSingleCallInstructions = (
     inst.push(asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8()));
   }
 
-  if (outputInfo.isHeap) {
+  if (outputInfo.encoding === ENCODING_V0 && outputInfo.isHeap) {
     inst.extend([
       // The RET register contains the pointer address of the `CALL` return (a stack
       // address).
@@ -198,6 +201,7 @@ const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
       const output: CallOutputInfo = {
         isHeap: call.isOutputDataHeap,
         encodedLength: call.outputEncodedLength,
+        encoding: call.encoding ?? ENCODING_V0,
       };
       return sum + getSingleCallInstructions(offset, output).byteLength();
     },
@@ -210,6 +214,7 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
     return {
       isHeap: func.outputMetadata.isHeapType,
       encodedLength: func.outputMetadata.encodedLength,
+      encoding: func.encoding,
     };
   });
 
@@ -379,6 +384,7 @@ export const getContractCallScript = (
         outputInfos.push({
           isHeap: call.isOutputDataHeap,
           encodedLength: call.outputEncodedLength,
+          encoding: call.encoding ?? ENCODING_V0,
         });
         scriptData.push(concat(callScriptData));
         paramOffsets.push(callParamOffsets);
