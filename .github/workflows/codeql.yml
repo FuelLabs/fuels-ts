@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "master", "upcoming-release/*" ]
+    branches: [ "master" ]
   schedule:
     - cron: '40 13 * * 4'
 
