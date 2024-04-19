@@ -2,7 +2,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
 import { NODE_URL } from "@/lib";
-import { useConnectUI, useDisconnect } from "@fuel-wallet/react";
+import { useConnectUI, useDisconnect } from "@fuels/react";
 import { WalletDisplay } from "./WalletDisplay";
 import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
