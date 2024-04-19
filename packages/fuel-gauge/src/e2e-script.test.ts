@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import type { BN } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, WalletUnlocked, bn } from 'fuels';
+import { Provider, WalletUnlocked, bn } from 'fuels';
 
 import { getScript } from './utils';
 
