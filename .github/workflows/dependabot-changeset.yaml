@@ -9,7 +9,8 @@ jobs:
   create-changeset:
     name: Create Changeset
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    ## Comment out the following line to enable the workflow
+    #  github.actor == 'dependabot[bot]'
 
     steps:
       - uses: actions/checkout@v3
