@@ -461,6 +461,15 @@ export default class Provider {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      responseMiddleware: ({ response }: any) => {
+        if (Array.isArray(response?.errors)) {
+          throw new FuelError(
+            FuelError.CODES.INVALID_REQUEST,
+            response.errors.map((err: Error) => err.message).join('\n\n')
+          );
+        }
+      },
     });
 
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
