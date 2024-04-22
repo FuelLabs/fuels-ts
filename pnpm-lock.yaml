@@ -148,7 +148,7 @@ importers:
         version: 0.1.1
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.33)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2))(typescript@5.2.2)
+        version: 6.7.0(postcss@8.4.38)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2))(typescript@5.2.2)
       tsx:
         specifier: ^4.7.0
         version: 4.7.0
@@ -159,11 +159,11 @@ importers:
         specifier: ~5.2.2
         version: 5.2.2
       vite:
-        specifier: ^5.2.9
+        specifier: ^5.0.11
         version: 5.2.9(@types/node@18.15.3)(terser@5.18.2)
       vite-plugin-node-polyfills:
         specifier: ^0.17.0
-        version: 0.17.0(rollup@4.9.6)(vite@5.2.9(@types/node@18.15.3)(terser@5.18.2))
+        version: 0.17.0(rollup@4.14.3)(vite@5.2.9(@types/node@18.15.3)(terser@5.18.2))
       vite-plugin-plain-text:
         specifier: ^1.4.2
         version: 1.4.2
@@ -475,10 +475,10 @@ importers:
         version: 5.0.1(typedoc@0.25.3(typescript@5.2.2))
       vitepress:
         specifier: 1.0.0-rc.40
-        version: 1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.33)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2)
+        version: 1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.38)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2)
       vitepress-plugin-search:
         specifier: 1.0.4-alpha.19
-        version: 1.0.4-alpha.19(flexsearch@0.7.31)(vitepress@1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.33)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2))(vue@3.4.15(typescript@5.2.2))
+        version: 1.0.4-alpha.19(flexsearch@0.7.31)(vitepress@1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.38)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2))(vue@3.4.15(typescript@5.2.2))
       vue:
         specifier: ^3.4.15
         version: 3.4.15(typescript@5.2.2)
@@ -15794,13 +15794,13 @@ snapshots:
     optionalDependencies:
       '@types/babel__core': 7.20.1
 
-  '@rollup/plugin-inject@5.0.5(rollup@4.9.6)':
+  '@rollup/plugin-inject@5.0.5(rollup@4.14.3)':
     dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@4.9.6)
+      '@rollup/pluginutils': 5.1.0(rollup@4.14.3)
       estree-walker: 2.0.2
       magic-string: 0.30.5
     optionalDependencies:
-      rollup: 4.9.6
+      rollup: 4.14.3
 
   '@rollup/plugin-node-resolve@11.2.1(rollup@2.79.1)':
     dependencies:
@@ -15825,13 +15825,13 @@ snapshots:
       picomatch: 2.3.1
       rollup: 2.79.1
 
-  '@rollup/pluginutils@5.1.0(rollup@4.9.6)':
+  '@rollup/pluginutils@5.1.0(rollup@4.14.3)':
     dependencies:
       '@types/estree': 1.0.5
       estree-walker: 2.0.2
       picomatch: 2.3.1
     optionalDependencies:
-      rollup: 4.9.6
+      rollup: 4.14.3
 
   '@rollup/rollup-android-arm-eabi@4.14.3':
     optional: true
@@ -23257,12 +23257,12 @@ snapshots:
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
 
-  postcss-load-config@3.1.4(postcss@8.4.33)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2)):
+  postcss-load-config@3.1.4(postcss@8.4.38)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
     optionalDependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       ts-node: 10.9.1(@types/node@18.15.3)(typescript@5.2.2)
 
   postcss-load-config@4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.2.2)):
@@ -25507,7 +25507,7 @@ snapshots:
 
   tslib@2.6.0: {}
 
-  tsup@6.7.0(postcss@8.4.33)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2))(typescript@5.2.2):
+  tsup@6.7.0(postcss@8.4.38)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2))(typescript@5.2.2):
     dependencies:
       bundle-require: 4.0.1(esbuild@0.17.19)
       cac: 6.7.14
@@ -25517,14 +25517,14 @@ snapshots:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 3.1.4(postcss@8.4.33)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2))
+      postcss-load-config: 3.1.4(postcss@8.4.38)(ts-node@10.9.1(@types/node@18.15.3)(typescript@5.2.2))
       resolve-from: 5.0.0
       rollup: 3.25.3
       source-map: 0.8.0-beta.0
       sucrase: 3.32.0
       tree-kill: 1.2.2
     optionalDependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
@@ -25939,9 +25939,9 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-node-polyfills@0.17.0(rollup@4.9.6)(vite@5.2.9(@types/node@18.15.3)(terser@5.18.2)):
+  vite-plugin-node-polyfills@0.17.0(rollup@4.14.3)(vite@5.2.9(@types/node@18.15.3)(terser@5.18.2)):
     dependencies:
-      '@rollup/plugin-inject': 5.0.5(rollup@4.9.6)
+      '@rollup/plugin-inject': 5.0.5(rollup@4.14.3)
       buffer-polyfill: buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
@@ -26005,16 +26005,16 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.18.2
 
-  vitepress-plugin-search@1.0.4-alpha.19(flexsearch@0.7.31)(vitepress@1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.33)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2))(vue@3.4.15(typescript@5.2.2)):
+  vitepress-plugin-search@1.0.4-alpha.19(flexsearch@0.7.31)(vitepress@1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.38)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2))(vue@3.4.15(typescript@5.2.2)):
     dependencies:
       '@types/flexsearch': 0.7.3
       '@types/markdown-it': 12.2.3
       flexsearch: 0.7.31
       markdown-it: 13.0.1
-      vitepress: 1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.33)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2)
+      vitepress: 1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.38)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2)
       vue: 3.4.15(typescript@5.2.2)
 
-  vitepress@1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.33)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2):
+  vitepress@1.0.0-rc.40(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(postcss@8.4.38)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2):
     dependencies:
       '@docsearch/css': 3.5.2
       '@docsearch/js': 3.5.2(@algolia/client-search@4.22.1)(@types/react@18.2.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)
@@ -26032,7 +26032,7 @@ snapshots:
       vite: 5.0.12(@types/node@20.11.13)(terser@5.18.2)
       vue: 3.4.15(typescript@5.2.2)
     optionalDependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/node'
