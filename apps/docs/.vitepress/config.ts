@@ -94,6 +94,68 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Wallets',
+            link: '/guide/wallets/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
+              {
+                text: 'Private Keys',
+                link: '/guide/wallets/private-keys',
+              },
+              {
+                text: 'Mnemonic Wallet',
+                link: '/guide/wallets/mnemonic-wallet',
+              },
+              {
+                text: 'Encrypting and Decrypting',
+                link: '/guide/wallets/encrypting-and-decrypting',
+              },
+              {
+                text: 'Checking Balances',
+                link: '/guide/wallets/checking-balances',
+              },
+              {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
+              },
+              {
+                text: 'Wallet Manager',
+                link: '/guide/wallets/wallet-manager',
+              },
+              {
+                text: 'Locking and Unlocking',
+                link: '/guide/wallets/locking-and-unlocking',
+              },
+              {
+                text: 'Signing Transactions',
+                link: '/guide/wallets/signing-transactions',
+              },
+              {
+                text: 'Test Wallets',
+                link: '/guide/wallets/test-wallets',
+              },
+            ],
+          },
+          {
+            text: 'Provider',
+            link: '/guide/provider/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Provider Options',
+                link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Querying the Chain',
+                link: '/guide/provider/querying-the-chain',
+              },
+            ],
+          },
+          {
             text: 'Contracts',
             link: '/guide/contracts/',
             collapsed: true,
@@ -203,68 +265,6 @@ export default defineConfig({
               {
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
-              },
-            ],
-          },
-          {
-            text: 'Wallets',
-            link: '/guide/wallets/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Instantiating Wallets',
-                link: '/guide/wallets/instantiating-wallets',
-              },
-              {
-                text: 'Private Keys',
-                link: '/guide/wallets/private-keys',
-              },
-              {
-                text: 'Mnemonic Wallet',
-                link: '/guide/wallets/mnemonic-wallet',
-              },
-              {
-                text: 'Encrypting and Decrypting',
-                link: '/guide/wallets/encrypting-and-decrypting',
-              },
-              {
-                text: 'Checking Balances',
-                link: '/guide/wallets/checking-balances',
-              },
-              {
-                text: 'Wallet Transferring',
-                link: '/guide/wallets/wallet-transferring',
-              },
-              {
-                text: 'Wallet Manager',
-                link: '/guide/wallets/wallet-manager',
-              },
-              {
-                text: 'Locking and Unlocking',
-                link: '/guide/wallets/locking-and-unlocking',
-              },
-              {
-                text: 'Signing Transactions',
-                link: '/guide/wallets/signing-transactions',
-              },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
-            ],
-          },
-          {
-            text: 'Provider',
-            link: '/guide/provider/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Provider Options',
-                link: '/guide/provider/provider-options',
-              },
-              {
-                text: 'Querying the Chain',
-                link: '/guide/provider/querying-the-chain',
               },
             ],
           },

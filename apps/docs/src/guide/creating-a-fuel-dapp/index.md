@@ -2,7 +2,7 @@
 
 `npm create fuels` is a command line tool that helps you scaffold a new full-stack Fuel dApp. In this guide, we will create a new counter dApp using `npm create fuels` and add decrement functionality to it. The final result will look like this:
 
-![End result of this guide](./public/creating-a-fuel-dapp-create-fuels-end-result.png)
+![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
 ## Initializing the project
 
@@ -128,7 +128,7 @@ pnpm dev
 
 You should now be able to see the counter dApp running at `http://localhost:3000`. You can try changing the contents of the `./sway-programs/contract/src/main.sw` file and see the changes reflected in the UI without having to restart the server.
 
-![Fullstack Fuel Dev Workflow](./public/creating-a-fuel-dapp-create-fuels-split-view.png)
+![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
 
 ## Adding Decrement Functionality
 
@@ -172,7 +172,7 @@ Congratulations! That's all. You should now be able to see the counter dApp runn
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 
-![End result of this guide](./public/creating-a-fuel-dapp-create-fuels-end-result.png)
+![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
 Whenever you want to add a new feature to your dApp and quickly prototype things, you can follow the same steps we followed in this guide.
 
