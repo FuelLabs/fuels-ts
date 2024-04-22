@@ -13,8 +13,12 @@ export class EmptyType extends AType implements IType {
   constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
     super(params);
     this.attributes = {
-      inputLabel: `undefined`,
-      outputLabel: `undefined`,
+      /**
+       * This type is always ignored as function's input
+       * and it's an error in the typegen if it makes its way into a function's inputs list
+       */
+      inputLabel: `never`,
+      outputLabel: `void`,
     };
   }
 

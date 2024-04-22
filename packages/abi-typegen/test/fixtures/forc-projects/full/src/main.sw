@@ -26,6 +26,9 @@ struct StructWithSingleOption {
 
 abi MyContract {
     fn types_empty(x: ()) -> ();
+    fn types_empty_then_value(x: (), y: u8) -> ();
+    fn types_value_then_empty(x: u8, y: ()) -> ();
+    fn types_value_then_empty_then_value(x: u8, y: (), z: u8) -> ();
     fn types_u8(x: u8) -> u8;
     fn types_u16(x: u16) -> u16;
     fn types_u32(x: u32) -> u32;
@@ -55,6 +58,16 @@ impl MyContract for Contract {
     fn types_empty(x: ()) -> () {
         x
     }
+    fn types_empty_then_value(x: (), y: u8) -> () {
+        ()
+    }
+    fn types_value_then_empty(x: u8, y: ()) -> () {
+        ()
+    }
+    fn types_value_then_empty_then_value(x: u8, y: (), z: u8) -> () {
+        ()
+    }
+
     fn types_u8(x: u8) -> u8 {
         255
     }

@@ -51,6 +51,17 @@ describe('CallTestContract', () => {
 
     const { value: value1 } = await contract.functions.foobar(undefined).call();
     expect(value1.toHex()).toEqual(toHex(63));
+
+    const { value: value2 } = await contract.functions.foobar2(35).call();
+    expect(value2.toHex()).toEqual(toHex(63));
+
+    // @ts-expect-error asd
+    const { value: value3 } = await contract.functions.foobar3(35).call();
+    expect(value3.toHex()).toEqual(toHex(63));
+
+    // @ts-expect-error asd
+    const { value: value4 } = await contract.functions.foobar4(35, 35).call();
+    expect(value4.toHex()).toEqual(toHex(63));
   });
 
   it('function with empty return should resolve undefined', async () => {
