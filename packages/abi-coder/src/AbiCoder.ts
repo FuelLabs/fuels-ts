@@ -3,14 +3,12 @@ import type { DecodedValue, InputValue, Coder } from './encoding/coders/Abstract
 import { getCoderForEncoding } from './encoding/strategies/getCoderForEncoding';
 import type { EncodingOptions } from './types/EncodingOptions';
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
-import { DEFAULT_ENCODING_VERSION } from './utils/constants';
 
 export abstract class AbiCoder {
   static getCoder(
     abi: JsonAbi,
     argument: JsonAbiArgument,
     options: EncodingOptions = {
-      encoding: DEFAULT_ENCODING_VERSION,
       isSmallBytes: false,
     }
   ): Coder {
