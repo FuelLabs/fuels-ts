@@ -26,7 +26,6 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
   Predicate,
-  hexlify,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
