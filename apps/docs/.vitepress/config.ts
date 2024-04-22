@@ -49,120 +49,47 @@ export default defineConfig({
           },
           {
             text: 'Creating a Fuel dApp',
-            link: '/creating-a-fuel-dapp',
-          },
-          {
-            text: 'Provider',
-            link: '/guide/provider/',
+            link: '/guide/creating-a-fuel-dapp/',
             collapsed: true,
             items: [
               {
-                text: 'Provider Options',
-                link: '/guide/provider/provider-options',
+                text: 'Options',
+                link: '/guide/creating-a-fuel-dapp/options',
               },
               {
-                text: 'Querying the Chain',
-                link: '/guide/provider/querying-the-chain',
+                text: 'Deploying a dApp to Testnet',
+                link: '/guide/creating-a-fuel-dapp/deploying-a-dapp-to-testnet',
               },
             ],
           },
           {
-            text: 'Errors',
-            link: '/guide/errors/',
+            text: 'fuels CLI',
+            link: '/guide/fuels-cli/',
             collapsed: true,
             items: [
               {
-                text: 'Error Codes',
-                link: '/guide/errors/error-codes',
+                text: 'Config File',
+                link: '/guide/fuels-cli/config-file',
               },
               {
-                text: 'Debugging Revert Errors',
-                link: '/guide/errors/debugging-revert-errors',
-              },
-            ],
-          },
-          {
-            text: 'Wallets',
-            link: '/guide/wallets/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Instantiating Wallets',
-                link: '/guide/wallets/instantiating-wallets',
+                text: 'Commands',
+                link: '/guide/fuels-cli/commands',
               },
               {
-                text: 'Private Keys',
-                link: '/guide/wallets/private-keys',
+                text: 'Binaries',
+                link: '/guide/fuels-cli/binaries',
               },
               {
-                text: 'Mnemonic Wallet',
-                link: '/guide/wallets/mnemonic-wallet',
+                text: 'ABI Typegen',
+                link: '/guide/fuels-cli/abi-typegen',
               },
-              {
-                text: 'Encrypting and Decrypting',
-                link: '/guide/wallets/encrypting-and-decrypting',
-              },
-              {
-                text: 'Checking Balances',
-                link: '/guide/wallets/checking-balances',
-              },
-              {
-                text: 'Wallet Transferring',
-                link: '/guide/wallets/wallet-transferring',
-              },
-              {
-                text: 'Wallet Manager',
-                link: '/guide/wallets/wallet-manager',
-              },
-              {
-                text: 'Locking and Unlocking',
-                link: '/guide/wallets/locking-and-unlocking',
-              },
-              {
-                text: 'Signing Transactions',
-                link: '/guide/wallets/signing-transactions',
-              },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
-            ],
-          },
-          {
-            text: 'Typegen',
-            link: '/guide/typegen/',
-            collapsed: true,
-            items: [
               {
                 text: 'Generating Types',
-                link: '/guide/typegen/generating-types',
+                link: '/guide/fuels-cli/generating-types',
               },
               {
                 text: 'Using Generated Types',
-                link: '/guide/typegen/using-generated-types',
-              },
-            ],
-          },
-          {
-            text: 'Transactions',
-            link: '/guide/transactions/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Transaction Request',
-                link: '/guide/transactions/transaction-request',
-              },
-              {
-                text: 'Transaction Response',
-                link: '/guide/transactions/transaction-response',
-              },
-              {
-                text: 'Transaction Parameters',
-                link: '/guide/transactions/transaction-parameters',
-              },
-              {
-                text: 'Transaction Policies',
-                link: '/guide/transactions/transaction-policies',
+                link: '/guide/fuels-cli/using-generated-types',
               },
             ],
           },
@@ -280,6 +207,179 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Wallets',
+            link: '/guide/wallets/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Instantiating Wallets',
+                link: '/guide/wallets/instantiating-wallets',
+              },
+              {
+                text: 'Private Keys',
+                link: '/guide/wallets/private-keys',
+              },
+              {
+                text: 'Mnemonic Wallet',
+                link: '/guide/wallets/mnemonic-wallet',
+              },
+              {
+                text: 'Encrypting and Decrypting',
+                link: '/guide/wallets/encrypting-and-decrypting',
+              },
+              {
+                text: 'Checking Balances',
+                link: '/guide/wallets/checking-balances',
+              },
+              {
+                text: 'Wallet Transferring',
+                link: '/guide/wallets/wallet-transferring',
+              },
+              {
+                text: 'Wallet Manager',
+                link: '/guide/wallets/wallet-manager',
+              },
+              {
+                text: 'Locking and Unlocking',
+                link: '/guide/wallets/locking-and-unlocking',
+              },
+              {
+                text: 'Signing Transactions',
+                link: '/guide/wallets/signing-transactions',
+              },
+              {
+                text: 'Test Wallets',
+                link: '/guide/wallets/test-wallets',
+              },
+            ],
+          },
+          {
+            text: 'Provider',
+            link: '/guide/provider/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Provider Options',
+                link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Querying the Chain',
+                link: '/guide/provider/querying-the-chain',
+              },
+            ],
+          },
+          {
+            text: 'Transactions',
+            link: '/guide/transactions/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Transaction Request',
+                link: '/guide/transactions/transaction-request',
+              },
+              {
+                text: 'Transaction Response',
+                link: '/guide/transactions/transaction-response',
+              },
+              {
+                text: 'Transaction Parameters',
+                link: '/guide/transactions/transaction-parameters',
+              },
+              {
+                text: 'Transaction Policies',
+                link: '/guide/transactions/transaction-policies',
+              },
+            ],
+          },
+          {
+            text: 'Utilities',
+            link: '/guide/utilities/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Date conversion',
+                link: '/guide/utilities/date-conversion',
+              },
+              {
+                text: 'Address conversion',
+                link: '/guide/utilities/address-conversion',
+              },
+              {
+                text: 'Unit conversion',
+                link: '/guide/utilities/unit-conversion',
+              },
+            ],
+          },
+          {
+            text: 'Cookbook',
+            link: '/guide/cookbook/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Transferring Assets',
+                link: '/guide/cookbook/transferring-assets',
+              },
+              {
+                text: 'Deposit And Withdraw',
+                link: '/guide/cookbook/deposit-and-withdraw',
+              },
+              {
+                text: 'Wallet SDK and React Hooks',
+                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
+              },
+              {
+                text: 'Custom Transactions',
+                link: '/guide/cookbook/custom-transactions',
+              },
+              {
+                text: 'Custom Transactions from Contract Calls',
+                link: '/guide/cookbook/custom-transactions-from-contract-calls',
+              },
+              {
+                text: 'Transactions with Multiple Signers',
+                link: '/guide/cookbook/transactions-with-multiple-signers',
+              },
+              {
+                text: 'GraphQL Integration',
+                link: '/guide/cookbook/graphql-integration',
+              },
+            ],
+          },
+          {
+            text: 'Testing',
+            link: '/guide/testing/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Testing in TS',
+                link: '/guide/testing/testing-in-ts',
+              },
+              {
+                text: 'Setting Up a Custom Chain',
+                link: '/guide/testing/setting-up-a-custom-chain',
+              },
+              {
+                text: 'Tweaking the Blockchain',
+                link: '/guide/testing/tweaking-the-blockchain',
+              },
+            ],
+          },
+          {
+            text: 'Errors',
+            link: '/guide/errors/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Error Codes',
+                link: '/guide/errors/error-codes',
+              },
+              {
+                text: 'Debugging Revert Errors',
+                link: '/guide/errors/debugging-revert-errors',
+              },
+            ],
+          },
+          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,
@@ -359,120 +459,6 @@ export default defineConfig({
               {
                 text: 'Vectors',
                 link: '/guide/types/vectors',
-              },
-            ],
-          },
-          {
-            text: 'Utilities',
-            link: '/guide/utilities/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Date conversion',
-                link: '/guide/utilities/date-conversion',
-              },
-              {
-                text: 'Address conversion',
-                link: '/guide/utilities/address-conversion',
-              },
-              {
-                text: 'Unit conversion',
-                link: '/guide/utilities/unit-conversion',
-              },
-            ],
-          },
-          {
-            text: 'Cookbook',
-            link: '/guide/cookbook/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Transferring Assets',
-                link: '/guide/cookbook/transferring-assets',
-              },
-              {
-                text: 'Deposit And Withdraw',
-                link: '/guide/cookbook/deposit-and-withdraw',
-              },
-              {
-                text: 'Wallet SDK and React Hooks',
-                link: '/guide/cookbook/wallet-sdk-and-react-hooks',
-              },
-              {
-                text: 'Custom Transactions',
-                link: '/guide/cookbook/custom-transactions',
-              },
-              {
-                text: 'Custom Transactions from Contract Calls',
-                link: '/guide/cookbook/custom-transactions-from-contract-calls',
-              },
-              {
-                text: 'Transactions with Multiple Signers',
-                link: '/guide/cookbook/transactions-with-multiple-signers',
-              },
-              {
-                text: 'GraphQL Integration',
-                link: '/guide/cookbook/graphql-integration',
-              },
-            ],
-          },
-          {
-            text: 'Testing',
-            link: '/guide/testing/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
-              },
-              {
-                text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
-              },
-              {
-                text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
-              },
-            ],
-          },
-          {
-            text: 'CLI',
-            link: '/guide/cli/',
-            collapsed: true,
-            items: [
-              {
-                text: 'npm create fuels',
-                link: '/guide/npm-create-fuels/',
-                collapsed: true,
-                items: [
-                  {
-                    text: 'Options',
-                    link: '/guide/npm-create-fuels/options',
-                  },
-                  {
-                    text: 'Deploying a dApp to Testnet',
-                    link: '/guide/npm-create-fuels/deploying-a-dapp-to-testnet',
-                  },
-                ],
-              },
-              {
-                text: 'fuels',
-                link: '/guide/fuels/',
-                collapsed: true,
-                items: [
-                  {
-                    text: 'Config File',
-                    link: '/guide/fuels/config-file',
-                  },
-                  {
-                    text: 'Commands',
-                    link: '/guide/fuels/commands',
-                  },
-                  {
-                    text: 'Binaries',
-                    link: '/guide/fuels/binaries',
-                  },
-                ],
               },
             ],
           },
