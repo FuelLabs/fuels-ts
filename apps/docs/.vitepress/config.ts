@@ -49,7 +49,34 @@ export default defineConfig({
           },
           {
             text: 'Creating a Fuel dApp',
-            link: '/creating-a-fuel-dapp',
+            link: '/guide/creating-a-fuel-dapp/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Initializing the Project',
+                link: '/guide/creating-a-fuel-dapp/initializing-the-project',
+              },
+              {
+                text: 'Directory Structure',
+                link: '/guide/creating-a-fuel-dapp/directory-structure',
+              },
+              {
+                text: 'Dev Environment Setup',
+                link: '/guide/creating-a-fuel-dapp/dev-environment-setup',
+              },
+              {
+                text: 'Adding Decrement Functionality',
+                link: '/guide/creating-a-fuel-dapp/adding-decrement-functionality',
+              },
+              {
+                text: 'Deploying to Testnet',
+                link: '/guide/creating-a-fuel-dapp/deploying-to-testnet',
+              },
+              {
+                text: 'Next Steps',
+                link: '/guide/creating-a-fuel-dapp/next-steps',
+              },
+            ],
           },
           {
             text: 'Provider',
@@ -477,7 +504,7 @@ export default defineConfig({
             ],
           },
           apiLinks,
-        ]
+        ],
       },
     ],
   },
