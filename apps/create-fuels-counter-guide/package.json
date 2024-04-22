@@ -7,7 +7,7 @@
     "original:build": "next build",
     "original:start": "next start",
     "original:lint": "next lint",
-    "fuels:build": "fuels build --deploy",
+    "fuels:build": "fuels build",
     "fuels:dev": "fuels dev",
     "postbuild": "run-s fuels:build original:build"
   },
