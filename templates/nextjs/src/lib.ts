@@ -1,8 +1,14 @@
 import { Account, BN } from 'fuels';
 
-export const NODE_URL = `http://127.0.0.1:${
-  process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000
-}/graphql`;
+type DappEnvironment = 'local' | 'testnet';
+
+export const CURRENT_ENVIRONMENT: DappEnvironment =
+  (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as DappEnvironment) || 'local';
+
+export const NODE_URL =
+  CURRENT_ENVIRONMENT === 'local'
+    ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/graphql`
+    : 'https://beta-5.fuel.network/graphql';
 
 /**
  * Enable the Fuel dev connector.
@@ -15,3 +21,5 @@ export interface AppWallet {
   walletBalance?: BN;
   refreshWalletBalance?: () => Promise<void>;
 }
+
+export const TESTNET_FAUCET_LINK = 'https://faucet-beta-5.fuel.network/';
