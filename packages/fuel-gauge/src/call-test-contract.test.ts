@@ -1,5 +1,5 @@
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
-import type { BigNumberish, Contract } from 'fuels';
+import type { Contract } from 'fuels';
 import { BN, bn, toHex, BaseAssetId } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -45,22 +45,19 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     const contract = await setupContract();
 
-    const { value: value0 } = await contract.functions.barfoo(0).call();
-    expect(value0.toHex()).toEqual(toHex(63));
+    const { value: empty } = await contract.functions.empty().call();
+    expect(empty.toHex()).toEqual(toHex(63));
 
-    const { value: value1 } = await contract.functions.foobar().call();
-    expect(value1.toHex()).toEqual(toHex(63));
+    const { value: emptyThenValue } = await contract.functions.empty_then_value(35).call();
+    expect(emptyThenValue.toHex()).toEqual(toHex(63));
 
-    const { value: value2 } = await contract.functions.foobar2(35).call();
-    expect(value2.toHex()).toEqual(toHex(63));
+    const { value: valueThenEmpty } = await contract.functions.value_then_empty(35).call();
+    expect(valueThenEmpty.toHex()).toEqual(toHex(63));
 
-    // @ts-expect-error asd
-    const { value: value3 } = await contract.functions.foobar3(35).call();
-    expect(value3.toHex()).toEqual(toHex(63));
-
-    // @ts-expect-error asd
-    const { value: value4 } = await contract.functions.foobar4(35, 35).call();
-    expect(value4.toHex()).toEqual(toHex(63));
+    const { value: valueThenEmptyThenValue } = await contract.functions
+      .value_then_empty_then_value(35, 35)
+      .call();
+    expect(valueThenEmptyThenValue.toHex()).toEqual(toHex(63));
   });
 
   it('function with empty return should resolve undefined', async () => {
@@ -73,7 +70,7 @@ describe('CallTestContract', () => {
 
   it.each([
     [
-      'foobar_no_params',
+      'no_params',
       {
         values: [],
         expected: bn(50),
@@ -136,9 +133,7 @@ describe('CallTestContract', () => {
         expected: '0x0000000000000000000000000000000000000000000000000000000000000001',
       },
     ],
-  ] as Array<
-    [keyof CallTestContractAbi['functions'], { values: unknown[]; expected: BigNumberish }]
-  >)(
+  ])(
     `Test call with multiple arguments and different types -> %s`,
     async (method, { values, expected }) => {
       // Type cast to Contract because of the dynamic nature of the test
@@ -230,7 +225,7 @@ describe('CallTestContract', () => {
   it('Calling a simple contract function does only one dry run', async () => {
     const contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
-    await contract.functions.foobar_no_params().call();
+    await contract.functions.no_params().call();
     expect(dryRunSpy).toHaveBeenCalledOnce();
   });
 
@@ -238,7 +233,7 @@ describe('CallTestContract', () => {
     const contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
 
-    await contract.functions.foobar_no_params().simulate();
+    await contract.functions.no_params().simulate();
     expect(dryRunSpy).toHaveBeenCalledTimes(2);
   });
 });
