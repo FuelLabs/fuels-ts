@@ -9,11 +9,19 @@ jobs:
   create-changeset:
     name: Create Changeset
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    ## Comment out the following line to enable the workflow
+    #  github.actor == 'dependabot[bot]'
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 9.0.2
+          run_install: true
 
       - name: Install jq
         run: sudo apt-get install -y jq
@@ -23,4 +31,10 @@ jobs:
 
       - name: Commit Changeset
         run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add .
           git commit -m "build: update dependency changeset"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
