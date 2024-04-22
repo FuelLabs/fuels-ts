@@ -84,7 +84,7 @@ It is a Next.js project with a few extra files and folders. Let's take a closer 
 
 ### `./fuels.config.ts`
 
-This is the configuration file for the [`fuels` CLI](./guide/fuels/index.md), the CLI and tooling that powers this project under the hood. It makes sure that all of your Sway programs are continuously compiled and deployed to your local Fuel node. You can read more about the `fuels.config.ts` file in the [Fuels CLI documentation](./guide/fuels/config-file.md).
+This is the configuration file for the [`fuels` CLI](../fuels-cli/index.md), the CLI and tooling that powers this project under the hood. It makes sure that all of your Sway programs are continuously compiled and deployed to your local Fuel node. You can read more about the `fuels.config.ts` file in the [Fuels CLI documentation](../fuels-cli/config-file.md).
 
 ### `./sway-programs/contract/src/main.sw`
 
@@ -180,7 +180,7 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - Now that you have a basic counter dApp running and have the `npm create fuels` workflow powering you, you can start building more complex dApps using the Fuel Stack. A good place to start for ideas and reference code is the [Sway Applications Repo](https://github.com/FuelLabs/sway-applications).
 
-- If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./guide/npm-create-fuels/deploying-a-dapp-to-testnet.md) guide.
+- If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./deploying-a-dapp-to-testnet.md) guide.
 
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 

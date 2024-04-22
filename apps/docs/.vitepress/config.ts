@@ -365,21 +365,6 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Errors',
-            link: '/guide/errors/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Error Codes',
-                link: '/guide/errors/error-codes',
-              },
-              {
-                text: 'Debugging Revert Errors',
-                link: '/guide/errors/debugging-revert-errors',
-              },
-            ],
-          },
-          {
             text: 'Types',
             link: '/guide/types/',
             collapsed: true,
@@ -459,6 +444,21 @@ export default defineConfig({
               {
                 text: 'Vectors',
                 link: '/guide/types/vectors',
+              },
+            ],
+          },
+          {
+            text: 'Errors',
+            link: '/guide/errors/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Error Codes',
+                link: '/guide/errors/error-codes',
+              },
+              {
+                text: 'Debugging Revert Errors',
+                link: '/guide/errors/debugging-revert-errors',
               },
             ],
           },
