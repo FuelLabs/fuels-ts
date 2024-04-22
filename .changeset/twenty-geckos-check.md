@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: throw proper error when user does not have enough resources to cover fee
+fix: throw proper error for not enough resources to cover fee
