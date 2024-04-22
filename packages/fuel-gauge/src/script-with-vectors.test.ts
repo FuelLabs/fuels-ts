@@ -39,10 +39,10 @@ describe('Script With Vectors', () => {
     const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
 
     const vecFirst = someVec[0];
-    const vecPointer = 11232;
+    const vecPointer = 11616;
     const vecCapacity = 4;
     const vecLen = 4;
-    const vecAddr = 11208;
+    const vecAddr = 11592;
 
     expect(formattedLog).toEqual([
       vecFirst,

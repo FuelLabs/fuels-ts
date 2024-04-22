@@ -185,7 +185,7 @@ describe('Transaction Request', () => {
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
 
     // Get the chain ID
-    const chainId = await provider.getChainId();
+    const chainId = provider.getChainId();
 
     // Get the transaction ID using the Chain ID
     const transactionId = transactionRequest.getTransactionId(chainId);
@@ -193,7 +193,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x35cd6a10e917d5d0223413c1fb9863d27da40e5d602a7f37cfbcefb570172f6c'
+      '0x8a1a2bb529db20cdd8f35a8b6e00b0440629712fa891fa29232a396982be3d15'
     );
   });
 });
