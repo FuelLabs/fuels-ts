@@ -436,48 +436,41 @@ export default defineConfig({
             ],
           },
           {
-            text: 'CLI',
-            link: '/guide/cli/',
+            text: 'CLI - npm create fuels',
+            link: '/guide/npm-create-fuels/',
             collapsed: true,
             items: [
               {
-                text: 'npm create fuels',
-                link: '/guide/npm-create-fuels/',
-                collapsed: true,
-                items: [
-                  {
-                    text: 'Options',
-                    link: '/guide/npm-create-fuels/options',
-                  },
-                  {
-                    text: 'Deploying a dApp to Testnet',
-                    link: '/guide/npm-create-fuels/deploying-a-dapp-to-testnet',
-                  },
-                ],
+                text: 'Options',
+                link: '/guide/npm-create-fuels/options',
               },
               {
-                text: 'fuels',
-                link: '/guide/fuels/',
-                collapsed: true,
-                items: [
-                  {
-                    text: 'Config File',
-                    link: '/guide/fuels/config-file',
-                  },
-                  {
-                    text: 'Commands',
-                    link: '/guide/fuels/commands',
-                  },
-                  {
-                    text: 'Binaries',
-                    link: '/guide/fuels/binaries',
-                  },
-                ],
+                text: 'Deploying a dApp to Testnet',
+                link: '/guide/npm-create-fuels/deploying-a-dapp-to-testnet',
+              },
+            ],
+          },
+          {
+            text: 'CLI - fuels',
+            link: '/guide/fuels/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Config File',
+                link: '/guide/fuels/config-file',
+              },
+              {
+                text: 'Commands',
+                link: '/guide/fuels/commands',
+              },
+              {
+                text: 'Binaries',
+                link: '/guide/fuels/binaries',
               },
             ],
           },
           apiLinks,
-        ]
+        ],
       },
     ],
   },
