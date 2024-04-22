@@ -76,7 +76,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "^2.13.7",
-    "@graphql-codegen/typescript": "^2.8.0",
+    "@graphql-codegen/typescript": "^4.0.6",
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
     "@graphql-codegen/typescript-operations": "^2.5.5",
     "@types/ramda": "^0.29.3",
