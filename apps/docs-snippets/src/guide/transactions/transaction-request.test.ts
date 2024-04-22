@@ -177,7 +177,7 @@ describe('Transaction Request', () => {
     expect(transactionRequest.witnesses.length).toEqual(2);
   });
 
-  it('gets the transaction ID', async () => {
+  it('gets the transaction ID', () => {
     // #region transaction-request-7
     // #import { ScriptTransactionRequest };
 
