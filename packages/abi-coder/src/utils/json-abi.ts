@@ -3,13 +3,18 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
-import { DEFAULT_ENCODING_VERSION, ENCODING_V0, ENCODING_V1, type EncodingVersion } from './constants';
+import {
+  DEFAULT_ENCODING_VERSION,
+  ENCODING_V0,
+  ENCODING_V1,
+  type EncodingVersion,
+} from './constants';
 
 /**
  * Asserts that the encoding version is supported by the ABI coder.
- * 
+ *
  * @param encoding - the encoding version to check
- * @return the supported encoding version
+ * @returns the encoding version
  * @throws FuelError if the encoding version is not supported
  */
 export const getEncodingVersion = (encoding?: string): EncodingVersion => {
@@ -29,7 +34,7 @@ export const getEncodingVersion = (encoding?: string): EncodingVersion => {
         `Encoding version '${encoding}' is unsupported.`
       );
   }
-}
+};
 
 /**
  * Find a function by name in the ABI.

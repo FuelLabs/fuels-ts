@@ -32,20 +32,23 @@ describe('json-abi', () => {
   describe('getEncodingVersion', () => {
     it('should fallback to the default encoding version', () => {
       const encodingVersion = undefined;
-      const expected = DEFAULT_ENCODING_VERSION
+      const expected = DEFAULT_ENCODING_VERSION;
 
       const actual = getEncodingVersion(encodingVersion);
 
       expect(actual).toBe(expected);
-    })
+    });
 
-    it.each([ENCODING_V0, ENCODING_V1])('should return the encoding version (when defined)', (version) => {
-      const expected = version;
+    it.each([ENCODING_V0, ENCODING_V1])(
+      'should return the encoding version (when defined)',
+      (version) => {
+        const expected = version;
 
-      const actual = getEncodingVersion(version);
+        const actual = getEncodingVersion(version);
 
-      expect(actual).toBe(expected);
-    })
+        expect(actual).toBe(expected);
+      }
+    );
 
     it('should throw an error if the encoding version is not supported', () => {
       const encodingVersion = '-1';
@@ -53,9 +56,9 @@ describe('json-abi', () => {
       expect(() => getEncodingVersion(encodingVersion)).toThrowError(
         `Encoding version '${encodingVersion}' is unsupported.`
       );
-    })
-  })
-  
+    });
+  });
+
   describe('findFunctionByName', () => {
     it('should find a function by name', () => {
       const expected = {

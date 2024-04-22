@@ -21,7 +21,12 @@ import type {
 } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
 import { ENCODING_V1, OPTION_CODER_TYPE } from './utils/constants';
-import { findFunctionByName, findNonEmptyInputs, findTypeById, getEncodingVersion } from './utils/json-abi';
+import {
+  findFunctionByName,
+  findNonEmptyInputs,
+  findTypeById,
+  getEncodingVersion,
+} from './utils/json-abi';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
 import { isHeapType, isPointerType, unpackDynamicData } from './utils/utilities';
 
