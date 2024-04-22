@@ -26,6 +26,7 @@ import {
   BaseAssetId,
   FUEL_NETWORK_URL,
   Predicate,
+  hexlify,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -825,7 +826,7 @@ describe('Contract', () => {
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
-  it('should ensure multicall does not allow multiple calls that return heap types', async () => {
+  it('should ensure multicall allows multiple heap types', async () => {
     const wallet = Wallet.generate({
       provider,
     });
@@ -841,47 +842,15 @@ describe('Contract', () => {
 
     const vector = [5, 4, 3, 2, 1];
 
-    const calls = [
-      contract.functions.return_context_amount(),
-      contract.functions.return_vector(vector), // returns heap type Vec
-      contract.functions.return_bytes(), // returns heap type Bytes
-    ];
+    const { value } = await contract
+      .multiCall([
+        contract.functions.return_context_amount(),
+        contract.functions.return_vector(vector), // returns heap type Vec
+        contract.functions.return_bytes(),
+      ])
+      .call();
 
-    await expectToThrowFuelError(
-      () => contract.multiCall(calls).call(),
-      new FuelError(
-        ErrorCode.INVALID_MULTICALL,
-        'A multicall can have only one call that returns a heap type.'
-      )
-    );
-  });
-
-  it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(500_000),
-        assetId: BaseAssetId,
-      },
-    ]);
-    const factory = new ContractFactory(contractBytecode, abi, wallet);
-
-    const contract = await factory.deployContract({ gasPrice });
-
-    const calls = [
-      contract.functions.return_bytes(), // returns heap type Bytes
-      contract.functions.return_context_amount(),
-    ];
-
-    await expectToThrowFuelError(
-      () => contract.multiCall(calls).call(),
-      new FuelError(
-        ErrorCode.INVALID_MULTICALL,
-        'In a multicall, the contract call returning a heap type must be the last call.'
-      )
-    );
+    expect(JSON.stringify(value)).toBe(JSON.stringify([bn(0), vector, new Uint8Array()]));
   });
 
   it('Read only call', async () => {

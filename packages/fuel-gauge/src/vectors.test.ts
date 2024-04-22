@@ -281,7 +281,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test Vec<u8> inside vector input/output', async () => {
+  it('should test Vec<u8> inside vector input/output', async () => {
     const INPUT = [[1, 5, 98], [2, 44], [34]];
 
     const { value } = await contractInstance.functions.echo_vector_inside_vector(INPUT).call();
