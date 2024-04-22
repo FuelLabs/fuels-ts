@@ -57,7 +57,7 @@
     "commander": "^9.4.1",
     "glob": "^10.2.6",
     "handlebars": "^4.7.7",
-    "mkdirp": "^1.0.4",
+    "mkdirp": "^3.0.1",
     "ramda": "^0.29.0",
     "rimraf": "^3.0.2"
   },
