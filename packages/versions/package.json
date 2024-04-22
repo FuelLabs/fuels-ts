@@ -45,6 +45,6 @@
     "cli-table": "^0.3.11"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.1"
+    "@types/cli-table": "^0.3.4"
   }
 }
