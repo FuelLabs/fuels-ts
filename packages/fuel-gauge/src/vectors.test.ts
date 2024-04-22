@@ -337,7 +337,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test multiCall vectors', async () => {
+  it('should test multiCall vectors', async () => {
     const { value: results } = await contractInstance
       .multiCall([
         contractInstance.functions.echo_u8([1]),
