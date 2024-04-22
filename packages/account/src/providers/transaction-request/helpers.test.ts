@@ -1,7 +1,6 @@
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import { generateFakeCoin, generateFakeMessageCoin } from '../../test-utils/resources';
 import {
@@ -25,6 +24,8 @@ import { ScriptTransactionRequest } from './script-transaction-request';
  * @group browser
  */
 describe('helpers', () => {
+  const ASSET_A: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
+  const ASSET_B: string = '0x0202020202020202020202020202020202020202020202020202020202020202';
   const coinInput = generateFakeRequestInputCoin();
   const messageInput = generateFakeRequestInputMessage();
   const contractInput = generateFakeRequestInputContract();
