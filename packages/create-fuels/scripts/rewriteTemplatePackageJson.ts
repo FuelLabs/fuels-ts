@@ -8,6 +8,5 @@ let contents = readFileSync(filepath, 'utf-8');
 
 contents = contents.replace(/xprebuild/g, 'prebuild');
 contents = contents.replace(/"fuels": "workspace:\*"/, `"fuels": "${fuelsVersion}"`);
-contents = contents.replace(/"build": "pnpm run prebuild && next build"/, `"build": "next build"`);
 
 writeFileSync(filepath, contents);
