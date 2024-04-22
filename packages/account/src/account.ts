@@ -30,12 +30,19 @@ import {
   transactionRequestify,
   addAmountToAsset,
 } from './providers';
+import {
+  cacheRequestInputsResources,
+  getAssetAmountInRequestInputs,
+  isRequestInputCoin,
+  isRequestInputResource,
+} from './providers/transaction-request/helpers';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
   'gasLimit' | 'gasPrice' | 'maturity' | 'maxFee' | 'witnessLimit'
 >;
+const MAX_FUNDING_ATTEMPTS = 2;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
@@ -233,60 +240,48 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    *
    * @param request - The transaction request.
-   * @param coinQuantities - The coin quantities required to execute the transaction.
+   * @param requiredQuantities - The coin quantities required to execute the transaction.
    * @param fee - The estimated transaction fee.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(
     request: T,
-    coinQuantities: CoinQuantity[],
+    requiredQuantities: CoinQuantity[],
     fee: BN
   ): Promise<void> {
-    const updatedQuantities = addAmountToAsset({
+    const requiredInBaseAsset =
+      requiredQuantities.find((quantity) => quantity.assetId === BaseAssetId)?.amount || bn(0);
+
+    const requiredQuantitiesWithFee = addAmountToAsset({
       amount: bn(fee),
       assetId: BaseAssetId,
-      coinQuantities,
+      coinQuantities: requiredQuantities,
     });
 
     const quantitiesDict: Record<string, { required: BN; owned: BN }> = {};
 
-    updatedQuantities.forEach(({ amount, assetId }) => {
+    requiredQuantitiesWithFee.forEach(({ amount, assetId }) => {
       quantitiesDict[assetId] = {
         required: amount,
         owned: bn(0),
       };
     });
 
-    const cachedUtxos: BytesLike[] = [];
-    const cachedMessages: BytesLike[] = [];
-
     const owner = this.address.toB256();
 
-    request.inputs.forEach((input) => {
-      const isResource = 'amount' in input;
-
-      if (isResource) {
-        const isCoin = 'owner' in input;
-
-        if (isCoin) {
-          const assetId = String(input.assetId);
-          if (input.owner === owner && quantitiesDict[assetId]) {
-            const amount = bn(input.amount);
-            quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
-
-            // caching this utxo to avoid fetching it again if requests needs to be funded
-            cachedUtxos.push(input.id);
-          }
-        } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
-          quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
-
-          // caching this message to avoid fetching it again if requests needs to be funded
-          cachedMessages.push(input.nonce);
+    request.inputs.filter(isRequestInputResource).forEach((input) => {
+      if (isRequestInputCoin(input)) {
+        const assetId = String(input.assetId);
+        if (input.owner === owner && quantitiesDict[assetId]) {
+          const amount = bn(input.amount);
+          quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
         }
+      } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
+        quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
       }
     });
 
-    const missingQuantities: CoinQuantity[] = [];
+    let missingQuantities: CoinQuantity[] = [];
     Object.entries(quantitiesDict).forEach(([assetId, { owned, required }]) => {
       if (owned.lt(required)) {
         missingQuantities.push({
@@ -296,14 +291,39 @@ export class Account extends AbstractAccount {
       }
     });
 
-    const needsToBeFunded = missingQuantities.length;
+    let needsToBeFunded = missingQuantities.length > 0;
+    let fundingAttempts = 0;
+    while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
+      const resources = await this.getResourcesToSpend(
+        missingQuantities,
+        cacheRequestInputsResources(request.inputs)
+      );
 
-    if (needsToBeFunded) {
-      const resources = await this.getResourcesToSpend(missingQuantities, {
-        messages: cachedMessages,
-        utxos: cachedUtxos,
-      });
       request.addResources(resources);
+      const { maxFee: newFee } = this.provider.estimateTxGasAndFee({
+        transactionRequest: request,
+      });
+
+      const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
+        request.inputs,
+        BaseAssetId,
+        BaseAssetId
+      );
+
+      const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
+
+      if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
+        needsToBeFunded = false;
+      } else {
+        missingQuantities = [
+          {
+            amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
+            assetId: BaseAssetId,
+          },
+        ];
+      }
+
+      fundingAttempts += 1;
     }
   }
 
