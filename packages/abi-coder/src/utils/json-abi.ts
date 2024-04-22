@@ -4,7 +4,6 @@ import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
 import {
-  DEFAULT_ENCODING_VERSION,
   ENCODING_V0,
   ENCODING_V1,
   type EncodingVersion,
@@ -20,13 +19,11 @@ import {
 export const getEncodingVersion = (encoding?: string): EncodingVersion => {
   switch (encoding) {
     case undefined:
-      return DEFAULT_ENCODING_VERSION;
-
-    case ENCODING_V1:
-      return ENCODING_V1;
-
     case ENCODING_V0:
       return ENCODING_V0;
+  
+    case ENCODING_V1:
+      return ENCODING_V1;
 
     default:
       throw new FuelError(
