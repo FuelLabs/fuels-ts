@@ -47,6 +47,7 @@ interface MyContractAbiInterface extends Interface {
     types_bool: FunctionFragment;
     types_bytes: FunctionFragment;
     types_empty: FunctionFragment;
+    types_empty_then_value: FunctionFragment;
     types_enum: FunctionFragment;
     types_evm_address: FunctionFragment;
     types_option: FunctionFragment;
@@ -61,6 +62,8 @@ interface MyContractAbiInterface extends Interface {
     types_u32: FunctionFragment;
     types_u64: FunctionFragment;
     types_u8: FunctionFragment;
+    types_value_then_empty: FunctionFragment;
+    types_value_then_empty_then_value: FunctionFragment;
     types_vector_geo: FunctionFragment;
     types_vector_option: FunctionFragment;
     types_vector_u8: FunctionFragment;
@@ -72,7 +75,8 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_b512', values: [string]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_bool', values: [boolean]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_bytes', values: [Bytes]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_empty', values: [undefined]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_empty', values: []): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_empty_then_value', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_enum', values: [MyEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
@@ -87,6 +91,8 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_u32', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u64', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_u8', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_value_then_empty', values: [BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_value_then_empty_then_value', values: [BigNumberish, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_vector_geo', values: [Vec<MyStructInput>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_vector_option', values: [Vec<StructWithMultiOptionInput>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_vector_u8', values: [Vec<BigNumberish>]): Uint8Array;
@@ -98,6 +104,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_bool', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_bytes', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_empty', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_empty_then_value', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_evm_address', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option', data: BytesLike): DecodedValue;
@@ -112,6 +119,8 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_u32', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u64', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_u8', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_value_then_empty', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_value_then_empty_then_value', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_vector_geo', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_vector_option', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_vector_u8', data: BytesLike): DecodedValue;
@@ -126,7 +135,8 @@ export class MyContractAbi extends Contract {
     types_b512: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_bytes: InvokeFunction<[x: Bytes], Bytes>;
-    types_empty: InvokeFunction<[x: undefined], undefined>;
+    types_empty: InvokeFunction<[], void>;
+    types_empty_then_value: InvokeFunction<[y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
@@ -141,6 +151,8 @@ export class MyContractAbi extends Contract {
     types_u32: InvokeFunction<[x: BigNumberish], number>;
     types_u64: InvokeFunction<[x: BigNumberish], BN>;
     types_u8: InvokeFunction<[x: BigNumberish], number>;
+    types_value_then_empty: InvokeFunction<[x: BigNumberish], void>;
+    types_value_then_empty_then_value: InvokeFunction<[x: BigNumberish, z: BigNumberish], void>;
     types_vector_geo: InvokeFunction<[x: Vec<MyStructInput>], Vec<MyStructOutput>>;
     types_vector_option: InvokeFunction<[x: Vec<StructWithMultiOptionInput>], Vec<StructWithMultiOptionOutput>>;
     types_vector_u8: InvokeFunction<[x: Vec<BigNumberish>], Vec<number>>;
