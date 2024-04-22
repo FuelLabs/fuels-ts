@@ -144,8 +144,6 @@ describe('Doc Examples', () => {
 
   test('it can work with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    // #region wallets
-    // #import { Wallet, WalletLocked, WalletUnlocked };
 
     // use the `generate` helper to make an Unlocked Wallet
     const myWallet: WalletUnlocked = Wallet.generate({
@@ -154,33 +152,19 @@ describe('Doc Examples', () => {
 
     // or use an Address to create a wallet
     const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
-    // #endregion wallets
 
     const PRIVATE_KEY = myWallet.privateKey;
 
-    // #region wallet-locked-to-unlocked
     const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
-    // #region wallet-from-private-key
+
     // unlock an existing wallet
     let unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
     // or directly from a private key
     unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
-    // #endregion wallet-locked-to-unlocked
-    // #endregion wallet-from-private-key
 
-    // #region wallet-unlocked-to-locked
     const newlyLockedWallet = unlockedWallet.lock();
-    // #endregion wallet-unlocked-to-locked
-
-    // #region wallet-check-balance
-    // #import { BigNumberish };
     const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
-    // #endregion wallet-check-balance
-
-    // #region wallet-check-balances
-    // #import { CoinQuantity };
     const balances: CoinQuantity[] = await myWallet.getBalances();
-    // #endregion wallet-check-balances
 
     expect(newlyLockedWallet.address).toEqual(someWallet.address);
     expect(balance).toBeTruthy();
@@ -188,9 +172,6 @@ describe('Doc Examples', () => {
   });
 
   it('it can be created without a provider', async () => {
-    // #region wallet-optional-provider
-    // #context import { Wallet, WalletUnlocked } from 'fuels';
-
     // You can create a wallet, without a provider
     let unlockedWallet: WalletUnlocked = Wallet.generate();
     unlockedWallet = Wallet.fromPrivateKey(unlockedWallet.privateKey);
@@ -200,30 +181,25 @@ describe('Doc Examples', () => {
 
     // All provider dependent methods will throw
     await expect(() => unlockedWallet.getCoins()).rejects.toThrow(/Provider not set/);
-    // #endregion wallet-optional-provider
   });
 
   it('it can work sign messages with wallets', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    // #region wallet-message-signing
-    // #import { WalletUnlocked, hashMessage, Signer };
-
     const wallet = WalletUnlocked.generate({
       provider,
     });
     const message = 'doc-test-message';
+
     const signedMessage = await wallet.signMessage(message);
     const hashedMessage = hashMessage(message);
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
-    // #endregion wallet-message-signing
+
     expect(wallet.privateKey).toBeTruthy();
     expect(wallet.publicKey).toBeTruthy();
     expect(wallet.address).toEqual(recoveredAddress);
   });
 
   it('can create wallets', async () => {
-    // #region wallet-setup
-    // #import { Provider, bn, FUEL_NETWORK_URL, generateTestWallet };
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -255,7 +231,6 @@ describe('Doc Examples', () => {
       { assetId: assetIdB, amount: bn(200) },
     ]);
     expect(walletCBalances).toEqual([]);
-    // #endregion wallet-setup
   });
 
   // TODO: remove skip from testnet test
@@ -264,11 +239,9 @@ describe('Doc Examples', () => {
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
-    // #region signer-address
     const signer = new Signer(PRIVATE_KEY);
-    // validate address
+
     expect(wallet.address).toEqual(signer.address);
-    // #endregion signer-address
   });
 
   it('can connect to a local provider', async () => {
