@@ -14,4 +14,4 @@ Instead of importing from a file, you can also specify the custom storage slots 
 
 ## Auto-load of Storage Slots
 
-Code generated using [Typegen](../typegen/generating-types.md) automatically [load](../typegen/using-generated-types.md#autoloading-of-storage-slots) Storage Slots for you.
+Code generated using [Typegen](../fuels-cli/generating-types.md) automatically [load](../fuels-cli/using-generated-types.md#autoloading-of-storage-slots) Storage Slots for you.
