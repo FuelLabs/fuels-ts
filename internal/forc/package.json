@@ -1,10 +1,11 @@
 {
-  "name": "@fuel-ts/fuel-core",
+  "private": true,
+  "name": "@fuel-ts/forc",
   "version": "0.81.0",
-  "description": "NPM bin wrapper around `fuel-core`",
+  "description": "NPM bin wrapper around Fuel `forc`",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels-core": "lib/bin.js"
+    "fuels-forc": "lib/bin.js"
   },
   "type": "module",
   "files": [
@@ -17,6 +18,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.6.7"
   }
 }
