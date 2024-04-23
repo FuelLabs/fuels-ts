@@ -94,7 +94,7 @@ describe(__filename, () => {
     // #region signing-3
     await wallet.fund(request, requiredQuantities, maxFee);
 
-    const tx = await provider.sendTransaction(request);
+    const tx = await wallet.sendTransaction(request);
     const result = await tx.waitForResult();
     // #endregion signing-3
 
