@@ -1,4 +1,3 @@
-import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import { spawn } from 'child_process';
 
 import type { FuelsConfig } from '../../types';
