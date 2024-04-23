@@ -14,8 +14,8 @@ export class EmptyType extends AType implements IType {
     super(params);
     this.attributes = {
       /**
-       * The empty type is always ignored in function inputs
-       * and it's an bug in the typegen if it makes its way into a function's inputs list
+       * The empty type is always ignored in function inputs. If it makes
+       * its way into a function's inputs list, it's a bug in the typegen.
        */
       inputLabel: `never`,
       outputLabel: `void`,
