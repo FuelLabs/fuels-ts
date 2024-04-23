@@ -146,3 +146,13 @@ jobs:
           comment_tag: diff
           mode: recreate
           create_if_not_exists: true
+
+  trigger-changeset:
+    runs-on: ubuntu-latest
+    needs: [test] # Specify the jobs that need to complete before running this job
+    steps:
+      - name: Trigger Changeset Workflow
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: create-changeset
+          client-payload: '{"ref": "${{ github.ref }}"}'
