@@ -31,7 +31,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
-      .check_msg_sender({ value: wallet.address.toB256() })
+      .check_msg_sender({ bits: wallet.address.toB256() })
       .call();
 
     expect(value).toBeTruthy();
@@ -39,7 +39,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
-      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
+      contractInstance.functions.check_msg_sender({ bits: getRandomB256() }).call()
     ).rejects.toThrow(
       'The transaction reverted because an "assert" statement failed to evaluate to true.'
     );

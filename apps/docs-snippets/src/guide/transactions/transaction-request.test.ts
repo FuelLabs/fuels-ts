@@ -190,7 +190,7 @@ describe('Transaction Request', () => {
     expect(transactionRequest.witnesses.length).toEqual(2);
   });
 
-  it('gets the transaction ID', async () => {
+  it('gets the transaction ID', () => {
     // #region transaction-request-7
     // #import { ScriptTransactionRequest };
 
@@ -198,7 +198,7 @@ describe('Transaction Request', () => {
     const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
 
     // Get the chain ID
-    const chainId = await provider.getChainId();
+    const chainId = provider.getChainId();
 
     // Get the transaction ID using the Chain ID
     const transactionId = transactionRequest.getTransactionId(chainId);
@@ -206,7 +206,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x3eeeca6eb1375da063b4e6ab2b2000e047fe7e2d32468ee707df3b044f984a4c'
+      '0x420f6093f32975eec3bd505e1a124be5e7352146841017b6142b34923e563f4b'
     );
   });
 });

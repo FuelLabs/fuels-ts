@@ -119,8 +119,7 @@ test('Example script', async () => {
   const script = ScriptAbi__factory.createInstance(wallet);
   const { value } = await script.functions.main().call();
   // #endregion typegen-demo-script
-  // @ts-expect-error TODO: investitage - typegen is expecting value to be a number but the value being returned is the string '0xa'
-  expect(value.toNumber()).toBe(10);
+  expect(value).toBe(10);
 });
 
 test('Example predicate', async () => {

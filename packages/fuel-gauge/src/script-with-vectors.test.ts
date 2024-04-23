@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BigNumberish, BN } from 'fuels';
+import type { BigNumberish } from 'fuels';
 import { BaseAssetId, FUEL_NETWORK_URL, Provider } from 'fuels';
 
 import { getScript } from './utils';
@@ -38,16 +38,16 @@ describe('Script With Vectors', () => {
 
     const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
 
+    const vecFirst = someVec[0];
+    const vecCapacity = 4;
+    const vecLen = 4;
+
     expect(formattedLog).toEqual([
-      7,
-      'vector.buf.ptr',
-      11264,
+      vecFirst,
       'vector.capacity()',
-      4,
+      vecCapacity,
       'vector.len()',
-      4,
-      'addr_of vector',
-      11240,
+      vecLen,
     ]);
   });
 
@@ -88,7 +88,7 @@ describe('Script With Vectors', () => {
     const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
 
     const { value } = await scriptInstance.functions.main(importantDates).call();
-    expect((value as unknown as BN).toString()).toBe('1');
+    expect(value).toBe(true);
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
@@ -155,6 +155,6 @@ describe('Script With Vectors', () => {
     const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
 
     const { value } = await scriptInstance.functions.main(vectorOfStructs).call();
-    expect((value as unknown as BN).toString()).toBe('1');
+    expect(value).toBe(true);
   });
 });

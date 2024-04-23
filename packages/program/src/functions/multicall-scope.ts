@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ENCODING_V1 } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract } from '@fuel-ts/interfaces';
 
@@ -20,7 +21,9 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
   constructor(contract: AbstractContract, funcScopes: Array<FunctionInvocationScope>) {
     super(contract, true);
     this.addCalls(funcScopes);
-    this.validateHeapTypeReturnCalls();
+    if (this.program.interface.jsonAbi.encoding !== ENCODING_V1) {
+      this.validateHeapTypeReturnCalls();
+    }
   }
 
   /**

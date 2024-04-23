@@ -267,7 +267,7 @@ describe('TransactionSummary', () => {
       const {
         transactionResult: { operations },
       } = await contract.functions
-        .transfer_to_address({ value: recipient.address.toB256() }, { value: assetId }, amount)
+        .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, amount)
         .call();
 
       validateTransferOperation({
@@ -318,14 +318,14 @@ describe('TransactionSummary', () => {
         .multi_address_transfer([
           // 3 Transfers for recipient contract 1
           ...transferData1.quantities.map(({ amount, assetId }) => ({
-            recipient: { value: transferData1.address.toB256() },
-            asset_id: { value: assetId },
+            recipient: { bits: transferData1.address.toB256() },
+            asset_id: { bits: assetId },
             amount,
           })),
           // 2 Transfers for recipient contract 2
           ...transferData2.quantities.map(({ amount, assetId }) => ({
-            recipient: { value: transferData2.address.toB256() },
-            asset_id: { value: assetId },
+            recipient: { bits: transferData2.address.toB256() },
+            asset_id: { bits: assetId },
             amount,
           })),
         ])
@@ -358,8 +358,8 @@ describe('TransactionSummary', () => {
         transactionResult: { operations },
       } = await contractSender.functions
         .transfer_to_contract(
-          { value: contractRecipient.id.toB256() },
-          { value: mintedAssets[0].assetId },
+          { bits: contractRecipient.id.toB256() },
+          { bits: mintedAssets[0].assetId },
           amount
         )
         .call();
@@ -415,14 +415,14 @@ describe('TransactionSummary', () => {
         .multi_contract_transfer([
           // 2 Transfers for recipient contract 1
           ...transferData1.quantities.map(({ amount, assetId }) => ({
-            recipient: { value: transferData1.address.toB256() },
-            asset_id: { value: assetId },
+            recipient: { bits: transferData1.address.toB256() },
+            asset_id: { bits: assetId },
             amount,
           })),
           // 3 Transfers for recipient contract 2
           ...transferData2.quantities.map(({ amount, assetId }) => ({
-            recipient: { value: transferData2.address.toB256() },
-            asset_id: { value: assetId },
+            recipient: { bits: transferData2.address.toB256() },
+            asset_id: { bits: assetId },
             amount,
           })),
         ])

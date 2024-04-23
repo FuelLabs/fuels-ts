@@ -6,7 +6,7 @@ fn extract_pulic_key_and_match(signature: B512, expected_public_key: b256) -> u6
     let message_hash = 0x6aed34e6bddff5e1d872b5d7d5698a7b73abd6f3b33402732edc73ab9ffb9c70;
     if let Result::Ok(pub_key_sig) = ec_recover_address(signature, message_hash)
     {
-        if pub_key_sig.value == expected_public_key {
+        if pub_key_sig.bits() == expected_public_key {
             return 1;
         }
     }

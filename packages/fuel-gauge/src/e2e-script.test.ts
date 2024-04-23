@@ -119,6 +119,6 @@ describe('Live Script Test', () => {
       `);
     }
 
-    expect(output.toString()).toBe('1');
+    expect(output).toBe(true);
   });
 });

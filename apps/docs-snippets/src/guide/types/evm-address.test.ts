@@ -21,7 +21,7 @@ describe('EvMAddress', () => {
     // #import { EvmAddress };
 
     const evmAddress: EvmAddress = {
-      value: Bits256,
+      bits: Bits256,
     };
     // #endregion evm-address-1
 
@@ -29,14 +29,12 @@ describe('EvMAddress', () => {
     // #import { EvmAddress };
 
     const address: EvmAddress = {
-      value: '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6',
+      bits: '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6',
     };
     // #endregion addresses-3
 
-    expect(evmAddress.value).toBe(Bits256);
-    expect(address.value).toBe(
-      '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6'
-    );
+    expect(evmAddress.bits).toBe(Bits256);
+    expect(address.bits).toBe('0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6');
   });
 
   it('should create an Evm Address from a B256Address', async () => {
@@ -60,7 +58,7 @@ describe('EvMAddress', () => {
     // #import { EvmAddress };
 
     const evmAddress: EvmAddress = {
-      value: Bits256,
+      bits: Bits256,
     };
 
     const { value } = await contract.functions.echo_address_comparison(evmAddress).simulate();
@@ -74,7 +72,7 @@ describe('EvMAddress', () => {
     // #import { EvmAddress };
 
     const evmAddress: EvmAddress = {
-      value: Bits256,
+      bits: Bits256,
     };
 
     const { value } = await contract.functions.echo_address().simulate();
@@ -82,6 +80,6 @@ describe('EvMAddress', () => {
     expect(value).toEqual(evmAddress);
     // #endregion evm-address-4
 
-    expect(value.value).toEqual(Bits256);
+    expect(value.bits).toEqual(Bits256);
   });
 });

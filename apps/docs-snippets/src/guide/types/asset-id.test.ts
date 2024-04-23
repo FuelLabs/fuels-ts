@@ -20,11 +20,11 @@ describe('AssetId', () => {
     // #import { AssetId };
 
     const assetId: AssetId = {
-      value: Bits256,
+      bits: Bits256,
     };
     // #endregion asset-id-1
 
-    expect(assetId.value).toBe(Bits256);
+    expect(assetId.bits).toBe(Bits256);
   });
 
   it('should create an AssetId from a B256Address', async () => {
@@ -48,7 +48,7 @@ describe('AssetId', () => {
     // #import { AssetId };
 
     const assetId: AssetId = {
-      value: Bits256,
+      bits: Bits256,
     };
 
     const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
@@ -62,7 +62,7 @@ describe('AssetId', () => {
     // #import { AssetId };
 
     const assetId: AssetId = {
-      value: Bits256,
+      bits: Bits256,
     };
 
     const { value } = await contract.functions.echo_asset_id().simulate();
@@ -70,6 +70,6 @@ describe('AssetId', () => {
     expect(value).toEqual(assetId);
     // #endregion asset-id-4
 
-    expect(value.value).toEqual(Bits256);
+    expect(value.bits).toEqual(Bits256);
   });
 });

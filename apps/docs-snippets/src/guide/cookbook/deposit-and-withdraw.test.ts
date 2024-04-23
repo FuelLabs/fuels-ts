@@ -38,7 +38,7 @@ describe(__filename, () => {
     const assetId = getMintedAssetId(contractId, subId);
 
     await liquidityPoolContract.functions
-      .deposit({ value: liquidityOwner.address.toB256() })
+      .deposit({ bits: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, BaseAssetId] })
       .txParams({ variableOutputs: 1 })
       .call();
@@ -50,7 +50,7 @@ describe(__filename, () => {
 
     // #region deposit-and-withdraw-cookbook-3
     await liquidityPoolContract.functions
-      .withdraw({ value: liquidityOwner.address.toB256() })
+      .withdraw({ bits: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, BaseAssetId] })
       .txParams({ variableOutputs: 1 })
       .call();

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "pretest": "pnpm build:forc",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release"
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release --experimental-new-encoding"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",

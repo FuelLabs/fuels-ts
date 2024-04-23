@@ -40,7 +40,7 @@ describe('Advanced Logging', () => {
       { Playing: 1 },
       'Contract Id',
       {
-        value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+        bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
       },
       'Game Ref',
       {
@@ -50,7 +50,7 @@ describe('Advanced Logging', () => {
         game_id: '0x18af8',
         state: { Playing: 1 },
         contract_Id: {
-          value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+          bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
         },
         difficulty: { Medium: true },
       },
@@ -64,7 +64,7 @@ describe('Advanced Logging', () => {
         game_id: '0x20157',
         state: { Playing: 1 },
         contract_Id: {
-          value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+          bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
         },
         difficulty: { Hard: true },
       },
@@ -98,7 +98,7 @@ describe('Advanced Logging', () => {
               game_id: bn(0x18af8),
               state: { Playing: 1 },
               contract_Id: {
-                value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+                bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
               },
               difficulty: { Medium: true },
             },

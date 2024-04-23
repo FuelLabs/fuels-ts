@@ -32,7 +32,7 @@ describe('Reentrant Contract Calls', () => {
       value,
       transactionResult: { receipts },
     } = await fooContract.functions
-      .foo({ value: fooContract.id.toB256() }, { value: barContract.id.toB256() })
+      .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
       .call();
 
@@ -54,7 +54,7 @@ describe('Reentrant Contract Calls', () => {
      * number 42 (from `Foo.foo`) instead of 1337 (from `Foo.baz`).
      */
     const returnReceipts = receipts.filter(
-      (r) => r.type === ReceiptType.Return && r.id === fooContract.id.toB256()
+      (r) => r.type === ReceiptType.ReturnData && r.id === fooContract.id.toB256()
     );
 
     expect(value.toNumber()).toBe(42);
@@ -69,8 +69,8 @@ describe('Reentrant Contract Calls', () => {
     ).deployContract({ storageSlots: storageTest.storageSlots });
 
     const reentrantCall = fooContract.functions.foo(
-      { value: fooContract.id.toB256() },
-      { value: barContract.id.toB256() }
+      { bits: fooContract.id.toB256() },
+      { bits: barContract.id.toB256() }
     );
 
     const result = await fooContract

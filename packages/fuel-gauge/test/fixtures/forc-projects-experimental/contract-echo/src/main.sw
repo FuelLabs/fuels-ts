@@ -73,6 +73,8 @@ abi MyContract {
     fn echo_struct(param: MixedStruct) -> MixedStruct;
     fn test_revert() -> bool;
     fn echo_configurable(param: (u8, u16, u32, str[4])) -> (u8, u16, u32, str[4]);
+    fn first_call(param: u8) -> u8;
+    fn second_call(param: u16) -> u16;
 }
 
 impl MyContract for Contract {
@@ -95,5 +97,13 @@ impl MyContract for Contract {
         assert_eq(param_str, conf_str);
 
         CONF
+    }
+
+    fn first_call(param: u8) -> u8 {
+        param
+    }
+
+    fn second_call(param: u16) -> u16 {
+        param
     }
 }

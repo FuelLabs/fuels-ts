@@ -133,7 +133,7 @@ abi MyContract {
     fn struct_simple(x: SimpleStruct) -> SimpleStruct;
     fn struct_generic_simple(x: StructB<u8>) -> StructB<u8>;
     fn struct_with_tuple(x: StructB<(bool, u64)>) -> StructB<(bool, u64)>;
-    fn struct_with_implicitGenerics(
+    fn struct_with_implicit_generics(
         arg: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8>;
     fn bytes(arg: Bytes) -> Bytes;
@@ -256,7 +256,7 @@ impl MyContract for Contract {
     fn vector_u8_then_arg(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {
         (x, y)
     }
-    fn struct_with_implicitGenerics(
+    fn struct_with_implicit_generics(
         arg: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8> {
         arg

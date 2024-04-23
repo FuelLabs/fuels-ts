@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { EncodingVersion } from '@fuel-ts/abi-coder';
 import {
   WORD_SIZE,
   B256Coder,
@@ -6,6 +7,7 @@ import {
   BigNumberCoder,
   CONTRACT_ID_LEN,
   ENCODING_V1,
+  ENCODING_V0,
 } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
@@ -42,6 +44,7 @@ type CallOpcodeParamsOffset = {
 type CallOutputInfo = {
   isHeap: boolean;
   encodedLength: number;
+  encoding: EncodingVersion;
 };
 
 type ContractCallScriptFn = (
@@ -90,7 +93,7 @@ const getSingleCallInstructions = (
     inst.push(asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8()));
   }
 
-  if (outputInfo.isHeap) {
+  if (outputInfo.encoding === ENCODING_V0 && outputInfo.isHeap) {
     inst.extend([
       // The RET register contains the pointer address of the `CALL` return (a stack
       // address).
@@ -198,6 +201,7 @@ const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
       const output: CallOutputInfo = {
         isHeap: call.isOutputDataHeap,
         encodedLength: call.outputEncodedLength,
+        encoding: call.encoding ?? ENCODING_V0,
       };
       return sum + getSingleCallInstructions(offset, output).byteLength();
     },
@@ -210,6 +214,7 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
     return {
       isHeap: func.outputMetadata.isHeapType,
       encodedLength: func.outputMetadata.encodedLength,
+      encoding: func.encoding,
     };
   });
 
@@ -277,40 +282,42 @@ export const getScriptDataV1: ContractCallScriptFn = (
   segmentOffset: number
 ): { scriptData: Uint8Array[]; callParamOffsets: CallOpcodeParamsOffset } => {
   const scriptData: Uint8Array[] = [];
-  const callSegmentOffset = segmentOffset + WORD_SIZE;
-  let gasForwardedSize: number = 0;
+
+  const amountOffset = segmentOffset;
+  const assetIdOffset = amountOffset + WORD_SIZE;
+  const callDataOffset = assetIdOffset + ASSET_ID_LEN;
+  const encodedSelectorOffset = callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
+  const encodedArgsOffset = encodedSelectorOffset + call.fnSelectorBytes.byteLength;
+  const encodedArgs = arrayify(call.data);
+  let gasForwardedOffset = 0;
 
   // 1. Amount
   scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
   // 2. Asset ID
   scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
-  // 3. Gas to be forwarded
+  // 3. Contract ID
+  scriptData.push(call.contractId.toBytes());
+  // 4. Function selector offset
+  scriptData.push(new BigNumberCoder('u64').encode(encodedSelectorOffset));
+  // 5. Encoded argument offset
+  scriptData.push(new BigNumberCoder('u64').encode(encodedArgsOffset));
+  // 6. Encoded function selector
+  scriptData.push(call.fnSelectorBytes);
+  // 7. Encoded arguments
+  scriptData.push(encodedArgs);
+
+  // 8. Gas to be forwarded
   if (call.gas) {
     scriptData.push(new BigNumberCoder('u64').encode(call.gas));
-    gasForwardedSize = WORD_SIZE;
+    gasForwardedOffset = encodedArgsOffset + encodedArgs.byteLength;
   }
 
   const callParamOffsets: CallOpcodeParamsOffset = {
-    amountOffset: callSegmentOffset,
-    assetIdOffset: callSegmentOffset + WORD_SIZE,
-    gasForwardedOffset: callSegmentOffset + WORD_SIZE + ASSET_ID_LEN,
-    callDataOffset: callSegmentOffset + WORD_SIZE + ASSET_ID_LEN + gasForwardedSize,
+    amountOffset,
+    assetIdOffset,
+    gasForwardedOffset,
+    callDataOffset,
   };
-  const encodedSelectorOffset =
-    callParamOffsets.callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-  const customInputOffset = encodedSelectorOffset + call.fnSelectorBytes.length;
-  const bytes = arrayify(call.data);
-
-  // 4. Contract ID
-  scriptData.push(call.contractId.toBytes());
-  // 5. Function selector offset
-  scriptData.push(new BigNumberCoder('u64').encode(encodedSelectorOffset));
-  // 6. CallData offset
-  scriptData.push(new BigNumberCoder('u64').encode(customInputOffset));
-  // 7. Function selector
-  scriptData.push(call.fnSelectorBytes);
-  // 8. Encoded arguments
-  scriptData.push(bytes);
 
   return {
     scriptData,
@@ -377,6 +384,7 @@ export const getContractCallScript = (
         outputInfos.push({
           isHeap: call.isOutputDataHeap,
           encodedLength: call.outputEncodedLength,
+          encoding: call.encoding ?? ENCODING_V0,
         });
         scriptData.push(concat(callScriptData));
         paramOffsets.push(callParamOffsets);
