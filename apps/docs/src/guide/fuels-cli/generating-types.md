@@ -1,11 +1,16 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuelsInstallVersion } = data
+</script>
+
 # Generating Types from ABI
 
 ## Installation
 
 First we install `fuels` to our project:
 
-```console
-pnpm add fuels@0.81.0
+```console-vue
+pnpm add fuels{{fuelsInstallVersion}}
 ```
 
 ## Help

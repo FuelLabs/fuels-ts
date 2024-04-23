@@ -1,15 +1,20 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuelsInstallVersion } = data
+</script>
+
 # Options
 
 The `npm create fuels` command has several command-line options that you can use to customize your project.
 
 ::: code-group
 
-```sh [pnpm]
-pnpm create fuels@0.81.0 [project-name] [options]
+```sh-vue [pnpm]
+pnpm create fuels{{fuelsInstallVersion}} [project-name] [options]
 ```
 
-```sh [npm]
-npm create fuels@0.81.0 [project-name] [options]
+```sh-vue [npm]
+npm create fuels{{fuelsInstallVersion}} [project-name] [options]
 ```
 
 :::

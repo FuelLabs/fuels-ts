@@ -1,3 +1,8 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuelsInstallVersion } = data
+</script>
+
 # Creating a Fuel dApp
 
 `npm create fuels` is a command line tool that helps you scaffold a new full-stack Fuel dApp. In this guide, we will create a new counter dApp using `npm create fuels` and add decrement functionality to it. The final result will look like this:
@@ -10,12 +15,12 @@ The first step is to run the command:
 
 ::: code-group
 
-```sh [npm]
-npm create fuels@0.81.0
+```sh-vue [npm]
+npm create fuels{{fuelsInstallVersion}}
 ```
 
-```sh [pnpm]
-pnpm create fuels@0.81.0
+```sh-vue [pnpm]
+pnpm create fuels{{fuelsInstallVersion}}
 ```
 
 :::

@@ -1,11 +1,16 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuelsInstallVersion } = data
+</script>
+
 # Commands
 
 The `fuels` CLI consists of a couple commands.
 
 ## `fuels init`
 
-```console
-npx fuels@0.81.0 help init
+```console-vue
+npx fuels{{fuelsInstallVersion}} help init
 ```
 
 ```console
@@ -20,13 +25,13 @@ Options:
 Creating a sample `fuel.config.ts` file:
 
 ```console
-npx fuels@0.81.0 init --contracts ./my-contracts/* --output ./src/sway-contracts-api
+npx fuels{{fuelsInstallVersion}} init --contracts ./my-contracts/* --output ./src/sway-contracts-api
 ```
 
 Using [Forc workspaces](https://docs.fuel.network/docs/forc/workspaces/)? Try this instead:
 
-```console
-npx fuels@0.81.0 init --workspace ./sway-programs --output ./src/sway-programs-api
+```console-vue
+npx fuels{{fuelsInstallVersion}} init --workspace ./sway-programs --output ./src/sway-programs-api
 ```
 
 This will give you a minimal configuration:
@@ -51,7 +56,7 @@ In a nutshell:
 ## `fuels build`
 
 ```console
-npx fuels@0.81.0 help build
+npx fuels{{fuelsInstallVersion}} help build
 ```
 
 ```console
@@ -63,15 +68,15 @@ Options:
 
 Examples:
 
-```console
-npx fuels@0.81.0 build
+```console-vue
+npx fuels{{fuelsInstallVersion}} build
 ```
 
 1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
 1.  Generate types for them using `fuels-typegen` <sup>[2](#typegen)</sup>
 
-```console
-npx fuels@0.81.0 build --deploy
+```console-vue
+npx fuels{{fuelsInstallVersion}} build --deploy
 ```
 
 Using the `--deploy` flag will additionally:
@@ -83,8 +88,8 @@ Using the `--deploy` flag will additionally:
 
 ## `fuels deploy`
 
-```console
-npx fuels@0.81.0 deploy
+```console-vue
+npx fuels{{fuelsInstallVersion}} deploy
 ```
 
 1. Deploy all Sway contracts under `workspace`
@@ -108,8 +113,8 @@ For a complete example, see:
 
 ## `fuels dev`
 
-```console
-npx fuels@0.81.0 dev
+```console-vue
+npx fuels{{fuelsInstallVersion}} dev
 ```
 
 The `fuels dev` command do three things:
@@ -124,8 +129,8 @@ The `fuels dev` command do three things:
 
 Manually generates type definitions and factory classes from ABI JSON files.
 
-```console
-npx fuels@0.81.0 help typegen
+```console-vue
+npx fuels{{fuelsInstallVersion}} help typegen
 ```
 
 ```console
@@ -146,8 +151,8 @@ For more info, check:
 
 Check for version incompatibilities between your [Fuel Toolchain](#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
-```console
-npx fuels@0.81.0 versions
+```console-vue
+npx fuels{{fuelsInstallVersion}} versions
 ```
 
 ```

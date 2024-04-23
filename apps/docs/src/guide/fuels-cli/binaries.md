@@ -1,3 +1,8 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuelsInstallVersion } = data
+</script>
+
 # Built-In Binaries
 
 `fuels` conveniently ships with `built-in` binaries for [`forc`](https://docs.fuel.network/docs/forc/commands/) and [`fuel-core`](https://docs.fuel.network/guides/running-a-node/running-a-local-node/).
@@ -13,16 +18,16 @@ Here's how to configure this explicitly:
 
 You can also call the `built-in` binaries directly:
 
-```console
-npx fuels@0.81.0 help forc
-npx fuels@0.81.0 forc --version
-npx fuels@0.81.0 forc test -h
+```console-vue
+npx fuels{{fuelsInstallVersion}} help forc
+npx fuels{{fuelsInstallVersion}} forc --version
+npx fuels{{fuelsInstallVersion}} forc test -h
 ```
 
-```console
-npx fuels@0.81.0 help core
-npx fuels@0.81.0 core --version
-npx fuels@0.81.0 core run -h
+```console-vue
+npx fuels{{fuelsInstallVersion}} help core
+npx fuels{{fuelsInstallVersion}} core --version
+npx fuels{{fuelsInstallVersion}} core run -h
 ```
 
 Check the docs for `forc` and `fuel-core`:
