@@ -1,6 +1,9 @@
 # Adding Decrement Functionality
 
-In order to introduce decrement functionality to our counter, we will have to do two things: 1. Introduce a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/pages/index.tsx` file to introduce a button that calls this function.
+In order to introduce decrement functionality to our counter, we will have to do two things:
+
+1. Add a `decrement_counter` function to our Sway contract.
+2. Modify the `./src/pages/index.tsx` file to add a button that calls this function.
 
 ## 1. Modifying the Sway Contract
 
