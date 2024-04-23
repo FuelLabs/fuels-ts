@@ -12,7 +12,7 @@ const config: UserConfig = {
         Buffer: true,
         global: true,
       },
-      include: ["fs", "crypto", "buffer", "fs", "events", "timers/promises"],
+      include: ["crypto", "buffer", "events", "timers/promises"],
       overrides: {
         fs: "memfs",
       },
