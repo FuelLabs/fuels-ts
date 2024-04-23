@@ -147,7 +147,7 @@ export abstract class FuelConnector extends EventEmitter {
   }
 
   /**
-   * Should add the the assets metadata to the connector and return true if the asset
+   * Should add the assets metadata to the connector and return true if the asset
    * was added successfully.
    *
    * If the asset already exists it should throw an error.
@@ -162,7 +162,7 @@ export abstract class FuelConnector extends EventEmitter {
   }
 
   /**
-   * Should add the the asset metadata to the connector and return true if the asset
+   * Should add the asset metadata to the connector and return true if the asset
    * was added successfully.
    *
    * If the asset already exists it should throw an error.
