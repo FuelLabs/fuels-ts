@@ -26,7 +26,7 @@ First, we will add a function called `onDecrementPressed` similar to the `onIncr
 
 <<< @/../../create-fuels-counter-guide/src/pages/index.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
 
-Second, we will add a new button to the UI that will call the `onDecrementPressed` function when clicked:
+Secondly, we will add a new button to the UI that will call the `onDecrementPressed` function when clicked:
 
 <!-- TODO: our docs engine currently does not detect comments in JSX -->
 
