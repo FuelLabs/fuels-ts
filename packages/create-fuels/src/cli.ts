@@ -10,6 +10,8 @@ import prompts from 'prompts';
 
 import packageJson from '../package.json';
 
+import { checkIfFuelUpInstalled, installFuelUp } from './lib';
+
 const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
@@ -113,6 +115,16 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   writeFileSync(envFilePath, newFileContents);
 }
 
+async function promptForFuelUpInstall() {
+  const shouldInstallFuelUp = await prompts({
+    type: 'confirm',
+    name: 'shouldInstallFuelUp',
+    message: 'fuelup is not installed. Would you like us to install it for you?',
+    initial: true,
+  });
+  return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
+}
+
 export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
@@ -143,6 +155,31 @@ export const runScaffoldCli = async ({
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
   const verboseEnabled = program.opts().verbose ?? false;
+
+  const fuelUpSpinner = ora({
+    text: 'Checking if fuelup is installed..',
+    color: 'green',
+  }).start();
+
+  const isFuelUpInstalled = await checkIfFuelUpInstalled();
+
+  if (isFuelUpInstalled) {
+    fuelUpSpinner.succeed('fuelup is already installed.');
+  }
+
+  if (!isFuelUpInstalled) {
+    fuelUpSpinner.fail('fuelup not found.');
+    // show a prompt asking the user if they want us to install fuelup for them
+    const shouldInstallFuelUp = await promptForFuelUpInstall();
+    if (shouldInstallFuelUp) {
+      const installSpinner = ora({
+        text: 'Installing fuelup..',
+        color: 'green',
+      });
+      await installFuelUp();
+      installSpinner.succeed('Successfully installed fuelup!');
+    }
+  }
 
   while (existsSync(projectPath)) {
     log(
