@@ -12,6 +12,7 @@ import {
 import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
+import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
@@ -493,6 +494,22 @@ export default class Provider {
       nodeInfo: { nodeVersion },
     } = await this.operations.getVersion();
     return nodeVersion;
+  }
+
+  /**
+   * @hidden
+   *
+   * Returns the network configuration of the connected Fuel node.
+   *
+   * @returns A promise that resolves to the network configuration object
+   */
+  async getNetwork(): Promise<Network> {
+    const {
+      name,
+      consensusParameters: { chainId },
+    } = await this.getChain();
+    const network = new Network(name, chainId.toNumber());
+    return Promise.resolve(network);
   }
 
   /**

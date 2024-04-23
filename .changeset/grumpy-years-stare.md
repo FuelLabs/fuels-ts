@@ -5,4 +5,4 @@
 "@fuel-ts/errors": patch
 ---
 
-fix!: deprecate `getNetwork`
+fix: internalize `ethers` functionality and remove dependency
