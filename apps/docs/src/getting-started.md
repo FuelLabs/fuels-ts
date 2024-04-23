@@ -27,7 +27,7 @@ pnpm add fuels@{{fuelsInstallVersion}}
 
 :::
 
-**Note**: We use `@{{fuelsInstallVersion}}` to ensure compatibility with our latest testnet.
+**Note**: We use `{{fuelsInstallVersion}}` to ensure compatibility with our latest testnet.
 
 ### Note
 
