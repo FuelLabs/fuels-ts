@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import type { BN } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, WalletUnlocked, bn } from 'fuels';
+import { Provider, WalletUnlocked, bn } from 'fuels';
 
 import { getScript } from './utils';
 
@@ -79,12 +79,12 @@ type MainArgs = [
  */
 describe('Live Script Test', () => {
   it('can use script against live Fuel Node', async () => {
-    if (!process.env.TEST_WALLET_PVT_KEY) {
+    if (!process.env.TEST_WALLET_PVT_KEY || !process.env.FUEL_TESTNET_NETWORK_URL) {
       console.log('Skipping live Fuel Node test');
       return;
     }
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
     const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
     const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
 

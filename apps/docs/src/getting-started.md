@@ -7,6 +7,10 @@
 
 This guide will walk you through the process of setting up and using the Fuels-ts library in your front-end project.
 
+## Prerequisites
+
+We expect you to install the [Fuel Toolchain][https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain] before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
+
 ## Installation
 
 To begin, you need to add the `fuels` dependency to your project. You can do this using the following command:

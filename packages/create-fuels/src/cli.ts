@@ -108,6 +108,8 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
     .join('\n');
 
   newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
+  newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
+
   writeFileSync(envFilePath, newFileContents);
 }
 

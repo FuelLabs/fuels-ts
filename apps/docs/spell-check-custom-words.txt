@@ -313,3 +313,5 @@ transactional
 BigNumber
 Gwei
 onchain
+Vercel
+hardcoded
