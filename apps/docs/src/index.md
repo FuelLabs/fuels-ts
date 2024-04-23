@@ -17,10 +17,6 @@ Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/in
 
 We recommend starting with the [Developer Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/) for a walk-through on building your first DApp on Fuel.
 
-- [Guide](./guide/)
-- [Sample Application](https://github.com/FuelLabs/beta2-quickstart)
-- [Other examples and projects](https://github.com/FuelLabs/sway-applications)
-
 ## The Fuel Ecosystem
 
 Learn more about the Fuel Ecosystem.

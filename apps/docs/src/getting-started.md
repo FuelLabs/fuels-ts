@@ -9,7 +9,7 @@ This guide will walk you through the process of setting up and using the Fuels-t
 
 ## Prerequisites
 
-We expect you to install the [Fuel Toolchain][https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain] before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
+We expect you to install the [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
 
 ## Installation
 
