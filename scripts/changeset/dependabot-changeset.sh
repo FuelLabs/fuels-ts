@@ -23,8 +23,9 @@ changeset_content+="$pr_title"
 # Create a new changeset file using pnpm
 pnpm changeset add --empty
 
+# Find the newly created changeset file
 changeset_file=$(git status --porcelain .changeset/*.md | sed -E 's/.*(\.changeset\/.*\.md)/\1/')
 echo "$changeset_file"
 
 # Write the changeset content to the file
-echo -e "$changeset_content" >"$changeset_file"
+echo -e "$changeset_content" > "$changeset_file"
