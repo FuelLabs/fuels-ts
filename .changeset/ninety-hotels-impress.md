@@ -6,4 +6,4 @@
 "@fuel-ts/forc": patch
 ---
 
-chore!: upgrading `forc` to `0.53.0`
+chore!: upgrading `forc` to `0.55.0`
