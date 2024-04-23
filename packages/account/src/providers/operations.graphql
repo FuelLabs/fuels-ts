@@ -41,6 +41,33 @@ fragment transactionStatusFragment on TransactionStatus {
   }
 }
 
+fragment transactionStatusSubscriptionFragment on TransactionStatus {
+  type: __typename
+  ... on SubmittedStatus {
+    time
+  }
+  ... on SuccessStatus {
+    block {
+      id
+    }
+    time
+    programState {
+      returnType
+      data
+    }
+  }
+  ... on FailureStatus {
+    block {
+      id
+    }
+    time
+    reason
+  }
+  ... on SqueezedOutStatus {
+    reason
+  }
+}
+
 fragment transactionFragment on Transaction {
   id
   rawPayload
@@ -749,12 +776,12 @@ mutation produceBlocks(
 
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
-    ...transactionStatusFragment
+    ...transactionStatusSubscriptionFragment
   }
 }
 
 subscription statusChange($transactionId: TransactionId!) {
   statusChange(id: $transactionId) {
-    ...transactionStatusFragment
+    ...transactionStatusSubscriptionFragment
   }
 }
