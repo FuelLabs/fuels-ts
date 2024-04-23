@@ -91,15 +91,7 @@ export type BuildParams = BaseParams & {
 };
 
 export async function runInit(params: InitParams) {
-  const {
-    autoStartFuelCore,
-    contracts,
-    output,
-    predicates,
-    root,
-    scripts,
-    workspace,
-  } = params;
+  const { autoStartFuelCore, contracts, output, predicates, root, scripts, workspace } = params;
 
   const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
     value ? (flags as string[]) : [];
