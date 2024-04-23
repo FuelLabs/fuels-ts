@@ -15,6 +15,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
+import type { GraphQLResponse } from 'graphql-request/src/types';
 import { clone } from 'ramda';
 
 import type { Predicate } from '../predicate';
@@ -461,13 +462,15 @@ export default class Provider {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      responseMiddleware: ({ response }: any) => {
-        if (Array.isArray(response?.errors)) {
-          throw new FuelError(
-            FuelError.CODES.INVALID_REQUEST,
-            response.errors.map((err: Error) => err.message).join('\n\n')
-          );
+      responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
+        if ('response' in response) {
+          const graphQlResponse = response.response as GraphQLResponse;
+          if (Array.isArray(graphQlResponse?.errors)) {
+            throw new FuelError(
+              FuelError.CODES.INVALID_REQUEST,
+              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
+            );
+          }
         }
       },
     });
