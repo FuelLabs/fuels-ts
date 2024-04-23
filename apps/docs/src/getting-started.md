@@ -27,7 +27,7 @@ pnpm add fuels@{{fuelsInstallVersion}}
 
 :::
 
-**Note**: We use `{{fuelsInstallVersion}}` to ensure compatibility with our latest testnet.
+**Note**: Use version `{{fuelsInstallVersion}}` to ensure compatibility with `beta-5` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
 
 ### Note
 
