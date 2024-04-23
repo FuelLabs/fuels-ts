@@ -108,7 +108,7 @@ describe('parseTypeArguments.ts', () => {
   test('should fallback to void for null outputs', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID);
 
-    const types = bundleTypes([]);
+    const types = bundleTypes(project.abiContents.types);
     const typeArguments = [project.abiContents.functions[0].output];
 
     // should fallback to void because `typeArguments.type` will be 0, and non-existent
