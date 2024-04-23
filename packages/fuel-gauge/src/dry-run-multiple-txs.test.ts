@@ -120,8 +120,6 @@ describe('dry-run-multiple-txs', () => {
       { estimateTxDependencies: false }
     );
 
-    console.log(estimatedRequests);
-
     expect(dryRunSpy).toHaveBeenCalledTimes(1);
 
     expect(estimatedRequests[0]).toStrictEqual<CallResult>({
