@@ -106,12 +106,12 @@ describe('dry-run-multiple-txs', () => {
     request2.addResources(resources);
     request3.addResources(resources);
 
-    request1.maxFee = bn(1363);
-    request1.gasLimit = bn(26775);
-    request2.maxFee = bn(1364);
-    request2.gasLimit = bn(26825);
-    request3.maxFee = bn(1364);
-    request3.gasLimit = bn(26825);
+    request1.maxFee = bn(2000);
+    request1.gasLimit = bn(50000);
+    request2.maxFee = bn(2000);
+    request2.gasLimit = bn(50000);
+    request3.maxFee = bn(2000);
+    request3.gasLimit = bn(50000);
 
     const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
 
@@ -119,6 +119,8 @@ describe('dry-run-multiple-txs', () => {
       [request1, request2, request3],
       { estimateTxDependencies: false }
     );
+
+    console.log(estimatedRequests);
 
     expect(dryRunSpy).toHaveBeenCalledTimes(1);
 
