@@ -167,9 +167,9 @@ describe('dry-run-multiple-txs', () => {
 
     // creating receives to be used by the request 2 and 3
     const addresses = [
-      { value: Wallet.generate({ provider }).address.toB256() },
-      { value: Wallet.generate({ provider }).address.toB256() },
-      { value: Wallet.generate({ provider }).address.toB256() },
+      { bits: Wallet.generate({ provider }).address.toB256() },
+      { bits: Wallet.generate({ provider }).address.toB256() },
+      { bits: Wallet.generate({ provider }).address.toB256() },
     ];
 
     // request 1
