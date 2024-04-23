@@ -5,7 +5,7 @@ inputs:
     default: 20.10.0
   pnpm-version:
     description: "PNPM version"
-    default: 8.9.0
+    default: 9.0.5
 runs:
   using: "composite"
   steps:
