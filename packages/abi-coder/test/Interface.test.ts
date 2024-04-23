@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BN } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
-import { NumberCoder, WORD_SIZE, Interface } from '../src';
+import { Interface } from '../src';
 /** @knipignore */
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
@@ -16,44 +16,31 @@ import {
   B512_ENCODED,
   B512_ZERO_DECODED,
   B512_ZERO_ENCODED,
+  BOOL_FALSE_ENCODED,
   BOOL_TRUE_ENCODED,
-  EMPTY_8_BYTE_ARRAY,
+  ENUM_FIRST_INDEX,
+  ENUM_SECOND_INDEX,
+  ENUM_THIRD_INDEX,
   U16_MAX,
   U16_MAX_ENCODED,
+  U16_MIN_ENCODED,
   U32_MAX,
   U32_MAX_ENCODED,
+  U32_MIN_ENCODED,
   U64_MAX,
   U64_MAX_ENCODED,
+  U64_MIN_ENCODED,
   U8_MAX,
   U8_MAX_ENCODED,
+  U8_MIN_ENCODED,
 } from './utils/constants';
-
-function encodeVectorFully(
-  encodedData: Uint8Array[] | Uint8Array,
-  offset: number,
-  dataLength?: number
-) {
-  const data = encodedData instanceof Uint8Array ? encodedData : concat(encodedData);
-  // eslint-disable-next-line no-param-reassign
-  dataLength ??= data.length / 8;
-  const o = new NumberCoder('u32').encode(offset);
-  const length = new NumberCoder('u8').encode(dataLength);
-  const capacity = length;
-
-  return {
-    offset,
-    length: dataLength,
-    vec: concat([o, length, capacity]),
-    data,
-  };
-}
 
 const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 
 /**
  * @group node
  */
-describe.skip('Abi interface', () => {
+describe('Abi interface', () => {
   it('can retrieve a function fragment', () => {
     const fn = exhaustiveExamplesInterface.functions.entry_one;
 
@@ -98,9 +85,9 @@ describe.skip('Abi interface', () => {
       'simple_vector(s<u8>(s<u8>(rawptr,u64),u64))',
       '0x00000000dd1b1a41',
 
-      'struct_with_implicitGenerics',
-      'struct_with_implicitGenerics(s<b256,u8>(a[b256;3],<b256,u8>(b256,u8)))',
-      '0x00000000a282b8c9',
+      'struct_with_implicit_generics',
+      'struct_with_implicit_generics(s<b256,u8>(a[b256;3],<b256,u8>(b256,u8)))',
+      '0x0000000032ef2da0',
     ])('%p', (nameOrSignatureOrSelector: string) => {
       const fn = exhaustiveExamplesInterface.getFunction(nameOrSignatureOrSelector);
 
@@ -165,19 +152,19 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8]',
           value: 0,
-          encodedValue: EMPTY_8_BYTE_ARRAY,
+          encodedValue: U8_MIN_ENCODED,
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8]',
           value: U8_MAX,
-          encodedValue: Uint8Array.from(U8_MAX_ENCODED).reverse(),
+          encodedValue: Uint8Array.from(U8_MAX_ENCODED),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16]',
           value: 0,
-          encodedValue: EMPTY_8_BYTE_ARRAY,
+          encodedValue: Uint8Array.from(U16_MIN_ENCODED),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_16,
@@ -189,7 +176,7 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32]',
           value: 0,
-          encodedValue: EMPTY_8_BYTE_ARRAY,
+          encodedValue: U32_MIN_ENCODED,
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_32,
@@ -201,7 +188,7 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: 0,
-          encodedValue: EMPTY_8_BYTE_ARRAY,
+          encodedValue: U64_MIN_ENCODED,
           decodedTransformer: (decoded: unknown | undefined) =>
             (decoded as BN).toNumber() as number,
         },
@@ -209,21 +196,21 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U8_MAX,
-          encodedValue: Uint8Array.from(U8_MAX_ENCODED).reverse(),
+          encodedValue: Uint8Array.from([0, 0, 0, 0, 0, 0, 0, U8_MAX]),
           decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U16_MAX,
-          encodedValue: U16_MAX_ENCODED,
+          encodedValue: Uint8Array.from([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]),
           decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U32_MAX,
-          encodedValue: U32_MAX_ENCODED,
+          encodedValue: Uint8Array.from([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]),
           decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
@@ -236,13 +223,13 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.boolean,
           title: '[bool]',
           value: false,
-          encodedValue: EMPTY_8_BYTE_ARRAY,
+          encodedValue: BOOL_FALSE_ENCODED,
         },
         {
           fn: exhaustiveExamplesInterface.functions.boolean,
           title: '[bool]',
           value: true,
-          encodedValue: Uint8Array.from(BOOL_TRUE_ENCODED).reverse(),
+          encodedValue: BOOL_TRUE_ENCODED,
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_256,
@@ -272,7 +259,7 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.two_args,
           title: 'two arguments',
           value: [B256_DECODED, false],
-          encodedValue: [B256_ENCODED, EMPTY_8_BYTE_ARRAY],
+          encodedValue: [B256_ENCODED, BOOL_FALSE_ENCODED],
         },
         {
           fn: exhaustiveExamplesInterface.functions.struct_simple,
@@ -299,7 +286,7 @@ describe.skip('Abi interface', () => {
           encodedValue: [BOOL_TRUE_ENCODED, U64_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamplesInterface.functions.struct_with_implicitGenerics,
+          fn: exhaustiveExamplesInterface.functions.struct_with_implicit_generics,
           title: '[struct] with implicit generics',
           value: { arr: [B256_DECODED, B256_DECODED, B256_DECODED], tuple: [B256_DECODED, U8_MAX] },
           encodedValue: [B256_ENCODED, B256_ENCODED, B256_ENCODED, B256_ENCODED, U8_MAX_ENCODED],
@@ -308,10 +295,7 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.bytes,
           title: '[struct Bytes]',
           value: [[1, 2, 3]],
-          encodedValue: new Uint8Array([
-            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 0, 0,
-            0, 0, 0,
-          ]),
+          encodedValue: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]),
           decodedTransformer: (decoded: unknown | undefined) => {
             const data = (decoded as BN[]).slice(0, 3);
             return Array.from(data);
@@ -321,7 +305,7 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.raw_slice,
           title: '[raw_slice]',
           value: [[1, 2, 3]],
-          encodedValue: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]),
+          encodedValue: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]),
           decodedTransformer: (decoded: unknown | undefined) => (decoded as number[]).slice(-3),
         },
         {
@@ -329,75 +313,56 @@ describe.skip('Abi interface', () => {
           title: '[struct String]',
           value: 'H3llo W0rld',
           encodedValue: new Uint8Array([
-            0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 11, 72, 51, 108,
-            108, 111, 32, 87, 48, 114, 108, 100, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 11, 72, 51, 108, 108, 111, 32, 87, 48, 114, 108, 100,
           ]),
         },
         {
           fn: exhaustiveExamplesInterface.functions.tuple_as_param,
           title: '[tuple] as param',
           value: [[U8_MAX, { propA1: { propB1: U64_MAX }, propA2: 'aaa' }]],
-          encodedValue: [
-            U8_MAX_ENCODED,
-            U64_MAX_ENCODED,
-            EMPTY_8_BYTE_ARRAY.slice().fill(97, 0, 3),
-          ],
+          encodedValue: [U8_MAX_ENCODED, U64_MAX_ENCODED, Uint8Array.from([97, 97, 97])],
         },
         {
           fn: exhaustiveExamplesInterface.functions.option_u8,
           title: '[option] u8',
           value: undefined,
-          encodedValue: [EMPTY_8_BYTE_ARRAY, EMPTY_8_BYTE_ARRAY],
+          encodedValue: ENUM_FIRST_INDEX,
         },
         {
           fn: exhaustiveExamplesInterface.functions.option_u8,
           title: '[option] u8',
           value: U8_MAX,
-          encodedValue: [
-            Uint8Array.from(EMPTY_8_BYTE_ARRAY).fill(1, 7),
-            Uint8Array.from(U8_MAX_ENCODED).reverse(),
-          ],
+          encodedValue: [ENUM_SECOND_INDEX, U8_MAX_ENCODED],
         },
         {
           fn: exhaustiveExamplesInterface.functions.enum_simple,
           title: '[enum] simple',
           value: 'Green',
-          encodedValue: EMPTY_8_BYTE_ARRAY.slice().fill(1, 7),
-        },
-        {
-          fn: exhaustiveExamplesInterface.functions.enum_simple,
-          title: '[enum] simple',
-          value: 'Green',
-          encodedValue: EMPTY_8_BYTE_ARRAY.slice().fill(1, 7),
+          encodedValue: ENUM_SECOND_INDEX,
         },
         {
           fn: exhaustiveExamplesInterface.functions.enum_with_builtin_type,
           title: '[enum] with builtin type',
           value: { a: true },
-          encodedValue: [EMPTY_8_BYTE_ARRAY, EMPTY_8_BYTE_ARRAY.slice().fill(1, 7)],
+          encodedValue: [ENUM_FIRST_INDEX, BOOL_TRUE_ENCODED],
         },
         {
           fn: exhaustiveExamplesInterface.functions.enum_with_builtin_type,
           title: '[enum] with builtin type',
           value: { b: U64_MAX },
-          encodedValue: [EMPTY_8_BYTE_ARRAY.slice().fill(1, 7), U64_MAX_ENCODED],
+          encodedValue: [ENUM_SECOND_INDEX, U64_MAX_ENCODED],
         },
         {
           fn: exhaustiveExamplesInterface.functions.enum_with_structs,
           title: '[enum] with structs',
           value: { c: { propA1: U64_MAX, propA2: { a: true, b: U32_MAX } } },
-          encodedValue: [
-            EMPTY_8_BYTE_ARRAY.slice().fill(2, 7),
-            U64_MAX_ENCODED,
-            BOOL_TRUE_ENCODED,
-            U32_MAX_ENCODED,
-          ],
+          encodedValue: [ENUM_THIRD_INDEX, U64_MAX_ENCODED, BOOL_TRUE_ENCODED, U32_MAX_ENCODED],
         },
         {
           fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] simple',
           value: [[1, 2, 3, U8_MAX]],
-          encodedValue: Uint8Array.from([1, 2, 3, U8_MAX, 0, 0, 0, 0]),
+          encodedValue: Uint8Array.from([1, 2, 3, U8_MAX]),
         },
         {
           fn: exhaustiveExamplesInterface.functions.array_struct,
@@ -411,11 +376,11 @@ describe.skip('Abi interface', () => {
           ],
           encodedValue: [
             BOOL_TRUE_ENCODED,
-            EMPTY_8_BYTE_ARRAY.slice().fill(1, 7),
-            EMPTY_8_BYTE_ARRAY,
+            Uint8Array.from([0, 0, 0, 1]),
+            BOOL_FALSE_ENCODED,
             U32_MAX_ENCODED,
             BOOL_TRUE_ENCODED,
-            EMPTY_8_BYTE_ARRAY.slice().fill(2, 7),
+            Uint8Array.from([0, 0, 0, 2]),
           ],
         },
         {
@@ -427,17 +392,17 @@ describe.skip('Abi interface', () => {
                 {
                   bim: B256_DECODED,
                   bam: { propB1: U8_MAX },
-                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                  bom: { propA1: B256_DECODED, propA2: U8_MAX },
                 },
                 {
                   bim: B256_DECODED,
                   bam: { propB1: 0 },
-                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                  bom: { propA1: B256_DECODED, propA2: U8_MAX },
                 },
                 {
                   bim: B256_DECODED,
                   bam: { propB1: U8_MAX },
-                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                  bom: { propA1: B256_DECODED, propA2: U8_MAX },
                 },
               ],
             },
@@ -445,67 +410,56 @@ describe.skip('Abi interface', () => {
           encodedValue: [
             B256_ENCODED,
             U8_MAX_ENCODED,
-            U8_MAX_ENCODED,
-            B256_ENCODED,
-            B256_ENCODED,
-            EMPTY_8_BYTE_ARRAY,
-            U8_MAX_ENCODED,
-            B256_ENCODED,
             B256_ENCODED,
             U8_MAX_ENCODED,
+            B256_ENCODED,
+            U8_MIN_ENCODED,
+            B256_ENCODED,
             U8_MAX_ENCODED,
             B256_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            U8_MAX_ENCODED,
           ],
         },
         {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: [[true, false, true, true]],
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          encodedValue: () => {
-            const data = Uint8Array.from([1, 0, 1, 1]);
-            const vector = encodeVectorFully(data, 3 * WORD_SIZE, data.length);
-            return [vector.vec, vector.data] as Uint8Array[];
-          },
+          encodedValue: [
+            Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4]),
+            BOOL_TRUE_ENCODED,
+            BOOL_FALSE_ENCODED,
+            BOOL_TRUE_ENCODED,
+            BOOL_TRUE_ENCODED,
+          ],
         },
         {
           fn: exhaustiveExamplesInterface.functions.vector_u8,
           title: '[vector] u8',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX]],
-          encodedValue: () => {
-            const data = Uint8Array.from([U8_MAX, 0, U8_MAX, U8_MAX]);
-            const vector = encodeVectorFully(data, 3 * WORD_SIZE, data.length);
-            return [vector.vec, vector.data] as Uint8Array[];
-          },
+          encodedValue: Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]),
         },
         {
           skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: [{ a: true, b: U32_MAX }, [U8_MAX, 0, U8_MAX, U8_MAX]],
-          encodedValue: () => {
-            const data = Uint8Array.from([U8_MAX, 0, U8_MAX, U8_MAX]);
-
-            const vector = encodeVectorFully(data, 2 * WORD_SIZE + 3 * WORD_SIZE, data.length);
-            return [BOOL_TRUE_ENCODED, U32_MAX_ENCODED, vector.vec, vector.data];
-          },
+          encodedValue: [
+            BOOL_TRUE_ENCODED,
+            U32_MAX_ENCODED,
+            Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]),
+          ],
         },
         {
           skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
-          encodedValue: () => {
-            const data = Uint8Array.from([U8_MAX, 0, U8_MAX, U8_MAX]);
-
-            const fullyEncodedVector = encodeVectorFully(
-              data,
-              3 * WORD_SIZE + B256_ENCODED.length,
-              data.length
-            );
-            return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data] as Uint8Array[];
-          },
+          encodedValue: [
+            Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]),
+            B256_ENCODED,
+          ],
         },
         {
           skipDecoding: true,
@@ -515,51 +469,30 @@ describe.skip('Abi interface', () => {
             [U8_MAX, U8_MAX],
             [U8_MAX, 0, U8_MAX, U8_MAX],
           ],
-          encodedValue: () => {
-            const vec1Data = Uint8Array.from([U8_MAX, U8_MAX]);
-            const vec2Data = Uint8Array.from([U8_MAX, 0, U8_MAX, U8_MAX]);
-            const vec1 = encodeVectorFully(vec1Data, 2 * 3 * WORD_SIZE, vec1Data.length);
-            const vec2 = encodeVectorFully(vec2Data, vec1.offset + vec1.length, vec2Data.length);
-            return [vec1.vec, vec2.vec, vec1.data, vec2.data];
-          },
+          encodedValue: [
+            Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 2, U8_MAX, U8_MAX]),
+            Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]),
+          ],
         },
         {
           skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
-          encodedValue: () => {
-            const EXPECTED: Uint8Array[] = [
-              new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
-              new Uint8Array([
-                0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0, 0, 0, 0, 1, 84,
-              ]),
-              new Uint8Array([
-                0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 14,
-              ]),
-              new Uint8Array([0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 9]),
-            ];
-            const vec1 = encodeVectorFully(EXPECTED[1], WORD_SIZE + 3 * WORD_SIZE * 3);
-            const vec2 = encodeVectorFully(EXPECTED[2], vec1.offset + vec1.length * WORD_SIZE);
-
-            const vec3 = encodeVectorFully(EXPECTED[3], vec2.offset + vec2.length * WORD_SIZE);
-
-            return [
-              EXPECTED[0],
-              vec1.vec,
-              vec2.vec,
-              vec3.vec,
-              vec1.data,
-              vec2.data,
-              vec3.data,
-            ] as Uint8Array[];
-          },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          decodedTransformer: (value: unknown | undefined) =>
-            (value as any[]).map((x) =>
-              Array.isArray(x) ? x.map((y) => (y instanceof BN ? y.toNumber() : y)) : x
-            ),
+          encodedValue: [
+            Uint8Array.from([0, 0, 0, 33]),
+            Uint8Array.from([
+              0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0,
+              0, 0, 0, 1, 84,
+            ]),
+            Uint8Array.from([
+              0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0,
+              0, 0, 0, 14,
+            ]),
+            Uint8Array.from([
+              0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 9,
+            ]),
+          ],
         },
         {
           skipDecoding: true,
@@ -571,43 +504,29 @@ describe.skip('Abi interface', () => {
               [6, 7, 8],
             ],
           ],
-          encodedValue: (input?: any, offset: number = 0) => {
+          encodedValue: (input?: any, _offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-
-            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 24]);
-            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.length]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.length]);
-
-            const pointerVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 72]);
-            const capacityVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
             const lengthVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
-            const data1Vec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][0]]);
-            const data2Vec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][1]]);
-            const data3Vec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][2]]);
-            const pointerVec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, offset + 96]);
-            const capacityVec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1].length]);
+            const data1Vec1 = Uint8Array.from([0, 0, 0, input[0][0]]);
+            const data2Vec1 = Uint8Array.from([0, 0, 0, input[0][1]]);
+            const data3Vec1 = Uint8Array.from([0, 0, 0, input[0][2]]);
             const lengthVec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1].length]);
-            const data1Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][0]]);
-            const data2Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][1]]);
-            const data3Vec2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[1][2]]);
+            const data1Vec2 = Uint8Array.from([0, 0, 0, input[1][0]]);
+            const data2Vec2 = Uint8Array.from([0, 0, 0, input[1][1]]);
+            const data3Vec2 = Uint8Array.from([0, 0, 0, input[1][2]]);
             const expectedBytes = concat([
               // top level vector
-              pointer,
-              capacity,
               length,
               // top level vector, index 0 vector
-              pointerVec1,
-              capacityVec1,
               lengthVec1,
-              // top level vector, index 1 vector
-              pointerVec2,
-              capacityVec2,
-              lengthVec2,
               // index 0 vector's data
               data1Vec1,
               data2Vec1,
               data3Vec1,
+              // top level vector, index 1 vector
+              lengthVec2,
               // index 1 vector's data
               data1Vec2,
               data2Vec2,
@@ -621,17 +540,13 @@ describe.skip('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_inside_array,
           title: '[vector] vector inside array',
           value: [[[5, 6]]],
-          encodedValue: (input?: any, offset: number = 0) => {
+          encodedValue: (input?: any, _offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-
-            const pointer = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 24 + offset]);
-            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
-
-            const data1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][0]]);
-            const data2 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0][1]]);
-            const expectedBytes = concat([pointer, capacity, length, data1, data2]);
+            const data1 = Uint8Array.from([0, 0, 0, input[0][0]]);
+            const data2 = Uint8Array.from([0, 0, 0, input[0][1]]);
+            const expectedBytes = concat([length, data1, data2]);
 
             return expectedBytes;
           },
@@ -649,14 +564,10 @@ describe.skip('Abi interface', () => {
           encodedValue: (input?: any, _offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-            const enumCaseOne = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]);
-            const pointer = EMPTY_8_BYTE_ARRAY.slice().fill(enumCaseOne.length + 3 * WORD_SIZE, 7);
-
-            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
             const vectorData = Uint8Array.from(input.vec);
 
-            const expectedBytes = concat([enumCaseOne, pointer, capacity, length, vectorData]);
+            const expectedBytes = concat([ENUM_SECOND_INDEX, length, vectorData]);
             return expectedBytes;
           },
           offset: 0,
@@ -671,16 +582,14 @@ describe.skip('Abi interface', () => {
               vec: [3, 9, 6, 4],
             },
           ],
-          encodedValue: (input?: any, offset: number = 0) => {
+          encodedValue: (input?: any, _offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
-            const u8 = EMPTY_8_BYTE_ARRAY.slice().fill(7, 0, 1);
-            const pointer = EMPTY_8_BYTE_ARRAY.slice().fill(offset + u8.length + 3 * WORD_SIZE, 7);
-            const capacity = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
+            const u8 = Uint8Array.from([7]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
             const vectorData = Uint8Array.from(input.vec);
 
-            const expectedBytes = concat([u8, pointer, capacity, length, vectorData]);
+            const expectedBytes = concat([u8, length, vectorData]);
 
             return expectedBytes;
           },

@@ -3,8 +3,8 @@ use std::b512::B512;
 use std::bytes::Bytes;
 use std::string::String;
 
-enum EnumWithGeneric<T> {
-    VariantOne: T,
+enum EnumWithGeneric<A> {
+    VariantOne: A,
     VariantTwo: u64,
 }
 
@@ -20,13 +20,13 @@ configurable {
     ENUM: EnumWithGeneric<bool> = EnumWithGeneric::VariantOne(true),
 }
 
-struct StructA<T, U> {
-    propA1: T,
-    propA2: U,
+struct StructA<B, C> {
+    propA1: B,
+    propA2: C,
 }
 
-struct StructB<T> {
-    propB1: T,
+struct StructB<D> {
+    propB1: D,
 }
 
 struct StructC {
@@ -57,17 +57,17 @@ enum EnumWithStructs {
     c: StructA<u64, SimpleStruct>,
 }
 
-struct StructWithImplicitGenerics<T, U> {
-    arr: [T; 3],
-    tuple: (T, U),
+struct StructWithImplicitGenerics<E, F> {
+    arr: [E; 3],
+    tuple: (E, F),
 }
 
 enum MyGenericEnum<V> {
     Foo: u64,
     Bar: bool,
 }
-struct MyGenericStruct<T, U> {
-    bim: T,
+struct MyGenericStruct<G, H> {
+    bim: G,
     bam: MyGenericEnum<u64>,
 }
 
@@ -109,14 +109,14 @@ struct StructWithVector {
     vec: Vec<u8>,
 }
 
-struct MyStructWithGeneric<T, U> {
-    bim: T,
-    bam: StructB<U>,
-    bom: StructA<U, T>,
+struct MyStructWithGeneric<I, J> {
+    bim: I,
+    bam: StructB<J>,
+    bom: StructA<I, J>,
 }
 
-struct ArrWithGenericStruct<U> {
-    a: [MyStructWithGeneric<U, u8>; 3],
+struct ArrWithGenericStruct<K> {
+    a: [MyStructWithGeneric<K, u8>; 3],
 }
 
 abi MyContract {
