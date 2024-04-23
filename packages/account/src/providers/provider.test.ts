@@ -1009,11 +1009,11 @@ describe('Provider', () => {
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
-    const calculatePriceWithFactorMock = vi.spyOn(gasMod, 'calculateGasFee').mockReturnValue(bn(0));
+    const calculateGasFeeMock = vi.spyOn(gasMod, 'calculateGasFee').mockReturnValue(bn(0));
 
     const { minFee, maxFee } = await provider.getTransactionCost(request);
 
-    expect(calculatePriceWithFactorMock).toHaveBeenCalled();
+    expect(calculateGasFeeMock).toHaveBeenCalled();
 
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
