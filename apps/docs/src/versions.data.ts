@@ -8,7 +8,7 @@ export default {
       forc: FORC,
       fuels: FUELS,
       fuelCore: FUEL_CORE,
-      fuelsInstallVersion: '~0.81.0',
+      fuelsInstallVersion: '~0.82.0',
     };
   },
 };
