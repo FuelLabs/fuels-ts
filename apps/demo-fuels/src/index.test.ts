@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /**
  * NOTE: These tests are a copy of the ones at:
  *  - /apps/demo-typegen/src/index.test.ts
