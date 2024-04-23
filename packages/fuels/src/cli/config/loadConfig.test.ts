@@ -7,8 +7,6 @@ import {
   resetConfigAndMocks,
   resetDiskAndMocks,
 } from '../../../test/utils/runCommands';
-import * as shouldUseBuiltinForcMod from '../commands/init/shouldUseBuiltinForc';
-import * as shouldUseBuiltinFuelCoreMod from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig } from '../types';
 
 import { loadConfig } from './loadConfig';
@@ -122,29 +120,5 @@ describe('loadConfig', () => {
     expect(result).not.toBeTruthy();
     expect(error?.message).toMatch(/forc workspace not detected/i);
     expect(error?.message).toMatch(/try using 'contracts'/i);
-  });
-
-  test(`should smart-set built-in flags`, async () => {
-    await runInit({
-      root: paths.root,
-      workspace: paths.workspaceDir,
-      output: paths.outputDir,
-    });
-
-    const shouldUseBuiltinForc = vi
-      .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
-      .mockReturnValue(false);
-
-    const shouldUseBuiltinFuelCore = vi
-      .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
-      .mockReturnValue(true);
-
-    const config = await loadConfig(paths.root);
-
-    expect(config.useBuiltinForc).toEqual(false);
-    expect(config.useBuiltinFuelCore).toEqual(true);
-
-    expect(shouldUseBuiltinForc).toHaveBeenCalledTimes(1);
-    expect(shouldUseBuiltinFuelCore).toHaveBeenCalledTimes(1);
   });
 });

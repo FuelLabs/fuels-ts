@@ -9,7 +9,7 @@ import { log } from '../../utils/logger';
 export function init(program: Command) {
   const options = program.opts();
 
-  const { path, autoStartFuelCore, useBuiltinForc, useBuiltinFuelCore } = options;
+  const { path, autoStartFuelCore } = options;
 
   let workspace: string | undefined;
   let absoluteWorkspace: string | undefined;
@@ -53,8 +53,6 @@ export function init(program: Command) {
       scripts,
       predicates,
       output,
-      useBuiltinForc,
-      useBuiltinFuelCore,
       autoStartFuelCore,
     });
 

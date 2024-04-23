@@ -82,7 +82,6 @@ export type InitParams = BaseParams & {
   scripts?: string;
   predicates?: string;
   output: string;
-  useBuiltinBinaries?: boolean;
   autoStartFuelCore?: boolean;
   build?: boolean;
 };
@@ -99,7 +98,6 @@ export async function runInit(params: InitParams) {
     predicates,
     root,
     scripts,
-    useBuiltinBinaries,
     workspace,
   } = params;
 
@@ -113,7 +111,6 @@ export async function runInit(params: InitParams) {
     flag(['--contracts', contracts], contracts),
     flag(['--scripts', scripts], scripts),
     flag(['--predicates', predicates], predicates),
-    flag(['--use-builtin-forc', '--use-builtin-fuel-core'], useBuiltinBinaries),
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
   ].flat();
 

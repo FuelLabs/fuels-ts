@@ -5,8 +5,6 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
-import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
-import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
 
 import { readForcToml, readSwayType } from './forcUtils';
@@ -41,9 +39,6 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
   await validateConfig(userConfig);
 
-  const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
-  const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? shouldUseBuiltinFuelCore();
-
   const { forcBuildFlags = [] } = userConfig;
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');
   const buildMode = releaseFlag ? 'release' : 'debug';
@@ -60,8 +55,6 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     privateKey: defaultConsensusKey,
     ...userConfig,
     basePath: cwd,
-    useBuiltinForc,
-    useBuiltinFuelCore,
     configPath,
     forcBuildFlags,
     buildMode,

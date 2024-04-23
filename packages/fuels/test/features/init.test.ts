@@ -40,8 +40,6 @@ describe('init', () => {
     const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: './workspace',`);
     expect(fuelsContents).toMatch(`output: './output',`);
-    expect(fuelsContents).not.toMatch(`useBuiltinForc: true,`);
-    expect(fuelsContents).not.toMatch(`useBuiltinFuelCore: true,`);
   });
 
   it('should run `init` command using built-in flags', async () => {
@@ -56,8 +54,6 @@ describe('init', () => {
     const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: './workspace',`);
     expect(fuelsContents).toMatch(`output: './output',`);
-    expect(fuelsContents).toMatch(`useBuiltinForc: true,`);
-    expect(fuelsContents).toMatch(`useBuiltinFuelCore: true,`);
   });
 
   it('should run `init` command and throw for existent config file', async () => {

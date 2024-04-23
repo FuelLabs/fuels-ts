@@ -10,11 +10,8 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
   debug('Building Sway program', path);
 
   return new Promise<void>((resolve, reject) => {
-    const builtInForcPath = findBinPath('fuels-forc', __dirname);
-
-    const command = config.useBuiltinForc ? builtInForcPath : 'forc';
     const args = ['build', '-p', path].concat(config.forcBuildFlags);
-    const forc = spawn(command, args, { stdio: 'pipe' });
+    const forc = spawn('forc', args, { stdio: 'pipe' });
 
     if (loggingConfig.isLoggingEnabled) {
       forc.stderr?.pipe(process.stderr);

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { createConfig } from 'fuels';
-import type { CommandEvent, ContractDeployOptions, FuelsConfig } from 'fuels/src/cli/types';
+import type { CommandEvent, ContractDeployOptions, FuelsConfig } from 'fuels';
 
 const MY_FIRST_DEPLOYED_CONTRACT_NAME = '';
 
@@ -96,16 +96,6 @@ export default createConfig({
     console.log('fuels:onFailure', { error, config });
   },
   // #endregion onFailure
-
-  // #region useBuiltInForc
-  // Default: undefined
-  useBuiltinForc: false,
-  // #endregion useBuiltInForc
-
-  // #region useBuiltInFuelCore
-  // Default: undefined
-  useBuiltinFuelCore: false,
-  // #endregion useBuiltInFuelCore
 });
 
 export const simpleDeployConfig = createConfig({

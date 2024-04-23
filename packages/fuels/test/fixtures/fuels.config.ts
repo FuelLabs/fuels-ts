@@ -19,8 +19,6 @@ export const fuelsConfig: FuelsConfig = {
   deployConfig: {
     gasPrice: 5,
   },
-  useBuiltinForc: false,
-  useBuiltinFuelCore: false,
   autoStartFuelCore: true,
   fuelCorePort: 4000,
   providerUrl: FUEL_NETWORK_URL,

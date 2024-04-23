@@ -1,5 +1,4 @@
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
-import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -56,8 +55,6 @@ export const configureCli = () => {
     .addOption(new Option(`-s, --scripts ${arg}`, `${desc} Scripts`).conflicts('workspace'))
     .addOption(new Option(`-p, --predicates ${arg}`, `${desc} Predicates`).conflicts('workspace'))
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
-    .option('--use-builtin-forc', 'Use buit-in `forc` to build Sway programs')
-    .option('--use-builtin-fuel-core', 'Use buit-in `fuel-core` when starting a Fuel node')
     .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
     .action(withProgram(command, Commands.init, init));
 
@@ -94,18 +91,6 @@ export const configureCli = () => {
     .command('versions')
     .description('Check for version incompatibilities')
     .action(runVersions);
-
-  /**
-   * Binary wrappers
-   */
-
-  program.command('core', 'Wrapper around Fuel Core binary', {
-    executableFile: findBinPath('fuels-core', __dirname),
-  });
-
-  program.command('forc', 'Wrapper around Forc binary', {
-    executableFile: findBinPath('fuels-forc', __dirname),
-  });
 
   return program;
 };
