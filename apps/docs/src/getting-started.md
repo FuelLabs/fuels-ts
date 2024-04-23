@@ -27,21 +27,6 @@ pnpm add fuels
 
 :::
 
-### Note
-
-If you are using bun, you'll need to add a `trustedDependencies` field to your `package.json`:
-
-```json
-{
-  // ...
-  "trustedDependencies": ["@fuel-ts/fuel-core", "@fuel-ts/forc"]
-}
-```
-
-This is to ensure that bun includes the `fuel-core` and `forc` binaries in your project.
-
-> IMPORTANT: We don't officially support `bun` yet; use it at your own risk.
-
 ## Usage
 
 With the Fuels dependency set up, you can now create a React component that will connect to the Fuel provider and retrieve the base asset balance for a given wallet address. Here's an example of how to do this:
@@ -130,7 +115,7 @@ In the example below, we connect a [Provider](./guide/provider/index.md) to the 
 Firstly, you will need a local node running on your machine. We recommend one of the following methods:
 
 - [Testing utilities](./guide/testing/index.md#wallet-test-utilities) can assist in programmatically launching a short-lived node.
-- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](./guide/fuels/commands.md#fuels-core).
+- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly.
 
 In the following example, we create a provider to connect to the local node and sign a message.
 

@@ -11,11 +11,11 @@ This doc was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway
 
 ## Installation Guide
 
-Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/installation) to install The Fuel toolchain binaries and pre requisites.
+Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/installation) to install The Fuel toolchain binaries and prerequisites.
 
 ## Developer Quickstart Guide
 
-We recommend starting with the [Developer Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/) for a walk through on building your first DApp on Fuel.
+We recommend starting with the [Developer Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/) for a walk-through on building your first DApp on Fuel.
 
 - [Guide](./guide/)
 - [Sample Application](https://github.com/FuelLabs/beta2-quickstart)
@@ -29,7 +29,7 @@ Learn more about the Fuel Ecosystem.
 - <a :href="url" target="_blank" rel="noreferrer">🧰 Forc</a> the Fuel toolbox. Build, deploy and manage your sway projects.
 - [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
-- [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
+- [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in Rust.
 - [⚡ Fuel Network](https://fuel.network/) the project.
 
 ## Install

@@ -468,10 +468,6 @@ export default defineConfig({
                     text: 'Commands',
                     link: '/guide/fuels/commands',
                   },
-                  {
-                    text: 'Binaries',
-                    link: '/guide/fuels/binaries',
-                  },
                 ],
               },
             ],

@@ -26,6 +26,10 @@ my-fuel-dapp # NextJS app or similar
 └── package.json
 ```
 
+## Prerequisites
+
+We expect you to install the [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
+
 ## Installation
 
 Add it to your `my-fuel-dapp` project:

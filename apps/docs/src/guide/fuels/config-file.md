@@ -139,34 +139,6 @@ Parameters:
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onFailure{ts:line-numbers}
 
-## `useBuiltinForc`
-
-Opt-in or out from using [built-in](./binaries.md) `forc` binaries.
-
-When not supplied, will default to using the `system` binaries.
-
-If `system` binaries are absent, print a warning and use `built-in` ones instead.
-
-<<< @../../../demo-fuels/fuels.config.full.ts#useBuiltInForc{ts:line-numbers}
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
-
-## `useBuiltinFuelCore`
-
-Opt-in or out from using [built-in](./binaries.md) `fuel-core` binaries.
-
-When not supplied, will default to using the `system` binaries.
-
-If `system` binaries are absent, print a warning and use `built-in` ones instead.
-
-<<< @../../../demo-fuels/fuels.config.full.ts#useBuiltInFuelCore{ts:line-numbers}
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
-
 ## Loading environment variables
 
 If you want to load environment variables from a `.env` file, you can use the `dotenv` package.
