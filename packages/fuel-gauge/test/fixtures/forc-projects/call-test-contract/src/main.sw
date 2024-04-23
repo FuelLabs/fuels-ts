@@ -40,9 +40,11 @@ abi TestContract {
     fn foo(value: u64) -> u64;
     fn call_external_foo(param: u64, contract_id: b256) -> u64;
     fn boo(value: TestStruct) -> TestStruct;
-    fn barfoo(value: u64) -> u64;
-    fn foobar(value: ()) -> u64;
-    fn foobar_no_params() -> u64;
+    fn empty(empty: ()) -> u64;
+    fn empty_then_value(empty: (), value: u8) -> u64;
+    fn value_then_empty(value: u8, empty: ()) -> u64;
+    fn value_then_empty_then_value(value: u8, empty: (), value2: u8) -> u64;
+    fn no_params() -> u64;
     fn sum(a: u64, b: u64) -> u64;
     fn sum_test(a: u64, test: SumStruct) -> u64;
     fn sum_single(test: SumStruct) -> u64;
@@ -90,13 +92,19 @@ impl TestContract for Contract {
             b: value.b + 1,
         }
     }
-    fn barfoo(value: u64) -> u64 {
+    fn empty(value: ()) -> u64 {
         63
     }
-    fn foobar(value: ()) -> u64 {
+    fn empty_then_value(empty: (), value: u8) -> u64 {
         63
     }
-    fn foobar_no_params() -> u64 {
+    fn value_then_empty(value: u8, empty: ()) -> u64 {
+        63
+    }
+    fn value_then_empty_then_value(value: u8, empty: (), value2: u8) -> u64 {
+        63
+    }
+    fn no_params() -> u64 {
         50
     }
     fn sum(a: u64, b: u64) -> u64 {
