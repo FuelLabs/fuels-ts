@@ -8,8 +8,8 @@ import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
+const U64 = bn(32);
 const U32 = 1000;
-const U16 = 32;
 const U8 = 1;
 
 /**
@@ -21,8 +21,8 @@ describe('TransactionCoder', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
       scriptGasLimit: bn(U32),
-      scriptLength: bn(U16),
-      scriptDataLength: bn(U16),
+      scriptLength: U64,
+      scriptDataLength: U64,
       policyTypes: 5,
       inputsCount: 0,
       outputsCount: 0,
@@ -55,8 +55,8 @@ describe('TransactionCoder', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
       scriptGasLimit: bn(U32),
-      scriptLength: bn(U16),
-      scriptDataLength: bn(U16),
+      scriptLength: U64,
+      scriptDataLength: U64,
       policyTypes: 7,
       inputsCount: 1,
       outputsCount: 1,
