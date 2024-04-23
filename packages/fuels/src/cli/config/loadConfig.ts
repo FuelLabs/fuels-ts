@@ -43,6 +43,9 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');
   const buildMode = releaseFlag ? 'release' : 'debug';
 
+  const forcPath = userConfig.forcPath ?? 'forc';
+  const fuelCorePath = userConfig.fuelCorePath ?? 'fuel-core';
+
   // Start clone-object while initializing optional props
   const config: FuelsConfig = {
     contracts: [],
@@ -53,6 +56,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,
     privateKey: defaultConsensusKey,
+    forcPath,
+    fuelCorePath,
     ...userConfig,
     basePath: cwd,
     configPath,

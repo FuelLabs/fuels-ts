@@ -38,7 +38,6 @@ describe('loadConfig', () => {
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
-      useBuiltinBinaries: true,
       autoStartFuelCore: true,
     });
 

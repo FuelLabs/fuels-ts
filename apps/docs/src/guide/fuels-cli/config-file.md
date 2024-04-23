@@ -139,6 +139,22 @@ Parameters:
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onFailure{ts:line-numbers}
 
+## `forcPath`
+
+Path to the `forc` binary.
+
+When not supplied, will default to using the `system` binaries.
+
+<<< @../../../demo-fuels/fuels.config.full.ts#forcPath{ts:line-numbers}
+
+## `fuelCorePath`
+
+Path to the `fuel-core` binary.
+
+When not supplied, will default to using the `system` binaries.
+
+<<< @../../../demo-fuels/fuels.config.full.ts#fuelCorePath{ts:line-numbers}
+
 ## Loading environment variables
 
 If you want to load environment variables from a `.env` file, you can use the `dotenv` package.

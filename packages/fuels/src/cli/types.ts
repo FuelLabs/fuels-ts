@@ -73,6 +73,12 @@ export type UserFuelsConfig = {
   /** If set to false, you will need to spin up a Fuel core node by yourself */
   autoStartFuelCore?: boolean;
 
+  /** If set, will use absolute path to forc binary  */
+  forcPath?: string;
+
+  /** If set, will use absolute path to forc binary  */
+  fuelCorePath?: string;
+
   /**
    * Port to use when starting a `fuel-core` node
    * Default: first free port, starting from 4000
@@ -111,6 +117,8 @@ export type FuelsConfig = UserFuelsConfig &
       | 'scripts'
       | 'deployConfig'
       | 'autoStartFuelCore'
+      | 'forcPath'
+      | 'fuelCorePath'
       | 'providerUrl'
       | 'forcBuildFlags'
     >

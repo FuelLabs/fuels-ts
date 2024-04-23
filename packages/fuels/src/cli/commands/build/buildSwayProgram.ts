@@ -8,9 +8,11 @@ import { onForcExit, onForcError } from './forcHandlers';
 export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
   debug('Building Sway program', path);
 
+  const forcPath = config.forcPath ?? 'forc';
+
   return new Promise<void>((resolve, reject) => {
     const args = ['build', '-p', path].concat(config.forcBuildFlags);
-    const forc = spawn('forc', args, { stdio: 'pipe' });
+    const forc = spawn(forcPath, args, { stdio: 'pipe' });
 
     if (loggingConfig.isLoggingEnabled) {
       forc.stderr?.pipe(process.stderr);

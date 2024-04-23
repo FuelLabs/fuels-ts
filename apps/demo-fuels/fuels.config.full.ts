@@ -96,6 +96,16 @@ export default createConfig({
     console.log('fuels:onFailure', { error, config });
   },
   // #endregion onFailure
+
+  // #region forcPath
+  // Default: undefined
+  forcPath: 'fuels-forc',
+  // #endregion forcPath
+
+  // #region fuelCorePath
+  // Default: undefined
+  fuelCorePath: 'fuel-core',
+  // #endregion fuelCorePath
 });
 
 export const simpleDeployConfig = createConfig({
