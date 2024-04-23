@@ -95,26 +95,15 @@ describe(__filename, () => {
     expect(myWallet).toBeDefined();
   });
 
-  it('should instantiate an locked wallet from an unlocked wallet', () => {
-    // #region instantiating-wallets-9
-    const unlockedWallet: WalletUnlocked = Wallet.generate();
-
-    const lockedWallet: WalletLocked = unlockedWallet.lock();
-    // #endregion instantiating-wallets-9
-
-    expect(lockedWallet).toBeDefined();
-    expect(unlockedWallet.privateKey).toBeUndefined();
-  });
-
   it('should connect a wallet to a provider', async () => {
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
     const myWallet = Wallet.fromAddress(address);
 
-    // #region instantiating-wallets-10
+    // #region instantiating-wallets-9
     const provider = await Provider.create('https://beta-5.fuel.network/graphql');
 
     myWallet.connect(provider);
-    // #endregion instantiating-wallets-10
+    // #endregion instantiating-wallets-9
 
     expect(myWallet).toBeDefined();
   });
@@ -124,9 +113,9 @@ describe(__filename, () => {
 
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
 
-    // #region instantiating-wallets-11
+    // #region instantiating-wallets-10
     const myWallet: WalletLocked = Wallet.fromAddress(address, provider);
-    // #endregion instantiating-wallets-11
+    // #endregion instantiating-wallets-10
 
     myWallet.connect(provider);
 

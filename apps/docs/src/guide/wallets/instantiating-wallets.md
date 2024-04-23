@@ -42,18 +42,14 @@ You can also instantiate [`WalletLocked`](../../api/Account/WalletLocked) instan
 
 <<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-8{ts:line-numbers}
 
-Or even using a `WalletUnlocked`:
-
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-9{ts:line-numbers}
-
 ## Connecting to a Provider
 
 While wallets can be used independently of a [`Provider`](../../api/Account/Provider), operations requiring blockchain interaction will need one.
 
 Connecting an existing wallet to a Provider:
 
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-10{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-9{ts:line-numbers}
 
 Instantiating a wallet with a Provider:
 
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-11{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#instantiating-wallets-10{ts:line-numbers}
