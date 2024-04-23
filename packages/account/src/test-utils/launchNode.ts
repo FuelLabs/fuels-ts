@@ -4,7 +4,6 @@ import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
-import { randomBytes } from 'ethers';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
@@ -16,6 +15,8 @@ import { Signer } from '../signer';
 import type { WalletUnlocked } from '../wallet';
 
 import { generateTestWallet } from './generateTestWallet';
+import { randomBytes } from '@fuel-ts/crypto';
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 
 const getFlagValueFromArgs = (args: string[], flag: string) => {
   const flagIndex = args.indexOf(flag);
@@ -177,7 +178,7 @@ export const launchNode = async ({
         process.env.GENESIS_SECRET = hexlify(pk);
 
         stateConfigJson.coins.push({
-          tx_id: hexlify(randomBytes(34)),
+          tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
           owner: signer.address.toHexString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           amount: '18446744073709551615' as any,
