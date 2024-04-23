@@ -232,8 +232,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
-  // TODO: Validate if options param is still needed
-  async getTransactionCost(_options?: TransactionCostOptions) {
+  async getTransactionCost() {
     const provider = this.getProvider();
 
     const request = await this.getTransactionRequest();
