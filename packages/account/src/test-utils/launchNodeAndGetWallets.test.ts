@@ -39,7 +39,9 @@ describe('launchNode', () => {
       consensusParameters: { gasPerByte },
     } = provider.getChain();
 
-    expect(gasPerByte.toNumber()).toEqual(63);
+    const expectedGasPerByte = 63;
+
+    expect(gasPerByte.toNumber()).toEqual(expectedGasPerByte);
 
     stop();
     // #endregion launchNode-custom-config
