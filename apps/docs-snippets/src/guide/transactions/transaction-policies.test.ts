@@ -57,8 +57,8 @@ describe('Transaction Policies', () => {
     // set the respective policies.
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      gasLimit: bn(1_000),
-      maturity: 2,
+      gasLimit: bn(2_000),
+      maturity: 1,
       tip: bn(3),
       witnessLimit: 900,
       maxFee: bn(10_000),

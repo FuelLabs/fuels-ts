@@ -46,7 +46,7 @@ describe(__filename, () => {
   it('should successfully execute transaction with `txParams` and `callParams`', async () => {
     // #region call-params-3
     const amountToForward = 10;
-    const contractCallGasLimit = 1000;
+    const contractCallGasLimit = 2000;
     const transactionGasLimit = 100_000;
 
     const result = await contract.functions

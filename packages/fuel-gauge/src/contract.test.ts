@@ -928,7 +928,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[50_000, BaseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -953,7 +953,7 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [15_000, BaseAssetId],
+      [50_000, BaseAssetId],
       [15_000, ASSET_A],
       [15_000, ASSET_B],
     ]);
@@ -992,7 +992,7 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [5_000, BaseAssetId],
+      [50_000, BaseAssetId],
       [5_000, ASSET_A],
       [5_000, ASSET_B],
     ]);
