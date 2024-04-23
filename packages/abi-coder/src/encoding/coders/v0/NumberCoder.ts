@@ -16,32 +16,35 @@ export class NumberCoder extends Coder<number, number> {
 
   constructor(
     baseType: NumberCoderType,
-    options: EncodingOptions = {
-      isSmallBytes: false,
-      isRightPadded: false,
-    }
+    options: EncodingOptions = { isSmallBytes: false, isRightPadded: false }
   ) {
-    const paddingLength = options.isSmallBytes && baseType === 'u8' ? 1 : 8;
+    const isSmallBytes = options && options.isSmallBytes === true;
+    const paddingLength = NumberCoder.calculatePaddingLength(baseType, isSmallBytes);
+    const length = NumberCoder.calculateLength(baseType);
 
     super('number', baseType, paddingLength);
-    this.baseType = baseType;
-    switch (baseType) {
-      case 'u8':
-        this.length = 1;
-        break;
-      case 'u16':
-        this.length = 2;
-        break;
-      case 'u32':
-      default:
-        this.length = 4;
-        break;
-    }
 
+    this.baseType = baseType;
+    this.length = length;
     this.paddingLength = paddingLength;
     this.options = options;
   }
 
+  private static calculatePaddingLength(baseType: NumberCoderType, isSmallBytes: boolean): number {
+    return isSmallBytes && baseType === 'u8' ? 1 : 8;
+  }
+
+  private static calculateLength(baseType: NumberCoderType): number {
+    switch (baseType) {
+      case 'u8':
+        return 1;
+      case 'u16':
+        return 2;
+      case 'u32':
+      default:
+        return 4;
+    }
+  }
   encode(value: number | string): Uint8Array {
     let bytes;
 
