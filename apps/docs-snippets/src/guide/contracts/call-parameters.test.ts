@@ -61,8 +61,9 @@ describe(__filename, () => {
       .call();
 
     const { value } = result;
+    const expectedValue = 10;
 
-    expect(new BN(value).toNumber()).toBe(10);
+    expect(new BN(value).toNumber()).toBe(expectedValue);
     // #endregion call-params-3
   });
 });
