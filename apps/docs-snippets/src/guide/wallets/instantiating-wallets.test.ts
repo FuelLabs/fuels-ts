@@ -1,3 +1,4 @@
+import type { WalletLocked, WalletUnlocked } from 'fuels';
 import { FUEL_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
 
 /**
@@ -6,7 +7,7 @@ import { FUEL_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
 describe(__filename, () => {
   it('should generate a new wallet just fine', () => {
     // #region instantiating-wallets-1
-    const unlockedWallet = Wallet.generate();
+    const unlockedWallet: WalletUnlocked = Wallet.generate();
     // #endregion instantiating-wallets-1
 
     expect(unlockedWallet).toBeDefined();
@@ -16,7 +17,7 @@ describe(__filename, () => {
     // #region instantiating-wallets-2
     const privateKey = '0x36ca81ba70f3e04b7cc8780bff42d907ebca508097d4ae3df5147c93fd217f7c';
 
-    const myWallet = Wallet.fromPrivateKey(privateKey);
+    const myWallet: WalletUnlocked = Wallet.fromPrivateKey(privateKey);
     // #endregion instantiating-wallets-2
 
     expect(myWallet).toBeDefined();
@@ -26,7 +27,7 @@ describe(__filename, () => {
     // #region instantiating-wallets-3
     const mnemonic = 'section gospel lady april mouse huge prosper boy urge fox tackle orient';
 
-    const myWallet = Wallet.fromMnemonic(mnemonic);
+    const myWallet: WalletUnlocked = Wallet.fromMnemonic(mnemonic);
     // #endregion instantiating-wallets-3
 
     expect(myWallet).toBeDefined();
@@ -36,7 +37,7 @@ describe(__filename, () => {
     // #region instantiating-wallets-4
     const mySeed = '0xa5d42fd0cf8825fc846b2f257887a515573ee5b779e99f060dc945b3d5504bca';
 
-    const myWallet = Wallet.fromSeed(mySeed);
+    const myWallet: WalletUnlocked = Wallet.fromSeed(mySeed);
     // #endregion instantiating-wallets-4
 
     expect(myWallet).toBeDefined();
@@ -48,7 +49,7 @@ describe(__filename, () => {
 
     const extendedKey = HDWallet.fromSeed(mySeed).toExtendedKey();
 
-    const myWallet = Wallet.fromExtendedKey(extendedKey);
+    const myWallet: WalletUnlocked = Wallet.fromExtendedKey(extendedKey);
     // #endregion instantiating-wallets-5
 
     expect(myWallet).toBeDefined();
@@ -60,35 +61,60 @@ describe(__filename, () => {
 
     const password = 'password';
 
-    const myWallet = await Wallet.fromEncryptedJson(jsonWallet, password);
+    const myWallet: WalletUnlocked = await Wallet.fromEncryptedJson(jsonWallet, password);
     // #endregion instantiating-wallets-6
 
     expect(myWallet).toBeDefined();
   });
 
-  it('should instantiate wallet using a bech32 string address', async () => {
+  it('should instantiate an unlocked wallet from a locked wallet', () => {
+    // #region instantiating-wallets-7
+    const address = 'fuel1fjett54ahnydhklerngqhclzmmkmp6s0xnykns8dwsdpjfg3r2rsfazpw5';
+    const privateKey = '0x9deba03f08676716e3a4247797672d8008a5198d183048be65415ef89447b890';
+
+    const lockedWallet: WalletLocked = Wallet.fromAddress(address);
+
+    const unlockedWallet: WalletUnlocked = lockedWallet.unlock(privateKey);
+    // #endregion instantiating-wallets-7
+
+    expect(unlockedWallet).toBeDefined();
+    expect(unlockedWallet.privateKey).toBeDefined();
+  });
+
+  it('should instantiate a locked wallet using a bech32 string address', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const address = `fuel14kjrdcdcp7z4l9xk0pm3cwz9qnjxxd04wx4zgnc3kknslclxzezqyeux5d`;
 
-    // #region instantiating-wallets-7
-    const myWallet = Wallet.fromAddress(address, provider);
-    // #endregion instantiating-wallets-7
+    // #region instantiating-wallets-8
+    const myWallet: WalletLocked = Wallet.fromAddress(address, provider);
+    // #endregion instantiating-wallets-8
 
     myWallet.connect(provider);
 
     expect(myWallet).toBeDefined();
+  });
+
+  it('should instantiate an locked wallet from an unlocked wallet', () => {
+    // #region instantiating-wallets-9
+    const unlockedWallet: WalletUnlocked = Wallet.generate();
+
+    const lockedWallet: WalletLocked = unlockedWallet.lock();
+    // #endregion instantiating-wallets-9
+
+    expect(lockedWallet).toBeDefined();
+    expect(unlockedWallet.privateKey).toBeUndefined();
   });
 
   it('should connect a wallet to a provider', async () => {
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
     const myWallet = Wallet.fromAddress(address);
 
-    // #region instantiating-wallets-8
+    // #region instantiating-wallets-10
     const provider = await Provider.create('https://beta-5.fuel.network/graphql');
 
     myWallet.connect(provider);
-    // #endregion instantiating-wallets-8
+    // #endregion instantiating-wallets-10
 
     expect(myWallet).toBeDefined();
   });
@@ -98,9 +124,9 @@ describe(__filename, () => {
 
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
 
-    // #region instantiating-wallets-9
-    const myWallet = Wallet.fromAddress(address, provider);
-    // #endregion instantiating-wallets-9
+    // #region instantiating-wallets-11
+    const myWallet: WalletLocked = Wallet.fromAddress(address, provider);
+    // #endregion instantiating-wallets-11
 
     myWallet.connect(provider);
 
