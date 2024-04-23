@@ -142,6 +142,10 @@ export default defineConfig({
                 link: '/guide/wallets/signing',
               },
               {
+                text: 'Connectors',
+                link: '/guide/wallets/connectors',
+              },
+              {
                 text: 'Wallet Manager',
                 link: '/guide/wallets/wallet-manager',
               },
