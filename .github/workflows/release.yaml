@@ -35,8 +35,8 @@ jobs:
         run: |
           pnpm changeset version
           echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
-          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
-          echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
+          echo "FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)" >> $GITHUB_ENV
+          echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -222,7 +222,7 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
+Manually edit the `internal/fuel-core/VERSION` file, add the right version, and then:
 
 ```sh
 pnpm install # will download new binaries

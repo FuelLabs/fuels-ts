@@ -2,8 +2,8 @@
   1) Variables
   ------------
     `FUELS` — comes from `/packages/fuels/package.json`
-    `FUEL_CORE` — comes from `/packages/fuel-core/VERSION`
-    `FORC` — comes from `/packages/forc/VERSION`
+    `FUEL_CORE` — comes from `/internal/fuel-core/VERSION`
+    `FORC` — comes from `/internal/forc/VERSION`
 
   3) Pre Build
   ------------

@@ -47,4 +47,4 @@ runs:
         ./install-fuelup.sh --no-modify-path --skip-toolchain-installation
         export PATH="${HOME}/.fuelup/bin:${PATH}"
         fuelup toolchain new forc-experimental
-        fuelup component add forc@$(cat ./packages/forc/VERSION_EXPERIMENTAL)
+        fuelup component add forc@$(cat ./internal/forc/VERSION_EXPERIMENTAL)
