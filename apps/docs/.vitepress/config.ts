@@ -94,6 +94,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Provider',
+            link: '/guide/provider/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Provider Options',
+                link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Querying the Chain',
+                link: '/guide/provider/querying-the-chain',
+              },
+            ],
+          },
+          {
             text: 'Wallets',
             link: '/guide/wallets/',
             collapsed: true,
@@ -137,21 +152,6 @@ export default defineConfig({
               {
                 text: 'Test Wallets',
                 link: '/guide/wallets/test-wallets',
-              },
-            ],
-          },
-          {
-            text: 'Provider',
-            link: '/guide/provider/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Provider Options',
-                link: '/guide/provider/provider-options',
-              },
-              {
-                text: 'Querying the Chain',
-                link: '/guide/provider/querying-the-chain',
               },
             ],
           },
