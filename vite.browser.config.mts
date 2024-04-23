@@ -19,7 +19,7 @@ const config: UserConfig = {
     }),
   ],
   optimizeDeps: {
-    exclude: ["fsevents"],
+    exclude: ["fsevents", "path-scurry"],
     include: ["events", "timers/promises"],
   },
   test: {

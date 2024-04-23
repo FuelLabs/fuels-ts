@@ -74,8 +74,8 @@
     "@types/web": "^0.0.65",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
-    "@vitest/browser": "^1.1.3",
-    "@vitest/coverage-istanbul": "^1.1.3",
+    "@vitest/browser": "^1.5.0",
+    "@vitest/coverage-istanbul": "^1.5.0",
     "compare-versions": "^6.1.0",
     "coverage-diff": "^3.2.0",
     "eslint": "^8.52.0",
@@ -92,7 +92,7 @@
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^10.2.6",
     "knip": "^5.9.3",
-    "memfs": "^4.6.0",
+    "memfs": "^4.8.2",
     "nodemon": "^3.0.3",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
@@ -106,11 +106,11 @@
     "tsx": "^4.7.0",
     "turbo": "^1.8.8",
     "typescript": "~5.2.2",
-    "vite": "^5.2.9",
+    "vite": "^5.2.10",
     "vite-plugin-node-polyfills": "^0.21.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.5.0",
-    "webdriverio": "^8.32.0"
+    "webdriverio": "^8.36.1"
   },
   "pnpm": {
     "overrides": {
