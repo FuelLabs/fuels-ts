@@ -1,4 +1,6 @@
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import { defaultChainConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
@@ -15,8 +17,6 @@ import { Signer } from '../signer';
 import type { WalletUnlocked } from '../wallet';
 
 import { generateTestWallet } from './generateTestWallet';
-import { randomBytes } from '@fuel-ts/crypto';
-import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 
 const getFlagValueFromArgs = (args: string[], flag: string) => {
   const flagIndex = args.indexOf(flag);

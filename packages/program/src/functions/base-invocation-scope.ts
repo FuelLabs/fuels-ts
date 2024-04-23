@@ -18,7 +18,7 @@ import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
 import { POINTER_DATA_OFFSET } from '../script-request';
-import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
+import type { ContractCall, InvocationScopeLike, TxParams } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
