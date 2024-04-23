@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
-import path, { join } from 'path';
+import { join } from 'path';
 
 const FORC = '~/.fuelup/bin/forc'; // node doesn't find it in PATH and fails, thus we need to provide the full path
 
