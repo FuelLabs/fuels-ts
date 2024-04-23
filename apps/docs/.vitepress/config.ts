@@ -76,10 +76,6 @@ export default defineConfig({
                 link: '/guide/fuels-cli/commands',
               },
               {
-                text: 'Binaries',
-                link: '/guide/fuels-cli/binaries',
-              },
-              {
                 text: 'ABI Typegen',
                 link: '/guide/fuels-cli/abi-typegen',
               },
