@@ -3,6 +3,7 @@ import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 import { findType } from '../../utils/findType';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';
+import { EmptyType } from '../types/EmptyType';
 
 export class Function implements IFunction {
   public name: string;
@@ -26,33 +27,38 @@ export class Function implements IFunction {
     const { types } = this;
 
     // loop through all inputs
-    const inputs = this.rawAbiFunction.inputs.map((input) => {
-      const { name, type: typeId, typeArguments } = input;
+    const inputs = this.rawAbiFunction.inputs
+      .filter((input) => {
+        const type = findType({ types, typeId: input.type });
+        return type.rawAbiType.type !== EmptyType.swayType;
+      })
+      .map((input) => {
+        const { name, type: typeId, typeArguments } = input;
 
-      const type = findType({ types, typeId });
+        const type = findType({ types, typeId });
 
-      let typeDecl: string;
+        let typeDecl: string;
 
-      if (typeArguments) {
-        // recursively process child `typeArguments`
-        typeDecl = parseTypeArguments({
-          types,
-          target: TargetEnum.INPUT,
-          parentTypeId: typeId,
-          typeArguments,
-        });
-      } else {
-        // or just collect type declaration
-        typeDecl = type.attributes.inputLabel;
-      }
+        if (typeArguments) {
+          // recursively process child `typeArguments`
+          typeDecl = parseTypeArguments({
+            types,
+            target: TargetEnum.INPUT,
+            parentTypeId: typeId,
+            typeArguments,
+          });
+        } else {
+          // or just collect type declaration
+          typeDecl = type.attributes.inputLabel;
+        }
 
-      // assemble it in `[key: string]: <Type>` fashion
-      if (shouldPrefixParams) {
-        return `${name}: ${typeDecl}`;
-      }
+        // assemble it in `[key: string]: <Type>` fashion
+        if (shouldPrefixParams) {
+          return `${name}: ${typeDecl}`;
+        }
 
-      return typeDecl;
-    });
+        return typeDecl;
+      });
 
     return inputs.join(', ');
   }
