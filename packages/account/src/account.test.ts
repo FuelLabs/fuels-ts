@@ -406,16 +406,19 @@ describe('Account', () => {
   });
 
   it('can transfer with custom TX Params', async () => {
-    const sender = await generateTestWallet(provider, [[1000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[9000, BaseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId);
+    const tx = await sender.transfer(receiver.address, 1, BaseAssetId, {
+      gasLimit: 1000,
+      tip: 10,
+      witnessLimit: 10000,
+    });
 
-    await response.wait();
-    const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(112) }]);
+    const response = await tx.wait();
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+    expect(response.isStatusSuccess).toBeTruthy();
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
