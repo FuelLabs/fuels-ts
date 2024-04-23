@@ -4,10 +4,9 @@ set -o pipefail
 
 output=$(pnpm fuels-forc build -p test/fixtures/forc-projects --release | tee >(cat >&2))
 
-exit_code=$?
-
+# Check the exit code of the build command
 if [ $exit_code -ne 0 ]; then
-    exit $exit_code
+    error_exit "Build failed with exit code $exit_code"
 fi
 
 res=$(echo "$output" | grep Compiling | grep -v library | sed -E 's/.* (predicate|contract|script).*\((.*)\)/\1 -i \2\/out\/release\/*-abi.json/g')
