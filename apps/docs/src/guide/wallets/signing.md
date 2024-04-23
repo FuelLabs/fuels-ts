@@ -22,7 +22,7 @@ Signing a transaction involves using your wallet to sign the transaction ID (als
 
 3. `Security Mechanism`: The transaction ID is derived from the transaction bytes (excluding the `witnesses`). If the transaction changes, the ID changes, making any previous signatures invalid. This ensures no unauthorized changes can be made after signing.
 
-The following code snippet examplify how a Transaction can be signed:
+The following code snippet exemplifies how a Transaction can be signed:
 
 <<< @/../../docs-snippets/src/guide/wallets/signing.test.ts#signing-2{ts:line-numbers}
 

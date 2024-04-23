@@ -11,7 +11,7 @@ Wallets can be used for many important things, for instance:
 
 The SDK has multiple Wallets related classes:
 
-- [Wallet](../../api/Account/Wallet): Works simplily like a wrapper providing methods to create and instantiating `WalletUnlocked` and `WalletLocked` instances.
+- [Wallet](../../api/Account/Wallet): Works simply like a wrapper providing methods to create and instantiating `WalletUnlocked` and `WalletLocked` instances.
 
 - [WalletLocked](../../api/Account/WalletLocked): Provides the functionalities for a locked wallet.
 
