@@ -8,6 +8,8 @@
   ],
   "ignoreDependencies": [
     "@fuel-ts/*",
+    "@internal/fuel-core",
+    "@internal/forc",
     "@types/jest",
     "@types/rimraf",
     "@graphql-codegen*",
