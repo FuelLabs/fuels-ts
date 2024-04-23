@@ -11,7 +11,7 @@ respectively.
 
 The [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) type represents a wallet whose private key is known and
 stored internally in memory. A wallet must be of type [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) in order
-to perform operations that involve [signing messages or transactions](./signing-transactions.md).
+to perform operations that involve [signing messages or transactions](./signing.md).
 
 The [`WalletLocked`](../../api/Account/WalletLocked.md) type represents a wallet whose private key is _not_ known or stored
 in memory. Instead, [`WalletLocked`](../../api/Account/WalletLocked.md) only knows its public address. A [`WalletLocked`](../../api/Account/WalletLocked.md) cannot be
