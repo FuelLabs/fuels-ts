@@ -345,8 +345,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * assetId, if one it was not added yet.
    *
    * @param coin - Coin resource.
-   * @param predicate - Predicate bytes.
-   * @param predicateData - Predicate data bytes.
    */
   addCoinInput(coin: Coin) {
     const { assetId, owner, amount } = coin;
@@ -386,8 +384,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * baseAssetId, if one it was not added yet.
    *
    * @param message - Message resource.
-   * @param predicate - Predicate bytes.
-   * @param predicateData - Predicate data bytes.
    */
   addMessageInput(message: MessageCoin) {
     const { recipient, sender, amount } = message;
