@@ -87,7 +87,7 @@ export const killNode = (params: KillNodeParams) => {
  * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
  * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core.
- * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
+ * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@internal/fuel-core package.
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())

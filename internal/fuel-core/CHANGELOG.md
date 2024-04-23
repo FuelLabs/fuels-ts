@@ -1,4 +1,4 @@
-# @fuel-ts/fuel-core
+# @internal/fuel-core
 
 ## 0.81.0
 

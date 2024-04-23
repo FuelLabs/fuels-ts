@@ -38,6 +38,6 @@
     "@fuel-ts/utils": "workspace:*"
   },
   "devDependencies": {
-    "@fuel-ts/forc": "workspace:*"
+    "@internal/forc": "workspace:*"
   }
 }

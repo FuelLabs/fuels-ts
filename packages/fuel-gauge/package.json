@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
-    "@fuel-ts/forc": "workspace:*",
+    "@internal/forc": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*"
   }
