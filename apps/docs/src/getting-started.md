@@ -9,7 +9,7 @@ This guide will walk you through the process of setting up and using the Fuels-t
 
 ## Prerequisites
 
-We expect you to install the [Fuel Toolchain][https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain] before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
+We expect you to install the [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
 
 ## Installation
 
@@ -132,7 +132,7 @@ In the example below, we connect a [Provider](./guide/provider/index.md) to the 
 Firstly, you will need a local node running on your machine. We recommend one of the following methods:
 
 - [Testing utilities](./guide/testing/index.md#wallet-test-utilities) can assist in programmatically launching a short-lived node.
-- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](./guide/fuels/commands.md#fuels-core).
+- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](./guide/fuels-cli/commands.md#fuels-core).
 
 In the following example, we create a provider to connect to the local node and sign a message.
 
