@@ -10,7 +10,7 @@
 First we install `fuels` to our project:
 
 ```console-vue
-pnpm add fuels{{fuelsInstallVersion}}
+pnpm add fuels@{{fuelsInstallVersion}}
 ```
 
 ## Help

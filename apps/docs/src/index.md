@@ -33,11 +33,11 @@ Learn more about the Fuel Ecosystem.
 ::: code-group
 
 ```sh-vue [pnpm]
-pnpm add fuels{{fuelsInstallVersion}}
+pnpm add fuels@{{fuelsInstallVersion}}
 ```
 
 ```sh-vue [npm]
-npm install fuels{{fuelsInstallVersion}} --save
+npm install fuels@{{fuelsInstallVersion}} --save
 ```
 
 :::

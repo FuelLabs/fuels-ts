@@ -19,15 +19,15 @@ Here's how to configure this explicitly:
 You can also call the `built-in` binaries directly:
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} help forc
-npx fuels{{fuelsInstallVersion}} forc --version
-npx fuels{{fuelsInstallVersion}} forc test -h
+npx fuels@{{fuelsInstallVersion}} help forc
+npx fuels@{{fuelsInstallVersion}} forc --version
+npx fuels@{{fuelsInstallVersion}} forc test -h
 ```
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} help core
-npx fuels{{fuelsInstallVersion}} core --version
-npx fuels{{fuelsInstallVersion}} core run -h
+npx fuels@{{fuelsInstallVersion}} help core
+npx fuels@{{fuelsInstallVersion}} core --version
+npx fuels@{{fuelsInstallVersion}} core run -h
 ```
 
 Check the docs for `forc` and `fuel-core`:

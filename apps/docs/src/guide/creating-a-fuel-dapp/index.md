@@ -16,11 +16,11 @@ The first step is to run the command:
 ::: code-group
 
 ```sh-vue [npm]
-npm create fuels{{fuelsInstallVersion}}
+npm create fuels@{{fuelsInstallVersion}}
 ```
 
 ```sh-vue [pnpm]
-pnpm create fuels{{fuelsInstallVersion}}
+pnpm create fuels@{{fuelsInstallVersion}}
 ```
 
 :::

@@ -10,7 +10,7 @@ The `fuels` CLI consists of a couple commands.
 ## `fuels init`
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} help init
+npx fuels@{{fuelsInstallVersion}} help init
 ```
 
 ```console
@@ -25,13 +25,13 @@ Options:
 Creating a sample `fuel.config.ts` file:
 
 ```console
-npx fuels{{fuelsInstallVersion}} init --contracts ./my-contracts/* --output ./src/sway-contracts-api
+npx fuels@{{fuelsInstallVersion}} init --contracts ./my-contracts/* --output ./src/sway-contracts-api
 ```
 
 Using [Forc workspaces](https://docs.fuel.network/docs/forc/workspaces/)? Try this instead:
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} init --workspace ./sway-programs --output ./src/sway-programs-api
+npx fuels@{{fuelsInstallVersion}} init --workspace ./sway-programs --output ./src/sway-programs-api
 ```
 
 This will give you a minimal configuration:
@@ -56,7 +56,7 @@ In a nutshell:
 ## `fuels build`
 
 ```console
-npx fuels{{fuelsInstallVersion}} help build
+npx fuels@{{fuelsInstallVersion}} help build
 ```
 
 ```console
@@ -69,14 +69,14 @@ Options:
 Examples:
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} build
+npx fuels@{{fuelsInstallVersion}} build
 ```
 
 1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
 1.  Generate types for them using `fuels-typegen` <sup>[2](#typegen)</sup>
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} build --deploy
+npx fuels@{{fuelsInstallVersion}} build --deploy
 ```
 
 Using the `--deploy` flag will additionally:
@@ -89,7 +89,7 @@ Using the `--deploy` flag will additionally:
 ## `fuels deploy`
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} deploy
+npx fuels@{{fuelsInstallVersion}} deploy
 ```
 
 1. Deploy all Sway contracts under `workspace`
@@ -114,7 +114,7 @@ For a complete example, see:
 ## `fuels dev`
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} dev
+npx fuels@{{fuelsInstallVersion}} dev
 ```
 
 The `fuels dev` command do three things:
@@ -130,7 +130,7 @@ The `fuels dev` command do three things:
 Manually generates type definitions and factory classes from ABI JSON files.
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} help typegen
+npx fuels@{{fuelsInstallVersion}} help typegen
 ```
 
 ```console
@@ -152,7 +152,7 @@ For more info, check:
 Check for version incompatibilities between your [Fuel Toolchain](#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} versions
+npx fuels@{{fuelsInstallVersion}} versions
 ```
 
 ```

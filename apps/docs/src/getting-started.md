@@ -18,16 +18,16 @@ To begin, you need to add the `fuels` dependency to your project. You can do thi
 ::: code-group
 
 ```sh-vue [npm]
-npm install fuels{{fuelsInstallVersion}} --save
+npm install fuels@{{fuelsInstallVersion}} --save
 ```
 
 ```sh-vue [pnpm]
-pnpm add fuels{{fuelsInstallVersion}}
+pnpm add fuels@{{fuelsInstallVersion}}
 ```
 
 :::
 
-**Note**: We use `{{fuelsInstallVersion}}` to ensure compatibility with our latest testnet.
+**Note**: We use `@{{fuelsInstallVersion}}` to ensure compatibility with our latest testnet.
 
 ### Note
 

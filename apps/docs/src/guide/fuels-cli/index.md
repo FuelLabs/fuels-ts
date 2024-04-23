@@ -38,11 +38,11 @@ Add it to your `my-fuel-dapp` project:
 ::: code-group
 
 ```console-vue [npm]
-npm install fuels{{fuelsInstallVersion}} --save
+npm install fuels@{{fuelsInstallVersion}} --save
 ```
 
 ```console-vue [pnpm]
-pnpm add fuels{{fuelsInstallVersion}}
+pnpm add fuels@{{fuelsInstallVersion}}
 ```
 
 :::
@@ -50,7 +50,7 @@ pnpm add fuels{{fuelsInstallVersion}}
 ## Double-checking
 
 ```console-vue
-npx fuels{{fuelsInstallVersion}} -v
+npx fuels@{{fuelsInstallVersion}} -v
 ```
 
 ## Next Step
