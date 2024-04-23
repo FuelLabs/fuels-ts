@@ -1,4 +1,4 @@
 ---
 ---
 
-docs: Un-documented built-in binaries
+chore!: Remove built-in binaries for `forc` and `fuel-core`
