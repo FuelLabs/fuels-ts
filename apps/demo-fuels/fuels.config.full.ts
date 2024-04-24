@@ -104,7 +104,7 @@ export default createConfig({
 
   // #region fuelCorePath
   // Default: undefined
-  fuelCorePath: 'fuel-core',
+  fuelCorePath: 'fuels-core',
   // #endregion fuelCorePath
 });
 

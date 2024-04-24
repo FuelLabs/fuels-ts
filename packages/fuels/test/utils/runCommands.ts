@@ -48,6 +48,9 @@ export function bootstrapProject(testFilepath: string) {
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
   const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi__factory.ts');
 
+  const forcPath = 'fuels-forc';
+  const fuelCorePath = 'fuels-core';
+
   return {
     root,
     workspaceDir,
@@ -60,6 +63,8 @@ export function bootstrapProject(testFilepath: string) {
     outputDir,
     contractsJsonPath,
     fooContractFactoryPath,
+    forcPath,
+    fuelCorePath,
   };
 }
 
@@ -82,6 +87,8 @@ export type InitParams = BaseParams & {
   scripts?: string;
   predicates?: string;
   output: string;
+  forcPath?: string;
+  fuelCorePath?: string;
   autoStartFuelCore?: boolean;
   build?: boolean;
 };
@@ -91,7 +98,17 @@ export type BuildParams = BaseParams & {
 };
 
 export async function runInit(params: InitParams) {
-  const { autoStartFuelCore, contracts, output, predicates, root, scripts, workspace } = params;
+  const {
+    autoStartFuelCore,
+    contracts,
+    output,
+    predicates,
+    root,
+    scripts,
+    forcPath,
+    fuelCorePath,
+    workspace,
+  } = params;
 
   const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
     value ? (flags as string[]) : [];
@@ -103,6 +120,8 @@ export async function runInit(params: InitParams) {
     flag(['--contracts', contracts], contracts),
     flag(['--scripts', scripts], scripts),
     flag(['--predicates', predicates], predicates),
+    flag(['--forc-path', forcPath], forcPath),
+    flag(['--fuel-core-path', fuelCorePath], fuelCorePath),
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
   ].flat();
 

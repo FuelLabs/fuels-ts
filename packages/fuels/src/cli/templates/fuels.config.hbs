@@ -27,6 +27,12 @@ export default createConfig({
     {{/if}}
   {{/if}}
   output: '{{output}}',
+  {{#if (isDefined forcPath)}}
+  forcPath: '{{forcPath}}',
+  {{/if}}
+  {{#if (isDefined fuelCorePath)}}
+  fuelCorePath: '{{fuelCorePath}}',
+  {{/if}}
   {{#if (isDefined autoStartFuelCore)}}
   autoStartFuelCore: {{autoStartFuelCore}},
   {{/if}}

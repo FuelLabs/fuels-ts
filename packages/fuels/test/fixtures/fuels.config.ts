@@ -19,8 +19,8 @@ export const fuelsConfig: FuelsConfig = {
   deployConfig: {
     gasPrice: 5,
   },
-  forcPath: 'forc',
-  fuelCorePath: 'fuel-core',
+  forcPath: 'fuels-forc',
+  fuelCorePath: 'fuels-core',
   autoStartFuelCore: true,
   fuelCorePort: 4000,
   providerUrl: FUEL_NETWORK_URL,

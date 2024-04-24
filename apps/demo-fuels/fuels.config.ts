@@ -5,7 +5,7 @@ export default createConfig({
   workspace: './sway-programs', // forc workspace
   output: './src/sway-programs-api',
   forcPath: 'fuels-forc',
-  fuelCorePath: 'fuel-core',
+  fuelCorePath: 'fuels-core',
 });
 // #endregion config
 

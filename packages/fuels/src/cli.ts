@@ -55,6 +55,8 @@ export const configureCli = () => {
     .addOption(new Option(`-s, --scripts ${arg}`, `${desc} Scripts`).conflicts('workspace'))
     .addOption(new Option(`-p, --predicates ${arg}`, `${desc} Predicates`).conflicts('workspace'))
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
+    .option('--forc-path <path>', 'Path to the `forc` binary')
+    .option('--fuel-core-path <path>', 'Path to the `fuel-core` binary')
     .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
     .action(withProgram(command, Commands.init, init));
 
