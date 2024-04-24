@@ -1,13 +1,6 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
-import {
-  FUEL_NETWORK_URL,
-  Provider,
-  BaseAssetId,
-  ScriptTransactionRequest,
-  Wallet,
-  bn,
-} from 'fuels';
+import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from 'fuels';
 
 /**
  * @group node
@@ -15,10 +8,12 @@ import {
 describe(__filename, () => {
   let mainWallet: Account;
   let provider: Provider;
+  let baseAssetId: string;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     mainWallet = Wallet.generate({ provider });
-    await seedTestWallet(mainWallet, [[500_000, BaseAssetId]]);
+    await seedTestWallet(mainWallet, [[500_000, baseAssetId]]);
   });
 
   const fundingTxWithMultipleUTXOs = async ({
@@ -33,10 +28,10 @@ describe(__filename, () => {
     const request = new ScriptTransactionRequest();
 
     for (let i = 0; i < splitIn; i++) {
-      request.addCoinOutput(account.address, totalAmount / splitIn, BaseAssetId);
+      request.addCoinOutput(account.address, totalAmount / splitIn, baseAssetId);
     }
 
-    const resources = await mainWallet.getResourcesToSpend([[totalAmount + 2_000, BaseAssetId]]);
+    const resources = await mainWallet.getResourcesToSpend([[totalAmount + 2_000, baseAssetId]]);
     request.addResources(resources);
 
     const txCost = await mainWallet.provider.getTransactionCost(request);
@@ -67,7 +62,7 @@ describe(__filename, () => {
 
     const amountToTransfer = 300;
 
-    request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
     const txCost = await provider.getTransactionCost(request);
 
@@ -85,7 +80,7 @@ describe(__filename, () => {
     // fund method should have been called to fetch the remaining UTXOs
     expect(getResourcesToSpendSpy).toHaveBeenCalled();
 
-    const receiverBalance = await receiver.getBalance(BaseAssetId);
+    const receiverBalance = await receiver.getBalance(baseAssetId);
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer);
   });
@@ -101,8 +96,8 @@ describe(__filename, () => {
       splitIn: 2,
     });
 
-    // sender has 2 UTXOs for 1000 each, so it has enough resources to spend 1000 of BaseAssetId
-    const enoughtResources = await sender.getResourcesToSpend([[100, BaseAssetId]]);
+    // sender has 2 UTXOs for 1000 each, so it has enough resources to spend 1000 of baseAssetId
+    const enoughtResources = await sender.getResourcesToSpend([[100, baseAssetId]]);
 
     // confirm we only fetched 1 UTXO from the expected amount
     expect(enoughtResources.length).toBe(1);
@@ -114,7 +109,7 @@ describe(__filename, () => {
 
     const amountToTransfer = 100;
 
-    request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
     request.addResources(enoughtResources);
 
     const txCost = await provider.getTransactionCost(request);
@@ -138,7 +133,7 @@ describe(__filename, () => {
     // fund should not have been called since the TX request was already funded
     expect(getResourcesToSpendSpy).toHaveBeenCalledTimes(0);
 
-    const receiverBalance = await receiver.getBalance(BaseAssetId);
+    const receiverBalance = await receiver.getBalance(baseAssetId);
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer);
   });
@@ -159,7 +154,7 @@ describe(__filename, () => {
     });
 
     const amountToTransfer = 1000;
-    request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
     const txCost = await provider.getTransactionCost(request);
 
@@ -180,7 +175,7 @@ describe(__filename, () => {
     // fund method should have been called to fetch UTXOs
     expect(getResourcesToSpendSpy).toHaveBeenCalledTimes(1);
 
-    const receiverBalance = await receiver.getBalance(BaseAssetId);
+    const receiverBalance = await receiver.getBalance(baseAssetId);
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer);
   });

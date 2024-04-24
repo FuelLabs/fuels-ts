@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -24,9 +24,11 @@ describe('Predicate', () => {
     let receiver: WalletUnlocked;
     let provider: Provider;
 
-    beforeEach(async () => {
+    let baseAssetId: string;
+    beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      wallet = await generateTestWallet(provider, [[10_000_000, BaseAssetId]]);
+      baseAssetId = provider.getBaseAssetId();
+      wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
 
@@ -41,13 +43,14 @@ describe('Predicate', () => {
       // calling the script with the receiver account (no resources)
       const scriptInput = 1;
       scriptInstance.account = receiver;
+
       await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
         /not enough coins to fit the target/
       );
 
       // setup predicate
-      const amountToPredicate = 5000;
-      const amountToReceiver = 1000;
+      const amountToPredicate = 10_000;
+      const amountToReceiver = 2000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
@@ -66,7 +69,7 @@ describe('Predicate', () => {
       expect(toNumber(await predicate.getBalance())).toBeGreaterThan(initialPredicateBalance);
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
         gasLimit: 1000,
       });
 

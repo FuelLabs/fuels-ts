@@ -1,7 +1,6 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import {
   Address,
-  BaseAssetId,
   FUEL_NETWORK_URL,
   Provider,
   ScriptTransactionRequest,
@@ -15,9 +14,11 @@ import {
  */
 describe(__filename, () => {
   let provider: Provider;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
   });
 
   it('should sign a message using wallet instance', async () => {
@@ -44,14 +45,14 @@ describe(__filename, () => {
 
   it('should sign a transaction using wallet instance [DETAILED]', async () => {
     const wallet = WalletUnlocked.generate({ provider });
-    await seedTestWallet(wallet, [[10_000, BaseAssetId]]);
+    await seedTestWallet(wallet, [[10_000, baseAssetId]]);
 
     // #region signing-2
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(Address.fromRandom(), 1000, BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
 
     const txCost = await provider.getTransactionCost(request);
 
@@ -76,13 +77,13 @@ describe(__filename, () => {
 
   it('should sign a transaction using wallet instance [SIMPLIFIED]', async () => {
     const wallet = WalletUnlocked.generate({ provider });
-    await seedTestWallet(wallet, [[10_000, BaseAssetId]]);
+    await seedTestWallet(wallet, [[10_000, baseAssetId]]);
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(Address.fromRandom(), 1000, BaseAssetId);
+    request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
 
     const txCost = await provider.getTransactionCost(request);
 

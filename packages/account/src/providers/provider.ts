@@ -102,6 +102,7 @@ type ConsensusParameters = {
   maxMessageDataLength: BN;
   chainId: BN;
   gasCosts: GqlGasCosts;
+  baseAssetId: string;
 };
 
 /**
@@ -180,6 +181,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       gasPerByte: bn(feeParams.gasPerByte),
       maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
       chainId: bn(consensusParameters.chainId),
+      baseAssetId: consensusParameters.baseAssetId,
       gasCosts,
     },
     gasCosts,
@@ -560,6 +562,18 @@ export default class Provider {
       consensusParameters: { chainId },
     } = this.getChain();
     return chainId.toNumber();
+  }
+
+  /**
+   * Returns the base asset ID
+   *
+   * @returns A promise that resolves to the base asset ID
+   */
+  getBaseAssetId() {
+    const {
+      consensusParameters: { baseAssetId },
+    } = this.getChain();
+    return baseAssetId;
   }
 
   /**
@@ -1005,6 +1019,7 @@ export default class Provider {
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
+    const baseAssetId = this.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
@@ -1012,7 +1027,7 @@ export default class Provider {
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
     // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
+    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
 
     /**
      * Estimate predicates gasUsed

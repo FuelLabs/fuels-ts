@@ -1,14 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import {
-  Provider,
-  FUEL_NETWORK_URL,
-  BaseAssetId,
-  Predicate,
-  Wallet,
-  ScriptTransactionRequest,
-  bn,
-} from 'fuels';
+import { Provider, FUEL_NETWORK_URL, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -16,9 +8,16 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
  * @group node
  */
 describe('PredicateConditionalInputs', () => {
+  let baseAssetId: string;
+
   const { binHexlified: predicateBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.PREDICATE_CONDITIONAL_INPUTS
   );
+
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
+  });
 
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -30,7 +29,7 @@ describe('PredicateConditionalInputs', () => {
     const amountToTransfer = 1000;
 
     const adminWallet = await generateTestWallet(provider, [
-      [500_000, BaseAssetId],
+      [500_000, baseAssetId],
       [500_000, ASSET_A],
     ]);
 
@@ -47,7 +46,7 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to Alice so she can pay the fees
-    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, BaseAssetId);
+    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, baseAssetId);
 
     await tx2.waitForResult();
 
@@ -105,7 +104,7 @@ describe('PredicateConditionalInputs', () => {
     const amountToTransfer = 1000;
 
     const adminWallet = await generateTestWallet(provider, [
-      [500_000, BaseAssetId],
+      [500_000, baseAssetId],
       [500_000, ASSET_A],
       [500_000, ASSET_B],
     ]);
@@ -123,7 +122,7 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to predicate so it can pay the fees
-    const tx2 = await adminWallet.transfer(predicate.address, 10_000, BaseAssetId);
+    const tx2 = await adminWallet.transfer(predicate.address, 10_000, baseAssetId);
 
     await tx2.waitForResult();
 

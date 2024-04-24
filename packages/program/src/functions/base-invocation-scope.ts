@@ -78,7 +78,6 @@ export class BaseInvocationScope<TReturn = any> {
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
     this.isMultiCall = isMultiCall;
-
     this.transactionRequest = new ScriptTransactionRequest();
   }
 

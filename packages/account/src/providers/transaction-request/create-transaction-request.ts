@@ -52,12 +52,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
    *
    * @param createTransactionRequestLike - The initial values for the instance
    */
-  constructor({
-    bytecodeWitnessIndex,
-    salt,
-    storageSlots,
-    ...rest
-  }: CreateTransactionRequestLike = {}) {
+  constructor({ bytecodeWitnessIndex, salt, storageSlots, ...rest }: CreateTransactionRequestLike) {
     super(rest);
     this.bytecodeWitnessIndex = bytecodeWitnessIndex ?? 0;
     this.salt = hexlify(salt ?? ZeroBytes32);

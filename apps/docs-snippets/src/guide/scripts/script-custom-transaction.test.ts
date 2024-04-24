@@ -1,6 +1,13 @@
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest, coinQuantityfy } from 'fuels';
-import type { CoinQuantityLike, Contract, WalletUnlocked, Provider } from 'fuels';
+import {
+  BN,
+  ContractFactory,
+  FUEL_NETWORK_URL,
+  ScriptTransactionRequest,
+  coinQuantityfy,
+  Provider,
+} from 'fuels';
+import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,6 +22,7 @@ describe(__filename, () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
   let contract: Contract;
+  let baseAssetId: string;
 
   const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
@@ -25,14 +33,14 @@ describe(__filename, () => {
   );
 
   beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     const seedQuantities: CoinQuantityLike[] = [
       [1000, ASSET_A],
       [500, ASSET_B],
-      [300_000, BaseAssetId],
+      [300_000, baseAssetId],
     ];
-
     wallet = await getTestWallet(seedQuantities);
-    provider = wallet.provider;
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
     contract = await factory.deployContract();
   });
@@ -57,9 +65,9 @@ describe(__filename, () => {
     // 2. Instantiate the script main arguments
     const scriptArguments = [
       contract.id.toB256(),
-      { value: ASSET_A },
+      { bits: ASSET_A },
       new BN(1000),
-      { value: ASSET_B },
+      { bits: ASSET_B },
       new BN(500),
     ];
 

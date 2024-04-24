@@ -19,6 +19,8 @@ fn validate_string(arg: String) {
     }
 }
 
-fn main(arg: String) {
+fn main(arg: String) -> bool {
     validate_string(arg);
+
+    true
 }

@@ -1,5 +1,4 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
@@ -198,8 +197,9 @@ export class Account extends AbstractAccount {
    * @param assetId - The asset ID to check the balance for.
    * @returns A promise that resolves to the balance amount.
    */
-  async getBalance(assetId: BytesLike = BaseAssetId): Promise<BN> {
-    const amount = await this.provider.getBalance(this.address, assetId);
+  async getBalance(assetId?: BytesLike): Promise<BN> {
+    const assetIdToFetch = assetId ?? this.provider.getBaseAssetId();
+    const amount = await this.provider.getBalance(this.address, assetIdToFetch);
     return amount;
   }
 
@@ -247,11 +247,12 @@ export class Account extends AbstractAccount {
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const { addedSignatures, estimatedPredicates, maxFee: fee, requiredQuantities } = params;
+    const baseAssetId = this.provider.getBaseAssetId();
 
     const txRequest = request as T;
     const requiredQuantitiesWithFee = addAmountToCoinQuantities({
       amount: bn(fee),
-      assetId: BaseAssetId,
+      assetId: baseAssetId,
       coinQuantities: requiredQuantities,
     });
 
@@ -270,7 +271,7 @@ export class Account extends AbstractAccount {
         return;
       }
       const isCoin = 'owner' in input;
-      const assetId = isCoin ? String(input.assetId) : BaseAssetId;
+      const assetId = isCoin ? String(input.assetId) : baseAssetId;
       if (quantitiesDict[assetId]) {
         quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(input.amount);
       }
@@ -327,12 +328,13 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
     const request = new ScriptTransactionRequest(txParams);
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
+    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
     const txCost = await this.provider.getTransactionCost(request, {
       estimateTxDependencies: true,
       resourcesOwner: this,
@@ -367,7 +369,7 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
@@ -377,7 +379,8 @@ export class Account extends AbstractAccount {
         'Transfer amount must be a positive number.'
       );
     }
-    const request = await this.createTransfer(destination, amount, assetId, txParams);
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
+    const request = await this.createTransfer(destination, amount, assetIdToTransfer, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
@@ -396,7 +399,7 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
@@ -408,11 +411,11 @@ export class Account extends AbstractAccount {
     }
 
     const contractAddress = Address.fromAddressOrString(contractId);
-
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
     const { script, scriptData } = await assembleTransferToContractScript({
       hexlifiedContractId: contractAddress.toB256(),
       amountToTransfer: bn(amount),
-      assetId,
+      assetId: assetIdToTransfer,
     });
 
     const request = new ScriptTransactionRequest({
@@ -425,7 +428,7 @@ export class Account extends AbstractAccount {
 
     const txCost = await this.provider.getTransactionCost(request, {
       resourcesOwner: this,
-      quantitiesToContract: [{ amount: bn(amount), assetId: String(assetId) }],
+      quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
     this.validateGasLimitAndMaxFee({
@@ -474,8 +477,9 @@ export class Account extends AbstractAccount {
 
     const params: ScriptTransactionRequestLike = { script, ...txParams };
 
+    const baseAssetId = this.provider.getBaseAssetId();
     const request = new ScriptTransactionRequest(params);
-    const quantitiesToContract = [{ amount: bn(amount), assetId: BaseAssetId }];
+    const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
 
     const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
 

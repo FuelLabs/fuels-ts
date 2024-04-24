@@ -1,7 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish, Transaction, WalletUnlocked } from 'fuels';
 import {
-  BaseAssetId,
   ContractFactory,
   FUEL_NETWORK_URL,
   PolicyType,
@@ -22,9 +21,11 @@ import { createSetupConfig } from './utils';
 describe('Policies', () => {
   let provider: Provider;
   let wallet: WalletUnlocked;
+  let baseAssetId: string;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
   });
 
   type CustomTxParams = {
@@ -69,7 +70,7 @@ describe('Policies', () => {
 
     const txRequest = new ScriptTransactionRequest(txParams);
 
-    txRequest.addCoinOutput(receiver.address, 500, BaseAssetId);
+    txRequest.addCoinOutput(receiver.address, 500, baseAssetId);
 
     const txCost = await provider.getTransactionCost(txRequest);
 
@@ -168,7 +169,7 @@ describe('Policies', () => {
       tip: 2,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 1800,
+      maxFee: 2000,
     });
 
     const txRequest = await callScope.getTransactionRequest();
@@ -193,7 +194,7 @@ describe('Policies', () => {
       maxFee: 1800,
     };
 
-    const pendingTx = await wallet.transfer(receiver.address, 500, BaseAssetId, txParams);
+    const pendingTx = await wallet.transfer(receiver.address, 500, baseAssetId, txParams);
 
     const { transaction } = await pendingTx.waitForResult();
 
@@ -221,7 +222,7 @@ describe('Policies', () => {
       maxFee: 2500,
     };
 
-    const pendingTx = await wallet.transferToContract(contract.id, 500, BaseAssetId, txParams);
+    const pendingTx = await wallet.transferToContract(contract.id, 500, baseAssetId, txParams);
 
     const { transaction } = await pendingTx.waitForResult();
 
@@ -240,7 +241,7 @@ describe('Policies', () => {
     };
 
     await expect(async () => {
-      const pendingTx = await wallet.transfer(receiver.address, 500, BaseAssetId, txParams);
+      const pendingTx = await wallet.transfer(receiver.address, 500, baseAssetId, txParams);
 
       await pendingTx.waitForResult();
     }).rejects.toThrow(/TransactionWitnessLimitExceeded/);
@@ -259,7 +260,7 @@ describe('Policies', () => {
       };
 
       await expect(async () => {
-        const pendingTx = await wallet.transfer(receiver.address, 500, BaseAssetId, txParams);
+        const pendingTx = await wallet.transfer(receiver.address, 500, baseAssetId, txParams);
         await pendingTx.waitForResult();
       }).rejects.toThrow(new RegExp(`Max fee '${maxFee}' is lower than the required`));
     });
@@ -284,7 +285,7 @@ describe('Policies', () => {
       };
 
       await expect(async () => {
-        const pendingTx = await wallet.transferToContract(contract.id, 500, BaseAssetId, txParams);
+        const pendingTx = await wallet.transferToContract(contract.id, 500, baseAssetId, txParams);
         await pendingTx.waitForResult();
       }).rejects.toThrow(new RegExp(`Max fee '${maxFee}' is lower than the required`));
     });

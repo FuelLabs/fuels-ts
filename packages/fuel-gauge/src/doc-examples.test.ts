@@ -23,7 +23,6 @@ import {
   WalletUnlocked,
   Signer,
   ZeroBytes32,
-  BaseAssetId,
   FUEL_NETWORK_URL,
   FUEL_BETA_5_NETWORK_URL,
 } from 'fuels';
@@ -59,6 +58,12 @@ const ADDRESS_BYTES = new Uint8Array([
  * @group node
  */
 describe('Doc Examples', () => {
+  let baseAssetId: string;
+
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
+  });
   test('it has an Address class using bech32Address', () => {
     const address = new Address(ADDRESS_BECH32);
 
@@ -163,7 +168,7 @@ describe('Doc Examples', () => {
     unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     const newlyLockedWallet = unlockedWallet.lock();
-    const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
+    const balance: BigNumberish = await myWallet.getBalance(baseAssetId);
     const balances: CoinQuantity[] = await myWallet.getBalances();
 
     expect(newlyLockedWallet.address).toEqual(someWallet.address);
@@ -205,14 +210,14 @@ describe('Doc Examples', () => {
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
     // single asset
-    const walletA = await generateTestWallet(provider, [[42, BaseAssetId]]);
+    const walletA = await generateTestWallet(provider, [[42, baseAssetId]]);
 
     // multiple assets
     const walletB = await generateTestWallet(provider, [
       // [Amount, AssetId]
       [100, assetIdA],
       [200, assetIdB],
-      [30, BaseAssetId],
+      [30, baseAssetId],
     ]);
 
     // this wallet has no assets
@@ -224,9 +229,9 @@ describe('Doc Examples', () => {
     const walletCBalances = await walletC.getBalances();
 
     // validate balances
-    expect(walletABalances).toEqual([{ assetId: BaseAssetId, amount: bn(42) }]);
+    expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
     expect(walletBBalances).toEqual([
-      { assetId: BaseAssetId, amount: bn(30) },
+      { assetId: baseAssetId, amount: bn(30) },
       { assetId: assetIdA, amount: bn(100) },
       { assetId: assetIdB, amount: bn(200) },
     ]);
@@ -278,9 +283,9 @@ describe('Doc Examples', () => {
     const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
     const receiver = Wallet.generate({ provider });
 
-    await seedTestWallet(wallet1, [{ assetId: BaseAssetId, amount: bn(1_000_000) }]);
-    await seedTestWallet(wallet2, [{ assetId: BaseAssetId, amount: bn(2_000_000) }]);
-    await seedTestWallet(wallet3, [{ assetId: BaseAssetId, amount: bn(300_000) }]);
+    await seedTestWallet(wallet1, [{ assetId: baseAssetId, amount: bn(1_000_000) }]);
+    await seedTestWallet(wallet2, [{ assetId: baseAssetId, amount: bn(2_000_000) }]);
+    await seedTestWallet(wallet3, [{ assetId: baseAssetId, amount: bn(300_000) }]);
 
     const AbiInputs: JsonAbi = {
       types: [
@@ -346,7 +351,7 @@ describe('Doc Examples', () => {
     const amountToReceiver = 100;
     const initialPredicateBalance = await predicate.getBalance();
 
-    const response = await wallet1.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const response = await wallet1.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 10_000,
     });
     await response.waitForResult();
@@ -355,7 +360,7 @@ describe('Doc Examples', () => {
     // assert that predicate address now has the expected amount to predicate
     expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
-    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, BaseAssetId, {
+    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, baseAssetId, {
       gasLimit: 10_000,
     });
     // Wait for Transaction to succeed
@@ -367,7 +372,7 @@ describe('Doc Examples', () => {
       initialPredicateBalance.add(amountToPredicate).add(1000)
     );
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasLimit: 10_000,
     });
     await tx.waitForResult();

@@ -1,5 +1,4 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { defaultChainConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
@@ -182,7 +181,7 @@ export const launchNode = async ({
           owner: signer.address.toHexString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           amount: '18446744073709551615' as any,
-          asset_id: BaseAssetId,
+          asset_id: chainConfigJson.consensus_parameters.V1.base_asset_id,
           output_index: 0,
           tx_pointer_block_height: 0,
           tx_pointer_tx_idx: 0,
@@ -280,9 +279,10 @@ export const launchNode = async ({
   });
 
 const generateWallets = async (count: number, provider: Provider) => {
+  const baseAssetId = provider.getBaseAssetId();
   const wallets: WalletUnlocked[] = [];
   for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
     wallets.push(wallet);
   }
   return wallets;

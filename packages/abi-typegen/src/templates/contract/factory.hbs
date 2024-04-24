@@ -27,7 +27,7 @@ export class {{capitalizedName}}__factory {
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
-    options: DeployContractOptions = {}
+    options: DeployContractOptions
   ): Promise<{{capitalizedName}}> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 

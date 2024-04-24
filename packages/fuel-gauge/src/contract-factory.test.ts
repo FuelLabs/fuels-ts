@@ -1,16 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import {
-  BN,
-  bn,
-  toHex,
-  Interface,
-  Provider,
-  ContractFactory,
-  BaseAssetId,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { BN, bn, toHex, Interface, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -18,6 +9,8 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
  * @group node
  */
 describe('Contract Factory', () => {
+  let baseAssetId: string;
+
   const {
     binHexlified: byteCode,
     abiContents: abi,
@@ -26,7 +19,8 @@ describe('Contract Factory', () => {
 
   const createContractFactory = async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
 
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);

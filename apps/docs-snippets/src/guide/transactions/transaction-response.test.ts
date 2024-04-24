@@ -44,6 +44,7 @@ describe('Transaction Response', () => {
 
   it('gets transaction response from transaction request', async () => {
     const scriptMainFunctionArguments = [1];
+
     // #region transaction-response-2
     // #import { ScriptTransactionRequest, TransactionResponse };
 

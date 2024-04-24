@@ -6,7 +6,7 @@ import type {
   TransactionResultReceipt,
   WalletUnlocked,
 } from 'fuels';
-import { BaseAssetId, ContractFactory, FUEL_NETWORK_URL, Provider, Wallet, bn } from 'fuels';
+import { ContractFactory, FUEL_NETWORK_URL, Provider, Wallet, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -32,10 +32,12 @@ describe('dry-run-multiple-txs', () => {
 
   let provider: Provider;
   let wallet: WalletUnlocked;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000_000]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
   });
 
   afterEach(() => {
@@ -76,7 +78,7 @@ describe('dry-run-multiple-txs', () => {
       maxFee: 3000,
     });
 
-    const resources = await wallet.getResourcesToSpend([[500_000, BaseAssetId]]);
+    const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);
 
     const request1 = await revertContract.functions
       .validate_inputs(10, 0)
@@ -163,7 +165,7 @@ describe('dry-run-multiple-txs', () => {
 
     // subId defined on multi-token contract
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
-    const resources = await wallet.getResourcesToSpend([[500_000, BaseAssetId]]);
+    const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);
 
     // creating receives to be used by the request 2 and 3
     const addresses = [

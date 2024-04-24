@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Contract, WalletUnlocked, TransactionResultReceipt } from 'fuels';
-import { bn, ContractFactory, Provider, BaseAssetId, FUEL_NETWORK_URL, getRandomB256 } from 'fuels';
+import { bn, ContractFactory, Provider, FUEL_NETWORK_URL, getRandomB256 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -14,10 +14,12 @@ let wallet: WalletUnlocked;
  */
 describe('Revert Error Testing', () => {
   let provider: Provider;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
     const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.REVERT_ERROR
@@ -182,9 +184,9 @@ describe('Revert Error Testing', () => {
     const tokenContract = await factory.deployContract();
 
     const addresses = [
-      { value: getRandomB256() },
-      { value: getRandomB256() },
-      { value: getRandomB256() },
+      { bits: getRandomB256() },
+      { bits: getRandomB256() },
+      { bits: getRandomB256() },
     ];
 
     const request = await tokenContract

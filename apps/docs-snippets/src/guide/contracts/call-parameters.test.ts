@@ -1,5 +1,5 @@
-import type { Contract } from 'fuels';
-import { BN, BaseAssetId } from 'fuels';
+import type { Contract, Provider } from 'fuels';
+import { BN } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -9,8 +9,12 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
+  let provider: Provider;
+  let baseAssetId: string;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
+    provider = contract.provider;
+    baseAssetId = provider.getBaseAssetId();
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {
@@ -20,7 +24,7 @@ describe(__filename, () => {
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, BaseAssetId],
+        forward: [amountToForward, baseAssetId],
       })
       .call();
 
@@ -35,7 +39,7 @@ describe(__filename, () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [10, BaseAssetId],
+          forward: [10, baseAssetId],
           gasLimit: 1,
         })
         .call()
@@ -46,13 +50,13 @@ describe(__filename, () => {
   it('should successfully execute transaction with `txParams` and `callParams`', async () => {
     // #region call-params-3
     const amountToForward = 10;
-    const contractCallGasLimit = 100;
-    const transactionGasLimit = 3_000_000;
+    const contractCallGasLimit = 4000;
+    const transactionGasLimit = 100_000;
 
     const result = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, BaseAssetId],
+        forward: [amountToForward, baseAssetId],
         gasLimit: contractCallGasLimit,
       })
       .txParams({

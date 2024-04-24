@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -24,8 +24,9 @@ type Wrapper = {
 
 const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
 
   return wallet;
 };
@@ -34,6 +35,12 @@ const setup = async (balance = 500_000) => {
  * @group node
  */
 describe('Bytes Tests', () => {
+  let baseAssetId: string;
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
+  });
+
   it('should test bytes output', async () => {
     const INPUT = 10;
 
@@ -94,7 +101,7 @@ describe('Bytes Tests', () => {
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
@@ -102,7 +109,7 @@ describe('Bytes Tests', () => {
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasLimit: 10_000,
     });
     await tx.waitForResult();
@@ -130,6 +137,6 @@ describe('Bytes Tests', () => {
     };
 
     const { value } = await scriptInstance.functions.main(1, INPUT).call<BN>();
-    expect(value.toNumber()).toStrictEqual(0);
+    expect(value).toBe(true);
   });
 });

@@ -1,5 +1,5 @@
 import { getRandomB256 } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
@@ -69,7 +69,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
       };
@@ -110,7 +110,7 @@ describe('operations', () => {
               amount2: '0x64',
             },
             amount: bn('0x5f5e100'),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
         from: {
@@ -124,7 +124,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
       };
@@ -176,7 +176,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
         from: {
@@ -249,7 +249,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0xf4240'),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
         from: {
@@ -332,7 +332,7 @@ describe('operations', () => {
           assetsSent: [
             {
               amount: bn(100000000),
-              assetId: BaseAssetId,
+              assetId: ZeroBytes32,
             },
           ],
         },
@@ -370,7 +370,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn(100000000),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
       };
@@ -411,7 +411,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
         from: {
@@ -444,7 +444,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
         from: {
@@ -475,7 +475,7 @@ describe('operations', () => {
         assetsSent: [
           {
             amount: bn('0x1'),
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
           },
         ],
         from: {

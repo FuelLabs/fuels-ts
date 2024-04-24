@@ -2,7 +2,6 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, BaseWalletUnlocked } from 'fuels';
 import {
-  BaseAssetId,
   ContractFactory,
   FUEL_NETWORK_URL,
   Predicate,
@@ -20,11 +19,13 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 describe('Fee', () => {
   let wallet: BaseWalletUnlocked;
   let provider: Provider;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     wallet = await generateTestWallet(provider, [
-      [1_000_000_000],
+      [1_000_000_000, baseAssetId],
       [1_000_000_000, ASSET_A],
       [1_000_000_000, ASSET_B],
     ]);
@@ -90,7 +91,7 @@ describe('Fee', () => {
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
 
-    const tx = await wallet.transfer(destination.address, amountToTransfer, BaseAssetId, {
+    const tx = await wallet.transfer(destination.address, amountToTransfer, baseAssetId, {
       gasLimit: 10_000,
     });
     const { fee } = await tx.wait();
@@ -117,7 +118,7 @@ describe('Fee', () => {
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(destination1.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(destination1.address, amountToTransfer, baseAssetId);
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
@@ -239,7 +240,7 @@ describe('Fee', () => {
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
-    const genAddresses = () => Array.from({ length: 3 }, () => ({ value: getRandomB256() }));
+    const genAddresses = () => Array.from({ length: 3 }, () => ({ bits: getRandomB256() }));
 
     const calls = Array.from({ length: 15 }).map(() =>
       contract.functions.mint_to_addresses(genAddresses(), subId, 100)
@@ -277,12 +278,12 @@ describe('Fee', () => {
       inputData: [1078],
     });
 
-    const tx1 = await wallet.transfer(predicate.address, 2000, BaseAssetId);
+    const tx1 = await wallet.transfer(predicate.address, 2000, baseAssetId);
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId);
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, baseAssetId);
 
     const { fee } = await tx2.wait();
 

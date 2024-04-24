@@ -1,15 +1,7 @@
 // #region Testing-in-ts-ts
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import {
-  ContractFactory,
-  Provider,
-  toHex,
-  BaseAssetId,
-  Wallet,
-  FUEL_NETWORK_URL,
-  Address,
-} from 'fuels';
+import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL, Address, bn } from 'fuels';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
@@ -19,13 +11,19 @@ import type { PredicateAbiInputs } from './predicate-types';
 import { PredicateAbi__factory } from './predicate-types';
 import { ScriptAbi__factory } from './script-types';
 
+let baseAssetId: string;
+
 /**
  * @group node
  */
 describe('ExampleContract', () => {
+  beforeAll(async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
+  });
   it('with imported storage slots', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     // #region typegen-demo-contract-storage-slots
     // #context import storageSlots from './contract/out/debug/demo-contract-storage_slots.json';
@@ -39,7 +37,7 @@ describe('ExampleContract', () => {
   });
   it('should return the input', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     // Deploy
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
@@ -64,7 +62,7 @@ describe('ExampleContract', () => {
 
   it('deployContract method', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     // #region typegen-demo-contract-factory-deploy
     // #context import { DemoContractAbi__factory } from './types';
@@ -72,6 +70,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet);
+
     // #endregion typegen-demo-contract-factory-deploy
 
     // Call
@@ -85,7 +84,7 @@ describe('ExampleContract', () => {
 
 it('should throw when simulating via contract factory with wallet with no resources', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const fundedWallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  const fundedWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
@@ -99,7 +98,7 @@ it('should throw when simulating via contract factory with wallet with no resour
 
 it('should not throw when dry running via contract factory with wallet with no resources', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const fundedWallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  const fundedWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
@@ -111,7 +110,7 @@ it('should not throw when dry running via contract factory with wallet with no r
 
 test('Example script', async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
   // #region typegen-demo-script
   // #context import { ScriptAbi__factory } from './types';
@@ -119,8 +118,7 @@ test('Example script', async () => {
   const script = ScriptAbi__factory.createInstance(wallet);
   const { value } = await script.functions.main().call();
   // #endregion typegen-demo-script
-  // @ts-expect-error TODO: investitage - typegen is expecting value to be a number but the value being returned is the string '0xa'
-  expect(value.toNumber()).toBe(10);
+  expect(value).toStrictEqual(bn(10));
 });
 
 test('Example predicate', async () => {
@@ -130,19 +128,19 @@ test('Example predicate', async () => {
 
   // In this exchange, we are first transferring some coins to the predicate
   const provider = await Provider.create(FUEL_NETWORK_URL);
-  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
   const predicateData: PredicateAbiInputs = [];
   const predicate = PredicateAbi__factory.createInstance(provider, predicateData);
 
-  const tx = await wallet.transfer(predicate.address, 100_000, BaseAssetId);
+  const tx = await wallet.transfer(predicate.address, 100_000, baseAssetId);
   await tx.wait();
 
   const initialPredicateBalance = await predicate.getBalance();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)
-  const tx2 = await predicate.transfer(receiver.address, 50_000, BaseAssetId);
+  const tx2 = await predicate.transfer(receiver.address, 50_000, baseAssetId);
   await tx2.wait();
 
   expect((await receiver.getBalance()).toNumber()).toEqual(50_000);

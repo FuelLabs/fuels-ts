@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { Contract } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -9,15 +9,17 @@ import { getScript, getSetupContract } from './utils';
 const setupContract = getSetupContract('std-lib-string');
 let contractInstance: Contract;
 
+let baseAssetId: string;
 beforeAll(async () => {
   contractInstance = await setupContract();
+  baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
 const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
 
   return wallet;
 };
@@ -56,14 +58,14 @@ describe('std-lib-string Tests', () => {
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasLimit: 10_000,
     });
     await tx.waitForResult();
@@ -85,8 +87,8 @@ describe('std-lib-string Tests', () => {
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
 
-    const { value } = await scriptInstance.functions.main(INPUT).call<BN>();
+    const { value } = await scriptInstance.functions.main(INPUT).call();
 
-    expect(value.toNumber()).toStrictEqual(0);
+    expect(value).toBe(true);
   });
 });

@@ -1,7 +1,7 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { Provider } from 'fuels';
-import { WalletUnlocked, Predicate, BN, getRandomB256, BaseAssetId } from 'fuels';
+import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,6 +15,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
   let provider: Provider;
+  let baseAssetId: string;
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
@@ -28,7 +29,8 @@ describe(__filename, () => {
       abi,
       inputData: [inputAddress],
     });
-    await seedTestWallet(predicate, [[100_000]]);
+    baseAssetId = provider.getBaseAssetId();
+    await seedTestWallet(predicate, [[100_000, baseAssetId]]);
   });
 
   it('should successfully use predicate to spend assets', async () => {
@@ -45,7 +47,7 @@ describe(__filename, () => {
     // #region send-and-spend-funds-from-predicates-3
     const amountToPredicate = 1000;
     const amountToReceiver = 200;
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1000,
     });
 
@@ -64,7 +66,7 @@ describe(__filename, () => {
     const tx2 = await predicate.transfer(
       receiverWallet.address.toB256(),
       amountToReceiver,
-      BaseAssetId
+      baseAssetId
     );
 
     await tx2.waitForResult();
@@ -79,6 +81,14 @@ describe(__filename, () => {
       inputData: ['0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4'],
     });
 
+    const amountToPredicate = 100;
+
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
+      gasLimit: 1_000,
+    });
+
+    await tx.waitForResult();
+
     const predicateBalance = new BN(await predicate.getBalance()).toNumber();
 
     const receiverWallet = WalletUnlocked.generate({
@@ -86,7 +96,7 @@ describe(__filename, () => {
     });
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, predicateBalance, BaseAssetId)
+      predicate.transfer(receiverWallet.address, predicateBalance, baseAssetId)
     );
 
     // #region send-and-spend-funds-from-predicates-6
@@ -109,7 +119,7 @@ describe(__filename, () => {
 
     const amountToPredicate = 10000;
 
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1000,
     });
 
@@ -122,7 +132,7 @@ describe(__filename, () => {
     const amountToWallet = 150;
 
     const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, amountToWallet, BaseAssetId)
+      predicate.transfer(receiverWallet.address, amountToWallet, baseAssetId)
     );
 
     // #region send-and-spend-funds-from-predicates-7
@@ -141,6 +151,14 @@ describe(__filename, () => {
       inputData: [inputAddress],
     });
 
+    const amountToPredicate = 10_000;
+
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
+      gasLimit: 1_000,
+    });
+
+    await tx.waitForResult();
+
     const receiverWallet = WalletUnlocked.generate({
       provider,
     });
@@ -151,7 +169,7 @@ describe(__filename, () => {
     const transactionRequest = await predicate.createTransfer(
       receiverWallet.address,
       amountToReceiver,
-      BaseAssetId,
+      baseAssetId,
       {
         gasLimit: 1000,
       }
@@ -181,7 +199,7 @@ describe(__filename, () => {
 
     const amountToPredicate = 10_000;
 
-    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, BaseAssetId, {
+    const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1_000,
     });
 
@@ -196,7 +214,7 @@ describe(__filename, () => {
     const preparedTx = await predicate.createTransfer(
       receiverWallet.address,
       amountToPredicate,
-      BaseAssetId
+      baseAssetId
     );
 
     // Get the transaction ID before sending the transaction

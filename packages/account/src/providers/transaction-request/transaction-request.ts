@@ -1,6 +1,6 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
@@ -381,14 +381,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   /**
    * Adds a single message input to the transaction and a change output for the
-   * baseAssetId, if one it was not added yet.
+   * asset against the message
    *
    * @param message - Message resource.
    */
   addMessageInput(message: MessageCoin) {
-    const { recipient, sender, amount } = message;
-
-    const assetId = BaseAssetId;
+    const { recipient, sender, amount, assetId } = message;
 
     let witnessIndex;
 
@@ -456,7 +454,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param amount - Amount of coin.
    * @param assetId - Asset ID of coin.
    */
-  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike = BaseAssetId) {
+  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike) {
     this.pushOutput({
       type: OutputType.Coin,
       to: addressify(to).toB256(),
@@ -492,7 +490,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param to - Address of the owner.
    * @param assetId - Asset ID of coin.
    */
-  addChangeOutput(to: AddressLike, assetId: BytesLike = BaseAssetId) {
+  addChangeOutput(to: AddressLike, assetId: BytesLike) {
     // Find the ChangeOutput for the AssetId of the Resource
     const changeOutput = this.getChangeOutputs().find(
       (output) => hexlify(output.assetId) === assetId
@@ -559,8 +557,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * quantities array.
    *
    * @param quantities - CoinQuantity Array.
+   * @param baseAssetId - The base asset to fund the transaction.
    */
-  fundWithFakeUtxos(quantities: CoinQuantity[], resourcesOwner?: AbstractAddress) {
+  fundWithFakeUtxos(
+    quantities: CoinQuantity[],
+    baseAssetId: string,
+    resourcesOwner?: AbstractAddress
+  ) {
     const findAssetInput = (assetId: string) =>
       this.inputs.find((input) => {
         if ('assetId' in input) {
@@ -574,7 +577,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
       let usedQuantity = quantity;
 
-      if (assetId === BaseAssetId) {
+      if (assetId === baseAssetId) {
         usedQuantity = bn('1000000000000000000');
       }
 
@@ -595,7 +598,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       }
     };
 
-    updateAssetInput(BaseAssetId, bn(100_000_000_000));
+    updateAssetInput(baseAssetId, bn(100_000_000_000));
     quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
   }
 

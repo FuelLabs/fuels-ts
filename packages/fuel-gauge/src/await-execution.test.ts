@@ -1,12 +1,5 @@
 import { launchNode } from '@fuel-ts/account/test-utils';
-import {
-  Provider,
-  WalletUnlocked,
-  randomBytes,
-  Wallet,
-  BaseAssetId,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { Provider, WalletUnlocked, randomBytes, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 /**
  * @group node
@@ -17,6 +10,7 @@ describe('await-execution', () => {
       args: ['--poa-instant', 'false', '--poa-interval-period', '400ms'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+    const baseAssetId = nodeProvider.getBaseAssetId();
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -25,7 +19,7 @@ describe('await-execution', () => {
 
     const destination = Wallet.generate({ provider: nodeProvider });
 
-    const transfer = await genesisWallet.createTransfer(destination.address, 100, BaseAssetId, {
+    const transfer = await genesisWallet.createTransfer(destination.address, 100, baseAssetId, {
       gasLimit: 10_000,
     });
 
@@ -43,6 +37,8 @@ describe('await-execution', () => {
 
   test.skip('transferring funds with awaitExecution works', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
       provider
@@ -55,7 +51,7 @@ describe('await-execution', () => {
     await genesisWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
+      baseAssetId,
       {
         gasLimit: 10_000,
       }

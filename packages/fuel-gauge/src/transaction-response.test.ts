@@ -3,7 +3,6 @@ import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import {
-  BaseAssetId,
   FUEL_NETWORK_URL,
   Provider,
   TransactionResponse,
@@ -89,9 +88,11 @@ describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
 
+  let baseAssetId: string;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    adminWallet = await generateTestWallet(provider, [[500_000]]);
+    baseAssetId = provider.getBaseAssetId();
+    adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
   });
 
   it('should ensure create method waits till a transaction response is given', async () => {
@@ -102,7 +103,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
+      baseAssetId,
       { gasLimit: 10_000 }
     );
 
@@ -123,7 +124,7 @@ describe('TransactionResponse', () => {
       provider: nodeProvider,
     });
 
-    const { id: transactionId } = await adminWallet.transfer(destination.address, 100, BaseAssetId);
+    const { id: transactionId } = await adminWallet.transfer(destination.address, 100, baseAssetId);
 
     const response = await TransactionResponse.create(transactionId, provider);
 
@@ -179,7 +180,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await genesisWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
+      baseAssetId,
       { gasLimit: 10_000 }
     );
     const response = await TransactionResponse.create(transactionId, nodeProvider);
@@ -220,7 +221,7 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
+    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
     const txCost = await genesisWallet.provider.getTransactionCost(request);
 
@@ -260,7 +261,7 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    request.addCoinOutput(Wallet.generate(), 100, BaseAssetId);
+    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
     const txCost = await genesisWallet.provider.getTransactionCost(request, {
       signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),

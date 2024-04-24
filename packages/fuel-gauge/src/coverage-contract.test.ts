@@ -6,7 +6,6 @@ import {
   Provider,
   Wallet,
   ScriptTransactionRequest,
-  BaseAssetId,
   randomBytes,
   hexlify,
   FUEL_NETWORK_URL,
@@ -25,8 +24,10 @@ const B512 =
 const setupContract = getSetupContract('coverage-contract');
 
 let contractInstance: Contract;
+let baseAssetId: string;
 beforeAll(async () => {
   contractInstance = await setupContract();
+  baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
 enum SmallEnum {
@@ -115,7 +116,7 @@ describe('Coverage Contract', () => {
           .call()
       ).value
     ).toStrictEqual({
-      value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+      bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
     expect(
       (
@@ -490,7 +491,7 @@ describe('Coverage Contract', () => {
       provider
     );
 
-    request.addCoinOutput(recipient.address, 10, BaseAssetId);
+    request.addCoinOutput(recipient.address, 10, baseAssetId);
 
     const txCost = await sender.provider.getTransactionCost(request);
 
@@ -599,7 +600,7 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT_B);
   });
 
-  it.skip('should handle multiple calls [with vectors]', async () => {
+  it('should handle multiple calls [with vectors]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));
@@ -617,7 +618,7 @@ describe('Coverage Contract', () => {
     expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
   });
 
-  it.skip('should handle multiple calls [with vectors + stack data first]', async () => {
+  it('should handle multiple calls [with vectors + stack data first]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));

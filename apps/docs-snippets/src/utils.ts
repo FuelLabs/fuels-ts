@@ -1,7 +1,6 @@
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   FUEL_NETWORK_URL,
-  BaseAssetId,
   Provider,
   ScriptTransactionRequest,
   Wallet,
@@ -17,6 +16,9 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // create a provider using the Fuel network URL
   const provider = await Provider.create(FUEL_NETWORK_URL);
 
+  // Fetch the base asset ID
+  const baseAssetId = provider.getBaseAssetId();
+
   // instantiate the genesis wallet with its secret key
   const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || '0x01', provider);
 
@@ -27,7 +29,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   const request = new ScriptTransactionRequest();
 
   // add the transaction outputs (coins to be sent to the test wallet)
-  (seedQuantities || [[1_000_000, BaseAssetId]])
+  (seedQuantities || [[1_000_000, baseAssetId]])
     .map(coinQuantityfy)
     .forEach(({ amount, assetId }) => request.addCoinOutput(testWallet.address, amount, assetId));
 

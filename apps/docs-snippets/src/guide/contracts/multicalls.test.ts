@@ -1,5 +1,5 @@
-import type { Contract } from 'fuels';
-import { BaseAssetId, BN, ContractFactory } from 'fuels';
+import type { Contract, Provider } from 'fuels';
+import { BN, ContractFactory } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -14,9 +14,13 @@ describe(__filename, () => {
   let echoContract: Contract;
   let counterContract: Contract;
   let contextContract: Contract;
+  let provider: Provider;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     const wallet = await getTestWallet();
+    provider = wallet.provider;
+    baseAssetId = provider.getBaseAssetId();
 
     const counterArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COUNTER);
     const echoArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
@@ -92,7 +96,7 @@ describe(__filename, () => {
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         }),
       ])
       .call();
