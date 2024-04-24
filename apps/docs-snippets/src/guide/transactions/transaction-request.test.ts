@@ -84,7 +84,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request using a CreateTransactionRequest
     const transactionRequest = new CreateTransactionRequest({
       witnesses: [contractByteCode],
-  
     });
     // #endregion transaction-request-2
 
@@ -134,7 +133,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-
     });
 
     // Add the contract input and output using the contract ID

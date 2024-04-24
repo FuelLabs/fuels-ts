@@ -1,5 +1,4 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { defaultConsensusKey } from '@fuel-ts/utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';

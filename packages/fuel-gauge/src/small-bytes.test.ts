@@ -14,11 +14,9 @@ describe('small-bytes', () => {
   const setupContract = getSetupContract('small-bytes');
 
   let contract: Contract;
-  let baseAssetId: string;
 
   beforeAll(async () => {
     contract = await setupContract();
-    baseAssetId = contract.provider.getBaseAssetId();
   });
   it('should successfully call contract and echo values', async () => {
     const expected = [48, 63];
