@@ -1,5 +1,9 @@
 import { isDefined } from './isDefined';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('isDefined', () => {
   it('should return true for non-undefined values', () => {
     expect(isDefined(0)).toBe(true);
