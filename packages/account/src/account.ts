@@ -266,19 +266,13 @@ export class Account extends AbstractAccount {
 
     txRequest.inputs.forEach((input) => {
       const isResource = 'amount' in input;
-
-      if (isResource) {
-        const isCoin = 'owner' in input;
-
-        if (isCoin) {
-          const assetId = String(input.assetId);
-          if (quantitiesDict[assetId]) {
-            const amount = bn(input.amount);
-            quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
-          }
-        } else if (input.amount && quantitiesDict[BaseAssetId]) {
-          quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
-        }
+      if (!isResource) {
+        return;
+      }
+      const isCoin = 'owner' in input;
+      const assetId = isCoin ? String(input.assetId) : BaseAssetId;
+      if (quantitiesDict[assetId]) {
+        quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(input.amount);
       }
     });
 
