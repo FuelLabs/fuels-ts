@@ -8,7 +8,6 @@ import {
   WalletUnlocked,
   hashMessage,
 } from 'fuels';
-import { b } from 'vitest/dist/suite-ynYMzeLu';
 
 /**
  * @group node
