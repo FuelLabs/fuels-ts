@@ -305,15 +305,12 @@ export class Account extends AbstractAccount {
     txRequest.shiftPredicateData();
     txRequest.updatePredicateGasUsed(estimatedPredicates);
 
-    const requestToBeReEstimate = clone(txRequest);
+    const requestToReestimate = clone(txRequest);
     if (addedSignatures) {
-      Array.from({ length: addedSignatures }).forEach(() =>
-        requestToBeReEstimate.addEmptyWitness()
-      );
+      Array.from({ length: addedSignatures }).forEach(() => requestToReestimate.addEmptyWitness());
     }
-
     const { maxFee } = await this.provider.estimateTxGasAndFee({
-      transactionRequest: requestToBeReEstimate,
+      transactionRequest: requestToReestimate,
     });
 
     txRequest.maxFee = maxFee;
