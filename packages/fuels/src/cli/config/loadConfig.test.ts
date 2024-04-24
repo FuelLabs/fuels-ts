@@ -120,4 +120,32 @@ describe('loadConfig', () => {
     expect(error?.message).toMatch(/forc workspace not detected/i);
     expect(error?.message).toMatch(/try using 'contracts'/i);
   });
+
+  test('should use system binary paths by default', async () => {
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+    });
+
+    const config = await loadConfig(paths.root);
+
+    expect(config.forcPath).toEqual('forc');
+    expect(config.fuelCorePath).toEqual('fuel-core');
+  })
+
+  test(`should load custom binary paths`, async () => {
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath: 'fuels-forc',
+      fuelCorePath: 'fuels-core',
+    });
+
+    const config = await loadConfig(paths.root);
+
+    expect(config.forcPath).toEqual('fuels-forc');
+    expect(config.fuelCorePath).toEqual('fuels-core');
+  })
 });
