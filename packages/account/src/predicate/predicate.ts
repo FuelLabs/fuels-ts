@@ -7,15 +7,12 @@ import {
   SCRIPT_FIXED_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
-import type { TxParamsType } from '../account';
 import { transactionRequestify, BaseTransactionRequest } from '../providers';
 import type {
   CallResult,
@@ -23,7 +20,6 @@ import type {
   ExcludeResourcesOption,
   Provider,
   Resource,
-  TransactionRequest,
   TransactionRequestInput,
   TransactionRequestLike,
   TransactionResponse,
