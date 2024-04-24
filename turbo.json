@@ -18,7 +18,7 @@
       "outputMode": "new-only"
     },
     "pretest": {
-      "outputMode": "new-only",
+      "outputMode": "error-only",
       "inputs": [
         "**/test/fixtures/forc-projects/Forc.toml",
         "**/test/fixtures/forc-projects/**/src/*.sw",
