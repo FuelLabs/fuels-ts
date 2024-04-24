@@ -201,7 +201,9 @@ type ConsensusParameters {
   privilegedAddress: Address!
 }
 
-union ConsensusParametersVersion = Version
+enum ConsensusParametersVersion {
+  V1
+}
 
 type Contract {
   id: ContractId!
@@ -273,7 +275,9 @@ type ContractParameters {
   maxStorageSlots: U64!
 }
 
-union ContractParametersVersion = Version
+enum ContractParametersVersion {
+  V1
+}
 
 union DependentCost = LightOperation | HeavyOperation
 
@@ -327,7 +331,9 @@ type FeeParameters {
   gasPerByte: U64!
 }
 
-union FeeParametersVersion = Version
+enum FeeParametersVersion {
+  V1
+}
 
 type GasCosts {
   version: GasCostsVersion!
@@ -443,7 +449,9 @@ type GasCosts {
   newStoragePerByte: U64!
 }
 
-union GasCostsVersion = Version
+enum GasCostsVersion {
+  V1
+}
 
 type Genesis {
   """
@@ -839,7 +847,9 @@ type PredicateParameters {
   maxMessageDataLength: U64!
 }
 
-union PredicateParametersVersion = Version
+enum PredicateParametersVersion {
+  V1
+}
 
 type ProgramState {
   returnType: ReturnType!
@@ -1098,7 +1108,9 @@ type ScriptParameters {
   maxScriptDataLength: U64!
 }
 
-union ScriptParametersVersion = Version
+enum ScriptParametersVersion {
+  V1
+}
 
 scalar Signature
 
@@ -1247,7 +1259,9 @@ type TxParameters {
   maxSize: U64!
 }
 
-union TxParametersVersion = Version
+enum TxParametersVersion {
+  V1
+}
 
 scalar TxPointer
 
@@ -1257,16 +1271,10 @@ scalar U32
 
 scalar U64
 
-scalar U8
-
 scalar UtxoId
 
 type VariableOutput {
   to: Address!
   amount: U64!
   assetId: AssetId!
-}
-
-type Version {
-  value: U8!
 }

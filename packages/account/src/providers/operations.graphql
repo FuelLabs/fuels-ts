@@ -249,6 +249,7 @@ fragment balanceFragment on Balance {
 }
 
 fragment TxParametersFragment on TxParameters {
+  version
   maxInputs
   maxOutputs
   maxWitnesses
@@ -257,6 +258,7 @@ fragment TxParametersFragment on TxParameters {
 }
 
 fragment PredicateParametersFragment on PredicateParameters {
+  version
   maxPredicateLength
   maxPredicateDataLength
   maxGasPerPredicate
@@ -264,16 +266,19 @@ fragment PredicateParametersFragment on PredicateParameters {
 }
 
 fragment ScriptParametersFragment on ScriptParameters {
+  version
   maxScriptLength
   maxScriptDataLength
 }
 
 fragment ContractParametersFragment on ContractParameters {
+  version
   contractMaxSize
   maxStorageSlots
 }
 
 fragment FeeParametersFragment on FeeParameters {
+  version
   gasPriceFactor
   gasPerByte
 }
@@ -291,11 +296,7 @@ fragment DependentCostFragment on DependentCost {
 }
 
 fragment GasCostsFragment on GasCosts {
-  version {
-    ... on Version {
-      value
-    }
-  }
+  version
   add
   addi
   aloc
@@ -451,11 +452,7 @@ fragment GasCostsFragment on GasCosts {
 }
 
 fragment consensusParametersFragment on ConsensusParameters {
-  version {
-    ... on Version {
-      value
-    }
-  }
+  version
   txParams {
     ...TxParametersFragment
   }
