@@ -90,6 +90,37 @@ describe('launchNode', () => {
     cleanup();
   });
 
+  test('should start `fuel-core` node with custom binary', async () => {
+    const { spawn } = mockSpawn();
+
+    const { cleanup, ip, port } = await launchNode({
+      ...defaultLaunchNodeConfig,
+      fuelCorePath: 'fuels-core',
+    });
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+    expect(spawn).toBeCalledWith('fuels-core', expect.any(Array), expect.any(Object));
+
+    cleanup();
+  });
+
+  test('should start `fuel-core` node with system binary (favour over custom)', async () => {
+    const { spawn } = mockSpawn();
+
+    const { cleanup, ip, port } = await launchNode({
+      ...defaultLaunchNodeConfig,
+      fuelCorePath: 'custom-fuels-core',
+      useSystemFuelCore: true,
+    });
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+    expect(spawn).toBeCalledWith('fuel-core', expect.any(Array), expect.any(Object));
+
+    cleanup();
+  });
+
   test('should throw on error', async () => {
     const { innerMocks } = mockSpawn({ shouldError: true });
 

@@ -40,6 +40,7 @@ export type LaunchNodeOptions = {
   ip?: string;
   port?: string;
   args?: string[];
+  fuelCorePath?: string;
   useSystemFuelCore?: boolean;
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
@@ -97,6 +98,7 @@ export const launchNode = async ({
   ip,
   port,
   args = [],
+  fuelCorePath = undefined,
   useSystemFuelCore = false,
   loggingEnabled = true,
   debugEnabled = false,
@@ -124,7 +126,7 @@ export const launchNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const binPath = findBinPath('fuels-core', __dirname);
+    const binPath = fuelCorePath ?? findBinPath('fuels-core', __dirname);
 
     const command = useSystemFuelCore ? 'fuel-core' : binPath;
 
