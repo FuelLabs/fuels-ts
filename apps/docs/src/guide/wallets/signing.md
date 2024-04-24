@@ -18,7 +18,7 @@ Signing a transaction involves using your wallet to sign the transaction ID (als
 
 1. `Generate a Signature`: Using the wallet to create a signature based on the transaction ID.
 
-2. `Using the Signature on the transaction`: Place the signature in the transaction's `witnesses` array. Each Coin / Message input should have a matching `witnessIndex`. This index points to where your signature is located within the `witnesses` array.
+2. `Using the Signature on the transaction`: Place the signature in the transaction's `witnesses` array. Each Coin / Message input should have a matching `witnessIndex`. This index indicates your signature's location within the `witnesses` array.
 
 3. `Security Mechanism`: The transaction ID is derived from the transaction bytes (excluding the `witnesses`). If the transaction changes, the ID changes, making any previous signatures invalid. This ensures no unauthorized changes can be made after signing.
 
