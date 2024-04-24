@@ -8,7 +8,7 @@ import { FUEL_NETWORK_URL, Provider, bn } from 'fuels';
 describe(__filename, () => {
   it('wallet-setup', async () => {
     // #region wallet-setup
-    // #import { FUEL_NETWORK_URL, Provider, WalletUnlocked, CoinQuantity, generateTestWallet, BaseAssetId };
+    // #import { FUEL_NETWORK_URL, Provider, WalletUnlocked, CoinQuantity, generateTestWallet };
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
