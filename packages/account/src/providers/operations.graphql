@@ -43,26 +43,6 @@ fragment transactionStatusFragment on TransactionStatus {
 
 fragment transactionStatusSubscriptionFragment on TransactionStatus {
   type: __typename
-  ... on SubmittedStatus {
-    time
-  }
-  ... on SuccessStatus {
-    block {
-      id
-    }
-    time
-    programState {
-      returnType
-      data
-    }
-  }
-  ... on FailureStatus {
-    block {
-      id
-    }
-    time
-    reason
-  }
   ... on SqueezedOutStatus {
     reason
   }
