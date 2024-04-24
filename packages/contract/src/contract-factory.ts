@@ -7,7 +7,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, isDefined } from '@fuel-ts/utils';
 
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
@@ -145,6 +145,15 @@ export default class ContractFactory {
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
 
     const txCost = await this.account.provider.getTransactionCost(transactionRequest);
+
+    const { maxFee: setMaxFee } = deployContractOptions;
+
+    if (isDefined(setMaxFee) && txCost.maxFee.gt(setMaxFee)) {
+      throw new FuelError(
+        ErrorCode.MAX_FEE_TOO_LOW,
+        `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+      );
+    }
 
     transactionRequest.maxFee = txCost.maxFee;
 
