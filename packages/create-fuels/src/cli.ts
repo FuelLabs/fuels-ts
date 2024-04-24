@@ -119,7 +119,7 @@ async function promptForFuelUpInstall() {
   const shouldInstallFuelUp = await prompts({
     type: 'confirm',
     name: 'shouldInstallFuelUp',
-    message: 'fuelup is not installed. Would you like us to install it for you?',
+    message: "You don't have `fuelup` installed. Would you like us to install it for you?",
     initial: true,
   });
   return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
