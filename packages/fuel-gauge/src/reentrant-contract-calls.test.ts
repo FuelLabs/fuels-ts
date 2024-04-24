@@ -19,6 +19,7 @@ describe('Reentrant Contract Calls', () => {
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     wallet = await generateTestWallet(provider, [[20_000, baseAssetId]]);
 
     const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
