@@ -17,7 +17,7 @@ The SDK has multiple classes related to a Wallet instance:
 
 - [WalletUnlocked](../../api/Account/WalletUnlocked): Provides the functionalities for an unlocked wallet.
 
-- [Account](../../api/Account/Account): Provides an abstraction with basically functionalities for wallets or accounts to interact with the network. It is important to notice that both `WalletLocked` and `WalletUnlocked` extends from the `Account` class.
+- [Account](../../api/Account/Account): Provides an abstraction with basic functionalities for wallets or accounts to interact with the network. It is essential to notice that both `WalletLocked` and `WalletUnlocked` extend from the `Account` class.
 
 Let's explore these different approaches in the following sub-chapters.
 
