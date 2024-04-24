@@ -189,11 +189,12 @@ describe('Transaction Request', () => {
 
     // Get the transaction ID using the Chain ID
     const transactionId = transactionRequest.getTransactionId(chainId);
-    // TX ID: 0x55667d...
+    // TX ID: 0x420f6...
     // #endregion transaction-request-7
 
-    expect(transactionId).toBe(
-      '0x420f6093f32975eec3bd505e1a124be5e7352146841017b6142b34923e563f4b'
-    );
+    const expectedTransactionId =
+      '0x420f6093f32975eec3bd505e1a124be5e7352146841017b6142b34923e563f4b';
+
+    expect(transactionId).toBe(expectedTransactionId);
   });
 });
