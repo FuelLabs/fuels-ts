@@ -791,9 +791,6 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
-      execa:
-        specifier: ^8.0.1
-        version: 8.0.1
       ora:
         specifier: 5.4.1
         version: 5.4.1
@@ -16378,7 +16375,7 @@ snapshots:
       '@vitest/utils': 1.2.1
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.2.1(@types/node@18.15.3)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2)
+      vitest: 1.2.1(@types/node@20.11.13)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2)
     optionalDependencies:
       webdriverio: 8.32.2(typescript@5.2.2)
 

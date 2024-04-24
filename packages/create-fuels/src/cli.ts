@@ -176,7 +176,7 @@ export const runScaffoldCli = async ({
         text: 'Installing fuelup..',
         color: 'green',
       });
-      await installFuelUp();
+      installFuelUp();
       installSpinner.succeed('Successfully installed fuelup!');
     }
   }
