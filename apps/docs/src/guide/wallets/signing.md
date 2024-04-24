@@ -28,6 +28,6 @@ The following code snippet exemplifies how a Transaction can be signed:
 
 Similar to the sign message example, the previous code used `Signer.recoverAddress` to get the wallet's address from the transaction ID and the signed data.
 
-When using your wallet to submit a transaction with `wallet.sendTransaction`, the SDK already handle these steps related to signing the transaction and adding the signature to the `witnesses` array. Because of that, this can be skipped in most cases:
+When using your wallet to submit a transaction with `wallet.sendTransaction`, the SDK already handles these steps related to signing the transaction and adding the signature to the `witnesses` array. Because of that, this can be skipped in most cases:
 
 <<< @/../../docs-snippets/src/guide/wallets/signing.test.ts#signing-3{ts:line-numbers}
