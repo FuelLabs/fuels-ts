@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 
 export const checkIfFuelUpInstalled = () => {
   try {
-    execSync('fuelddup --version', { stdio: 'pipe' });
+    execSync('fuelup --version', { stdio: 'pipe' });
     return true;
   } catch (error) {
     return false;

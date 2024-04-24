@@ -161,7 +161,7 @@ export const runScaffoldCli = async ({
     color: 'green',
   }).start();
 
-  const isFuelUpInstalled = await checkIfFuelUpInstalled();
+  const isFuelUpInstalled = checkIfFuelUpInstalled();
 
   if (isFuelUpInstalled) {
     fuelUpSpinner.succeed('fuelup is already installed.');
