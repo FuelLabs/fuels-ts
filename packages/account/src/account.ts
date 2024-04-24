@@ -358,7 +358,7 @@ export class Account extends AbstractAccount {
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @param txParams - The transaction parameters (gasLimit, maturity).
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
