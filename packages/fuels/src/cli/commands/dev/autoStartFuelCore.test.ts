@@ -77,7 +77,6 @@ describe('autoStartFuelCore', () => {
     expect(launchNode).toBeCalledWith(
       expect.objectContaining({
         fuelCorePath: 'fuels-core',
-        useSystemFuelCore: false,
       })
     );
 
