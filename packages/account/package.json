@@ -63,7 +63,7 @@
     "@noble/curves": "^1.3.0",
     "ethers": "^6.7.1",
     "events": "^3.3.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-request": "5.0.0",
     "graphql-tag": "^2.12.6",
     "portfinder": "^1.0.32",
