@@ -102,28 +102,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   }
 
   /**
-   * A helper that creates a transfer transaction request and returns it.
-   *
-   * @param destination - The address of the destination.
-   * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
-   * @returns A promise that resolves to the prepared transaction request.
-   */
-  async createTransfer(
-    /** Address of the destination */
-    destination: AbstractAddress,
-    /** Amount of coins */
-    amount: BigNumberish,
-    /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
-    /** Tx Params */
-    txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
-    return super.createTransfer(destination, amount, assetId, txParams);
-  }
-
-  /**
    * Sends a transaction with the populated predicate data.
    *
    * @param transactionRequestLike - The transaction request-like object.
