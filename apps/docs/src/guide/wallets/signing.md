@@ -2,7 +2,7 @@
 
 ## Signing Messages
 
-Signing messages with a wallet is a fundamental security practice in blockchain environment. It verifies ownership and ensures the integrity of data. Here's how to use the `wallet.signMessage` method to sign messages:
+Signing messages with a wallet is a fundamental security practice in a blockchain environment. It verifies ownership and ensures the integrity of data. Here's how to use the `wallet.signMessage` method to sign messages:
 
 <<< @/../../docs-snippets/src/guide/wallets/signing.test.ts#signing-1{ts:line-numbers}
 
