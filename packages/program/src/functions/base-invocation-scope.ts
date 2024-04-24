@@ -14,6 +14,7 @@ import type {
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
+import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
 import { getContractCallScript } from '../contract-call-script';
@@ -255,7 +256,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     const txCost = await this.getTransactionCost();
     const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
-    this.setDefaultTxParams(transactionRequest, gasUsed);
+    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
 
     // Clean coin inputs before add new coins to the request
     transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
@@ -461,10 +462,14 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * In case the gasLimit is *not* set by the user, this method sets a default value.
    */
-  private setDefaultTxParams(transactionRequest: ScriptTransactionRequest, gasUsed: BN) {
+  private setDefaultTxParams(
+    transactionRequest: ScriptTransactionRequest,
+    gasUsed: BN,
+    maxFee: BN
+  ) {
     const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
 
-    const { gasLimit } = transactionRequest;
+    const { gasLimit, maxFee: setMaxFee } = transactionRequest;
 
     if (!gasLimitSpecified) {
       transactionRequest.gasLimit = gasUsed;
@@ -472,6 +477,13 @@ export class BaseInvocationScope<TReturn = any> {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
+
+    if (isDefined(setMaxFee) && maxFee.gt(setMaxFee)) {
+      throw new FuelError(
+        ErrorCode.MAX_FEE_TOO_LOW,
+        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
   }
