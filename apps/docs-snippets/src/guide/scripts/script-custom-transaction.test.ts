@@ -65,7 +65,6 @@ describe(__filename, () => {
       gasLimit: 3_000_000,
       script: scriptBin,
       gasPrice: minGasPrice,
-      baseAssetId: provider.getBaseAssetId(),
     });
 
     // 2. Instantiate the script main arguments

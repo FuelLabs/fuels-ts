@@ -54,7 +54,6 @@ describe('configurable-constants', () => {
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
-      baseAssetId: provider.getBaseAssetId(),
     });
     // #endregion configurable-constants-2
 
@@ -79,7 +78,6 @@ describe('configurable-constants', () => {
     const contract = await factory.deployContract({
       configurableConstants,
       gasPrice: minGasPrice,
-      baseAssetId: provider.getBaseAssetId(),
     });
     // #endregion configurable-constants-3
 
@@ -107,7 +105,6 @@ describe('configurable-constants', () => {
       factory.deployContract({
         configurableConstants,
         gasPrice: minGasPrice,
-        baseAssetId: provider.getBaseAssetId(),
       })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4
