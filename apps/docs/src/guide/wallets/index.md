@@ -9,7 +9,7 @@ Wallets can be used for many important things, for instance:
 
 ## Wallets Instances
 
-The SDK has multiple Wallets related classes:
+The SDK has multiple classes related to a Wallet instance:
 
 - [Wallet](../../api/Account/Wallet): Works simply like a wrapper providing methods to create and instantiating `WalletUnlocked` and `WalletLocked` instances.
 
