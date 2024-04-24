@@ -44,7 +44,7 @@ describe(__filename, () => {
     wallet = await getTestWallet(seedQuantities);
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
     const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-    contract = await factory.deployContract({ gasPrice, baseAssetId });
+    contract = await factory.deployContract({ gasPrice });
   });
 
   it('transfer multiple assets to a contract', async () => {

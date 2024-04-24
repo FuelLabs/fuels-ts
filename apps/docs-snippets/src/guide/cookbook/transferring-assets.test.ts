@@ -25,7 +25,7 @@ describe(__filename, () => {
     const baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
     const { minGasPrice } = sender.provider.getGasConfig();
-    deployedContract = await factory.deployContract({ gasPrice: minGasPrice, baseAssetId });
+    deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
   });
 
   it('should successfully transfer asset to another account', async () => {

@@ -32,7 +32,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract({ gasPrice, baseAssetId });
+    const contact = await factory.deployContract({ gasPrice });
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
@@ -49,7 +49,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract({ gasPrice, baseAssetId });
+    const contact = await factory.deployContract({ gasPrice });
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
@@ -92,7 +92,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contract = await factory.deployContract({ gasPrice, baseAssetId });
+    const contract = await factory.deployContract({ gasPrice });
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({

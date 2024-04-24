@@ -32,7 +32,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, wallet);
-    const contract = await factory.deployContract({ gasPrice, baseAssetId });
+    const contract = await factory.deployContract({ gasPrice });
 
     // Call
     const { value } = await contract.functions.return_input(1337).call();
@@ -68,7 +68,7 @@ describe('ExampleContract', () => {
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
-    const contract = await factory.deployContract({ gasPrice, baseAssetId });
+    const contract = await factory.deployContract({ gasPrice });
     const contractInstance = SampleAbi__factory.connect(contract.id, unfundedWallet);
 
     const { error } = await safeExec(() =>
@@ -84,7 +84,7 @@ describe('ExampleContract', () => {
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
-    const contract = await factory.deployContract({ gasPrice, baseAssetId });
+    const contract = await factory.deployContract({ gasPrice });
     const contractInstance = SampleAbi__factory.connect(contract.id, unfundedWallet);
 
     await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();

@@ -838,7 +838,7 @@ describe('Contract', () => {
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract({ gasPrice, baseAssetId });
+    const contract = await factory.deployContract({ gasPrice });
 
     const vector = [5, 4, 3, 2, 1];
 
@@ -869,7 +869,7 @@ describe('Contract', () => {
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract({ gasPrice, baseAssetId });
+    const contract = await factory.deployContract({ gasPrice });
 
     const calls = [
       contract.functions.return_bytes(), // returns heap type Bytes

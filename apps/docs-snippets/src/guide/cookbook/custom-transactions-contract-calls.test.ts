@@ -27,7 +27,7 @@ describe('Custom Transactions from Contract Calls', () => {
     const { minGasPrice: gasPrice } = senderWallet.provider.getGasConfig();
     abi = abiContents;
     baseAssetId = senderWallet.provider.getBaseAssetId();
-    contract = await factory.deployContract({ storageSlots, gasPrice, baseAssetId });
+    contract = await factory.deployContract({ storageSlots, gasPrice });
   });
 
   it('creates a custom transaction from a contract call', async () => {
