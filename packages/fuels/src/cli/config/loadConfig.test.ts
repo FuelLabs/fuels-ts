@@ -132,7 +132,7 @@ describe('loadConfig', () => {
 
     expect(config.forcPath).toEqual('forc');
     expect(config.fuelCorePath).toEqual('fuel-core');
-  })
+  });
 
   test(`should load custom binary paths`, async () => {
     await runInit({
@@ -147,5 +147,5 @@ describe('loadConfig', () => {
 
     expect(config.forcPath).toEqual('fuels-forc');
     expect(config.fuelCorePath).toEqual('fuels-core');
-  })
+  });
 });

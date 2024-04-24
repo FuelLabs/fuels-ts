@@ -79,7 +79,7 @@ describe('autoStartFuelCore', () => {
         fuelCorePath: 'fuels-core',
         useSystemFuelCore: false,
       })
-    )
+    );
 
     core.killChildProcess();
   });
