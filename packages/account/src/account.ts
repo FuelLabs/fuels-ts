@@ -5,7 +5,7 @@ import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
@@ -347,14 +347,11 @@ export class Account extends AbstractAccount {
       resourcesOwner: this,
     });
 
-    // TODO: Fix this logic. The if was not working when gasLimit was 0, "if(txParams.gasLimit)"
-    // was being evaluated as false. Should we change this on master?
-    if ('gasLimit' in txParams) {
-      this.validateGas({
-        gasUsed: txCost.gasUsed,
-        gasLimit: request.gasLimit,
-      });
-    }
+    this.validateGasLimitAndMaxFee({
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -439,12 +436,12 @@ export class Account extends AbstractAccount {
       resourcesOwner: this,
       quantitiesToContract: [{ amount: bn(amount), assetId: String(assetId) }],
     });
-    if (txParams.gasLimit) {
-      this.validateGas({
-        gasUsed: txCost.gasUsed,
-        gasLimit: request.gasLimit,
-      });
-    }
+
+    this.validateGasLimitAndMaxFee({
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -491,12 +488,11 @@ export class Account extends AbstractAccount {
 
     const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
 
-    if (txParams.gasLimit) {
-      this.validateGas({
-        gasUsed: txCost.gasUsed,
-        gasLimit: request.gasLimit,
-      });
-    }
+    this.validateGasLimitAndMaxFee({
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
 
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
@@ -571,11 +567,26 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private validateGas({ gasUsed, gasLimit }: { gasUsed: BN; gasLimit: BN }) {
-    if (gasUsed.gt(gasLimit)) {
+  private validateGasLimitAndMaxFee({
+    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
+    gasUsed,
+    maxFee,
+  }: {
+    gasUsed: BN;
+    maxFee: BN;
+    txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
+  }) {
+    if (isDefined(setGasLimit) && gasUsed.gt(setGasLimit)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
+      );
+    }
+
+    if (isDefined(setMaxFee) && maxFee.gt(setMaxFee)) {
+      throw new FuelError(
+        ErrorCode.MAX_FEE_TOO_LOW,
+        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
   }
