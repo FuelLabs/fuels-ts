@@ -138,16 +138,20 @@ export default defineConfig({
                 link: '/guide/wallets/wallet-transferring',
               },
               {
+                text: 'Signing',
+                link: '/guide/wallets/signing',
+              },
+              {
+                text: 'Connectors',
+                link: '/guide/wallets/connectors',
+              },
+              {
                 text: 'Wallet Manager',
                 link: '/guide/wallets/wallet-manager',
               },
               {
                 text: 'Locking and Unlocking',
                 link: '/guide/wallets/locking-and-unlocking',
-              },
-              {
-                text: 'Signing Transactions',
-                link: '/guide/wallets/signing-transactions',
               },
               {
                 text: 'Test Wallets',
@@ -463,7 +467,7 @@ export default defineConfig({
             ],
           },
           apiLinks,
-        ]
+        ],
       },
     ],
   },
