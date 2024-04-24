@@ -116,12 +116,15 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
 }
 
 async function promptForFuelUpInstall() {
-  const shouldInstallFuelUp = await prompts({
-    type: 'confirm',
-    name: 'shouldInstallFuelUp',
-    message: "You don't have `fuelup` installed. Would you like us to install it for you?",
-    initial: true,
-  });
+  const shouldInstallFuelUp = await prompts(
+    {
+      type: 'confirm',
+      name: 'shouldInstallFuelUp',
+      message: "You don't have `fuelup` installed. Would you like us to install it for you?",
+      initial: true,
+    },
+    { onCancel: () => process.exit(0) }
+  );
   return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
 }
 
@@ -169,15 +172,20 @@ export const runScaffoldCli = async ({
 
   if (!isFuelUpInstalled) {
     fuelUpSpinner.fail('fuelup not found.');
-    // show a prompt asking the user if they want us to install fuelup for them
     const shouldInstallFuelUp = await promptForFuelUpInstall();
     if (shouldInstallFuelUp) {
-      const installSpinner = ora({
+      const installFuelUpSpinner = ora({
         text: 'Installing fuelup..',
         color: 'green',
       });
       installFuelUp();
-      installSpinner.succeed('Successfully installed fuelup!');
+      installFuelUpSpinner.succeed('Successfully installed fuelup!');
+    } else {
+      log(
+        chalk.yellow(
+          'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
+        )
+      );
     }
   }
 
