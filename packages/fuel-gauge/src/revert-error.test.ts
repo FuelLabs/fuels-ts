@@ -186,9 +186,9 @@ describe('Revert Error Testing', () => {
     const tokenContract = await factory.deployContract({ baseAssetId });
 
     const addresses = [
-      { value: getRandomB256() },
-      { value: getRandomB256() },
-      { value: getRandomB256() },
+      { bits: getRandomB256() },
+      { bits: getRandomB256() },
+      { bits: getRandomB256() },
     ];
 
     const request = await tokenContract

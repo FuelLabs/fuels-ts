@@ -2,7 +2,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BN } from 'fuels';
-import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL, Address } from 'fuels';
+import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL, Address, bn } from 'fuels';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
@@ -74,7 +74,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice
+      gasPrice,
     });
     // #endregion typegen-demo-contract-factory-deploy
 
@@ -123,8 +123,7 @@ test('Example script', async () => {
   const script = ScriptAbi__factory.createInstance(wallet);
   const { value } = await script.functions.main().call();
   // #endregion typegen-demo-script
-  // @ts-expect-error TODO: investitage - typegen is expecting value to be a number but the value being returned is the string '0xa'
-  expect(value.toNumber()).toBe(10);
+  expect(value).toStrictEqual(bn(10));
 });
 
 test('Example predicate', async () => {

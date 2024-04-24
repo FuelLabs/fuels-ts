@@ -105,7 +105,7 @@ export default class Address extends AbstractAddress {
     const b256Address = toB256(this.bech32Address);
 
     return {
-      value: clearFirst12BytesFromB256(b256Address),
+      bits: clearFirst12BytesFromB256(b256Address),
     } as EvmAddress;
   }
 
@@ -116,7 +116,7 @@ export default class Address extends AbstractAddress {
    */
   toAssetId(): AssetId {
     return {
-      value: this.toB256(),
+      bits: this.toB256(),
     } as AssetId;
   }
 

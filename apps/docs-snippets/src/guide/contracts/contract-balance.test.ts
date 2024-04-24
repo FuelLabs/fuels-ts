@@ -29,7 +29,7 @@ describe(__filename, () => {
     });
 
     const asset: AssetId = {
-      value: baseAssetId,
+      bits: baseAssetId,
     };
 
     await contract.functions
