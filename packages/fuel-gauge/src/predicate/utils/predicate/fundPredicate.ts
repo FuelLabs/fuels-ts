@@ -11,7 +11,6 @@ export const fundPredicate = async <T extends InputValue[]>(
 
   const request = new ScriptTransactionRequest({
     gasPrice: minGasPrice,
-    baseAssetId,
   });
 
   request.addCoinOutput(predicate.address, amountToPredicate, baseAssetId);

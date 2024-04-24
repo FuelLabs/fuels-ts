@@ -224,7 +224,7 @@ describe('TransactionResponse', () => {
       nodeProvider
     );
 
-    const request = new ScriptTransactionRequest({ baseAssetId });
+    const request = new ScriptTransactionRequest();
 
     const resources = await genesisWallet.getResourcesToSpend([[100_000, baseAssetId]]);
 
@@ -258,7 +258,7 @@ describe('TransactionResponse', () => {
       nodeProvider
     );
 
-    const request = new ScriptTransactionRequest({ baseAssetId });
+    const request = new ScriptTransactionRequest();
 
     const resources = await genesisWallet.getResourcesToSpend([[100_000, baseAssetId]]);
 

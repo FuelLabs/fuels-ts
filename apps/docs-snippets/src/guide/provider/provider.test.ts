@@ -5,6 +5,7 @@ import {
   ZeroBytes32,
   sleep,
   WalletUnlocked,
+  Address,
 } from 'fuels';
 
 async function fetchSomeExternalCredentials() {
@@ -108,6 +109,8 @@ describe('Provider', () => {
   });
 
   it('fetches the base asset ID', async () => {
+    const recipientAddress = Address.fromRandom();
+
     // #region provider-getBaseAssetId
     // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest };
 
@@ -116,12 +119,13 @@ describe('Provider', () => {
     const baseAssetId = provider.getBaseAssetId();
     // 0x...
 
-    // Create a transaction request and pass the base asset ID
-    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    // Create a transaction request
+    const transactionRequest = new ScriptTransactionRequest();
+    // Use the base asset for an operation
+    transactionRequest.addCoinOutput(recipientAddress, 100, baseAssetId);
     // #endregion provider-getBaseAssetId
 
     expect(baseAssetId).toBe(ZeroBytes32);
-    expect(transactionRequest.baseAssetId).toBe(baseAssetId);
   });
 
   it('using operations', async () => {

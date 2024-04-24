@@ -54,9 +54,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     contracts: [],
     scripts: [],
     predicates: [],
-    deployConfig: {
-      baseAssetId: ZeroBytes32,
-    },
+    deployConfig: {},
     autoStartFuelCore: true,
     fuelCorePort: 4000,
     providerUrl: FUEL_NETWORK_URL,

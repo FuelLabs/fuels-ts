@@ -133,7 +133,6 @@ describe('Fee', () => {
     const request = new ScriptTransactionRequest({
       gasPrice,
       gasLimit: 10000,
-      baseAssetId,
     });
 
     request.addCoinOutput(destination1.address, amountToTransfer, baseAssetId);

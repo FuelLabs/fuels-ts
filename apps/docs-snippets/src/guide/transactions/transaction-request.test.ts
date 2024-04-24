@@ -66,7 +66,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request using a ScriptTransactionRequest
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      baseAssetId,
     });
 
     // Set the script main function arguments (can also be passed in the class constructor)
@@ -85,7 +84,7 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request using a CreateTransactionRequest
     const transactionRequest = new CreateTransactionRequest({
       witnesses: [contractByteCode],
-      baseAssetId,
+  
     });
     // #endregion transaction-request-2
 
@@ -106,7 +105,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      baseAssetId,
     });
 
     // Adding resources (coins or messages)
@@ -136,7 +134,7 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      baseAssetId,
+
     });
 
     // Add the contract input and output using the contract ID
@@ -156,7 +154,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      baseAssetId,
     });
 
     // Instantiate the predicate and pass valid input data to validate
@@ -185,7 +182,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      baseAssetId,
     });
 
     // Add a witness directly
@@ -206,7 +202,6 @@ describe('Transaction Request', () => {
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
-      baseAssetId,
     });
 
     // Get the chain ID

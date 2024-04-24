@@ -16,14 +16,12 @@ import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike } from './types';
 import { transactionRequestify } from './utils';
 
-const baseAssetId = ZeroBytes32;
-
 /**
  * @group node
  */
 describe('TransactionRequest', () => {
   it('should correctly map all the coin outputs to CoinQuantity', () => {
-    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    const transactionRequest = new ScriptTransactionRequest();
 
     const address1 = Address.fromRandom();
     const address2 = Address.fromRandom();
@@ -49,7 +47,7 @@ describe('TransactionRequest', () => {
   });
 
   it('should return an empty array if there are no coin outputs', () => {
-    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    const transactionRequest = new ScriptTransactionRequest();
 
     const result = transactionRequest.getCoinOutputsQuantities();
 
@@ -57,25 +55,27 @@ describe('TransactionRequest', () => {
   });
 
   it('should fund with the expected quantities', () => {
-    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    const transactionRequest = new ScriptTransactionRequest();
+
+    const baseAssetId = ZeroBytes32;
 
     const amountBase = bn(500);
     const amountA = bn(700);
     const amountB = bn(300);
 
     const quantities: CoinQuantity[] = [
-      { assetId: ZeroBytes32, amount: amountBase },
+      { assetId: baseAssetId, amount: amountBase },
       { assetId: ASSET_A, amount: amountA },
       { assetId: ASSET_B, amount: amountB },
     ];
 
-    transactionRequest.fundWithFakeUtxos(quantities);
+    transactionRequest.fundWithFakeUtxos(quantities, baseAssetId);
 
     const inputs = transactionRequest.inputs as CoinTransactionRequestInput[];
 
     const inputA = inputs.find((i) => i.assetId === ASSET_A);
     const inputB = inputs.find((i) => i.assetId === ASSET_B);
-    const inputBase = inputs.find((i) => i.assetId === ZeroBytes32);
+    const inputBase = inputs.find((i) => i.assetId === baseAssetId);
 
     expect(inputA?.amount).toEqual(bn(700));
     expect(inputB?.amount).toEqual(bn(300));
@@ -83,7 +83,7 @@ describe('TransactionRequest', () => {
   });
 
   it('updates witnesses', () => {
-    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    const transactionRequest = new ScriptTransactionRequest();
     const coinOwner = Address.fromRandom();
     const coin: Coin = {
       id: hexlify(randomBytes(32)),
@@ -132,7 +132,7 @@ describe('TransactionRequest', () => {
 
     const provider = await ProviderCustom.create('nope');
     const signer = WalletUnlocked.generate({ provider });
-    const txRequest = new ScriptTransactionRequest({ baseAssetId });
+    const txRequest = new ScriptTransactionRequest();
 
     const createWitnessSpy = vi.spyOn(txRequest, 'addWitness');
     const signTxSpy = vi.spyOn(signer, 'signTransaction');
@@ -159,7 +159,6 @@ describe('transactionRequestify', () => {
     const scriptData = Uint8Array.from([5, 6]);
     const txRequestLike: TransactionRequestLike = {
       type: TransactionType.Script,
-      baseAssetId,
       script,
       scriptData,
       gasPrice: 1,
@@ -190,7 +189,6 @@ describe('transactionRequestify', () => {
   it('should throw error if invalid transaction type', () => {
     const txRequestLike = {
       type: 5,
-      baseAssetId,
       gasPrice: 1,
     };
 

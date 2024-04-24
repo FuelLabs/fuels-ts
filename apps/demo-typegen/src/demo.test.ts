@@ -34,7 +34,6 @@ describe('ExampleContract', () => {
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
       storageSlots,
       gasPrice,
-      baseAssetId,
     });
     // #endregion typegen-demo-contract-storage-slots
 
@@ -75,8 +74,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice,
-      baseAssetId,
+      gasPrice
     });
     // #endregion typegen-demo-contract-factory-deploy
 

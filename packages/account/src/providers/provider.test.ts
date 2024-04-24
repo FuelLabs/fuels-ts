@@ -83,7 +83,6 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      baseAssetId,
       gasPrice: 0,
       gasLimit: 1000000,
       script:
@@ -134,11 +133,9 @@ describe('Provider', () => {
   // skip for now
   it.skip('can sendTransaction()', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      baseAssetId,
       gasPrice: 0,
       gasLimit: 1000000,
       script:
@@ -377,8 +374,7 @@ describe('Provider', () => {
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
-    const transactionRequest = new ScriptTransactionRequest({ baseAssetId });
+    const transactionRequest = new ScriptTransactionRequest();
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
@@ -400,7 +396,6 @@ describe('Provider', () => {
       nonce: baseAssetId,
     };
     const transactionRequest = new ScriptTransactionRequest({
-      baseAssetId,
       inputs: [MessageInput],
     });
 
@@ -457,7 +452,6 @@ describe('Provider', () => {
       amount: 100,
     };
     const transactionRequest = new ScriptTransactionRequest({
-      baseAssetId,
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
@@ -518,7 +512,6 @@ describe('Provider', () => {
       amount: 100,
     };
     const transactionRequest = new ScriptTransactionRequest({
-      baseAssetId,
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
@@ -595,7 +588,6 @@ describe('Provider', () => {
       amount: 100,
     };
     const transactionRequest = new ScriptTransactionRequest({
-      baseAssetId,
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
@@ -656,7 +648,6 @@ describe('Provider', () => {
       amount: 100,
     };
     const transactionRequest = new ScriptTransactionRequest({
-      baseAssetId,
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
@@ -972,11 +963,9 @@ describe('Provider', () => {
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { gasPerByte } = provider.getGasConfig();
-    const baseAssetId = provider.getBaseAssetId();
 
     const gasLimit = bn(1000);
     const transactionRequest = new ScriptTransactionRequest({
-      baseAssetId,
       gasLimit,
     });
 
@@ -1002,10 +991,8 @@ describe('Provider', () => {
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { gasPerByte } = provider.getGasConfig();
-    const baseAssetId = provider.getBaseAssetId();
 
     const transactionRequest = new CreateTransactionRequest({
-      baseAssetId,
       witnesses: [ZeroBytes32],
     });
 
@@ -1031,9 +1018,8 @@ describe('Provider', () => {
 
   it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
 
-    const request = new ScriptTransactionRequest({ baseAssetId });
+    const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
     const calculatePriceWithFactorMock = vi
@@ -1056,8 +1042,7 @@ describe('Provider', () => {
     const methodCalls = [
       () => provider.getBalance(b256Str, baseAssetId),
       () => provider.getCoins(b256Str),
-      () =>
-        provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest({ baseAssetId })),
+      () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
       () => provider.getResourcesToSpend(b256Str, []),
       () => provider.getContractBalance(b256Str, baseAssetId),
       () => provider.getBalances(b256Str),

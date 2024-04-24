@@ -898,6 +898,7 @@ export default class Provider {
     const { minGasPrice } = this.getGasConfig();
     const setGasPrice = max(txRequestClone.gasPrice, minGasPrice);
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
+    const baseAssetId = this.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
@@ -905,7 +906,7 @@ export default class Provider {
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const allQuantities = mergeQuantities(coinOutputsQuantities, forwardingQuantities);
     // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, resourcesOwner?.address);
+    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
 
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);

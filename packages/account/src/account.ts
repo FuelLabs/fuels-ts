@@ -487,7 +487,6 @@ export class Account extends AbstractAccount {
     const params: ScriptTransactionRequestLike = {
       script,
       gasPrice: minGasPrice,
-      baseAssetId,
       ...txParams,
     };
 

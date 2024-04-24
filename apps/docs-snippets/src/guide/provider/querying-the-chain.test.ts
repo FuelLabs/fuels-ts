@@ -91,7 +91,7 @@ describe('querying the chain', () => {
       { amount: 50, assetId: assetIdA },
     ]);
 
-    const tx = new ScriptTransactionRequest({ baseAssetId });
+    const tx = new ScriptTransactionRequest();
     tx.addResources(spendableResources);
     // #endregion wallet-get-spendable-resources
 

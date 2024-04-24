@@ -58,7 +58,6 @@ describe('Transaction Response', () => {
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
       gasPrice,
-      baseAssetId,
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
@@ -82,7 +81,6 @@ describe('Transaction Response', () => {
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
       gasPrice,
-      baseAssetId,
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
     transactionRequest.addResources(resources);

@@ -218,9 +218,8 @@ describe('WalletUnlocked', () => {
   it('simulates a transaction', async () => {
     const transactionRequestLike: TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
-      baseAssetId,
     };
-    const transactionReq = new ScriptTransactionRequest({ baseAssetId });
+    const transactionReq = new ScriptTransactionRequest();
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = vi

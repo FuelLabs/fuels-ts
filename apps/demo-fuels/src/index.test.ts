@@ -52,8 +52,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const contract = await SampleAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice,
-      baseAssetId,
+      gasPrice
     });
 
     // Call
@@ -95,8 +94,7 @@ describe('ExampleContract', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const depoloyed = await SampleAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice,
-      baseAssetId,
+      gasPrice
     });
     const contractsIds = {
       sample: depoloyed.id,

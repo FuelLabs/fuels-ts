@@ -76,12 +76,7 @@ export class BaseInvocationScope<TReturn = any> {
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
     this.isMultiCall = isMultiCall;
-
-    const provider = <Provider>program.provider;
-
-    this.transactionRequest = new ScriptTransactionRequest({
-      baseAssetId: provider.getBaseAssetId(),
-    });
+    this.transactionRequest = new ScriptTransactionRequest();
   }
 
   /**

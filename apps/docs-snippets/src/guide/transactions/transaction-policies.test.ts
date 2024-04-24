@@ -31,7 +31,6 @@ describe('Transaction Policies', () => {
       witnessLimit: bn(1), // Sets the witness limit policy
       maturity: 1, // Sets the maturity policy
       maxFee: bn(1), // Sets the max fee policy
-      baseAssetId,
     });
     // #endregion transaction-policies-1
 
@@ -64,7 +63,6 @@ describe('Transaction Policies', () => {
       gasPrice: bn(3),
       witnessLimit: 900,
       maxFee: bn(10_000),
-      baseAssetId,
     });
 
     // Set the script main function arguments

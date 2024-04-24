@@ -140,7 +140,6 @@ describe('small-bytes', () => {
     const configurableContract = await factory.deployContract({
       gasPrice: minGasPrice,
       configurableConstants,
-      baseAssetId,
     });
 
     const res1 = await configurableContract.functions.echo_configurable_u8().simulate();
@@ -166,7 +165,6 @@ describe('small-bytes', () => {
     const configurableContract = await factory.deployContract({
       gasPrice: minGasPrice,
       configurableConstants,
-      baseAssetId,
     });
 
     const res1 = await configurableContract.functions.echo_configurable_boolean().simulate();

@@ -10,12 +10,10 @@ import { createAndDeployContractFromProject } from '../../utils';
 describe(__filename, () => {
   let contract: Contract;
   let provider: Provider;
-  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS);
-    baseAssetId = provider.getBaseAssetId();
   });
 
   it('should successfully get a contract balance', async () => {
@@ -24,6 +22,7 @@ describe(__filename, () => {
 
     const amountToForward = 40;
     const amountToTransfer = 10;
+    const baseAssetId = provider.getBaseAssetId();
 
     const recipient = Wallet.generate({
       provider,

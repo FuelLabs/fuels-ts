@@ -62,7 +62,6 @@ describe('Policies', () => {
     const receiver = Wallet.generate({ provider });
 
     const txRequest = new ScriptTransactionRequest({
-      baseAssetId,
       gasLimit: randomNumber(800, 1_000),
       maturity: randomNumber(1, 2),
       gasPrice: randomNumber(1, 3),

@@ -111,7 +111,6 @@ describe('Contract Factory', () => {
     const contract = await factory.deployContract({
       storageSlots,
       gasPrice,
-      baseAssetId,
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
@@ -144,7 +143,6 @@ describe('Contract Factory', () => {
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
-      baseAssetId,
     });
 
     const { value: vB256 } = await contact.functions.return_b256().simulate();
@@ -161,7 +159,6 @@ describe('Contract Factory', () => {
         ...storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
-      baseAssetId,
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
