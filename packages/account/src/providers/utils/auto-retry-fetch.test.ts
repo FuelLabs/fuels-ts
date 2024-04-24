@@ -75,7 +75,7 @@ describe('autoRetryFetch', () => {
 
     expect(fn).toHaveBeenCalledTimes(1);
     expect(result).toBeFalsy();
-    expect(error?.message).toMatch(/anything/);
+    expect(error).toMatch(/anything/);
   });
 
   it('should retry until maxRetries and fail', async () => {
