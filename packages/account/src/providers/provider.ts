@@ -822,40 +822,31 @@ export default class Provider {
       const nextRoundTransactions = [];
 
       for (let i = 0; i < dryRunResults.dryRun.length; i++) {
-        const currentResultIndex = transactionsToProcess[i];
+        const requestIdx = transactionsToProcess[i];
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
-        results[currentResultIndex].receipts = rawReceipts.map(processGqlReceipt);
-        results[currentResultIndex].dryrunStatus = status;
-
+        const result = results[requestIdx];
+        result.receipts = rawReceipts.map(processGqlReceipt);
+        result.dryrunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
-          results[currentResultIndex].receipts
+          result.receipts
         );
         const hasMissingOutputs =
           missingOutputVariables.length > 0 || missingOutputContractIds.length > 0;
-
-        const requestToProcess = allRequests[currentResultIndex];
-
-        if (hasMissingOutputs && requestToProcess?.type === TransactionType.Script) {
-          results[currentResultIndex].outputVariables += missingOutputVariables.length;
-          requestToProcess.addVariableOutputs(missingOutputVariables.length);
+        const request = allRequests[requestIdx];
+        if (hasMissingOutputs && request?.type === TransactionType.Script) {
+          result.outputVariables += missingOutputVariables.length;
+          request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
-            requestToProcess.addContractInputAndOutput(Address.fromString(contractId));
-            results[currentResultIndex].missingContractIds.push(contractId);
+            request.addContractInputAndOutput(Address.fromString(contractId));
+            result.missingContractIds.push(contractId);
           });
-
           const { maxFee } = await this.estimateTxGasAndFee({
-            transactionRequest: requestToProcess,
+            transactionRequest: request,
           });
-          requestToProcess.maxFee = maxFee;
-
+          request.maxFee = maxFee;
           // Prepare for the next round of dry run
-          serializedTransactionsMap.set(
-            currentResultIndex,
-            hexlify(requestToProcess.toTransactionBytes())
-          );
-          nextRoundTransactions.push(currentResultIndex);
-
-          allRequests[currentResultIndex] = requestToProcess;
+          serializedTransactionsMap.set(requestIdx, hexlify(request.toTransactionBytes()));
+          nextRoundTransactions.push(requestIdx);
         }
       }
 
