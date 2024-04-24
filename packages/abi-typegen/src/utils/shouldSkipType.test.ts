@@ -6,7 +6,6 @@ import { supportedTypes } from './supportedTypes';
  */
 describe('types.ts', () => {
   test('should always skip these types', () => {
-    expect(shouldSkipAbiType({ type: '()' })).toEqual(true);
     expect(shouldSkipAbiType({ type: 'struct RawVec' })).toEqual(true);
   });
 
