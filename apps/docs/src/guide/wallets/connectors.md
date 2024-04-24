@@ -2,7 +2,7 @@
 
 `Fuel Wallet Connectors` provide a standardized interface to integrate multiple wallets with your DApps.
 
-By using these connectors, developers can simplify the process of wallet integration, enabling smooth user interactions within their applications.
+By using these connectors, developers can simplify wallet integration and enable smooth user interactions within their applications.
 
 ## Learning Resources
 
