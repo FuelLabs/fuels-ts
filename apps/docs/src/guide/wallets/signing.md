@@ -10,7 +10,7 @@ The `wallet.signMessage` method internally hashes the message using the SHA-256 
 
 The `hashMessage` helper is used so we can have a hash of the original message. This is crucial to ensure that the hash used during signing matches the one used during the address recovery process
 
-The `recoverAddress` method from the `Signer` class takes the hashed message and the signature to recover the address of the signer. This confirms that the signature was indeed created by the holder of the private key associated with that address, ensuring the authenticity and integrity of the signed message.
+The `recoverAddress` method from the `Signer` class takes the hashed message and the signature to recover the signer's address. This confirms that the signature was created by the holder of the private key associated with that address, ensuring the authenticity and integrity of the signed message.
 
 ## Signing Transactions
 
