@@ -1,7 +1,5 @@
 import chalk from 'chalk';
 
-export const getBinarySource = (useBuiltIn: boolean) =>
-  ({
-    true: chalk.cyan('built-in'),
-    false: chalk.green('source'),
-  })[`${useBuiltIn}`];
+export const getBinarySource = (binaryPath?: string) => binaryPath ? 
+  chalk.cyan('user-defined') :
+  chalk.green('source');

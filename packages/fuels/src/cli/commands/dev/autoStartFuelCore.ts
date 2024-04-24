@@ -4,6 +4,7 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { getPortPromise } from 'portfinder';
 
 import type { FuelsConfig } from '../../types';
+import { getBinarySource } from '../../utils/getBinarySource';
 import { log, loggingConfig } from '../../utils/logger';
 
 export type FuelCoreNode = {
@@ -27,7 +28,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
   let fuelCore: FuelCoreNode | undefined;
 
   if (config.autoStartFuelCore) {
-    log(`Starting 'fuel-core' node..`);
+    log(`Starting ${getBinarySource(config.fuelCorePath)} 'fuel-core' node..`);
 
     const bindIp = '0.0.0.0';
     const accessIp = '127.0.0.1';
