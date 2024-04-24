@@ -13,5 +13,5 @@ export type Coin = {
   txCreatedIdx: BN;
   predicate?: BytesLike;
   predicateData?: BytesLike;
-  paddPredicateData?: (policiesLenght: number) => BytesLike;
+  padPredicateData?: (policiesLenght: number) => BytesLike;
 };

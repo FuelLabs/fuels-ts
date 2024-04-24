@@ -226,7 +226,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     return resources.map((resource) => ({
       ...resource,
       predicate: hexlify(this.bytes),
-      paddPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
+      padPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
     }));
   }
 
