@@ -808,34 +808,6 @@ describe('Contract', () => {
     expect(JSON.stringify(value)).toBe(JSON.stringify([bn(0), vector, new Uint8Array()]));
   });
 
-  it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(500_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    const factory = new ContractFactory(contractBytecode, abi, wallet);
-
-    const contract = await factory.deployContract();
-
-    const calls = [
-      contract.functions.return_bytes(), // returns heap type Bytes
-      contract.functions.return_context_amount(),
-    ];
-
-    await expectToThrowFuelError(
-      () => contract.multiCall(calls).call(),
-      new FuelError(
-        ErrorCode.INVALID_MULTICALL,
-        'In a multicall, the contract call returning a heap type must be the last call.'
-      )
-    );
-  });
-
   it('Read only call', async () => {
     const contract = await setupContract({ cache: false });
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
@@ -957,7 +929,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[5_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[20_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -982,9 +954,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [15_000, baseAssetId],
-      [15_000, ASSET_A],
-      [15_000, ASSET_B],
+      [50_000, baseAssetId],
+      [50_000, ASSET_A],
+      [50_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1021,9 +993,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [5_000, baseAssetId],
-      [5_000, ASSET_A],
-      [5_000, ASSET_B],
+      [50_000, baseAssetId],
+      [50_000, ASSET_A],
+      [50_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);

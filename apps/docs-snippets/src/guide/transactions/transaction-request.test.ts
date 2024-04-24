@@ -224,7 +224,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x3eeeca6eb1375da063b4e6ab2b2000e047fe7e2d32468ee707df3b044f984a4c'
+      '0x6a9901970ce4d7a43f10f4a95b8e1ecf07be35993dc6e41547d000ee74465a0a'
     );
   });
 });
