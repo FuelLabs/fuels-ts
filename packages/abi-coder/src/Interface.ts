@@ -7,18 +7,18 @@ import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
-import { ENCODING_V0 } from './utils/constants';
-import { findTypeById } from './utils/json-abi';
+import { ENCODING_V0, type EncodingVersion } from './utils/constants';
+import { findTypeById, getEncodingVersion } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
-
   readonly configurables: Record<string, JsonAbiConfigurable>;
-
   readonly jsonAbi: TAbi;
+  readonly encoding: EncodingVersion;
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
+    this.encoding = getEncodingVersion(jsonAbi.encoding);
 
     this.functions = Object.fromEntries(
       this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
@@ -85,7 +85,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     }
 
     return AbiCoder.decode(this.jsonAbi, loggedType.loggedType, arrayify(data), 0, {
-      encoding: this.jsonAbi.encoding,
+      encoding: this.encoding,
     });
   }
 

@@ -20,9 +20,7 @@ describe('OptionType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
     const rawTypes = project.abiContents.types;
 
-    const types = rawTypes
-      .filter((t) => t.type !== '()')
-      .map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     return { types };
   }
