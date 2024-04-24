@@ -55,11 +55,11 @@ describe('autoStartFuelCore', () => {
     expect(launchNode).toHaveBeenCalledTimes(0);
   });
 
-  test('should start `fuel-core` node using built-in binary', async () => {
+  test('should start `fuel-core` node using custom binary', async () => {
     const { launchNode } = mockLaunchNode();
 
     const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
-    copyConfig.useBuiltinFuelCore = true;
+    copyConfig.fuelCorePath = 'fuels-core';
 
     // this will cause it to autofind a free port
     copyConfig.fuelCorePort = undefined;
@@ -74,6 +74,12 @@ describe('autoStartFuelCore', () => {
     expect(core.port).toBeGreaterThanOrEqual(4000);
     expect(core.providerUrl).toMatch(/http:\/\/127\.0\.0\.1:([0-9]+)\/graphql/);
     expect(core.killChildProcess).toBeTruthy();
+    expect(launchNode).toBeCalledWith(
+      expect.objectContaining({
+        fuelCorePath: 'fuels-core',
+        useSystemFuelCore: false,
+      })
+    )
 
     core.killChildProcess();
   });
