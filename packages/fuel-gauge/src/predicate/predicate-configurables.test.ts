@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, CoinQuantityLike } from 'fuels';
+import type { CoinQuantityLike } from 'fuels';
 import { getRandomB256, Provider, WalletUnlocked, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -18,9 +18,8 @@ describe('Predicate', () => {
 
   describe('Configurables', () => {
     let wallet: WalletUnlocked;
-    let gasPrice: BN;
+    const amountToPredicate = 2000;
     let baseAssetId: string;
-    const amountToPredicate = 500_000;
 
     const defaultValues = {
       FEE: 10,
@@ -30,7 +29,6 @@ describe('Predicate', () => {
     beforeEach(async () => {
       const provider = await Provider.create(FUEL_NETWORK_URL);
       baseAssetId = provider.getBaseAssetId();
-      ({ minGasPrice: gasPrice } = provider.getGasConfig());
 
       const quantities: CoinQuantityLike[] = [
         {
@@ -62,8 +60,7 @@ describe('Predicate', () => {
       await assertBalance(destination, 0, baseAssetId);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
 
       await tx.waitForResult();
@@ -96,8 +93,7 @@ describe('Predicate', () => {
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
 
       await tx.waitForResult();
@@ -130,8 +126,7 @@ describe('Predicate', () => {
 
       // executing predicate transfer
       const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
 
       await tx.waitForResult();
@@ -166,8 +161,7 @@ describe('Predicate', () => {
       await fundPredicate(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
 
       await tx.waitForResult();
@@ -187,7 +181,7 @@ describe('Predicate', () => {
       });
 
       await expect(
-        predicate.transfer(destination.address, 300, baseAssetId, { gasLimit: 10_000 })
+        predicate.transfer(destination.address, 300, baseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 

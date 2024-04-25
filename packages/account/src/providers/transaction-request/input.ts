@@ -29,9 +29,6 @@ export type CoinTransactionRequestInput = {
   /** Index of witness that authorizes spending the coin */
   witnessIndex: number;
 
-  /** UTXO being spent must have been created at least this many blocks ago */
-  maturity?: number;
-
   /** Gas used by predicate */
   predicateGasUsed?: BigNumberish;
 
@@ -40,6 +37,8 @@ export type CoinTransactionRequestInput = {
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  padPredicateData?: (policiesLenght: number) => BytesLike;
 };
 
 export type MessageTransactionRequestInput = {
@@ -68,6 +67,8 @@ export type MessageTransactionRequestInput = {
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  padPredicateData?: (policiesLenght: number) => BytesLike;
 
   /** data of message */
   data?: BytesLike;
@@ -107,10 +108,9 @@ export const inputify = (value: TransactionRequestInput): Input => {
           txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         witnessIndex: value.witnessIndex,
-        maturity: value.maturity ?? 0,
         predicateGasUsed: bn(value.predicateGasUsed),
-        predicateLength: predicate.length,
-        predicateDataLength: predicateData.length,
+        predicateLength: bn(predicate.length),
+        predicateDataLength: bn(predicateData.length),
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
       };
@@ -141,8 +141,8 @@ export const inputify = (value: TransactionRequestInput): Input => {
         nonce: hexlify(value.nonce),
         witnessIndex: value.witnessIndex,
         predicateGasUsed: bn(value.predicateGasUsed),
-        predicateLength: predicate.length,
-        predicateDataLength: predicateData.length,
+        predicateLength: bn(predicate.length),
+        predicateDataLength: bn(predicateData.length),
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
         data: hexlify(data),

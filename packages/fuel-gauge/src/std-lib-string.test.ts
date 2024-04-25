@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import type { Contract } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -8,12 +8,10 @@ import { getScript, getSetupContract } from './utils';
 
 const setupContract = getSetupContract('std-lib-string');
 let contractInstance: Contract;
-let gasPrice: BN;
-let baseAssetId: string;
 
+let baseAssetId: string;
 beforeAll(async () => {
   contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
   baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
@@ -61,7 +59,6 @@ describe('std-lib-string Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
@@ -69,7 +66,6 @@ describe('std-lib-string Tests', () => {
     const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
     const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await tx.waitForResult();

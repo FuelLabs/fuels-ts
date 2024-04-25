@@ -34,7 +34,7 @@ export type EncodingVersion = typeof ENCODING_V0 | typeof ENCODING_V1;
  */
 export const WORD_SIZE = 8;
 export const BYTES_32 = 32;
-export const UTXO_ID_LEN = BYTES_32 + 1;
+export const UTXO_ID_LEN = BYTES_32 + 2;
 export const MAX_INPUTS = 255;
 export const ASSET_ID_LEN = BYTES_32;
 export const CONTRACT_ID_LEN = BYTES_32;
@@ -46,9 +46,10 @@ export const MAX_BYTES = 2 ** 32 - 1; // Max u32
 
 export const calculateVmTxMemory = ({ maxInputs }: { maxInputs: number }) =>
   BYTES_32 + // Tx ID
-  WORD_SIZE + // Tx size
+  ASSET_ID_LEN + // Base asset ID
   // Asset ID/Balance coin input pairs
-  maxInputs * (ASSET_ID_LEN + WORD_SIZE);
+  maxInputs * (ASSET_ID_LEN + WORD_SIZE) +
+  WORD_SIZE; // Tx size
 
 // SCRIPT_FIXED_SIZE = 104
 export const SCRIPT_FIXED_SIZE =
@@ -72,7 +73,6 @@ export const INPUT_COIN_FIXED_SIZE =
   ASSET_ID_LEN + // Asset id
   TX_POINTER_LEN + // TxPointer
   WORD_SIZE + // Witnesses index
-  WORD_SIZE + // Maturity
   WORD_SIZE + // Predicate size
   WORD_SIZE + // Predicate data size
   WORD_SIZE; // Predicate gas used

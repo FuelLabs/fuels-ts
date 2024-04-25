@@ -47,7 +47,6 @@ export default function PredicateExample() {
     }
 
     await wallet.transfer(predicate.address, amount, baseAssetId, {
-      gasPrice: 1,
       gasLimit: 10_000,
     });
 

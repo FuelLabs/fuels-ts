@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
+import type { BN, BaseWalletUnlocked } from 'fuels';
 import {
   ContractFactory,
   FUEL_NETWORK_URL,
@@ -8,7 +8,6 @@ import {
   Provider,
   ScriptTransactionRequest,
   Wallet,
-  bn,
   getRandomB256,
 } from 'fuels';
 
@@ -20,13 +19,11 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 describe('Fee', () => {
   let wallet: BaseWalletUnlocked;
   let provider: Provider;
-  let minGasPrice: number;
   let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
-    minGasPrice = provider.getGasConfig().minGasPrice.toNumber();
     wallet = await generateTestWallet(provider, [
       [1_000_000_000, baseAssetId],
       [1_000_000_000, ASSET_A],
@@ -51,29 +48,22 @@ describe('Fee', () => {
     }
   };
 
-  const randomGasPrice = (minValue: number, maxValue: number) => {
-    const randomValue = Math.floor(Math.random() * (maxValue - minValue + 1) + minValue);
-    return bn(randomValue);
-  };
-
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
     // minting coins
     let balanceBefore = await wallet.getBalance();
-
-    let gasPrice = randomGasPrice(minGasPrice, 7);
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions.mint_coins(subId, 1_000).call();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -84,11 +74,9 @@ describe('Fee', () => {
     // burning coins
     balanceBefore = await wallet.getBalance();
 
-    gasPrice = randomGasPrice(minGasPrice, 7);
-
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions.mint_coins(subId, 1_000).txParams({ gasPrice }).call();
+    } = await contract.functions.mint_coins(subId, 1_000).call();
 
     balanceAfter = await wallet.getBalance();
 
@@ -103,10 +91,7 @@ describe('Fee', () => {
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
-
     const tx = await wallet.transfer(destination.address, amountToTransfer, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const { fee } = await tx.wait();
@@ -127,11 +112,9 @@ describe('Fee', () => {
     const destination3 = Wallet.generate({ provider });
 
     const amountToTransfer = 120;
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const request = new ScriptTransactionRequest({
-      gasPrice,
       gasLimit: 10000,
     });
 
@@ -139,15 +122,14 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const quantities: CoinQuantityLike[] = [
-      [20_000 + amountToTransfer, baseAssetId],
-      [amountToTransfer, ASSET_A],
-      [amountToTransfer, ASSET_B],
-    ];
+    const txCost = await provider.getTransactionCost(request, {
+      resourcesOwner: wallet,
+    });
 
-    const resources = await wallet.getResourcesToSpend(quantities);
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    request.addResources(resources);
+    await wallet.fund(request, txCost);
 
     const tx = await wallet.sendTransaction(request);
     const { fee } = await tx.wait();
@@ -169,12 +151,13 @@ describe('Fee', () => {
 
     const balanceBefore = await wallet.getBalance();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { transactionRequest } = factory.createTransactionRequest({ gasPrice });
-    const { maxFee, requiredQuantities } = await provider.getTransactionCost(transactionRequest);
+    const { transactionRequest } = factory.createTransactionRequest();
+    const txCost = await provider.getTransactionCost(transactionRequest);
 
-    await wallet.fund(transactionRequest, requiredQuantities, maxFee);
+    transactionRequest.maxFee = txCost.maxFee;
+
+    await wallet.fund(transactionRequest, txCost);
 
     const tx = await wallet.sendTransaction(transactionRequest);
     const { fee } = await tx.wait();
@@ -195,18 +178,15 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
     const {
       transactionResult: { fee },
     } = await contract.functions
       .sum_multparams(1, 2, 3, 4, 5)
-      .txParams({
-        gasPrice,
-      })
+
       .call();
 
     const balanceAfter = await wallet.getBalance();
@@ -225,22 +205,16 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
-    const gasPrice = randomGasPrice(minGasPrice, 7);
     const balanceBefore = await wallet.getBalance();
 
-    const scope = contract
-      .multiCall([
-        contract.functions.sum_multparams(1, 2, 3, 4, 5),
-        contract.functions.return_void(),
-        contract.functions.empty(),
-        contract.functions.return_bytes(),
-      ])
-      .txParams({
-        gasPrice,
-        gasLimit: 10000,
-      });
+    const scope = contract.multiCall([
+      contract.functions.sum_multparams(1, 2, 3, 4, 5),
+      contract.functions.return_void(),
+      contract.functions.empty(),
+      contract.functions.return_bytes(),
+    ]);
 
     const {
       transactionResult: { fee },
@@ -262,7 +236,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract({ gasPrice: minGasPrice });
+    const contract = await factory.deployContract();
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
@@ -294,28 +268,22 @@ describe('Fee', () => {
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.PREDICATE_TRUE
+      FuelGaugeProjectsEnum.PREDICATE_U32
     );
 
     const predicate = new Predicate({
       bytecode: binHexlified,
       abi: abiContents,
       provider,
+      inputData: [1078],
     });
 
-    const tx1 = await wallet.transfer(predicate.address, 1_500_000, baseAssetId, {
-      gasPrice: minGasPrice,
-      gasLimit: 10_000,
-    });
+    const tx1 = await wallet.transfer(predicate.address, 2000, baseAssetId);
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const gasPrice = randomGasPrice(minGasPrice, 9);
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, baseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, baseAssetId);
 
     const { fee } = await tx2.wait();
 
@@ -324,8 +292,8 @@ describe('Fee', () => {
 
     expectToBeInRange({
       value: fee.toNumber(),
-      min: balanceDiff - 1,
-      max: balanceDiff + 1,
+      min: balanceDiff - 10,
+      max: balanceDiff + 10,
     });
   });
 });
