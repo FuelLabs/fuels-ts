@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuelsInstallVersion } = data
+  const { fuels } = data
 </script>
 
 # Creating a Fuel dApp
@@ -16,11 +16,11 @@ The first step is to run the command:
 ::: code-group
 
 ```sh-vue [npm]
-npm create fuels@{{fuelsInstallVersion}}
+npm create fuels@{{fuels}}
 ```
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuelsInstallVersion}}
+pnpm create fuels@{{fuels}}
 ```
 
 :::
