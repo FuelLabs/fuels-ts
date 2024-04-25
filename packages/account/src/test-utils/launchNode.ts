@@ -1,6 +1,6 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
-import { defaultChainConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
+import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
@@ -50,7 +50,7 @@ export type LaunchNodeResult = Promise<{
   cleanup: () => void;
   ip: string;
   port: string;
-  chainConfigPath: string;
+  snapshotDir: string;
 }>;
 
 export type KillNodeParams = {
@@ -112,7 +112,7 @@ export const launchNode = async ({
       '--poa-instant',
     ]);
 
-    const chainConfigPath = getFlagValueFromArgs(args, '--snapshot');
+    const snapshotDir = getFlagValueFromArgs(args, '--snapshot');
     const consensusKey = getFlagValueFromArgs(args, '--consensus-key') || defaultConsensusKey;
 
     const dbTypeFlagValue = getFlagValueFromArgs(args, '--db-type');
@@ -139,21 +139,21 @@ export const launchNode = async ({
         })
       ).toString();
 
-    let chainConfigPathToUse: string;
+    let snapshotDirToUse: string;
 
     const prefix = basePath || os.tmpdir();
     const suffix = basePath ? '' : randomUUID();
-    const tempDirPath = path.join(prefix, '.fuels', suffix, 'chainConfigs');
+    const tempDirPath = path.join(prefix, '.fuels', suffix, 'snapshotDir');
 
-    if (chainConfigPath) {
-      chainConfigPathToUse = chainConfigPath;
+    if (snapshotDir) {
+      snapshotDirToUse = snapshotDir;
     } else {
       if (!existsSync(tempDirPath)) {
         mkdirSync(tempDirPath, { recursive: true });
       }
 
-      let { stateConfigJson } = defaultChainConfigs;
-      const { chainConfigJson, metadataJson } = defaultChainConfigs;
+      let { stateConfigJson } = defaultSnapshotConfigs;
+      const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
 
       stateConfigJson = {
         ...stateConfigJson,
@@ -203,7 +203,7 @@ export const launchNode = async ({
       writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
       writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
 
-      chainConfigPathToUse = tempDirPath;
+      snapshotDirToUse = tempDirPath;
     }
 
     const child = spawn(
@@ -216,7 +216,7 @@ export const launchNode = async ({
         ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--consensus-key', consensusKey],
-        ['--snapshot', chainConfigPathToUse as string],
+        ['--snapshot', snapshotDirToUse as string],
         '--vm-backtrace',
         '--utxo-validation',
         '--debug',
@@ -253,7 +253,7 @@ export const launchNode = async ({
           cleanup: () => killNode(cleanupConfig),
           ip: ipToUse,
           port: portToUse,
-          chainConfigPath: chainConfigPathToUse as string,
+          snapshotDir: snapshotDirToUse as string,
         });
       }
       if (/error/i.test(chunk)) {

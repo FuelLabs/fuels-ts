@@ -16,7 +16,7 @@ export const mockStartFuelCore = (): {
     port: 4000,
     providerUrl: FUEL_NETWORK_URL,
     killChildProcess,
-    chainConfigPath: '/some/path/chainConfig.json',
+    snapshotDir: '/some/path',
   };
 
   const autoStartFuelCore = vi

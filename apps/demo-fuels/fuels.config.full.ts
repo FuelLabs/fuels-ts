@@ -34,9 +34,9 @@ export default createConfig({
   providerUrl: 'http://network:port/v1/graphql',
   // #endregion providerUrl
 
-  // #region chainConfig
-  chainConfig: './my/custom/chainConfig.json',
-  // #endregion chainConfig
+  // #region snapshotDir
+  snapshotDir: './my/snapshot/dir',
+  // #endregion snapshotDir
 
   // #region autoStartFuelCore
   autoStartFuelCore: true,

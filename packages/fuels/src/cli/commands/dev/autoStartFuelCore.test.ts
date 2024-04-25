@@ -16,9 +16,14 @@ describe('autoStartFuelCore', () => {
     vi.restoreAllMocks();
 
     const chainConfig = join(fuelsConfig.basePath, '.fuels', 'chainConfig.json');
-    if (existsSync(chainConfig)) {
-      rmSync(chainConfig);
-    }
+    const metadata = join(fuelsConfig.basePath, '.fuels', 'metadata.json');
+    const stateConfig = join(fuelsConfig.basePath, '.fuels', 'stateConfig.json');
+    const filepaths = [chainConfig, metadata, stateConfig];
+    filepaths.forEach((filepath) => {
+      if (existsSync(filepath)) {
+        rmSync(filepath);
+      }
+    });
   });
 
   function mockLaunchNode() {
@@ -27,7 +32,7 @@ describe('autoStartFuelCore', () => {
         cleanup: () => {},
         ip: '0.0.0.0',
         port: '4000',
-        chainConfigPath: '/some/path/chainConfig.json',
+        snapshotDir: '/some/path',
       })
     );
     return { launchNode };
