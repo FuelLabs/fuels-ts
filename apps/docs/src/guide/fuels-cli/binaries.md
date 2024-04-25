@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuelsInstallVersion } = data
+  const { fuels } = data
 </script>
 
 # Built-In Binaries
@@ -19,15 +19,15 @@ Here's how to configure this explicitly:
 You can also call the `built-in` binaries directly:
 
 ```console-vue
-npx fuels@{{fuelsInstallVersion}} help forc
-npx fuels@{{fuelsInstallVersion}} forc --version
-npx fuels@{{fuelsInstallVersion}} forc test -h
+npx fuels@{{fuels}} help forc
+npx fuels@{{fuels}} forc --version
+npx fuels@{{fuels}} forc test -h
 ```
 
 ```console-vue
-npx fuels@{{fuelsInstallVersion}} help core
-npx fuels@{{fuelsInstallVersion}} core --version
-npx fuels@{{fuelsInstallVersion}} core run -h
+npx fuels@{{fuels}} help core
+npx fuels@{{fuels}} core --version
+npx fuels@{{fuels}} core run -h
 ```
 
 Check the docs for `forc` and `fuel-core`:

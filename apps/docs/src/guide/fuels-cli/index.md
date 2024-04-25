@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuelsInstallVersion } = data
+  const { fuels } = data
 </script>
 
 # Fuels CLI
@@ -38,11 +38,11 @@ Add it to your `my-fuel-dapp` project:
 ::: code-group
 
 ```console-vue [npm]
-npm install fuels@{{fuelsInstallVersion}} --save
+npm install fuels@{{fuels}} --save
 ```
 
 ```console-vue [pnpm]
-pnpm add fuels@{{fuelsInstallVersion}}
+pnpm add fuels@{{fuels}}
 ```
 
 :::
@@ -50,7 +50,7 @@ pnpm add fuels@{{fuelsInstallVersion}}
 ## Double-checking
 
 ```console-vue
-npx fuels@{{fuelsInstallVersion}} -v
+npx fuels@{{fuels}} -v
 ```
 
 ## Next Step
