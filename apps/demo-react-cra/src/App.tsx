@@ -1,13 +1,13 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BaseAssetId, encrypt, decrypt, bn } from "fuels";
+import { ZeroBytes32, encrypt, decrypt, bn } from "fuels";
 import * as asm from "@fuels/vm-asm";
 
 function App() {
   const { log } = console;
 
-  log("Hello Fuels", BaseAssetId, encrypt, decrypt);
+  log("Hello Fuels", ZeroBytes32, encrypt, decrypt);
   log("Hello ASM", asm);
   log("Hello BN", bn(1000));
 

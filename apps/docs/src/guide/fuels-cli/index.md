@@ -1,3 +1,8 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuels } = data
+</script>
+
 # Fuels CLI
 
 The quickest way to build full stack Fuel dApps.
@@ -32,20 +37,20 @@ Add it to your `my-fuel-dapp` project:
 
 ::: code-group
 
-```console [npm]
-npm install fuels --save
+```console-vue [npm]
+npm install fuels@{{fuels}} --save
 ```
 
-```console [pnpm]
-pnpm add fuels
+```console-vue [pnpm]
+pnpm add fuels@{{fuels}}
 ```
 
 :::
 
 ## Double-checking
 
-```console
-npx fuels -v
+```console-vue
+npx fuels@{{fuels}} -v
 ```
 
 ## Next Step

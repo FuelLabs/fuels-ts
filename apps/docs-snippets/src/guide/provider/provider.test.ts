@@ -1,5 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FUEL_NETWORK_URL, Provider, WalletUnlocked, sleep } from 'fuels';
+import {
+  FUEL_NETWORK_URL,
+  Provider,
+  ScriptTransactionRequest,
+  ZeroBytes32,
+  sleep,
+  WalletUnlocked,
+  Address,
+} from 'fuels';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
@@ -36,6 +43,7 @@ describe('Provider', () => {
     expect(provider).toBeInstanceOf(Provider);
     expect(consensusParameters).toBeDefined();
     expect(consensusParameters).toBeInstanceOf(Object);
+    expect(balances).toEqual([]);
   });
 
   test('options: requestMiddleware', async () => {
@@ -98,6 +106,26 @@ describe('Provider', () => {
       },
     });
     // #endregion options-fetch
+  });
+
+  it('fetches the base asset ID', async () => {
+    const recipientAddress = Address.fromRandom();
+
+    // #region provider-getBaseAssetId
+    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest };
+
+    // Fetch the base asset ID using the provider
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+    // 0x...
+
+    // Create a transaction request
+    const transactionRequest = new ScriptTransactionRequest();
+    // Use the base asset for an operation
+    transactionRequest.addCoinOutput(recipientAddress, 100, baseAssetId);
+    // #endregion provider-getBaseAssetId
+
+    expect(baseAssetId).toBe(ZeroBytes32);
   });
 
   it('using operations', async () => {

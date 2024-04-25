@@ -17,15 +17,17 @@ To begin, you need to add the `fuels` dependency to your project. You can do thi
 
 ::: code-group
 
-```sh [npm]
-npm install fuels --save
+```sh-vue [npm]
+npm install fuels@{{fuels}} --save
 ```
 
-```sh [pnpm]
-pnpm add fuels
+```sh-vue [pnpm]
+pnpm add fuels@{{fuels}}
 ```
 
 :::
+
+**Note**: Use version `{{fuels}}` to ensure compatibility with `beta-5` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
 
 ### Note
 

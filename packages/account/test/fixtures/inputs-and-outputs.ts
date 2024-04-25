@@ -1,5 +1,5 @@
 import { getRandomB256 } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { InputCoin, InputMessage } from '@fuel-ts/transactions';
 import { InputType, OutputType } from '@fuel-ts/transactions';
@@ -20,7 +20,7 @@ export const MOCK_COIN_INPUT: InputCoin = {
   outputIndex: 0,
   owner: ZeroBytes32,
   amount: bn(100),
-  assetId: BaseAssetId,
+  assetId: ZeroBytes32,
   txPointer: {
     blockHeight: 0,
     txIndex: 0,
