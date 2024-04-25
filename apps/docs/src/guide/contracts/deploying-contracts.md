@@ -37,4 +37,4 @@ Now that the contract is deployed, you can interact with it. In the following st
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
 
-For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../typegen/generating-types.md)
+For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../fuels-cli/generating-types.md)
