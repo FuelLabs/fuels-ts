@@ -32,12 +32,12 @@ Learn more about the Fuel Ecosystem.
 
 ::: code-group
 
-```sh [pnpm]
-pnpm add fuels
+```sh-vue [pnpm]
+pnpm add fuels@{{fuels}}
 ```
 
-```sh [npm]
-npm install fuels --save
+```sh-vue [npm]
+npm install fuels@{{fuels}} --save
 ```
 
 :::
